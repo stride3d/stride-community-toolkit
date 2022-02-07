@@ -5,8 +5,9 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 **Steps**
 1. Create a console application (.NET 6) in your editor of choice
 2. Reference this project or NuGet package Stride.GameDefaults (package not yet released)
-3. Paste the code below
-4. Run
+    - Note, also Stride .NET 6 is not yet released, you need to build master [Stride](https://github.com/stride3d/stride) branch.
+4. Paste the code below
+5. Run
 
 ```c#
 using (var game = new Game())
