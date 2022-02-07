@@ -1,8 +1,8 @@
 ![Stride](https://media.githubusercontent.com/media/stride3d/stride/master/sources/data/images/Logo/stride-logo-readme.png)
 
-This repo contains some helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the editor.
+This repo contains some helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the editor/Game Studio.
 
-Context
+**Why would you use Code Only and not Stride Editor?**
 - You don't want to install anything on your computer (no Stride installation required)
 - You want to start very quickly
 - You want to learn C# programming with a nice visual output instead of console
