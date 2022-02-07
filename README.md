@@ -14,5 +14,5 @@ Context
 - Performance and feature evaluation
 
 References
-https://github.com/stride3d/stride/issues/1295
-https://github.com/stride3d/stride/discussions/1253
+- https://github.com/stride3d/stride/issues/1295
+- https://github.com/stride3d/stride/discussions/1253
