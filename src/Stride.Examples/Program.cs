@@ -1,14 +1,11 @@
-using (var game = new Game())
+Console.WriteLine("1 - Basic Example - Capsule with Rigid Body");
+Console.WriteLine("2 - Basic Example with Profiler");
+Console.WriteLine("Enter choice: ");
+
+if (!int.TryParse(Console.ReadLine(), out var choice)) return;
+
+switch (choice)
 {
-    game.Run(start: Start);
-
-    void Start(Scene rootScene)
-    {
-        game.SetupBase3DScene();
-
-        var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
-
-        entity.Transform.Position = new Vector3(0, 8, 0);
-        entity.Scene = rootScene;
-    }
+    case 1: CapsuleExample.Run(); break;
+    //case 2: CapsuleExample.Run(); break;
 }
