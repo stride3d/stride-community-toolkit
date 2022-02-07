@@ -10,6 +10,11 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 5. Run
 
 ```c#
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.GameDefaults;
+using Stride.GameDefaults.Extensions;
+
 using (var game = new Game())
 {
     game.Run(start: Start);
