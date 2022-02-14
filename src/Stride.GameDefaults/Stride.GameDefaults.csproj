@@ -4,6 +4,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>$(DefineConstants)TRACE;CODE_ANALYSIS</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.0.1" IncludeAssets="build;buildTransitive" />
         <PackageReference Include="Stride.Engine" Version="4.1.0.1" />
