@@ -3,7 +3,6 @@ namespace Stride.GameDefaults.Extensions;
 public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
-    private static readonly Color _defaulMaterialColor = Color.FromBgra(0xFF8C8C8C);
 
     public static void Run(this Game game, GameContext? context = null, Action<Scene>? start = null, Action<Scene, GameTime>? update = null)
     {
@@ -218,11 +217,13 @@ public static class GameExtensions
     /// <returns></returns>
     public static Material NewDefaultMaterial(this Game game, Color? color = null)
     {
+        var defaulMaterialColor = Color.FromBgra(0xFF8C8C8C);
+
         var materialDescription = new MaterialDescriptor
         {
             Attributes =
                 {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? _defaulMaterialColor)),
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? defaulMaterialColor)),
                     DiffuseModel = new MaterialDiffuseLambertModelFeature(),
                     Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(1.0f)),
                     SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
@@ -254,7 +255,7 @@ public static class GameExtensions
             PrimitiveModelType.Teapot => new TeapotProceduralModel(),
             PrimitiveModelType.Cone => new ConeProceduralModel(),
             PrimitiveModelType.Capsule => new CapsuleProceduralModel(),
-            _ => throw new NotImplementedException(),
+            _ => throw new InvalidOperationException(),
         };
 
         var model = proceduralModel.Generate(game.Services);
@@ -264,7 +265,7 @@ public static class GameExtensions
         var entity = new Entity(entityName) { new ModelComponent(model) };
 
         if (!includeCollider) return entity;
-        
+
         IInlineColliderShapeDesc? colliderShape = type switch
         {
             PrimitiveModelType.Plane => null,
@@ -275,7 +276,7 @@ public static class GameExtensions
             PrimitiveModelType.Teapot => null,
             PrimitiveModelType.Cone => new ConeColliderShapeDesc(),
             PrimitiveModelType.Capsule => new CapsuleColliderShapeDesc(),
-            _ => throw new NotImplementedException(),
+            _ => throw new InvalidOperationException(),
         };
 
         if (colliderShape is null) return entity;

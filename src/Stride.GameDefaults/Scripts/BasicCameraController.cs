@@ -16,7 +16,7 @@ public class BasicCameraController : SyncScript
     private float yaw;
     private float pitch;
 
-    public bool Gamepad { get; set; } = false;
+    public bool Gamepad { get; set; }
 
     public Vector3 KeyboardMovementSpeed { get; set; } = new Vector3(5.0f);
 
@@ -240,4 +240,3 @@ public class BasicCameraController : SyncScript
         Entity.Transform.Rotation *= Quaternion.RotationAxis(right, pitch) * Quaternion.RotationAxis(upVector, yaw);
     }
 }
-

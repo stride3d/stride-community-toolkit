@@ -5,7 +5,7 @@ public class GameProfiler : AsyncScript
     /// <summary>
     /// Enables or disable the game profiling
     /// </summary>
-    public bool Enabled = true;
+    public bool Enabled { get; set; } = true;
 
     /// <summary>
     /// The color of the text displayed during profiling
