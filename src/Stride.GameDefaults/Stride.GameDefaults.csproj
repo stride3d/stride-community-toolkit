@@ -3,7 +3,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>1.0.0.0-preview.1</Version>
+        <Version>1.0.0.0-preview.3</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>CodeCapital.$(MSBuildProjectName)</AssemblyName>
         <Authors>Stride contributors</Authors>
@@ -19,10 +19,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\..\nuget-icon.png">
-        <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
-      </None>
+        <None Remove="Resources\skybox_texture_hdr.dds" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Resources\skybox_texture_hdr.dds">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <PackageCopyToOutput>true</PackageCopyToOutput>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\nuget-icon.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -33,9 +44,4 @@
         <PackageReference Include="Stride.UI" Version="4.1.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-        <None Update="Resources\skybox_texture_hdr.dds">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
 </Project>
