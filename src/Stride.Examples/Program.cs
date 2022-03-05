@@ -1,11 +1,28 @@
-Console.WriteLine("1 - Basic Example - Capsule with Rigid Body");
-Console.WriteLine("2 - Basic Example with Profiler");
-Console.WriteLine("Enter choice: ");
+using Pastel;
+using Color = System.Drawing.Color;
 
-if (!int.TryParse(Console.ReadLine(), out var choice)) return;
+Console.WriteLine($"{Navigation("[1]")} Basic Example - Capsule with Rigid Body");
+Console.WriteLine($"{Navigation("[2]")} Basic Example with Profiler");
+Console.WriteLine();
+Console.WriteLine($"{Navigation("[Q]")} Quit");
+Console.WriteLine();
 
-switch (choice)
+while (true)
 {
-    case 1: CapsuleExample.Run(); break;
-    //case 2: CapsuleExample.Run(); break;
+    Console.WriteLine($"Enter choice and press {"ENTER".Pastel(Color.FromArgb(165, 229, 250))} to continue");
+
+    var choice = Console.ReadLine();
+
+    switch (choice)
+    {
+        case "1": CapsuleExample.Run(); break;
+        case "q": return;
+        case "Q": return;
+            //case 2: CapsuleExample.Run(); break;
+    }
+}
+
+string Navigation(string text)
+{
+    return text.Pastel(Color.LightGreen);
 }
