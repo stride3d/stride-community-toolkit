@@ -3,6 +3,14 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Version>1.0.0.0-preview.1</Version>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <AssemblyName>CodeCapital.$(MSBuildProjectName)</AssemblyName>
+        <Authors>Stride contributors</Authors>
+        <Description>Code only extensions</Description>
+        <PackageProjectUrl>https://stride3d.net</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/VaclavElias/stride-code-only</RepositoryUrl>
+        <PackageTags>Stride;3D;gamedev;Game Engine;engine;games</PackageTags>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
