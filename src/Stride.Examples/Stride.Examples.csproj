@@ -8,12 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Pastel" Version="3.0.0" />
-      <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+        <PackageReference Include="CodeCapital.Stride.GameDefaults" Version="1.0.0-preview.3" />
+        <PackageReference Include="Pastel" Version="3.0.0" />
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
+    <!--<ItemGroup>
         <ProjectReference Include="..\Stride.GameDefaults\Stride.GameDefaults.csproj" />
-    </ItemGroup>
+    </ItemGroup>-->
 
 </Project>

@@ -12,14 +12,12 @@ public static class CapsuleExample
         {
             game.SetupBase3DScene();
 
-            AddCapusule(rootScene, game);
+            AddCapsule(rootScene, game.CreatePrimitive(PrimitiveModelType.Capsule));
         }
     }
 
-    private static void AddCapusule(Scene rootScene, Game game)
+    private static void AddCapsule(Scene rootScene, Entity entity)
     {
-        var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
-
         entity.Transform.Position = new Vector3(0, 8, 0);
         entity.Scene = rootScene;
     }
