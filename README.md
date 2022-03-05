@@ -2,6 +2,10 @@
 
 This repo contains some C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the editor/Game Studio.
 
+**Prerequisites**
+
+1. Install Visual C++ Redistributable: https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe
+
 **Steps**
 1. Create a console application (.NET 6) in your editor of choice
 2. Reference this project or NuGet package Stride.GameDefaults (package not yet released)
