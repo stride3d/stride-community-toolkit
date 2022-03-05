@@ -11,11 +11,19 @@
         <PackageProjectUrl>https://stride3d.net</PackageProjectUrl>
         <RepositoryUrl>https://github.com/VaclavElias/stride-code-only</RepositoryUrl>
         <PackageTags>Stride;3D;gamedev;Game Engine;engine;games</PackageTags>
+        <PackageIcon>nuget-icon.png</PackageIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DefineConstants>$(DefineConstants)TRACE;CODE_ANALYSIS</DefineConstants>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\..\nuget-icon.png">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.0.1" IncludeAssets="build;buildTransitive" />
