@@ -1,5 +1,6 @@
 namespace Stride.GameDefaults.Scripts;
 
+// Taken from Stride.Assets.Presentation, Assets -> Scripts -> Camera
 /// <summary>
 /// A script that allows to move and rotate an entity through keyboard, mouse and touch input to provide basic camera navigation.
 /// </summary>

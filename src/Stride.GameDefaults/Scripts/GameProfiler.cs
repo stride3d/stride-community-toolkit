@@ -1,5 +1,6 @@
 namespace Stride.GameDefaults.Scripts;
 
+// Taken from Stride.Assets.Presentation, Assets -> Scripts -> Utility
 public class GameProfiler : AsyncScript
 {
     /// <summary>
