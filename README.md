@@ -10,7 +10,7 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 **Steps**
 1. Create a console application (.NET 6) in your editor of choice
 2. Reference this project or NuGet package CodeCapital.Stride.GameDefaults (prerelease)
-    - Note, also Stride .NET 6 is not yet released, you need to build [Stride](https://github.com/stride3d/stride) master branch.
+    - Note that Stride .NET 6 is not yet released, you need to build [Stride](https://github.com/stride3d/stride) master branch.
 4. Paste the code below
 5. Run
 
