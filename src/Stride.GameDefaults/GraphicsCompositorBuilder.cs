@@ -24,6 +24,7 @@ public static class GraphicsCompositorBuilder
         var shadowCasterRenderStage = new RenderStage("ShadowMapCaster", "ShadowMapCaster") { SortMode = new FrontToBackSortMode() };
         var shadowCasterCubeMapRenderStage = new RenderStage("ShadowMapCasterCubeMap", "ShadowMapCasterCubeMap") { SortMode = new FrontToBackSortMode() };
         var shadowCasterParaboloidRenderStage = new RenderStage("ShadowMapCasterParaboloid", "ShadowMapCasterParaboloid") { SortMode = new FrontToBackSortMode() };
+        var uiStage = new RenderStage("UiStage", "Main");
 
         var postProcessingEffects = new PostProcessingEffects
         {
@@ -61,7 +62,8 @@ public static class GraphicsCompositorBuilder
                     transparentRenderStage,
                     shadowCasterRenderStage,
                     shadowCasterParaboloidRenderStage,
-                    shadowCasterCubeMapRenderStage
+                    shadowCasterCubeMapRenderStage,
+                    uiStage
                 },
             RenderFeatures =
                 {
@@ -148,7 +150,14 @@ public static class GraphicsCompositorBuilder
                     {
                         RenderStageSelectors =
                         {
-                            new SimpleGroupToRenderStageSelector { RenderStage = transparentRenderStage, EffectName = "Test" }
+                            new SimpleGroupToRenderStageSelector {
+                                RenderStage = transparentRenderStage,
+                                EffectName = "Test",
+                                RenderGroup = RenderGroupMaskAllExcludingGroup31() },
+                            new SimpleGroupToRenderStageSelector {
+                                RenderStage = uiStage,
+                                EffectName = "UiStage",
+                                RenderGroup = RenderGroupMask.Group31 }
                         }
                     },
                     new SpriteRenderFeature
@@ -177,10 +186,23 @@ public static class GraphicsCompositorBuilder
                         },
                     },
                 },
-            Game = new SceneCameraRenderer { Child = singleView, Camera = cameraSlot },
+            Game = new SceneRendererCollection {
+                new SceneCameraRenderer {
+                    Child = singleView,
+                    Camera = cameraSlot,
+                    RenderMask = RenderGroupMaskAllExcludingGroup31() },
+                new SceneCameraRenderer
+                {
+                    Camera = cameraSlot,
+                    Child = new SingleStageRenderer { RenderStage = uiStage },
+                    RenderMask = RenderGroupMask.Group31
+                }
+            },
             Editor = singleView,
             SingleView = singleView
         };
     }
+
+    private static RenderGroupMask RenderGroupMaskAllExcludingGroup31() => RenderGroupMask.Group0 | RenderGroupMask.Group1 | RenderGroupMask.Group2 | RenderGroupMask.Group3 | RenderGroupMask.Group4 | RenderGroupMask.Group5 | RenderGroupMask.Group6 | RenderGroupMask.Group7 | RenderGroupMask.Group8 | RenderGroupMask.Group9 | RenderGroupMask.Group10 | RenderGroupMask.Group11 | RenderGroupMask.Group12 | RenderGroupMask.Group13 | RenderGroupMask.Group14 | RenderGroupMask.Group15 | RenderGroupMask.Group16 | RenderGroupMask.Group17 | RenderGroupMask.Group18 | RenderGroupMask.Group19 | RenderGroupMask.Group20 | RenderGroupMask.Group21 | RenderGroupMask.Group22 | RenderGroupMask.Group23 | RenderGroupMask.Group24 | RenderGroupMask.Group25 | RenderGroupMask.Group26 | RenderGroupMask.Group27 | RenderGroupMask.Group28 | RenderGroupMask.Group29 | RenderGroupMask.Group30;
 }
 
