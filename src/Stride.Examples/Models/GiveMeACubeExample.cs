@@ -3,7 +3,9 @@ using Stride.Engine;
 using Stride.GameDefaults;
 using Stride.GameDefaults.Extensions;
 
-public class GiveMeACubeExample
+namespace Stride.Examples.Models;
+
+public static class GiveMeACubeExample
 {
     public static void Run()
     {
