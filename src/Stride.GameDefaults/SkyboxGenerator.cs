@@ -1,3 +1,11 @@
+using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Stride.Graphics.Data;
+using Stride.Rendering.ComputeEffect.GGXPrefiltering;
+using Stride.Rendering.ComputeEffect.LambertianPrefiltering;
+using Stride.Rendering.Skyboxes;
+using Stride.Shaders;
+
 namespace Stride.GameDefaults;
 
 // Taken from Stride.Assets.Skyboxes

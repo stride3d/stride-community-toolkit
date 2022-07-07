@@ -1,3 +1,9 @@
+using Stride.Core;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering;
+using Stride.Rendering.Materials;
+
 namespace Stride.GameDefaults;
 
 // Taken from Stride.Assets.Skyboxes

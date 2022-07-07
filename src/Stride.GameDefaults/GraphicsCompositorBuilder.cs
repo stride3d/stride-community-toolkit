@@ -1,3 +1,16 @@
+using Stride.Core.Mathematics;
+using Stride.Particles.Rendering;
+using Stride.Rendering;
+using Stride.Rendering.Background;
+using Stride.Rendering.Compositing;
+using Stride.Rendering.Images;
+using Stride.Rendering.LightProbes;
+using Stride.Rendering.Lights;
+using Stride.Rendering.Materials;
+using Stride.Rendering.Shadows;
+using Stride.Rendering.Sprites;
+using Stride.Rendering.UI;
+
 namespace Stride.GameDefaults;
 
 // Taken from Stride.Rendering.Compositing GraphicsCompositorHelper 

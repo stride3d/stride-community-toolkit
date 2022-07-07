@@ -1,3 +1,8 @@
+using Stride.Core;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Input;
+
 namespace Stride.GameDefaults.Scripts;
 
 // Taken from Stride.Assets.Presentation, Assets -> Scripts -> Camera

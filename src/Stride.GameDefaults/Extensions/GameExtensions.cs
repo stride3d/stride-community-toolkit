@@ -1,3 +1,17 @@
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Engine.Processors;
+using Stride.Games;
+using Stride.Graphics;
+using Stride.Physics;
+using Stride.Rendering;
+using Stride.Rendering.Compositing;
+using Stride.Rendering.Lights;
+using Stride.Rendering.Materials;
+using Stride.Rendering.Materials.ComputeColors;
+using Stride.Rendering.ProceduralModels;
+using Stride.Rendering.Skyboxes;
+
 namespace Stride.GameDefaults.Extensions;
 
 public static class GameExtensions

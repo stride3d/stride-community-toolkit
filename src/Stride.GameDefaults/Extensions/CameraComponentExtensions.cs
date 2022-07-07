@@ -1,3 +1,6 @@
+using Stride.Core.Mathematics;
+using Stride.Engine;
+
 namespace Stride.GameDefaults.Extensions;
 
 public static class CameraComponentExtensions
