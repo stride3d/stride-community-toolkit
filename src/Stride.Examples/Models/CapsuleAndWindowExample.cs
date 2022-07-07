@@ -3,6 +3,7 @@ using Stride.Engine;
 using Stride.GameDefaults;
 using Stride.GameDefaults.Extensions;
 using Stride.Graphics;
+using Stride.Rendering;
 using Stride.UI;
 using Stride.UI.Controls;
 using Stride.UI.Panels;
@@ -44,6 +45,7 @@ public static class CapsuleAndWindowExample
                 new UIComponent
                 {
                     Page = new UIPage { RootElement = GetCanavas() },
+                    RenderGroup = RenderGroup.Group31
                 }
             };
 
