@@ -1,5 +1,6 @@
 using Pastel;
-using Color = System.Drawing.Color;
+using Stride.Examples.Models;
+using System.Drawing;
 
 Console.WriteLine($"{Navigation("[1]")} Basic Example - Capsule with Rigid Body");
 Console.WriteLine($"{Navigation("[2]")} Basic Example - Capsule with Rigid Body and Window");

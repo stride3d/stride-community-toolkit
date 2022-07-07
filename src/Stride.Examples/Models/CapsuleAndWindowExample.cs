@@ -1,3 +1,7 @@
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.GameDefaults;
+using Stride.GameDefaults.Extensions;
 using Stride.Graphics;
 using Stride.UI;
 using Stride.UI.Controls;

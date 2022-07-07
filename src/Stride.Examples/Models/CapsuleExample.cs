@@ -1,3 +1,8 @@
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.GameDefaults;
+using Stride.GameDefaults.Extensions;
+
 namespace Stride.Examples.Models;
 
 public static class CapsuleExample

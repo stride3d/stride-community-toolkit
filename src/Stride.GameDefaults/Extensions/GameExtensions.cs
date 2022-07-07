@@ -1,6 +1,7 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Processors;
+using Stride.GameDefaults.Scripts;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Physics;
