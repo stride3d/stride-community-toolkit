@@ -2,9 +2,10 @@ using Pastel;
 using Stride.Examples.Models;
 using System.Drawing;
 
-Console.WriteLine($"{Navigation("[1]")} Basic Example - Capsule with Rigid Body");
-Console.WriteLine($"{Navigation("[2]")} Basic Example - Capsule with Rigid Body and Window");
-Console.WriteLine($"{Navigation("[3]")} Basic Example with Profiler");
+Console.WriteLine($"{Navigation("[1]")} Basic Example - Give me a cube");
+Console.WriteLine($"{Navigation("[2]")} Basic Example - Capsule with rigid body");
+Console.WriteLine($"{Navigation("[3]")} Basic Example - Capsule with rigid body and window");
+Console.WriteLine($"{Navigation("[4]")} Basic Example - Profiler");
 Console.WriteLine();
 Console.WriteLine($"{Navigation("[Q]")} Quit");
 Console.WriteLine();
@@ -17,11 +18,11 @@ while (true)
 
     switch (choice)
     {
-        case "1": CapsuleExample.Run(); break;
-        case "2": CapsuleAndWindowExample.Run(); break;
+        case "1": GiveMeACubeExample.Run(); break;
+        case "2": CapsuleExample.Run(); break;
+        case "3": CapsuleAndWindowExample.Run(); break;
         case "q": return;
         case "Q": return;
-            //case 2: CapsuleExample.Run(); break;
     }
 }
 
