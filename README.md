@@ -50,3 +50,4 @@ using (var game = new Game())
 References
 - https://github.com/stride3d/stride/issues/1295
 - https://github.com/stride3d/stride/discussions/1253
+- Example games to do https://github.com/abagames/111-one-button-games-in-2021/blob/main/README.md
