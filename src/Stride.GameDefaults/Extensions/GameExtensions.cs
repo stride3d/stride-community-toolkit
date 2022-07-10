@@ -49,11 +49,11 @@ public static class GameExtensions
     {
         game.AddGraphicsCompositor();
         game.AddCamera();
-        game.AddLight();
+        game.AddDirectionalLight();
     }
 
     /// <summary>
-    /// Sets up the default scene similarly like in Stride.Assets.Entities, SceneBaseFactory; Graphics Compositor, Camera and Light, Skybox, MouseLookCamera, Ground
+    /// Sets up the default scene, the bare minumum like when you create an empty project through editor: Graphics Compositor, Camera and Directional Light, Skybox, MouseLookCamera, Ground
     /// </summary>
     /// <param name="game"></param>
     public static void SetupBase3DScene(this Game game)
@@ -62,7 +62,7 @@ public static class GameExtensions
 
         game.AddMouseLookCamera(game.AddCamera());
 
-        game.AddLight();
+        game.AddDirectionalLight();
 
         game.AddSkybox();
 
@@ -109,7 +109,7 @@ public static class GameExtensions
         return entity;
     }
 
-    public static Entity AddLight(this Game game, string? entityName = null)
+    public static Entity AddDirectionalLight(this Game game, string? entityName = null)
     {
         var entity = new Entity(entityName) { new LightComponent
             {
