@@ -1,7 +1,10 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Processors;
+using Stride.GameDefaults.Compositing;
+using Stride.GameDefaults.ProceduralModels;
 using Stride.GameDefaults.Scripts;
+using Stride.GameDefaults.Skyboxes;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Physics;
@@ -260,18 +263,7 @@ public static class GameExtensions
     /// <returns></returns>
     public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true)
     {
-        PrimitiveProceduralModelBase proceduralModel = type switch
-        {
-            PrimitiveModelType.Plane => new PlaneProceduralModel(),
-            PrimitiveModelType.Sphere => new SphereProceduralModel(),
-            PrimitiveModelType.Cube => new CubeProceduralModel(),
-            PrimitiveModelType.Cylinder => new CylinderProceduralModel(),
-            PrimitiveModelType.Torus => new TorusProceduralModel(),
-            PrimitiveModelType.Teapot => new TeapotProceduralModel(),
-            PrimitiveModelType.Cone => new ConeProceduralModel(),
-            PrimitiveModelType.Capsule => new CapsuleProceduralModel(),
-            _ => throw new InvalidOperationException(),
-        };
+        var proceduralModel = GetProceduralModel(type);
 
         var model = proceduralModel.Generate(game.Services);
 
@@ -281,18 +273,7 @@ public static class GameExtensions
 
         if (!includeCollider) return entity;
 
-        IInlineColliderShapeDesc? colliderShape = type switch
-        {
-            PrimitiveModelType.Plane => null,
-            PrimitiveModelType.Sphere => new SphereColliderShapeDesc(),
-            PrimitiveModelType.Cube => new BoxColliderShapeDesc(),
-            PrimitiveModelType.Cylinder => new CylinderColliderShapeDesc(),
-            PrimitiveModelType.Torus => null,
-            PrimitiveModelType.Teapot => null,
-            PrimitiveModelType.Cone => new ConeColliderShapeDesc(),
-            PrimitiveModelType.Capsule => new CapsuleColliderShapeDesc(),
-            _ => throw new InvalidOperationException(),
-        };
+        var colliderShape = GetColliderShape(type);
 
         if (colliderShape is null) return entity;
 
@@ -317,4 +298,31 @@ public static class GameExtensions
 
         return entity;
     }
+
+    private static PrimitiveProceduralModelBase GetProceduralModel(PrimitiveModelType type)
+        => type switch
+        {
+            PrimitiveModelType.Plane => new PlaneProceduralModel(),
+            PrimitiveModelType.Sphere => new SphereProceduralModel(),
+            PrimitiveModelType.Cube => new CubeProceduralModel(),
+            PrimitiveModelType.Cylinder => new CylinderProceduralModel(),
+            PrimitiveModelType.Torus => new TorusProceduralModel(),
+            PrimitiveModelType.Teapot => new TeapotProceduralModel(),
+            PrimitiveModelType.Cone => new ConeProceduralModel(),
+            PrimitiveModelType.Capsule => new CapsuleProceduralModel(),
+            _ => throw new InvalidOperationException(),
+        };
+    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type)
+        => type switch
+        {
+            PrimitiveModelType.Plane => null,
+            PrimitiveModelType.Sphere => new SphereColliderShapeDesc(),
+            PrimitiveModelType.Cube => new BoxColliderShapeDesc(),
+            PrimitiveModelType.Cylinder => new CylinderColliderShapeDesc(),
+            PrimitiveModelType.Torus => null,
+            PrimitiveModelType.Teapot => null,
+            PrimitiveModelType.Cone => new ConeColliderShapeDesc(),
+            PrimitiveModelType.Capsule => new CapsuleColliderShapeDesc(),
+            _ => throw new InvalidOperationException(),
+        };
 }
