@@ -11,7 +11,7 @@ using Stride.Rendering.Shadows;
 using Stride.Rendering.Sprites;
 using Stride.Rendering.UI;
 
-namespace Stride.GameDefaults;
+namespace Stride.GameDefaults.Compositing;
 
 // Taken from Stride.Rendering.Compositing GraphicsCompositorHelper 
 public static class GraphicsCompositorBuilder
@@ -205,4 +205,3 @@ public static class GraphicsCompositorBuilder
 
     private static RenderGroupMask RenderGroupMaskAllExcludingGroup31() => RenderGroupMask.Group0 | RenderGroupMask.Group1 | RenderGroupMask.Group2 | RenderGroupMask.Group3 | RenderGroupMask.Group4 | RenderGroupMask.Group5 | RenderGroupMask.Group6 | RenderGroupMask.Group7 | RenderGroupMask.Group8 | RenderGroupMask.Group9 | RenderGroupMask.Group10 | RenderGroupMask.Group11 | RenderGroupMask.Group12 | RenderGroupMask.Group13 | RenderGroupMask.Group14 | RenderGroupMask.Group15 | RenderGroupMask.Group16 | RenderGroupMask.Group17 | RenderGroupMask.Group18 | RenderGroupMask.Group19 | RenderGroupMask.Group20 | RenderGroupMask.Group21 | RenderGroupMask.Group22 | RenderGroupMask.Group23 | RenderGroupMask.Group24 | RenderGroupMask.Group25 | RenderGroupMask.Group26 | RenderGroupMask.Group27 | RenderGroupMask.Group28 | RenderGroupMask.Group29 | RenderGroupMask.Group30;
 }
-
