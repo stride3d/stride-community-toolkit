@@ -5,11 +5,12 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Version>1.0.0.0-preview.5</Version>
     </PropertyGroup>
 
     <ItemGroup>
         <!--<PackageReference Include="CodeCapital.Stride.GameDefaults" Version="1.0.0-preview.4" />-->
-        <PackageReference Include="Pastel" Version="3.0.0" />
+        <PackageReference Include="Pastel" Version="3.0.1" />
         <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     </ItemGroup>
 

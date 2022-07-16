@@ -3,9 +3,9 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>4.1.0.1</Version>
+        <Version>1.0.0.0-preview.5</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <AssemblyName>CodeCapital.$(MSBuildProjectName)</AssemblyName>
+        <AssemblyName>CodeCapital.Stride.GameDefaults</AssemblyName>
         <Authors>Stride contributors</Authors>
         <Description>Code only extensions</Description>
         <PackageProjectUrl>https://stride3d.net</PackageProjectUrl>
@@ -37,11 +37,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.0.1" IncludeAssets="build;buildTransitive" />
-        <PackageReference Include="Stride.Engine" Version="4.1.0.1" />
-        <PackageReference Include="Stride.Particles" Version="4.1.0.1" />
-        <PackageReference Include="Stride.Physics" Version="4.1.0.1" />
-        <PackageReference Include="Stride.UI" Version="4.1.0.1" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.0.1728" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.Engine" Version="4.1.0.1728" />
+        <PackageReference Include="Stride.Particles" Version="4.1.0.1728" />
+        <PackageReference Include="Stride.Physics" Version="4.1.0.1728" />
+        <PackageReference Include="Stride.UI" Version="4.1.0.1728" />
     </ItemGroup>
 
 </Project>
