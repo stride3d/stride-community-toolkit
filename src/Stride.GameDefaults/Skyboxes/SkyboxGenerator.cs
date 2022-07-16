@@ -6,7 +6,7 @@ using Stride.Rendering.ComputeEffect.LambertianPrefiltering;
 using Stride.Rendering.Skyboxes;
 using Stride.Shaders;
 
-namespace Stride.GameDefaults;
+namespace Stride.GameDefaults.Skyboxes;
 
 // Taken from Stride.Assets.Skyboxes
 public static class SkyboxGenerator
@@ -26,9 +26,7 @@ public static class SkyboxGenerator
 
         var coefficients = lamberFiltering.PrefilteredLambertianSH.Coefficients;
         for (int i = 0; i < coefficients.Length; i++)
-        {
             coefficients[i] *= SphericalHarmonics.BaseCoefficients[i];
-        }
 
         skybox.DiffuseLightingParameters.Set(SkyboxKeys.Shader, new ShaderClassSource("SphericalHarmonicsEnvironmentColor", lamberFiltering.HarmonicOrder));
         skybox.DiffuseLightingParameters.Set(SphericalHarmonicsEnvironmentColorKeys.SphericalColors, coefficients);
