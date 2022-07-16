@@ -1,7 +1,7 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.GameDefaults;
 using Stride.GameDefaults.Extensions;
+using Stride.GameDefaults.ProceduralModels;
 using Stride.Graphics;
 using Stride.Rendering;
 using Stride.UI;
