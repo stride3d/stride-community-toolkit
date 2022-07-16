@@ -1,5 +1,6 @@
-﻿namespace Stride.GameDefaults;
+namespace Stride.GameDefaults.ProceduralModels;
 
+// Duplicated from Stride.Assets.Presentation.Preview
 public enum PrimitiveModelType
 {
     Sphere,
