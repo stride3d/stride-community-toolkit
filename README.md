@@ -20,7 +20,7 @@ You must install (unless it is installed already) the following, otherwise you w
 
 **Visual Studio 2022 Instructions**
 1. Install Visual Studio 2022
-   - (Community version)[https://visualstudio.microsoft.com/vs/] is free
+   - [Community version](https://visualstudio.microsoft.com/vs/) is free
 2. Create C# console application (.NET 6)
 2. Add NuGet package CodeCapital.Stride.GameDefaults (prerelease)
 4. Paste the code below
