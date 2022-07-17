@@ -9,19 +9,19 @@ You must install the following, otherwise you won't be able to build/run the pro
 1. Install Visual C++ Redistributable 2015 - 2022
    - From [Microsoft Visual C++](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022) page or direct link [vc_redist.x64.exe  ](https://aka.ms/vs/17/release/vc_redist.x64.exe)  
 2. Install .NET 6 SDK x64 https://dotnet.microsoft.com/en-us/download
-3. Install editor of your choice (Visual Studio 2022, Visual Studio Code, Rider, ..)
+3. Install IDE of your choice (Visual Studio 2022 (free), Visual Studio Code (free), Rider (paid), ..)
+   - [Visual Studio 2022 Community](https://visualstudio.microsoft.com/vs/) is free
 
 ## Visual Studio Code Instructions
 
-1. Install Visual Studio Code
-2. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
-3. Add package ```dotnet add package CodeCapital.Stride.GameDefaults --prerelease```
-4. Paste the code below
-5. Run
+1. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
+2. Add package ```dotnet add package CodeCapital.Stride.GameDefaults --prerelease```
+3. Paste the code below
+4. Run
 
 ## Visual Studio 2022 Instructions
 1. Install Visual Studio 2022
-   - [Community version](https://visualstudio.microsoft.com/vs/) is free
+   
 2. Create C# console application (.NET 6)
 2. Add NuGet package CodeCapital.Stride.GameDefaults (prerelease)
 4. Paste the code below
