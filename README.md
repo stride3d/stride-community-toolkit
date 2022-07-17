@@ -21,6 +21,7 @@ You must install the following, otherwise you won't be able to build/run the pro
       - Make sure that **.NET desktop development** workload is selected when installing Visual Studio
    - [Visual Studio Code](https://code.visualstudio.com/) (free)
       -  Make sure you install also **C# for Visual Studio Code (powered by OmniSharp)** extension
+      -  Restart Visual Studio Code otherwise ```dotnet`` command might not work
    - Rider (paid)
 
 ## Visual Studio Code Instructions
