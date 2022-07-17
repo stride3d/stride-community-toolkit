@@ -4,7 +4,7 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 
 ## Prerequisites
 
-You must install (unless it is installed already) the following, otherwise you won't be able to build/run the proejct.
+You must install the following, otherwise you won't be able to build/run the project. If you are using Stride 4.1+, these should be already installed.
 
 1. Install Visual C++ Redistributable
    - From [Microsoft Visual C++](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022) page or direct link [vc_redist.x64.exe  ](https://aka.ms/vs/17/release/vc_redist.x64.exe)  
