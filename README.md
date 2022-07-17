@@ -8,6 +8,14 @@ You must install the following, otherwise you won't be able to build/run the pro
 
 1. Install Visual C++ Redistributable 2015 - 2022
    - From [Microsoft Visual C++](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022) page or direct link [vc_redist.x64.exe  ](https://aka.ms/vs/17/release/vc_redist.x64.exe)  
+
+- https://download.visualstudio.microsoft.com/download/pr/0c1cfec3-e028-4996-8bb7-0c751ba41e32/1abed1573f36075bfdfc538a2af00d37/vc_redist.x86.exe
+- https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe
+- http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe
+- http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe
+
+
+
 2. Install .NET 6 SDK x64 https://dotnet.microsoft.com/en-us/download
 3. Install IDE of your choice
    - Visual Studio 2022
@@ -29,6 +37,7 @@ You must install the following, otherwise you won't be able to build/run the pro
  
 1. Create C# Console Application (.NET 6)
 2. Add NuGet package CodeCapital.Stride.GameDefaults (prerelease)
+   - If you experience any issue adding a package, try again
 3. Paste the code below in the Program.cs
 4. Run
 5. Enjoy Stride
