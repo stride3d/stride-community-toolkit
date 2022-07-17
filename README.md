@@ -13,6 +13,7 @@ You must install the following, otherwise you won't be able to build/run the pro
    - Visual Studio 2022
       - [Visual Studio 2022 Community](https://visualstudio.microsoft.com/vs/) is free
    - Visual Studio Code (free)
+      -  Make sure you install also C# for Visual Studio Code (powered by OmniSharp) extension
    - Rider (paid)
 
 ## Visual Studio Code Instructions
