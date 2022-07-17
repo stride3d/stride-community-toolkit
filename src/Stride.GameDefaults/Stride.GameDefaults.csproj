@@ -3,7 +3,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>1.0.0.0-preview.5</Version>
+        <Version>1.0.0.0-preview.6</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>CodeCapital.Stride.GameDefaults</AssemblyName>
         <Authors>Stride contributors</Authors>
@@ -37,11 +37,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.0.1728" IncludeAssets="build;buildTransitive" />
-        <PackageReference Include="Stride.Engine" Version="4.1.0.1728" />
-        <PackageReference Include="Stride.Particles" Version="4.1.0.1728" />
-        <PackageReference Include="Stride.Physics" Version="4.1.0.1728" />
-        <PackageReference Include="Stride.UI" Version="4.1.0.1728" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.0.1734" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.Engine" Version="4.1.0.1734" />
+        <PackageReference Include="Stride.Particles" Version="4.1.0.1734" />
+        <PackageReference Include="Stride.Physics" Version="4.1.0.1734" />
+        <PackageReference Include="Stride.UI" Version="4.1.0.1734" />
     </ItemGroup>
 
 </Project>
