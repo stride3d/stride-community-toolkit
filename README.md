@@ -6,9 +6,13 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 
 1. Install Visual C++ Redistributable: https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe
 2. http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe
+3. Install .NET 6 SDK https://dotnet.microsoft.com/en-us/download
+4. Install Visual Studio Code
+5. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
+6. Add package dotnet add package CodeCapital.Stride.GameDefaults --prerelease
 
 **Steps**
-1. Create a console application (.NET 6) in your editor of choice
+1. Create a console application (.NET 6) in your editor of choice (Visual Studio 2022, Visual Studio Code, Rider, ..)
 2. Reference this project or NuGet package CodeCapital.Stride.GameDefaults (prerelease)
     - Note that Stride .NET 6 is not yet released, you need to build [Stride](https://github.com/stride3d/stride) master branch.
 4. Paste the code below
@@ -17,7 +21,7 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 ```c#
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.GameDefaults;
+using Stride.GameDefaults.ProceduralModels;
 using Stride.GameDefaults.Extensions;
 
 using (var game = new Game())
