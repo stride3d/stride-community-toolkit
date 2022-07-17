@@ -4,17 +4,25 @@ This repo contains some C# helpers and extensions to run [Stride](https://github
 
 **Prerequisites**
 
-1. Install Visual C++ Redistributable: https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe
-2. http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe
-3. Install .NET 6 SDK https://dotnet.microsoft.com/en-us/download
-4. Install Visual Studio Code
-5. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
-6. Add package dotnet add package CodeCapital.Stride.GameDefaults --prerelease
+You must install the following, otherwise you won't be able to build to build the proejct.
 
-**Steps**
-1. Create a console application (.NET 6) in your editor of choice (Visual Studio 2022, Visual Studio Code, Rider, ..)
-2. Reference this project or NuGet package CodeCapital.Stride.GameDefaults (prerelease)
-    - Note that Stride .NET 6 is not yet released, you need to build [Stride](https://github.com/stride3d/stride) master branch.
+1. Install Visual C++ Redistributable
+   - From [Microsoft Visual C++](https://docs.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022) page or direct link [vc_redist.x64.exe  ](https://aka.ms/vs/17/release/vc_redist.x64.exe)  
+2. Install .NET 6 SDK https://dotnet.microsoft.com/en-us/download
+3. Install editor of your choice (Visual Studio 2022, Visual Studio Code, Rider, ..)
+
+**Visual Studio Code Instructions**
+1. Install Visual Studio Code
+2. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
+3. Add package dotnet add package ```CodeCapital.Stride.GameDefaults --prerelease```
+4. Paste the code below
+5. Run
+
+**Visual Studio 2022 Instructions**
+1. Install Visual Studio 2022
+  - (Community version)[https://visualstudio.microsoft.com/vs/] is free
+2. Create C# console application (.NET 6)
+2. Add NuGet package CodeCapital.Stride.GameDefaults (prerelease)
 4. Paste the code below
 5. Run
 
