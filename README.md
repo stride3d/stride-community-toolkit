@@ -29,7 +29,7 @@ You must install the following, otherwise you won't be able to build/run the pro
 1. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
    - ```dotnet new console --framework net6.0```
 2. Add package ```dotnet add package CodeCapital.Stride.GameDefaults --prerelease```
-  - If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)
+   - If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)
 3. Paste the example code below in the Program.cs
 4. Run ```dotnet run```
 5. Enjoy Stride
