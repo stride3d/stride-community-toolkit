@@ -15,7 +15,7 @@ You must install (unless it is installed already) the following, otherwise you w
 
 1. Install Visual Studio Code
 2. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
-3. Add package dotnet add package ```CodeCapital.Stride.GameDefaults --prerelease```
+3. Add package ```dotnet add package CodeCapital.Stride.GameDefaults --prerelease```
 4. Paste the code below
 5. Run
 
@@ -60,7 +60,7 @@ using (var game = new Game())
 - Performance and feature evaluation
 
 ## Issues
-1. Error - Could not load native library libcore using CPU architecture x64 or 
+1. Error - Could not load native library libcore using CPU architecture x64
    - Make sure you installed Visual C++ Redistributable
 ```
 C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\Stride.Core.Assets.CompilerApp.targets(132,5): error MSB3073: The command ""C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\..\tools\net6.0-windows7.0\Stride.Core.Assets.CompilerApp.exe"  --disable-auto- 
