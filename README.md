@@ -15,7 +15,7 @@ You must install the following, otherwise you won't be able to build/run the pro
    - [vcredist_x86.exe](http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe)
    - [vcredist_x64.exe](http://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe)
 2. Install Microsoft Visual C++ 2015-2019 Redistributable
-   - [vcredist_x64.exe](https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe))
+   - [vcredist_x64.exe](https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe)
 3. Install .NET 6 SDK x64 https://dotnet.microsoft.com/en-us/download
 4. Install IDE of your choice
    - Visual Studio 2022
