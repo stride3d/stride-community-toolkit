@@ -27,7 +27,7 @@ You must install the following, otherwise you won't be able to build/run the pro
 
 ## Visual Studio 2022 Instructions
  
-1. Create C# console application (.NET 6)
+1. Create C# Console Application (.NET 6)
 2. Add NuGet package CodeCapital.Stride.GameDefaults (prerelease)
 3. Paste the code below in the Program.cs
 4. Run
