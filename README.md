@@ -1,6 +1,6 @@
 ![Stride](https://media.githubusercontent.com/media/stride3d/stride/master/sources/data/images/Logo/stride-logo-readme.png)
 
-This repo contains some C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the editor/Game Studio. The documentation and examples will follow up.
+This repo contains some C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the editor/Game Studio. The documentation and more fun examples will follow up. This repository is here to collect feedback before any major updates are done in the Stride engine itself.
 
 ## Prerequisites
 
