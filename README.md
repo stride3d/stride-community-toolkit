@@ -2,6 +2,15 @@
 
 This repo contains C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the Stride editor/Game Studio. The documentation and more fun examples will follow up. This repository is here to collect feedback before any major updates are done in the Stride engine itself. This NuGet is in preview, expect breaking changes.
 
+## Content
+- Prerequisites
+- Visual Studio Code Instructions
+- Visual Studio 2022 Instructions
+- Example Code
+- Why would you use Code Only and not Stride Editor?
+- Functionality
+- Issues
+
 ## Prerequisites
 
 You must install the following, otherwise you won't be able to build/run the project. If you are using Stride **4.1**+ already, these should be already installed.
@@ -78,6 +87,9 @@ using (var game = new Game())
 - Easy and quick prototyping
 - Easy to learn game development concepts and steps
 - Performance and feature evaluation
+
+## Functionality
+Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in the Issues.
 
 ## Issues
 1. Error - Could not load native library libcore using CPU architecture x64
