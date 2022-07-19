@@ -9,7 +9,8 @@ This repo contains C# helpers and extensions to run [Stride](https://github.com/
 - Example Code
 - Why would you use Code Only and not Stride Editor?
 - Functionality
-- Issues
+- References
+- Building Project Issues
 
 ## Prerequisites
 
@@ -89,9 +90,9 @@ using (var game = new Game())
 - Performance and feature evaluation
 
 ## Functionality
-Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in the Issues.
+Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in this repo Issues.
 
-## Issues
+## Building Project Issues
 1. Error - Could not load native library libcore using CPU architecture x64
    - Make sure you installed Visual C++ Redistributable
 ```
@@ -102,8 +103,7 @@ todatecheck-filebase="C:\Projects\StrideDemo\obj\Debug\net6.0\stride\assetcompil
 2. Error - Package 'runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl 4.3.0' from source .. : The repository primary signature's timestamping certificate is not trusted by the trust provider
    - Restore the package CodeCapital.Stride.GameDefaults again ```dotnet restore``` 
 
-
-References
+## References
 - https://github.com/stride3d/stride/issues/1295
 - https://github.com/stride3d/stride/discussions/1253
 - Example games to do https://github.com/abagames/111-one-button-games-in-2021/blob/main/README.md
