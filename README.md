@@ -9,8 +9,8 @@ This repo contains C# helpers and extensions to run [Stride](https://github.com/
 - Example Code
 - Why would you use Code Only and not Stride Editor?
 - Functionality
-- References
 - Building Project Issues
+- References
 
 ## Prerequisites
 
