@@ -74,6 +74,7 @@ using (var game = new Game())
         var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
         
         entity.Transform.Position = new Vector3(0, 8, 0);
+        
         entity.Scene = rootScene;
     }
 }
