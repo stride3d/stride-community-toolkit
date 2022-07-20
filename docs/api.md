@@ -2,6 +2,8 @@
 
 *Work in progress..*
 
+This library is just a preview, expect breaking changes.
+
 | Name                   | Description
 | --------------------   | ----------------- |
 | BasicCameraController | Stride.Assets.Presentation, Assets -> Scripts -> Camera|
@@ -20,10 +22,12 @@ Check method parameters in the code.
 | --------------------   | ----------------- |
 | ```ScreenPointToRay()``` | |
 
-## Improvements
+## GameExtensions.cs
 
-| GameExtensions.cs                   | Description
-| --------------------   | ----------------- |
+The methodes which are done can be used but most likely would need some refactoring, because they are duplicating code from the engine. More research needs to be done if this could be moved to Stride engine.
+
+| Extensions | Status | Note
+| --- |---| --- |
 | ```Run()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| |
 | ```SetupBase()```|![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| |
 | ```SetupBase3DScene()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| |
@@ -38,8 +42,8 @@ Check method parameters in the code.
 | ```AddPhysicsDebugger()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)|To see colliders|
 
 ## Other requests
-| Title                   | Description
-| --------------------   | ----------------- |
+| Title | Status | Note
+| --- |---| --- |
 | [#8 Load Assets](https://github.com/VaclavElias/stride-code-only/issues/8) |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)|Import and update assets|
 | [#2 Code Only + Editor](https://github.com/VaclavElias/stride-code-only/issues/2) |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)|Seamless workflow of both options|
 
