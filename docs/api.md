@@ -23,7 +23,7 @@ This library is just a preview, expect breaking changes.
 
 ## GameExtensions.cs
 
-The methodes which are done can be used but most likely would need some refactoring, because they are duplicating code from the engine. More research needs to be done if this could be moved to Stride engine.
+The methods which are done can be used but most likely would need some refactoring, because they are duplicating code from the engine. More research needs to be done if this could be moved to Stride engine.
 
 | Extensions | Status | Note
 | --- | --- | --- |
