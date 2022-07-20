@@ -79,6 +79,8 @@ using (var game = new Game())
     }
 }
 ```
+![image](https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png)
+
 ## Why would you use Code Only and not Stride Editor?
 - You don't want to install anything on your computer (no Stride installation required)
 - You want to start very quickly
