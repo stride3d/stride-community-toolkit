@@ -4,7 +4,7 @@
 
 This library is just a preview, expect breaking changes.
 
-| Name                   | Description
+| Class Name                   | Description
 | --------------------   | ----------------- |
 | BasicCameraController | Stride.Assets.Presentation, Assets -> Scripts -> Camera|
 | **CameraComponentExtensions** | ScreenPointToRay | |
