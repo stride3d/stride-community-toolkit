@@ -79,6 +79,9 @@ using (var game = new Game())
     }
 }
 ```
+
+```CreatePrimitive()``` creates Capsule with rigid body physics, and because we placed the capsule 8 above the ground ```new Vector3(0, 8, 0)```, it will fall down, eventually starts rolling till it falls from the ground. Note that we should remove the capsule once it is not visible to release resources, otherwise it remains in the memory and CPU is used to calculate physics.
+
 ![image](https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png)
 
 ## Why would you use Code Only and not Stride Editor?
