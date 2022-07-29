@@ -48,7 +48,7 @@ You must install the following, otherwise you won't be able to build/run the pro
 4. Run ```dotnet run```
 5. Enjoy Stride
 
-## Visual Studio 2022 Instructions
+## Visual Studio 2022 and Rider Instructions
  
 1. Create C# Console Application (.NET 6)
 2. Add NuGet package **CodeCapital.Stride.GameDefaults** prerelease
@@ -65,20 +65,19 @@ using Stride.Engine;
 using Stride.GameDefaults.ProceduralModels;
 using Stride.GameDefaults.Extensions;
 
-using (var game = new Game())
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
 {
-    game.Run(start: Start);
+    game.SetupBase3DScene();
 
-    void Start(Scene rootScene)
-    {
-        game.SetupBase3DScene();
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
-        
-        entity.Transform.Position = new Vector3(0, 8, 0);
-        
-        entity.Scene = rootScene;
-    }
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = rootScene;
 }
 ```
 
