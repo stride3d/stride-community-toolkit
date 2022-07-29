@@ -1,6 +1,8 @@
 ![Stride](https://media.githubusercontent.com/media/stride3d/stride/master/sources/data/images/Logo/stride-logo-readme.png)
 
-This repo contains C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the Stride editor/Game Studio. The documentation and more fun examples will follow up. This repository is here to collect feedback before any major updates are done in the Stride engine itself. This NuGet is in preview, expect breaking changes.
+This repo contains C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the Stride editor/Game Studio. The [documentation](https://github.com/VaclavElias/stride-code-only/blob/main/docs/api.md) and more fun examples will follow up. This repository is here to collect feedback before any major updates are done in the Stride engine itself. This NuGet is in preview, expect breaking changes.
+
+I wasn't able to run this on Linux at the moment. F# example is here https://github.com/VaclavElias/StrideFSharpExample.
 
 ## Content
 - Prerequisites
@@ -46,7 +48,7 @@ You must install the following, otherwise you won't be able to build/run the pro
 4. Run ```dotnet run```
 5. Enjoy Stride
 
-## Visual Studio 2022 Instructions
+## Visual Studio 2022 and Rider Instructions
  
 1. Create C# Console Application (.NET 6)
 2. Add NuGet package **CodeCapital.Stride.GameDefaults** prerelease
@@ -63,31 +65,38 @@ using Stride.Engine;
 using Stride.GameDefaults.ProceduralModels;
 using Stride.GameDefaults.Extensions;
 
-using (var game = new Game())
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
 {
-    game.Run(start: Start);
+    game.SetupBase3DScene();
 
-    void Start(Scene rootScene)
-    {
-        game.SetupBase3DScene();
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
-        
-        entity.Transform.Position = new Vector3(0, 8, 0);
-        entity.Scene = rootScene;
-    }
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = rootScene;
 }
 ```
+
+```CreatePrimitive()``` creates Capsule with rigid body physics, and because we placed the capsule 8 above the ground ```new Vector3(0, 8, 0)```, it will fall down, eventually starts rolling till it falls from the ground. Note that we should remove the capsule once it is not visible to release resources, otherwise it remains in the memory and CPU is used to calculate physics.
+
+![image](https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png)
+
 ## Why would you use Code Only and not Stride Editor?
 - You don't want to install anything on your computer (no Stride installation required)
 - You want to start very quickly
-- You want to learn C# programming with a nice visual output instead of console
+- You want to have fun learning C# or game development
+- You want to learn C# programming with a nice visual 2D/3D output instead of console
 - You want to learn game programming gradually, in the simplest way, without using the game editor
 - You find coding and coding tools very complex to understand and navigate around
 - You want to start with game development basics before you even start exploring the game editor
 - Easy and quick prototyping
 - Easy to learn game development concepts and steps
 - Performance and feature evaluation
+- Any other reason? Suggest here [GitHub Issues](https://github.com/VaclavElias/stride-code-only/issues).
 
 ## Functionality
 Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in this repo Issues.
