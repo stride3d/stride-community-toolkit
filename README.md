@@ -88,13 +88,15 @@ void Start(Scene rootScene)
 ## Why would you use Code Only and not Stride Editor?
 - You don't want to install anything on your computer (no Stride installation required)
 - You want to start very quickly
-- You want to learn C# programming with a nice visual output instead of console
+- You want to have fun learning C# or game development
+- You want to learn C# programming with a nice visual 2D/3D output instead of console
 - You want to learn game programming gradually, in the simplest way, without using the game editor
 - You find coding and coding tools very complex to understand and navigate around
 - You want to start with game development basics before you even start exploring the game editor
 - Easy and quick prototyping
 - Easy to learn game development concepts and steps
 - Performance and feature evaluation
+- Any other reason? Suggest here [GitHub Issues](https://github.com/VaclavElias/stride-code-only/issues).
 
 ## Functionality
 Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in this repo Issues.
