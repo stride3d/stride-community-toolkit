@@ -8,7 +8,7 @@ This library is just a preview, expect breaking changes.
 | --- | --- |
 | BasicCameraController | Stride.Assets.Presentation, Assets -> Scripts -> Camera|
 | CameraComponentExtensions | Implements ```ScreenPointToRay()``` | |
-| GameExtensions | |
+| GameExtensions | See below |
 | GameProfiler | Stride.Assets.Presentation, Assets -> Scripts -> Utility |
 | GraphicsCompositorBuilder | |
 | PrimitiveModelType |  |
@@ -19,7 +19,7 @@ This library is just a preview, expect breaking changes.
 
 | Extensions | Status | Note
 | --- | --- | --- |
-| ```ScreenPointToRay()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| |
+| ```ScreenPointToRay()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Returns near and far vector based on a ray going from camera through a screen point. |
 
 ## GameExtensions.cs
 
@@ -39,9 +39,11 @@ Some extensions return ```Entity``` so it can be further modified.
 | ```AddSkybox()```|![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge) | |
 | ```AddMouseLookCamera()```|![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge) | The camera entity can be moved using W, A, S, D, Q and E, arrow keys |
 | ```NewDefaultMaterial()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge) | Adds basic material |
-| ```AddGizmo()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)|To see X,Y,Z arrows|
-| ```AddEntityNames()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)|To see entity properties in the game|
-| ```AddPhysicsDebugger()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)|To see colliders|
+| ```CreatePrimitive()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge) | Simplifies primitives creation |
+| ```AddProfiler()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge) | Attaches profile |
+| ```AddGizmo()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Debug. To see X,Y,Z arrows|
+| ```AddEntityNames()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Debug. To see entity properties in the game|
+| ```AddPhysicsDebugger()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Debug. To see colliders|
 
 ## Other Requests & Features Tracking
 | Title | Status | Note
