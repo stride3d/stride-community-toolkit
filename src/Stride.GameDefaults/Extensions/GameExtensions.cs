@@ -22,6 +22,13 @@ public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
 
+    /// <summary>
+    /// Call this method to initialize the game, begin running the game loop, and start processing events for the game.
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="context"></param>
+    /// <param name="start"></param>
+    /// <param name="update"></param>
     public static void Run(this Game game, GameContext? context = null, Action<Scene>? start = null, Action<Scene, GameTime>? update = null)
     {
         game.Script.Scheduler.Add(RootScript);
@@ -84,9 +91,6 @@ public static class GameExtensions
         //    ColorTransforms = { Transforms = { new ToneMap() } },
         //};
 
-
-        // This might be used instead, I would like to update it with Clean UI
-        // https://github.com/herocrab/StrideCleanUI
         var graphicsCompositor = GraphicsCompositorBuilder.Create();
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
@@ -312,6 +316,7 @@ public static class GameExtensions
             PrimitiveModelType.Capsule => new CapsuleProceduralModel(),
             _ => throw new InvalidOperationException(),
         };
+
     private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type)
         => type switch
         {
