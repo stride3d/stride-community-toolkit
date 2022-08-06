@@ -7,7 +7,7 @@ I wasn't able to run this on Linux at the moment. F# example is here https://git
 ## Content
 - Prerequisites
 - Visual Studio Code Instructions
-- Visual Studio 2022 Instructions
+- Visual Studio 2022 and Rider Instructions
 - Example Code
 - Why would you use Code Only and not Stride Editor?
 - Functionality
