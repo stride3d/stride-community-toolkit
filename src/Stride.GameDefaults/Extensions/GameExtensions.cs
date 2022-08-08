@@ -255,15 +255,15 @@ public static class GameExtensions
 
         return Material.New(game.GraphicsDevice, materialDescription);
     }
-
+    
     /// <summary>
-    /// Creates a game object with a primitive mesh renderer and adds appropriate collider except for Torus, Teapot and Plane.
+    /// Creates an entity with a primitive procedural model with a primitive mesh renderer and adds appropriate collider except for Torus, Teapot and Plane.
     /// </summary>
     /// <param name="game"></param>
     /// <param name="type"></param>
     /// <param name="entityName"></param>
     /// <param name="material"></param>
-    /// <param name="includeCollider">Adds a default collider except for Torus, Teapot and Plane</param>
+    /// <param name="includeCollider">Adds a default collider except for Torus, Teapot and Plane. Default true.</param>
     /// <returns></returns>
     public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true)
     {
