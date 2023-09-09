@@ -1,0 +1,107 @@
+{
+  "api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html": {
+    "href": "api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html",
+    "title": "Class GraphicsCompositorBuilder | Stride Community Toolkit",
+    "keywords": "Class GraphicsCompositorBuilder Namespace Stride.CommunityToolkit.Compositing Assembly CodeCapital.Stride.GameDefaults.dll public static class GraphicsCompositorBuilder Inheritance object GraphicsCompositorBuilder Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods Create(Color4?) public static GraphicsCompositor Create(Color4? clearColor = null) Parameters clearColor Color4? Returns GraphicsCompositor"
+  },
+  "api/Stride.CommunityToolkit.Compositing.html": {
+    "href": "api/Stride.CommunityToolkit.Compositing.html",
+    "title": "Namespace Stride.CommunityToolkit.Compositing | Stride Community Toolkit",
+    "keywords": "Namespace Stride.CommunityToolkit.Compositing Classes GraphicsCompositorBuilder"
+  },
+  "api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html": {
+    "href": "api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html",
+    "title": "Class CameraComponentExtensions | Stride Community Toolkit",
+    "keywords": "Class CameraComponentExtensions Namespace Stride.CommunityToolkit.Extensions Assembly CodeCapital.Stride.GameDefaults.dll public static class CameraComponentExtensions Inheritance object CameraComponentExtensions Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods ScreenPointToRay(CameraComponent, Vector2) Returns near and far vector based on a ray going from camera through a screen point. The ray is in world space, starting on the near plane of the camera and going through position's (x,y) pixel coordinates on the screen. public static (Vector4 VectorNear, Vector4 VectorFar) ScreenPointToRay(this CameraComponent cameraComponent, Vector2 mousePosition) Parameters cameraComponent CameraComponent mousePosition Vector2 Returns (Vector4 VectorNear, Vector4 VectorFar)"
+  },
+  "api/Stride.CommunityToolkit.Extensions.GameExtensions.html": {
+    "href": "api/Stride.CommunityToolkit.Extensions.GameExtensions.html",
+    "title": "Class GameExtensions | Stride Community Toolkit",
+    "keywords": "Class GameExtensions Namespace Stride.CommunityToolkit.Extensions Assembly CodeCapital.Stride.GameDefaults.dll public static class GameExtensions Inheritance object GameExtensions Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods AddCamera(Game, string?) public static Entity AddCamera(this Game game, string? entityName = null) Parameters game Game entityName string Returns Entity AddDirectionalLight(Game, string?) public static Entity AddDirectionalLight(this Game game, string? entityName = null) Parameters game Game entityName string Returns Entity AddGraphicsCompositor(Game) public static GraphicsCompositor AddGraphicsCompositor(this Game game) Parameters game Game Returns GraphicsCompositor AddGround(Game, string?, Vector2?, bool) Adds a ground with default Size 10,10. public static Entity AddGround(this Game game, string? entityName = null, Vector2? size = null, bool includeCollider = true) Parameters game Game entityName string size Vector2? includeCollider bool Adds a collider Returns Entity AddMouseLookCamera(Game, Entity?) The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch. Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch. public static void AddMouseLookCamera(this Game game, Entity? cameraEntity) Parameters game Game cameraEntity Entity AddProfiler(Game, string?) Toggle profiling Left Shift + Left Ctrl + P, Toggle filtering mode F1 public static Entity AddProfiler(this Game game, string? entityName = null) Parameters game Game entityName string Returns Entity AddSkybox(Game, string?) public static Entity AddSkybox(this Game game, string? entityName = null) Parameters game Game entityName string Returns Entity CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool) Creates an entity with a primitive procedural model with a primitive mesh renderer and adds appropriate collider except for Torus, Teapot and Plane. public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true) Parameters game Game type PrimitiveModelType entityName string material Material includeCollider bool Adds a default collider except for Torus, Teapot and Plane. Default true. Returns Entity NewDefaultMaterial(Game, Color?) Basic default material public static Material NewDefaultMaterial(this Game game, Color? color = null) Parameters game Game color Color? Returns Material Run(Game, GameContext?, Action<Scene>?, Action<Scene, GameTime>?) Call this method to initialize the game, begin running the game loop, and start processing events for the game. public static void Run(this Game game, GameContext? context = null, Action<Scene>? start = null, Action<Scene, GameTime>? update = null) Parameters game Game context GameContext start Action<Scene> update Action<Scene, GameTime> SetupBase(Game) Sets up the mininum: Graphics Compositor, Camera and Light public static void SetupBase(this Game game) Parameters game Game SetupBase3DScene(Game) Sets up the default scene, the bare minumum like when you create an empty project through editor: Graphics Compositor, Camera and Directional Light, Skybox, MouseLookCamera, Ground public static void SetupBase3DScene(this Game game) Parameters game Game"
+  },
+  "api/Stride.CommunityToolkit.Extensions.html": {
+    "href": "api/Stride.CommunityToolkit.Extensions.html",
+    "title": "Namespace Stride.CommunityToolkit.Extensions | Stride Community Toolkit",
+    "keywords": "Namespace Stride.CommunityToolkit.Extensions Classes CameraComponentExtensions GameExtensions"
+  },
+  "api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html": {
+    "href": "api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html",
+    "title": "Enum PrimitiveModelType | Stride Community Toolkit",
+    "keywords": "Enum PrimitiveModelType Namespace Stride.CommunityToolkit.ProceduralModels Assembly CodeCapital.Stride.GameDefaults.dll public enum PrimitiveModelType Fields Capsule = 7 Cone = 6 Cube = 1 Cylinder = 2 Plane = 4 Sphere = 0 Teapot = 5 Torus = 3"
+  },
+  "api/Stride.CommunityToolkit.ProceduralModels.html": {
+    "href": "api/Stride.CommunityToolkit.ProceduralModels.html",
+    "title": "Namespace Stride.CommunityToolkit.ProceduralModels | Stride Community Toolkit",
+    "keywords": "Namespace Stride.CommunityToolkit.ProceduralModels Enums PrimitiveModelType"
+  },
+  "api/Stride.CommunityToolkit.Scripts.BasicCameraController.html": {
+    "href": "api/Stride.CommunityToolkit.Scripts.BasicCameraController.html",
+    "title": "Class BasicCameraController | Stride Community Toolkit",
+    "keywords": "Class BasicCameraController Namespace Stride.CommunityToolkit.Scripts Assembly CodeCapital.Stride.GameDefaults.dll A script that allows to move and rotate an entity through keyboard, mouse and touch input to provide basic camera navigation. public class BasicCameraController : SyncScript, IIdentifiable, ICollectorHolder Inheritance object EntityComponent ScriptComponent StartupScript SyncScript BasicCameraController Implements IIdentifiable ICollectorHolder Inherited Members ScriptComponent.LiveScriptingMask ScriptComponent.ScriptGlobalProfilingKey ScriptComponent.PriorityUpdated() ScriptComponent.Cancel() ScriptComponent.ProfilingKey ScriptComponent.Audio ScriptComponent.SpriteAnimation ScriptComponent.Services ScriptComponent.Game ScriptComponent.Content ScriptComponent.GameProfiler ScriptComponent.GraphicsDevice ScriptComponent.Input ScriptComponent.Script ScriptComponent.SceneSystem ScriptComponent.EffectSystem ScriptComponent.DebugText ScriptComponent.Streaming ScriptComponent.Log ScriptComponent.Priority ScriptComponent.IsLiveReloading ScriptComponent.Collector EntityComponent.Entity EntityComponent.Id EntityComponent.EnsureEntity object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Remarks The entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch. Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch. Properties Gamepad public bool Gamepad { get; set; } Property Value bool KeyboardMovementSpeed public Vector3 KeyboardMovementSpeed { get; set; } Property Value Vector3 KeyboardRotationSpeed public Vector2 KeyboardRotationSpeed { get; set; } Property Value Vector2 MouseRotationSpeed public Vector2 MouseRotationSpeed { get; set; } Property Value Vector2 SpeedFactor public float SpeedFactor { get; set; } Property Value float TouchMovementSpeed public Vector3 TouchMovementSpeed { get; set; } Property Value Vector3 TouchRotationSpeed public Vector2 TouchRotationSpeed { get; set; } Property Value Vector2 Methods Start() Called before the script enters it's update loop. public override void Start() Update() Called every frame. public override void Update()"
+  },
+  "api/Stride.CommunityToolkit.Scripts.GameProfiler.html": {
+    "href": "api/Stride.CommunityToolkit.Scripts.GameProfiler.html",
+    "title": "Class GameProfiler | Stride Community Toolkit",
+    "keywords": "Class GameProfiler Namespace Stride.CommunityToolkit.Scripts Assembly CodeCapital.Stride.GameDefaults.dll public class GameProfiler : AsyncScript, IIdentifiable, ICollectorHolder Inheritance object EntityComponent ScriptComponent AsyncScript GameProfiler Implements IIdentifiable ICollectorHolder Inherited Members AsyncScript.PriorityUpdated() AsyncScript.CancellationToken ScriptComponent.LiveScriptingMask ScriptComponent.ScriptGlobalProfilingKey ScriptComponent.Cancel() ScriptComponent.ProfilingKey ScriptComponent.Audio ScriptComponent.SpriteAnimation ScriptComponent.Services ScriptComponent.Game ScriptComponent.Content ScriptComponent.GameProfiler ScriptComponent.GraphicsDevice ScriptComponent.Input ScriptComponent.Script ScriptComponent.SceneSystem ScriptComponent.EffectSystem ScriptComponent.DebugText ScriptComponent.Streaming ScriptComponent.Log ScriptComponent.Priority ScriptComponent.IsLiveReloading ScriptComponent.Collector EntityComponent.Entity EntityComponent.Id EntityComponent.EnsureEntity object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties Enabled Enables or disable the game profiling public bool Enabled { get; set; } Property Value bool FilteringMode Gets or sets the type of the profiling to display: CPU or GPU [Display(0, \"Filter\", null)] public GameProfilingResults FilteringMode { get; set; } Property Value GameProfilingResults RefreshTime The time between two refreshes of the profiling information in milliseconds. [Display(2, \"Refresh interval (ms)\", null)] public double RefreshTime { get; set; } Property Value double ResultPage Gets or sets the current profiling result page to display. [Display(3, \"Display page\", null)] public uint ResultPage { get; set; } Property Value uint SortingMode Gets or set the sorting mode of the profiling entries [Display(1, \"Sort by\", null)] public GameProfilingSorting SortingMode { get; set; } Property Value GameProfilingSorting TextColor The color of the text displayed during profiling [Display(4, \"Text color\", null)] public Color TextColor { get; set; } Property Value Color Methods Execute() Called once, as a microthread public override Task Execute() Returns Task"
+  },
+  "api/Stride.CommunityToolkit.Scripts.html": {
+    "href": "api/Stride.CommunityToolkit.Scripts.html",
+    "title": "Namespace Stride.CommunityToolkit.Scripts | Stride Community Toolkit",
+    "keywords": "Namespace Stride.CommunityToolkit.Scripts Classes BasicCameraController A script that allows to move and rotate an entity through keyboard, mouse and touch input to provide basic camera navigation. GameProfiler"
+  },
+  "api/Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html": {
+    "href": "api/Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html",
+    "title": "Class SkyboxGenerator | Stride Community Toolkit",
+    "keywords": "Class SkyboxGenerator Namespace Stride.CommunityToolkit.Skyboxes Assembly CodeCapital.Stride.GameDefaults.dll public static class SkyboxGenerator Inheritance object SkyboxGenerator Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods Generate(Skybox, SkyboxGeneratorContext, Texture) public static Skybox Generate(Skybox skybox, SkyboxGeneratorContext context, Texture skyboxTexture) Parameters skybox Skybox context SkyboxGeneratorContext skyboxTexture Texture Returns Skybox"
+  },
+  "api/Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.html": {
+    "href": "api/Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.html",
+    "title": "Class SkyboxGeneratorContext | Stride Community Toolkit",
+    "keywords": "Class SkyboxGeneratorContext Namespace Stride.CommunityToolkit.Skyboxes Assembly CodeCapital.Stride.GameDefaults.dll public class SkyboxGeneratorContext : ShaderGeneratorContext, IDisposable, IComponent, IReferencable, ICollectorHolder Inheritance object DisposeBase ComponentBase ShaderGeneratorContext SkyboxGeneratorContext Implements IDisposable IComponent IReferencable ICollectorHolder Inherited Members ShaderGeneratorContext.GetParameterKey(ParameterKey) ShaderGeneratorContext.GenerateTextureFromColor(Color) ShaderGeneratorContext.GetTextureKey(Texture, ObjectParameterKey<Texture>, Color?) ShaderGeneratorContext.GetSamplerKey(SamplerStateDescription, GraphicsDevice) ShaderGeneratorContext.GetTextureKey(ComputeTextureBase, MaterialComputeColorKeys) ShaderGeneratorContext.GetSamplerKey(ComputeColorParameterSampler) ShaderGeneratorContext.ResetParameterKeys() ShaderGeneratorContext.PushOverrides(MaterialOverrides) ShaderGeneratorContext.PopOverrides() ShaderGeneratorContext.FindAsset ShaderGeneratorContext.GetAssetFriendlyName ShaderGeneratorContext.Log ShaderGeneratorContext.Content ShaderGeneratorContext.Parameters ShaderGeneratorContext.CurrentOverrides ShaderGeneratorContext.ColorSpace ShaderGeneratorContext.IsNotPixelStage ShaderGeneratorContext.OptimizeMaterials ComponentBase.Tags ComponentBase.Destroy() ComponentBase.OnNameChanged() ComponentBase.ToString() ComponentBase.Name DisposeBase.Dispose() DisposeBase.OnAddReference() DisposeBase.OnReleaseReference() DisposeBase.IsDisposed object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) Constructors SkyboxGeneratorContext(Game) public SkyboxGeneratorContext(Game game) Parameters game Game Properties GraphicsDevice public GraphicsDevice GraphicsDevice { get; } Property Value GraphicsDevice RenderContext public RenderContext RenderContext { get; } Property Value RenderContext RenderDrawContext public RenderDrawContext RenderDrawContext { get; } Property Value RenderDrawContext Services public IServiceRegistry Services { get; } Property Value IServiceRegistry"
+  },
+  "api/Stride.CommunityToolkit.Skyboxes.html": {
+    "href": "api/Stride.CommunityToolkit.Skyboxes.html",
+    "title": "Namespace Stride.CommunityToolkit.Skyboxes | Stride Community Toolkit",
+    "keywords": "Namespace Stride.CommunityToolkit.Skyboxes Classes SkyboxGenerator SkyboxGeneratorContext"
+  },
+  "api/Stride.Examples.Models.CapsuleAndWindowExample.html": {
+    "href": "api/Stride.Examples.Models.CapsuleAndWindowExample.html",
+    "title": "Class CapsuleAndWindowExample | Stride Community Toolkit",
+    "keywords": "Class CapsuleAndWindowExample Namespace Stride.Examples.Models Assembly Stride.CommunityToolkit.Examples.dll public static class CapsuleAndWindowExample Inheritance object CapsuleAndWindowExample Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods Run() public static void Run()"
+  },
+  "api/Stride.Examples.Models.CapsuleExample.html": {
+    "href": "api/Stride.Examples.Models.CapsuleExample.html",
+    "title": "Class CapsuleExample | Stride Community Toolkit",
+    "keywords": "Class CapsuleExample Namespace Stride.Examples.Models Assembly Stride.CommunityToolkit.Examples.dll public static class CapsuleExample Inheritance object CapsuleExample Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods Run() public static void Run()"
+  },
+  "api/Stride.Examples.Models.GiveMeACubeExample.html": {
+    "href": "api/Stride.Examples.Models.GiveMeACubeExample.html",
+    "title": "Class GiveMeACubeExample | Stride Community Toolkit",
+    "keywords": "Class GiveMeACubeExample Namespace Stride.Examples.Models Assembly Stride.CommunityToolkit.Examples.dll public static class GiveMeACubeExample Inheritance object GiveMeACubeExample Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods Run() public static void Run()"
+  },
+  "api/Stride.Examples.Models.html": {
+    "href": "api/Stride.Examples.Models.html",
+    "title": "Namespace Stride.Examples.Models | Stride Community Toolkit",
+    "keywords": "Namespace Stride.Examples.Models Classes CapsuleAndWindowExample CapsuleExample GiveMeACubeExample"
+  },
+  "api/index.html": {
+    "href": "api/index.html",
+    "title": "PLACEHOLDER | Stride Community Toolkit",
+    "keywords": "PLACEHOLDER TODO: Add .NET projects to the src folder and run docfx to generate REAL API Documentation!"
+  },
+  "articles/code-only.html": {
+    "href": "articles/code-only.html",
+    "title": "Code Only API Docs | Stride Community Toolkit",
+    "keywords": "Code Only API Docs Work in progress.. This library is just a preview, expect breaking changes. Class Name Description BasicCameraController Stride.Assets.Presentation, Assets -> Scripts -> Camera CameraComponentExtensions Implements ScreenPointToRay() GameExtensions See below GameProfiler Stride.Assets.Presentation, Assets -> Scripts -> Utility GraphicsCompositorBuilder PrimitiveModelType SkyboxGenerator SkyboxGeneratorContext CameraComponentExtensions.cs Extensions Status Note ScreenPointToRay() Returns near and far vector based on a ray going from camera through a screen point. GameExtensions.cs The methods which are done can be used but most likely would need some refactoring, because they are duplicating code from the engine. More research needs to be done if this could be moved to Stride engine. Some extensions return Entity so it can be further modified. Extensions Status Note Run() Unitialising the game, use start and update params SetupBase() Adds Graphics Compositor, Camera and Directional Light SetupBase3DScene() Same as SetupBase() plus SkyBox, Ground, MouseLookCamera SetupBase2DScene() AddGraphicsCompositor() Adds Graphic Compositor with Clean UI AddCamera() AddDirectionalLight() AddSkybox() AddMouseLookCamera() The camera entity can be moved using W, A, S, D, Q and E, arrow keys NewDefaultMaterial() Adds basic material CreatePrimitive() Simplifies primitives creation AddProfiler() Attaches profile AddGizmo() Debug. To see X,Y,Z arrows AddEntityNames() Debug. To see entity properties in the game AddPhysicsDebugger() Debug. To see colliders. Tracked here Issue #9 Other Requests & Features Tracking Title Status Note #8 Load Assets Import and update assets #2 Code Only + Editor Seamless workflow for both options #7 dotnet new template Can we use templates?"
+  },
+  "articles/intro.html": {
+    "href": "articles/intro.html",
+    "title": "Add your introductions here! | Stride Community Toolkit",
+    "keywords": "Add your introductions here!"
+  },
+  "index.html": {
+    "href": "index.html",
+    "title": "This is the HOMEPAGE. | Stride Community Toolkit",
+    "keywords": "This is the HOMEPAGE. Refer to Markdown for how to write markdown files. Quick Start Notes: Add images to the images folder if the file is referencing an image."
+  }
+}
