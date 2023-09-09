@@ -1,7 +1,7 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Stride.GameDefaults.Extensions;
+namespace Stride.CommunityToolkit.Extensions;
 
 public static class CameraComponentExtensions
 {

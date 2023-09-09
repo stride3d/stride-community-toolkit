@@ -1,4 +1,4 @@
-namespace Stride.GameDefaults.ProceduralModels;
+namespace Stride.CommunityToolkit.ProceduralModels;
 
 // Duplicated from Stride.Assets.Presentation.Preview
 public enum PrimitiveModelType

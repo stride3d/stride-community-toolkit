@@ -1,10 +1,10 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Processors;
-using Stride.GameDefaults.Compositing;
-using Stride.GameDefaults.ProceduralModels;
-using Stride.GameDefaults.Scripts;
-using Stride.GameDefaults.Skyboxes;
+using Stride.CommunityToolkit.Compositing;
+using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Scripts;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Physics;
@@ -16,7 +16,7 @@ using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
 
-namespace Stride.GameDefaults.Extensions;
+namespace Stride.CommunityToolkit.Extensions;
 
 public static class GameExtensions
 {

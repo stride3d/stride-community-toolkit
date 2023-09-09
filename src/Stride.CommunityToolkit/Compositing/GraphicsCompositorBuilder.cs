@@ -11,7 +11,7 @@ using Stride.Rendering.Shadows;
 using Stride.Rendering.Sprites;
 using Stride.Rendering.UI;
 
-namespace Stride.GameDefaults.Compositing;
+namespace Stride.CommunityToolkit.Compositing;
 
 // Taken from Stride.Rendering.Compositing GraphicsCompositorHelper 
 public static class GraphicsCompositorBuilder

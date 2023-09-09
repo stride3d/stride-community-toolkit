@@ -6,7 +6,7 @@ using Stride.Rendering.ComputeEffect.LambertianPrefiltering;
 using Stride.Rendering.Skyboxes;
 using Stride.Shaders;
 
-namespace Stride.GameDefaults.Skyboxes;
+namespace Stride.CommunityToolkit.Skyboxes;
 
 // Taken from Stride.Assets.Skyboxes
 public static class SkyboxGenerator

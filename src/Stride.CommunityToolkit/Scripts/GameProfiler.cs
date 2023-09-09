@@ -4,7 +4,7 @@ using Stride.Engine;
 using Stride.Input;
 using Stride.Profiling;
 
-namespace Stride.GameDefaults.Scripts;
+namespace Stride.CommunityToolkit.Scripts;
 
 // Taken from Stride.Assets.Presentation, Assets -> Scripts -> Utility
 public class GameProfiler : AsyncScript

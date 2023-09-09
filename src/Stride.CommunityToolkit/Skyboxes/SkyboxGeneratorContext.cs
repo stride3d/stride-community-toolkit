@@ -4,7 +4,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
 
-namespace Stride.GameDefaults.Skyboxes;
+namespace Stride.CommunityToolkit.Skyboxes;
 
 // Taken from Stride.Assets.Skyboxes
 public class SkyboxGeneratorContext : ShaderGeneratorContext
