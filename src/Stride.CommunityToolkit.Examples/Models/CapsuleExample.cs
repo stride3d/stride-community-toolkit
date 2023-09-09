@@ -1,7 +1,7 @@
+using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.GameDefaults.Extensions;
-using Stride.GameDefaults.ProceduralModels;
 
 namespace Stride.Examples.Models;
 

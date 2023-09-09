@@ -1,7 +1,7 @@
+using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.GameDefaults.Extensions;
-using Stride.GameDefaults.ProceduralModels;
 using Stride.Graphics;
 using Stride.Rendering;
 using Stride.UI;
@@ -44,7 +44,7 @@ public static class CapsuleAndWindowExample
             {
                 new UIComponent
                 {
-                    Page = new UIPage { RootElement = GetCanavas() },
+                    Page = new UIPage { RootElement = GetCanvas() },
                     RenderGroup = RenderGroup.Group31
                 }
             };
@@ -52,7 +52,7 @@ public static class CapsuleAndWindowExample
         uiEntity.Scene = rootScene;
     }
 
-    private static Canvas GetCanavas()
+    private static Canvas GetCanvas()
     {
         var canvas = new Canvas { Width = 300, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
 
