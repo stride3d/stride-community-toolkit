@@ -1,4 +1,4 @@
-name: Build Stride Docs - Staging - GitHub
+name: Build Stride Community Toolkit Docs - GitHub Pages
 on:
   # push:
   #   branches:
