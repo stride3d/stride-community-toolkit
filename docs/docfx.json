@@ -4,8 +4,14 @@
       "src": [
         {
           "files": [
-            "bin/**/*.dll"
-          ]
+            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj",
+            "Stride.CommunityToolkit.Examples/Stride.CommunityToolkit.Examples.csproj",
+          ],
+          "src": "../src",
+          "properties": {
+            "TargetFramework": "net6.0",
+            "StrideBuildDoc": "true"
+          }
         }
       ],
       "dest": "api",
@@ -20,6 +26,17 @@
     }
   ],
   "build": {
+    "globalMetadata": {
+      "_appTitle": "Stride Community Toolkit",
+      "_enableSearch": true,
+      "_appLogoPath": "media/stride-logo-red.svg",
+      "_appFooter": "<div class=\"d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small\"><p >Supported by the <a href=\"https://dotnetfoundation.org/\" target=\"_blank\" rel=\"noopener\">.NET Foundation</a></p><p>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></p><p >Stride Docs Website v.2.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>"
+    },
+    "sitemap": {
+      "baseUrl": "https://doc.stride3d.net/",
+      "priority": 0.1,
+      "changefreq": "monthly"
+    },
     "content": [
       {
         "files": [
@@ -36,15 +53,32 @@
         ]
       }
     ],
+    "overwrite": [
+      {
+        "files": [
+          "examples/**/*.md"
+        ]
+      }
+    ],
     "resource": [
       {
         "files": [
-          "images/**"
-        ]
+          ".nojekyll",
+          "CNAME",
+          "favicon.ico",
+          "favicon.png",
+          "images/**",
+        ],
+        "exclude": [ "_site/**", "obj/**" ]
       }
     ],
     "output": "_site",
     "globalMetadataFiles": [],
+    "markdownEngineProperties": {
+      "toc": {
+        "levels": "1,2,3"
+      }
+    },
     "fileMetadataFiles": [],
     "template": [
       "default",
