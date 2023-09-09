@@ -24,8 +24,6 @@ jobs:
 
     - name: Checkout Stride Community Toolkit
       uses: actions/checkout@v3
-      with:
-        path: stride-community-toolkit
 
     # - name: Checkout Stride (note the LFS)
     #   uses: actions/checkout@v3
