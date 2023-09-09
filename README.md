@@ -4,6 +4,8 @@ This repo contains C# helpers and extensions to run [Stride](https://github.com/
 
 I wasn't able to run this on Linux at the moment. F# example is here https://github.com/VaclavElias/StrideFSharpExample.
 
+- Stride Game Engine Extension for code only approach, running Stride application without Game Editor.
+
 ## Content
 - Prerequisites
 - Visual Studio Code Instructions
