@@ -1,0 +1,52 @@
+name: Build Stride Docs - Staging - GitHub
+on:
+  # push:
+  #   branches:
+  #     - main
+  #   paths-ignore:
+  #     - 'README.md'
+  #     - 'BuildDocs.ps1'
+  #     - 'wiki/**'
+  #     - '.github/**'
+  workflow_dispatch:
+
+jobs:
+  publish-docs:
+    runs-on: windows-2022
+    steps:
+    #- name: Display .NET Core information
+    #  run: dotnet --info
+
+    - name: Dotnet Setup
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.x
+
+    - name: Checkout Stride Community Toolkit
+      uses: actions/checkout@v3
+      with:
+        path: stride-community-toolkit
+
+    # - name: Checkout Stride (note the LFS)
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: stride3d/stride
+    #     token: ${{ secrets.GITHUB_TOKEN }}
+    #     path: stride
+    #     lfs: true
+
+    # - name: Copy global.json file
+    #   run: xcopy stride-docs\global.json . /Y
+
+    - run: dotnet tool update -g docfx
+#    - run: dotnet tool install -g docfx --version 2.65.1
+
+    - name: Build documentation
+      run: docfx docfx.json
+      working-directory: docs
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_site
