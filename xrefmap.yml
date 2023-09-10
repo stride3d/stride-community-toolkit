@@ -38,6 +38,32 @@ references:
   commentId: T:Stride.CommunityToolkit.Extensions.CameraComponentExtensions
   fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions
   nameWithType: CameraComponentExtensions
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RayCast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.RayCast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast*
+  name: RayCast
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast
+  nameWithType: CameraComponentExtensions.RayCast
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RayCastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.RayCastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse*
+  name: RayCastMouse
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCastMouse_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse
+  nameWithType: CameraComponentExtensions.RayCastMouse
 - uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
   name: ScreenPointToRay(CameraComponent, Vector2)
   href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenPointToRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
@@ -182,6 +208,32 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive
   nameWithType: GameExtensions.CreatePrimitive
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime(Stride.Games.IGame)
+  name: DeltaTime(IGame)
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTime_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime(Stride.Games.IGame)
+  nameWithType: GameExtensions.DeltaTime(IGame)
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime*
+  name: DeltaTime
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTime_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime
+  nameWithType: GameExtensions.DeltaTime
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  name: DeltaTimeAccurate(IGame)
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  nameWithType: GameExtensions.DeltaTimeAccurate(IGame)
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate*
+  name: DeltaTimeAccurate
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTimeAccurate_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate
+  nameWithType: GameExtensions.DeltaTimeAccurate
 - uid: Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color})
   name: NewDefaultMaterial(Game, Color?)
   href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_NewDefaultMaterial_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Color__
@@ -237,6 +289,25 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene
   nameWithType: GameExtensions.SetupBase3DScene
+- uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
+  name: GraphicsDeviceExtensions
+  href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html
+  commentId: T:Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
+  fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
+  nameWithType: GraphicsDeviceExtensions
+- uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
+  name: GetWindowSize(GraphicsDevice)
+  href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html#Stride_CommunityToolkit_Extensions_GraphicsDeviceExtensions_GetWindowSize_Stride_Graphics_GraphicsDevice_
+  commentId: M:Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
+  fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
+  nameWithType: GraphicsDeviceExtensions.GetWindowSize(GraphicsDevice)
+- uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize*
+  name: GetWindowSize
+  href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html#Stride_CommunityToolkit_Extensions_GraphicsDeviceExtensions_GetWindowSize_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize
+  nameWithType: GraphicsDeviceExtensions.GetWindowSize
 - uid: Stride.CommunityToolkit.ProceduralModels
   name: Stride.CommunityToolkit.ProceduralModels
   href: api/Stride.CommunityToolkit.ProceduralModels.html

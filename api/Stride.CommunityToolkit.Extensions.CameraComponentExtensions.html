@@ -48,7 +48,7 @@
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
           <a class="navbar-brand" href="../index.html">
-            <img id="logo" class="svg" src="../media/stride-logo-red.svg" alt="">
+            <img id="logo" class="svg" src="../media/stride-logo-blue.svg" alt="">
             
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,7 @@
 
   <h1 id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions" class="text-break">
     Class CameraComponentExtensions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L7"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -157,11 +157,112 @@
 </h2>
 
 
+  <a id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
+  RayCast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a raycasting operation from the specified CameraComponent's position through the specified screen position in world coordinates,
+and returns information about the hit result.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static HitResult RayCast(this CameraComponent Camera, ScriptComponent component, Vector2 screenPos, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.DefaultFilter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>Camera</code> <a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
+    <dd><p>The CameraComponent from which the ray should be cast.</p>
+</dd>
+    <dt><code>component</code> <a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
+    <dd><p>The ScriptComponent which has the Simulation to run the Cast in.</p>
+</dd>
+    <dt><code>screenPos</code> <a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>The screen position (in world coordinates) where the ray should be cast through.</p>
+</dd>
+    <dt><code>collisionGroups</code> <span class="xref">CollisionFilterGroups</span></dt>
+    <dd><p>Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</p>
+</dd>
+    <dt><code>collisionFlags</code> <span class="xref">CollisionFilterGroupFlags</span></dt>
+    <dd><p>Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">HitResult</span></dt>
+    <dd><p>A HitResult containing information about the hit result, including the hit location and other collision data.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCastMouse_" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
+  RayCastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
+and returns information about the hit result.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static HitResult RayCastMouse(this CameraComponent Camera, ScriptComponent component, CollisionFilterGroups collisionGroup = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>Camera</code> <a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
+    <dd><p>The CameraComponent from which the ray should be cast.</p>
+</dd>
+    <dt><code>component</code> <a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
+    <dd><p>The ScriptComponent from which the Input.MousePosition should be taken.</p>
+</dd>
+    <dt><code>collisionGroup</code> <span class="xref">CollisionFilterGroups</span></dt>
+    <dd><p>Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</p>
+</dd>
+    <dt><code>collisionFilterGroupFlags</code> <span class="xref">CollisionFilterGroupFlags</span></dt>
+    <dd><p>Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">HitResult</span></dt>
+    <dd><p>A HitResult containing information about the hit result, including the hit location and other collision data.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
   <a id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenPointToRay_" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay*"></a>
 
   <h3 id="Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenPointToRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_" data-uid="Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)">
   ScreenPointToRay(CameraComponent, Vector2)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L15"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Returns near and far vector based on a ray going from camera through a screen point. The ray is in world space, starting on the near plane of the camera and going through position's (x,y) pixel coordinates on the screen.</p>
@@ -200,7 +301,7 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L6" class="edit-link">Edit this page</a>
+          <a href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraComponentExtensions.cs/#L7" class="edit-link">Edit this page</a>
         </div>
 
         
@@ -216,7 +317,7 @@
     <footer class="border-top">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Docs Website v.2.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Docs Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

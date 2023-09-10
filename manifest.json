@@ -17,6 +17,16 @@
       }
     },
     {
+      "type": "Resource",
+      "source_relative_path": ".nojekyll",
+      "output": {
+        "resource": {
+          "relative_path": ".nojekyll"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.yml",
       "output": {
@@ -52,6 +62,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Extensions.GameExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html"
         }
       },
       "version": ""
@@ -211,43 +231,169 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/code-only.md",
+      "source_relative_path": "index.md",
       "output": {
         ".html": {
-          "relative_path": "articles/code-only.html"
+          "relative_path": "index.html"
         }
       },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/intro.md",
+      "source_relative_path": "manual/code-only.md",
       "output": {
         ".html": {
-          "relative_path": "articles/intro.html"
+          "relative_path": "manual/code-only.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/getting-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/index.html"
         }
       },
       "version": ""
     },
     {
       "type": "Toc",
-      "source_relative_path": "articles/toc.yml",
+      "source_relative_path": "manual/toc.yml",
       "output": {
         ".html": {
-          "relative_path": "articles/toc.html"
+          "relative_path": "manual/toc.html"
         },
         ".json": {
-          "relative_path": "articles/toc.json"
+          "relative_path": "manual/toc.json"
         }
       },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "index.md",
+      "source_relative_path": "manual/whats-new.md",
       "output": {
         ".html": {
-          "relative_path": "index.html"
+          "relative_path": "manual/whats-new.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/bg_dark.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/bg_dark.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/bg_light.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/bg_light.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/stride-logo-blue.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-blue.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/stride-logo-dark.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-dark.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/stride-logo-green.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-green.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/stride-logo-light.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-light.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/stride-logo-only.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-only.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/stride-logo-red.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-red.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Toc",
+      "source_relative_path": "release-notes/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/toc.html"
+        },
+        ".json": {
+          "relative_path": "release-notes/toc.json"
         }
       },
       "version": ""
@@ -261,6 +407,49 @@
         },
         ".json": {
           "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/code-only.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/code-only.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/intro.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "tutorials/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/toc.html"
+        },
+        ".json": {
+          "relative_path": "tutorials/toc.json"
         }
       },
       "version": ""

@@ -1,2 +1,2 @@
 
-{"items":[{"name":"Articles","href":"articles/intro.html","tocHref":"articles/toc.html","topicHref":"articles/intro.html"},{"name":"Api Documentation","href":"api/index.html","tocHref":"api/toc.html","topicHref":"api/index.html","homepage":"api/index.html"}]}
+{"items":[{"name":"📚 Manual","href":"manual/index.html","tocHref":"manual/toc.html","topicHref":"manual/index.html","homepage":"manual/index.html"},{"name":"🎓 Tutorials","href":"tutorials/index.html","topicHref":"tutorials/index.html"},{"name":"📝 Release Notes","href":"release-notes/index.html","topicHref":"release-notes/index.html"},{"name":"🔧 API","href":"api/index.html","tocHref":"api/toc.html","topicHref":"api/index.html","homepage":"api/index.html"}]}
