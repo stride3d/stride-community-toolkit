@@ -115,7 +115,25 @@ public static class GameExtensions
 
         return entity;
     }
+    /// <summary>
+    /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
+    /// </summary>
+    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
+    /// <returns>The time elapsed since the last game update in seconds.</returns>
+    public static float DeltaTime(this IGame gameTime)
+    {
+        return (float)gameTime.UpdateTime.Elapsed.TotalSeconds;
+    }
 
+    /// <summary>
+    /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
+    /// </summary>
+    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
+    /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
+    public static double DeltaTimeAccurate(this IGame gameTime)
+    {
+        return gameTime.UpdateTime.Elapsed.TotalSeconds;
+    }
     public static Entity AddDirectionalLight(this Game game, string? entityName = null)
     {
         var entity = new Entity(entityName) { new LightComponent
@@ -255,7 +273,7 @@ public static class GameExtensions
 
         return Material.New(game.GraphicsDevice, materialDescription);
     }
-    
+
     /// <summary>
     /// Creates an entity with a primitive procedural model with a primitive mesh renderer and adds appropriate collider except for Torus, Teapot and Plane.
     /// </summary>
