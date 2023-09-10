@@ -4,8 +4,10 @@
   href: getting-started.md
 - name: What's new in docs
   href: whats-new.md
-  # items:
-  # - name: What's new in docs
-  #   href: whats-new.md
 - name: Code Only
-  href: code-only.md
+  href: code-only/index.md
+  items:
+  - name: Create Project
+    href: code-only/create-project.md
+  - name: Troubleshooting
+    href: code-only/troubleshooting.md
