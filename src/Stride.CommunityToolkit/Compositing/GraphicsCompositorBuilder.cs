@@ -13,7 +13,7 @@ using Stride.Rendering.UI;
 
 namespace Stride.CommunityToolkit.Compositing;
 
-// Taken from Stride.Rendering.Compositing GraphicsCompositorHelper 
+// Taken from Stride.Rendering.Compositing GraphicsCompositorHelper
 public static class GraphicsCompositorBuilder
 {
     public static GraphicsCompositor Create(Color4? clearColor = null)

@@ -1,0 +1,6 @@
+- name: Release Notes
+  href: index.md
+# - name: What's new in 1.1
+#   href: stride-community-toolkit-1.1.md
+- name: What's new in 1.0
+  href: stride-community-toolkit-1.0.md
