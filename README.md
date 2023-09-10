@@ -1,3 +1,5 @@
+# Stride Community Toolkit 🧰
+
 ![Stride](https://media.githubusercontent.com/media/stride3d/stride/master/sources/data/images/Logo/stride-logo-readme.png)
 
 This repo contains C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the Stride editor/Game Studio. The [documentation](https://github.com/VaclavElias/stride-code-only/blob/main/docs/api.md) and more fun examples will follow up. This repository is here to collect feedback before any major updates are done in the Stride engine itself. This NuGet is in preview, expect breaking changes.
