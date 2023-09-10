@@ -29,8 +29,16 @@
     "globalMetadata": {
       "_appTitle": "Stride Community Toolkit",
       "_enableSearch": true,
-      "_appLogoPath": "media/stride-logo-red.svg",
-      "_appFooter": "<div class=\"d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small\"><p >Supported by the <a href=\"https://dotnetfoundation.org/\" target=\"_blank\" rel=\"noopener\">.NET Foundation</a></p><p>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></p><p >Stride Docs Website v.2.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>"
+      "_appLogoPath": "media/stride-logo-blue.svg",
+      "_appFooter": "<div class=\"d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small\"><p >Supported by the <a href=\"https://dotnetfoundation.org/\" target=\"_blank\" rel=\"noopener\">.NET Foundation</a></p><p>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></p><p >Stride Docs Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>"
+    },
+    "fileMetadata": {
+      "_appTitle": {
+        "tutorials/**/*.md": "Stride Tutorials",
+        "manual/**/*.md": "Stride Manual",
+        "ReleaseNotes/**/*.md": "Stride Release Notes",
+        "api/**/*.md": "Stride API"
+      }
     },
     "sitemap": {
       "baseUrl": "https://doc.stride3d.net/",
@@ -41,7 +49,13 @@
       {
         "files": [
           "api/**.yml",
-          "api/index.md"
+          "api/index.md",
+          "tutorials/toc.yml",
+          "tutorials/**/*.md",
+          "release-notes/toc.yml",
+          "release-notes/**/*.md",
+          "manual/toc.yml",
+          "manual/**/*.md"
         ]
       },
       {
@@ -68,6 +82,14 @@
           "favicon.ico",
           "favicon.png",
           "images/**",
+          "**/media/**/*.png",
+          "**/media/**/*.jpg",
+          "**/media/**/*.gif",
+          "**/media/**/*.mp4",
+          "**/media/**/*.zip",
+          "**/media/**/*.svg",
+          "**/media/**/*.webp",
+          "**/media/**/*.cs"
         ],
         "exclude": [ "_site/**", "obj/**" ]
       }
@@ -82,7 +104,8 @@
     "fileMetadataFiles": [],
     "template": [
       "default",
-      "modern"
+      "modern",
+      "template"
     ],
     "postProcessors": [],
     "keepFileLink": false,
