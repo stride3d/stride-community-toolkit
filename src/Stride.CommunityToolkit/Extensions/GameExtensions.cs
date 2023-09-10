@@ -1,10 +1,10 @@
-using Stride.Core.Mathematics;
-using Stride.Engine;
-using Stride.Engine.Processors;
 using Stride.CommunityToolkit.Compositing;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Engine.Processors;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Physics;
@@ -134,6 +134,7 @@ public static class GameExtensions
     {
         return gameTime.UpdateTime.Elapsed.TotalSeconds;
     }
+
     public static Entity AddDirectionalLight(this Game game, string? entityName = null)
     {
         var entity = new Entity(entityName) { new LightComponent

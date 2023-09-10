@@ -1,12 +1,8 @@
-﻿using Stride.Core.Mathematics;
+using Stride.Core.Mathematics;
 using Stride.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stride.CommunityToolkit.Extensions;
+
 public static class GraphicsDeviceExtensions
 {
     /// <summary>
