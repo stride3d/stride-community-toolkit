@@ -9,5 +9,7 @@
   items:
   - name: Create Project
     href: code-only/create-project.md
+  - name: Extensions
+    href: code-only/extensions.md
   - name: Troubleshooting
     href: code-only/troubleshooting.md
