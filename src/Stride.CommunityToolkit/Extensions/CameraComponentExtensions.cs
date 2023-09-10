@@ -69,4 +69,17 @@ public static class CameraComponentExtensions
         // Raycast from the point on the near plane to the point on the far plane and get the collision result
         return component.GetSimulation().Raycast(vectorNear.XYZ(), vectorFar.XYZ(), collisionGroups, collisionFlags);
     }
+    /// <summary>
+    /// Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
+    /// and returns information about the hit result.
+    /// </summary>
+    /// <param name="Camera">The CameraComponent from which the ray should be cast.</param>
+    /// <param name="component">The ScriptComponent from which the Input.MousePosition should be taken.</param>
+    /// <param name="collisionGroup">Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</param>
+    /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</param>
+    /// <returns>A HitResult containing information about the hit result, including the hit location and other collision data.</returns>
+    public static HitResult RayCastMouse(this CameraComponent Camera, ScriptComponent component, CollisionFilterGroups collisionGroup = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
+    {
+        return Camera.RayCast(component, component.Input.MousePosition, collisionGroup, collisionFilterGroupFlags);
+    }
 }
