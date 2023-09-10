@@ -1,4 +1,6 @@
-- name: What's new
-  href: intro.md
-- name: Code Only
-  href: code-only.md
+- name: Release Notes
+  href: index.md
+# - name: What's new in 1.1
+#   href: stride-community-toolkit-1.1.md
+- name: What's new in 1.0
+  href: stride-community-toolkit-1.0.md
