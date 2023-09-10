@@ -1,4 +1,4 @@
-# 📦 Stride Community Toolkit Documentation
+# Stride Community Toolkit Documentation
 
 The Stride Community Toolkit is a comprehensive set of helpers and extensions designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/).It simplifies and exemplifies routine development tasks, enabling you to build applications for Stride using .NET with ease.
 

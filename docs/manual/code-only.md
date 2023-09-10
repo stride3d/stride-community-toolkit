@@ -1,4 +1,4 @@
-# Code Only API Docs
+# Code Only
 
 ## Why would you use Code Only and not Stride Editor?
 - You don't want to install anything on your computer (no Stride installation required)
