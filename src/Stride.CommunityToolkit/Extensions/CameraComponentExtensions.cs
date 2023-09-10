@@ -33,6 +33,7 @@ public static class CameraComponentExtensions
 
         return (vectorNear, vectorFar);
     }
+
     /// <summary>
     /// Performs a raycasting operation from the specified CameraComponent's position through the specified screen position in world coordinates,
     /// and returns information about the hit result.
@@ -69,6 +70,7 @@ public static class CameraComponentExtensions
         // Raycast from the point on the near plane to the point on the far plane and get the collision result
         return component.GetSimulation().Raycast(vectorNear.XYZ(), vectorFar.XYZ(), collisionGroups, collisionFlags);
     }
+
     /// <summary>
     /// Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
     /// and returns information about the hit result.
