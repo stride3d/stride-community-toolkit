@@ -1,8 +1,10 @@
 # Stride Community Toolkit Documentation
 
-The Stride Community Toolkit is a collection of helpers and extensions for [Stride Game Engine](https://www.stride3d.net/). Simplifies and demonstrates common developer tasks building experiences for Stride with .NET.
+The Stride Community Toolkit is a comprehensive set of helpers and extensions designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/).It simplifies and exemplifies routine development tasks, enabling you to build applications for Stride using .NET with ease.
 
-The Stride Community Toolkit is available as a NuGet package for new or existing C# projects. Read the Getting Started page for all the details.
+Available as a NuGet package, the Stride Community Toolkit can be easily integrated into new or existing C# projects. For more information on how to get started, please refer to the Getting Started page.
+
+This toolkit serves as our preferred solution for rapid prototyping and accelerated game development. Unlike the more stable Stride Game Engine, the Stride Community Toolkit aims for a faster development momentum. As such, **breaking changes** are not only likely but should be expected. This approach allows us to quickly iterate and integrate new features and improvements. We believe this pace serves the needs of developers who are looking for cutting-edge tools and are comfortable with a more dynamic environment.
 
 Feel free to browse the documentation using the table of contents on the left side of this page.
 
@@ -10,6 +12,6 @@ Feel free to browse the documentation using the table of contents on the left si
 
 [Stride Community Toolkit Source Code](https://github.com/VaclavElias/stride-community-toolkit)
 
-Built as an open source project hosted on GitHub with support from the community. It is part of the .NET Foundation.
+This toolkit is an open-source project hosted on GitHub and is supported by the community.
 
-The majority of the projects within the Stride Community Toolkit are licensed under a MIT license. Check the specific repo/NuGet packages for details on licensing and third-party usage notes.
+Most projects within the Stride Community Toolkit are licensed under the MIT license. For specifics on licensing and notes on third-party usage, please check the individual repositories or NuGet packages.

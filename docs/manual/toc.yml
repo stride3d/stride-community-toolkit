@@ -1,9 +1,11 @@
+- name: Manual
+  href: index.md
 - name: Getting Started
   href: getting-started.md
 - name: What's new
   href: whats-new.md
-  items:
-  - name: What's new in docs
-    href: whats-new.md
+  # items:
+  # - name: What's new in docs
+  #   href: whats-new.md
 - name: Code Only
   href: code-only.md
