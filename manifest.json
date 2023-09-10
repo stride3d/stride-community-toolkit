@@ -230,6 +230,26 @@
       "version": ""
     },
     {
+      "type": "Resource",
+      "source_relative_path": "favicon.ico",
+      "output": {
+        "resource": {
+          "relative_path": "favicon.ico"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "favicon.png",
+      "output": {
+        "resource": {
+          "relative_path": "favicon.png"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
@@ -383,9 +403,16 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/stride-community-toolkit-1.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/stride-community-toolkit-1.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Toc",
       "source_relative_path": "release-notes/toc.yml",
       "output": {
@@ -413,10 +440,10 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "tutorials/code-only.md",
+      "source_relative_path": "tutorials/code-only/index.md",
       "output": {
         ".html": {
-          "relative_path": "tutorials/code-only.html"
+          "relative_path": "tutorials/code-only/index.html"
         }
       },
       "version": ""
@@ -432,16 +459,9 @@
       "version": ""
     },
     {
-      "type": "Conceptual",
-      "source_relative_path": "tutorials/intro.md",
-      "output": {
-        ".html": {
-          "relative_path": "tutorials/intro.html"
-        }
-      },
-      "version": ""
-    },
-    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Toc",
       "source_relative_path": "tutorials/toc.yml",
       "output": {

@@ -116,27 +116,27 @@
   },
   "manual/whats-new.html": {
     "href": "manual/whats-new.html",
-    "title": "What's new? | Stride Manual",
-    "keywords": "What's new? Welcome to what's new in Stride Community Toolkit docs. Use this page to quickly find the latest changes. New articles Updated articles"
+    "title": "What's new in docs? | Stride Manual",
+    "keywords": "What's new in docs? Welcome to what's new in Stride Community Toolkit docs. Use this page to quickly find the latest changes. New articles Updated articles"
   },
   "release-notes/index.html": {
     "href": "release-notes/index.html",
-    "title": "This is the HOMEPAGE. | Stride Community Toolkit",
-    "keywords": "This is the HOMEPAGE. Refer to Markdown for how to write markdown files. Quick Start Notes: Add images to the images folder if the file is referencing an image."
+    "title": "Release Notes | Stride Community Toolkit",
+    "keywords": "Release Notes Welcome to the Release Notes for the Stride Community Toolkit. This section aims to provide you with an organized, high-level summary of changes, enhancements, and fixes made in each version release. If you're looking to understand what has changed from one version to the next, you're in the right place. How to Read the Release Notes Each sub-page listed on the left corresponds to a specific version release of the Stride Community Toolkit. These sub-pages will detail new features, improvements, and bug fixes for that particular version. What to Expect The Stride Community Toolkit is developed with rapid iteration in mind. It moves at a faster development pace compared to the Stride Game Engine. As a result, you should expect frequent updates that may introduce breaking changes. This fast-paced approach allows us to incorporate community feedback quickly and continue improving the toolkit."
   },
-  "tutorials/code-only.html": {
-    "href": "tutorials/code-only.html",
-    "title": "Code Only API Docs | Stride Tutorials",
-    "keywords": "Code Only API Docs Work in progress.. This library is just a preview, expect breaking changes. Class Name Description BasicCameraController Stride.Assets.Presentation, Assets -> Scripts -> Camera CameraComponentExtensions Implements ScreenPointToRay() GameExtensions See below GameProfiler Stride.Assets.Presentation, Assets -> Scripts -> Utility GraphicsCompositorBuilder PrimitiveModelType SkyboxGenerator SkyboxGeneratorContext CameraComponentExtensions.cs Extensions Status Note ScreenPointToRay() Returns near and far vector based on a ray going from camera through a screen point. GameExtensions.cs The methods which are done can be used but most likely would need some refactoring, because they are duplicating code from the engine. More research needs to be done if this could be moved to Stride engine. Some extensions return Entity so it can be further modified. Extensions Status Note Run() Unitialising the game, use start and update params SetupBase() Adds Graphics Compositor, Camera and Directional Light SetupBase3DScene() Same as SetupBase() plus SkyBox, Ground, MouseLookCamera SetupBase2DScene() AddGraphicsCompositor() Adds Graphic Compositor with Clean UI AddCamera() AddDirectionalLight() AddSkybox() AddMouseLookCamera() The camera entity can be moved using W, A, S, D, Q and E, arrow keys NewDefaultMaterial() Adds basic material CreatePrimitive() Simplifies primitives creation AddProfiler() Attaches profile AddGizmo() Debug. To see X,Y,Z arrows AddEntityNames() Debug. To see entity properties in the game AddPhysicsDebugger() Debug. To see colliders. Tracked here Issue #9 Other Requests & Features Tracking Title Status Note #8 Load Assets Import and update assets #2 Code Only + Editor Seamless workflow for both options #7 dotnet new template Can we use templates?"
+  "release-notes/stride-community-toolkit-1.0.html": {
+    "href": "release-notes/stride-community-toolkit-1.0.html",
+    "title": "What's new in Stride Community Toolkit 1.0 | Stride Community Toolkit",
+    "keywords": "What's new in Stride Community Toolkit 1.0 This article highlights the most significant changes in Stride Community Toolkit 1.0 with links to relevant documentation."
+  },
+  "tutorials/code-only/index.html": {
+    "href": "tutorials/code-only/index.html",
+    "title": "C# Code Only | Stride Tutorials",
+    "keywords": "C# Code Only These tutorials cover the code only principles of using C# when working with the Stride game engine."
   },
   "tutorials/index.html": {
     "href": "tutorials/index.html",
-    "title": "This is the HOMEPAGE. | Stride Tutorials",
-    "keywords": "This is the HOMEPAGE. Refer to Markdown for how to write markdown files. Quick Start Notes: Add images to the images folder if the file is referencing an image."
-  },
-  "tutorials/intro.html": {
-    "href": "tutorials/intro.html",
-    "title": "Add your introductions here! | Stride Tutorials",
-    "keywords": "Add your introductions here!"
+    "title": "Stride Game Engine Tutorials | Stride Tutorials",
+    "keywords": "Stride Game Engine Tutorials These pages contain tutorials to learn more about the Stride game engine 🎮. Stride Tutorials New to Stride? Start with these tutorials to get familiar with the basics of the engine and the Game Studio. 🛠️ Game Studio - The Stride engine comes with an editor called Game Studio, which is the central tool for game and application production in Stride. 🌱 C# Beginner - Covering the beginner principles of using C# when working with the Stride game engine. 📈 C# Intermediate - Diving into intermediate principles of C# programming in Stride, including UI, collisions, and more. Stride Community Toolkit Tutorials 📈 Code Only - This tutorial will show you how to create a simple game using only code."
   }
 }
