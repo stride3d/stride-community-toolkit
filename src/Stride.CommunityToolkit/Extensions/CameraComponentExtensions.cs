@@ -33,6 +33,7 @@ public static class CameraComponentExtensions
 
         return (vectorNear, vectorFar);
     }
+
     public static Vector3 LogicDirectionToWorldDirection(this CameraComponent camera, Vector2 logicDirection, Vector3 upVector)
     {
         camera.Update();
