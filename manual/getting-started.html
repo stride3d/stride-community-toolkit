@@ -91,9 +91,47 @@
 
 <p>This article covers how to get started using the packages provided as part of the Stride Community Toolkit project.</p>
 <h2 id="prerequisites">Prerequisites</h2>
+<p>You must install the following, otherwise you won't be able to build/run the project. If you are using Stride <strong>4.1</strong>+ already, these should be already installed.</p>
+<!---
+- https://download.visualstudio.microsoft.com/download/pr/0c1cfec3-e028-4996-8bb7-0c751ba41e32/1abed1573f36075bfdfc538a2af00d37/vc_redist.x86.exe
+- https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe
+-->
+<ol>
+<li>Install Microsoft Visual C++ 2013 Redistributable
 <ul>
-<li>.NET 6.0 SDK</li>
+<li><a href="https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe">vcredist_x86.exe</a></li>
+<li><a href="https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe">vcredist_x64.exe</a></li>
 </ul>
+</li>
+<li>Install Microsoft Visual C++ 2015-2019 Redistributable
+<ul>
+<li><a href="https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe">vcredist_x64.exe</a></li>
+</ul>
+</li>
+<li>New - Install Microsoft Visual C++ 2015-2022 Redistributable
+<ul>
+<li><a href="https://aka.ms/vs/17/release/vc_redist.x64.exe">vcredist_x64.exe</a> (25MB)</li>
+</ul>
+</li>
+<li>Install .NET 6 SDK x64 <a href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</a> (200MB)</li>
+<li>Install IDE of your choice
+<ul>
+<li>Visual Studio 2022
+<ul>
+<li><a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2022 Community</a> is free</li>
+<li>Make sure that <strong>.NET desktop development</strong> workload is selected when installing Visual Studio</li>
+</ul>
+</li>
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a> (free, 81MB)
+<ul>
+<li>Make sure you install also <strong>C# for Visual Studio Code (powered by OmniSharp)</strong> extension</li>
+<li>Restart Visual Studio Code otherwise <code>dotnet</code> command might not work</li>
+</ul>
+</li>
+<li>Rider (paid)</li>
+</ul>
+</li>
+</ol>
 <h2 id="adding-the-nuget-packages">Adding the NuGet package(s)</h2>
 <p>The toolkit is available as a set of NuGet packages that can be added to any existing or new project using Visual Studio.</p>
 </article>
