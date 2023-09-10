@@ -1,124 +1,45 @@
-# Stride Community Toolkit 🧰
+# 🧰 Stride Community Toolkit
 
-![Stride](https://media.githubusercontent.com/media/stride3d/stride/master/sources/data/images/Logo/stride-logo-readme.png)
+Welcome to the Stride Community Toolkit repository. This toolkit serves as a comprehensive collection of helpers and extensions designed to simplify and accelerate development with the [Stride Game Engine](https://www.stride3d.net/) using .NET and C#.
 
-This repo contains C# helpers and extensions to run [Stride](https://github.com/stride3d/stride) easily without the Stride editor/Game Studio. The [documentation](https://github.com/VaclavElias/stride-code-only/blob/main/docs/api.md) and more fun examples will follow up. This repository is here to collect feedback before any major updates are done in the Stride engine itself. This NuGet is in preview, expect breaking changes.
 
-I wasn't able to run this on Linux at the moment. F# example is here https://github.com/VaclavElias/StrideFSharpExample.
+* [Getting Started](#-getting-started)
+* [Contributing](#-contributing)
+* [License](#%EF%B8%8Flicense)
+<!--* [Roadmap](#%EF%B8%8F-roadmap)-->
+<!--* [.NET Foundation](#-net-foundation)-->
 
-- Stride Game Engine Extension for code only approach, running Stride application without Game Editor.
+## 🚀 Getting Started
 
-## Content
-- Prerequisites
-- Visual Studio Code Instructions
-- Visual Studio 2022 and Rider Instructions
-- Example Code
-- Why would you use Code Only and not Stride Editor?
-- Functionality
-- Building Project Issues
-- References
+To get started with the Stride Community Toolkit, please refer to our official 📦 [Stride Community Toolkit Docs](https://www.vaclavelias.com/stride-community-toolkit/).
 
-## Prerequisites
 
-You must install the following, otherwise you won't be able to build/run the project. If you are using Stride **4.1**+ already, these should be already installed.
+## 🤝 Contributing
 
-<!---
-- https://download.visualstudio.microsoft.com/download/pr/0c1cfec3-e028-4996-8bb7-0c751ba41e32/1abed1573f36075bfdfc538a2af00d37/vc_redist.x86.exe
-- https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe
+Use [Discord](https://discord.gg/f6aerfE) for questions and general discussions. 
+Use [Issues](https://github.com/VaclavElias/stride-community-toolkit/issues) to report bugs and proposing features.
+
+### Good First Issues
+
+If you're new to the project and want to contribute code, issues tagged as [`help-wanted`](https://github.com/VaclavElias/stride-community-toolkit/labels/help-wanted) are excellent starting points.
+
+### Branch and Release
+
+The `main` branch is the default branch for pull requests and most other development activities. 
+
+Releases are based on a stable `main` branch. Use of [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) is encouraged.
+
+<!--## 🗺️ Roadmap
+
+Our Wiki [Roadmap](https://github.com/VaclavElias/stride-docs-next/wiki/Roadmap) communicates upcoming changes to the Stride Docs.
+
+## 🌐 .NET Foundation
+
+This project is supported by the [.NET Foundation](http://www.dotnetfoundation.org).
+
+This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](http://www.dotnetfoundation.org/code-of-conduct).
 -->
+## 🛡️License
 
-1. Install Microsoft Visual C++ 2013 Redistributable
-   - [vcredist_x86.exe](https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe)
-   - [vcredist_x64.exe](https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe)
-2. Install Microsoft Visual C++ 2015-2019 Redistributable
-   - [vcredist_x64.exe](https://download.visualstudio.microsoft.com/download/pr/cc0046d4-e7b4-45a1-bd46-b1c079191224/9c4042a4c2e6d1f661f4c58cf4d129e9/vc_redist.x64.exe)
-2. New - Install Microsoft Visual C++ 2015-2022 Redistributable
-   - [vcredist_x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (25MB)
-3. Install .NET 6 SDK x64 https://dotnet.microsoft.com/en-us/download (200MB)
-4. Install IDE of your choice
-   - Visual Studio 2022
-      - [Visual Studio 2022 Community](https://visualstudio.microsoft.com/vs/) is free
-      - Make sure that **.NET desktop development** workload is selected when installing Visual Studio
-   - [Visual Studio Code](https://code.visualstudio.com/) (free, 81MB)
-      -  Make sure you install also **C# for Visual Studio Code (powered by OmniSharp)** extension
-      -  Restart Visual Studio Code otherwise ```dotnet``` command might not work
-   - Rider (paid)
-
-## Visual Studio Code Instructions
-
-1. Create Console App https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0
-   - ```dotnet new console --framework net6.0```
-2. Add package ```dotnet add package CodeCapital.Stride.GameDefaults --prerelease```
-   - If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)
-3. Paste the example code below in the Program.cs
-4. Run ```dotnet run```
-5. Enjoy Stride
-
-## Visual Studio 2022 and Rider Instructions
- 
-1. Create C# Console Application (.NET 6)
-2. Add NuGet package **CodeCapital.Stride.GameDefaults** prerelease
-   - If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)
-3. Paste the example code below in the Program.cs
-4. Run
-5. Enjoy Stride
-
-## Example Code
-
-```c#
-using Stride.Core.Mathematics;
-using Stride.Engine;
-using Stride.GameDefaults.ProceduralModels;
-using Stride.GameDefaults.Extensions;
-
-using var game = new Game();
-
-game.Run(start: Start);
-
-void Start(Scene rootScene)
-{
-    game.SetupBase3DScene();
-
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
-
-    entity.Transform.Position = new Vector3(0, 8, 0);
-
-    entity.Scene = rootScene;
-}
-```
-
-```CreatePrimitive()``` creates Capsule with rigid body physics, and because we placed the capsule 8 above the ground ```new Vector3(0, 8, 0)```, it will fall down, eventually starts rolling till it falls from the ground. Note that we should remove the capsule once it is not visible to release resources, otherwise it remains in the memory and CPU is used to calculate physics.
-
-![image](https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png)
-
-## Why would you use Code Only and not Stride Editor?
-- You don't want to install anything on your computer (no Stride installation required)
-- You want to start very quickly
-- You want to have fun learning C# or game development
-- You want to learn C# programming with a nice visual 2D/3D output instead of console
-- You want to learn game programming gradually, in the simplest way, without using the game editor
-- You find coding and coding tools very complex to understand and navigate around
-- You want to start with game development basics before you even start exploring the game editor
-- Easy and quick prototyping
-- Easy to learn game development concepts and steps
-- Performance and feature evaluation
-- Any other reason? Suggest here [GitHub Issues](https://github.com/VaclavElias/stride-code-only/issues).
-
-## Functionality
-Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in this repo Issues.
-
-## Building Project Issues
-1. Error - Could not load native library libcore using CPU architecture x64
-   - Make sure you installed Visual C++ Redistributable
-```
-C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\Stride.Core.Assets.CompilerApp.targets(132,5): error MSB3073: The command ""C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\..\tools\net6.0-windows7.0\Stride.Core.Assets.CompilerApp.exe"  --disable-auto- 
-compile --project-configuration "Debug" --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path="C:\Projects\StrideDemo\bin\Debug\net6.0\data" --build-path="C:\Projects\StrideDemo\obj\stride\assetbuild\data" --package-file="C:\Projects\StrideDemo\StrideDemo.csproj" --msbuild-up 
-todatecheck-filebase="C:\Projects\StrideDemo\obj\Debug\net6.0\stride\assetcompiler-uptodatecheck"" exited with code -532462766. [C:\Projects\StrideDemo\StrideDemo.csproj]
-```
-2. Error - Package 'runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl 4.3.0' from source .. : The repository primary signature's timestamping certificate is not trusted by the trust provider
-   - Restore the package CodeCapital.Stride.GameDefaults again ```dotnet restore``` 
-
-## References
-- https://github.com/stride3d/stride/issues/1295
-- https://github.com/stride3d/stride/discussions/1253
-- Example games to do https://github.com/abagames/111-one-button-games-in-2021/blob/main/README.md
+This project is licensed under the [MIT](https://github.com/VaclavElias/stride-community-toolkit/blob/main/LICENSE) License.
