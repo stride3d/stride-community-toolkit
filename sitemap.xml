@@ -2,235 +2,235 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Compositing.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Extensions.GameExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Extensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.ProceduralModels.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Scripts.BasicCameraController.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Scripts.GameProfiler.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Scripts.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.CommunityToolkit.Skyboxes.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Engine.AnimationComponentExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Engine.EntityComponentExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Engine.ModelComponentExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Engine.ScriptComponentExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Engine.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Examples.Models.CapsuleAndWindowExample.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Examples.Models.CapsuleExample.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Examples.Models.GiveMeACubeExample.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Examples.Models.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Physics.SimulationExtensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/Stride.Physics.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/api/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/code-only/create-project.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/code-only/extensions.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/code-only/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/code-only/troubleshooting.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/getting-started.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/manual/whats-new.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/release-notes/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/release-notes/stride-community-toolkit-1.0.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/tutorials/code-only/getting-started.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/tutorials/code-only/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>
   <url>
     <loc>https://doc.stride3d.net/tutorials/index.html</loc>
-    <lastmod>2023-09-10T09:18:36+00:00</lastmod>
+    <lastmod>2023-09-10T09:31:13+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.1</priority>
   </url>

@@ -434,6 +434,16 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "media/stride-logo-blue-toolkit.svg",
+      "output": {
+        "resource": {
+          "relative_path": "media/stride-logo-blue-toolkit.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "media/stride-logo-blue.svg",
       "output": {
         "resource": {
