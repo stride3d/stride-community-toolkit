@@ -38,6 +38,25 @@ references:
   commentId: T:Stride.CommunityToolkit.Extensions.CameraComponentExtensions
   fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions
   nameWithType: CameraComponentExtensions
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: LogicDirectionToWorldDirection(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)
+  name: LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection*
+  name: LogicDirectionToWorldDirection
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_LogicDirectionToWorldDirection_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection
+  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection
 - uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
   name: RayCast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
   href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
@@ -234,6 +253,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate
   nameWithType: GameExtensions.DeltaTimeAccurate
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.FPS(Stride.Engine.Game)
+  name: FPS(Game)
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_FPS_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.FPS(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.FPS(Stride.Engine.Game)
+  nameWithType: GameExtensions.FPS(Game)
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.FPS*
+  name: FPS
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_FPS_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.FPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.FPS
+  nameWithType: GameExtensions.FPS
 - uid: Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color})
   name: NewDefaultMaterial(Game, Color?)
   href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_NewDefaultMaterial_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Color__
@@ -696,6 +728,184 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.Services
   nameWithType: SkyboxGeneratorContext.Services
+- uid: Stride.Engine
+  name: Stride.Engine
+  href: api/Stride.Engine.html
+  commentId: N:Stride.Engine
+  fullName: Stride.Engine
+  nameWithType: Stride.Engine
+- uid: Stride.Engine.AnimationComponentExtensions
+  name: AnimationComponentExtensions
+  href: api/Stride.Engine.AnimationComponentExtensions.html
+  commentId: T:Stride.Engine.AnimationComponentExtensions
+  fullName: Stride.Engine.AnimationComponentExtensions
+  nameWithType: AnimationComponentExtensions
+- uid: Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)
+  name: PlayAnimation(AnimationComponent, string)
+  href: api/Stride.Engine.AnimationComponentExtensions.html#Stride_Engine_AnimationComponentExtensions_PlayAnimation_Stride_Engine_AnimationComponent_System_String_
+  commentId: M:Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)
+  name.vb: PlayAnimation(AnimationComponent, String)
+  fullName: Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent, string)
+  fullName.vb: Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent, String)
+  nameWithType: AnimationComponentExtensions.PlayAnimation(AnimationComponent, string)
+  nameWithType.vb: AnimationComponentExtensions.PlayAnimation(AnimationComponent, String)
+- uid: Stride.Engine.AnimationComponentExtensions.PlayAnimation*
+  name: PlayAnimation
+  href: api/Stride.Engine.AnimationComponentExtensions.html#Stride_Engine_AnimationComponentExtensions_PlayAnimation_
+  commentId: Overload:Stride.Engine.AnimationComponentExtensions.PlayAnimation
+  isSpec: "True"
+  fullName: Stride.Engine.AnimationComponentExtensions.PlayAnimation
+  nameWithType: AnimationComponentExtensions.PlayAnimation
+- uid: Stride.Engine.EntityComponentExtensions
+  name: EntityComponentExtensions
+  href: api/Stride.Engine.EntityComponentExtensions.html
+  commentId: T:Stride.Engine.EntityComponentExtensions
+  fullName: Stride.Engine.EntityComponentExtensions
+  nameWithType: EntityComponentExtensions
+- uid: Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)
+  name: DestroyEntity(Entity)
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_DestroyEntity_Stride_Engine_Entity_
+  commentId: M:Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)
+  fullName: Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)
+  nameWithType: EntityComponentExtensions.DestroyEntity(Entity)
+- uid: Stride.Engine.EntityComponentExtensions.DestroyEntity*
+  name: DestroyEntity
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_DestroyEntity_
+  commentId: Overload:Stride.Engine.EntityComponentExtensions.DestroyEntity
+  isSpec: "True"
+  fullName: Stride.Engine.EntityComponentExtensions.DestroyEntity
+  nameWithType: EntityComponentExtensions.DestroyEntity
+- uid: Stride.Engine.EntityComponentExtensions.GetComponent*
+  name: GetComponent
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponent_
+  commentId: Overload:Stride.Engine.EntityComponentExtensions.GetComponent
+  isSpec: "True"
+  fullName: Stride.Engine.EntityComponentExtensions.GetComponent
+  nameWithType: EntityComponentExtensions.GetComponent
+- uid: Stride.Engine.EntityComponentExtensions.GetComponent``1(Stride.Engine.Entity)
+  name: GetComponent<T>(Entity)
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponent__1_Stride_Engine_Entity_
+  commentId: M:Stride.Engine.EntityComponentExtensions.GetComponent``1(Stride.Engine.Entity)
+  name.vb: GetComponent(Of T)(Entity)
+  fullName: Stride.Engine.EntityComponentExtensions.GetComponent<T>(Stride.Engine.Entity)
+  fullName.vb: Stride.Engine.EntityComponentExtensions.GetComponent(Of T)(Stride.Engine.Entity)
+  nameWithType: EntityComponentExtensions.GetComponent<T>(Entity)
+  nameWithType.vb: EntityComponentExtensions.GetComponent(Of T)(Entity)
+- uid: Stride.Engine.EntityComponentExtensions.GetComponents*
+  name: GetComponents
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponents_
+  commentId: Overload:Stride.Engine.EntityComponentExtensions.GetComponents
+  isSpec: "True"
+  fullName: Stride.Engine.EntityComponentExtensions.GetComponents
+  nameWithType: EntityComponentExtensions.GetComponents
+- uid: Stride.Engine.EntityComponentExtensions.GetComponents``1(Stride.Engine.Entity)
+  name: GetComponents<T>(Entity)
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponents__1_Stride_Engine_Entity_
+  commentId: M:Stride.Engine.EntityComponentExtensions.GetComponents``1(Stride.Engine.Entity)
+  name.vb: GetComponents(Of T)(Entity)
+  fullName: Stride.Engine.EntityComponentExtensions.GetComponents<T>(Stride.Engine.Entity)
+  fullName.vb: Stride.Engine.EntityComponentExtensions.GetComponents(Of T)(Stride.Engine.Entity)
+  nameWithType: EntityComponentExtensions.GetComponents<T>(Entity)
+  nameWithType.vb: EntityComponentExtensions.GetComponents(Of T)(Entity)
+- uid: Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)
+  name: WorldPosition(Entity)
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_WorldPosition_Stride_Engine_Entity_
+  commentId: M:Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)
+  fullName: Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)
+  nameWithType: EntityComponentExtensions.WorldPosition(Entity)
+- uid: Stride.Engine.EntityComponentExtensions.WorldPosition*
+  name: WorldPosition
+  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_WorldPosition_
+  commentId: Overload:Stride.Engine.EntityComponentExtensions.WorldPosition
+  isSpec: "True"
+  fullName: Stride.Engine.EntityComponentExtensions.WorldPosition
+  nameWithType: EntityComponentExtensions.WorldPosition
+- uid: Stride.Engine.ModelComponentExtensions
+  name: ModelComponentExtensions
+  href: api/Stride.Engine.ModelComponentExtensions.html
+  commentId: T:Stride.Engine.ModelComponentExtensions
+  fullName: Stride.Engine.ModelComponentExtensions
+  nameWithType: ModelComponentExtensions
+- uid: Stride.Engine.ModelComponentExtensions.GetMeshHWL(Stride.Engine.ModelComponent)
+  name: GetMeshHWL(ModelComponent)
+  href: api/Stride.Engine.ModelComponentExtensions.html#Stride_Engine_ModelComponentExtensions_GetMeshHWL_Stride_Engine_ModelComponent_
+  commentId: M:Stride.Engine.ModelComponentExtensions.GetMeshHWL(Stride.Engine.ModelComponent)
+  fullName: Stride.Engine.ModelComponentExtensions.GetMeshHWL(Stride.Engine.ModelComponent)
+  nameWithType: ModelComponentExtensions.GetMeshHWL(ModelComponent)
+- uid: Stride.Engine.ModelComponentExtensions.GetMeshHWL*
+  name: GetMeshHWL
+  href: api/Stride.Engine.ModelComponentExtensions.html#Stride_Engine_ModelComponentExtensions_GetMeshHWL_
+  commentId: Overload:Stride.Engine.ModelComponentExtensions.GetMeshHWL
+  isSpec: "True"
+  fullName: Stride.Engine.ModelComponentExtensions.GetMeshHWL
+  nameWithType: ModelComponentExtensions.GetMeshHWL
+- uid: Stride.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)
+  name: GetMeshHeight(ModelComponent)
+  href: api/Stride.Engine.ModelComponentExtensions.html#Stride_Engine_ModelComponentExtensions_GetMeshHeight_Stride_Engine_ModelComponent_
+  commentId: M:Stride.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)
+  fullName: Stride.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)
+  nameWithType: ModelComponentExtensions.GetMeshHeight(ModelComponent)
+- uid: Stride.Engine.ModelComponentExtensions.GetMeshHeight*
+  name: GetMeshHeight
+  href: api/Stride.Engine.ModelComponentExtensions.html#Stride_Engine_ModelComponentExtensions_GetMeshHeight_
+  commentId: Overload:Stride.Engine.ModelComponentExtensions.GetMeshHeight
+  isSpec: "True"
+  fullName: Stride.Engine.ModelComponentExtensions.GetMeshHeight
+  nameWithType: ModelComponentExtensions.GetMeshHeight
+- uid: Stride.Engine.ScriptComponentExtensions
+  name: ScriptComponentExtensions
+  href: api/Stride.Engine.ScriptComponentExtensions.html
+  commentId: T:Stride.Engine.ScriptComponentExtensions
+  fullName: Stride.Engine.ScriptComponentExtensions
+  nameWithType: ScriptComponentExtensions
+- uid: Stride.Engine.ScriptComponentExtensions.DeltaTime(Stride.Engine.ScriptComponent)
+  name: DeltaTime(ScriptComponent)
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_DeltaTime_Stride_Engine_ScriptComponent_
+  commentId: M:Stride.Engine.ScriptComponentExtensions.DeltaTime(Stride.Engine.ScriptComponent)
+  fullName: Stride.Engine.ScriptComponentExtensions.DeltaTime(Stride.Engine.ScriptComponent)
+  nameWithType: ScriptComponentExtensions.DeltaTime(ScriptComponent)
+- uid: Stride.Engine.ScriptComponentExtensions.DeltaTime*
+  name: DeltaTime
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_DeltaTime_
+  commentId: Overload:Stride.Engine.ScriptComponentExtensions.DeltaTime
+  isSpec: "True"
+  fullName: Stride.Engine.ScriptComponentExtensions.DeltaTime
+  nameWithType: ScriptComponentExtensions.DeltaTime
+- uid: Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)
+  name: GetCamera(ScriptComponent)
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_
+  commentId: M:Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)
+  fullName: Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)
+  nameWithType: ScriptComponentExtensions.GetCamera(ScriptComponent)
+- uid: Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)
+  name: GetCamera(ScriptComponent, string)
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_System_String_
+  commentId: M:Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)
+  name.vb: GetCamera(ScriptComponent, String)
+  fullName: Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent, string)
+  fullName.vb: Stride.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent, String)
+  nameWithType: ScriptComponentExtensions.GetCamera(ScriptComponent, string)
+  nameWithType.vb: ScriptComponentExtensions.GetCamera(ScriptComponent, String)
+- uid: Stride.Engine.ScriptComponentExtensions.GetCamera*
+  name: GetCamera
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_GetCamera_
+  commentId: Overload:Stride.Engine.ScriptComponentExtensions.GetCamera
+  isSpec: "True"
+  fullName: Stride.Engine.ScriptComponentExtensions.GetCamera
+  nameWithType: ScriptComponentExtensions.GetCamera
+- uid: Stride.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)
+  name: GetFirstCamera(ScriptComponent)
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_GetFirstCamera_Stride_Engine_ScriptComponent_
+  commentId: M:Stride.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)
+  fullName: Stride.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)
+  nameWithType: ScriptComponentExtensions.GetFirstCamera(ScriptComponent)
+- uid: Stride.Engine.ScriptComponentExtensions.GetFirstCamera*
+  name: GetFirstCamera
+  href: api/Stride.Engine.ScriptComponentExtensions.html#Stride_Engine_ScriptComponentExtensions_GetFirstCamera_
+  commentId: Overload:Stride.Engine.ScriptComponentExtensions.GetFirstCamera
+  isSpec: "True"
+  fullName: Stride.Engine.ScriptComponentExtensions.GetFirstCamera
+  nameWithType: ScriptComponentExtensions.GetFirstCamera
 - uid: Stride.Examples.Models
   name: Stride.Examples.Models
   href: api/Stride.Examples.Models.html
@@ -759,3 +969,40 @@ references:
   isSpec: "True"
   fullName: Stride.Examples.Models.GiveMeACubeExample.Run
   nameWithType: GiveMeACubeExample.Run
+- uid: Stride.Physics
+  name: Stride.Physics
+  href: api/Stride.Physics.html
+  commentId: N:Stride.Physics
+  fullName: Stride.Physics
+  nameWithType: Stride.Physics
+- uid: Stride.Physics.SimulationExtensions
+  name: SimulationExtensions
+  href: api/Stride.Physics.SimulationExtensions.html
+  commentId: T:Stride.Physics.SimulationExtensions
+  fullName: Stride.Physics.SimulationExtensions
+  nameWithType: SimulationExtensions
+- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags)
+  name: RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags)
+  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags)
+  name.vb: RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags)
+  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags)
+  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags)
+  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags)
+- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags)
+  name: RayCast(Simulation, Entity, float, CollisionFilterGroupFlags)
+  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags)
+  name.vb: RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags)
+  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags)
+  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, float, CollisionFilterGroupFlags)
+  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags)
+- uid: Stride.Physics.SimulationExtensions.RayCast*
+  name: RayCast
+  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_
+  commentId: Overload:Stride.Physics.SimulationExtensions.RayCast
+  isSpec: "True"
+  fullName: Stride.Physics.SimulationExtensions.RayCast
+  nameWithType: SimulationExtensions.RayCast

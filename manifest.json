@@ -168,6 +168,56 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Engine.AnimationComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Engine.AnimationComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Engine.EntityComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Engine.EntityComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Engine.ModelComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Engine.ModelComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Engine.ScriptComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Engine.ScriptComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Engine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Engine.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.Examples.Models.CapsuleAndWindowExample.yml",
       "output": {
         ".html": {
@@ -202,6 +252,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.Examples.Models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Physics.SimulationExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Physics.SimulationExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Physics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Physics.html"
         }
       },
       "version": ""
@@ -261,10 +331,40 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/code-only.md",
+      "source_relative_path": "manual/code-only/create-project.md",
       "output": {
         ".html": {
-          "relative_path": "manual/code-only.html"
+          "relative_path": "manual/code-only/create-project.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/extensions.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/extensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/troubleshooting.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/troubleshooting.html"
         }
       },
       "version": ""

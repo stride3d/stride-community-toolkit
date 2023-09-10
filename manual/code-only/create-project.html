@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Create Project | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Create Project | Stride Manual ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/create-project.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module">
+    import options from './../../public/main.js'
+    import { init } from './../../public/docfx.min.js'
+    init(options)
+  </script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="create-project">Create Project</h1>
+
+<h2 id="visual-studio-code-instructions">Visual Studio Code Instructions</h2>
+<ol>
+<li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to create a new console application.
+<pre><code>dotnet new console --framework net6.0
+</code></pre>
+</li>
+<li><strong>Add NuGet Package:</strong> Execute the following command to add the necessary NuGet package.
+<pre><code>dotnet add package CodeCapital.Stride.GameDefaults --prerelease
+</code></pre>
+</li>
+<li><strong>Update Program.cs:</strong> Paste the example code (provided below) into your <code>Program.cs</code> file.</li>
+<li><strong>Run the Project:</strong> Execute the following command.
+<pre><code>dotnet run
+</code></pre>
+</li>
+<li><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</li>
+</ol>
+<!-- If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)-->
+<h2 id="visual-studio-2022-and-rider-instructions">Visual Studio 2022 and Rider Instructions</h2>
+<ol>
+<li><strong>Create a C# Console Application:</strong> Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 6.</li>
+<li><strong>Add NuGet Package:</strong> Search for and add the <strong>CodeCapital.Stride.GameDefaults</strong> NuGet package, ensuring you opt for the prerelease version.</li>
+<li><strong>Update Program.cs:</strong> Paste the example code (provided below) into your <code>Program.cs</code> file.</li>
+<li><strong>Run the Project:</strong> Build and run your project using the IDE's run functionality.</li>
+<li><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</li>
+</ol>
+<h2 id="example-code">Example Code</h2>
+<pre><code class="lang-csharp">using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.GameDefaults.ProceduralModels;
+using Stride.GameDefaults.Extensions;
+
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
+{
+    game.SetupBase3DScene();
+
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = rootScene;
+}
+</code></pre>
+<ol>
+<li><code>using var game = new Game();</code> creates a new instance of the <code>Game</code> class.</li>
+<li>The <code>game.Run(start: Start);</code> line starts the game, and it specifies that the <code>Start</code> method should be called when the game begins.</li>
+<li><code>void Start(Scene rootScene)</code> is the method that is called when the game starts. It takes in a <code>Scene</code> object, which represents the game scene that is currently being played.</li>
+<li>Inside the <code>Start</code> method, <code>game.SetupBase3DScene();</code> sets up a basic 3D scene.</li>
+<li><code>var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);</code> creates a new primitive entity of type <code>Capsule</code>, and assigns it to the <code>entity</code> variable.</li>
+<li><code>entity.Transform.Position = new Vector3(0, 8, 0);</code> sets the position of the entity in the 3D space. The position is set to (0, 8, 0), which means the capsule is placed 8 units above the ground.</li>
+<li><code>entity.Scene = rootScene;</code> adds the entity to the root scene of the game.</li>
+</ol>
+<p>The <code>CreatePrimitive()</code> method creates a Capsule with rigid body physics. Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it</p>
+<p><img src="https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png" alt="image"></p>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/create-project.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Docs Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
