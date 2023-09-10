@@ -349,4 +349,14 @@ public static class GameExtensions
             PrimitiveModelType.Capsule => new CapsuleColliderShapeDesc(),
             _ => throw new InvalidOperationException(),
         };
+
+    /// <summary>
+    /// Shows the current FPS.
+    /// </summary>
+    /// <param name="game"></param>
+    /// <returns></returns>
+	public static float FPS(this Game game)
+	{
+		return game.UpdateTime.FramePerSecond;
+	}
 }
