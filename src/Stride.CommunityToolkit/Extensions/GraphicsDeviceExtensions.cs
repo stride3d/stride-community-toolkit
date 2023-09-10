@@ -14,6 +14,7 @@ public static class GraphicsDeviceExtensions
     {
         int width = graphics.Presenter.BackBuffer.Width;
         int height = graphics.Presenter.BackBuffer.Height;
+
         return new Int2(width, height);
     }
 }
