@@ -67,11 +67,19 @@ Canvas CreateCanvas()
     return canvas;
 }
 
-TextBlock CreateTextBlock(SpriteFont? _font) => new TextBlock
+TextBlock CreateTextBlock(SpriteFont? _font)
 {
-    Text = "Hello, World",
-    TextColor = Color.White,
-    TextSize = 20,
-    Margin = new Thickness(3, 3, 3, 0),
-    Font = _font
-};
+    if (_font is null)
+    {
+        Console.WriteLine("Font is null");
+    }
+
+    return new TextBlock
+    {
+        Text = "Hello, World",
+        TextColor = Color.White,
+        TextSize = 20,
+        Margin = new Thickness(3, 3, 3, 0),
+        Font = _font
+    };
+}
