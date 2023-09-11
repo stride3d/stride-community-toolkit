@@ -11,5 +11,7 @@
     href: code-only/create-project.md
   - name: Extensions
     href: code-only/extensions.md
+  - name: Examples
+    href: code-only/examples.md
   - name: Troubleshooting
     href: code-only/troubleshooting.md

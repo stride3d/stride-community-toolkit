@@ -2,7 +2,9 @@
 
 ## GameExtensions.cs
 
-These extensions are used to simplify the game creation for the most common scenarios in code only projects. They are not required to run the game, but they can save you some time.
+These extensions are used to simplify the game creation for the most common scenarios in **code only** projects. They are not required to run the game, but they can save you some time starting learning Stride.
+
+The extensions are using lots of defaults to help you get started. If you want to change the defaults, you can always check how the extension is implemented and create your own version.
 
 Some extensions return ```Entity``` so it can be further modified.
 
