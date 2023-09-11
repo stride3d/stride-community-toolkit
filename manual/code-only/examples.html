@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Code Only Examples | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Code Only Examples | Stride Manual ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/examples.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module">
+    import options from './../../public/main.js'
+    import { init } from './../../public/docfx.min.js'
+    init(options)
+  </script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="code-only-examples">Code Only Examples</h1>
+
+<p>You can either copy and paste the code snippets from the examples below into your own project or run them directly using our console app with an interactive menu.</p>
+<p>The console application providing this interactive menu is part of the <code>Stride.CommunityToolkit.Examples</code> project.</p>
+<pre><code class="lang-plaintext">Stride Community Toolkit Examples
+
+[1] Basic Example - Capsule with rigid body
+[2] Basic Example - Give me a cube
+[3] Basic Example - Capsule with rigid body and window
+[Q] Quit
+</code></pre>
+<h2 id="basic-example---capsule-with-rigid-body">Basic Example - Capsule with rigid body</h2>
+<p>This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the Stride Game Engine. The capsule entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method. It's a simple example that provides a starting point for building a game using Stride</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+
+using var game = new Game();
+
+game.Run(start: (Scene rootScene) =&gt;
+{
+    game.SetupBase3DScene();
+
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = rootScene;
+});
+</code></pre>
+<ul>
+<li><code>using var game = new Game();</code> This line of code creates a new instance of the <code>Game</code> class. The <code>Game</code> class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The <code>using</code> keyword ensures that the <code>Dispose()</code> method is called on the <code>game</code> object when it goes out of scope, ensuring that any resources it uses are properly cleaned up</li>
+<li><code>game.Run(start: (Scene rootScene) =&gt;</code> This line initiates the game loop. The <code>Run</code> method is responsible for starting the game, and it takes a delegate as a parameter. This delegate is a function that is called once when the game starts. The <code>rootScene</code> parameter represents the main scene of your game.</li>
+<li><code>game.SetupBase3DScene();</code> This line sets up a basic 3D scene. It's a helper method provided to quickly set up a scene with a default camera, lighting, and skybox.</li>
+<li><code>var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);</code> Here, a new entity is created in the form of a 3D capsule primitive. The <code>CreatePrimitive method</code> is another helper method provided to create basic 3D shapes.</li>
+<li><code>entity.Transform.Position = new Vector3(0, 8, 0);</code> This line sets the position of the created entity in the 3D space. The <code>Position</code> property of the <code>Transform</code> component determines the location of the entity.</li>
+<li><code>entity.Scene = rootScene;</code> Finally, the entity is added to the <code>rootScene</code>. The <code>Scene</code> property of an entity determines which scene it belongs to.</li>
+</ul>
+<h2 id="basic-example---give-me-a-cube">Basic Example - Give me a cube</h2>
+<p>This example demonstrates the essential steps to create a 3D cube in Stride. Just like the previous example, the cube entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method. The cube is positioned at <code>(1f, 0.5f, 3f)</code> in the 3D world space. This example is perfect for those who are new to 3D game development with Stride.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
+{
+    game.SetupBase3DScene();
+
+    var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
+
+    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
+
+    entity.Scene = rootScene;
+}
+</code></pre><h2 id="basic-example---capsule-with-rigid-body-and-window">Basic Example - Capsule with rigid body and window</h2>
+<p>In this example, we demonstrate how to set up a 3D scene that includes a capsule with a rigid body as well as a simple window displaying a text message.</p>
+<p>This example is organized into multiple methods for better readability and maintainability. It is structured as follows:</p>
+<ul>
+<li><code>Start(Scene rootScene)</code> This is the entry point for setting up the scene. It calls other methods to set up the 3D scene, add the capsule, load the font, and add the window.</li>
+<li><code>AddCapsule(Scene rootScene)</code> This method creates a 3D capsule and adds it to the scene at a specific position.</li>
+<li><code>LoadFont()</code> This method loads the font that will be used for the UI window.</li>
+<li><code>AddWindow(Scene rootScene)</code> This method calls <code>CreateUIEntity()</code> to create an entity with a UI component, and then adds this entity to the root scene.</li>
+<li><code>CreateUIEntity()</code> This method creates an entity that has a UI component. The UI component includes a canvas as its root element.</li>
+<li><code>CreateCanvas()</code> This method creates a canvas element that will be the root of the UI component.</li>
+<li><code>CreateTextBlock(SpriteFont? _font)</code> This method creates a <code>TextBlock</code> element that displays the message &quot;Hello, World&quot;. It uses the loaded font and sets other properties like color and size.</li>
+</ul>
+<p>This modular approach makes the code easier to understand and maintain. Each method has a clear responsibility.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering;
+using Stride.UI;
+using Stride.UI.Controls;
+using Stride.UI.Panels;
+
+SpriteFont? _font;
+
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
+{
+    game.SetupBase3DScene();
+
+    AddCapsule(rootScene);
+
+    LoadFont();
+
+    AddWindow(rootScene);
+}
+
+void AddCapsule(Scene rootScene)
+{
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = rootScene;
+}
+
+void LoadFont()
+{
+    _font = game.Content.Load&lt;SpriteFont&gt;(&quot;StrideDefaultFont&quot;);
+}
+
+void AddWindow(Scene rootScene)
+{
+    var uiEntity = CreateUIEntity();
+
+    uiEntity.Scene = rootScene;
+}
+
+Entity CreateUIEntity()
+{
+    return new Entity
+    {
+        new UIComponent
+        {
+            Page = new UIPage { RootElement = CreateCanvas() },
+            RenderGroup = RenderGroup.Group31
+        }
+    };
+}
+
+Canvas CreateCanvas()
+{
+    var canvas = new Canvas { Width = 300, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
+
+    canvas.Children.Add(CreateTextBlock(_font));
+
+    return canvas;
+}
+
+TextBlock CreateTextBlock(SpriteFont? _font)
+{
+    if (_font is null)
+    {
+        Console.WriteLine(&quot;Font is null&quot;);
+    }
+
+    return new TextBlock
+    {
+        Text = &quot;Hello, World&quot;,
+        TextColor = Color.White,
+        TextSize = 20,
+        Margin = new Thickness(3, 3, 3, 0),
+        Font = _font
+    };
+}
+</code></pre></article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/examples.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Docs Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

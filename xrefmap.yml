@@ -26,6 +26,76 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create
   nameWithType: GraphicsCompositorBuilder.Create
+- uid: Stride.CommunityToolkit.Examples
+  name: Stride.CommunityToolkit.Examples
+  href: api/Stride.CommunityToolkit.Examples.html
+  commentId: N:Stride.CommunityToolkit.Examples
+  fullName: Stride.CommunityToolkit.Examples
+  nameWithType: Stride.CommunityToolkit.Examples
+- uid: Stride.CommunityToolkit.Examples.Example
+  name: Example
+  href: api/Stride.CommunityToolkit.Examples.Example.html
+  commentId: T:Stride.CommunityToolkit.Examples.Example
+  fullName: Stride.CommunityToolkit.Examples.Example
+  nameWithType: Example
+- uid: Stride.CommunityToolkit.Examples.Example.#ctor(System.String,System.String,System.Action)
+  name: Example(string, string, Action)
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example__ctor_System_String_System_String_System_Action_
+  commentId: M:Stride.CommunityToolkit.Examples.Example.#ctor(System.String,System.String,System.Action)
+  name.vb: New(String, String, Action)
+  fullName: Stride.CommunityToolkit.Examples.Example.Example(string, string, System.Action)
+  fullName.vb: Stride.CommunityToolkit.Examples.Example.New(String, String, System.Action)
+  nameWithType: Example.Example(string, string, Action)
+  nameWithType.vb: Example.New(String, String, Action)
+- uid: Stride.CommunityToolkit.Examples.Example.#ctor*
+  name: Example
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Examples.Example.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Examples.Example.Example
+  fullName.vb: Stride.CommunityToolkit.Examples.Example.New
+  nameWithType: Example.Example
+  nameWithType.vb: Example.New
+- uid: Stride.CommunityToolkit.Examples.Example.Action
+  name: Action
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Action
+  commentId: P:Stride.CommunityToolkit.Examples.Example.Action
+  fullName: Stride.CommunityToolkit.Examples.Example.Action
+  nameWithType: Example.Action
+- uid: Stride.CommunityToolkit.Examples.Example.Action*
+  name: Action
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Action_
+  commentId: Overload:Stride.CommunityToolkit.Examples.Example.Action
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Examples.Example.Action
+  nameWithType: Example.Action
+- uid: Stride.CommunityToolkit.Examples.Example.Id
+  name: Id
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Id
+  commentId: P:Stride.CommunityToolkit.Examples.Example.Id
+  fullName: Stride.CommunityToolkit.Examples.Example.Id
+  nameWithType: Example.Id
+- uid: Stride.CommunityToolkit.Examples.Example.Id*
+  name: Id
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Id_
+  commentId: Overload:Stride.CommunityToolkit.Examples.Example.Id
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Examples.Example.Id
+  nameWithType: Example.Id
+- uid: Stride.CommunityToolkit.Examples.Example.Title
+  name: Title
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Title
+  commentId: P:Stride.CommunityToolkit.Examples.Example.Title
+  fullName: Stride.CommunityToolkit.Examples.Example.Title
+  nameWithType: Example.Title
+- uid: Stride.CommunityToolkit.Examples.Example.Title*
+  name: Title
+  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Title_
+  commentId: Overload:Stride.CommunityToolkit.Examples.Example.Title
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Examples.Example.Title
+  nameWithType: Example.Title
 - uid: Stride.CommunityToolkit.Extensions
   name: Stride.CommunityToolkit.Extensions
   href: api/Stride.CommunityToolkit.Extensions.html
@@ -906,69 +976,6 @@ references:
   isSpec: "True"
   fullName: Stride.Engine.ScriptComponentExtensions.GetFirstCamera
   nameWithType: ScriptComponentExtensions.GetFirstCamera
-- uid: Stride.Examples.Models
-  name: Stride.Examples.Models
-  href: api/Stride.Examples.Models.html
-  commentId: N:Stride.Examples.Models
-  fullName: Stride.Examples.Models
-  nameWithType: Stride.Examples.Models
-- uid: Stride.Examples.Models.CapsuleAndWindowExample
-  name: CapsuleAndWindowExample
-  href: api/Stride.Examples.Models.CapsuleAndWindowExample.html
-  commentId: T:Stride.Examples.Models.CapsuleAndWindowExample
-  fullName: Stride.Examples.Models.CapsuleAndWindowExample
-  nameWithType: CapsuleAndWindowExample
-- uid: Stride.Examples.Models.CapsuleAndWindowExample.Run
-  name: Run()
-  href: api/Stride.Examples.Models.CapsuleAndWindowExample.html#Stride_Examples_Models_CapsuleAndWindowExample_Run
-  commentId: M:Stride.Examples.Models.CapsuleAndWindowExample.Run
-  fullName: Stride.Examples.Models.CapsuleAndWindowExample.Run()
-  nameWithType: CapsuleAndWindowExample.Run()
-- uid: Stride.Examples.Models.CapsuleAndWindowExample.Run*
-  name: Run
-  href: api/Stride.Examples.Models.CapsuleAndWindowExample.html#Stride_Examples_Models_CapsuleAndWindowExample_Run_
-  commentId: Overload:Stride.Examples.Models.CapsuleAndWindowExample.Run
-  isSpec: "True"
-  fullName: Stride.Examples.Models.CapsuleAndWindowExample.Run
-  nameWithType: CapsuleAndWindowExample.Run
-- uid: Stride.Examples.Models.CapsuleExample
-  name: CapsuleExample
-  href: api/Stride.Examples.Models.CapsuleExample.html
-  commentId: T:Stride.Examples.Models.CapsuleExample
-  fullName: Stride.Examples.Models.CapsuleExample
-  nameWithType: CapsuleExample
-- uid: Stride.Examples.Models.CapsuleExample.Run
-  name: Run()
-  href: api/Stride.Examples.Models.CapsuleExample.html#Stride_Examples_Models_CapsuleExample_Run
-  commentId: M:Stride.Examples.Models.CapsuleExample.Run
-  fullName: Stride.Examples.Models.CapsuleExample.Run()
-  nameWithType: CapsuleExample.Run()
-- uid: Stride.Examples.Models.CapsuleExample.Run*
-  name: Run
-  href: api/Stride.Examples.Models.CapsuleExample.html#Stride_Examples_Models_CapsuleExample_Run_
-  commentId: Overload:Stride.Examples.Models.CapsuleExample.Run
-  isSpec: "True"
-  fullName: Stride.Examples.Models.CapsuleExample.Run
-  nameWithType: CapsuleExample.Run
-- uid: Stride.Examples.Models.GiveMeACubeExample
-  name: GiveMeACubeExample
-  href: api/Stride.Examples.Models.GiveMeACubeExample.html
-  commentId: T:Stride.Examples.Models.GiveMeACubeExample
-  fullName: Stride.Examples.Models.GiveMeACubeExample
-  nameWithType: GiveMeACubeExample
-- uid: Stride.Examples.Models.GiveMeACubeExample.Run
-  name: Run()
-  href: api/Stride.Examples.Models.GiveMeACubeExample.html#Stride_Examples_Models_GiveMeACubeExample_Run
-  commentId: M:Stride.Examples.Models.GiveMeACubeExample.Run
-  fullName: Stride.Examples.Models.GiveMeACubeExample.Run()
-  nameWithType: GiveMeACubeExample.Run()
-- uid: Stride.Examples.Models.GiveMeACubeExample.Run*
-  name: Run
-  href: api/Stride.Examples.Models.GiveMeACubeExample.html#Stride_Examples_Models_GiveMeACubeExample_Run_
-  commentId: Overload:Stride.Examples.Models.GiveMeACubeExample.Run
-  isSpec: "True"
-  fullName: Stride.Examples.Models.GiveMeACubeExample.Run
-  nameWithType: GiveMeACubeExample.Run
 - uid: Stride.Physics
   name: Stride.Physics
   href: api/Stride.Physics.html

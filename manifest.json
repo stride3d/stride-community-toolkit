@@ -48,6 +48,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Examples.Example.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Examples.Example.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Examples.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Examples.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.yml",
       "output": {
         ".html": {
@@ -218,46 +238,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Examples.Models.CapsuleAndWindowExample.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Examples.Models.CapsuleAndWindowExample.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Examples.Models.CapsuleExample.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Examples.Models.CapsuleExample.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Examples.Models.GiveMeACubeExample.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Examples.Models.GiveMeACubeExample.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Examples.Models.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Examples.Models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.Physics.SimulationExtensions.yml",
       "output": {
         ".html": {
@@ -335,6 +315,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/create-project.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples.html"
         }
       },
       "version": ""
