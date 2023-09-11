@@ -1,10 +1,14 @@
 # Extensions
 
+Each extension has been crafted to address common game development scenarios. They encapsulate and abstract away some of the complexities involved in setting up these scenarios, thus allowing you to focus more on the game logic and less on the setup and configuration.
+
+To modify an extension, you can examine its code to understand how it works. Once you grasp the underlying logic, you can modify it or even create a new extension that better suits your needs. Remember, these extensions are just tools to help you get started; don't be afraid to modify them or build your own to align with your unique requirements.
+
+In conclusion, whether you are a beginner just starting out with Stride or an experienced developer looking for a quicker way to get your game up and running, these extensions are a valuable resource. They are designed to be a starting point that can be used as is, or can be customised and built upon to create the perfect solution for your game development needs.
+
+Remember, the key to mastering Stride, and game development in general, is practice and exploration. So, go ahead, play around with these extensions, and start creating!
+
 ## GameExtensions.cs
-
-These extensions are used to simplify the game creation for the most common scenarios in **code only** projects. They are not required to run the game, but they can save you some time starting learning Stride.
-
-The extensions are using lots of defaults to help you get started. If you want to change the defaults, you can always check how the extension is implemented and create your own version.
 
 Some extensions return ```Entity``` so it can be further modified.
 

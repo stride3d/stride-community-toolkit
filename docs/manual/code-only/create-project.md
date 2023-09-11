@@ -30,6 +30,9 @@
 
 ## Example Code
 
+The provided C# code example is designed to showcase the basic usage of the Stride Game Engine.
+
+
 ```csharp
 using Stride.Core.Mathematics;
 using Stride.Engine;

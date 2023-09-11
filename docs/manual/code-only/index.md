@@ -18,6 +18,14 @@ There are numerous reasons to consider using the Code-Only approach, especially 
 
 Have more reasons to add? Feel free to suggest them through our [GitHub Issues](https://github.com/VaclavElias/stride-community-toolkit/issues).
 
+## Extensions and Helpers
+
+Our extensions and helpers provide a simplified pathway for game creation, specifically designed for **code-only** projects within the Stride Game Engine. While they are not essential for running a game, they serve as time-saving tools to aid users, particularly those new to Stride, in quickly getting started.
+
+These extensions rely heavily on default settings to ease your initiation into the engine. However, they are not rigid; if the default settings don't fully meet your needs, you have the option to delve into the extension's implementation and create a custom version tailored to your preferences.
+
+Please note, although these extensions have been created with an opinionated approach to help beginners get up and running quickly, experienced users can also find value in them. They can serve as a foundation upon which you can build, modify, and extend to create more complex and customised solutions.
+
 ## Functionality
 Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in the [GitHub Issues](https://github.com/VaclavElias/stride-community-toolkit/issues).
 
