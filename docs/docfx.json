@@ -5,7 +5,7 @@
         {
           "files": [
             "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj",
-            "Stride.CommunityToolkit.Examples/Stride.CommunityToolkit.Examples.csproj",
+            "Stride.CommunityToolkit.Examples/Stride.CommunityToolkit.Examples.csproj"
           ],
           "src": "../src",
           "properties": {
@@ -15,6 +15,7 @@
         }
       ],
       "dest": "api",
+      "filter": "filterConfig.yml",
       "includePrivateMembers": false,
       "disableGitFeatures": false,
       "disableDefaultFilter": false,

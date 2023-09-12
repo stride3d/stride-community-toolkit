@@ -1,0 +1,7 @@
+apiRules:
+- exclude:
+    uidRegex: ^System.Object
+    type: Type
+- exclude:
+    uidRegex: ^Stride\.CommunityToolkit\.Examples
+    type: Namespace
