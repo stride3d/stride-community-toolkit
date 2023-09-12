@@ -4,8 +4,7 @@
       "src": [
         {
           "files": [
-            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj",
-            "Stride.CommunityToolkit.Examples/Stride.CommunityToolkit.Examples.csproj"
+            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj"
           ],
           "src": "../src",
           "properties": {
@@ -42,7 +41,7 @@
       }
     },
     "sitemap": {
-      "baseUrl": "https://doc.stride3d.net/",
+      "baseUrl": "https://www.vaclavelias.com/stride-community-toolkit/",
       "priority": 0.1,
       "changefreq": "monthly"
     },
