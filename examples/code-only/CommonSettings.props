@@ -6,7 +6,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Linq" />
+		<USing Include="System.Collections.Generic"></USing>
+		<Using Include="Stride.Core" />
+		<Using Include="Stride.Core.Mathematics"/>
+	</ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>

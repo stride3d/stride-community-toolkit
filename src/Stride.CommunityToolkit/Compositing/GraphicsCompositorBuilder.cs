@@ -1,4 +1,3 @@
-using Stride.Core.Mathematics;
 using Stride.Particles.Rendering;
 using Stride.Rendering;
 using Stride.Rendering.Background;

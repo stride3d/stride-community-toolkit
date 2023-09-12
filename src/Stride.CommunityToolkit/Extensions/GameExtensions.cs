@@ -2,7 +2,6 @@ using Stride.CommunityToolkit.Compositing;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Processors;
 using Stride.Games;

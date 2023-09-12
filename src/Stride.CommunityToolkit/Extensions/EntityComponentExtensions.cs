@@ -1,5 +1,3 @@
-using Stride.Core.Mathematics;
-
 namespace Stride.Engine;
 
 public static class EntityComponentExtensions
@@ -50,10 +48,10 @@ public static class EntityComponentExtensions
     }
 
     /// <summary>
-    /// An easier way to get world position rather than Transform.WorldMatrix.TranslationVector
+    /// An easier way to get world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
+    /// <param name="entity">The <see cref="Entity"/> to get the World Position</param>
+    /// <returns>The <see cref="Vector3"/> as the World Position of the <see cref="Entity"/></returns>
     public static Vector3 WorldPosition(this Entity entity)
     {
         return entity.Transform.WorldMatrix.TranslationVector;

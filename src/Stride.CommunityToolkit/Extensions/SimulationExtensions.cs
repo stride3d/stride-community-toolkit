@@ -1,4 +1,3 @@
-using Stride.Core.Mathematics;
 using Stride.Engine;
 
 namespace Stride.Physics;
