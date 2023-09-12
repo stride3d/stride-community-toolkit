@@ -25,6 +25,7 @@ public static class ScriptComponentExtensions
     public static CameraComponent GetCamera(this ScriptComponent scriptComponent)
     {
         SceneCameraSlotCollection cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
+
         foreach (var sceneCamera in cameraCollection)
         {
             if (sceneCamera.Name == "Main")
@@ -47,6 +48,7 @@ public static class ScriptComponentExtensions
     public static CameraComponent GetCamera(this ScriptComponent scriptComponent, string cameraName)
     {
         SceneCameraSlotCollection cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
+
         foreach (var sceneCamera in cameraCollection)
         {
             if (sceneCamera.Name == cameraName)

@@ -45,6 +45,7 @@ public static class CameraComponentExtensions
         var right = Vector3.Cross(forward, upVector);
         var worldDirection = forward * logicDirection.Y + right * logicDirection.X;
         worldDirection.Normalize();
+
         return worldDirection;
     }
 
@@ -60,6 +61,7 @@ public static class CameraComponentExtensions
         var right = Vector3.Cross(forward, upVector);
         var worldDirection = forward * logicDirection.Y + right * logicDirection.X;
         worldDirection.Normalize();
+
         return worldDirection;
     }
 
@@ -145,6 +147,7 @@ public static class CameraComponentExtensions
     public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, Vector3 position)
     {
         cameraComponent.WorldToScreenPoint(ref position, out var result);
+
         return result;
     }
     /// <summary>
@@ -185,6 +188,7 @@ public static class CameraComponentExtensions
     public static RaySegment ScreenToWorldRaySegment(this CameraComponent cameraComponent, Vector2 position)
     {
         cameraComponent.ScreenToWorldRaySegment(ref position, out var result);
+
         return result;
     }
     /// <summary>
@@ -210,6 +214,7 @@ public static class CameraComponentExtensions
         Vector3.TransformCoordinate(ref clipSpace, ref inverseViewProjection, out var near);
 
         clipSpace.Z = 1f;
+
         Vector3.TransformCoordinate(ref clipSpace, ref inverseViewProjection, out var far);
 
         result = new RaySegment(near, far);
