@@ -1,8 +1,6 @@
 using Stride.CommunityToolkit.Scripts;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
-using System;
 
 namespace Stride.CommunityToolkit.Extensions;
 

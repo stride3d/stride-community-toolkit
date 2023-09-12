@@ -1,12 +1,5 @@
-﻿using Stride.Core;
-using Stride.Core.Mathematics;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stride.CommunityToolkit.Scripts;
 /// <summary>

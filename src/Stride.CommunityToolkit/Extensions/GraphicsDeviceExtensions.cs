@@ -1,4 +1,3 @@
-using Stride.Core.Mathematics;
 using Stride.Graphics;
 
 namespace Stride.CommunityToolkit.Extensions;
