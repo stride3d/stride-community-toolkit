@@ -1,6 +1,6 @@
 {
   "sitemap": {
-    "baseUrl": "https://doc.stride3d.net/",
+    "baseUrl": "https://www.vaclavelias.com/stride-community-toolkit/",
     "changefreq": "monthly",
     "priority": 0.1
   },
@@ -42,26 +42,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Compositing.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Examples.Example.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Examples.Example.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Examples.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Examples.html"
         }
       },
       "version": ""
@@ -142,6 +122,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Scripts.GameProfiler.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.RaySegment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.RaySegment.html"
         }
       },
       "version": ""

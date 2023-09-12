@@ -26,76 +26,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create
   nameWithType: GraphicsCompositorBuilder.Create
-- uid: Stride.CommunityToolkit.Examples
-  name: Stride.CommunityToolkit.Examples
-  href: api/Stride.CommunityToolkit.Examples.html
-  commentId: N:Stride.CommunityToolkit.Examples
-  fullName: Stride.CommunityToolkit.Examples
-  nameWithType: Stride.CommunityToolkit.Examples
-- uid: Stride.CommunityToolkit.Examples.Example
-  name: Example
-  href: api/Stride.CommunityToolkit.Examples.Example.html
-  commentId: T:Stride.CommunityToolkit.Examples.Example
-  fullName: Stride.CommunityToolkit.Examples.Example
-  nameWithType: Example
-- uid: Stride.CommunityToolkit.Examples.Example.#ctor(System.String,System.String,System.Action)
-  name: Example(string, string, Action)
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example__ctor_System_String_System_String_System_Action_
-  commentId: M:Stride.CommunityToolkit.Examples.Example.#ctor(System.String,System.String,System.Action)
-  name.vb: New(String, String, Action)
-  fullName: Stride.CommunityToolkit.Examples.Example.Example(string, string, System.Action)
-  fullName.vb: Stride.CommunityToolkit.Examples.Example.New(String, String, System.Action)
-  nameWithType: Example.Example(string, string, Action)
-  nameWithType.vb: Example.New(String, String, Action)
-- uid: Stride.CommunityToolkit.Examples.Example.#ctor*
-  name: Example
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example__ctor_
-  commentId: Overload:Stride.CommunityToolkit.Examples.Example.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: Stride.CommunityToolkit.Examples.Example.Example
-  fullName.vb: Stride.CommunityToolkit.Examples.Example.New
-  nameWithType: Example.Example
-  nameWithType.vb: Example.New
-- uid: Stride.CommunityToolkit.Examples.Example.Action
-  name: Action
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Action
-  commentId: P:Stride.CommunityToolkit.Examples.Example.Action
-  fullName: Stride.CommunityToolkit.Examples.Example.Action
-  nameWithType: Example.Action
-- uid: Stride.CommunityToolkit.Examples.Example.Action*
-  name: Action
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Action_
-  commentId: Overload:Stride.CommunityToolkit.Examples.Example.Action
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Examples.Example.Action
-  nameWithType: Example.Action
-- uid: Stride.CommunityToolkit.Examples.Example.Id
-  name: Id
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Id
-  commentId: P:Stride.CommunityToolkit.Examples.Example.Id
-  fullName: Stride.CommunityToolkit.Examples.Example.Id
-  nameWithType: Example.Id
-- uid: Stride.CommunityToolkit.Examples.Example.Id*
-  name: Id
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Id_
-  commentId: Overload:Stride.CommunityToolkit.Examples.Example.Id
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Examples.Example.Id
-  nameWithType: Example.Id
-- uid: Stride.CommunityToolkit.Examples.Example.Title
-  name: Title
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Title
-  commentId: P:Stride.CommunityToolkit.Examples.Example.Title
-  fullName: Stride.CommunityToolkit.Examples.Example.Title
-  nameWithType: Example.Title
-- uid: Stride.CommunityToolkit.Examples.Example.Title*
-  name: Title
-  href: api/Stride.CommunityToolkit.Examples.Example.html#Stride_CommunityToolkit_Examples_Example_Title_
-  commentId: Overload:Stride.CommunityToolkit.Examples.Example.Title
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Examples.Example.Title
-  nameWithType: Example.Title
 - uid: Stride.CommunityToolkit.Extensions
   name: Stride.CommunityToolkit.Extensions
   href: api/Stride.CommunityToolkit.Extensions.html
@@ -166,6 +96,88 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay
   nameWithType: CameraComponentExtensions.ScreenPointToRay
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  name: ScreenToWorldPoint(CameraComponent, Vector3)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name: ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name.vb: ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
+  nameWithType.vb: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint*
+  name: ScreenToWorldPoint
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldPoint_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: ScreenToWorldRaySegment(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)
+  name: ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__Stride_CommunityToolkit_Scripts_RaySegment__
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)
+  name.vb: ScreenToWorldRaySegment(CameraComponent, Vector2, RaySegment)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector2, out Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
+  nameWithType.vb: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, Vector2, RaySegment)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment*
+  name: ScreenToWorldRaySegment
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldRaySegment_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment
+  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name: WorldToClipSpace(CameraComponent, ref Vector3)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToClipSpace_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name.vb: WorldToClipSpace(CameraComponent, Vector3)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToClipSpace(CameraComponent, ref Vector3)
+  nameWithType.vb: CameraComponentExtensions.WorldToClipSpace(CameraComponent, Vector3)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace*
+  name: WorldToClipSpace
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToClipSpace_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace
+  nameWithType: CameraComponentExtensions.WorldToClipSpace
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  name: WorldToScreenPoint(CameraComponent, Vector3)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name: WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name.vb: WorldToScreenPoint(CameraComponent, Vector3, Vector3)
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
+  nameWithType.vb: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint*
+  name: WorldToScreenPoint
+  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToScreenPoint_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint
 - uid: Stride.CommunityToolkit.Extensions.GameExtensions
   name: GameExtensions
   href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html
@@ -696,6 +708,185 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.GameProfiler.TextColor
   nameWithType: GameProfiler.TextColor
+- uid: Stride.CommunityToolkit.Scripts.RaySegment
+  name: RaySegment
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html
+  commentId: T:Stride.CommunityToolkit.Scripts.RaySegment
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment
+  nameWithType: RaySegment
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.#ctor(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3)
+  name: RaySegment(Vector3, Vector3)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment__ctor_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.#ctor(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3)
+  name.vb: New(Vector3, Vector3)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.RaySegment(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.New(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
+  nameWithType: RaySegment.RaySegment(Vector3, Vector3)
+  nameWithType.vb: RaySegment.New(Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.#ctor*
+  name: RaySegment
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.RaySegment
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.New
+  nameWithType: RaySegment.RaySegment
+  nameWithType.vb: RaySegment.New
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.End
+  name: End
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_End
+  commentId: F:Stride.CommunityToolkit.Scripts.RaySegment.End
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.End
+  nameWithType: RaySegment.End
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Equals(Stride.CommunityToolkit.Scripts.RaySegment)
+  name: Equals(RaySegment)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Equals_Stride_CommunityToolkit_Scripts_RaySegment_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.Equals(Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Equals(Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: RaySegment.Equals(RaySegment)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Equals(System.Object)
+  name: Equals(object)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Equals_System_Object_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.Equals(System.Object)
+  name.vb: Equals(Object)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Equals(object)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.Equals(Object)
+  nameWithType: RaySegment.Equals(object)
+  nameWithType.vb: RaySegment.Equals(Object)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Equals*
+  name: Equals
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Equals_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.Equals
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Equals
+  nameWithType: RaySegment.Equals
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.GetHashCode
+  name: GetHashCode()
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_GetHashCode
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.GetHashCode
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.GetHashCode()
+  nameWithType: RaySegment.GetHashCode()
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.GetHashCode*
+  name: GetHashCode
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_GetHashCode_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.GetHashCode
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.GetHashCode
+  nameWithType: RaySegment.GetHashCode
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Length
+  name: Length
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Length
+  commentId: P:Stride.CommunityToolkit.Scripts.RaySegment.Length
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Length
+  nameWithType: RaySegment.Length
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Length*
+  name: Length
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Length_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.Length
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Length
+  nameWithType: RaySegment.Length
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Start
+  name: Start
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Start
+  commentId: F:Stride.CommunityToolkit.Scripts.RaySegment.Start
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Start
+  nameWithType: RaySegment.Start
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString
+  name: ToString()
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_ToString
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.ToString
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString()
+  nameWithType: RaySegment.ToString()
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.IFormatProvider)
+  name: ToString(IFormatProvider)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_ToString_System_IFormatProvider_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.IFormatProvider)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.IFormatProvider)
+  nameWithType: RaySegment.ToString(IFormatProvider)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String)
+  name: ToString(string)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_ToString_System_String_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String)
+  name.vb: ToString(String)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString(string)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.ToString(String)
+  nameWithType: RaySegment.ToString(string)
+  nameWithType.vb: RaySegment.ToString(String)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String,System.IFormatProvider)
+  name: ToString(string, IFormatProvider)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_ToString_System_String_System_IFormatProvider_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String,System.IFormatProvider)
+  name.vb: ToString(String, IFormatProvider)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString(string, System.IFormatProvider)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.ToString(String, System.IFormatProvider)
+  nameWithType: RaySegment.ToString(string, IFormatProvider)
+  nameWithType.vb: RaySegment.ToString(String, IFormatProvider)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString*
+  name: ToString
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_ToString_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.ToString
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString
+  nameWithType: RaySegment.ToString
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.op_Equality(Stride.CommunityToolkit.Scripts.RaySegment,Stride.CommunityToolkit.Scripts.RaySegment)
+  name: operator ==(RaySegment, RaySegment)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_op_Equality_Stride_CommunityToolkit_Scripts_RaySegment_Stride_CommunityToolkit_Scripts_RaySegment_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.op_Equality(Stride.CommunityToolkit.Scripts.RaySegment,Stride.CommunityToolkit.Scripts.RaySegment)
+  name.vb: =(RaySegment, RaySegment)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.operator ==(Stride.CommunityToolkit.Scripts.RaySegment, Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.=(Stride.CommunityToolkit.Scripts.RaySegment, Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: RaySegment.operator ==(RaySegment, RaySegment)
+  nameWithType.vb: RaySegment.=(RaySegment, RaySegment)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.op_Equality*
+  name: operator ==
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_op_Equality_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.op_Equality
+  isSpec: "True"
+  name.vb: =
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.operator ==
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.=
+  nameWithType: RaySegment.operator ==
+  nameWithType.vb: RaySegment.=
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.op_Explicit(Stride.CommunityToolkit.Scripts.RaySegment)~Stride.Core.Mathematics.Ray
+  name: explicit operator Ray(RaySegment)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_op_Explicit_Stride_CommunityToolkit_Scripts_RaySegment__Stride_Core_Mathematics_Ray
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.op_Explicit(Stride.CommunityToolkit.Scripts.RaySegment)~Stride.Core.Mathematics.Ray
+  name.vb: CType(RaySegment)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.explicit operator Stride.Core.Mathematics.Ray(Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.CType(Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: RaySegment.explicit operator Ray(RaySegment)
+  nameWithType.vb: RaySegment.CType(RaySegment)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.op_Explicit*
+  name: explicit operator
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_op_Explicit_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.op_Explicit
+  isSpec: "True"
+  name.vb: CType
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.explicit operator
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.CType
+  nameWithType: RaySegment.explicit operator
+  nameWithType.vb: RaySegment.CType
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.op_Inequality(Stride.CommunityToolkit.Scripts.RaySegment,Stride.CommunityToolkit.Scripts.RaySegment)
+  name: operator !=(RaySegment, RaySegment)
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_op_Inequality_Stride_CommunityToolkit_Scripts_RaySegment_Stride_CommunityToolkit_Scripts_RaySegment_
+  commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.op_Inequality(Stride.CommunityToolkit.Scripts.RaySegment,Stride.CommunityToolkit.Scripts.RaySegment)
+  name.vb: <>(RaySegment, RaySegment)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.operator !=(Stride.CommunityToolkit.Scripts.RaySegment, Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.<>(Stride.CommunityToolkit.Scripts.RaySegment, Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: RaySegment.operator !=(RaySegment, RaySegment)
+  nameWithType.vb: RaySegment.<>(RaySegment, RaySegment)
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.op_Inequality*
+  name: operator !=
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_op_Inequality_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.op_Inequality
+  isSpec: "True"
+  name.vb: <>
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.operator !=
+  fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.<>
+  nameWithType: RaySegment.operator !=
+  nameWithType.vb: RaySegment.<>
 - uid: Stride.CommunityToolkit.Skyboxes
   name: Stride.CommunityToolkit.Skyboxes
   href: api/Stride.CommunityToolkit.Skyboxes.html
