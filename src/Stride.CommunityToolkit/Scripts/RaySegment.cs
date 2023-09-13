@@ -14,22 +14,22 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <summary>
     /// The position in three dimensional space where the ray starts.
     /// </summary>
-    public Vector3 Start;
+    public Vector3 Start { get; init; }
 
     /// <summary>
     /// The position in three dimensional space where the ray ends.
     /// </summary>
-    public Vector3 End;
+    public Vector3 End { get; init; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="StrideToolkit.Mathematics.RaySegment"/> struct.
+    /// Initializes a new instance of the <see cref="RaySegment"/> struct.
     /// </summary>
     /// <param name="start">The position in three dimensional space where the ray starts.</param>
     /// <param name="end">The position in three dimensional space where the ray ends.</param>
     public RaySegment(Vector3 start, Vector3 end)
     {
-        this.Start = start;
-        this.End = end;
+        Start = start;
+        End = end;
     }
 
     /// <summary>
@@ -60,10 +60,10 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     }
 
     /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
+    /// Returns a <see cref="string"/> that represents this instance.
     /// </summary>
     /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
+    /// A <see cref="string"/> that represents this instance.
     /// </returns>
     public override string ToString()
     {
@@ -71,11 +71,11 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     }
 
     /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
+    /// Returns a <see cref="string"/> that represents this instance.
     /// </summary>
     /// <param name="format">The format.</param>
     /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
+    /// A <see cref="string"/> that represents this instance.
     /// </returns>
     public string ToString(string format)
     {
@@ -84,11 +84,11 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     }
 
     /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
+    /// Returns a <see cref="string"/> that represents this instance.
     /// </summary>
     /// <param name="formatProvider">The format provider.</param>
     /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
+    /// A <see cref="string"/> that represents this instance.
     /// </returns>
     public string ToString(IFormatProvider formatProvider)
     {
@@ -96,14 +96,14 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     }
 
     /// <summary>
-    /// Returns a <see cref="System.String"/> that represents this instance.
+    /// Returns a <see cref="string"/> that represents this instance.
     /// </summary>
     /// <param name="format">The format.</param>
     /// <param name="formatProvider">The format provider.</param>
     /// <returns>
-    /// A <see cref="System.String"/> that represents this instance.
+    /// A <see cref="string"/> that represents this instance.
     /// </returns>
-    public string ToString(string format, IFormatProvider formatProvider)
+    public string ToString(string? format, IFormatProvider? formatProvider)
     {
         return string.Format(formatProvider, ToStringFormat, Start.ToString(format, formatProvider),
             End.ToString(format, formatProvider));
@@ -133,13 +133,13 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     }
 
     /// <summary>
-    /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+    /// Determines whether the specified <see cref="object"/> is equal to this instance.
     /// </summary>
-    /// <param name="value">The <see cref="System.Object"/> to compare with this instance.</param>
+    /// <param name="value">The <see cref="object"/> to compare with this instance.</param>
     /// <returns>
-    /// <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+    /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    public override bool Equals(object value)
+    public override bool Equals(object? value)
     {
         if (value == null)
             return false;
