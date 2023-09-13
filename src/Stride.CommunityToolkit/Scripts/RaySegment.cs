@@ -1,7 +1,8 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Scripts;
+
 /// <summary>
 /// Represents a three dimensional line based on a 2 points in space.
 /// </summary>
@@ -113,7 +114,7 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// Returns a hash code for this instance.
     /// </summary>
     /// <returns>
-    /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+    /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
     /// </returns>
     public override int GetHashCode()
     {
@@ -159,5 +160,4 @@ public struct RaySegment : IEquatable<RaySegment>, IFormattable
 
         return result;
     }
-
 }

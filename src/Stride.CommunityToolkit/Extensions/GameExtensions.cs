@@ -51,7 +51,7 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets up the mininum: Graphics Compositor, Camera and Light
+    /// Sets up the minimum: Graphics Compositor, Camera and Light
     /// </summary>
     /// <param name="game"></param>
     public static void SetupBase(this Game game)
@@ -62,7 +62,7 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets up the default scene, the bare minumum like when you create an empty project through editor: Graphics Compositor, Camera and Directional Light, Skybox, MouseLookCamera, Ground
+    /// Sets up the default scene, the bare minimum like when you create an empty project through editor: Graphics Compositor, Camera and Directional Light, Skybox, MouseLookCamera, Ground
     /// </summary>
     /// <param name="game"></param>
     public static void SetupBase3DScene(this Game game)
@@ -257,13 +257,13 @@ public static class GameExtensions
     /// <returns></returns>
     public static Material NewDefaultMaterial(this Game game, Color? color = null)
     {
-        var defaulMaterialColor = Color.FromBgra(0xFF8C8C8C);
+        var defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
 
         var materialDescription = new MaterialDescriptor
         {
             Attributes =
                 {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? defaulMaterialColor)),
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? defaultMaterialColor)),
                     DiffuseModel = new MaterialDiffuseLambertModelFeature(),
                     Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(1.0f)),
                     SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
