@@ -28,26 +28,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Compositing.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Compositing.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.yml",
       "output": {
         ".html": {
@@ -102,6 +82,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.ProceduralModels.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.html"
         }
       },
       "version": ""

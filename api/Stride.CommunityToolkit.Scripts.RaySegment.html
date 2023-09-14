@@ -99,7 +99,7 @@
 
   <div class="facts text-secondary">
     <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Scripts.html">Scripts</a></dd></dl>
-  <dl><dt>Assembly</dt><dd>CodeCapital.Stride.GameDefaults.dll</dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
   <div class="markdown summary"><p>Represents a three dimensional line based on a 2 points in space.</p>
@@ -141,7 +141,7 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/RaySegment.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Initializes a new instance of the StrideToolkit.Mathematics.RaySegment struct.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a> struct.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -170,10 +170,11 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
 
 
 
-  <h2 class="section" id="fields">Fields
+  <h2 class="section" id="properties">Properties
 </h2>
 
 
+  <a id="Stride_CommunityToolkit_Scripts_RaySegment_End_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.End*"></a>
 
   <h3 id="Stride_CommunityToolkit_Scripts_RaySegment_End" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.End">
   End
@@ -185,13 +186,14 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Vector3 End</code></pre>
+    <pre><code class="lang-csharp hljs">public Vector3 End { readonly get; init; }</code></pre>
   </div>
 
 
 
 
-  <h4 class="section">Field Value</h4>
+
+  <h4 class="section">Property Value</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
     <dd></dd>
@@ -202,42 +204,6 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
 
 
 
-
-
-
-
-  <h3 id="Stride_CommunityToolkit_Scripts_RaySegment_Start" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.Start">
-  Start
-  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/RaySegment.cs/#L18"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>The position in three dimensional space where the ray starts.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Vector3 Start</code></pre>
-  </div>
-
-
-
-
-  <h4 class="section">Field Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-
-  <h2 class="section" id="properties">Properties
-</h2>
 
 
   <a id="Stride_CommunityToolkit_Scripts_RaySegment_Length_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.Length*"></a>
@@ -262,6 +228,38 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Scripts_RaySegment_Start_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.Start*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_RaySegment_Start" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.Start">
+  Start
+  <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/RaySegment.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The position in three dimensional space where the ray starts.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Vector3 Start { readonly get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/77d5ea606703a4694e89638d7cf318b6532eba5c/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
     <dd></dd>
   </dl>
 
@@ -318,7 +316,7 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <a id="Stride_CommunityToolkit_Scripts_RaySegment_Equals_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.Equals*"></a>
 
   <h3 id="Stride_CommunityToolkit_Scripts_RaySegment_Equals_System_Object_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.Equals(System.Object)">
-  Equals(object)
+  Equals(object?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/RaySegment.cs/#L143"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -327,7 +325,7 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool Equals(object value)</code></pre>
+    <pre><code class="lang-csharp hljs">public override bool Equals(object? value)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -501,7 +499,7 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <a id="Stride_CommunityToolkit_Scripts_RaySegment_ToString_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.ToString*"></a>
 
   <h3 id="Stride_CommunityToolkit_Scripts_RaySegment_ToString_System_String_System_IFormatProvider_" data-uid="Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String,System.IFormatProvider)">
-  ToString(string, IFormatProvider)
+  ToString(string?, IFormatProvider?)
   <a class="header-action link-secondary" title="View source" href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/RaySegment.cs/#L107"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -510,7 +508,7 @@ public struct RaySegment : IEquatable&lt;RaySegment&gt;, IFormattable</code></pr
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ToString(string format, IFormatProvider formatProvider)</code></pre>
+    <pre><code class="lang-csharp hljs">public string ToString(string? format, IFormatProvider? formatProvider)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>

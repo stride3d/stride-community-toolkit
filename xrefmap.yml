@@ -1,31 +1,6 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
-- uid: Stride.CommunityToolkit.Compositing
-  name: Stride.CommunityToolkit.Compositing
-  href: api/Stride.CommunityToolkit.Compositing.html
-  commentId: N:Stride.CommunityToolkit.Compositing
-  fullName: Stride.CommunityToolkit.Compositing
-  nameWithType: Stride.CommunityToolkit.Compositing
-- uid: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder
-  name: GraphicsCompositorBuilder
-  href: api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html
-  commentId: T:Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder
-  fullName: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder
-  nameWithType: GraphicsCompositorBuilder
-- uid: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create(System.Nullable{Stride.Core.Mathematics.Color4})
-  name: Create(Color4?)
-  href: api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html#Stride_CommunityToolkit_Compositing_GraphicsCompositorBuilder_Create_System_Nullable_Stride_Core_Mathematics_Color4__
-  commentId: M:Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create(System.Nullable{Stride.Core.Mathematics.Color4})
-  fullName: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create(Stride.Core.Mathematics.Color4?)
-  nameWithType: GraphicsCompositorBuilder.Create(Color4?)
-- uid: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create*
-  name: Create
-  href: api/Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.html#Stride_CommunityToolkit_Compositing_GraphicsCompositorBuilder_Create_
-  commentId: Overload:Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Compositing.GraphicsCompositorBuilder.Create
-  nameWithType: GraphicsCompositorBuilder.Create
 - uid: Stride.CommunityToolkit.Extensions
   name: Stride.CommunityToolkit.Extensions
   href: api/Stride.CommunityToolkit.Extensions.html
@@ -482,6 +457,31 @@ references:
   commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Torus
   fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Torus
   nameWithType: PrimitiveModelType.Torus
+- uid: Stride.CommunityToolkit.Rendering.Compositing
+  name: Stride.CommunityToolkit.Rendering.Compositing
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.html
+  commentId: N:Stride.CommunityToolkit.Rendering.Compositing
+  fullName: Stride.CommunityToolkit.Rendering.Compositing
+  nameWithType: Stride.CommunityToolkit.Rendering.Compositing
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions
+  name: GraphicsCompositorExtensions
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions
+  nameWithType: GraphicsCompositorExtensions
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)
+  name: AddCleanUIStage(GraphicsCompositor)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddCleanUIStage_Stride_Rendering_Compositing_GraphicsCompositor_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)
+  nameWithType: GraphicsCompositorExtensions.AddCleanUIStage(GraphicsCompositor)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage*
+  name: AddCleanUIStage
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddCleanUIStage_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage
+  nameWithType: GraphicsCompositorExtensions.AddCleanUIStage
 - uid: Stride.CommunityToolkit.Scripts
   name: Stride.CommunityToolkit.Scripts
   href: api/Stride.CommunityToolkit.Scripts.html
@@ -736,7 +736,14 @@ references:
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.End
   name: End
   href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_End
-  commentId: F:Stride.CommunityToolkit.Scripts.RaySegment.End
+  commentId: P:Stride.CommunityToolkit.Scripts.RaySegment.End
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.End
+  nameWithType: RaySegment.End
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.End*
+  name: End
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_End_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.End
+  isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.RaySegment.End
   nameWithType: RaySegment.End
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.Equals(Stride.CommunityToolkit.Scripts.RaySegment)
@@ -746,13 +753,13 @@ references:
   fullName: Stride.CommunityToolkit.Scripts.RaySegment.Equals(Stride.CommunityToolkit.Scripts.RaySegment)
   nameWithType: RaySegment.Equals(RaySegment)
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.Equals(System.Object)
-  name: Equals(object)
+  name: Equals(object?)
   href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Equals_System_Object_
   commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.Equals(System.Object)
   name.vb: Equals(Object)
-  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Equals(object)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Equals(object?)
   fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.Equals(Object)
-  nameWithType: RaySegment.Equals(object)
+  nameWithType: RaySegment.Equals(object?)
   nameWithType.vb: RaySegment.Equals(Object)
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.Equals*
   name: Equals
@@ -790,7 +797,14 @@ references:
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.Start
   name: Start
   href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Start
-  commentId: F:Stride.CommunityToolkit.Scripts.RaySegment.Start
+  commentId: P:Stride.CommunityToolkit.Scripts.RaySegment.Start
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.Start
+  nameWithType: RaySegment.Start
+- uid: Stride.CommunityToolkit.Scripts.RaySegment.Start*
+  name: Start
+  href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_Start_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.RaySegment.Start
+  isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.RaySegment.Start
   nameWithType: RaySegment.Start
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString
@@ -815,13 +829,13 @@ references:
   nameWithType: RaySegment.ToString(string)
   nameWithType.vb: RaySegment.ToString(String)
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String,System.IFormatProvider)
-  name: ToString(string, IFormatProvider)
+  name: ToString(string?, IFormatProvider?)
   href: api/Stride.CommunityToolkit.Scripts.RaySegment.html#Stride_CommunityToolkit_Scripts_RaySegment_ToString_System_String_System_IFormatProvider_
   commentId: M:Stride.CommunityToolkit.Scripts.RaySegment.ToString(System.String,System.IFormatProvider)
   name.vb: ToString(String, IFormatProvider)
-  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString(string, System.IFormatProvider)
+  fullName: Stride.CommunityToolkit.Scripts.RaySegment.ToString(string?, System.IFormatProvider?)
   fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.ToString(String, System.IFormatProvider)
-  nameWithType: RaySegment.ToString(string, IFormatProvider)
+  nameWithType: RaySegment.ToString(string?, IFormatProvider?)
   nameWithType.vb: RaySegment.ToString(String, IFormatProvider)
 - uid: Stride.CommunityToolkit.Scripts.RaySegment.ToString*
   name: ToString
