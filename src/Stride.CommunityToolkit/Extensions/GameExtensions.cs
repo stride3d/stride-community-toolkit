@@ -1,5 +1,5 @@
-using Stride.CommunityToolkit.Compositing;
 using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
@@ -78,20 +78,20 @@ public static class GameExtensions
         game.AddGround();
     }
 
+    /// <summary>
+    /// Adds a default GraphicsCompositor with a UI stage and white text effect to the given Game instance.
+    /// </summary>
+    /// <param name="game">The Game instance to which the GraphicsCompositor will be added.</param>
+    /// <returns>The configured GraphicsCompositor instance.</returns>
     public static GraphicsCompositor AddGraphicsCompositor(this Game game)
     {
-        // This is already build in Stride engine
-        //var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(true);
+        // Create a default GraphicsCompositor with enabled post-effects.
+        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(true);
 
-        // Just some extra things added
-        //((ForwardRenderer)graphicsCompositor.SingleView).PostEffects = (PostProcessingEffects?)new PostProcessingEffects
-        //{
-        //    DepthOfField = { Enabled = false },
-        //    ColorTransforms = { Transforms = { new ToneMap() } },
-        //};
+        // Add UI stage and white text effect.
+        graphicsCompositor.AddCleanUIStage();
 
-        var graphicsCompositor = GraphicsCompositorBuilder.Create();
-
+        // Set the GraphicsCompositor for the game's SceneSystem
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
         return graphicsCompositor;

@@ -8,7 +8,7 @@
    ```
 1. **Add NuGet Package:** Execute the following command to add the necessary NuGet package.
    ```
-   dotnet add package CodeCapital.Stride.GameDefaults --prerelease
+   dotnet add package Stride.CommunityToolkit --prerelease
    ```
 1. **Update Program.cs:** Paste the example code (provided below) into your `Program.cs` file.
 1. **Run the Project:** Execute the following command.
@@ -22,7 +22,7 @@
 ## Visual Studio 2022 and Rider Instructions
  
 1. **Create a C# Console Application:** Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 6.
-1. **Add NuGet Package:** Search for and add the **CodeCapital.Stride.GameDefaults** NuGet package, ensuring you opt for the prerelease version.
+1. **Add NuGet Package:** Search for and add the **Stride.CommunityToolkit** NuGet package, ensuring you opt for the prerelease version.
 1. **Update Program.cs:** Paste the example code (provided below) into your `Program.cs` file.
 1. **Run the Project:** Build and run your project using the IDE's run functionality.
 1. **Enjoy Stride:** If everything is set up correctly, you should now be able to run and enjoy your Stride project.

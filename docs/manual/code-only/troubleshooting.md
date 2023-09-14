@@ -9,4 +9,4 @@
     todatecheck-filebase="C:\Projects\StrideDemo\obj\Debug\net6.0\stride\assetcompiler-uptodatecheck"" exited with code -532462766. [C:\Projects\StrideDemo\StrideDemo.csproj]
    ```
 1. Error - Package 'runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl 4.3.0' from source .. : The repository primary signature's timestamping certificate is not trusted by the trust provider
-   - Restore the package CodeCapital.Stride.GameDefaults again ```dotnet restore``` 
+   - Restore the package Stride.CommunityToolkit again ```dotnet restore``` 
