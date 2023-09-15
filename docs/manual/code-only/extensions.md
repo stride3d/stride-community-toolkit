@@ -29,3 +29,26 @@ Some extensions return ```Entity``` so it can be further modified.
 | ```AddGizmo()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Debug. To see X,Y,Z arrows|
 | ```AddEntityNames()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Debug. To see entity properties in the game|
 | ```AddPhysicsDebugger()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Debug. To see colliders. Tracked here [Issue #9](https://github.com/VaclavElias/stride-code-only/issues/9)|
+
+## EntityComponentExtensions.cs
+
+| ```GetComponent()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Allows you to find a class attached to an Entity that are not limited to type ScriptComponent |
+| ```GetComponents()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Allows you to find all classes attached to an Entity that are not limited to type ScriptComponent |
+| ```DestroyEntity()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| easily destroys the calling Entity, you may need to use `Entity.Transform.Parent.Entity.DestroyEntity();` |
+| ```WorldPosition()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| A faster way of getting world position |
+
+## ScriptComponentExtensions.cs
+
+| ```DeltaTime()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Easier way of getting DeltaTime as a `float` in seconds |
+| ```GetCamera()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Gets the first camera with the name "Main", currently doesnt work at the start of a game due to being null in the `GraphicsCompositor` |
+| ```GetCamera(string name)``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Gets the first camera with the name provided, currently doesnt work at the start of a game due to being null in the `GraphicsCompositor` |
+| ```GetFirstCamera()``` |![Research](https://img.shields.io/badge/status-research-blue?style=for-the-badge)| Gets the first camera in the `GraphicsCompositor`. currently doesnt work at the start of a game due to being null in the `GraphicsCompositor` |
+
+## AnimationComponentExtensions.cs
+
+| ```PlayAnimation()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Plays an animation if not already playing |
+
+## ModelComponentExtensions.cs
+
+| ```GetMeshHeight()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Gets the Mesh height as a `float` |
+| ```GetMeshHWL()``` |![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)| Gets the Mesh height, width and length as a `Vector3` |

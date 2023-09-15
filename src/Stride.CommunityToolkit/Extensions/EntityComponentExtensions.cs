@@ -38,7 +38,6 @@ public static class EntityComponentExtensions
         try
         {
             entity.Scene.Entities.Remove(entity);
-
             return true;
         }
         catch
