@@ -131,6 +131,7 @@ public static class CameraComponentExtensions
         Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewProjectionMatrix, out var result);
         return result;
     }
+
     /// <summary>
     /// Converts the world position to screen space coordinates relative to camera.
     /// </summary>
@@ -150,6 +151,7 @@ public static class CameraComponentExtensions
 
         return result;
     }
+
     /// <summary>
     /// Converts the world position to screen space coordinates relative to camera.
     /// </summary>
@@ -174,6 +176,7 @@ public static class CameraComponentExtensions
             Z = viewSpace.Z + cameraComponent.NearClipPlane,
         };
     }
+
     /// <summary>
     /// Converts the screen position to a <see cref="RaySegment"/> in world coordinates.
     /// </summary>
@@ -191,6 +194,7 @@ public static class CameraComponentExtensions
 
         return result;
     }
+
     /// <summary>
     /// Converts the screen position to a <see cref="RaySegment"/> in world coordinates.
     /// </summary>
@@ -219,6 +223,7 @@ public static class CameraComponentExtensions
 
         result = new RaySegment(near, far);
     }
+
     private static void ScreenToClipSpace(ref Vector2 position, out Vector3 clipSpace)
     {
         clipSpace = new Vector3
