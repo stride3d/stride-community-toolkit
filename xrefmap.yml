@@ -153,21 +153,39 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint
   nameWithType: CameraComponentExtensions.WorldToScreenPoint
+- uid: Stride.CommunityToolkit.Extensions.CameraDefaults
+  name: CameraDefaults
+  href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html
+  commentId: T:Stride.CommunityToolkit.Extensions.CameraDefaults
+  fullName: Stride.CommunityToolkit.Extensions.CameraDefaults
+  nameWithType: CameraDefaults
+- uid: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition
+  name: InitialPosition
+  href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html#Stride_CommunityToolkit_Extensions_CameraDefaults_InitialPosition
+  commentId: F:Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition
+  fullName: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition
+  nameWithType: CameraDefaults.InitialPosition
+- uid: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
+  name: InitialRotation
+  href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html#Stride_CommunityToolkit_Extensions_CameraDefaults_InitialRotation
+  commentId: F:Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
+  fullName: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
+  nameWithType: CameraDefaults.InitialRotation
 - uid: Stride.CommunityToolkit.Extensions.GameExtensions
   name: GameExtensions
   href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html
   commentId: T:Stride.CommunityToolkit.Extensions.GameExtensions
   fullName: Stride.CommunityToolkit.Extensions.GameExtensions
   nameWithType: GameExtensions
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game,System.String)
-  name: AddCamera(Game, string?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddCamera_Stride_Engine_Game_System_String_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game,System.String)
-  name.vb: AddCamera(Game, String)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game, string?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game, String)
-  nameWithType: GameExtensions.AddCamera(Game, string?)
-  nameWithType.vb: GameExtensions.AddCamera(Game, String)
+- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
+  name: AddCamera(Game, string?, Vector3?, Vector3?)
+  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
+  name.vb: AddCamera(Game, String, Vector3?, Vector3?)
+  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
+  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
+  nameWithType: GameExtensions.AddCamera(Game, string?, Vector3?, Vector3?)
+  nameWithType.vb: GameExtensions.AddCamera(Game, String, Vector3?, Vector3?)
 - uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera*
   name: AddCamera
   href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddCamera_
