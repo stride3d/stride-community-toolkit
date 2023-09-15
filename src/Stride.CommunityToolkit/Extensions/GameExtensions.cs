@@ -22,12 +22,18 @@ public static class GameExtensions
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
 
     /// <summary>
-    /// Call this method to initialize the game, begin running the game loop, and start processing events for the game.
+    /// Initializes the game, starts the game loop, and handles game events.
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="context"></param>
-    /// <param name="start"></param>
-    /// <param name="update"></param>
+    /// <remarks>
+    /// This method performs the following actions:
+    /// 1. Schedules the root script for execution.
+    /// 2. Initiates the game loop by calling <see cref="Game.Run(GameContext)"/>.
+    /// 3. Invokes the provided <paramref name="start"/> and <paramref name="update"/> delegates.
+    /// </remarks>
+    /// <param name="game">The Game instance to initialize and run.</param>
+    /// <param name="context">Optional GameContext to be used. Defaults to null.</param>
+    /// <param name="start">Optional action to execute at the start of the game. Takes the root scene as a parameter.</param>
+    /// <param name="update">Optional action to execute during each game loop iteration. Takes the root scene and game time as parameters.</param>
     public static void Run(this Game game, GameContext? context = null, Action<Scene>? start = null, Action<Scene, GameTime>? update = null)
     {
         game.Script.Scheduler.Add(RootScript);
@@ -43,6 +49,7 @@ public static class GameExtensions
             while (true)
             {
                 update.Invoke(GetRootScene(), game.UpdateTime);
+
                 await game.Script.NextFrame();
             }
         }
@@ -51,45 +58,52 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets up the minimum: Graphics Compositor, Camera and Light
+    /// Sets up essential components for the game including a GraphicsCompositor, a camera, and a directional light.
     /// </summary>
-    /// <param name="game"></param>
+    /// <remarks>
+    /// This method performs the following operations:
+    /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.
+    /// 2. Adds a camera to the game.
+    /// 3. Adds a directional light to the game.
+    /// </remarks>
+    /// <param name="game">The Game instance that will receive the base setup.</param>
     public static void SetupBase(this Game game)
     {
-        game.AddGraphicsCompositor();
+        game.AddGraphicsCompositor().AddCleanUIStage();
         game.AddCamera();
         game.AddDirectionalLight();
     }
 
     /// <summary>
-    /// Sets up the default scene, the bare minimum like when you create an empty project through editor: Graphics Compositor, Camera and Directional Light, Skybox, MouseLookCamera, Ground
+    /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
-    /// <param name="game"></param>
+    /// <remarks>
+    /// This method performs the following setup operations in sequence:
+    /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.
+    /// 2. Adds a camera to the game and sets it up with a MouseLookCamera component.
+    /// 3. Adds a directional light to the game scene.
+    /// 4. Adds a skybox to the game scene.
+    /// 5. Adds ground geometry to the game scene.
+    /// </remarks>
+    /// <param name="game">The Game instance for which the base 3D scene will be set up.</param>
     public static void SetupBase3DScene(this Game game)
     {
-        game.AddGraphicsCompositor();
-
+        game.AddGraphicsCompositor().AddCleanUIStage();
         game.AddMouseLookCamera(game.AddCamera());
-
         game.AddDirectionalLight();
-
         game.AddSkybox();
-
         game.AddGround();
     }
 
     /// <summary>
-    /// Adds a default GraphicsCompositor with a UI stage and white text effect to the given Game instance.
+    /// Adds a default GraphicsCompositor with enabled post-effects to the specified Game instance and sets it as the game's SceneSystem GraphicsCompositor.
     /// </summary>
     /// <param name="game">The Game instance to which the GraphicsCompositor will be added.</param>
-    /// <returns>The configured GraphicsCompositor instance.</returns>
+    /// <returns>The newly configured GraphicsCompositor instance with enabled post-effects.</returns>
     public static GraphicsCompositor AddGraphicsCompositor(this Game game)
     {
         // Create a default GraphicsCompositor with enabled post-effects.
         var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(true);
-
-        // Add UI stage and white text effect.
-        graphicsCompositor.AddCleanUIStage();
 
         // Set the GraphicsCompositor for the game's SceneSystem
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
@@ -97,23 +111,44 @@ public static class GameExtensions
         return graphicsCompositor;
     }
 
-    public static Entity AddCamera(this Game game, string? entityName = null)
+    /// <summary>
+    /// Adds a camera entity to the game's root scene with customizable position and rotation.
+    /// </summary>
+    /// <param name="game">The Game instance to which the camera entity will be added.</param>
+    /// <param name="entityName">Optional name for the camera entity. If null, the entity will not be named.</param>
+    /// <param name="initialPosition">Initial position for the camera entity. If null, the camera will be positioned at the default position (6, 6, 6).</param>
+    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If null, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
+    /// <returns>The created Entity object representing the camera.</returns>
+    /// <remarks>
+    /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
+    /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
+    /// </remarks>
+    public static Entity AddCamera(this Game game, string? entityName = null, Vector3? initialPosition = null, Vector3? initialRotation = null)
     {
-        var entity = new Entity(entityName) { new CameraComponent {
-            Projection = CameraProjectionMode.Perspective,
-            Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId()}
+        initialPosition ??= CameraDefaults.InitialPosition;
+        initialRotation ??= CameraDefaults.InitialRotation;
+
+        var entity = new Entity(entityName)
+        {
+            new CameraComponent
+            {
+                Projection = CameraProjectionMode.Perspective,
+                Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId()
+            }
         };
 
-        entity.Transform.Position = new(6, 6, 6);
+        entity.Transform.Position = initialPosition.Value;
         entity.Transform.Rotation = Quaternion.RotationYawPitchRoll(
-            MathUtil.DegreesToRadians(45),
-            MathUtil.DegreesToRadians(-30),
-            MathUtil.DegreesToRadians(0));
+            MathUtil.DegreesToRadians(initialRotation.Value.X),
+            MathUtil.DegreesToRadians(initialRotation.Value.Y),
+            MathUtil.DegreesToRadians(initialRotation.Value.Z)
+        );
 
         game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
 
         return entity;
     }
+
     /// <summary>
     /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
     /// </summary>
