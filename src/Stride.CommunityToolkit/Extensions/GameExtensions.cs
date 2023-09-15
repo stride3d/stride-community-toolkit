@@ -169,9 +169,28 @@ public static class GameExtensions
         return gameTime.UpdateTime.Elapsed.TotalSeconds;
     }
 
+    /// <summary>
+    /// Adds a directional light entity to the game's root scene with optional customization.
+    /// </summary>
+    /// <param name="game">The Game instance to which the directional light will be added.</param>
+    /// <param name="entityName">Optional name for the new directional light entity. If null, the entity will not be named.</param>
+    /// <returns>The created Entity object representing the directional light.</returns>
+    /// <remarks>
+    /// This method creates a directional light with the following default settings:
+    /// - Intensity: 20.0f
+    /// - Position: (0, 2.0f, 0)
+    /// - Rotation: X-axis rotated by -30 degrees and Y-axis rotated by -180 degrees.
+    /// - Shadow Enabled: True
+    /// - Shadow Size: Large
+    /// - Shadow Filter: PCF (Percentage Closer Filtering) with a filter size of 5x5
+    ///
+    /// The entity will be added to the game's root scene. You can customize the light properties by accessing the returned Entity object.
+    /// </remarks>
     public static Entity AddDirectionalLight(this Game game, string? entityName = null)
     {
-        var entity = new Entity(entityName) { new LightComponent
+        var entity = new Entity(entityName)
+        {
+            new LightComponent
             {
                 Intensity =  20.0f,
                 Type = new LightDirectional
@@ -183,7 +202,8 @@ public static class GameExtensions
                         Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
                     }
                 }
-            } };
+            }
+        };
 
         entity.Transform.Position = new Vector3(0, 2.0f, 0);
         entity.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30.0f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-180.0f));
