@@ -27,10 +27,44 @@ public static class GraphicsCompositorExtensions
     /// This alters the GraphicsCompositor's <see cref="PostProcessingEffects"/>, <see cref="RenderStage"/>, and <see cref="RenderFeature"/>.
     /// </summary>
     /// <param name="graphicsCompositor">The GraphicsCompositor to modify.</param>
-    public static void AddCleanUIStage(this GraphicsCompositor graphicsCompositor)
+    /// <returns>Returns the modified GraphicsCompositor instance, allowing for method chaining.</returns>
+    public static GraphicsCompositor AddCleanUIStage(this GraphicsCompositor graphicsCompositor)
     {
         AddPostEffects(graphicsCompositor);
         AddRenderStagesAndFeatures(graphicsCompositor);
+
+        return graphicsCompositor;
+    }
+
+    /// <summary>
+    /// Adds a new scene renderer to the given GraphicsCompositor's game. If the game is already a collection of scene renderers,
+    /// the new scene renderer is added to that collection. Otherwise, a new scene renderer collection is created to house both
+    /// the existing game and the new scene renderer.
+    /// </summary>
+    /// <param name="graphicsCompositor">The GraphicsCompositor to which the scene renderer will be added.</param>
+    /// <param name="sceneRenderer">The new <see cref="SceneRendererBase"/> instance that will be added to the GraphicsCompositor's game.</param>
+    /// <remarks>
+    /// This method will either add the scene renderer to an existing SceneRendererCollection or create a new one to house both
+    /// the existing game and the new scene renderer. In either case, the GraphicsCompositor's game will end up with the new scene renderer added.
+    /// </remarks>
+    /// <returns>Returns the modified GraphicsCompositor instance, allowing for method chaining.</returns>
+    public static GraphicsCompositor AddSceneRenderer(this GraphicsCompositor graphicsCompositor, SceneRendererBase sceneRenderer)
+    {
+        if (graphicsCompositor.Game is SceneRendererCollection sceneRendererCollection)
+        {
+            sceneRendererCollection.Children.Add(sceneRenderer);
+        }
+        else
+        {
+            var newSceneRendererCollection = new SceneRendererCollection();
+
+            newSceneRendererCollection.Children.Add(graphicsCompositor.Game);
+            newSceneRendererCollection.Children.Add(sceneRenderer);
+
+            graphicsCompositor.Game = newSceneRendererCollection;
+        }
+
+        return graphicsCompositor;
     }
 
     private static void AddPostEffects(GraphicsCompositor graphicsCompositor)
