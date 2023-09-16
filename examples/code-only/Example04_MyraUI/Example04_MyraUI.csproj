@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+      <PackageReference Include="Myra.Stride" Version="1.4.5" />
+    </ItemGroup>
+
+</Project>
