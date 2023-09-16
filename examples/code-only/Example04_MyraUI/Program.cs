@@ -1,40 +1,50 @@
 using Example04_MyraUI;
 using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
-using Stride.Rendering.Compositing;
+using Stride.Games;
 
 using var game = new Game();
-game.Run(start: Start);
+
+// State flag to track health bar visibility
+bool isHealthBarVisible = false;
+
+game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     SetupBase3DScene();
 }
 
+void Update(Scene rootScene, GameTime time)
+{
+    InitializeHealthBar();
+}
+
 void SetupBase3DScene()
 {
-    ConfigureGraphicsCompositor();
+    game.AddGraphicsCompositor()
+        .AddCleanUIStage()
+        .AddSceneRenderer(new MyraSceneRenderer());
     game.AddMouseLookCamera(game.AddCamera());
     game.AddDirectionalLight();
     game.AddSkybox();
     game.AddGround();
 }
 
-// Create a custom graphics compositor to include the Myra UI renderer as a renderstage
-void ConfigureGraphicsCompositor()
+/// <summary>
+/// Initializes the health bar if it is not already visible.
+/// </summary>
+void InitializeHealthBar()
 {
-    // get the default graphics compositor
-    var graphicsCompositor = game.AddGraphicsCompositor();
+    if (isHealthBarVisible) return;
 
-    // create a new SceneRendererCollection
-    var scenRendererCollection = new SceneRendererCollection();
+    var mainView = game.Services.GetService<MainView>();
 
-    // add the default renderstage to a new SceneRendererCollection
-    // fun fact if you comment this out the Myra UI will render but the 3D scene will not
-    scenRendererCollection.Children.Add(graphicsCompositor.Game);
-    // add the Myra UI renderer to the new SceneRendererCollection
-    scenRendererCollection.Children.Add(new MyraRenderer());
+    if (mainView == null) return;
 
-    // Set the new collection as the main Scene Renderer
-    graphicsCompositor.Game = scenRendererCollection;
+    // Create and add a new health bar to the main view
+    mainView.Widgets.Add(UIUtils.CreateHealthBar(-50, "#FFD961FF"));
+
+    isHealthBarVisible = true;
 }

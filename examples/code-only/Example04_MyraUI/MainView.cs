@@ -1,47 +1,64 @@
-using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI;
 
 namespace Example04_MyraUI;
+
+/// <summary>
+/// Represents the main user interface view for the application.
+/// </summary>
+/// <remarks>
+/// The MainView class is responsible for creating and managing key UI elements such as a health bar and a test window.
+/// </remarks>
 public class MainView : Panel
 {
-    public HorizontalProgressBar HealthBar;
-    public Window TestWindow;
+    /// <summary>
+    /// Gets the health bar UI element.
+    /// </summary>
+    /// <remarks>
+    /// The health bar shows the current health status.
+    /// </remarks>
+    public HorizontalProgressBar HealthBar { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the test window UI element.
+    /// </summary>
+    /// <remarks>
+    /// The example window is used for demo purposes and contains a sample label.
+    /// </remarks>
+    public Window ExampleWindow { get; private set; } = null!;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainView"/> class.
+    /// </summary>
     public MainView()
     {
-        // This can be configured to show health as a progress bar
-        // It isnt configured because Im lazy right now but Ill set this up later to show how to do it
-        HealthBar = new()
-        {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Value = 100,
-            Filler = new SolidBrush("#4BD961FF"),
-            Left = 20,
-            Top = -20,
-            Width = 300,
-            Height = 20,
-            Background = new SolidBrush("#202020FF"),
-        };
+        InitializeHealthBar();
+        InitializeTestWindow();
+    }
 
-        // Just a simple readonly text field
+    /// <summary>
+    /// Initializes the health bar UI element.
+    /// </summary>
+    private void InitializeHealthBar() => Widgets.Add(UIUtils.CreateHealthBar(-20, "#4BD961FF"));
+
+    /// <summary>
+    /// Initializes the test window UI element.
+    /// </summary>
+    private void InitializeTestWindow()
+    {
         var label = new Label
         {
             VerticalSpacing = 10,
-            Text = "This is a Test! Hello from Myra!"
+            Text = "This is a Test! Hello from Myra! This is a window and below two progress bars."
         };
 
-        // This is a window that can be moved around and closed and shows the label as Content
-        TestWindow = new Window()
+        ExampleWindow = new Window
         {
-            Title = "Hello World!",
+            Title = "Hello From Myra",
             Left = 590,
             Top = 200,
-            Content = label,
+            Content = label
         };
 
-        // Add the window and the health bar to the main view
-        Widgets.Add(TestWindow);
-        Widgets.Add(HealthBar);
+        Widgets.Add(ExampleWindow);
     }
 }
