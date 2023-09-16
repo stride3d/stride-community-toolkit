@@ -54,6 +54,7 @@ static List<Example> GetExamples() => new() {
     new Example("1", "Basic Example - Capsule with rigid body", () => StartProcess(nameof(Example01_Basic3DScene))),
     new Example("2", "Basic Example - Give me a cube", () => StartProcess(nameof(Example02_GiveMeACube))),
     new Example("3", "Basic Example - Capsule with rigid body and window", () => StartProcess(nameof(Example03_CapsuleAndWindow))),
+    new Example("4", "Basic Example - Myra UI", () => StartProcess(nameof(Example04_MyraUI))),
     //new Example("4", "Basic Example - Profiler",
     //                  () => StartProcess(nameof(Example04_Profiler))),
     new Example("Q", "Quit", () => Environment.Exit(0))
