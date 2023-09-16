@@ -27,7 +27,7 @@ public static class GameExtensions
     /// <remarks>
     /// This method performs the following actions:
     /// 1. Schedules the root script for execution.
-    /// 2. Initiates the game loop by calling <see cref="Game.Run(GameContext)"/>.
+    /// 2. Initiates the game loop by calling <see cref="GameBase.Run(GameContext)"/>.
     /// 3. Invokes the provided <paramref name="start"/> and <paramref name="update"/> delegates.
     /// </remarks>
     /// <param name="game">The Game instance to initialize and run.</param>
