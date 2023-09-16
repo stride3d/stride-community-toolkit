@@ -4,6 +4,8 @@ This code example demonstrates how to initialize a game, set up a basic 3D scene
 
 *ToDo: Add a screenshot*
 
+View on [GitHub](https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene).
+
 [!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene/Program.cs)]
 
 - `using var game = new Game();` This line of code creates a new instance of the `Game` class. The `Game` class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The `using` keyword ensures that the `Dispose()` method is called on the `game` object when it goes out of scope, ensuring that any resources it uses are properly cleaned up

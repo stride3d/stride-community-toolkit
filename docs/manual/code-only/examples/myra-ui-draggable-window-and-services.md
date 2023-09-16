@@ -16,21 +16,23 @@ By following this example, you will gain insights into how to extend your game's
 
 *ToDo: Add a screenshot*
 
+View on [GitHub](https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI).
+
 [!code-csharp[](../../../../examples/code-only/Example04_MyraUI/Program.cs)]
 
-## Scene Renderer
+## MyraSceneRenderer.cs
 
 This class provides functionality for rendering Myra-based user interfaces in a Stride game.
 
 [!code-csharp[](../../../../examples/code-only/Example04_MyraUI/MyraSceneRenderer.cs)]
 
-## Main View
+## MainView.cs
 
 This class creates the main UI window `MainView` and the health bar using `HorizontalProgressBar`.
 
 [!code-csharp[](../../../../examples/code-only/Example04_MyraUI/MainView.cs)]
 
-## UI Utils
+## UIUtils.cs
 
 This class contains helper methods to create UI elements, which are used in multiple places in the example.
 

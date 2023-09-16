@@ -2,8 +2,8 @@ const app = {
     iconLinks: [
         {
             icon: 'github',
-            href: 'https://github.com/stride3d/stride',
-            title: 'GitHub'
+            href: 'https://github.com/VaclavElias/stride-community-toolkit',
+            title: 'Stride Community Toolkit GitHub'
         },
         {
             icon: 'discord',

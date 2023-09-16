@@ -1,4 +1,4 @@
-# Basic Example - Capsule with rigid body and window
+# Capsule with rigid body and window
 
 In this example, we demonstrate how to set up a 3D scene that includes a capsule with a rigid body as well as a simple window displaying a text message.
 
@@ -15,5 +15,7 @@ This example is organized into multiple methods for better readability and maint
 This modular approach makes the code easier to understand and maintain. Each method has a clear responsibility.
 
 *ToDo: Add a screenshot*
+
+View on [GitHub](https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example03_StrideUI_CapsuleAndWindow).
 
 [!code-csharp[](../../../../examples/code-only/Example03_StrideUI_CapsuleAndWindow/Program.cs)]
