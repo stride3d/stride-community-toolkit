@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Myra UI - Draggable Window, GetService() | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Myra UI - Draggable Window, GetService() | Stride Manual ">
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/examples/myra-ui-draggable-window-and-services.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module">
+    import options from './../../../public/main.js'
+    import { init } from './../../../public/docfx.min.js'
+    init(options)
+  </script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="myra-ui---draggable-window-getservice">Myra UI - Draggable Window, GetService()</h1>
+
+<p>This example showcases how to integrate <a href="https://github.com/rds1983/Myra">Myra</a>, an external UI library, into your game developed with Stride. Myra provides a rich set of widgets and functionalities to enhance the graphical user interface of your game.</p>
+<p>Key features in this example:</p>
+<ul>
+<li><p><strong>Draggable Window</strong>: The example demonstrates how to implement a draggable window within the game using Myra's UI components. This draggable window serves as a movable and interactive element that can host other widgets, thus offering a dynamic interface experience for the player.</p>
+</li>
+<li><p><strong>Health Bar</strong>: This example features two distinct health bars. The first one is statically defined within the <code>MainView</code> class, while the second is dynamically added during runtime. Both bars can be customized to represent a variety of in-game attributes, such as player health, experience, or other performance metrics.</p>
+</li>
+<li><p><strong>Dynamic Initialization</strong>: The UI components, including the health bar, are initialized dynamically during the game's runtime. This allows for greater flexibility and responsiveness in the game's UI.</p>
+</li>
+<li><p><strong>Service Retrieval</strong>: The example illustrates the use of <code>GetService()</code> to retrieve services dynamically, thus fostering loose coupling between various components of the game. This practice promotes code reusability and easier maintenance.</p>
+</li>
+</ul>
+<p>By following this example, you will gain insights into how to extend your game's capabilities by leveraging external libraries for UI and best practices for service retrieval and dynamic UI component initialization.</p>
+<p><em>ToDo: Add a screenshot</em></p>
+<p>View on <a href="https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Example04_MyraUI;
+using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.Engine;
+using Stride.Games;
+
+using var game = new Game();
+
+// State flag to track health bar visibility
+bool isHealthBarVisible = false;
+
+game.Run(start: Start, update: Update);
+
+void Start(Scene rootScene)
+{
+    SetupBase3DScene();
+}
+
+void Update(Scene rootScene, GameTime time)
+{
+    InitializeHealthBar();
+}
+
+void SetupBase3DScene()
+{
+    game.AddGraphicsCompositor()
+        .AddCleanUIStage() //optional
+        .AddSceneRenderer(new MyraSceneRenderer());
+    game.AddMouseLookCamera(game.AddCamera());
+    game.AddDirectionalLight();
+    game.AddSkybox();
+    game.AddGround();
+}
+
+/// &lt;summary&gt;
+/// Initializes the health bar if it is not already visible.
+/// &lt;/summary&gt;
+void InitializeHealthBar()
+{
+    if (isHealthBarVisible) return;
+
+    var mainView = game.Services.GetService&lt;MainView&gt;();
+
+    if (mainView == null) return;
+
+    // Create and add a new health bar to the main view
+    mainView.Widgets.Add(UIUtils.CreateHealthBar(-50, &quot;#FFD961FF&quot;));
+
+    isHealthBarVisible = true;
+}
+</code></pre><h2 id="myrascenerenderercs">MyraSceneRenderer.cs</h2>
+<p>This class provides functionality for rendering Myra-based user interfaces in a Stride game.</p>
+<pre><code class="lang-csharp">using Myra;
+using Myra.Graphics2D.UI;
+using Stride.Engine;
+using Stride.Games;
+using Stride.Graphics;
+using Stride.Rendering;
+using Stride.Rendering.Compositing;
+
+namespace Example04_MyraUI;
+
+/// &lt;summary&gt;
+/// Provides functionality for rendering Myra-based user interfaces in a Stride game.
+/// &lt;/summary&gt;
+/// &lt;remarks&gt;
+/// This renderer uses the Myra UI library to render the user interface and integrates it into the Stride rendering pipeline.
+/// &lt;/remarks&gt;
+public class MyraSceneRenderer : SceneRendererBase
+{
+    /// &lt;summary&gt;
+    /// Gets or sets the root of all UI elements to be rendered.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// The desktop serves as the root container for all UI elements rendered by Myra.
+    /// &lt;/remarks&gt;
+    private Desktop? _desktop;
+
+    /// &lt;summary&gt;
+    /// Gets or sets the main view of the application UI.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// The main view contains the primary UI elements that the user will interact with.
+    /// &lt;/remarks&gt;
+    private MainView? _mainView;
+
+    /// &lt;summary&gt;
+    /// Initializes the core rendering properties.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// This method sets up the Myra environment, configures the main view, and associates it with the desktop.
+    /// &lt;/remarks&gt;
+    protected override void InitializeCore()
+    {
+        base.InitializeCore();
+
+        MyraEnvironment.Game = (Game)Services.GetService&lt;IGame&gt;();
+
+        InitializeMainView();
+
+        InitializeDesktop();
+    }
+
+    /// &lt;summary&gt;
+    /// Initializes the main view and adds it to the Stride services.
+    /// &lt;/summary&gt;
+    private void InitializeMainView()
+    {
+        _mainView = new MainView();
+
+        Services.AddService(_mainView);
+    }
+
+    /// &lt;summary&gt;
+    /// Initializes the desktop and sets the root view.
+    /// &lt;/summary&gt;
+    private void InitializeDesktop()
+    {
+        _desktop = new Desktop
+        {
+            Root = _mainView
+        };
+    }
+
+    protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
+    {
+        // Clear depth buffer
+        drawContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer);
+
+        // Render UI
+        _desktop?.Render();
+    }
+}
+</code></pre><h2 id="mainviewcs">MainView.cs</h2>
+<p>This class creates the main UI window <code>MainView</code> and the health bar using <code>HorizontalProgressBar</code>.</p>
+<pre><code class="lang-csharp">using Myra.Graphics2D.UI;
+
+namespace Example04_MyraUI;
+
+/// &lt;summary&gt;
+/// Represents the main user interface view for the application.
+/// &lt;/summary&gt;
+/// &lt;remarks&gt;
+/// The MainView class is responsible for creating and managing key UI elements such as a health bar and a test window.
+/// &lt;/remarks&gt;
+public class MainView : Panel
+{
+    /// &lt;summary&gt;
+    /// Gets the health bar UI element.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// The health bar shows the current health status.
+    /// &lt;/remarks&gt;
+    public HorizontalProgressBar HealthBar { get; private set; } = null!;
+
+    /// &lt;summary&gt;
+    /// Gets the test window UI element.
+    /// &lt;/summary&gt;
+    /// &lt;remarks&gt;
+    /// The example window is used for demo purposes and contains a sample label.
+    /// &lt;/remarks&gt;
+    public Window ExampleWindow { get; private set; } = null!;
+
+    /// &lt;summary&gt;
+    /// Initializes a new instance of the &lt;see cref=&quot;MainView&quot;/&gt; class.
+    /// &lt;/summary&gt;
+    public MainView()
+    {
+        InitializeHealthBar();
+        InitializeTestWindow();
+    }
+
+    /// &lt;summary&gt;
+    /// Initializes the health bar UI element.
+    /// &lt;/summary&gt;
+    private void InitializeHealthBar() =&gt; Widgets.Add(UIUtils.CreateHealthBar(-20, &quot;#4BD961FF&quot;));
+
+    /// &lt;summary&gt;
+    /// Initializes the test window UI element.
+    /// &lt;/summary&gt;
+    private void InitializeTestWindow()
+    {
+        var label = new Label
+        {
+            VerticalSpacing = 10,
+            Text = &quot;This is a Test! Hello from Myra! This is a window and below two progress bars.&quot;
+        };
+
+        ExampleWindow = new Window
+        {
+            Title = &quot;Hello From Myra&quot;,
+            Left = 590,
+            Top = 200,
+            Content = label
+        };
+
+        Widgets.Add(ExampleWindow);
+    }
+}
+</code></pre><h2 id="uiutilscs">UIUtils.cs</h2>
+<p>This class contains helper methods to create UI elements, which are used in multiple places in the example.</p>
+<pre><code class="lang-csharp">using Myra.Graphics2D.Brushes;
+using Myra.Graphics2D.UI;
+
+namespace Example04_MyraUI;
+
+/// &lt;summary&gt;
+/// Utility class to create custom UI widgets.
+/// &lt;/summary&gt;
+public static class UIUtils
+{
+    /// &lt;summary&gt;
+    /// Creates a new &lt;see cref=&quot;HorizontalProgressBar&quot;/&gt; with the given top position and filler color.
+    /// &lt;/summary&gt;
+    /// &lt;param name=&quot;top&quot;&gt;The top position of the progress bar.&lt;/param&gt;
+    /// &lt;param name=&quot;filler&quot;&gt;The filler color of the progress bar.&lt;/param&gt;
+    /// &lt;returns&gt;A new &lt;see cref=&quot;HorizontalProgressBar&quot;/&gt; instance.&lt;/returns&gt;
+    public static HorizontalProgressBar CreateHealthBar(int top, string filler)
+    {
+        return new HorizontalProgressBar
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Value = 100,
+            Filler = new SolidBrush(filler),
+            Left = 20,
+            Top = top,
+            Width = 300,
+            Height = 20,
+            Background = new SolidBrush(&quot;#202020FF&quot;)
+        };
+    }
+}
+</code></pre><h2 id="other-examples">Other Examples</h2>
+<p><a href="https://github.com/rds1983/Myra/wiki/Using-Myra-in-Stride-Engine-Tutorial">Using Myra in Stride Engine Tutorial</a></p>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/examples/myra-ui-draggable-window-and-services.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Docs Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

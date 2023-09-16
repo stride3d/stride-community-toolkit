@@ -500,6 +500,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage
   nameWithType: GraphicsCompositorExtensions.AddCleanUIStage
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer(Stride.Rendering.Compositing.GraphicsCompositor,Stride.Rendering.Compositing.SceneRendererBase)
+  name: AddSceneRenderer(GraphicsCompositor, SceneRendererBase)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddSceneRenderer_Stride_Rendering_Compositing_GraphicsCompositor_Stride_Rendering_Compositing_SceneRendererBase_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer(Stride.Rendering.Compositing.GraphicsCompositor,Stride.Rendering.Compositing.SceneRendererBase)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer(Stride.Rendering.Compositing.GraphicsCompositor, Stride.Rendering.Compositing.SceneRendererBase)
+  nameWithType: GraphicsCompositorExtensions.AddSceneRenderer(GraphicsCompositor, SceneRendererBase)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer*
+  name: AddSceneRenderer
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddSceneRenderer_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer
+  nameWithType: GraphicsCompositorExtensions.AddSceneRenderer
 - uid: Stride.CommunityToolkit.Scripts
   name: Stride.CommunityToolkit.Scripts
   href: api/Stride.CommunityToolkit.Scripts.html

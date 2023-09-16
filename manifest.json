@@ -321,10 +321,60 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/code-only/examples.md",
+      "source_relative_path": "manual/code-only/examples/advance-examples.md",
       "output": {
         ".html": {
-          "relative_path": "manual/code-only/examples.html"
+          "relative_path": "manual/code-only/examples/advance-examples.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/basic-examples.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/basic-examples.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/capsule-with-rigid-body.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/capsule-with-rigid-body.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/give-me-cube-body.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/give-me-cube-body.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/myra-ui-draggable-window-and-services.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/myra-ui-draggable-window-and-services.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/stride-ui-capsule-with-rigid-body.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/stride-ui-capsule-with-rigid-body.html"
         }
       },
       "version": ""

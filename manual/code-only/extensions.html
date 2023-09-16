@@ -181,6 +181,21 @@
 </tr>
 </tbody>
 </table>
+<h2 id="entitycomponentextensionscs">EntityComponentExtensions.cs</h2>
+<p>| <code>GetComponent()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find a class attached to an Entity that are not limited to type ScriptComponent |
+| <code>GetComponents()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find all classes attached to an Entity that are not limited to type ScriptComponent |
+| <code>DestroyEntity()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| easily destroys the calling Entity, you may need to use <code>Entity.Transform.Parent.Entity.DestroyEntity();</code> |
+| <code>WorldPosition()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| A faster way of getting world position |</p>
+<h2 id="scriptcomponentextensionscs">ScriptComponentExtensions.cs</h2>
+<p>| <code>DeltaTime()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Easier way of getting DeltaTime as a <code>float</code> in seconds |
+| <code>GetCamera()</code> |<img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research">| Gets the first camera with the name &quot;Main&quot;, currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |
+| <code>GetCamera(string name)</code> |<img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research">| Gets the first camera with the name provided, currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |
+| <code>GetFirstCamera()</code> |<img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research">| Gets the first camera in the <code>GraphicsCompositor</code>. currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |</p>
+<h2 id="animationcomponentextensionscs">AnimationComponentExtensions.cs</h2>
+<p>| <code>PlayAnimation()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Plays an animation if not already playing |</p>
+<h2 id="modelcomponentextensionscs">ModelComponentExtensions.cs</h2>
+<p>| <code>GetMeshHeight()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Gets the Mesh height as a <code>float</code> |
+| <code>GetMeshHWL()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Gets the Mesh height, width and length as a <code>Vector3</code> |</p>
 </article>
 
         <div class="contribution d-print-none">

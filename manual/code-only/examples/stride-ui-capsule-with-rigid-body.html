@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Capsule with rigid body and window | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Capsule with rigid body and window | Stride Manual ">
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/examples/stride-ui-capsule-with-rigid-body.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module">
+    import options from './../../../public/main.js'
+    import { init } from './../../../public/docfx.min.js'
+    init(options)
+  </script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="capsule-with-rigid-body-and-window">Capsule with rigid body and window</h1>
+
+<p>In this example, we demonstrate how to set up a 3D scene that includes a capsule with a rigid body as well as a simple window displaying a text message.</p>
+<p>This example is organized into multiple methods for better readability and maintainability. It is structured as follows:</p>
+<ul>
+<li><code>Start(Scene rootScene)</code> This is the entry point for setting up the scene. It calls other methods to set up the 3D scene, add the capsule, load the font, and add the window.</li>
+<li><code>AddCapsule(Scene rootScene)</code> This method creates a 3D capsule and adds it to the scene at a specific position.</li>
+<li><code>LoadFont()</code> This method loads the font that will be used for the UI window.</li>
+<li><code>AddWindow(Scene rootScene)</code> This method calls <code>CreateUIEntity()</code> to create an entity with a UI component, and then adds this entity to the root scene.</li>
+<li><code>CreateUIEntity()</code> This method creates an entity that has a UI component. The UI component includes a canvas as its root element.</li>
+<li><code>CreateCanvas()</code> This method creates a canvas element that will be the root of the UI component.</li>
+<li><code>CreateTextBlock(SpriteFont? _font)</code> This method creates a <code>TextBlock</code> element that displays the message &quot;Hello, World&quot;. It uses the loaded font and sets other properties like color and size.</li>
+</ul>
+<p>This modular approach makes the code easier to understand and maintain. Each method has a clear responsibility.</p>
+<p><em>ToDo: Add a screenshot</em></p>
+<p>View on <a href="https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example03_StrideUI_CapsuleAndWindow">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering;
+using Stride.UI;
+using Stride.UI.Controls;
+using Stride.UI.Panels;
+
+SpriteFont? _font;
+
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
+{
+    game.SetupBase3DScene();
+
+    AddCapsule(rootScene);
+
+    LoadFont();
+
+    AddWindow(rootScene);
+}
+
+void AddCapsule(Scene rootScene)
+{
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = rootScene;
+}
+
+void LoadFont()
+{
+    _font = game.Content.Load&lt;SpriteFont&gt;(&quot;StrideDefaultFont&quot;);
+}
+
+void AddWindow(Scene rootScene)
+{
+    var uiEntity = CreateUIEntity();
+
+    uiEntity.Scene = rootScene;
+}
+
+Entity CreateUIEntity()
+{
+    return new Entity
+    {
+        new UIComponent
+        {
+            Page = new UIPage { RootElement = CreateCanvas() },
+            RenderGroup = RenderGroup.Group31
+        }
+    };
+}
+
+Canvas CreateCanvas()
+{
+    var canvas = new Canvas { Width = 300, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
+
+    canvas.Children.Add(CreateTextBlock(_font));
+
+    return canvas;
+}
+
+TextBlock CreateTextBlock(SpriteFont? _font)
+{
+    if (_font is null)
+    {
+        Console.WriteLine(&quot;Font is null&quot;);
+    }
+
+    return new TextBlock
+    {
+        Text = &quot;Hello, World&quot;,
+        TextColor = Color.White,
+        TextSize = 20,
+        Margin = new Thickness(3, 3, 3, 0),
+        Font = _font
+    };
+}
+</code></pre></article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/VaclavElias/stride-community-toolkit/blob/main/docs/manual/code-only/examples/stride-ui-capsule-with-rigid-body.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Docs Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
