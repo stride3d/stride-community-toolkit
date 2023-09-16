@@ -24,7 +24,7 @@ void Update(Scene rootScene, GameTime time)
 void SetupBase3DScene()
 {
     game.AddGraphicsCompositor()
-        .AddCleanUIStage()
+        .AddCleanUIStage() //optional
         .AddSceneRenderer(new MyraSceneRenderer());
     game.AddMouseLookCamera(game.AddCamera());
     game.AddDirectionalLight();
