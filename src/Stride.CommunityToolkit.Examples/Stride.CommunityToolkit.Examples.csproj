@@ -19,6 +19,7 @@
         <ProjectReference Include="..\..\examples\code-only\Example02_GiveMeACube\Example02_GiveMeACube.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example03_StrideUI_CapsuleAndWindow\Example03_StrideUI_CapsuleAndWindow.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example04_MyraUI\Example04_MyraUI.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example05_FSharp_Basic3DScene\Example05_FSharp_Basic3DScene.fsproj" />
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
