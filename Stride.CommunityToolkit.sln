@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example04_MyraUI", "example
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example03_StrideUI_CapsuleAndWindow", "examples\code-only\Example03_StrideUI_CapsuleAndWindow\Example03_StrideUI_CapsuleAndWindow.csproj", "{3A424438-B172-4D84-B36C-2EFD53EE4A55}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Example05_FSharp_Basic3DScene", "examples\code-only\Example05_FSharp_Basic3DScene\Example05_FSharp_Basic3DScene.fsproj", "{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Example05_FSharp_Basic3DScene", "examples\code-only\Example05_FSharp_Basic3DScene\Example05_FSharp_Basic3DScene.fsproj", "{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
