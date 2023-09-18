@@ -9,7 +9,7 @@ let Start rootScene =
     game.SetupBase3DScene()
     game.AddProfiler() |> ignore
 
-    let firstBox = game.CreatePrimitive(PrimitiveModelType.Cube);
+    let firstBox = game.CreatePrimitive(PrimitiveModelType.Capsule);
     firstBox.Transform.Position <- new Vector3(0f, 2.5f, 0f)
     firstBox.Scene <- rootScene
 
