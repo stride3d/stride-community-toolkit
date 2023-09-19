@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example03_StrideUI_CapsuleA
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Example05_FSharp_Basic3DScene", "examples\code-only\Example05_FSharp_Basic3DScene\Example05_FSharp_Basic3DScene.fsproj", "{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Example06_VBasic_Basic3DScene", "examples\code-only\Example06_VBasic_Basic3DScene\Example06_VBasic_Basic3DScene.vbproj", "{F9FFE7E3-7ED5-44F6-84B1-9760E1177B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9FFE7E3-7ED5-44F6-84B1-9760E1177B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9FFE7E3-7ED5-44F6-84B1-9760E1177B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9FFE7E3-7ED5-44F6-84B1-9760E1177B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9FFE7E3-7ED5-44F6-84B1-9760E1177B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{53070659-0936-46DD-86AB-3685AF7AD8AC} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{3A424438-B172-4D84-B36C-2EFD53EE4A55} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{F730BBA2-480B-4F6A-BFB9-9CA003F0B4C6} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{F9FFE7E3-7ED5-44F6-84B1-9760E1177B20} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
