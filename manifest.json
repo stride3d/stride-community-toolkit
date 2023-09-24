@@ -341,6 +341,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/capsule-with-rigid-body-fs.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/capsule-with-rigid-body-fs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/capsule-with-rigid-body.md",
       "output": {
         ".html": {

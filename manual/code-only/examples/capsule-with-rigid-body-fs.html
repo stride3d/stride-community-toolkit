@@ -2,20 +2,20 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Code Only | Stride Manual </title>
+      <title>Capsule with rigid body in F# | Stride Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Code Only | Stride Manual ">
+      <meta name="title" content="Capsule with rigid body in F# | Stride Manual ">
       
-      <link rel="icon" href="../../favicon.ico">
-      <link rel="stylesheet" href="../../public/docfx.min.css">
-      <link rel="stylesheet" href="../../public/main.css">
-      <meta name="docfx:navrel" content="../../toc.html">
-      <meta name="docfx:tocrel" content="../toc.html">
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
       
-      <meta name="docfx:rel" content="../../">
+      <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/index.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/capsule-with-rigid-body-fs.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -30,8 +30,8 @@
   </head>
 
   <script type="module">
-    import options from './../../public/main.js'
-    import { init } from './../../public/docfx.min.js'
+    import options from './../../../public/main.js'
+    import { init } from './../../../public/docfx.min.js'
     init(options)
   </script>
 
@@ -45,8 +45,8 @@
     <header class="bg-body border-bottom">
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
-          <a class="navbar-brand" href="../../index.html">
-            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
             
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,38 +87,48 @@
         </div>
 
         <article data-uid="">
-<h1 id="code-only">Code Only</h1>
+<h1 id="capsule-with-rigid-body-in-f">Capsule with rigid body in F#</h1>
 
-<h2 id="why-opt-for-code-only-over-the-stride-editor">Why Opt for Code-Only Over the Stride Editor?</h2>
-<p>There are numerous reasons to consider using the Code-Only approach, especially if:</p>
+<p>This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the Stride Game Engine. The capsule entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method. It's a simple example that provides a starting point for building a game using Stride</p>
+<p><em>ToDo: Add a screenshot</em></p>
+<p>View on <a href="https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example05_FSharp_Basic3DScene">GitHub</a>.</p>
+<pre><code class="lang-fsharp">open Stride.CommunityToolkit.Extensions;
+open Stride.CommunityToolkit.ProceduralModels;
+open Stride.Core.Mathematics;
+open Stride.Engine;
+
+let game = new Game()
+
+let Start rootScene =
+    game.SetupBase3DScene()
+    game.AddProfiler() |&gt; ignore
+
+    let firstBox = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    firstBox.Transform.Position &lt;- new Vector3(0f, 2.5f, 0f)
+    firstBox.Scene &lt;- rootScene
+
+[&lt;EntryPoint&gt;]
+let main argv =
+    game.Run(start = Start)
+    0
+</code></pre>
 <ul>
-<li>You prefer not to install additional software on your computer (Stride installation not required).</li>
-<li>Learn C# or game development in a straightforward, code-first manner.</li>
-<li>You're aiming for a quick start in game development or C# programming.</li>
-<li>You're eager to dive into C# or game development, finding joy and educational value in hands-on coding experiences, whether you're new or experienced.</li>
-<li>You wish to see tangible, visual 2D/3D outputs instead of just console-based results.</li>
-<li>You want to gradually ease into game programming, mastering the basics before diving into the complexities of a game editor.</li>
-<li>You find typical coding environments and tools too overwhelming to navigate.</li>
-<li>You'd like to prototype quickly and easily game elements.</li>
-<li>You want an efficient way to grasp fundamental game development concepts and practices.</li>
-<li>You're interested in evaluating performance and features of Stride Game Engine without the overhead of a full-fledged editor.</li>
-</ul>
-<p>Have more reasons to add? Feel free to suggest them through our <a href="https://github.com/VaclavElias/stride-community-toolkit/issues">GitHub Issues</a>.</p>
-<h2 id="extensions-and-helpers">Extensions and Helpers</h2>
-<p>Our extensions and helpers provide a simplified pathway for game creation, specifically designed for <strong>code-only</strong> projects within the Stride Game Engine. While they are not essential for running a game, they serve as time-saving tools to aid users, particularly those new to Stride, in quickly getting started.</p>
-<p>These extensions rely heavily on default settings to ease your initiation into the engine. However, they are not rigid; if the default settings don't fully meet your needs, you have the option to delve into the extension's implementation and create a custom version tailored to your preferences.</p>
-<p>Please note, although these extensions have been created with an opinionated approach to help beginners get up and running quickly, experienced users can also find value in them. They can serve as a foundation upon which you can build, modify, and extend to create more complex and customised solutions.</p>
-<h2 id="functionality">Functionality</h2>
-<p>Some functionality you would expect and which is working in the Stride Editor might not be possible yet. Please add your vote or submit another request in the <a href="https://github.com/VaclavElias/stride-community-toolkit/issues">GitHub Issues</a>.</p>
-<h2 id="references">References</h2>
-<ul>
-<li><a href="https://github.com/stride3d/stride/issues/1295">https://github.com/stride3d/stride/issues/1295</a></li>
-<li><a href="https://github.com/stride3d/stride/discussions/1253">https://github.com/stride3d/stride/discussions/1253</a></li>
+<li><code>let game = new Game()</code> Creates a new instance of the <code>Game</code> class, serving as the central part of the Stride engine for managing game loop, scenes, and entities.</li>
+<li><code>let Start rootScene =</code> Defines a function named <code>Start</code> that takes a <code>Scene</code> object named <code>rootScene</code> as an argument.</li>
+<li><code>game.SetupBase3DScene()</code> Sets up a basic 3D scene with a default camera, lighting, and skybox.</li>
+<li><code>game.AddProfiler() |&gt; ignore</code> Adds a profiler to the game and discards the unneeded return value.</li>
+<li><code>let firstBox = game.CreatePrimitive(PrimitiveModelType.Capsule);</code> Creates a new 3D capsule primitive entity.</li>
+<li><code>firstBox.Transform.Position &lt;- new Vector3(0f, 2.5f, 0f)</code> Sets the 3D position of the created entity.</li>
+<li><code>firstBox.Scene &lt;- rootScene</code> Adds the entity to the <code>rootScene</code>.</li>
+<li><code>[&lt;EntryPoint&gt;]</code> Specifies that the following <code>main</code> function is the entry point of the application.</li>
+<li><code>let main argv =</code> Defines the main function, which will be the entry point for the application.</li>
+<li><code>game.Run(start = Start)</code> Initiates the game loop by passing the <code>Start</code> function as the <code>start</code> delegate.</li>
+<li><code>0</code> Indicates a successful program execution.</li>
 </ul>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/index.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/capsule-with-rigid-body-fs.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
