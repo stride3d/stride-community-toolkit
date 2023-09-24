@@ -11,7 +11,7 @@ Welcome to the Stride Community Toolkit repository. This toolkit serves as a com
 
 ## 🚀 Getting Started
 
-To get started with the Stride Community Toolkit, please refer to our official [Stride Community Toolkit Docs](https://www.vaclavelias.com/stride-community-toolkit/).
+To get started with the Stride Community Toolkit, please refer to our official [Stride Community Toolkit Docs](https://stride3d.github.io/stride-community-toolkit/).
 
 
 ## 🤝 Contributing
