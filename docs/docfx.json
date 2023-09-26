@@ -41,7 +41,7 @@
       }
     },
     "sitemap": {
-      "baseUrl": "https://www.vaclavelias.com/stride-community-toolkit/",
+      "baseUrl": "https://stride3d.github.io/stride-community-toolkit",
       "priority": 0.1,
       "changefreq": "monthly"
     },
