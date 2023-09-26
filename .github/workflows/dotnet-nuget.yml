@@ -1,7 +1,7 @@
 name: .NET Build and Publish Nuget
 
 env:
-  PROJECT_PATH: src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj
+  PROJECT_PATH: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
 
 on:
   workflow_dispatch:
@@ -32,5 +32,5 @@ jobs:
     - name: Publish Stride Community Toolkit
       uses: alirezanet/publish-nuget@v3.0.1
       with:
-        PROJECT_FILE_PATH: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
