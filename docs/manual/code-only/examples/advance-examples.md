@@ -2,7 +2,7 @@
 
 You can either copy and paste the code snippets from the advance examples into your own project or run them directly using our console app with an interactive menu.
 
-The console application providing this interactive menu is available here [`Stride.CommunityToolkit.Examples`](https://github.com/VaclavElias/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples) project.
+The console application providing this interactive menu is available here [`Stride.CommunityToolkit.Examples`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples) project.
 
 
 ```plaintext

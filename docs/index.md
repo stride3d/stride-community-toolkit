@@ -1,6 +1,6 @@
 # Stride Community Toolkit Documentation
 
-The [Stride Community Toolkit](https://github.com/VaclavElias/stride-community-toolkit) is a comprehensive set of helpers and extensions designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/) ([GitHub](https://github.com/stride3d)). It simplifies and exemplifies routine development tasks, enabling you to build applications for Stride using .NET with ease.
+The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a comprehensive set of helpers and extensions designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/) ([GitHub](https://github.com/stride3d)). It simplifies and exemplifies routine development tasks, enabling you to build applications for Stride using .NET with ease.
 
 Available as a **NuGet package**, the Stride Community Toolkit can be easily integrated into new or existing Stride Game C# projects. For more information on how to get started, please refer to the Getting Started page.
 
@@ -10,7 +10,7 @@ Feel free to browse the documentation using the table of contents on the left si
 
 ## 🤝 Open Source
 
-[Stride Community Toolkit Source Code](https://github.com/VaclavElias/stride-community-toolkit)
+[Stride Community Toolkit Source Code](https://github.com/stride3d/stride-community-toolkit)
 
 This toolkit is an open-source project hosted on GitHub and is supported by the community.
 

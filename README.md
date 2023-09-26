@@ -17,11 +17,11 @@ To get started with the Stride Community Toolkit, please refer to our official [
 ## 🤝 Contributing
 
 Use [Discord](https://discord.gg/f6aerfE) for questions and general discussions. 
-Use [Issues](https://github.com/VaclavElias/stride-community-toolkit/issues) to report bugs and proposing features.
+Use [Issues](https://github.com/stride3d/stride-community-toolkit/issues) to report bugs and proposing features.
 
 ### Good First Issues
 
-If you're new to the project and want to contribute code, issues tagged as [`help-wanted`](https://github.com/VaclavElias/stride-community-toolkit/labels/help-wanted) are excellent starting points.
+If you're new to the project and want to contribute code, issues tagged as [`help-wanted`](https://github.com/stride3d/stride-community-toolkit/labels/help%20wanted) are excellent starting points.
 
 ### Branch and Release
 
@@ -42,4 +42,4 @@ For more information see the [.NET Foundation Code of Conduct](http://www.dotnet
 -->
 ## 🛡️License
 
-This project is licensed under the [MIT](https://github.com/VaclavElias/stride-community-toolkit/blob/main/LICENSE) License.
+This project is licensed under the [MIT](https://github.com/stride3d/stride-community-toolkit/blob/main/LICENSE) License.

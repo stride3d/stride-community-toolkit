@@ -16,6 +16,6 @@ This modular approach makes the code easier to understand and maintain. Each met
 
 *ToDo: Add a screenshot*
 
-View on [GitHub](https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example03_StrideUI_CapsuleAndWindow).
+View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example03_StrideUI_CapsuleAndWindow).
 
 [!code-csharp[](../../../../examples/code-only/Example03_StrideUI_CapsuleAndWindow/Program.cs)]

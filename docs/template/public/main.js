@@ -2,7 +2,7 @@ const app = {
     iconLinks: [
         {
             icon: 'github',
-            href: 'https://github.com/VaclavElias/stride-community-toolkit',
+            href: 'https://github.com/stride3d/stride-community-toolkit',
             title: 'Stride Community Toolkit GitHub'
         },
         {

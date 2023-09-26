@@ -16,7 +16,7 @@ By following this example, you will gain insights into how to extend your game's
 
 *ToDo: Add a screenshot*
 
-View on [GitHub](https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI).
+View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI).
 
 [!code-csharp[](../../../../examples/code-only/Example04_MyraUI/Program.cs)]
 

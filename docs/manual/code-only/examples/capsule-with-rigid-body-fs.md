@@ -4,7 +4,7 @@ This code example demonstrates how to initialize a game, set up a basic 3D scene
 
 *ToDo: Add a screenshot*
 
-View on [GitHub](https://github.com/VaclavElias/stride-community-toolkit/tree/main/examples/code-only/Example05_FSharp_Basic3DScene).
+View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_FSharp_Basic3DScene).
 
 [!code-fsharp[](../../../../examples/code-only/Example05_FSharp_Basic3DScene/Program.fs)]
 
