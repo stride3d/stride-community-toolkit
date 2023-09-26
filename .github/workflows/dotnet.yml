@@ -1,11 +1,13 @@
 name: .NET Build Test
 
+env:
+  PROJECT_PATH: src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj
+
 on:
   workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
@@ -18,10 +20,10 @@ jobs:
         include-prerelease: true
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ env.PROJECT_PATH }}
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ${{ env.PROJECT_PATH }} --no-build --verbosity normal
