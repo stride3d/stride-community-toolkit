@@ -12,10 +12,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Install GitHub CLI
-      run: |
-        choco install gh
-
     - name: Checkout Stride Community Toolkit
       uses: actions/checkout@v3
 
