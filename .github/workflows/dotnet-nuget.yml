@@ -2,6 +2,7 @@ name: .NET Build and Publish Nuget
 
 env:
   PROJECT_PATH: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  VERSION: "1.0.0.0-preview.${{ github.run_number }}"
 
 on:
   workflow_dispatch:
@@ -11,6 +12,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Install GitHub CLI
+      run: |
+        choco install gh
+
     - name: Checkout Stride Community Toolkit
       uses: actions/checkout@v3
 
@@ -19,6 +24,13 @@ jobs:
       with:
         dotnet-version: 6.0.x
         include-prerelease: true
+
+    - name: Set Version in csproj
+      run: |
+        $csprojPath = "${{ env.PROJECT_PATH }}"
+        $csprojContent = Get-Content -Path $csprojPath -Raw
+        $updatedCsprojContent = $csprojContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
+        Set-Content -Path $csprojPath -Value $updatedCsprojContent
 
     - name: Restore dependencies
       run: dotnet restore ${{ env.PROJECT_PATH }}
@@ -34,3 +46,9 @@ jobs:
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+    - name: Create GitHub Release
+      run: |
+        gh release create ${{ env.VERSION }} --title "Release ${{ env.VERSION }}" --notes "Release notes for ${{ env.VERSION }}" --draft
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
