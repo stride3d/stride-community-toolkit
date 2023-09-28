@@ -19,7 +19,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true
 
     - name: Set Version in csproj
       run: |
@@ -38,13 +37,13 @@ jobs:
       run: dotnet test ${{ env.PROJECT_PATH }} --no-build --verbosity normal
 
     - name: Publish Stride Community Toolkit
-      uses: alirezanet/publish-nuget@v3.0.1
+      uses: alirezanet/publish-nuget@v3.1.0
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
     - name: Create GitHub Release
       run: |
-        gh release create ${{ env.VERSION }} --title "Release ${{ env.VERSION }}" --notes "Release notes for ${{ env.VERSION }}" --draft
+        gh release create ${{ env.VERSION }} --title "v${{ env.VERSION }}" --notes "Release notes for ${{ env.VERSION }}" --draft
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
