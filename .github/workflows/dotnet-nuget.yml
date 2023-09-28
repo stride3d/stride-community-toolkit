@@ -2,7 +2,7 @@ name: .NET Build and Publish Nuget
 
 env:
   PROJECT_PATH: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
-  VERSION: "1.0.0.0-preview.${{ github.run_number }}"
+  VERSION: "1.0.0.0-preview.${{ github.run_number + 4 }}"
 
 on:
   workflow_dispatch:
