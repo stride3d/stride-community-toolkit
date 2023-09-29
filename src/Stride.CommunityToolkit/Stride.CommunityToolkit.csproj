@@ -12,6 +12,9 @@
         <RepositoryUrl>https://github.com/stride3d/stride-community-toolkit</RepositoryUrl>
         <PackageTags>Stride;3D;2D;gamedev;Game Engine;engine;games;CSharp</PackageTags>
         <PackageIcon>nuget-icon.png</PackageIcon>
+        <Title>Stride Community Toolkit</Title>
+        <Copyright>Stride Contributors</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,6 +36,10 @@
         <None Include="..\..\nuget-icon.png">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\..\README.md">
+          <Pack>True</Pack>
+          <PackagePath>\</PackagePath>
         </None>
     </ItemGroup>
 
