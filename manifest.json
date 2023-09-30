@@ -4,7 +4,6 @@
     "changefreq": "monthly",
     "priority": 0.1
   },
-  "homepages": [],
   "source_base_path": "D:/a/stride-community-toolkit/stride-community-toolkit/docs",
   "xrefmap": "xrefmap.yml",
   "files": [
@@ -341,6 +340,26 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/basic-examples-fs.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/basic-examples-fs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/basic-examples-vb.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/basic-examples-vb.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/basic-examples.md",
       "output": {
         ".html": {
@@ -361,6 +380,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/capsule-with-rigid-body-vb.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/capsule-with-rigid-body-vb.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/capsule-with-rigid-body.md",
       "output": {
         ".html": {
@@ -375,6 +404,46 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/give-me-cube-body.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example01-basic-3d-scene.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example01-basic-3d-scene.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example02-give-me-cube.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example02-give-me-cube.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example03-stride-ui-basic-window.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example03-stride-ui-basic-window.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example04-myra-ui-draggable-window.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example04-myra-ui-draggable-window.webp"
         }
       },
       "version": ""
@@ -421,16 +490,6 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/code-only/troubleshooting.md",
-      "output": {
-        ".html": {
-          "relative_path": "manual/code-only/troubleshooting.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
       "source_relative_path": "manual/game-extensions/index.md",
       "output": {
         ".html": {
@@ -468,6 +527,16 @@
         },
         ".json": {
           "relative_path": "manual/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/troubleshooting.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/troubleshooting.html"
         }
       },
       "version": ""
@@ -662,7 +731,6 @@
       "version": ""
     }
   ],
-  "version_info": {},
   "groups": [
     {
       "xrefmap": "xrefmap.yml"

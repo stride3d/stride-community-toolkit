@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Give me a cube | Stride Manual </title>
+      <title>Capsule with rigid body in Visual Basic | Stride Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Give me a cube | Stride Manual ">
+      <meta name="title" content="Capsule with rigid body in Visual Basic | Stride Manual ">
       
       <link rel="icon" href="../../../favicon.ico">
       <link rel="stylesheet" href="../../../public/docfx.min.css">
@@ -15,7 +15,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/give-me-cube-body.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/capsule-with-rigid-body-vb.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -87,35 +87,46 @@
         </div>
 
         <article data-uid="">
-<h1 id="give-me-a-cube">Give me a cube</h1>
+<h1 id="capsule-with-rigid-body-in-visual-basic">Capsule with rigid body in Visual Basic</h1>
 
-<p>This example demonstrates the essential steps to create a 3D cube in Stride. Just like the previous example, the cube entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method.</p>
-<p>The cube is positioned at <code>(1f, 0.5f, 3f)</code> in the 3D world space. This example is perfect for those who are new to 3D game development with Stride.</p>
-<p><img src="media/stride-game-engine-example02-give-me-cube.webp" alt="Stride UI Example"></p>
-<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example02_GiveMeACube">GitHub</a>.</p>
-<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
-using Stride.CommunityToolkit.ProceduralModels;
-using Stride.Core.Mathematics;
-using Stride.Engine;
+<p>This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the Stride Game Engine. The capsule entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method. It's a simple example that provides a starting point for building a game using Stride.</p>
+<p><img src="media/stride-game-engine-example01-basic-3d-scene.webp" alt="Stride UI Example"></p>
 
-using var game = new Game();
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_VBasic">GitHub</a>.</p>
+<pre><code class="lang-vb">Imports Stride.CommunityToolkit.Extensions
+Imports Stride.CommunityToolkit.ProceduralModels
+Imports Stride.Core.Mathematics
+Imports Stride.Engine
 
-game.Run(start: Start);
+Module Program
+    Private game As New Game()
 
-void Start(Scene rootScene)
-{
-    game.SetupBase3DScene();
+    Sub Main()
+        GameExtensions.Run(game, Nothing, AddressOf StartGame)
+    End Sub
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
+    Private Sub StartGame(rootScene As Scene)
+        game.SetupBase3DScene()
+        game.AddProfiler()
 
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
-
-    entity.Scene = rootScene;
-}
-</code></pre></article>
+        Dim entity = game.CreatePrimitive(PrimitiveModelType.Capsule)
+        entity.Transform.Position = New Vector3(0, 8, 0)
+        entity.Scene = rootScene
+    End Sub
+End Module
+</code></pre>
+<ul>
+<li><code>Private game As New Game()</code> This line of code creates a new instance of the <code>Game</code> class. The Game class is central to the Stride engine, managing the overall game loop, scenes, and updates to the entities.</li>
+<li><code>GameExtensions.Run(game, Nothing, AddressOf StartGame)</code> This line initiates the game loop. The <code>Run</code> method, from <code>GameExtensions</code>, is responsible for starting the game and it takes a reference to the <code>StartGame</code> method as a parameter. This method is called once when the game starts. The <code>Nothing</code> argument here is for an optional parameter that is not being used in this case.</li>
+<li><code>game.SetupBase3DScene()</code> This line sets up a basic 3D scene. It's a helper method provided to quickly set up a scene with a default camera, lighting, and skybox.</li>
+<li><code>Dim entity = game.CreatePrimitive(PrimitiveModelType.Capsule)</code> Here, a new entity is created in the form of a 3D capsule primitive. The <code>CreatePrimitive</code> method is a helper method provided to create basic 3D shapes.</li>
+<li><code>entity.Transform.Position = New Vector3(0, 8, 0)</code> This line sets the position of the created entity in the 3D space. The <code>Position</code> property of the <code>Transform</code> component determines the location of the entity.</li>
+<li><code>entity.Scene = rootScene</code> Finally, the entity is added to the <code>rootScene</code>. The <code>Scene</code> property of an entity determines which scene it belongs to.</li>
+</ul>
+</article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/give-me-cube-body.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/capsule-with-rigid-body-vb.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

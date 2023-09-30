@@ -6,16 +6,16 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Troubleshooting | Stride Manual ">
       
-      <link rel="icon" href="../../favicon.ico">
-      <link rel="stylesheet" href="../../public/docfx.min.css">
-      <link rel="stylesheet" href="../../public/main.css">
-      <meta name="docfx:navrel" content="../../toc.html">
-      <meta name="docfx:tocrel" content="../toc.html">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
       
-      <meta name="docfx:rel" content="../../">
+      <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/troubleshooting.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/troubleshooting.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -30,8 +30,8 @@
   </head>
 
   <script type="module">
-    import options from './../../public/main.js'
-    import { init } from './../../public/docfx.min.js'
+    import options from './../public/main.js'
+    import { init } from './../public/docfx.min.js'
     init(options)
   </script>
 
@@ -45,8 +45,8 @@
     <header class="bg-body border-bottom">
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
-          <a class="navbar-brand" href="../../index.html">
-            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
             
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,25 +91,50 @@
 
 <h2 id="building-project-issues">Building Project Issues</h2>
 <ol>
-<li>Error - Could not load native library libcore using CPU architecture x64
+<li><strong>Error - Could not load native library libcore using CPU architecture x64</strong>
 <ul>
-<li>Make sure you installed Visual C++ Redistributable</li>
-</ul>
+<li>Missing Microsoft Visual C++ Redistributable
 <pre><code> C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\Stride.Core.Assets.CompilerApp.targets(132,5): error MSB3073: The command &quot;&quot;C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\..\tools\net6.0-windows7.0\Stride.Core.Assets.CompilerApp.exe&quot;  --disable-auto- 
  compile --project-configuration &quot;Debug&quot; --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path=&quot;C:\Projects\StrideDemo\bin\Debug\net6.0\data&quot; --build-path=&quot;C:\Projects\StrideDemo\obj\stride\assetbuild\data&quot; --package-file=&quot;C:\Projects\StrideDemo\StrideDemo.csproj&quot; --msbuild-up 
  todatecheck-filebase=&quot;C:\Projects\StrideDemo\obj\Debug\net6.0\stride\assetcompiler-uptodatecheck&quot;&quot; exited with code -532462766. [C:\Projects\StrideDemo\StrideDemo.csproj]
 </code></pre>
 </li>
-<li>Error - Package 'runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl 4.3.0' from source .. : The repository primary signature's timestamping certificate is not trusted by the trust provider
+</ul>
+</li>
+<li><strong>Error - Unable to instantiate compiler</strong>
 <ul>
-<li>Restore the package Stride.CommunityToolkit again <code>dotnet restore</code></li>
+<li>Missing Microsoft Visual C++ Redistributable
+<pre><code>EXEC : error 6.206s: [AssetsCompiler.AttributeBasedRegistry] Unable to instantiate compiler [Stride.A
+ssets.Physics.ColliderShapeAsset, Stride.Assets, Version=4.1.0.1898, Culture=neutral, PublicKeyToken=
+null]. Exception: TargetInvocationException: Exception has been thrown by the target of an invocation
+. [C:\Examples\Example01\Example01.csproj]
+    ---&gt; TypeInitializationException: The type initializer for 'Stride.Assets.Physics.ColliderShapeAss
+    etCompiler' threw an exception.
+    ---&gt; InvalidOperationException: Could not load native library VHACD using CPU architecture x64.
+        at Stride.Core.NativeLibraryHelper.PreloadLibrary(String libraryName, Type owner) in C:\BuildAge
+    nt\work\b5f46e3c4829a09e\sources\core\Stride.Core\Native\NativeLibraryHelper.cs:line 156
+        at Stride.Assets.Physics.ColliderShapeAssetCompiler..cctor() in C:\BuildAgent\work\b5f46e3c4829a
+    09e\sources\engine\Stride.Assets\Physics\ColliderShapeAssetCompiler.cs:line 30
+        at Stride.Assets.Physics.ColliderShapeAssetCompiler..ctor()
+        at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+        at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+        at Stride.Core.Assets.Compiler.AssetCompilerRegistry.ProcessAttribute(AssetCompilerAttribute com
+    pilerCompilerAttribute, Type type) in C:\BuildAgent\work\b5f46e3c4829a09e\sources\assets\Stride.Cor
+    e.Assets\Compiler\AssetCompilerRegistry.cs:line 161
+        at Stride.Core.Assets.Compiler.AssetCompilerRegistry.RegisterCompilersFromAssembly(Assembly asse
+    mbly) in C:\BuildAgent\work\b5f46e3c4829a09e\sources\assets\Stride.Core.Assets\Compiler\AssetCompil
+    erRegistry.cs:line 198
+    System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocati
+    on.
+</code></pre>
+</li>
 </ul>
 </li>
 </ol>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/troubleshooting.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/troubleshooting.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
