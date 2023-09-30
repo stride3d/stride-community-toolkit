@@ -8,3 +8,13 @@
 - name: 🔧 API
   href: api/
   homepage: api/index.md
+- name: 📖 Stride Docs
+  items:
+  - name: 📚 Manual
+    href: https://doc.stride3d.net/latest/en/manual/index.html
+  - name: 🎓 Tutorials
+    href: https://doc.stride3d.net/latest/en/tutorials/index.html
+  - name: 📝 Release Notes
+    href: https://doc.stride3d.net/latest/en/release-notes/index.html
+  - name: 🔧 API
+    href: https://doc.stride3d.net/latest/en/api/index.html

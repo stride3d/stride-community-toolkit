@@ -1,3 +1,3 @@
 # Visual Basic Code Only Basic Examples
 
-[!INCLUDE [basic-examples](../../../includes/basic-examples.md)]
+[!INCLUDE [basic-examples](../../../includes/manual/examples/basic-examples.md)]
