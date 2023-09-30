@@ -16,9 +16,8 @@ Ensure the following are installed to build/run the project. If you're on Stride
 1. IDE of your choice
    - Visual Studio 2022
       - [Visual Studio 2022 Community](https://visualstudio.microsoft.com/vs/) (Free)
-      - Ensure **.NET desktop development** workload is selected during installation
-   - [Visual Studio Code](https://code.visualstudio.com/) (Free, 81MB)
-      - Install **C# for Visual Studio Code (powered by OmniSharp)** extension
+   - [Visual Studio Code](https://code.visualstudio.com/) (Free, 95MB)
+      - Install **C# Dev Kit** extension 
       - Restart Visual Studio Code to ensure `dotnet` command functions properly
    - Rider (Paid)
 
