@@ -1,8 +1,8 @@
 # Create Project
 
-## Visual Studio Code Instructions
+## Command Line and Visual Studio Code Instructions
 
-1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to create a new console application.
+1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to learn more about how to create a new console application.
    ```
    dotnet new console --framework net6.0
    ```
@@ -15,6 +15,7 @@
    ```
    dotnet run
    ```
+   - The first run will take a while as the Assets are being built.
 1. **Enjoy Stride:** If everything is set up correctly, you should now be able to run and enjoy your Stride project.
 
 <!-- If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)-->
