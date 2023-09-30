@@ -1,25 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <Version>1.0.0.0-preview.2</Version>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>Stride.CommunityToolkit</AssemblyName>
-        <Authors>Stride Contributors</Authors>
-        <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET.</Description>
-        <PackageProjectUrl>https://stride3d.github.io/stride-community-toolkit/index.html</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/stride3d/stride-community-toolkit</RepositoryUrl>
-        <PackageTags>Stride;3D;2D;gamedev;Game Engine;engine;games;CSharp</PackageTags>
-        <PackageIcon>nuget-icon.png</PackageIcon>
-        <Title>Stride Community Toolkit</Title>
-        <Copyright>Stride Contributors</Copyright>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Import Project="..\CommonSettings.props" />
+
+    <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
         <DefineConstants>$(DefineConstants)TRACE;CODE_ANALYSIS</DefineConstants>
-    </PropertyGroup>
+    </PropertyGroup>-->
 
     <ItemGroup>
         <None Remove="Resources\skybox_texture_hdr.dds" />
@@ -30,17 +18,6 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <PackageCopyToOutput>true</PackageCopyToOutput>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="..\..\nuget-icon.png">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
-        <None Include="..\..\README.md">
-          <Pack>True</Pack>
-          <PackagePath>\</PackagePath>
-        </None>
     </ItemGroup>
 
     <ItemGroup>
