@@ -7,8 +7,11 @@ The console application providing this interactive menu is available here [`Stri
 Stride Community Toolkit Examples
 
 [1] Basic Example - Capsule with rigid body
-[2] Basic Example - Give me a cube
-[3] Basic Example - Stride UI - Capsule with rigid body and Window
-[4] Basic Example - Myra UI - Draggable Window, GetService()
+[2] Basic Example - Capsule with rigid body in F#
+[3] Basic Example - Give me a cube
+[4] Basic Example - Stride UI - Capsule with rigid body and Window
+[5] Basic Example - Myra UI - Draggable Window, GetService()
 [Q] Quit
+
+Enter choice and press ENTER to continue
 ```
