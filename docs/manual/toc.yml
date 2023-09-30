@@ -27,9 +27,9 @@
     items:
     - name: Myra UI - Draggable Window, GetService()
       href: code-only/examples/myra-ui-draggable-window-and-services.md
-  - name: Troubleshooting
-    href: code-only/troubleshooting.md
 - name: Camera Extensions
   href: camera-extensions/index.md
 - name: Game Extensions
   href: game-extensions/index.md
+- name: Troubleshooting
+  href: troubleshooting.md
