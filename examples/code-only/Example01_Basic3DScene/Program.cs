@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Extensions;
 using Stride.CommunityToolkit.ProceduralModels;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 
 using var game = new Game();
