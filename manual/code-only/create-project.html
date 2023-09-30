@@ -89,9 +89,9 @@
         <article data-uid="">
 <h1 id="create-project">Create Project</h1>
 
-<h2 id="visual-studio-code-instructions">Visual Studio Code Instructions</h2>
+<h2 id="command-line-and-visual-studio-code-instructions">Command Line and Visual Studio Code Instructions</h2>
 <ol>
-<li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to create a new console application.
+<li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about how to create a new console application.
 <pre><code>dotnet new console --framework net6.0
 </code></pre>
 </li>
@@ -103,6 +103,9 @@
 <li><strong>Run the Project:</strong> Execute the following command.
 <pre><code>dotnet run
 </code></pre>
+<ul>
+<li>The first run will take a while as the Assets are being built.</li>
+</ul>
 </li>
 <li><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</li>
 </ol>
@@ -110,17 +113,21 @@
 <h2 id="visual-studio-2022-and-rider-instructions">Visual Studio 2022 and Rider Instructions</h2>
 <ol>
 <li><strong>Create a C# Console Application:</strong> Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 6.</li>
-<li><strong>Add NuGet Package:</strong> Search for and add the <strong>Stride.CommunityToolkit</strong> NuGet package, ensuring you opt for the prerelease version.</li>
+<li><strong>Add NuGet Package:</strong> Search for and add the <strong>Stride.CommunityToolkit</strong> NuGet package, ensuring you opt for the pre-release version.
+<ul>
+<li>This package will install all needed Stride NuGet packages</li>
+</ul>
+</li>
 <li><strong>Update Program.cs:</strong> Paste the example code (provided below) into your <code>Program.cs</code> file.</li>
 <li><strong>Run the Project:</strong> Build and run your project using the IDE's run functionality.</li>
 <li><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</li>
 </ol>
 <h2 id="example-code">Example Code</h2>
 <p>The provided C# code example is designed to showcase the basic usage of the Stride Game Engine.</p>
-<pre><code class="lang-csharp">using Stride.Core.Mathematics;
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.ProceduralModels;
+using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.GameDefaults.ProceduralModels;
-using Stride.GameDefaults.Extensions;
 
 using var game = new Game();
 
@@ -146,7 +153,7 @@ void Start(Scene rootScene)
 <li><code>entity.Transform.Position = new Vector3(0, 8, 0);</code> sets the position of the entity in the 3D space. The position is set to (0, 8, 0), which means the capsule is placed 8 units above the ground.</li>
 <li><code>entity.Scene = rootScene;</code> adds the entity to the root scene of the game.</li>
 </ol>
-<p>The <code>CreatePrimitive()</code> method creates a Capsule with rigid body physics. Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it</p>
+<p>The <code>CreatePrimitive()</code> method creates a Capsule with <a href="https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html">rigid body physics</a>. Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it</p>
 <p><img src="https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png" alt="image"></p>
 </article>
 
