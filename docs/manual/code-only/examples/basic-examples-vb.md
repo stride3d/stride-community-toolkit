@@ -1,3 +1,3 @@
-# C# Code Only Basic Examples
+# Visual Basic Code Only Basic Examples
 
 [!INCLUDE [basic-examples](../../../includes/basic-examples.md)]
