@@ -1,6 +1,6 @@
 # Capsule with rigid body in F#
 
-This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the Stride Game Engine. The capsule entity comes automatically equipped with a rigid body and a collider, thanks to the `CreatePrimitive()` method. It's a simple example that provides a starting point for building a game using Stride
+This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the Stride Game Engine. The capsule entity comes automatically equipped with a rigid body and a collider, thanks to the `CreatePrimitive()` method. It's a simple example that provides a starting point for building a game using Stride.
 
 *ToDo: Add a screenshot*
 
