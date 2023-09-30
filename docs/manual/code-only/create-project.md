@@ -2,6 +2,8 @@
 
 ## Command Line and Visual Studio Code Instructions
 
+The following instructions will guide you through the process of creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same instructions in the Visual Studio Code Terminal.
+
 1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to learn more about how to create a new console application.
    ```
    dotnet new console --framework net6.0
@@ -10,15 +12,16 @@
    ```
    dotnet add package Stride.CommunityToolkit --prerelease
    ```
-1. **Update Program.cs:** Paste the example code (provided below) into your `Program.cs` file.
-1. **Run the Project:** Execute the following command.
+1. **Update Program.cs:** Paste the [example code](#example-code) (below) into your `Program.cs` file.
+1. **Build the Project (Optional):** The `dotnet build` command is used to compile your Stride project, generating executable files and checking for any errors in your code. This step is optional as the subsequent `dotnet run` command will automatically build the project if it hasn't been built already. To manually build the project, execute the following command:
+   ```bash
+   dotnet build
+   ```
+1. **Run the Project:** The `dotnet run` command will build (if necessary) and execute your project. Run the following command to start your Stride project:
    ```
    dotnet run
    ```
-   - The first run will take a while as the Assets are being built.
 1. **Enjoy Stride:** If everything is set up correctly, you should now be able to run and enjoy your Stride project.
-
-<!-- If you experience any issue (timestamping certificate) adding this package, try again (weird, isn't it?)-->
 
 ## Visual Studio 2022 and Rider Instructions
  

@@ -9,27 +9,35 @@
   items:
   - name: Create Project
     href: code-only/create-project.md
-  - name: Extensions
-    href: code-only/extensions.md
-  - name: Basic Examples
+  - name: C# Basic Examples
     href: code-only/examples/basic-examples.md
     items:
     - name: Capsule with rigid body
       href: code-only/examples/capsule-with-rigid-body.md
-    - name: Capsule with rigid body in F#
-      href: code-only/examples/capsule-with-rigid-body-fs.md
     - name: Give me a cube
       href: code-only/examples/give-me-cube-body.md
     - name: Stride UI - Capsule with rigid body and Window
       href: code-only/examples/stride-ui-capsule-with-rigid-body.md
-  - name: Advance Examples
+  - name: C# Advance Examples
     href: code-only/examples/advance-examples.md
     items:
     - name: Myra UI - Draggable Window, GetService()
       href: code-only/examples/myra-ui-draggable-window-and-services.md
-  - name: Troubleshooting
-    href: code-only/troubleshooting.md
+  - name: F# Basic Examples
+    href: code-only/examples/basic-examples-fs.md
+    items:
+    - name: Capsule with rigid body
+      href: code-only/examples/capsule-with-rigid-body-fs.md
+  - name: VB Basic Examples
+    href: code-only/examples/basic-examples-vb.md
+    items:
+    - name: Capsule with rigid body
+      href: code-only/examples/capsule-with-rigid-body-vb.md
+  - name: Extensions
+    href: code-only/extensions.md
 - name: Camera Extensions
   href: camera-extensions/index.md
 - name: Game Extensions
   href: game-extensions/index.md
+- name: Troubleshooting
+  href: troubleshooting.md

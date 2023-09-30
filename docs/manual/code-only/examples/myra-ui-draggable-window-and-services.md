@@ -14,7 +14,7 @@ Key features in this example:
 
 By following this example, you will gain insights into how to extend your game's capabilities by leveraging external libraries for UI and best practices for service retrieval and dynamic UI component initialization.
 
-*ToDo: Add a screenshot*
+![Stride UI Example](media/stride-game-engine-example04-myra-ui-draggable-window.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI).
 
