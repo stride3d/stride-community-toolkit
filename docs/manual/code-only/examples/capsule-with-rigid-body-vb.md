@@ -4,9 +4,9 @@ This code example demonstrates how to initialize a game, set up a basic 3D scene
 
 *ToDo: Add a screenshot*
 
-View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example06_VBasic_Basic3DScene).
+View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_VBasic).
 
-[!code-vb[](../../../../examples/code-only/Example06_VBasic_Basic3DScene/Program.vb)]
+[!code-vb[](../../../../examples/code-only/Example01_Basic3DScene_VBasic/Program.vb)]
 
 - `let game = new Game()` Creates a new instance of the `Game` class, serving as the central part of the Stride engine for managing game loop, scenes, and entities.
 - `let Start rootScene =` Defines a function named `Start` that takes a `Scene` object named `rootScene` as an argument.
