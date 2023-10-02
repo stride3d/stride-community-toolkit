@@ -40,6 +40,7 @@ jobs:
       uses: alirezanet/publish-nuget@v3.1.0
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
     - name: Create GitHub Release
