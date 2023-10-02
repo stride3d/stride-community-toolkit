@@ -2,6 +2,7 @@ name: .NET Build and Publish Nuget
 
 env:
   PROJECT_PATH: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
 
 on:
@@ -22,10 +23,9 @@ jobs:
 
     - name: Set Version in csproj
       run: |
-        $csprojPath = "${{ env.PROJECT_PATH }}"
-        $csprojContent = Get-Content -Path $csprojPath -Raw
-        $updatedCsprojContent = $csprojContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
-        Set-Content -Path $csprojPath -Value $updatedCsprojContent
+        $settingsContent = Get-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Raw
+        $updatedCsprojContent = $settingsContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
+        Set-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Value $updatedCsprojContent
 
     - name: Restore dependencies
       run: dotnet restore ${{ env.PROJECT_PATH }}
