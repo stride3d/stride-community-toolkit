@@ -10,7 +10,7 @@ Ensure the following are installed to build/run the project. If you're on Stride
    - [vcredist_x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (25MB)
 1. .NET 6 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (200MB)
    - Verify installation with:
-        ```bash
+        ```
         dotnet --info
         ```
 1. IDE of your choice
@@ -21,6 +21,13 @@ Ensure the following are installed to build/run the project. If you're on Stride
       - Restart Visual Studio Code to ensure `dotnet` command functions properly
    - Rider (Paid)
 
-## 📦 Adding the NuGet package(s)
+## 📦 Adding the NuGet package
 
-The toolkit comprises a set of NuGet packages, easily integrable into existing or new projects via Visual Studio.
+The toolkit is encapsulated in a single package named `Stride.CommunityToolkit`. This package embodies all the toolkit's functionalities. You can use your preferred IDE or the command line to add this package to your project.
+
+
+To add the NuGet package using the command line, execute the following command:
+
+```
+dotnet add package Stride.CommunityToolkit --prerelease
+```
