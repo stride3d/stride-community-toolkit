@@ -101,7 +101,7 @@
 <li>.NET 6 SDK x64: <a href="https://dotnet.microsoft.com/en-us/download">Download</a> (200MB)
 <ul>
 <li>Verify installation with:
-<pre><code class="lang-bash">dotnet --info
+<pre><code>dotnet --info
 </code></pre>
 </li>
 </ul>
@@ -123,8 +123,11 @@
 </ul>
 </li>
 </ol>
-<h2 id="-adding-the-nuget-packages">📦 Adding the NuGet package(s)</h2>
-<p>The toolkit comprises a set of NuGet packages, easily integrable into existing or new projects via Visual Studio.</p>
+<h2 id="-adding-the-nuget-package">📦 Adding the NuGet package</h2>
+<p>The toolkit is encapsulated in a single package named <code>Stride.CommunityToolkit</code>. This package embodies all the toolkit's functionalities. You can use your preferred IDE or the command line to add this package to your project.</p>
+<p>To add the NuGet package using the command line, execute the following command:</p>
+<pre><code>dotnet add package Stride.CommunityToolkit --prerelease
+</code></pre>
 </article>
 
         <div class="contribution d-print-none">
