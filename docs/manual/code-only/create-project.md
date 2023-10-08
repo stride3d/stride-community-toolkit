@@ -72,3 +72,16 @@ void Start(Scene rootScene)
 The `CreatePrimitive()` method creates a Capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it
 
 ![image](https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png)
+
+## Additional Examples
+
+Explore more examples listed in the menu on the left, categorized by the programming language and level of complexity. These examples provide a deeper understanding of how to work with a code-only project in Stride, showcasing various functionalities and implementations.
+
+The examples are organized under the following sections:
+
+- **C# Basic Examples**: Contains basic examples demonstrating fundamental concepts using C#.
+- **C# Advanced Examples**: Features more advanced scenarios and implementations using C#.
+- **F# Basic Examples**: Basic examples showcasing fundamental concepts using F#.
+- **VB Basic Examples**: Demonstrates fundamental concepts using Visual Basic.
+
+To view an example, click on its name in the menu, and you will be navigated to a page with a detailed explanation and code snippets.
