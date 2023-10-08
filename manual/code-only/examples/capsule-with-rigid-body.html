@@ -89,7 +89,7 @@
         <article data-uid="">
 <h1 id="capsule-with-rigid-body">Capsule with rigid body</h1>
 
-<p>This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the Stride Game Engine. The capsule entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method. It's a simple example that provides a starting point for building a game using Stride.</p>
+<p>This code example demonstrates how to initialize a game, set up a basic 3D scene, create a 3D capsule entity, set its position, and add it to the scene using the extensions provided by the toolkit. The <code>CreatePrimitive()</code> method, a part of the toolkit, automatically equips the capsule entity with a rigid body and a collider. This example serves as a simple starting point for building a game with Stride, leveraging the utilities provided by the toolkit to simplify common game development tasks.</p>
 <p><img src="media/stride-game-engine-example01-basic-3d-scene.webp" alt="Stride UI Example"></p>
 
 <p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene">GitHub</a>.</p>
@@ -112,7 +112,7 @@ game.Run(start: (Scene rootScene) =&gt;
 });
 </code></pre>
 <ul>
-<li><code>using var game = new Game();</code> This line of code creates a new instance of the <code>Game</code> class. The <code>Game</code> class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The <code>using</code> keyword ensures that the <code>Dispose()</code> method is called on the <code>game</code> object when it goes out of scope, ensuring that any resources it uses are properly cleaned up</li>
+<li><code>using var game = new Game();</code> This line of code creates a new instance of the <a href="https://doc.stride3d.net/latest/en/api/Stride.Engine.Game.html"><code>Game</code></a> class. The <code>Game</code> class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The <code>using</code> keyword ensures that the <code>Dispose()</code> method is called on the <code>game</code> object when it goes out of scope, ensuring that any resources it uses are properly cleaned up</li>
 <li><code>game.Run(start: (Scene rootScene) =&gt;</code> This line initiates the game loop. The <code>Run</code> method is responsible for starting the game, and it takes a delegate as a parameter. This delegate is a function that is called once when the game starts. The <code>rootScene</code> parameter represents the main scene of your game.</li>
 <li><code>game.SetupBase3DScene();</code> This line sets up a basic 3D scene. It's a helper method provided to quickly set up a scene with a default camera, lighting, and skybox.</li>
 <li><code>var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);</code> Here, a new entity is created in the form of a 3D capsule primitive. The <code>CreatePrimitive method</code> is another helper method provided to create basic 3D shapes.</li>
