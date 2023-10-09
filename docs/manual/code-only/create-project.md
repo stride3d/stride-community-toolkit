@@ -4,6 +4,7 @@
 
 The following instructions will guide you through the process of creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same instructions in the Visual Studio Code Terminal.
 
+1. **Prerequisites:** Make sure you have all prerequisites installed. See the [Prerequisites](../getting-started.md) section for more information.
 1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to learn more about how to create a new console application.
    ```
    dotnet new console --framework net6.0
