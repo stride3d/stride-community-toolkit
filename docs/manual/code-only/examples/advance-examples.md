@@ -2,15 +2,13 @@
 
 You can either copy and paste the code snippets from the advance examples into your own project or run them directly using our console app with an interactive menu.
 
-The console application providing this interactive menu is available here [`Stride.CommunityToolkit.Examples`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples) project.
+## Examples Overview
 
-
-```plaintext
-Stride Community Toolkit Examples
-
-[1] Basic Example - Capsule with rigid body
-[2] Basic Example - Give me a cube
-[3] Basic Example - Stride UI - Capsule with rigid body and Window
-[4] Basic Example - Myra UI - Draggable Window, GetService()
-[Q] Quit
-```
+- [Capsule with rigid body](capsule-with-rigid-body.md):
+  - Demonstrates how to create a 3D capsule entity and position it in a scene.
+- [Give me a cube](give-me-cube-body.md):
+  - A variation of the above example, positioning a 3D cube in a scene.
+- [Stride UI - Capsule with rigid body and Window](stride-ui-capsule-with-rigid-body.md):
+  - Demonstrates how to create a 3D capsule entity and position it in a scene, and how to create a simple window displaying a text message.
+  
+[!INCLUDE [basic-examples](../../../includes/manual/examples/basic-examples-outro.md)]
