@@ -12,4 +12,7 @@ New to Stride? Start with these tutorials to get familiar with the basics of the
 
 ## Stride Community Toolkit Tutorials
 
-1. 📈 [Code Only](code-only/index.md) - This tutorial will show you how to create a simple game using only code.
+> [!NOTE]
+> Under construction
+
+<!--1. 📈 [Code Only](code-only/index.md) - This tutorial will show you how to create a simple game using only code.-->
