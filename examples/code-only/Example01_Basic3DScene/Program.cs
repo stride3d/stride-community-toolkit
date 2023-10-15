@@ -9,7 +9,9 @@ game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase3DScene();
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    var material = game.CreateMaterial(Color.DarkGoldenrod);
+
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, material: material);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
