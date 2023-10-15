@@ -93,7 +93,7 @@
 <p><img src="media/stride-game-engine-example01-basic-3d-scene.webp" alt="Stride UI Example"></p>
 
 <p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene">GitHub</a>.</p>
-<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -104,7 +104,9 @@ game.Run(start: (Scene rootScene) =&gt;
 {
     game.SetupBase3DScene();
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    var material = game.CreateMaterial(Color.DarkGoldenrod);
+
+    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, material: material);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 

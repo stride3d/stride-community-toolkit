@@ -1,6 +1,240 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
+- uid: Stride.CommunityToolkit.Engine
+  name: Stride.CommunityToolkit.Engine
+  href: api/Stride.CommunityToolkit.Engine.html
+  commentId: N:Stride.CommunityToolkit.Engine
+  fullName: Stride.CommunityToolkit.Engine
+  nameWithType: Stride.CommunityToolkit.Engine
+- uid: Stride.CommunityToolkit.Engine.GameExtensions
+  name: GameExtensions
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html
+  commentId: T:Stride.CommunityToolkit.Engine.GameExtensions
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions
+  nameWithType: GameExtensions
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
+  name: AddCamera(Game, string?, Vector3?, Vector3?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
+  name.vb: AddCamera(Game, String, Vector3?, Vector3?)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
+  nameWithType: GameExtensions.AddCamera(Game, string?, Vector3?, Vector3?)
+  nameWithType.vb: GameExtensions.AddCamera(Game, String, Vector3?, Vector3?)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera*
+  name: AddCamera
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera
+  nameWithType: GameExtensions.AddCamera
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)
+  name: AddDirectionalLight(Game, string?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)
+  name.vb: AddDirectionalLight(Game, String)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game, string?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game, String)
+  nameWithType: GameExtensions.AddDirectionalLight(Game, string?)
+  nameWithType.vb: GameExtensions.AddDirectionalLight(Game, String)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight*
+  name: AddDirectionalLight
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight
+  nameWithType: GameExtensions.AddDirectionalLight
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
+  name: AddGraphicsCompositor(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGraphicsCompositor_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
+  nameWithType: GameExtensions.AddGraphicsCompositor(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor*
+  name: AddGraphicsCompositor
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGraphicsCompositor_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor
+  nameWithType: GameExtensions.AddGraphicsCompositor
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
+  name: AddGround(Game, string?, Vector2?, bool)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
+  name.vb: AddGround(Game, String, Vector2?, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?, Boolean)
+  nameWithType: GameExtensions.AddGround(Game, string?, Vector2?, bool)
+  nameWithType.vb: GameExtensions.AddGround(Game, String, Vector2?, Boolean)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGround*
+  name: AddGround
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGround_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddGround
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGround
+  nameWithType: GameExtensions.AddGround
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)
+  name: AddMouseLookCamera(Game, Entity?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddMouseLookCamera_Stride_Engine_Game_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)
+  name.vb: AddMouseLookCamera(Game, Entity)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game, Stride.Engine.Entity?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game, Stride.Engine.Entity)
+  nameWithType: GameExtensions.AddMouseLookCamera(Game, Entity?)
+  nameWithType.vb: GameExtensions.AddMouseLookCamera(Game, Entity)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera*
+  name: AddMouseLookCamera
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddMouseLookCamera_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera
+  nameWithType: GameExtensions.AddMouseLookCamera
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
+  name: AddProfiler(Game, string?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
+  name.vb: AddProfiler(Game, String)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game, string?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game, String)
+  nameWithType: GameExtensions.AddProfiler(Game, string?)
+  nameWithType.vb: GameExtensions.AddProfiler(Game, String)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler*
+  name: AddProfiler
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler
+  nameWithType: GameExtensions.AddProfiler
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
+  name: AddSkybox(Game, string?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
+  name.vb: AddSkybox(Game, String)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game, string?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game, String)
+  nameWithType: GameExtensions.AddSkybox(Game, string?)
+  nameWithType.vb: GameExtensions.AddSkybox(Game, String)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox*
+  name: AddSkybox
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox
+  nameWithType: GameExtensions.AddSkybox
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
+  name: CreateMaterial(Game, Color?, float, float)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Single_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
+  name.vb: CreateMaterial(Game, Color?, Single, Single)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game, Stride.Core.Mathematics.Color?, float, float)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game, Stride.Core.Mathematics.Color?, Single, Single)
+  nameWithType: GameExtensions.CreateMaterial(Game, Color?, float, float)
+  nameWithType.vb: GameExtensions.CreateMaterial(Game, Color?, Single, Single)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial*
+  name: CreateMaterial
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
+  nameWithType: GameExtensions.CreateMaterial
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector2})
+  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector2?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector2__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector2})
+  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector2?)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector2?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector2?)
+  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector2?)
+  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector2?)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive*
+  name: CreatePrimitive
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive
+  nameWithType: GameExtensions.CreatePrimitive
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
+  name: DeltaTime(IGame)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
+  nameWithType: GameExtensions.DeltaTime(IGame)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime*
+  name: DeltaTime
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime
+  nameWithType: GameExtensions.DeltaTime
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  name: DeltaTimeAccurate(IGame)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  nameWithType: GameExtensions.DeltaTimeAccurate(IGame)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate*
+  name: DeltaTimeAccurate
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTimeAccurate_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate
+  nameWithType: GameExtensions.DeltaTimeAccurate
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)
+  name: FPS(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)
+  nameWithType: GameExtensions.FPS(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS*
+  name: FPS
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.FPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS
+  nameWithType: GameExtensions.FPS
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})
+  name: Run(Game, GameContext?, Action<Scene>?, Action<Scene, GameTime>?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Scene__System_Action_Stride_Engine_Scene_Stride_Games_GameTime__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})
+  name.vb: Run(Game, GameContext, Action(Of Scene), Action(Of Scene, GameTime))
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game, Stride.Games.GameContext?, System.Action<Stride.Engine.Scene>?, System.Action<Stride.Engine.Scene, Stride.Games.GameTime>?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game, Stride.Games.GameContext, System.Action(Of Stride.Engine.Scene), System.Action(Of Stride.Engine.Scene, Stride.Games.GameTime))
+  nameWithType: GameExtensions.Run(Game, GameContext?, Action<Scene>?, Action<Scene, GameTime>?)
+  nameWithType.vb: GameExtensions.Run(Game, GameContext, Action(Of Scene), Action(Of Scene, GameTime))
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Run*
+  name: Run
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Run
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Run
+  nameWithType: GameExtensions.Run
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase(Stride.Engine.Game)
+  name: SetupBase(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase(Stride.Engine.Game)
+  nameWithType: GameExtensions.SetupBase(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase*
+  name: SetupBase
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase
+  nameWithType: GameExtensions.SetupBase
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
+  name: SetupBase3DScene(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
+  nameWithType: GameExtensions.SetupBase3DScene(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene*
+  name: SetupBase3DScene
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene
+  nameWithType: GameExtensions.SetupBase3DScene
 - uid: Stride.CommunityToolkit.Extensions
   name: Stride.CommunityToolkit.Extensions
   href: api/Stride.CommunityToolkit.Extensions.html
@@ -171,231 +405,6 @@ references:
   commentId: F:Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
   fullName: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
   nameWithType: CameraDefaults.InitialRotation
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions
-  name: GameExtensions
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html
-  commentId: T:Stride.CommunityToolkit.Extensions.GameExtensions
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions
-  nameWithType: GameExtensions
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
-  name: AddCamera(Game, string?, Vector3?, Vector3?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
-  name.vb: AddCamera(Game, String, Vector3?, Vector3?)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
-  nameWithType: GameExtensions.AddCamera(Game, string?, Vector3?, Vector3?)
-  nameWithType.vb: GameExtensions.AddCamera(Game, String, Vector3?, Vector3?)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera*
-  name: AddCamera
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddCamera_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddCamera
-  nameWithType: GameExtensions.AddCamera
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)
-  name: AddDirectionalLight(Game, string?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)
-  name.vb: AddDirectionalLight(Game, String)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight(Stride.Engine.Game, string?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight(Stride.Engine.Game, String)
-  nameWithType: GameExtensions.AddDirectionalLight(Game, string?)
-  nameWithType.vb: GameExtensions.AddDirectionalLight(Game, String)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight*
-  name: AddDirectionalLight
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddDirectionalLight_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddDirectionalLight
-  nameWithType: GameExtensions.AddDirectionalLight
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
-  name: AddGraphicsCompositor(Game)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddGraphicsCompositor_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
-  nameWithType: GameExtensions.AddGraphicsCompositor(Game)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddGraphicsCompositor*
-  name: AddGraphicsCompositor
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddGraphicsCompositor_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddGraphicsCompositor
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddGraphicsCompositor
-  nameWithType: GameExtensions.AddGraphicsCompositor
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
-  name: AddGround(Game, string?, Vector2?, bool)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
-  name.vb: AddGround(Game, String, Vector2?, Boolean)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddGround(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?, bool)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddGround(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?, Boolean)
-  nameWithType: GameExtensions.AddGround(Game, string?, Vector2?, bool)
-  nameWithType.vb: GameExtensions.AddGround(Game, String, Vector2?, Boolean)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddGround*
-  name: AddGround
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddGround_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddGround
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddGround
-  nameWithType: GameExtensions.AddGround
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)
-  name: AddMouseLookCamera(Game, Entity?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddMouseLookCamera_Stride_Engine_Game_Stride_Engine_Entity_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)
-  name.vb: AddMouseLookCamera(Game, Entity)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera(Stride.Engine.Game, Stride.Engine.Entity?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera(Stride.Engine.Game, Stride.Engine.Entity)
-  nameWithType: GameExtensions.AddMouseLookCamera(Game, Entity?)
-  nameWithType.vb: GameExtensions.AddMouseLookCamera(Game, Entity)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera*
-  name: AddMouseLookCamera
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddMouseLookCamera_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddMouseLookCamera
-  nameWithType: GameExtensions.AddMouseLookCamera
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
-  name: AddProfiler(Game, string?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
-  name.vb: AddProfiler(Game, String)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler(Stride.Engine.Game, string?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler(Stride.Engine.Game, String)
-  nameWithType: GameExtensions.AddProfiler(Game, string?)
-  nameWithType.vb: GameExtensions.AddProfiler(Game, String)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler*
-  name: AddProfiler
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddProfiler_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddProfiler
-  nameWithType: GameExtensions.AddProfiler
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
-  name: AddSkybox(Game, string?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
-  name.vb: AddSkybox(Game, String)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox(Stride.Engine.Game, string?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox(Stride.Engine.Game, String)
-  nameWithType: GameExtensions.AddSkybox(Game, string?)
-  nameWithType.vb: GameExtensions.AddSkybox(Game, String)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox*
-  name: AddSkybox
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_AddSkybox_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.AddSkybox
-  nameWithType: GameExtensions.AddSkybox
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean)
-  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean)
-  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean)
-  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool)
-  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive*
-  name: CreatePrimitive
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_CreatePrimitive_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.CreatePrimitive
-  nameWithType: GameExtensions.CreatePrimitive
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime(Stride.Games.IGame)
-  name: DeltaTime(IGame)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTime_Stride_Games_IGame_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime(Stride.Games.IGame)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime(Stride.Games.IGame)
-  nameWithType: GameExtensions.DeltaTime(IGame)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime*
-  name: DeltaTime
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTime_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTime
-  nameWithType: GameExtensions.DeltaTime
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
-  name: DeltaTimeAccurate(IGame)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
-  nameWithType: GameExtensions.DeltaTimeAccurate(IGame)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate*
-  name: DeltaTimeAccurate
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_DeltaTimeAccurate_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.DeltaTimeAccurate
-  nameWithType: GameExtensions.DeltaTimeAccurate
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.FPS(Stride.Engine.Game)
-  name: FPS(Game)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_FPS_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.FPS(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.FPS(Stride.Engine.Game)
-  nameWithType: GameExtensions.FPS(Game)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.FPS*
-  name: FPS
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_FPS_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.FPS
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.FPS
-  nameWithType: GameExtensions.FPS
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color})
-  name: NewDefaultMaterial(Game, Color?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_NewDefaultMaterial_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Color__
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color})
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial(Stride.Engine.Game, Stride.Core.Mathematics.Color?)
-  nameWithType: GameExtensions.NewDefaultMaterial(Game, Color?)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial*
-  name: NewDefaultMaterial
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_NewDefaultMaterial_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.NewDefaultMaterial
-  nameWithType: GameExtensions.NewDefaultMaterial
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})
-  name: Run(Game, GameContext?, Action<Scene>?, Action<Scene, GameTime>?)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Scene__System_Action_Stride_Engine_Scene_Stride_Games_GameTime__
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})
-  name.vb: Run(Game, GameContext, Action(Of Scene), Action(Of Scene, GameTime))
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.Run(Stride.Engine.Game, Stride.Games.GameContext?, System.Action<Stride.Engine.Scene>?, System.Action<Stride.Engine.Scene, Stride.Games.GameTime>?)
-  fullName.vb: Stride.CommunityToolkit.Extensions.GameExtensions.Run(Stride.Engine.Game, Stride.Games.GameContext, System.Action(Of Stride.Engine.Scene), System.Action(Of Stride.Engine.Scene, Stride.Games.GameTime))
-  nameWithType: GameExtensions.Run(Game, GameContext?, Action<Scene>?, Action<Scene, GameTime>?)
-  nameWithType.vb: GameExtensions.Run(Game, GameContext, Action(Of Scene), Action(Of Scene, GameTime))
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.Run*
-  name: Run
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_Run_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.Run
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.Run
-  nameWithType: GameExtensions.Run
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase(Stride.Engine.Game)
-  name: SetupBase(Game)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_SetupBase_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase(Stride.Engine.Game)
-  nameWithType: GameExtensions.SetupBase(Game)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase*
-  name: SetupBase
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_SetupBase_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase
-  nameWithType: GameExtensions.SetupBase
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
-  name: SetupBase3DScene(Game)
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_SetupBase3DScene_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
-  nameWithType: GameExtensions.SetupBase3DScene(Game)
-- uid: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene*
-  name: SetupBase3DScene
-  href: api/Stride.CommunityToolkit.Extensions.GameExtensions.html#Stride_CommunityToolkit_Extensions_GameExtensions_SetupBase3DScene_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GameExtensions.SetupBase3DScene
-  nameWithType: GameExtensions.SetupBase3DScene
 - uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
   name: GraphicsDeviceExtensions
   href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html
@@ -513,6 +522,382 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer
   nameWithType: GraphicsCompositorExtensions.AddSceneRenderer
+- uid: Stride.CommunityToolkit.Rendering.Utilities
+  name: Stride.CommunityToolkit.Rendering.Utilities
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.html
+  commentId: N:Stride.CommunityToolkit.Rendering.Utilities
+  fullName: Stride.CommunityToolkit.Rendering.Utilities
+  nameWithType: Stride.CommunityToolkit.Rendering.Utilities
+- uid: Stride.CommunityToolkit.Rendering.Utilities.IndexingType
+  name: IndexingType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.IndexingType.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Utilities.IndexingType
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.IndexingType
+  nameWithType: IndexingType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.IndexingType.Int16
+  name: Int16
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.IndexingType.html#Stride_CommunityToolkit_Rendering_Utilities_IndexingType_Int16
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.IndexingType.Int16
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.IndexingType.Int16
+  nameWithType: IndexingType.Int16
+- uid: Stride.CommunityToolkit.Rendering.Utilities.IndexingType.Int32
+  name: Int32
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.IndexingType.html#Stride_CommunityToolkit_Rendering_Utilities_IndexingType_Int32
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.IndexingType.Int32
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.IndexingType.Int32
+  nameWithType: IndexingType.Int32
+- uid: Stride.CommunityToolkit.Rendering.Utilities.IndexingType.None
+  name: None
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.IndexingType.html#Stride_CommunityToolkit_Rendering_Utilities_IndexingType_None
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.IndexingType.None
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.IndexingType.None
+  nameWithType: IndexingType.None
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder
+  name: MeshBuilder
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder
+  nameWithType: MeshBuilder
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex(System.Int32)
+  name: AddIndex(int)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_AddIndex_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex(System.Int32)
+  name.vb: AddIndex(Integer)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex(int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex(Integer)
+  nameWithType: MeshBuilder.AddIndex(int)
+  nameWithType.vb: MeshBuilder.AddIndex(Integer)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex*
+  name: AddIndex
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_AddIndex_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddIndex
+  nameWithType: MeshBuilder.AddIndex
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex
+  name: AddVertex()
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_AddVertex
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex()
+  nameWithType: MeshBuilder.AddVertex()
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex*
+  name: AddVertex
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_AddVertex_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex
+  nameWithType: MeshBuilder.AddVertex
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Clear
+  name: Clear()
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_Clear
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Clear
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Clear()
+  nameWithType: MeshBuilder.Clear()
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Clear*
+  name: Clear
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_Clear_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Clear
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Clear
+  nameWithType: MeshBuilder.Clear
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Dispose
+  name: Dispose()
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_Dispose
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Dispose
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Dispose()
+  nameWithType: MeshBuilder.Dispose()
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Dispose*
+  name: Dispose
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_Dispose_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Dispose
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.Dispose
+  nameWithType: MeshBuilder.Dispose
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement*
+  name: GetElement
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_GetElement_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement
+  nameWithType: MeshBuilder.GetElement
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement``1(System.Int32)
+  name: GetElement<T>(int)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_GetElement__1_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement``1(System.Int32)
+  name.vb: GetElement(Of T)(Integer)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement<T>(int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement(Of T)(Integer)
+  nameWithType: MeshBuilder.GetElement<T>(int)
+  nameWithType.vb: MeshBuilder.GetElement(Of T)(Integer)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement``1(System.Int32,System.Int32)
+  name: GetElement<T>(int, int)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_GetElement__1_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement``1(System.Int32,System.Int32)
+  name.vb: GetElement(Of T)(Integer, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement<T>(int, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.GetElement(Of T)(Integer, Integer)
+  nameWithType: MeshBuilder.GetElement<T>(int, int)
+  nameWithType.vb: MeshBuilder.GetElement(Of T)(Integer, Integer)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexCount
+  name: IndexCount
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_IndexCount
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexCount
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexCount
+  nameWithType: MeshBuilder.IndexCount
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexCount*
+  name: IndexCount
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_IndexCount_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexCount
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexCount
+  nameWithType: MeshBuilder.IndexCount
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexType
+  name: IndexType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_IndexType
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexType
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexType
+  nameWithType: MeshBuilder.IndexType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexType*
+  name: IndexType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_IndexType_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexType
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.IndexType
+  nameWithType: MeshBuilder.IndexType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.PrimitiveType
+  name: PrimitiveType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_PrimitiveType
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.PrimitiveType
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.PrimitiveType
+  nameWithType: MeshBuilder.PrimitiveType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.PrimitiveType*
+  name: PrimitiveType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_PrimitiveType_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.PrimitiveType
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.PrimitiveType
+  nameWithType: MeshBuilder.PrimitiveType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement*
+  name: SetElement
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_SetElement_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement
+  nameWithType: MeshBuilder.SetElement
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement``1(System.Int32,System.Int32,``0)
+  name: SetElement<T>(int, int, T)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_SetElement__1_System_Int32_System_Int32___0_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement``1(System.Int32,System.Int32,``0)
+  name.vb: SetElement(Of T)(Integer, Integer, T)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement<T>(int, int, T)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement(Of T)(Integer, Integer, T)
+  nameWithType: MeshBuilder.SetElement<T>(int, int, T)
+  nameWithType.vb: MeshBuilder.SetElement(Of T)(Integer, Integer, T)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement``1(System.Int32,``0)
+  name: SetElement<T>(int, T)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_SetElement__1_System_Int32___0_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement``1(System.Int32,``0)
+  name.vb: SetElement(Of T)(Integer, T)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement<T>(int, T)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement(Of T)(Integer, T)
+  nameWithType: MeshBuilder.SetElement<T>(int, T)
+  nameWithType.vb: MeshBuilder.SetElement(Of T)(Integer, T)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw(Stride.Graphics.GraphicsDevice,System.Boolean)
+  name: ToMeshDraw(GraphicsDevice, bool)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_ToMeshDraw_Stride_Graphics_GraphicsDevice_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw(Stride.Graphics.GraphicsDevice,System.Boolean)
+  name.vb: ToMeshDraw(GraphicsDevice, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw(Stride.Graphics.GraphicsDevice, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw(Stride.Graphics.GraphicsDevice, Boolean)
+  nameWithType: MeshBuilder.ToMeshDraw(GraphicsDevice, bool)
+  nameWithType.vb: MeshBuilder.ToMeshDraw(GraphicsDevice, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw*
+  name: ToMeshDraw
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_ToMeshDraw_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.ToMeshDraw
+  nameWithType: MeshBuilder.ToMeshDraw
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexCount
+  name: VertexCount
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_VertexCount
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexCount
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexCount
+  nameWithType: MeshBuilder.VertexCount
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexCount*
+  name: VertexCount
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_VertexCount_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexCount
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexCount
+  nameWithType: MeshBuilder.VertexCount
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexElements
+  name: VertexElements
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_VertexElements
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexElements
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexElements
+  nameWithType: MeshBuilder.VertexElements
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexElements*
+  name: VertexElements
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_VertexElements_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexElements
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.VertexElements
+  nameWithType: MeshBuilder.VertexElements
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent*
+  name: WithBiTangent
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithBiTangent_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent
+  nameWithType: MeshBuilder.WithBiTangent
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithBiTangent<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithBiTangent__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithBiTangent(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithBiTangent(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithBiTangent<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithBiTangent(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor*
+  name: WithColor
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor
+  nameWithType: MeshBuilder.WithColor
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithColor<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithColor__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithColor(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithColor(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithColor<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithColor(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement*
+  name: WithElement
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithElement_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement
+  nameWithType: MeshBuilder.WithElement
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithElement<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithElement__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithElement(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithElement(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithElement<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithElement(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithIndexType(Stride.CommunityToolkit.Rendering.Utilities.IndexingType)
+  name: WithIndexType(IndexingType)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithIndexType_Stride_CommunityToolkit_Rendering_Utilities_IndexingType_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithIndexType(Stride.CommunityToolkit.Rendering.Utilities.IndexingType)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithIndexType(Stride.CommunityToolkit.Rendering.Utilities.IndexingType)
+  nameWithType: MeshBuilder.WithIndexType(IndexingType)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithIndexType*
+  name: WithIndexType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithIndexType_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithIndexType
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithIndexType
+  nameWithType: MeshBuilder.WithIndexType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal*
+  name: WithNormal
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithNormal_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal
+  nameWithType: MeshBuilder.WithNormal
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithNormal<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithNormal__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithNormal(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithNormal(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithNormal<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithNormal(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition*
+  name: WithPosition
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithPosition_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition
+  nameWithType: MeshBuilder.WithPosition
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed*
+  name: WithPositionTransformed
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithPositionTransformed_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed
+  nameWithType: MeshBuilder.WithPositionTransformed
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithPositionTransformed<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithPositionTransformed__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithPositionTransformed(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPositionTransformed(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithPositionTransformed<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithPositionTransformed(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithPosition<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithPosition__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithPosition(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPosition(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithPosition<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithPosition(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPrimitiveType(Stride.Graphics.PrimitiveType)
+  name: WithPrimitiveType(PrimitiveType)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithPrimitiveType_Stride_Graphics_PrimitiveType_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPrimitiveType(Stride.Graphics.PrimitiveType)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPrimitiveType(Stride.Graphics.PrimitiveType)
+  nameWithType: MeshBuilder.WithPrimitiveType(PrimitiveType)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPrimitiveType*
+  name: WithPrimitiveType
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithPrimitiveType_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPrimitiveType
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithPrimitiveType
+  nameWithType: MeshBuilder.WithPrimitiveType
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent*
+  name: WithTangent
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithTangent_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent
+  nameWithType: MeshBuilder.WithTangent
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithTangent<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithTangent__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithTangent(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTangent(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithTangent<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithTangent(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate*
+  name: WithTextureCoordinate
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithTextureCoordinate_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate
+  nameWithType: MeshBuilder.WithTextureCoordinate
+- uid: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name: WithTextureCoordinate<T>(int, string, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_WithTextureCoordinate__1_System_Int32_System_String_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate``1(System.Int32,System.String,Stride.Graphics.PixelFormat)
+  name.vb: WithTextureCoordinate(Of T)(Integer, String, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate<T>(int, string, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate(Of T)(Integer, String, Stride.Graphics.PixelFormat)
+  nameWithType: MeshBuilder.WithTextureCoordinate<T>(int, string, PixelFormat)
+  nameWithType.vb: MeshBuilder.WithTextureCoordinate(Of T)(Integer, String, PixelFormat)
 - uid: Stride.CommunityToolkit.Scripts
   name: Stride.CommunityToolkit.Scripts
   href: api/Stride.CommunityToolkit.Scripts.html

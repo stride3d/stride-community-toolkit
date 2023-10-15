@@ -2,20 +2,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Give me a cube | Stride Manual </title>
+      <title>Enum IndexingType
+ | Stride Community Toolkit </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Give me a cube | Stride Manual ">
+      <meta name="title" content="Enum IndexingType
+ | Stride Community Toolkit ">
       
-      <link rel="icon" href="../../../favicon.ico">
-      <link rel="stylesheet" href="../../../public/docfx.min.css">
-      <link rel="stylesheet" href="../../../public/main.css">
-      <meta name="docfx:navrel" content="../../../toc.html">
-      <meta name="docfx:tocrel" content="../../toc.html">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
       
-      <meta name="docfx:rel" content="../../../">
+      <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/give-me-cube-body.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Rendering_Utilities_IndexingType.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Rendering.Utilities.IndexingType%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -30,8 +32,8 @@
   </head>
 
   <script type="module">
-    import options from './../../../public/main.js'
-    import { init } from './../../../public/docfx.min.js'
+    import options from './../public/main.js'
+    import { init } from './../public/docfx.min.js'
     init(options)
   </script>
 
@@ -41,12 +43,12 @@
   </script>
 
 
-  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
     <header class="bg-body border-bottom">
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
-          <a class="navbar-brand" href="../../../index.html">
-            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
             
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,39 +88,58 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="">
-<h1 id="give-me-a-cube">Give me a cube</h1>
+        <article data-uid="Stride.CommunityToolkit.Rendering.Utilities.IndexingType">
 
-<p>This example demonstrates the essential steps to create a 3D cube in Stride. Just like the previous example, the cube entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method.</p>
-<p>The cube is positioned at <code>(1f, 0.5f, 3f)</code> in the 3D world space. This example is perfect for those who are new to 3D game development with Stride.</p>
-<p><img src="media/stride-game-engine-example02-give-me-cube.webp" alt="Stride UI Example"></p>
-<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example02_GiveMeACube">GitHub</a>.</p>
-<pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
-using Stride.Core.Mathematics;
-using Stride.Engine;
 
-using var game = new Game();
 
-game.Run(start: Start);
 
-void Start(Scene rootScene)
-{
-    game.SetupBase3DScene();
+  <h1 id="Stride_CommunityToolkit_Rendering_Utilities_IndexingType" data-uid="Stride.CommunityToolkit.Rendering.Utilities.IndexingType" class="text-break">
+    Enum IndexingType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/IndexingType.cs/#L3"><i class="bi bi-code-slash"></i></a>
+  </h1>
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.html">Rendering</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.html">Utilities</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
 
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
 
-    entity.Scene = rootScene;
-}
-</code></pre></article>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public enum IndexingType</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+  <h2 id="fields">Fields
+</h2>
+  <dl class="parameters">
+    <dt id="Stride_CommunityToolkit_Rendering_Utilities_IndexingType_Int16"><code>Int16 = 2</code></dt>
+    <dd><p>Use a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16">short</a> for vertex indices</p>
+</dd>
+    <dt id="Stride_CommunityToolkit_Rendering_Utilities_IndexingType_Int32"><code>Int32 = 4</code></dt>
+    <dd><p>Use a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a> for vertex indices</p>
+</dd>
+    <dt id="Stride_CommunityToolkit_Rendering_Utilities_IndexingType_None"><code>None = 0</code></dt>
+    <dd><p>Do not use vertex indexing</p>
+</dd>
+  </dl>
+
+
+
+</article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/give-me-cube-body.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/IndexingType.cs/#L3" class="edit-link">Edit this page</a>
         </div>
 
-        <div class="next-article d-print-none border-top" id="nextArticle"></div>
         
       </div>
 

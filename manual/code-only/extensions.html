@@ -95,92 +95,28 @@
 <p>Remember, the key to mastering Stride, and game development in general, is practice and exploration. So, go ahead, play around with these extensions, and start creating!</p>
 <h2 id="gameextensionscs">GameExtensions.cs</h2>
 <p>Some extensions return <code>Entity</code> so it can be further modified.</p>
-<table>
-<thead>
-<tr>
-<th>Extensions</th>
-<th>Status</th>
-<th>Note</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Run()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Unitialising the game, use <code>start</code> and <code>update</code> params</td>
-</tr>
-<tr>
-<td><code>SetupBase()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Adds Graphics Compositor, Camera and Directional Light</td>
-</tr>
-<tr>
-<td><code>SetupBase3DScene()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Same as <code>SetupBase()</code> plus SkyBox, Ground, MouseLookCamera</td>
-</tr>
-<tr>
-<td><code>SetupBase2DScene()</code></td>
-<td><img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research"></td>
-<td></td>
-</tr>
-<tr>
-<td><code>AddGraphicsCompositor()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Adds Graphic Compositor with Clean UI</td>
-</tr>
-<tr>
-<td><code>AddCamera()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td></td>
-</tr>
-<tr>
-<td><code>AddDirectionalLight()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td></td>
-</tr>
-<tr>
-<td><code>AddSkybox()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td></td>
-</tr>
-<tr>
-<td><code>AddMouseLookCamera()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>The camera entity can be moved using W, A, S, D, Q and E, arrow keys</td>
-</tr>
-<tr>
-<td><code>NewDefaultMaterial()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Adds basic material</td>
-</tr>
-<tr>
-<td><code>CreatePrimitive()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Simplifies primitives creation</td>
-</tr>
-<tr>
-<td><code>AddProfiler()</code></td>
-<td><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></td>
-<td>Attaches profile</td>
-</tr>
-<tr>
-<td><code>AddGizmo()</code></td>
-<td><img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research"></td>
-<td>Debug. To see X,Y,Z arrows</td>
-</tr>
-<tr>
-<td><code>AddEntityNames()</code></td>
-<td><img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research"></td>
-<td>Debug. To see entity properties in the game</td>
-</tr>
-<tr>
-<td><code>AddPhysicsDebugger()</code></td>
-<td><img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research"></td>
-<td>Debug. To see colliders. Tracked here <a href="https://github.com/stride3d/stride-community-toolkit/issues/9">Issue #9</a></td>
-</tr>
-</tbody>
-</table>
+<p><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></p>
+<ul>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Scene__System_Action_Stride_Engine_Scene_Stride_Games_GameTime__"><code>Run()</code></a> - Initialising the game, use <code>start</code> and <code>update</code> params</li>
+<li><code>SetupBase()</code> - Adds Graphics Compositor, Camera and Directional Light</li>
+<li><code>SetupBase3DScene()</code> - Same as <code>SetupBase()</code> plus SkyBox, Ground, MouseLookCamera</li>
+<li><code>AddGraphicsCompositor()</code> - Adds Graphic Compositor with Clean UI</li>
+<li><code>AddCamera()</code> - Adds Camera</li>
+<li><code>AddDirectionalLight()</code> - Adds Directional Light</li>
+<li><code>AddSkybox()</code> - Adds Skybox</li>
+<li><code>AddMouseLookCamera()</code> - The camera entity can be moved using W, A, S, D, Q and E, arrow keys</li>
+<li><code>AddGround()</code> - Adds Ground</li>
+<li><code>AddGround(float size)</code> - Adds Ground with size</li>
+<li><code>NewDefaultMaterial</code> - Adds basic material</li>
+<li><code>CreatePrimitive()</code> - Simplifies primitives creation</li>
+<li><code>AddProfiler()</code> - Attaches profile</li>
+</ul>
+<p><img src="https://img.shields.io/badge/status-todo-orange?style=for-the-badge" alt="ToDo"></p>
+<ul>
+<li><code>AddGizmo()</code> - Debug. To see X,Y,Z arrows</li>
+<li><code>AddEntityNames()</code> - Debug. To see entity properties in the game</li>
+<li><code>AddPhysicsDebugger()</code> - Debug. To see colliders. Tracked here <a href="https://github.com/stride3d/stride-community-toolkit/issues/9">Issue #9</a></li>
+</ul>
 <h2 id="entitycomponentextensionscs">EntityComponentExtensions.cs</h2>
 <p>| <code>GetComponent()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find a class attached to an Entity that are not limited to type ScriptComponent |
 | <code>GetComponents()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find all classes attached to an Entity that are not limited to type ScriptComponent |

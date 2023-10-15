@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Give me a cube | Stride Manual </title>
+      <title>Procedural geometry | Stride Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Give me a cube | Stride Manual ">
+      <meta name="title" content="Procedural geometry | Stride Manual ">
       
       <link rel="icon" href="../../../favicon.ico">
       <link rel="stylesheet" href="../../../public/docfx.min.css">
@@ -15,7 +15,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/give-me-cube-body.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/procedural-geometry.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -87,16 +87,17 @@
         </div>
 
         <article data-uid="">
-<h1 id="give-me-a-cube">Give me a cube</h1>
+<h1 id="procedural-geometry">Procedural geometry</h1>
 
-<p>This example demonstrates the essential steps to create a 3D cube in Stride. Just like the previous example, the cube entity comes automatically equipped with a rigid body and a collider, thanks to the <code>CreatePrimitive()</code> method.</p>
-<p>The cube is positioned at <code>(1f, 0.5f, 3f)</code> in the 3D world space. This example is perfect for those who are new to 3D game development with Stride.</p>
-<p><img src="media/stride-game-engine-example02-give-me-cube.webp" alt="Stride UI Example"></p>
-<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example02_GiveMeACube">GitHub</a>.</p>
+<p>This example demonstrates how to create a procedural geometry mesh triangle, plane and circle and add them to a scene.</p>
+<p><img src="media/stride-game-engine-procedural-geometry.webp" alt="Stride UI Example"></p>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_ProceduralGeometry">GitHub</a>.</p>
 <pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering;
 
 using var game = new Game();
 
@@ -106,16 +107,107 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
+    AddMesh(game.GraphicsDevice, rootScene, Vector3.Zero, GiveMeATriangle);
+    AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, GiveMeAPlane);
+    AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, GiveMeACircle);
+}
 
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
+void GiveMeATriangle(MeshBuilder meshBuilder)
+{
+    meshBuilder.WithIndexType(IndexingType.Int32);
+    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
-    entity.Scene = rootScene;
+    var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(0, 0, 0));
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(1, 0, 0));
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(.5f, 1, 0));
+
+    meshBuilder.AddIndex(0);
+    meshBuilder.AddIndex(2);
+    meshBuilder.AddIndex(1);
+}
+
+void GiveMeAPlane(MeshBuilder meshBuilder)
+{
+    meshBuilder.WithIndexType(IndexingType.Int32);
+    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+
+    var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(0, 0, 0));
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(0, 1, 0));
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(1, 1, 0));
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(1, 0, 0));
+
+    meshBuilder.AddIndex(0);
+    meshBuilder.AddIndex(1);
+    meshBuilder.AddIndex(2);
+
+    meshBuilder.AddIndex(0);
+    meshBuilder.AddIndex(2);
+    meshBuilder.AddIndex(3);
+}
+
+void GiveMeACircle(MeshBuilder meshBuilder)
+{
+    meshBuilder.WithIndexType(IndexingType.Int32);
+    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+
+    var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+
+    const int segments = 48;
+    for (var i = 0; i &lt; segments; i++)
+    {
+        var x = (float)Math.Sin(Math.Tau / segments * i) / 2;
+        var y = (float)Math.Cos(Math.Tau / segments * i) / 2;
+
+        meshBuilder.AddVertex();
+        meshBuilder.SetElement(position, new Vector3(x + .5f, y + .5f, 0));
+    }
+
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(.5f, .5f, 0));
+
+    for (var i = 0; i &lt; segments; i++)
+    {
+        meshBuilder.AddIndex(segments);
+        meshBuilder.AddIndex(i);
+        meshBuilder.AddIndex((i + 1) % segments);
+    }
+}
+
+void AddMesh(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, Action&lt;MeshBuilder&gt; build)
+{
+    using var meshBuilder = new MeshBuilder();
+    build(meshBuilder);
+
+    var entity = new Entity { Scene = rootScene, Transform = { Position = position } };
+    var model = new Model
+    {
+        new Mesh {
+            Draw = meshBuilder.ToMeshDraw(graphicsDevice),
+            MaterialIndex = 0
+        }
+    };
+    entity.Add(new ModelComponent { Model = model });
 }
 </code></pre></article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/give-me-cube-body.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/procedural-geometry.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
