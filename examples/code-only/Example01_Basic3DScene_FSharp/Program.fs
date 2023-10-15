@@ -1,4 +1,4 @@
-open Stride.CommunityToolkit.Extensions;
+open Stride.CommunityToolkit.Engine;
 open Stride.CommunityToolkit.ProceduralModels;
 open Stride.Core.Mathematics;
 open Stride.Engine;

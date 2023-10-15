@@ -12,7 +12,8 @@ Stride Community Toolkit Examples
 [3] Basic Example - Capsule with rigid body in Visual Basic
 [4] Basic Example - Give me a cube
 [5] Basic Example - Stride UI - Capsule with rigid body and Window
-[6] Basic Example - Myra UI - Draggable Window, GetService()
+[6] Basic Example - Procedural Geometry
+[7] Advance Example - Myra UI - Draggable Window, GetService()
 [Q] Quit
 
 Enter choice and press ENTER to continue

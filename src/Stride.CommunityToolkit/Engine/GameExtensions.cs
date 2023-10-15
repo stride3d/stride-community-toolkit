@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Extensions;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts;
@@ -15,11 +16,17 @@ using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
 
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Engine;
 
+/// <summary>
+/// Extensions for <see cref="IGame"/>
+/// </summary>
 public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
+    private const float DefaultGroundSizeX = 10.0f;
+    private const float DefaultGroundSizeY = 10.0f;
+    private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
 
     /// <summary>
     /// Initializes the game, starts the game loop, and handles game events.
@@ -260,44 +267,11 @@ public static class GameExtensions
     /// <returns></returns>
     public static Entity AddGround(this Game game, string? entityName = null, Vector2? size = null, bool includeCollider = true)
     {
-        var materialDescription = new MaterialDescriptor
-        {
-            Attributes =
-                {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(Color.FromBgra(0xFF242424))),
-                    DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(0.0f)),
-                    SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.1f))
-                }
-        };
+        var validSize = size ?? new Vector2(DefaultGroundSizeX, DefaultGroundSizeY);
 
-        var material = Material.New(game.GraphicsDevice, materialDescription);
+        var material = game.CreateMaterial(Color.FromBgra(0xFF242424), 0.0f, 0.1f);
 
-        var validSize = size ?? new Vector2(10.0f, 10.0f);
-
-        var groundModel = new PlaneProceduralModel
-        {
-            Size = validSize,
-            MaterialInstance = { Material = material }
-        };
-
-        var model = groundModel.Generate(game.Services);
-
-        var entity = new Entity(entityName) { new ModelComponent(model) };
-
-        if (includeCollider)
-        {
-            var groundCollider = new StaticColliderComponent();
-
-            groundCollider.ColliderShapes.Add(new BoxColliderShapeDesc()
-            {
-                Size = new Vector3(validSize.X, 1, validSize.Y),
-                LocalOffset = new Vector3(0, -0.5f, 0)
-            });
-
-            entity.Add(groundCollider);
-        }
+        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, validSize);
 
         game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
 
@@ -310,19 +284,17 @@ public static class GameExtensions
     /// <param name="game"></param>
     /// <param name="color"></param>
     /// <returns></returns>
-    public static Material NewDefaultMaterial(this Game game, Color? color = null)
+    public static Material CreateMaterial(this Game game, Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
     {
-        var defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
-
         var materialDescription = new MaterialDescriptor
         {
             Attributes =
                 {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? defaultMaterialColor)),
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? _defaultMaterialColor)),
                     DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(1.0f)),
+                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
                     SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.65f))
+                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(microSurface))
                 }
         };
 
@@ -338,9 +310,9 @@ public static class GameExtensions
     /// <param name="material"></param>
     /// <param name="includeCollider">Adds a default collider except for Torus, Teapot and Plane. Default true.</param>
     /// <returns></returns>
-    public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true)
+    public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector2? size = null)
     {
-        var proceduralModel = GetProceduralModel(type);
+        var proceduralModel = GetProceduralModel(type, size);
 
         var model = proceduralModel.Generate(game.Services);
 
@@ -350,11 +322,13 @@ public static class GameExtensions
 
         if (!includeCollider) return entity;
 
-        var colliderShape = GetColliderShape(type);
+        var colliderShape = GetColliderShape(type, size);
 
         if (colliderShape is null) return entity;
 
-        var collider = new RigidbodyComponent();
+        PhysicsComponent collider = type == PrimitiveModelType.Plane ?
+            new StaticColliderComponent() :
+            new RigidbodyComponent();
 
         collider.ColliderShapes.Add(colliderShape);
 
@@ -376,10 +350,10 @@ public static class GameExtensions
         return entity;
     }
 
-    private static PrimitiveProceduralModelBase GetProceduralModel(PrimitiveModelType type)
+    private static PrimitiveProceduralModelBase GetProceduralModel(PrimitiveModelType type, Vector2? size = null)
         => type switch
         {
-            PrimitiveModelType.Plane => new PlaneProceduralModel(),
+            PrimitiveModelType.Plane => new PlaneProceduralModel() { Size = size ?? Vector2.Zero },
             PrimitiveModelType.Sphere => new SphereProceduralModel(),
             PrimitiveModelType.Cube => new CubeProceduralModel(),
             PrimitiveModelType.Cylinder => new CylinderProceduralModel(),
@@ -390,10 +364,14 @@ public static class GameExtensions
             _ => throw new InvalidOperationException(),
         };
 
-    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type)
+    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type, Vector2? size = null)
         => type switch
         {
-            PrimitiveModelType.Plane => null,
+            PrimitiveModelType.Plane => new BoxColliderShapeDesc()
+            {
+                Size = new Vector3(size?.X ?? 0, 1, size?.Y ?? 0),
+                LocalOffset = new Vector3(0, -0.5f, 0)
+            },
             PrimitiveModelType.Sphere => new SphereColliderShapeDesc(),
             PrimitiveModelType.Cube => new BoxColliderShapeDesc(),
             PrimitiveModelType.Cylinder => new CylinderColliderShapeDesc(),
