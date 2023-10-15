@@ -1,5 +1,4 @@
-﻿using Stride.CommunityToolkit.Extensions;
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -101,7 +100,7 @@ void AddMesh(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, A
     using var meshBuilder = new MeshBuilder();
     build(meshBuilder);
 
-    var entity = new Entity { Scene = rootScene, Transform = { Position = position }};
+    var entity = new Entity { Scene = rootScene, Transform = { Position = position } };
     var model = new Model
     {
         new Mesh {
