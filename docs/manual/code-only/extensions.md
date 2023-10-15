@@ -14,8 +14,7 @@ Some extensions return `Entity` so it can be further modified.
 
 ![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)
 
-- [`Run()`](Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})) - Initialising the game, use `start` and `update` params
-- `Run()` - Initialising the game, use `start` and `update` params
+- [`Run()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})) - Initialising the game, use `start` and `update` params
 - `SetupBase()` - Adds Graphics Compositor, Camera and Directional Light
 - `SetupBase3DScene()` - Same as `SetupBase()` plus SkyBox, Ground, MouseLookCamera
 - `AddGraphicsCompositor()` - Adds Graphic Compositor with Clean UI
