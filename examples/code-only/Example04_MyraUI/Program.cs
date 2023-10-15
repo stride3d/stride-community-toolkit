@@ -1,5 +1,5 @@
 using Example04_MyraUI;
-using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
 using Stride.Games;

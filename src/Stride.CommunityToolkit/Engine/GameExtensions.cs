@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Extensions;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts;
@@ -15,8 +16,11 @@ using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
 
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Engine;
 
+/// <summary>
+/// Extensions for <see cref="IGame"/>
+/// </summary>
 public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
