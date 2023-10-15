@@ -220,6 +220,17 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.
+    /// </summary>
+    /// <param name="game">The game instance to which the skybox will be added.</param>
+    /// <param name="entityName">The name for the skybox entity. If null, a default name will be used.</param>
+    /// <returns>The created skybox entity.</returns>
+    /// <remarks>
+    /// The skybox texture is loaded from the Resources folder, and is used to generate a skybox using the <see cref="SkyboxGenerator"/>.
+    /// A new entity is created with a <see cref="BackgroundComponent"/> and a <see cref="LightComponent"/>, both configured for the skybox, and is added to the game scene.
+    /// The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).
+    /// </remarks>
     public static Entity AddSkybox(this Game game, string? entityName = null)
     {
         using var stream = new FileStream($"{AppContext.BaseDirectory}Resources\\{SkyboxTexture}", FileMode.Open, FileAccess.Read);
