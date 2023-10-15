@@ -1224,24 +1224,24 @@ references:
   commentId: T:Stride.Physics.SimulationExtensions
   fullName: Stride.Physics.SimulationExtensions
   nameWithType: SimulationExtensions
-- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags)
-  name: RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags)
-  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags)
-  name.vb: RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags)
-  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags)
-  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags)
-  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags)
-- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags)
-  name: RayCast(Simulation, Entity, float, CollisionFilterGroupFlags)
-  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags)
-  name.vb: RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags)
-  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags)
-  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, float, CollisionFilterGroupFlags)
-  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags)
+- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name: RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
+  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
+  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name.vb: RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
+  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
+  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
+- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name: RayCast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
+  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
+  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name.vb: RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
+  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
+  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
 - uid: Stride.Physics.SimulationExtensions.RayCast*
   name: RayCast
   href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_
