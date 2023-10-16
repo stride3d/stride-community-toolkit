@@ -96,7 +96,7 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        AddMouseLookCamera(game.AddCamera());
+        game.AddCamera().AddMouseLookCamera();
         game.AddDirectionalLight();
         game.AddSkybox();
         game.AddGround();
