@@ -15,13 +15,13 @@ Some extensions return `Entity` so it can be further modified.
 ![Done](https://img.shields.io/badge/status-done-green?style=for-the-badge)
 
 - [`Run()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})) - Initialising the game, use `start` and `update` params
-- `SetupBase()` - Adds Graphics Compositor, Camera and Directional Light
-- `SetupBase3DScene()` - Same as `SetupBase()` plus SkyBox, Ground, MouseLookCamera
-- `AddGraphicsCompositor()` - Adds Graphic Compositor with Clean UI
-- `AddCamera()` - Adds Camera
-- `AddDirectionalLight()` - Adds Directional Light
-- `AddSkybox()` - Adds Skybox
-- `AddMouseLookCamera()` - The camera entity can be moved using W, A, S, D, Q and E, arrow keys
+- [`SetupBase()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase(Stride.Engine.Game)) - Adds Graphics Compositor, Camera and Directional Light
+- [`SetupBase3DScene()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)) - Same as `SetupBase()` plus SkyBox, Ground, MouseLookCamera
+- [`AddGraphicsCompositor()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)) - Adds default `GraphicsCompositor`
+- [`AddCamera()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})) - Adds Camera
+- [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)) - Adds Directional Light
+- [`AddSkybox()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)) - Adds Skybox
+- [`AddMouseLookCamera()`]() - The camera entity can be moved using W, A, S, D, Q and E, arrow keys
 - `AddGround()` - Adds Ground
 - `AddGround(float size)` - Adds Ground with size
 - `NewDefaultMaterial` - Adds basic material
@@ -33,6 +33,10 @@ Some extensions return `Entity` so it can be further modified.
 - `AddGizmo()` - Debug. To see X,Y,Z arrows
 - `AddEntityNames()` - Debug. To see entity properties in the game
 - `AddPhysicsDebugger()` - Debug. To see colliders. Tracked here [Issue #9](https://github.com/stride3d/stride-community-toolkit/issues/9)
+
+## GraphicsCompositorExtensions.cs
+
+- [`AddCleanUIStage`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given @Stride.Rendering.Compositing.GraphicsCompositor`
 
 ## EntityComponentExtensions.cs
 

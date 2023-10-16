@@ -26,7 +26,7 @@ void SetupBase3DScene()
     game.AddGraphicsCompositor()
         .AddCleanUIStage() //optional
         .AddSceneRenderer(new MyraSceneRenderer());
-    game.AddMouseLookCamera(game.AddCamera());
+    game.AddCamera().AddMouseLookCamera();
     game.AddDirectionalLight();
     game.AddSkybox();
     game.AddGround();
