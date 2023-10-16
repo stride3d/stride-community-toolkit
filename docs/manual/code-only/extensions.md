@@ -21,7 +21,7 @@ Some extensions return `Entity` so it can be further modified.
 - [`AddCamera()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})) - Adds Camera
 - [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)) - Adds Directional Light
 - [`AddSkybox()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)) - Adds Skybox
-- `AddMouseLookCamera()` - The camera entity can be moved using W, A, S, D, Q and E, arrow keys
+- [`AddMouseLookCamera()`]() - The camera entity can be moved using W, A, S, D, Q and E, arrow keys
 - `AddGround()` - Adds Ground
 - `AddGround(float size)` - Adds Ground with size
 - `NewDefaultMaterial` - Adds basic material

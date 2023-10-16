@@ -5,17 +5,30 @@ using Stride.Rendering.Materials;
 
 namespace Stride.CommunityToolkit.Skyboxes;
 
-// Taken from Stride.Assets.Skyboxes
+/// <summary>
+/// Provides context for generating a skybox by encapsulating relevant services and rendering contexts.
+/// </summary>
+/// <remarks>
+/// This class is a simplified version tailored for code-only usage, inspired by the more complex SkyboxGeneratorContext class in the Stride.Assets.Skyboxes namespace.
+/// </remarks>
 public class SkyboxGeneratorContext : ShaderGeneratorContext
 {
-    public IServiceRegistry Services { get; private set; }
+    /// <summary>Gets the service registry.</summary>
+    public IServiceRegistry Services { get; }
 
-    public GraphicsDevice GraphicsDevice { get; private set; }
+    /// <summary>Gets the graphics device.</summary>
+    public GraphicsDevice GraphicsDevice { get; }
 
-    public RenderContext RenderContext { get; private set; }
+    /// <summary>Gets the render context.</summary>
+    public RenderContext RenderContext { get; }
 
-    public RenderDrawContext RenderDrawContext { get; private set; }
+    /// <summary>Gets the render draw context.</summary>
+    public RenderDrawContext RenderDrawContext { get; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SkyboxGeneratorContext"/> class using the provided game instance.
+    /// </summary>
+    /// <param name="game">The game instance used to access necessary services and contexts.</param>
     public SkyboxGeneratorContext(Game game)
     {
         Services = game.Services;
