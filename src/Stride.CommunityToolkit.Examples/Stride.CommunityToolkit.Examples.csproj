@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Pastel" Version="4.1.0" />
+        <PackageReference Include="Pastel" Version="4.2.0" />
         <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     </ItemGroup>
 
