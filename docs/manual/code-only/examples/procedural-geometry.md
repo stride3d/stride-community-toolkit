@@ -4,8 +4,7 @@ This example demonstrates how to create a procedural geometry mesh triangle, pla
 
 ![Stride UI Example](media/stride-game-engine-procedural-geometry.webp)
 
-For this example we use a new community class called MeshBuilder.
-it streamlines the creation of meshes using a simple builder syntax.
+For this example we use a new community class called @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder. It streamlines the creation of meshes using a simple builder syntax.
 
 ## Once there was a triangle:
 Like in all rendering examples let's start with a simple triangle.
