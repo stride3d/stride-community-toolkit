@@ -13,7 +13,6 @@ using var game = new Game();
 Entity? circleEntity = null;
 game.Run(start: Start, update: Update);
 
-
 void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
@@ -21,6 +20,7 @@ void Start(Scene rootScene)
     AddMesh(game.GraphicsDevice, rootScene, Vector3.Zero, GiveMeATriangle);
     AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, GiveMeAPlane);
 }
+
 void Update(Scene rootScene, GameTime gameTime)
 {
     var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * 47) + 3;
