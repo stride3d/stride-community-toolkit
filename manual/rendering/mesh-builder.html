@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MeshBuilder | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MeshBuilder | Stride Manual ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/rendering/mesh-builder.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module">
+    import options from './../../public/main.js'
+    import { init } from './../../public/docfx.min.js'
+    init(options)
+  </script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="meshbuilder">MeshBuilder</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p>The <code>MeshBuilder</code> is a utility class allowing dynamic creation of meshes at runtime. Acting as a wrapper around the <code>Mesh</code> class, it provides a simpler API for defining the mesh layout and data.</p>
+<h2 id="once-there-was-a-triangle">Once there was a triangle</h2>
+<p>Like in all rendering examples let's start with a simple triangle.</p>
+<h2 id="vertexelement"><code>VertexElement</code></h2>
+<p>A vertex element is a value assigned to a specific vertex.
+In Stride we can use a lot of different types to define our data some of them are <code>Vector3</code>, <code>Vector4</code>, <code>Color</code>, <code>Int</code>, <code>Float</code>, <code>Half</code> and more.</p>
+<p>We need to tell Stride how we want layout this data so our shader can read our various values.
+This is where vertex elements come in. They define a <code>semanticName</code>, <code>semanticIndex</code>, <code>offset</code> and a <code>size</code>.</p>
+<p>By default Stride allows you to define structs for your data or to use custom buffers for your data.
+For most use-cases this is probably fine and the easier approach compared to a mesh builder.</p>
+<p>However if you need to define your data dynamically or want a generalized method here we go.</p>
+<h2 id="meshbuilder-1"><code>MeshBuilder</code></h2>
+<p>The <a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html">MeshBuilder</a> abstracts away a lot of complexity behind custom buffers, type erasure, memory allocation and instead
+provides you with a simpler builder API to define your mesh dynamically.</p>
+<p>It uses the same concepts as Stride so you still have to define your layout manually but the process is easier and you don't need to worry about the memory layout yourself.
+To use a <code>MeshBuilder</code> just create a new instance.</p>
+<pre><code class="lang-csharp">using var meshBuilder = new MeshBuilder()
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Notice the <code>using</code> at the front. This part is crucial as you should always dispose of your mesh builder when it's no longer needed. The builder utilizes pooling behind the scenes, and failing to dispose of it prevents the return of internal buffers, which can lead to significant performance degradation.</p>
+</div>
+<h2 id="layout">Layout</h2>
+<p>As we discussed earlier we need to tell the <code>MeshBuilder</code> which data types and fields we want to use.
+For this we use the various <code>With...</code> methods.</p>
+<h3 id="primitive-type">Primitive Type</h3>
+<p>First we need to select a primitive type in our example we create a bunch of triangles so we use this code:</p>
+<pre><code class="lang-csharp">meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+</code></pre>
+<h3 id="indexing">Indexing</h3>
+<p>The mesh builder supports three types of indexing, <code>None</code>, <code>Int16</code> or <code>Int32</code>.
+In our case we definitely don't need more than 32k indices so we can safely use the <code>Int16</code> version.</p>
+<pre><code class="lang-csharp">meshBuilder.WithIndexType(IndexingType.Int16);
+</code></pre>
+<h2 id="elements">Elements</h2>
+<p>For our example we will use a vertex with a <code>position</code> and a <code>color</code> element.</p>
+<pre><code class="lang-csharp">var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+var color = meshBuilder.WithColor&lt;Color&gt;();
+</code></pre>
+<p>These methods return the element index we need when we set our actual values.
+We use a <code>Vector3</code> as our vertex position and a <code>Color</code> for our vertex color.
+Other types would work as well but these are very common so we will use them as well.</p>
+<h2 id="vertices">Vertices</h2>
+<p>Next we define our vertices. For that we use a new method <a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_AddVertex">AddVertex()</a>.
+This will add a new vertex to our builder and allows us to use the <code>Get/SetElement</code> methods.</p>
+<p>You can also declare multiple vertices before setting the actual values but this is the simplest way for now.</p>
+<pre><code class="lang-csharp">meshBuilder.AddVertex();
+</code></pre>
+<p>After this we can set our element data. For this we use the <a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html#Stride_CommunityToolkit_Rendering_Utilities_MeshBuilder_SetElement__1_System_Int32_System_Int32___0_">SetElement()</a> method.
+It expects an element index (which we received from <code>WithPosition</code> and <code>WithColor</code> earlier) as well as your desired value.</p>
+<pre><code class="lang-csharp">meshBuilder.SetElement(position, new Vector3(0, 0, 0));
+meshBuilder.SetElement(color, Color.Red);
+</code></pre>
+<p>We repeat this for the other two triangle points as well.</p>
+<pre><code class="lang-csharp">meshBuilder.AddVertex();
+meshBuilder.SetElement(position, new Vector3(1, 0, 0));
+meshBuilder.SetElement(color, Color.Green);
+
+meshBuilder.AddVertex();
+meshBuilder.SetElement(position, new Vector3(.5f, 1, 0));
+meshBuilder.SetElement(color, Color.Blue);
+</code></pre>
+<h2 id="indices">Indices</h2>
+<p>Next we need to tell the <code>MeshBuilder</code> how we want to connect the vertices.
+We configured indexing for our builder so we need to do this explicitly.
+For a simple example like this you could also completely skip the indexing part and use <code>IndexingType.None</code> instead.</p>
+<p>The winding order in Stride is counter-clockwise so we use these indices.</p>
+<pre><code class="lang-csharp">meshBuilder.AddIndex(0);
+meshBuilder.AddIndex(2);
+meshBuilder.AddIndex(1);
+</code></pre>
+<h2 id="mesh">Mesh</h2>
+<p>The only thing left is building the actual mesh. For this we use this method.
+It expects a graphics device as an argument. If you call this from a script this is usually available for you using the <code>GraphicsDevice</code> property of your script.</p>
+<pre><code class="lang-csharp">meshBuilder.ToMeshDraw(GraphicsDevice);
+</code></pre>
+<h3 id="display">Display</h3>
+<p>To show this <code>MeshDraw</code> on screen we create a <code>ModelComponent</code> and add our <code>MeshDraw</code> as new model.
+We also need to define a material to use our vertex colors on screen. Else the Triangle would just be white.</p>
+<pre><code>var model = new Model
+{
+    new MaterialInstance {
+        Material = Material.New(graphicsDevice, new MaterialDescriptor {
+            Attributes = new MaterialAttributes {
+                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                Diffuse = new MaterialDiffuseMapFeature {
+                    DiffuseMap = new ComputeVertexStreamColor()
+                },
+            }
+        })
+    },
+    new Mesh {
+        Draw = meshBuilder.ToMeshDraw(graphicsDevice),
+        MaterialIndex = 0
+    }
+}
+</code></pre>
+<p>Congrats 🥳 you got a triangle.</p>
+<h2 id="example">Example</h2>
+<p>For a more comprehensive usage of <code>MeshBuilder</code>, explore our <a href="../code-only/examples/procedural-geometry.html">Procedural Geometry</a> example where you'll find detailed code on creating complex geometries dynamically.</p>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/rendering/mesh-builder.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -98,13 +98,13 @@
 <p><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></p>
 <ul>
 <li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Scene__System_Action_Stride_Engine_Scene_Stride_Games_GameTime__"><code>Run()</code></a> - Initialising the game, use <code>start</code> and <code>update</code> params</li>
-<li><code>SetupBase()</code> - Adds Graphics Compositor, Camera and Directional Light</li>
-<li><code>SetupBase3DScene()</code> - Same as <code>SetupBase()</code> plus SkyBox, Ground, MouseLookCamera</li>
-<li><code>AddGraphicsCompositor()</code> - Adds Graphic Compositor with Clean UI</li>
-<li><code>AddCamera()</code> - Adds Camera</li>
-<li><code>AddDirectionalLight()</code> - Adds Directional Light</li>
-<li><code>AddSkybox()</code> - Adds Skybox</li>
-<li><code>AddMouseLookCamera()</code> - The camera entity can be moved using W, A, S, D, Q and E, arrow keys</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_Stride_Engine_Game_"><code>SetupBase()</code></a> - Adds Graphics Compositor, Camera and Directional Light</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_"><code>SetupBase3DScene()</code></a> - Same as <code>SetupBase()</code> plus SkyBox, Ground, MouseLookCamera</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGraphicsCompositor_Stride_Engine_Game_"><code>AddGraphicsCompositor()</code></a> - Adds default <code>GraphicsCompositor</code></li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__"><code>AddCamera()</code></a> - Adds Camera</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_"><code>AddDirectionalLight()</code></a> - Adds Directional Light</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_"><code>AddSkybox()</code></a> - Adds Skybox</li>
+<li><a href=""><code>AddMouseLookCamera()</code></a> - The camera entity can be moved using W, A, S, D, Q and E, arrow keys</li>
 <li><code>AddGround()</code> - Adds Ground</li>
 <li><code>AddGround(float size)</code> - Adds Ground with size</li>
 <li><code>NewDefaultMaterial</code> - Adds basic material</li>
@@ -116,6 +116,10 @@
 <li><code>AddGizmo()</code> - Debug. To see X,Y,Z arrows</li>
 <li><code>AddEntityNames()</code> - Debug. To see entity properties in the game</li>
 <li><code>AddPhysicsDebugger()</code> - Debug. To see colliders. Tracked here <a href="https://github.com/stride3d/stride-community-toolkit/issues/9">Issue #9</a></li>
+</ul>
+<h2 id="graphicscompositorextensionscs">GraphicsCompositorExtensions.cs</h2>
+<ul>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddCleanUIStage_Stride_Rendering_Compositing_GraphicsCompositor_"><code>AddCleanUIStage</code></a> - Adds a UI render stage and white/clean text effect to the given @Stride.Rendering.Compositing.GraphicsCompositor`</li>
 </ul>
 <h2 id="entitycomponentextensionscs">EntityComponentExtensions.cs</h2>
 <p>| <code>GetComponent()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find a class attached to an Entity that are not limited to type ScriptComponent |

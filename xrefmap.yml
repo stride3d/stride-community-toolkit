@@ -7,6 +7,83 @@ references:
   commentId: N:Stride.CommunityToolkit.Engine
   fullName: Stride.CommunityToolkit.Engine
   nameWithType: Stride.CommunityToolkit.Engine
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions
+  name: EntityExtensions
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html
+  commentId: T:Stride.CommunityToolkit.Engine.EntityExtensions
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions
+  nameWithType: EntityExtensions
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)
+  name: AddMouseLookCamera(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.AddMouseLookCamera(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera*
+  name: AddMouseLookCamera
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera
+  nameWithType: EntityExtensions.AddMouseLookCamera
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
+  name: DestroyEntity(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.DestroyEntity(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity*
+  name: DestroyEntity
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity
+  nameWithType: EntityExtensions.DestroyEntity
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent*
+  name: GetComponent
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent
+  nameWithType: EntityExtensions.GetComponent
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)
+  name: GetComponent<T>(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent__1_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)
+  name.vb: GetComponent(Of T)(Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent<T>(Stride.Engine.Entity)
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent(Of T)(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.GetComponent<T>(Entity)
+  nameWithType.vb: EntityExtensions.GetComponent(Of T)(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents*
+  name: GetComponents
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents
+  nameWithType: EntityExtensions.GetComponents
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)
+  name: GetComponents<T>(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents__1_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)
+  name.vb: GetComponents(Of T)(Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents<T>(Stride.Engine.Entity)
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents(Of T)(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.GetComponents<T>(Entity)
+  nameWithType.vb: EntityExtensions.GetComponents(Of T)(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)
+  name: WorldPosition(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.WorldPosition(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition*
+  name: WorldPosition
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition
+  nameWithType: EntityExtensions.WorldPosition
 - uid: Stride.CommunityToolkit.Engine.GameExtensions
   name: GameExtensions
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html
@@ -74,22 +151,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGround
   nameWithType: GameExtensions.AddGround
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)
-  name: AddMouseLookCamera(Game, Entity?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddMouseLookCamera_Stride_Engine_Game_Stride_Engine_Entity_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)
-  name.vb: AddMouseLookCamera(Game, Entity)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game, Stride.Engine.Entity?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game, Stride.Engine.Entity)
-  nameWithType: GameExtensions.AddMouseLookCamera(Game, Entity?)
-  nameWithType.vb: GameExtensions.AddMouseLookCamera(Game, Entity)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera*
-  name: AddMouseLookCamera
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddMouseLookCamera_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera
-  nameWithType: GameExtensions.AddMouseLookCamera
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
   name: AddProfiler(Game, string?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_
@@ -1447,70 +1508,6 @@ references:
   isSpec: "True"
   fullName: Stride.Engine.AnimationComponentExtensions.PlayAnimation
   nameWithType: AnimationComponentExtensions.PlayAnimation
-- uid: Stride.Engine.EntityComponentExtensions
-  name: EntityComponentExtensions
-  href: api/Stride.Engine.EntityComponentExtensions.html
-  commentId: T:Stride.Engine.EntityComponentExtensions
-  fullName: Stride.Engine.EntityComponentExtensions
-  nameWithType: EntityComponentExtensions
-- uid: Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)
-  name: DestroyEntity(Entity)
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_DestroyEntity_Stride_Engine_Entity_
-  commentId: M:Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)
-  fullName: Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)
-  nameWithType: EntityComponentExtensions.DestroyEntity(Entity)
-- uid: Stride.Engine.EntityComponentExtensions.DestroyEntity*
-  name: DestroyEntity
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_DestroyEntity_
-  commentId: Overload:Stride.Engine.EntityComponentExtensions.DestroyEntity
-  isSpec: "True"
-  fullName: Stride.Engine.EntityComponentExtensions.DestroyEntity
-  nameWithType: EntityComponentExtensions.DestroyEntity
-- uid: Stride.Engine.EntityComponentExtensions.GetComponent*
-  name: GetComponent
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponent_
-  commentId: Overload:Stride.Engine.EntityComponentExtensions.GetComponent
-  isSpec: "True"
-  fullName: Stride.Engine.EntityComponentExtensions.GetComponent
-  nameWithType: EntityComponentExtensions.GetComponent
-- uid: Stride.Engine.EntityComponentExtensions.GetComponent``1(Stride.Engine.Entity)
-  name: GetComponent<T>(Entity)
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponent__1_Stride_Engine_Entity_
-  commentId: M:Stride.Engine.EntityComponentExtensions.GetComponent``1(Stride.Engine.Entity)
-  name.vb: GetComponent(Of T)(Entity)
-  fullName: Stride.Engine.EntityComponentExtensions.GetComponent<T>(Stride.Engine.Entity)
-  fullName.vb: Stride.Engine.EntityComponentExtensions.GetComponent(Of T)(Stride.Engine.Entity)
-  nameWithType: EntityComponentExtensions.GetComponent<T>(Entity)
-  nameWithType.vb: EntityComponentExtensions.GetComponent(Of T)(Entity)
-- uid: Stride.Engine.EntityComponentExtensions.GetComponents*
-  name: GetComponents
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponents_
-  commentId: Overload:Stride.Engine.EntityComponentExtensions.GetComponents
-  isSpec: "True"
-  fullName: Stride.Engine.EntityComponentExtensions.GetComponents
-  nameWithType: EntityComponentExtensions.GetComponents
-- uid: Stride.Engine.EntityComponentExtensions.GetComponents``1(Stride.Engine.Entity)
-  name: GetComponents<T>(Entity)
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_GetComponents__1_Stride_Engine_Entity_
-  commentId: M:Stride.Engine.EntityComponentExtensions.GetComponents``1(Stride.Engine.Entity)
-  name.vb: GetComponents(Of T)(Entity)
-  fullName: Stride.Engine.EntityComponentExtensions.GetComponents<T>(Stride.Engine.Entity)
-  fullName.vb: Stride.Engine.EntityComponentExtensions.GetComponents(Of T)(Stride.Engine.Entity)
-  nameWithType: EntityComponentExtensions.GetComponents<T>(Entity)
-  nameWithType.vb: EntityComponentExtensions.GetComponents(Of T)(Entity)
-- uid: Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)
-  name: WorldPosition(Entity)
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_WorldPosition_Stride_Engine_Entity_
-  commentId: M:Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)
-  fullName: Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)
-  nameWithType: EntityComponentExtensions.WorldPosition(Entity)
-- uid: Stride.Engine.EntityComponentExtensions.WorldPosition*
-  name: WorldPosition
-  href: api/Stride.Engine.EntityComponentExtensions.html#Stride_Engine_EntityComponentExtensions_WorldPosition_
-  commentId: Overload:Stride.Engine.EntityComponentExtensions.WorldPosition
-  isSpec: "True"
-  fullName: Stride.Engine.EntityComponentExtensions.WorldPosition
-  nameWithType: EntityComponentExtensions.WorldPosition
 - uid: Stride.Engine.ModelComponentExtensions
   name: ModelComponentExtensions
   href: api/Stride.Engine.ModelComponentExtensions.html

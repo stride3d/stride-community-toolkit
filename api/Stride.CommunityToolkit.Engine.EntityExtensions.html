@@ -2,10 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Class EntityComponentExtensions
+      <title>Class EntityExtensions
  | Stride Community Toolkit </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Class EntityComponentExtensions
+      <meta name="title" content="Class EntityExtensions
  | Stride Community Toolkit ">
       
       <link rel="icon" href="../favicon.ico">
@@ -17,7 +17,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_Engine_EntityComponentExtensions.md&amp;value=---%0Auid%3A%20Stride.Engine.EntityComponentExtensions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Engine_EntityExtensions.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Engine.EntityExtensions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -88,25 +88,26 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Stride.Engine.EntityComponentExtensions">
+        <article data-uid="Stride.CommunityToolkit.Engine.EntityExtensions">
 
 
 
-  <h1 id="Stride_Engine_EntityComponentExtensions" data-uid="Stride.Engine.EntityComponentExtensions" class="text-break">
-    Class EntityComponentExtensions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/EntityComponentExtensions.cs/#L3"><i class="bi bi-code-slash"></i></a>
+  <h1 id="Stride_CommunityToolkit_Engine_EntityExtensions" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions" class="text-break">
+    Class EntityExtensions
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L9"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
-    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.Engine.html">Engine</a></dd></dl>
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Engine.html">Engine</a></dd></dl>
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to simplify common operations.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class EntityComponentExtensions</code></pre>
+    <pre><code class="lang-csharp hljs">public static class EntityExtensions</code></pre>
   </div>
 
 
@@ -116,7 +117,7 @@
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-      <div><span class="xref">EntityComponentExtensions</span></div>
+      <div><span class="xref">EntityExtensions</span></div>
     </dd>
   </dl>
 
@@ -132,14 +133,51 @@
 </h2>
 
 
-  <a id="Stride_Engine_EntityComponentExtensions_DestroyEntity_" data-uid="Stride.Engine.EntityComponentExtensions.DestroyEntity*"></a>
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera*"></a>
 
-  <h3 id="Stride_Engine_EntityComponentExtensions_DestroyEntity_Stride_Engine_Entity_" data-uid="Stride.Engine.EntityComponentExtensions.DestroyEntity(Stride.Engine.Entity)">
-  DestroyEntity(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/EntityComponentExtensions.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)">
+  AddMouseLookCamera(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L19"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Destroys the entity that calls this method.</p>
+  <div class="markdown level1 summary"><p>Adds a mouse-look camera controller to the specified entity, enabling camera movement and rotation through various input methods.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void AddMouseLookCamera(this Entity entity)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity to which the camera controller will be added.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_Stride_Engine_Entity__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
+Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)">
+  DestroyEntity(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Attempts to remove the entity from its scene, destroying it.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -156,7 +194,8 @@
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p>True if the entity was successfully removed; otherwise, false.</p>
+</dd>
   </dl>
 
 
@@ -169,19 +208,19 @@
 
 
 
-  <a id="Stride_Engine_EntityComponentExtensions_GetComponent_" data-uid="Stride.Engine.EntityComponentExtensions.GetComponent*"></a>
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent*"></a>
 
-  <h3 id="Stride_Engine_EntityComponentExtensions_GetComponent__1_Stride_Engine_Entity_" data-uid="Stride.Engine.EntityComponentExtensions.GetComponent``1(Stride.Engine.Entity)">
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)">
   GetComponent&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/EntityComponentExtensions.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L29"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Definitely not a rip off of Unity's GetComponent.</p>
+  <div class="markdown level1 summary"><p>Retrieves the first component of the specified type from the entity.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static T GetComponent&lt;T&gt;(this Entity entity)</code></pre>
+    <pre><code class="lang-csharp hljs">public static T? GetComponent&lt;T&gt;(this Entity entity)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -193,13 +232,15 @@
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><span class="xref">T</span></dt>
-    <dd></dd>
+    <dd><p>The first component of the specified type, or null if no such component exists.</p>
+</dd>
   </dl>
 
   <h4 class="section">Type Parameters</h4>
   <dl class="parameters">
     <dt><code>T</code></dt>
-    <dd></dd>
+    <dd><p>The type of component to retrieve.</p>
+</dd>
   </dl>
 
 
@@ -211,14 +252,14 @@
 
 
 
-  <a id="Stride_Engine_EntityComponentExtensions_GetComponents_" data-uid="Stride.Engine.EntityComponentExtensions.GetComponents*"></a>
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents*"></a>
 
-  <h3 id="Stride_Engine_EntityComponentExtensions_GetComponents__1_Stride_Engine_Entity_" data-uid="Stride.Engine.EntityComponentExtensions.GetComponents``1(Stride.Engine.Entity)">
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)">
   GetComponents&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/EntityComponentExtensions.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L41"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets all components of type T</p>
+  <div class="markdown level1 summary"><p>Retrieves all components of the specified type from the entity.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -235,13 +276,15 @@
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
-    <dd></dd>
+    <dd><p>An IEnumerable of components of the specified type.</p>
+</dd>
   </dl>
 
   <h4 class="section">Type Parameters</h4>
   <dl class="parameters">
     <dt><code>T</code></dt>
-    <dd></dd>
+    <dd><p>The type of components to retrieve.</p>
+</dd>
   </dl>
 
 
@@ -253,11 +296,11 @@
 
 
 
-  <a id="Stride_Engine_EntityComponentExtensions_WorldPosition_" data-uid="Stride.Engine.EntityComponentExtensions.WorldPosition*"></a>
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition*"></a>
 
-  <h3 id="Stride_Engine_EntityComponentExtensions_WorldPosition_Stride_Engine_Entity_" data-uid="Stride.Engine.EntityComponentExtensions.WorldPosition(Stride.Engine.Entity)">
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)">
   WorldPosition(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/EntityComponentExtensions.cs/#L54"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L71"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>An easier way to get world position rather than getting <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/core/Stride.Core.Mathematics/Matrix.cs">TranslationVector</a> from <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/TransformComponent.cs">WorldMatrix</a></p>
@@ -296,7 +339,7 @@
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/EntityComponentExtensions.cs/#L3" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L9" class="edit-link">Edit this page</a>
         </div>
 
         

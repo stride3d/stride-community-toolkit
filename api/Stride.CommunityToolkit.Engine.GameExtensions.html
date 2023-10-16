@@ -322,41 +322,6 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
 
 
 
-  <a id="Stride_CommunityToolkit_Engine_GameExtensions_AddMouseLookCamera_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddMouseLookCamera_Stride_Engine_Game_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddMouseLookCamera(Stride.Engine.Game,Stride.Engine.Entity)">
-  AddMouseLookCamera(Game, Entity?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L255"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
-Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void AddMouseLookCamera(this Game game, Entity? cameraEntity)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
-    <dt><code>cameraEntity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-
-
-
-
   <a id="Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)">
@@ -400,10 +365,11 @@ Rotation is achieved using the Numpad, the mouse while holding the right mouse b
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)">
   AddSkybox(Game, string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L223"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L234"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -413,15 +379,18 @@ Rotation is achieved using the Numpad, the mouse while holding the right mouse b
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The game instance to which the skybox will be added.</p>
+</dd>
     <dt><code>entityName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
+    <dd><p>The name for the skybox entity. If null, a default name will be used.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The created skybox entity.</p>
+</dd>
   </dl>
 
 
@@ -430,6 +399,11 @@ Rotation is achieved using the Numpad, the mouse while holding the right mouse b
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The skybox texture is loaded from the Resources folder, and is used to generate a skybox using the <a class="xref" href="Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html">SkyboxGenerator</a>.
+A new entity is created with a <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/BackgroundComponent.cs">BackgroundComponent</a> and a <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/LightComponent.cs">LightComponent</a>, both configured for the skybox, and is added to the game scene.
+The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
+</div>
 
 
 

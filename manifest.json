@@ -27,6 +27,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.EntityExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.EntityExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.GameExtensions.yml",
       "output": {
         ".html": {
@@ -231,16 +241,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.Engine.AnimationComponentExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Engine.EntityComponentExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Engine.EntityComponentExtensions.html"
         }
       },
       "version": ""
@@ -574,6 +574,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/rendering/mesh-builder.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/rendering/mesh-builder.html"
         }
       },
       "version": ""
