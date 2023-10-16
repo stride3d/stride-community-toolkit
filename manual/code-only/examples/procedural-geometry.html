@@ -91,17 +91,121 @@
 
 <p>This example demonstrates how to create a procedural geometry mesh triangle, plane and circle and add them to a scene.</p>
 <p><img src="media/stride-game-engine-procedural-geometry.webp" alt="Stride UI Example"></p>
+<p>For this example we use a new community class called MeshBuilder.
+it streamlines the creation of meshes using a simple builder syntax.</p>
+<h2 id="once-there-was-a-triangle">Once there was a triangle:</h2>
+<p>Like in all rendering examples let's start with a simple triangle.</p>
+<h3 id="vertexelement">VertexElement</h3>
+<p>A vertex element is a value assigned to a specific vertex.
+In Stride we can use a lot of different types to define our data some of them are <code>Vector3</code>, <code>Vector4</code>, <code>Color</code>, <code>Int</code>, <code>Float</code>, <code>Half</code> and more.</p>
+<p>We need to tell stride how we want layout this data so our shader can read our various values.
+This is where Vertex elements come in. They define a SemanticName, SemanticIndex, Offset and a Size.</p>
+<p>By default stride allows you to define structs for your data or to use custom buffers for your data.
+For most use-cases this is probably fine and the easier approach compared to a mesh builder.</p>
+<p>However if you need to define your data dynamically or want a generalized method here we go.</p>
+<h3 id="meshbuilder">MeshBuilder</h3>
+<p>The meshbuilder abstracts away a lot of complexity behind custom buffers, type erasure, memory allocation and instead
+provides you with a simpler builder API to define your mesh dynamically.</p>
+<p>It uses the same concepts as Stride so you still have to define your layout manually but the process is easier and you don't need to worry about the memory layout yourself.
+To use a MeshBuilder just create a new instance.</p>
+<pre><code class="lang-csharp">using var meshBuilder = new MeshBuilder()
+</code></pre>
+<p><strong>Note</strong>:
+Notice the using at the front. This part is important always dispose your mesh builder if you don't need it anymore.
+The builder uses pooling behind the scenes and if you don't dispose it it can never return the internal buffers which can lead to significant performance degregation.</p>
+<h3 id="layout">Layout:</h3>
+<p>As we discussed earlier we need to tell the <code>MeshBuilder</code> which data types and fields we want to use.
+For this we use the various <code>With...</code> methods.</p>
+<h5 id="primitive-type">Primitive Type:</h5>
+<p>First we need to select a primitive type in our example we create a bunch of triangles so we use this code:</p>
+<pre><code class="lang-csharp">meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+</code></pre>
+<h5 id="indexing">Indexing:</h5>
+<p>The mesh builder supports three types of indexing, <code>None</code>, <code>Int16</code> or <code>Int32</code>.
+In our case we definitely don't need more than 32k indices so we can safely use the Int16 version.</p>
+<pre><code class="lang-csharp">meshBuilder.WithIndexType(IndexingType.Int16);
+</code></pre>
+<h3 id="elements">Elements:</h3>
+<p>For our example we will use a Vertex with a Position and a Color element.</p>
+<pre><code class="lang-csharp">var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+var color = meshBuilder.WithColor&lt;Color&gt;();
+</code></pre>
+<p>These methods return the element index we need when we set our actual values.
+We use a <code>Vector3</code> as our vertex position and a <code>Color</code> for our vertex color.
+Other types would work as well but these are very common so we will use them as well.</p>
+<h3 id="vertices">Vertices:</h3>
+<p>Next we define our vertices. For that we use a new method <code>AddVertex</code>.
+This will add a new vertex to our builder and allows us to use the <code>Get/SetElement</code> methods.</p>
+<p>You can also declare multiple Vertices before setting the actual values but this is the simplest way for now.</p>
+<pre><code class="lang-csharp">meshBuilder.AddVertex();
+</code></pre>
+<p>After this we can set our element data. For this we use the <code>SetElement</code> method.
+It expects an element index (which we received from <code>WithPosition</code> and <code>WithColor</code> earlier) as well as your desired value.</p>
+<pre><code class="lang-csharp">meshBuilder.SetElement(position, new Vector3(0, 0, 0));
+meshBuilder.SetElement(color, Color.Red);
+</code></pre>
+<p>We repeat this for the other two triangle points as well.</p>
+<pre><code class="lang-csharp">meshBuilder.AddVertex();
+meshBuilder.SetElement(position, new Vector3(1, 0, 0));
+meshBuilder.SetElement(color, Color.Green);
+
+meshBuilder.AddVertex();
+meshBuilder.SetElement(position, new Vector3(.5f, 1, 0));
+meshBuilder.SetElement(color, Color.Blue);
+</code></pre>
+<h3 id="indices">Indices:</h3>
+<p>Next we need to tell the <code>MeshBuilder</code> how we want to connect the vertices.
+We configured indexing for our builder so we need to do this explicitly.
+For a simple example like this you could also completely skip the indexing part and use <code>IndexingType.None</code> instead.</p>
+<p>the winding order in stride is counter-clockwise so we use these indices.</p>
+<pre><code class="lang-csharp">meshBuilder.AddIndex(0);
+meshBuilder.AddIndex(2);
+meshBuilder.AddIndex(1);
+</code></pre>
+<h3 id="mesh">Mesh:</h3>
+<p>The only thing left is building the actual mesh. For this we use this method.
+It expects a graphics device as an argument. If you call this from a script this is usually avalable for you using the <code>GraphicsDevice</code> property of your script.</p>
+<pre><code class="lang-csharp">meshBuilder.ToMeshDraw(GraphicsDevice)
+</code></pre>
+<h5 id="display">Display</h5>
+<p>To show this <code>MeshDraw</code> on screen we create a <code>ModelComponent</code> and add our <code>MeshDraw</code> as new model.
+We also need to define a material to use our vertex colors on screen. Else the Triangle would just be white.</p>
+<pre><code>var model = new Model
+{
+    new MaterialInstance {
+        Material = Material.New(graphicsDevice, new MaterialDescriptor {
+            Attributes = new MaterialAttributes {
+                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                Diffuse = new MaterialDiffuseMapFeature {
+                    DiffuseMap = new ComputeVertexStreamColor()
+                },
+            }
+        })
+    },
+    new Mesh {
+        Draw = meshBuilder.ToMeshDraw(graphicsDevice),
+        MaterialIndex = 0
+    }
+}
+</code></pre>
+<p>Congrats you got a triangle.
+For more examples take a look at the full example:</p>
 <p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_ProceduralGeometry">GitHub</a>.</p>
 <pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
+using Stride.Rendering.Materials;
+using Stride.Rendering.Materials.ComputeColors;
 
 using var game = new Game();
 
-game.Run(start: Start);
+Entity? circleEntity = null;
+game.Run(start: Start, update: Update);
+
 
 void Start(Scene rootScene)
 {
@@ -109,24 +213,33 @@ void Start(Scene rootScene)
 
     AddMesh(game.GraphicsDevice, rootScene, Vector3.Zero, GiveMeATriangle);
     AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, GiveMeAPlane);
-    AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, GiveMeACircle);
+}
+void Update(Scene rootScene, GameTime gameTime)
+{
+    var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * 47) + 3;
+    circleEntity?.DestroyEntity();
+    circleEntity = AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, b =&gt; GiveMeACircle(b, segments));
 }
 
 void GiveMeATriangle(MeshBuilder meshBuilder)
 {
-    meshBuilder.WithIndexType(IndexingType.Int32);
+    meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
     var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+    var color = meshBuilder.WithColor&lt;Color&gt;();
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(0, 0, 0));
+    meshBuilder.SetElement(color, Color.Red);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(1, 0, 0));
+    meshBuilder.SetElement(color, Color.Green);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(.5f, 1, 0));
+    meshBuilder.SetElement(color, Color.Blue);
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(2);
@@ -135,22 +248,27 @@ void GiveMeATriangle(MeshBuilder meshBuilder)
 
 void GiveMeAPlane(MeshBuilder meshBuilder)
 {
-    meshBuilder.WithIndexType(IndexingType.Int32);
+    meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
     var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+    var color = meshBuilder.WithColor&lt;Color&gt;();
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(0, 0, 0));
+    meshBuilder.SetElement(color, Color.Red);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(0, 1, 0));
+    meshBuilder.SetElement(color, Color.Green);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(1, 1, 0));
+    meshBuilder.SetElement(color, Color.Blue);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(1, 0, 0));
+    meshBuilder.SetElement(color, Color.Yellow);
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(1);
@@ -161,25 +279,28 @@ void GiveMeAPlane(MeshBuilder meshBuilder)
     meshBuilder.AddIndex(3);
 }
 
-void GiveMeACircle(MeshBuilder meshBuilder)
+void GiveMeACircle(MeshBuilder meshBuilder, int segments)
 {
-    meshBuilder.WithIndexType(IndexingType.Int32);
+    meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
     var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+    var color = meshBuilder.WithColor&lt;Color4&gt;();
 
-    const int segments = 48;
     for (var i = 0; i &lt; segments; i++)
     {
         var x = (float)Math.Sin(Math.Tau / segments * i) / 2;
         var y = (float)Math.Cos(Math.Tau / segments * i) / 2;
+        var hsl = new ColorHSV(360f / segments * i, 1, 1, 1).ToColor();
 
         meshBuilder.AddVertex();
         meshBuilder.SetElement(position, new Vector3(x + .5f, y + .5f, 0));
+        meshBuilder.SetElement(color, hsl);
     }
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(.5f, .5f, 0));
+    meshBuilder.SetElement(color, Color.Black.ToColor4());
 
     for (var i = 0; i &lt; segments; i++)
     {
@@ -189,7 +310,7 @@ void GiveMeACircle(MeshBuilder meshBuilder)
     }
 }
 
-void AddMesh(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, Action&lt;MeshBuilder&gt; build)
+Entity AddMesh(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, Action&lt;MeshBuilder&gt; build)
 {
     using var meshBuilder = new MeshBuilder();
     build(meshBuilder);
@@ -197,12 +318,23 @@ void AddMesh(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, A
     var entity = new Entity { Scene = rootScene, Transform = { Position = position } };
     var model = new Model
     {
+        new MaterialInstance {
+            Material = Material.New(graphicsDevice, new MaterialDescriptor {
+                Attributes = new MaterialAttributes {
+                    DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                    Diffuse = new MaterialDiffuseMapFeature {
+                        DiffuseMap = new ComputeVertexStreamColor()
+                    },
+                }
+            })
+        },
         new Mesh {
             Draw = meshBuilder.ToMeshDraw(graphicsDevice),
             MaterialIndex = 0
         }
     };
     entity.Add(new ModelComponent { Model = model });
+    return entity;
 }
 </code></pre></article>
 
