@@ -21,3 +21,13 @@ The Stride Community Toolkit is an open-source, MIT licensed project hosted on G
 ## 🎮 Game Engine Repository
 
 Access the source code or contribute 🤝 to the Stride Game Engine on its [GitHub Repository](https://github.com/stride3d/stride). Explore a comprehensive guide on the [Stride Docs](https://doc.stride3d.net/) website.
+
+## 👥 Contributors
+
+This section highlights the amazing contributors who have helped enhance the Stride Community Toolkit with their efforts.
+
+- [DotLogix](https://github.com/dotlogix): MeshBuilder
+- [Doprez](https://github.com/Doprez): Extensions
+- [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
+- [Vaclav Elias](https://github.com/VaclavElias): Code only approach implementation, toolkit docs
+- [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
