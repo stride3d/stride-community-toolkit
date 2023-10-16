@@ -41,5 +41,9 @@
   href: camera-extensions/index.md
 - name: Game Extensions
   href: game-extensions/index.md
+- name: Rendering
+  items:
+  - name: MeshBuilder
+    href: rendering/mesh-builder.md
 - name: Troubleshooting
   href: troubleshooting.md

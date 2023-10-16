@@ -26,7 +26,7 @@ Access the source code or contribute 🤝 to the Stride Game Engine on its [GitH
 
 This section highlights the amazing contributors who have helped enhance the Stride Community Toolkit with their efforts.
 
-- [DotLogix](https://github.com/dotlogix): MeshBuilder
+- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, docs
 - [Doprez](https://github.com/Doprez): Extensions
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
 - [Vaclav Elias](https://github.com/VaclavElias): Code only approach implementation, toolkit docs

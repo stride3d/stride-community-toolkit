@@ -1,12 +1,15 @@
+using Stride.Graphics;
+using Stride.Rendering;
 using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Stride.Graphics;
-using Stride.Rendering;
 using Buffer = System.Buffer;
 
 namespace Stride.CommunityToolkit.Rendering.Utilities;
 
+/// <summary>
+/// A utility class for building meshes by defining vertex elements with different data types and primitives types.
+/// </summary>
 public class MeshBuilder : IDisposable
 {
     /// <summary>
