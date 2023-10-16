@@ -96,7 +96,7 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddMouseLookCamera(game.AddCamera());
+        AddMouseLookCamera(game.AddCamera());
         game.AddDirectionalLight();
         game.AddSkybox();
         game.AddGround();
@@ -255,17 +255,6 @@ public static class GameExtensions
         game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
 
         return entity;
-    }
-
-    /// <summary>
-    /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
-    /// Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.
-    /// </summary>
-    /// <param name="game"></param>
-    /// <param name="cameraEntityName"></param>
-    public static void AddMouseLookCamera(this Game game, Entity? cameraEntity)
-    {
-        cameraEntity?.Add(new BasicCameraController());
     }
 
     /// <summary>
