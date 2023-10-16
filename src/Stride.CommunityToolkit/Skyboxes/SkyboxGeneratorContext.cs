@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Skyboxes;
 /// Provides context for generating a skybox by encapsulating relevant services and rendering contexts.
 /// </summary>
 /// <remarks>
-/// This class is a simplified version tailored for code-only usage, inspired by the more complex SkyboxGeneratorContext class in the Stride.Assets.Skyboxes namespace.
+/// This class is a simplified version tailored for code-only usage, inspired by the more complex `SkyboxGeneratorContext` class in the `Stride.Assets.Skyboxes` namespace.
 /// </remarks>
 public class SkyboxGeneratorContext : ShaderGeneratorContext
 {
