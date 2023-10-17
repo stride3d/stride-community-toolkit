@@ -4,7 +4,15 @@ using Stride.Profiling;
 
 namespace Stride.CommunityToolkit.Scripts;
 
-// Taken from Stride.Assets.Presentation, Assets -> Scripts -> Utility
+/// <summary>
+/// Provides in-game profiling functionality, allowing the monitoring and analysis of game performance in real time.
+/// This script facilitates the toggling of profiling, setting display preferences, and navigating through profiling data.
+/// </summary>
+/// <remarks>
+/// This class provides keyboard shortcuts for toggling the profiler on/off with Shift + Ctrl + P,
+/// changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
+/// and adjusting the refresh interval with the plus and minus keys.
+/// </remarks>
 public class GameProfiler : AsyncScript
 {
     /// <summary>

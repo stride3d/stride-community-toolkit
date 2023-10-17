@@ -21,28 +21,12 @@ Some extensions return `Entity` so it can be further modified.
 - [`AddCamera()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})) - Adds camera
 - [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)) - Adds directional light
 - [`AddSkybox()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)) - Adds skybox
-- `AddGround()` - Adds ground
-- `AddGround(float size)` - Adds Ground with size
-- `NewDefaultMaterial` - Adds basic material
-- `CreatePrimitive()` - Simplifies primitives creation
-- `AddProfiler()` - Attaches profile
-
-![ToDo](https://img.shields.io/badge/status-todo-orange)
-
-- `AddGizmo()` - Debug. To see X,Y,Z arrows
-- `AddEntityNames()` - Debug. To see entity properties in the game
-- `AddPhysicsDebugger()` - Debug. To see colliders. Tracked here [Issue #9](https://github.com/stride3d/stride-community-toolkit/issues/9)
+- [`AddGround()`]() - Adds ground
+- [`AddGround(float size)`]() - Adds Ground with size
 
 ## GraphicsCompositorExtensions.cs
 
 - [`AddCleanUIStage`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given @Stride.Rendering.Compositing.GraphicsCompositor`
-
-## EntityComponentExtensions.cs
-
-| ```GetComponent()``` |![Done](https://img.shields.io/badge/status-done-green)| Allows you to find a class attached to an Entity that are not limited to type ScriptComponent |
-| ```GetComponents()``` |![Done](https://img.shields.io/badge/status-done-green)| Allows you to find all classes attached to an Entity that are not limited to type ScriptComponent |
-| ```DestroyEntity()``` |![Done](https://img.shields.io/badge/status-done-green)| easily destroys the calling Entity, you may need to use `Entity.Transform.Parent.Entity.DestroyEntity();` |
-| ```WorldPosition()``` |![Done](https://img.shields.io/badge/status-done-green)| A faster way of getting world position |
 
 ## ScriptComponentExtensions.cs
 
