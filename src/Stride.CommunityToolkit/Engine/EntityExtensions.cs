@@ -9,14 +9,14 @@ namespace Stride.CommunityToolkit.Engine;
 public static class EntityExtensions
 {
     /// <summary>
-    /// Adds a mouse-look camera controller to the specified entity, enabling camera movement and rotation through various input methods.
+    /// Adds an interactive camera script to the specified entity, enabling camera movement and rotation through various input methods.
     /// </summary>
-    /// <param name="entity">The entity to which the camera controller will be added.</param>
+    /// <param name="entity">The entity to which the interactive camera script will be added.</param>
     /// <remarks>
     /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
     /// Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.
     /// </remarks>
-    public static void AddMouseLookCamera(this Entity entity)
+    public static void AddInteractiveCameraScript(this Entity entity)
     {
         entity.Add(new BasicCameraController());
     }

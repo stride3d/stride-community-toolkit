@@ -96,7 +96,7 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera().AddMouseLookCamera();
+        game.AddCamera().AddInteractiveCameraScript();
         game.AddDirectionalLight();
         game.AddSkybox();
         game.AddGround();
@@ -154,26 +154,6 @@ public static class GameExtensions
         game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
 
         return entity;
-    }
-
-    /// <summary>
-    /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
-    /// </summary>
-    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
-    /// <returns>The time elapsed since the last game update in seconds.</returns>
-    public static float DeltaTime(this IGame gameTime)
-    {
-        return (float)gameTime.UpdateTime.Elapsed.TotalSeconds;
-    }
-
-    /// <summary>
-    /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
-    /// </summary>
-    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
-    /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
-    public static double DeltaTimeAccurate(this IGame gameTime)
-    {
-        return gameTime.UpdateTime.Elapsed.TotalSeconds;
     }
 
     /// <summary>
@@ -276,6 +256,26 @@ public static class GameExtensions
         game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
 
         return entity;
+    }
+
+    /// <summary>
+    /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
+    /// </summary>
+    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
+    /// <returns>The time elapsed since the last game update in seconds.</returns>
+    public static float DeltaTime(this IGame gameTime)
+    {
+        return (float)gameTime.UpdateTime.Elapsed.TotalSeconds;
+    }
+
+    /// <summary>
+    /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
+    /// </summary>
+    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
+    /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
+    public static double DeltaTimeAccurate(this IGame gameTime)
+    {
+        return gameTime.UpdateTime.Elapsed.TotalSeconds;
     }
 
     /// <summary>
