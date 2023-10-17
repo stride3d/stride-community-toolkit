@@ -21,12 +21,11 @@ Some extensions return `Entity` so it can be further modified.
 - [`AddCamera()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})) - Adds camera
 - [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)) - Adds directional light
 - [`AddSkybox()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)) - Adds skybox
-- [`AddGround()`]() - Adds ground
-- [`AddGround(float size)`]() - Adds Ground with size
+- [`AddGround()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)) - Adds ground
 
 ## GraphicsCompositorExtensions.cs
 
-- [`AddCleanUIStage`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given @Stride.Rendering.Compositing.GraphicsCompositor`
+- [`AddCleanUIStage`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given `GraphicsCompositor`
 
 ## ScriptComponentExtensions.cs
 
