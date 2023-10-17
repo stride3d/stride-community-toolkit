@@ -1,5 +1,8 @@
 # Stride Community Toolkit Documentation
 
+[![Join the chat at https://discord.gg/f6aerfE](https://img.shields.io/discord/500285081265635328.svg?style=flat&logo=discord&label=discord&logoColor=f2f2f2)](https://discord.gg/f6aerfE)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/stride3d/stride/blob/master/LICENSE.md)
+
 [!INCLUDE [global-note](includes/global-note.md)]
 
 ## 👋 Introduction
