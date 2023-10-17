@@ -189,7 +189,7 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)">
   AddDirectionalLight(Game, string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L196"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L176"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a directional light entity to the game's root scene with optional customization.</p>
@@ -282,7 +282,7 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)">
   AddGround(Game, string?, Vector2?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L268"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L248"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a ground with default Size 10,10.</p>
@@ -326,10 +326,12 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)">
   AddProfiler(Game, string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L344"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L355"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Toggle profiling Left Shift + Left Ctrl + P, Toggle filtering mode F1</p>
+  <div class="markdown level1 summary"><p>Adds a profiler to the game, which can be toggled on/off with Left Shift + Left Ctrl + P, and provides other keyboard shortcuts.
+Changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
+and adjusting the refresh interval with the plus and minus keys.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -340,15 +342,18 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The game to which the profiler will be added.</p>
+</dd>
     <dt><code>entityName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
+    <dd><p>Optional name for the entity to which the <a class="xref" href="Stride.CommunityToolkit.Scripts.GameProfiler.html">GameProfiler</a> script will be attached.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The entity to which the <a class="xref" href="Stride.CommunityToolkit.Scripts.GameProfiler.html">GameProfiler</a> script was attached.</p>
+</dd>
   </dl>
 
 
@@ -357,6 +362,10 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This extension method creates an entity and attaches a <a class="xref" href="Stride.CommunityToolkit.Scripts.GameProfiler.html">GameProfiler</a> script to it, enabling in-game profiling.
+The profiler's behaviour can be interacted with using various keyboard shortcuts as described in the <a class="xref" href="Stride.CommunityToolkit.Scripts.GameProfiler.html">GameProfiler</a> class.</p>
+</div>
 
 
 
@@ -365,7 +374,7 @@ It will also be assigned to the first available camera slot in the GraphicsCompo
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)">
   AddSkybox(Game, string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L234"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L214"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.</p>
@@ -412,10 +421,10 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Single_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)">
   CreateMaterial(Game, Color?, float, float)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L287"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L289"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Basic default material</p>
+  <div class="markdown level1 summary"><p>Creates a basic material with optional color, specular reflection, and microsurface smoothness values.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -426,19 +435,24 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The game instance used to access the graphics device.</p>
+</dd>
     <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>The color of the material. Defaults to null, which will use the _defaultMaterialColor.</p>
+</dd>
     <dt><code>specular</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd></dd>
+    <dd><p>The specular reflection factor of the material. Defaults to 1.0f.</p>
+</dd>
     <dt><code>microSurface</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd></dd>
+    <dd><p>The microsurface smoothness value of the material. Defaults to 0.65f.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
+    <dd><p>A new material instance with the specified or default attributes.</p>
+</dd>
   </dl>
 
 
@@ -455,10 +469,10 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector2__" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector2})">
   CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector2?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L313"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L316"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Creates an entity with a primitive procedural model with a primitive mesh renderer and adds appropriate collider except for Torus, Teapot and Plane.</p>
+  <div class="markdown level1 summary"><p>Creates a primitive 3D model entity of the specified type with optional customizations.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -469,24 +483,30 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The game instance.</p>
+</dd>
     <dt><code>type</code> <a class="xref" href="Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html">PrimitiveModelType</a></dt>
-    <dd></dd>
+    <dd><p>The type of primitive model to create.</p>
+</dd>
     <dt><code>entityName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
+    <dd><p>The name to assign to the new entity (optional).</p>
+</dd>
     <dt><code>material</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
+    <dd><p>The material to apply to the model (optional).</p>
+</dd>
     <dt><code>includeCollider</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>Adds a default collider except for Torus, Teapot and Plane. Default true.</p>
+    <dd><p>Indicates whether to include a collider component (default is true).</p>
 </dd>
     <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a>?</dt>
-    <dd></dd>
+    <dd><p>The size of the model if applicable (optional).</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>A new entity representing the specified primitive model.</p>
+</dd>
   </dl>
 
 
@@ -503,7 +523,7 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)">
   DeltaTime(IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L164"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L266"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.</p>
@@ -542,7 +562,7 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)">
   DeltaTimeAccurate(IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L174"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L276"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.</p>
@@ -581,10 +601,10 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Engine_Game_" data-uid="Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)">
   FPS(Game)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L390"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/GameExtensions.cs/#L401"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Shows the current FPS.</p>
+  <div class="markdown level1 summary"><p>Retrieves the current frames per second (FPS) rate of the running game.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -595,13 +615,15 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The game instance from which to obtain the FPS rate.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd></dd>
+    <dd><p>The current FPS rate of the game.</p>
+</dd>
   </dl>
 
 

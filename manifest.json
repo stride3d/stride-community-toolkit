@@ -550,6 +550,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/entity-extensions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/entity-extensions/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/game-extensions/index.md",
       "output": {
         ".html": {

@@ -13,19 +13,19 @@ references:
   commentId: T:Stride.CommunityToolkit.Engine.EntityExtensions
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions
   nameWithType: EntityExtensions
-- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)
-  name: AddMouseLookCamera(Entity)
-  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_Stride_Engine_Entity_
-  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera(Stride.Engine.Entity)
-  nameWithType: EntityExtensions.AddMouseLookCamera(Entity)
-- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera*
-  name: AddMouseLookCamera
-  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddMouseLookCamera_
-  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript(Stride.Engine.Entity)
+  name: AddInteractiveCameraScript(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddInteractiveCameraScript_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.AddInteractiveCameraScript(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript*
+  name: AddInteractiveCameraScript
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddInteractiveCameraScript_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddMouseLookCamera
-  nameWithType: EntityExtensions.AddMouseLookCamera
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript
+  nameWithType: EntityExtensions.AddInteractiveCameraScript
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
   name: DestroyEntity(Entity)
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_Stride_Engine_Entity_

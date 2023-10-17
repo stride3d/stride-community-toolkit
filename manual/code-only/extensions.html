@@ -95,47 +95,31 @@
 <p>Remember, the key to mastering Stride, and game development in general, is practice and exploration. So, go ahead, play around with these extensions, and start creating!</p>
 <h2 id="gameextensionscs">GameExtensions.cs</h2>
 <p>Some extensions return <code>Entity</code> so it can be further modified.</p>
-<p><img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done"></p>
+<p><img src="https://img.shields.io/badge/status-done-green" alt="Done"></p>
 <ul>
 <li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Scene__System_Action_Stride_Engine_Scene_Stride_Games_GameTime__"><code>Run()</code></a> - Initialising the game, use <code>start</code> and <code>update</code> params</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_Stride_Engine_Game_"><code>SetupBase()</code></a> - Adds Graphics Compositor, Camera and Directional Light</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_"><code>SetupBase3DScene()</code></a> - Same as <code>SetupBase()</code> plus SkyBox, Ground, MouseLookCamera</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGraphicsCompositor_Stride_Engine_Game_"><code>AddGraphicsCompositor()</code></a> - Adds default <code>GraphicsCompositor</code></li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__"><code>AddCamera()</code></a> - Adds Camera</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_"><code>AddDirectionalLight()</code></a> - Adds Directional Light</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_"><code>AddSkybox()</code></a> - Adds Skybox</li>
-<li><a href=""><code>AddMouseLookCamera()</code></a> - The camera entity can be moved using W, A, S, D, Q and E, arrow keys</li>
-<li><code>AddGround()</code> - Adds Ground</li>
-<li><code>AddGround(float size)</code> - Adds Ground with size</li>
-<li><code>NewDefaultMaterial</code> - Adds basic material</li>
-<li><code>CreatePrimitive()</code> - Simplifies primitives creation</li>
-<li><code>AddProfiler()</code> - Attaches profile</li>
-</ul>
-<p><img src="https://img.shields.io/badge/status-todo-orange?style=for-the-badge" alt="ToDo"></p>
-<ul>
-<li><code>AddGizmo()</code> - Debug. To see X,Y,Z arrows</li>
-<li><code>AddEntityNames()</code> - Debug. To see entity properties in the game</li>
-<li><code>AddPhysicsDebugger()</code> - Debug. To see colliders. Tracked here <a href="https://github.com/stride3d/stride-community-toolkit/issues/9">Issue #9</a></li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_Stride_Engine_Game_"><code>SetupBase()</code></a> - Adds graphics compositor, camera and directional light</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_"><code>SetupBase3DScene()</code></a> - Same as <code>SetupBase()</code> plus skybox, ground, mouse look camera</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGraphicsCompositor_Stride_Engine_Game_"><code>AddGraphicsCompositor()</code></a> - Adds a default <code>GraphicsCompositor</code></li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__"><code>AddCamera()</code></a> - Adds camera</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_"><code>AddDirectionalLight()</code></a> - Adds directional light</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_"><code>AddSkybox()</code></a> - Adds skybox</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_"><code>AddGround()</code></a> - Adds ground</li>
 </ul>
 <h2 id="graphicscompositorextensionscs">GraphicsCompositorExtensions.cs</h2>
 <ul>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddCleanUIStage_Stride_Rendering_Compositing_GraphicsCompositor_"><code>AddCleanUIStage</code></a> - Adds a UI render stage and white/clean text effect to the given @Stride.Rendering.Compositing.GraphicsCompositor`</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddCleanUIStage_Stride_Rendering_Compositing_GraphicsCompositor_"><code>AddCleanUIStage</code></a> - Adds a UI render stage and white/clean text effect to the given <code>GraphicsCompositor</code></li>
 </ul>
-<h2 id="entitycomponentextensionscs">EntityComponentExtensions.cs</h2>
-<p>| <code>GetComponent()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find a class attached to an Entity that are not limited to type ScriptComponent |
-| <code>GetComponents()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Allows you to find all classes attached to an Entity that are not limited to type ScriptComponent |
-| <code>DestroyEntity()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| easily destroys the calling Entity, you may need to use <code>Entity.Transform.Parent.Entity.DestroyEntity();</code> |
-| <code>WorldPosition()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| A faster way of getting world position |</p>
 <h2 id="scriptcomponentextensionscs">ScriptComponentExtensions.cs</h2>
-<p>| <code>DeltaTime()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Easier way of getting DeltaTime as a <code>float</code> in seconds |
-| <code>GetCamera()</code> |<img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research">| Gets the first camera with the name &quot;Main&quot;, currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |
-| <code>GetCamera(string name)</code> |<img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research">| Gets the first camera with the name provided, currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |
-| <code>GetFirstCamera()</code> |<img src="https://img.shields.io/badge/status-research-blue?style=for-the-badge" alt="Research">| Gets the first camera in the <code>GraphicsCompositor</code>. currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |</p>
+<p>| <code>DeltaTime()</code> |<img src="https://img.shields.io/badge/status-done-green" alt="Done">| Easier way of getting DeltaTime as a <code>float</code> in seconds |
+| <code>GetCamera()</code> |<img src="https://img.shields.io/badge/status-research-blue" alt="Research">| Gets the first camera with the name &quot;Main&quot;, currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |
+| <code>GetCamera(string name)</code> |<img src="https://img.shields.io/badge/status-research-blue" alt="Research">| Gets the first camera with the name provided, currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |
+| <code>GetFirstCamera()</code> |<img src="https://img.shields.io/badge/status-research-blue" alt="Research">| Gets the first camera in the <code>GraphicsCompositor</code>. currently doesnt work at the start of a game due to being null in the <code>GraphicsCompositor</code> |</p>
 <h2 id="animationcomponentextensionscs">AnimationComponentExtensions.cs</h2>
-<p>| <code>PlayAnimation()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Plays an animation if not already playing |</p>
+<p>| <code>PlayAnimation()</code> |<img src="https://img.shields.io/badge/status-done-green" alt="Done">| Plays an animation if not already playing |</p>
 <h2 id="modelcomponentextensionscs">ModelComponentExtensions.cs</h2>
-<p>| <code>GetMeshHeight()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Gets the Mesh height as a <code>float</code> |
-| <code>GetMeshHWL()</code> |<img src="https://img.shields.io/badge/status-done-green?style=for-the-badge" alt="Done">| Gets the Mesh height, width and length as a <code>Vector3</code> |</p>
+<p>| <code>GetMeshHeight()</code> |<img src="https://img.shields.io/badge/status-done-green" alt="Done">| Gets the Mesh height as a <code>float</code> |
+| <code>GetMeshHWL()</code> |<img src="https://img.shields.io/badge/status-done-green" alt="Done">| Gets the Mesh height, width and length as a <code>Vector3</code> |</p>
 </article>
 
         <div class="contribution d-print-none">

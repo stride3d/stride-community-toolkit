@@ -94,7 +94,7 @@
 
   <h1 id="Stride_CommunityToolkit_Scripts_GameProfiler" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler" class="text-break">
     Class GameProfiler
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L8"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -102,7 +102,9 @@
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides in-game profiling functionality, allowing the monitoring and analysis of game performance in real time.
+This script facilitates the toggling of profiling, setting display preferences, and navigating through profiling data.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -234,6 +236,11 @@
 
 
 
+  <h2 id="Stride_CommunityToolkit_Scripts_GameProfiler_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This class provides keyboard shortcuts for toggling the profiler on/off with Shift + Ctrl + P,
+changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
+and adjusting the refresh interval with the plus and minus keys.</p>
+</div>
 
 
   <h2 class="section" id="properties">Properties
@@ -244,7 +251,7 @@
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_Enabled" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.Enabled">
   Enabled
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L21"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Enables or disable the game profiling</p>
@@ -276,7 +283,7 @@
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_FilteringMode" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.FilteringMode">
   FilteringMode
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the type of the profiling to display: CPU or GPU</p>
@@ -309,7 +316,7 @@ public GameProfilingResults FilteringMode { get; set; }</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_RefreshTime" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.RefreshTime">
   RefreshTime
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The time between two refreshes of the profiling information in milliseconds.</p>
@@ -342,7 +349,7 @@ public double RefreshTime { get; set; }</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_ResultPage" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.ResultPage">
   ResultPage
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L50"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the current profiling result page to display.</p>
@@ -375,7 +382,7 @@ public uint ResultPage { get; set; }</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_SortingMode" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.SortingMode">
   SortingMode
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L30"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or set the sorting mode of the profiling entries</p>
@@ -408,7 +415,7 @@ public GameProfilingSorting SortingMode { get; set; }</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_TextColor" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.TextColor">
   TextColor
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>The color of the text displayed during profiling</p>
@@ -445,7 +452,7 @@ public Color TextColor { get; set; }</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Scripts_GameProfiler_Execute" data-uid="Stride.CommunityToolkit.Scripts.GameProfiler.Execute">
   Execute()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Called once, as a microthread</p>
@@ -477,7 +484,7 @@ public Color TextColor { get; set; }</code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L8" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/GameProfiler.cs/#L16" class="edit-link">Edit this page</a>
         </div>
 
         
