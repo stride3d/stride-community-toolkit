@@ -96,7 +96,7 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera().AddMouseLookCamera();
+        game.AddCamera().AddInteractiveCameraScript();
         game.AddDirectionalLight();
         game.AddSkybox();
         game.AddGround();
@@ -154,26 +154,6 @@ public static class GameExtensions
         game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
 
         return entity;
-    }
-
-    /// <summary>
-    /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
-    /// </summary>
-    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
-    /// <returns>The time elapsed since the last game update in seconds.</returns>
-    public static float DeltaTime(this IGame gameTime)
-    {
-        return (float)gameTime.UpdateTime.Elapsed.TotalSeconds;
-    }
-
-    /// <summary>
-    /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
-    /// </summary>
-    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
-    /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
-    public static double DeltaTimeAccurate(this IGame gameTime)
-    {
-        return gameTime.UpdateTime.Elapsed.TotalSeconds;
     }
 
     /// <summary>
@@ -279,11 +259,33 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Basic default material
+    /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="color"></param>
-    /// <returns></returns>
+    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
+    /// <returns>The time elapsed since the last game update in seconds.</returns>
+    public static float DeltaTime(this IGame gameTime)
+    {
+        return (float)gameTime.UpdateTime.Elapsed.TotalSeconds;
+    }
+
+    /// <summary>
+    /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
+    /// </summary>
+    /// <param name="gameTime">The IGame interface providing access to game timing information.</param>
+    /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
+    public static double DeltaTimeAccurate(this IGame gameTime)
+    {
+        return gameTime.UpdateTime.Elapsed.TotalSeconds;
+    }
+
+    /// <summary>
+    /// Creates a basic material with optional color, specular reflection, and microsurface smoothness values.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="color">The color of the material. Defaults to null, which will use the _defaultMaterialColor.</param>
+    /// <param name="specular">The specular reflection factor of the material. Defaults to 1.0f.</param>
+    /// <param name="microSurface">The microsurface smoothness value of the material. Defaults to 0.65f.</param>
+    /// <returns>A new material instance with the specified or default attributes.</returns>
     public static Material CreateMaterial(this Game game, Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
     {
         var materialDescription = new MaterialDescriptor
@@ -302,14 +304,15 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Creates an entity with a primitive procedural model with a primitive mesh renderer and adds appropriate collider except for Torus, Teapot and Plane.
+    /// Creates a primitive 3D model entity of the specified type with optional customizations.
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="type"></param>
-    /// <param name="entityName"></param>
-    /// <param name="material"></param>
-    /// <param name="includeCollider">Adds a default collider except for Torus, Teapot and Plane. Default true.</param>
-    /// <returns></returns>
+    /// <param name="game">The game instance.</param>
+    /// <param name="type">The type of primitive model to create.</param>
+    /// <param name="entityName">The name to assign to the new entity (optional).</param>
+    /// <param name="material">The material to apply to the model (optional).</param>
+    /// <param name="includeCollider">Indicates whether to include a collider component (default is true).</param>
+    /// <param name="size">The size of the model if applicable (optional).</param>
+    /// <returns>A new entity representing the specified primitive model.</returns>
     public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector2? size = null)
     {
         var proceduralModel = GetProceduralModel(type, size);
@@ -338,9 +341,17 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Toggle profiling Left Shift + Left Ctrl + P, Toggle filtering mode F1
+    /// Adds a profiler to the game, which can be toggled on/off with Left Shift + Left Ctrl + P, and provides other keyboard shortcuts.
+    /// Changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
+    /// and adjusting the refresh interval with the plus and minus keys.
     /// </summary>
-    /// <param name="game"></param>
+    /// <param name="game">The game to which the profiler will be added.</param>
+    /// <param name="entityName">Optional name for the entity to which the <see cref="GameProfiler"/> script will be attached.</param>
+    /// <returns>The entity to which the <see cref="GameProfiler"/> script was attached.</returns>
+    /// <remarks>
+    /// This extension method creates an entity and attaches a <see cref="GameProfiler"/> script to it, enabling in-game profiling.
+    /// The profiler's behaviour can be interacted with using various keyboard shortcuts as described in the <see cref="GameProfiler"/> class.
+    /// </remarks>
     public static Entity AddProfiler(this Game game, string? entityName = null)
     {
         var entity = new Entity(entityName) { new GameProfiler() };
@@ -383,12 +394,9 @@ public static class GameExtensions
         };
 
     /// <summary>
-    /// Shows the current FPS.
+    /// Retrieves the current frames per second (FPS) rate of the running game.
     /// </summary>
-    /// <param name="game"></param>
-    /// <returns></returns>
-    public static float FPS(this Game game)
-    {
-        return game.UpdateTime.FramePerSecond;
-    }
+    /// <param name="game">The game instance from which to obtain the FPS rate.</param>
+    /// <returns>The current FPS rate of the game.</returns>
+    public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
 }
