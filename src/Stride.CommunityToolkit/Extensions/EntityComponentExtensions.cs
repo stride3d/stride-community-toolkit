@@ -33,6 +33,7 @@ public static class EntityComponentExtensions
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
+    [Obsolete("Use Remove instead")]
     public static bool DestroyEntity(this Entity entity)
     {
         try
@@ -47,12 +48,27 @@ public static class EntityComponentExtensions
     }
 
     /// <summary>
-    /// An easier way to get world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
+    /// Sets the entity scene to null to remove the entity.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public static void Remove(this Entity entity)
+    {
+        entity.Scene = null;
+    }
+
+    /// <summary>
+    /// An easier way to get the previous frames world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
     /// </summary>
     /// <param name="entity">The <see cref="Entity"/> to get the World Position</param>
+    /// <param name="updateTransforms"> If true it will get the current frames world matrix</param>
     /// <returns>The <see cref="Vector3"/> as the World Position of the <see cref="Entity"/></returns>
-    public static Vector3 WorldPosition(this Entity entity)
+    public static Vector3 WorldPosition(this Entity entity, bool updateTransforms = false)
     {
+        if(updateTransforms)
+        {
+            entity.Transform.UpdateWorldMatrix();
+        }
         return entity.Transform.WorldMatrix.TranslationVector;
     }
 }
