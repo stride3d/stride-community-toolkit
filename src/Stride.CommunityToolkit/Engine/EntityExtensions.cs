@@ -49,12 +49,12 @@ public static class EntityExtensions
     /// Attempts to remove the entity from its scene, destroying it.
     /// </summary>
     /// <returns>True if the entity was successfully removed; otherwise, false.</returns>
+    [Obsolete("Use Remove instead")]
     public static bool DestroyEntity(this Entity entity)
     {
         try
         {
             entity.Scene.Entities.Remove(entity);
-
             return true;
         }
         catch
@@ -64,12 +64,27 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// An easier way to get world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
+    /// Sets the entity scene to null to remove the entity.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public static void Remove(this Entity entity)
+    {
+        entity.Scene = null;
+    }
+
+    /// <summary>
+    /// An easier way to get the previous frames world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
     /// </summary>
     /// <param name="entity">The <see cref="Entity"/> to get the World Position</param>
+    /// <param name="updateTransforms"> If true it will get the current frames world matrix</param>
     /// <returns>The <see cref="Vector3"/> as the World Position of the <see cref="Entity"/></returns>
-    public static Vector3 WorldPosition(this Entity entity)
+    public static Vector3 WorldPosition(this Entity entity, bool updateTransforms = true)
     {
+        if (updateTransforms)
+        {
+            entity.Transform.UpdateWorldMatrix();
+        }
         return entity.Transform.WorldMatrix.TranslationVector;
     }
 }
