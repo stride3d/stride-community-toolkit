@@ -64,10 +64,9 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Sets the entity scene to null to remove the entity.
+    /// Removes the entity from its current scene by setting its <see cref="Scene"/> property to null.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <returns></returns>
+    /// <param name="entity">The entity to be removed from its current scene.</param>
     public static void Remove(this Entity entity)
     {
         entity.Scene = null;
@@ -85,6 +84,7 @@ public static class EntityExtensions
         {
             entity.Transform.UpdateWorldMatrix();
         }
+
         return entity.Transform.WorldMatrix.TranslationVector;
     }
 }
