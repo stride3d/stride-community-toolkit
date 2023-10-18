@@ -1,5 +1,5 @@
 using Example04_MyraUI;
-using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
 using Stride.Games;
@@ -26,7 +26,7 @@ void SetupBase3DScene()
     game.AddGraphicsCompositor()
         .AddCleanUIStage() //optional
         .AddSceneRenderer(new MyraSceneRenderer());
-    game.AddMouseLookCamera(game.AddCamera());
+    game.AddCamera().AddInteractiveCameraScript();
     game.AddDirectionalLight();
     game.AddSkybox();
     game.AddGround();

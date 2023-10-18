@@ -3,13 +3,14 @@ using Stride.Input;
 
 namespace Stride.CommunityToolkit.Scripts;
 
-// Taken from Stride.Assets.Presentation, Assets -> Scripts -> Camera
 /// <summary>
 /// A script that allows to move and rotate an entity through keyboard, mouse and touch input to provide basic camera navigation.
 /// </summary>
 /// <remarks>
 /// The entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
 /// Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.
+///
+/// This functionality is inspired by Stride.Assets.Presentation, Assets->Scripts->Camera
 /// </remarks>
 public class BasicCameraController : SyncScript
 {

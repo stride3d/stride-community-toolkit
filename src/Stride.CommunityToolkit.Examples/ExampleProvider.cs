@@ -23,7 +23,10 @@ public static class ExampleProvider
         new Example(GetIndex(), "Basic Example - Stride UI - Capsule with rigid body and Window",
             () => StartProcess(nameof(Example03_StrideUI_CapsuleAndWindow))),
 
-        new Example(GetIndex(), "Basic Example - Myra UI - Draggable Window, GetService()",
+        new Example(GetIndex(), "Basic Example - Procedural Geometry",
+            () => StartProcess(nameof(Example05_ProceduralGeometry))),
+
+        new Example(GetIndex(), "Advance Example - Myra UI - Draggable Window, GetService()",
             () => StartProcess(nameof(Example04_MyraUI))),
 
         new Example("Q", "Quit", () => Environment.Exit(0))

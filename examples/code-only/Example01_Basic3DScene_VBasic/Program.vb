@@ -1,4 +1,4 @@
-Imports Stride.CommunityToolkit.Extensions
+Imports Stride.CommunityToolkit.Engine
 Imports Stride.CommunityToolkit.ProceduralModels
 Imports Stride.Core.Mathematics
 Imports Stride.Engine

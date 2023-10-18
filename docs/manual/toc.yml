@@ -2,8 +2,8 @@
   href: index.md
 - name: Getting Started
   href: getting-started.md
-- name: What's new in docs
-  href: whats-new.md
+# - name: What's new in docs
+#   href: whats-new.md
 - name: Code Only
   href: code-only/index.md
   items:
@@ -18,6 +18,8 @@
       href: code-only/examples/give-me-cube-body.md
     - name: Stride UI - Capsule with rigid body and Window
       href: code-only/examples/stride-ui-capsule-with-rigid-body.md
+    - name: Procedural Geometry
+      href: code-only/examples/procedural-geometry.md
   - name: C# Advance Examples
     href: code-only/examples/advance-examples.md
     items:
@@ -35,9 +37,15 @@
       href: code-only/examples/capsule-with-rigid-body-vb.md
   - name: Extensions
     href: code-only/extensions.md
-- name: Camera Extensions
-  href: camera-extensions/index.md
-- name: Game Extensions
+# - name: Camera Extensions
+#   href: camera-extensions/index.md
+- name: EntityExtensions
+  href: entity-extensions/index.md
+- name: GameExtensions
   href: game-extensions/index.md
+- name: Rendering
+  items:
+  - name: MeshBuilder
+    href: rendering/mesh-builder.md
 - name: Troubleshooting
   href: troubleshooting.md
