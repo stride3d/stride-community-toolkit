@@ -20,6 +20,9 @@ changelog:
     - title: 🔧 Engineering
       labels:
         - engineering
+    - title: 🎨 Rendering
+      labels:
+        - rendering        
     - title: ✨ Enhancement
       labels:
         - enhancement        
