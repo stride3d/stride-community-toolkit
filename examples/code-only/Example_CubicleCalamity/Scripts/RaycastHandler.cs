@@ -1,11 +1,11 @@
-using Example_CubeTower.Components;
+using CubicleCalamity.Components;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
 using Stride.Physics;
 
-namespace Example_CubeTower.Scripts;
+namespace CubicleCalamity.Scripts;
 
 public class RaycastHandler : AsyncScript
 {
@@ -91,15 +91,15 @@ public class RaycastHandler : AsyncScript
     private static IEnumerable<Entity> GetTouchingCubes(Entity entity, Color color) => entity.Scene.Entities
         .Where(x => x.Name == "Cube"
             && (Equals(x.Transform.Position.Y, entity.Transform.Position.Y)
-                    && ((Equals(x.Transform.Position.X, entity.Transform.Position.X - 1)
-                        || Equals(x.Transform.Position.X, entity.Transform.Position.X + 1))
+                    && ((Equals(x.Transform.Position.X, entity.Transform.Position.X - Constants.CubeSize.X)
+                        || Equals(x.Transform.Position.X, entity.Transform.Position.X + Constants.CubeSize.X))
                         && Equals(x.Transform.Position.Z, entity.Transform.Position.Z)
-                        || (Equals(x.Transform.Position.Z, entity.Transform.Position.Z - 1)
-                        || Equals(x.Transform.Position.Z, entity.Transform.Position.Z + 1))
+                        || (Equals(x.Transform.Position.Z, entity.Transform.Position.Z - Constants.CubeSize.Z)
+                        || Equals(x.Transform.Position.Z, entity.Transform.Position.Z + Constants.CubeSize.Z))
                         && Equals(x.Transform.Position.X, entity.Transform.Position.X)
                     )
-                || (Equals(x.Transform.Position.Y, entity.Transform.Position.Y - 1)
-                    || Equals(x.Transform.Position.Y, entity.Transform.Position.Y + 1))
+                || (Equals(x.Transform.Position.Y, entity.Transform.Position.Y - Constants.CubeSize.Y)
+                    || Equals(x.Transform.Position.Y, entity.Transform.Position.Y + Constants.CubeSize.Y))
                     && Equals(x.Transform.Position.X, entity.Transform.Position.X)
                     && Equals(x.Transform.Position.Z, entity.Transform.Position.Z)
                 )

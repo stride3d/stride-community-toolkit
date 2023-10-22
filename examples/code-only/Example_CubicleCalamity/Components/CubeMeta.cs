@@ -1,7 +1,7 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Example_CubeTower.Components;
+namespace CubicleCalamity.Components;
 
 public class CubeComponent : EntityComponent
 {
