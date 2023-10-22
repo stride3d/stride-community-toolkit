@@ -391,8 +391,8 @@ public static class GameExtensions
         {
             PrimitiveModelType.Plane => size is null ? new BoxColliderShapeDesc() : new()
             {
-                Size = new Vector3(size.Value.X, 1, size?.Y ?? 0),
-                LocalOffset = new Vector3(0, -0.5f, 0)
+                Size = new Vector3(size.Value.X, 0, size?.Y ?? 0),
+                LocalOffset = new Vector3(0, 0, 0)
             },
             PrimitiveModelType.Sphere => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X },
             PrimitiveModelType.Cube => size is null ? new BoxColliderShapeDesc() : new() { Size = size ?? Vector3.Zero },
@@ -400,7 +400,7 @@ public static class GameExtensions
             PrimitiveModelType.Torus => null,
             PrimitiveModelType.Teapot => null,
             PrimitiveModelType.Cone => size is null ? new ConeColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
-            PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() : new() { Radius = size.Value.X, Length = size.Value.Y },
+            PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y },
             _ => throw new InvalidOperationException(),
         };
 
