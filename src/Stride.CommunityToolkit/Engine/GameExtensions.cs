@@ -24,9 +24,10 @@ namespace Stride.CommunityToolkit.Engine;
 public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
-    private const float DefaultGroundSizeX = 10.0f;
-    private const float DefaultGroundSizeY = 10.0f;
+    private const float DefaultGroundSizeX = 15.0f;
+    private const float DefaultGroundSizeY = 15.0f;
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
+    private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
     /// <summary>
     /// Initializes the game, starts the game loop, and handles game events.
@@ -247,9 +248,9 @@ public static class GameExtensions
     /// <returns></returns>
     public static Entity AddGround(this Game game, string? entityName = null, Vector2? size = null, bool includeCollider = true)
     {
-        var validSize = size ?? new Vector2(DefaultGroundSizeX, DefaultGroundSizeY);
+        var validSize = size is null ? new Vector3(DefaultGroundSizeX, DefaultGroundSizeY, 0) : new Vector3(size.Value.X, size.Value.Y, 0);
 
-        var material = game.CreateMaterial(Color.FromBgra(0xFF242424), 0.0f, 0.1f);
+        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
         var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, validSize);
 
@@ -276,6 +277,27 @@ public static class GameExtensions
     public static double DeltaTimeAccurate(this IGame gameTime)
     {
         return gameTime.UpdateTime.Elapsed.TotalSeconds;
+    }
+
+    /// <summary>
+    /// Adds a profiler to the game, which can be toggled on/off with Left Shift + Left Ctrl + P, and provides other keyboard shortcuts.
+    /// Changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
+    /// and adjusting the refresh interval with the plus and minus keys.
+    /// </summary>
+    /// <param name="game">The game to which the profiler will be added.</param>
+    /// <param name="entityName">Optional name for the entity to which the <see cref="GameProfiler"/> script will be attached.</param>
+    /// <returns>The entity to which the <see cref="GameProfiler"/> script was attached.</returns>
+    /// <remarks>
+    /// This extension method creates an entity and attaches a <see cref="GameProfiler"/> script to it, enabling in-game profiling.
+    /// The profiler's behaviour can be interacted with using various keyboard shortcuts as described in the <see cref="GameProfiler"/> class.
+    /// </remarks>
+    public static Entity AddProfiler(this Game game, string? entityName = null)
+    {
+        var entity = new Entity(entityName) { new GameProfiler() };
+
+        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
+
+        return entity;
     }
 
     /// <summary>
@@ -311,9 +333,9 @@ public static class GameExtensions
     /// <param name="entityName">The name to assign to the new entity (optional).</param>
     /// <param name="material">The material to apply to the model (optional).</param>
     /// <param name="includeCollider">Indicates whether to include a collider component (default is true).</param>
-    /// <param name="size">The size of the model if applicable (optional).</param>
+    /// <param name="size">The size of the model if applicable (optional). Dimensions in the Vector3 are used in the order X, Y, Z. If null, default dimensions are used for the model.</param>
     /// <returns>A new entity representing the specified primitive model.</returns>
-    public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector2? size = null)
+    public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector3? size = null)
     {
         var proceduralModel = GetProceduralModel(type, size);
 
@@ -341,55 +363,44 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a profiler to the game, which can be toggled on/off with Left Shift + Left Ctrl + P, and provides other keyboard shortcuts.
-    /// Changing the filtering mode with F1, altering the sorting mode with F2, navigating result pages with F3 and F4,
-    /// and adjusting the refresh interval with the plus and minus keys.
+    /// Generates a procedural model based on the specified type and size.
     /// </summary>
-    /// <param name="game">The game to which the profiler will be added.</param>
-    /// <param name="entityName">Optional name for the entity to which the <see cref="GameProfiler"/> script will be attached.</param>
-    /// <returns>The entity to which the <see cref="GameProfiler"/> script was attached.</returns>
+    /// <param name="type">The type of primitive model to create.</param>
+    /// <param name="size">The size parameters for the model, or null to use default size values. The dimensions in the Vector3 are used in the order X, Y, Z.</param>
+    /// <returns>A primitive procedural model of the specified type, with dimensions specified by <paramref name="size"/> or default dimensions if <paramref name="size"/> is null.</returns>
     /// <remarks>
-    /// This extension method creates an entity and attaches a <see cref="GameProfiler"/> script to it, enabling in-game profiling.
-    /// The profiler's behaviour can be interacted with using various keyboard shortcuts as described in the <see cref="GameProfiler"/> class.
+    /// If <paramref name="size"/> is null, default dimensions are used for the model.
     /// </remarks>
-    public static Entity AddProfiler(this Game game, string? entityName = null)
-    {
-        var entity = new Entity(entityName) { new GameProfiler() };
-
-        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
-
-        return entity;
-    }
-
-    private static PrimitiveProceduralModelBase GetProceduralModel(PrimitiveModelType type, Vector2? size = null)
+    private static PrimitiveProceduralModelBase GetProceduralModel(PrimitiveModelType type, Vector3? size = null)
         => type switch
         {
-            PrimitiveModelType.Plane => new PlaneProceduralModel() { Size = size ?? Vector2.Zero },
-            PrimitiveModelType.Sphere => new SphereProceduralModel(),
-            PrimitiveModelType.Cube => new CubeProceduralModel(),
-            PrimitiveModelType.Cylinder => new CylinderProceduralModel(),
-            PrimitiveModelType.Torus => new TorusProceduralModel(),
-            PrimitiveModelType.Teapot => new TeapotProceduralModel(),
-            PrimitiveModelType.Cone => new ConeProceduralModel(),
-            PrimitiveModelType.Capsule => new CapsuleProceduralModel(),
+            PrimitiveModelType.Plane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
+            PrimitiveModelType.Sphere => size is null ? new SphereProceduralModel() : new() { Radius = size.Value.X },
+            PrimitiveModelType.Cube => size is null ? new CubeProceduralModel() : new() { Size = size.Value },
+            PrimitiveModelType.Cylinder => size is null ? new CylinderProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
+            PrimitiveModelType.Torus => size is null ? new TorusProceduralModel() : new() { Radius = size.Value.X, Thickness = size.Value.Y },
+            PrimitiveModelType.Teapot => size is null ? new TeapotProceduralModel() : new() { Size = size.Value.X },
+            PrimitiveModelType.Cone => size is null ? new ConeProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
+            PrimitiveModelType.Capsule => size is null ? new CapsuleProceduralModel() : new() { Radius = size.Value.X, Length = size.Value.Y },
             _ => throw new InvalidOperationException(),
         };
 
-    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type, Vector2? size = null)
+    // ToDo: Add collider shapes for Torus and Teapot
+    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type, Vector3? size = null)
         => type switch
         {
-            PrimitiveModelType.Plane => new BoxColliderShapeDesc()
+            PrimitiveModelType.Plane => size is null ? new BoxColliderShapeDesc() : new()
             {
-                Size = new Vector3(size?.X ?? 0, 1, size?.Y ?? 0),
-                LocalOffset = new Vector3(0, -0.5f, 0)
+                Size = new Vector3(size.Value.X, 0, size?.Y ?? 0),
+                LocalOffset = new Vector3(0, 0, 0)
             },
-            PrimitiveModelType.Sphere => new SphereColliderShapeDesc(),
-            PrimitiveModelType.Cube => new BoxColliderShapeDesc(),
-            PrimitiveModelType.Cylinder => new CylinderColliderShapeDesc(),
+            PrimitiveModelType.Sphere => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X },
+            PrimitiveModelType.Cube => size is null ? new BoxColliderShapeDesc() : new() { Size = size ?? Vector3.Zero },
+            PrimitiveModelType.Cylinder => size is null ? new CylinderColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
             PrimitiveModelType.Torus => null,
             PrimitiveModelType.Teapot => null,
-            PrimitiveModelType.Cone => new ConeColliderShapeDesc(),
-            PrimitiveModelType.Capsule => new CapsuleColliderShapeDesc(),
+            PrimitiveModelType.Cone => size is null ? new ConeColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
+            PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y },
             _ => throw new InvalidOperationException(),
         };
 

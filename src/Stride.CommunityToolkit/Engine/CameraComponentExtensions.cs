@@ -2,7 +2,7 @@ using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Physics;
 
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Engine;
 
 public static class CameraComponentExtensions
 {
@@ -208,9 +208,7 @@ public static class CameraComponentExtensions
     public static void ScreenToWorldRaySegment(this CameraComponent cameraComponent, ref Vector2 position, out RaySegment result)
     {
         if (cameraComponent == null)
-        {
             throw new ArgumentNullException(nameof(cameraComponent));
-        }
         Matrix.Invert(ref cameraComponent.ViewProjectionMatrix, out var inverseViewProjection);
 
         ScreenToClipSpace(ref position, out var clipSpace);
@@ -273,8 +271,8 @@ public static class CameraComponentExtensions
 
         Vector3.TransformNormal(ref direction, ref cameraComponent.ViewMatrix, out var viewSpaceDir);
 
-        float rayDistance = (position.Z / viewSpaceDir.Z);
+        float rayDistance = position.Z / viewSpaceDir.Z;
 
-        result = ray.Start + (direction * rayDistance);
+        result = ray.Start + direction * rayDistance;
     }
 }

@@ -24,7 +24,7 @@ void Start(Scene rootScene)
 void Update(Scene rootScene, GameTime gameTime)
 {
     var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * 47) + 3;
-    circleEntity?.DestroyEntity();
+    circleEntity?.Remove();
     circleEntity = AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, b => GiveMeACircle(b, segments));
 }
 

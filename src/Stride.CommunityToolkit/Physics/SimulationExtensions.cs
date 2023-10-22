@@ -1,13 +1,13 @@
 using Stride.Engine;
-using static BulletSharp.TriangleRaycastCallback;
+using Stride.Physics;
 
-namespace Stride.Physics;
+namespace Stride.CommunityToolkit.Physics;
 
 public static class SimulationExtensions
 {
     /// <summary>
     /// A Raycast method based on the example in the fps demo
-    /// <para>Make sure you are using the actual rotating Entity otherwise you will waste hours like I did debuging a non issue</para>
+    /// <para>Make sure you are using the actual rotating Entity otherwise you will waste hours like I did debugging a non issue</para>
     /// </summary>
     public static HitResult RayCast(this Simulation simulation, Entity entityPosition, float length = 1, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.AllFilter, EFlags eFlags = EFlags.None)
     {
