@@ -1,4 +1,4 @@
-using Example_CubeTower;
+using CubicleCalamity;
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 

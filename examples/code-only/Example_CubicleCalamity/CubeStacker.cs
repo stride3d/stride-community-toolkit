@@ -1,5 +1,5 @@
-using Example_CubeTower.Components;
-using Example_CubeTower.Scripts;
+using CubicleCalamity.Components;
+using CubicleCalamity.Scripts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -7,12 +7,14 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Physics;
 using Stride.Rendering;
+using Stride.Rendering.Colors;
+using Stride.Rendering.Lights;
 
-namespace Example_CubeTower;
+namespace CubicleCalamity;
 
 public class CubeStacker
 {
-    private readonly Vector3 _cubeSize = new Vector3(1);
+
     private readonly Game _game;
     private readonly Dictionary<Color, Material> _materials = new();
     private readonly Random _random = new();
@@ -27,11 +29,15 @@ public class CubeStacker
         _game.AddProfiler();
 
         CreateMaterials();
-        CreateAndCollideRow(0.5f, scene);
+
+        SetupLighting(scene);
+
+        CreateFirstLayer(0.5f, scene);
+
         CreateGameManagerEntity(scene);
     }
 
-    private void CreateGameManagerEntity(Scene scene)
+    private static void CreateGameManagerEntity(Scene scene)
     {
         var entity = new Entity("GameManager")
         {
@@ -45,11 +51,11 @@ public class CubeStacker
     {
         _elapsedTime += time.Elapsed.TotalSeconds;
 
-        if (_elapsedTime >= Constants.Interval && _layer <= Constants.MaxLayers)
+        if (_elapsedTime >= Constants.Interval && _layer <= Constants.MaxLayers - 1)
         {
             _elapsedTime = 0;
 
-            var entities = CreateModelRow(_layer + 0.5f, scene);
+            var entities = CreateCubeLayer(_layer + 2.5f, scene);
 
             AddColliders(entities);
 
@@ -67,14 +73,14 @@ public class CubeStacker
         }
     }
 
-    private void CreateAndCollideRow(float y, Scene scene)
+    private void CreateFirstLayer(float y, Scene scene)
     {
-        var entities = CreateModelRow(y, scene);
+        var entities = CreateCubeLayer(y, scene);
 
         AddColliders(entities);
     }
 
-    private List<Entity> CreateModelRow(float y, Scene scene)
+    private List<Entity> CreateCubeLayer(float y, Scene scene)
     {
         var entities = new List<Entity>();
 
@@ -82,9 +88,9 @@ public class CubeStacker
         {
             for (var z = 0; z < Constants.Rows; z++)
             {
-                var entity = CreateCube(_game, _cubeSize);
+                var entity = CreateCube(_game, Constants.CubeSize);
 
-                entity.Transform.Position = new Vector3(x, y, z);
+                entity.Transform.Position = new Vector3(x, y, z) * Constants.CubeSize;
 
                 entity.Scene = scene;
 
@@ -95,7 +101,7 @@ public class CubeStacker
         return entities;
     }
 
-    private void AddColliders(List<Entity> entities)
+    private static void AddColliders(List<Entity> entities)
     {
         foreach (var entity in entities)
         {
@@ -103,7 +109,7 @@ public class CubeStacker
 
             collider.ColliderShapes.Add(new BoxColliderShapeDesc
             {
-                Size = _cubeSize,
+                Size = Constants.CubeSize,
             });
 
             entity.Add(collider);
@@ -123,5 +129,51 @@ public class CubeStacker
         entity.Add(new CubeComponent(color));
 
         return entity;
+    }
+
+    public static void SetupLighting(Scene scene)
+    {
+        CreateLight(new LightAmbient
+        {
+            Color = GetColor(new(0.2f, 0.2f, 0.2f))
+        }, 1f, new Vector3(0, 20, 0));
+
+        CreateLight(new LightPoint
+        {
+            Color = GetColor(new(1f, 1f, 1f)),
+            Radius = 100f,
+        }, 100f, new Vector3(-20f, 5f, -20f));
+
+        CreateLight(new LightPoint
+        {
+            Color = GetColor(new(1f, 1f, 1f)),
+            Radius = 100f,
+        }, 100f, new Vector3(20f, 5f, 20f));
+
+        CreateLight(new LightPoint
+        {
+            Color = GetColor(new(1f, 1f, 1f)),
+            Radius = 100f,
+        }, 100f, new Vector3(-20f, 5f, 20f));
+
+        CreateLight(new LightPoint
+        {
+            Color = GetColor(new(1f, 1f, 1f)),
+            Radius = 100f,
+        }, 100f, new Vector3(20f, 5f, -20f));
+
+        static ColorRgbProvider GetColor(Color color) => new(color);
+
+        void CreateLight(ILight light, float intensity, Vector3 position)
+        {
+            var entity = new Entity() {
+                new LightComponent {
+                    Intensity =  intensity,
+                    Type = light
+                }};
+
+            entity.Transform.Position = position;
+            entity.Scene = scene;
+        }
     }
 }
