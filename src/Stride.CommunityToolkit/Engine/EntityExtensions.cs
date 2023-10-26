@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Engine;
 public static class EntityExtensions
 {
     /// <summary>
-    /// Adds an interactive camera script to the specified entity, enabling camera movement and rotation through various input methods.
+    /// Adds an interactive camera script <see cref="BasicCameraController"/> to the specified entity, enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
     /// <remarks>
