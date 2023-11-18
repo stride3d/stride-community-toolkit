@@ -138,28 +138,24 @@ public class CubeStacker
             Color = GetColor(new(0.2f, 0.2f, 0.2f))
         }, 1f, new Vector3(0, 20, 0));
 
-        CreateLight(new LightPoint
+        CreateLight(new LightDirectional
         {
             Color = GetColor(new(1f, 1f, 1f)),
-            Radius = 100f,
         }, 100f, new Vector3(-20f, 5f, -20f));
 
-        CreateLight(new LightPoint
+        CreateLight(new LightDirectional
         {
             Color = GetColor(new(1f, 1f, 1f)),
-            Radius = 100f,
         }, 100f, new Vector3(20f, 5f, 20f));
 
-        CreateLight(new LightPoint
+        CreateLight(new LightDirectional
         {
             Color = GetColor(new(1f, 1f, 1f)),
-            Radius = 100f,
         }, 100f, new Vector3(-20f, 5f, 20f));
 
-        CreateLight(new LightPoint
+        CreateLight(new LightDirectional
         {
             Color = GetColor(new(1f, 1f, 1f)),
-            Radius = 100f,
         }, 100f, new Vector3(20f, 5f, -20f));
 
         static ColorRgbProvider GetColor(Color color) => new(color);

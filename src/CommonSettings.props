@@ -6,7 +6,7 @@
         <Version>1.0.0.0</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Stride Contributors</Authors>
-        <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET.</Description>
+        <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET 8.</Description>
         <PackageProjectUrl>https://stride3d.github.io/stride-community-toolkit/index.html</PackageProjectUrl>
         <RepositoryUrl>https://github.com/stride3d/stride-community-toolkit</RepositoryUrl>
         <PackageTags>Stride;3D;2D;gamedev;Game Engine;engine;games;CSharp</PackageTags>
