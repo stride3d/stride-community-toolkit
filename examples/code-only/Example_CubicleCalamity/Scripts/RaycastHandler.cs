@@ -29,7 +29,7 @@ public class RaycastHandler : AsyncScript
         {
             if (Input.HasMouse && Input.IsMouseButtonPressed(MouseButton.Left))
             {
-                var hitResult = cameraComponent.RayCastMouse(this);
+                var hitResult = cameraComponent.RaycastMouse(this);
 
                 if (hitResult.Succeeded)
                 {
