@@ -32,7 +32,9 @@ public class RaycastHandler : AsyncScript
                 var hitResult = cameraComponent.RayCastMouse(this);
 
                 if (hitResult.Succeeded)
+                {
                     OnEntityHit(hitResult.Collider.Entity);
+                }
             }
 
             await Script.NextFrame();
@@ -59,7 +61,9 @@ public class RaycastHandler : AsyncScript
             Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count())}, Total Score: {_totalScore}");
 
             foreach (var cube in cubesToRemove)
+            {
                 cube.Remove();
+            }
 
             entity.Remove();
         }
@@ -82,7 +86,9 @@ public class RaycastHandler : AsyncScript
                 .Where(cube => !processedCubes.Contains(cube) && !cubesToCheck.Contains(cube));
 
             foreach (var touchingCube in touchingCubes)
+            {
                 cubesToCheck.Enqueue(touchingCube);
+            }
         }
 
         return processedCubes;
