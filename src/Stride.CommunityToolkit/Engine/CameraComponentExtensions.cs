@@ -65,6 +65,74 @@ public static class CameraComponentExtensions
         return worldDirection;
     }
 
+    // ToDo: Needs refactoring
+    public static Ray GetPickRay(this CameraComponent camera, Vector2 screenPos)
+    {
+        Matrix invViewProj = Matrix.Invert(camera.ViewProjectionMatrix);
+
+        // Reconstruct the projection-space position in the (-1, +1) range.
+        //    Don't forget that Y is down in screen coordinates, but up in projection space
+        Vector3 sPos;
+        sPos.X = screenPos.X * 2f - 1f;
+        sPos.Y = 1f - screenPos.Y * 2f;
+
+        // Compute the near (start) point for the raycast
+        // It's assumed to have the same projection space (x,y) coordinates and z = 0 (lying on the near plane)
+        // We need to unproject it to world space
+        sPos.Z = 0f;
+        var vectorNear = Vector3.Transform(sPos, invViewProj);
+        vectorNear /= vectorNear.W;
+
+        // Compute the far (end) point for the raycast
+        // It's assumed to have the same projection space (x,y) coordinates and z = 1 (lying on the far plane)
+        // We need to unproject it to world space
+        sPos.Z = 1f;
+        var vectorFar = Vector3.Transform(sPos, invViewProj);
+        vectorFar /= vectorFar.W;
+        Vector3 dir = vectorFar.XYZ() - vectorNear.XYZ();
+        dir.Normalize();
+        Ray ray = new Ray(vectorNear.XYZ(), dir);
+        return ray;
+    }
+
+    //ToDo: Needs refactoring
+    //Example of picking a Heightmap, and its extension
+    public static bool IntersectsRay(this Heightmap heightmap,
+        Ray ray, out Vector3 point, float m_QuadSideWidthX = 1.0f,
+        float m_QuadSideWidthZ = 1.0f)
+    {
+        //point = ray.Position;
+        //check each quad
+        // int quadnumx = (heightmap.Size.X - 1), quadnumz = (heightmap.Size.Y - 1);
+        BoundingSphere sphere = new BoundingSphere(Vector3.Zero, 1.5f);
+        int x, z;
+        float mindist = 1000000000.0f;
+        point = Vector3.Zero;
+        bool foundit = false;
+        for (z = 0; z < heightmap.Size.Y; z++)
+        {
+            for (x = 0; x < heightmap.Size.X; x++)
+            {
+                // ToDo Get GetHeightAt
+                //sphere.Center = new Vector3(x * m_QuadSideWidthX, heightmap.GetHeightAt(x, z), z * m_QuadSideWidthZ);
+
+                if (sphere.Intersects(ref ray, out Vector3 pt))
+                {
+                    //get nearest hit
+                    float dist = Vector3.Distance(pt, ray.Position);
+                    if (dist < mindist)
+                    {
+                        mindist = dist;
+                        point = pt;
+                        foundit = true;
+                    }
+                    //return true;//gets the first hit, replace out Vector3 pt with out point and comment the above
+                }
+            }
+        }
+        return foundit;
+    }
+
     /// <summary>
     /// Performs a raycasting operation from the specified CameraComponent's position through the specified screen position in world coordinates,
     /// and returns information about the hit result.
