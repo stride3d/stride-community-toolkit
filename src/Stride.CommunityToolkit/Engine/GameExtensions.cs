@@ -164,6 +164,7 @@ public static class GameExtensions
     /// <param name="entityName">Optional name for the new directional light entity. If null, the entity will not be named.</param>
     /// <returns>The created Entity object representing the directional light.</returns>
     /// <remarks>
+    /// <para>
     /// This method creates a directional light with the following default settings:
     /// - Intensity: 20.0f
     /// - Position: (0, 2.0f, 0)
@@ -171,8 +172,8 @@ public static class GameExtensions
     /// - Shadow Enabled: True
     /// - Shadow Size: Large
     /// - Shadow Filter: PCF (Percentage Closer Filtering) with a filter size of 5x5
-    ///
-    /// The entity will be added to the game's root scene. You can customize the light properties by accessing the returned Entity object.
+    /// </para>
+    /// <para>The entity will be added to the game's root scene. You can customize the light properties by accessing the returned Entity object.</para>
     /// </remarks>
     public static Entity AddDirectionalLight(this Game game, string? entityName = null)
     {

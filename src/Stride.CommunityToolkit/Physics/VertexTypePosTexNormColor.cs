@@ -1,4 +1,4 @@
-﻿using Stride.Graphics;
+using Stride.Graphics;
 using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Physics;
@@ -40,7 +40,7 @@ public static partial class HeightmapExtensions
             => Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent)
             && Color.Equals(other.Color) && TexCoord.Equals(other.TexCoord);
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             return obj is VertexTypePosTexNormColor && Equals((VertexTypePosTexNormColor)obj);
