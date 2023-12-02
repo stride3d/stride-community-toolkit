@@ -29,13 +29,10 @@
       <meta name="loc:themeAuto" content="Auto">
       <meta name="loc:changeTheme" content="Change theme">
       <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
 
-  <script type="module">
-    import options from './../public/main.js'
-    import { init } from './../public/docfx.min.js'
-    init(options)
-  </script>
+  <script type="module" src="./../public/docfx.min.js"></script>
 
   <script>
     const theme = localStorage.getItem('theme') || 'auto'
@@ -94,7 +91,7 @@
 
   <h1 id="Stride_Engine_ModelComponentExtensions" data-uid="Stride.Engine.ModelComponentExtensions" class="text-break">
     Class ModelComponentExtensions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L3"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -136,7 +133,7 @@
 
   <h3 id="Stride_Engine_ModelComponentExtensions_GetMeshHWL_Stride_Engine_ModelComponent_" data-uid="Stride.Engine.ModelComponentExtensions.GetMeshHWL(Stride.Engine.ModelComponent)">
   GetMeshHWL(ModelComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L26"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ModelComponents BoundingBox and calculates the Height, Width and Length</p>
@@ -149,13 +146,13 @@
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
     <dd></dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
     <dd></dd>
   </dl>
 
@@ -173,7 +170,7 @@
 
   <h3 id="Stride_Engine_ModelComponentExtensions_GetMeshHeight_Stride_Engine_ModelComponent_" data-uid="Stride.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)">
   GetMeshHeight(ModelComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the ModelComponents BoundingBox and calculates the Y height</p>
@@ -186,7 +183,7 @@
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
     <dd></dd>
   </dl>
 
@@ -206,14 +203,53 @@
 
 
 
+  <a id="Stride_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_" data-uid="Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices*"></a>
+
+  <h3 id="Stride_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_Stride_Engine_ModelComponent_Stride_Games_IGame_" data-uid="Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent,Stride.Games.IGame)">
+  GetMeshVerticesAndIndices(ModelComponent, IGame)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the ModelComponents Mesh data as vertices and indices.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (List&lt;Vector3&gt; verts, List&lt;int&gt; indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>model</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd></dd>
+    <dt><code>game</code> <span class="xref">IGame</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a>&gt; <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-system.collections.generic.list-stride.core.mathematics.vector3-,system.collections.generic.list-system.int32--.verts">verts</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt; <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-system.collections.generic.list-stride.core.mathematics.vector3-,system.collections.generic.list-system.int32--.indices">indices</a>)</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L3" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/ModelComponentExtensions.cs/#L6" class="edit-link">Edit this page</a>
         </div>
 
-        
+
       </div>
 
       <div class="affix">
@@ -223,7 +259,7 @@
 
     <div class="container-xxl search-results" id="search-results"></div>
 
-    <footer class="border-top">
+    <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
           <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>

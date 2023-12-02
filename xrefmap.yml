@@ -7,6 +7,165 @@ references:
   commentId: N:Stride.CommunityToolkit.Engine
   fullName: Stride.CommunityToolkit.Engine
   nameWithType: Stride.CommunityToolkit.Engine
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions
+  name: CameraComponentExtensions
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html
+  commentId: T:Stride.CommunityToolkit.Engine.CameraComponentExtensions
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions
+  nameWithType: CameraComponentExtensions
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: GetPickRay(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_GetPickRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.GetPickRay(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay*
+  name: GetPickRay
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_GetPickRay_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay
+  nameWithType: CameraComponentExtensions.GetPickRay
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: LogicDirectionToWorldDirection(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)
+  name: LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection*
+  name: LogicDirectionToWorldDirection
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_LogicDirectionToWorldDirection_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection
+  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast*
+  name: Raycast
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_Raycast_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast
+  nameWithType: CameraComponentExtensions.Raycast
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse*
+  name: RaycastMouse
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_RaycastMouse_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse
+  nameWithType: CameraComponentExtensions.RaycastMouse
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: ScreenPointToRay(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenPointToRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.ScreenPointToRay(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay*
+  name: ScreenPointToRay
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenPointToRay_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay
+  nameWithType: CameraComponentExtensions.ScreenPointToRay
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  name: ScreenToWorldPoint(CameraComponent, Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name: ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name.vb: ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
+  nameWithType.vb: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint*
+  name: ScreenToWorldPoint
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: ScreenToWorldRaySegment(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)
+  name: ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__Stride_CommunityToolkit_Scripts_RaySegment__
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)
+  name.vb: ScreenToWorldRaySegment(CameraComponent, Vector2, RaySegment)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector2, out Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
+  nameWithType.vb: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, Vector2, RaySegment)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment*
+  name: ScreenToWorldRaySegment
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment
+  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name: WorldToClipSpace(CameraComponent, ref Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToClipSpace_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name.vb: WorldToClipSpace(CameraComponent, Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToClipSpace(CameraComponent, ref Vector3)
+  nameWithType.vb: CameraComponentExtensions.WorldToClipSpace(CameraComponent, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace*
+  name: WorldToClipSpace
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToClipSpace_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace
+  nameWithType: CameraComponentExtensions.WorldToClipSpace
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  name: WorldToScreenPoint(CameraComponent, Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name: WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
+  name.vb: WorldToScreenPoint(CameraComponent, Vector3, Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
+  nameWithType.vb: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint*
+  name: WorldToScreenPoint
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions
   name: EntityExtensions
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html
@@ -71,12 +230,28 @@ references:
   fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents(Of T)(Stride.Engine.Entity)
   nameWithType: EntityExtensions.GetComponents<T>(Entity)
   nameWithType.vb: EntityExtensions.GetComponents(Of T)(Entity)
-- uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)
-  name: WorldPosition(Entity)
-  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_
-  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity)
-  nameWithType: EntityExtensions.WorldPosition(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)
+  name: Remove(Entity)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_Remove_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)
+  nameWithType: EntityExtensions.Remove(Entity)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.Remove*
+  name: Remove
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_Remove_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.Remove
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.Remove
+  nameWithType: EntityExtensions.Remove
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)
+  name: WorldPosition(Entity, bool)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)
+  name.vb: WorldPosition(Entity, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity, Boolean)
+  nameWithType: EntityExtensions.WorldPosition(Entity, bool)
+  nameWithType.vb: EntityExtensions.WorldPosition(Entity, Boolean)
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition*
   name: WorldPosition
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_
@@ -199,15 +374,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
   nameWithType: GameExtensions.CreateMaterial
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector2})
-  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector2?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector2__
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector2})
-  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector2?)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector2?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector2?)
-  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector2?)
-  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector2?)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3})
+  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3})
+  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector3?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector3?)
+  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?)
+  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive*
   name: CreatePrimitive
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_
@@ -302,152 +477,6 @@ references:
   commentId: N:Stride.CommunityToolkit.Extensions
   fullName: Stride.CommunityToolkit.Extensions
   nameWithType: Stride.CommunityToolkit.Extensions
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions
-  name: CameraComponentExtensions
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html
-  commentId: T:Stride.CommunityToolkit.Extensions.CameraComponentExtensions
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions
-  nameWithType: CameraComponentExtensions
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
-  name: LogicDirectionToWorldDirection(CameraComponent, Vector2)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
-  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection(CameraComponent, Vector2)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)
-  name: LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector3_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection*
-  name: LogicDirectionToWorldDirection
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_LogicDirectionToWorldDirection_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.LogicDirectionToWorldDirection
-  nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: RayCast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: CameraComponentExtensions.RayCast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast*
-  name: RayCast
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCast_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCast
-  nameWithType: CameraComponentExtensions.RayCast
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: RayCastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: CameraComponentExtensions.RayCastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse*
-  name: RayCastMouse
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_RayCastMouse_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.RayCastMouse
-  nameWithType: CameraComponentExtensions.RayCastMouse
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
-  name: ScreenPointToRay(CameraComponent, Vector2)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenPointToRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
-  nameWithType: CameraComponentExtensions.ScreenPointToRay(CameraComponent, Vector2)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay*
-  name: ScreenPointToRay
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenPointToRay_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenPointToRay
-  nameWithType: CameraComponentExtensions.ScreenPointToRay
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  name: ScreenToWorldPoint(CameraComponent, Vector3)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name: ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name.vb: ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
-  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
-  nameWithType.vb: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint*
-  name: ScreenToWorldPoint
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldPoint_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldPoint
-  nameWithType: CameraComponentExtensions.ScreenToWorldPoint
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
-  name: ScreenToWorldRaySegment(CameraComponent, Vector2)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
-  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, Vector2)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)
-  name: ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__Stride_CommunityToolkit_Scripts_RaySegment__
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)
-  name.vb: ScreenToWorldRaySegment(CameraComponent, Vector2, RaySegment)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector2, out Stride.CommunityToolkit.Scripts.RaySegment)
-  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Stride.CommunityToolkit.Scripts.RaySegment)
-  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
-  nameWithType.vb: CameraComponentExtensions.ScreenToWorldRaySegment(CameraComponent, Vector2, RaySegment)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment*
-  name: ScreenToWorldRaySegment
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_ScreenToWorldRaySegment_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.ScreenToWorldRaySegment
-  nameWithType: CameraComponentExtensions.ScreenToWorldRaySegment
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
-  name: WorldToClipSpace(CameraComponent, ref Vector3)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToClipSpace_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
-  name.vb: WorldToClipSpace(CameraComponent, Vector3)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3)
-  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.WorldToClipSpace(CameraComponent, ref Vector3)
-  nameWithType.vb: CameraComponentExtensions.WorldToClipSpace(CameraComponent, Vector3)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace*
-  name: WorldToClipSpace
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToClipSpace_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToClipSpace
-  nameWithType: CameraComponentExtensions.WorldToClipSpace
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  name: WorldToScreenPoint(CameraComponent, Vector3)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name: WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name.vb: WorldToScreenPoint(CameraComponent, Vector3, Vector3)
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
-  fullName.vb: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
-  nameWithType.vb: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3, Vector3)
-- uid: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint*
-  name: WorldToScreenPoint
-  href: api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html#Stride_CommunityToolkit_Extensions_CameraComponentExtensions_WorldToScreenPoint_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.CameraComponentExtensions.WorldToScreenPoint
-  nameWithType: CameraComponentExtensions.WorldToScreenPoint
 - uid: Stride.CommunityToolkit.Extensions.CameraDefaults
   name: CameraDefaults
   href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html
@@ -485,6 +514,468 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize
   nameWithType: GraphicsDeviceExtensions.GetWindowSize
+- uid: Stride.CommunityToolkit.Physics
+  name: Stride.CommunityToolkit.Physics
+  href: api/Stride.CommunityToolkit.Physics.html
+  commentId: N:Stride.CommunityToolkit.Physics
+  fullName: Stride.CommunityToolkit.Physics
+  nameWithType: Stride.CommunityToolkit.Physics
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions
+  name: HeightmapExtensions
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html
+  commentId: T:Stride.CommunityToolkit.Physics.HeightmapExtensions
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions
+  nameWithType: HeightmapExtensions
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor(System.Int16)
+  name: AsStrideColor(short)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_AsStrideColor_System_Int16_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor(System.Int16)
+  name.vb: AsStrideColor(Short)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor(short)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor(Short)
+  nameWithType: HeightmapExtensions.AsStrideColor(short)
+  nameWithType.vb: HeightmapExtensions.AsStrideColor(Short)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor*
+  name: AsStrideColor
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_AsStrideColor_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.AsStrideColor
+  nameWithType: HeightmapExtensions.AsStrideColor
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter
+  name: HeightmapExtensions.FloatRGBAConverter
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html
+  commentId: T:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter
+  nameWithType: HeightmapExtensions.FloatRGBAConverter
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.#ctor(System.Byte,System.Byte,System.Byte,System.Byte)
+  name: FloatRGBAConverter(byte, byte, byte, byte)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter__ctor_System_Byte_System_Byte_System_Byte_System_Byte_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.#ctor(System.Byte,System.Byte,System.Byte,System.Byte)
+  name.vb: New(Byte, Byte, Byte, Byte)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.FloatRGBAConverter(byte, byte, byte, byte)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.New(Byte, Byte, Byte, Byte)
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.FloatRGBAConverter(byte, byte, byte, byte)
+  nameWithType.vb: HeightmapExtensions.FloatRGBAConverter.New(Byte, Byte, Byte, Byte)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.#ctor(System.Single)
+  name: FloatRGBAConverter(float)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter__ctor_System_Single_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.#ctor(System.Single)
+  name.vb: New(Single)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.FloatRGBAConverter(float)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.New(Single)
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.FloatRGBAConverter(float)
+  nameWithType.vb: HeightmapExtensions.FloatRGBAConverter.New(Single)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.#ctor*
+  name: FloatRGBAConverter
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.FloatRGBAConverter
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.New
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.FloatRGBAConverter
+  nameWithType.vb: HeightmapExtensions.FloatRGBAConverter.New
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.A
+  name: A
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter_A
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.A
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.A
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.A
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.B
+  name: B
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter_B
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.B
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.B
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.B
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.Float
+  name: Float
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter_Float
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.Float
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.Float
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.Float
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.G
+  name: G
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter_G
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.G
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.G
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.G
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.R
+  name: R
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_FloatRGBAConverter_R
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.R
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.R
+  nameWithType: HeightmapExtensions.FloatRGBAConverter.R
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name: GetHeightAt(Heightmap, int, int)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetHeightAt_Stride_Physics_Heightmap_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name.vb: GetHeightAt(Heightmap, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt(Stride.Physics.Heightmap, int, int)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt(Stride.Physics.Heightmap, Integer, Integer)
+  nameWithType: HeightmapExtensions.GetHeightAt(Heightmap, int, int)
+  nameWithType.vb: HeightmapExtensions.GetHeightAt(Heightmap, Integer, Integer)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt*
+  name: GetHeightAt
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetHeightAt_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightAt
+  nameWithType: HeightmapExtensions.GetHeightAt
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name: GetHeightIndex(Heightmap, int, int)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetHeightIndex_Stride_Physics_Heightmap_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name.vb: GetHeightIndex(Heightmap, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex(Stride.Physics.Heightmap, int, int)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex(Stride.Physics.Heightmap, Integer, Integer)
+  nameWithType: HeightmapExtensions.GetHeightIndex(Heightmap, int, int)
+  nameWithType.vb: HeightmapExtensions.GetHeightIndex(Heightmap, Integer, Integer)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex*
+  name: GetHeightIndex
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetHeightIndex_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetHeightIndex
+  nameWithType: HeightmapExtensions.GetHeightIndex
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name: GetNormal(Heightmap, int, int)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetNormal_Stride_Physics_Heightmap_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name.vb: GetNormal(Heightmap, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal(Stride.Physics.Heightmap, int, int)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal(Stride.Physics.Heightmap, Integer, Integer)
+  nameWithType: HeightmapExtensions.GetNormal(Heightmap, int, int)
+  nameWithType.vb: HeightmapExtensions.GetNormal(Heightmap, Integer, Integer)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal*
+  name: GetNormal
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetNormal_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetNormal
+  nameWithType: HeightmapExtensions.GetNormal
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name: GetTangent(Heightmap, int, int)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetTangent_Stride_Physics_Heightmap_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name.vb: GetTangent(Heightmap, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent(Stride.Physics.Heightmap, int, int)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent(Stride.Physics.Heightmap, Integer, Integer)
+  nameWithType: HeightmapExtensions.GetTangent(Heightmap, int, int)
+  nameWithType.vb: HeightmapExtensions.GetTangent(Heightmap, Integer, Integer)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent*
+  name: GetTangent
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_GetTangent_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.GetTangent
+  nameWithType: HeightmapExtensions.GetTangent
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.HeightMultiplier
+  name: HeightMultiplier
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_HeightMultiplier
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.HeightMultiplier
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.HeightMultiplier
+  nameWithType: HeightmapExtensions.HeightMultiplier
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay(Stride.Physics.Heightmap,Stride.Core.Mathematics.Ray,Stride.Core.Mathematics.Vector3@,System.Single,System.Single)
+  name: IntersectsRay(Heightmap, Ray, out Vector3, float, float)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_IntersectsRay_Stride_Physics_Heightmap_Stride_Core_Mathematics_Ray_Stride_Core_Mathematics_Vector3__System_Single_System_Single_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay(Stride.Physics.Heightmap,Stride.Core.Mathematics.Ray,Stride.Core.Mathematics.Vector3@,System.Single,System.Single)
+  name.vb: IntersectsRay(Heightmap, Ray, Vector3, Single, Single)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay(Stride.Physics.Heightmap, Stride.Core.Mathematics.Ray, out Stride.Core.Mathematics.Vector3, float, float)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay(Stride.Physics.Heightmap, Stride.Core.Mathematics.Ray, Stride.Core.Mathematics.Vector3, Single, Single)
+  nameWithType: HeightmapExtensions.IntersectsRay(Heightmap, Ray, out Vector3, float, float)
+  nameWithType.vb: HeightmapExtensions.IntersectsRay(Heightmap, Ray, Vector3, Single, Single)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay*
+  name: IntersectsRay
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_IntersectsRay_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.IntersectsRay
+  nameWithType: HeightmapExtensions.IntersectsRay
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name: IsValidCoordinate(Heightmap, int, int)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_IsValidCoordinate_Stride_Physics_Heightmap_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate(Stride.Physics.Heightmap,System.Int32,System.Int32)
+  name.vb: IsValidCoordinate(Heightmap, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate(Stride.Physics.Heightmap, int, int)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate(Stride.Physics.Heightmap, Integer, Integer)
+  nameWithType: HeightmapExtensions.IsValidCoordinate(Heightmap, int, int)
+  nameWithType.vb: HeightmapExtensions.IsValidCoordinate(Heightmap, Integer, Integer)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate*
+  name: IsValidCoordinate
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_IsValidCoordinate_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.IsValidCoordinate
+  nameWithType: HeightmapExtensions.IsValidCoordinate
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToFloats(Stride.Physics.Heightmap)
+  name: ToFloats(Heightmap)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToFloats_Stride_Physics_Heightmap_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToFloats(Stride.Physics.Heightmap)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToFloats(Stride.Physics.Heightmap)
+  nameWithType: HeightmapExtensions.ToFloats(Heightmap)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToFloats*
+  name: ToFloats
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToFloats_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToFloats
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToFloats
+  nameWithType: HeightmapExtensions.ToFloats
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh(Stride.Physics.Heightmap,Stride.Graphics.GraphicsDevice,System.Single,System.Single,System.Single,Stride.Core.Mathematics.Vector3[]@,System.Int32)
+  name: ToMesh(Heightmap, GraphicsDevice, float, float, float, out Vector3[], int)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToMesh_Stride_Physics_Heightmap_Stride_Graphics_GraphicsDevice_System_Single_System_Single_System_Single_Stride_Core_Mathematics_Vector3____System_Int32_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh(Stride.Physics.Heightmap,Stride.Graphics.GraphicsDevice,System.Single,System.Single,System.Single,Stride.Core.Mathematics.Vector3[]@,System.Int32)
+  name.vb: ToMesh(Heightmap, GraphicsDevice, Single, Single, Single, Vector3(), Integer)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh(Stride.Physics.Heightmap, Stride.Graphics.GraphicsDevice, float, float, float, out Stride.Core.Mathematics.Vector3[], int)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh(Stride.Physics.Heightmap, Stride.Graphics.GraphicsDevice, Single, Single, Single, Stride.Core.Mathematics.Vector3(), Integer)
+  nameWithType: HeightmapExtensions.ToMesh(Heightmap, GraphicsDevice, float, float, float, out Vector3[], int)
+  nameWithType.vb: HeightmapExtensions.ToMesh(Heightmap, GraphicsDevice, Single, Single, Single, Vector3(), Integer)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh*
+  name: ToMesh
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToMesh_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToMesh
+  nameWithType: HeightmapExtensions.ToMesh
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToTexture(Stride.Physics.Heightmap,Stride.Graphics.GraphicsDevice,Stride.Graphics.CommandList)
+  name: ToTexture(Heightmap, GraphicsDevice, CommandList)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToTexture_Stride_Physics_Heightmap_Stride_Graphics_GraphicsDevice_Stride_Graphics_CommandList_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToTexture(Stride.Physics.Heightmap,Stride.Graphics.GraphicsDevice,Stride.Graphics.CommandList)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToTexture(Stride.Physics.Heightmap, Stride.Graphics.GraphicsDevice, Stride.Graphics.CommandList)
+  nameWithType: HeightmapExtensions.ToTexture(Heightmap, GraphicsDevice, CommandList)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToTexture*
+  name: ToTexture
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToTexture_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToTexture
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToTexture
+  nameWithType: HeightmapExtensions.ToTexture
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints(Stride.Physics.Heightmap,System.Single,System.Single)
+  name: ToWorldPoints(Heightmap, float, float)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToWorldPoints_Stride_Physics_Heightmap_System_Single_System_Single_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints(Stride.Physics.Heightmap,System.Single,System.Single)
+  name.vb: ToWorldPoints(Heightmap, Single, Single)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints(Stride.Physics.Heightmap, float, float)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints(Stride.Physics.Heightmap, Single, Single)
+  nameWithType: HeightmapExtensions.ToWorldPoints(Heightmap, float, float)
+  nameWithType.vb: HeightmapExtensions.ToWorldPoints(Heightmap, Single, Single)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints*
+  name: ToWorldPoints
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_ToWorldPoints_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.ToWorldPoints
+  nameWithType: HeightmapExtensions.ToWorldPoints
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor
+  name: HeightmapExtensions.VertexTypePosTexNormColor
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html
+  commentId: T:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.#ctor(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector4)
+  name: VertexTypePosTexNormColor(Vector3, Vector3, Vector3, Vector2, Vector4)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor__ctor_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector4_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.#ctor(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector4)
+  name.vb: New(Vector3, Vector3, Vector3, Vector2, Vector4)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.VertexTypePosTexNormColor(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Vector4)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.New(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Vector4)
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.VertexTypePosTexNormColor(Vector3, Vector3, Vector3, Vector2, Vector4)
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.New(Vector3, Vector3, Vector3, Vector2, Vector4)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.#ctor*
+  name: VertexTypePosTexNormColor
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.VertexTypePosTexNormColor
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.New
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.VertexTypePosTexNormColor
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.New
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Color
+  name: Color
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Color
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Color
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Color
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Color
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  name: Equals(VertexTypePosTexNormColor)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Equals_Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Equals(HeightmapExtensions.VertexTypePosTexNormColor)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(System.Object)
+  name: Equals(object)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Equals_System_Object_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(System.Object)
+  name.vb: Equals(Object)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(object)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals(Object)
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Equals(object)
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.Equals(Object)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals*
+  name: Equals
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Equals_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Equals
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Equals
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding
+  name: FlipWinding()
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_FlipWinding
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding()
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding()
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding*
+  name: FlipWinding
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_FlipWinding_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.FlipWinding
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode
+  name: GetHashCode()
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_GetHashCode
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode()
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode()
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode*
+  name: GetHashCode
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_GetHashCode_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.GetHashCode
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetLayout
+  name: GetLayout()
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_GetLayout
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetLayout
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetLayout()
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.GetLayout()
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetLayout*
+  name: GetLayout
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_GetLayout_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetLayout
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.GetLayout
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.GetLayout
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Layout
+  name: Layout
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Layout
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Layout
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Layout
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Layout
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Normal
+  name: Normal
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Normal
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Normal
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Normal
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Normal
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Position
+  name: Position
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Position
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Position
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Position
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Position
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Size
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Size
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Size
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Size
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Tangent
+  name: Tangent
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Tangent
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Tangent
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.Tangent
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.Tangent
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.TexCoord
+  name: TexCoord
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_TexCoord
+  commentId: F:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.TexCoord
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.TexCoord
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.TexCoord
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.ToString
+  name: ToString()
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_ToString
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.ToString
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.ToString()
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.ToString()
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.ToString*
+  name: ToString
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_ToString_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.ToString
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.ToString
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.ToString
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Equality(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor,Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  name: operator ==(VertexTypePosTexNormColor, VertexTypePosTexNormColor)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_op_Equality_Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Equality(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor,Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  name.vb: =(VertexTypePosTexNormColor, VertexTypePosTexNormColor)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.operator ==(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor, Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.=(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor, Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.operator ==(HeightmapExtensions.VertexTypePosTexNormColor, HeightmapExtensions.VertexTypePosTexNormColor)
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.=(HeightmapExtensions.VertexTypePosTexNormColor, HeightmapExtensions.VertexTypePosTexNormColor)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Equality*
+  name: operator ==
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_op_Equality_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Equality
+  isSpec: "True"
+  name.vb: =
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.operator ==
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.=
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.operator ==
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.=
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Inequality(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor,Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  name: operator !=(VertexTypePosTexNormColor, VertexTypePosTexNormColor)
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_op_Inequality_Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_
+  commentId: M:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Inequality(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor,Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  name.vb: <>(VertexTypePosTexNormColor, VertexTypePosTexNormColor)
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.operator !=(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor, Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.<>(Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor, Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor)
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.operator !=(HeightmapExtensions.VertexTypePosTexNormColor, HeightmapExtensions.VertexTypePosTexNormColor)
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.<>(HeightmapExtensions.VertexTypePosTexNormColor, HeightmapExtensions.VertexTypePosTexNormColor)
+- uid: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Inequality*
+  name: operator !=
+  href: api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html#Stride_CommunityToolkit_Physics_HeightmapExtensions_VertexTypePosTexNormColor_op_Inequality_
+  commentId: Overload:Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.op_Inequality
+  isSpec: "True"
+  name.vb: <>
+  fullName: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.operator !=
+  fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.<>
+  nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.operator !=
+  nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.<>
+- uid: Stride.CommunityToolkit.Physics.SimulationExtensions
+  name: SimulationExtensions
+  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html
+  commentId: T:Stride.CommunityToolkit.Physics.SimulationExtensions
+  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions
+  nameWithType: SimulationExtensions
+- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name: Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
+  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
+  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name.vb: Raycast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
+  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  fullName.vb: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  nameWithType: SimulationExtensions.Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
+  nameWithType.vb: SimulationExtensions.Raycast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
+- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name: Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
+  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
+  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name.vb: Raycast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
+  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  fullName.vb: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  nameWithType: SimulationExtensions.Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
+  nameWithType.vb: SimulationExtensions.Raycast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
+- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast*
+  name: Raycast
+  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_
+  commentId: Overload:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast
+  nameWithType: SimulationExtensions.Raycast
 - uid: Stride.CommunityToolkit.ProceduralModels
   name: Stride.CommunityToolkit.ProceduralModels
   href: api/Stride.CommunityToolkit.ProceduralModels.html
@@ -1540,6 +2031,19 @@ references:
   isSpec: "True"
   fullName: Stride.Engine.ModelComponentExtensions.GetMeshHeight
   nameWithType: ModelComponentExtensions.GetMeshHeight
+- uid: Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent,Stride.Games.IGame)
+  name: GetMeshVerticesAndIndices(ModelComponent, IGame)
+  href: api/Stride.Engine.ModelComponentExtensions.html#Stride_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_Stride_Engine_ModelComponent_Stride_Games_IGame_
+  commentId: M:Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent,Stride.Games.IGame)
+  fullName: Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent, Stride.Games.IGame)
+  nameWithType: ModelComponentExtensions.GetMeshVerticesAndIndices(ModelComponent, IGame)
+- uid: Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices*
+  name: GetMeshVerticesAndIndices
+  href: api/Stride.Engine.ModelComponentExtensions.html#Stride_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_
+  commentId: Overload:Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices
+  isSpec: "True"
+  fullName: Stride.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices
+  nameWithType: ModelComponentExtensions.GetMeshVerticesAndIndices
 - uid: Stride.Engine.ScriptComponentExtensions
   name: ScriptComponentExtensions
   href: api/Stride.Engine.ScriptComponentExtensions.html
@@ -1594,40 +2098,3 @@ references:
   isSpec: "True"
   fullName: Stride.Engine.ScriptComponentExtensions.GetFirstCamera
   nameWithType: ScriptComponentExtensions.GetFirstCamera
-- uid: Stride.Physics
-  name: Stride.Physics
-  href: api/Stride.Physics.html
-  commentId: N:Stride.Physics
-  fullName: Stride.Physics
-  nameWithType: Stride.Physics
-- uid: Stride.Physics.SimulationExtensions
-  name: SimulationExtensions
-  href: api/Stride.Physics.SimulationExtensions.html
-  commentId: T:Stride.Physics.SimulationExtensions
-  fullName: Stride.Physics.SimulationExtensions
-  nameWithType: SimulationExtensions
-- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name: RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
-  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
-  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name.vb: RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
-  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
-  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
-- uid: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name: RayCast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
-  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
-  commentId: M:Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name.vb: RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
-  fullName: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  fullName.vb: Stride.Physics.SimulationExtensions.RayCast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  nameWithType: SimulationExtensions.RayCast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
-  nameWithType.vb: SimulationExtensions.RayCast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
-- uid: Stride.Physics.SimulationExtensions.RayCast*
-  name: RayCast
-  href: api/Stride.Physics.SimulationExtensions.html#Stride_Physics_SimulationExtensions_RayCast_
-  commentId: Overload:Stride.Physics.SimulationExtensions.RayCast
-  isSpec: "True"
-  fullName: Stride.Physics.SimulationExtensions.RayCast
-  nameWithType: SimulationExtensions.RayCast

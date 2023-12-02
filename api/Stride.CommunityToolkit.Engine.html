@@ -29,13 +29,10 @@
       <meta name="loc:themeAuto" content="Auto">
       <meta name="loc:changeTheme" content="Change theme">
       <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
   </head>
 
-  <script type="module">
-    import options from './../public/main.js'
-    import { init } from './../public/docfx.min.js'
-    init(options)
-  </script>
+  <script type="module" src="./../public/docfx.min.js"></script>
 
   <script>
     const theme = localStorage.getItem('theme') || 'auto'
@@ -100,8 +97,12 @@
 Classes
 </h3>
     <dl class="jumplist">
+      <dt><a class="xref" href="Stride.CommunityToolkit.Engine.CameraComponentExtensions.html">CameraComponentExtensions</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
       <dt><a class="xref" href="Stride.CommunityToolkit.Engine.EntityExtensions.html">EntityExtensions</a></dt>
-      <dd><p>Provides extension methods for <a class="xref" href="https://github.com/stride3d/stride/blob/02f6a1ef77ed604675df7fc4501d68a3875c68e3/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to simplify common operations.</p>
+      <dd><p>Provides extension methods for <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to simplify common operations.</p>
 </dd>
     </dl>
     <dl class="jumplist">
@@ -116,7 +117,7 @@ Classes
         <div class="contribution d-print-none">
         </div>
 
-        
+
       </div>
 
       <div class="affix">
@@ -126,7 +127,7 @@ Classes
 
     <div class="container-xxl search-results" id="search-results"></div>
 
-    <footer class="border-top">
+    <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
           <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>

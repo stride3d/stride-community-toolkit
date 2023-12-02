@@ -27,6 +27,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.EntityExtensions.yml",
       "output": {
         ".html": {
@@ -57,16 +67,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Extensions.CameraComponentExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Extensions.CameraDefaults.yml",
       "output": {
         ".html": {
@@ -91,6 +91,56 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Extensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Physics.SimulationExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Physics.SimulationExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Physics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Physics.html"
         }
       },
       "version": ""
@@ -271,26 +321,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.Engine.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Physics.SimulationExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Physics.SimulationExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Physics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Physics.html"
         }
       },
       "version": ""
