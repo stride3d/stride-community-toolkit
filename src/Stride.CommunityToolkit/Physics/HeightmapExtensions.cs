@@ -1,11 +1,10 @@
 using Stride.Graphics;
 using Stride.Physics;
 using Stride.Rendering;
-using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Physics;
 
-public static class HeightmapExtensions
+public static partial class HeightmapExtensions
 {
     /// <summary>
     /// Used to distinguish between Grey scale heightmaps HeightMultiplier=255.0f (yields a byte 0-255)
@@ -16,9 +15,7 @@ public static class HeightmapExtensions
 
     //ToDo: Needs refactoring
     //Example of picking a Heightmap, and its extension
-    public static bool IntersectsRay(this Heightmap heightmap,
-        Ray ray, out Vector3 point, float m_QuadSideWidthX = 1.0f,
-        float m_QuadSideWidthZ = 1.0f)
+    public static bool IntersectsRay(this Heightmap heightmap, Ray ray, out Vector3 point, float m_QuadSideWidthX = 1.0f, float m_QuadSideWidthZ = 1.0f)
     {
         BoundingSphere sphere = new BoundingSphere(Vector3.Zero, 1.5f);
         int x, z;
@@ -114,11 +111,10 @@ public static class HeightmapExtensions
         return heightValues;
     }
 
-    public static Texture ToTexture(this Heightmap heightmap,
-        GraphicsDevice GraphicsDevice, CommandList CommandList)
+    public static Texture ToTexture(this Heightmap heightmap, GraphicsDevice graphicsDevice, CommandList commandList)
     {
         int i, j, index, m_Width = heightmap.Size.X, m_Height = heightmap.Size.Y;
-        Texture tex = Texture.New2D(GraphicsDevice, m_Width,
+        Texture tex = Texture.New2D(graphicsDevice, m_Width,
             m_Height, PixelFormat.R8G8B8A8_UNorm,
             TextureFlags.ShaderResource, 1, GraphicsResourceUsage.Dynamic);
         Color[] heightValues = new Color[m_Width * m_Height];
@@ -131,30 +127,30 @@ public static class HeightmapExtensions
                 heightValues[index] = heightmap.Shorts[index].AsStrideColor();
             }
         }
-        tex.SetData(CommandList, heightValues);
+        tex.SetData(commandList, heightValues);
         return tex;
     }
 
     /// <summary>
-    /// Creates the terrain mesh from a given heightmap. Tesselation divides
+    /// Creates the terrain mesh from a given heightmap. Tessellation divides
     /// the quad numbers.
     /// </summary>
     /// <param name="heightmap"></param>
-    /// <param name="GraphicsDevice"></param>
+    /// <param name="graphicsDevice"></param>
     /// <param name="m_QuadSideWidthX"></param>
     /// <param name="m_QuadSideWidthZ"></param>
     /// <param name="TEXTURE_REPEAT"></param>
-    /// <param name="TerrainPoints"></param>
-    /// <param name="Tesselation"></param>
+    /// <param name="terrainPoints"></param>
+    /// <param name="tessellation"></param>
     /// <returns></returns>
     public static Mesh ToMesh(this Heightmap heightmap,
-        GraphicsDevice GraphicsDevice,
+        GraphicsDevice graphicsDevice,
         float m_QuadSideWidthX, float m_QuadSideWidthZ, float TEXTURE_REPEAT,
-        out Vector3[] TerrainPoints, int Tesselation)
+        out Vector3[] terrainPoints, int tessellation)
     {
         Vector3 minBounds = Vector3.Zero;
-        int m_num_quads_z = (heightmap.Size.Y - 1) / Tesselation,
-            m_num_quads_x = (heightmap.Size.X - 1) / Tesselation;
+        int m_num_quads_z = (heightmap.Size.Y - 1) / tessellation,
+            m_num_quads_x = (heightmap.Size.X - 1) / tessellation;
         Vector3 maxBounds = new Vector3((heightmap.Size.X - 1)
             * m_QuadSideWidthX, 0,
             (heightmap.Size.Y - 1)
@@ -162,14 +158,14 @@ public static class HeightmapExtensions
         Vector3 center = 0.5f * (minBounds + maxBounds);
         int numVertsX = m_num_quads_x + 1;
         int numVertsZ = m_num_quads_z + 1;
-        float stepX = Tesselation * (maxBounds.X - minBounds.X) / (heightmap.Size.X - 1);
-        float stepZ = Tesselation * (maxBounds.Z - minBounds.Z) / (heightmap.Size.Y - 1);
+        float stepX = tessellation * (maxBounds.X - minBounds.X) / (heightmap.Size.X - 1);
+        float stepZ = tessellation * (maxBounds.Z - minBounds.Z) / (heightmap.Size.Y - 1);
         int count = 0, x, z, m_vertexCount = numVertsX * numVertsZ;
         Vector3 pos = new Vector3(minBounds.X, 0, minBounds.Z);
         byte R = 149, G = 135, B = 118;
         // Create the vertex array.
         VertexTypePosTexNormColor[] m_vertices = new VertexTypePosTexNormColor[m_vertexCount];
-        TerrainPoints = new Vector3[m_vertexCount];
+        terrainPoints = new Vector3[m_vertexCount];
 
         // Vector3[] Normals = heightmap.CalculateNormals();
         // Initialize the index to the vertex buffer.
@@ -180,16 +176,16 @@ public static class HeightmapExtensions
             {
                 m_vertices[count].Position = new Vector3(pos.X,
                     heightmap.GetHeightAt(x, z), pos.Z);
-                TerrainPoints[count] = m_vertices[count].Position;
+                terrainPoints[count] = m_vertices[count].Position;
                 if (TEXTURE_REPEAT > 0)//whole terrain has the texture repeatedly
                 {
-                    m_vertices[count].TexCoord.X = m_QuadSideWidthX * TEXTURE_REPEAT * x / (float)numVertsX * Tesselation;
-                    m_vertices[count].TexCoord.Y = m_QuadSideWidthZ * TEXTURE_REPEAT * (z * 1.0f) / (float)numVertsZ * Tesselation;
+                    m_vertices[count].TexCoord.X = m_QuadSideWidthX * TEXTURE_REPEAT * x / (float)numVertsX * tessellation;
+                    m_vertices[count].TexCoord.Y = m_QuadSideWidthZ * TEXTURE_REPEAT * (z * 1.0f) / (float)numVertsZ * tessellation;
                 }
                 else //make each quad have the texture
                 {
-                    m_vertices[count].TexCoord.X = m_QuadSideWidthX * x * Tesselation;
-                    m_vertices[count].TexCoord.Y = m_QuadSideWidthZ * z * Tesselation;
+                    m_vertices[count].TexCoord.X = m_QuadSideWidthX * x * tessellation;
+                    m_vertices[count].TexCoord.Y = m_QuadSideWidthZ * z * tessellation;
                 }
                 m_vertices[count].Normal = heightmap.GetNormal(x, z);
                 m_vertices[count].Tangent = heightmap.GetTangent(x, z);
@@ -217,8 +213,8 @@ public static class HeightmapExtensions
             }
         }
 
-        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(GraphicsDevice, m_vertices, GraphicsResourceUsage.Dynamic);
-        var indexBuffer = Stride.Graphics.Buffer.Index.New(GraphicsDevice, indices);
+        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(graphicsDevice, m_vertices, GraphicsResourceUsage.Dynamic);
+        var indexBuffer = Stride.Graphics.Buffer.Index.New(graphicsDevice, indices);
 
         return new Mesh
         {
@@ -229,8 +225,8 @@ public static class HeightmapExtensions
                 IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
                 VertexBuffers = new[] { new VertexBufferBinding(vertexBuffer, VertexTypePosTexNormColor.Layout, vertexBuffer.ElementCount) },
             },
-            BoundingBox = BoundingBox.FromPoints(TerrainPoints),
-            BoundingSphere = BoundingSphere.FromPoints(TerrainPoints)
+            BoundingBox = BoundingBox.FromPoints(terrainPoints),
+            BoundingSphere = BoundingSphere.FromPoints(terrainPoints)
         };
     }
 
@@ -267,115 +263,10 @@ public static class HeightmapExtensions
         return points;
     }
 
-    /// <summary>
-    /// Custom vertex type so that we can generate tangents for supporting normal maps
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct VertexTypePosTexNormColor : IEquatable<VertexTypePosTexNormColor>, IVertex
-    {
-        public VertexTypePosTexNormColor(Vector3 position, Vector3 normal, Vector3 tangent,
-            Vector2 TexCoord1, Vector4 Color1) : this()
-        {
-            Position = position;
-            Normal = normal;
-            Tangent = tangent;
-            TexCoord = TexCoord1;
-            Color = Color1;
-        }
-
-        public Vector3 Position;
-        public Vector3 Normal;
-        public Vector3 Tangent;
-        public Vector2 TexCoord;
-        public Vector4 Color;
-
-        public static readonly int Size = 60;
-
-        public static readonly VertexDeclaration Layout = new VertexDeclaration(
-           VertexElement.Position<Vector3>(),//12=4*3
-           VertexElement.Normal<Vector3>(),//24
-           VertexElement.Tangent<Vector3>(),//36
-           VertexElement.TextureCoordinate<Vector2>(),//44
-           VertexElement.Color<Vector4>());
-
-        public bool Equals(VertexTypePosTexNormColor other)
-            =>  Position.Equals(other.Position) && Normal.Equals(other.Normal) && Tangent.Equals(other.Tangent)
-            && Color.Equals(other.Color) && TexCoord.Equals(other.TexCoord);
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is VertexTypePosTexNormColor && Equals((VertexTypePosTexNormColor)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = Position.GetHashCode();
-                hashCode = (hashCode * 397) ^ Normal.GetHashCode();
-                hashCode = (hashCode * 397) ^ TexCoord.GetHashCode();
-                hashCode = (hashCode * 397) ^ Color.GetHashCode();
-                return hashCode;
-            }
-        }
-
-        public VertexDeclaration GetLayout()
-            => Layout;
-
-        public void FlipWinding()
-            => TexCoord.X = (1.0f - TexCoord.X);
-
-        public static bool operator ==(VertexTypePosTexNormColor left, VertexTypePosTexNormColor right)
-            => left.Equals(right);
-
-        public static bool operator !=(VertexTypePosTexNormColor left, VertexTypePosTexNormColor right)
-            => !left.Equals(right);
-
-        public override string ToString()
-            => string.Format("Position: {0}, Normal: {1}, Tangent {2}, Texcoord: {3}, Color: {4}", Position, Normal, Tangent, TexCoord, Color);
-
-    }
-    public static Stride.Core.Mathematics.Color AsStrideColor(this short val)
+    public static Color AsStrideColor(this short val)
     {
         FloatRGBAConverter converter = new FloatRGBAConverter((float)val);
-        return new Stride.Core.Mathematics.Color(converter.R, converter.G,
+        return new Color(converter.R, converter.G,
              converter.B, converter.A);
     }
-
-    /// <summary>
-    /// Float from bytes and back, like the Union structure from c++
-    /// </summary>
-    [StructLayout(LayoutKind.Explicit)]
-    public struct FloatRGBAConverter
-    {
-        [FieldOffset(0)]
-        public float Float;
-
-        [FieldOffset(0)]
-        public byte R;
-
-        [FieldOffset(1)]
-        public byte G;
-
-        [FieldOffset(2)]
-        public byte B;
-
-        [FieldOffset(3)]
-        public byte A;
-
-        public FloatRGBAConverter(float @float) : this()
-        {
-            Float = @float;
-        }
-
-        public FloatRGBAConverter(byte r, byte g, byte b, byte a) : this()
-        {
-            R = r;
-            G = g;
-            B = b;
-            A = a;
-        }
-    }
-
 }
