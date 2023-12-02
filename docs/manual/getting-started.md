@@ -8,7 +8,7 @@ Ensure the following are installed to build/run the project. If you're on Stride
 
 1. Microsoft Visual C++ 2015-2022 Redistributable
    - [vcredist_x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (25MB)
-1. .NET 6 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (200MB)
+1. .NET 8 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (200MB)
    - Verify installation with:
         ```
         dotnet --info
@@ -31,3 +31,5 @@ To add the NuGet package using the command line, execute the following command:
 ```
 dotnet add package Stride.CommunityToolkit --prerelease
 ```
+
+Use the left navigation to check our extension or dive in code-only section for simple examples.

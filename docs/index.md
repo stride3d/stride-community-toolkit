@@ -7,7 +7,7 @@
 
 ## 👋 Introduction
 
-The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a comprehensive set of helpers and extensions designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and exemplifies routine development tasks 🛠️, enabling you to build applications for Stride using .NET with ease 🎉.
+The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a comprehensive set of C# helpers and [extensions](manual/entity-extensions/index.md) designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and exemplifies routine development tasks 🛠️, enabling you to build applications for Stride using **.NET 8** with ease 🎉.
 
 ## 🔧 Installation
 
@@ -25,6 +25,17 @@ The Stride Community Toolkit is an open-source, MIT licensed project hosted on G
 
 Access the source code or contribute 🤝 to the Stride Game Engine on its [GitHub Repository](https://github.com/stride3d/stride). Explore a comprehensive guide on the [Stride Docs](https://doc.stride3d.net/) website.
 
+## 📃 Documentation & Resources
+
+Explore a range of resources to help you get the most out of the Stride Community Toolkit:
+
+- [Manual](manual/index.md): Get detailed guidance and best practices for using the toolkit.
+- [Tutorials](tutorials/index.md): Step-by-step tutorials to help you learn various features of the toolkit.
+- [Release Notes](release-notes/index.md): Stay updated with the latest changes and improvements.
+- [API Reference](api/index.md): In-depth API documentation for a deep dive into the toolkit's capabilities.
+
+These resources are designed to provide comprehensive information and support for developers at all levels, from beginners to advanced users.
+
 ## 👥 Contributors
 
 This section highlights the amazing contributors who have helped enhance the Stride Community Toolkit with their efforts.
@@ -34,3 +45,4 @@ This section highlights the amazing contributors who have helped enhance the Str
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
 - [Vaclav Elias](https://github.com/VaclavElias): Code only approach implementation, toolkit docs
 - [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
+- [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
