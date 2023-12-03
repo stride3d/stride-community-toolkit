@@ -1,7 +1,8 @@
+using Stride.Engine;
 using Stride.Games;
 using Stride.Rendering;
 
-namespace Stride.Engine;
+namespace Stride.CommunityToolkit.Engine;
 
 public static class ModelComponentExtensions
 {
@@ -44,9 +45,9 @@ public static class ModelComponentExtensions
         return GetMeshData(model.Model, game.Services, game);
     }
 
-    static unsafe (List<Vector3> verts, List<int> indices) GetMeshData(Model model, IServiceRegistry services, IGame game)
+    private static unsafe (List<Vector3> verts, List<int> indices) GetMeshData(Model model, IServiceRegistry services, IGame game)
     {
-        Matrix[] nodeTransforms = null;
+        Matrix[]? nodeTransforms = null;
 
         int totalVerts = 0, totalIndices = 0;
         foreach (var meshData in model.Meshes)
@@ -62,8 +63,8 @@ public static class ModelComponentExtensions
         {
             var vBuffer = meshData.Draw.VertexBuffers[0].Buffer;
             var iBuffer = meshData.Draw.IndexBuffer.Buffer;
-            byte[] verticesBytes = vBuffer.GetData<byte>(game.GraphicsContext.CommandList); ;
-            byte[] indicesBytes = iBuffer.GetData<byte>(game.GraphicsContext.CommandList); ;
+            byte[] verticesBytes = vBuffer.GetData<byte>(game.GraphicsContext.CommandList);
+            byte[] indicesBytes = iBuffer.GetData<byte>(game.GraphicsContext.CommandList);
 
             if ((verticesBytes?.Length ?? 0) == 0 || (indicesBytes?.Length ?? 0) == 0)
             {
@@ -110,6 +111,7 @@ public static class ModelComponentExtensions
                 }
             }
         }
+
         return (combinedVerts, combinedIndices);
     }
 }
