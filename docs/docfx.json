@@ -26,6 +26,9 @@
     }
   ],
   "build": {
+    "xref": [
+      "https://stride-doc-staging.azurewebsites.net/latest/en/xrefmap.yml"
+    ],
     "globalMetadata": {
       "_appTitle": "Stride Community Toolkit",
       "_enableSearch": true,

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <AssemblyName>Stride.CommunityToolkit</AssemblyName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
@@ -26,10 +27,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.1.*" IncludeAssets="build;buildTransitive" />
-        <PackageReference Include="Stride.Engine" Version="4.1.*" />
-        <PackageReference Include="Stride.Particles" Version="4.1.*" />
-        <PackageReference Include="Stride.Physics" Version="4.1.*" />
-        <PackageReference Include="Stride.UI" Version="4.1.*" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.*" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.Engine" Version="4.2.*" />
+        <PackageReference Include="Stride.Particles" Version="4.2.*" />
+        <PackageReference Include="Stride.Physics" Version="4.2.*" />
+        <PackageReference Include="Stride.UI" Version="4.2.*" />
     </ItemGroup>
 </Project>

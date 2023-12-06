@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Engine;
 public static class EntityExtensions
 {
     /// <summary>
-    /// Adds an interactive camera script to the specified entity, enabling camera movement and rotation through various input methods.
+    /// Adds an interactive camera script <see cref="BasicCameraController"/> to the specified entity, enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
     /// <remarks>
@@ -19,6 +19,24 @@ public static class EntityExtensions
     public static void AddInteractiveCameraScript(this Entity entity)
     {
         entity.Add(new BasicCameraController());
+    }
+
+    /// <summary>
+    /// Attempts to remove the entity from its scene, destroying it.
+    /// </summary>
+    /// <returns>True if the entity was successfully removed; otherwise, false.</returns>
+    [Obsolete("Use Remove() instead", true)]
+    public static bool DestroyEntity(this Entity entity)
+    {
+        try
+        {
+            entity.Scene.Entities.Remove(entity);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -43,24 +61,6 @@ public static class EntityExtensions
         var result = entity.OfType<T>();
 
         return result;
-    }
-
-    /// <summary>
-    /// Attempts to remove the entity from its scene, destroying it.
-    /// </summary>
-    /// <returns>True if the entity was successfully removed; otherwise, false.</returns>
-    [Obsolete("Use Remove instead")]
-    public static bool DestroyEntity(this Entity entity)
-    {
-        try
-        {
-            entity.Scene.Entities.Remove(entity);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
     }
 
     /// <summary>

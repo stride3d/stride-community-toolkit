@@ -9,26 +9,25 @@ public static class CameraComponentExtensions
     /// <summary>
     /// Returns near and far vector based on a ray going from camera through a screen point. The ray is in world space, starting on the near plane of the camera and going through position's (x,y) pixel coordinates on the screen.
     /// </summary>
-    /// <param name="cameraComponent"></param>
-    /// <param name="mousePosition"></param>
+    /// <param name="camera"></param>
+    /// <param name="screenPosition"></param>
     /// <returns></returns>
-    public static (Vector4 VectorNear, Vector4 VectorFar) ScreenPointToRay(this CameraComponent cameraComponent, Vector2 mousePosition)
+    // screenPosition or mousePosition
+    public static (Vector4 VectorNear, Vector4 VectorFar) ScreenPointToRay(this CameraComponent camera, Vector2 screenPosition)
     {
-        var validMousePosition = mousePosition;
-
-        var invertedMatrix = Matrix.Invert(cameraComponent.ViewProjectionMatrix);
+        var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
 
         Vector3 position;
-        position.X = validMousePosition.X * 2f - 1f;
-        position.Y = 1f - validMousePosition.Y * 2f;
+        position.X = screenPosition.X * 2f - 1f;
+        position.Y = 1f - screenPosition.Y * 2f;
         position.Z = 0f;
 
-        Vector4 vectorNear = Vector3.Transform(position, invertedMatrix);
+        var vectorNear = Vector3.Transform(position, invertedMatrix);
         vectorNear /= vectorNear.W;
 
         position.Z = 1f;
 
-        Vector4 vectorFar = Vector3.Transform(position, invertedMatrix);
+        var vectorFar = Vector3.Transform(position, invertedMatrix);
         vectorFar /= vectorFar.W;
 
         return (vectorNear, vectorFar);
@@ -65,37 +64,64 @@ public static class CameraComponentExtensions
         return worldDirection;
     }
 
+    public static Ray GetPickRay(this CameraComponent camera, Vector2 screenPosition)
+    {
+        var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
+
+        Vector3 position;
+        position.X = screenPosition.X * 2f - 1f;
+        position.Y = 1f - screenPosition.Y * 2f;
+        position.Z = 0f;
+
+        var vectorNear = Vector3.Transform(position, invertedMatrix);
+        vectorNear /= vectorNear.W;
+
+        position.Z = 1f;
+
+        var vectorFar = Vector3.Transform(position, invertedMatrix);
+        vectorFar /= vectorFar.W;
+
+        Vector3 dir = vectorFar.XYZ() - vectorNear.XYZ();
+
+        dir.Normalize();
+
+        return new Ray(vectorNear.XYZ(), dir);
+    }
+
     /// <summary>
     /// Performs a raycasting operation from the specified CameraComponent's position through the specified screen position in world coordinates,
     /// and returns information about the hit result.
     /// </summary>
-    /// <param name="Camera">The CameraComponent from which the ray should be cast.</param>
+    /// <param name="camera">The CameraComponent from which the ray should be cast.</param>
     /// <param name="component">The ScriptComponent which has the Simulation to run the Cast in.</param>
-    /// <param name="screenPos">The screen position (in world coordinates) where the ray should be cast through.</param>
+    /// <param name="screenPosition">The screen position (in world coordinates) where the ray should be cast through.</param>
     /// <param name="collisionGroups">Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</param>
     /// <param name="collisionFlags">Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</param>
     /// <returns>A HitResult containing information about the hit result, including the hit location and other collision data.</returns>
-    public static HitResult RayCast(this CameraComponent Camera, ScriptComponent component, Vector2 screenPos, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.DefaultFilter)
+    public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.DefaultFilter)
     {
-        Matrix invViewProj = Matrix.Invert(Camera.ViewProjectionMatrix);
+        var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
+
         // Reconstruct the projection-space position in the (-1, +1) range.
         //    Don't forget that Y is down in screen coordinates, but up in projection space
-        Vector3 sPos;
-        sPos.X = screenPos.X * 2f - 1f;
-        sPos.Y = 1f - screenPos.Y * 2f;
+        Vector3 position;
+        position.X = screenPosition.X * 2f - 1f;
+        position.Y = 1f - screenPosition.Y * 2f;
 
         // Compute the near (start) point for the raycast
         // It's assumed to have the same projection space (x,y) coordinates and z = 0 (lying on the near plane)
         // We need to unproject it to world space
-        sPos.Z = 0f;
-        var vectorNear = Vector3.Transform(sPos, invViewProj);
+        position.Z = 0f;
+
+        var vectorNear = Vector3.Transform(position, invertedMatrix);
         vectorNear /= vectorNear.W;
 
         // Compute the far (end) point for the raycast
         // It's assumed to have the same projection space (x,y) coordinates and z = 1 (lying on the far plane)
         // We need to unproject it to world space
-        sPos.Z = 1f;
-        var vectorFar = Vector3.Transform(sPos, invViewProj);
+        position.Z = 1f;
+
+        var vectorFar = Vector3.Transform(position, invertedMatrix);
         vectorFar /= vectorFar.W;
 
         // Raycast from the point on the near plane to the point on the far plane and get the collision result
@@ -106,14 +132,14 @@ public static class CameraComponentExtensions
     /// Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
     /// and returns information about the hit result.
     /// </summary>
-    /// <param name="Camera">The CameraComponent from which the ray should be cast.</param>
+    /// <param name="camera">The CameraComponent from which the ray should be cast.</param>
     /// <param name="component">The ScriptComponent from which the Input.MousePosition should be taken.</param>
     /// <param name="collisionGroup">Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</param>
     /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</param>
     /// <returns>A HitResult containing information about the hit result, including the hit location and other collision data.</returns>
-    public static HitResult RayCastMouse(this CameraComponent Camera, ScriptComponent component, CollisionFilterGroups collisionGroup = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
+    public static HitResult RaycastMouse(this CameraComponent camera, ScriptComponent component, CollisionFilterGroups collisionGroup = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
     {
-        return Camera.RayCast(component, component.Input.MousePosition, collisionGroup, collisionFilterGroupFlags);
+        return camera.Raycast(component, component.Input.MousePosition, collisionGroup, collisionFilterGroupFlags);
     }
 
     /// <summary>

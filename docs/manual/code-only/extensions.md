@@ -25,7 +25,7 @@ Some extensions return `Entity` so it can be further modified.
 
 ## GraphicsCompositorExtensions.cs
 
-- [`AddCleanUIStage`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given `GraphicsCompositor`
+- [`AddCleanUIStage()`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given `GraphicsCompositor`
 
 ## ScriptComponentExtensions.cs
 
