@@ -57,6 +57,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.ModelComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.ModelComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.yml",
       "output": {
         ".html": {
@@ -297,26 +317,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Engine.ModelComponentExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Engine.ModelComponentExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Engine.ScriptComponentExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Engine.ScriptComponentExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.Engine.yml",
       "output": {
         ".html": {
@@ -374,6 +374,16 @@
       "output": {
         ".html": {
           "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/camera-component-extensions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/camera-component-extensions/index.html"
         }
       },
       "version": ""
@@ -624,6 +634,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/rendering/mesh-builder.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/script-component-extensions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/script-component-extensions/index.html"
         }
       },
       "version": ""
