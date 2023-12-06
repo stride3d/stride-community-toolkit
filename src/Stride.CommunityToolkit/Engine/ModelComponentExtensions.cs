@@ -1,7 +1,8 @@
+using Stride.Engine;
 using Stride.Games;
 using Stride.Rendering;
 
-namespace Stride.Engine;
+namespace Stride.CommunityToolkit.Engine;
 
 public static class ModelComponentExtensions
 {
@@ -39,39 +40,40 @@ public static class ModelComponentExtensions
     /// <param name="model"></param>
     /// <param name="game"></param>
     /// <returns></returns>
-    public static (List<Vector3> verts, List<int> indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)
+    public static (List<Vector3> vertices, List<int> indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)
     {
-        return GetMeshData(model.Model, game.Services, game);
+        return GetMeshData(model.Model, game);
     }
 
-    static unsafe (List<Vector3> verts, List<int> indices) GetMeshData(Model model, IServiceRegistry services, IGame game)
+    private static unsafe (List<Vector3> vertices, List<int> indices) GetMeshData(Model model, IGame game)
     {
-        Matrix[] nodeTransforms = null;
+        // ToDo: Do we need this?
+        Matrix[]? nodeTransforms = null;
 
-        int totalVerts = 0, totalIndices = 0;
+        int totalVertices = 0, totalIndices = 0;
         foreach (var meshData in model.Meshes)
         {
-            totalVerts += meshData.Draw.VertexBuffers[0].Count;
+            totalVertices += meshData.Draw.VertexBuffers[0].Count;
             totalIndices += meshData.Draw.IndexBuffer.Count;
         }
 
-        var combinedVerts = new List<Vector3>(totalVerts);
+        var combinedVertices = new List<Vector3>(totalVertices);
         var combinedIndices = new List<int>(totalIndices);
 
         foreach (var meshData in model.Meshes)
         {
             var vBuffer = meshData.Draw.VertexBuffers[0].Buffer;
             var iBuffer = meshData.Draw.IndexBuffer.Buffer;
-            byte[] verticesBytes = vBuffer.GetData<byte>(game.GraphicsContext.CommandList); ;
-            byte[] indicesBytes = iBuffer.GetData<byte>(game.GraphicsContext.CommandList); ;
+            byte[] verticesBytes = vBuffer.GetData<byte>(game.GraphicsContext.CommandList);
+            byte[] indicesBytes = iBuffer.GetData<byte>(game.GraphicsContext.CommandList);
 
             if ((verticesBytes?.Length ?? 0) == 0 || (indicesBytes?.Length ?? 0) == 0)
             {
                 // returns empty lists if there is an issue
-                return (combinedVerts, combinedIndices);
+                return (combinedVertices, combinedIndices);
             }
 
-            int vertMappingStart = combinedVerts.Count;
+            int vertMappingStart = combinedVertices.Count;
 
             fixed (byte* bytePtr = verticesBytes)
             {
@@ -88,7 +90,7 @@ public static class ModelComponentExtensions
                         pos = finalMatrix.TranslationVector;
                     }
 
-                    combinedVerts.Add(pos);
+                    combinedVertices.Add(pos);
                 }
             }
 
@@ -110,6 +112,7 @@ public static class ModelComponentExtensions
                 }
             }
         }
-        return (combinedVerts, combinedIndices);
+
+        return (combinedVertices, combinedIndices);
     }
 }

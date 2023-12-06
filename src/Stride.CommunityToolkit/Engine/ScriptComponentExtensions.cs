@@ -1,6 +1,7 @@
+using Stride.Engine;
 using Stride.Rendering.Compositing;
 
-namespace Stride.Engine;
+namespace Stride.CommunityToolkit.Engine;
 
 public static class ScriptComponentExtensions
 {
@@ -22,9 +23,9 @@ public static class ScriptComponentExtensions
     /// </remarks>
     /// <param name="scriptComponent"></param>
     /// <returns></returns>
-    public static CameraComponent GetCamera(this ScriptComponent scriptComponent)
+    public static CameraComponent? GetCamera(this ScriptComponent scriptComponent)
     {
-        SceneCameraSlotCollection cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
+        var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
 
         foreach (var sceneCamera in cameraCollection)
         {
@@ -33,6 +34,7 @@ public static class ScriptComponentExtensions
                 return sceneCamera.Camera;
             }
         }
+
         return null;
     }
 
@@ -45,9 +47,9 @@ public static class ScriptComponentExtensions
     /// <param name="scriptComponent"></param>
     /// <param name="cameraName"></param>
     /// <returns></returns>
-    public static CameraComponent GetCamera(this ScriptComponent scriptComponent, string cameraName)
+    public static CameraComponent? GetCamera(this ScriptComponent scriptComponent, string cameraName)
     {
-        SceneCameraSlotCollection cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
+        var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
 
         foreach (var sceneCamera in cameraCollection)
         {

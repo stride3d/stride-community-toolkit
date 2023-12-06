@@ -7,5 +7,3 @@
 - [`GetComponents<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)) - Retrieves all components of the specified type from the entity
 - [`Remove()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)) - Removes the entity from its current scene by setting its `Scene` property to null
 - [`WorldPosition()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)) - An easier way to get world position
-
-![ToDo](https://img.shields.io/badge/status-todo-orange)
