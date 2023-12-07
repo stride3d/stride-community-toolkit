@@ -21,24 +21,18 @@ public class TranslationGizmo : AxialGizmo
     private readonly List<Entity>[] _translationPlaneEdges = { new(), new(), new() };
     private readonly List<Entity> _translationPlaneRoots = new();
     private readonly List<ModelComponent>[] _translationOppositeAxes = { new(), new(), new(), };
-    private Entity _translationOrigin;
 
-    public TranslationGizmo(GraphicsDevice graphicsDevice) : base(graphicsDevice)
-    {
-    }
+    public TranslationGizmo(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
 
-    public Entity Create(Scene scene)
+    public TranslationGizmo(GraphicsDevice graphicsDevice, Color? xColor = null, Color? yColor = null, Color? zColor = null) : base(graphicsDevice, xColor, yColor, zColor) { }
+
+    public void Create(Entity entity)
     {
         base.Create();
 
-        _planeMaterials[0] = CreateUniformColorMaterial(Color.Red.WithAlpha(86));
-        _planeMaterials[1] = CreateUniformColorMaterial(Color.Green.WithAlpha(86));
-        _planeMaterials[2] = CreateUniformColorMaterial(Color.Blue.WithAlpha(86));
-
-        var entity = new Entity("Translation gizmo")
-        {
-            Scene = scene
-        };
+        _planeMaterials[0] = CreateUniformColorMaterial(GetXColor().WithAlpha(86));
+        _planeMaterials[1] = CreateUniformColorMaterial(GetYColor().WithAlpha(86));
+        _planeMaterials[2] = CreateUniformColorMaterial(GetZColor().WithAlpha(86));
 
         var axisRootEntities = new[] { new Entity("Root X axis"), new Entity("Root Y axis"), new Entity("Root Z axis") };
 
@@ -48,18 +42,41 @@ public class TranslationGizmo : AxialGizmo
 
         // set the axis root entities rotation and add them to the main entity
         var axisRotations = new[] { Vector3.Zero, new Vector3(MathUtil.PiOverTwo, 0, MathUtil.PiOverTwo), new Vector3(-MathUtil.PiOverTwo, -MathUtil.PiOverTwo, 0) };
+
         for (int axis = 0; axis < 3; axis++)
         {
             axisRootEntities[axis].Transform.RotationEulerXYZ = axisRotations[axis];
+
             entity.Transform.Children.Add(axisRootEntities[axis].Transform);
         }
 
-        // Add middle sphere
-        var sphereMeshDraw = GeometricPrimitive.Sphere.New(GraphicsDevice, OriginRadius, GizmoTessellation).ToMeshDraw();
-        _translationOrigin = new Entity("OriginSphere") { new ModelComponent { Model = new Model { DefaultOriginMaterial, new Mesh { Draw = sphereMeshDraw } }, RenderGroup = RenderGroup } };
-        entity.Transform.Children.Add(_translationOrigin.Transform);
+        var translationOrigin = CreateMiddleSphere();
+
+        entity.Transform.Children.Add(translationOrigin.Transform);
+    }
+
+    public Entity Create(Scene scene)
+    {
+        var entity = new Entity("Translation gizmo")
+        {
+            Scene = scene
+        };
+
+        Create(entity);
 
         return entity;
+    }
+
+    private Entity CreateMiddleSphere()
+    {
+        var sphereMeshDraw = GeometricPrimitive.Sphere.New(GraphicsDevice, OriginRadius, GizmoTessellation).ToMeshDraw();
+
+        var translationOrigin = new Entity("OriginSphere")
+        {
+            new ModelComponent { Model = new Model { DefaultOriginMaterial, new Mesh { Draw = sphereMeshDraw } }, RenderGroup = RenderGroup }
+        };
+
+        return translationOrigin;
     }
 
     private void CreateAxisArrow(Entity[] axisRootEntities)
