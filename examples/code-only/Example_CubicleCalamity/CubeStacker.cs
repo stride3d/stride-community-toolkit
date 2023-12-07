@@ -31,9 +31,14 @@ public class CubeStacker
 
         CreateMaterials();
 
-        _translationGizmo = new TranslationGizmo(_game.GraphicsDevice);
-        var gizmoEntity = _translationGizmo.Create(scene);
-        gizmoEntity.Transform.Position = new Vector3(10, 0, 0);
+        var entity = new Entity("MyGizmo");
+        entity.AddGizmo(_game.GraphicsDevice);
+        entity.Transform.Position = new Vector3(-5, 0, 0);
+        entity.Scene = scene;
+
+        //_translationGizmo = new TranslationGizmo(_game.GraphicsDevice);
+        //var gizmoEntity = _translationGizmo.Create(scene);
+        //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
         //SetupLighting(scene);
         CreateFirstLayer(0.5f, scene);
@@ -46,8 +51,9 @@ public class CubeStacker
         {
             new RaycastHandler()
         };
+        entity.Scene = scene;
 
-        scene.Entities.Add(entity);
+        //scene.Entities.Add(entity);
     }
 
     public void Update(Scene scene, GameTime time)
@@ -96,6 +102,8 @@ public class CubeStacker
                 entity.Transform.Position = new Vector3(x, y, z) * Constants.CubeSize;
 
                 entity.Scene = scene;
+
+                //entity.AddGizmo(_game.GraphicsDevice);
 
                 //entity.Transform.Children.Add(_translationGizmo.Create(scene).Transform);
 

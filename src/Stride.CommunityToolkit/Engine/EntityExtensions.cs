@@ -1,5 +1,7 @@
+using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
+using Stride.Graphics;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -19,6 +21,14 @@ public static class EntityExtensions
     public static void AddInteractiveCameraScript(this Entity entity)
     {
         entity.Add(new BasicCameraController());
+    }
+
+    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice)
+    {
+        //var gizmo = new TranslationGizmo(graphicsDevice, Color.DarkOrange, Color.Maroon, Color.BlueViolet);
+        var gizmo = new TranslationGizmo(graphicsDevice);
+
+        gizmo.Create(entity);
     }
 
     /// <summary>
