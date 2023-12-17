@@ -27,6 +27,10 @@ Some extensions return `Entity` so it can be further modified.
 
 - [`AddCleanUIStage()`](xref:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage(Stride.Rendering.Compositing.GraphicsCompositor)) - Adds a UI render stage and white/clean text effect to the given `GraphicsCompositor`
 
+![ToDo](https://img.shields.io/badge/status-todo-orange)
+
+- `AddGizmo()` - Adds Gizmo to the ground
+
 ## ScriptComponentExtensions.cs
 
 | ```DeltaTime()``` |![Done](https://img.shields.io/badge/status-done-green)| Easier way of getting DeltaTime as a `float` in seconds |

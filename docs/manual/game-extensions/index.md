@@ -11,6 +11,5 @@
 
 ![ToDo](https://img.shields.io/badge/status-todo-orange)
 
-- `AddGizmo()` - Debug. To see X,Y,Z arrows
 - `AddEntityNames()` - Debug. To see entity properties in the game
 - `AddPhysicsDebugger()` - Debug. To see colliders. Tracked here [Issue #9](https://github.com/stride3d/stride-community-toolkit/issues/9)
