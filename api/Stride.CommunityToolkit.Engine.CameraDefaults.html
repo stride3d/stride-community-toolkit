@@ -17,7 +17,7 @@
       <meta name="docfx:rel" content="../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Extensions_CameraDefaults.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Extensions.CameraDefaults%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Engine_CameraDefaults.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Engine.CameraDefaults%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,17 +85,17 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="Stride.CommunityToolkit.Extensions.CameraDefaults">
+        <article data-uid="Stride.CommunityToolkit.Engine.CameraDefaults">
 
 
 
-  <h1 id="Stride_CommunityToolkit_Extensions_CameraDefaults" data-uid="Stride.CommunityToolkit.Extensions.CameraDefaults" class="text-break">
+  <h1 id="Stride_CommunityToolkit_Engine_CameraDefaults" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults" class="text-break">
     Class CameraDefaults
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraDefaults.cs/#L3"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L3"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
-    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Extensions.html">Extensions</a></dd></dl>
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Engine.html">Engine</a></dd></dl>
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
@@ -130,9 +130,9 @@
 
 
 
-  <h3 id="Stride_CommunityToolkit_Extensions_CameraDefaults_InitialPosition" data-uid="Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition">
+  <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_InitialPosition" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition">
   InitialPosition
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraDefaults.cs/#L9"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L9"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Specifies the initial position for a camera within the game or scene.
@@ -162,9 +162,9 @@ This position is set as (6, 6, 6) by default.</p>
 
 
 
-  <h3 id="Stride_CommunityToolkit_Extensions_CameraDefaults_InitialRotation" data-uid="Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation">
+  <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_InitialRotation" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation">
   InitialRotation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraDefaults.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L15"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Specifies the initial rotation (in degrees) for a camera within the game or scene.
@@ -194,10 +194,41 @@ This rotation is set as (45, -30, 0) by default, representing rotations around t
 
 
 
+  <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_MainCameraName" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.MainCameraName">
+  MainCameraName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Main camera name used be default in Stride</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string MainCameraName = &quot;Main&quot;</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/CameraDefaults.cs/#L3" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L3" class="edit-link">Edit this page</a>
         </div>
 
 

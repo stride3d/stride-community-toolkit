@@ -133,10 +133,11 @@
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_GetPickRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)">
   GetPickRay(CameraComponent, Vector2)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Calculates a ray from the camera through a point on the screen in world space.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -146,15 +147,18 @@
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>camera</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The camera component used for the calculation.</p>
+</dd>
     <dt><code>screenPosition</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
-    <dd></dd>
+    <dd><p>The position on the screen, typically the mouse position, normalized between (0,0) and (1,1).</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Ray.cs">Ray</a></dt>
-    <dd></dd>
+    <dd><p>A <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Ray.cs">Ray</a> starting from the camera and pointing into the scene through the specified screen position.</p>
+</dd>
   </dl>
 
 
@@ -163,6 +167,9 @@
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_GetPickRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method is useful for implementing features like object picking where you want to select or interact with objects in the 3D world based on screen coordinates.</p>
+</div>
 
 
 
@@ -174,7 +181,8 @@
   <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L51"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Converts a 2D logical direction into a 3D world direction relative to the camera's orientation.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -184,15 +192,18 @@
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>camera</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The camera component used for the calculation.</p>
+</dd>
     <dt><code>logicDirection</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
-    <dd></dd>
+    <dd><p>The 2D logical direction (e.g., input from a joystick or keyboard), typically normalized between -1 and 1.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>The corresponding 3D world direction vector.</p>
+</dd>
   </dl>
 
 
@@ -201,6 +212,9 @@
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method is useful for converting 2D input commands into 3D movements in the world, taking into account the camera's current orientation.</p>
+</div>
 
 
 
@@ -209,10 +223,11 @@
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector3)">
   LogicDirectionToWorldDirection(CameraComponent, Vector2, Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L77"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Converts a 2D logical direction into a 3D world direction relative to the camera's orientation, using a specified up vector.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -222,17 +237,21 @@
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>camera</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The camera component used for the calculation.</p>
+</dd>
     <dt><code>logicDirection</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
-    <dd></dd>
+    <dd><p>The 2D logical direction (e.g., input from a joystick or keyboard), typically normalized between -1 and 1.</p>
+</dd>
     <dt><code>upVector</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>The up vector to be used for the calculation, defining the vertical direction in world space.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>The corresponding 3D world direction vector.</p>
+</dd>
   </dl>
 
 
@@ -241,6 +260,9 @@
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_LogicDirectionToWorldDirection_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector3__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method is useful for converting 2D input commands into 3D movements in the world, taking into account the camera's current orientation and a custom vertical orientation.</p>
+</div>
 
 
 
@@ -249,7 +271,7 @@
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
   Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs a raycasting operation from the specified CameraComponent's position through the specified screen position in world coordinates,
@@ -258,7 +280,7 @@ and returns information about the hit result.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.DefaultFilter)</code></pre>
+    <pre><code class="lang-csharp hljs">public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -275,7 +297,7 @@ and returns information about the hit result.</p>
     <dt><code>collisionGroups</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Physics.CollisionFilterGroups.html">CollisionFilterGroups</a></dt>
     <dd><p>Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</p>
 </dd>
-    <dt><code>collisionFlags</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
+    <dt><code>collisionFilterGroupFlags</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
     <dd><p>Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</p>
 </dd>
   </dl>
@@ -301,7 +323,7 @@ and returns information about the hit result.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
   RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L140"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L141"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
@@ -310,7 +332,7 @@ and returns information about the hit result.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static HitResult RaycastMouse(this CameraComponent camera, ScriptComponent component, CollisionFilterGroups collisionGroup = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)</code></pre>
+    <pre><code class="lang-csharp hljs">public static HitResult RaycastMouse(this CameraComponent camera, ScriptComponent component, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -321,7 +343,7 @@ and returns information about the hit result.</p>
     <dt><code>component</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
     <dd><p>The ScriptComponent from which the Input.MousePosition should be taken.</p>
 </dd>
-    <dt><code>collisionGroup</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Physics.CollisionFilterGroups.html">CollisionFilterGroups</a></dt>
+    <dt><code>collisionGroups</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Physics.CollisionFilterGroups.html">CollisionFilterGroups</a></dt>
     <dd><p>Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</p>
 </dd>
     <dt><code>collisionFilterGroupFlags</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
@@ -350,10 +372,11 @@ and returns information about the hit result.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenPointToRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)">
   ScreenPointToRay(CameraComponent, Vector2)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L153"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Returns near and far vector based on a ray going from camera through a screen point. The ray is in world space, starting on the near plane of the camera and going through position's (x,y) pixel coordinates on the screen.</p>
+  <div class="markdown level1 summary"><p>Calculates the near and far vectors for a ray that starts at the camera and passes through a given screen point.
+The ray is in world space, starting at the near plane of the camera and extending through the specified pixel coordinates on the screen.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -364,15 +387,18 @@ and returns information about the hit result.</p>
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>camera</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The camera component used to calculate the ray.</p>
+</dd>
     <dt><code>screenPosition</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
-    <dd></dd>
+    <dd><p>The screen position (in normalized coordinates) through which the ray passes.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt>(<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-stride.core.mathematics.vector4,stride.core.mathematics.vector4-.vectornear">VectorNear</a>, <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-stride.core.mathematics.vector4,stride.core.mathematics.vector4-.vectorfar">VectorFar</a>)</dt>
-    <dd></dd>
+    <dd><p>A tuple containing the near vector (<code>VectorNear</code>) and the far vector (<code>VectorFar</code>) of the ray in world space.</p>
+</dd>
   </dl>
 
 
@@ -389,7 +415,7 @@ and returns information about the hit result.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)">
   ScreenToWorldPoint(CameraComponent, Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L272"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L185"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a point in world coordinates.</p>
@@ -440,7 +466,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)">
   ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L289"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L202"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a point in world coordinates.</p>
@@ -482,7 +508,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)">
   ScreenToWorldRaySegment(CameraComponent, Vector2)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L217"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L229"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a> in world coordinates.</p>
@@ -532,7 +558,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__Stride_CommunityToolkit_Scripts_RaySegment__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)">
   ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L234"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L246"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a> in world coordinates.</p>
@@ -573,7 +599,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToClipSpace_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)">
   WorldToClipSpace(CameraComponent, ref Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L155"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L273"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the world position to clip space coordinates relative to camera.</p>
@@ -587,15 +613,18 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>cameraComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The camera component used for the transformation.</p>
+</dd>
     <dt><code>position</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>The position in world space to be transformed.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>The position in clip space.</p>
+</dd>
   </dl>
 
 
@@ -616,7 +645,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)">
   WorldToScreenPoint(CameraComponent, Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L174"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L293"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the world position to screen space coordinates relative to camera.</p>
@@ -666,7 +695,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)">
   WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L192"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L311"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the world position to screen space coordinates relative to camera.</p>

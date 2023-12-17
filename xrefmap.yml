@@ -166,12 +166,49 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint
   nameWithType: CameraComponentExtensions.WorldToScreenPoint
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults
+  name: CameraDefaults
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html
+  commentId: T:Stride.CommunityToolkit.Engine.CameraDefaults
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults
+  nameWithType: CameraDefaults
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition
+  name: InitialPosition
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_InitialPosition
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition
+  nameWithType: CameraDefaults.InitialPosition
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation
+  name: InitialRotation
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_InitialRotation
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation
+  nameWithType: CameraDefaults.InitialRotation
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.MainCameraName
+  name: MainCameraName
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_MainCameraName
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.MainCameraName
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.MainCameraName
+  nameWithType: CameraDefaults.MainCameraName
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions
   name: EntityExtensions
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html
   commentId: T:Stride.CommunityToolkit.Engine.EntityExtensions
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions
   nameWithType: EntityExtensions
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
+  name: AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity, Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?)
+  nameWithType: EntityExtensions.AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo*
+  name: AddGizmo
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo
+  nameWithType: EntityExtensions.AddGizmo
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript(Stride.Engine.Entity)
   name: AddInteractiveCameraScript(Entity)
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddInteractiveCameraScript_Stride_Engine_Entity_
@@ -576,24 +613,6 @@ references:
   commentId: N:Stride.CommunityToolkit.Extensions
   fullName: Stride.CommunityToolkit.Extensions
   nameWithType: Stride.CommunityToolkit.Extensions
-- uid: Stride.CommunityToolkit.Extensions.CameraDefaults
-  name: CameraDefaults
-  href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html
-  commentId: T:Stride.CommunityToolkit.Extensions.CameraDefaults
-  fullName: Stride.CommunityToolkit.Extensions.CameraDefaults
-  nameWithType: CameraDefaults
-- uid: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition
-  name: InitialPosition
-  href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html#Stride_CommunityToolkit_Extensions_CameraDefaults_InitialPosition
-  commentId: F:Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition
-  fullName: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialPosition
-  nameWithType: CameraDefaults.InitialPosition
-- uid: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
-  name: InitialRotation
-  href: api/Stride.CommunityToolkit.Extensions.CameraDefaults.html#Stride_CommunityToolkit_Extensions_CameraDefaults_InitialRotation
-  commentId: F:Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
-  fullName: Stride.CommunityToolkit.Extensions.CameraDefaults.InitialRotation
-  nameWithType: CameraDefaults.InitialRotation
 - uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
   name: GraphicsDeviceExtensions
   href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html
@@ -1173,6 +1192,362 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer
   nameWithType: GraphicsCompositorExtensions.AddSceneRenderer
+- uid: Stride.CommunityToolkit.Rendering.Gizmos
+  name: Stride.CommunityToolkit.Rendering.Gizmos
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.html
+  commentId: N:Stride.CommunityToolkit.Rendering.Gizmos
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos
+  nameWithType: Stride.CommunityToolkit.Rendering.Gizmos
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo
+  name: AxialGizmo
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo
+  nameWithType: AxialGizmo
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
+  name: AxialGizmo(GraphicsDevice, Color?, Color?, Color?)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo__ctor_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
+  name.vb: New(GraphicsDevice, Color?, Color?, Color?)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.AxialGizmo(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.New(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?)
+  nameWithType: AxialGizmo.AxialGizmo(GraphicsDevice, Color?, Color?, Color?)
+  nameWithType.vb: AxialGizmo.New(GraphicsDevice, Color?, Color?, Color?)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.#ctor*
+  name: AxialGizmo
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.AxialGizmo
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.New
+  nameWithType: AxialGizmo.AxialGizmo
+  nameWithType.vb: AxialGizmo.New
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial
+  name: BlueUniformMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_BlueUniformMaterial
+  commentId: P:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial
+  nameWithType: AxialGizmo.BlueUniformMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial*
+  name: BlueUniformMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_BlueUniformMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial
+  nameWithType: AxialGizmo.BlueUniformMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create
+  name: Create()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_Create
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create()
+  nameWithType: AxialGizmo.Create()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create*
+  name: Create
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_Create_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create
+  nameWithType: AxialGizmo.Create
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial(Stride.Core.Mathematics.Color)
+  name: CreateEmissiveColorMaterial(Color)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_CreateEmissiveColorMaterial_Stride_Core_Mathematics_Color_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial(Stride.Core.Mathematics.Color)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial(Stride.Core.Mathematics.Color)
+  nameWithType: AxialGizmo.CreateEmissiveColorMaterial(Color)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial*
+  name: CreateEmissiveColorMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_CreateEmissiveColorMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial
+  nameWithType: AxialGizmo.CreateEmissiveColorMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial
+  name: DefaultOriginMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_DefaultOriginMaterial
+  commentId: P:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial
+  nameWithType: AxialGizmo.DefaultOriginMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial*
+  name: DefaultOriginMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_DefaultOriginMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial
+  nameWithType: AxialGizmo.DefaultOriginMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor
+  name: GetBlueColor()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetBlueColor
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor()
+  nameWithType: AxialGizmo.GetBlueColor()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor*
+  name: GetBlueColor
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetBlueColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor
+  nameWithType: AxialGizmo.GetBlueColor
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor
+  name: GetGreenColor()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetGreenColor
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor()
+  nameWithType: AxialGizmo.GetGreenColor()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor*
+  name: GetGreenColor
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetGreenColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor
+  nameWithType: AxialGizmo.GetGreenColor
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor
+  name: GetRedColor()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetRedColor
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor()
+  nameWithType: AxialGizmo.GetRedColor()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor*
+  name: GetRedColor
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetRedColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor
+  nameWithType: AxialGizmo.GetRedColor
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoDefaultSize
+  name: GizmoDefaultSize
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoDefaultSize
+  commentId: F:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoDefaultSize
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoDefaultSize
+  nameWithType: AxialGizmo.GizmoDefaultSize
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoExtremitySize
+  name: GizmoExtremitySize
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoExtremitySize
+  commentId: F:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoExtremitySize
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoExtremitySize
+  nameWithType: AxialGizmo.GizmoExtremitySize
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoOriginScale
+  name: GizmoOriginScale
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoOriginScale
+  commentId: F:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoOriginScale
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoOriginScale
+  nameWithType: AxialGizmo.GizmoOriginScale
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoPlaneLength
+  name: GizmoPlaneLength
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoPlaneLength
+  commentId: F:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoPlaneLength
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoPlaneLength
+  nameWithType: AxialGizmo.GizmoPlaneLength
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoTessellation
+  name: GizmoTessellation
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoTessellation
+  commentId: F:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoTessellation
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoTessellation
+  nameWithType: AxialGizmo.GizmoTessellation
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice
+  name: GraphicsDevice
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GraphicsDevice
+  commentId: P:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice
+  nameWithType: AxialGizmo.GraphicsDevice
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice*
+  name: GraphicsDevice
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GraphicsDevice_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice
+  nameWithType: AxialGizmo.GraphicsDevice
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial
+  name: GreenUniformMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GreenUniformMaterial
+  commentId: P:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial
+  nameWithType: AxialGizmo.GreenUniformMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial*
+  name: GreenUniformMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GreenUniformMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial
+  nameWithType: AxialGizmo.GreenUniformMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial
+  name: RedUniformMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_RedUniformMaterial
+  commentId: P:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial
+  nameWithType: AxialGizmo.RedUniformMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial*
+  name: RedUniformMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_RedUniformMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial
+  nameWithType: AxialGizmo.RedUniformMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup
+  nameWithType: AxialGizmo.RenderGroup
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup*
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup
+  nameWithType: AxialGizmo.RenderGroup
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial
+  name: GizmoEmissiveColorMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial
+  nameWithType: GizmoEmissiveColorMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create(Stride.Graphics.GraphicsDevice,Stride.Core.Mathematics.Color,System.Single)
+  name: Create(GraphicsDevice, Color, float)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoEmissiveColorMaterial_Create_Stride_Graphics_GraphicsDevice_Stride_Core_Mathematics_Color_System_Single_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create(Stride.Graphics.GraphicsDevice,Stride.Core.Mathematics.Color,System.Single)
+  name.vb: Create(GraphicsDevice, Color, Single)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color, float)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color, Single)
+  nameWithType: GizmoEmissiveColorMaterial.Create(GraphicsDevice, Color, float)
+  nameWithType.vb: GizmoEmissiveColorMaterial.Create(GraphicsDevice, Color, Single)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create*
+  name: Create
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoEmissiveColorMaterial_Create_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.Create
+  nameWithType: GizmoEmissiveColorMaterial.Create
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice,Stride.Rendering.Material,Stride.Core.Mathematics.Color,System.Single)
+  name: UpdateColor(GraphicsDevice, Material, Color, float)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoEmissiveColorMaterial_UpdateColor_Stride_Graphics_GraphicsDevice_Stride_Rendering_Material_Stride_Core_Mathematics_Color_System_Single_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice,Stride.Rendering.Material,Stride.Core.Mathematics.Color,System.Single)
+  name.vb: UpdateColor(GraphicsDevice, Material, Color, Single)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice, Stride.Rendering.Material, Stride.Core.Mathematics.Color, float)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice, Stride.Rendering.Material, Stride.Core.Mathematics.Color, Single)
+  nameWithType: GizmoEmissiveColorMaterial.UpdateColor(GraphicsDevice, Material, Color, float)
+  nameWithType.vb: GizmoEmissiveColorMaterial.UpdateColor(GraphicsDevice, Material, Color, Single)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor*
+  name: UpdateColor
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoEmissiveColorMaterial_UpdateColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.UpdateColor
+  nameWithType: GizmoEmissiveColorMaterial.UpdateColor
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial
+  name: GizmoUniformColorMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial
+  nameWithType: GizmoUniformColorMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create(Stride.Graphics.GraphicsDevice,Stride.Core.Mathematics.Color)
+  name: Create(GraphicsDevice, Color)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_Create_Stride_Graphics_GraphicsDevice_Stride_Core_Mathematics_Color_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create(Stride.Graphics.GraphicsDevice,Stride.Core.Mathematics.Color)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color)
+  nameWithType: GizmoUniformColorMaterial.Create(GraphicsDevice, Color)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create*
+  name: Create
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_Create_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create
+  nameWithType: GizmoUniformColorMaterial.Create
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice,Stride.Rendering.Material,Stride.Core.Mathematics.Color)
+  name: UpdateColor(GraphicsDevice, Material, Color)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_UpdateColor_Stride_Graphics_GraphicsDevice_Stride_Rendering_Material_Stride_Core_Mathematics_Color_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice,Stride.Rendering.Material,Stride.Core.Mathematics.Color)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice, Stride.Rendering.Material, Stride.Core.Mathematics.Color)
+  nameWithType: GizmoUniformColorMaterial.UpdateColor(GraphicsDevice, Material, Color)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor*
+  name: UpdateColor
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.html#Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_UpdateColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor
+  nameWithType: GizmoUniformColorMaterial.UpdateColor
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo
+  name: TranslationGizmo
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo
+  nameWithType: TranslationGizmo
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor(Stride.Graphics.GraphicsDevice)
+  name: TranslationGizmo(GraphicsDevice)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo__ctor_Stride_Graphics_GraphicsDevice_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor(Stride.Graphics.GraphicsDevice)
+  name.vb: New(GraphicsDevice)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.TranslationGizmo(Stride.Graphics.GraphicsDevice)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.New(Stride.Graphics.GraphicsDevice)
+  nameWithType: TranslationGizmo.TranslationGizmo(GraphicsDevice)
+  nameWithType.vb: TranslationGizmo.New(GraphicsDevice)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
+  name: TranslationGizmo(GraphicsDevice, Color?, Color?, Color?)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo__ctor_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
+  name.vb: New(GraphicsDevice, Color?, Color?, Color?)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.TranslationGizmo(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.New(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?)
+  nameWithType: TranslationGizmo.TranslationGizmo(GraphicsDevice, Color?, Color?, Color?)
+  nameWithType.vb: TranslationGizmo.New(GraphicsDevice, Color?, Color?, Color?)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor*
+  name: TranslationGizmo
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.TranslationGizmo
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.New
+  nameWithType: TranslationGizmo.TranslationGizmo
+  nameWithType.vb: TranslationGizmo.New
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity)
+  name: Create(Entity)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity)
+  nameWithType: TranslationGizmo.Create(Entity)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Scene)
+  name: Create(Scene)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Scene_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Scene)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Scene)
+  nameWithType: TranslationGizmo.Create(Scene)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create*
+  name: Create
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create
+  nameWithType: TranslationGizmo.Create
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial(Stride.Core.Mathematics.Color)
+  name: CreateUniformColorMaterial(Color)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_CreateUniformColorMaterial_Stride_Core_Mathematics_Color_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial(Stride.Core.Mathematics.Color)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial(Stride.Core.Mathematics.Color)
+  nameWithType: TranslationGizmo.CreateUniformColorMaterial(Color)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial*
+  name: CreateUniformColorMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_CreateUniformColorMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial
+  nameWithType: TranslationGizmo.CreateUniformColorMaterial
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial(System.Int32)
+  name: GetAxisDefaultMaterial(int)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_GetAxisDefaultMaterial_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial(System.Int32)
+  name.vb: GetAxisDefaultMaterial(Integer)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial(int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial(Integer)
+  nameWithType: TranslationGizmo.GetAxisDefaultMaterial(int)
+  nameWithType.vb: TranslationGizmo.GetAxisDefaultMaterial(Integer)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial*
+  name: GetAxisDefaultMaterial
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_GetAxisDefaultMaterial_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial
+  nameWithType: TranslationGizmo.GetAxisDefaultMaterial
 - uid: Stride.CommunityToolkit.Rendering.Utilities
   name: Stride.CommunityToolkit.Rendering.Utilities
   href: api/Stride.CommunityToolkit.Rendering.Utilities.html
