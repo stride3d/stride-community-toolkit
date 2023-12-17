@@ -2,6 +2,7 @@ using CubicleCalamity.Components;
 using CubicleCalamity.Scripts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -14,10 +15,10 @@ namespace CubicleCalamity;
 
 public class CubeStacker
 {
-
     private readonly Game _game;
     private readonly Dictionary<Color, Material> _materials = new();
     private readonly Random _random = new();
+    private TranslationGizmo? _translationGizmo;
     private double _elapsedTime;
     private int _layer = 1;
 
@@ -30,10 +31,17 @@ public class CubeStacker
 
         CreateMaterials();
 
-        SetupLighting(scene);
+        var entity = new Entity("MyGizmo");
+        entity.AddGizmo(_game.GraphicsDevice);
+        entity.Transform.Position = new Vector3(-7.5f, 0, -7.5f);
+        entity.Scene = scene;
 
+        //_translationGizmo = new TranslationGizmo(_game.GraphicsDevice);
+        //var gizmoEntity = _translationGizmo.Create(scene);
+        //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
+
+        //SetupLighting(scene);
         CreateFirstLayer(0.5f, scene);
-
         CreateGameManagerEntity(scene);
     }
 
@@ -43,8 +51,9 @@ public class CubeStacker
         {
             new RaycastHandler()
         };
+        entity.Scene = scene;
 
-        scene.Entities.Add(entity);
+        //scene.Entities.Add(entity);
     }
 
     public void Update(Scene scene, GameTime time)
@@ -93,6 +102,10 @@ public class CubeStacker
                 entity.Transform.Position = new Vector3(x, y, z) * Constants.CubeSize;
 
                 entity.Scene = scene;
+
+                //entity.AddGizmo(_game.GraphicsDevice);
+
+                //entity.Transform.Children.Add(_translationGizmo.Create(scene).Transform);
 
                 entities.Add(entity);
             }

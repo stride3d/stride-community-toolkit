@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Engine;
 
 public static class CameraDefaults
 {
@@ -13,4 +13,9 @@ public static class CameraDefaults
     /// This rotation is set as (45, -30, 0) by default, representing rotations around the X, Y, and Z axes respectively.
     /// </summary>
     public static readonly Vector3 InitialRotation = new(45, -30, 0);
+
+    /// <summary>
+    /// Main camera name used be default in Stride
+    /// </summary>
+    public const string MainCameraName = "Main";
 }

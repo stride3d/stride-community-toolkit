@@ -1,5 +1,7 @@
+using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
+using Stride.Graphics;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -19,6 +21,29 @@ public static class EntityExtensions
     public static void AddInteractiveCameraScript(this Entity entity)
     {
         entity.Add(new BasicCameraController());
+    }
+
+    /// <summary>
+    /// Adds a TranslationGizmo to the specified entity with optional custom colors.
+    /// </summary>
+    /// <param name="entity">The entity to which the gizmo will be added.</param>
+    /// <param name="graphicsDevice">The graphics device used for rendering the gizmo.</param>
+    /// <param name="redColor">Optional custom color for the X-axis of the gizmo. If not specified, a default color is used.</param>
+    /// <param name="greenColor">Optional custom color for the Y-axis of the gizmo. If not specified, a default color is used.</param>
+    /// <param name="blueColor">Optional custom color for the Z-axis of the gizmo. If not specified, a default color is used.</param>
+    /// <example>
+    /// This example shows how to add a gizmo to an entity with the default colors:
+    /// <code>
+    /// var entity = new Entity();
+    /// // Assume 'game' is an existing Game instance
+    /// entity.AddGizmo(game.GraphicsDevice);
+    /// </code>
+    /// </example>
+    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)
+    {
+        var gizmo = new TranslationGizmo(graphicsDevice, redColor, greenColor, blueColor);
+
+        gizmo.Create(entity);
     }
 
     /// <summary>
