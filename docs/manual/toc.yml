@@ -37,8 +37,8 @@
       href: code-only/examples/capsule-with-rigid-body-vb.md
   - name: Extensions
     href: code-only/extensions.md
-# - name: Camera Component Extensions
-#   href: camera-component-extensions/index.md
+- name: Camera Component Extensions
+  href: camera-component-extensions/index.md
 - name: Entity Extensions
   href: entity-extensions/index.md
 - name: Game Extensions

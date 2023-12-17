@@ -16,7 +16,7 @@ public static class ScriptComponentExtensions
     }
 
     /// <summary>
-    /// Gets the camera from the <see cref="GraphicsCompositor"/> with the name main
+    /// Gets the camera from the <see cref="GraphicsCompositor"/> with the name "Main"
     /// </summary>
     /// <remarks>
     /// Make sure the Graphics compositor has been initialized with cameras or else this will fail.
