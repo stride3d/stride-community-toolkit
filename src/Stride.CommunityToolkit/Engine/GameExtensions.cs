@@ -26,6 +26,7 @@ public static class GameExtensions
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
     private const float DefaultGroundSizeX = 15.0f;
     private const float DefaultGroundSizeY = 15.0f;
+    private const string MainCameraName = "Main";
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -120,7 +121,7 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a camera entity to the game's root scene with customizable position and rotation.
+    /// Adds a camera entity to the game's root scene with customizable position and rotation, and default camera name: Main
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>
     /// <param name="entityName">Optional name for the camera entity. If null, the entity will not be named.</param>
@@ -131,7 +132,7 @@ public static class GameExtensions
     /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
     /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
-    public static Entity AddCamera(this Game game, string? entityName = null, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    public static Entity AddCamera(this Game game, string? entityName = MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
     {
         initialPosition ??= CameraDefaults.InitialPosition;
         initialRotation ??= CameraDefaults.InitialRotation;
