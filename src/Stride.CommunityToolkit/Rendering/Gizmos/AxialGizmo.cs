@@ -27,9 +27,18 @@ public abstract class AxialGizmo
     private static readonly Color GreenUniformColor = new(0x32, 0xE3, 0x35);
     private static readonly Color BlueUniformColor = new(0x2F, 0x6A, 0xE1);
 
-    private readonly Color? _xColor;
-    private readonly Color? _yColor;
-    private readonly Color? _zColor;
+    /// <summary>
+    /// Represents X axes
+    /// </summary>
+    private readonly Color? _redColor;
+    /// <summary>
+    /// Represents Y axes
+    /// </summary>
+    private readonly Color? _greenColor;
+    /// <summary>
+    /// Represents Z axes
+    /// </summary>
+    private readonly Color? _blueColor;
 
     protected Material? DefaultOriginMaterial { get; private set; }
 
@@ -56,19 +65,19 @@ public abstract class AxialGizmo
         }
 
         DefaultOriginMaterial = CreateEmissiveColorMaterial(Color.White);
-        RedUniformMaterial = CreateEmissiveColorMaterial(_xColor ?? RedUniformColor);
-        GreenUniformMaterial = CreateEmissiveColorMaterial(_yColor ?? GreenUniformColor);
-        BlueUniformMaterial = CreateEmissiveColorMaterial(_zColor ?? BlueUniformColor);
+        RedUniformMaterial = CreateEmissiveColorMaterial(GetRedColor());
+        GreenUniformMaterial = CreateEmissiveColorMaterial(GetGreenColor());
+        BlueUniformMaterial = CreateEmissiveColorMaterial(GetBlueColor());
 
         return null;
     }
 
-    protected AxialGizmo(GraphicsDevice graphicsDevice, Color? xColor = null, Color? yColor = null, Color? zColor = null)
+    protected AxialGizmo(GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)
     {
         GraphicsDevice = graphicsDevice;
-        _xColor = xColor;
-        _yColor = yColor;
-        _zColor = zColor;
+        _redColor = redColor;
+        _greenColor = greenColor;
+        _blueColor = blueColor;
     }
 
     /// <summary>
@@ -79,9 +88,9 @@ public abstract class AxialGizmo
     protected Material CreateEmissiveColorMaterial(Color color)
         => GizmoEmissiveColorMaterial.Create(GraphicsDevice, color, 0.75f);
 
-    protected Color GetXColor() => _xColor ?? RedUniformColor;
+    protected Color GetRedColor() => _redColor ?? RedUniformColor;
 
-    protected Color GetYColor() => _yColor ?? GreenUniformColor;
+    protected Color GetGreenColor() => _greenColor ?? GreenUniformColor;
 
-    protected Color GetZColor() => _zColor ?? BlueUniformColor;
+    protected Color GetBlueColor() => _blueColor ?? BlueUniformColor;
 }

@@ -23,10 +23,9 @@ public static class EntityExtensions
         entity.Add(new BasicCameraController());
     }
 
-    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice)
+    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)
     {
-        //var gizmo = new TranslationGizmo(graphicsDevice, Color.DarkOrange, Color.Maroon, Color.BlueViolet);
-        var gizmo = new TranslationGizmo(graphicsDevice);
+        var gizmo = new TranslationGizmo(graphicsDevice, redColor, greenColor, blueColor);
 
         gizmo.Create(entity);
     }

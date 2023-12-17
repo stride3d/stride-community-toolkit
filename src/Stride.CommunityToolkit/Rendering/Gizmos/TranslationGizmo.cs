@@ -14,7 +14,6 @@ public class TranslationGizmo : AxialGizmo
     private const float AxisBodyLength = 1f - AxisConeHeight;
     private const float OriginRadius = GizmoOriginScale * AxisConeRadius;
 
-    private readonly List<EntitySortInfo> _sortedEntities = new();
     private readonly Material[] _planeMaterials = new Material[3];
     private readonly List<Entity>[] _translationAxes = { new(), new(), new() };
     private readonly List<Entity>[] _translationPlanes = { new(), new(), new() };
@@ -30,9 +29,9 @@ public class TranslationGizmo : AxialGizmo
     {
         base.Create();
 
-        _planeMaterials[0] = CreateUniformColorMaterial(GetXColor().WithAlpha(86));
-        _planeMaterials[1] = CreateUniformColorMaterial(GetYColor().WithAlpha(86));
-        _planeMaterials[2] = CreateUniformColorMaterial(GetZColor().WithAlpha(86));
+        _planeMaterials[0] = CreateUniformColorMaterial(GetRedColor().WithAlpha(86));
+        _planeMaterials[1] = CreateUniformColorMaterial(GetGreenColor().WithAlpha(86));
+        _planeMaterials[2] = CreateUniformColorMaterial(GetBlueColor().WithAlpha(86));
 
         var axisRootEntities = new[] { new Entity("Root X axis"), new Entity("Root Y axis"), new Entity("Root Z axis") };
 
@@ -147,8 +146,6 @@ public class TranslationGizmo : AxialGizmo
             planeFrameEntityBack.Transform.RotationEulerXYZ = new Vector3(0, -MathUtil.Pi / 2f, 0);
             _translationPlanes[axis].Add(planeFrameEntityFront);
             _translationPlanes[axis].Add(planeFrameEntityBack);
-            _sortedEntities.Add(new EntitySortInfo { Entity = planeFrameEntityFront });
-            _sortedEntities.Add(new EntitySortInfo { Entity = planeFrameEntityBack });
 
             // Add the different parts of the plane to the plane entity
             var planeEntity = new Entity("GizmoPlane" + axis);
@@ -172,17 +169,5 @@ public class TranslationGizmo : AxialGizmo
         1 => GreenUniformMaterial,
         2 => BlueUniformMaterial,
         _ => throw new ArgumentOutOfRangeException("axisIndex"),
-    };
-
-    private class EntitySortInfo : IComparer<EntitySortInfo>
-    {
-        public Entity Entity;
-
-        public float Depth;
-
-        public int Compare(EntitySortInfo x, EntitySortInfo y)
-        {
-            return Math.Sign(x.Depth - y.Depth);
-        }
     };
 }

@@ -33,7 +33,7 @@ public class CubeStacker
 
         var entity = new Entity("MyGizmo");
         entity.AddGizmo(_game.GraphicsDevice);
-        entity.Transform.Position = new Vector3(-5, 0, 0);
+        entity.Transform.Position = new Vector3(-7.5f, 0, -7.5f);
         entity.Scene = scene;
 
         //_translationGizmo = new TranslationGizmo(_game.GraphicsDevice);
