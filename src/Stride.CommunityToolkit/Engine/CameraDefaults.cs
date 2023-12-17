@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Engine;
 
 public static class CameraDefaults
 {
