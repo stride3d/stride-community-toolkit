@@ -7,23 +7,14 @@ namespace Stride.CommunityToolkit.Engine;
 public static class ModelComponentExtensions
 {
     /// <summary>
-    /// Gets the ModelComponents BoundingBox and calculates the Y height
+    /// Calculates the height, width, and length of the model represented by the ModelComponent.
     /// </summary>
-    /// <param name="modelComponent"></param>
-    /// <returns></returns>
-    public static float GetMeshHeight(this ModelComponent modelComponent)
-    {
-        var boundingBox = modelComponent.Model.BoundingBox;
-        var height = boundingBox.Maximum.Y - boundingBox.Minimum.Y;
-
-        return height;
-    }
-
-    /// <summary>
-    /// Gets the ModelComponents BoundingBox and calculates the Height, Width and Length
-    /// </summary>
-    /// <param name="modelComponent"></param>
-    /// <returns></returns>
+    /// <param name="modelComponent">The ModelComponent whose model dimensions are to be calculated.</param>
+    /// <returns>A Vector3 representing the height, width, and length of the model.</returns>
+    /// <remarks>
+    /// The dimensions are calculated based on the model's bounding box. The returned Vector3 contains the height (Y-axis),
+    /// width (X-axis), and length (Z-axis) of the bounding box.
+    /// </remarks>
     public static Vector3 GetMeshHWL(this ModelComponent modelComponent)
     {
         var boundingBox = modelComponent.Model.BoundingBox;
@@ -35,11 +26,32 @@ public static class ModelComponentExtensions
     }
 
     /// <summary>
-    /// Gets the ModelComponents Mesh data as vertices and indices.
+    /// Calculates the height of the model represented by the ModelComponent.
     /// </summary>
-    /// <param name="model"></param>
-    /// <param name="game"></param>
-    /// <returns></returns>
+    /// <param name="modelComponent">The ModelComponent whose model height is to be calculated.</param>
+    /// <returns>The height of the model along the Y-axis.</returns>
+    /// <remarks>
+    /// The height is calculated based on the model's bounding box, which encompasses its maximum extent in 3D space.
+    /// </remarks>
+    public static float GetMeshHeight(this ModelComponent modelComponent)
+    {
+        var boundingBox = modelComponent.Model.BoundingBox;
+        var height = boundingBox.Maximum.Y - boundingBox.Minimum.Y;
+
+        return height;
+    }
+
+    /// <summary>
+    /// Retrieves the vertices and indices from the ModelComponent's mesh data.
+    /// </summary>
+    /// <param name="model">The ModelComponent from which to extract mesh data.</param>
+    /// <param name="game">The game instance, used to access graphics context for data extraction.</param>
+    /// <returns>A tuple containing two lists: the first list holds the vertices (as <see cref="Vector3"/>), and the second list holds the indices (as <see cref="int"/>).</returns>
+    /// <remarks>
+    /// This method extracts raw vertex and index data from the meshes in the provided ModelComponent.
+    /// It's useful for operations that require direct access to mesh data, such as custom rendering, collision detection, or physics simulations.
+    /// Note that this method extracts combined vertex and index data from all meshes in the ModelComponent.
+    /// </remarks>
     public static (List<Vector3> vertices, List<int> indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)
     {
         return GetMeshData(model.Model, game);

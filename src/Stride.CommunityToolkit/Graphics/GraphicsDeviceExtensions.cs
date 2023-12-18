@@ -1,6 +1,6 @@
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Graphics;
 
 public static class GraphicsDeviceExtensions
 {
