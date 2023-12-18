@@ -37,14 +37,16 @@
       href: code-only/examples/capsule-with-rigid-body-vb.md
   - name: Extensions
     href: code-only/extensions.md
-- name: Camera Component Extensions
-  href: camera-component-extensions/index.md
+- name: Camera Extensions
+  href: camera-extensions/index.md
 - name: Entity Extensions
   href: entity-extensions/index.md
 - name: Game Extensions
   href: game-extensions/index.md
-- name: Script Component Extensions
-  href: script-component-extensions/index.md
+- name: Model Extensions
+  href: model-extensions/index.md
+- name: Script Extensions
+  href: script-extensions/index.md
 - name: Rendering
   items:
   - name: MeshBuilder
