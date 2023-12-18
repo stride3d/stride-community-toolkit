@@ -22,6 +22,7 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
     - [Capsule with Rigid Body (VB)](code-only/examples/capsule-with-rigid-body-vb.md)
   - [Extensions](code-only/extensions.md)
 - [Camera Extensions](camera-extensions/index.md): These extensions provide powerful and convenient ways to interact with the camera.
+- [Animation Extensions](animation-extensions/index.md)
 - [Entity Extensions](entity-extensions/index.md): Enhancements and utilities for working with entities.
 - [Game Extensions](game-extensions/index.md): Extensions ranging from performance monitoring to material creation and entity manipulation.
 - [Model Extensions](model-extensions/index.md)
