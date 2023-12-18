@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>EntityExtensions.cs | Stride Manual </title>
+      <title>ScriptComponentExtensions.cs | Stride Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="EntityExtensions.cs | Stride Manual ">
+      <meta name="title" content="ScriptComponentExtensions.cs | Stride Manual ">
       
       <link rel="icon" href="../../favicon.ico">
       <link rel="stylesheet" href="../../public/docfx.min.css">
@@ -15,7 +15,7 @@
       <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/entity-extensions/index.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/script-extensions/index.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -84,25 +84,20 @@
         </div>
 
         <article data-uid="">
-<h1 id="entityextensionscs">EntityExtensions.cs</h1>
+<h1 id="scriptcomponentextensionscs">ScriptComponentExtensions.cs</h1>
 
 <p><img src="https://img.shields.io/badge/status-done-green" alt="Done"></p>
-<p><code>EntityExtensions.cs</code> is a collection of extension methods enhancing the functionality of entities within the Stride game engine. These methods provide additional capabilities to entities, making it easier to work with them in various scenarios. From adding gizmos and interactive scripts to retrieving components and managing entity positions, these extensions offer a variety of useful tools for developers.</p>
-<p>Here is an overview of the available extension methods:</p>
 <ul>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__"><code>AddGizmo()</code></a> - Adds a TranslationGizmo to the specified entity with optional custom colors</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddInteractiveCameraScript_Stride_Engine_Entity_"><code>AddInteractiveCameraScript()</code></a> - Adds an interactive camera script to the specified entity, enabling camera movement and rotation</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent__1_Stride_Engine_Entity_"><code>GetComponent&lt;T&gt;()</code></a> - Retrieves the first component of the specified type from the entity</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents__1_Stride_Engine_Entity_"><code>GetComponents&lt;T&gt;()</code></a> - Retrieves all components of the specified type from the entity</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_Remove_Stride_Engine_Entity_"><code>Remove()</code></a> - Removes the entity from its current scene by setting its <code>Scene</code> property to null</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_System_Boolean_"><code>WorldPosition()</code></a> - An easier way to get world position</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_DeltaTime_Stride_Engine_ScriptComponent_"><code>DeltaTime()</code></a> - Returns delta time from <code>ScriptComponent</code> in a shorter format</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_"><code>GetCamera()</code></a> - Gets the camera from the <code>GraphicsCompositor</code> with the name &quot;Main&quot;</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_System_String_"><code>GetCamera()</code></a> - Gets the camera from the <code>GraphicsCompositor</code> with the given name</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstCamera_Stride_Engine_ScriptComponent_"><code>GetFirstCamera()</code></a> - Gets the first camera from the <code>GraphicsCompositor</code></li>
 </ul>
-<p>These extensions are designed to streamline common tasks associated with entities in Stride, enhancing the overall efficiency and flexibility of game development workflows.</p>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/entity-extensions/index.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/script-extensions/index.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

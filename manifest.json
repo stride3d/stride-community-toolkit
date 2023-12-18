@@ -27,6 +27,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.yml",
       "output": {
         ".html": {
@@ -97,20 +107,20 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.yml",
+      "source_relative_path": "api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html"
+          "relative_path": "api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.yml",
+      "source_relative_path": "api/Stride.CommunityToolkit.Graphics.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Extensions.html"
+          "relative_path": "api/Stride.CommunityToolkit.Graphics.html"
         }
       },
       "version": ""
@@ -356,26 +366,6 @@
       "version": ""
     },
     {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Engine.AnimationComponentExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Engine.AnimationComponentExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.Engine.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.Engine.html"
-        }
-      },
-      "version": ""
-    },
-    {
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
@@ -430,10 +420,10 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/camera-component-extensions/index.md",
+      "source_relative_path": "manual/animation-extensions/index.md",
       "output": {
         ".html": {
-          "relative_path": "manual/camera-component-extensions/index.html"
+          "relative_path": "manual/animation-extensions/index.html"
         }
       },
       "version": ""
@@ -680,6 +670,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/model-extensions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/model-extensions/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/rendering/mesh-builder.md",
       "output": {
         ".html": {
@@ -690,10 +690,10 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "manual/script-component-extensions/index.md",
+      "source_relative_path": "manual/script-extensions/index.md",
       "output": {
         ".html": {
-          "relative_path": "manual/script-component-extensions/index.html"
+          "relative_path": "manual/script-extensions/index.html"
         }
       },
       "version": ""

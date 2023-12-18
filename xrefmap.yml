@@ -7,6 +7,28 @@ references:
   commentId: N:Stride.CommunityToolkit.Engine
   fullName: Stride.CommunityToolkit.Engine
   nameWithType: Stride.CommunityToolkit.Engine
+- uid: Stride.CommunityToolkit.Engine.AnimationComponentExtensions
+  name: AnimationComponentExtensions
+  href: api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.html
+  commentId: T:Stride.CommunityToolkit.Engine.AnimationComponentExtensions
+  fullName: Stride.CommunityToolkit.Engine.AnimationComponentExtensions
+  nameWithType: AnimationComponentExtensions
+- uid: Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)
+  name: PlayAnimation(AnimationComponent, string)
+  href: api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.html#Stride_CommunityToolkit_Engine_AnimationComponentExtensions_PlayAnimation_Stride_Engine_AnimationComponent_System_String_
+  commentId: M:Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)
+  name.vb: PlayAnimation(AnimationComponent, String)
+  fullName: Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent, string)
+  fullName.vb: Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent, String)
+  nameWithType: AnimationComponentExtensions.PlayAnimation(AnimationComponent, string)
+  nameWithType.vb: AnimationComponentExtensions.PlayAnimation(AnimationComponent, String)
+- uid: Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation*
+  name: PlayAnimation
+  href: api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.html#Stride_CommunityToolkit_Engine_AnimationComponentExtensions_PlayAnimation_
+  commentId: Overload:Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation
+  nameWithType: AnimationComponentExtensions.PlayAnimation
 - uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions
   name: CameraComponentExtensions
   href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html
@@ -607,30 +629,30 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera
   nameWithType: ScriptComponentExtensions.GetFirstCamera
-- uid: Stride.CommunityToolkit.Extensions
-  name: Stride.CommunityToolkit.Extensions
-  href: api/Stride.CommunityToolkit.Extensions.html
-  commentId: N:Stride.CommunityToolkit.Extensions
-  fullName: Stride.CommunityToolkit.Extensions
-  nameWithType: Stride.CommunityToolkit.Extensions
-- uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
+- uid: Stride.CommunityToolkit.Graphics
+  name: Stride.CommunityToolkit.Graphics
+  href: api/Stride.CommunityToolkit.Graphics.html
+  commentId: N:Stride.CommunityToolkit.Graphics
+  fullName: Stride.CommunityToolkit.Graphics
+  nameWithType: Stride.CommunityToolkit.Graphics
+- uid: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions
   name: GraphicsDeviceExtensions
-  href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html
-  commentId: T:Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
-  fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions
+  href: api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.html
+  commentId: T:Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions
+  fullName: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions
   nameWithType: GraphicsDeviceExtensions
-- uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
+- uid: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
   name: GetWindowSize(GraphicsDevice)
-  href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html#Stride_CommunityToolkit_Extensions_GraphicsDeviceExtensions_GetWindowSize_Stride_Graphics_GraphicsDevice_
-  commentId: M:Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
-  fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
+  href: api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.html#Stride_CommunityToolkit_Graphics_GraphicsDeviceExtensions_GetWindowSize_Stride_Graphics_GraphicsDevice_
+  commentId: M:Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
+  fullName: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)
   nameWithType: GraphicsDeviceExtensions.GetWindowSize(GraphicsDevice)
-- uid: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize*
+- uid: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize*
   name: GetWindowSize
-  href: api/Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.html#Stride_CommunityToolkit_Extensions_GraphicsDeviceExtensions_GetWindowSize_
-  commentId: Overload:Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize
+  href: api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.html#Stride_CommunityToolkit_Graphics_GraphicsDeviceExtensions_GetWindowSize_
+  commentId: Overload:Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Extensions.GraphicsDeviceExtensions.GetWindowSize
+  fullName: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize
   nameWithType: GraphicsDeviceExtensions.GetWindowSize
 - uid: Stride.CommunityToolkit.Physics
   name: Stride.CommunityToolkit.Physics
@@ -2445,31 +2467,3 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.Services
   nameWithType: SkyboxGeneratorContext.Services
-- uid: Stride.Engine
-  name: Stride.Engine
-  href: api/Stride.Engine.html
-  commentId: N:Stride.Engine
-  fullName: Stride.Engine
-  nameWithType: Stride.Engine
-- uid: Stride.Engine.AnimationComponentExtensions
-  name: AnimationComponentExtensions
-  href: api/Stride.Engine.AnimationComponentExtensions.html
-  commentId: T:Stride.Engine.AnimationComponentExtensions
-  fullName: Stride.Engine.AnimationComponentExtensions
-  nameWithType: AnimationComponentExtensions
-- uid: Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)
-  name: PlayAnimation(AnimationComponent, string)
-  href: api/Stride.Engine.AnimationComponentExtensions.html#Stride_Engine_AnimationComponentExtensions_PlayAnimation_Stride_Engine_AnimationComponent_System_String_
-  commentId: M:Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)
-  name.vb: PlayAnimation(AnimationComponent, String)
-  fullName: Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent, string)
-  fullName.vb: Stride.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent, String)
-  nameWithType: AnimationComponentExtensions.PlayAnimation(AnimationComponent, string)
-  nameWithType.vb: AnimationComponentExtensions.PlayAnimation(AnimationComponent, String)
-- uid: Stride.Engine.AnimationComponentExtensions.PlayAnimation*
-  name: PlayAnimation
-  href: api/Stride.Engine.AnimationComponentExtensions.html#Stride_Engine_AnimationComponentExtensions_PlayAnimation_
-  commentId: Overload:Stride.Engine.AnimationComponentExtensions.PlayAnimation
-  isSpec: "True"
-  fullName: Stride.Engine.AnimationComponentExtensions.PlayAnimation
-  nameWithType: AnimationComponentExtensions.PlayAnimation

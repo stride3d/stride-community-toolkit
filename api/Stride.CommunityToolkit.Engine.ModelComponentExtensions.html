@@ -133,10 +133,10 @@
 
   <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshHWL_Stride_Engine_ModelComponent_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshHWL(Stride.Engine.ModelComponent)">
   GetMeshHWL(ModelComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the ModelComponents BoundingBox and calculates the Height, Width and Length</p>
+  <div class="markdown level1 summary"><p>Calculates the height, width, and length of the model represented by the ModelComponent.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -147,13 +147,15 @@
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
-    <dd></dd>
+    <dd><p>The ModelComponent whose model dimensions are to be calculated.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>A Vector3 representing the height, width, and length of the model.</p>
+</dd>
   </dl>
 
 
@@ -162,6 +164,10 @@
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshHWL_Stride_Engine_ModelComponent__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The dimensions are calculated based on the model's bounding box. The returned Vector3 contains the height (Y-axis),
+width (X-axis), and length (Z-axis) of the bounding box.</p>
+</div>
 
 
 
@@ -170,10 +176,10 @@
 
   <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshHeight_Stride_Engine_ModelComponent_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)">
   GetMeshHeight(ModelComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the ModelComponents BoundingBox and calculates the Y height</p>
+  <div class="markdown level1 summary"><p>Calculates the height of the model represented by the ModelComponent.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -184,13 +190,15 @@
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
-    <dd></dd>
+    <dd><p>The ModelComponent whose model height is to be calculated.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd></dd>
+    <dd><p>The height of the model along the Y-axis.</p>
+</dd>
   </dl>
 
 
@@ -199,6 +207,9 @@
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshHeight_Stride_Engine_ModelComponent__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The height is calculated based on the model's bounding box, which encompasses its maximum extent in 3D space.</p>
+</div>
 
 
 
@@ -207,10 +218,10 @@
 
   <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_Stride_Engine_ModelComponent_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent,Stride.Games.IGame)">
   GetMeshVerticesAndIndices(ModelComponent, IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L43"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the ModelComponents Mesh data as vertices and indices.</p>
+  <div class="markdown level1 summary"><p>Retrieves the vertices and indices from the ModelComponent's mesh data.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -221,15 +232,18 @@
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>model</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
-    <dd></dd>
+    <dd><p>The ModelComponent from which to extract mesh data.</p>
+</dd>
     <dt><code>game</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd></dd>
+    <dd><p>The game instance, used to access graphics context for data extraction.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt>(<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a>&gt; <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-system.collections.generic.list-stride.core.mathematics.vector3-,system.collections.generic.list-system.int32--.vertices">vertices</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt; <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetuple-system.collections.generic.list-stride.core.mathematics.vector3-,system.collections.generic.list-system.int32--.indices">indices</a>)</dt>
-    <dd></dd>
+    <dd><p>A tuple containing two lists: the first list holds the vertices (as <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a>), and the second list holds the indices (as <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>).</p>
+</dd>
   </dl>
 
 
@@ -238,6 +252,11 @@
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_Stride_Engine_ModelComponent_Stride_Games_IGame__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method extracts raw vertex and index data from the meshes in the provided ModelComponent.
+It's useful for operations that require direct access to mesh data, such as custom rendering, collision detection, or physics simulations.
+Note that this method extracts combined vertex and index data from all meshes in the ModelComponent.</p>
+</div>
 
 
 
