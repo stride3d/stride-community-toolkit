@@ -2,6 +2,7 @@ using CubicleCalamity.Components;
 using CubicleCalamity.Scripts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -26,7 +27,11 @@ public class CubeStacker
 
     public void Start(Scene scene)
     {
-        _game.SetupBase3DScene();
+        _game.AddGraphicsCompositor().AddCleanUIStage();
+        _game.AddCamera().AddInteractiveCameraScript();
+        //_game.AddDirectionalLight();
+        _game.AddSkybox();
+        _game.AddGround();
         _game.AddProfiler();
 
         CreateMaterials();
@@ -40,7 +45,7 @@ public class CubeStacker
         //var gizmoEntity = _translationGizmo.Create(scene);
         //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
-        //SetupLighting(scene);
+        SetupLighting(scene);
         CreateFirstLayer(0.5f, scene);
         CreateGameManagerEntity(scene);
     }
@@ -144,36 +149,42 @@ public class CubeStacker
         return entity;
     }
 
-    public static void SetupLighting(Scene scene)
+    public void SetupLighting(Scene scene)
     {
-        CreateLight(new LightAmbient
-        {
-            Color = GetColor(new(0.2f, 0.2f, 0.2f))
-        }, 1f, new Vector3(0, 20, 0));
+        //CreateLight(new LightAmbient
+        //{
+        //    Color = GetColor(new(0.2f, 0.2f, 0.2f)),
+        //}, 1000f, new Vector3(0, 5, 0));
+
+        //CreateLight(new LightAmbient
+        //{
+        //    Color = GetColor(Color.White)
+        //}, 1f, new Vector3(0, 20, 0));
 
         CreateLight(new LightDirectional
         {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(-20f, 5f, -20f));
+            Color = GetColor(Color.White),
+        }, 100f, new Vector3(0, 2f, 5f));
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(20f, 5f, 20f));
+        CreateLight(new LightDirectional { Color = GetColor(new(1f, 1f, 1f)) },
+            100f,
+            new Vector3(5f, 2f, 0),
+            Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(-90))
+        );
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(-20f, 5f, 20f));
+        //CreateLight(new LightDirectional
+        //{
+        //    Color = GetColor(new(1f, 1f, 1f)),
+        //}, 100f, new Vector3(-20f, 5f, 20f));
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(20f, 5f, -20f));
+        //CreateLight(new LightDirectional
+        //{
+        //    Color = GetColor(new(1f, 1f, 1f)),
+        //}, 100f, new Vector3(20f, 5f, -20f));
 
         static ColorRgbProvider GetColor(Color color) => new(color);
 
-        void CreateLight(ILight light, float intensity, Vector3 position)
+        void CreateLight(ILight light, float intensity, Vector3 position, Quaternion? rotation = null)
         {
             var entity = new Entity() {
                 new LightComponent {
@@ -182,7 +193,9 @@ public class CubeStacker
                 }};
 
             entity.Transform.Position = position;
+            entity.Transform.Rotation = rotation ?? Quaternion.Identity;
             entity.Scene = scene;
+            entity.AddGizmo(_game.GraphicsDevice);
         }
     }
 }
