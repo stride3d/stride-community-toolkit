@@ -74,10 +74,10 @@ public static class GameExtensions
     /// 3. Adds a directional light to the game.
     /// </remarks>
     /// <param name="game">The Game instance that will receive the base setup.</param>
-    public static void SetupBase(this Game game)
+    public static void SetupBase(this Game game,string mainCameraName="Main")
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera();
+        game.AddCamera(mainCameraName);
         game.AddDirectionalLight();
     }
 
