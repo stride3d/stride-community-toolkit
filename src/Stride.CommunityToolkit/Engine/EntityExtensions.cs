@@ -47,6 +47,31 @@ public static class EntityExtensions
     }
 
     /// <summary>
+    /// Adds a directional light gizmo to the specified entity for visual representation and manipulation in the editor or during runtime.
+    /// </summary>
+    /// <param name="entity">The entity to which the directional light gizmo will be added.</param>
+    /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
+    /// <param name="color">Optional color for the gizmo. If not specified, a default color is used.</param>
+    /// <remarks>
+    /// This method is useful for visually representing the direction and orientation of a directional light in a scene.
+    /// The gizmo can be used during runtime to provide a visual reference for the light's direction.
+    /// </remarks>
+    /// <example>
+    /// This example shows how to add a light directional gizmo to an entity with the default colors:
+    /// <code>
+    /// var entity = new Entity();
+    /// // Assume 'game' is an existing Game instance
+    /// entity.AddLightDirectionalGizmo(game.GraphicsDevice);
+    /// </code>
+    /// </example>///
+    public static void AddLightDirectionalGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? color = null)
+    {
+        var gizmo = new LightDirectionalGizmo(graphicsDevice, color);
+
+        gizmo.Create(entity);
+    }
+
+    /// <summary>
     /// Retrieves the first component of the specified type from the entity.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
