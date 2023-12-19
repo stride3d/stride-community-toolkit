@@ -91,7 +91,7 @@ public static class EntityExtensions
     /// </returns>
     public static bool TryGetComponent<T>(this Entity entity, out T? result)
     {
-        result = entity.OfType<T>().FirstOrDefault();
+        result = entity.GetComponent<T>();
         if (result is null)
         {
             return false;
