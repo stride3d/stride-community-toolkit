@@ -98,6 +98,26 @@ public static class EntityExtensions
     }
 
     /// <summary>
+    /// Tries to retrieve a component of type <typeparamref name="T"/> from the given entity.
+    /// </summary>
+    /// <typeparam name="T">The type of component to retrieve.</typeparam>
+    /// <param name="entity">The entity from which to retrieve the component.</param>
+    /// <param name="result">When this method returns, contains the first component of type</param>
+    /// <returns>
+    /// <c>true</c> if a component of type <typeparamref name="T"/> is found in the entity;
+    /// otherwise, <c>false</c>.
+    /// </returns>
+    public static bool TryGetComponent<T>(this Entity entity, out T? result)
+    {
+        result = entity.OfType<T>().FirstOrDefault();
+        if (result is null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
     /// An easier way to get the previous frames world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
     /// </summary>
     /// <param name="entity">The <see cref="Entity"/> to get the World Position</param>
