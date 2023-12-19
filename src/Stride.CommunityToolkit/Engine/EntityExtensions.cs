@@ -47,24 +47,6 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Attempts to remove the entity from its scene, destroying it.
-    /// </summary>
-    /// <returns>True if the entity was successfully removed; otherwise, false.</returns>
-    [Obsolete("Use Remove() instead", true)]
-    public static bool DestroyEntity(this Entity entity)
-    {
-        try
-        {
-            entity.Scene.Entities.Remove(entity);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    /// <summary>
     /// Retrieves the first component of the specified type from the entity.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
