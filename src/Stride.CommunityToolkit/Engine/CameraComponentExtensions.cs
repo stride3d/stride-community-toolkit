@@ -170,7 +170,6 @@ public static class CameraComponentExtensions
         return (vectorNear, vectorFar);
     }
 
-    // ToDo: A benchmark would be useful if we should use out or just directly return the Vector3, that means one of these methods migth be unnecessary?
     /// <summary>
     /// Converts the screen position to a point in world coordinates.
     /// </summary>
@@ -182,24 +181,7 @@ public static class CameraComponentExtensions
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
-    public static Vector3 ScreenToWorldPoint(this CameraComponent cameraComponent, Vector3 position)
-    {
-        cameraComponent.ScreenToWorldPoint(ref position, out var result);
-
-        return result;
-    }
-
-    /// <summary>
-    /// Converts the screen position to a point in world coordinates.
-    /// </summary>
-    /// <param name="cameraComponent"></param>
-    /// <param name="position">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.</param>
-    /// <param name="result">Position in world coordinates.</param>
-    /// <remarks>
-    /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
-    /// </remarks>
-    public static void ScreenToWorldPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
+    public static Vector3 ScreenToWorldPoint(this CameraComponent cameraComponent, ref Vector3 position)
     {
         var position2D = position.XY();
 
@@ -212,7 +194,7 @@ public static class CameraComponentExtensions
 
         float rayDistance = position.Z / viewSpaceDir.Z;
 
-        result = ray.Start + direction * rayDistance;
+        return ray.Start + direction * rayDistance;
     }
 
     /// <summary>
@@ -290,31 +272,13 @@ public static class CameraComponentExtensions
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
-    public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, Vector3 position)
-    {
-        cameraComponent.WorldToScreenPoint(ref position, out var result);
-
-        return result;
-    }
-
-    /// <summary>
-    /// Converts the world position to screen space coordinates relative to camera.
-    /// </summary>
-    /// <param name="cameraComponent"></param>
-    /// <param name="position"></param>
-    /// <param name="result">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.</param>
-    /// <exception cref="ArgumentNullException">If the cameraComponent argument is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
-    /// </remarks>
-    public static void WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
+    public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position)
     {
         var clipSpace = cameraComponent.WorldToClipSpace(ref position);
 
         Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewMatrix, out var viewSpace);
 
-        result = new Vector3
+        return new Vector3
         {
             X = (clipSpace.X + 1f) / 2f,
             Y = 1f - (clipSpace.Y + 1f) / 2f,

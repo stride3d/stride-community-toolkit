@@ -47,24 +47,6 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Attempts to remove the entity from its scene, destroying it.
-    /// </summary>
-    /// <returns>True if the entity was successfully removed; otherwise, false.</returns>
-    [Obsolete("Use Remove() instead", true)]
-    public static bool DestroyEntity(this Entity entity)
-    {
-        try
-        {
-            entity.Scene.Entities.Remove(entity);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    /// <summary>
     /// Retrieves the first component of the specified type from the entity.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
@@ -95,6 +77,26 @@ public static class EntityExtensions
     public static void Remove(this Entity entity)
     {
         entity.Scene = null;
+    }
+
+    /// <summary>
+    /// Tries to retrieve a component of type <typeparamref name="T"/> from the given entity.
+    /// </summary>
+    /// <typeparam name="T">The type of component to retrieve.</typeparam>
+    /// <param name="entity">The entity from which to retrieve the component.</param>
+    /// <param name="result">When this method returns, contains the first component of type</param>
+    /// <returns>
+    /// <c>true</c> if a component of type <typeparamref name="T"/> is found in the entity;
+    /// otherwise, <c>false</c>.
+    /// </returns>
+    public static bool TryGetComponent<T>(this Entity entity, out T? result)
+    {
+        result = entity.GetComponent<T>();
+        if (result is null)
+        {
+            return false;
+        }
+        return true;
     }
 
     /// <summary>
