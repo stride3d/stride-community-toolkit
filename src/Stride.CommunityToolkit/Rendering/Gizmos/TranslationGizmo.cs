@@ -15,11 +15,15 @@ public class TranslationGizmo : AxialGizmo
     private const float OriginRadius = GizmoOriginScale * AxisConeRadius;
 
     private readonly Material[] _planeMaterials = new Material[3];
+    private Material _letterMaterial;
     private readonly List<Entity>[] _translationAxes = { new(), new(), new() };
     private readonly List<Entity>[] _translationPlanes = { new(), new(), new() };
     private readonly List<Entity>[] _translationPlaneEdges = { new(), new(), new() };
     private readonly List<Entity> _translationPlaneRoots = new();
     private readonly List<ModelComponent>[] _translationOppositeAxes = { new(), new(), new(), };
+    private float CylinderRadius = 0.02f;
+    private float CylinderHeight = 0.3f;
+    private int CylinderTessellation = 8;
 
     public TranslationGizmo(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
 
@@ -32,6 +36,7 @@ public class TranslationGizmo : AxialGizmo
         _planeMaterials[0] = CreateUniformColorMaterial(GetRedColor().WithAlpha(86));
         _planeMaterials[1] = CreateUniformColorMaterial(GetGreenColor().WithAlpha(86));
         _planeMaterials[2] = CreateUniformColorMaterial(GetBlueColor().WithAlpha(86));
+        _letterMaterial = CreateUniformColorMaterial(Color.White);
 
         var axisRootEntities = new[] { new Entity("Root X axis"), new Entity("Root Y axis"), new Entity("Root Z axis") };
 
@@ -92,6 +97,7 @@ public class TranslationGizmo : AxialGizmo
             coneEntity.Transform.Rotation = Quaternion.RotationZ(-MathUtil.Pi / 2);
             coneEntity.Transform.Position.X = AxisBodyLength + AxisConeHeight * 0.5f;
             _translationAxes[axis].Add(coneEntity);
+            coneEntity.AddChild(CreateLetterZ());
 
             // the main body
             var bodyEntity = new Entity("ArrowBody" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = bodyMesh } }, RenderGroup = RenderGroup } };
@@ -113,9 +119,74 @@ public class TranslationGizmo : AxialGizmo
             arrowEntity.Transform.Children.Add(bodyEntity.Transform);
             arrowEntity.Transform.Children.Add(opositeFrameEntity.Transform);
 
+
             // Add the arrow entity to the gizmo entity
             axisRootEntities[axis].Transform.Children.Add(arrowEntity.Transform);
         }
+    }
+
+    private Entity CreateLetterX()
+    {
+        var part1 = CreatePrimitive(CylinderRadius, CylinderHeight, CylinderTessellation);
+        part1.Transform.Rotation = Quaternion.RotationX(MathUtil.PiOverFour);
+
+        var part2 = CreatePrimitive(CylinderRadius, CylinderHeight, CylinderTessellation);
+        part2.Transform.Rotation = Quaternion.RotationX(-MathUtil.PiOverFour);
+
+        var letterX = new Entity("LetterX");
+        letterX.Transform.Children.Add(part1.Transform);
+        letterX.Transform.Children.Add(part2.Transform);
+
+        return letterX;
+    }
+
+    private Entity CreateLetterY()
+    {
+        // Vertical stem
+        var stem = CreatePrimitive(CylinderRadius, CylinderHeight * 0.4f, CylinderTessellation);
+
+        // Upper branches
+        var branch1 = CreatePrimitive(CylinderRadius, CylinderHeight / 2, CylinderTessellation);
+        branch1.Transform.Rotation = Quaternion.RotationX(MathUtil.PiOverFour);
+        branch1.Transform.Position = new Vector3(0, CylinderHeight / 4, CylinderHeight / 4);
+
+        var branch2 = CreatePrimitive(CylinderRadius, CylinderHeight / 2, CylinderTessellation);
+        branch2.Transform.Rotation = Quaternion.RotationX(-MathUtil.PiOverFour);
+        branch2.Transform.Position = new Vector3(0, CylinderHeight / 4, -CylinderHeight / 4);
+
+        var letterY = new Entity("LetterY");
+        letterY.Transform.Children.Add(stem.Transform);
+        letterY.Transform.Children.Add(branch1.Transform);
+        letterY.Transform.Children.Add(branch2.Transform);
+
+        return letterY;
+    }
+
+    private Entity CreateLetterZ()
+    {
+        // Top and bottom parts
+        var top = CreatePrimitive(CylinderRadius, CylinderHeight, CylinderTessellation);
+        var bottom = CreatePrimitive(CylinderRadius, CylinderHeight, CylinderTessellation);
+        top.Transform.Position = new Vector3(0, CylinderHeight / 2, 0);
+        bottom.Transform.Position = new Vector3(0, -CylinderHeight / 2, 0);
+
+        // Diagonal part
+        var diagonal = CreatePrimitive(CylinderRadius, (float)Math.Sqrt(2) * CylinderHeight, CylinderTessellation);
+        diagonal.Transform.Rotation = Quaternion.RotationZ(MathUtil.PiOverFour);
+
+        var letterZ = new Entity("LetterZ");
+        letterZ.Transform.Children.Add(top.Transform);
+        letterZ.Transform.Children.Add(bottom.Transform);
+        letterZ.Transform.Children.Add(diagonal.Transform);
+
+        return letterZ;
+    }
+
+    private Entity CreatePrimitive(float radius, float height, int tessellation)
+    {
+        var mesh = GeometricPrimitive.Cylinder.New(GraphicsDevice, height, radius, tessellation).ToMeshDraw();
+
+        return new() { new ModelComponent { Model = new Model { _letterMaterial, new Mesh { Draw = mesh } } } };
     }
 
     private void CreateTranslationPlanes(Entity[] axisRootEntities)
