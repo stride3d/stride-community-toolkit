@@ -335,7 +335,7 @@ public static class GameExtensions
     /// <param name="includeCollider">Indicates whether to include a collider component (default is true).</param>
     /// <param name="size">The size of the model if applicable (optional). Dimensions in the Vector3 are used in the order X, Y, Z. If null, default dimensions are used for the model.</param>
     /// <returns>A new entity representing the specified primitive model.</returns>
-    public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector3? size = null)
+    public static Entity CreatePrimitive(this Game game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector3? size = null, RenderGroup renderGroup = RenderGroup.Group0)
     {
         var proceduralModel = GetProceduralModel(type, size);
 
@@ -343,7 +343,7 @@ public static class GameExtensions
 
         model.Materials.Add(material);
 
-        var entity = new Entity(entityName) { new ModelComponent(model) };
+        var entity = new Entity(entityName) { new ModelComponent(model) { RenderGroup = renderGroup } };
 
         if (!includeCollider) return entity;
 
