@@ -151,7 +151,7 @@ public static class GameExtensions
             MathUtil.DegreesToRadians(initialRotation.Value.Z)
         );
 
-        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
@@ -196,7 +196,7 @@ public static class GameExtensions
         entity.Transform.Position = new Vector3(0, 2.0f, 0);
         entity.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30.0f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-180.0f));
 
-        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
@@ -233,7 +233,7 @@ public static class GameExtensions
 
         entity.Transform.Position = new Vector3(0.0f, 2.0f, -2.0f);
 
-        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
@@ -254,7 +254,7 @@ public static class GameExtensions
 
         var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, validSize);
 
-        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
@@ -295,7 +295,7 @@ public static class GameExtensions
     {
         var entity = new Entity(entityName) { new GameProfiler() };
 
-        game.SceneSystem.SceneInstance.RootScene.Entities.Add(entity);
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
