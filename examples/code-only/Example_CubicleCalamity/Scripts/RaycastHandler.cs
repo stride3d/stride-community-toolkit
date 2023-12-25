@@ -15,10 +15,10 @@ public class RaycastHandler : AsyncScript
     {
         var cameraComponent = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-        // not working
-        var cameraComponent2 = Entity.GetComponent<CameraComponent>();
+        // working after x frames
+        var cameraComponent2 = this.GetCamera();
 
-        // not working
+        //  working after x frames
         var cameraComponent3 = this.GetFirstCamera();
 
         var simulation = this.GetSimulation();
@@ -54,11 +54,11 @@ public class RaycastHandler : AsyncScript
 
             Console.WriteLine($"Cubes to remove: {cubesToRemove.Count()}");
 
-            var score = CalculateScore(cubesToRemove.Count());
+            var score = CalculateScore(cubesToRemove.Count()).Result;
 
             _totalScore += score;
 
-            Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count())}, Total Score: {_totalScore}");
+            Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count()).Calculations}, Total Score: {_totalScore - score} + {score}");
 
             foreach (var cube in cubesToRemove)
             {
@@ -115,12 +115,12 @@ public class RaycastHandler : AsyncScript
     private static bool Equals(float a, float b, float tolerance = 0.1f)
         => Math.Abs(a - b) < tolerance;
 
-    public static int CalculateScore(int numberOfCubes)
+    public static (int Result, string Calculations) CalculateScore(int numberOfCubes)
     {
         int baseScore = numberOfCubes * Constants.BasePointsPerCube;
 
         int bonus = numberOfCubes * numberOfCubes;
 
-        return baseScore + bonus;
+        return (baseScore + bonus, $"{numberOfCubes} * {Constants.BasePointsPerCube} + {numberOfCubes} * {numberOfCubes}");
     }
 }

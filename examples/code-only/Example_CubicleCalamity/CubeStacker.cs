@@ -2,7 +2,6 @@ using CubicleCalamity.Components;
 using CubicleCalamity.Scripts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -18,7 +17,6 @@ public class CubeStacker
     private readonly Game _game;
     private readonly Dictionary<Color, Material> _materials = new();
     private readonly Random _random = new();
-    private TranslationGizmo? _translationGizmo;
     private double _elapsedTime;
     private int _layer = 1;
 
@@ -29,23 +27,27 @@ public class CubeStacker
         _game.SetupBase3DScene();
         _game.AddProfiler();
 
-        CreateMaterials();
-
-        var entity = new Entity("MyGizmo");
-        entity.AddGizmo(_game.GraphicsDevice);
-        entity.Transform.Position = new Vector3(-7.5f, 0, -7.5f);
-        entity.Scene = scene;
+        AddMaterials();
+        AddGizmo(scene);
 
         //_translationGizmo = new TranslationGizmo(_game.GraphicsDevice);
         //var gizmoEntity = _translationGizmo.Create(scene);
         //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
-        //SetupLighting(scene);
-        CreateFirstLayer(0.5f, scene);
-        CreateGameManagerEntity(scene);
+        AddAllDirectionLighting(scene, intensity: 20f);
+        AddFirstLayer(scene, 0.5f);
+        AddGameManagerEntity(scene);
     }
 
-    private static void CreateGameManagerEntity(Scene scene)
+    private void AddGizmo(Scene scene)
+    {
+        var entity = new Entity("MyGizmo");
+        entity.AddGizmo(_game.GraphicsDevice, showAxisName: true);
+        entity.Transform.Position = new Vector3(-7.5f, 1, -7.5f);
+        entity.Scene = scene;
+    }
+
+    private static void AddGameManagerEntity(Scene scene)
     {
         var entity = new Entity("GameManager")
         {
@@ -72,7 +74,7 @@ public class CubeStacker
         }
     }
 
-    private void CreateMaterials()
+    private void AddMaterials()
     {
         foreach (var color in Constants.Colours)
         {
@@ -82,7 +84,7 @@ public class CubeStacker
         }
     }
 
-    private void CreateFirstLayer(float y, Scene scene)
+    private void AddFirstLayer(Scene scene, float y)
     {
         var entities = CreateCubeLayer(y, scene);
 
@@ -144,36 +146,25 @@ public class CubeStacker
         return entity;
     }
 
-    public static void SetupLighting(Scene scene)
+    public void AddAllDirectionLighting(Scene scene, float intensity, bool showLightGizmo = true)
     {
-        CreateLight(new LightAmbient
-        {
-            Color = GetColor(new(0.2f, 0.2f, 0.2f))
-        }, 1f, new Vector3(0, 20, 0));
+        var position = new Vector3(7f, 2f, 0);
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(-20f, 5f, -20f));
+        CreateLightEntity(GetLight(), intensity, position);
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(20f, 5f, 20f));
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)));
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(-20f, 5f, 20f));
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)));
 
-        CreateLight(new LightDirectional
-        {
-            Color = GetColor(new(1f, 1f, 1f)),
-        }, 100f, new Vector3(20f, 5f, -20f));
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270)));
+
+        LightDirectional GetLight() => new() { Color = GetColor(Color.White) };
 
         static ColorRgbProvider GetColor(Color color) => new(color);
 
-        void CreateLight(ILight light, float intensity, Vector3 position)
+        void CreateLightEntity(ILight light, float intensity, Vector3 position, Quaternion? rotation = null)
         {
             var entity = new Entity() {
                 new LightComponent {
@@ -182,7 +173,13 @@ public class CubeStacker
                 }};
 
             entity.Transform.Position = position;
+            entity.Transform.Rotation = rotation ?? Quaternion.Identity;
             entity.Scene = scene;
+
+            if (showLightGizmo)
+            {
+                entity.AddLightDirectionalGizmo(_game.GraphicsDevice);
+            }
         }
     }
 }

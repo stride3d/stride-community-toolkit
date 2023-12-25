@@ -25,7 +25,7 @@ public class TranslationGizmo : AxialGizmo
 
     public TranslationGizmo(GraphicsDevice graphicsDevice, Color? xColor = null, Color? yColor = null, Color? zColor = null) : base(graphicsDevice, xColor, yColor, zColor) { }
 
-    public void Create(Entity entity)
+    public void Create(Entity entity, bool showAxisName = false, bool rotateAxisNames = true)
     {
         base.Create();
 
@@ -51,7 +51,31 @@ public class TranslationGizmo : AxialGizmo
 
         var translationOrigin = CreateMiddleSphere();
 
+        AddAxisNames(entity, showAxisName, rotateAxisNames);
+
         entity.Transform.Children.Add(translationOrigin.Transform);
+    }
+
+    private void AddAxisNames(Entity entity, bool showAxisName, bool rotateAxisNames)
+    {
+        if (showAxisName is false) return;
+
+        var letter = new Letter3D(GraphicsDevice, rotateAxisNames);
+
+        var xLetter = letter.CreateLetterX();
+        xLetter.Transform.Position.X = 1.1f;
+        xLetter.Transform.Position.Y = 0.15f;
+
+        var yLetter = letter.CreateLetterY();
+        yLetter.Transform.Position.Y = 1.15f;
+
+        var zLetter = letter.CreateLetterZ();
+        zLetter.Transform.Position.Z = 1.1f;
+        zLetter.Transform.Position.Y = 0.15f;
+
+        entity.AddChild(xLetter);
+        entity.AddChild(yLetter);
+        entity.AddChild(zLetter);
     }
 
     public Entity Create(Scene scene)
@@ -92,6 +116,7 @@ public class TranslationGizmo : AxialGizmo
             coneEntity.Transform.Rotation = Quaternion.RotationZ(-MathUtil.Pi / 2);
             coneEntity.Transform.Position.X = AxisBodyLength + AxisConeHeight * 0.5f;
             _translationAxes[axis].Add(coneEntity);
+            //coneEntity.AddChild(CreateLetterX());
 
             // the main body
             var bodyEntity = new Entity("ArrowBody" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = bodyMesh } }, RenderGroup = RenderGroup } };
@@ -112,6 +137,7 @@ public class TranslationGizmo : AxialGizmo
             arrowEntity.Transform.Children.Add(coneEntity.Transform);
             arrowEntity.Transform.Children.Add(bodyEntity.Transform);
             arrowEntity.Transform.Children.Add(opositeFrameEntity.Transform);
+
 
             // Add the arrow entity to the gizmo entity
             axisRootEntities[axis].Transform.Children.Add(arrowEntity.Transform);

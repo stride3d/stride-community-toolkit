@@ -6,23 +6,23 @@ namespace Stride.CommunityToolkit.Engine;
 public static class ScriptComponentExtensions
 {
     /// <summary>
-    /// Returns delta time in a shorter format.
+    /// Retrieves the time elapsed since the last game update in seconds.
     /// </summary>
-    /// <param name="scriptComponent"></param>
-    /// <returns></returns>
+    /// <param name="scriptComponent">The script component used to access game timing information.</param>
+    /// <returns>The delta time in seconds as a single-precision floating-point number.</returns>
     public static float DeltaTime(this ScriptComponent scriptComponent)
     {
         return (float)scriptComponent.Game.UpdateTime.Elapsed.TotalSeconds;
     }
 
     /// <summary>
-    /// Gets the camera from the <see cref="GraphicsCompositor"/> with the name "Main"
+    /// Retrieves the camera named "Main" from the <see cref="GraphicsCompositor"/>. Note that the camera might not be available during the first 2-3 frames.
     /// </summary>
     /// <remarks>
-    /// Make sure the Graphics compositor has been initialized with cameras or else this will fail.
+    /// Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.
     /// </remarks>
-    /// <param name="scriptComponent"></param>
-    /// <returns></returns>
+    /// <param name="scriptComponent">The script component from which to access the GraphicsCompositor.</param>
+    /// <returns>The <see cref="CameraComponent"/> named "Main", if found; otherwise, null.</returns>
     public static CameraComponent? GetCamera(this ScriptComponent scriptComponent)
     {
         var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
@@ -39,14 +39,14 @@ public static class ScriptComponentExtensions
     }
 
     /// <summary>
-    /// Gets the camera from the <see cref="GraphicsCompositor"/> with the given name.
+    /// Retrieves the camera from the <see cref="GraphicsCompositor"/> with the specified name. Note that the camera might not be available during the first 2-3 frames.
     /// </summary>
     /// <remarks>
-    /// Make sure the Graphics compositor has been initialized with cameras or else this will fail.
+    /// Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.
     /// </remarks>
-    /// <param name="scriptComponent"></param>
-    /// <param name="cameraName"></param>
-    /// <returns></returns>
+    /// <param name="scriptComponent">The script component from which to access the GraphicsCompositor.</param>
+    /// <param name="cameraName">The name of the camera to retrieve.</param>
+    /// <returns>The <see cref="CameraComponent"/> with the given name, if found; otherwise, null.</returns>
     public static CameraComponent? GetCamera(this ScriptComponent scriptComponent, string cameraName)
     {
         var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
@@ -63,13 +63,13 @@ public static class ScriptComponentExtensions
     }
 
     /// <summary>
-    /// Gets the first camera from the <see cref="GraphicsCompositor"/>
+    /// Gets the first camera from the <see cref="GraphicsCompositor"/>. Note that the camera might not be available during the first 2-3 frames.
     /// </summary>
     /// <remarks>
-    /// Make sure the Graphics compositor has been initialized with cameras or else this will fail.
+    /// Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.
     /// </remarks>
-    /// <param name="scriptComponent"></param>
-    /// <returns></returns>
+    /// <param name="scriptComponent">The script component from which to access the GraphicsCompositor.</param>
+    /// <returns>The <see cref="CameraComponent"/> with the given name, if found; otherwise, null.</returns>
     public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponent)
     {
         SceneCameraSlotCollection cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
