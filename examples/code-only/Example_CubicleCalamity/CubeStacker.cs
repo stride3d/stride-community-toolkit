@@ -25,24 +25,29 @@ public class CubeStacker
     public void Start(Scene scene)
     {
         _game.SetupBase3DScene();
+        _game.AddProfiler();
 
-        CreateMaterials();
-
-        var entity = new Entity("MyGizmo");
-        entity.AddGizmo(_game.GraphicsDevice);
-        entity.Transform.Position = new Vector3(-7.5f, 0, -7.5f);
-        entity.Scene = scene;
+        AddMaterials();
+        AddGizmo(scene);
 
         //_translationGizmo = new TranslationGizmo(_game.GraphicsDevice);
         //var gizmoEntity = _translationGizmo.Create(scene);
         //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
-        SetupLighting(scene);
-        CreateFirstLayer(0.5f, scene);
-        CreateGameManagerEntity(scene);
+        AddAllDirectionLighting(scene, intensity: 20f);
+        AddFirstLayer(scene, 0.5f);
+        AddGameManagerEntity(scene);
     }
 
-    private static void CreateGameManagerEntity(Scene scene)
+    private void AddGizmo(Scene scene)
+    {
+        var entity = new Entity("MyGizmo");
+        entity.AddGizmo(_game.GraphicsDevice, showAxisName: true);
+        entity.Transform.Position = new Vector3(-7.5f, 1, -7.5f);
+        entity.Scene = scene;
+    }
+
+    private static void AddGameManagerEntity(Scene scene)
     {
         var entity = new Entity("GameManager")
         {
@@ -69,7 +74,7 @@ public class CubeStacker
         }
     }
 
-    private void CreateMaterials()
+    private void AddMaterials()
     {
         foreach (var color in Constants.Colours)
         {
@@ -79,7 +84,7 @@ public class CubeStacker
         }
     }
 
-    private void CreateFirstLayer(float y, Scene scene)
+    private void AddFirstLayer(Scene scene, float y)
     {
         var entities = CreateCubeLayer(y, scene);
 
@@ -141,23 +146,23 @@ public class CubeStacker
         return entity;
     }
 
-    public void SetupLighting(Scene scene)
+    public void AddAllDirectionLighting(Scene scene, float intensity, bool showLightGizmo = true)
     {
-        var intensity = 50f;
+        var position = new Vector3(7f, 2f, 0);
 
-        CreateLightEntity(GetLight(), intensity, new Vector3(7f, 2f, 0));
+        CreateLightEntity(GetLight(), intensity, position);
 
-        CreateLightEntity(GetLight(), intensity, new Vector3(7f, 2f, 0), Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)));
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)));
 
-        CreateLightEntity(GetLight(), intensity, new Vector3(7f, 2f, 0), Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)));
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)));
 
-        CreateLightEntity(GetLight(), intensity, new Vector3(7f, 2f, 0), Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)));
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)));
 
-        CreateLightEntity(GetLight(), intensity, new Vector3(7f, 2f, 0), Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270)));
-
-        static ColorRgbProvider GetColor(Color color) => new(color);
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270)));
 
         LightDirectional GetLight() => new() { Color = GetColor(Color.White) };
+
+        static ColorRgbProvider GetColor(Color color) => new(color);
 
         void CreateLightEntity(ILight light, float intensity, Vector3 position, Quaternion? rotation = null)
         {
@@ -170,8 +175,11 @@ public class CubeStacker
             entity.Transform.Position = position;
             entity.Transform.Rotation = rotation ?? Quaternion.Identity;
             entity.Scene = scene;
-            entity.AddLightDirectionalGizmo(_game.GraphicsDevice);
-            //entity.AddGizmo(_game.GraphicsDevice);
+
+            if (showLightGizmo)
+            {
+                entity.AddLightDirectionalGizmo(_game.GraphicsDevice);
+            }
         }
     }
 }

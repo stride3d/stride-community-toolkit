@@ -15,10 +15,10 @@ public class RaycastHandler : AsyncScript
     {
         var cameraComponent = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-        // not working
-        var cameraComponent2 = Entity.GetComponent<CameraComponent>();
+        // working after x frames
+        var cameraComponent2 = this.GetCamera();
 
-        // not working
+        //  working after x frames
         var cameraComponent3 = this.GetFirstCamera();
 
         var simulation = this.GetSimulation();
