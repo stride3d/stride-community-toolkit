@@ -25,6 +25,7 @@ public static class GameExtensions
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
     private const float DefaultGroundSizeX = 15.0f;
     private const float DefaultGroundSizeY = 15.0f;
+    private const string DefaultGroundName = "Ground";
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -119,10 +120,10 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a camera entity to the game's root scene with customizable position and rotation, and default camera name: Main
+    /// Adds a camera entity to the game's root scene with customizable position and rotation, and default camera name "Main"
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="entityName">Optional name for the camera entity. If null, the entity will not be named.</param>
+    /// <param name="cameraName">Optional name for the camera entity and camera slot. If null, the entity will not be named.</param>
     /// <param name="initialPosition">Initial position for the camera entity. If null, the camera will be positioned at the default position (6, 6, 6).</param>
     /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If null, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
     /// <returns>The created Entity object representing the camera.</returns>
@@ -130,12 +131,21 @@ public static class GameExtensions
     /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
     /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
-    public static Entity AddCamera(this Game game, string? entityName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    public static Entity AddCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
     {
+        if (game.SceneSystem.GraphicsCompositor.Cameras.Count == 0)
+        {
+            throw new InvalidOperationException("Cannot add camera: The GraphicsCompositor does not have any camera slots defined.");
+        }
+
+        var cameraSlot = game.SceneSystem.GraphicsCompositor.Cameras[0];
+
+        cameraSlot.Name = cameraName;
+
         initialPosition ??= CameraDefaults.InitialPosition;
         initialRotation ??= CameraDefaults.InitialRotation;
 
-        var entity = new Entity(entityName)
+        var entity = new Entity(cameraName)
         {
             new CameraComponent
             {
@@ -246,7 +256,7 @@ public static class GameExtensions
     /// <param name="size"></param>
     /// <param name="includeCollider">Adds a collider</param>
     /// <returns></returns>
-    public static Entity AddGround(this Game game, string? entityName = null, Vector2? size = null, bool includeCollider = true)
+    public static Entity AddGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
     {
         var validSize = size is null ? new Vector3(DefaultGroundSizeX, DefaultGroundSizeY, 0) : new Vector3(size.Value.X, size.Value.Y, 0);
 
@@ -257,6 +267,15 @@ public static class GameExtensions
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
+    }
+
+    public static void AddGroundGizmo(this Game game, bool showAxisName = false, bool rotateAxisNames = true)
+    {
+        var entity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);
+
+        if (entity == null) return;
+
+        entity.AddGizmo(game.GraphicsDevice, showAxisName: showAxisName, rotateAxisNames: rotateAxisNames);
     }
 
     /// <summary>

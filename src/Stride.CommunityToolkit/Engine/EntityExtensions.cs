@@ -39,11 +39,11 @@ public static class EntityExtensions
     /// entity.AddGizmo(game.GraphicsDevice);
     /// </code>
     /// </example>
-    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)
+    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
         var gizmo = new TranslationGizmo(graphicsDevice, redColor, greenColor, blueColor);
 
-        gizmo.Create(entity);
+        gizmo.Create(entity, showAxisName, rotateAxisNames);
     }
 
     /// <summary>
