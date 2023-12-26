@@ -502,7 +502,8 @@ public class TextureCanvas : IDisposable
 
             // Finally draw the current buffer to the new render texture
             scaler.Draw(RenderDrawContext);
-        } finally
+        }
+        finally
         {
             _primaryBuffer?.Dispose();
             _primaryBuffer = _secondaryBuffer;
