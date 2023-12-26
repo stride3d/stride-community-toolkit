@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>F# Code Only Basic Examples | Stride Manual </title>
+      <title>Image Processing | Stride Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="F# Code Only Basic Examples | Stride Manual ">
+      <meta name="title" content="Image Processing | Stride Manual ">
       
       <link rel="icon" href="../../../favicon.ico">
       <link rel="stylesheet" href="../../../public/docfx.min.css">
@@ -15,7 +15,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/basic-examples-fs.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/image-processing.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -84,39 +84,108 @@
         </div>
 
         <article data-uid="">
-<h1 id="f-code-only-basic-examples">F# Code Only Basic Examples</h1>
+<h1 id="image-processing">Image Processing</h1>
 
-<p>This page provides a brief overview of the basic examples available for code-only projects in Stride. You can explore each example in detail. Each linked example page contains detailed code snippets and explanations.</p>
-<h2 id="examples-overview">Examples Overview</h2>
-<ul>
-<li><a href="capsule-with-rigid-body-fs.html">Capsule with rigid body</a>:
-<ul>
-<li>Demonstrates how to create a 3D capsule entity and position it in a scene.</li>
-</ul>
-</li>
-</ul>
-<h2 id="interactive-console-application">Interactive Console Application</h2>
-<p>For those who prefer a more interactive approach, we provide a console application that allows you to run these examples directly. This console app, available in the <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples"><code>Stride.CommunityToolkit.Examples</code></a> project, offers an interactive menu for selecting and running the examples.</p>
-<p>Here's a glimpse of the interactive menu provided by the console application:</p>
-<pre><code class="lang-plaintext">Stride Community Toolkit Examples
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example06_ImageProcessing">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering.Images;
+using Stride.Rendering.Sprites;
+using Stride.UI;
+using Stride.UI.Controls;
+using Stride.UI.Panels;
+using System.Reflection;
 
-[1] Basic Example - Capsule with rigid body
-[2] Basic Example - Capsule with rigid body in F#
-[3] Basic Example - Capsule with rigid body in Visual Basic
-[4] Basic Example - Give me a cube
-[5] Basic Example - Stride UI - Capsule with rigid body and Window
-[6] Basic Example - Procedural Geometry
-[7] Advance Example - Myra UI - Draggable Window, GetService()
-[8] Advance Example - Image Processing
-[Q] Quit
+using var game = new Game();
 
-Enter choice and press ENTER to continue
+game.Run(start: Start);
+
+static void Start(Game game)
+{
+    game.Window.SetSize(new Int2(1000, 1080));
+    game.SetupBase();
+
+    var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+    var filePath = Path.Combine(directory, &quot;input.png&quot;);
+    using var input = File.Open(filePath, FileMode.Open);
+    var texture = Texture.Load(game.GraphicsDevice, input);
+
+    var grid = new UniformGrid
+    {
+        Width = 1000,
+        Height = 1000,
+        Columns = 9,
+        Rows = 9,
+        Margin = new Thickness(8, 8, 8, 8)
+    };
+
+    grid.Children.Add(CreateCard(texture));
+
+    for (var a = 0; a &lt; 9; a++)
+    {
+        var anchor = (TextureCanvas.Anchor)a;
+        for (var s = 0; s &lt; 4; s++)
+        {
+            var stretch = (TextureCanvas.Stretch)s;
+
+            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
+            {
+                canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(128, 256, 768, 512), null, stretch, anchor, SamplingPattern.Expanded);
+                var card = CreateCard(canvas.ToTexture());
+                card.SetGridColumn(a);
+                card.SetGridRow(s * 2 + 1);
+                grid.Children.Add(card);
+            }
+
+            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
+            {
+
+                canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(256, 128, 512, 768), null, stretch, anchor);
+                var card = CreateCard(canvas.ToTexture());
+                card.SetGridColumn(a);
+                card.SetGridRow(s * 2 + 2);
+                grid.Children.Add(card);
+            }
+        }
+    }
+
+    var entity = new Entity { Scene = game.SceneSystem.SceneInstance.RootScene };
+    entity.Add(new UIComponent { Page = new UIPage { RootElement = grid } });
+}
+
+static Border CreateCard(Texture texture)
+{
+    var card = new Border
+    {
+        BorderColor = new Color(25, 25, 25),
+        BackgroundColor = new Color(120, 120, 120),
+        BorderThickness = new Thickness(2, 2, 2, 2),
+        Padding = new Thickness(8, 8, 8, 8),
+        Margin = new Thickness(4, 4, 4, 4),
+        Content = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+            Children =
+            {
+                new ImageElement
+                {
+                    Source = new SpriteFromTexture { Texture = texture }
+                }
+            }
+        }
+    };
+
+    return card;
+}
 </code></pre>
-
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/basic-examples-fs.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/image-processing.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

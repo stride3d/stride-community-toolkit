@@ -106,21 +106,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay
   nameWithType: CameraComponentExtensions.ScreenPointToRay
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  name: ScreenToWorldPoint(CameraComponent, Vector3)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3)
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name: ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name.vb: ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
-  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
-  nameWithType.vb: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name: ScreenToWorldPoint(CameraComponent, ref Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name.vb: ScreenToWorldPoint(CameraComponent, Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, ref Vector3)
+  nameWithType.vb: CameraComponentExtensions.ScreenToWorldPoint(CameraComponent, Vector3)
 - uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint*
   name: ScreenToWorldPoint
   href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_
@@ -166,21 +160,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace
   nameWithType: CameraComponentExtensions.WorldToClipSpace
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  name: WorldToScreenPoint(CameraComponent, Vector3)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3)
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name: WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)
-  name.vb: WorldToScreenPoint(CameraComponent, Vector3, Vector3)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3, out Stride.Core.Mathematics.Vector3)
-  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3)
-  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
-  nameWithType.vb: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3, Vector3)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name: WorldToScreenPoint(CameraComponent, ref Vector3)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)
+  name.vb: WorldToScreenPoint(CameraComponent, Vector3)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, ref Stride.Core.Mathematics.Vector3)
+  fullName.vb: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector3)
+  nameWithType: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, ref Vector3)
+  nameWithType.vb: CameraComponentExtensions.WorldToScreenPoint(CameraComponent, Vector3)
 - uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint*
   name: WorldToScreenPoint
   href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_
@@ -218,12 +206,15 @@ references:
   commentId: T:Stride.CommunityToolkit.Engine.EntityExtensions
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions
   nameWithType: EntityExtensions
-- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
-  name: AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?)
-  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__
-  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity, Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?)
-  nameWithType: EntityExtensions.AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Boolean,System.Boolean)
+  name: AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?, bool, bool)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Boolean,System.Boolean)
+  name.vb: AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity, Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity, Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Stride.Core.Mathematics.Color?, Boolean, Boolean)
+  nameWithType: EntityExtensions.AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?, bool, bool)
+  nameWithType.vb: EntityExtensions.AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?, Boolean, Boolean)
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo*
   name: AddGizmo
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_
@@ -244,19 +235,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddInteractiveCameraScript
   nameWithType: EntityExtensions.AddInteractiveCameraScript
-- uid: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
-  name: DestroyEntity(Entity)
-  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_Stride_Engine_Entity_
-  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)
-  nameWithType: EntityExtensions.DestroyEntity(Entity)
-- uid: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity*
-  name: DestroyEntity
-  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_
-  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})
+  name: AddLightDirectionalGizmo(Entity, GraphicsDevice, Color?)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo(Stride.Engine.Entity, Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?)
+  nameWithType: EntityExtensions.AddLightDirectionalGizmo(Entity, GraphicsDevice, Color?)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo*
+  name: AddLightDirectionalGizmo
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity
-  nameWithType: EntityExtensions.DestroyEntity
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo
+  nameWithType: EntityExtensions.AddLightDirectionalGizmo
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent*
   name: GetComponent
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent_
@@ -302,6 +293,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions.Remove
   nameWithType: EntityExtensions.Remove
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent*
+  name: TryGetComponent
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent
+  nameWithType: EntityExtensions.TryGetComponent
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)
+  name: TryGetComponent<T>(Entity, out T?)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent__1_Stride_Engine_Entity___0__
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)
+  name.vb: TryGetComponent(Of T)(Entity, T)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent<T>(Stride.Engine.Entity, out T?)
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent(Of T)(Stride.Engine.Entity, T)
+  nameWithType: EntityExtensions.TryGetComponent<T>(Entity, out T?)
+  nameWithType.vb: EntityExtensions.TryGetComponent(Of T)(Entity, T)
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)
   name: WorldPosition(Entity, bool)
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_System_Boolean_
@@ -385,6 +392,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGround
   nameWithType: GameExtensions.AddGround
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game,System.Boolean,System.Boolean)
+  name: AddGroundGizmo(Game, bool, bool)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGroundGizmo_Stride_Engine_Game_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game,System.Boolean,System.Boolean)
+  name.vb: AddGroundGizmo(Game, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game, Boolean, Boolean)
+  nameWithType: GameExtensions.AddGroundGizmo(Game, bool, bool)
+  nameWithType.vb: GameExtensions.AddGroundGizmo(Game, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo*
+  name: AddGroundGizmo
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGroundGizmo_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo
+  nameWithType: GameExtensions.AddGroundGizmo
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
   name: AddProfiler(Game, string?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_
@@ -433,15 +456,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
   nameWithType: GameExtensions.CreateMaterial
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3})
-  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3})
-  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector3?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector3?)
-  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?)
-  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup)
+  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?, RenderGroup)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector3__Stride_Rendering_RenderGroup_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup)
+  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?, RenderGroup)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector3?, Stride.Rendering.RenderGroup)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector3?, Stride.Rendering.RenderGroup)
+  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?, RenderGroup)
+  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?, RenderGroup)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive*
   name: CreatePrimitive
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_
@@ -488,6 +511,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS
   nameWithType: GameExtensions.FPS
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Game},System.Action{Stride.Engine.Game})
+  name: Run(Game, GameContext?, Action<Game>?, Action<Game>?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Game__System_Action_Stride_Engine_Game__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Game},System.Action{Stride.Engine.Game})
+  name.vb: Run(Game, GameContext, Action(Of Game), Action(Of Game))
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game, Stride.Games.GameContext?, System.Action<Stride.Engine.Game>?, System.Action<Stride.Engine.Game>?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game, Stride.Games.GameContext, System.Action(Of Stride.Engine.Game), System.Action(Of Stride.Engine.Game))
+  nameWithType: GameExtensions.Run(Game, GameContext?, Action<Game>?, Action<Game>?)
+  nameWithType.vb: GameExtensions.Run(Game, GameContext, Action(Of Game), Action(Of Game))
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime})
   name: Run(Game, GameContext?, Action<Scene>?, Action<Scene, GameTime>?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Scene__System_Action_Stride_Engine_Scene_Stride_Games_GameTime__
@@ -629,6 +661,43 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera
   nameWithType: ScriptComponentExtensions.GetFirstCamera
+- uid: Stride.CommunityToolkit.Extensions
+  name: Stride.CommunityToolkit.Extensions
+  href: api/Stride.CommunityToolkit.Extensions.html
+  commentId: N:Stride.CommunityToolkit.Extensions
+  fullName: Stride.CommunityToolkit.Extensions
+  nameWithType: Stride.CommunityToolkit.Extensions
+- uid: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions
+  name: TextureCanvasExtensions
+  href: api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html
+  commentId: T:Stride.CommunityToolkit.Extensions.TextureCanvasExtensions
+  fullName: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions
+  nameWithType: TextureCanvasExtensions
+- uid: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Core.IServiceRegistry,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  name: CreateTextureCanvas(IServiceRegistry, Size2?, PixelFormat)
+  href: api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html#Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_Stride_Core_IServiceRegistry_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Core.IServiceRegistry,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  fullName: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Core.IServiceRegistry, Stride.Core.Mathematics.Size2?, Stride.Graphics.PixelFormat)
+  nameWithType: TextureCanvasExtensions.CreateTextureCanvas(IServiceRegistry, Size2?, PixelFormat)
+- uid: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  name: CreateTextureCanvas(IGame, Size2?, PixelFormat)
+  href: api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html#Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_Stride_Games_IGame_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  fullName: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Games.IGame, Stride.Core.Mathematics.Size2?, Stride.Graphics.PixelFormat)
+  nameWithType: TextureCanvasExtensions.CreateTextureCanvas(IGame, Size2?, PixelFormat)
+- uid: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Rendering.RenderContext,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  name: CreateTextureCanvas(RenderContext, Size2?, PixelFormat)
+  href: api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html#Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_Stride_Rendering_RenderContext_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Rendering.RenderContext,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  fullName: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Rendering.RenderContext, Stride.Core.Mathematics.Size2?, Stride.Graphics.PixelFormat)
+  nameWithType: TextureCanvasExtensions.CreateTextureCanvas(RenderContext, Size2?, PixelFormat)
+- uid: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas*
+  name: CreateTextureCanvas
+  href: api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html#Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas
+  nameWithType: TextureCanvasExtensions.CreateTextureCanvas
 - uid: Stride.CommunityToolkit.Graphics
   name: Stride.CommunityToolkit.Graphics
   href: api/Stride.CommunityToolkit.Graphics.html
@@ -1488,6 +1557,114 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor
   nameWithType: GizmoUniformColorMaterial.UpdateColor
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D
+  name: Letter3D
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D
+  nameWithType: Letter3D
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.#ctor(Stride.Graphics.GraphicsDevice,System.Boolean)
+  name: Letter3D(GraphicsDevice, bool)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D__ctor_Stride_Graphics_GraphicsDevice_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.#ctor(Stride.Graphics.GraphicsDevice,System.Boolean)
+  name.vb: New(GraphicsDevice, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.Letter3D(Stride.Graphics.GraphicsDevice, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.New(Stride.Graphics.GraphicsDevice, Boolean)
+  nameWithType: Letter3D.Letter3D(GraphicsDevice, bool)
+  nameWithType.vb: Letter3D.New(GraphicsDevice, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.#ctor*
+  name: Letter3D
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.Letter3D
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.New
+  nameWithType: Letter3D.Letter3D
+  nameWithType.vb: Letter3D.New
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterX
+  name: CreateLetterX()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D_CreateLetterX
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterX
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterX()
+  nameWithType: Letter3D.CreateLetterX()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterX*
+  name: CreateLetterX
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D_CreateLetterX_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterX
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterX
+  nameWithType: Letter3D.CreateLetterX
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterY
+  name: CreateLetterY()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D_CreateLetterY
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterY
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterY()
+  nameWithType: Letter3D.CreateLetterY()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterY*
+  name: CreateLetterY
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D_CreateLetterY_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterY
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterY
+  nameWithType: Letter3D.CreateLetterY
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterZ
+  name: CreateLetterZ()
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D_CreateLetterZ
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterZ
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterZ()
+  nameWithType: Letter3D.CreateLetterZ()
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterZ*
+  name: CreateLetterZ
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html#Stride_CommunityToolkit_Rendering_Gizmos_Letter3D_CreateLetterZ_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterZ
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.CreateLetterZ
+  nameWithType: Letter3D.CreateLetterZ
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo
+  name: LightDirectionalGizmo
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo
+  nameWithType: LightDirectionalGizmo
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})
+  name: LightDirectionalGizmo(GraphicsDevice, Color?)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo__ctor_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})
+  name.vb: New(GraphicsDevice, Color?)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.LightDirectionalGizmo(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.New(Stride.Graphics.GraphicsDevice, Stride.Core.Mathematics.Color?)
+  nameWithType: LightDirectionalGizmo.LightDirectionalGizmo(GraphicsDevice, Color?)
+  nameWithType.vb: LightDirectionalGizmo.New(GraphicsDevice, Color?)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.#ctor*
+  name: LightDirectionalGizmo
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.LightDirectionalGizmo
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.New
+  nameWithType: LightDirectionalGizmo.LightDirectionalGizmo
+  nameWithType.vb: LightDirectionalGizmo.New
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create(Stride.Engine.Entity)
+  name: Create(Entity)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo_Create_Stride_Engine_Entity_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create(Stride.Engine.Entity)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create(Stride.Engine.Entity)
+  nameWithType: LightDirectionalGizmo.Create(Entity)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create*
+  name: Create
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo_Create_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create
+  nameWithType: LightDirectionalGizmo.Create
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.GizmoTessellation
+  name: GizmoTessellation
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo_GizmoTessellation
+  commentId: F:Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.GizmoTessellation
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.GizmoTessellation
+  nameWithType: LightDirectionalGizmo.GizmoTessellation
 - uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo
   name: TranslationGizmo
   href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html
@@ -1522,12 +1699,15 @@ references:
   fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.New
   nameWithType: TranslationGizmo.TranslationGizmo
   nameWithType.vb: TranslationGizmo.New
-- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity)
-  name: Create(Entity)
-  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Entity_
-  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity)
-  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity)
-  nameWithType: TranslationGizmo.Create(Entity)
+- uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity,System.Boolean,System.Boolean)
+  name: Create(Entity, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Entity_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity,System.Boolean,System.Boolean)
+  name.vb: Create(Entity, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity, Boolean, Boolean)
+  nameWithType: TranslationGizmo.Create(Entity, bool, bool)
+  nameWithType.vb: TranslationGizmo.Create(Entity, Boolean, Boolean)
 - uid: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Scene)
   name: Create(Scene)
   href: api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Scene_
@@ -1946,6 +2126,475 @@ references:
   fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.WithTextureCoordinate(Of T)(Integer, String, Stride.Graphics.PixelFormat)
   nameWithType: MeshBuilder.WithTextureCoordinate<T>(int, string, PixelFormat)
   nameWithType.vb: MeshBuilder.WithTextureCoordinate(Of T)(Integer, String, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas
+  name: TextureCanvas
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas
+  nameWithType: TextureCanvas
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.#ctor(Stride.Rendering.RenderContext,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  name: TextureCanvas(RenderContext, Size2?, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas__ctor_Stride_Rendering_RenderContext_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.#ctor(Stride.Rendering.RenderContext,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)
+  name.vb: New(RenderContext, Size2?, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.TextureCanvas(Stride.Rendering.RenderContext, Stride.Core.Mathematics.Size2?, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.New(Stride.Rendering.RenderContext, Stride.Core.Mathematics.Size2?, Stride.Graphics.PixelFormat)
+  nameWithType: TextureCanvas.TextureCanvas(RenderContext, Size2?, PixelFormat)
+  nameWithType.vb: TextureCanvas.New(RenderContext, Size2?, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.#ctor*
+  name: TextureCanvas
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.TextureCanvas
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.New
+  nameWithType: TextureCanvas.TextureCanvas
+  nameWithType.vb: TextureCanvas.New
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor
+  name: TextureCanvas.Anchor
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor
+  nameWithType: TextureCanvas.Anchor
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Bottom
+  name: Bottom
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Bottom
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Bottom
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Bottom
+  nameWithType: TextureCanvas.Anchor.Bottom
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.BottomLeft
+  name: BottomLeft
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_BottomLeft
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.BottomLeft
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.BottomLeft
+  nameWithType: TextureCanvas.Anchor.BottomLeft
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.BottomRight
+  name: BottomRight
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_BottomRight
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.BottomRight
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.BottomRight
+  nameWithType: TextureCanvas.Anchor.BottomRight
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Center
+  name: Center
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Center
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Center
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Center
+  nameWithType: TextureCanvas.Anchor.Center
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Left
+  name: Left
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Left
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Left
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Left
+  nameWithType: TextureCanvas.Anchor.Left
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Right
+  name: Right
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Right
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Right
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Right
+  nameWithType: TextureCanvas.Anchor.Right
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Top
+  name: Top
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Top
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Top
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.Top
+  nameWithType: TextureCanvas.Anchor.Top
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.TopLeft
+  name: TopLeft
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_TopLeft
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.TopLeft
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.TopLeft
+  nameWithType: TextureCanvas.Anchor.TopLeft
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.TopRight
+  name: TopRight
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_TopRight
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.TopRight
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.TopRight
+  nameWithType: TextureCanvas.Anchor.TopRight
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply(Stride.Rendering.Images.ImageEffect,Stride.Graphics.Texture[])
+  name: Apply(ImageEffect, params Texture?[]?)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Apply_Stride_Rendering_Images_ImageEffect_Stride_Graphics_Texture___
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply(Stride.Rendering.Images.ImageEffect,Stride.Graphics.Texture[])
+  name.vb: Apply(ImageEffect, ParamArray Texture())
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply(Stride.Rendering.Images.ImageEffect, params Stride.Graphics.Texture?[]?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply(Stride.Rendering.Images.ImageEffect, ParamArray Stride.Graphics.Texture())
+  nameWithType: TextureCanvas.Apply(ImageEffect, params Texture?[]?)
+  nameWithType.vb: TextureCanvas.Apply(ImageEffect, ParamArray Texture())
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply*
+  name: Apply
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Apply_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply
+  nameWithType: TextureCanvas.Apply
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter(System.Single,System.Single,System.Nullable{Stride.Core.Mathematics.Color3})
+  name: BrightFilter(float, float, Color3?)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_BrightFilter_System_Single_System_Single_System_Nullable_Stride_Core_Mathematics_Color3__
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter(System.Single,System.Single,System.Nullable{Stride.Core.Mathematics.Color3})
+  name.vb: BrightFilter(Single, Single, Color3?)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter(float, float, Stride.Core.Mathematics.Color3?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter(Single, Single, Stride.Core.Mathematics.Color3?)
+  nameWithType: TextureCanvas.BrightFilter(float, float, Color3?)
+  nameWithType.vb: TextureCanvas.BrightFilter(Single, Single, Color3?)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter*
+  name: BrightFilter
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_BrightFilter_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter
+  nameWithType: TextureCanvas.BrightFilter
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize
+  name: ByteSize
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ByteSize
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize
+  nameWithType: TextureCanvas.ByteSize
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize*
+  name: ByteSize
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ByteSize_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize
+  nameWithType: TextureCanvas.ByteSize
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear
+  name: Clear()
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Clear
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear()
+  nameWithType: TextureCanvas.Clear()
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear*
+  name: Clear
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Clear_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear
+  nameWithType: TextureCanvas.Clear
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur(System.Int32)
+  name: CoCMapBlur(int)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_CoCMapBlur_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur(System.Int32)
+  name.vb: CoCMapBlur(Integer)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur(int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur(Integer)
+  nameWithType: TextureCanvas.CoCMapBlur(int)
+  nameWithType.vb: TextureCanvas.CoCMapBlur(Integer)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur*
+  name: CoCMapBlur
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_CoCMapBlur_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur
+  nameWithType: TextureCanvas.CoCMapBlur
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize(Stride.Core.Mathematics.Color4)
+  name: Colorize(Color4)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Colorize_Stride_Core_Mathematics_Color4_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize(Stride.Core.Mathematics.Color4)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize(Stride.Core.Mathematics.Color4)
+  nameWithType: TextureCanvas.Colorize(Color4)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize*
+  name: Colorize
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Colorize_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize
+  nameWithType: TextureCanvas.Colorize
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine(Stride.Graphics.Texture[],System.Single[],Stride.Core.Mathematics.Color3[])
+  name: Combine(Texture?[]?, float[]?, Color3[]?)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Combine_Stride_Graphics_Texture___System_Single___Stride_Core_Mathematics_Color3___
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine(Stride.Graphics.Texture[],System.Single[],Stride.Core.Mathematics.Color3[])
+  name.vb: Combine(Texture(), Single(), Color3())
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine(Stride.Graphics.Texture?[]?, float[]?, Stride.Core.Mathematics.Color3[]?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine(Stride.Graphics.Texture(), Single(), Stride.Core.Mathematics.Color3())
+  nameWithType: TextureCanvas.Combine(Texture?[]?, float[]?, Color3[]?)
+  nameWithType.vb: TextureCanvas.Combine(Texture(), Single(), Color3())
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine*
+  name: Combine
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Combine_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine
+  nameWithType: TextureCanvas.Combine
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose
+  name: Dispose()
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Dispose
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose()
+  nameWithType: TextureCanvas.Dispose()
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose*
+  name: Dispose
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Dispose_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose
+  nameWithType: TextureCanvas.Dispose
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect(Stride.Core.Mathematics.Rectangle,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  name: DrawRect(Rectangle, Stretch, Anchor, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawRect_Stride_Core_Mathematics_Rectangle_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect(Stride.Core.Mathematics.Rectangle,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect(Stride.Core.Mathematics.Rectangle, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.DrawRect(Rectangle, TextureCanvas.Stretch, TextureCanvas.Anchor, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect*
+  name: DrawRect
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawRect_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect
+  nameWithType: TextureCanvas.DrawRect
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.Rectangle,Stride.Core.Mathematics.Rectangle,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  name: DrawTexture(Texture, Rectangle, Rectangle, Color4?, Stretch, Anchor, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_Rectangle_Stride_Core_Mathematics_Rectangle_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.Rectangle,Stride.Core.Mathematics.Rectangle,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture, Stride.Core.Mathematics.Rectangle, Stride.Core.Mathematics.Rectangle, Stride.Core.Mathematics.Color4?, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.DrawTexture(Texture, Rectangle, Rectangle, Color4?, TextureCanvas.Stretch, TextureCanvas.Anchor, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.Rectangle,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  name: DrawTexture(Texture, Rectangle, Color4?, Stretch, Anchor, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_Rectangle_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.Rectangle,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture, Stride.Core.Mathematics.Rectangle, Stride.Core.Mathematics.Color4?, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.DrawTexture(Texture, Rectangle, Color4?, TextureCanvas.Stretch, TextureCanvas.Anchor, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.RectangleF,Stride.Core.Mathematics.RectangleF,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  name: DrawTexture(Texture, RectangleF, RectangleF, Color4?, Stretch, Anchor, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_RectangleF_Stride_Core_Mathematics_RectangleF_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.RectangleF,Stride.Core.Mathematics.RectangleF,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture, Stride.Core.Mathematics.RectangleF, Stride.Core.Mathematics.RectangleF, Stride.Core.Mathematics.Color4?, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.DrawTexture(Texture, RectangleF, RectangleF, Color4?, TextureCanvas.Stretch, TextureCanvas.Anchor, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.RectangleF,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  name: DrawTexture(Texture, RectangleF, Color4?, Stretch, Anchor, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_RectangleF_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.RectangleF,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture, Stride.Core.Mathematics.RectangleF, Stride.Core.Mathematics.Color4?, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.DrawTexture(Texture, RectangleF, Color4?, TextureCanvas.Stretch, TextureCanvas.Anchor, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  name: DrawTexture(Texture, Color4?, Stretch, Anchor, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture, Stride.Core.Mathematics.Color4?, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch, Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.DrawTexture(Texture, Color4?, TextureCanvas.Stretch, TextureCanvas.Anchor, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture*
+  name: DrawTexture
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture
+  nameWithType: TextureCanvas.DrawTexture
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur(System.Int32,System.Single)
+  name: GaussianBlur(int, float)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GaussianBlur_System_Int32_System_Single_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur(System.Int32,System.Single)
+  name.vb: GaussianBlur(Integer, Single)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur(int, float)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur(Integer, Single)
+  nameWithType: TextureCanvas.GaussianBlur(int, float)
+  nameWithType.vb: TextureCanvas.GaussianBlur(Integer, Single)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur*
+  name: GaussianBlur
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GaussianBlur_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur
+  nameWithType: TextureCanvas.GaussianBlur
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData
+  name: GetData()
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData()
+  nameWithType: TextureCanvas.GetData()
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData(System.Byte[])
+  name: GetData(byte[])
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData_System_Byte___
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData(System.Byte[])
+  name.vb: GetData(Byte())
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData(byte[])
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData(Byte())
+  nameWithType: TextureCanvas.GetData(byte[])
+  nameWithType.vb: TextureCanvas.GetData(Byte())
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData*
+  name: GetData
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData
+  nameWithType: TextureCanvas.GetData
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.Byte[])
+  name: Load(byte[])
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_Byte___
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.Byte[])
+  name.vb: Load(Byte())
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(byte[])
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(Byte())
+  nameWithType: TextureCanvas.Load(byte[])
+  nameWithType.vb: TextureCanvas.Load(Byte())
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.IO.Stream)
+  name: Load(Stream)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_IO_Stream_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.IO.Stream)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.IO.Stream)
+  nameWithType: TextureCanvas.Load(Stream)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.String)
+  name: Load(string)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_String_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.String)
+  name.vb: Load(String)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(string)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(String)
+  nameWithType: TextureCanvas.Load(string)
+  nameWithType.vb: TextureCanvas.Load(String)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load*
+  name: Load
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load
+  nameWithType: TextureCanvas.Load
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat
+  name: PixelFormat
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_PixelFormat
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat
+  nameWithType: TextureCanvas.PixelFormat
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat*
+  name: PixelFormat
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_PixelFormat_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat
+  nameWithType: TextureCanvas.PixelFormat
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize(System.Nullable{Stride.Core.Mathematics.Color4})
+  name: Recolorize(Color4?)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Recolorize_System_Nullable_Stride_Core_Mathematics_Color4__
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize(System.Nullable{Stride.Core.Mathematics.Color4})
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize(Stride.Core.Mathematics.Color4?)
+  nameWithType: TextureCanvas.Recolorize(Color4?)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize*
+  name: Recolorize
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Recolorize_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize
+  nameWithType: TextureCanvas.Recolorize
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample(Stride.Core.Mathematics.Size2,Stride.Graphics.PixelFormat,Stride.Rendering.Images.SamplingPattern)
+  name: Resample(Size2, PixelFormat, SamplingPattern)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample(Stride.Core.Mathematics.Size2,Stride.Graphics.PixelFormat,Stride.Rendering.Images.SamplingPattern)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample(Stride.Core.Mathematics.Size2, Stride.Graphics.PixelFormat, Stride.Rendering.Images.SamplingPattern)
+  nameWithType: TextureCanvas.Resample(Size2, PixelFormat, SamplingPattern)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample*
+  name: Resample
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample
+  nameWithType: TextureCanvas.Resample
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData(System.Byte[],System.Int32,System.Int32,Stride.Graphics.PixelFormat)
+  name: SetData(byte[], int, int, PixelFormat)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_SetData_System_Byte___System_Int32_System_Int32_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData(System.Byte[],System.Int32,System.Int32,Stride.Graphics.PixelFormat)
+  name.vb: SetData(Byte(), Integer, Integer, PixelFormat)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData(byte[], int, int, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData(Byte(), Integer, Integer, Stride.Graphics.PixelFormat)
+  nameWithType: TextureCanvas.SetData(byte[], int, int, PixelFormat)
+  nameWithType.vb: TextureCanvas.SetData(Byte(), Integer, Integer, PixelFormat)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData*
+  name: SetData
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_SetData_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData
+  nameWithType: TextureCanvas.SetData
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Size
+  commentId: P:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size
+  nameWithType: TextureCanvas.Size
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Size_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size
+  nameWithType: TextureCanvas.Size
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.IO.Stream,Stride.Graphics.ImageFileType)
+  name: Store(Stream, ImageFileType)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_System_IO_Stream_Stride_Graphics_ImageFileType_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.IO.Stream,Stride.Graphics.ImageFileType)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.IO.Stream, Stride.Graphics.ImageFileType)
+  nameWithType: TextureCanvas.Store(Stream, ImageFileType)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.String,System.Nullable{Stride.Graphics.ImageFileType})
+  name: Store(string, ImageFileType?)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_System_String_System_Nullable_Stride_Graphics_ImageFileType__
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.String,System.Nullable{Stride.Graphics.ImageFileType})
+  name.vb: Store(String, ImageFileType?)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(string, Stride.Graphics.ImageFileType?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(String, Stride.Graphics.ImageFileType?)
+  nameWithType: TextureCanvas.Store(string, ImageFileType?)
+  nameWithType.vb: TextureCanvas.Store(String, ImageFileType?)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store*
+  name: Store
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store
+  nameWithType: TextureCanvas.Store
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch
+  name: TextureCanvas.Stretch
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch
+  nameWithType: TextureCanvas.Stretch
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Contain
+  name: Contain
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Contain
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Contain
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Contain
+  nameWithType: TextureCanvas.Stretch.Contain
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Cover
+  name: Cover
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Cover
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Cover
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Cover
+  nameWithType: TextureCanvas.Stretch.Cover
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.None
+  name: None
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_None
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.None
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.None
+  nameWithType: TextureCanvas.Stretch.None
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Stretch
+  name: Stretch
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stretch
+  commentId: F:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Stretch
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.Stretch
+  nameWithType: TextureCanvas.Stretch.Stretch
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture(Stride.Graphics.TextureFlags)
+  name: ToTexture(TextureFlags)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ToTexture_Stride_Graphics_TextureFlags_
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture(Stride.Graphics.TextureFlags)
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture(Stride.Graphics.TextureFlags)
+  nameWithType: TextureCanvas.ToTexture(TextureFlags)
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture*
+  name: ToTexture
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ToTexture_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture
+  nameWithType: TextureCanvas.ToTexture
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform(System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform},System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform},System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform})
+  name: Transform(IEnumerable<ColorTransform>?, IEnumerable<ColorTransform>?, IEnumerable<ColorTransform>?)
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Transform_System_Collections_Generic_IEnumerable_Stride_Rendering_Images_ColorTransform__System_Collections_Generic_IEnumerable_Stride_Rendering_Images_ColorTransform__System_Collections_Generic_IEnumerable_Stride_Rendering_Images_ColorTransform__
+  commentId: M:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform(System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform},System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform},System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform})
+  name.vb: Transform(IEnumerable(Of ColorTransform), IEnumerable(Of ColorTransform), IEnumerable(Of ColorTransform))
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform(System.Collections.Generic.IEnumerable<Stride.Rendering.Images.ColorTransform>?, System.Collections.Generic.IEnumerable<Stride.Rendering.Images.ColorTransform>?, System.Collections.Generic.IEnumerable<Stride.Rendering.Images.ColorTransform>?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform(System.Collections.Generic.IEnumerable(Of Stride.Rendering.Images.ColorTransform), System.Collections.Generic.IEnumerable(Of Stride.Rendering.Images.ColorTransform), System.Collections.Generic.IEnumerable(Of Stride.Rendering.Images.ColorTransform))
+  nameWithType: TextureCanvas.Transform(IEnumerable<ColorTransform>?, IEnumerable<ColorTransform>?, IEnumerable<ColorTransform>?)
+  nameWithType.vb: TextureCanvas.Transform(IEnumerable(Of ColorTransform), IEnumerable(Of ColorTransform), IEnumerable(Of ColorTransform))
+- uid: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform*
+  name: Transform
+  href: api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Transform_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform
+  nameWithType: TextureCanvas.Transform
 - uid: Stride.CommunityToolkit.Scripts
   name: Stride.CommunityToolkit.Scripts
   href: api/Stride.CommunityToolkit.Scripts.html
@@ -2172,6 +2821,51 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.GameProfiler.TextColor
   nameWithType: GameProfiler.TextColor
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript
+  name: GizmoBillboardLetterScript
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html
+  commentId: T:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript
+  nameWithType: GizmoBillboardLetterScript
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation
+  name: DefaultRotation
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_DefaultRotation
+  commentId: P:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation
+  nameWithType: GizmoBillboardLetterScript.DefaultRotation
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation*
+  name: DefaultRotation
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_DefaultRotation_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation
+  nameWithType: GizmoBillboardLetterScript.DefaultRotation
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update
+  name: Update()
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_Update
+  commentId: M:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update()
+  nameWithType: GizmoBillboardLetterScript.Update()
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update*
+  name: Update
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_Update_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update
+  nameWithType: GizmoBillboardLetterScript.Update
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.UpdateLetterRotation(Stride.Core.Mathematics.Vector3)
+  name: UpdateLetterRotation(Vector3)
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_UpdateLetterRotation_Stride_Core_Mathematics_Vector3_
+  commentId: M:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.UpdateLetterRotation(Stride.Core.Mathematics.Vector3)
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.UpdateLetterRotation(Stride.Core.Mathematics.Vector3)
+  nameWithType: GizmoBillboardLetterScript.UpdateLetterRotation(Vector3)
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.UpdateLetterRotation*
+  name: UpdateLetterRotation
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_UpdateLetterRotation_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.UpdateLetterRotation
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.UpdateLetterRotation
+  nameWithType: GizmoBillboardLetterScript.UpdateLetterRotation
 - uid: Stride.CommunityToolkit.Scripts.RaySegment
   name: RaySegment
   href: api/Stride.CommunityToolkit.Scripts.RaySegment.html

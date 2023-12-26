@@ -1,0 +1,518 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>TextureCanvas | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="TextureCanvas | Stride Manual ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/rendering/texture-canvas.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="texturecanvas">TextureCanvas</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p>The <code>TextureCanvas</code> is a utility class allowing dynamic creation of textures at runtime. Acting as a wrapper around the <code>Texture</code> class, it provides a simpler API for simple texture manipulation.</p>
+<h2 id="motivation">Motivation</h2>
+<p>Stride is a very versatile and powerful engine which uses textures for a lot of data processing.
+Sometimes it is necessary to create these textures on the fly for example for simple tasks like scaling, applying image effects or to build new textures based on existing ones (texture atlas).</p>
+<h2 id="texturecanvas-1"><code>TextureCanvas</code></h2>
+<p>The <a class="xref" href="../../api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> abstracts away a lot of complexity behind custom buffers, textures, memory allocation and instead
+provides you with a simpler builder API to define your texture dynamically.</p>
+<pre><code class="lang-csharp">var renderContext = RenderContext.GetShared(game.Services);
+using var canvas = new TextureCanvas(renderContext);
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Notice the <code>using</code> at the front. This part is crucial as you should always dispose of your texture canvas when it's no longer needed. The canvas utilizes multiple image buffers behind the scenes, and failing to dispose of it prevents the release of these resources, which can lead to memory leaks.</p>
+</div>
+<h2 id="initialization">Initialization</h2>
+<p>Most operations start with a single texture as a source so we need to load the texture first using the traditional texture api.</p>
+<pre><code class="lang-csharp">var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+var filePath = Path.Combine(directory, &quot;input.png&quot;);
+
+using var input = File.Open(filePath, FileMode.Open);
+var texture = Texture.Load(game.GraphicsDevice, input);
+</code></pre>
+<p>This code loads an input image from the local file system and stores it as a temporary texture</p>
+<h2 id="loading">Loading</h2>
+<p>In case you just want to manipulate a texture directly you can also use the similar api from the <code>TextureCanvas</code> directly.</p>
+<pre><code class="lang-csharp">var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+var filePath = Path.Combine(directory, &quot;input.png&quot;);
+canvas.Load(filePath)
+</code></pre>
+<p>This would load the same texture directly as a buffer for further processing.
+Similar methods also exist for file streams or data buffers accordingly.</p>
+<h2 id="storing">Storing</h2>
+<p>To get the resulting image you have the option to save the image to a file, stream or array depending on your requirements.</p>
+<pre><code class="lang-csharp">var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+var filePath = Path.Combine(directory, &quot;input.png&quot;);
+using var output = File.Open(filePath, FileMode.Open);
+canvas.Store(output, ImageFileType.Png);
+</code></pre>
+<p>The most common approach however would be to get the result as a texture you can use for your UI or Materials.</p>
+<pre><code class="lang-csharp">var output = canvas.ToTexture();
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Notice that you shouldn't use these methods every frame as it involves GPU &lt; - &gt; CPU transfers which can block your game.</p>
+</div>
+<h2 id="manipulation">Manipulation</h2>
+<p>The <code>TextureCanvas</code> supports various image manipulations as well as image effects.</p>
+<h3 id="resample">Resample</h3>
+<p>The <strong>Resample</strong> method changes the current size of the texture or pixel format while preserving the current content.
+The content will be resized to match the new size if neccesary.</p>
+<pre><code class="lang-csharp">canvas.Resample(size: new Size2(512, 512), pixelFormat: PixelFormat.R8G8B8A8_UNorm)
+</code></pre>
+<h3 id="brightfilter">BrightFilter</h3>
+<p>The <strong>BrightFilter</strong> method a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/BrightFilter/BrightFilter.cs">BrightFilter</a> filter to the image</p>
+<pre><code class="lang-csharp">canvas.BrightFilter(threshold: 0.2f, steepness: 1.0f)
+</code></pre>
+<h3 id="gaussianblur">GaussianBlur</h3>
+<p>The <strong>GaussianBlur</strong> method applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/GaussianBlur/GaussianBlur.cs">GaussianBlur</a> effect to the image</p>
+<pre><code class="lang-csharp">canvas.GaussianBlur(radius: 4, sigmaRatio: 2.0f)
+</code></pre>
+<h3 id="cocmapblur">CoCMapBlur</h3>
+<p>The <strong>CoCMapBlur</strong> method applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/DepthOfField/CoCMapBlur.cs">CoCMapBlur</a> effect to the image</p>
+<pre><code class="lang-csharp">canvas.CoCMapBlur(radius: 4)
+</code></pre>
+<h3 id="transform">Transform</h3>
+<p>The <strong>Transform</strong> method applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorTransforms/ColorTransformGroup.cs">ColorTransformGroup</a> effect to the image</p>
+<pre><code class="lang-csharp">canvas.Transform(transforms: new[] { new LuminanceToChannelTransform{ ColorChannel = ColorChannel.R } })
+</code></pre>
+<h3 id="combine">Combine</h3>
+<p>The <strong>Combine</strong> method applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorCombiner/ColorCombiner.cs">ColorCombiner</a> effect to the image</p>
+<pre><code class="lang-csharp">canvas.Combine(
+   textures: new [] { sourceTexture1, sourceTexture2, null /* = Canvas Content */ },
+   factors: new [] { .2f, .2f, .6f }
+);
+</code></pre>
+<h3 id="colorize">Colorize</h3>
+<p>The <strong>Colorize</strong> method multiplies the current canvas content by a color to create a modulated image.</p>
+<pre><code class="lang-csharp">canvas.Colorize(colorMultiplier: new Color4(1f, 0, 0));
+</code></pre>
+<h3 id="recolorize">Recolorize</h3>
+<p>The <strong>Recolorize</strong> method works the same way as colorize but only uses the red-channel as an input.
+The color multiplier is optional, omitting it would change the image to a gray-scale image.</p>
+<pre><code class="lang-csharp">canvas.Recolorize(colorMultiplier: new Color4(1f, 0, 0));
+</code></pre>
+<h3 id="apply">Apply</h3>
+<p>The <strong>Apply</strong> method applies a custom <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ImageEffect.cs">ImageEffect</a> to the image</p>
+<pre><code class="lang-csharp">using var effect = new GaussianBlur();
+canvas.Apply(effect);
+</code></pre>
+<h2 id="drawing">Drawing</h2>
+<p>Sometimes you also want to customize which parts of a source texture is applied to which part of the canvas.
+You can also compose multiple texture into a single one using these methods.</p>
+<h3 id="stretch">Stretch</h3>
+<p>This enum controls the stretch mode when resampling the source rect to the target rect</p>
+<ul>
+<li><strong>None:</strong>
+The texture preserves its original size. Overflowing content is cropped.</li>
+<li><strong>Stretch:</strong>
+The texture is resized to fill the destination dimensions.
+The aspect ratio is not preserved.</li>
+<li><strong>Contain:</strong>
+The texture is resized to fit in the destination dimensions while it preserves its native aspect ratio.</li>
+<li><strong>Cover:</strong>
+The texture is resized to fill the destination dimensions while it preserves its native aspect ratio.
+If the aspect ratio of the destination rectangle differs from the source,
+the source texture is clipped to fit in the destination dimensions.</li>
+</ul>
+<h3 id="anchors">Anchors</h3>
+<p>This enum controls the alignment mode if clipping or padding is necessary.
+How the anchors behave is dependant on the selected stretch mode.</p>
+<ul>
+<li><strong>TopLeft:</strong>
+Adjust the position so the top-left corner of the source and target rect are aligned.</li>
+<li><strong>Top:</strong>
+Adjust the position so the top-edge center of the source and target rect are aligned.</li>
+<li><strong>TopRight:</strong>
+Adjust the position so the top-right corner of the source and target rect are aligned.</li>
+<li><strong>Left:</strong>
+Adjust the position so the left-edge center of the source and target rect are aligned.</li>
+<li><strong>Center:</strong>
+Adjust the position so the center of the source and target rect are aligned.</li>
+<li><strong>Right:</strong>
+Adjust the position so the right-edge center of the source and target rect are aligned.</li>
+<li><strong>BottomLeft:</strong>
+Adjust the position so the bottom-left corner of the source and target rect are aligned.</li>
+<li><strong>Bottom:</strong>
+Adjust the position so the bottom-edge center of the source and target rect are aligned.</li>
+<li><strong>BottomRight:</strong>
+Adjust the position so the bottom-right corner of the source and target rect are aligned.</li>
+</ul>
+<h3 id="draw">Draw</h3>
+<p>There are many overloads to the draw method but all of them follow this basic structure.</p>
+<pre><code class="lang-csharp">canvas.DrawTexture(
+    texture,
+    [SourceRect],
+    [TargetRect],
+    [ColorMultiplier],
+    [Stretch],
+    [Anchor],
+    [SamplingPattern]
+);
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Notice the options for stretch and anchors these control how the texture is converted from the source rectangle to the target one.</p>
+</div>
+<h4 id="examples">Examples</h4>
+<table>
+<thead>
+<tr>
+<th>Stretch</th>
+<th>Anchor</th>
+<th>Source Rect</th>
+<th>Target Rect</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>None</td>
+<td>TopLeft</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-top-left.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>Top</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-top-center.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>TopRight</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-top-right.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>Left</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-center-left.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>Center</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-center-center.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>Right</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-center-right.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>BottomLeft</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-bottom-left.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>Bottom</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-bottom-center.png" alt=""></td>
+</tr>
+<tr>
+<td>None</td>
+<td>BottomRight</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/none-bottom-right.png" alt=""></td>
+</tr>
+<tr>
+<td>Stretch</td>
+<td>Any</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/stretch-any-v.png" alt=""></td>
+</tr>
+<tr>
+<td>Stretch</td>
+<td>Any</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-h.png" alt=""></td>
+<td><img src="media/stretch-any-h.png" alt=""></td>
+</tr>
+<tr>
+<td>Contain</td>
+<td>AnyLeft</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-h.png" alt=""></td>
+<td><img src="media/contain-left.png" alt=""></td>
+</tr>
+<tr>
+<td>Contain</td>
+<td>AnyRight</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-h.png" alt=""></td>
+<td><img src="media/contain-right.png" alt=""></td>
+</tr>
+<tr>
+<td>Contain</td>
+<td>AnyTop</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/contain-top.png" alt=""></td>
+</tr>
+<tr>
+<td>Contain</td>
+<td>AnyBottom</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/contain-bottom.png" alt=""></td>
+</tr>
+<tr>
+<td>Contain</td>
+<td>AnyCenter</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target.png" alt=""></td>
+<td><img src="media/contain-center.png" alt=""></td>
+</tr>
+<tr>
+<td>Cover</td>
+<td>AnyLeft</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/cover-left.png" alt=""></td>
+</tr>
+<tr>
+<td>Cover</td>
+<td>AnyRight</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-v.png" alt=""></td>
+<td><img src="media/cover-right.png" alt=""></td>
+</tr>
+<tr>
+<td>Cover</td>
+<td>AnyTop</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-h.png" alt=""></td>
+<td><img src="media/cover-top.png" alt=""></td>
+</tr>
+<tr>
+<td>Cover</td>
+<td>AnyBottom</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target-h.png" alt=""></td>
+<td><img src="media/cover-bottom.png" alt=""></td>
+</tr>
+<tr>
+<td>Cover</td>
+<td>AnyCenter</td>
+<td><img src="media/source.png" alt=""></td>
+<td><img src="media/target.png" alt=""></td>
+<td><img src="media/cover-center.png" alt=""></td>
+</tr>
+</tbody>
+</table>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example06_ImageProcessing">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering.Images;
+using Stride.Rendering.Sprites;
+using Stride.UI;
+using Stride.UI.Controls;
+using Stride.UI.Panels;
+using System.Reflection;
+
+using var game = new Game();
+
+game.Run(start: Start);
+
+static void Start(Game game)
+{
+    game.Window.SetSize(new Int2(1000, 1080));
+    game.SetupBase();
+
+    var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
+    var filePath = Path.Combine(directory, &quot;input.png&quot;);
+    using var input = File.Open(filePath, FileMode.Open);
+    var texture = Texture.Load(game.GraphicsDevice, input);
+
+    var grid = new UniformGrid
+    {
+        Width = 1000,
+        Height = 1000,
+        Columns = 9,
+        Rows = 9,
+        Margin = new Thickness(8, 8, 8, 8)
+    };
+
+    grid.Children.Add(CreateCard(texture));
+
+    for (var a = 0; a &lt; 9; a++)
+    {
+        var anchor = (TextureCanvas.Anchor)a;
+        for (var s = 0; s &lt; 4; s++)
+        {
+            var stretch = (TextureCanvas.Stretch)s;
+
+            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
+            {
+                canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(128, 256, 768, 512), null, stretch, anchor, SamplingPattern.Expanded);
+                var card = CreateCard(canvas.ToTexture());
+                card.SetGridColumn(a);
+                card.SetGridRow(s * 2 + 1);
+                grid.Children.Add(card);
+            }
+
+            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
+            {
+
+                canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(256, 128, 512, 768), null, stretch, anchor);
+                var card = CreateCard(canvas.ToTexture());
+                card.SetGridColumn(a);
+                card.SetGridRow(s * 2 + 2);
+                grid.Children.Add(card);
+            }
+        }
+    }
+
+    var entity = new Entity { Scene = game.SceneSystem.SceneInstance.RootScene };
+    entity.Add(new UIComponent { Page = new UIPage { RootElement = grid } });
+}
+
+static Border CreateCard(Texture texture)
+{
+    var card = new Border
+    {
+        BorderColor = new Color(25, 25, 25),
+        BackgroundColor = new Color(120, 120, 120),
+        BorderThickness = new Thickness(2, 2, 2, 2),
+        Padding = new Thickness(8, 8, 8, 8),
+        Margin = new Thickness(4, 4, 4, 4),
+        Content = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+            Children =
+            {
+                new ImageElement
+                {
+                    Source = new SpriteFromTexture { Texture = texture }
+                }
+            }
+        }
+    };
+
+    return card;
+}
+</code></pre>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/rendering/texture-canvas.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -132,8 +132,8 @@
 
   <a id="Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo*"></a>
 
-  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})">
-  AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?)
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Boolean_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Boolean,System.Boolean)">
+  AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?, bool, bool)
   <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h3>
 
@@ -142,7 +142,7 @@
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null, bool showAxisName = false, bool rotateAxisNames = true)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -162,6 +162,10 @@
     <dt><code>blueColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
     <dd><p>Optional custom color for the Z-axis of the gizmo. If not specified, a default color is used.</p>
 </dd>
+    <dt><code>showAxisName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+    <dt><code>rotateAxisNames</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
   </dl>
 
 
@@ -170,7 +174,7 @@
 
 
 
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color___examples">Examples</h4>
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Boolean_System_Boolean__examples">Examples</h4>
   <p>This example shows how to add a gizmo to an entity with the default colors:</p>
 <pre><code class="lang-csharp">var entity = new Entity();
 // Assume 'game' is an existing Game instance
@@ -218,32 +222,31 @@ Rotation is achieved using the Numpad, the mouse while holding the right mouse b
 
 
 
-  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity*"></a>
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo*"></a>
 
-  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_DestroyEntity_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.DestroyEntity(Stride.Engine.Entity)">
-  DestroyEntity(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})">
+  AddLightDirectionalGizmo(Entity, GraphicsDevice, Color?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Attempts to remove the entity from its scene, destroying it.</p>
+  <div class="markdown level1 summary"><p>Adds a directional light gizmo to the specified entity for visual representation and manipulation in the editor or during runtime.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use Remove() instead&quot;, true)]
-public static bool DestroyEntity(this Entity entity)</code></pre>
+    <pre><code class="lang-csharp hljs">public static void AddLightDirectionalGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? color = null)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>True if the entity was successfully removed; otherwise, false.</p>
+    <dd><p>The entity to which the directional light gizmo will be added.</p>
+</dd>
+    <dt><code>graphicsDevice</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
+    <dd><p>The graphics device used to render the gizmo.</p>
+</dd>
+    <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
+    <dd><p>Optional color for the gizmo. If not specified, a default color is used.</p>
 </dd>
   </dl>
 
@@ -253,6 +256,17 @@ public static bool DestroyEntity(this Entity entity)</code></pre>
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color___examples">Examples</h4>
+  <p>This example shows how to add a light directional gizmo to an entity with the default colors:</p>
+<pre><code class="lang-csharp">var entity = new Entity();
+// Assume 'game' is an existing Game instance
+entity.AddLightDirectionalGizmo(game.GraphicsDevice);</code></pre>
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method is useful for visually representing the direction and orientation of a directional light in a scene.
+The gizmo can be used during runtime to provide a visual reference for the light's direction.</p>
+</div>
 
 
 
@@ -261,7 +275,7 @@ public static bool DestroyEntity(this Entity entity)</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)">
   GetComponent&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L79"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the first component of the specified type from the entity.</p>
@@ -305,7 +319,7 @@ public static bool DestroyEntity(this Entity entity)</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)">
   GetComponents&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L84"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L91"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves all components of the specified type from the entity.</p>
@@ -349,7 +363,7 @@ public static bool DestroyEntity(this Entity entity)</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Remove_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)">
   Remove(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Removes the entity from its current scene by setting its <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a> property to null.</p>
@@ -378,11 +392,60 @@ public static bool DestroyEntity(this Entity entity)</code></pre>
 
 
 
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent__1_Stride_Engine_Entity___0__" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)">
+  TryGetComponent&lt;T&gt;(Entity, out T?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L117"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Tries to retrieve a component of type <code class="typeparamref">T</code> from the given entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetComponent&lt;T&gt;(this Entity entity, out T? result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity from which to retrieve the component.</p>
+</dd>
+    <dt><code>result</code> <span class="xref">T</span></dt>
+    <dd><p>When this method returns, contains the first component of type</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if a component of type <code class="typeparamref">T</code> is found in the entity;
+otherwise, <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
   <a id="Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)">
   WorldPosition(Entity, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L106"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L133"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>An easier way to get the previous frames world position rather than getting <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Matrix.cs">TranslationVector</a> from <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">WorldMatrix</a></p>

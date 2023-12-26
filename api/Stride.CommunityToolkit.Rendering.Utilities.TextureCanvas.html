@@ -1,0 +1,1315 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class TextureCanvas
+ | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class TextureCanvas
+ | Stride Community Toolkit ">
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas">
+
+
+
+  <h1 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas" class="text-break">
+    Class TextureCanvas
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.html">Rendering</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.html">Utilities</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A helper class for simple image processing</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TextureCanvas : IDisposable</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">TextureCanvas</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas__ctor_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.#ctor*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas__ctor_Stride_Rendering_RenderContext_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.#ctor(Stride.Rendering.RenderContext,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)">
+  TextureCanvas(RenderContext, Size2?, PixelFormat)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TextureCanvas(RenderContext renderContext, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>renderContext</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/RenderContext.cs">RenderContext</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Size2.cs">Size2</a>?</dt>
+    <dd></dd>
+    <dt><code>pixelFormat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ByteSize_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ByteSize" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ByteSize">
+  ByteSize
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Calculates the texture size in bytes</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ByteSize { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_PixelFormat_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_PixelFormat" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.PixelFormat">
+  PixelFormat
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the current pixel format</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PixelFormat PixelFormat { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_PixelFormat_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Setting a different pixel format may cause a resample of the already drawn back buffer or call the setter before
+you start drawing.<br>
+You may consider using <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_">Resample(Size2, PixelFormat, SamplingPattern)</a> if you also want to change the size in a single operation.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Size_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Size" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Size">
+  Size
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the current texture size</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Size2 Size { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Size2.cs">Size2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Size_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Setting a different size may cause a resample of the already drawn back buffer or call the setter before you start
+drawing.<br>
+You may consider using <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_">Resample(Size2, PixelFormat, SamplingPattern)</a> if you also want to change the pixel format in a single operation.</p>
+</div>
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Apply_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Apply_Stride_Rendering_Images_ImageEffect_Stride_Graphics_Texture___" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Apply(Stride.Rendering.Images.ImageEffect,Stride.Graphics.Texture[])">
+  Apply(ImageEffect, params Texture?[]?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L459"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies an image effect to the buffer texture</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Apply(ImageEffect effect, params Texture?[]? inputs)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>effect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ImageEffect.cs">ImageEffect</a></dt>
+    <dd><p>The image effect to apply</p>
+</dd>
+    <dt><code>inputs</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a>[]</dt>
+    <dd><p>The input textures</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Apply_Stride_Rendering_Images_ImageEffect_Stride_Graphics_Texture____remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Null, Empty arrays or array entries with null as a value will be replaced by the current drawing buffer<br>
+The output will always be replaced by the <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> as a single output.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_BrightFilter_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_BrightFilter_System_Single_System_Single_System_Nullable_Stride_Core_Mathematics_Color3__" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.BrightFilter(System.Single,System.Single,System.Nullable{Stride.Core.Mathematics.Color3})">
+  BrightFilter(float, float, Color3?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L342"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/BrightFilter/BrightFilter.cs">BrightFilter</a> effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void BrightFilter(float threshold = 0.2, float steepness = 1, Color3? colorMultiplier = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>threshold</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The threshold relative to the white point</p>
+</dd>
+    <dt><code>steepness</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>the smooth-step steepness for bright pass filtering.</p>
+</dd>
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color3.cs">Color3</a>?</dt>
+    <dd><p>Modulates bright areas with the provided color. It affects the color of sub-sequent bloom,
+light-streak effects</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Clear_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Clear" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Clear">
+  Clear()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L517"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Clears the current drawing context and releases internal texture buffers</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_CoCMapBlur_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_CoCMapBlur_System_Int32_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.CoCMapBlur(System.Int32)">
+  CoCMapBlur(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L373"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/DepthOfField/CoCMapBlur.cs">CoCMapBlur</a> effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CoCMapBlur(int radius = 4)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>radius</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The radius.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Colorize_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Colorize_Stride_Core_Mathematics_Color4_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Colorize(Stride.Core.Mathematics.Color4)">
+  Colorize(Color4)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L431"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a color multiply effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Colorize(Color4 colorMultiplier)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a></dt>
+    <dd><p>The color multiplier</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Combine_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Combine_Stride_Graphics_Texture___System_Single___Stride_Core_Mathematics_Color3___" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Combine(Stride.Graphics.Texture[],System.Single[],Stride.Core.Mathematics.Color3[])">
+  Combine(Texture?[]?, float[]?, Color3[]?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L418"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorCombiner/ColorCombiner.cs">ColorCombiner</a> effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Combine(Texture?[]? textures = null, float[]? factors = null, Color3[]? colorMultipliers = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>textures</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a>[]</dt>
+    <dd><p>The textures combine (use null to use the current drawing buffer as a texture input)</p>
+</dd>
+    <dt><code>factors</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>[]</dt>
+    <dd><p>The factors used to multiply the colors.</p>
+</dd>
+    <dt><code>colorMultipliers</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color3.cs">Color3</a>[]</dt>
+    <dd><p>The color multiplier of each texture. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Combine_Stride_Graphics_Texture___System_Single___Stride_Core_Mathematics_Color3____remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Null, Empty arrays or array entries with null as a value will be replaced by the current drawing buffer</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Dispose_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Dispose" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Dispose">
+  Dispose()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawRect_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawRect_Stride_Core_Mathematics_Rectangle_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawRect(Stride.Core.Mathematics.Rectangle,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)">
+  DrawRect(Rectangle, Stretch, Anchor, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawRect(Rectangle destinationRect, TextureCanvas.Stretch stretch = Stretch.Stretch, TextureCanvas.Anchor anchor = Anchor.TopLeft, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>destinationRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Rectangle.cs">Rectangle</a></dt>
+    <dd></dd>
+    <dt><code>stretch</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html">Stretch</a></dt>
+    <dd></dd>
+    <dt><code>anchor</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html">Anchor</a></dt>
+    <dd></dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_Rectangle_Stride_Core_Mathematics_Rectangle_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.Rectangle,Stride.Core.Mathematics.Rectangle,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)">
+  DrawTexture(Texture, Rectangle, Rectangle, Color4?, Stretch, Anchor, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L162"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws a texture to the <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawTexture(Texture sourceTexture, Rectangle sourceRect, Rectangle destinationRect, Color4? colorMultiplier = null, TextureCanvas.Stretch stretch = Stretch.Stretch, TextureCanvas.Anchor anchor = Anchor.TopLeft, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceTexture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd><p>The source texture to draw</p>
+</dd>
+    <dt><code>sourceRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Rectangle.cs">Rectangle</a></dt>
+    <dd><p>The sub rectangle of the source texture to draw</p>
+</dd>
+    <dt><code>destinationRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Rectangle.cs">Rectangle</a></dt>
+    <dd><p>The sub rectangle of the target texture</p>
+</dd>
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd><p>The color multiplier. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+    <dt><code>stretch</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html">Stretch</a></dt>
+    <dd><p>The stretch mode</p>
+</dd>
+    <dt><code>anchor</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html">Anchor</a></dt>
+    <dd><p>The anchor mode</p>
+</dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd><p>The sampling pattern</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_Rectangle_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.Rectangle,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)">
+  DrawTexture(Texture, Rectangle, Color4?, Stretch, Anchor, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L117"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws a texture to the <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawTexture(Texture sourceTexture, Rectangle destinationRect, Color4? colorMultiplier = null, TextureCanvas.Stretch stretch = Stretch.Stretch, TextureCanvas.Anchor anchor = Anchor.TopLeft, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceTexture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd><p>The source texture to draw</p>
+</dd>
+    <dt><code>destinationRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Rectangle.cs">Rectangle</a></dt>
+    <dd><p>The sub rectangle of the target texture in percentages</p>
+</dd>
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd><p>The color multiplier. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+    <dt><code>stretch</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html">Stretch</a></dt>
+    <dd><p>The stretch mode</p>
+</dd>
+    <dt><code>anchor</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html">Anchor</a></dt>
+    <dd><p>The anchor mode</p>
+</dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd><p>The sampling pattern</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_RectangleF_Stride_Core_Mathematics_RectangleF_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.RectangleF,Stride.Core.Mathematics.RectangleF,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)">
+  DrawTexture(Texture, RectangleF, RectangleF, Color4?, Stretch, Anchor, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L190"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws a texture to the <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> using rectangles with percentage values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawTexture(Texture sourceTexture, RectangleF relativeSourceRect, RectangleF relativeDestinationRect, Color4? colorMultiplier = null, TextureCanvas.Stretch stretch = Stretch.Stretch, TextureCanvas.Anchor anchor = Anchor.TopLeft, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceTexture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd><p>The source texture to draw</p>
+</dd>
+    <dt><code>relativeSourceRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/RectangleF.cs">RectangleF</a></dt>
+    <dd><p>The sub rectangle of the source texture to draw in percentages</p>
+</dd>
+    <dt><code>relativeDestinationRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/RectangleF.cs">RectangleF</a></dt>
+    <dd><p>The sub rectangle of the target texture in percentages</p>
+</dd>
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd><p>The color multiplier. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+    <dt><code>stretch</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html">Stretch</a></dt>
+    <dd><p>The stretch mode</p>
+</dd>
+    <dt><code>anchor</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html">Anchor</a></dt>
+    <dd><p>The anchor mode</p>
+</dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd><p>The sampling pattern</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_Stride_Core_Mathematics_RectangleF_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,Stride.Core.Mathematics.RectangleF,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)">
+  DrawTexture(Texture, RectangleF, Color4?, Stretch, Anchor, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws a texture to the <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> using a rectangle with percentage values</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawTexture(Texture sourceTexture, RectangleF relativeDestinationRect, Color4? colorMultiplier = null, TextureCanvas.Stretch stretch = Stretch.Stretch, TextureCanvas.Anchor anchor = Anchor.TopLeft, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceTexture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd><p>The source texture to draw</p>
+</dd>
+    <dt><code>relativeDestinationRect</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/RectangleF.cs">RectangleF</a></dt>
+    <dd><p>The sub rectangle of the target texture in percentages</p>
+</dd>
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd><p>The color multiplier. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+    <dt><code>stretch</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html">Stretch</a></dt>
+    <dd><p>The stretch mode</p>
+</dd>
+    <dt><code>anchor</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html">Anchor</a></dt>
+    <dd><p>The anchor mode</p>
+</dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd><p>The sampling pattern</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_DrawTexture_Stride_Graphics_Texture_System_Nullable_Stride_Core_Mathematics_Color4__Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Stretch_Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Anchor_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.DrawTexture(Stride.Graphics.Texture,System.Nullable{Stride.Core.Mathematics.Color4},Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch,Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor,Stride.Rendering.Images.SamplingPattern)">
+  DrawTexture(Texture, Color4?, Stretch, Anchor, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws a texture to the drawing context</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DrawTexture(Texture sourceTexture, Color4? colorMultiplier = null, TextureCanvas.Stretch stretch = Stretch.Stretch, TextureCanvas.Anchor anchor = Anchor.TopLeft, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>sourceTexture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd><p>The source texture to draw</p>
+</dd>
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd><p>The color multiplier. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+    <dt><code>stretch</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html">Stretch</a></dt>
+    <dd><p>The stretch mode</p>
+</dd>
+    <dt><code>anchor</code> <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.<a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html">Anchor</a></dt>
+    <dd><p>The anchor mode</p>
+</dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd><p>The sampling pattern</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GaussianBlur_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GaussianBlur_System_Int32_System_Single_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GaussianBlur(System.Int32,System.Single)">
+  GaussianBlur(int, float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L360"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/GaussianBlur/GaussianBlur.cs">GaussianBlur</a> effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void GaussianBlur(int radius = 4, float sigmaRatio = 2)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>radius</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The radius.</p>
+</dd>
+    <dt><code>sigmaRatio</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The sigma ratio. The sigma ratio is used to calculate the sigma based on the radius: The
+actual formula is sigma = radius / SigmaRatio. The default value is 2.0f.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData">
+  GetData()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L319"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Copies the current texture data to a byte array</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] GetData()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_GetData_System_Byte___" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.GetData(System.Byte[])">
+  GetData(byte[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L310"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Copies the current texture data to a byte array</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void GetData(byte[] data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The data array to store the data</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_Byte___" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.Byte[])">
+  Load(byte[])
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L227"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Replaces the current <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> with a texture loaded from a <span class="xref">byte[]</span></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Load(byte[] data)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The <span class="xref">byte[]</span> containing file data</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_Byte____remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method also replaces the current size and pixel format. Use <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_">Resample(Size2, PixelFormat, SamplingPattern)</a> to change it
+afterwards.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_IO_Stream_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.IO.Stream)">
+  Load(Stream)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L242"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Replaces the current <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> with a texture loaded from a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Load(Stream stream)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a> containing file data</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_IO_Stream__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method also replaces the current size and pixel format. Use <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_">Resample(Size2, PixelFormat, SamplingPattern)</a> to change it
+afterwards.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_String_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Load(System.String)">
+  Load(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L213"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Replaces the current <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> with a texture loaded from the local file system</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Load(string path)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The file path</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Load_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method also replaces the current size and pixel format. Use <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_">Resample(Size2, PixelFormat, SamplingPattern)</a> to change it
+afterwards.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Recolorize_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Recolorize_System_Nullable_Stride_Core_Mathematics_Color4__" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Recolorize(System.Nullable{Stride.Core.Mathematics.Color4})">
+  Recolorize(Color4?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L442"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a grey scale effect by copying the red channel to blue and green and optionally also recolors the resulting image.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Recolorize(Color4? colorMultiplier = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>colorMultiplier</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd><p>The color multiplier. Default is <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">White</a></p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Resample(Stride.Core.Mathematics.Size2,Stride.Graphics.PixelFormat,Stride.Rendering.Images.SamplingPattern)">
+  Resample(Size2, PixelFormat, SamplingPattern)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L487"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Resamples the texture in a different size or pixel format</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Resample(Size2 size, PixelFormat pixelFormat, SamplingPattern samplingPattern = SamplingPattern.Linear)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Size2.cs">Size2</a></dt>
+    <dd><p>The new size</p>
+</dd>
+    <dt><code>pixelFormat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
+    <dd><p>The new pixel format</p>
+</dd>
+    <dt><code>samplingPattern</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Rendering.Images.SamplingPattern.html">SamplingPattern</a></dt>
+    <dd><p>The sampling pattern</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_SetData_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_SetData_System_Byte___System_Int32_System_Int32_Stride_Graphics_PixelFormat_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.SetData(System.Byte[],System.Int32,System.Int32,Stride.Graphics.PixelFormat)">
+  SetData(byte[], int, int, PixelFormat)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L297"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Replaces the current <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> with a texture loaded from a <span class="xref">byte[]</span> containing
+pixel data</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetData(byte[] data, int width, int height, PixelFormat pixelFormat)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>data</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</dt>
+    <dd><p>The <span class="xref">byte[]</span> containing pixel data</p>
+</dd>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The width of the new texture</p>
+</dd>
+    <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The height of the new texture</p>
+</dd>
+    <dt><code>pixelFormat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
+    <dd><p>The pixel format of the new texture</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_SetData_System_Byte___System_Int32_System_Int32_Stride_Graphics_PixelFormat__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method also replaces the current size and pixel format. Use <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html#Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Resample_Stride_Core_Mathematics_Size2_Stride_Graphics_PixelFormat_Stride_Rendering_Images_SamplingPattern_">Resample(Size2, PixelFormat, SamplingPattern)</a> to change it
+afterwards.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_System_IO_Stream_Stride_Graphics_ImageFileType_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.IO.Stream,Stride.Graphics.ImageFileType)">
+  Store(Stream, ImageFileType)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L279"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stores the current texture to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a> in the selected file format</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Store(Stream stream, ImageFileType fileType)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a></dt>
+    <dd><p>The target stream</p>
+</dd>
+    <dt><code>fileType</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.ImageFileType.html">ImageFileType</a></dt>
+    <dd><p>The file type to write</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Store_System_String_System_Nullable_Stride_Graphics_ImageFileType__" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Store(System.String,System.Nullable{Stride.Graphics.ImageFileType})">
+  Store(string, ImageFileType?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L255"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Stores the current texture to a file in the local file system.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Store(string path, ImageFileType? fileType = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>path</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The target file path</p>
+</dd>
+    <dt><code>fileType</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.ImageFileType.html">ImageFileType</a>?</dt>
+    <dd><p>The file type to write or null for automatic inference based on the file extension</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ToTexture_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_ToTexture_Stride_Graphics_TextureFlags_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.ToTexture(Stride.Graphics.TextureFlags)">
+  ToTexture(TextureFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L328"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Copies the current texture data to a new texture</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Texture ToTexture(TextureFlags flags = TextureFlags.ShaderResource)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>flags</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.TextureFlags.html">TextureFlags</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Transform_" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Utilities_TextureCanvas_Transform_System_Collections_Generic_IEnumerable_Stride_Rendering_Images_ColorTransform__System_Collections_Generic_IEnumerable_Stride_Rendering_Images_ColorTransform__System_Collections_Generic_IEnumerable_Stride_Rendering_Images_ColorTransform__" data-uid="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Transform(System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform},System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform},System.Collections.Generic.IEnumerable{Stride.Rendering.Images.ColorTransform})">
+  Transform(IEnumerable&lt;ColorTransform&gt;?, IEnumerable&lt;ColorTransform&gt;?, IEnumerable&lt;ColorTransform&gt;?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L387"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Applies a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorTransforms/ColorTransformGroup.cs">ColorTransformGroup</a> effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Transform(IEnumerable&lt;ColorTransform&gt;? transforms = null, IEnumerable&lt;ColorTransform&gt;? preTransforms = null, IEnumerable&lt;ColorTransform&gt;? postTransforms = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transforms</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorTransforms/ColorTransform.cs">ColorTransform</a>&gt;</dt>
+    <dd><p>The color transforms to apply</p>
+</dd>
+    <dt><code>preTransforms</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorTransforms/ColorTransform.cs">ColorTransform</a>&gt;</dt>
+    <dd><p>The color pre-transforms to apply</p>
+</dd>
+    <dt><code>postTransforms</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Images/ColorTransforms/ColorTransform.cs">ColorTransform</a>&gt;</dt>
+    <dd><p>The color post-transforms to apply</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Utilities/TextureCanvas.cs/#L10" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

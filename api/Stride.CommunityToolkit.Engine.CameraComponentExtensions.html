@@ -413,9 +413,9 @@ The ray is in world space, starting at the near plane of the camera and extendin
 
   <a id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint*"></a>
 
-  <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)">
-  ScreenToWorldPoint(CameraComponent, Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L185"><i class="bi bi-code-slash"></i></a>
+  <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)">
+  ScreenToWorldPoint(CameraComponent, ref Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L184"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a point in world coordinates.</p>
@@ -423,7 +423,7 @@ The ray is in world space, starting at the near plane of the camera and extendin
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Vector3 ScreenToWorldPoint(this CameraComponent cameraComponent, Vector3 position)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Vector3 ScreenToWorldPoint(this CameraComponent cameraComponent, ref Vector3 position)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -448,7 +448,7 @@ The ray is in world space, starting at the near plane of the camera and extendin
 
 
 
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__remarks">Remarks</h4>
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3___remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>This method does not update the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ViewMatrix</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ProjectionMatrix</a> before performing the transformation.
 If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> or it's containing <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">TransformComponent</a>has been modified since the last frame you may need to call the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">Update()</a> method first.</p>
 </div>
@@ -462,53 +462,11 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
 
 
-  <a id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)">
-  ScreenToWorldPoint(CameraComponent, ref Vector3, out Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L202"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Converts the screen position to a point in world coordinates.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void ScreenToWorldPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>cameraComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
-    <dt><code>position</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd><p>The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.</p>
-</dd>
-    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd><p>Position in world coordinates.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3___remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>This method does not update the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ViewMatrix</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ProjectionMatrix</a> before performing the transformation.
-If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> or it's containing <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">TransformComponent</a>has been modified since the last frame you may need to call the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">Update()</a> method first.</p>
-</div>
-
-
-
-
   <a id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)">
   ScreenToWorldRaySegment(CameraComponent, Vector2)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L229"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L211"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a> in world coordinates.</p>
@@ -558,7 +516,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenToWorldRaySegment_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2__Stride_CommunityToolkit_Scripts_RaySegment__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)">
   ScreenToWorldRaySegment(CameraComponent, ref Vector2, out RaySegment)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L246"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L228"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the screen position to a <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a> in world coordinates.</p>
@@ -599,7 +557,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToClipSpace_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)">
   WorldToClipSpace(CameraComponent, ref Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L273"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L255"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the world position to clip space coordinates relative to camera.</p>
@@ -643,9 +601,9 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
   <a id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint*"></a>
 
-  <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)">
-  WorldToScreenPoint(CameraComponent, Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L293"><i class="bi bi-code-slash"></i></a>
+  <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)">
+  WorldToScreenPoint(CameraComponent, ref Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L275"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Converts the world position to screen space coordinates relative to camera.</p>
@@ -653,7 +611,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, Vector3 position)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -677,54 +635,7 @@ If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/source
 
 
 
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>This method does not update the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ViewMatrix</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ProjectionMatrix</a> before performing the transformation.
-If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> or it's containing <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">TransformComponent</a>has been modified since the last frame you may need to call the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">Update()</a> method first.</p>
-</div>
-
-  <h4 class="section">Exceptions</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
-    <dd><p>If the cameraComponent argument is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
-</dd>
-  </dl>
-
-
-
-  <a id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)">
-  WorldToScreenPoint(CameraComponent, ref Vector3, out Vector3)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraComponentExtensions.cs/#L311"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Converts the world position to screen space coordinates relative to camera.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>cameraComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
-    <dt><code>position</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
-    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd><p>The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3___remarks">Remarks</h4>
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_CameraComponentExtensions_WorldToScreenPoint_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector3___remarks">Remarks</h4>
   <div class="markdown level1 remarks"><p>This method does not update the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ViewMatrix</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">ProjectionMatrix</a> before performing the transformation.
 If the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> or it's containing <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">TransformComponent</a>has been modified since the last frame you may need to call the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">Update()</a> method first.</p>
 </div>

@@ -107,6 +107,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Extensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.yml",
       "output": {
         ".html": {
@@ -247,6 +267,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.yml",
       "output": {
         ".html": {
@@ -287,6 +327,36 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.yml",
       "output": {
         ".html": {
@@ -311,6 +381,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Scripts.GameProfiler.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html"
         }
       },
       "version": ""
@@ -529,6 +609,16 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/image-processing.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/image-processing.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Resource",
       "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example01-basic-3d-scene.webp",
       "output": {
@@ -679,11 +769,281 @@
       "version": ""
     },
     {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/contain-bottom.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/contain-bottom.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/contain-center.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/contain-center.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/contain-left.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/contain-left.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/contain-right.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/contain-right.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/contain-top.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/contain-top.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/cover-bottom.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/cover-bottom.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/cover-center.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/cover-center.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/cover-left.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/cover-left.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/cover-right.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/cover-right.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/cover-top-center.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/cover-top-center.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/cover-top.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/cover-top.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-bottom-center.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-bottom-center.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-bottom-left.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-bottom-left.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-bottom-right.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-bottom-right.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-center-center.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-center-center.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-center-left.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-center-left.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-center-right.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-center-right.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-top-center.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-top-center.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-top-left.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-top-left.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/none-top-right.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/none-top-right.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/source.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/source.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/stretch-any-h.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/stretch-any-h.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/stretch-any-v.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/stretch-any-v.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/target-h.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/target-h.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/target-v.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/target-v.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/rendering/media/target.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/rendering/media/target.png"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "manual/rendering/mesh-builder.md",
       "output": {
         ".html": {
           "relative_path": "manual/rendering/mesh-builder.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/rendering/texture-canvas.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/rendering/texture-canvas.html"
         }
       },
       "version": ""
