@@ -23,7 +23,7 @@ public class Left : IClickable
     public string Prefix { get; init; } = "Left Mouse Button";
     public int Count { get; set; }
 
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {++Count}";
+    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : { Count = Count +1 }";
     public bool CanHandle(MouseButton button) => button == MouseButton.Left;
     
 }
@@ -34,5 +34,5 @@ public class Right : IClickable
     public int Count { get; set; }
 
     public bool CanHandle(MouseButton button) => button == MouseButton.Right;
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {++Count}";
+    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {Count = Count + 1 }";
 }

@@ -32,7 +32,7 @@ public class ClickHandlerComponent : SyncScript
     }
     public override void Update()
     {
-        var mouseDown = Input.Mouse.DownButtons;
+        var mouseDown = Input.Mouse.ReleasedButtons;
         foreach(var mouseButton in mouseDown)
         {
             foreach(var (text, clickable) in _clickableBlocks)
@@ -44,11 +44,11 @@ public class ClickHandlerComponent : SyncScript
                 }
             }
         }
-        if(Input.Keyboard.IsKeyDown(Keys.S))
+        if(Input.Keyboard.IsKeyReleased(Keys.S))
         {
             DataSaver.Save();
         }
-        if(Input.Keyboard.IsKeyDown(Keys.L))
+        if(Input.Keyboard.IsKeyReleased(Keys.L))
         {
             DataSaver.TryLoad(out var data);
             DataSaver.Data = data;
