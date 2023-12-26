@@ -16,6 +16,6 @@ Below is a list of available extension methods:
 - [`ScreenToWorldRaySegment()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)) - Converts the screen position to a `RaySegment` in world coordinates 
 - [`ScreenToWorldRaySegment()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenToWorldRaySegment(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2@,Stride.CommunityToolkit.Scripts.RaySegment@)) - Converts the screen position to a `RaySegment` in world coordinates 
 - [`WorldToClipSpace()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToClipSpace(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)) - Converts the world position to clip space coordinates relative to camera
-- [`WorldToScreenPoint()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3)) - Converts the world position to screen space coordinates relative to camera
+- [`WorldToScreenPoint()`](xref:Stride.CommunityToolkit.Engine.CameraComponentExtensions.WorldToScreenPoint(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector3@)) - Converts the world position to screen space coordinates relative to camera
 
 Each of these methods is designed to offer streamlined, high-level operations that simplify camera manipulation tasks, allowing you to focus on creating immersive and dynamic 3D environments.

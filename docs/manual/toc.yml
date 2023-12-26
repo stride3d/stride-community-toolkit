@@ -53,5 +53,7 @@
   items:
   - name: MeshBuilder
     href: rendering/mesh-builder.md
+  - name: TextureCanvas
+    href: rendering/texture-canvas.md
 - name: Troubleshooting
   href: troubleshooting.md
