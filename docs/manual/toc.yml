@@ -25,6 +25,8 @@
     items:
     - name: Myra UI - Draggable Window, GetService()
       href: code-only/examples/myra-ui-draggable-window-and-services.md
+    - name: Image Processing
+      href: code-only/examples/image-processing.md
   - name: F# Basic Examples
     href: code-only/examples/basic-examples-fs.md
     items:
@@ -53,5 +55,7 @@
   items:
   - name: MeshBuilder
     href: rendering/mesh-builder.md
+  - name: TextureCanvas
+    href: rendering/texture-canvas.md
 - name: Troubleshooting
   href: troubleshooting.md

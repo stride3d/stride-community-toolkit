@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="Pastel" Version="4.2.0" />
-        <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+        <!--<PackageReference Include="System.Drawing.Common" Version="8.0.0" />-->
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +21,7 @@
         <ProjectReference Include="..\..\examples\code-only\Example03_StrideUI_CapsuleAndWindow\Example03_StrideUI_CapsuleAndWindow.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example04_MyraUI\Example04_MyraUI.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example05_ProceduralGeometry\Example05_ProceduralGeometry.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example06_ImageProcessing\Example06_ImageProcessing.csproj" />
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 

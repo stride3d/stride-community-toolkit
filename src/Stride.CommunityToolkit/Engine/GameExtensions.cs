@@ -45,8 +45,8 @@ public static class GameExtensions
     public static void Run(this Game game, GameContext? context = null, Action<Scene>? start = null, Action<Scene, GameTime>? update = null)
     {
         game.Script.Scheduler.Add(RootScript);
+
         game.Run(context);
-        return;
 
         async Task RootScript()
         {
@@ -81,8 +81,8 @@ public static class GameExtensions
     public static void Run(this Game game, GameContext? context = null, Action<Game>? start = null, Action<Game>? update = null)
     {
         game.Script.Scheduler.Add(RootScript);
+
         game.Run(context);
-        return;
 
         async Task RootScript()
         {
@@ -93,6 +93,7 @@ public static class GameExtensions
             while (true)
             {
                 update.Invoke(game);
+
                 await game.Script.NextFrame();
             }
         }
