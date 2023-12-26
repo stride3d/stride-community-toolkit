@@ -29,16 +29,26 @@ public static class ExampleProvider
         new Example(GetIndex(), "Advance Example - Myra UI - Draggable Window, GetService()",
             () => StartProcess(nameof(Example04_MyraUI))),
 
+        new Example(GetIndex(), "Advance Example - Image Processing",
+            () => StartProcess(nameof(Example06_ImageProcessing))),
+
         new Example("Q", "Quit", () => Environment.Exit(0))
     };
 
     private static string GetIndex() => Interlocked.Increment(ref _index).ToString();
 
-    private static void StartProcess(string projectName) => Process.Start(new ProcessStartInfo
+    private static void StartProcess(string projectName)
     {
-        FileName = $"{projectName}.exe",
-        RedirectStandardOutput = true,
-        UseShellExecute = false,
-        CreateNoWindow = true,
-    });
+        var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{projectName}.exe");
+        var workingDirectory = Path.GetDirectoryName(exePath);
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = exePath,
+            WorkingDirectory = workingDirectory,
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        });
+    }
 }

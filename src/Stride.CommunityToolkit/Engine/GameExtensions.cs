@@ -66,6 +66,40 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Initializes the game, starts the game loop, and handles game events.
+    /// </summary>
+    /// <remarks>
+    /// This method performs the following actions:
+    /// 1. Schedules the root script for execution.
+    /// 2. Initiates the game loop by calling <see cref="GameBase.Run(GameContext)"/>.
+    /// 3. Invokes the provided <paramref name="start"/> and <paramref name="update"/> delegates.
+    /// </remarks>
+    /// <param name="game">The Game instance to initialize and run.</param>
+    /// <param name="context">Optional GameContext to be used. Defaults to null.</param>
+    /// <param name="start">Optional action to execute at the start of the game. Takes the game as a parameter.</param>
+    /// <param name="update">Optional action to execute during each game loop iteration. Takes the game as a parameter.</param>
+    public static void Run(this Game game, GameContext? context = null, Action<Game>? start = null, Action<Game>? update = null)
+    {
+        game.Script.Scheduler.Add(RootScript);
+
+        game.Run(context);
+
+        async Task RootScript()
+        {
+            start?.Invoke(game);
+
+            if (update == null) return;
+
+            while (true)
+            {
+                update.Invoke(game);
+
+                await game.Script.NextFrame();
+            }
+        }
+    }
+
+    /// <summary>
     /// Sets up essential components for the game including a GraphicsCompositor, a camera, and a directional light.
     /// </summary>
     /// <remarks>

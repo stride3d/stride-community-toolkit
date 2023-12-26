@@ -48,7 +48,7 @@ public class MainView : Panel
         var label = new Label
         {
             VerticalSpacing = 10,
-            Text = "This is a Test! Hello from Myra! This is a window and below two progress bars."
+            Text = "This is a Test! Hello from Myra! This is a draggable window and below two progress bars."
         };
 
         ExampleWindow = new Window

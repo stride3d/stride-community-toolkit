@@ -6,5 +6,6 @@ This page provides a brief overview of the advance examples available for code-o
 
 - [Myra UI - Draggable Window, GetService()](myra-ui-draggable-window-and-services.md):
   - Demonstrates how to use Myra UI by creating a simple draggable window, displaying a health bar, and accessing registered services.
+- [Image Processing](image-processing.md):
   
 [!INCLUDE [basic-examples](../../../includes/manual/examples/basic-examples-outro.md)]

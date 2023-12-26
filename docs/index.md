@@ -40,7 +40,7 @@ These resources are designed to provide comprehensive information and support fo
 
 This section highlights the amazing contributors who have helped enhance the Stride Community Toolkit with their efforts.
 
-- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, docs
+- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
 - [Doprez](https://github.com/Doprez): Extensions
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
 - [Vaclav Elias](https://github.com/VaclavElias): Code only approach implementation, toolkit docs
