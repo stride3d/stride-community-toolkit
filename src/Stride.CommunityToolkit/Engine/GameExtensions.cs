@@ -103,6 +103,15 @@ public static class GameExtensions
         game.AddGround();
     }
 
+    public static void SetupBase2DScene(this Game game)
+    {
+        game.AddGraphicsCompositor().AddCleanUIStage();
+        game.Add2DCamera().AddInteractiveCameraScript();
+        //game.AddDirectionalLight();
+        game.AddSkybox();
+        game.Add2DGround();
+    }
+
     /// <summary>
     /// Adds a default GraphicsCompositor with enabled post-effects to the specified Game instance and sets it as the game's SceneSystem GraphicsCompositor.
     /// </summary>
@@ -131,7 +140,7 @@ public static class GameExtensions
     /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
     /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
-    public static Entity AddCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    public static Entity AddCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null, CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
     {
         if (game.SceneSystem.GraphicsCompositor.Cameras.Count == 0)
         {
@@ -142,15 +151,17 @@ public static class GameExtensions
 
         cameraSlot.Name = cameraName;
 
-        initialPosition ??= CameraDefaults.InitialPosition;
-        initialRotation ??= CameraDefaults.InitialRotation;
+        initialPosition ??= CameraDefaults.Initial3DPosition;
+        initialRotation ??= CameraDefaults.Initial3DRotation;
 
         var entity = new Entity(cameraName)
         {
             new CameraComponent
             {
-                Projection = CameraProjectionMode.Perspective,
-                Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId()
+                Projection = projectionMode,
+                Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId(),
+                //OrthographicSize = 6,
+                //FarClipPlane = 80
             }
         };
 
@@ -164,6 +175,15 @@ public static class GameExtensions
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
+    }
+
+    public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    {
+        return game.AddCamera(
+            cameraName,
+            initialPosition ?? CameraDefaults.Initial2DPosition,
+            initialRotation ?? CameraDefaults.Initial2DRotation,
+            CameraProjectionMode.Orthographic);
     }
 
     /// <summary>
@@ -257,6 +277,19 @@ public static class GameExtensions
     /// <param name="includeCollider">Adds a collider</param>
     /// <returns></returns>
     public static Entity AddGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+    {
+        var validSize = size is null ? new Vector3(DefaultGroundSizeX, DefaultGroundSizeY, 0) : new Vector3(size.Value.X, size.Value.Y, 0);
+
+        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
+
+        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, validSize);
+
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+
+        return entity;
+    }
+
+    public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
     {
         var validSize = size is null ? new Vector3(DefaultGroundSizeX, DefaultGroundSizeY, 0) : new Vector3(size.Value.X, size.Value.Y, 0);
 
