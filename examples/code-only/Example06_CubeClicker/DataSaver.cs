@@ -1,12 +1,6 @@
 using NexVYaml.Serialization;
-using Stride.Engine;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using Stride.Core;
+using Stride.Core.Mathematics;
 
 namespace Example06_SaveTheCube;
 [DataContract]
