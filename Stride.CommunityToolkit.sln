@@ -36,6 +36,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example05_ProceduralGeometr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example_CubicleCalamity", "examples\code-only\Example_CubicleCalamity\Example_CubicleCalamity.csproj", "{FF85041F-6C26-4B47-BD73-708C869AB857}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example06_CubeClicker", "examples\code-only\Example06_CubeClicker\Example06_CubeClicker.csproj", "{7B5E8960-4717-43F0-B6E3-1054F22785ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{FF85041F-6C26-4B47-BD73-708C869AB857}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF85041F-6C26-4B47-BD73-708C869AB857}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF85041F-6C26-4B47-BD73-708C869AB857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B5E8960-4717-43F0-B6E3-1054F22785ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B5E8960-4717-43F0-B6E3-1054F22785ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B5E8960-4717-43F0-B6E3-1054F22785ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B5E8960-4717-43F0-B6E3-1054F22785ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{5EF318FB-41AE-46D9-A2EA-0EE8EBA66A6C} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{A690C386-6CCE-40B8-B44B-838DB488ED35} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{FF85041F-6C26-4B47-BD73-708C869AB857} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{7B5E8960-4717-43F0-B6E3-1054F22785ED} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
