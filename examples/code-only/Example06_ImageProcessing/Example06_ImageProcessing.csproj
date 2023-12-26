@@ -12,9 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="input.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="input.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

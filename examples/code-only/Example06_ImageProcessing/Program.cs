@@ -1,4 +1,3 @@
-﻿using System.Reflection;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Extensions;
 using Stride.CommunityToolkit.Rendering.Utilities;
@@ -10,15 +9,17 @@ using Stride.Rendering.Sprites;
 using Stride.UI;
 using Stride.UI.Controls;
 using Stride.UI.Panels;
+using System.Reflection;
 
 using var game = new Game();
+
 game.Run(start: Start);
-return;
 
 static void Start(Game game)
 {
     game.Window.SetSize(new Int2(1000, 1080));
     game.SetupBase();
+
     var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
     var filePath = Path.Combine(directory, "input.png");
     using var input = File.Open(filePath, FileMode.Open);
@@ -30,7 +31,7 @@ static void Start(Game game)
         Height = 1000,
         Columns = 9,
         Rows = 9,
-        Margin = new Thickness(8,8,8,8)
+        Margin = new Thickness(8, 8, 8, 8)
     };
 
     grid.Children.Add(CreateCard(texture));
@@ -42,7 +43,7 @@ static void Start(Game game)
         {
             var stretch = (TextureCanvas.Stretch)s;
 
-            using(var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
+            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
             {
                 canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(128, 256, 768, 512), null, stretch, anchor, SamplingPattern.Expanded);
                 var card = CreateCard(canvas.ToTexture());
@@ -51,7 +52,7 @@ static void Start(Game game)
                 grid.Children.Add(card);
             }
 
-            using(var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
+            using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
             {
 
                 canvas.DrawTexture(texture, new Rectangle(0, 128, 256, 256), new Rectangle(256, 128, 512, 768), null, stretch, anchor);
@@ -63,10 +64,9 @@ static void Start(Game game)
         }
     }
 
-    var entity = new Entity{ Scene = game.SceneSystem.SceneInstance.RootScene };
-    entity.Add(new UIComponent { Page = new UIPage{ RootElement = grid } });
+    var entity = new Entity { Scene = game.SceneSystem.SceneInstance.RootScene };
+    entity.Add(new UIComponent { Page = new UIPage { RootElement = grid } });
 }
-
 
 static Border CreateCard(Texture texture)
 {
@@ -76,7 +76,7 @@ static Border CreateCard(Texture texture)
         BackgroundColor = new Color(120, 120, 120),
         BorderThickness = new Thickness(2, 2, 2, 2),
         Padding = new Thickness(8, 8, 8, 8),
-        Margin = new Thickness(4,4,4,4),
+        Margin = new Thickness(4, 4, 4, 4),
         Content = new StackPanel
         {
             Orientation = Orientation.Vertical,
@@ -89,5 +89,6 @@ static Border CreateCard(Texture texture)
             }
         }
     };
+
     return card;
 }
