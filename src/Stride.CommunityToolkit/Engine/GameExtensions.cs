@@ -26,6 +26,7 @@ public static class GameExtensions
     private const float DefaultGroundSizeX = 15.0f;
     private const float DefaultGroundSizeY = 15.0f;
     private const string DefaultGroundName = "Ground";
+    private static Vector3 Default2DGroundSize = new(50, 0.1f, 0.1f);
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -194,8 +195,8 @@ public static class GameExtensions
             {
                 Projection = projectionMode,
                 Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId(),
-                //OrthographicSize = 6,
-                //FarClipPlane = 80
+                OrthographicSize = 10,
+                FarClipPlane = 550
             }
         };
 
@@ -325,7 +326,33 @@ public static class GameExtensions
 
     public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
     {
-        var validSize = size is null ? new Vector3(DefaultGroundSizeX, DefaultGroundSizeY, 0) : new Vector3(size.Value.X, size.Value.Y, 0);
+        var validSize = size is null ? Default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
+
+        var proceduralModel = GetProceduralModel(PrimitiveModelType.Cube, validSize);
+        var model = proceduralModel.Generate(game.Services);
+
+        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
+        model.Materials.Add(material);
+
+        var entity = new Entity(entityName) { new ModelComponent(model) };
+
+        var colliderShape = GetColliderShape(PrimitiveModelType.Cube, validSize);
+
+        if (colliderShape is null) return entity;
+
+        var collider = new StaticColliderComponent();
+        collider.ColliderShapes.Add(colliderShape);
+
+        entity.Add(collider);
+
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+
+        return entity;
+    }
+
+    public static Entity Add2DGroundPlane(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+    {
+        var validSize = size is null ? Default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
@@ -336,13 +363,19 @@ public static class GameExtensions
         return entity;
     }
 
-    public static void AddGroundGizmo(this Game game, bool showAxisName = false, bool rotateAxisNames = true)
+    public static void AddGroundGizmo(this Game game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
-        var entity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);
+        var groundEntity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);
 
-        if (entity == null) return;
+        if (groundEntity is null) return;
 
-        entity.AddGizmo(game.GraphicsDevice, showAxisName: showAxisName, rotateAxisNames: rotateAxisNames);
+        var gizmoEntity = new Entity("Gizmo");
+
+        gizmoEntity.AddGizmo(game.GraphicsDevice, showAxisName: showAxisName, rotateAxisNames: rotateAxisNames);
+
+        gizmoEntity.Transform.Position = position ?? Vector3.Zero;
+
+        groundEntity.AddChild(gizmoEntity);
     }
 
     /// <summary>

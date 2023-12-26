@@ -14,7 +14,7 @@ public static class CameraDefaults
     /// </summary>
     public static readonly Vector3 Initial3DRotation = new(45, -30, 0);
 
-    public static readonly Vector3 Initial2DPosition = new(0, 0, 500);
+    public static readonly Vector3 Initial2DPosition = new(0, 0, 50);
 
     public static readonly Vector3 Initial2DRotation = new();
 
