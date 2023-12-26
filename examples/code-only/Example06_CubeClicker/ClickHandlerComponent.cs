@@ -1,4 +1,5 @@
 using Example06_SaveTheCube;
+using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Input;
@@ -16,13 +17,13 @@ public class ClickHandlerComponent : SyncScript
     public required DataSaver<UiData> DataSaver { get; init; }
     public TextBlockCreator TextBlockCreator { get; } = new();
     readonly List<(TextBlock text, IClickable clickable)> _clickableBlocks = [];
-
-
-    public void Start()
+    Entity _entity;
+    public override void Start()
     {
         var _font = Game.Content.Load<SpriteFont>("StrideDefaultFont");
-        var entity = TextBlockCreator.CreateUIEntity(_font);
-        entity.Scene = SceneSystem.SceneInstance.RootScene;
+        if(_entity != null ) { _entity.Remove(); }
+        _entity = TextBlockCreator.CreateUIEntity(_font);
+        _entity.Scene = SceneSystem.SceneInstance.RootScene;
         foreach (var clickable in DataSaver.Data.Clickables)
         {
             var textBlock = TextBlockCreator.CreateTextBlock(_font);
@@ -50,7 +51,7 @@ public class ClickHandlerComponent : SyncScript
         if(Input.Keyboard.IsKeyDown(Keys.L))
         {
             DataSaver.TryLoad(out var data);
-            DataSaver.Data = data.Data;
+            DataSaver.Data = data;
             Start();
         }
     }

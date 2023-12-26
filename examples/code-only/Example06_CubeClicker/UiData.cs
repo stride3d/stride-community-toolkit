@@ -7,14 +7,15 @@ namespace Example06_SaveTheCube;
 [DataContract]
 public class UiData : StartupScript
 {
+    public string DataName { get; set; } = "UiData";
     public List<IClickable> Clickables { get; set; } = new();
 }
 public interface IClickable
 {
-    string Prefix { get; }
-    int Count { get; }
-    void HandleClick(TextBlock textBlock);
+    string Prefix { get; init; }
+    int Count { get; set; }
     bool CanHandle(MouseButton button);
+    void HandleClick(TextBlock block);
 }
 [DataContract]
 public class Left : IClickable
@@ -22,8 +23,9 @@ public class Left : IClickable
     public string Prefix { get; init; } = "Left Mouse Button";
     public int Count { get; set; }
 
+    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {++Count}";
     public bool CanHandle(MouseButton button) => button == MouseButton.Left;
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {++Count }";
+    
 }
 [DataContract]
 public class Right : IClickable
@@ -32,5 +34,5 @@ public class Right : IClickable
     public int Count { get; set; }
 
     public bool CanHandle(MouseButton button) => button == MouseButton.Right;
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {++Count }";
+    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {++Count}";
 }

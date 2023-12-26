@@ -15,12 +15,9 @@ namespace Example06_CubeClicker;
 public class TextBlockCreator
 {
     Canvas Canvas { get; set; }
-    Entity _uiPage;
     public Entity CreateUIEntity(SpriteFont font)
     {
-        if (_uiPage != null)
-            _uiPage.Scene = null;
-        return _uiPage = new Entity
+        return new Entity
         {
             new UIComponent
             {

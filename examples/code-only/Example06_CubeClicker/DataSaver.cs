@@ -16,18 +16,17 @@ public class DataSaver<T>
     string _savePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "StrideExampleCubeSaver.yaml";
     public void Save()
     {
-        using FileStream fileStream = new FileStream(_savePath, FileMode.OpenOrCreate, FileAccess.Write);
-        fileStream.Write(YamlSerializer.Serialize(this).Span);
+        File.WriteAllText(_savePath,YamlSerializer.SerializeToString(Data));
     }
-    public bool TryLoad(out DataSaver<T> cubeSaver)
+    public bool TryLoad(out T cubeSaver)
     {
         if(File.Exists(_savePath))
         {
             var yamlContent = File.ReadAllText(_savePath);
-            cubeSaver = YamlSerializer.Deserialize<DataSaver<T>>(yamlContent);
+            cubeSaver = YamlSerializer.Deserialize<T>(yamlContent);
             return true;
         }
-        cubeSaver = this;
+        cubeSaver = Data;
         return false;
     }
 }

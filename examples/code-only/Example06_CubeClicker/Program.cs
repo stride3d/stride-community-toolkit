@@ -4,8 +4,11 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Example06_SaveTheCube;
 using Example06_CubeClicker;
+using NexVYaml;
 
 using var game = new Game();
+// Register all DataContracted Types
+NexYamlSerializerRegistry.Init();
 
 var data = new UiData();
 DataSaver<UiData> cubeSaver = new()
@@ -14,7 +17,7 @@ DataSaver<UiData> cubeSaver = new()
 };
 if(cubeSaver.TryLoad(out var loadedState))
 {
-    cubeSaver = loadedState;
+    cubeSaver.Data = loadedState;
 }
 else
 {
