@@ -14,6 +14,7 @@ Stride Community Toolkit Examples
 [5] Basic Example - Stride UI - Capsule with rigid body and Window
 [6] Basic Example - Procedural Geometry
 [7] Advance Example - Myra UI - Draggable Window, GetService()
+[8] Advance Example - Image Processing
 [Q] Quit
 
 Enter choice and press ENTER to continue

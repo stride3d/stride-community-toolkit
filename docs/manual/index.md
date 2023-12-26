@@ -16,6 +16,7 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
     - [Procedural Geometry](code-only/examples/procedural-geometry.md)
   - C# Advanced Examples
     - [Myra UI - Draggable Window, GetService()](code-only/examples/myra-ui-draggable-window-and-services.md)
+    - [Image Processing](code-only/examples/image-processing.md)
   - [F# Basic Examples](code-only/examples/basic-examples-fs.md)
     - [Capsule with Rigid Body (F#)](code-only/examples/capsule-with-rigid-body-fs.md)
   - [VB Basic Examples](code-only/examples/basic-examples-vb.md)
@@ -27,7 +28,9 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
 - [Game Extensions](game-extensions/index.md): Extensions ranging from performance monitoring to material creation and entity manipulation.
 - [Model Extensions](model-extensions/index.md)
 - [Script Extensions](script-extensions/index.md): Additional features and tools for game development.
-- [Rendering](rendering/mesh-builder.md): A guide on rendering techniques, including using the MeshBuilder.
+- Rendering: A guide on rendering techniques.
+  - [MeshBuilder](rendering/mesh-builder.md): A utility class allowing dynamic creation of meshes at runtime.
+  - [TextureCanvas](rendering/texture-canvas.md): a utility class allowing dynamic creation of textures at runtime.
 - [Troubleshooting](troubleshooting.md): Solutions and tips for common issues encountered while using the toolkit.
 
 Explore these sections to discover the full potential of the Stride Community Toolkit and enhance your game development skills.

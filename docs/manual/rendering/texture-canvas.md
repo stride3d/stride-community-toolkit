@@ -46,6 +46,7 @@ Similar methods also exist for file streams or data buffers accordingly.
 
 ## Storing
 To get the resulting image you have the option to save the image to a file, stream or array depending on your requirements.
+
 ```csharp
 var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
 var filePath = Path.Combine(directory, "input.png");
@@ -73,12 +74,14 @@ canvas.Resample(size: new Size2(512, 512), pixelFormat: PixelFormat.R8G8B8A8_UNo
 
 ### BrightFilter
 The **BrightFilter** method a @Stride.Rendering.Images.BrightFilter filter to the image
+
 ```csharp
 canvas.BrightFilter(threshold: 0.2f, steepness: 1.0f)
 ```
 
 ### GaussianBlur
 The **GaussianBlur** method applies a @Stride.Rendering.Images.GaussianBlur effect to the image
+
 ```csharp
 canvas.GaussianBlur(radius: 4, sigmaRatio: 2.0f)
 ```
@@ -91,12 +94,14 @@ canvas.CoCMapBlur(radius: 4)
 
 ### Transform
 The **Transform** method applies a @Stride.Rendering.Images.ColorTransformGroup effect to the image
+
 ```csharp
 canvas.Transform(transforms: new[] { new LuminanceToChannelTransform{ ColorChannel = ColorChannel.R } })
 ```
 
 ### Combine
 The **Combine** method applies a @Stride.Rendering.Images.ColorCombiner effect to the image
+
 ```csharp
 canvas.Combine(
    textures: new [] { sourceTexture1, sourceTexture2, null /* = Canvas Content */ },
@@ -106,6 +111,7 @@ canvas.Combine(
 
 ### Colorize
 The **Colorize** method multiplies the current canvas content by a color to create a modulated image.
+
 ```csharp
 canvas.Colorize(colorMultiplier: new Color4(1f, 0, 0));
 ```
@@ -113,12 +119,14 @@ canvas.Colorize(colorMultiplier: new Color4(1f, 0, 0));
 ### Recolorize
 The **Recolorize** method works the same way as colorize but only uses the red-channel as an input.
 The color multiplier is optional, omitting it would change the image to a gray-scale image.
+
 ```csharp
 canvas.Recolorize(colorMultiplier: new Color4(1f, 0, 0));
 ```
 
 ### Apply
 The **Apply** method applies a custom @Stride.Rendering.Images.ImageEffect to the image
+
 ```csharp
 using var effect = new GaussianBlur();
 canvas.Apply(effect);
@@ -168,6 +176,7 @@ How the anchors behave is dependant on the selected stretch mode.
 
 ### Draw
 There are many overloads to the draw method but all of them follow this basic structure.
+
 ```csharp
 canvas.DrawTexture(
     texture,
