@@ -13,6 +13,7 @@ using NexVYaml;
 /// D : Delete the stored data
 /// The Game Automatically loads the data from the previous run on launch
 /// If a corrupted Yaml exists, go to the %APPDATA% path and manually delete the file
+/// it doesn't matter if you click on the cube or not, it's just a regular cube..
 
 using var game = new Game();
 // Register all DataContracted Types

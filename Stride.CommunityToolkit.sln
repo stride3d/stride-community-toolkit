@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example_CubicleCalamity", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example06_ImageProcessing", "examples\code-only\Example06_ImageProcessing\Example06_ImageProcessing.csproj", "{81A9A56B-DF91-4EA0-AFB5-D3D716854051}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example06_CubeClicker", "examples\code-only\Example06_CubeClicker\Example06_CubeClicker.csproj", "{371FBFD4-9073-4755-A825-005389C451BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example07_CubeClicker", "examples\code-only\Example06_CubeClicker\Example07_CubeClicker.csproj", "{371FBFD4-9073-4755-A825-005389C451BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
