@@ -14,22 +14,26 @@ using Stride.Core.Mathematics;
 namespace Example06_CubeClicker;
 public class TextBlockCreator
 {
-    Canvas Canvas { get; set; }
+    public Grid Grid { get; set; }
     public Entity CreateUIEntity(SpriteFont font)
     {
         return new Entity
         {
             new UIComponent
             {
-                Page = new UIPage { RootElement = Canvas = CreateCanvas(font) },
+                Page = new UIPage { RootElement = Grid = CreateGrid() },
                 RenderGroup = RenderGroup.Group31
             }
         };
     }
 
-    Canvas CreateCanvas(SpriteFont font)
+    Grid CreateGrid()
     {
-        var canvas = new Canvas { Width = 300, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
+        
+        var canvas = new Grid {
+            Width = 700, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
+        canvas.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
+        canvas.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
         return canvas;
     }
 
@@ -47,7 +51,7 @@ public class TextBlockCreator
             Margin = new Thickness(3, 3, 3, 0),
             Font = _font
         };
-        Canvas.Children.Add(textBlock);
+        Grid.Children.Add(textBlock);
         return textBlock;
     }
 }

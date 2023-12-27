@@ -6,24 +6,24 @@ using Example06_SaveTheCube;
 using Example06_CubeClicker;
 using NexVYaml;
 
+
+/// Keybindings
+/// S : Save Data to file in %APPDATA% , and one folder higher, not in roaming
+/// L : Loading the Data from the Path
+/// D : Delete the stored data
+/// The Game Automatically loads the data from the previous run on launch
+
 using var game = new Game();
 // Register all DataContracted Types
 NexYamlSerializerRegistry.Init();
 
-var data = new UiData();
 DataSaver<UiData> cubeSaver = new()
 {
-    Data = data
+    // The default if loading fails so we don't have to deal with null
+    Data = UiData.Default
 };
-if(cubeSaver.TryLoad(out var loadedState))
-{
-    cubeSaver.Data = loadedState;
-}
-else
-{
-    data.Clickables.Add(new Left());
-    data.Clickables.Add(new Right());
-}
+// load the data from the previous run if possible.
+cubeSaver.Data = cubeSaver.TryLoad().Result;
 
 var clickHandler = new ClickHandlerComponent()
 {
@@ -35,10 +35,10 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
-    AddCapsule(rootScene);
+    AddCube(rootScene);
 }
 
-void AddCapsule(Scene rootScene)
+void AddCube(Scene rootScene)
 {
     var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
     entity.Add(clickHandler);
