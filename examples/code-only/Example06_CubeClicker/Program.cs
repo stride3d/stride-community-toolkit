@@ -12,6 +12,7 @@ using NexVYaml;
 /// L : Loading the Data from the Path
 /// D : Delete the stored data
 /// The Game Automatically loads the data from the previous run on launch
+/// If a corrupted Yaml exists, go to the %APPDATA% path and manually delete the file
 
 using var game = new Game();
 // Register all DataContracted Types
