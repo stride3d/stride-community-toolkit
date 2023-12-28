@@ -1,28 +1,23 @@
-using Example06_SaveTheCube;
-using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Input;
 using Stride.UI;
 using Stride.UI.Controls;
-using Stride.UI.Panels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Example06_CubeClicker;
+namespace Example07_CubeClicker;
+
 public class ClickHandlerComponent : AsyncScript
 {
     public required DataSaver<UiData> DataSaver { get; init; }
     public TextBlockCreator TextBlockCreator { get; } = new();
+
     readonly List<(TextBlock text, IClickable clickable)> _clickableBlocks = [];
-    void InitHandler()
+
+    private void InitHandler()
     {
         // get a font to render
         var _font = Game.Content.Load<SpriteFont>("StrideDefaultFont");
+
         if (TextBlockCreator.Grid != null)
         {
             // this is for reloading, flush the old textboxes
@@ -37,7 +32,8 @@ public class ClickHandlerComponent : AsyncScript
         }
         AddClickables(_font);
     }
-    void AddClickables(SpriteFont font)
+
+    private void AddClickables(SpriteFont font)
     {
         for (int i = 0; i < DataSaver.Data.Clickables.Count; i++)
         {
@@ -52,6 +48,7 @@ public class ClickHandlerComponent : AsyncScript
             textBlock.SetGridRow(i);
         }
     }
+
     public override async Task Execute()
     {
         InitHandler();
@@ -59,34 +56,29 @@ public class ClickHandlerComponent : AsyncScript
         {
             var mouseDown = Input.Mouse.ReleasedButtons;
             foreach (var mouseButton in mouseDown)
-            {
                 foreach (var (text, clickable) in _clickableBlocks)
-                {
                     // when the mousebutton suits the clickable
                     if (clickable.CanHandle(mouseButton))
-                    {
                         // react to the mouse click
                         clickable.HandleClick(text);
-                    }
-                }
-            }
+
             // Save the Data
             if (Input.Keyboard.IsKeyReleased(Keys.S))
-            {
-                DataSaver.Save();
-            }
+                await DataSaver.SaveAsync();
+
             // Load the Data
             if (Input.Keyboard.IsKeyReleased(Keys.L))
             {
-                DataSaver.Data = await DataSaver.TryLoad();
+                DataSaver.Data = await DataSaver.TryLoadAsync();
+
                 // Here we trigger a flush of the textboxes
                 InitHandler();
             }
+
             // Delete the Datafile
             if (Input.Keyboard.IsKeyReleased(Keys.D))
-            {
                 DataSaver.Delete();
-            }
+
             // We have to await the next frame. If we don't do this, our game will be stuck in an infinite loop
             await Script.NextFrame();
         }

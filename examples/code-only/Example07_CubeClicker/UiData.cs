@@ -1,19 +1,19 @@
-using BulletSharp;
 using Stride.Core;
 using Stride.Engine;
 using Stride.Input;
 using Stride.UI.Controls;
 
-namespace Example06_SaveTheCube;
+namespace Example07_CubeClicker;
+
 [DataContract]
 public class UiData : StartupScript
 {
     /// <summary>
     /// "NullPattern", ensuring that there is never null and a valid fallback option
     /// </summary>
-    public static UiData Default => new ()
+    public static UiData Default => new()
     {
-        Clickables = [ new LeftMouseButtonCounter() , new RightMouseButtonCounter()]
+        Clickables = [new LeftMouseButtonCounter(), new RightMouseButtonCounter()]
     };
     /// <summary>
     /// Just to have more data in the file
@@ -53,7 +53,7 @@ public class LeftMouseButtonCounter : IClickable
     /// </summary>
     public int Count { get; set; }
 
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : { Count = Count +1 }";
+    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {Count = Count + 1}";
     public bool CanHandle(MouseButton button) => button == MouseButton.Left;
     public override string ToString() => $"{Prefix} : {Count}";
 }
@@ -64,6 +64,6 @@ public class RightMouseButtonCounter : IClickable
     public int Count { get; set; }
 
     public bool CanHandle(MouseButton button) => button == MouseButton.Right;
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {Count = Count + 1 }";
+    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {Count = Count + 1}";
     public override string ToString() => $"{Prefix} : {Count}";
 }

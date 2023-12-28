@@ -1,20 +1,17 @@
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
+using Stride.UI;
 using Stride.UI.Controls;
 using Stride.UI.Panels;
-using Stride.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Stride.Core.Mathematics;
 
-namespace Example06_CubeClicker;
+namespace Example07_CubeClicker;
+
 public class TextBlockCreator
 {
-    public Grid Grid { get; set; }
+    public Grid? Grid { get; set; }
+
     public Entity CreateUIEntity(SpriteFont font)
     {
         return new Entity
@@ -27,22 +24,25 @@ public class TextBlockCreator
         };
     }
 
-    Grid CreateGrid()
+    private static Grid CreateGrid()
     {
-        
-        var canvas = new Grid {
-            Width = 700, Height = 100, BackgroundColor = new Color(248, 177, 149, 100) };
-        canvas.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
-        canvas.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
-        return canvas;
+        var grid = new Grid
+        {
+            Height = 100,
+            VerticalAlignment = VerticalAlignment.Top,
+            BackgroundColor = new Color(248, 177, 149, 100)
+        };
+        grid.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
+        grid.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
+
+        return grid;
     }
 
     public TextBlock CreateTextBlock(SpriteFont? _font)
     {
         if (_font is null)
-        {
             Console.WriteLine("Font is null");
-        }
+
         var textBlock = new TextBlock
         {
             Text = "",
@@ -51,7 +51,9 @@ public class TextBlockCreator
             Margin = new Thickness(3, 3, 3, 0),
             Font = _font
         };
-        Grid.Children.Add(textBlock);
+
+        Grid?.Children.Add(textBlock);
+
         return textBlock;
     }
 }
