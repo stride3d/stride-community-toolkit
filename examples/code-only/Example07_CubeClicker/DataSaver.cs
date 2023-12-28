@@ -1,6 +1,6 @@
 using NexVYaml.Serialization;
 using Stride.Core;
-using Stride.Core.Mathematics;
+using Stride.Core.IO;
 
 namespace Example06_SaveTheCube;
 [DataContract]
@@ -11,36 +11,32 @@ public class DataSaver<T>
     /// Only Objects with direct [DataContract] Attribute work.
     /// </summary>
     public required T Data { get; set; }
-    /// <summary>
-    /// The path to store the data to, can be a parameter
-    /// </summary>
-    string _savePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "StrideExampleCubeSaver.yaml";
+    private const string SaveDataFileName = "StrideExampleCubeSaver.yaml";
     public void Save()
     {
+        
         // Create a new file per default
-        FileMode mode = FileMode.CreateNew;
+        VirtualFileMode mode = VirtualFileMode.CreateNew;
         // if it exists allready, empty the file to write the new content to it
-        if (File.Exists(_savePath))
-            mode = FileMode.Truncate;
-        // open a filestream to the target path
-        using FileStream fileStream = new FileStream(_savePath, mode, FileAccess.Write);
+        if (VirtualFileSystem.ApplicationData.FileExists(SaveDataFileName))
+            mode = VirtualFileMode.Truncate;
+        // open a virtual filestream to the target path
+        using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(SaveDataFileName, mode,VirtualFileAccess.Write);
+        
         // serialize the object to the stream
         YamlSerializer.Serialize(Data,fileStream);
     }
     public void Delete()
     {
-        File.Delete(_savePath);
+        VirtualFileSystem.ApplicationData.FileDelete(SaveDataFileName);
     }
     public async Task<T> TryLoad()
     {
         // if the file exists, get it
-        if(File.Exists(_savePath))
+        if(VirtualFileSystem.ApplicationData.FileExists(SaveDataFileName))
         {
             // open a stream to the save path
-            using FileStream fileStream = new FileStream(_savePath, FileMode.Open, FileAccess.Read);
-            // read the content, this is simplified,
-            // ReadonlyMemory<byte> etc. would also work with other streams for better performance
-            var yamlContent = File.ReadAllText(_savePath);
+            using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(SaveDataFileName, VirtualFileMode.Open, VirtualFileAccess.Read);
             // await the deserialization of the object in the yaml file
             return await YamlSerializer.DeserializeAsync<T>(fileStream);
         }
