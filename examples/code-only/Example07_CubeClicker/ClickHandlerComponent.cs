@@ -1,8 +1,10 @@
+using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Input;
 using Stride.UI;
 using Stride.UI.Controls;
+using Stride.UI.Events;
 
 namespace Example07_CubeClicker;
 
@@ -11,10 +13,23 @@ public class ClickHandlerComponent : AsyncScript
     public required DataSaver<UiData> DataSaver { get; init; }
     public TextBlockCreator TextBlockCreator { get; } = new();
 
-    readonly List<(TextBlock text, IClickable clickable)> _clickableBlocks = [];
+    private readonly List<(TextBlock text, IClickable clickable)> _clickableBlocks = [];
+    private Button? _loadButton;
 
     private void InitHandler()
     {
+        var uiEntity = Entity.FindEntity(GameUI.EntityName);
+
+        if (uiEntity != null)
+        {
+            var page = uiEntity.Get<UIComponent>().Page;
+            _loadButton = page.RootElement.FindVisualChildOfType<Button>(GameUI.LoadButtonName);
+
+            //_loadClickHandler = (sender, args) => ClickButtonTest();
+
+            _loadButton.Click += LoadClickButton;
+        }
+
         // get a font to render
         var _font = Game.Content.Load<SpriteFont>("StrideDefaultFont");
 
@@ -30,7 +45,13 @@ public class ClickHandlerComponent : AsyncScript
             var entity = TextBlockCreator.CreateUIEntity(_font);
             entity.Scene = SceneSystem.SceneInstance.RootScene;
         }
+
         AddClickables(_font);
+    }
+
+    private void LoadClickButton(object? sender, RoutedEventArgs e)
+    {
+        Console.WriteLine("Button clicked");
     }
 
     private void AddClickables(SpriteFont font)
@@ -81,6 +102,16 @@ public class ClickHandlerComponent : AsyncScript
 
             // We have to await the next frame. If we don't do this, our game will be stuck in an infinite loop
             await Script.NextFrame();
+        }
+    }
+
+    public override void Cancel()
+    {
+        base.Cancel();
+
+        if (_loadButton != null)
+        {
+            _loadButton.Click -= LoadClickButton;
         }
     }
 }

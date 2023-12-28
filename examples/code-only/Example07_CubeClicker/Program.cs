@@ -4,6 +4,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 
 // Keybindings
 // S : Save Data to file in %APPDATA% , and one folder higher, not in roaming
@@ -18,19 +19,14 @@ using var game = new Game();
 // Register all DataContracted Types
 NexYamlSerializerRegistry.Init();
 
-DataSaver<UiData> cubeSaver = new()
+DataSaver<UiData> dataSaver = new()
 {
     // The default if loading fails so we don't have to deal with null
     Data = UiData.Default
 };
 
 // Load the data from the previous run if possible.
-cubeSaver.Data = await cubeSaver.TryLoadAsync();
-
-var clickHandler = new ClickHandlerComponent()
-{
-    DataSaver = cubeSaver
-};
+dataSaver.Data = await dataSaver.TryLoadAsync();
 
 game.Run(start: Start);
 
@@ -38,11 +34,26 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
+    AddGameUI(rootScene);
+
     AddCube(rootScene);
+}
+
+void AddGameUI(Scene rootScene)
+{
+    var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
+    var entity = new GameUI(font, dataSaver).Create();
+
+    entity.Scene = rootScene;
 }
 
 void AddCube(Scene rootScene)
 {
+    var clickHandler = new ClickHandlerComponent()
+    {
+        DataSaver = dataSaver
+    };
+
     var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
     entity.Add(clickHandler);
     entity.Transform.Position = new Vector3(0, 8, 0);
