@@ -54,7 +54,6 @@ public class LeftMouseButtonCounter : IClickable
     /// The click count
     /// </summary>
     public int Count { get; set; }
-
     public MouseButton Type { get; } = MouseButton.Left;
 
     public void HandleClick() => Count++;

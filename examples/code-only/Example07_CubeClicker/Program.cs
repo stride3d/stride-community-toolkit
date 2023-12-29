@@ -1,4 +1,5 @@
 using Example07_CubeClicker;
+using Example07_CubeClicker.Scripts;
 using NexVYaml;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
@@ -6,8 +7,9 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 
-// The Game automatically loads the data from the previous run on launch
-// If a corrupted Yaml exists, go to \bin\Debug\net8.0\data\ path and manually delete the file
+// This example demonstrates how to load and save game data, specifically tracking left and right mouse clicks on dynamically generated cubes.
+// Upon launch, the game automatically loads data from the previous session.
+// In case of a corrupted Yaml file, navigate to the \bin\Debug\net8.0\data\ directory and delete the file manually.
 
 using var game = new Game();
 
@@ -37,18 +39,18 @@ void Start(Scene rootScene)
 void CreateAndRegisterGameUI(Scene rootScene)
 {
     var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
+
     var gameUI = new GameUI(font, dataSaver);
+    game.Services.AddService(gameUI);
 
     var uiEntity = gameUI.Create();
     uiEntity.Add(new ClickHandlerComponent());
     uiEntity.Scene = rootScene;
-
-    game.Services.AddService(gameUI);
 }
 
 void AddFirstCube(Scene rootScene)
 {
-    var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
+    var entity = game.CreatePrimitive(PrimitiveModelType.Cube, "Cube");
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
 }

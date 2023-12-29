@@ -44,7 +44,6 @@ public class GameUI
         };
 
         AddTextBlocks();
-
         AddLoadButton();
         AddSaveButton();
         AddDeleteButton();
@@ -119,9 +118,10 @@ public class GameUI
         button.SetGridColumn(1);
         button.SetGridRow(1);
         button.Click += DeleteData;
-        button.Width = 160;
+        button.Width = 104;
+
         // We can use margin or use StackPanel to place the buttons next to each other
-        button.Margin = new Thickness(303, 3, 0, 3);
+        button.Margin = new Thickness(223, 3, 0, 3);
 
         _grid?.Children.Add(button);
     }
@@ -209,23 +209,30 @@ public class GameUI
         return textBlock;
     }
 
-    private TextBlock CreateTextBlock(string? text = null, float textSize = 20) => new()
-    {
-        Text = text,
-        TextColor = Color.White,
-        Margin = new Thickness(3, 0, 3, 0),
-        TextSize = textSize,
-        Font = _font,
-        TextAlignment = TextAlignment.Left,
-        VerticalAlignment = VerticalAlignment.Center
-    };
+    private TextBlock CreateTextBlock(string? text = null, float textSize = 20, TextAlignment textAlignment = TextAlignment.Left)
+        => new()
+        {
+            Text = text,
+            TextColor = Color.White,
+            Margin = new Thickness(3, 0, 3, 0),
+            TextSize = textSize,
+            Font = _font,
+            TextAlignment = textAlignment,
+            VerticalAlignment = VerticalAlignment.Center
+        };
 
-    private Button CreateButton(string title, string? name = null) => new()
+    private Button CreateButton(string title, string? name = null)
     {
-        Content = CreateTextBlock(title),
-        BackgroundColor = new Color(0, 0, 0, 200),
-        Width = 130,
-        Margin = new Thickness(0, 3, 0, 3),
-        Name = name
-    };
+        var text = CreateTextBlock(title, 14, TextAlignment.Center);
+
+        return new()
+        {
+            Content = text,
+            Padding = new Thickness(5, 5, 5, 5),
+            BackgroundColor = new Color(0, 0, 0, 200),
+            Width = 104,
+            Margin = new Thickness(0, 3, 0, 3),
+            Name = name
+        };
+    }
 }

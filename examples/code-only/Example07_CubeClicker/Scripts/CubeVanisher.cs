@@ -33,26 +33,3 @@ public class CubeVanisher : AsyncScript
         Console.WriteLine("Entity removed");
     }
 }
-
-public class CubeSpawner : AsyncScript
-{
-    private const float TotalTime = 1.0f;
-
-    public override async Task Execute()
-    {
-        Entity.Transform.Scale = Vector3.Zero;
-
-        var elapsedTime = 0f;
-
-        while (elapsedTime < TotalTime)
-        {
-            elapsedTime += (float)Game.UpdateTime.Elapsed.TotalSeconds;
-
-            Entity.Transform.Scale = new Vector3(1 + elapsedTime / TotalTime);
-
-            await Script.NextFrame();
-        }
-
-        Console.WriteLine("Entity removed");
-    }
-}

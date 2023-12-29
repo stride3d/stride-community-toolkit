@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
+using Stride.Rendering;
 
 namespace Example07_CubeClicker.Scripts;
 
@@ -11,11 +12,14 @@ public class ClickHandlerComponent : AsyncScript
     private const string HitEntityName = "Cube";
     private GameUI? _gameUI;
     private CameraComponent? _camera;
+    private readonly Random _random = new();
+    private Material? _material;
 
     public override async Task Execute()
     {
         _gameUI = Game.Services.GetService<GameUI>();
         _camera = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+        _material = Game.CreateMaterial(Color.Yellow, 0.0f, 0.1f);
 
         if (_camera is null) return;
 
@@ -53,13 +57,31 @@ public class ClickHandlerComponent : AsyncScript
 
     private void AddNewEntity(Entity clickedEntity)
     {
+        ChangeColor(clickedEntity);
+
         Console.WriteLine("Adding new entity");
 
         var entity = Game.CreatePrimitive(PrimitiveModelType.Cube, HitEntityName);
-        entity.Transform.Position = new Vector3(0, 8, 0);
-        //entity.Transform.Scale = Vector3.Zero;
+        entity.Transform.Position = new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4));
+        entity.Add(new CubeGrower());
+
         entity.Scene = clickedEntity.Scene;
-        //entity.Add(new CubeSpawner());
+    }
+
+    private void ChangeColor(Entity clickedEntity)
+    {
+        var model = clickedEntity.GetComponent<ModelComponent>();
+
+        if (model is null) return;
+
+        if (model.Materials.Count > 0)
+        {
+            model.Model.Materials[0] = _material;
+        }
+        else
+        {
+            model.Model.Materials.Add(_material);
+        }
     }
 
     private void RemoveEntity(Entity entity)
