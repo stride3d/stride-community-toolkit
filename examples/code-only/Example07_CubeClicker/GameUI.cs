@@ -89,7 +89,7 @@ public class GameUI
 
             if (textBlock is null) continue;
 
-            textBlock.Text = item.GetText();
+            textBlock.Text = item.ToString();
         }
     }
 

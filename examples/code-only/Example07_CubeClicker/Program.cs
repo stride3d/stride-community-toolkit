@@ -6,13 +6,8 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 
-// Keybindings
-// S : Save Data to file in %APPDATA% , and one folder higher, not in roaming
-// L : Loading the Data from the Path
-// D : Delete the stored data
-// The Game Automatically loads the data from the previous run on launch
-// If a corrupted Yaml exists, go to the %APPDATA% path and manually delete the file
-// it doesn't matter if you click on the cube or not, it's just a regular cube..
+// The Game automatically loads the data from the previous run on launch
+// If a corrupted Yaml exists, go to \bin\Debug\net8.0\data\ path and manually delete the file
 
 using var game = new Game();
 
@@ -36,7 +31,7 @@ void Start(Scene rootScene)
 
     CreateAndRegisterGameUI(rootScene);
 
-    AddCube(rootScene);
+    AddFirstCube(rootScene);
 }
 
 void CreateAndRegisterGameUI(Scene rootScene)
@@ -51,7 +46,7 @@ void CreateAndRegisterGameUI(Scene rootScene)
     game.Services.AddService(gameUI);
 }
 
-void AddCube(Scene rootScene)
+void AddFirstCube(Scene rootScene)
 {
     var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
     entity.Transform.Position = new Vector3(0, 8, 0);

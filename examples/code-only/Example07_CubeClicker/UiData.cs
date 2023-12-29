@@ -35,7 +35,6 @@ public interface IClickable
     MouseButton Type { get; }
     bool CanHandle(MouseButton button);
     void HandleClick();
-    string GetText();
 }
 
 /// <summary>
@@ -50,6 +49,7 @@ public class LeftMouseButtonCounter : IClickable
     /// We can adjust that string in the yaml, so the application loads the new Prefix instead of this one.
     /// </summary>
     public string Prefix { get; init; } = "Left Mouse Button";
+
     /// <summary>
     /// The click count
     /// </summary>
@@ -60,8 +60,6 @@ public class LeftMouseButtonCounter : IClickable
     public void HandleClick() => Count++;
 
     public bool CanHandle(MouseButton button) => button == Type;
-
-    public string GetText() => $"{Prefix}: {Count}";
 
     public override string ToString() => $"{Prefix}: {Count}";
 }
@@ -76,8 +74,6 @@ public class RightMouseButtonCounter : IClickable
     public void HandleClick() => Count++;
 
     public bool CanHandle(MouseButton button) => button == Type;
-
-    public string GetText() => $"{Prefix}: {Count}";
 
     public override string ToString() => $"{Prefix}: {Count}";
 }
