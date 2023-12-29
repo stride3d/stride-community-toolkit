@@ -19,14 +19,14 @@ using var game = new Game();
 // Register all DataContracted Types
 NexYamlSerializerRegistry.Init();
 
-DataSaver<UiData> dataSaver = new()
+var dataSaver = new DataSaver<UiData>()
 {
     // The default if loading fails so we don't have to deal with null
     Data = UiData.Default
 };
 
 // Load the data from the previous run if possible.
-dataSaver.Data = await dataSaver.TryLoadAsync();
+await dataSaver.TryLoadAsync();
 
 game.Run(start: Start);
 

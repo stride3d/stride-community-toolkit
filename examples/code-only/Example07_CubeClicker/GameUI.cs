@@ -16,18 +16,20 @@ public class GameUI
     private const string LoadButtonText = "Load Data";
     private const string SaveButtonText = "Save Data";
     private const string DeleteButtonText = "Delete Data";
-
+    private const string IntroText = "Left-clicking on a cube creates a new one, while right-clicking will remove it.";
     private readonly Color _gridBackgroundColor = new(248, 177, 149, 100);
     private readonly SpriteFont _font;
     private readonly DataSaver<UiData> _dataSaver;
     private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
     private readonly Grid _grid;
+    private readonly TextBlock _message;
 
     public GameUI(SpriteFont font, DataSaver<UiData> dataSaver)
     {
         _font = font;
         _grid = CreateGrid();
         _dataSaver = dataSaver;
+        _message = CreateMessageTextBlock();
     }
 
     public Entity Create()
@@ -41,7 +43,8 @@ public class GameUI
             }
         };
 
-        AddClickTextBlocks();
+        AddTextBlocks();
+
         AddLoadButton();
         AddSaveButton();
         AddDeleteButton();
@@ -60,7 +63,7 @@ public class GameUI
         UpdateClickTextBlocks();
     }
 
-    private void AddClickTextBlocks()
+    private void AddTextBlocks()
     {
         var row = 0;
 
@@ -117,7 +120,8 @@ public class GameUI
         button.SetGridRow(1);
         button.Click += DeleteData;
         button.Width = 160;
-        button.Margin = new Thickness(293, 3, 0, 3);
+        // We can use margin or use StackPanel to place the buttons next to each other
+        button.Margin = new Thickness(303, 3, 0, 3);
 
         _grid?.Children.Add(button);
     }
@@ -126,9 +130,15 @@ public class GameUI
     {
         try
         {
-            _dataSaver.Data = await _dataSaver.TryLoadAsync();
+            if (await _dataSaver.TryLoadAsync())
+            {
+                _message.Text = "Data loaded. Start clicking.";
+            }
+            else
+            {
+                _message.Text = "No data found. Save data.";
+            }
 
-            Console.WriteLine("Data loaded..");
         }
         catch (Exception ex)
         {
@@ -144,7 +154,7 @@ public class GameUI
         {
             await _dataSaver.SaveAsync();
 
-            Console.WriteLine("Data saved..");
+            _message.Text = "Data saved. Keep clicking.";
         }
         catch (Exception ex)
         {
@@ -158,7 +168,9 @@ public class GameUI
         {
             _dataSaver.Delete();
 
-            Console.WriteLine("Data deleted..");
+            _message.Text = "Data deleted.";
+
+            _dataSaver.Data = UiData.Default;
         }
         catch (Exception ex)
         {
@@ -174,6 +186,7 @@ public class GameUI
         BackgroundColor = _gridBackgroundColor,
         RowDefinitions = {
                 new StripDefinition() { Type = StripType.Auto },
+                new StripDefinition() { Type = StripType.Auto },
                 new StripDefinition() { Type = StripType.Auto }
             },
         ColumnDefinitions =
@@ -183,12 +196,25 @@ public class GameUI
             }
     };
 
-    private TextBlock CreateTextBlock(string? text = null) => new()
+    private TextBlock CreateMessageTextBlock()
+    {
+        var textBlock = CreateTextBlock(IntroText, 16);
+        textBlock.SetGridColumn(0);
+        textBlock.SetGridRow(2);
+        textBlock.SetGridColumnSpan(2);
+        textBlock.HorizontalAlignment = HorizontalAlignment.Center;
+
+        _grid?.Children.Add(textBlock);
+
+        return textBlock;
+    }
+
+    private TextBlock CreateTextBlock(string? text = null, float textSize = 20) => new()
     {
         Text = text,
         TextColor = Color.White,
         Margin = new Thickness(3, 0, 3, 0),
-        TextSize = 20,
+        TextSize = textSize,
         Font = _font,
         TextAlignment = TextAlignment.Left,
         VerticalAlignment = VerticalAlignment.Center

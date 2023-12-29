@@ -1,11 +1,10 @@
 using Stride.Core;
-using Stride.Engine;
 using Stride.Input;
 
 namespace Example07_CubeClicker;
 
 [DataContract]
-public class UiData : StartupScript
+public class UiData
 {
     /// <summary>
     /// "NullPattern", ensuring that there is never null and a valid fallback option

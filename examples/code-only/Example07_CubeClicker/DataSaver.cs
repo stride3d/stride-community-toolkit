@@ -1,10 +1,8 @@
 using NexVYaml.Serialization;
-using Stride.Core;
 using Stride.Core.IO;
 
 namespace Example07_CubeClicker;
 
-[DataContract]
 public class DataSaver<T>
 {
     /// <summary>
@@ -26,6 +24,7 @@ public class DataSaver<T>
         }
 
         // open a virtual filestream to the target path
+        // data are saved in this location: \bin\Debug\net8.0\data\
         await using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(SaveDataFileName, fileMode, VirtualFileAccess.Write);
 
         // serialize the object to the stream
@@ -37,7 +36,7 @@ public class DataSaver<T>
         VirtualFileSystem.ApplicationData.FileDelete(SaveDataFileName);
     }
 
-    public async Task<T> TryLoadAsync()
+    public async Task<bool> TryLoadAsync()
     {
         if (VirtualFileSystem.ApplicationData.FileExists(SaveDataFileName))
         {
@@ -45,10 +44,11 @@ public class DataSaver<T>
             await using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(SaveDataFileName, VirtualFileMode.Open, VirtualFileAccess.Read);
 
             // await the deserialization of the object in the yaml file
-            return await YamlSerializer.DeserializeAsync<T>(fileStream);
+            Data = await YamlSerializer.DeserializeAsync<T>(fileStream);
+
+            return true;
         }
 
-        // fallback option if the file doesn't exist, so we don't run into a null
-        return Data;
+        return false;
     }
 }
