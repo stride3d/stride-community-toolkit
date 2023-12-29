@@ -8,12 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        
         <PackageReference Include="NexVYaml" Version="1.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
-    
+
 </Project>
