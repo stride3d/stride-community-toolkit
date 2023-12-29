@@ -34,28 +34,26 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
-    AddGameUI(rootScene);
+    CreateAndRegisterGameUI(rootScene);
 
     AddCube(rootScene);
 }
 
-void AddGameUI(Scene rootScene)
+void CreateAndRegisterGameUI(Scene rootScene)
 {
     var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
-    var entity = new GameUI(font, dataSaver).Create();
+    var gameUI = new GameUI(font, dataSaver);
 
-    entity.Scene = rootScene;
+    var uiEntity = gameUI.Create();
+    uiEntity.Add(new ClickHandlerComponent());
+    uiEntity.Scene = rootScene;
+
+    game.Services.AddService(gameUI);
 }
 
 void AddCube(Scene rootScene)
 {
-    var clickHandler = new ClickHandlerComponent()
-    {
-        DataSaver = dataSaver
-    };
-
     var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
-    entity.Add(clickHandler);
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
 }

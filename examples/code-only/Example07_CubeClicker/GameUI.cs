@@ -1,6 +1,7 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
+using Stride.Input;
 using Stride.Rendering;
 using Stride.UI;
 using Stride.UI.Controls;
@@ -11,20 +12,20 @@ namespace Example07_CubeClicker;
 
 public class GameUI
 {
-    public const string EntityName = "GameUI";
-    public const string LoadButtonName = "LoadButton";
-
+    private const string EntityName = "GameUI";
+    private const string LoadButtonText = "Load Data";
+    private const string SaveButtonText = "Save Data";
+    private const string DeleteButtonText = "Delete Data";
+    private Color GridBackgroundColor = new(248, 177, 149, 100);
     private readonly SpriteFont _font;
     private readonly DataSaver<UiData> _dataSaver;
-
-    public Grid? Grid { get; set; }
-    private int _width = 300;
-    private int _height = 200;
-    private int _buttonSize = 25;
+    private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
+    private readonly Grid _grid;
 
     public GameUI(SpriteFont font, DataSaver<UiData> dataSaver)
     {
         _font = font;
+        _grid = CreateGrid();
         _dataSaver = dataSaver;
     }
 
@@ -34,69 +35,114 @@ public class GameUI
         {
             new UIComponent
             {
-                Page = new UIPage { RootElement = Grid = CreateGrid() },
+                Page = new UIPage { RootElement = _grid },
                 RenderGroup = RenderGroup.Group31
             }
         };
 
+        AddClickTextBlocks();
         AddLoadButton();
         AddSaveButton();
+        AddDeleteButton();
 
         return entity;
     }
 
-    private static Grid CreateGrid()
+    public void HandleClick(MouseButton type)
     {
-        var grid = new Grid
+        var clickable = _dataSaver.Data.Clickables.FirstOrDefault(x => x.Type == type);
+
+        if (clickable is null) return;
+
+        clickable.HandleClick();
+
+        UpdateClickTextBlocks();
+    }
+
+    private void AddClickTextBlocks()
+    {
+        var row = 0;
+
+        foreach (var item in _dataSaver.Data.Clickables)
         {
-            //Height = 100,
-            VerticalAlignment = VerticalAlignment.Center,
-            BackgroundColor = new Color(248, 177, 149, 100),
-            Margin = new Thickness(5, 5, 5, 5)
-        };
+            var textBlock = CreateTextBlock();
+            textBlock.SetGridColumn(0);
+            textBlock.SetGridRow(row++);
 
-        grid.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
-        grid.RowDefinitions.Add(new StripDefinition() { Type = StripType.Auto });
-        grid.ColumnDefinitions.Add(new StripDefinition(StripType.Star, 1));
-        grid.ColumnDefinitions.Add(new StripDefinition(StripType.Star, 1));
+            _grid?.Children.Add(textBlock);
 
-        return grid;
+            _clickableTextBlocks.Add((textBlock, item.Type));
+        }
+
+        UpdateClickTextBlocks();
+    }
+
+    private void UpdateClickTextBlocks()
+    {
+        foreach (var item in _dataSaver.Data.Clickables)
+        {
+            var textBlock = _clickableTextBlocks.FirstOrDefault(w => w.Type == item.Type).Text;
+
+            if (textBlock is null) continue;
+
+            textBlock.Text = item.GetText();
+        }
     }
 
     private void AddLoadButton()
     {
-        var button = CreateButton("Load Data", LoadButtonName);
+        var button = CreateButton(LoadButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(0);
-        button.Click += SaveClickButtonAsync;
+        button.Click += LoadClickButtonAsync;
 
-        Grid?.Children.Add(button);
+        _grid?.Children.Add(button);
     }
 
     private void AddSaveButton()
     {
-        var button = CreateButton("Save Data");
+        var button = CreateButton(SaveButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(1);
         button.Click += SaveClickButtonAsync;
 
-        Grid?.Children.Add(button);
+        _grid?.Children.Add(button);
     }
 
-    private Button CreateButton(string title, string? name = null) => new Button
+    private void AddDeleteButton()
     {
-        Content = GetButtonTitle(title),
-        BackgroundColor = new Color(0, 0, 0, 200),
-        Width = 100,
-        Margin = new Thickness(3, 0, 3, 0),
-        Name = name
-    };
+        var button = CreateButton(SaveButtonText);
+        button.SetGridColumn(1);
+        button.SetGridRow(1);
+        button.Click += SaveClickButtonAsync;
+        button.Margin = new Thickness();
+
+        _grid?.Children.Add(button);
+    }
+
+    private async void LoadClickButtonAsync(object? sender, RoutedEventArgs e)
+    {
+        try
+        {
+            _dataSaver.Data = await _dataSaver.TryLoadAsync();
+
+            Console.WriteLine("Data loaded..");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during load operation: {ex.Message}");
+        }
+
+        UpdateClickTextBlocks();
+    }
 
     private async void SaveClickButtonAsync(object? sender, RoutedEventArgs e)
     {
         try
         {
             await _dataSaver.SaveAsync();
+
+            Console.WriteLine("Data saved..");
         }
         catch (Exception ex)
         {
@@ -104,15 +150,38 @@ public class GameUI
         }
     }
 
-    private UIElement GetButtonTitle(string text) => new TextBlock
+    private Grid CreateGrid() => new()
+    {
+        VerticalAlignment = VerticalAlignment.Top,
+        BackgroundColor = GridBackgroundColor,
+        RowDefinitions = {
+                new StripDefinition() { Type = StripType.Auto },
+                new StripDefinition() { Type = StripType.Auto }
+            },
+        ColumnDefinitions =
+            {
+                new StripDefinition(StripType.Star, 1),
+                new StripDefinition(StripType.Star, 1)
+            }
+    };
+
+    private TextBlock CreateTextBlock(string? text = null) => new()
     {
         Text = text,
-        //Width = _buttonSize,
-        //Height = _buttonSize,
         TextColor = Color.White,
+        Margin = new Thickness(3, 0, 3, 0),
         TextSize = 20,
         Font = _font,
-        TextAlignment = TextAlignment.Center,
+        TextAlignment = TextAlignment.Left,
         VerticalAlignment = VerticalAlignment.Center
+    };
+
+    private Button CreateButton(string title, string? name = null) => new()
+    {
+        Content = CreateTextBlock(title),
+        BackgroundColor = new Color(0, 0, 0, 200),
+        Width = 130,
+        Margin = new Thickness(0, 3, 0, 3),
+        Name = name
     };
 }

@@ -1,7 +1,6 @@
 using Stride.Core;
 using Stride.Engine;
 using Stride.Input;
-using Stride.UI.Controls;
 
 namespace Example07_CubeClicker;
 
@@ -25,6 +24,7 @@ public class UiData : StartupScript
     /// </summary>
     public List<IClickable> Clickables { get; set; } = new();
 }
+
 /// <summary>
 /// Interfaces aren't [DataContract] tagged.
 /// An Implementing class will add it on registration to the YamlRegistry
@@ -33,9 +33,12 @@ public interface IClickable
 {
     string Prefix { get; init; }
     int Count { get; set; }
+    MouseButton Type { get; }
     bool CanHandle(MouseButton button);
-    void HandleClick(TextBlock block);
+    void HandleClick();
+    string GetText();
 }
+
 /// <summary>
 /// Has to be directly [DataContract] tagged, else it won't detect it.
 /// </summary>
@@ -53,17 +56,29 @@ public class LeftMouseButtonCounter : IClickable
     /// </summary>
     public int Count { get; set; }
 
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {Count = Count + 1}";
-    public bool CanHandle(MouseButton button) => button == MouseButton.Left;
-    public override string ToString() => $"{Prefix} : {Count}";
+    public MouseButton Type { get; } = MouseButton.Left;
+
+    public void HandleClick() => Count++;
+
+    public bool CanHandle(MouseButton button) => button == Type;
+
+    public string GetText() => $"{Prefix}: {Count}";
+
+    public override string ToString() => $"{Prefix}: {Count}";
 }
+
 [DataContract]
 public class RightMouseButtonCounter : IClickable
 {
     public string Prefix { get; init; } = "Right Mouse Button";
     public int Count { get; set; }
+    public MouseButton Type { get; } = MouseButton.Right;
 
-    public bool CanHandle(MouseButton button) => button == MouseButton.Right;
-    public void HandleClick(TextBlock block) => block.Text = $"{Prefix} : {Count = Count + 1}";
-    public override string ToString() => $"{Prefix} : {Count}";
+    public void HandleClick() => Count++;
+
+    public bool CanHandle(MouseButton button) => button == Type;
+
+    public string GetText() => $"{Prefix}: {Count}";
+
+    public override string ToString() => $"{Prefix}: {Count}";
 }
