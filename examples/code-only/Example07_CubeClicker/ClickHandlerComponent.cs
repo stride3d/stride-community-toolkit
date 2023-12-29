@@ -21,10 +21,6 @@ public class ClickHandlerComponent : AsyncScript
                 _gameUI?.HandleClick(item);
             }
 
-            // Delete the Datafile
-            //if (Input.Keyboard.IsKeyReleased(Keys.D))
-            //    DataSaver.Delete();
-
             // We have to await the next frame. If we don't do this, our game will be stuck in an infinite loop
             await Script.NextFrame();
         }

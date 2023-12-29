@@ -16,7 +16,8 @@ public class GameUI
     private const string LoadButtonText = "Load Data";
     private const string SaveButtonText = "Save Data";
     private const string DeleteButtonText = "Delete Data";
-    private Color GridBackgroundColor = new(248, 177, 149, 100);
+
+    private readonly Color _gridBackgroundColor = new(248, 177, 149, 100);
     private readonly SpriteFont _font;
     private readonly DataSaver<UiData> _dataSaver;
     private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
@@ -94,7 +95,7 @@ public class GameUI
         var button = CreateButton(LoadButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(0);
-        button.Click += LoadClickButtonAsync;
+        button.Click += LoadDataAsync;
 
         _grid?.Children.Add(button);
     }
@@ -104,23 +105,24 @@ public class GameUI
         var button = CreateButton(SaveButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(1);
-        button.Click += SaveClickButtonAsync;
+        button.Click += SaveDataAsync;
 
         _grid?.Children.Add(button);
     }
 
     private void AddDeleteButton()
     {
-        var button = CreateButton(SaveButtonText);
+        var button = CreateButton(DeleteButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(1);
-        button.Click += SaveClickButtonAsync;
-        button.Margin = new Thickness();
+        button.Click += DeleteData;
+        button.Width = 160;
+        button.Margin = new Thickness(293, 3, 0, 3);
 
         _grid?.Children.Add(button);
     }
 
-    private async void LoadClickButtonAsync(object? sender, RoutedEventArgs e)
+    private async void LoadDataAsync(object? sender, RoutedEventArgs e)
     {
         try
         {
@@ -136,7 +138,7 @@ public class GameUI
         UpdateClickTextBlocks();
     }
 
-    private async void SaveClickButtonAsync(object? sender, RoutedEventArgs e)
+    private async void SaveDataAsync(object? sender, RoutedEventArgs e)
     {
         try
         {
@@ -150,10 +152,26 @@ public class GameUI
         }
     }
 
+    private void DeleteData(object? sender, RoutedEventArgs e)
+    {
+        try
+        {
+            _dataSaver.Delete();
+
+            Console.WriteLine("Data deleted..");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during delete operation: {ex.Message}");
+        }
+
+        UpdateClickTextBlocks();
+    }
+
     private Grid CreateGrid() => new()
     {
         VerticalAlignment = VerticalAlignment.Top,
-        BackgroundColor = GridBackgroundColor,
+        BackgroundColor = _gridBackgroundColor,
         RowDefinitions = {
                 new StripDefinition() { Type = StripType.Auto },
                 new StripDefinition() { Type = StripType.Auto }
