@@ -394,7 +394,10 @@ public static class GameExtensions
 
         var model = proceduralModel.Generate(game.Services);
 
-        model.Materials.Add(material);
+        if (material != null)
+        {
+            model.Materials.Add(material);
+        }
 
         var entity = new Entity(entityName) { new ModelComponent(model) { RenderGroup = renderGroup } };
 
