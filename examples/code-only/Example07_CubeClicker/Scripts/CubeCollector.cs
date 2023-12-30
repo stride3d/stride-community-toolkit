@@ -14,6 +14,7 @@ namespace Example07_CubeClicker.Scripts;
 public class CubeCollector : StartupScript
 {
     private const string HitEntityName = "Cube";
+    private const string CubeDataFileName = "StrideExampleCubeData.yaml";
     [DataMember]
     internal CubeData cubeData { get; private set; } = new();
     private List<Entity> _entities = new();
@@ -39,7 +40,7 @@ public class CubeCollector : StartupScript
             Data = new CubeData()
         };
 
-        var isSuccesful = await dataSaver.TryLoadAsync("StrideExampleCubeData.yaml");
+        var isSuccesful = await dataSaver.TryLoadAsync(CubeDataFileName);
         if (isSuccesful)
         {
             // delete the existing cubes
@@ -54,12 +55,20 @@ public class CubeCollector : StartupScript
         }
         return false;
     }
+    public void Delete()
+    {
+        DataSaver<CubeData> dataSaver = new()
+        {
+            Data = new CubeData()
+        };
+        dataSaver.Delete(CubeDataFileName);
+    }
     public async Task SaveCubeDataAsync()
     {
         DataSaver<CubeData> dataSaver = new()
         {
             Data = new CubeData()
         };
-        await dataSaver.SaveAsync("StrideExampleCubeData.yaml");
+        await dataSaver.SaveAsync(CubeDataFileName);
     }
 }

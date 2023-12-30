@@ -13,6 +13,7 @@ namespace Example07_CubeClicker;
 
 public class GameUI
 {
+    public const string ClickDataFileName = "StrideExampleCubeSaver.yaml";
     private const string EntityName = "GameUI";
     private const string LoadButtonText = "Load Data";
     private const string SaveButtonText = "Save Data";
@@ -133,7 +134,7 @@ public class GameUI
     {
         try
         {
-            if (await _dataSaver.TryLoadAsync() && await _cubeCollector.LoadCubeDataAsync())
+            if (await _dataSaver.TryLoadAsync(ClickDataFileName) && await _cubeCollector.LoadCubeDataAsync())
             {
                 _message.Text = "Data loaded. Start clicking.";
             }
@@ -155,7 +156,7 @@ public class GameUI
     {
         try
         {
-            await _dataSaver.SaveAsync();
+            await _dataSaver.SaveAsync(ClickDataFileName);
             await _cubeCollector.SaveCubeDataAsync();
             _message.Text = "Data saved. Keep clicking.";
         }
@@ -169,7 +170,7 @@ public class GameUI
     {
         try
         {
-            _dataSaver.Delete();
+            _dataSaver.Delete(ClickDataFileName);
 
             _message.Text = "Data deleted.";
 

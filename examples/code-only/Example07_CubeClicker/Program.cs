@@ -23,7 +23,7 @@ var dataSaver = new DataSaver<UiData>()
 };
 
 // Load the data from the previous run if possible.
-await dataSaver.TryLoadAsync();
+await dataSaver.TryLoadAsync(GameUI.ClickDataFileName);
 
 game.Run(start: Start);
 

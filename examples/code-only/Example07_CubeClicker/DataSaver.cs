@@ -10,9 +10,9 @@ public class DataSaver<T>
     /// Only Objects with direct [DataContract] Attribute work.
     /// </summary>
     public required T Data { get; set; }
-    private const string SaveDataFileName = "StrideExampleCubeSaver.yaml";
+    
 
-    public async Task SaveAsync(string fileName = "StrideExampleCubeSaver.yaml")
+    public async Task SaveAsync(string fileName)
     {
         // Create a new file per default
         var fileMode = VirtualFileMode.CreateNew;
@@ -31,12 +31,12 @@ public class DataSaver<T>
         YamlSerializer.Serialize(Data, fileStream);
     }
 
-    public void Delete(string fileName = "StrideExampleCubeSaver.yaml")
+    public void Delete(string fileName)
     {
         VirtualFileSystem.ApplicationData.FileDelete(fileName);
     }
 
-    public async Task<bool> TryLoadAsync(string fileName = "StrideExampleCubeSaver.yaml")
+    public async Task<bool> TryLoadAsync(string fileName)
     {
         if (VirtualFileSystem.ApplicationData.FileExists(fileName))
         {
