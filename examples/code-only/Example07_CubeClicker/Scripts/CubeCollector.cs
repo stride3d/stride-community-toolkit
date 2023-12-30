@@ -32,7 +32,7 @@ public class CubeCollector : StartupScript
         Add(entity);
         entity.Scene = Entity.Scene;
     }
-    public async Task<bool> LoadCubeData()
+    public async Task<bool> LoadCubeDataAsync()
     {
         DataSaver<CubeData> dataSaver = new()
         {
@@ -54,11 +54,11 @@ public class CubeCollector : StartupScript
         }
         return false;
     }
-    public async Task SaveCubeData()
+    public async Task SaveCubeDataAsync()
     {
         DataSaver<CubeData> dataSaver = new()
         {
-            Data = cubeData
+            Data = new CubeData()
         };
         await dataSaver.SaveAsync("StrideExampleCubeData.yaml");
     }

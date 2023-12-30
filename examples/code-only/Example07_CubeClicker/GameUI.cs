@@ -133,7 +133,7 @@ public class GameUI
     {
         try
         {
-            if (await _dataSaver.TryLoadAsync() && await _cubeCollector.LoadCubeData())
+            if (await _dataSaver.TryLoadAsync() && await _cubeCollector.LoadCubeDataAsync())
             {
                 _message.Text = "Data loaded. Start clicking.";
             }
@@ -156,7 +156,7 @@ public class GameUI
         try
         {
             await _dataSaver.SaveAsync();
-            await _cubeCollector.SaveCubeData();
+            await _cubeCollector.SaveCubeDataAsync();
             _message.Text = "Data saved. Keep clicking.";
         }
         catch (Exception ex)

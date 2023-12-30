@@ -47,7 +47,7 @@ async void CreateAndRegisterGameUI(Scene rootScene)
     uiEntity.Add(new ClickHandlerComponent());
     uiEntity.Add(cubeCollector);
     uiEntity.Scene = rootScene;
-    await cubeCollector.LoadCubeData();
+    await cubeCollector.LoadCubeDataAsync();
 }
 
 void AddFirstCube(Scene rootScene)
