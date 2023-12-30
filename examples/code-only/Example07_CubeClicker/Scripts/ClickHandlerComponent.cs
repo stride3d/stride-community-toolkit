@@ -14,10 +14,12 @@ public class ClickHandlerComponent : AsyncScript
     private CameraComponent? _camera;
     private readonly Random _random = new();
     private Material? _material;
-
+    private CubeCollector? _cubeCollector;
+    
     public override async Task Execute()
     {
         _gameUI = Game.Services.GetService<GameUI>();
+        _cubeCollector = Entity.GetComponent<CubeCollector>();
         _camera = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
         _material = Game.CreateMaterial(Color.Yellow, 0.0f, 0.1f);
 
@@ -58,12 +60,13 @@ public class ClickHandlerComponent : AsyncScript
     private void AddNewEntity(Entity clickedEntity)
     {
         ChangeColor(clickedEntity);
-
         Console.WriteLine("Adding new entity");
 
         var entity = Game.CreatePrimitive(PrimitiveModelType.Cube, HitEntityName);
         entity.Transform.Position = new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4));
         entity.Add(new CubeGrower());
+
+        _cubeCollector?.Add(entity);
 
         entity.Scene = clickedEntity.Scene;
     }

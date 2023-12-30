@@ -36,16 +36,18 @@ void Start(Scene rootScene)
     AddFirstCube(rootScene);
 }
 
-void CreateAndRegisterGameUI(Scene rootScene)
+async void CreateAndRegisterGameUI(Scene rootScene)
 {
     var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
-
-    var gameUI = new GameUI(font, dataSaver);
+    var cubeCollector = new CubeCollector();
+    var gameUI = new GameUI(font, dataSaver, cubeCollector);
     game.Services.AddService(gameUI);
 
     var uiEntity = gameUI.Create();
     uiEntity.Add(new ClickHandlerComponent());
+    uiEntity.Add(cubeCollector);
     uiEntity.Scene = rootScene;
+    await cubeCollector.LoadCubeData();
 }
 
 void AddFirstCube(Scene rootScene)
