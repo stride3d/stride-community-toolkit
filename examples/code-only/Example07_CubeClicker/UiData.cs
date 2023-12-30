@@ -13,10 +13,9 @@ public class UiData
     {
         Clickables = [new LeftMouseButtonCounter(), new RightMouseButtonCounter()]
     };
-    /// <summary>
-    /// Just to have more data in the file
-    /// </summary>
-    public string DataName { get; set; } = "UiData";
+
+    public string DataName { get; set; } = "Just to have more example data in the saved file";
+
     /// <summary>
     /// We can serialize Interfaces, Abstracts as long as the "real" object in it
     /// has it's class [DataContract] tagged

@@ -27,7 +27,7 @@ public class GameUI
     private readonly Grid _grid;
     private readonly TextBlock _message;
 
-    public GameUI(SpriteFont font, DataSaver<UiData> dataSaver,CubeCollector collector)
+    public GameUI(SpriteFont font, DataSaver<UiData> dataSaver, CubeCollector collector)
     {
         _font = font;
         _grid = CreateGrid();
@@ -158,6 +158,7 @@ public class GameUI
         {
             await _dataSaver.SaveAsync(ClickDataFileName);
             await _cubeCollector.SaveCubeDataAsync();
+
             _message.Text = "Data saved. Keep clicking.";
         }
         catch (Exception ex)
@@ -171,6 +172,7 @@ public class GameUI
         try
         {
             _dataSaver.Delete(ClickDataFileName);
+            _cubeCollector.Delete();
 
             _message.Text = "Data deleted.";
 

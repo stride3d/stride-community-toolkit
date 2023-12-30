@@ -15,7 +15,7 @@ public class ClickHandlerComponent : AsyncScript
     private readonly Random _random = new();
     private Material? _material;
     private CubeCollector? _cubeCollector;
-    
+
     public override async Task Execute()
     {
         _gameUI = Game.Services.GetService<GameUI>();
