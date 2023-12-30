@@ -36,7 +36,7 @@ public class CubeCollector : StartupScript
     {
         DataSaver<CubeData> dataSaver = new()
         {
-            Data = cubeData
+            Data = new CubeData()
         };
 
         var isSuccesful = await dataSaver.TryLoadAsync("StrideExampleCubeData.yaml");
