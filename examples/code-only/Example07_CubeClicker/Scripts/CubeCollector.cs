@@ -42,11 +42,11 @@ public class CubeCollector : StartupScript
         var isSuccesful = await dataSaver.TryLoadAsync("StrideExampleCubeData.yaml");
         if (isSuccesful)
         {
-            ;
             // delete the existing cubes
             _entities.ForEach(entity => entity.Remove());
             dataSaver.Data.CubePositions.ForEach(async position =>
             {
+                // create cubes from the loaded data
                 AddCube(new Vector3() { X = position.X, Y = 8, Z = position.Z });
             }
             );
