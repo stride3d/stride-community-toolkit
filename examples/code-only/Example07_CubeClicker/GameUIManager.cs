@@ -11,28 +11,35 @@ using Stride.UI.Panels;
 
 namespace Example07_CubeClicker;
 
-public class GameUI
+public class GameUIManager
 {
-    public const string ClickDataFileName = "StrideExampleCubeSaver.yaml";
+    private const string ClickDataFileName = "StrideExampleCubeSaver.yaml";
     private const string EntityName = "GameUI";
     private const string LoadButtonText = "Load Data";
     private const string SaveButtonText = "Save Data";
     private const string DeleteButtonText = "Delete Data";
     private const string IntroText = "Left-clicking on a cube creates a new one, while right-clicking will remove it.";
+    private const string ErrorDuringLoad = "Error during load operation: {0}";
     private readonly Color _gridBackgroundColor = new(248, 177, 149, 100);
     private readonly SpriteFont _font;
-    private readonly DataSaver<UiData> _dataSaver;
     private readonly CubeCollector _cubeCollector;
     private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
     private readonly Grid _grid;
     private readonly TextBlock _message;
+    private readonly DataSaver2<UiData> _uiDataSaver;
 
-    public GameUI(SpriteFont font, DataSaver<UiData> dataSaver, CubeCollector collector)
+    public GameUIManager(SpriteFont font)
     {
         _font = font;
         _grid = CreateGrid();
-        _dataSaver = dataSaver;
-        _cubeCollector = collector;
+        _cubeCollector = new CubeCollector();
+        _uiDataSaver = new DataSaver2<UiData>()
+        {
+            // The default if loading fails so we don't have to deal with null
+            Data = UiData.Default,
+            FileName = ClickDataFileName
+        };
+
         _message = CreateMessageTextBlock();
     }
 
@@ -55,9 +62,11 @@ public class GameUI
         return entity;
     }
 
-    public void HandleClick(MouseButton type)
+    public void HandleClick(MouseButton type, List<Vector3> positinos)
     {
-        var clickable = _dataSaver.Data.Clickables.FirstOrDefault(x => x.Type == type);
+        _cubeCollector.UpdatePositions(positinos);
+
+        var clickable = _uiDataSaver.Data.Clickables.FirstOrDefault(x => x.Type == type);
 
         if (clickable is null) return;
 
@@ -70,7 +79,7 @@ public class GameUI
     {
         var row = 0;
 
-        foreach (var item in _dataSaver.Data.Clickables)
+        foreach (var item in _uiDataSaver.Data.Clickables)
         {
             var textBlock = CreateTextBlock();
             textBlock.SetGridColumn(0);
@@ -86,7 +95,7 @@ public class GameUI
 
     private void UpdateClickTextBlocks()
     {
-        foreach (var item in _dataSaver.Data.Clickables)
+        foreach (var item in _uiDataSaver.Data.Clickables)
         {
             var textBlock = _clickableTextBlocks.FirstOrDefault(w => w.Type == item.Type).Text;
 
@@ -101,7 +110,7 @@ public class GameUI
         var button = CreateButton(LoadButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(0);
-        button.Click += LoadDataAsync;
+        button.Click += LoadClickDataAsync;
 
         _grid?.Children.Add(button);
     }
@@ -130,33 +139,57 @@ public class GameUI
         _grid?.Children.Add(button);
     }
 
-    private async void LoadDataAsync(object? sender, RoutedEventArgs e)
+    private async void LoadClickDataAsync(object? sender, RoutedEventArgs e)
     {
+        if (await LoadClickDataAsync())
+        {
+            _message.Text = "Data loaded. Start clicking.";
+        }
+        else
+        {
+            _message.Text = "No data found. Save data.";
+        }
+    }
+
+    public async Task<bool> LoadClickDataAsync()
+    {
+        bool result;
+
         try
         {
-            if (await _dataSaver.TryLoadAsync(ClickDataFileName) && await _cubeCollector.LoadCubeDataAsync())
-            {
-                _message.Text = "Data loaded. Start clicking.";
-            }
-            else
-            {
-                _message.Text = "No data found. Save data.";
-            }
-
+            result = await _uiDataSaver.TryLoadAsync();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error during load operation: {ex.Message}");
+            Console.WriteLine(string.Format(ErrorDuringLoad, ex.Message));
+
+            return false;
         }
 
         UpdateClickTextBlocks();
+
+        return result;
+    }
+
+    public async Task<List<Vector3>> LoadCubeDataAsync()
+    {
+        try
+        {
+            return await _cubeCollector.LoadCubeDataAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(string.Format(ErrorDuringLoad, ex.Message));
+
+            return [];
+        }
     }
 
     private async void SaveDataAsync(object? sender, RoutedEventArgs e)
     {
         try
         {
-            await _dataSaver.SaveAsync(ClickDataFileName);
+            await _uiDataSaver.SaveAsync();
             await _cubeCollector.SaveCubeDataAsync();
 
             _message.Text = "Data saved. Keep clicking.";
@@ -171,12 +204,12 @@ public class GameUI
     {
         try
         {
-            _dataSaver.Delete(ClickDataFileName);
+            _uiDataSaver.Delete();
             _cubeCollector.Delete();
 
             _message.Text = "Data deleted.";
 
-            _dataSaver.Data = UiData.Default;
+            _uiDataSaver.Data = UiData.Default;
         }
         catch (Exception ex)
         {

@@ -1,4 +1,4 @@
-﻿using Stride.Core;
+using Stride.Core;
 
 namespace Example07_CubeClicker.Scripts;
 
@@ -9,5 +9,7 @@ namespace Example07_CubeClicker.Scripts;
 [DataContract]
 internal struct SimpleVector
 {
-    public float X; public float Z;
+    public float X;
+    public float Y;
+    public float Z;
 }

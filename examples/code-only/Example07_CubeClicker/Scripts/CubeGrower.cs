@@ -1,4 +1,4 @@
-﻿using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
@@ -34,5 +34,7 @@ public class CubeGrower : AsyncScript
         Entity.Transform.Scale = Vector3.One;
 
         Console.WriteLine("Entity grown");
+
+        //ToDo: Remove the component from the entity if we can
     }
 }
