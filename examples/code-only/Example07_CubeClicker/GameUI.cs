@@ -1,3 +1,4 @@
+using Example07_CubeClicker.Scripts;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
@@ -12,6 +13,7 @@ namespace Example07_CubeClicker;
 
 public class GameUI
 {
+    public const string ClickDataFileName = "StrideExampleCubeSaver.yaml";
     private const string EntityName = "GameUI";
     private const string LoadButtonText = "Load Data";
     private const string SaveButtonText = "Save Data";
@@ -20,15 +22,17 @@ public class GameUI
     private readonly Color _gridBackgroundColor = new(248, 177, 149, 100);
     private readonly SpriteFont _font;
     private readonly DataSaver<UiData> _dataSaver;
+    private readonly CubeCollector _cubeCollector;
     private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
     private readonly Grid _grid;
     private readonly TextBlock _message;
 
-    public GameUI(SpriteFont font, DataSaver<UiData> dataSaver)
+    public GameUI(SpriteFont font, DataSaver<UiData> dataSaver,CubeCollector collector)
     {
         _font = font;
         _grid = CreateGrid();
         _dataSaver = dataSaver;
+        _cubeCollector = collector;
         _message = CreateMessageTextBlock();
     }
 
@@ -130,7 +134,7 @@ public class GameUI
     {
         try
         {
-            if (await _dataSaver.TryLoadAsync())
+            if (await _dataSaver.TryLoadAsync(ClickDataFileName) && await _cubeCollector.LoadCubeDataAsync())
             {
                 _message.Text = "Data loaded. Start clicking.";
             }
@@ -152,8 +156,8 @@ public class GameUI
     {
         try
         {
-            await _dataSaver.SaveAsync();
-
+            await _dataSaver.SaveAsync(ClickDataFileName);
+            await _cubeCollector.SaveCubeDataAsync();
             _message.Text = "Data saved. Keep clicking.";
         }
         catch (Exception ex)
@@ -166,7 +170,7 @@ public class GameUI
     {
         try
         {
-            _dataSaver.Delete();
+            _dataSaver.Delete(ClickDataFileName);
 
             _message.Text = "Data deleted.";
 
