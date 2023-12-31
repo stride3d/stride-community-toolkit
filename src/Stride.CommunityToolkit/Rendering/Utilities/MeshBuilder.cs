@@ -98,7 +98,9 @@ public class MeshBuilder : IDisposable
     public void WithPrimitiveType(PrimitiveType primitiveType)
     {
         if (VertexCount > 0)
-            throw new InvalidOperationException("Can not change vertex indexing type if vertices were added already");
+        {
+            throw new InvalidOperationException("Can not change primitive type if vertices were added already");
+        }
 
         _primitiveType = primitiveType;
     }
@@ -114,7 +116,9 @@ public class MeshBuilder : IDisposable
     public void WithIndexType(IndexingType indexingType)
     {
         if (VertexCount > 0)
+        {
             throw new InvalidOperationException("Can not change vertex indexing type if vertices were added already");
+        }
 
         _indexStride = (int)indexingType;
     }
@@ -166,7 +170,9 @@ public class MeshBuilder : IDisposable
         where T : unmanaged
     {
         if (VertexCount > 0)
+        {
             throw new InvalidOperationException("Can not add elements, because vertices were added already");
+        }
 
         if (pixelFormat == PixelFormat.None) pixelFormat = VertexElement.ConvertTypeToFormat<T>();
 
@@ -250,6 +256,7 @@ public class MeshBuilder : IDisposable
     public int AddVertex()
     {
         if ((VertexCount + 1) * _vertexStride <= _vertexBuffer.Length) return VertexCount++;
+
         return AddVertexWithResize();
     }
 
@@ -260,6 +267,7 @@ public class MeshBuilder : IDisposable
     {
         var nextCapacity = Math.Max(MinCapacity * _vertexStride, _vertexBuffer.Length * 2);
         var nextBuffer = ArrayPool<byte>.Shared.Rent(nextCapacity);
+
         if (_vertexBuffer.Length > 0)
         {
             Buffer.BlockCopy(_vertexBuffer, 0, nextBuffer, 0, _vertexBuffer.Length);
@@ -267,6 +275,7 @@ public class MeshBuilder : IDisposable
         }
 
         _vertexBuffer = nextBuffer;
+
         return VertexCount++;
     }
 
@@ -386,7 +395,9 @@ public class MeshBuilder : IDisposable
             DrawCount = IndexCount,
             StartLocation = 0
         };
+
         if (clear) Clear();
+
         return draw;
     }
 
