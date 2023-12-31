@@ -11,10 +11,10 @@ namespace Example07_CubeClicker.Scripts;
 public class ClickHandlerComponent : AsyncScript
 {
     private const string HitEntityName = "Cube";
-    private Vector3 _defaultCubePosition = new(0, 8, 0);
+    private readonly Vector3 _defaultCubePosition = new(0, 8, 0);
+    private readonly Random _random = new();
     private GameManager? _gameManager;
     private CameraComponent? _camera;
-    private readonly Random _random = new();
     private Material? _material;
 
     public override async Task Execute()

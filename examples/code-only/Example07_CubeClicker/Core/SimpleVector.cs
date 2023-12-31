@@ -7,9 +7,18 @@ namespace Example07_CubeClicker.Core;
 /// So a workaround has to be made with a local class
 /// </summary>
 [DataContract]
-internal struct SimpleVector
+public readonly struct SimpleVector
 {
-    public float X;
-    public float Y;
-    public float Z;
+    public float X { get; init; }
+
+    public float Y { get; init; }
+
+    public float Z { get; init; }
+
+    public SimpleVector(float x, float y, float z) : this()
+    {
+        X = x;
+        Y = y;
+        Z = z;
+    }
 }
