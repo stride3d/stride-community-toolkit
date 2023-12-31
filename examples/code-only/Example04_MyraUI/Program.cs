@@ -29,7 +29,7 @@ void SetupBase3DScene()
     game.AddCamera().AddInteractiveCameraScript();
     game.AddDirectionalLight();
     game.AddSkybox();
-    game.AddGround();
+    game.Add3DGround();
 }
 
 /// <summary>
