@@ -19,6 +19,7 @@ game.Run(start: Start);
 void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
+    game.AddGroundGizmo(showAxisName: true);
 
     CreateAndRegisterGameManagerUI(rootScene);
 }
@@ -26,14 +27,10 @@ void Start(Scene rootScene)
 void CreateAndRegisterGameManagerUI(Scene rootScene)
 {
     var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
-    //var cubeCollector = new CubeCollector();
     var gameUI = new GameUIManager(font);
     game.Services.AddService(gameUI);
 
     var uiEntity = gameUI.Create();
     uiEntity.Add(new ClickHandlerComponent());
-    //uiEntity.Add(cubeCollector);
     uiEntity.Scene = rootScene;
-
-    //await cubeCollector.LoadCubeDataAsync();
 }

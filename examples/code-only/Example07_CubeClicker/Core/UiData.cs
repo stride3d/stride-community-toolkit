@@ -1,7 +1,7 @@
 using Stride.Core;
 using Stride.Input;
 
-namespace Example07_CubeClicker;
+namespace Example07_CubeClicker.Core;
 
 [DataContract]
 public class UiData

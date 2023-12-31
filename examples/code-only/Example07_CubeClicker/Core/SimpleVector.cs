@@ -1,6 +1,6 @@
 using Stride.Core;
 
-namespace Example07_CubeClicker.Scripts;
+namespace Example07_CubeClicker.Core;
 
 /// <summary>
 /// Stride.Core.Vector isn't generated as the generator can't reach the core without being in it

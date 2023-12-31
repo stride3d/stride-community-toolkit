@@ -1,7 +1,7 @@
 using Stride.Core;
 using Stride.Core.Mathematics;
 
-namespace Example07_CubeClicker.Scripts;
+namespace Example07_CubeClicker.Core;
 
 [DataContract]
 internal class CubeData

@@ -1,4 +1,4 @@
-using Example07_CubeClicker.Scripts;
+using Example07_CubeClicker.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
@@ -26,14 +26,15 @@ public class GameUIManager
     private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
     private readonly Grid _grid;
     private readonly TextBlock _message;
-    private readonly DataSaver2<UiData> _uiDataSaver;
+    private readonly DataSaver<UiData> _uiDataSaver;
+    public bool ReloadCubes { get; set; }
 
     public GameUIManager(SpriteFont font)
     {
         _font = font;
         _grid = CreateGrid();
         _cubeCollector = new CubeCollector();
-        _uiDataSaver = new DataSaver2<UiData>()
+        _uiDataSaver = new DataSaver<UiData>()
         {
             // The default if loading fails so we don't have to deal with null
             Data = UiData.Default,
@@ -110,7 +111,7 @@ public class GameUIManager
         var button = CreateButton(LoadButtonText);
         button.SetGridColumn(1);
         button.SetGridRow(0);
-        button.Click += LoadClickDataAsync;
+        button.Click += LoadDataAsync;
 
         _grid?.Children.Add(button);
     }
@@ -139,7 +140,7 @@ public class GameUIManager
         _grid?.Children.Add(button);
     }
 
-    private async void LoadClickDataAsync(object? sender, RoutedEventArgs e)
+    private async void LoadDataAsync(object? sender, RoutedEventArgs e)
     {
         if (await LoadClickDataAsync())
         {
@@ -147,8 +148,10 @@ public class GameUIManager
         }
         else
         {
-            _message.Text = "No data found. Save data.";
+            _message.Text = "No click data found.";
         }
+
+        ReloadCubes = true;
     }
 
     public async Task<bool> LoadClickDataAsync()

@@ -7,7 +7,7 @@ namespace Example07_CubeClicker.Scripts;
 
 public class CubeGrower : AsyncScript
 {
-    private const float GrowDuration = 4.0f;
+    private const float GrowDuration = 2.0f;
 
     public override async Task Execute()
     {
@@ -33,8 +33,8 @@ public class CubeGrower : AsyncScript
         // Ensure the entity is fully scaled up after the loop
         Entity.Transform.Scale = Vector3.One;
 
-        Console.WriteLine("Entity grown");
+        Entity.Remove<CubeGrower>();
 
-        //ToDo: Remove the component from the entity if we can
+        Console.WriteLine("Entity grown");
     }
 }
