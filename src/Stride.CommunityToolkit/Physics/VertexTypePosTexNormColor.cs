@@ -72,7 +72,5 @@ public static partial class HeightmapExtensions
 
         public override string ToString()
             => string.Format("Position: {0}, Normal: {1}, Tangent {2}, Texcoord: {3}, Color: {4}", Position, Normal, Tangent, TexCoord, Color);
-
     }
-
 }
