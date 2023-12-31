@@ -1,4 +1,5 @@
-using Example07_CubeClicker;
+using Example07_CubeClicker.Managers;
+using Example07_CubeClicker.Scripts;
 using NexVYaml;
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
@@ -30,5 +31,6 @@ void CreateAndRegisterGameManagerUI(Scene rootScene)
     game.Services.AddService(gameManager);
 
     var uiEntity = gameManager.CreateUI();
+    uiEntity.Add(new ClickHandlerComponent());
     uiEntity.Scene = rootScene;
 }

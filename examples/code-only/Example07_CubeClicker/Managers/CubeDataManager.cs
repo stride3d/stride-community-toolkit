@@ -1,7 +1,7 @@
 using Example07_CubeClicker.Core;
 using Stride.Core.Mathematics;
 
-namespace Example07_CubeClicker;
+namespace Example07_CubeClicker.Managers;
 
 public class CubeDataManager
 {
@@ -35,8 +35,6 @@ public class CubeDataManager
         _dataSaver.Data.CubePositions.Clear();
 
         foreach (var position in positinos)
-        {
             _dataSaver.Data.AddPosition(position);
-        }
     }
 }

@@ -1,6 +1,6 @@
 using Example07_CubeClicker.Core;
 
-namespace Example07_CubeClicker;
+namespace Example07_CubeClicker.Managers;
 
 public class ClickDataManager
 {

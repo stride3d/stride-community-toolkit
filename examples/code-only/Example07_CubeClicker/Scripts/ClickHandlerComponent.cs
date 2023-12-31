@@ -1,3 +1,4 @@
+using Example07_CubeClicker.Managers;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -11,7 +12,7 @@ public class ClickHandlerComponent : AsyncScript
 {
     private const string HitEntityName = "Cube";
     private Vector3 _defaultCubePosition = new(0, 8, 0);
-    private GameManager? _gameUI;
+    private GameManager? _gameManager;
     private CameraComponent? _camera;
     private readonly Random _random = new();
     private Material? _material;
@@ -19,9 +20,9 @@ public class ClickHandlerComponent : AsyncScript
     public override async Task Execute()
     {
         _camera = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
-        _gameUI = Game.Services.GetService<GameManager>();
+        _gameManager = Game.Services.GetService<GameManager>();
 
-        if (_camera is null || _gameUI is null)
+        if (_camera is null || _gameManager is null)
         {
             // notify user about missing components or services
             return;
@@ -29,7 +30,7 @@ public class ClickHandlerComponent : AsyncScript
 
         _material = Game.CreateMaterial(Color.Yellow, 0.0f, 0.1f);
 
-        await _gameUI.LoadClickDataAsync();
+        await _gameManager.LoadClickDataAsync();
         await LoadCubeDataAsync();
 
         while (Game.IsRunning)
@@ -40,7 +41,7 @@ public class ClickHandlerComponent : AsyncScript
                 continue;
             }
 
-            if (_gameUI.ReloadCubes)
+            if (_gameManager.ReloadCubes)
             {
                 await LoadCubeDataAsync();
             }
@@ -60,14 +61,14 @@ public class ClickHandlerComponent : AsyncScript
 
     private async Task LoadCubeDataAsync()
     {
-        _gameUI!.ReloadCubes = false;
+        _gameManager!.ReloadCubes = false;
 
         foreach (var cube in GetCubeEntities())
         {
             cube.Remove();
         }
 
-        var loadedCubes = await _gameUI.LoadCubeDataAsync();
+        var loadedCubes = await _gameManager.LoadCubeDataAsync();
 
         if (loadedCubes.Count == 0)
         {
@@ -98,7 +99,7 @@ public class ClickHandlerComponent : AsyncScript
                 RemoveEntity(hitResult.Collider.Entity);
             }
 
-            _gameUI?.HandleClick(mouseButton, GetCubeEntities().ConvertAll(s => s.Transform.Position));
+            _gameManager?.HandleClick(mouseButton, GetCubeEntities().ConvertAll(s => s.Transform.Position));
         }
 
     }

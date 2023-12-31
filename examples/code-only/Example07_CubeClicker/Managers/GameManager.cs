@@ -1,4 +1,3 @@
-using Example07_CubeClicker.Scripts;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
@@ -9,7 +8,7 @@ using Stride.UI.Controls;
 using Stride.UI.Events;
 using Stride.UI.Panels;
 
-namespace Example07_CubeClicker;
+namespace Example07_CubeClicker.Managers;
 
 public class GameManager
 {
@@ -48,8 +47,7 @@ public class GameManager
             {
                 Page = new UIPage { RootElement = _grid },
                 RenderGroup = RenderGroup.Group31
-            },
-            new ClickHandlerComponent()
+            }
         };
 
         AddTextBlocks();
@@ -140,13 +138,9 @@ public class GameManager
     private async void LoadDataAsync(object? sender, RoutedEventArgs e)
     {
         if (await LoadClickDataAsync())
-        {
             _message.Text = "Data loaded. Start clicking.";
-        }
         else
-        {
             _message.Text = "No click data found.";
-        }
 
         ReloadCubes = true;
     }
