@@ -23,9 +23,9 @@ namespace Stride.CommunityToolkit.Engine;
 public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
-    private const float DefaultGroundSizeX = 15.0f;
-    private const float DefaultGroundSizeY = 15.0f;
     private const string DefaultGroundName = "Ground";
+    private static readonly Vector2 _default3DGroundSize = new(15f);
+    private static readonly Vector3 _default2DGroundSize = new(10, 1, 0);
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -112,7 +112,7 @@ public static class GameExtensions
     public static void SetupBase(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera();
+        game.Add3DCamera();
         game.AddDirectionalLight();
     }
 
@@ -131,10 +131,19 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera().AddInteractiveCameraScript();
+        game.Add3DCamera().AddInteractiveCameraScript();
         game.AddDirectionalLight();
         game.AddSkybox();
-        game.AddGround();
+        game.Add3DGround();
+    }
+
+    public static void SetupBase2DScene(this Game game)
+    {
+        game.AddGraphicsCompositor().AddCleanUIStage();
+        game.Add2DCamera().AddInteractiveCameraScript();
+        //game.AddDirectionalLight();
+        game.AddSkybox();
+        game.Add2DGround();
     }
 
     /// <summary>
@@ -165,7 +174,7 @@ public static class GameExtensions
     /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
     /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
-    public static Entity AddCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    public static Entity Add3DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null, CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
     {
         if (game.SceneSystem.GraphicsCompositor.Cameras.Count == 0)
         {
@@ -176,15 +185,17 @@ public static class GameExtensions
 
         cameraSlot.Name = cameraName;
 
-        initialPosition ??= CameraDefaults.InitialPosition;
-        initialRotation ??= CameraDefaults.InitialRotation;
+        initialPosition ??= CameraDefaults.Initial3DPosition;
+        initialRotation ??= CameraDefaults.Initial3DRotation;
 
         var entity = new Entity(cameraName)
         {
             new CameraComponent
             {
-                Projection = CameraProjectionMode.Perspective,
-                Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId()
+                Projection = projectionMode,
+                Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId(),
+                OrthographicSize = 10,
+                FarClipPlane = 550
             }
         };
 
@@ -198,6 +209,15 @@ public static class GameExtensions
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
+    }
+
+    public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    {
+        return game.Add3DCamera(
+            cameraName,
+            initialPosition ?? CameraDefaults.Initial2DPosition,
+            initialRotation ?? CameraDefaults.Initial2DRotation,
+            CameraProjectionMode.Orthographic);
     }
 
     /// <summary>
@@ -290,26 +310,62 @@ public static class GameExtensions
     /// <param name="size"></param>
     /// <param name="includeCollider">Adds a collider</param>
     /// <returns></returns>
-    public static Entity AddGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+    public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
     {
-        var validSize = size is null ? new Vector3(DefaultGroundSizeX, DefaultGroundSizeY, 0) : new Vector3(size.Value.X, size.Value.Y, 0);
+        var validSize = size ?? _default3DGroundSize;
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, validSize);
+        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, (Vector3)validSize);
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
 
-    public static void AddGroundGizmo(this Game game, bool showAxisName = false, bool rotateAxisNames = true)
+    public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null)
     {
-        var entity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);
+        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
 
-        if (entity == null) return;
+        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        entity.AddGizmo(game.GraphicsDevice, showAxisName: showAxisName, rotateAxisNames: rotateAxisNames);
+        var proceduralModel = GetProceduralModel(PrimitiveModelType.Cube, validSize);
+        var model = proceduralModel.Generate(game.Services);
+
+        if (material != null)
+        {
+            model.Materials.Add(material);
+        }
+
+        var entity = new Entity(entityName) { new ModelComponent(model) };
+
+        var collider = new StaticColliderComponent();
+
+        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
+        {
+            //LocalOffset = new Vector3(0.5f, 0.5f, 0),
+        };
+
+        entity.Add(collider);
+
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+
+        return entity;
+    }
+
+    public static void AddGroundGizmo(this Game game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
+    {
+        var groundEntity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);
+
+        if (groundEntity is null) return;
+
+        var gizmoEntity = new Entity("Gizmo");
+
+        gizmoEntity.AddGizmo(game.GraphicsDevice, showAxisName: showAxisName, rotateAxisNames: rotateAxisNames);
+
+        gizmoEntity.Transform.Position = position ?? Vector3.Zero;
+
+        groundEntity.AddChild(gizmoEntity);
     }
 
     /// <summary>
@@ -388,7 +444,7 @@ public static class GameExtensions
     /// <param name="includeCollider">Indicates whether to include a collider component (default is true).</param>
     /// <param name="size">The size of the model if applicable (optional). Dimensions in the Vector3 are used in the order X, Y, Z. If null, default dimensions are used for the model.</param>
     /// <returns>A new entity representing the specified primitive model.</returns>
-    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector3? size = null, RenderGroup renderGroup = RenderGroup.Group0)
+    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector3? size = null, RenderGroup renderGroup = RenderGroup.Group0, bool is2D = false)
     {
         var proceduralModel = GetProceduralModel(type, size);
 
@@ -403,7 +459,7 @@ public static class GameExtensions
 
         if (!includeCollider) return entity;
 
-        var colliderShape = GetColliderShape(type, size);
+        var colliderShape = GetColliderShape(type, size, is2D);
 
         if (colliderShape is null) return entity;
 
@@ -442,21 +498,21 @@ public static class GameExtensions
         };
 
     // ToDo: Add collider shapes for Torus and Teapot
-    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type, Vector3? size = null)
+    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type, Vector3? size = null, bool is2D = false)
         => type switch
         {
             PrimitiveModelType.Plane => size is null ? new BoxColliderShapeDesc() : new()
             {
-                Size = new Vector3(size.Value.X, 0, size?.Y ?? 0),
-                LocalOffset = new Vector3(0, 0, 0)
+                Size = new Vector3(size.Value.X, 0, size.Value.Y),
+                //LocalOffset = new Vector3(0, 0, 0)
             },
-            PrimitiveModelType.Sphere => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X },
-            PrimitiveModelType.Cube => size is null ? new BoxColliderShapeDesc() : new() { Size = size ?? Vector3.Zero },
+            PrimitiveModelType.Sphere => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X, Is2D = is2D },
+            PrimitiveModelType.Cube => size is null ? new BoxColliderShapeDesc() : new() { Size = size ?? Vector3.Zero, Is2D = is2D },
             PrimitiveModelType.Cylinder => size is null ? new CylinderColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
             PrimitiveModelType.Torus => null,
             PrimitiveModelType.Teapot => null,
             PrimitiveModelType.Cone => size is null ? new ConeColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
-            PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y },
+            PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y, Is2D = is2D },
             _ => throw new InvalidOperationException(),
         };
 

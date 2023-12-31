@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Physics;
 
@@ -38,5 +38,4 @@ public static partial class HeightmapExtensions
             A = a;
         }
     }
-
 }
