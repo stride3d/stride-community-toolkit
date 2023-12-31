@@ -25,7 +25,7 @@ public static class GameExtensions
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
     private const string DefaultGroundName = "Ground";
     private static readonly Vector2 _default3DGroundSize = new(15f);
-    private static readonly Vector3 _default2DGroundSize = new(10, 0.5f, 1);
+    private static readonly Vector3 _default2DGroundSize = new(10, 1, 0);
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -112,7 +112,7 @@ public static class GameExtensions
     public static void SetupBase(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera();
+        game.Add3DCamera();
         game.AddDirectionalLight();
     }
 
@@ -131,7 +131,7 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.AddCamera().AddInteractiveCameraScript();
+        game.Add3DCamera().AddInteractiveCameraScript();
         game.AddDirectionalLight();
         game.AddSkybox();
         game.Add3DGround();
@@ -143,7 +143,7 @@ public static class GameExtensions
         game.Add2DCamera().AddInteractiveCameraScript();
         //game.AddDirectionalLight();
         game.AddSkybox();
-        game.Add2DGroundPlane();
+        game.Add2DGround();
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public static class GameExtensions
     /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
     /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
-    public static Entity AddCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null, CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
+    public static Entity Add3DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null, CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
     {
         if (game.SceneSystem.GraphicsCompositor.Cameras.Count == 0)
         {
@@ -213,7 +213,7 @@ public static class GameExtensions
 
     public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
     {
-        return game.AddCamera(
+        return game.Add3DCamera(
             cameraName,
             initialPosition ?? CameraDefaults.Initial2DPosition,
             initialRotation ?? CameraDefaults.Initial2DRotation,
@@ -323,33 +323,7 @@ public static class GameExtensions
         return entity;
     }
 
-    public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
-    {
-        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
-
-        var proceduralModel = GetProceduralModel(PrimitiveModelType.Cube, validSize);
-        var model = proceduralModel.Generate(game.Services);
-
-        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
-        model.Materials.Add(material);
-
-        var entity = new Entity(entityName) { new ModelComponent(model) };
-
-        var colliderShape = GetColliderShape(PrimitiveModelType.Cube, validSize);
-
-        if (colliderShape is null) return entity;
-
-        var collider = new StaticColliderComponent();
-        collider.ColliderShapes.Add(colliderShape);
-
-        entity.Add(collider);
-
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
-
-        return entity;
-    }
-
-    public static Entity Add2DGroundPlane(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+    public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null)
     {
         var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
 
@@ -367,7 +341,10 @@ public static class GameExtensions
 
         var collider = new StaticColliderComponent();
 
-        collider.ColliderShapes.Add(new BoxColliderShapeDesc() { Size = validSize, Is2D = false });
+        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
+        {
+            //LocalOffset = new Vector3(0.5f, 0.5f, 0),
+        };
 
         entity.Add(collider);
 
