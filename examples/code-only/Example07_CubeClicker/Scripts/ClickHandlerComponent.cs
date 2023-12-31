@@ -1,3 +1,4 @@
+using Example07_CubeClicker.Managers;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -10,20 +11,27 @@ namespace Example07_CubeClicker.Scripts;
 public class ClickHandlerComponent : AsyncScript
 {
     private const string HitEntityName = "Cube";
-    private GameUI? _gameUI;
-    private CameraComponent? _camera;
+    private readonly Vector3 _defaultCubePosition = new(0, 8, 0);
     private readonly Random _random = new();
+    private GameManager? _gameManager;
+    private CameraComponent? _camera;
     private Material? _material;
-    private CubeCollector? _cubeCollector;
-    
+
     public override async Task Execute()
     {
-        _gameUI = Game.Services.GetService<GameUI>();
-        _cubeCollector = Entity.GetComponent<CubeCollector>();
         _camera = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+        _gameManager = Game.Services.GetService<GameManager>();
+
+        if (_camera is null || _gameManager is null)
+        {
+            // notify user about missing components or services
+            return;
+        }
+
         _material = Game.CreateMaterial(Color.Yellow, 0.0f, 0.1f);
 
-        if (_camera is null) return;
+        await _gameManager.LoadClickDataAsync();
+        await LoadCubeDataAsync();
 
         while (Game.IsRunning)
         {
@@ -33,12 +41,46 @@ public class ClickHandlerComponent : AsyncScript
                 continue;
             }
 
+            if (_gameManager.ReloadCubes)
+            {
+                await LoadCubeDataAsync();
+            }
+
             if (Input.IsMouseButtonPressed(MouseButton.Left))
+            {
                 ProcessRaycast(MouseButton.Left);
+            }
             else if (Input.IsMouseButtonPressed(MouseButton.Right))
+            {
                 ProcessRaycast(MouseButton.Right);
+            }
 
             await Script.NextFrame();
+        }
+    }
+
+    private async Task LoadCubeDataAsync()
+    {
+        _gameManager!.ReloadCubes = false;
+
+        foreach (var cube in GetCubeEntities())
+        {
+            cube.Remove();
+        }
+
+        var loadedCubes = await _gameManager.LoadCubeDataAsync();
+
+        if (loadedCubes.Count == 0)
+        {
+            // Create initial cube
+            CreateCube();
+        }
+        else
+        {
+            foreach (var vector in loadedCubes)
+            {
+                CreateCube(vector);
+            }
         }
     }
 
@@ -48,27 +90,39 @@ public class ClickHandlerComponent : AsyncScript
 
         if (hitResult.Succeeded && hitResult.Collider.Entity.Name == HitEntityName)
         {
-            _gameUI?.HandleClick(mouseButton);
-
             if (mouseButton == MouseButton.Left)
+            {
                 AddNewEntity(hitResult.Collider.Entity);
+            }
             else if (mouseButton == MouseButton.Right)
+            {
                 RemoveEntity(hitResult.Collider.Entity);
+            }
+
+            _gameManager?.HandleClick(mouseButton, GetCubeEntities().ConvertAll(s => s.Transform.Position));
         }
+
     }
+
+    private List<Entity> GetCubeEntities()
+        => Entity.Scene.Entities
+        .Where(w => w.Name == HitEntityName && w.Get<CubeVanisher>() is null)
+        .ToList();
 
     private void AddNewEntity(Entity clickedEntity)
     {
         ChangeColor(clickedEntity);
+
         Console.WriteLine("Adding new entity");
 
-        var entity = Game.CreatePrimitive(PrimitiveModelType.Cube, HitEntityName);
-        entity.Transform.Position = new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4));
-        entity.Add(new CubeGrower());
+        CreateCube(new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4)));
+    }
 
-        _cubeCollector?.Add(entity);
+    private static void RemoveEntity(Entity entity)
+    {
+        Console.WriteLine("Removing entity");
 
-        entity.Scene = clickedEntity.Scene;
+        entity.Add(new CubeVanisher());
     }
 
     private void ChangeColor(Entity clickedEntity)
@@ -87,10 +141,11 @@ public class ClickHandlerComponent : AsyncScript
         }
     }
 
-    private void RemoveEntity(Entity entity)
+    private void CreateCube(Vector3? position = null)
     {
-        Console.WriteLine("Removing entity");
-
-        entity.Add(new CubeVanisher());
+        var entity = Game.CreatePrimitive(PrimitiveModelType.Cube, HitEntityName);
+        entity.Transform.Position = position ?? _defaultCubePosition;
+        entity.Add(new CubeGrower());
+        entity.Scene = Entity.Scene;
     }
 }

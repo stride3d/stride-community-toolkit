@@ -1,4 +1,4 @@
-﻿using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
@@ -7,7 +7,7 @@ namespace Example07_CubeClicker.Scripts;
 
 public class CubeGrower : AsyncScript
 {
-    private const float GrowDuration = 4.0f;
+    private const float GrowDuration = 1.0f;
 
     public override async Task Execute()
     {
@@ -32,6 +32,8 @@ public class CubeGrower : AsyncScript
 
         // Ensure the entity is fully scaled up after the loop
         Entity.Transform.Scale = Vector3.One;
+
+        Entity.Remove<CubeGrower>();
 
         Console.WriteLine("Entity grown");
     }

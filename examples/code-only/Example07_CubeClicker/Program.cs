@@ -1,9 +1,7 @@
-using Example07_CubeClicker;
+using Example07_CubeClicker.Managers;
 using Example07_CubeClicker.Scripts;
 using NexVYaml;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 
@@ -16,43 +14,23 @@ using var game = new Game();
 // Register all DataContracted Types
 NexYamlSerializerRegistry.Init();
 
-var dataSaver = new DataSaver<UiData>()
-{
-    // The default if loading fails so we don't have to deal with null
-    Data = UiData.Default
-};
-
-// Load the data from the previous run if possible.
-await dataSaver.TryLoadAsync(GameUI.ClickDataFileName);
-
 game.Run(start: Start);
 
 void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
+    game.AddGroundGizmo(showAxisName: true);
 
-    CreateAndRegisterGameUI(rootScene);
-
-    AddFirstCube(rootScene);
+    CreateAndRegisterGameManagerUI(rootScene);
 }
 
-async void CreateAndRegisterGameUI(Scene rootScene)
+void CreateAndRegisterGameManagerUI(Scene rootScene)
 {
     var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
-    var cubeCollector = new CubeCollector();
-    var gameUI = new GameUI(font, dataSaver, cubeCollector);
-    game.Services.AddService(gameUI);
+    var gameManager = new GameManager(font);
+    game.Services.AddService(gameManager);
 
-    var uiEntity = gameUI.Create();
+    var uiEntity = gameManager.CreateUI();
     uiEntity.Add(new ClickHandlerComponent());
-    uiEntity.Add(cubeCollector);
     uiEntity.Scene = rootScene;
-    await cubeCollector.LoadCubeDataAsync();
-}
-
-void AddFirstCube(Scene rootScene)
-{
-    var entity = game.CreatePrimitive(PrimitiveModelType.Cube, "Cube");
-    entity.Transform.Position = new Vector3(0, 8, 0);
-    entity.Scene = rootScene;
 }
