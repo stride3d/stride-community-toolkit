@@ -7,7 +7,7 @@ namespace Example07_CubeClicker.Scripts;
 
 public class CubeVanisher : AsyncScript
 {
-    private const float TotalTime = 1f;
+    private const float TotalTime = 0.5f;
     private const float RotationSpeed = 900;
 
     public override async Task Execute()

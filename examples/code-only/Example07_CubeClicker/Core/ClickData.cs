@@ -4,12 +4,12 @@ using Stride.Input;
 namespace Example07_CubeClicker.Core;
 
 [DataContract]
-public class UiData
+public class ClickData
 {
     /// <summary>
     /// "NullPattern", ensuring that there is never null and a valid fallback option
     /// </summary>
-    public static UiData Default => new()
+    public static ClickData Default => new()
     {
         Clickables = [new LeftMouseButtonCounter(), new RightMouseButtonCounter()]
     };
@@ -32,7 +32,6 @@ public interface IClickable
     string Prefix { get; init; }
     int Count { get; set; }
     MouseButton Type { get; }
-    bool CanHandle(MouseButton button);
     void HandleClick();
 }
 
@@ -53,11 +52,10 @@ public class LeftMouseButtonCounter : IClickable
     /// The click count
     /// </summary>
     public int Count { get; set; }
+
     public MouseButton Type { get; } = MouseButton.Left;
 
     public void HandleClick() => Count++;
-
-    public bool CanHandle(MouseButton button) => button == Type;
 
     public override string ToString() => $"{Prefix}: {Count}";
 }
@@ -65,13 +63,21 @@ public class LeftMouseButtonCounter : IClickable
 [DataContract]
 public class RightMouseButtonCounter : IClickable
 {
+    /// <summary>
+    /// get and init/set is required for the serializer
+    /// this can be made internal, but it would require a [DataMember] Attribute then
+    /// We can adjust that string in the yaml, so the application loads the new Prefix instead of this one.
+    /// </summary>
     public string Prefix { get; init; } = "Right Mouse Button";
+
+    /// <summary>
+    /// The click count
+    /// </summary>
     public int Count { get; set; }
+
     public MouseButton Type { get; } = MouseButton.Right;
 
     public void HandleClick() => Count++;
-
-    public bool CanHandle(MouseButton button) => button == Type;
 
     public override string ToString() => $"{Prefix}: {Count}";
 }

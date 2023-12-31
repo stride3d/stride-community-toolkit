@@ -11,7 +11,7 @@ public class ClickHandlerComponent : AsyncScript
 {
     private const string HitEntityName = "Cube";
     private Vector3 _defaultCubePosition = new(0, 8, 0);
-    private GameUIManager? _gameUI;
+    private GameManager? _gameUI;
     private CameraComponent? _camera;
     private readonly Random _random = new();
     private Material? _material;
@@ -19,7 +19,7 @@ public class ClickHandlerComponent : AsyncScript
     public override async Task Execute()
     {
         _camera = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
-        _gameUI = Game.Services.GetService<GameUIManager>();
+        _gameUI = Game.Services.GetService<GameManager>();
 
         if (_camera is null || _gameUI is null)
         {

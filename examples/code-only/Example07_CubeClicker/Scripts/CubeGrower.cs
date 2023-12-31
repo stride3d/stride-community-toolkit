@@ -7,7 +7,7 @@ namespace Example07_CubeClicker.Scripts;
 
 public class CubeGrower : AsyncScript
 {
-    private const float GrowDuration = 2.0f;
+    private const float GrowDuration = 1.0f;
 
     public override async Task Execute()
     {

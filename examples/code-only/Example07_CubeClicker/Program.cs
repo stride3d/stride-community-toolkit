@@ -1,5 +1,4 @@
 using Example07_CubeClicker;
-using Example07_CubeClicker.Scripts;
 using NexVYaml;
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
@@ -27,10 +26,9 @@ void Start(Scene rootScene)
 void CreateAndRegisterGameManagerUI(Scene rootScene)
 {
     var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
-    var gameUI = new GameUIManager(font);
-    game.Services.AddService(gameUI);
+    var gameManager = new GameManager(font);
+    game.Services.AddService(gameManager);
 
-    var uiEntity = gameUI.Create();
-    uiEntity.Add(new ClickHandlerComponent());
+    var uiEntity = gameManager.CreateUI();
     uiEntity.Scene = rootScene;
 }

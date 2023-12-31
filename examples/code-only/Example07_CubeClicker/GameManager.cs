@@ -1,4 +1,4 @@
-using Example07_CubeClicker.Core;
+using Example07_CubeClicker.Scripts;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
@@ -11,40 +11,36 @@ using Stride.UI.Panels;
 
 namespace Example07_CubeClicker;
 
-public class GameUIManager
+public class GameManager
 {
-    private const string ClickDataFileName = "StrideExampleCubeSaver.yaml";
     private const string EntityName = "GameUI";
     private const string LoadButtonText = "Load Data";
     private const string SaveButtonText = "Save Data";
     private const string DeleteButtonText = "Delete Data";
     private const string IntroText = "Left-clicking on a cube creates a new one, while right-clicking will remove it.";
     private const string ErrorDuringLoad = "Error during load operation: {0}";
-    private readonly Color _gridBackgroundColor = new(248, 177, 149, 100);
+
+    private readonly CubeDataManager _cubeDataManager;
+    private readonly ClickDataManager _clickDataManager;
+
     private readonly SpriteFont _font;
-    private readonly CubeCollector _cubeCollector;
-    private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
+    private readonly Color _gridBackgroundColor = new(248, 177, 149, 100);
     private readonly Grid _grid;
     private readonly TextBlock _message;
-    private readonly DataSaver<UiData> _uiDataSaver;
+    private readonly List<(TextBlock Text, MouseButton Type)> _clickableTextBlocks = [];
+
     public bool ReloadCubes { get; set; }
 
-    public GameUIManager(SpriteFont font)
+    public GameManager(SpriteFont font)
     {
         _font = font;
         _grid = CreateGrid();
-        _cubeCollector = new CubeCollector();
-        _uiDataSaver = new DataSaver<UiData>()
-        {
-            // The default if loading fails so we don't have to deal with null
-            Data = UiData.Default,
-            FileName = ClickDataFileName
-        };
-
+        _cubeDataManager = new CubeDataManager();
+        _clickDataManager = new ClickDataManager();
         _message = CreateMessageTextBlock();
     }
 
-    public Entity Create()
+    public Entity CreateUI()
     {
         var entity = new Entity(EntityName)
         {
@@ -52,7 +48,8 @@ public class GameUIManager
             {
                 Page = new UIPage { RootElement = _grid },
                 RenderGroup = RenderGroup.Group31
-            }
+            },
+            new ClickHandlerComponent()
         };
 
         AddTextBlocks();
@@ -65,9 +62,9 @@ public class GameUIManager
 
     public void HandleClick(MouseButton type, List<Vector3> positinos)
     {
-        _cubeCollector.UpdatePositions(positinos);
+        _cubeDataManager.UpdatePositions(positinos);
 
-        var clickable = _uiDataSaver.Data.Clickables.FirstOrDefault(x => x.Type == type);
+        var clickable = _clickDataManager.GetClickables().FirstOrDefault(x => x.Type == type);
 
         if (clickable is null) return;
 
@@ -80,7 +77,7 @@ public class GameUIManager
     {
         var row = 0;
 
-        foreach (var item in _uiDataSaver.Data.Clickables)
+        foreach (var item in _clickDataManager.GetClickables())
         {
             var textBlock = CreateTextBlock();
             textBlock.SetGridColumn(0);
@@ -96,7 +93,7 @@ public class GameUIManager
 
     private void UpdateClickTextBlocks()
     {
-        foreach (var item in _uiDataSaver.Data.Clickables)
+        foreach (var item in _clickDataManager.GetClickables())
         {
             var textBlock = _clickableTextBlocks.FirstOrDefault(w => w.Type == item.Type).Text;
 
@@ -160,7 +157,7 @@ public class GameUIManager
 
         try
         {
-            result = await _uiDataSaver.TryLoadAsync();
+            result = await _clickDataManager.TryLoadAsync();
         }
         catch (Exception ex)
         {
@@ -178,7 +175,7 @@ public class GameUIManager
     {
         try
         {
-            return await _cubeCollector.LoadCubeDataAsync();
+            return await _cubeDataManager.LoadDataAsync();
         }
         catch (Exception ex)
         {
@@ -192,8 +189,8 @@ public class GameUIManager
     {
         try
         {
-            await _uiDataSaver.SaveAsync();
-            await _cubeCollector.SaveCubeDataAsync();
+            await _clickDataManager.SaveDataAsync();
+            await _cubeDataManager.SaveDataAsync();
 
             _message.Text = "Data saved. Keep clicking.";
         }
@@ -207,12 +204,10 @@ public class GameUIManager
     {
         try
         {
-            _uiDataSaver.Delete();
-            _cubeCollector.Delete();
+            _clickDataManager.DeleteData();
+            _cubeDataManager.DeleteData();
 
             _message.Text = "Data deleted.";
-
-            _uiDataSaver.Data = UiData.Default;
         }
         catch (Exception ex)
         {
