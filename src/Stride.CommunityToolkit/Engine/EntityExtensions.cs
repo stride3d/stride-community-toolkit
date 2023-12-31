@@ -105,6 +105,17 @@ public static class EntityExtensions
     }
 
     /// <summary>
+    /// Searching for an entity in all scene entities.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public static Entity? FindEntity(this Entity entity, string name)
+    {
+        return entity.Scene.Entities.FirstOrDefault(w => w.Name == name);
+    }
+
+    /// <summary>
     /// Tries to retrieve a component of type <typeparamref name="T"/> from the given entity.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
