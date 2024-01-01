@@ -20,8 +20,11 @@ public static class ExampleProvider
         new Example(GetIndex(), "Basic Example - Give me a cube",
             () => StartProcess(nameof(Example02_GiveMeACube))),
 
-        new Example(GetIndex(), "Basic Example - Stride UI - Capsule with rigid body and Window",
+        new Example(GetIndex(), "Basic Example - Stride UI - Canvas - Capsule with rigid body and Window",
             () => StartProcess(nameof(Example03_StrideUI_CapsuleAndWindow))),
+
+        new Example(GetIndex(), "Basic Example - Stride UI - Grid - Save and load game state",
+            () => StartProcess(nameof(Example07_CubeClicker))),
 
         new Example(GetIndex(), "Basic Example - Procedural Geometry",
             () => StartProcess(nameof(Example05_ProceduralGeometry))),

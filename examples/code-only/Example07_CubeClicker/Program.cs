@@ -5,9 +5,12 @@ using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 using Stride.Graphics;
 
-// This example demonstrates how to load and save game data, specifically tracking left and right mouse clicks on dynamically generated cubes.
-// Upon launch, the game automatically loads data from the previous session.
-// In case of a corrupted Yaml file, navigate to the \bin\Debug\net8.0\data\ directory and delete the file manually.
+// This example demonstrates how to load and save game data. When the game starts,
+// it automatically loads the click data and cube positions from the previous session.
+// The player interacts with dynamically generated cubes, with the game tracking left
+// and right mouse clicks.
+// In case of a corrupted Yaml file, navigate to the \bin\Debug\net8.0\data\
+// directory and delete the file manually.
 
 using var game = new Game();
 
