@@ -476,6 +476,7 @@ public static class GameExtensions
 
     /// <summary>
     /// Sets the maximum frames per second (FPS) rate for the game.
+    /// Set <param name="targetFPS"/> to 0 for max possible FPS.
     /// </summary>
     /// <param name="game"></param>
     /// <param name="targetFPS"></param>
