@@ -25,7 +25,7 @@ public static class GameExtensions
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
     private const string DefaultGroundName = "Ground";
     private static readonly Vector2 _default3DGroundSize = new(15f);
-    private static readonly Vector3 _default2DGroundSize = new(10, 1, 0);
+    private static readonly Vector3 _default2DGroundSize = new(15, 1, 0);
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -325,7 +325,7 @@ public static class GameExtensions
 
     public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null)
     {
-        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
+        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 1);
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
@@ -343,7 +343,7 @@ public static class GameExtensions
 
         collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
         {
-            //LocalOffset = new Vector3(0.5f, 0.5f, 0),
+            LocalOffset = new Vector3(0, 0, 0),
         };
 
         entity.Add(collider);

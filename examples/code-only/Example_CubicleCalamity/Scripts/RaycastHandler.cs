@@ -3,7 +3,6 @@ using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
-using Stride.Physics;
 
 namespace CubicleCalamity.Scripts;
 
@@ -21,9 +20,9 @@ public class RaycastHandler : AsyncScript
         //  working after x frames
         var cameraComponent3 = this.GetFirstCamera();
 
-        var simulation = this.GetSimulation();
+        //var simulation = this.GetSimulation();
 
-        if (cameraComponent == null || simulation == null) return;
+        if (cameraComponent == null) return;
 
         while (Game.IsRunning)
         {
