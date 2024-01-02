@@ -15,10 +15,12 @@ using System.Reflection;
 
 using var game = new Game();
 
-var boxSize = new Vector3(1);
+var boxSize = new Vector3(0.2f);
 var model = new Model();
+int cubes = 0;
 
 game.Run(start: Start, update: Update);
+
 
 void Start(Scene rootScene)
 {
@@ -35,6 +37,7 @@ void Start(Scene rootScene)
     game.AddDirectionalLight();
     game.AddSkybox();
 
+    // Make sure you also update 2D Groud collider if you are testing this
     //game.Add2DGround();
     game.Add3DGround();
 
@@ -53,6 +56,10 @@ void Start(Scene rootScene)
         }
     };
 
+    //var simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+
+    //simulation.FixedTimeStep = 1f / 120;
+
     Add2DBoxes(rootScene, 1);
 
     AddBackground(rootScene);
@@ -67,12 +74,20 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsKeyPressed(Keys.N))
     {
         Add3DBoxes(scene, 10);
+
+        cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
     }
 
     if (game.Input.IsKeyPressed(Keys.M))
     {
-        Add2DBoxes(scene, 1);
+        Add2DBoxes(scene, 10);
+
+        cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
     }
+
+    game.DebugTextSystem.Print($"N - generate 3D cubes", new Int2(x: 20, y: 30));
+    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: 20, y: 50));
+    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: 20, y: 70));
 }
 
 MeshBuilder GiveMeAPlane()
@@ -90,15 +105,15 @@ MeshBuilder GiveMeAPlane()
     //meshBuilder.SetElement(color, Color.Red);
 
     meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(0, 1));
+    meshBuilder.SetElement(position, new Vector2(0, boxSize.X));
     //meshBuilder.SetElement(color, Color.Green);
 
     meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(1, 1));
+    meshBuilder.SetElement(position, new Vector2(boxSize.X, boxSize.X));
     //meshBuilder.SetElement(color, Color.Blue);
 
     meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(1, 0));
+    meshBuilder.SetElement(position, new Vector2(boxSize.X, 0));
     //meshBuilder.SetElement(color, Color.Yellow);
 
     meshBuilder.AddIndex(0);
@@ -140,8 +155,8 @@ void Add3DBoxes(Scene scene, int count = 5)
     {
         var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize);
 
+        entity.Name = "Cube";
         entity.Transform.Position = new Vector3(0.5f, 8, 0);
-
         entity.Scene = scene;
     }
 }
@@ -150,16 +165,21 @@ void Add2DBoxes(Scene rootScene, int count = 5)
 {
     for (int i = 1; i <= count; i++)
     {
-        var entity = new Entity { Transform = { Position = new(0, 10, 0) } };
+        var entity = new Entity
+        {
+            Name = "Cube",
+            Transform = { Position = new(Random.Shared.Next(-5, 5), 5 + Random.Shared.Next(0, 5), 0) }
+        };
+
         entity.Add(new ModelComponent { Model = model });
+        //entity.Add(new StaticColliderComponent());
         entity.Add(new RigidbodyComponent()
         {
             IsKinematic = false,
             //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-            ColliderShape = new BoxColliderShape(true, new Vector3(1, 1, 0))
+            ColliderShape = new BoxColliderShape(true, new Vector3(boxSize.X, boxSize.X, 0))
             {
-                LocalOffset = new Vector3(0.5f, 0.5f, 0),
-                //Scaling = Vector3.One,
+                LocalOffset = new Vector3(boxSize.X / 2, boxSize.X / 2, 0)
             }
         });
 
