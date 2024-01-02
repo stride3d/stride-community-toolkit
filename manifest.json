@@ -117,6 +117,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Extensions.TextureExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Extensions.TextureExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Extensions.yml",
       "output": {
         ".html": {
@@ -694,6 +704,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/stride-ui-capsule-with-rigid-body.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/stride-ui-cube-clicker.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/stride-ui-cube-clicker.html"
         }
       },
       "version": ""

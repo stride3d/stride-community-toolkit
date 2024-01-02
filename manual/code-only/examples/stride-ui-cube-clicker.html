@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>F# Code Only Basic Examples | Stride Manual </title>
+      <title>Cube clicker | Stride Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="F# Code Only Basic Examples | Stride Manual ">
+      <meta name="title" content="Cube clicker | Stride Manual ">
       
       <link rel="icon" href="../../../favicon.ico">
       <link rel="stylesheet" href="../../../public/docfx.min.css">
@@ -15,7 +15,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/basic-examples-fs.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/stride-ui-cube-clicker.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -84,40 +84,62 @@
         </div>
 
         <article data-uid="">
-<h1 id="f-code-only-basic-examples">F# Code Only Basic Examples</h1>
+<h1 id="cube-clicker">Cube clicker</h1>
 
-<p>This page provides a brief overview of the basic examples available for code-only projects in Stride. You can explore each example in detail. Each linked example page contains detailed code snippets and explanations.</p>
-<h2 id="examples-overview">Examples Overview</h2>
+<p>Cube Clicker is an instructive example using the Stride game engine, showcasing several key features:</p>
 <ul>
-<li><a href="capsule-with-rigid-body-fs.html">Capsule with rigid body</a>:
-<ul>
-<li>Demonstrates how to create a 3D capsule entity and position it in a scene.</li>
+<li><strong>Game Data Management</strong>: Utilizes the <code>NexVYaml</code> serializer for saving and loading game data, demonstrating effective data persistence techniques.</li>
+<li><strong>Stride UI Demonstration</strong>: Illustrates the use of Stride's UI elements, specifically Grid, TextBlock, and Button, to create interactive and user-friendly interfaces.</li>
+<li><strong>Scripting in Stride</strong>: Employs both <code>SyncScript</code> and <code>AsyncScript</code>, providing examples of how to implement synchronous and asynchronous logic in a Stride game.</li>
+<li><strong>Separation of Concerns</strong>: The game's architecture demonstrates good practice in separating different areas of logic, making the code more maintainable and scalable.</li>
 </ul>
-</li>
-</ul>
-<h2 id="interactive-console-application">Interactive Console Application</h2>
-<p>For those who prefer a more interactive approach, we provide a console application that allows you to run these examples directly. This console app, available in the <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples"><code>Stride.CommunityToolkit.Examples</code></a> project, offers an interactive menu for selecting and running the examples.</p>
-<p>Here's a glimpse of the interactive menu provided by the console application:</p>
-<pre><code class="lang-plaintext">Stride Community Toolkit Examples
+<p>When the game starts, it automatically loads the click data and cube positions from the previous session. The player interacts with dynamically generated cubes, with the game tracking left and right mouse clicks.</p>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example07_CubeClicker">GitHub</a>.</p>
+<p>To explore the entire project, follow the link above. Below is the <code>Program.cs</code> file from the project for a quick overview.</p>
+<pre><code class="lang-csharp">using Example07_CubeClicker.Managers;
+using Example07_CubeClicker.Scripts;
+using NexVYaml;
+using Stride.CommunityToolkit.Engine;
+using Stride.Engine;
+using Stride.Graphics;
 
-[1] Basic Example - Capsule with rigid body
-[2] Basic Example - Capsule with rigid body in F#
-[3] Basic Example - Capsule with rigid body in Visual Basic
-[4] Basic Example - Give me a cube
-[5] Basic Example - Stride UI - Canvas - Capsule with rigid body and Window
-[6] Basic Example - Stride UI - Grid - Save and load game state
-[7] Basic Example - Procedural Geometry
-[8] Advance Example - Myra UI - Draggable Window, GetService()
-[9] Advance Example - Image Processing
-[Q] Quit
+// This example demonstrates how to load and save game data. When the game starts,
+// it automatically loads the click data and cube positions from the previous session.
+// The player interacts with dynamically generated cubes, with the game tracking left
+// and right mouse clicks.
+// In case of a corrupted Yaml file, navigate to the \bin\Debug\net8.0\data\
+// directory and delete the file manually.
 
-Enter choice and press ENTER to continue
+using var game = new Game();
+
+// Register all DataContracted Types
+NexYamlSerializerRegistry.Init();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
+{
+    game.SetupBase3DScene();
+    game.AddGroundGizmo(showAxisName: true);
+
+    CreateAndRegisterGameManagerUI(rootScene);
+}
+
+void CreateAndRegisterGameManagerUI(Scene rootScene)
+{
+    var font = game.Content.Load&lt;SpriteFont&gt;(&quot;StrideDefaultFont&quot;);
+    var gameManager = new GameManager(font);
+    game.Services.AddService(gameManager);
+
+    var uiEntity = gameManager.CreateUI();
+    uiEntity.Add(new ClickHandlerComponent());
+    uiEntity.Scene = rootScene;
+}
 </code></pre>
-
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/basic-examples-fs.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/stride-ui-cube-clicker.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

@@ -182,18 +182,30 @@ references:
   commentId: T:Stride.CommunityToolkit.Engine.CameraDefaults
   fullName: Stride.CommunityToolkit.Engine.CameraDefaults
   nameWithType: CameraDefaults
-- uid: Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition
-  name: InitialPosition
-  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_InitialPosition
-  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition
-  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.InitialPosition
-  nameWithType: CameraDefaults.InitialPosition
-- uid: Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation
-  name: InitialRotation
-  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_InitialRotation
-  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation
-  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.InitialRotation
-  nameWithType: CameraDefaults.InitialRotation
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DPosition
+  name: Initial2DPosition
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_Initial2DPosition
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DPosition
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DPosition
+  nameWithType: CameraDefaults.Initial2DPosition
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DRotation
+  name: Initial2DRotation
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_Initial2DRotation
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DRotation
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DRotation
+  nameWithType: CameraDefaults.Initial2DRotation
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DPosition
+  name: Initial3DPosition
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_Initial3DPosition
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DPosition
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DPosition
+  nameWithType: CameraDefaults.Initial3DPosition
+- uid: Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DRotation
+  name: Initial3DRotation
+  href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_Initial3DRotation
+  commentId: F:Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DRotation
+  fullName: Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DRotation
+  nameWithType: CameraDefaults.Initial3DRotation
 - uid: Stride.CommunityToolkit.Engine.CameraDefaults.MainCameraName
   name: MainCameraName
   href: api/Stride.CommunityToolkit.Engine.CameraDefaults.html#Stride_CommunityToolkit_Engine_CameraDefaults_MainCameraName
@@ -248,6 +260,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo
   nameWithType: EntityExtensions.AddLightDirectionalGizmo
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)
+  name: FindEntity(Entity, string)
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_FindEntity_Stride_Engine_Entity_System_String_
+  commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)
+  name.vb: FindEntity(Entity, String)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity, string)
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity, String)
+  nameWithType: EntityExtensions.FindEntity(Entity, string)
+  nameWithType.vb: EntityExtensions.FindEntity(Entity, String)
+- uid: Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity*
+  name: FindEntity
+  href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_FindEntity_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity
+  nameWithType: EntityExtensions.FindEntity
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent*
   name: GetComponent
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent_
@@ -331,22 +359,70 @@ references:
   commentId: T:Stride.CommunityToolkit.Engine.GameExtensions
   fullName: Stride.CommunityToolkit.Engine.GameExtensions
   nameWithType: GameExtensions
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
-  name: AddCamera(Game, string?, Vector3?, Vector3?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
-  name.vb: AddCamera(Game, String, Vector3?, Vector3?)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
-  nameWithType: GameExtensions.AddCamera(Game, string?, Vector3?, Vector3?)
-  nameWithType.vb: GameExtensions.AddCamera(Game, String, Vector3?, Vector3?)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera*
-  name: AddCamera
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddCamera_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddCamera
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
+  name: Add2DCamera(Game, string?, Vector3?, Vector3?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add2DCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3})
+  name.vb: Add2DCamera(Game, String, Vector3?, Vector3?)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?)
+  nameWithType: GameExtensions.Add2DCamera(Game, string?, Vector3?, Vector3?)
+  nameWithType.vb: GameExtensions.Add2DCamera(Game, String, Vector3?, Vector3?)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera*
+  name: Add2DCamera
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add2DCamera_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddCamera
-  nameWithType: GameExtensions.AddCamera
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add2DCamera
+  nameWithType: GameExtensions.Add2DCamera
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2})
+  name: Add2DGround(Game, string?, Vector2?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add2DGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2})
+  name.vb: Add2DGround(Game, String, Vector2?)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?)
+  nameWithType: GameExtensions.Add2DGround(Game, string?, Vector2?)
+  nameWithType.vb: GameExtensions.Add2DGround(Game, String, Vector2?)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround*
+  name: Add2DGround
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add2DGround_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround
+  nameWithType: GameExtensions.Add2DGround
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Engine.Processors.CameraProjectionMode)
+  name: Add3DCamera(Game, string?, Vector3?, Vector3?, CameraProjectionMode)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DCamera_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector3__System_Nullable_Stride_Core_Mathematics_Vector3__Stride_Engine_Processors_CameraProjectionMode_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Engine.Processors.CameraProjectionMode)
+  name.vb: Add3DCamera(Game, String, Vector3?, Vector3?, CameraProjectionMode)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?, Stride.Engine.Processors.CameraProjectionMode)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector3?, Stride.Core.Mathematics.Vector3?, Stride.Engine.Processors.CameraProjectionMode)
+  nameWithType: GameExtensions.Add3DCamera(Game, string?, Vector3?, Vector3?, CameraProjectionMode)
+  nameWithType.vb: GameExtensions.Add3DCamera(Game, String, Vector3?, Vector3?, CameraProjectionMode)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera*
+  name: Add3DCamera
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DCamera_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera
+  nameWithType: GameExtensions.Add3DCamera
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
+  name: Add3DGround(Game, string?, Vector2?, bool)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
+  name.vb: Add3DGround(Game, String, Vector2?, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?, Boolean)
+  nameWithType: GameExtensions.Add3DGround(Game, string?, Vector2?, bool)
+  nameWithType.vb: GameExtensions.Add3DGround(Game, String, Vector2?, Boolean)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround*
+  name: Add3DGround
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DGround_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround
+  nameWithType: GameExtensions.Add3DGround
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)
   name: AddDirectionalLight(Game, string?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_
@@ -376,31 +452,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor
   nameWithType: GameExtensions.AddGraphicsCompositor
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
-  name: AddGround(Game, string?, Vector2?, bool)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
-  name.vb: AddGround(Game, String, Vector2?, Boolean)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?, bool)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddGround(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?, Boolean)
-  nameWithType: GameExtensions.AddGround(Game, string?, Vector2?, bool)
-  nameWithType.vb: GameExtensions.AddGround(Game, String, Vector2?, Boolean)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGround*
-  name: AddGround
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGround_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddGround
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGround
-  nameWithType: GameExtensions.AddGround
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game,System.Boolean,System.Boolean)
-  name: AddGroundGizmo(Game, bool, bool)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGroundGizmo_Stride_Engine_Game_System_Boolean_System_Boolean_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game,System.Boolean,System.Boolean)
-  name.vb: AddGroundGizmo(Game, Boolean, Boolean)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game, bool, bool)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game, Boolean, Boolean)
-  nameWithType: GameExtensions.AddGroundGizmo(Game, bool, bool)
-  nameWithType.vb: GameExtensions.AddGroundGizmo(Game, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)
+  name: AddGroundGizmo(Game, Vector3?, bool, bool)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGroundGizmo_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Vector3__System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)
+  name.vb: AddGroundGizmo(Game, Vector3?, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game, Stride.Core.Mathematics.Vector3?, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Engine.Game, Stride.Core.Mathematics.Vector3?, Boolean, Boolean)
+  nameWithType: GameExtensions.AddGroundGizmo(Game, Vector3?, bool, bool)
+  nameWithType.vb: GameExtensions.AddGroundGizmo(Game, Vector3?, Boolean, Boolean)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo*
   name: AddGroundGizmo
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGroundGizmo_
@@ -440,15 +500,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox
   nameWithType: GameExtensions.AddSkybox
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
-  name: CreateMaterial(Game, Color?, float, float)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_Stride_Engine_Game_System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Single_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
-  name.vb: CreateMaterial(Game, Color?, Single, Single)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game, Stride.Core.Mathematics.Color?, float, float)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game, Stride.Core.Mathematics.Color?, Single, Single)
-  nameWithType: GameExtensions.CreateMaterial(Game, Color?, float, float)
-  nameWithType.vb: GameExtensions.CreateMaterial(Game, Color?, Single, Single)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
+  name: CreateMaterial(IGame, Color?, float, float)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_Stride_Games_IGame_System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Single_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
+  name.vb: CreateMaterial(IGame, Color?, Single, Single)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame, Stride.Core.Mathematics.Color?, float, float)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame, Stride.Core.Mathematics.Color?, Single, Single)
+  nameWithType: GameExtensions.CreateMaterial(IGame, Color?, float, float)
+  nameWithType.vb: GameExtensions.CreateMaterial(IGame, Color?, Single, Single)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial*
   name: CreateMaterial
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_
@@ -456,15 +516,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
   nameWithType: GameExtensions.CreateMaterial
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup)
-  name: CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?, RenderGroup)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Engine_Game_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector3__Stride_Rendering_RenderGroup_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup)
-  name.vb: CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?, RenderGroup)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector3?, Stride.Rendering.RenderGroup)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector3?, Stride.Rendering.RenderGroup)
-  nameWithType: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, string?, Material?, bool, Vector3?, RenderGroup)
-  nameWithType.vb: GameExtensions.CreatePrimitive(Game, PrimitiveModelType, String, Material, Boolean, Vector3?, RenderGroup)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup,System.Boolean)
+  name: CreatePrimitive(IGame, PrimitiveModelType, string?, Material?, bool, Vector3?, RenderGroup, bool)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Games_IGame_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_System_String_Stride_Rendering_Material_System_Boolean_System_Nullable_Stride_Core_Mathematics_Vector3__Stride_Rendering_RenderGroup_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup,System.Boolean)
+  name.vb: CreatePrimitive(IGame, PrimitiveModelType, String, Material, Boolean, Vector3?, RenderGroup, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, string?, Stride.Rendering.Material?, bool, Stride.Core.Mathematics.Vector3?, Stride.Rendering.RenderGroup, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, String, Stride.Rendering.Material, Boolean, Stride.Core.Mathematics.Vector3?, Stride.Rendering.RenderGroup, Boolean)
+  nameWithType: GameExtensions.CreatePrimitive(IGame, PrimitiveModelType, string?, Material?, bool, Vector3?, RenderGroup, bool)
+  nameWithType.vb: GameExtensions.CreatePrimitive(IGame, PrimitiveModelType, String, Material, Boolean, Vector3?, RenderGroup, Boolean)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive*
   name: CreatePrimitive
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_
@@ -536,6 +596,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Run
   nameWithType: GameExtensions.Run
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
+  name: SetMaxFPS(IGame, int)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetMaxFPS_Stride_Games_IGame_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
+  name.vb: SetMaxFPS(IGame, Integer)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame, int)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame, Integer)
+  nameWithType: GameExtensions.SetMaxFPS(IGame, int)
+  nameWithType.vb: GameExtensions.SetMaxFPS(IGame, Integer)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS*
+  name: SetMaxFPS
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetMaxFPS_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS
+  nameWithType: GameExtensions.SetMaxFPS
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase(Stride.Engine.Game)
   name: SetupBase(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_Stride_Engine_Game_
@@ -549,6 +625,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase
   nameWithType: GameExtensions.SetupBase
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene(Stride.Engine.Game)
+  name: SetupBase2DScene(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase2DScene_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene(Stride.Engine.Game)
+  nameWithType: GameExtensions.SetupBase2DScene(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene*
+  name: SetupBase2DScene
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase2DScene_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene
+  nameWithType: GameExtensions.SetupBase2DScene
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
   name: SetupBase3DScene(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_
@@ -698,6 +787,57 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas
   nameWithType: TextureCanvasExtensions.CreateTextureCanvas
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions
+  name: TextureExtensions
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html
+  commentId: T:Stride.CommunityToolkit.Extensions.TextureExtensions
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions
+  nameWithType: TextureExtensions
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir(System.String,System.String)
+  name: FindAssetSourceDir(string, string)
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html#Stride_CommunityToolkit_Extensions_TextureExtensions_FindAssetSourceDir_System_String_System_String_
+  commentId: M:Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir(System.String,System.String)
+  name.vb: FindAssetSourceDir(String, String)
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir(string, string)
+  fullName.vb: Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir(String, String)
+  nameWithType: TextureExtensions.FindAssetSourceDir(string, string)
+  nameWithType.vb: TextureExtensions.FindAssetSourceDir(String, String)
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir*
+  name: FindAssetSourceDir
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html#Stride_CommunityToolkit_Extensions_TextureExtensions_FindAssetSourceDir_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.FindAssetSourceDir
+  nameWithType: TextureExtensions.FindAssetSourceDir
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions.ReFormat(Stride.Graphics.Texture,Stride.Graphics.GraphicsContext,Stride.Graphics.PixelFormat)
+  name: ReFormat(Texture, GraphicsContext, PixelFormat)
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html#Stride_CommunityToolkit_Extensions_TextureExtensions_ReFormat_Stride_Graphics_Texture_Stride_Graphics_GraphicsContext_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Extensions.TextureExtensions.ReFormat(Stride.Graphics.Texture,Stride.Graphics.GraphicsContext,Stride.Graphics.PixelFormat)
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.ReFormat(Stride.Graphics.Texture, Stride.Graphics.GraphicsContext, Stride.Graphics.PixelFormat)
+  nameWithType: TextureExtensions.ReFormat(Texture, GraphicsContext, PixelFormat)
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions.ReFormat*
+  name: ReFormat
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html#Stride_CommunityToolkit_Extensions_TextureExtensions_ReFormat_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.TextureExtensions.ReFormat
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.ReFormat
+  nameWithType: TextureExtensions.ReFormat
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions.Resize(Stride.Graphics.Texture,System.Int32,System.Int32,Stride.Graphics.GraphicsContext,Stride.Graphics.PixelFormat)
+  name: Resize(Texture, int, int, GraphicsContext, PixelFormat)
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html#Stride_CommunityToolkit_Extensions_TextureExtensions_Resize_Stride_Graphics_Texture_System_Int32_System_Int32_Stride_Graphics_GraphicsContext_Stride_Graphics_PixelFormat_
+  commentId: M:Stride.CommunityToolkit.Extensions.TextureExtensions.Resize(Stride.Graphics.Texture,System.Int32,System.Int32,Stride.Graphics.GraphicsContext,Stride.Graphics.PixelFormat)
+  name.vb: Resize(Texture, Integer, Integer, GraphicsContext, PixelFormat)
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.Resize(Stride.Graphics.Texture, int, int, Stride.Graphics.GraphicsContext, Stride.Graphics.PixelFormat)
+  fullName.vb: Stride.CommunityToolkit.Extensions.TextureExtensions.Resize(Stride.Graphics.Texture, Integer, Integer, Stride.Graphics.GraphicsContext, Stride.Graphics.PixelFormat)
+  nameWithType: TextureExtensions.Resize(Texture, int, int, GraphicsContext, PixelFormat)
+  nameWithType.vb: TextureExtensions.Resize(Texture, Integer, Integer, GraphicsContext, PixelFormat)
+- uid: Stride.CommunityToolkit.Extensions.TextureExtensions.Resize*
+  name: Resize
+  href: api/Stride.CommunityToolkit.Extensions.TextureExtensions.html#Stride_CommunityToolkit_Extensions_TextureExtensions_Resize_
+  commentId: Overload:Stride.CommunityToolkit.Extensions.TextureExtensions.Resize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.Resize
+  nameWithType: TextureExtensions.Resize
 - uid: Stride.CommunityToolkit.Graphics
   name: Stride.CommunityToolkit.Graphics
   href: api/Stride.CommunityToolkit.Graphics.html
