@@ -4,8 +4,10 @@ using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Engine.Processors;
+using Stride.Extensions;
 using Stride.Games;
 using Stride.Graphics;
+using Stride.Graphics.GeometricPrimitives;
 using Stride.Physics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
@@ -341,7 +343,7 @@ public static class GameExtensions
 
         var collider = new StaticColliderComponent();
 
-        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
+        collider.ColliderShape = new BoxColliderShapeX4(is2D: true, validSize)
         {
             LocalOffset = new Vector3(0, 0, 0),
         };
@@ -522,4 +524,54 @@ public static class GameExtensions
     /// <param name="game">The game instance from which to obtain the FPS rate.</param>
     /// <returns>The current FPS rate of the game.</returns>
     public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
+}
+
+public class BoxColliderShapeX4 : ColliderShape
+{
+    public readonly Vector3 BoxSize;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BoxColliderShape"/> class.
+    /// </summary>
+    /// <param name="is2D">If this cube is a 2D quad</param>
+    /// <param name="size">The size of the cube</param>
+    public BoxColliderShapeX4(bool is2D, Vector3 size)
+    {
+        Type = ColliderShapeTypes.Box;
+        Is2D = is2D;
+        BoxSize = size;
+
+        //Box is not working properly when in a convex2dshape, Z cannot be 0
+
+        cachedScaling = Is2D ? new Vector3(1, 1, 0.001f) : Vector3.One;
+
+        if (is2D) size.Z = 0.001f;
+
+        // Note: Creating Convex 2D Shape from (3D) BoxShape, causes weird behaviour,
+        // better to instantiate Box2DShape directly (see issue #1707)
+        //if (Is2D)
+        //{
+        //    InternalShape = new BulletSharp.Box2DShape(size / 2) { LocalScaling = cachedScaling };
+        //}
+        //else
+        //{
+        //    InternalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
+        //}
+
+        if (Is2D)
+        {
+            InternalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2)) { LocalScaling = cachedScaling };
+        }
+        else
+        {
+            InternalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
+        }
+
+        DebugPrimitiveMatrix = Matrix.Scaling(size * DebugScaling);
+    }
+
+    public override MeshDraw CreateDebugPrimitive(GraphicsDevice device)
+    {
+        return GeometricPrimitive.Cube.New(device).ToMeshDraw();
+    }
 }

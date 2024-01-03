@@ -18,6 +18,7 @@ using var game = new Game();
 var boxSize = new Vector3(0.2f);
 var model = new Model();
 int cubes = 0;
+Simulation? simulation = null;
 
 game.Run(start: Start, update: Update);
 
@@ -56,7 +57,7 @@ void Start(Scene rootScene)
         }
     };
 
-    //var simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+    simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
     //simulation.FixedTimeStep = 1f / 120;
 
@@ -73,7 +74,7 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.N))
     {
-        Add3DBoxes(scene, 10);
+        Add3DBoxes(scene, 5);
 
         cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
     }
@@ -157,7 +158,17 @@ void Add3DBoxes(Scene scene, int count = 5)
 
         entity.Name = "Cube";
         entity.Transform.Position = new Vector3(0.5f, 8, 0);
+
         entity.Scene = scene;
+
+        var rigidBody = entity.Get<RigidbodyComponent>();
+
+        Vector3 pivot = new Vector3(0, 0, 0);
+        Vector3 axis = Vector3.UnitZ;
+
+        var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
+
+        simulation.AddConstraint(constrain);
     }
 }
 
@@ -177,7 +188,7 @@ void Add2DBoxes(Scene rootScene, int count = 5)
         {
             IsKinematic = false,
             //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-            ColliderShape = new BoxColliderShape(true, new Vector3(boxSize.X, boxSize.X, 0))
+            ColliderShape = new BoxColliderShapeX4(true, new Vector3(boxSize.X, boxSize.X, 0))
             {
                 LocalOffset = new Vector3(boxSize.X / 2, boxSize.X / 2, 0)
             }
