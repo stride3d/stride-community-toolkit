@@ -1,3 +1,5 @@
+using DebugShapes;
+using Stride.Engine;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Images;
@@ -65,6 +67,51 @@ public static class GraphicsCompositorExtensions
         }
 
         return graphicsCompositor;
+    }
+
+    public static void AddImmediatDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
+    {
+        var debugRenderFeatures = graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
+
+        if(!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
+        {
+            throw new NullReferenceException("Opaque RenderStage not found");
+        }
+        if(!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
+        {
+            throw new NullReferenceException("Transparent RenderStage not found");
+        }
+
+        if (!debugRenderFeatures.Any())
+        {
+            var newDebugRenderFeature = new ImmediateDebugRenderFeature()
+            {
+                RenderStageSelectors = {
+                        new ImmediateDebugRenderStageSelector
+                        {
+                            OpaqueRenderStage = opaqueRenderStage,
+                            TransparentRenderStage = transparentRenderStage
+                        }
+                    }
+            };
+            graphicsCompositor.RenderFeatures.Add(newDebugRenderFeature);
+        }
+    }
+
+    public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage renderFeature)
+    {
+        renderFeature = null;
+        var renderSystem = graphicsCompositor.RenderSystem;
+        for (int i = 0; i < renderSystem.RenderStages.Count; ++i)
+        {
+            var stage = renderSystem.RenderStages[i];
+            if (stage.Name == effectName)
+            {
+                renderFeature = stage;
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void AddPostEffects(GraphicsCompositor graphicsCompositor)

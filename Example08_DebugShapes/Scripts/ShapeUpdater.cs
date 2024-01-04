@@ -5,6 +5,7 @@ using Stride.Physics;
 using Stride.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using DebugShapes;
 
 namespace Example08_DebugShapes.Scripts;
@@ -110,31 +111,12 @@ public class ShapeUpdater : SyncScript
             return null;
         }
 
-        DebugDraw = new ImmediateDebugRenderSystem(Services);
+        DebugDraw = new ImmediateDebugRenderSystem(Services, RenderGroup.Group1);
         DebugDraw.PrimitiveColor = Color.Green;
         DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
         DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
         DebugDraw.Visible = true;
 
-        // FIXME
-        var debugRenderFeatures = SceneSystem.GraphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
-        var opaqueRenderStage = FindRenderStage(SceneSystem.GraphicsCompositor.RenderSystem, "Opaque");
-        var transparentRenderStage = FindRenderStage(SceneSystem.GraphicsCompositor.RenderSystem, "Transparent");
-
-        if (!debugRenderFeatures.Any())
-        {
-            var newDebugRenderFeature = new ImmediateDebugRenderFeature()
-            {
-                RenderStageSelectors = {
-                        new ImmediateDebugRenderStageSelector
-                        {
-                            OpaqueRenderStage = opaqueRenderStage,
-                            TransparentRenderStage = transparentRenderStage
-                        }
-                    }
-            };
-            SceneSystem.GraphicsCompositor.RenderFeatures.Add(newDebugRenderFeature);
-        }
         // keep DebugText visible in release builds too
         DebugText.Visible = true;
         Services.AddService(DebugDraw);

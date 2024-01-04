@@ -1,4 +1,4 @@
-﻿// Copyright (c) Stride contributors (https://stride3d.net)
+// Copyright (c) Stride contributors (https://stride3d.net)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using System.Runtime.InteropServices;
@@ -226,12 +226,14 @@ namespace DebugShapes
 		public int MaxPrimitives { get; set; } = 100;
 		public int MaxPrimitivesWithLifetime { get; set; } = 100;
 
-		public RenderGroup RenderGroup { get; set; } = RenderGroup.Group31;
+		public RenderGroup RenderGroup { get; set; }
 
-		public ImmediateDebugRenderSystem(IServiceRegistry registry) : base(registry)
+		public ImmediateDebugRenderSystem(IServiceRegistry registry, RenderGroup renderGroup = RenderGroup.Group31) : base(registry)
 		{
 			Enabled = true;
 			Visible = Platform.IsRunningDebugAssembly;
+
+            RenderGroup = renderGroup;
 
 			DrawOrder = 0xffffff;
 			UpdateOrder = -100100; //before script

@@ -6,7 +6,7 @@ using Stride.Games;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(start: Start);
 
 void Start(Scene rootScene)
 {
@@ -14,14 +14,10 @@ void Start(Scene rootScene)
     SetupBaseScene();
 }
 
-void Update(Scene scene, GameTime time)
-{
-
-}
-
 void SetupBaseScene()
 {
-    game.AddGraphicsCompositor();
+    game.AddGraphicsCompositor()
+        .AddImmediatDebugRenderFeature();
     game.Add3DCamera().AddInteractiveCameraScript();
     game.AddDirectionalLight();
     game.AddSkybox();
