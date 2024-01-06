@@ -477,6 +477,18 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Sets the maximum frames per second (FPS) rate for the game.
+    /// Set <param name="targetFPS"/> to 0 for max possible FPS.
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="targetFPS"></param>
+    public static void SetMaxFPS(this IGame game, int targetFPS)
+    {
+        var gameBase = (GameBase)game;
+        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000 / targetFPS);
+    }
+
+    /// <summary>
     /// Generates a procedural model based on the specified type and size.
     /// </summary>
     /// <param name="type">The type of primitive model to create.</param>
