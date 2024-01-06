@@ -1,4 +1,4 @@
-using NexVYaml.Serialization;
+using NexVYaml;
 using Stride.Core.IO;
 
 namespace Example07_CubeClicker.Core;
@@ -26,7 +26,7 @@ public class DataSaver<TData>
         await using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(FileName, fileMode, VirtualFileAccess.Write);
 
         // serialize the object to the stream
-        YamlSerializer.Serialize(Data, fileStream);
+        await YamlSerializer.SerializeAsync(Data, fileStream);
     }
 
     public void Delete() => VirtualFileSystem.ApplicationData.FileDelete(FileName);
