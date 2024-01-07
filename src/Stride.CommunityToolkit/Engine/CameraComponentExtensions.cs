@@ -90,6 +90,25 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
+    /// Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
+    /// and returns information about the hit result.
+    /// </summary>
+    /// <param name="camera">The CameraComponent from which the ray should be cast.</param>
+    /// <param name="component">The ScriptComponent from which the Input.MousePosition should be taken.</param>
+    /// <param name="collisionGroups">Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</param>
+    /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</param>
+    /// <returns>A HitResult containing information about the hit result, including the hit location and other collision data.</returns>
+    public static HitResult RaycastMouse(this CameraComponent camera, ScriptComponent component, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
+    {
+        return camera.Raycast(component, component.Input.MousePosition, collisionGroups, collisionFilterGroupFlags);
+    }
+
+    public static HitResult RaycastMouse(this CameraComponent camera, Simulation simulation, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
+    {
+        return camera.Raycast(simulation, screenPosition, collisionGroups, collisionFilterGroupFlags);
+    }
+
+    /// <summary>
     /// Performs a raycasting operation from the specified CameraComponent's position through the specified screen position in world coordinates,
     /// and returns information about the hit result.
     /// </summary>
@@ -100,6 +119,9 @@ public static class CameraComponentExtensions
     /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</param>
     /// <returns>A HitResult containing information about the hit result, including the hit location and other collision data.</returns>
     public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
+        => Raycast(camera, component.GetSimulation(), screenPosition, collisionGroups, collisionFilterGroupFlags);
+
+    public static HitResult Raycast(this CameraComponent camera, Simulation simulation, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
     {
         var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
 
@@ -126,21 +148,7 @@ public static class CameraComponentExtensions
         vectorFar /= vectorFar.W;
 
         // Raycast from the point on the near plane to the point on the far plane and get the collision result
-        return component.GetSimulation().Raycast(vectorNear.XYZ(), vectorFar.XYZ(), collisionGroups, collisionFilterGroupFlags);
-    }
-
-    /// <summary>
-    /// Performs a raycasting operation from the specified CameraComponent's position through the mouse cursor position in screen coordinates,
-    /// and returns information about the hit result.
-    /// </summary>
-    /// <param name="camera">The CameraComponent from which the ray should be cast.</param>
-    /// <param name="component">The ScriptComponent from which the Input.MousePosition should be taken.</param>
-    /// <param name="collisionGroups">Optional. The collision filter group to consider during the raycasting. Default is CollisionFilterGroups.DefaultFilter.</param>
-    /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is CollisionFilterGroupFlags.DefaultFilter.</param>
-    /// <returns>A HitResult containing information about the hit result, including the hit location and other collision data.</returns>
-    public static HitResult RaycastMouse(this CameraComponent camera, ScriptComponent component, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
-    {
-        return camera.Raycast(component, component.Input.MousePosition, collisionGroups, collisionFilterGroupFlags);
+        return simulation.Raycast(vectorNear.XYZ(), vectorFar.XYZ(), collisionGroups, collisionFilterGroupFlags);
     }
 
     /// <summary>
