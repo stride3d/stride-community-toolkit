@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Engine.Design;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
@@ -16,14 +17,19 @@ using System.Reflection;
 using var game = new Game();
 
 var boxSize = new Vector3(0.2f);
-var model = new Model();
+var rectangleSize = new Vector3(0.2f, 0.3f, 0);
+var squareModel = new Model();
+var rectangleModel = new Model();
+var circleModel = new Model();
+var triangleModel = new Model();
 int cubes = 0;
+int debugX = 5;
+int debugY = 30;
 Simulation? simulation = null;
 CameraComponent? _camera = null;
 Entity? _selectedEntity = null;
 
 game.Run(start: Start, update: Update);
-
 
 void Start(Scene rootScene)
 {
@@ -40,7 +46,7 @@ void Start(Scene rootScene)
     game.AddDirectionalLight();
     game.AddSkybox();
 
-    // Make sure you also update 2D Groud collider if you are testing this
+    // Make sure you also update 2D Ground collider if you are testing this
     //game.Add2DGround();
     game.Add3DGround();
 
@@ -51,22 +57,40 @@ void Start(Scene rootScene)
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    var planeMesh = GiveMeAPlane();
-
-    model = new Model
+    squareModel = new Model
     {
         new Mesh {
-            Draw = planeMesh.ToMeshDraw(game.GraphicsDevice),
+            Draw = GiveMeShape(boxSize).ToMeshDraw(game.GraphicsDevice),
             MaterialIndex = 0
         }
     };
 
+    rectangleModel = new Model
+    {
+        new Mesh {
+            Draw = GiveMeShape(rectangleSize).ToMeshDraw(game.GraphicsDevice),
+            MaterialIndex = 0
+        }
+    };
+
+    circleModel = new Model
+    {
+        new Mesh {
+            Draw = GiveMeShape(rectangleSize).ToMeshDraw(game.GraphicsDevice),
+            MaterialIndex = 0
+        }
+    };
+
+    var gameSettings = game.Services.GetService<IGameSettingsService>();
+
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
-    //simulation.FixedTimeStep = 1f / 120;
+    var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
+
+    simulation.FixedTimeStep = 1f / 120;
     //simulation.ContinuousCollisionDetection = true;
 
-    Add2DBoxes(rootScene, 1);
+    Add2DShapes(rootScene, squareModel, boxSize, 1);
 
     AddBackground(rootScene);
 
@@ -75,6 +99,10 @@ void Start(Scene rootScene)
 
 void Update(Scene scene, GameTime time)
 {
+    var gameSettings = game.Services.GetService<IGameSettingsService>();
+
+    simulation.ContinuousCollisionDetection = true;
+
     if (!game.Input.HasKeyboard) return;
 
     if (game.Input.IsMouseButtonDown(MouseButton.Left))
@@ -86,19 +114,31 @@ void Update(Scene scene, GameTime time)
     {
         Add3DBoxes(scene, 5);
 
-        cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
+        SetSubeCount(scene);
     }
-
-    if (game.Input.IsKeyPressed(Keys.M))
+    else if (game.Input.IsKeyPressed(Keys.M))
     {
-        Add2DBoxes(scene, 10);
+        Add2DShapes(scene, squareModel, boxSize, 10);
 
-        cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
+        SetSubeCount(scene);
+    }
+    else if (game.Input.IsKeyPressed(Keys.R))
+    {
+        Add2DShapes(scene, rectangleModel, rectangleSize, 10);
+
+        SetSubeCount(scene);
+    }
+    else if (game.Input.IsKeyReleased(Keys.X))
+    {
+        foreach (var entity in scene.Entities.Where(w => w.Name == "Cube").ToList())
+        {
+            entity.Remove();
+        }
+
+        SetSubeCount(scene);
     }
 
-    game.DebugTextSystem.Print($"N - generate 3D cubes", new Int2(x: 20, y: 30));
-    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: 20, y: 50));
-    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: 20, y: 70));
+    RenderNavigation();
 }
 
 void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
@@ -147,7 +187,7 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
 //    }
 //}
 
-MeshBuilder GiveMeAPlane()
+MeshBuilder GiveMeShape(Vector3 size)
 {
     var meshBuilder = new MeshBuilder();
 
@@ -162,16 +202,16 @@ MeshBuilder GiveMeAPlane()
     //meshBuilder.SetElement(color, Color.Red);
 
     meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(0, boxSize.X));
+    meshBuilder.SetElement(position, new Vector2(0, size.Y));
     //meshBuilder.SetElement(color, Color.Green);
 
     meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(boxSize.X, boxSize.X));
+    meshBuilder.SetElement(position, new Vector2(size.X, size.Y));
     //meshBuilder.SetElement(color, Color.Blue);
 
     meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(boxSize.X, 0));
-    //meshBuilder.SetElement(color, Color.Yellow);mmmmmmmm
+    meshBuilder.SetElement(position, new Vector2(size.X, 0));
+    //meshBuilder.SetElement(color, Color.Yellow);
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(1);
@@ -222,13 +262,13 @@ void Add3DBoxes(Scene scene, int count = 5)
         Vector3 pivot = new Vector3(0, 0, 0);
         Vector3 axis = Vector3.UnitZ;
 
-        var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
+        //var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
 
-        simulation.AddConstraint(constrain);
+        //simulation.AddConstraint(constrain);
     }
 }
 
-void Add2DBoxes(Scene rootScene, int count = 5)
+void Add2DShapes(Scene rootScene, Model model, Vector3 size, int count = 5)
 {
     for (int i = 1; i <= count; i++)
     {
@@ -239,6 +279,7 @@ void Add2DBoxes(Scene rootScene, int count = 5)
         };
 
         entity.Add(new ModelComponent { Model = model });
+
         //entity.Add(new StaticColliderComponent());
 
         var rigidBody = new RigidbodyComponent()
@@ -251,9 +292,9 @@ void Add2DBoxes(Scene rootScene, int count = 5)
             //LinearDamping = 0.8f,
             //AngularDamping = 1.4f,
             //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-            ColliderShape = new BoxColliderShapeX4(true, new Vector3(boxSize.X, boxSize.X, 0))
+            ColliderShape = new BoxColliderShapeX4(true, new Vector3(size.X, size.Y, 0))
             {
-                LocalOffset = new Vector3(boxSize.X / 2, boxSize.X / 2, 0)
+                LocalOffset = new Vector3(size.X / 2, size.Y / 2, 0)
             }
         };
 
@@ -276,3 +317,13 @@ static void AddSpriteBatchRenderer(Scene rootScene)
 
     entity.Scene = rootScene;
 }
+
+void RenderNavigation()
+{
+    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
+    game.DebugTextSystem.Print($"X - delete all cubes and shapes", new Int2(x: debugX, y: debugY + 30));
+    game.DebugTextSystem.Print($"N - generate 3D cubes", new Int2(x: debugX, y: debugY + 50));
+    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: debugX, y: debugY + 70));
+}
+
+void SetSubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
