@@ -5,7 +5,6 @@ using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Engine.Design;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
@@ -28,11 +27,14 @@ int debugY = 30;
 Simulation? simulation = null;
 CameraComponent? _camera = null;
 Entity? _selectedEntity = null;
+Scene scene = new();
 
 game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
+    scene = rootScene;
+
     game.Window.AllowUserResizing = true;
     game.Window.Title = "2D Example";
 
@@ -65,43 +67,47 @@ void Start(Scene rootScene)
         }
     };
 
+    squareModel.Materials.Add(game.CreateMaterial(Color.DarkGreen));
+
     rectangleModel = new Model
     {
         new Mesh {
             Draw = GiveMeShape(rectangleSize).ToMeshDraw(game.GraphicsDevice),
             MaterialIndex = 0
-        }
+        },
+        game.CreateMaterial(Color.Orange)
     };
 
     circleModel = new Model
     {
         new Mesh {
-            Draw = GiveMeShape(rectangleSize).ToMeshDraw(game.GraphicsDevice),
+            Draw = GiveMeCircle(boxSize, 10).ToMeshDraw(game.GraphicsDevice),
             MaterialIndex = 0
-        }
+        },
+        game.CreateMaterial(Color.DarkRed)
     };
 
-    var gameSettings = game.Services.GetService<IGameSettingsService>();
+    //var gameSettings = game.Services.GetService<IGameSettingsService>();
 
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
-    var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
+    //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    simulation.FixedTimeStep = 1f / 120;
+    //simulation.FixedTimeStep = 1f / 120;
     //simulation.ContinuousCollisionDetection = true;
 
-    Add2DShapes(rootScene, squareModel, boxSize, 1);
+    Add2DShapes(ShapeType.Square, squareModel, boxSize, 1);
 
-    AddBackground(rootScene);
+    AddBackground();
 
     //Add3DBoxes(rootScene);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    var gameSettings = game.Services.GetService<IGameSettingsService>();
+    //var gameSettings = game.Services.GetService<IGameSettingsService>();
 
-    simulation.ContinuousCollisionDetection = true;
+    //simulation.ContinuousCollisionDetection = true;
 
     if (!game.Input.HasKeyboard) return;
 
@@ -112,19 +118,25 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsKeyPressed(Keys.N))
     {
-        Add3DBoxes(scene, 5);
+        Add3DBoxes(5);
 
         SetSubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.M))
     {
-        Add2DShapes(scene, squareModel, boxSize, 10);
+        Add2DShapes(ShapeType.Square, squareModel, boxSize, 10);
 
         SetSubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.R))
     {
-        Add2DShapes(scene, rectangleModel, rectangleSize, 10);
+        Add2DShapes(ShapeType.Rectangle, rectangleModel, rectangleSize, 10);
+
+        SetSubeCount(scene);
+    }
+    else if (game.Input.IsKeyPressed(Keys.C))
+    {
+        Add2DShapes(ShapeType.Circle, circleModel, rectangleSize, 10);
 
         SetSubeCount(scene);
     }
@@ -224,8 +236,49 @@ MeshBuilder GiveMeShape(Vector3 size)
     return meshBuilder;
 }
 
+MeshBuilder GiveMeCircle(Vector3 size, int segments)
+{
+    var meshBuilder = new MeshBuilder();
+
+    meshBuilder.WithIndexType(IndexingType.Int16);
+    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+
+    var position = meshBuilder.WithPosition<Vector2>();
+
+    // Calculate radius based on the size (assuming size.X is diameter)
+    float radius = size.X / 2;
+
+    // Add center vertex
+    meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector2(0, 0));
+
+    // Add vertices for the circumference
+    for (int i = 0; i <= segments; i++)
+    {
+        // Angle for each segment
+        float angle = MathUtil.TwoPi * i / segments;
+
+        // Calculate vertex position on circumference
+        float x = radius * MathF.Cos(angle);
+        float y = radius * MathF.Sin(angle);
+
+        meshBuilder.AddVertex();
+        meshBuilder.SetElement(position, new Vector2(x, y));
+    }
+
+    // Create triangles
+    for (int i = 1; i <= segments; i++)
+    {
+        meshBuilder.AddIndex(0); // Center vertex
+        meshBuilder.AddIndex(i + 1);
+        meshBuilder.AddIndex(i);
+    }
+
+    return meshBuilder;
+}
+
 // Image by brgfx, Free license, Attribution is required: https://www.freepik.com/free-vector/nature-roadside-background-scene_40169781.htm#query=2d%20game%20background&position=13&from_view=keyword&track=ais&uuid=dde78bdc-b045-4f91-b1b8-50f13aef87dc
-void AddBackground(Scene scene)
+void AddBackground()
 {
     var entity = new Entity("Background");
 
@@ -246,15 +299,14 @@ void AddBackground(Scene scene)
     entity.Scene = scene;
 }
 
-void Add3DBoxes(Scene scene, int count = 5)
+void Add3DBoxes(int count = 5)
 {
     for (int i = 0; i < count; i++)
     {
-        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize);
+        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
 
         entity.Name = "Cube";
         entity.Transform.Position = new Vector3(0.5f, 8, 0);
-
         entity.Scene = scene;
 
         var rigidBody = entity.Get<RigidbodyComponent>();
@@ -268,14 +320,17 @@ void Add3DBoxes(Scene scene, int count = 5)
     }
 }
 
-void Add2DShapes(Scene rootScene, Model model, Vector3 size, int count = 5)
+void Add2DShapes(ShapeType type, Model model, Vector3 size, int count = 5)
 {
     for (int i = 1; i <= count; i++)
     {
         var entity = new Entity
         {
             Name = "Cube",
-            Transform = { Position = new(Random.Shared.Next(-5, 5), 5 + Random.Shared.Next(0, 5), 0) }
+            Transform = {
+                Position = new(Random.Shared.Next(-5, 5), 5 + Random.Shared.Next(0, 5), 0),
+                //Rotation = Quaternion.RotationYawPitchRoll(MathUtil.DegreesToRadians(180), 0, 0)
+            }
         };
 
         entity.Add(new ModelComponent { Model = model });
@@ -292,15 +347,18 @@ void Add2DShapes(Scene rootScene, Model model, Vector3 size, int count = 5)
             //LinearDamping = 0.8f,
             //AngularDamping = 1.4f,
             //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-            ColliderShape = new BoxColliderShapeX4(true, new Vector3(size.X, size.Y, 0))
+            ColliderShape = (type) switch
             {
-                LocalOffset = new Vector3(size.X / 2, size.Y / 2, 0)
+                ShapeType.Square => GetBoxColliderShape(size),
+                ShapeType.Rectangle => GetBoxColliderShape(size),
+                ShapeType.Circle => new SphereColliderShape(true, size.X / 2),
+                _ => throw new NotImplementedException(),
             }
         };
 
         entity.Add(rigidBody);
 
-        entity.Scene = rootScene;
+        entity.Scene = scene;
 
         rigidBody.AngularFactor = new Vector3(0, 0, 1);
         rigidBody.LinearFactor = new Vector3(1, 1, 0);
@@ -327,3 +385,17 @@ void RenderNavigation()
 }
 
 void SetSubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
+
+static BoxColliderShapeX4 GetBoxColliderShape(Vector3 size)
+    => new BoxColliderShapeX4(true, new Vector3(size.X, size.Y, 0))
+    {
+        LocalOffset = new Vector3(size.X / 2, size.Y / 2, 0)
+    };
+
+enum ShapeType
+{
+    Square,
+    Rectangle,
+    Circle,
+    Triangle
+}
