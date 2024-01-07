@@ -16,6 +16,7 @@ using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
+using System.Reflection;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -550,36 +551,56 @@ public class BoxColliderShapeX4 : ColliderShape
     public BoxColliderShapeX4(bool is2D, Vector3 size)
     {
         Type = ColliderShapeTypes.Box;
-        Is2D = is2D;
         BoxSize = size;
 
-        //Box is not working properly when in a convex2dshape, Z cannot be 0
+        // Use reflection to set internal properties
+        SetInternalProperties(is2D, size);
 
         cachedScaling = Is2D ? new Vector3(1, 1, 0.001f) : Vector3.One;
 
-        if (is2D) size.Z = 0.001f;
+        //if (is2D) size.Z = 0.001f;
 
-        // Note: Creating Convex 2D Shape from (3D) BoxShape, causes weird behaviour,
-        // better to instantiate Box2DShape directly (see issue #1707)
         //if (Is2D)
         //{
-        //    InternalShape = new BulletSharp.Box2DShape(size / 2) { LocalScaling = cachedScaling };
+        //    InternalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2)) { LocalScaling = cachedScaling };
         //}
         //else
         //{
         //    InternalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
         //}
 
-        if (Is2D)
+        //DebugPrimitiveMatrix = Matrix.Scaling(size * DebugScaling);
+    }
+
+    private void SetInternalProperties(bool is2D, Vector3 size)
+    {
+        // Set the Is2D property using reflection
+        //var is2DProperty = typeof(ColliderShape).GetProperty("Is2D", BindingFlags.NonPublic | BindingFlags.Instance);
+        var is2DProperty = typeof(ColliderShape).GetProperty("Is2D");
+
+        if (is2DProperty != null)
         {
-            InternalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2)) { LocalScaling = cachedScaling };
-        }
-        else
-        {
-            InternalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
+            is2DProperty.SetValue(this, is2D);
         }
 
-        DebugPrimitiveMatrix = Matrix.Scaling(size * DebugScaling);
+        // Set the InternalShape property using reflection
+        var internalShapeField = typeof(ColliderShape).GetField("InternalShape", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (internalShapeField != null)
+        {
+            BulletSharp.CollisionShape internalShape;
+
+            if (is2D)
+            {
+                size.Z = 0.001f; // Adjust the Z size for 2D
+                internalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2) { LocalScaling = Vector3.One }) { LocalScaling = cachedScaling };
+            }
+            else
+            {
+                internalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
+            }
+
+            internalShapeField.SetValue(this, internalShape);
+        }
     }
 
     public override MeshDraw CreateDebugPrimitive(GraphicsDevice device)
