@@ -19,6 +19,8 @@ var boxSize = new Vector3(0.2f);
 var model = new Model();
 int cubes = 0;
 Simulation? simulation = null;
+CameraComponent? _camera = null;
+Entity? _selectedEntity = null;
 
 game.Run(start: Start, update: Update);
 
@@ -47,6 +49,8 @@ void Start(Scene rootScene)
 
     //AddSpriteBatchRenderer(rootScene);
 
+    _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+
     var planeMesh = GiveMeAPlane();
 
     model = new Model
@@ -60,6 +64,7 @@ void Start(Scene rootScene)
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
     //simulation.FixedTimeStep = 1f / 120;
+    //simulation.ContinuousCollisionDetection = true;
 
     Add2DBoxes(rootScene, 1);
 
@@ -71,6 +76,11 @@ void Start(Scene rootScene)
 void Update(Scene scene, GameTime time)
 {
     if (!game.Input.HasKeyboard) return;
+
+    if (game.Input.IsMouseButtonDown(MouseButton.Left))
+    {
+        ProcessRaycast(MouseButton.Left, game.Input.MousePosition);
+    }
 
     if (game.Input.IsKeyPressed(Keys.N))
     {
@@ -90,6 +100,52 @@ void Update(Scene scene, GameTime time)
     game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: 20, y: 50));
     game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: 20, y: 70));
 }
+
+void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
+{
+    var hitResult = _camera!.RaycastMouse(simulation, mousePosition);
+
+    if (hitResult.Succeeded && hitResult.Collider.Entity.Name == "Cube")
+    {
+        if (mouseButton == MouseButton.Left)
+        {
+            var rigidbody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
+
+            if (rigidbody != null)
+            {
+                //var worldPosition = _camera.ScreenToWorldPoint(new Vector3(mousePosition.X, mousePosition.Y, 0));
+
+                // Calculate a target position and apply force or set velocity
+                //var direction = worldPosition - rigidbody.Position;
+                //direction.Normalize();
+
+                // Apply a force towards the target position
+                // or set the velocity directly (more abrupt and less physically realistic)
+
+                var direction = new Vector3(0, 20, 0);
+
+                rigidbody.ApplyImpulse(direction * 10);
+                // or
+                rigidbody.LinearVelocity = direction * 1;
+            }
+
+
+            Console.WriteLine("Left click");
+        }
+    }
+}
+
+//void MoveSelectedEntity(Vector2 mousePosition)
+//{
+//    // Convert mouse position to world coordinates
+//    var worldPosition = ConvertMouseToWorldPosition(mousePosition);
+
+//    // Update entity position
+//    if (_selectedEntity != null)
+//    {
+//        _selectedEntity.Transform.Position = new Vector3(worldPosition.X, worldPosition.Y, _selectedEntity.Transform.Position.Z);
+//    }
+//}
 
 MeshBuilder GiveMeAPlane()
 {
@@ -115,7 +171,7 @@ MeshBuilder GiveMeAPlane()
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector2(boxSize.X, 0));
-    //meshBuilder.SetElement(color, Color.Yellow);
+    //meshBuilder.SetElement(color, Color.Yellow);mmmmmmmm
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(1);
@@ -184,17 +240,29 @@ void Add2DBoxes(Scene rootScene, int count = 5)
 
         entity.Add(new ModelComponent { Model = model });
         //entity.Add(new StaticColliderComponent());
-        entity.Add(new RigidbodyComponent()
+
+        var rigidBody = new RigidbodyComponent()
         {
             IsKinematic = false,
+            Restitution = 0,
+            Friction = 1,
+            RollingFriction = 0.1f,
+            Mass = 1000000,
+            //LinearDamping = 0.8f,
+            //AngularDamping = 1.4f,
             //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
             ColliderShape = new BoxColliderShapeX4(true, new Vector3(boxSize.X, boxSize.X, 0))
             {
                 LocalOffset = new Vector3(boxSize.X / 2, boxSize.X / 2, 0)
             }
-        });
+        };
+
+        entity.Add(rigidBody);
 
         entity.Scene = rootScene;
+
+        rigidBody.AngularFactor = new Vector3(0, 0, 1);
+        rigidBody.LinearFactor = new Vector3(1, 1, 0);
     }
 }
 
