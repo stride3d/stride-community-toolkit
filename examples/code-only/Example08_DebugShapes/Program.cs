@@ -2,7 +2,6 @@ using Example08_DebugShapes.Scripts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
-using Stride.Games;
 
 using var game = new Game();
 

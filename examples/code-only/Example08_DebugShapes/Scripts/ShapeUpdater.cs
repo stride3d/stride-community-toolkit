@@ -1,12 +1,11 @@
-using Stride.Core.Collections;
+using DebugShapes;
 using Stride.Core;
+using Stride.Core.Collections;
+using Stride.Core.Mathematics;
+using Stride.Core.Threading;
 using Stride.Engine;
 using Stride.Physics;
 using Stride.Rendering;
-using Stride.Core.Mathematics;
-using Stride.Core.Threading;
-using Stride.CommunityToolkit.Rendering.Compositing;
-using DebugShapes;
 
 namespace Example08_DebugShapes.Scripts;
 public class ShapeUpdater : SyncScript
