@@ -4,16 +4,20 @@ using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Engine.Processors;
+using Stride.Extensions;
 using Stride.Games;
 using Stride.Graphics;
+using Stride.Graphics.GeometricPrimitives;
 using Stride.Physics;
 using Stride.Rendering;
+using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
+using System.Reflection;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -265,6 +269,43 @@ public static class GameExtensions
         return entity;
     }
 
+    public static void AddAllDirectionLighting(this Game game, float intensity, bool showLightGizmo = true)
+    {
+        var position = new Vector3(7f, 2f, 0);
+
+        CreateLightEntity(GetLight(), intensity, position);
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270)));
+
+        LightDirectional GetLight() => new() { Color = GetColor(Color.White) };
+
+        static ColorRgbProvider GetColor(Color color) => new(color);
+
+        void CreateLightEntity(ILight light, float intensity, Vector3 position, Quaternion? rotation = null)
+        {
+            var entity = new Entity() {
+                new LightComponent {
+                    Intensity =  intensity,
+                    Type = light
+                }};
+
+            entity.Transform.Position = position;
+            entity.Transform.Rotation = rotation ?? Quaternion.Identity;
+            entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+
+            if (showLightGizmo)
+            {
+                entity.AddLightDirectionalGizmo(game.GraphicsDevice);
+            }
+        }
+    }
+
     /// <summary>
     /// Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.
     /// </summary>
@@ -341,7 +382,7 @@ public static class GameExtensions
 
         var collider = new StaticColliderComponent();
 
-        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
+        collider.ColliderShape = new BoxColliderShapeX4(is2D: true, validSize)
         {
             LocalOffset = new Vector3(0, 0, 0),
         };
@@ -534,4 +575,74 @@ public static class GameExtensions
     /// <param name="game">The game instance from which to obtain the FPS rate.</param>
     /// <returns>The current FPS rate of the game.</returns>
     public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
+}
+
+public class BoxColliderShapeX4 : ColliderShape
+{
+    public readonly Vector3 BoxSize;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BoxColliderShape"/> class.
+    /// </summary>
+    /// <param name="is2D">If this cube is a 2D quad</param>
+    /// <param name="size">The size of the cube</param>
+    public BoxColliderShapeX4(bool is2D, Vector3 size)
+    {
+        Type = ColliderShapeTypes.Box;
+        BoxSize = size;
+
+        // Use reflection to set internal properties
+        SetInternalProperties(is2D, size);
+
+        cachedScaling = Is2D ? new Vector3(1, 1, 0.001f) : Vector3.One;
+
+        //if (is2D) size.Z = 0.001f;
+
+        //if (Is2D)
+        //{
+        //    InternalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2)) { LocalScaling = cachedScaling };
+        //}
+        //else
+        //{
+        //    InternalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
+        //}
+
+        //DebugPrimitiveMatrix = Matrix.Scaling(size * DebugScaling);
+    }
+
+    private void SetInternalProperties(bool is2D, Vector3 size)
+    {
+        // Set the Is2D property using reflection
+        //var is2DProperty = typeof(ColliderShape).GetProperty("Is2D", BindingFlags.NonPublic | BindingFlags.Instance);
+        var is2DProperty = typeof(ColliderShape).GetProperty("Is2D");
+
+        if (is2DProperty != null)
+        {
+            is2DProperty.SetValue(this, is2D);
+        }
+
+        // Set the InternalShape property using reflection
+        var internalShapeField = typeof(ColliderShape).GetField("InternalShape", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (internalShapeField != null)
+        {
+            BulletSharp.CollisionShape internalShape;
+
+            if (is2D)
+            {
+                size.Z = 0.001f; // Adjust the Z size for 2D
+                internalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2) { LocalScaling = Vector3.One }) { LocalScaling = cachedScaling };
+            }
+            else
+            {
+                internalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
+            }
+
+            internalShapeField.SetValue(this, internalShape);
+        }
+    }
+
+    public override MeshDraw CreateDebugPrimitive(GraphicsDevice device)
+    {
+        return GeometricPrimitive.Cube.New(device).ToMeshDraw();
+    }
 }

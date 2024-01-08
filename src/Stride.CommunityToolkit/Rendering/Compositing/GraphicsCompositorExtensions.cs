@@ -1,5 +1,4 @@
 using DebugShapes;
-using Stride.Engine;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Images;
@@ -73,11 +72,11 @@ public static class GraphicsCompositorExtensions
     {
         var debugRenderFeatures = graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
 
-        if(!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
+        if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
         {
             throw new NullReferenceException("Opaque RenderStage not found");
         }
-        if(!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
+        if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
         {
             throw new NullReferenceException("Transparent RenderStage not found");
         }

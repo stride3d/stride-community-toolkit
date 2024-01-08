@@ -30,9 +30,9 @@ public class GameManager
 
     public Entity CreateUI() => _uiManager.CreateUI();
 
-    public void HandleClick(MouseButton type, List<Vector3> positinos)
+    public void HandleClick(MouseButton type, List<Vector3> positions)
     {
-        _cubeDataManager.UpdatePositions(positinos);
+        _cubeDataManager.UpdatePositions(positions);
 
         var clickable = _clickDataManager.GetClickables().FirstOrDefault(x => x.Type == type);
 
