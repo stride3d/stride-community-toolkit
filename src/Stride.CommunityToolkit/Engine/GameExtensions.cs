@@ -10,6 +10,7 @@ using Stride.Graphics;
 using Stride.Graphics.GeometricPrimitives;
 using Stride.Physics;
 using Stride.Rendering;
+using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
@@ -266,6 +267,43 @@ public static class GameExtensions
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
+    }
+
+    public static void AddAllDirectionLighting(this Game game, float intensity, bool showLightGizmo = true)
+    {
+        var position = new Vector3(7f, 2f, 0);
+
+        CreateLightEntity(GetLight(), intensity, position);
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(180)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(270)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)));
+
+        CreateLightEntity(GetLight(), intensity, position, Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270)));
+
+        LightDirectional GetLight() => new() { Color = GetColor(Color.White) };
+
+        static ColorRgbProvider GetColor(Color color) => new(color);
+
+        void CreateLightEntity(ILight light, float intensity, Vector3 position, Quaternion? rotation = null)
+        {
+            var entity = new Entity() {
+                new LightComponent {
+                    Intensity =  intensity,
+                    Type = light
+                }};
+
+            entity.Transform.Position = position;
+            entity.Transform.Rotation = rotation ?? Quaternion.Identity;
+            entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+
+            if (showLightGizmo)
+            {
+                entity.AddLightDirectionalGizmo(game.GraphicsDevice);
+            }
+        }
     }
 
     /// <summary>
