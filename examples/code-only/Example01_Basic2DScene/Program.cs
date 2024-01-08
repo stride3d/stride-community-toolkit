@@ -10,6 +10,8 @@ using Stride.Graphics;
 using Stride.Input;
 using Stride.Physics;
 using Stride.Rendering;
+using Stride.Rendering.Materials;
+using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.Sprites;
 using System.Reflection;
 
@@ -38,6 +40,7 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "2D Example";
 
+    //game.SetupBase2DScene();
     //game.SetupBase3DScene();
 
     game.AddGraphicsCompositor().AddCleanUIStage();
@@ -46,6 +49,7 @@ void Start(Scene rootScene)
     //game.Add2DCamera().AddInteractiveCameraScript();
 
     game.AddDirectionalLight();
+    game.AddAllDirectionLighting(intensity: 20f, true);
     game.AddSkybox();
 
     // Make sure you also update 2D Ground collider if you are testing this
@@ -59,32 +63,73 @@ void Start(Scene rootScene)
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    squareModel = new Model
+    squareModel = new Model();
+    //squareModel.Materials.Add(game.CreateMaterial(Color.DarkGreen));
+    squareModel.Materials.Add(new MaterialInstance
     {
-        new Mesh {
-            Draw = GiveMeShape(boxSize).ToMeshDraw(game.GraphicsDevice),
+        Material = Material.New(game.GraphicsDevice, new MaterialDescriptor
+        {
+            Attributes = new MaterialAttributes
+            {
+                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                Diffuse = new MaterialDiffuseMapFeature
+                {
+                    DiffuseMap = new ComputeVertexStreamColor()
+                },
+            }
+        })
+    });
+    squareModel.Meshes.Add(
+        new Mesh
+        {
+            Draw = GiveMeShape(boxSize, Color.DarkGreen).ToMeshDraw(game.GraphicsDevice),
             MaterialIndex = 0
         }
-    };
-
-    squareModel.Materials.Add(game.CreateMaterial(Color.DarkGreen));
+    );
 
     rectangleModel = new Model
     {
         new Mesh {
-            Draw = GiveMeShape(rectangleSize).ToMeshDraw(game.GraphicsDevice),
-            MaterialIndex = 0
+            Draw = GiveMeShape(rectangleSize, Color.Orange).ToMeshDraw(game.GraphicsDevice),
+            //MaterialIndex = 0
         },
-        game.CreateMaterial(Color.Orange)
+        new MaterialInstance
+    {
+        Material = Material.New(game.GraphicsDevice, new MaterialDescriptor
+        {
+            Attributes = new MaterialAttributes
+            {
+                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                Diffuse = new MaterialDiffuseMapFeature
+                {
+                    DiffuseMap = new ComputeVertexStreamColor()
+                },
+            }
+        })
+    }
+        //game.CreateMaterial(Color.Orange)
     };
 
     circleModel = new Model
     {
         new Mesh {
-            Draw = GiveMeCircle(boxSize, 10).ToMeshDraw(game.GraphicsDevice),
-            MaterialIndex = 0
+            Draw = GiveMeCircle(boxSize, 10, Color.DarkRed).ToMeshDraw(game.GraphicsDevice),
+            //MaterialIndex = 0
         },
-        game.CreateMaterial(Color.DarkRed)
+        new MaterialInstance
+    {
+        Material = Material.New(game.GraphicsDevice, new MaterialDescriptor
+        {
+            Attributes = new MaterialAttributes
+            {
+                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                Diffuse = new MaterialDiffuseMapFeature()
+                {
+                    DiffuseMap = new ComputeVertexStreamColor()
+                },
+            }
+        })
+    }
     };
 
     //var gameSettings = game.Services.GetService<IGameSettingsService>();
@@ -93,7 +138,7 @@ void Start(Scene rootScene)
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    //simulation.FixedTimeStep = 1f / 120;
+    simulation.FixedTimeStep = 1f / 120;
     //simulation.ContinuousCollisionDetection = true;
 
     Add2DShapes(ShapeType.Square, squareModel, boxSize, 1);
@@ -199,7 +244,7 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
 //    }
 //}
 
-MeshBuilder GiveMeShape(Vector3 size)
+MeshBuilder GiveMeShape(Vector3 size, Color shapeColor)
 {
     var meshBuilder = new MeshBuilder();
 
@@ -207,23 +252,23 @@ MeshBuilder GiveMeShape(Vector3 size)
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
     var position = meshBuilder.WithPosition<Vector2>();
-    //var color = meshBuilder.WithColor<Color>();
+    var color = meshBuilder.WithColor<Color>();
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector2(0, 0));
-    //meshBuilder.SetElement(color, Color.Red);
+    meshBuilder.SetElement(color, shapeColor);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector2(0, size.Y));
-    //meshBuilder.SetElement(color, Color.Green);
+    meshBuilder.SetElement(color, shapeColor);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector2(size.X, size.Y));
-    //meshBuilder.SetElement(color, Color.Blue);
+    meshBuilder.SetElement(color, shapeColor);
 
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector2(size.X, 0));
-    //meshBuilder.SetElement(color, Color.Yellow);
+    meshBuilder.SetElement(color, shapeColor);
 
     meshBuilder.AddIndex(0);
     meshBuilder.AddIndex(1);
@@ -236,7 +281,7 @@ MeshBuilder GiveMeShape(Vector3 size)
     return meshBuilder;
 }
 
-MeshBuilder GiveMeCircle(Vector3 size, int segments)
+MeshBuilder GiveMeCircle(Vector3 size, int segments, Color shapeColor)
 {
     var meshBuilder = new MeshBuilder();
 
@@ -244,6 +289,7 @@ MeshBuilder GiveMeCircle(Vector3 size, int segments)
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
     var position = meshBuilder.WithPosition<Vector2>();
+    var color = meshBuilder.WithColor<Color>();
 
     // Calculate radius based on the size (assuming size.X is diameter)
     float radius = size.X / 2;
@@ -251,6 +297,7 @@ MeshBuilder GiveMeCircle(Vector3 size, int segments)
     // Add center vertex
     meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector2(0, 0));
+    meshBuilder.SetElement(color, shapeColor);
 
     // Add vertices for the circumference
     for (int i = 0; i <= segments; i++)
@@ -264,6 +311,7 @@ MeshBuilder GiveMeCircle(Vector3 size, int segments)
 
         meshBuilder.AddVertex();
         meshBuilder.SetElement(position, new Vector2(x, y));
+        meshBuilder.SetElement(color, shapeColor);
     }
 
     // Create triangles
