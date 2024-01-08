@@ -30,7 +30,7 @@ List<ShapeModel> shapes = [
     new() { Type = ShapeType.Square, Color = Color.Green, Size = boxSize },
     new() { Type = ShapeType.Rectangle, Color = Color.Orange, Size = rectangleSize },
     new() { Type = ShapeType.Circle, Color = Color.Red, Size = boxSize },
-    new() { Type = ShapeType.Triangle, Color = Color.Purple, Size = rectangleSize }
+    //new() { Type = ShapeType.Triangle, Color = Color.Purple, Size = rectangleSize }
 ];
 
 game.Run(start: Start, update: Update);
@@ -69,9 +69,9 @@ void Start(Scene rootScene)
     //var gameSettings = game.Services.GetService<IGameSettingsService>();
 
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
-    //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
+    var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    simulation.FixedTimeStep = 1f / 120;
+    //simulation.FixedTimeStep = 1f / 120;
     //simulation.ContinuousCollisionDetection = true;
 
     Add2DShapes(ShapeType.Square, 1);
@@ -141,6 +141,12 @@ void Update(Scene scene, GameTime time)
     else if (game.Input.IsKeyPressed(Keys.C))
     {
         Add2DShapes(ShapeType.Circle, 10);
+
+        SetCubeCount(scene);
+    }
+    else if (game.Input.IsKeyPressed(Keys.T))
+    {
+        Add2DShapes(count: 30);
 
         SetCubeCount(scene);
     }
@@ -306,6 +312,9 @@ void Add3DBoxes(int count = 5)
 
         var rigidBody = entity.Get<RigidbodyComponent>();
 
+        rigidBody.AngularFactor = new Vector3(0, 0, 1);
+        rigidBody.LinearFactor = new Vector3(1, 1, 0);
+
         Vector3 pivot = new Vector3(0, 0, 0);
         Vector3 axis = Vector3.UnitZ;
 
@@ -315,52 +324,74 @@ void Add3DBoxes(int count = 5)
     }
 }
 
-void Add2DShapes(ShapeType type, int count = 5)
+void Add2DShapes(ShapeType? type = null, int count = 5)
+{
+    for (int i = 1; i <= count; i++)
+    {
+        ShapeModel? shapeModel;
+
+        if (type == null)
+        {
+            int randomIndex = Random.Shared.Next(shapes.Count);
+
+            shapeModel = shapes[randomIndex];
+        }
+        else
+        {
+            shapeModel = shapes.Find(x => x.Type == type);
+
+            if (shapeModel == null) return;
+        }
+
+        Create2DShape(shapeModel.Type);
+    }
+}
+
+void Create2DShape(ShapeType type)
 {
     var shapeModel = shapes.FirstOrDefault(x => x.Type == type);
 
     if (shapeModel == null) return;
 
-    for (int i = 1; i <= count; i++)
+    var entity = new Entity
     {
-        var entity = new Entity
-        {
-            Scene = scene,
-            Name = "Cube",
-            Transform = {
+        Scene = scene,
+        Name = "Cube",
+        Transform = {
                 Position = new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0),
                 //Rotation = Quaternion.RotationYawPitchRoll(MathUtil.DegreesToRadians(180), 0, 0)
             }
-        };
+    };
 
-        entity.Add(new ModelComponent { Model = shapeModel.Model });
+    entity.Add(new ModelComponent { Model = shapeModel.Model });
 
-        //entity.Add(new StaticColliderComponent());
+    //entity.Add(new StaticColliderComponent());
 
-        var rigidBody = new RigidbodyComponent()
+    var rigidBody = new RigidbodyComponent()
+    {
+        IsKinematic = false,
+        Restitution = 0,
+        Friction = 1,
+        RollingFriction = 0.1f,
+        CcdMotionThreshold = 100,
+        CcdSweptSphereRadius = 100,
+        //Mass = 1000000,
+        //LinearDamping = 0.8f,
+        //AngularDamping = 1.4f,
+        //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
+        ColliderShape = (type) switch
         {
-            IsKinematic = false,
-            Restitution = 0,
-            Friction = 1,
-            RollingFriction = 0.1f,
-            Mass = 1000000,
-            //LinearDamping = 0.8f,
-            //AngularDamping = 1.4f,
-            //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-            ColliderShape = (type) switch
-            {
-                ShapeType.Square => GetBoxColliderShape(shapeModel.Size),
-                ShapeType.Rectangle => GetBoxColliderShape(shapeModel.Size),
-                ShapeType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
-                _ => throw new NotImplementedException(),
-            }
-        };
+            ShapeType.Square => GetBoxColliderShape(shapeModel.Size),
+            ShapeType.Rectangle => GetBoxColliderShape(shapeModel.Size),
+            ShapeType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
+            _ => throw new NotImplementedException(),
+        }
+    };
 
-        entity.Add(rigidBody);
+    entity.Add(rigidBody);
 
-        rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        rigidBody.LinearFactor = new Vector3(1, 1, 0);
-    }
+    rigidBody.AngularFactor = new Vector3(0, 0, 1);
+    rigidBody.LinearFactor = new Vector3(1, 1, 0);
 }
 
 // Another issue
