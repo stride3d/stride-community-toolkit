@@ -46,8 +46,8 @@ void Start(Scene rootScene)
     //game.SetupBase3DScene();
 
     game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add3DCamera().AddInteractiveCameraScript();
-    //game.Add2DCamera().AddInteractiveCameraScript();
+    //game.Add3DCamera().AddInteractiveCameraScript();
+    game.Add2DCamera().AddInteractiveCameraScript();
 
     //game.AddDirectionalLight();
     game.AddAllDirectionLighting(intensity: 50f, true);
@@ -71,7 +71,7 @@ void Start(Scene rootScene)
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
     var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    //simulation.FixedTimeStep = 1f / 120;
+    //simulation.FixedTimeStep = 1f / 90;
     //simulation.ContinuousCollisionDetection = true;
 
     Add2DShapes(ShapeType.Square, 1);
@@ -304,13 +304,18 @@ void Add3DBoxes(int count = 5)
 {
     for (int i = 0; i < count; i++)
     {
-        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
+        //var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
+        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize);
 
         entity.Name = "Cube";
-        entity.Transform.Position = new Vector3(0.5f, 8, 0);
+        entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
 
         var rigidBody = entity.Get<RigidbodyComponent>();
+
+        //rigidBody.Restitution = 0;
+        //rigidBody.Friction = 1;
+        //rigidBody.RollingFriction = 0.1f;
 
         rigidBody.AngularFactor = new Vector3(0, 0, 1);
         rigidBody.LinearFactor = new Vector3(1, 1, 0);
@@ -358,7 +363,7 @@ void Create2DShape(ShapeType type)
         Scene = scene,
         Name = "Cube",
         Transform = {
-                Position = new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0),
+                Position = GetRandomPosition(),
                 //Rotation = Quaternion.RotationYawPitchRoll(MathUtil.DegreesToRadians(180), 0, 0)
             }
     };
@@ -369,12 +374,14 @@ void Create2DShape(ShapeType type)
 
     var rigidBody = new RigidbodyComponent()
     {
-        IsKinematic = false,
-        Restitution = 0,
-        Friction = 1,
-        RollingFriction = 0.1f,
-        CcdMotionThreshold = 100,
-        CcdSweptSphereRadius = 100,
+        //IsKinematic = false,
+
+        //Restitution = 0,
+        //Friction = 1,
+        //RollingFriction = 0.1f,
+
+        //CcdMotionThreshold = 100,
+        //CcdSweptSphereRadius = 100,
         //Mass = 1000000,
         //LinearDamping = 0.8f,
         //AngularDamping = 1.4f,
@@ -450,6 +457,8 @@ static Material CreateMaterial(Game game, Color color)
         }
     });
 }
+
+static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
 
 public enum ShapeType
 {
