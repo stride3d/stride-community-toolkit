@@ -8,6 +8,7 @@ using Stride.Physics;
 using Stride.Rendering;
 
 namespace Example08_DebugShapes.Scripts;
+
 public class ShapeUpdater : SyncScript
 {
     enum CurRenderMode : byte
@@ -33,7 +34,7 @@ public class ShapeUpdater : SyncScript
     [DataMemberIgnore]
     ImmediateDebugRenderSystem DebugDraw; // this is here to make it look like it should when properly integrated
 
-    int minNumberofPrimitives = 0;
+    int minNumberOfPrimitives = 0;
     int maxNumberOfPrimitives = 327680;
     int currentNumPrimitives = InitialNumPrimitives;
     CurRenderMode mode = CurRenderMode.All;
@@ -51,7 +52,6 @@ public class ShapeUpdater : SyncScript
 
     private void InitializePrimitives(int from, int to)
     {
-
         var random = new Random();
 
         primitivePositions.Resize(to, true);
@@ -62,7 +62,6 @@ public class ShapeUpdater : SyncScript
 
         for (int i = from; i < to; ++i)
         {
-
             // initialize boxes
 
             var randX = random.Next(-AreaSize, AreaSize);
@@ -89,7 +88,6 @@ public class ShapeUpdater : SyncScript
             color.G = (byte)(((primitivePositions[i].Y / AreaSize) + 1f) / 2.0f * 255.0f);
             color.B = (byte)(((primitivePositions[i].Z / AreaSize) + 1f) / 2.0f * 255.0f);
             color.A = 255;
-
         }
     }
 
@@ -107,6 +105,7 @@ public class ShapeUpdater : SyncScript
                     return stage;
                 }
             }
+
             return null;
         }
 
@@ -122,7 +121,6 @@ public class ShapeUpdater : SyncScript
         Game.GameSystems.Add(DebugDraw);
 
         InitializePrimitives(0, currentNumPrimitives);
-
     }
 
     private int Clamp(int v, int min, int max)
@@ -147,7 +145,7 @@ public class ShapeUpdater : SyncScript
         var dt = (float)Game.UpdateTime.Elapsed.TotalSeconds;
 
         var speedyDelta = (Input.IsKeyDown(Stride.Input.Keys.LeftShift)) ? 100.0f : 1.0f;
-        var newAmountOfBoxes = Clamp(currentNumPrimitives + (int)(Input.MouseWheelDelta * ChangePerSecond * speedyDelta * dt), minNumberofPrimitives, maxNumberOfPrimitives);
+        var newAmountOfBoxes = Clamp(currentNumPrimitives + (int)(Input.MouseWheelDelta * ChangePerSecond * speedyDelta * dt), minNumberOfPrimitives, maxNumberOfPrimitives);
 
         if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt))
         {
@@ -366,6 +364,7 @@ public class ShapeUpdater : SyncScript
         DebugDraw.DrawCone(new Vector3(0, 0.5f, 0), 2.0f, 0.5f, color: Color.HotPink);
 
     }
+
     public static HitResult ScreenPositionToWorldPositionRaycast(Vector2 screenPos, CameraComponent camera, Simulation simulation)
     {
         Matrix invViewProj = Matrix.Invert(camera.ViewProjectionMatrix);
