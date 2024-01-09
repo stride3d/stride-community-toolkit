@@ -1,3 +1,4 @@
+using DebugShapes;
 using Example01_Basic2DScene;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
@@ -14,6 +15,7 @@ using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.Sprites;
 using System.Reflection;
+using System.Xml.Linq;
 
 using var game = new Game();
 
@@ -22,9 +24,12 @@ var rectangleSize = new Vector3(0.2f, 0.3f, 0);
 int cubes = 0;
 int debugX = 5;
 int debugY = 30;
+int currentNumPrimitives = 1024;
 Simulation? simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
+ImmediateDebugRenderSystem? DebugDraw = null;
+List<Entity> cubesList = [];
 
 List<ShapeModel> shapes = [
     new() { Type = ShapeType.Square, Color = Color.Green, Size = boxSize },
@@ -45,9 +50,12 @@ void Start(Scene rootScene)
     //game.SetupBase2DScene();
     //game.SetupBase3DScene();
 
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    //game.Add3DCamera().AddInteractiveCameraScript();
-    game.Add2DCamera().AddInteractiveCameraScript();
+    //game.AddGraphicsCompositor().AddCleanUIStage();
+    game.AddGraphicsCompositor().AddCleanUIStage()
+    .AddImmediateDebugRenderFeature();
+
+    game.Add3DCamera().AddInteractiveCameraScript();
+    //game.Add2DCamera().AddInteractiveCameraScript();
 
     //game.AddDirectionalLight();
     game.AddAllDirectionLighting(intensity: 50f, true);
@@ -74,11 +82,22 @@ void Start(Scene rootScene)
     //simulation.FixedTimeStep = 1f / 90;
     //simulation.ContinuousCollisionDetection = true;
 
-    Add2DShapes(ShapeType.Square, 1);
+    //Add2DShapes(ShapeType.Square, 1);
 
     AddBackground();
 
-    //Add3DBoxes(rootScene);
+    DebugDraw = new ImmediateDebugRenderSystem(game.Services, RenderGroup.Group1);
+    DebugDraw.PrimitiveColor = Color.Green;
+    DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
+    DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
+    DebugDraw.Visible = true;
+
+    // keep DebugText visible in release builds too
+    game.DebugTextSystem.Visible = true;
+    game.Services.AddService(DebugDraw);
+    game.GameSystems.Add(DebugDraw);
+
+    Add3DBoxes(1);
 }
 
 void CreateShapeModels()
@@ -159,6 +178,15 @@ void Update(Scene scene, GameTime time)
 
         SetCubeCount(scene);
     }
+
+    for (var i = 0; i < cubesList.Count; i++)
+    {
+        var entity = cubesList[i];
+
+        DebugDraw.DrawCube(entity.Transform.Position, boxSize, entity.Transform.Rotation, Color.Red, depthTest: false, solid: !true);
+
+    }
+
 
     RenderNavigation();
 }
@@ -326,6 +354,8 @@ void Add3DBoxes(int count = 5)
         //var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
 
         //simulation.AddConstraint(constrain);
+
+        cubesList.Add(entity);
     }
 }
 
