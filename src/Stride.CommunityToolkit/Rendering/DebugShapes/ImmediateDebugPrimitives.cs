@@ -80,7 +80,6 @@ namespace DebugShapes;
 
 public class ImmediateDebugPrimitives
 {
-
     static private Vector2 noLineUv = new Vector2(0.5f);
     static private Vector2 lineUv = new Vector2(1.0f);
 

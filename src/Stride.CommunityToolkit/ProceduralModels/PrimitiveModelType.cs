@@ -8,6 +8,7 @@ public enum PrimitiveModelType
     Cylinder,
     Torus,
     Plane,
+    InfinitePlane,
     Teapot,
     Cone,
     Capsule
