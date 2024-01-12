@@ -8,6 +8,7 @@ using var game = new Game();
 game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase2DScene();
+    game.AddProfiler();
 
     var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
 
