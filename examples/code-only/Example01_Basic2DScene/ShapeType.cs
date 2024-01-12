@@ -5,5 +5,6 @@ public enum ShapeType
     Square,
     Rectangle,
     Circle,
-    Triangle
+    Triangle,
+    Capsule
 }
