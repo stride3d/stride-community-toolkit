@@ -143,7 +143,8 @@ public class ClickHandlerComponent : AsyncScript
 
     private void CreateCube(Vector3? position = null)
     {
-        var entity = Game.CreatePrimitive(PrimitiveModelType.Cube, HitEntityName);
+        var entity = Game.CreatePrimitive(PrimitiveModelType.Cube, new() { EntityName = HitEntityName });
+
         entity.Transform.Position = position ?? _defaultCubePosition;
         entity.Add(new CubeGrower());
         entity.Scene = Entity.Scene;

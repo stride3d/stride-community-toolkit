@@ -68,7 +68,7 @@ public static class GraphicsCompositorExtensions
         return graphicsCompositor;
     }
 
-    public static void AddImmediatDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
+    public static void AddImmediateDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
     {
         var debugRenderFeatures = graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
 
@@ -93,6 +93,7 @@ public static class GraphicsCompositorExtensions
                         }
                     }
             };
+
             graphicsCompositor.RenderFeatures.Add(newDebugRenderFeature);
         }
     }

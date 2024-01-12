@@ -4,7 +4,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
-namespace Example01_Basic2DScene;
+namespace Example_2D_Playground;
 
 public class SpriteBatchRenderer : SyncScript
 {
