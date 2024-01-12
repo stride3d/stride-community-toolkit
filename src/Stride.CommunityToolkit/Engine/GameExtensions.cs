@@ -198,8 +198,6 @@ public static class GameExtensions
             {
                 Projection = projectionMode,
                 Slot =  game.SceneSystem.GraphicsCompositor.Cameras[0].ToSlotId(),
-                OrthographicSize = 10,
-                FarClipPlane = 550
             }
         };
 
