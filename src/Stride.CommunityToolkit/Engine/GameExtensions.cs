@@ -545,6 +545,11 @@ public static class GameExtensions
         return entity;
     }
 
+    public static Entity Create2DPrimitive(this IGame game)
+    {
+        return new Entity();
+    }
+
     /// <summary>
     /// Sets the maximum frames per second (FPS) rate for the game.
     /// Set <param name="targetFPS"/> to 0 for max possible FPS.

@@ -5,8 +5,19 @@ using Stride.Input;
 namespace Stride.CommunityToolkit.Scripts;
 
 /// <summary>
-/// Default Stride FarClipPlane=1000, NearClipPlane=0.1f, OrthographicSize=10 are used
+/// Provides an interactive 2D camera controller for navigating 2D scenes in Stride.
+/// This controller supports movement in the XY-plane using keyboard inputs (W, A, S, D, arrow keys),
+/// zooming in and out with the mouse wheel, and moving the camera based on mouse position near screen edges.
+/// Additional features include a speed boost when holding shift and the ability to reset the camera
+/// to a default position and zoom level using the 'H' key.
 /// </summary>
+/// <remarks>
+/// - The camera moves at a default speed which can be increased with shift keys.
+/// - Zooming is performed by changing the OrthographicSize of the camera.
+/// - The camera can be moved towards the edges of the screen when the mouse cursor is close to them.
+/// - The 'H' key resets the camera to its default position and orthographic size.
+/// - Default settings: FarClipPlane=1000, NearClipPlane=0.1f, OrthographicSize=10.
+/// </remarks>
 public class Basic2DCameraController : SyncScript
 {
     // Speed at which the camera moves

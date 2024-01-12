@@ -8,13 +8,13 @@ namespace Stride.CommunityToolkit.ProceduralModels;
 /// </remarks>
 public enum PrimitiveModelType
 {
-    Sphere,
+    Capsule,
+    Cone,
     Cube,
     Cylinder,
-    Torus,
-    Plane,
     InfinitePlane,
+    Plane,
+    Sphere,
     Teapot,
-    Cone,
-    Capsule
+    Torus,
 }

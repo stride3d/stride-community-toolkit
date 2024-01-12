@@ -32,9 +32,9 @@ Scene scene = new();
 List<Entity> cubesList = [];
 
 List<Shape2DModel> shapes = [
-    new() { Type = ShapeType.Square, Color = Color.Green, Size = boxSize },
-    new() { Type = ShapeType.Rectangle, Color = Color.Orange, Size = rectangleSize },
-    new() { Type = ShapeType.Circle, Color = Color.Red, Size = boxSize },
+    new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = boxSize },
+    new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = rectangleSize },
+    new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = boxSize },
     //new() { Type = ShapeType.Capsule, Color = Color.Purple, Size = rectangleSize }
     //new() { Type = ShapeType.Triangle, Color = Color.Purple, Size = rectangleSize }
 ];
@@ -124,9 +124,9 @@ MeshBuilder CreateMeshDraw(Shape2DModel model)
 {
     return model.Type switch
     {
-        ShapeType.Square or ShapeType.Rectangle => GiveMeShape(model.Size, model.Color),
-        ShapeType.Circle => GiveMeCircle(model.Size, 10, model.Color),
-        ShapeType.Triangle => GiveMeShape(model.Size, model.Color),
+        Primitive2DModelType.Square or Primitive2DModelType.Rectangle => GiveMeShape(model.Size, model.Color),
+        Primitive2DModelType.Circle => GiveMeCircle(model.Size, 10, model.Color),
+        Primitive2DModelType.Triangle => GiveMeShape(model.Size, model.Color),
         _ => GiveMeShape(model.Size, model.Color),
     };
 }
@@ -151,19 +151,19 @@ void Update(Scene scene, GameTime time)
     }
     else if (game.Input.IsKeyPressed(Keys.M))
     {
-        Add2DShapes(ShapeType.Square, 10);
+        Add2DShapes(Primitive2DModelType.Square, 10);
 
         SetCubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.R))
     {
-        Add2DShapes(ShapeType.Rectangle, 10);
+        Add2DShapes(Primitive2DModelType.Rectangle, 10);
 
         SetCubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.C))
     {
-        Add2DShapes(ShapeType.Circle, 10);
+        Add2DShapes(Primitive2DModelType.Circle, 10);
 
         SetCubeCount(scene);
     }
@@ -362,7 +362,7 @@ void Add3DBoxes(int count = 5)
     }
 }
 
-void Add2DShapes(ShapeType? type = null, int count = 5)
+void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 {
     for (int i = 1; i <= count; i++)
     {
@@ -385,7 +385,7 @@ void Add2DShapes(ShapeType? type = null, int count = 5)
     }
 }
 
-void Create2DShape(ShapeType type)
+void Create2DShape(Primitive2DModelType type)
 {
     var shapeModel = shapes.FirstOrDefault(x => x.Type == type);
 
@@ -421,9 +421,9 @@ void Create2DShape(ShapeType type)
         //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
         ColliderShape = (type) switch
         {
-            ShapeType.Square => GetBoxColliderShape(shapeModel.Size),
-            ShapeType.Rectangle => GetBoxColliderShape(shapeModel.Size),
-            ShapeType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
+            Primitive2DModelType.Square => GetBoxColliderShape(shapeModel.Size),
+            Primitive2DModelType.Rectangle => GetBoxColliderShape(shapeModel.Size),
+            Primitive2DModelType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
             _ => throw new NotImplementedException(),
         }
     };
