@@ -4,10 +4,16 @@ using Stride.Input;
 
 namespace Stride.CommunityToolkit.Scripts;
 
+/// <summary>
+/// Default Stride FarClipPlane=1000, NearClipPlane=0.1f, OrthographicSize=10 are used
+/// </summary>
 public class Basic2DCameraController : SyncScript
 {
     // Speed at which the camera moves
     private const float MoveSpeed = 5.0f;
+
+    // Additional speed multiplier when holding shift
+    private const float SpeedFactor = 5.0f;
 
     // Speed of zooming in and out
     private const float ZoomSpeed = 50.0f;
@@ -16,7 +22,10 @@ public class Basic2DCameraController : SyncScript
     private const float OrthographicSizeDefault = 10.0f;
 
     // Default camera position
-    private static readonly Vector3 DefaultPosition = new Vector3(0, 0, 50);
+    private static readonly Vector3 _defaultPosition = new(0, 0, 50);
+
+    // Width of the screen edge border for triggering movement
+    private const float ScreenEdgeBorderWidth = 10.0f;
 
     private CameraComponent? _camera;
 
@@ -31,34 +40,76 @@ public class Basic2DCameraController : SyncScript
 
         ProcessCameraMovement();
 
+        ProcessScreenEdgeMovement();
+
         ProcessCameraZoom();
 
-        // Reset camera to default position and size when 'H' key is pressed
-        if (Input.IsKeyPressed(Keys.H))
-        {
-            ResetCameraToDefault();
-        }
+        ResetCameraToDefault();
     }
 
+    /// <summary>
+    /// Process camera movement based on mouse movement screen edge proximity
+    /// </summary>
     private void ProcessCameraMovement()
     {
         var moveDirection = Vector3.Zero;
 
         // Update moveDirection based on key input
         if (Input.IsKeyDown(Keys.W) || Input.IsKeyDown(Keys.Up))
-            moveDirection.Y += 1;
+            moveDirection.Y++;
         if (Input.IsKeyDown(Keys.S) || Input.IsKeyDown(Keys.Down))
-            moveDirection.Y -= 1;
+            moveDirection.Y--;
         if (Input.IsKeyDown(Keys.A) || Input.IsKeyDown(Keys.Left))
-            moveDirection.X -= 1;
+            moveDirection.X--;
         if (Input.IsKeyDown(Keys.D) || Input.IsKeyDown(Keys.Right))
-            moveDirection.X += 1;
+            moveDirection.X++;
 
-        /// Normalize the moveDirection to ensure consistent movement speed, for example when moving diagonally
+        // Normalize the moveDirection to ensure consistent movement speed, for example when moving diagonally
         if (moveDirection.LengthSquared() > 1)
             moveDirection.Normalize();
 
+        // Apply speed factor when shift is held
+        if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+            moveDirection *= SpeedFactor;
+
         // Apply movement to the camera position
+        Entity.Transform.Position += moveDirection * MoveSpeed * Game.DeltaTime();
+    }
+
+    private void ProcessScreenEdgeMovement()
+    {
+        var moveDirection = Vector3.Zero;
+        var mousePosition = Input.MousePosition;
+
+        // Calculate the screen dimensions
+        var screenWidth = Game.GraphicsDevice.Presenter.BackBuffer.Width;
+        var screenHeight = Game.GraphicsDevice.Presenter.BackBuffer.Height;
+
+        // Convert normalized mouse coordinates to screen coordinates
+        var screenMouseX = mousePosition.X * screenWidth;
+        var screenMouseY = mousePosition.Y * screenHeight;
+
+        // We could lock mouse inside the window
+        //Input.Mouse.LockPosition();
+
+        // Check if the mouse is within the screen bounds. We are detecting -1 because mouse keeps detected outside of the screen
+        if (screenMouseX > 0 && screenMouseX < screenWidth - 1 && screenMouseY > 0 && screenMouseY < screenHeight - 1)
+        {
+            // Check if the mouse is near the edges of the screen and update moveDirection accordingly
+            if (screenMouseX < ScreenEdgeBorderWidth)
+                moveDirection.X--;
+            if (screenMouseX > screenWidth - ScreenEdgeBorderWidth)
+                moveDirection.X++;
+            if (screenMouseY < ScreenEdgeBorderWidth)
+                moveDirection.Y++;
+            if (screenMouseY > screenHeight - ScreenEdgeBorderWidth)
+                moveDirection.Y--;
+        }
+
+        if (moveDirection.LengthSquared() > 1)
+            moveDirection.Normalize();
+
+        // Apply the movement
         Entity.Transform.Position += moveDirection * MoveSpeed * Game.DeltaTime();
     }
 
@@ -70,10 +121,14 @@ public class Basic2DCameraController : SyncScript
         _camera!.OrthographicSize = Math.Max(0.1f, _camera.OrthographicSize - zoomDelta * ZoomSpeed * Game.DeltaTime());
     }
 
+    /// <summary>
+    /// Reset camera to default position and orthographic size when 'H' key is pressed
+    /// </summary>
     private void ResetCameraToDefault()
     {
-        // Reset the camera's position and orthographic size to defaults
-        Entity.Transform.Position = DefaultPosition;
+        if (!Input.IsKeyPressed(Keys.H)) return;
+
+        Entity.Transform.Position = _defaultPosition;
 
         _camera!.OrthographicSize = OrthographicSizeDefault;
     }
