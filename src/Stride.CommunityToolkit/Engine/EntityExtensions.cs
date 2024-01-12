@@ -11,17 +11,18 @@ namespace Stride.CommunityToolkit.Engine;
 public static class EntityExtensions
 {
     /// <summary>
-    /// Adds an interactive camera script <see cref="BasicCameraController"/> to the specified entity, enabling camera movement and rotation through various input methods.
+    /// Adds an interactive camera script <see cref="Basic3DCameraController"/> to the specified entity, enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
     /// <remarks>
     /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
     /// Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.
     /// </remarks>
-    public static void AddInteractiveCameraScript(this Entity entity)
-    {
-        entity.Add(new BasicCameraController());
-    }
+    public static void Add3DCameraController(this Entity entity)
+        => entity.Add(new Basic3DCameraController());
+
+    public static void Add2DCameraController(this Entity entity)
+        => entity.Add(new Basic2DCameraController());
 
     /// <summary>
     /// Adds a TranslationGizmo to the specified entity with optional custom colors.

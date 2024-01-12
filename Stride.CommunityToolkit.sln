@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example01_Basic2DScene", "e
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example08_DebugShapes", "examples\code-only\Example08_DebugShapes\Example08_DebugShapes.csproj", "{50AB85B4-CE39-43EF-87B7-B2E7AF182E8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example_2D_Playground", "examples\code-only\Example_2D_Playground\Example_2D_Playground.csproj", "{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,6 +110,10 @@ Global
 		{50AB85B4-CE39-43EF-87B7-B2E7AF182E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50AB85B4-CE39-43EF-87B7-B2E7AF182E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50AB85B4-CE39-43EF-87B7-B2E7AF182E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{9C625B12-6278-4C89-A153-00F80FCE38EA} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{5F34BDA3-17D6-4EEF-AE6B-52FAF988D7F7} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{50AB85B4-CE39-43EF-87B7-B2E7AF182E8A} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}

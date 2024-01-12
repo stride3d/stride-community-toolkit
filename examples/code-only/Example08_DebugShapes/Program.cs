@@ -17,7 +17,7 @@ void SetupBaseScene()
 {
     game.AddGraphicsCompositor()
         .AddImmediateDebugRenderFeature();
-    game.Add3DCamera().AddInteractiveCameraScript();
+    game.Add3DCamera().Add3DCameraController();
     game.AddDirectionalLight();
     game.AddSkybox();
     game.Add3DGround();

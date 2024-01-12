@@ -29,7 +29,7 @@ public static class GameExtensions
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
     private const string DefaultGroundName = "Ground";
     private static readonly Vector2 _default3DGroundSize = new(15f);
-    private static readonly Vector3 _default2DGroundSize = new(15, 1, 0);
+    private static readonly Vector3 _default2DGroundSize = new(15, 0.1f, 0);
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
     private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
 
@@ -135,7 +135,7 @@ public static class GameExtensions
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add3DCamera().AddInteractiveCameraScript();
+        game.Add3DCamera().Add3DCameraController();
         game.AddDirectionalLight();
         game.AddSkybox();
         game.Add3DGround();
@@ -144,7 +144,7 @@ public static class GameExtensions
     public static void SetupBase2DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add2DCamera().AddInteractiveCameraScript();
+        game.Add2DCamera().Add2DCameraController();
         //game.AddDirectionalLight();
         game.AddSkybox();
         game.Add2DGround();
@@ -351,13 +351,17 @@ public static class GameExtensions
     /// <param name="size"></param>
     /// <param name="includeCollider">Adds a collider</param>
     /// <returns></returns>
-    public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+    public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true) => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
+
+    public static Entity AddInfinite3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true) => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.InfinitePlane);
+
+    private static Entity CreateGround(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
     {
         var validSize = size ?? _default3DGroundSize;
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, new()
+        var entity = game.CreatePrimitive(type, new()
         {
             EntityName = entityName,
             Material = material,
@@ -373,7 +377,7 @@ public static class GameExtensions
 
     public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null)
     {
-        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 1);
+        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
@@ -389,7 +393,12 @@ public static class GameExtensions
 
         var collider = new StaticColliderComponent();
 
-        collider.ColliderShape = new BoxColliderShapeX4(is2D: true, validSize)
+        //collider.ColliderShape = new StaticPlaneColliderShape(Vector3.UnitY, 0)
+        //{
+        //    LocalOffset = new Vector3(0, 0, 0),
+        //};
+
+        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
         {
             LocalOffset = new Vector3(0, 0, 0),
         };

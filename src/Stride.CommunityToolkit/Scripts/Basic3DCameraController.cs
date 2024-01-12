@@ -12,7 +12,7 @@ namespace Stride.CommunityToolkit.Scripts;
 ///
 /// This functionality is inspired by Stride.Assets.Presentation, Assets->Scripts->Camera
 /// </remarks>
-public class BasicCameraController : SyncScript
+public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
 
