@@ -54,8 +54,8 @@ void Start(Scene rootScene)
     game.AddGraphicsCompositor().AddCleanUIStage();
     //game.AddGraphicsCompositor().AddCleanUIStage().AddImmediateDebugRenderFeature();
 
-    game.Add3DCamera().Add3DCameraController();
-    //game.Add2DCamera().Add2DCameraController();
+    //game.Add3DCamera().Add3DCameraController();
+    game.Add2DCamera().Add2DCameraController();
 
     game.AddDirectionalLight();
     //game.AddAllDirectionLighting(intensity: 50f, true);
