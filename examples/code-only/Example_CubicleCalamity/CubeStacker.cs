@@ -139,7 +139,13 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, "Cube", material: _materials[color], includeCollider: false, size: size);
+        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, new()
+        {
+            EntityName = "Cube",
+            Material = _materials[color],
+            IncludeCollider = false,
+            Size = size
+        });
 
         entity.Add(new CubeComponent(color));
 

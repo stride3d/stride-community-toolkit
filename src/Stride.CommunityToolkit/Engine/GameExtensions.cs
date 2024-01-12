@@ -357,7 +357,14 @@ public static class GameExtensions
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, entityName, material, includeCollider, (Vector3)validSize);
+        var entity = game.CreatePrimitive(PrimitiveModelType.Plane, new()
+        {
+            EntityName = entityName,
+            Material = material,
+            IncludeCollider = includeCollider,
+            Size = (Vector3)validSize,
+            PhysicsComponent = new StaticColliderComponent()
+        });
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
@@ -451,6 +458,22 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Enables the visualization of collider shapes in the game scene. This feature is useful for debugging physics-related issues.
+    /// </summary>
+    /// <param name="game">The current game instance.</param>
+    /// <remarks>
+    /// This method activates the rendering of collider shapes within the physics simulation. It helps to visually inspect and debug the positioning and behaviour of colliders at runtime.
+    /// </remarks>
+    public static void ShowColliders(this Game game)
+    {
+        var simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+
+        if (simulation is null) return;
+
+        simulation.ColliderShapesRendering = true;
+    }
+
+    /// <summary>
     /// Creates a basic material with optional color, specular reflection, and microsurface smoothness values.
     /// </summary>
     /// <param name="game">The game instance used to access the graphics device.</param>
@@ -480,37 +503,37 @@ public static class GameExtensions
     /// </summary>
     /// <param name="game">The game instance.</param>
     /// <param name="type">The type of primitive model to create.</param>
-    /// <param name="entityName">The name to assign to the new entity (optional).</param>
-    /// <param name="material">The material to apply to the model (optional).</param>
-    /// <param name="includeCollider">Indicates whether to include a collider component (default is true).</param>
-    /// <param name="size">The size of the model if applicable (optional). Dimensions in the Vector3 are used in the order X, Y, Z. If null, default dimensions are used for the model.</param>
+    /// <param name="options">The options for creating the primitive model. If null, default options are used.</param>
     /// <returns>A new entity representing the specified primitive model.</returns>
-    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, string? entityName = null, Material? material = null, bool includeCollider = true, Vector3? size = null, RenderGroup renderGroup = RenderGroup.Group0, bool is2D = false)
+    /// <remarks>
+    /// The <paramref name="options"/> parameter allows specifying various settings such as entity name, material,
+    /// collider inclusion, size, render group, and 2D flag. Dimensions in the Vector3 for size are used in the order X, Y, Z.
+    /// If size is null, default dimensions are used for the model. If no collider is included, the entity is returned without it.
+    /// </remarks>
+    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, PrimitiveCreationOptions? options = null)
     {
-        var proceduralModel = GetProceduralModel(type, size);
+        options ??= new();
+
+        var proceduralModel = GetProceduralModel(type, options.Size);
 
         var model = proceduralModel.Generate(game.Services);
 
-        if (material != null)
+        if (options.Material != null)
         {
-            model.Materials.Add(material);
+            model.Materials.Add(options.Material);
         }
 
-        var entity = new Entity(entityName) { new ModelComponent(model) { RenderGroup = renderGroup } };
+        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 
-        if (!includeCollider) return entity;
+        if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
 
-        var colliderShape = GetColliderShape(type, size, is2D);
+        var colliderShape = GetColliderShape(type, options.Size, options.Is2D);
 
         if (colliderShape is null) return entity;
 
-        PhysicsComponent collider = type == PrimitiveModelType.Plane ?
-            new StaticColliderComponent() :
-            new RigidbodyComponent();
+        options.PhysicsComponent.ColliderShapes.Add(colliderShape);
 
-        collider.ColliderShapes.Add(colliderShape);
-
-        entity.Add(collider);
+        entity.Add(options.PhysicsComponent);
 
         return entity;
     }
@@ -540,6 +563,7 @@ public static class GameExtensions
         => type switch
         {
             PrimitiveModelType.Plane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
+            PrimitiveModelType.InfinitePlane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
             PrimitiveModelType.Sphere => size is null ? new SphereProceduralModel() : new() { Radius = size.Value.X },
             PrimitiveModelType.Cube => size is null ? new CubeProceduralModel() : new() { Size = size.Value },
             PrimitiveModelType.Cylinder => size is null ? new CylinderProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
@@ -559,6 +583,7 @@ public static class GameExtensions
                 Size = new Vector3(size.Value.X, 0, size.Value.Y),
                 //LocalOffset = new Vector3(0, 0, 0)
             },
+            PrimitiveModelType.InfinitePlane => new StaticPlaneColliderShapeDesc(),
             PrimitiveModelType.Sphere => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X, Is2D = is2D },
             PrimitiveModelType.Cube => size is null ? new BoxColliderShapeDesc() : new() { Size = size ?? Vector3.Zero, Is2D = is2D },
             PrimitiveModelType.Cylinder => size is null ? new CylinderColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
@@ -577,6 +602,9 @@ public static class GameExtensions
     public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
 }
 
+/// <summary>
+/// Temporary workaround for BoxColliderShape not working with 2D
+/// </summary>
 public class BoxColliderShapeX4 : ColliderShape
 {
     public readonly Vector3 BoxSize;

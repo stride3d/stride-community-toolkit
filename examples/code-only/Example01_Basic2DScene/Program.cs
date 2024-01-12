@@ -1,4 +1,4 @@
-using DebugShapes;
+//using DebugShapes;
 using Example01_Basic2DScene;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
@@ -24,11 +24,11 @@ var rectangleSize = new Vector3(0.2f, 0.3f, 0);
 int cubes = 0;
 int debugX = 5;
 int debugY = 30;
-int currentNumPrimitives = 1024;
+//int currentNumPrimitives = 1024;
 Simulation? simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
-ImmediateDebugRenderSystem? DebugDraw = null;
+//ImmediateDebugRenderSystem? DebugDraw = null;
 List<Entity> cubesList = [];
 
 List<ShapeModel> shapes = [
@@ -67,6 +67,7 @@ void Start(Scene rootScene)
 
     game.AddGroundGizmo(new(0, 0, -7.5f), showAxisName: true);
     game.AddProfiler();
+    //game.ShowColliders();
 
     //AddSpriteBatchRenderer(rootScene);
 
@@ -77,7 +78,8 @@ void Start(Scene rootScene)
     //var gameSettings = game.Services.GetService<IGameSettingsService>();
 
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
-    var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
+
+    //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
     //simulation.FixedTimeStep = 1f / 90;
     //simulation.ContinuousCollisionDetection = true;
@@ -86,16 +88,16 @@ void Start(Scene rootScene)
 
     AddBackground();
 
-    DebugDraw = new ImmediateDebugRenderSystem(game.Services, RenderGroup.Group1);
-    DebugDraw.PrimitiveColor = Color.Green;
-    DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
-    DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
-    DebugDraw.Visible = true;
+    //DebugDraw = new ImmediateDebugRenderSystem(game.Services, RenderGroup.Group1);
+    //DebugDraw.PrimitiveColor = Color.Green;
+    //DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
+    //DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
+    //DebugDraw.Visible = true;
 
-    // keep DebugText visible in release builds too
-    game.DebugTextSystem.Visible = true;
-    game.Services.AddService(DebugDraw);
-    game.GameSystems.Add(DebugDraw);
+    //// keep DebugText visible in release builds too
+    //game.DebugTextSystem.Visible = true;
+    //game.Services.AddService(DebugDraw);
+    //game.GameSystems.Add(DebugDraw);
 
     Add3DBoxes(1);
 }
@@ -179,14 +181,12 @@ void Update(Scene scene, GameTime time)
         SetCubeCount(scene);
     }
 
-    for (var i = 0; i < cubesList.Count; i++)
-    {
-        var entity = cubesList[i];
+    //for (var i = 0; i < cubesList.Count; i++)
+    //{
+    //    var entity = cubesList[i];
 
-        DebugDraw.DrawCube(entity.Transform.Position, boxSize, entity.Transform.Rotation, Color.Red, depthTest: false, solid: !true);
-
-    }
-
+    //    DebugDraw.DrawCube(entity.Transform.Position, boxSize, entity.Transform.Rotation, Color.Red, depthTest: false, solid: !true);
+    //}
 
     RenderNavigation();
 }
@@ -333,7 +333,7 @@ void Add3DBoxes(int count = 5)
     for (int i = 0; i < count; i++)
     {
         //var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
-        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize);
+        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, new() { Size = boxSize });
 
         entity.Name = "Cube";
         entity.Transform.Position = GetRandomPosition();
@@ -431,17 +431,6 @@ void Create2DShape(ShapeType type)
     rigidBody.LinearFactor = new Vector3(1, 1, 0);
 }
 
-// Another issue
-static void AddSpriteBatchRenderer(Scene rootScene)
-{
-    var entity = new Entity("SpriteBatchRendererEntity", new(1, 1, 1))
-    {
-        new SpriteBatchRenderer()
-    };
-
-    entity.Scene = rootScene;
-}
-
 void RenderNavigation()
 {
     game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
@@ -490,18 +479,13 @@ static Material CreateMaterial(Game game, Color color)
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
 
-public enum ShapeType
+// Another issue for another time
+static void AddSpriteBatchRenderer(Scene rootScene)
 {
-    Square,
-    Rectangle,
-    Circle,
-    Triangle
-}
+    var entity = new Entity("SpriteBatchRendererEntity", new(1, 1, 1))
+    {
+        new SpriteBatchRenderer()
+    };
 
-public class ShapeModel
-{
-    public required ShapeType Type { get; set; }
-    public required Color Color { get; set; }
-    public required Vector3 Size { get; set; }
-    public Model? Model { get; set; }
+    entity.Scene = rootScene;
 }
