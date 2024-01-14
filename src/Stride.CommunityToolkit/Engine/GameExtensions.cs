@@ -1,5 +1,5 @@
-using Stride.CommunityToolkit.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
@@ -15,7 +15,6 @@ using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
-using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
 using System.Reflection;
 
@@ -379,7 +378,7 @@ public static class GameExtensions
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var proceduralModel = GetProceduralModel(PrimitiveModelType.Cube, validSize);
+        var proceduralModel = Procedural3DModelBuilder.Build(PrimitiveModelType.Cube, validSize);
         var model = proceduralModel.Generate(game.Services);
 
         if (material != null)
@@ -521,7 +520,7 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var proceduralModel = GetProceduralModel(type, options.Size);
+        var proceduralModel = Procedural3DModelBuilder.Build(type, options.Size);
 
         var model = proceduralModel.Generate(game.Services);
 
@@ -534,7 +533,7 @@ public static class GameExtensions
 
         if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
 
-        var colliderShape = GetColliderShape(type, options.Size, options.Is2D);
+        var colliderShape = Get3DColliderShape(type, options.Size, options.Is2D);
 
         if (colliderShape is null) return entity;
 
@@ -545,9 +544,36 @@ public static class GameExtensions
         return entity;
     }
 
-    public static Entity Create2DPrimitive(this IGame game)
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, PrimitiveCreationOptions? options = null)
     {
-        return new Entity();
+        options ??= new();
+
+        var proceduralModel = Procedural2DModelBuilder.Build(type, options.Size);
+
+        //proceduralModel.SetMaterial("Material", options.Material);
+
+        var model = proceduralModel.Generate(game.Services);
+
+        //model.Add(options.Material);
+
+        if (options.Material != null)
+        {
+            model.Materials.Add(options.Material);
+        }
+
+        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
+
+        var colliderShape = Get2DColliderShape(type, options.Size?.XY());
+
+        if (colliderShape is null) return entity;
+
+        options.PhysicsComponent.ColliderShapes.Add(colliderShape);
+
+        entity.Add(options.PhysicsComponent);
+
+        return entity;
     }
 
     /// <summary>
@@ -562,32 +588,15 @@ public static class GameExtensions
         gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000 / targetFPS);
     }
 
-    /// <summary>
-    /// Generates a procedural model based on the specified type and size.
-    /// </summary>
-    /// <param name="type">The type of primitive model to create.</param>
-    /// <param name="size">The size parameters for the model, or null to use default size values. The dimensions in the Vector3 are used in the order X, Y, Z.</param>
-    /// <returns>A primitive procedural model of the specified type, with dimensions specified by <paramref name="size"/> or default dimensions if <paramref name="size"/> is null.</returns>
-    /// <remarks>
-    /// If <paramref name="size"/> is null, default dimensions are used for the model.
-    /// </remarks>
-    private static PrimitiveProceduralModelBase GetProceduralModel(PrimitiveModelType type, Vector3? size = null)
+    private static IInlineColliderShapeDesc? Get2DColliderShape(Primitive2DModelType type, Vector2? size = null)
         => type switch
         {
-            PrimitiveModelType.Plane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
-            PrimitiveModelType.InfinitePlane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
-            PrimitiveModelType.Sphere => size is null ? new SphereProceduralModel() : new() { Radius = size.Value.X },
-            PrimitiveModelType.Cube => size is null ? new CubeProceduralModel() : new() { Size = size.Value },
-            PrimitiveModelType.Cylinder => size is null ? new CylinderProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
-            PrimitiveModelType.Torus => size is null ? new TorusProceduralModel() : new() { Radius = size.Value.X, Thickness = size.Value.Y },
-            PrimitiveModelType.Teapot => size is null ? new TeapotProceduralModel() : new() { Size = size.Value.X },
-            PrimitiveModelType.Cone => size is null ? new ConeProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
-            PrimitiveModelType.Capsule => size is null ? new CapsuleProceduralModel() : new() { Radius = size.Value.X, Length = size.Value.Y },
+            Primitive2DModelType.Square => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
             _ => throw new InvalidOperationException(),
         };
 
     // ToDo: Add collider shapes for Torus and Teapot
-    private static IInlineColliderShapeDesc? GetColliderShape(PrimitiveModelType type, Vector3? size = null, bool is2D = false)
+    private static IInlineColliderShapeDesc? Get3DColliderShape(PrimitiveModelType type, Vector3? size = null, bool is2D = false)
         => type switch
         {
             PrimitiveModelType.Plane => size is null ? new BoxColliderShapeDesc() : new()
