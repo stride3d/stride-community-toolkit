@@ -1,5 +1,5 @@
 Imports Stride.CommunityToolkit.Engine
-Imports Stride.CommunityToolkit.ProceduralModels
+Imports Stride.CommunityToolkit.Rendering.ProceduralModels
 Imports Stride.Core.Mathematics
 Imports Stride.Engine
 

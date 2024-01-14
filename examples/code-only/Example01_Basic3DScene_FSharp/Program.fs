@@ -1,5 +1,5 @@
 open Stride.CommunityToolkit.Engine;
-open Stride.CommunityToolkit.ProceduralModels;
+open Stride.CommunityToolkit.Rendering.ProceduralModels;
 open Stride.Core.Mathematics;
 open Stride.Engine;
 

@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.ProceduralModels;
+namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
 /// <summary>
 /// Specifies the type of primitive model to be created. Available options: Sphere, Cube, Cylinder, Torus, Plane, InfinitePlane, Teapot, Cone, Capsule. Source Stride.Assets.Presentation.Preview.

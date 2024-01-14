@@ -1,8 +1,8 @@
 //using DebugShapes;
 using Example_2D_Playground;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -54,17 +54,16 @@ void Start(Scene rootScene)
     game.AddGraphicsCompositor().AddCleanUIStage();
     //game.AddGraphicsCompositor().AddCleanUIStage().AddImmediateDebugRenderFeature();
 
-    //game.Add3DCamera().Add3DCameraController();
-    game.Add2DCamera().Add2DCameraController();
+    game.Add3DCamera().Add3DCameraController();
+    //game.Add2DCamera().Add2DCameraController();
 
     game.AddDirectionalLight();
     //game.AddAllDirectionLighting(intensity: 50f, true);
     game.AddSkybox();
 
     // Make sure you also update 2D Ground collider if you are testing this
-    game.Add2DGround();
-    //game.Add2DGroundFixed();
-    //game.Add3DGround();
+    //game.Add2DGround();
+    game.Add3DGround();
     //game.AddInfinite3DGround();
 
     game.AddGroundGizmo(new(0, 0, -7.5f), showAxisName: true);
@@ -83,7 +82,7 @@ void Start(Scene rootScene)
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    //simulation.FixedTimeStep = 1f / 120;
+    simulation.FixedTimeStep = 1f / 120;
     //simulation.ContinuousCollisionDetection = true;
 
     //Add2DShapes(ShapeType.Square, 1);
@@ -100,6 +99,12 @@ void Start(Scene rootScene)
     //game.DebugTextSystem.Visible = true;
     //game.Services.AddService(DebugDraw);
     //game.GameSystems.Add(DebugDraw);
+
+    var entityNext = game.Create2DPrimitive(Primitive2DModelType.Square, new() { IncludeCollider = false });
+
+    entityNext.Transform.Position = new Vector3(0, 5, 0);
+
+    entityNext.Scene = scene;
 
     Add3DBoxes(1);
 }
@@ -124,10 +129,10 @@ MeshBuilder CreateMeshDraw(Shape2DModel model)
 {
     return model.Type switch
     {
-        Primitive2DModelType.Square or Primitive2DModelType.Rectangle => GiveMeShape(model.Size, model.Color),
+        Primitive2DModelType.Square or Primitive2DModelType.Rectangle => GiveMeRectangle(model.Size, model.Color),
         Primitive2DModelType.Circle => GiveMeCircle(model.Size, 10, model.Color),
-        Primitive2DModelType.Triangle => GiveMeShape(model.Size, model.Color),
-        _ => GiveMeShape(model.Size, model.Color),
+        Primitive2DModelType.Triangle => GiveMeRectangle(model.Size, model.Color),
+        _ => GiveMeRectangle(model.Size, model.Color),
     };
 }
 
@@ -227,7 +232,7 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
     }
 }
 
-MeshBuilder GiveMeShape(Vector3 size, Color shapeColor)
+MeshBuilder GiveMeRectangle(Vector3 size, Color shapeColor)
 {
     var meshBuilder = new MeshBuilder();
 
@@ -336,7 +341,9 @@ void Add3DBoxes(int count = 5)
     {
         //var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
         //var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, new() { Size = boxSize });
-        var entity = game.CreatePrimitive(PrimitiveModelType.Sphere, new() { Size = boxSize });
+        //var entity = game.CreatePrimitive(PrimitiveModelType.Sphere, new() { Size = boxSize });
+        //var entity = game.Create2DPrimitive(Primitive2DModelType.Square);
+        var entity = game.Create2DPrimitive(Primitive2DModelType.Square, new() { Size = boxSize, Material = CreateMaterial(game, Color.Purple) });
 
         entity.Name = "Cube";
         entity.Transform.Position = GetRandomPosition();
@@ -453,7 +460,7 @@ static BoxColliderShape GetBoxColliderShape(Vector3 size)
         LocalOffset = new Vector3(size.X / 2, size.Y / 2, 0)
     };
 
-static Material CreateMaterial(Game game, Color color)
+static Material CreateMaterialWorking(Game game, Color color)
 {
     var colorVertexStream = new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() };
     var computeColor = new ComputeBinaryColor(new ComputeColor(color), colorVertexStream, BinaryOperator.Multiply);
@@ -469,6 +476,33 @@ static Material CreateMaterial(Game game, Color color)
             },
             // Better colours
             //Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
+            // Worst colours
+            //Diffuse = new MaterialDiffuseMapFeature(computeColor),
+            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0)),
+            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
+            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.05f)),
+            Emissive = new MaterialEmissiveMapFeature(computeColor),
+        }
+    });
+}
+
+static Material CreateMaterial(Game game, Color color)
+{
+    var colorVertexStream = new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() };
+    var computeColor = new ComputeBinaryColor(new ComputeColor(color), colorVertexStream, BinaryOperator.Multiply);
+
+    return Material.New(game.GraphicsDevice, new MaterialDescriptor
+    {
+        Attributes = new MaterialAttributes
+        {
+            // Best colours
+            //Diffuse = new MaterialDiffuseMapFeature
+            //{
+            //    DiffuseMap = new ComputeVertexStreamColor()
+            //},
+            // Better colours
+            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
             // Worst colours
             //Diffuse = new MaterialDiffuseMapFeature(computeColor),
             DiffuseModel = new MaterialDiffuseLambertModelFeature(),

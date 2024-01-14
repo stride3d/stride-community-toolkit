@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Rendering;
 

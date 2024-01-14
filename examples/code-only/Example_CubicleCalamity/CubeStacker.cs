@@ -1,7 +1,7 @@
 using CubicleCalamity.Components;
 using CubicleCalamity.Scripts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
