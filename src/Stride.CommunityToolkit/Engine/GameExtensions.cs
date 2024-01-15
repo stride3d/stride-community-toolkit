@@ -348,9 +348,11 @@ public static class GameExtensions
     /// <param name="size"></param>
     /// <param name="includeCollider">Adds a collider</param>
     /// <returns></returns>
-    public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true) => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
+    public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+        => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
 
-    public static Entity AddInfinite3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true) => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.InfinitePlane);
+    public static Entity AddInfinite3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+        => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.InfinitePlane);
 
     private static Entity CreateGround(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
     {
@@ -516,7 +518,7 @@ public static class GameExtensions
     /// collider inclusion, size, render group, and 2D flag. Dimensions in the Vector3 for size are used in the order X, Y, Z.
     /// If size is null, default dimensions are used for the model. If no collider is included, the entity is returned without it.
     /// </remarks>
-    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, PrimitiveCreationOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
     {
         options ??= new();
 
@@ -544,11 +546,11 @@ public static class GameExtensions
         return entity;
     }
 
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, PrimitiveCreationOptions? options = null)
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
     {
         options ??= new();
 
-        var proceduralModel = Procedural2DModelBuilder.Build(type, options.Size);
+        var proceduralModel = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
 
         //proceduralModel.SetMaterial("Material", options.Material);
 
@@ -563,9 +565,14 @@ public static class GameExtensions
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 
+        if (type == Primitive2DModelType.Circle)
+        {
+            entity.Transform.Rotation = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90));
+        }
+
         if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
 
-        var colliderShape = Get2DColliderShape(type, options.Size?.XY());
+        var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
 
         if (colliderShape is null) return entity;
 
@@ -588,10 +595,12 @@ public static class GameExtensions
         gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000 / targetFPS);
     }
 
-    private static IInlineColliderShapeDesc? Get2DColliderShape(Primitive2DModelType type, Vector2? size = null)
+    private static IInlineColliderShapeDesc? Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0)
         => type switch
         {
+            Primitive2DModelType.Rectangle => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
             Primitive2DModelType.Square => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
+            Primitive2DModelType.Circle => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X, Is2D = true },
             _ => throw new InvalidOperationException(),
         };
 
@@ -644,19 +653,6 @@ public class BoxColliderShapeX4 : ColliderShape
         SetInternalProperties(is2D, size);
 
         cachedScaling = Is2D ? new Vector3(1, 1, 0.001f) : Vector3.One;
-
-        //if (is2D) size.Z = 0.001f;
-
-        //if (Is2D)
-        //{
-        //    InternalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2)) { LocalScaling = cachedScaling };
-        //}
-        //else
-        //{
-        //    InternalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
-        //}
-
-        //DebugPrimitiveMatrix = Matrix.Scaling(size * DebugScaling);
     }
 
     private void SetInternalProperties(bool is2D, Vector3 size)
