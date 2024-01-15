@@ -32,9 +32,9 @@ Scene scene = new();
 List<Entity> cubesList = [];
 
 List<Shape2DModel> shapes = [
-    new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = boxSize },
-    new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = rectangleSize },
-    new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = boxSize },
+    new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
+    new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
+    new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
     //new() { Type = ShapeType.Capsule, Color = Color.Purple, Size = rectangleSize }
     //new() { Type = ShapeType.Triangle, Color = Color.Purple, Size = rectangleSize }
 ];
@@ -58,7 +58,7 @@ void Start(Scene rootScene)
     //game.Add2DCamera().Add2DCameraController();
 
     game.AddDirectionalLight();
-    //game.AddAllDirectionLighting(intensity: 50f, true);
+    game.AddAllDirectionLighting(intensity: 5f, true);
     game.AddSkybox();
 
     // Make sure you also update 2D Ground collider if you are testing this
@@ -74,7 +74,7 @@ void Start(Scene rootScene)
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    CreateShapeModels();
+    //CreateShapeModels();
 
     //var gameSettings = game.Services.GetService<IGameSettingsService>();
 
@@ -100,7 +100,7 @@ void Start(Scene rootScene)
     //game.Services.AddService(DebugDraw);
     //game.GameSystems.Add(DebugDraw);
 
-    var entityNext = game.Create2DPrimitive(Primitive2DModelType.Square, new() { IncludeCollider = false });
+    var entityNext = game.Create2DPrimitive(Primitive2DModelType.Square);
 
     entityNext.Transform.Position = new Vector3(0, 5, 0);
 
@@ -113,11 +113,18 @@ void CreateShapeModels()
 {
     foreach (var item in shapes)
     {
+        //if (item.Type == Primitive2DModelType.Rectangle)
+        //{
+        //    item.Model = game.Create2DPrimitive(item.Type);
+
+        //    continue;
+        //}
+
         item.Model =
         [
             new Mesh
             {
-                Draw = CreateMeshDraw(item).ToMeshDraw(game.GraphicsDevice),
+                //Draw = CreateMeshDraw(item).ToMeshDraw(game.GraphicsDevice),
                 MaterialIndex = 0
             },
             CreateMaterial(game, item.Color)
@@ -125,16 +132,16 @@ void CreateShapeModels()
     }
 }
 
-MeshBuilder CreateMeshDraw(Shape2DModel model)
-{
-    return model.Type switch
-    {
-        Primitive2DModelType.Square or Primitive2DModelType.Rectangle => GiveMeRectangle(model.Size, model.Color),
-        Primitive2DModelType.Circle => GiveMeCircle(model.Size, 10, model.Color),
-        Primitive2DModelType.Triangle => GiveMeRectangle(model.Size, model.Color),
-        _ => GiveMeRectangle(model.Size, model.Color),
-    };
-}
+//MeshBuilder CreateMeshDraw(Shape2DModel model)
+//{
+//    return model.Type switch
+//    {
+//        Primitive2DModelType.Square or Primitive2DModelType.Rectangle => GiveMeRectangle(model.Size, model.Color),
+//        Primitive2DModelType.Circle => GiveMeCircle(model.Size, 10, model.Color),
+//        Primitive2DModelType.Triangle => GiveMeRectangle(model.Size, model.Color),
+//        _ => GiveMeRectangle(model.Size, model.Color),
+//    };
+//}
 
 void Update(Scene scene, GameTime time)
 {
@@ -343,7 +350,7 @@ void Add3DBoxes(int count = 5)
         //var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, new() { Size = boxSize });
         //var entity = game.CreatePrimitive(PrimitiveModelType.Sphere, new() { Size = boxSize });
         //var entity = game.Create2DPrimitive(Primitive2DModelType.Square);
-        var entity = game.Create2DPrimitive(Primitive2DModelType.Square, new() { Size = boxSize, Material = CreateMaterial(game, Color.Purple) });
+        var entity = game.Create2DPrimitive(Primitive2DModelType.Square, new() { Size = boxSize.XY(), Material = CreateMaterial(game, Color.Purple) });
 
         entity.Name = "Cube";
         entity.Transform.Position = GetRandomPosition();
@@ -388,58 +395,86 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
             if (shapeModel == null) return;
         }
 
-        Create2DShape(shapeModel.Type);
+        var entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size, Material = CreateMaterial(game, shapeModel.Color) });
+
+        entity.Name = "Cube";
+        entity.Transform.Position = GetRandomPosition();
+
+        entity.Scene = scene;
+
+        var newE = entity.Clone();
+
+        //var rigidBody = entity.Get<RigidbodyComponent>();
+        //rigidBody.AngularFactor = new Vector3(0, 0, 1);
+        //rigidBody.LinearFactor = new Vector3(1, 1, 0);
+
+        //Shape2DModel? shapeModel;
+
+        //if (type == null)
+        //{
+        //    int randomIndex = Random.Shared.Next(shapes.Count);
+
+        //    shapeModel = shapes[randomIndex];
+        //}
+        //else
+        //{
+        //    shapeModel = shapes.Find(x => x.Type == type);
+
+        //    if (shapeModel == null) return;
+        //}
+
+        //Create2DShape(shapeModel.Type);
     }
 }
 
-void Create2DShape(Primitive2DModelType type)
-{
-    var shapeModel = shapes.FirstOrDefault(x => x.Type == type);
+//void Create2DShape(Primitive2DModelType type)
+//{
+//    var shapeModel = shapes.FirstOrDefault(x => x.Type == type);
 
-    if (shapeModel == null) return;
+//    if (shapeModel == null) return;
 
-    var entity = new Entity
-    {
-        Scene = scene,
-        Name = "Cube",
-        Transform = {
-                Position = GetRandomPosition(),
-                //Rotation = Quaternion.RotationYawPitchRoll(MathUtil.DegreesToRadians(180), 0, 0)
-            }
-    };
+//    var entity = new Entity
+//    {
+//        Scene = scene,
+//        Name = "Cube",
+//        Transform = {
+//                Position = GetRandomPosition(),
+//                //Rotation = Quaternion.RotationYawPitchRoll(MathUtil.DegreesToRadians(180), 0, 0)
+//            }
+//    };
 
-    entity.Add(new ModelComponent { Model = shapeModel.Model });
+//    entity.Add(new ModelComponent { Model = shapeModel.Model });
 
-    //entity.Add(new StaticColliderComponent());
+//    //entity.Add(new StaticColliderComponent());
 
-    var rigidBody = new RigidbodyComponent()
-    {
-        //IsKinematic = false,
+//    var rigidBody = new RigidbodyComponent()
+//    {
+//        //IsKinematic = false,
 
-        //Restitution = 0,
-        //Friction = 1,
-        //RollingFriction = 0.1f,
+//        //Restitution = 0,
+//        //Friction = 1,
+//        //RollingFriction = 0.1f,
 
-        //CcdMotionThreshold = 100,
-        //CcdSweptSphereRadius = 100,
-        //Mass = 1000000,
-        //LinearDamping = 0.8f,
-        //AngularDamping = 1.4f,
-        //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-        ColliderShape = (type) switch
-        {
-            Primitive2DModelType.Square => GetBoxColliderShape(shapeModel.Size),
-            Primitive2DModelType.Rectangle => GetBoxColliderShape(shapeModel.Size),
-            Primitive2DModelType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
-            _ => throw new NotImplementedException(),
-        }
-    };
+//        //CcdMotionThreshold = 100,
+//        //CcdSweptSphereRadius = 100,
+//        //Mass = 1000000,
+//        //LinearDamping = 0.8f,
+//        //AngularDamping = 1.4f,
+//        //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
+//        ColliderShape = (type) switch
+//        {
+//            Primitive2DModelType.Square => GetBoxColliderShape(shapeModel.Size),
+//            Primitive2DModelType.Rectangle => GetBoxColliderShape(shapeModel.Size),
+//            Primitive2DModelType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
+//            _ => throw new NotImplementedException(),
+//        }
+//    };
 
-    entity.Add(rigidBody);
+//    entity.Add(rigidBody);
 
-    rigidBody.AngularFactor = new Vector3(0, 0, 1);
-    rigidBody.LinearFactor = new Vector3(1, 1, 0);
-}
+//    //rigidBody.AngularFactor = new Vector3(0, 0, 1);
+//    //rigidBody.LinearFactor = new Vector3(1, 1, 0);
+//}
 
 void RenderNavigation()
 {
