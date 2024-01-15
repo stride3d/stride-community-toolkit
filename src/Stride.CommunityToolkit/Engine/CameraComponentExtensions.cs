@@ -302,16 +302,15 @@ public static class CameraComponentExtensions
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
-    public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, GraphicsDevice graphicsDevice)
+    public static Vector2 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, GraphicsDevice graphicsDevice)
     {
         var worldPoint = cameraComponent.WorldToScreenPoint(ref position);
         var windowSize = graphicsDevice.GetWindowSize();
 
-        return new Vector3
+        return new Vector2
         {
             X = worldPoint.X * windowSize.X,
-            Y = worldPoint.Y * windowSize.Y,
-            Z = 0,
+            Y = worldPoint.Y * windowSize.Y
         };
     }
 
