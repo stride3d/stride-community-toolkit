@@ -35,8 +35,8 @@ List<Shape2DModel> shapes = [
     new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
     new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
-    //new() { Type = ShapeType.Capsule, Color = Color.Purple, Size = rectangleSize }
-    //new() { Type = ShapeType.Triangle, Color = Color.Purple, Size = rectangleSize }
+    //new() { Type = Primitive2DModelType.Capsule, Color = Color.Purple, Size = rectangleSize }
+    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
 ];
 
 game.Run(start: Start, update: Update);
@@ -100,7 +100,7 @@ void Start(Scene rootScene)
     //game.Services.AddService(DebugDraw);
     //game.GameSystems.Add(DebugDraw);
 
-    var entityNext = game.Create2DPrimitive(Primitive2DModelType.Square);
+    var entityNext = game.Create2DPrimitive(Primitive2DModelType.Triangle);
 
     entityNext.Transform.Position = new Vector3(0, 5, 0);
 
