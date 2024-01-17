@@ -51,7 +51,7 @@ public static class Procedural2DModelBuilder
             Primitive2DModelType.Rectangle => new CubeProceduralModel() { Size = size is null ? new(2, 1, depth) : new(size.Value.X, size.Value.Y, depth) },
             Primitive2DModelType.Square => new CubeProceduralModel() { Size = size is null ? new(1, 1, depth) : new(size.Value.X, size.Value.Y, depth) },
             //Primitive2DModelType.Square => size is null ? new SquareProceduralModel() : new() { Size = size.Value },
-            Primitive2DModelType.Triangle => size is null ? new TriangularPrismProceduralModel() : new(),
+            Primitive2DModelType.Triangle => new TriangularPrismProceduralModel() { Size = size is null ? new(1, 1, depth) : new(size.Value.X, size.Value.Y, depth) },
             _ => throw new InvalidOperationException($"Unsupported Primitive2DModelType: {type}")
         };
 }
