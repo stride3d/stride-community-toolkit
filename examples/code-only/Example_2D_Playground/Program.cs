@@ -29,14 +29,15 @@ Simulation? simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
 //ImmediateDebugRenderSystem? DebugDraw = null;
-List<Entity> cubesList = [];
+//List<Entity> cubesList = [];
 
 List<Shape2DModel> shapes = [
     new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
     new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
     //new() { Type = Primitive2DModelType.Capsule, Color = Color.Purple, Size = rectangleSize }
-    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
+    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = Vector2.One }
+    //new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
 ];
 
 game.Run(start: Start, update: Update);
@@ -54,8 +55,8 @@ void Start(Scene rootScene)
     game.AddGraphicsCompositor().AddCleanUIStage();
     //game.AddGraphicsCompositor().AddCleanUIStage().AddImmediateDebugRenderFeature();
 
-    game.Add3DCamera().Add3DCameraController();
-    //game.Add2DCamera().Add2DCameraController();
+    //game.Add3DCamera().Add3DCameraController();
+    game.Add2DCamera().Add2DCameraController();
 
     game.AddDirectionalLight();
     game.AddAllDirectionLighting(intensity: 5f, true);
@@ -82,7 +83,7 @@ void Start(Scene rootScene)
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    simulation.FixedTimeStep = 1f / 120;
+    //simulation.FixedTimeStep = 1f / 120;
     //simulation.ContinuousCollisionDetection = true;
 
     //Add2DShapes(ShapeType.Square, 1);
@@ -180,6 +181,12 @@ void Update(Scene scene, GameTime time)
         SetCubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.T))
+    {
+        Add2DShapes(Primitive2DModelType.Triangle, 10);
+
+        SetCubeCount(scene);
+    }
+    else if (game.Input.IsKeyPressed(Keys.P))
     {
         Add2DShapes(count: 30);
 
@@ -342,88 +349,55 @@ void AddBackground()
     entity.Scene = scene;
 }
 
-void Add3DBoxes(int count = 5)
-{
-    for (int i = 0; i < count; i++)
-    {
-        //var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
-        //var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, new() { Size = boxSize });
-        //var entity = game.CreatePrimitive(PrimitiveModelType.Sphere, new() { Size = boxSize });
-        //var entity = game.Create2DPrimitive(Primitive2DModelType.Square);
-        var entity = game.Create2DPrimitive(Primitive2DModelType.Square, new() { Size = boxSize.XY(), Material = CreateMaterial(game, Color.Purple) });
-
-        entity.Name = "Cube";
-        entity.Transform.Position = GetRandomPosition();
-        entity.Scene = scene;
-
-        var rigidBody = entity.Get<RigidbodyComponent>();
-
-        //rigidBody.Restitution = 0;
-        //rigidBody.Friction = 1;
-        //rigidBody.RollingFriction = 0.1f;
-
-        rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        rigidBody.LinearFactor = new Vector3(1, 1, 0);
-
-        Vector3 pivot = new Vector3(0, 0, 0);
-        Vector3 axis = Vector3.UnitZ;
-
-        //var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
-
-        //simulation.AddConstraint(constrain);
-
-        cubesList.Add(entity);
-    }
-}
-
 void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 {
-    for (int i = 1; i <= count; i++)
+    Shape2DModel? shapeModel;
+
+    if (type == null)
     {
-        Shape2DModel? shapeModel;
+        int randomIndex = Random.Shared.Next(shapes.Count);
 
-        if (type == null)
+        shapeModel = shapes[randomIndex];
+    }
+    else
+    {
+        shapeModel = shapes.Find(x => x.Type == type);
+
+        if (shapeModel == null) return;
+    }
+
+    var entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size, Material = CreateMaterial(game, shapeModel.Color) });
+
+    entity.Name = "Cube";
+    entity.Transform.Position = GetRandomPosition();
+
+    entity.Scene = scene;
+
+    //var newE = entity.Clone();
+
+    if (type == Primitive2DModelType.Triangle)
+    {
+        var rigidBody = entity.Get<RigidbodyComponent>();
+        rigidBody.AngularFactor = new Vector3(0, 0, 1);
+        rigidBody.LinearFactor = new Vector3(1, 1, 0);
+    }
+
+    if (count == 1) return;
+
+    for (int i = 1; i <= count - 1; i++)
+    {
+        var newEntity = entity.Clone();
+
+        newEntity.Transform.Position = GetRandomPosition();
+
+        newEntity.Scene = scene;
+
+        if (type == Primitive2DModelType.Triangle)
         {
-            int randomIndex = Random.Shared.Next(shapes.Count);
-
-            shapeModel = shapes[randomIndex];
+            var rigidBody = newEntity.Get<RigidbodyComponent>();
+            rigidBody.AngularFactor = new Vector3(0, 0, 1);
+            rigidBody.LinearFactor = new Vector3(1, 1, 0);
         }
-        else
-        {
-            shapeModel = shapes.Find(x => x.Type == type);
-
-            if (shapeModel == null) return;
-        }
-
-        var entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size, Material = CreateMaterial(game, shapeModel.Color) });
-
-        entity.Name = "Cube";
-        entity.Transform.Position = GetRandomPosition();
-
-        entity.Scene = scene;
-
-        var newE = entity.Clone();
-
-        //var rigidBody = entity.Get<RigidbodyComponent>();
-        //rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        //rigidBody.LinearFactor = new Vector3(1, 1, 0);
-
-        //Shape2DModel? shapeModel;
-
-        //if (type == null)
-        //{
-        //    int randomIndex = Random.Shared.Next(shapes.Count);
-
-        //    shapeModel = shapes[randomIndex];
-        //}
-        //else
-        //{
-        //    shapeModel = shapes.Find(x => x.Type == type);
-
-        //    if (shapeModel == null) return;
-        //}
-
-        //Create2DShape(shapeModel.Type);
     }
 }
 
@@ -547,6 +521,40 @@ static Material CreateMaterial(Game game, Color color)
             Emissive = new MaterialEmissiveMapFeature(computeColor),
         }
     });
+}
+
+void Add3DBoxes(int count = 5)
+{
+    for (int i = 0; i < count; i++)
+    {
+        //var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
+        //var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, new() { Size = boxSize });
+        //var entity = game.CreatePrimitive(PrimitiveModelType.Sphere, new() { Size = boxSize });
+        //var entity = game.Create2DPrimitive(Primitive2DModelType.Square);
+        var entity = game.Create2DPrimitive(Primitive2DModelType.Square, new() { Size = boxSize.XY(), Material = CreateMaterial(game, Color.Purple) });
+
+        entity.Name = "Cube";
+        entity.Transform.Position = GetRandomPosition();
+        entity.Scene = scene;
+
+        var rigidBody = entity.Get<RigidbodyComponent>();
+
+        //rigidBody.Restitution = 0;
+        //rigidBody.Friction = 1;
+        //rigidBody.RollingFriction = 0.1f;
+
+        rigidBody.AngularFactor = new Vector3(0, 0, 1);
+        rigidBody.LinearFactor = new Vector3(1, 1, 0);
+
+        Vector3 pivot = new Vector3(0, 0, 0);
+        Vector3 axis = Vector3.UnitZ;
+
+        //var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
+
+        //simulation.AddConstraint(constrain);
+
+        //cubesList.Add(entity);
+    }
 }
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);

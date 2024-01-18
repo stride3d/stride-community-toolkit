@@ -572,11 +572,54 @@ public static class GameExtensions
 
         if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
 
-        var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
+        if (type == Primitive2DModelType.Triangle)
+        {
+            //var a = new TriangularPrismProceduralModel() { Size = new(options.Size.Value.X, options.Size.Value.Y, options.Depth) };
 
-        if (colliderShape is null) return entity;
+            var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
 
-        options.PhysicsComponent.ColliderShapes.Add(colliderShape);
+            var points = meshData.Vertices.Select(w => w.Position).ToList();
+
+            var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
+
+            var xxx = new ConvexHullColliderShapeDesc()
+            {
+                //Model = model,
+                Scaling = new(0.9f),
+                ConvexHulls = new List<List<List<Vector3>>>(),
+                ConvexHullsIndices = new List<List<List<uint>>>()
+            };
+
+            xxx.ConvexHulls.Add(new List<List<Vector3>>() { points });
+            xxx.ConvexHullsIndices.Add(new List<List<uint>>() { uintIndices });
+
+            var shapee = xxx.CreateShape(game.Services);
+
+            //var collider = new ConvexHullColliderShape(points, uintIndices, Vector3.Zero);
+
+            var x = new ColliderShapeAssetDesc();
+
+            //var cs = new PhysicsColliderShape(descriptions);
+            List<IAssetColliderShapeDesc> descriptions = [];
+
+            descriptions.Add(xxx);
+
+            var cs = new PhysicsColliderShape(descriptions);
+
+            x.Shape = cs;
+
+            options.PhysicsComponent.ColliderShapes.Add(x);
+            //options.PhysicsComponent.ColliderShape = shapee;
+            //options.PhysicsComponent.ColliderShape = collider;
+        }
+        else
+        {
+            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
+
+            if (colliderShape is null) return entity;
+
+            options.PhysicsComponent.ColliderShapes.Add(colliderShape);
+        }
 
         entity.Add(options.PhysicsComponent);
 
@@ -601,7 +644,6 @@ public static class GameExtensions
             Primitive2DModelType.Rectangle => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
             Primitive2DModelType.Square => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
             Primitive2DModelType.Circle => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X, Is2D = true },
-            Primitive2DModelType.Triangle => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
             _ => throw new InvalidOperationException(),
         };
 
