@@ -29,48 +29,45 @@ public class TriangularPrismProceduralModel : PrimitiveProceduralModelBase
         // There are 3 indices for each triangle face (6 total), and 6 indices (2 triangles) for each rectangle face (18 total).
         var indices = new int[24];
 
-        var texCoords = new Vector2[4];
+        var textureCoordinates = new Vector2[4];
 
         for (var i = 0; i < 4; i++)
         {
-            texCoords[i] = TextureCoordinates[i] * new Vector2(uScale, vScale);
+            textureCoordinates[i] = TextureCoordinates[i] * new Vector2(uScale, vScale);
         }
 
         size /= 2.0f;
 
-        int vertexCount = 0;
-        int indexCount = 0;
-
         // Vertices for the two triangle faces
         // Triangle face 1 (front)
-        vertices[0] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, size.Z), Vector3.UnitZ, texCoords[0]);
-        vertices[1] = new VertexPositionNormalTexture(new Vector3(0, size.Y, size.Z), Vector3.UnitZ, texCoords[1]);
-        vertices[2] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, size.Z), Vector3.UnitZ, texCoords[2]);
+        vertices[0] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, size.Z), Vector3.UnitZ, textureCoordinates[0]);
+        vertices[1] = new VertexPositionNormalTexture(new Vector3(0, size.Y, size.Z), Vector3.UnitZ, textureCoordinates[1]);
+        vertices[2] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, size.Z), Vector3.UnitZ, textureCoordinates[2]);
 
         // Triangle face 2 (back)
-        vertices[3] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, -size.Z), -Vector3.UnitZ, texCoords[0]);
-        vertices[4] = new VertexPositionNormalTexture(new Vector3(0, size.Y, -size.Z), -Vector3.UnitZ, texCoords[1]);
-        vertices[5] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, -size.Z), -Vector3.UnitZ, texCoords[2]);
+        vertices[3] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, -size.Z), -Vector3.UnitZ, textureCoordinates[0]);
+        vertices[4] = new VertexPositionNormalTexture(new Vector3(0, size.Y, -size.Z), -Vector3.UnitZ, textureCoordinates[1]);
+        vertices[5] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, -size.Z), -Vector3.UnitZ, textureCoordinates[2]);
 
 
         // Vertices for the three rectangle faces
         // Rectangle face 1 (bottom)
-        vertices[6] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, size.Z), -Vector3.UnitY, texCoords[0]);
-        vertices[7] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, -size.Z), -Vector3.UnitY, texCoords[1]);
-        vertices[8] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, -size.Z), -Vector3.UnitY, texCoords[2]);
-        vertices[9] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, size.Z), -Vector3.UnitY, texCoords[3]);
+        vertices[6] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, size.Z), -Vector3.UnitY, textureCoordinates[0]);
+        vertices[7] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, -size.Z), -Vector3.UnitY, textureCoordinates[1]);
+        vertices[8] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, -size.Z), -Vector3.UnitY, textureCoordinates[2]);
+        vertices[9] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, size.Z), -Vector3.UnitY, textureCoordinates[3]);
 
         // Rectangle face 2 (left side)
-        vertices[10] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, size.Z), -Vector3.UnitX, texCoords[0]);
-        vertices[11] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, -size.Z), -Vector3.UnitX, texCoords[1]);
-        vertices[12] = new VertexPositionNormalTexture(new Vector3(0, size.Y, -size.Z), -Vector3.UnitX, texCoords[2]);
-        vertices[13] = new VertexPositionNormalTexture(new Vector3(0, size.Y, size.Z), -Vector3.UnitX, texCoords[3]);
+        vertices[10] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, size.Z), -Vector3.UnitX, textureCoordinates[0]);
+        vertices[11] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, -size.Z), -Vector3.UnitX, textureCoordinates[1]);
+        vertices[12] = new VertexPositionNormalTexture(new Vector3(0, size.Y, -size.Z), -Vector3.UnitX, textureCoordinates[2]);
+        vertices[13] = new VertexPositionNormalTexture(new Vector3(0, size.Y, size.Z), -Vector3.UnitX, textureCoordinates[3]);
 
         // Rectangle face 3 (right side)
-        vertices[14] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, size.Z), Vector3.UnitX, texCoords[0]);
-        vertices[15] = new VertexPositionNormalTexture(new Vector3(0, size.Y, size.Z), Vector3.UnitX, texCoords[1]);
-        vertices[16] = new VertexPositionNormalTexture(new Vector3(0, size.Y, -size.Z), Vector3.UnitX, texCoords[2]);
-        vertices[17] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, -size.Z), Vector3.UnitX, texCoords[3]);
+        vertices[14] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, size.Z), Vector3.UnitX, textureCoordinates[0]);
+        vertices[15] = new VertexPositionNormalTexture(new Vector3(0, size.Y, size.Z), Vector3.UnitX, textureCoordinates[1]);
+        vertices[16] = new VertexPositionNormalTexture(new Vector3(0, size.Y, -size.Z), Vector3.UnitX, textureCoordinates[2]);
+        vertices[17] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, -size.Z), Vector3.UnitX, textureCoordinates[3]);
 
 
         //// Triangle face indices
@@ -83,7 +80,6 @@ public class TriangularPrismProceduralModel : PrimitiveProceduralModelBase
         indices[18] = 14; indices[19] = 15; indices[20] = 16; indices[21] = 14; indices[22] = 16; indices[23] = 17; // Right
 
 
-        // Create the primitive object
         return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, toLeftHanded) { Name = "TriangularPrism" };
     }
 }
