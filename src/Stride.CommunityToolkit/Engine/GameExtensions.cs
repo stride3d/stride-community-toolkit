@@ -579,36 +579,34 @@ public static class GameExtensions
             var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
 
             var points = meshData.Vertices.Select(w => w.Position).ToList();
-
             var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
-
-            var xxx = new ConvexHullColliderShapeDesc()
+            var collider = new ConvexHullColliderShapeDesc()
             {
-                //Model = model,
+                //Model = model, // seems doing nothing
                 Scaling = new(0.9f),
-                ConvexHulls = new List<List<List<Vector3>>>(),
-                ConvexHullsIndices = new List<List<List<uint>>>()
+                //LocalOffset = new(20, 20, 10),
+                ConvexHulls = [],
+                ConvexHullsIndices = []
             };
 
-            xxx.ConvexHulls.Add(new List<List<Vector3>>() { points });
-            xxx.ConvexHullsIndices.Add(new List<List<uint>>() { uintIndices });
+            collider.ConvexHulls.Add([points]);
+            collider.ConvexHullsIndices.Add([uintIndices]);
 
-            var shapee = xxx.CreateShape(game.Services);
-
+            //var shapee = collider.CreateShape(game.Services);
             //var collider = new ConvexHullColliderShape(points, uintIndices, Vector3.Zero);
-
-            var x = new ColliderShapeAssetDesc();
-
             //var cs = new PhysicsColliderShape(descriptions);
+
+
             List<IAssetColliderShapeDesc> descriptions = [];
 
-            descriptions.Add(xxx);
+            descriptions.Add(collider);
 
-            var cs = new PhysicsColliderShape(descriptions);
+            var colliderShapeAsset = new ColliderShapeAssetDesc
+            {
+                Shape = new PhysicsColliderShape(descriptions)
+            };
 
-            x.Shape = cs;
-
-            options.PhysicsComponent.ColliderShapes.Add(x);
+            options.PhysicsComponent.ColliderShapes.Add(colliderShapeAsset);
             //options.PhysicsComponent.ColliderShape = shapee;
             //options.PhysicsComponent.ColliderShape = collider;
         }
