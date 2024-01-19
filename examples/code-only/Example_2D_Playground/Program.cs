@@ -36,7 +36,7 @@ List<Shape2DModel> shapes = [
     new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
     //new() { Type = Primitive2DModelType.Capsule, Color = Color.Purple, Size = rectangleSize }
-    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = Vector2.One }
+    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = Vector2.One / 2 }
     //new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
 ];
 
@@ -55,8 +55,8 @@ void Start(Scene rootScene)
     game.AddGraphicsCompositor().AddCleanUIStage();
     //game.AddGraphicsCompositor().AddCleanUIStage().AddImmediateDebugRenderFeature();
 
-    //game.Add3DCamera().Add3DCameraController();
-    game.Add2DCamera().Add2DCameraController();
+    game.Add3DCamera().Add3DCameraController();
+    //game.Add2DCamera().Add2DCameraController();
 
     game.AddDirectionalLight();
     game.AddAllDirectionLighting(intensity: 5f, true);
@@ -83,7 +83,7 @@ void Start(Scene rootScene)
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 
-    //simulation.FixedTimeStep = 1f / 120;
+    simulation.FixedTimeStep = 1f / 90;
     //simulation.ContinuousCollisionDetection = true;
 
     //Add2DShapes(ShapeType.Square, 1);
