@@ -1,5 +1,7 @@
+using Stride.CommunityToolkit.Graphics;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
+using Stride.Graphics;
 using Stride.Physics;
 
 namespace Stride.CommunityToolkit.Engine;
@@ -268,10 +270,10 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
-    /// Converts the world position to screen space coordinates relative to camera.
+    /// Converts the world position to screen space coordinates relative to <paramref name="cameraComponent"/>.
     /// </summary>
-    /// <param name="cameraComponent"></param>
-    /// <param name="position"></param>
+    /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
+    /// <param name="position">The world space position to be converted to screen space.</param>
     /// <returns>
     /// The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.
     /// </returns>
@@ -291,6 +293,32 @@ public static class CameraComponentExtensions
             X = (clipSpace.X + 1f) / 2f,
             Y = 1f - (clipSpace.Y + 1f) / 2f,
             Z = viewSpace.Z + cameraComponent.NearClipPlane,
+        };
+    }
+
+    /// <summary>
+    /// Converts the world position to screen space coordinates relative to <paramref name="cameraComponent"/> and the window size of the <paramref name="graphicsDevice"/>.
+    /// </summary>
+    /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
+    /// <param name="position">The world space position to be converted to screen space.</param>
+    /// <param name="graphicsDevice">The graphics device providing information about the window size.</param>
+    /// <returns>
+    /// The screen position as  normalized X * <paramref name="graphicsDevice"/> width, normalized Y * <paramref name="graphicsDevice"/> height. Z is always 0.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">If the cameraComponent argument is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
+    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// </remarks>
+    public static Vector2 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, GraphicsDevice graphicsDevice)
+    {
+        var worldPoint = cameraComponent.WorldToScreenPoint(ref position);
+        var windowSize = graphicsDevice.GetWindowSize();
+
+        return new Vector2
+        {
+            X = worldPoint.X * windowSize.X,
+            Y = worldPoint.Y * windowSize.Y
         };
     }
 

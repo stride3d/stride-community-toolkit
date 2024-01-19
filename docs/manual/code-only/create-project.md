@@ -7,7 +7,7 @@ The following instructions will guide you through the process of creating a new 
 1. **Prerequisites:** Make sure you have all prerequisites installed. See the [Prerequisites](../getting-started.md) section for more information.
 1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to learn more about how to create a new console application.
    ```
-   dotnet new console --framework net6.0
+   dotnet new console --framework net8.0
    ```
 1. **Add NuGet Package:** Execute the following command to add the necessary NuGet package.
    ```
@@ -26,7 +26,7 @@ The following instructions will guide you through the process of creating a new 
 
 ## Visual Studio 2022 and Rider Instructions
  
-1. **Create a C# Console Application:** Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 6.
+1. **Create a C# Console Application:** Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 8.
 1. **Add NuGet Package:** Search for and add the **Stride.CommunityToolkit** NuGet package, ensuring you opt for the pre-release version.
    - This package will install all needed Stride NuGet packages
 1. **Update Program.cs:** Paste the example code (provided below) into your `Program.cs` file.
@@ -40,7 +40,7 @@ The provided C# code example is designed to showcase the basic usage of the Stri
 
 
 ```csharp
-using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
