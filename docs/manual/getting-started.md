@@ -4,10 +4,11 @@ This article guides you through the initial steps to utilize the packages within
 
 ## 🛠️ Prerequisites
 
-Ensure the following are installed to build/run the project. If you're on Stride **4.1**+ already, these should be pre-installed.
+Ensure the following are installed to build/run the project. If you're on Stride **4.2**+ already, these should be pre-installed.
 
 1. Microsoft Visual C++ 2015-2022 Redistributable
    - [vcredist_x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (25MB)
+   - **Note:** You might be asked to restart your PC after the installation.
 1. .NET 8 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (200MB)
    - Verify installation with:
         ```
@@ -24,7 +25,6 @@ Ensure the following are installed to build/run the project. If you're on Stride
 ## 📦 Adding the NuGet package
 
 The toolkit is encapsulated in a single package named `Stride.CommunityToolkit`. This package embodies all the toolkit's functionalities. You can use your preferred IDE or the command line to add this package to your project.
-
 
 To add the NuGet package using the command line, execute the following command:
 
