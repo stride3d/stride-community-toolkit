@@ -28,6 +28,7 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
 - [Game Extensions](game-extensions/index.md): Extensions ranging from performance monitoring to material creation and entity manipulation.
 - [Model Extensions](model-extensions/index.md)
 - [Script Extensions](script-extensions/index.md): Additional features and tools for game development.
+- [Script System Extensions](script-system-extensions/index.md): Provides utilities for writing async methods.
 - Rendering: A guide on rendering techniques.
   - [MeshBuilder](rendering/mesh-builder.md): A utility class allowing dynamic creation of meshes at runtime.
   - [TextureCanvas](rendering/texture-canvas.md): a utility class allowing dynamic creation of textures at runtime.

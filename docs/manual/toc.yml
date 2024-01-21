@@ -53,6 +53,8 @@
   href: model-extensions/index.md
 - name: Script Extensions
   href: script-extensions/index.md
+- name: Script System Extensions
+  href: script-system-extensions/index.md
 - name: Rendering
   items:
   - name: MeshBuilder
