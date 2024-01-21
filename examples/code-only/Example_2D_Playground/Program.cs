@@ -3,7 +3,6 @@ using Example_2D_Playground;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -17,13 +16,15 @@ using Stride.Rendering.Sprites;
 using System.Reflection;
 using System.Xml.Linq;
 
-using var game = new Game();
-
 var boxSize = new Vector3(0.2f);
 var rectangleSize = new Vector3(0.2f, 0.3f, 0);
 int cubes = 0;
 int debugX = 5;
 int debugY = 30;
+var bgImage = "JumpyJetBackground.jpg";
+
+using var game = new Game();
+
 //int currentNumPrimitives = 1024;
 Simulation? simulation = null;
 CameraComponent? _camera = null;
@@ -88,7 +89,7 @@ void Start(Scene rootScene)
 
     //Add2DShapes(ShapeType.Square, 1);
 
-    AddBackground();
+    AddBackground(bgImage);
 
     //DebugDraw = new ImmediateDebugRenderSystem(game.Services, RenderGroup.Group1);
     //DebugDraw.PrimitiveColor = Color.Green;
@@ -109,40 +110,6 @@ void Start(Scene rootScene)
 
     Add3DBoxes(1);
 }
-
-void CreateShapeModels()
-{
-    foreach (var item in shapes)
-    {
-        //if (item.Type == Primitive2DModelType.Rectangle)
-        //{
-        //    item.Model = game.Create2DPrimitive(item.Type);
-
-        //    continue;
-        //}
-
-        item.Model =
-        [
-            new Mesh
-            {
-                //Draw = CreateMeshDraw(item).ToMeshDraw(game.GraphicsDevice),
-                MaterialIndex = 0
-            },
-            CreateMaterial(game, item.Color)
-        ];
-    }
-}
-
-//MeshBuilder CreateMeshDraw(Shape2DModel model)
-//{
-//    return model.Type switch
-//    {
-//        Primitive2DModelType.Square or Primitive2DModelType.Rectangle => GiveMeRectangle(model.Size, model.Color),
-//        Primitive2DModelType.Circle => GiveMeCircle(model.Size, 10, model.Color),
-//        Primitive2DModelType.Triangle => GiveMeRectangle(model.Size, model.Color),
-//        _ => GiveMeRectangle(model.Size, model.Color),
-//    };
-//}
 
 void Update(Scene scene, GameTime time)
 {
@@ -212,6 +179,25 @@ void Update(Scene scene, GameTime time)
     RenderNavigation();
 }
 
+void RenderNavigation()
+{
+    var space = 0;
+    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
+    space += 30;
+    game.DebugTextSystem.Print($"X - Delete all cubes and shapes", new Int2(x: debugX, y: debugY + space), Color.Red);
+    //game.DebugTextSystem.Print($"N - generate 3D cubes", new Int2(x: debugX, y: debugY + space + 60));
+    space += 20;
+    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: debugX, y: debugY + space));
+    space += 20;
+    game.DebugTextSystem.Print($"R - generate 2D rectangles", new Int2(x: debugX, y: debugY + space));
+    space += 20;
+    game.DebugTextSystem.Print($"C - generate 2D circles", new Int2(x: debugX, y: debugY + space));
+    space += 20;
+    game.DebugTextSystem.Print($"T - generate 2D triangles", new Int2(x: debugX, y: debugY + space));
+    space += 20;
+    game.DebugTextSystem.Print($"P - generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
+}
+
 void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
 {
     var hitResult = _camera!.RaycastMouse(simulation!, mousePosition);
@@ -246,94 +232,13 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
     }
 }
 
-MeshBuilder GiveMeRectangle(Vector3 size, Color shapeColor)
-{
-    var meshBuilder = new MeshBuilder();
-
-    meshBuilder.WithIndexType(IndexingType.Int16);
-    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
-
-    var position = meshBuilder.WithPosition<Vector2>();
-    var color = meshBuilder.WithColor<Color>();
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(0, 0));
-    meshBuilder.SetElement(color, shapeColor);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(0, size.Y));
-    meshBuilder.SetElement(color, shapeColor);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(size.X, size.Y));
-    meshBuilder.SetElement(color, shapeColor);
-
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(size.X, 0));
-    meshBuilder.SetElement(color, shapeColor);
-
-    meshBuilder.AddIndex(0);
-    meshBuilder.AddIndex(1);
-    meshBuilder.AddIndex(2);
-
-    meshBuilder.AddIndex(0);
-    meshBuilder.AddIndex(2);
-    meshBuilder.AddIndex(3);
-
-    return meshBuilder;
-}
-
-MeshBuilder GiveMeCircle(Vector3 size, int segments, Color shapeColor)
-{
-    var meshBuilder = new MeshBuilder();
-
-    meshBuilder.WithIndexType(IndexingType.Int16);
-    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
-
-    var position = meshBuilder.WithPosition<Vector2>();
-    var color = meshBuilder.WithColor<Color>();
-
-    // Calculate radius based on the size (assuming size.X is diameter)
-    float radius = size.X / 2;
-
-    // Add center vertex
-    meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector2(0, 0));
-    meshBuilder.SetElement(color, shapeColor);
-
-    // Add vertices for the circumference
-    for (int i = 0; i <= segments; i++)
-    {
-        // Angle for each segment
-        float angle = MathUtil.TwoPi * i / segments;
-
-        // Calculate vertex position on circumference
-        float x = radius * MathF.Cos(angle);
-        float y = radius * MathF.Sin(angle);
-
-        meshBuilder.AddVertex();
-        meshBuilder.SetElement(position, new Vector2(x, y));
-        meshBuilder.SetElement(color, shapeColor);
-    }
-
-    // Create triangles
-    for (int i = 1; i <= segments; i++)
-    {
-        meshBuilder.AddIndex(0); // Center vertex
-        meshBuilder.AddIndex(i + 1);
-        meshBuilder.AddIndex(i);
-    }
-
-    return meshBuilder;
-}
-
-// Image by brgfx, Free license, Attribution is required: https://www.freepik.com/free-vector/nature-roadside-background-scene_40169781.htm#query=2d%20game%20background&position=13&from_view=keyword&track=ais&uuid=dde78bdc-b045-4f91-b1b8-50f13aef87dc
-void AddBackground()
+void AddBackground(string fileName)
 {
     var entity = new Entity("Background");
 
     var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
-    var filePath = Path.Combine(directory, "background.jpg");
+    var filePath = Path.Combine(directory, fileName);
+
     using var input = File.OpenRead(filePath);
     var texture = Texture.Load(game.GraphicsDevice, input);
 
@@ -343,8 +248,8 @@ void AddBackground()
     };
 
     entity.Add(spriteComponent);
-    entity.Transform.Position.Z = -500;
-    entity.Transform.Position.Y = 12.4f;
+    entity.Transform.Position.Z = -100;
+    entity.Transform.Position.Y = 0f;
 
     entity.Scene = scene;
 }
@@ -450,17 +355,6 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 //    //rigidBody.LinearFactor = new Vector3(1, 1, 0);
 //}
 
-void RenderNavigation()
-{
-    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
-    game.DebugTextSystem.Print($"X - Delete all cubes and shapes", new Int2(x: debugX, y: debugY + 30), Color.Red);
-    game.DebugTextSystem.Print($"N - generate 3D cubes", new Int2(x: debugX, y: debugY + 60));
-    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: debugX, y: debugY + 80));
-    game.DebugTextSystem.Print($"C - generate 2D circles", new Int2(x: debugX, y: debugY + 100));
-    game.DebugTextSystem.Print($"R - generate 2D rectangles", new Int2(x: debugX, y: debugY + 120));
-    game.DebugTextSystem.Print($"T - generate random 2D shapes", new Int2(x: debugX, y: debugY + 140));
-}
-
 void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
 
 static BoxColliderShape GetBoxColliderShape(Vector3 size)
@@ -558,14 +452,3 @@ void Add3DBoxes(int count = 5)
 }
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
-
-// Another issue for another time
-static void AddSpriteBatchRenderer(Scene rootScene)
-{
-    var entity = new Entity("SpriteBatchRendererEntity", new(1, 1, 1))
-    {
-        new SpriteBatchRenderer()
-    };
-
-    entity.Scene = rootScene;
-}
