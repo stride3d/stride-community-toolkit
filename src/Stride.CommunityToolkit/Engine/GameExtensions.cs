@@ -369,6 +369,10 @@ public static class GameExtensions
             PhysicsComponent = new StaticColliderComponent()
         });
 
+        // seems doing nothing
+        //rigidBody.CcdMotionThreshold = 100;
+        //rigidBody.CcdSweptSphereRadius = 100
+
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
