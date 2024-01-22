@@ -41,6 +41,8 @@ List<Shape2DModel> shapes = [
     //new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
 ];
 
+Dictionary<Primitive2DModelType, Entity> templates = [];
+
 game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
@@ -101,14 +103,6 @@ void Start(Scene rootScene)
     //game.DebugTextSystem.Visible = true;
     //game.Services.AddService(DebugDraw);
     //game.GameSystems.Add(DebugDraw);
-
-    var entityNext = game.Create2DPrimitive(Primitive2DModelType.Triangle);
-
-    entityNext.Transform.Position = new Vector3(0, 5, 0);
-
-    entityNext.Scene = scene;
-
-    Add3DBoxes(1);
 }
 
 void Update(Scene scene, GameTime time)
@@ -123,13 +117,7 @@ void Update(Scene scene, GameTime time)
         ProcessRaycast(MouseButton.Left, game.Input.MousePosition);
     }
 
-    if (game.Input.IsKeyPressed(Keys.N))
-    {
-        Add3DBoxes(10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.M))
+    if (game.Input.IsKeyPressed(Keys.M))
     {
         Add2DShapes(Primitive2DModelType.Square, 10);
 
@@ -256,55 +244,74 @@ void AddBackground(string fileName)
 
 void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 {
-    Shape2DModel? shapeModel;
+    var entity = new Entity();
 
-    if (type == null)
+    for (int i = 1; i <= count; i++)
     {
-        int randomIndex = Random.Shared.Next(shapes.Count);
-
-        shapeModel = shapes[randomIndex];
-    }
-    else
-    {
-        shapeModel = shapes.Find(x => x.Type == type);
+        var shapeModel = GetShape(type);
 
         if (shapeModel == null) return;
+
+        if (type == null || i == 1)
+        {
+            entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
+        }
+        else
+        {
+            entity = entity.Clone();
+        }
+
+        entity.Name = "Cube";
+        entity.Transform.Position = GetRandomPosition();
+        entity.Scene = scene;
+
+        AddAngularAndLinearFactor(shapeModel.Type, entity);
     }
 
-    var entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size, Material = CreateMaterial(game, shapeModel.Color) });
-
-    entity.Name = "Cube";
-    entity.Transform.Position = GetRandomPosition();
-
-    entity.Scene = scene;
-
-    //var newE = entity.Clone();
-
-    if (type == Primitive2DModelType.Triangle)
+    static void AddAngularAndLinearFactor(Primitive2DModelType? type, Entity entity)
     {
+        if (type != Primitive2DModelType.Triangle) return;
+
         var rigidBody = entity.Get<RigidbodyComponent>();
         rigidBody.AngularFactor = new Vector3(0, 0, 1);
         rigidBody.LinearFactor = new Vector3(1, 1, 0);
     }
-
-    if (count == 1) return;
-
-    for (int i = 1; i <= count - 1; i++)
-    {
-        var newEntity = entity.Clone();
-
-        newEntity.Transform.Position = GetRandomPosition();
-
-        newEntity.Scene = scene;
-
-        if (type == Primitive2DModelType.Triangle)
-        {
-            var rigidBody = newEntity.Get<RigidbodyComponent>();
-            rigidBody.AngularFactor = new Vector3(0, 0, 1);
-            rigidBody.LinearFactor = new Vector3(1, 1, 0);
-        }
-    }
 }
+
+Shape2DModel? GetShape(Primitive2DModelType? type = null)
+{
+    if (type == null)
+    {
+        int randomIndex = Random.Shared.Next(shapes.Count);
+
+        return shapes[randomIndex];
+    }
+
+    return shapes.Find(x => x.Type == type);
+}
+
+void SetCubeCount(Scene scene) => cubes = scene.Entities.Count(w => w.Name == "Cube");
+
+static Material CreateMaterial(Game game, Color color)
+{
+    var colorVertexStream = new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() };
+    var computeColor = new ComputeBinaryColor(new ComputeColor(color), colorVertexStream, BinaryOperator.Multiply);
+
+    return Material.New(game.GraphicsDevice, new MaterialDescriptor
+    {
+        Attributes = new MaterialAttributes
+        {
+            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
+            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0)),
+            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
+            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.05f)),
+            Emissive = new MaterialEmissiveMapFeature(computeColor),
+        }
+    });
+}
+
+static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
 
 //void Create2DShape(Primitive2DModelType type)
 //{
@@ -354,101 +361,3 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 //    //rigidBody.AngularFactor = new Vector3(0, 0, 1);
 //    //rigidBody.LinearFactor = new Vector3(1, 1, 0);
 //}
-
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "Cube").Count();
-
-static BoxColliderShape GetBoxColliderShape(Vector3 size)
-    => new(true, new Vector3(size.X, size.Y, 0))
-    {
-        LocalOffset = new Vector3(size.X / 2, size.Y / 2, 0)
-    };
-
-static Material CreateMaterialWorking(Game game, Color color)
-{
-    var colorVertexStream = new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() };
-    var computeColor = new ComputeBinaryColor(new ComputeColor(color), colorVertexStream, BinaryOperator.Multiply);
-
-    return Material.New(game.GraphicsDevice, new MaterialDescriptor
-    {
-        Attributes = new MaterialAttributes
-        {
-            // Best colours
-            Diffuse = new MaterialDiffuseMapFeature
-            {
-                DiffuseMap = new ComputeVertexStreamColor()
-            },
-            // Better colours
-            //Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
-            // Worst colours
-            //Diffuse = new MaterialDiffuseMapFeature(computeColor),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.05f)),
-            Emissive = new MaterialEmissiveMapFeature(computeColor),
-        }
-    });
-}
-
-static Material CreateMaterial(Game game, Color color)
-{
-    var colorVertexStream = new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() };
-    var computeColor = new ComputeBinaryColor(new ComputeColor(color), colorVertexStream, BinaryOperator.Multiply);
-
-    return Material.New(game.GraphicsDevice, new MaterialDescriptor
-    {
-        Attributes = new MaterialAttributes
-        {
-            // Best colours
-            //Diffuse = new MaterialDiffuseMapFeature
-            //{
-            //    DiffuseMap = new ComputeVertexStreamColor()
-            //},
-            // Better colours
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
-            // Worst colours
-            //Diffuse = new MaterialDiffuseMapFeature(computeColor),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.05f)),
-            Emissive = new MaterialEmissiveMapFeature(computeColor),
-        }
-    });
-}
-
-void Add3DBoxes(int count = 5)
-{
-    for (int i = 0; i < count; i++)
-    {
-        //var entity = game.CreatePrimitive(PrimitiveModelType.Cube, size: boxSize, material: game.CreateMaterial(Color.Gold));
-        //var entity = game.CreatePrimitive(PrimitiveModelType.Capsule, new() { Size = boxSize });
-        //var entity = game.CreatePrimitive(PrimitiveModelType.Sphere, new() { Size = boxSize });
-        //var entity = game.Create2DPrimitive(Primitive2DModelType.Square);
-        var entity = game.Create2DPrimitive(Primitive2DModelType.Square, new() { Size = boxSize.XY(), Material = CreateMaterial(game, Color.Purple) });
-
-        entity.Name = "Cube";
-        entity.Transform.Position = GetRandomPosition();
-        entity.Scene = scene;
-
-        var rigidBody = entity.Get<RigidbodyComponent>();
-
-        //rigidBody.Restitution = 0;
-        //rigidBody.Friction = 1;
-        //rigidBody.RollingFriction = 0.1f;
-
-        rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        rigidBody.LinearFactor = new Vector3(1, 1, 0);
-
-        Vector3 pivot = new Vector3(0, 0, 0);
-        Vector3 axis = Vector3.UnitZ;
-
-        //var constrain = Simulation.CreateHingeConstraint(rigidBody, pivot, axis, useReferenceFrameA: false);
-
-        //simulation.AddConstraint(constrain);
-
-        //cubesList.Add(entity);
-    }
-}
-
-static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
