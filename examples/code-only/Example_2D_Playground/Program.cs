@@ -22,6 +22,7 @@ int cubes = 0;
 int debugX = 5;
 int debugY = 30;
 var bgImage = "JumpyJetBackground.jpg";
+const string ShapeName = "Shape";
 
 using var game = new Game();
 
@@ -37,7 +38,7 @@ List<Shape2DModel> shapes = [
     new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
     //new() { Type = Primitive2DModelType.Capsule, Color = Color.Purple, Size = rectangleSize }
-    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = Vector2.One / 2 }
+    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
     //new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
 ];
 
@@ -65,7 +66,6 @@ void Start(Scene rootScene)
     game.AddAllDirectionLighting(intensity: 5f, true);
     game.AddSkybox();
 
-    // Make sure you also update 2D Ground collider if you are testing this
     //game.Add2DGround();
     game.Add3DGround();
     //game.AddInfinite3DGround();
@@ -78,16 +78,10 @@ void Start(Scene rootScene)
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    //CreateShapeModels();
-
-    //var gameSettings = game.Services.GetService<IGameSettingsService>();
-
     simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+    simulation.FixedTimeStep = 1f / 90;
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
-
-    simulation.FixedTimeStep = 1f / 90;
-    //simulation.ContinuousCollisionDetection = true;
 
     //Add2DShapes(ShapeType.Square, 1);
 
@@ -149,7 +143,7 @@ void Update(Scene scene, GameTime time)
     }
     else if (game.Input.IsKeyReleased(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(w => w.Name == "Cube").ToList())
+        foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName).ToList())
         {
             entity.Remove();
         }
@@ -190,33 +184,16 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
 {
     var hitResult = _camera!.RaycastMouse(simulation!, mousePosition);
 
-    if (hitResult.Succeeded && hitResult.Collider.Entity.Name == "Cube")
+    if (hitResult.Succeeded && hitResult.Collider.Entity.Name == ShapeName && mouseButton == MouseButton.Left)
     {
-        if (mouseButton == MouseButton.Left)
-        {
-            var rigidBody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
+        var rigidBody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
 
-            if (rigidBody != null)
-            {
-                //var worldPosition = _camera.ScreenToWorldPoint(new Vector3(mousePosition.X, mousePosition.Y, 0));
+        if (rigidBody == null) return;
 
-                // Calculate a target position and apply force or set velocity
-                //var direction = worldPosition - rigidBody.Position;
-                //direction.Normalize();
+        var direction = new Vector3(0, 20, 0);
 
-                // Apply a force towards the target position
-                // or set the velocity directly (more abrupt and less physically realistic)
-
-                var direction = new Vector3(0, 20, 0);
-
-                rigidBody.ApplyImpulse(direction * 10);
-                // or
-                rigidBody.LinearVelocity = direction * 1;
-            }
-
-
-            Console.WriteLine("Left click");
-        }
+        rigidBody.ApplyImpulse(direction * 10);
+        rigidBody.LinearVelocity = direction * 1;
     }
 }
 
@@ -261,7 +238,7 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
             entity = entity.Clone();
         }
 
-        entity.Name = "Cube";
+        entity.Name = ShapeName;
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
 
@@ -275,6 +252,10 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
         var rigidBody = entity.Get<RigidbodyComponent>();
         rigidBody.AngularFactor = new Vector3(0, 0, 1);
         rigidBody.LinearFactor = new Vector3(1, 1, 0);
+
+        // seems doing nothing
+        //rigidBody.CcdMotionThreshold = 10000;
+        //rigidBody.CcdSweptSphereRadius = 10000;
     }
 }
 
@@ -290,7 +271,7 @@ Shape2DModel? GetShape(Primitive2DModelType? type = null)
     return shapes.Find(x => x.Type == type);
 }
 
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Count(w => w.Name == "Cube");
+void SetCubeCount(Scene scene) => cubes = scene.Entities.Count(w => w.Name == ShapeName);
 
 static Material CreateMaterial(Game game, Color color)
 {
@@ -312,52 +293,3 @@ static Material CreateMaterial(Game game, Color color)
 }
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
-
-//void Create2DShape(Primitive2DModelType type)
-//{
-//    var shapeModel = shapes.FirstOrDefault(x => x.Type == type);
-
-//    if (shapeModel == null) return;
-
-//    var entity = new Entity
-//    {
-//        Scene = scene,
-//        Name = "Cube",
-//        Transform = {
-//                Position = GetRandomPosition(),
-//                //Rotation = Quaternion.RotationYawPitchRoll(MathUtil.DegreesToRadians(180), 0, 0)
-//            }
-//    };
-
-//    entity.Add(new ModelComponent { Model = shapeModel.Model });
-
-//    //entity.Add(new StaticColliderComponent());
-
-//    var rigidBody = new RigidbodyComponent()
-//    {
-//        //IsKinematic = false,
-
-//        //Restitution = 0,
-//        //Friction = 1,
-//        //RollingFriction = 0.1f,
-
-//        //CcdMotionThreshold = 100,
-//        //CcdSweptSphereRadius = 100,
-//        //Mass = 1000000,
-//        //LinearDamping = 0.8f,
-//        //AngularDamping = 1.4f,
-//        //ColliderShapes = { new BoxColliderShapeDesc() { Size = new Vector3(1), Is2D = true } },
-//        ColliderShape = (type) switch
-//        {
-//            Primitive2DModelType.Square => GetBoxColliderShape(shapeModel.Size),
-//            Primitive2DModelType.Rectangle => GetBoxColliderShape(shapeModel.Size),
-//            Primitive2DModelType.Circle => new SphereColliderShape(true, shapeModel.Size.X / 2),
-//            _ => throw new NotImplementedException(),
-//        }
-//    };
-
-//    entity.Add(rigidBody);
-
-//    //rigidBody.AngularFactor = new Vector3(0, 0, 1);
-//    //rigidBody.LinearFactor = new Vector3(1, 1, 0);
-//}
