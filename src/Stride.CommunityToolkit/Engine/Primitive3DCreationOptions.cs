@@ -1,3 +1,4 @@
+using Stride.BepuPhysics;
 using Stride.Engine;
 using Stride.Physics;
 using Stride.Rendering;
@@ -45,7 +46,10 @@ public class Primitive3DCreationOptions
     public PhysicsComponent? PhysicsComponent { get; set; } = new RigidbodyComponent();
 }
 
-public class Primitive2DCreationOptions
+/// <summary>
+/// Provides options for creating a primitive entity in a 3D scene.
+/// </summary>
+public class Primitive3DCreationOptionsWithBepu
 {
     /// <summary>
     /// Gets or sets the name of the entity.
@@ -65,7 +69,7 @@ public class Primitive2DCreationOptions
     /// <summary>
     /// Gets or sets the size of the primitive model. If null, default dimensions are used.
     /// </summary>
-    public Vector2? Size { get; set; }
+    public Vector3? Size { get; set; }
 
     /// <summary>
     /// Gets or sets the render group for the entity. Defaults to RenderGroup.Group0.
@@ -73,9 +77,7 @@ public class Primitive2DCreationOptions
     public RenderGroup RenderGroup { get; set; } = RenderGroup.Group0;
 
     /// <summary>
-    /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of RigidbodyComponent.
+    /// Gets or sets the physics component to be added to the entity.
     /// </summary>
-    public PhysicsComponent? PhysicsComponent { get; set; } = new RigidbodyComponent();
-
-    public float Depth { get; set; } = 0.04f;
+    public ContainerComponent? Component { get; set; }
 }

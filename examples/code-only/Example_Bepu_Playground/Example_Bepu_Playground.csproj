@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,11 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Stride.BepuPhysics" Version="0.9.1.2" />
-  </ItemGroup>
+  <!--<ItemGroup>
+    <PackageReference Include="Stride.BepuPhysics" Version="0.9.2" />
+  </ItemGroup>-->
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Stride.BepuPhysics\Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.csproj" />
     <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
   </ItemGroup>
 

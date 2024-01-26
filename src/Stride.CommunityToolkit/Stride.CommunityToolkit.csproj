@@ -35,4 +35,9 @@
         <!--<PackageReference Include="Stride.UI" Version="4.2.0.1" />-->
         <!--<PackageReference Include="Stride.UI" Version="4.2.*" />-->
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Stride.BepuPhysics\Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.csproj" />
+      <ProjectReference Include="..\..\..\Stride.BepuPhysics\Stride.BepuPhysics\Stride.BepuPhysics.csproj" />
+    </ItemGroup>
 </Project>
