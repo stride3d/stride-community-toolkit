@@ -568,9 +568,9 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var proceduralModel = Procedural3DModelBuilder.Build(type, options.Size);
+        var modelBase = Procedural3DModelBuilder.Build(type, options.Size);
 
-        var model = proceduralModel.Generate(game.Services);
+        var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
         {
@@ -596,18 +596,27 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var proceduralModel = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
+        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
 
-        var model = proceduralModel.Generate(game.Services);
+        var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
         {
             model.Materials.Add(options.Material);
         }
 
-        var entity = new Entity(options.EntityName) {
-            new ModelComponent(model) { RenderGroup = options.RenderGroup }
-        };
+        var entity = new Entity(options.EntityName);
+
+        if (type == Primitive2DModelType.Circle)
+        {
+            var childEntity = new Entity("Child") { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+            childEntity.Transform.Rotation = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90));
+            entity.AddChild(childEntity);
+        }
+        else
+        {
+            entity.Add(new ModelComponent(model) { RenderGroup = options.RenderGroup });
+        }
 
         if (!options.IncludeCollider) return entity;
 
@@ -628,9 +637,9 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var proceduralModel = Procedural3DModelBuilder.Build(type, options.Size);
+        var modelBase = Procedural3DModelBuilder.Build(type, options.Size);
 
-        var model = proceduralModel.Generate(game.Services);
+        var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
         {
@@ -659,7 +668,13 @@ public static class GameExtensions
         {
             Primitive2DModelType.Rectangle => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
             Primitive2DModelType.Square => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
-            Primitive2DModelType.Circle => size is null ? new SphereCollider() : new() { Radius = size.Value.X },
+            Primitive2DModelType.Circle => size is null ? new CylinderCollider() : new()
+            {
+                Radius = size.Value.X,
+                Length = depth,
+                RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
+            },
+            Primitive2DModelType.Triangle => size is null ? new SphereCollider() : new() { Radius = size.Value.X },
             _ => throw new InvalidOperationException(),
         };
 
@@ -675,11 +690,11 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var proceduralModel = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
+        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
 
         //proceduralModel.SetMaterial("Material", options.Material);
 
-        var model = proceduralModel.Generate(game.Services);
+        var model = modelBase.Generate(game.Services);
 
         //model.Add(options.Material);
 
