@@ -117,5 +117,5 @@ public class Primitive2DCreationOptionsWithBepu
     /// </summary>
     public ContainerComponent Component { get; set; } = new Body2DComponent() { Collider = new CompoundCollider() };
 
-    public float Depth { get; set; } = 0.04f;
+    public float Depth { get; set; } = 0.4f;
 }
