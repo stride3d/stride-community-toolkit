@@ -597,11 +597,13 @@ public static class GameExtensions
             model.Materials.Add(options.Material);
         }
 
-        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+        var entity = new Entity(options.EntityName) {
+            new ModelComponent(model) { RenderGroup = options.RenderGroup }
+        };
 
         if (!options.IncludeCollider) return entity;
 
-        var colliderShape = Get2DColliderShapeWithBepu(type, options.Size);
+        var colliderShape = Get2DColliderShapeWithBepu(type, options.Size, options.Depth);
 
         if (colliderShape is null) return entity;
 

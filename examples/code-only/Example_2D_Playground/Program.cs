@@ -78,8 +78,8 @@ void Start(Scene rootScene)
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
-    simulation.FixedTimeStep = 1f / 90;
+    //simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+    //simulation.FixedTimeStep = 1f / 90;
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
 

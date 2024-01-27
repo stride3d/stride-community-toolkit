@@ -20,7 +20,7 @@ int cubes = 0;
 int debugX = 5;
 int debugY = 30;
 var bgImage = "JumpyJetBackground.jpg";
-const string ShapeName = "Shape";
+const string ShapeName = "BepuCube";
 const float Depth = 0.04f;
 Model? model = null;
 Scene scene = new();
@@ -114,7 +114,7 @@ void Update(Scene scene, GameTime time)
     }
     else if (game.Input.IsKeyReleased(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(w => w.Name == "BepuCube").ToList())
+        foreach (var entity in scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").ToList())
         {
             entity.Remove();
         }
@@ -188,7 +188,7 @@ void GenerateCubes(Scene rootScene, Vector3 shift, Model model)
         var entity2 = new Entity("BepuCube") {
             new ModelComponent(model) { RenderGroup = RenderGroup.Group0 }
         };
-        entity2.Transform.Position = new Vector3(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0) + shift;
+        entity2.Transform.Position = GetRandomPosition() + shift;
         //entity2.Transform.Rotation = Quaternion.Multiply(
         //    Quaternion.RotationZ(MathUtil.PiOverTwo),
         //    Quaternion.RotationY(MathUtil.PiOverTwo)
@@ -238,7 +238,7 @@ void GenerateCubes(Scene rootScene, Vector3 shift, Model model)
     }
 }
 
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "BepuCube").Count();
+void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").Count();
 
 void RenderNavigation()
 {
@@ -258,4 +258,4 @@ void RenderNavigation()
     //game.DebugTextSystem.Print($"P - generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
 }
 
-static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
+static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
