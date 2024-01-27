@@ -160,6 +160,14 @@ public static class GameExtensions
         game.Add3DGroundWithBepu();
     }
 
+    public static void SetupBase2DSceneWithBepu(this Game game)
+    {
+        game.AddGraphicsCompositor().AddCleanUIStage();
+        game.Add2DCamera().Add2DCameraController();
+        game.AddSkybox();
+        game.Add3DGroundWithBepu();
+    }
+
     /// <summary>
     /// Adds a default GraphicsCompositor with enabled post-effects to the specified Game instance and sets it as the game's SceneSystem GraphicsCompositor.
     /// </summary>
