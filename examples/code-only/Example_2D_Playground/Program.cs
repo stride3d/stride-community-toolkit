@@ -9,9 +9,6 @@ using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
 using Stride.Physics;
-using Stride.Rendering;
-using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 using Stride.Rendering.Sprites;
 using System.Reflection;
 using System.Xml.Linq;
@@ -27,7 +24,7 @@ const string ShapeName = "Shape";
 using var game = new Game();
 
 //int currentNumPrimitives = 1024;
-Simulation? simulation = null;
+Simulation? _simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
 //ImmediateDebugRenderSystem? DebugDraw = null;
@@ -78,7 +75,8 @@ void Start(Scene rootScene)
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    //simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+    // needed for Raycast
+    _simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
     //simulation.FixedTimeStep = 1f / 90;
 
     //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
@@ -182,7 +180,7 @@ void RenderNavigation()
 
 void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
 {
-    var hitResult = _camera!.RaycastMouse(simulation!, mousePosition);
+    var hitResult = _camera!.RaycastMouse(_simulation!, mousePosition);
 
     if (hitResult.Succeeded && hitResult.Collider.Entity.Name == ShapeName && mouseButton == MouseButton.Left)
     {
@@ -272,24 +270,5 @@ Shape2DModel? GetShape(Primitive2DModelType? type = null)
 }
 
 void SetCubeCount(Scene scene) => cubes = scene.Entities.Count(w => w.Name == ShapeName);
-
-static Material CreateMaterial(Game game, Color color)
-{
-    var colorVertexStream = new ComputeVertexStreamColor { Stream = new ColorVertexStreamDefinition() };
-    var computeColor = new ComputeBinaryColor(new ComputeColor(color), colorVertexStream, BinaryOperator.Multiply);
-
-    return Material.New(game.GraphicsDevice, new MaterialDescriptor
-    {
-        Attributes = new MaterialAttributes
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(0)),
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.05f)),
-            Emissive = new MaterialEmissiveMapFeature(computeColor),
-        }
-    });
-}
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
