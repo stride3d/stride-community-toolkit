@@ -26,6 +26,9 @@ Model? model = null;
 Simulation? _simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
+BepuConfiguration? _bepuConfig = null;
+int _simulationIndex = 0;
+float _maxDistance = 100;
 
 List<Shape2DModel> shapes = [
     new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
@@ -54,7 +57,7 @@ game.Run(start: (Action<Scene>?)((Scene rootScene) =>
     _simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
     //simulation.FixedTimeStep = 1f / 90;
 
-    var bepuConfig = game.Services.GetService<BepuConfiguration>();
+    _bepuConfig = game.Services.GetService<BepuConfiguration>();
     //bepuConfig.BepuSimulations[0].SolverSubStep = 5;
     //bepuConfig.BepuSimulations[0].FixedTimeStep = TimeSpan.FromTicks(TimeSpan.TicksPerSecond / 150);
     //bepuConfig.BepuSimulations[0] = new BepuSimulation() { SolverSubStep = 1 };
@@ -207,20 +210,61 @@ void RenderNavigation()
     game.DebugTextSystem.Print($"P - generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
 }
 
-void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
+void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
 {
-    var hitResult = _camera!.RaycastMouse(_simulation!, mousePosition);
+    if (_bepuConfig == null) return;
 
-    if (hitResult.Succeeded && hitResult.Collider.Entity.Name == ShapeName && mouseButton == MouseButton.Left)
+    if (mouseButton == MouseButton.Left)
     {
-        var rigidBody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
+        var invertedMatrix = Matrix.Invert(_camera.ViewProjectionMatrix);
 
-        if (rigidBody == null) return;
+        Vector3 position;
+        position.X = screenPosition.X * 2f - 1f;
+        position.Y = 1f - screenPosition.Y * 2f;
+        position.Z = 0f;
 
-        var direction = new Vector3(0, 20, 0);
+        var vectorNear = Vector3.Transform(position, invertedMatrix);
+        vectorNear /= vectorNear.W;
 
-        rigidBody.ApplyImpulse(direction * 10);
-        rigidBody.LinearVelocity = direction * 1;
+        // Compute the far (end) point for the raycast
+        // It's assumed to have the same projection space (x,y) coordinates and z = 1 (lying on the far plane)
+        // We need to unproject it to world space
+        position.Z = 1f;
+
+        var vectorFar = Vector3.Transform(position, invertedMatrix);
+        vectorFar /= vectorFar.W;
+
+        var buffer = System.Buffers.ArrayPool<HitInfo>.Shared.Rent(16);
+
+        _bepuConfig.BepuSimulations[_simulationIndex].RaycastPenetrating(vectorNear.XYZ(), vectorFar.XYZ(), _maxDistance, buffer, out var hits);
+
+        if (hits.Length > 0)
+        {
+            var space = 0;
+            for (int j = 0; j < hits.Length; j++)
+            {
+                var hitInfo = hits[j];
+                game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
+
+                space += 20;
+            }
+        }
+        else
+        {
+            game.DebugTextSystem.Print("No raycast hit", new Int2(x: debugX, y: 200));
+        }
+
+        //if (hitResult.Succeeded && hitResult.Collider.Entity.Name == ShapeName && mouseButton == MouseButton.Left)
+        //{
+        //    var rigidBody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
+
+        //    if (rigidBody == null) return;
+
+        //    var direction = new Vector3(0, 20, 0);
+
+        //    rigidBody.ApplyImpulse(direction * 10);
+        //    rigidBody.LinearVelocity = direction * 1;
+        //}
     }
 }
 
