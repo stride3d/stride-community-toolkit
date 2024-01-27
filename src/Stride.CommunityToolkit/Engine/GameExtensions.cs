@@ -584,6 +584,36 @@ public static class GameExtensions
         return entity;
     }
 
+    public static Entity Create2DPrimitiveWithBepu(this IGame game, Primitive2DModelType type, Primitive2DCreationOptionsWithBepu? options = null)
+    {
+        options ??= new();
+
+        var proceduralModel = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
+
+        var model = proceduralModel.Generate(game.Services);
+
+        if (options.Material != null)
+        {
+            model.Materials.Add(options.Material);
+        }
+
+        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        if (!options.IncludeCollider) return entity;
+
+        var colliderShape = Get2DColliderShapeWithBepu(type, options.Size);
+
+        if (colliderShape is null) return entity;
+
+        var compoundCollier = options.Component.Collider as CompoundCollider;
+
+        compoundCollier.Colliders.Add(colliderShape);
+
+        entity.Add(options.Component);
+
+        return entity;
+    }
+
     public static Entity CreatePrimitiveWithBepu(this IGame game, PrimitiveModelType type, Primitive3DCreationOptionsWithBepu? options = null)
     {
         options ??= new();
@@ -613,6 +643,15 @@ public static class GameExtensions
 
         return entity;
     }
+
+    private static ColliderBase? Get2DColliderShapeWithBepu(Primitive2DModelType type, Vector2? size = null, float depth = 0)
+        => type switch
+        {
+            Primitive2DModelType.Rectangle => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
+            Primitive2DModelType.Square => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
+            Primitive2DModelType.Circle => size is null ? new SphereCollider() : new() { Radius = size.Value.X },
+            _ => throw new InvalidOperationException(),
+        };
 
     private static ColliderBase? Get3DColliderShapeWithBepu(PrimitiveModelType type, Vector3? size = null)
     => type switch
