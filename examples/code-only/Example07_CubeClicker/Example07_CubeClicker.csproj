@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="NexVYaml" Version="1.0.3" />
+      <PackageReference Include="NexVYaml" Version="1.1.0" />
     </ItemGroup>
 
     <ItemGroup>
