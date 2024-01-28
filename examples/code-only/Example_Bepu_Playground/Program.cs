@@ -234,19 +234,33 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
         var vectorFar = Vector3.Transform(position, invertedMatrix);
         vectorFar /= vectorFar.W;
 
-        var buffer = System.Buffers.ArrayPool<HitInfo>.Shared.Rent(16);
+        var buffer = System.Buffers.ArrayPool<HitInfo>.Shared.Rent(100);
 
-        _bepuConfig.BepuSimulations[_simulationIndex].RaycastPenetrating(vectorNear.XYZ(), vectorFar.XYZ(), _maxDistance, buffer, out var hits);
+        _bepuConfig.BepuSimulations[_simulationIndex].RaycastPenetrating(vectorNear.XYZ(), vectorFar.XYZ() - vectorNear.XYZ(), _maxDistance, buffer, out var hits);
 
         if (hits.Length > 0)
         {
             var space = 0;
+
             for (int j = 0; j < hits.Length; j++)
             {
                 var hitInfo = hits[j];
-                game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
 
-                space += 20;
+                if (hitInfo.Container.Entity.Name == ShapeName)
+                {
+                    //game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
+
+                    space += 20;
+
+                    var rigidBody = hitInfo.Container.Entity.Get<Body2DComponent>();
+
+                    if (rigidBody == null) continue;
+
+                    var direction = new Vector3(0, 20, 0);
+
+                    rigidBody.ApplyImpulse(direction * 10, new());
+                    rigidBody.LinearVelocity = direction * 1;
+                }
             }
         }
         else
