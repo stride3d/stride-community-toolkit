@@ -46,3 +46,4 @@ This section highlights the amazing contributors who have helped enhance the Str
 - [Vaclav Elias](https://github.com/VaclavElias): Code only approach implementation, toolkit docs
 - [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
 - [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
+- [DockFrankenstein](https://github.com/DockFrankenstein): Script System Extensions
