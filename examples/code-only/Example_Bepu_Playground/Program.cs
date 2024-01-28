@@ -205,15 +205,15 @@ void RenderNavigation()
     space += 30;
     game.DebugTextSystem.Print($"X - Delete all cubes and shapes", new Int2(x: debugX, y: debugY + space), Color.Red);
     space += 20;
-    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: debugX, y: debugY + space));
+    game.DebugTextSystem.Print($"M - Generate 2D squares", new Int2(x: debugX, y: debugY + space));
     space += 20;
-    game.DebugTextSystem.Print($"R - generate 2D rectangles", new Int2(x: debugX, y: debugY + space));
+    game.DebugTextSystem.Print($"R - Generate 2D rectangles", new Int2(x: debugX, y: debugY + space));
     space += 20;
-    game.DebugTextSystem.Print($"C - generate 2D circles", new Int2(x: debugX, y: debugY + space));
-    //space += 20;
-    //game.DebugTextSystem.Print($"T - generate 2D triangles", new Int2(x: debugX, y: debugY + space));
+    game.DebugTextSystem.Print($"C - Generate 2D circles", new Int2(x: debugX, y: debugY + space));
     space += 20;
-    game.DebugTextSystem.Print($"P - generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
+    game.DebugTextSystem.Print($"T - Generate 2D triangles", new Int2(x: debugX, y: debugY + space));
+    space += 20;
+    game.DebugTextSystem.Print($"P - Generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
 }
 
 void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
@@ -290,7 +290,7 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
 
 void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 {
-    var entity = new Entity();
+    //var entity = new Entity();
 
     for (int i = 1; i <= count; i++)
     {
@@ -298,22 +298,27 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 
         if (shapeModel == null) return;
 
-        //var entity = game.Create2DPrimitiveWithBepu(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
+        var entity = game.Create2DPrimitiveWithBepu(shapeModel.Type,
+            new()
+            {
+                Size = shapeModel.Size,
+                Material = game.CreateMaterial(shapeModel.Color)
+            });
 
-        if (type == null || i == 1)
-        {
-            entity = game.Create2DPrimitiveWithBepu(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
-        }
-        else
-        {
-            entity = entity.Clone();
-        }
+        //if (type == null || i == 1)
+        //{
+        //    entity = game.Create2DPrimitiveWithBepu(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
+        //}
+        //else
+        //{
+        //    entity = entity.Clone();
+        //}
 
         entity.Name = ShapeName;
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
 
-        AddAngularAndLinearFactor(shapeModel.Type, entity);
+        //AddAngularAndLinearFactor(shapeModel.Type, entity);
     }
 
     static void AddAngularAndLinearFactor(Primitive2DModelType? type, Entity entity)
