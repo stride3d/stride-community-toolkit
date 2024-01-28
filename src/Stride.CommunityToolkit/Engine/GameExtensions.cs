@@ -620,15 +620,50 @@ public static class GameExtensions
 
         if (!options.IncludeCollider) return entity;
 
-        var colliderShape = Get2DColliderShapeWithBepu(type, options.Size, options.Depth);
+        if (type == Primitive2DModelType.Triangle)
+        {
+            var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
 
-        if (colliderShape is null) return entity;
+            var points = meshData.Vertices.Select(w => w.Position).ToList();
+            var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
+            var collider = new ConvexHullColliderShapeDesc()
+            {
+                Model = model, // seems doing nothing
+                //Scaling = new(0.9f),
+                //LocalOffset = new(20, 20, 10),
+                ConvexHulls = [],
+                ConvexHullsIndices = []
+            };
 
-        var compoundCollier = options.Component.Collider as CompoundCollider;
+            collider.ConvexHulls.Add([points]);
+            collider.ConvexHullsIndices.Add([uintIndices]);
 
-        compoundCollier.Colliders.Add(colliderShape);
+            List<IAssetColliderShapeDesc> descriptions = [];
 
-        entity.Add(options.Component);
+            descriptions.Add(collider);
+
+            var collider2 = new ConvexHullCollider() { Hull = new PhysicsColliderShape(descriptions) };
+
+            var compoundCollier = options.Component.Collider as CompoundCollider;
+
+            compoundCollier.Colliders.Add(collider2);
+
+            //options.Component.Collider = new MeshCollider() { Model = model, Closed = true };
+
+            entity.Add(options.Component);
+        }
+        else
+        {
+            var colliderShape = Get2DColliderShapeWithBepu(type, options.Size, options.Depth);
+
+            if (colliderShape is null) return entity;
+
+            var compoundCollier = options.Component.Collider as CompoundCollider;
+
+            compoundCollier.Colliders.Add(colliderShape);
+
+            entity.Add(options.Component);
+        }
 
         return entity;
     }
@@ -665,22 +700,6 @@ public static class GameExtensions
 
     private static ColliderBase? Get2DColliderShapeWithBepu(Primitive2DModelType type, Vector2? size = null, float depth = 0)
     {
-        TriangleCollider? triangleCollider = null;
-
-        if (size is not null && type == Primitive2DModelType.Triangle)
-        {
-            var equilateralHeight = (float)Math.Sqrt(size.Value.X * size.Value.X - Math.Pow(size.Value.X / 2, 2)) / 2;
-            var halfSize = size.Value / 2;
-
-            triangleCollider = new TriangleCollider
-            {
-                A = new Vector3(-halfSize.X, -equilateralHeight, 0),
-                B = new Vector3(0, equilateralHeight, 0),
-                C = new Vector3(halfSize.X, -equilateralHeight, 0),
-            };
-        }
-
-
         return type switch
         {
             Primitive2DModelType.Rectangle => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
@@ -691,7 +710,7 @@ public static class GameExtensions
                 Length = depth,
                 RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
             },
-            Primitive2DModelType.Triangle => triangleCollider ?? new TriangleCollider(),
+            //Primitive2DModelType.Triangle => triangleCollider ?? new TriangleCollider(),
             _ => throw new InvalidOperationException(),
         };
     }
