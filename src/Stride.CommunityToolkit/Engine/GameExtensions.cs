@@ -664,7 +664,24 @@ public static class GameExtensions
     }
 
     private static ColliderBase? Get2DColliderShapeWithBepu(Primitive2DModelType type, Vector2? size = null, float depth = 0)
-        => type switch
+    {
+        TriangleCollider? triangleCollider = null;
+
+        if (size is not null && type == Primitive2DModelType.Triangle)
+        {
+            var equilateralHeight = (float)Math.Sqrt(size.Value.X * size.Value.X - Math.Pow(size.Value.X / 2, 2)) / 2;
+            var halfSize = size.Value / 2;
+
+            triangleCollider = new TriangleCollider
+            {
+                A = new Vector3(-halfSize.X, -equilateralHeight, 0),
+                B = new Vector3(0, equilateralHeight, 0),
+                C = new Vector3(halfSize.X, -equilateralHeight, 0),
+            };
+        }
+
+
+        return type switch
         {
             Primitive2DModelType.Rectangle => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
             Primitive2DModelType.Square => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
@@ -674,9 +691,10 @@ public static class GameExtensions
                 Length = depth,
                 RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
             },
-            Primitive2DModelType.Triangle => size is null ? new SphereCollider() : new() { Radius = size.Value.X },
+            Primitive2DModelType.Triangle => triangleCollider ?? new TriangleCollider(),
             _ => throw new InvalidOperationException(),
         };
+    }
 
     private static ColliderBase? Get3DColliderShapeWithBepu(PrimitiveModelType type, Vector3? size = null)
     => type switch

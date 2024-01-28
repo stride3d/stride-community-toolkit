@@ -34,7 +34,7 @@ List<Shape2DModel> shapes = [
     new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
     new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
-    //new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
+    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
 ];
 
 using var game = new Game();
@@ -111,6 +111,12 @@ void Update(Scene scene, GameTime time)
     else if (game.Input.IsKeyPressed(Keys.C))
     {
         Add2DShapes(Primitive2DModelType.Circle, 10);
+
+        SetCubeCount(scene);
+    }
+    else if (game.Input.IsKeyPressed(Keys.T))
+    {
+        Add2DShapes(Primitive2DModelType.Triangle, 10);
 
         SetCubeCount(scene);
     }
@@ -314,9 +320,9 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
     {
         if (type != Primitive2DModelType.Triangle) return;
 
-        var rigidBody = entity.Get<RigidbodyComponent>();
-        rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        rigidBody.LinearFactor = new Vector3(1, 1, 0);
+        //var rigidBody = entity.Get<Body2DComponent>();
+        //rigidBody.AngularFactor = new Vector3(0, 0, 1);
+        //rigidBody.LinearFactor = new Vector3(1, 1, 0);
 
         // seems doing nothing
         //rigidBody.CcdMotionThreshold = 10000;
