@@ -79,9 +79,17 @@ public class TriangularPrismProceduralModel : PrimitiveProceduralModelBase
         indices[3] = 3; indices[4] = 5; indices[5] = 4; // Back
 
         //// Rectangle face indices
-        indices[6] = 6; indices[7] = 9; indices[8] = 8; indices[9] = 6; indices[10] = 8; indices[11] = 7; // Bottom
-        indices[12] = 10; indices[13] = 11; indices[14] = 12; indices[15] = 10; indices[16] = 12; indices[17] = 13; // Left
-        indices[18] = 14; indices[19] = 15; indices[20] = 16; indices[21] = 14; indices[22] = 16; indices[23] = 17; // Right
+        // Bottom
+        indices[6] = 6; indices[7] = 9; indices[8] = 8;
+        indices[9] = 6; indices[10] = 8; indices[11] = 7;
+
+        // Left
+        indices[12] = 10; indices[13] = 11; indices[14] = 12;
+        indices[15] = 10; indices[16] = 12; indices[17] = 13;
+
+        // Right
+        indices[18] = 14; indices[19] = 15; indices[20] = 16;
+        indices[21] = 14; indices[22] = 16; indices[23] = 17;
 
         return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, toLeftHanded) { Name = "TriangularPrism" };
     }
