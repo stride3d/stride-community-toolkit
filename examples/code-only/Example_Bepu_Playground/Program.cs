@@ -1,7 +1,6 @@
 using Example_Bepu_Playground;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics._2D;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -11,17 +10,17 @@ using Stride.Input;
 using Stride.Physics;
 using Stride.Rendering;
 
-var shift = new Vector3(0, 0, 0);
-var boxSize = new Vector3(0.2f, 0.2f, 0.04f);
-var groundSize = new Vector3(20, 0.01f, 20);
-var box2DSize = new Vector2(0.2f, 0.2f);
-var rectangleSize = new Vector3(0.2f, 0.3f, 0);
+const float Depth = 1;
+const string ShapeName = "BepuCube";
+
+var boxSize = new Vector3(0.2f, 0.2f, Depth);
+var rectangleSize = new Vector3(0.2f, 0.3f, Depth);
+var groundSize = new Vector3(20, 0.5f, 20);
 int cubes = 0;
 int debugX = 5;
 int debugY = 30;
 var bgImage = "JumpyJetBackground.jpg";
-const string ShapeName = "BepuCube";
-const float Depth = 1;
+
 Model? model = null;
 Simulation? _simulation = null;
 CameraComponent? _camera = null;
@@ -69,15 +68,6 @@ game.Run(start: (Action<Scene>?)((Scene rootScene) =>
     simulation2DEntity.Scene = rootScene;
     simulation2DEntity.AddGizmo(game.GraphicsDevice, showAxisName: true);
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
-    entity.Transform.Position = new Vector3(0, 20, 0);
-    entity.Scene = rootScene;
-
-    var shape = Procedural2DModelBuilder.Build(Primitive2DModelType.Square, box2DSize, Depth);
-    model = shape.Generate(game.Services);
-
-    GenerateCubes(rootScene, shift, model);
-
 }), update: Update);
 
 void Update(Scene scene, GameTime time)
@@ -87,13 +77,6 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsMouseButtonDown(MouseButton.Left))
     {
         ProcessRaycast(MouseButton.Left, game.Input.MousePosition);
-    }
-
-    if (game.Input.IsKeyDown(Keys.Space))
-    {
-        GenerateCubes(scene, shift, model);
-
-        SetCubeCount(scene);
     }
 
     if (game.Input.IsKeyPressed(Keys.M))
@@ -139,65 +122,6 @@ void Update(Scene scene, GameTime time)
     RenderNavigation();
 }
 
-void GenerateCubes(Scene rootScene, Vector3 shift, Model model)
-{
-    var rotationLock = new Vector3(0, 0, 1);
-
-    for (int i = 0; i < 10; i++)
-    {
-        var entity2 = new Entity("BepuCube") {
-            new ModelComponent(model) { RenderGroup = RenderGroup.Group0 }
-        };
-        entity2.Transform.Position = GetRandomPosition() + shift;
-        //entity2.Transform.Rotation = Quaternion.Multiply(
-        //    Quaternion.RotationZ(MathUtil.PiOverTwo),
-        //    Quaternion.RotationY(MathUtil.PiOverTwo)
-        //);
-
-        var component = new Body2DComponent()
-        {
-            Collider = new CompoundCollider() { Colliders = { new BoxCollider() { Size = boxSize } } },
-            //Collider = new CompoundCollider()
-            //{
-            //    Colliders = { new CylinderCollider() {
-            //        Radius = boxSize.X,
-            //        Length = Depth,
-            //        Mass = 1,
-            //        //RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90)),
-            //        PositionLocal = new Vector3(box2DSize.X, box2DSize.X, 0)
-
-            //        }
-            //    }
-            //},
-            //SimulationIndex = 2,
-            //SpringFrequency = 30,
-            //SpringDampingRatio = 3.0f,
-            //FrictionCoefficient = 1,
-            //MaximumRecoveryVelocity = 1000,
-            //Kinematic = false,
-            //IgnoreGlobalGravity = false,
-            //SleepThreshold = 0.01f,
-            //MinimumTimestepCountUnderThreshold = 32,
-            //InterpolationMode = InterpolationMode.None,
-            //ContinuousDetectionMode = ContinuousDetectionMode.Discrete,
-        };
-
-        entity2.Add(component);
-        //entity2.Add(new LinearAxisLimitConstraintComponent()
-        //{
-        //    Enabled = true,
-        //    TargetVelocity = new Vector3(0, 10, 0),
-        //    MotorDamping = 50,
-        //    MotorMaximumForce = 10000000,
-        //});
-        entity2.Scene = rootScene;
-
-        //component.LinearVelocity *= new Vector3(1, 1, 0);
-        ////component.Position *= new Vector3(1, 1, 0);
-        //component.AngularVelocity *= new Vector3(0, 0, 1);
-    }
-}
-
 void RenderNavigation()
 {
     var space = 0;
@@ -232,9 +156,6 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
         var vectorNear = Vector3.Transform(position, invertedMatrix);
         vectorNear /= vectorNear.W;
 
-        // Compute the far (end) point for the raycast
-        // It's assumed to have the same projection space (x,y) coordinates and z = 1 (lying on the far plane)
-        // We need to unproject it to world space
         position.Z = 1f;
 
         var vectorFar = Vector3.Transform(position, invertedMatrix);
@@ -254,7 +175,7 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
 
                 if (hitInfo.Container.Entity.Name == ShapeName)
                 {
-                    //game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
+                    game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
 
                     space += 20;
 
@@ -273,18 +194,6 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
         {
             game.DebugTextSystem.Print("No raycast hit", new Int2(x: debugX, y: 200));
         }
-
-        //if (hitResult.Succeeded && hitResult.Collider.Entity.Name == ShapeName && mouseButton == MouseButton.Left)
-        //{
-        //    var rigidBody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
-
-        //    if (rigidBody == null) return;
-
-        //    var direction = new Vector3(0, 20, 0);
-
-        //    rigidBody.ApplyImpulse(direction * 10);
-        //    rigidBody.LinearVelocity = direction * 1;
-        //}
     }
 }
 
@@ -317,21 +226,6 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
         entity.Name = ShapeName;
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
-
-        //AddAngularAndLinearFactor(shapeModel.Type, entity);
-    }
-
-    static void AddAngularAndLinearFactor(Primitive2DModelType? type, Entity entity)
-    {
-        if (type != Primitive2DModelType.Triangle) return;
-
-        //var rigidBody = entity.Get<Body2DComponent>();
-        //rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        //rigidBody.LinearFactor = new Vector3(1, 1, 0);
-
-        // seems doing nothing
-        //rigidBody.CcdMotionThreshold = 10000;
-        //rigidBody.CcdSweptSphereRadius = 10000;
     }
 }
 

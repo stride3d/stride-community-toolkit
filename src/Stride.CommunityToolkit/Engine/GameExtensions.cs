@@ -622,33 +622,33 @@ public static class GameExtensions
 
         if (type == Primitive2DModelType.Triangle)
         {
-            var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
+            // This is needed when using ConvexHullCollider
+            //var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
 
-            var points = meshData.Vertices.Select(w => w.Position).ToList();
-            var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
-            var collider = new ConvexHullColliderShapeDesc()
-            {
-                Model = model, // seems doing nothing
-                //Scaling = new(0.9f),
-                //LocalOffset = new(20, 20, 10),
-                ConvexHulls = [],
-                ConvexHullsIndices = []
-            };
+            //var points = meshData.Vertices.Select(w => w.Position).ToList();
+            //var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
+            //var collider = new ConvexHullColliderShapeDesc()
+            //{
+            //    Model = model, // seems doing nothing
+            //    ConvexHulls = [],
+            //    ConvexHullsIndices = []
+            //};
 
-            collider.ConvexHulls.Add([points]);
-            collider.ConvexHullsIndices.Add([uintIndices]);
+            //collider.ConvexHulls.Add([points]);
+            //collider.ConvexHullsIndices.Add([uintIndices]);
 
-            List<IAssetColliderShapeDesc> descriptions = [];
+            //List<IAssetColliderShapeDesc> descriptions = [];
 
-            descriptions.Add(collider);
+            //descriptions.Add(collider);
 
-            var collider2 = new ConvexHullCollider() { Hull = new PhysicsColliderShape(descriptions) };
+            //var collider2 = new ConvexHullCollider() { Hull = new PhysicsColliderShape(descriptions) };
 
-            var compoundCollier = options.Component.Collider as CompoundCollider;
+            //var compoundCollier = options.Component.Collider as CompoundCollider;
 
-            compoundCollier.Colliders.Add(collider2);
+            //compoundCollier.Colliders.Add(collider2);
 
-            //options.Component.Collider = new MeshCollider() { Model = model, Closed = true };
+            // Or you can use just his
+            options.Component.Collider = new MeshCollider() { Model = model, Closed = true };
 
             entity.Add(options.Component);
         }
