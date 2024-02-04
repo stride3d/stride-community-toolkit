@@ -7,28 +7,32 @@ changelog:
   categories:
     - title: 💥 Breaking Changes
       labels:
-        - breaking-change
+        - 'breaking-change'
     - title: 🎉 New Features
       labels:
-        - new-feature
+        - 'new-feature'
     - title: 🐞 Bug Fixes
       labels:
-        - bug-fix
+        - 'bug-fix'
     - title: 🚀 Performance Improvements
       labels:
         - performance
     - title: 🔧 Engineering
       labels:
-        - engineering
+        - 'engineering'
+        - 'refactoring'
     - title: 🎨 Rendering
       labels:
         - rendering        
     - title: ✨ Enhancement
       labels:
-        - enhancement        
+        - 'enhancement'
     - title: 📄 Documentation
       labels:
         - documentation
+    - title: 🎓 Examples
+      labels:
+        - 'example'
     - title: 💪 Other Changes
       labels:
         - "*"
