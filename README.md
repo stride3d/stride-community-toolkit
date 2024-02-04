@@ -19,7 +19,7 @@ To get started with the Stride Community Toolkit, please refer to our official [
 
 ## 🤝 Contributing
 
-Use [Discord](https://discord.gg/f6aerfE) for questions and general discussions. 
+Use [Discord](https://discord.gg/f6aerfE) *#toolkit* for questions and general discussions. 
 Use [Issues](https://github.com/stride3d/stride-community-toolkit/issues) to report bugs and proposing features.
 
 ### Good First Issues
