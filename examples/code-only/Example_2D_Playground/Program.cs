@@ -1,5 +1,5 @@
 //using DebugShapes;
-using Example_2D_Playground;
+using Example.Common;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;

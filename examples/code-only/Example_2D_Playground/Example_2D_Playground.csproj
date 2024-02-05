@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+        <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>
 
 </Project>
