@@ -1,4 +1,4 @@
-using Example_Bepu_Playground;
+using Example.Common;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics._2D;
 using Stride.CommunityToolkit.Engine;
@@ -29,11 +29,18 @@ BepuConfiguration? _bepuConfig = null;
 int _simulationIndex = 0;
 float _maxDistance = 100;
 
-List<Shape2DModel> shapes = [
+List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
     new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
     new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
+];
+
+List<Shape3DModel> _3DShapes = [
+    new() { Type = PrimitiveModelType.Cube, Color = Color.Green, Size = boxSize },
+    new() { Type = PrimitiveModelType.RectangularPrism, Color = Color.Orange, Size = rectangleSize },
+    new() { Type = PrimitiveModelType.Cylinder, Color = Color.Red, Size = boxSize },
+    new() { Type = PrimitiveModelType.TriangularPrism, Color = Color.Purple, Size = boxSize }
 ];
 
 using var game = new Game();
@@ -77,6 +84,44 @@ void Update(Scene scene, GameTime time)
     if (game.Input.IsMouseButtonDown(MouseButton.Left))
     {
         ProcessRaycast(MouseButton.Left, game.Input.MousePosition);
+    }
+
+    if (game.Input.IsKeyDown(Keys.LeftShift))
+    {
+        if (game.Input.IsKeyPressed(Keys.M))
+        {
+            Add3DShapes(PrimitiveModelType.Cube, 10);
+
+            SetCubeCount(scene);
+        }
+        else if (game.Input.IsKeyPressed(Keys.R))
+        {
+            Add3DShapes(PrimitiveModelType.RectangularPrism, 10);
+
+            SetCubeCount(scene);
+        }
+        else if (game.Input.IsKeyPressed(Keys.C))
+        {
+            Add3DShapes(PrimitiveModelType.Cylinder, 10);
+
+            SetCubeCount(scene);
+        }
+        else if (game.Input.IsKeyPressed(Keys.T))
+        {
+            Add3DShapes(PrimitiveModelType.TriangularPrism, 10);
+
+            SetCubeCount(scene);
+        }
+        else if (game.Input.IsKeyPressed(Keys.P))
+        {
+            Add3DShapes(count: 30);
+
+            SetCubeCount(scene);
+        }
+
+        RenderNavigation();
+
+        return;
     }
 
     if (game.Input.IsKeyPressed(Keys.M))
@@ -179,14 +224,14 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
 
                     space += 20;
 
-                    var rigidBody = hitInfo.Container.Entity.Get<Body2DComponent>();
+                    var body2D = hitInfo.Container.Entity.Get<BodyComponent>();
 
-                    if (rigidBody == null) continue;
+                    if (body2D == null) continue;
 
                     var direction = new Vector3(0, 20, 0);
 
-                    rigidBody.ApplyImpulse(direction * 10, new());
-                    rigidBody.LinearVelocity = direction * 1;
+                    body2D.ApplyImpulse(direction * 10, new());
+                    body2D.LinearVelocity = direction * 1;
                 }
             }
         }
@@ -203,7 +248,7 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 
     for (int i = 1; i <= count; i++)
     {
-        var shapeModel = GetShape(type);
+        var shapeModel = Get2DShape(type);
 
         if (shapeModel == null) return;
 
@@ -229,18 +274,64 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
     }
 }
 
-Shape2DModel? GetShape(Primitive2DModelType? type = null)
+void Add3DShapes(PrimitiveModelType? type = null, int count = 5)
+{
+    //var entity = new Entity();
+
+    for (int i = 1; i <= count; i++)
+    {
+        var shapeModel = Get3DShape(type);
+
+        if (shapeModel == null) return;
+
+        var entity = game.Create3DPrimitiveWithBepu(shapeModel.Type,
+            new()
+            {
+                Size = shapeModel.Size,
+                Material = game.CreateMaterial(shapeModel.Color)
+            });
+
+        //if (type == null || i == 1)
+        //{
+        //    entity = game.Create2DPrimitiveWithBepu(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
+        //}
+        //else
+        //{
+        //    entity = entity.Clone();
+        //}
+
+        entity.Name = ShapeName;
+        entity.Transform.Position = Get3DRandomPosition();
+        entity.Scene = scene;
+    }
+}
+
+Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
 {
     if (type == null)
     {
-        int randomIndex = Random.Shared.Next(shapes.Count);
+        int randomIndex = Random.Shared.Next(_2DShapes.Count);
 
-        return shapes[randomIndex];
+        return _2DShapes[randomIndex];
     }
 
-    return shapes.Find(x => x.Type == type);
+    return _2DShapes.Find(x => x.Type == type);
+}
+
+Shape3DModel? Get3DShape(PrimitiveModelType? type = null)
+{
+    if (type == null)
+    {
+        int randomIndex = Random.Shared.Next(_3DShapes.Count);
+
+        return _3DShapes[randomIndex];
+    }
+
+    return _3DShapes.Find(x => x.Type == type);
 }
 
 void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").Count();
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
+
+static Vector3 Get3DRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), Random.Shared.Next(-5, 5));

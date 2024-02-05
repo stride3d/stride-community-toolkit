@@ -406,7 +406,7 @@ public static class GameExtensions
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.CreatePrimitiveWithBepu(type, new Primitive3DCreationOptionsWithBepu()
+        var entity = game.Create3DPrimitiveWithBepu(type, new Primitive3DCreationOptionsWithBepu()
         {
             EntityName = entityName,
             Material = material,
@@ -668,7 +668,7 @@ public static class GameExtensions
         return entity;
     }
 
-    public static Entity CreatePrimitiveWithBepu(this IGame game, PrimitiveModelType type, Primitive3DCreationOptionsWithBepu? options = null)
+    public static Entity Create3DPrimitiveWithBepu(this IGame game, PrimitiveModelType type, Primitive3DCreationOptionsWithBepu? options = null)
     {
         options ??= new();
 
@@ -685,15 +685,50 @@ public static class GameExtensions
 
         if (!options.IncludeCollider) return entity;
 
-        var colliderShape = Get3DColliderShapeWithBepu(type, options.Size);
+        if (type == PrimitiveModelType.TriangularPrism)
+        {
+            // This is needed when using ConvexHullCollider
+            //var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
 
-        if (colliderShape is null) return entity;
+            //var points = meshData.Vertices.Select(w => w.Position).ToList();
+            //var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
+            //var collider = new ConvexHullColliderShapeDesc()
+            //{
+            //    Model = model, // seems doing nothing
+            //    ConvexHulls = [],
+            //    ConvexHullsIndices = []
+            //};
 
-        var compoundCollier = options.Component.Collider as CompoundCollider;
+            //collider.ConvexHulls.Add([points]);
+            //collider.ConvexHullsIndices.Add([uintIndices]);
 
-        compoundCollier.Colliders.Add(colliderShape);
+            //List<IAssetColliderShapeDesc> descriptions = [];
 
-        entity.Add(options.Component);
+            //descriptions.Add(collider);
+
+            //var collider2 = new ConvexHullCollider() { Hull = new PhysicsColliderShape(descriptions) };
+
+            //var compoundCollier = options.Component.Collider as CompoundCollider;
+
+            //compoundCollier.Colliders.Add(collider2);
+
+            // Or you can use just his
+            options.Component.Collider = new MeshCollider() { Model = model, Closed = true };
+
+            entity.Add(options.Component);
+        }
+        else
+        {
+            var colliderShape = Get3DColliderShapeWithBepu(type, options.Size);
+
+            if (colliderShape is null) return entity;
+
+            var compoundCollier = options.Component.Collider as CompoundCollider;
+
+            compoundCollier.Colliders.Add(colliderShape);
+
+            entity.Add(options.Component);
+        }
 
         return entity;
     }
@@ -720,6 +755,13 @@ public static class GameExtensions
     {
         PrimitiveModelType.Plane => size is null ? new BoxCollider() : new() { Size = new Vector3(size.Value.X, 0, size.Value.Y) },
         PrimitiveModelType.Cube => size is null ? new BoxCollider() : new() { Size = size ?? Vector3.One },
+        PrimitiveModelType.RectangularPrism => size is null ? new BoxCollider() : new() { Size = size ?? Vector3.One },
+        PrimitiveModelType.Cylinder => size is null ? new CylinderCollider() : new()
+        {
+            Radius = size.Value.X,
+            Length = size.Value.Z,
+            //RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
+        },
         _ => throw new InvalidOperationException(),
     };
 

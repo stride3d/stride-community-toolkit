@@ -14,7 +14,9 @@ public enum PrimitiveModelType
     Cylinder,
     InfinitePlane,
     Plane,
+    RectangularPrism,
     Sphere,
     Teapot,
     Torus,
+    TriangularPrism
 }
