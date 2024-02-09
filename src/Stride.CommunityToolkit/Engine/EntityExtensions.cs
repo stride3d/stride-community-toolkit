@@ -106,11 +106,11 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Searching for an entity in all scene entities.
+    /// Searches for an entity by name within the top-level entities of the current scene.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="entity">The reference entity used to access the scene.</param>
+    /// <param name="name">The name of the entity to find.</param>
+    /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
     public static Entity? FindEntity(this Entity entity, string name)
     {
         return entity.Scene.Entities.FirstOrDefault(w => w.Name == name);
