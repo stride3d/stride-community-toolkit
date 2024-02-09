@@ -23,11 +23,11 @@ changelog:
         - 'refactoring'
     - title: 🎨 Rendering
       labels:
-        - rendering        
+        - rendering
     - title: ✨ Enhancement
       labels:
         - 'enhancement'
-    - title: 📄 Documentation
+    - title: 📄 Docs
       labels:
         - documentation
     - title: 🎓 Examples
