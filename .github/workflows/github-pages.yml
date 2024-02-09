@@ -18,12 +18,12 @@ jobs:
     #  run: dotnet --info
 
     - name: Dotnet Setup
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.x
 
     - name: Checkout Stride Community Toolkit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - run: dotnet tool update -g docfx
 #    - run: dotnet tool install -g docfx --version 2.65.1
@@ -33,7 +33,7 @@ jobs:
       working-directory: docs
 
     - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v3.9.2
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_site
