@@ -7,19 +7,19 @@ public static class TextureExtensions
 {
     /// <summary>
     /// Retrieves the full filename of the Source of an asset.
-    /// workdir should be your Assets directory.
+    /// workDir should be your Assets directory.
     /// </summary>
-    /// <param name="urlname"></param>
-    /// <param name="workdir"></param>
+    /// <param name="urlName"></param>
+    /// <param name="workDir"></param>
     /// <returns></returns>
-    public static string FindAssetSourceDir(string urlname, string workdir)
+    public static string FindAssetSourceDir(string urlName, string workDir)
     {
         //start in the same directory as the .sln project
         string? startupPath = Directory.GetParent(Assembly.
             GetExecutingAssembly().Location)?.Parent?.Parent?.Parent?.
             FullName;
-        DirectoryInfo dir = new DirectoryInfo(startupPath + workdir);
-        FileInfo[] Files = dir.GetFiles(urlname, SearchOption.AllDirectories);
+        DirectoryInfo dir = new DirectoryInfo(startupPath + workDir);
+        FileInfo[] Files = dir.GetFiles(urlName, SearchOption.AllDirectories);
 
         if (Files.Length == 0)
         {
@@ -27,68 +27,68 @@ public static class TextureExtensions
         }
 
         string filename = Files[0].FullName;
+
         //open the *.sdtex file and read the Source
         var lines = File.ReadAllLines(filename);
-        string outfilename = "";
+        string outFilename = "";
 
         for (var i = 0; i < lines.Length; i += 1)
         {
             string line = lines[i];
+
             // Process line
             if (line.IndexOf("Source: !file") >= 0)
             {
-                outfilename = line.Substring(13);
+                outFilename = line.Substring(13);
                 break;
             }
         }
 
-        return outfilename;
+        return outFilename;
     }
 
     /// <summary>
-    /// Performs render to texture in a single function in order to resize and reformat a
-    /// given texture. if the texture was loaded using Content.Load<Texture>(...)
-    /// the texture is usually compressed and it will be by default 32x32.
-    /// So make sure you decompress it first by loading the Source file from the disc that this
-    /// asset refers to.
+    /// Resizes and reformats a given texture by rendering it to a new texture with the specified dimensions and pixel format.
+    /// This is useful for processing textures loaded through `Content.Load&lt;Texture&gt;()`, which may be compressed and default to a smaller size like 32x32 pixels.
+    /// To properly resize a compressed texture, ensure it's decompressed by loading the source file from disk before applying this method.
     /// </summary>
-    /// <param name="texin"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="GraphicsContext"></param>
-    /// <param name="pixelformat"></param>
-    /// <returns></returns>
-    public static Texture? Resize(this Texture texin, int width, int height,
-        GraphicsContext GraphicsContext, PixelFormat pixelformat = PixelFormat.R8G8B8A8_UNorm)
+    /// <param name="texture">The original texture to resize.</param>
+    /// <param name="width">The desired width of the resized texture.</param>
+    /// <param name="height">The desired height of the resized texture.</param>
+    /// <param name="graphicsContext">The graphics context to use for rendering.</param>
+    /// <param name="pixelFormat">The pixel format for the resized texture (default is PixelFormat.R8G8B8A8_UNorm).</param>
+    /// <returns>A new texture with the specified width, height, and pixel format, or null if the operation fails or the original texture has invalid dimensions.</returns>
+    public static Texture? Resize(this Texture texture, int width, int height,
+        GraphicsContext graphicsContext, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
     {
         try
         {
-            if (texin.Width == 0 || texin.Height == 0) return null;
+            if (texture.Width == 0 || texture.Height == 0) return null;
 
-            //if(texin.Width==width && texin.Height == height) return texin;
-            GraphicsDevice GraphicsDevice = texin.GraphicsDevice;
+            //if(texture.Width==width && texture.Height == height) return texture;
+            GraphicsDevice GraphicsDevice = texture.GraphicsDevice;
             Texture offlineTarget = Texture.New2D(GraphicsDevice, width, height,
-                pixelformat, TextureFlags.ShaderResource |
+                pixelFormat, TextureFlags.ShaderResource |
                 TextureFlags.RenderTarget);
             Texture depthBuffer = Texture.New2D(GraphicsDevice, width, height,
                 PixelFormat.D24_UNorm_S8_UInt, TextureFlags.DepthStencil);
             SpriteBatch spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // render into texture
-            GraphicsContext.CommandList.Clear(offlineTarget, new Color4(0, 0, 0, 0));
-            GraphicsContext.CommandList.Clear(depthBuffer, DepthStencilClearOptions.DepthBuffer);
-            GraphicsContext.CommandList.SetRenderTargetAndViewport(depthBuffer, offlineTarget);
+            graphicsContext.CommandList.Clear(offlineTarget, new Color4(0, 0, 0, 0));
+            graphicsContext.CommandList.Clear(depthBuffer, DepthStencilClearOptions.DepthBuffer);
+            graphicsContext.CommandList.SetRenderTargetAndViewport(depthBuffer, offlineTarget);
 
-            spriteBatch.Begin(GraphicsContext);
-            spriteBatch.Draw(texin, new RectangleF(0, 0, width, height), null, Color.White, 0, Vector2.Zero);
+            spriteBatch.Begin(graphicsContext);
+            spriteBatch.Draw(texture, new RectangleF(0, 0, width, height), null, Color.White, 0, Vector2.Zero);
             spriteBatch.End();
 
             // copy texture on screen
-            GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
-            GraphicsContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer);
-            GraphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
+            graphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
+            graphicsContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer);
+            graphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
 
-            spriteBatch.Begin(GraphicsContext);
+            spriteBatch.Begin(graphicsContext);
             spriteBatch.Draw(offlineTarget, new RectangleF(0, 0, width, height), null, Color.White, 0, Vector2.Zero);
             spriteBatch.End();
 
@@ -102,14 +102,14 @@ public static class TextureExtensions
     /// <summary>
     /// Reformats the pixels of a given texture via a rendering to texture approach.
     /// </summary>
-    /// <param name="texin"></param>
-    /// <param name="GraphicsContext"></param>
-    /// <param name="pixelformat"></param>
+    /// <param name="texture"></param>
+    /// <param name="graphicsContext"></param>
+    /// <param name="pixelFormat"></param>
     /// <returns></returns>
     public static Texture? ReFormat(
-        this Texture texin, GraphicsContext GraphicsContext,
-        PixelFormat pixelformat = PixelFormat.R8G8B8A8_UNorm)
+        this Texture texture, GraphicsContext graphicsContext,
+        PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
     {
-        return texin.Resize(texin.Width, texin.Height, GraphicsContext, pixelformat);
+        return texture.Resize(texture.Width, texture.Height, graphicsContext, pixelFormat);
     }
 }
