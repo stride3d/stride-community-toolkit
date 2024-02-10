@@ -6,9 +6,11 @@
 
 Here's a brief overview of the functionalities provided by these extension methods:
 
+- [`AddAllDirectionLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting(Stride.Engine.Game,System.Single,System.Boolean)) - Adds directional lighting from multiple angles to the current scene
 - [`AddProfiler()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)) - Adds a profiler to the game, which can be toggled on/off with Left Shift + Left Ctrl + P
-- [`CreateMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)) - Creates a basic material with optional color, specular reflection, and microsurface smoothness values
-- [`CreatePrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Engine.Game,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,System.String,Stride.Rendering.Material,System.Boolean,System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Rendering.RenderGroup)) - Creates a primitive 3D model entity of the specified type with optional customizations
+- [`CreateMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)) - Creates a basic material with optional color, specular reflection, and micro-surface smoothness values
+- [`Create2DPrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame)) - Creates a primitive 3D model entity of the specified type with optional customizations
+- [`CreatePrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.PrimitiveCreationOptions)) - Creates a primitive 3D model entity of the specified type with optional customizations
 - [`DeltaTime()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a single-precision floating-point number
 - [`DeltaTimeAccurate()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a double-precision floating-point
 - [`FPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)) - Retrieves the current frames per second (FPS) rate of the running game
