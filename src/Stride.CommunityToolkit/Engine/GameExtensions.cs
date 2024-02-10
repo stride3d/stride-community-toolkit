@@ -6,10 +6,8 @@ using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Engine.Processors;
-using Stride.Extensions;
 using Stride.Games;
 using Stride.Graphics;
-using Stride.Graphics.GeometricPrimitives;
 using Stride.Physics;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
@@ -17,8 +15,8 @@ using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
+using Stride.Rendering.ProceduralModels;
 using Stride.Rendering.Skyboxes;
-using System.Reflection;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -285,6 +283,16 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Adds directional lighting from multiple angles to the current scene, enhancing scene illumination.
+    /// </summary>
+    /// <param name="game">The game instance to which the lighting will be added.</param>
+    /// <param name="intensity">The intensity of the light sources.</param>
+    /// <param name="showLightGizmo">Specifies whether to display a gizmo for the light in the editor. Default is true.</param>
+    /// <remarks>
+    /// This method creates six directional lights positioned around a central point, each aiming from a unique angle to simulate uniform lighting from all directions.
+    /// The lights are added at predefined positions and rotations to cover the scene evenly.
+    /// </remarks>
     public static void AddAllDirectionLighting(this Game game, float intensity, bool showLightGizmo = true)
     {
         var position = new Vector3(7f, 2f, 0);
@@ -885,64 +893,4 @@ public static class GameExtensions
     /// <param name="game">The game instance from which to obtain the FPS rate.</param>
     /// <returns>The current FPS rate of the game.</returns>
     public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
-}
-
-/// <summary>
-/// Temporary workaround for BoxColliderShape not working with 2D
-/// </summary>
-public class BoxColliderShapeX4 : ColliderShape
-{
-    public readonly Vector3 BoxSize;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BoxColliderShape"/> class.
-    /// </summary>
-    /// <param name="is2D">If this cube is a 2D quad</param>
-    /// <param name="size">The size of the cube</param>
-    public BoxColliderShapeX4(bool is2D, Vector3 size)
-    {
-        Type = ColliderShapeTypes.Box;
-        BoxSize = size;
-
-        // Use reflection to set internal properties
-        SetInternalProperties(is2D, size);
-
-        cachedScaling = Is2D ? new Vector3(1, 1, 0.001f) : Vector3.One;
-    }
-
-    private void SetInternalProperties(bool is2D, Vector3 size)
-    {
-        // Set the Is2D property using reflection
-        //var is2DProperty = typeof(ColliderShape).GetProperty("Is2D", BindingFlags.NonPublic | BindingFlags.Instance);
-        var is2DProperty = typeof(ColliderShape).GetProperty("Is2D");
-
-        if (is2DProperty != null)
-        {
-            is2DProperty.SetValue(this, is2D);
-        }
-
-        // Set the InternalShape property using reflection
-        var internalShapeField = typeof(ColliderShape).GetField("InternalShape", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (internalShapeField != null)
-        {
-            BulletSharp.CollisionShape internalShape;
-
-            if (is2D)
-            {
-                size.Z = 0.001f; // Adjust the Z size for 2D
-                internalShape = new BulletSharp.Convex2DShape(new BulletSharp.Box2DShape(size / 2) { LocalScaling = Vector3.One }) { LocalScaling = cachedScaling };
-            }
-            else
-            {
-                internalShape = new BulletSharp.BoxShape(size / 2) { LocalScaling = cachedScaling };
-            }
-
-            internalShapeField.SetValue(this, internalShape);
-        }
-    }
-
-    public override MeshDraw CreateDebugPrimitive(GraphicsDevice device)
-    {
-        return GeometricPrimitive.Cube.New(device).ToMeshDraw();
-    }
 }
