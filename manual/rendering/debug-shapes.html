@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Debug Shapes | Stride Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Debug Shapes | Stride Manual ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/rendering/debug-shapes.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+  </head>
+
+  <script type="module" src="./../../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="debug-shapes">Debug Shapes</h1>
+
+<h2 id="available-shapes">Available Shapes</h2>
+<h3 id="sphere">Sphere</h3>
+<p>DrawSphere</p>
+<ul>
+<li>position - where the Sphere is located</li>
+<li>radius - the radius of the Sphere</li>
+<li>color - the color of the Sphere *optional</li>
+<li>duration - how long the Sphere will be visible *optional</li>
+<li>depthTest - if the Sphere should be visible through other objects *optional</li>
+<li>solid - if the Sphere should be solid or wireframe *optional</li>
+</ul>
+<h3 id="cube">Cube</h3>
+<p>DrawCube</p>
+<ul>
+<li>position - where the Box is located</li>
+<li>size - the size of the Box</li>
+<li>rotation - the rotation of the Box *optional</li>
+<li>color - the color of the Sphere *optional</li>
+<li>duration - how long the Sphere will be visible *optional</li>
+<li>depthTest - if the Sphere should be visible through other objects *optional</li>
+<li>solid - if the Sphere should be solid or wireframe *optional</li>
+</ul>
+<h3 id="line">Line</h3>
+<p>DrawLine</p>
+<ul>
+<li>start - the start position of the Line</li>
+<li>end - the end position of the Line</li>
+<li>color - the color of the line *optional</li>
+<li>duration - how long the line will be visible *optional</li>
+<li>depthTest - if the line should be visible through other objects *optional</li>
+</ul>
+<h3 id="arrow">Arrow</h3>
+<p>DrawArrow</p>
+<ul>
+<li>start - the start position of the Arrow</li>
+<li>end - the end position of the Arrow</li>
+<li>coneHeight - the height of the Arrow cone *optional</li>
+<li>coneRadius - the radius of the Arrow cone *optional</li>
+<li>color - the color of the arrow *optional</li>
+<li>duration - how long the arrow will be visible *optional</li>
+<li>depthTest - if the arrow should be visible through other objects *optional</li>
+<li>solid - if the arrow cone should be solid or wireframe *optional</li>
+</ul>
+<h3 id="half-sphere">Half Sphere</h3>
+<p>DrawHalfSphere</p>
+<ul>
+<li>position - where the Half Sphere is located</li>
+<li>radius - the radius of the Half Sphere</li>
+<li>rotation - the rotation of the Half Sphere *optional</li>
+<li>color - the color of the Half Sphere *optional</li>
+<li>duration - how long the Half Sphere will be visible *optional</li>
+<li>depthTest - if the Half Sphere should be visible through other objects *optional</li>
+<li>solid - if the Half Sphere should be solid or wireframe *optional</li>
+</ul>
+<h3 id="cylinder">Cylinder</h3>
+<p>DrawCylinder</p>
+<ul>
+<li>position - where the Cylinder is located</li>
+<li>radius - the radius of the Cylinder</li>
+<li>height - the height of the Cylinder</li>
+<li>rotation - the rotation of the Cylinder *optional</li>
+<li>color - the color of the Cylinder *optional</li>
+<li>duration - how long the Cylinder will be visible *optional</li>
+<li>depthTest - if the Cylinder should be visible through other objects *optional</li>
+<li>solid - if the Cylinder should be solid or wireframe *optional</li>
+</ul>
+<h3 id="cone">Cone</h3>
+<p>DrawCone</p>
+<ul>
+<li>position - where the Cone is located</li>
+<li>radius - the radius of the Cone</li>
+<li>height - the height of the Cone</li>
+<li>rotation - the rotation of the Cone *optional</li>
+<li>color - the color of the Cone *optional</li>
+<li>duration - how long the Cone will be visible *optional</li>
+<li>depthTest - if the Cone should be visible through other objects *optional</li>
+<li>solid - if the Cone should be solid or wireframe *optional</li>
+</ul>
+<h3 id="capsule">Capsule</h3>
+<p>DrawCapsule</p>
+<ul>
+<li>position - where the Capsule is located</li>
+<li>radius - the radius of the Capsule</li>
+<li>height - the height of the Capsule</li>
+<li>rotation - the rotation of the Capsule *optional</li>
+<li>color - the color of the Capsule *optional</li>
+<li>duration - how long the Capsule will be visible *optional</li>
+<li>depthTest - if the Capsule should be visible through other objects *optional</li>
+<li>solid - if the Capsule should be solid or wireframe *optional</li>
+</ul>
+<h3 id="quad">Quad</h3>
+<p>DrawQuad</p>
+<ul>
+<li>position - where the Quad is located</li>
+<li>size - the size of the Quad</li>
+<li>rotation - the rotation of the Quad *optional</li>
+<li>color - the color of the Quad *optional</li>
+<li>duration - how long the Quad will be visible *optional</li>
+<li>depthTest - if the Quad should be visible through other objects *optional</li>
+<li>solid - if the Quad should be solid or wireframe *optional</li>
+</ul>
+<h3 id="circle">Circle</h3>
+<p>DrawCircle</p>
+<ul>
+<li>position - where the Circle is located</li>
+<li>radius - the radius of the Circle</li>
+<li>rotation - the rotation of the Circle *optional</li>
+<li>color - the color of the Circle *optional</li>
+<li>duration - how long the Circle will be visible *optional</li>
+<li>depthTest - if the Circle should be visible through other objects *optional</li>
+<li>solid - if the Circle should be solid or wireframe *optional</li>
+</ul>
+<h2 id="boundsing-box">Boundsing Box</h2>
+<p>DrawBounds</p>
+<ul>
+<li>start - the start position of the Bounds</li>
+<li>end - the end position of the Bounds</li>
+<li>rotation - the rotation of the Bounds *optional</li>
+<li>color - the color of the bounds *optional</li>
+<li>duration - how long the bounds will be visible *optional</li>
+<li>depthTest - if the bounds should be visible through other objects *optional</li>
+<li>solid - if the bounds should be solid or wireframe *optional</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/rendering/debug-shapes.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

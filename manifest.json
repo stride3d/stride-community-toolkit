@@ -27,6 +27,66 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/DebugShapes.ImmediateDebugPrimitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DebugShapes.ImmediateDebugPrimitives.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderFeature.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DebugShapes.ImmediateDebugRenderFeature.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DebugShapes.ImmediateDebugRenderObject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderStageSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DebugShapes.ImmediateDebugRenderStageSelector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DebugShapes.ImmediateDebugRenderSystem.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/DebugShapes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/DebugShapes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.yml",
       "output": {
         ".html": {
@@ -87,10 +147,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.yml",
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.ScriptSystemExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.ScriptSystemExtensions.html"
         }
       },
       "version": ""
@@ -201,6 +281,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Physics.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html"
         }
       },
       "version": ""
@@ -377,10 +467,20 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.BasicCameraController.yml",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Scripts.BasicCameraController.html"
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.Basic3DCameraController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.Basic3DCameraController.html"
         }
       },
       "version": ""
@@ -451,6 +551,36 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Skyboxes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.DebugRendering.LinePrimitiveShaderKeys.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.DebugRendering.LinePrimitiveShaderKeys.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.DebugRendering.PrimitiveShaderKeys.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.DebugRendering.PrimitiveShaderKeys.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.DebugRendering.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.DebugRendering.html"
         }
       },
       "version": ""
@@ -789,6 +919,16 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "manual/rendering/debug-shapes.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/rendering/debug-shapes.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Resource",
       "source_relative_path": "manual/rendering/media/contain-bottom.png",
       "output": {
@@ -1074,6 +1214,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/script-extensions/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/script-system-extensions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/script-system-extensions/index.html"
         }
       },
       "version": ""

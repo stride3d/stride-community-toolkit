@@ -6,6 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Create Project | Stride Manual ">
       
+      
       <link rel="icon" href="../../favicon.ico">
       <link rel="stylesheet" href="../../public/docfx.min.css">
       <link rel="stylesheet" href="../../public/main.css">
@@ -91,7 +92,7 @@
 <ol>
 <li><strong>Prerequisites:</strong> Make sure you have all prerequisites installed. See the <a href="../getting-started.html">Prerequisites</a> section for more information.</li>
 <li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about how to create a new console application.
-<pre><code>dotnet new console --framework net6.0
+<pre><code>dotnet new console --framework net8.0
 </code></pre>
 </li>
 <li><strong>Add NuGet Package:</strong> Execute the following command to add the necessary NuGet package.
@@ -111,7 +112,7 @@
 </ol>
 <h2 id="visual-studio-2022-and-rider-instructions">Visual Studio 2022 and Rider Instructions</h2>
 <ol>
-<li><strong>Create a C# Console Application:</strong> Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 6.</li>
+<li><strong>Create a C# Console Application:</strong> Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 8.</li>
 <li><strong>Add NuGet Package:</strong> Search for and add the <strong>Stride.CommunityToolkit</strong> NuGet package, ensuring you opt for the pre-release version.
 <ul>
 <li>This package will install all needed Stride NuGet packages</li>
@@ -123,7 +124,7 @@
 </ol>
 <h2 id="example-code">Example Code</h2>
 <p>The provided C# code example is designed to showcase the basic usage of the Stride Game Engine.</p>
-<pre><code class="lang-csharp">using Stride.CommunityToolkit.Extensions;
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;

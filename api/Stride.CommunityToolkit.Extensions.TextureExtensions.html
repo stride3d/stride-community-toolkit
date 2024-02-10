@@ -2,11 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Class TextureExtensions
- | Stride Community Toolkit </title>
+      <title>Class TextureExtensions | Stride Community Toolkit </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Class TextureExtensions
- | Stride Community Toolkit ">
+      <meta name="title" content="Class TextureExtensions | Stride Community Toolkit ">
+      
       
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
@@ -90,8 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Extensions_TextureExtensions" data-uid="Stride.CommunityToolkit.Extensions.TextureExtensions" class="text-break">
-    Class TextureExtensions
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
+Class TextureExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -137,19 +135,19 @@
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the full filename of the Source of an asset.
-workdir should be your Assets directory.</p>
+workDir should be your Assets directory.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static string FindAssetSourceDir(string urlname, string workdir)</code></pre>
+    <pre><code class="lang-csharp hljs">public static string FindAssetSourceDir(string urlName, string workDir)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>urlname</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dt><code>urlName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd></dd>
-    <dt><code>workdir</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dt><code>workDir</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd></dd>
   </dl>
 
@@ -181,16 +179,16 @@ workdir should be your Assets directory.</p>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Texture? ReFormat(this Texture texin, GraphicsContext GraphicsContext, PixelFormat pixelformat = PixelFormat.R8G8B8A8_UNorm)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Texture? ReFormat(this Texture texture, GraphicsContext graphicsContext, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>texin</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dt><code>texture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
     <dd></dd>
-    <dt><code>GraphicsContext</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/GraphicsContext.cs">GraphicsContext</a></dt>
+    <dt><code>graphicsContext</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/GraphicsContext.cs">GraphicsContext</a></dt>
     <dd></dd>
-    <dt><code>pixelformat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
+    <dt><code>pixelFormat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
     <dd></dd>
   </dl>
 
@@ -217,31 +215,40 @@ workdir should be your Assets directory.</p>
   <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureExtensions.cs/#L61"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Resizes and reformats a given texture by rendering it to a new texture with the specified dimensions and pixel format.
+This is useful for processing textures loaded through <code>Content.Load&lt;Texture&gt;()</code>, which may be compressed and default to a smaller size like 32x32 pixels.
+To properly resize a compressed texture, ensure it's decompressed by loading the source file from disk before applying this method.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Texture? Resize(this Texture texin, int width, int height, GraphicsContext GraphicsContext, PixelFormat pixelformat = PixelFormat.R8G8B8A8_UNorm)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Texture? Resize(this Texture texture, int width, int height, GraphicsContext graphicsContext, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>texin</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
-    <dd></dd>
+    <dt><code>texture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd><p>The original texture to resize.</p>
+</dd>
     <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd></dd>
+    <dd><p>The desired width of the resized texture.</p>
+</dd>
     <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd></dd>
-    <dt><code>GraphicsContext</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/GraphicsContext.cs">GraphicsContext</a></dt>
-    <dd></dd>
-    <dt><code>pixelformat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
-    <dd></dd>
+    <dd><p>The desired height of the resized texture.</p>
+</dd>
+    <dt><code>graphicsContext</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/GraphicsContext.cs">GraphicsContext</a></dt>
+    <dd><p>The graphics context to use for rendering.</p>
+</dd>
+    <dt><code>pixelFormat</code> <a class="xref" href="https://stride-doc-staging.azurewebsites.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
+    <dd><p>The pixel format for the resized texture (default is PixelFormat.R8G8B8A8_UNorm).</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
-    <dd></dd>
+    <dd><p>A new texture with the specified width, height, and pixel format, or null if the operation fails or the original texture has invalid dimensions.</p>
+</dd>
   </dl>
 
 

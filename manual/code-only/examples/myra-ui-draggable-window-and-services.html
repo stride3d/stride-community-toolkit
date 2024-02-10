@@ -6,6 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Myra UI - Draggable Window, GetService() | Stride Manual ">
       
+      
       <link rel="icon" href="../../../favicon.ico">
       <link rel="stylesheet" href="../../../public/docfx.min.css">
       <link rel="stylesheet" href="../../../public/main.css">
@@ -129,7 +130,7 @@ void SetupBase3DScene()
     game.AddGraphicsCompositor()
         .AddCleanUIStage() //optional
         .AddSceneRenderer(new MyraSceneRenderer());
-    game.Add3DCamera().AddInteractiveCameraScript();
+    game.Add3DCamera().Add3DCameraController();
     game.AddDirectionalLight();
     game.AddSkybox();
     game.Add3DGround();
