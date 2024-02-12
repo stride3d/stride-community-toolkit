@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
@@ -10,6 +11,7 @@ game.Run(start: Start);
 void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
+    game.AddSkybox();
 
     var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
 

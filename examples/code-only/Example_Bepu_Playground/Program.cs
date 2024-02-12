@@ -3,6 +3,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics._2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -53,7 +54,9 @@ game.Run(start: (Action<Scene>?)((Scene rootScene) =>
     game.Window.Title = "2D Example";
 
     game.SetupBase3DSceneWithBepu();
+    game.AddSkybox();
     //game.SetupBase2DSceneWithBepu();
+
     game.AddProfiler();
     game.AddAllDirectionLighting(intensity: 5f, true);
     //game.ShowColliders();

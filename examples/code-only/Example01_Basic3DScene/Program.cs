@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -14,6 +15,7 @@ SpriteFont? font = null;
 game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase3DScene();
+    game.AddSkybox();
 
     font = game.Content.Load<SpriteFont>("StrideDefaultFont");
     spriteBatch = new SpriteBatch(game.GraphicsDevice);

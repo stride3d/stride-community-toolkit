@@ -1,7 +1,9 @@
 Imports Stride.CommunityToolkit.Engine
 Imports Stride.CommunityToolkit.Rendering.ProceduralModels
+Imports Stride.CommunityToolkit.Skyboxes
 Imports Stride.Core.Mathematics
 Imports Stride.Engine
+Imports GameExtensions = Stride.CommunityToolkit.Engine.GameExtensions
 
 Module Program
     Private game As New Game()
@@ -12,6 +14,7 @@ Module Program
 
     Private Sub StartGame(rootScene As Scene)
         game.SetupBase3DScene()
+        game.AddSkybox()
         game.AddProfiler()
 
         Dim entity = game.CreatePrimitive(PrimitiveModelType.Capsule)

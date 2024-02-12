@@ -2,6 +2,7 @@ using Example07_CubeClicker.Managers;
 using Example07_CubeClicker.Scripts;
 using NexVYaml;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Graphics;
 
@@ -22,6 +23,7 @@ game.Run(start: Start);
 void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
+    game.AddSkybox();
     game.AddGroundGizmo(showAxisName: true);
 
     CreateAndRegisterGameManagerUI(rootScene);
