@@ -3,11 +3,9 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
-using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Engine.Processors;
 using Stride.Games;
-using Stride.Graphics;
 using Stride.Physics;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
@@ -15,8 +13,6 @@ using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
-using Stride.Rendering.ProceduralModels;
-using Stride.Rendering.Skyboxes;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -25,7 +21,6 @@ namespace Stride.CommunityToolkit.Engine;
 /// </summary>
 public static class GameExtensions
 {
-    private const string SkyboxTexture = "skybox_texture_hdr.dds";
     private const string DefaultGroundName = "Ground";
     private static readonly Vector2 _default3DGroundSize = new(15f);
     private static readonly Vector3 _default2DGroundSize = new(15, 0.1f, 0);
@@ -127,8 +122,7 @@ public static class GameExtensions
     /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.
     /// 2. Adds a camera to the game and sets it up with a MouseLookCamera component.
     /// 3. Adds a directional light to the game scene.
-    /// 4. Adds a skybox to the game scene.
-    /// 5. Adds ground geometry to the game scene.
+    /// 4. Adds ground geometry to the game scene.
     /// </remarks>
     /// <param name="game">The Game instance for which the base 3D scene will be set up.</param>
     public static void SetupBase3DScene(this Game game)
@@ -136,7 +130,6 @@ public static class GameExtensions
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add3DCamera().Add3DCameraController();
         game.AddDirectionalLight();
-        game.AddSkybox();
         game.Add3DGround();
     }
 
@@ -145,7 +138,6 @@ public static class GameExtensions
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add2DCamera().Add2DCameraController();
         //game.AddDirectionalLight();
-        game.AddSkybox();
         game.Add2DGround();
     }
 
@@ -154,7 +146,6 @@ public static class GameExtensions
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add3DCamera().Add3DCameraController();
         game.AddDirectionalLight();
-        game.AddSkybox();
         game.Add3DGroundWithBepu();
     }
 
@@ -162,7 +153,6 @@ public static class GameExtensions
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add2DCamera().Add2DCameraController();
-        game.AddSkybox();
         game.Add3DGroundWithBepu();
     }
 
@@ -328,43 +318,6 @@ public static class GameExtensions
                 entity.AddLightDirectionalGizmo(game.GraphicsDevice);
             }
         }
-    }
-
-    /// <summary>
-    /// Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.
-    /// </summary>
-    /// <param name="game">The game instance to which the skybox will be added.</param>
-    /// <param name="entityName">The name for the skybox entity. If null, a default name will be used.</param>
-    /// <returns>The created skybox entity.</returns>
-    /// <remarks>
-    /// The skybox texture is loaded from the Resources folder, and is used to generate a skybox using the <see cref="SkyboxGenerator"/>.
-    /// A new entity is created with a <see cref="BackgroundComponent"/> and a <see cref="LightComponent"/>, both configured for the skybox, and is added to the game scene.
-    /// The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).
-    /// </remarks>
-    public static Entity AddSkybox(this Game game, string? entityName = null)
-    {
-        using var stream = new FileStream($"{AppContext.BaseDirectory}Resources\\{SkyboxTexture}", FileMode.Open, FileAccess.Read);
-
-        var texture = Texture.Load(game.GraphicsDevice, stream, TextureFlags.ShaderResource, GraphicsResourceUsage.Dynamic);
-
-        var skyboxGeneratorContext = new SkyboxGeneratorContext(game);
-
-        var skybox = new Skybox();
-
-        skybox = SkyboxGenerator.Generate(skybox, skyboxGeneratorContext, texture);
-
-        var entity = new Entity(entityName) {
-                new BackgroundComponent { Intensity = 1.0f, Texture = texture },
-                new LightComponent {
-                    Intensity = 1.0f,
-                    Type = new LightSkybox() { Skybox = skybox } }
-        };
-
-        entity.Transform.Position = new Vector3(0.0f, 2.0f, -2.0f);
-
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
-
-        return entity;
     }
 
     /// <summary>
