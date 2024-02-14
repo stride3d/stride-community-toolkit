@@ -13,7 +13,7 @@ void Start(Scene rootScene)
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Cube);
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube);
 
     entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
 

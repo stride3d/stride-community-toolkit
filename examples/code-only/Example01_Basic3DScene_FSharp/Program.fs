@@ -11,7 +11,7 @@ let Start rootScene =
     game.AddSkybox() |> ignore
     game.AddProfiler() |> ignore
 
-    let firstBox = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    let firstBox = game.Create3DPrimitive(PrimitiveModelType.Capsule);
     firstBox.Transform.Position <- new Vector3(0f, 2.5f, 0f)
     firstBox.Scene <- rootScene
 

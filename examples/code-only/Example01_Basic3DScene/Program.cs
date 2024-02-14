@@ -20,7 +20,7 @@ game.Run(start: (Scene rootScene) =>
     font = game.Content.Load<SpriteFont>("StrideDefaultFont");
     spriteBatch = new SpriteBatch(game.GraphicsDevice);
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 

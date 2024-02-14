@@ -29,7 +29,6 @@ public static class Procedural3DModelBuilder
             PrimitiveModelType.TriangularPrism => size is null ? new TriangularPrismProceduralModel() : new TriangularPrismProceduralModel() { Size = size is null ? Vector3.One : new(size.Value.X, size.Value.Y, size.Value.Z) },
             _ => throw new InvalidOperationException($"Unsupported PrimitiveModelType: {type}")
         };
-
 }
 
 public static class Procedural2DModelBuilder

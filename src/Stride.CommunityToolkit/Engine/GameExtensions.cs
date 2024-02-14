@@ -114,6 +114,14 @@ public static class GameExtensions
         game.AddDirectionalLight();
     }
 
+    public static void SetupBase2DScene(this Game game)
+    {
+        game.AddGraphicsCompositor().AddCleanUIStage();
+        game.Add2DCamera().Add2DCameraController();
+        //game.AddDirectionalLight();
+        game.Add2DGround();
+    }
+
     /// <summary>
     /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
@@ -133,12 +141,11 @@ public static class GameExtensions
         game.Add3DGround();
     }
 
-    public static void SetupBase2DScene(this Game game)
+    public static void SetupBase2DSceneWithBepu(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add2DCamera().Add2DCameraController();
-        //game.AddDirectionalLight();
-        game.Add2DGround();
+        game.Add3DGroundWithBepu();
     }
 
     public static void SetupBase3DSceneWithBepu(this Game game)
@@ -146,13 +153,6 @@ public static class GameExtensions
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add3DCamera().Add3DCameraController();
         game.AddDirectionalLight();
-        game.Add3DGroundWithBepu();
-    }
-
-    public static void SetupBase2DSceneWithBepu(this Game game)
-    {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add2DCamera().Add2DCameraController();
         game.Add3DGroundWithBepu();
     }
 
@@ -170,6 +170,15 @@ public static class GameExtensions
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
         return graphicsCompositor;
+    }
+
+    public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
+    {
+        return game.Add3DCamera(
+            cameraName,
+            initialPosition ?? CameraDefaults.Initial2DPosition,
+            initialRotation ?? CameraDefaults.Initial2DRotation,
+            CameraProjectionMode.Orthographic);
     }
 
     /// <summary>
@@ -217,15 +226,6 @@ public static class GameExtensions
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
-    }
-
-    public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
-    {
-        return game.Add3DCamera(
-            cameraName,
-            initialPosition ?? CameraDefaults.Initial2DPosition,
-            initialRotation ?? CameraDefaults.Initial2DRotation,
-            CameraProjectionMode.Orthographic);
     }
 
     /// <summary>
@@ -320,6 +320,41 @@ public static class GameExtensions
         }
     }
 
+    public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null)
+    {
+        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
+
+        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
+
+        var proceduralModel = Procedural3DModelBuilder.Build(PrimitiveModelType.Cube, validSize);
+        var model = proceduralModel.Generate(game.Services);
+
+        if (material != null)
+        {
+            model.Materials.Add(material);
+        }
+
+        var entity = new Entity(entityName) { new ModelComponent(model) };
+
+        var collider = new StaticColliderComponent();
+
+        //collider.ColliderShape = new StaticPlaneColliderShape(Vector3.UnitY, 0)
+        //{
+        //    LocalOffset = new Vector3(0, 0, 0),
+        //};
+
+        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
+        {
+            LocalOffset = new Vector3(0, 0, 0),
+        };
+
+        entity.Add(collider);
+
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+
+        return entity;
+    }
+
     /// <summary>
     /// Adds a ground with default Size 10,10.
     /// </summary>
@@ -343,7 +378,7 @@ public static class GameExtensions
 
         var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.CreatePrimitive(type, new()
+        var entity = game.Create3DPrimitive(type, new()
         {
             EntityName = entityName,
             Material = material,
@@ -375,41 +410,6 @@ public static class GameExtensions
             Size = (Vector3)validSize,
             Component = new StaticComponent() { Collider = new CompoundCollider() }
         });
-
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
-
-        return entity;
-    }
-
-    public static Entity Add2DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null)
-    {
-        var validSize = size is null ? _default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
-
-        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
-
-        var proceduralModel = Procedural3DModelBuilder.Build(PrimitiveModelType.Cube, validSize);
-        var model = proceduralModel.Generate(game.Services);
-
-        if (material != null)
-        {
-            model.Materials.Add(material);
-        }
-
-        var entity = new Entity(entityName) { new ModelComponent(model) };
-
-        var collider = new StaticColliderComponent();
-
-        //collider.ColliderShape = new StaticPlaneColliderShape(Vector3.UnitY, 0)
-        //{
-        //    LocalOffset = new Vector3(0, 0, 0),
-        //};
-
-        collider.ColliderShape = new BoxColliderShape(is2D: true, validSize)
-        {
-            LocalOffset = new Vector3(0, 0, 0),
-        };
-
-        entity.Add(collider);
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
@@ -513,6 +513,84 @@ public static class GameExtensions
         return Material.New(game.GraphicsDevice, materialDescription);
     }
 
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
+    {
+        options ??= new();
+
+        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
+
+        //proceduralModel.SetMaterial("Material", options.Material);
+
+        var model = modelBase.Generate(game.Services);
+
+        //model.Add(options.Material);
+
+        if (options.Material != null)
+        {
+            model.Materials.Add(options.Material);
+        }
+
+        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        if (type == Primitive2DModelType.Circle)
+        {
+            entity.Transform.Rotation = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90));
+        }
+
+        if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
+
+        if (type == Primitive2DModelType.Triangle)
+        {
+            //var a = new TriangularPrismProceduralModel() { Size = new(options.Size.Value.X, options.Size.Value.Y, options.Depth) };
+
+            var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
+
+            var points = meshData.Vertices.Select(w => w.Position).ToList();
+            var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
+            var collider = new ConvexHullColliderShapeDesc()
+            {
+                //Model = model, // seems doing nothing
+                Scaling = new(0.9f),
+                //LocalOffset = new(20, 20, 10),
+                ConvexHulls = [],
+                ConvexHullsIndices = []
+            };
+
+            collider.ConvexHulls.Add([points]);
+            collider.ConvexHullsIndices.Add([uintIndices]);
+
+            //var shapee = collider.CreateShape(game.Services);
+            //var collider = new ConvexHullColliderShape(points, uintIndices, Vector3.Zero);
+            //var cs = new PhysicsColliderShape(descriptions);
+
+
+            List<IAssetColliderShapeDesc> descriptions = [];
+
+            descriptions.Add(collider);
+
+            var colliderShapeAsset = new ColliderShapeAssetDesc
+            {
+                Shape = new PhysicsColliderShape(descriptions)
+            };
+
+            options.PhysicsComponent.ColliderShapes.Add(colliderShapeAsset);
+            //options.PhysicsComponent.ColliderShape = shapee;
+            //options.PhysicsComponent.ColliderShape = collider;
+        }
+        else
+        {
+            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
+
+            if (colliderShape is null) return entity;
+
+            options.PhysicsComponent.ColliderShapes.Add(colliderShape);
+        }
+
+        entity.Add(options.PhysicsComponent);
+
+        return entity;
+    }
+
     /// <summary>
     /// Creates a primitive 3D model entity of the specified type with optional customizations.
     /// </summary>
@@ -525,7 +603,7 @@ public static class GameExtensions
     /// collider inclusion, size, render group, and 2D flag. Dimensions in the Vector3 for size are used in the order X, Y, Z.
     /// If size is null, default dimensions are used for the model. If no collider is included, the entity is returned without it.
     /// </remarks>
-    public static Entity CreatePrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
+    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
     {
         options ??= new();
 
@@ -694,6 +772,25 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Sets the maximum frames per second (FPS) rate for the game.
+    /// Set <param name="targetFPS"/> to 0 for max possible FPS.
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="targetFPS"></param>
+    public static void SetMaxFPS(this IGame game, int targetFPS)
+    {
+        var gameBase = (GameBase)game;
+        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000 / targetFPS);
+    }
+
+    /// <summary>
+    /// Retrieves the current frames per second (FPS) rate of the running game.
+    /// </summary>
+    /// <param name="game">The game instance from which to obtain the FPS rate.</param>
+    /// <returns>The current FPS rate of the game.</returns>
+    public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
+
     private static ColliderBase? Get2DColliderShapeWithBepu(Primitive2DModelType type, Vector2? size = null, float depth = 0)
     {
         return type switch
@@ -726,96 +823,6 @@ public static class GameExtensions
         _ => throw new InvalidOperationException(),
     };
 
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
-    {
-        options ??= new();
-
-        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
-
-        //proceduralModel.SetMaterial("Material", options.Material);
-
-        var model = modelBase.Generate(game.Services);
-
-        //model.Add(options.Material);
-
-        if (options.Material != null)
-        {
-            model.Materials.Add(options.Material);
-        }
-
-        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
-
-        if (type == Primitive2DModelType.Circle)
-        {
-            entity.Transform.Rotation = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90));
-        }
-
-        if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
-
-        if (type == Primitive2DModelType.Triangle)
-        {
-            //var a = new TriangularPrismProceduralModel() { Size = new(options.Size.Value.X, options.Size.Value.Y, options.Depth) };
-
-            var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
-
-            var points = meshData.Vertices.Select(w => w.Position).ToList();
-            var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
-            var collider = new ConvexHullColliderShapeDesc()
-            {
-                //Model = model, // seems doing nothing
-                Scaling = new(0.9f),
-                //LocalOffset = new(20, 20, 10),
-                ConvexHulls = [],
-                ConvexHullsIndices = []
-            };
-
-            collider.ConvexHulls.Add([points]);
-            collider.ConvexHullsIndices.Add([uintIndices]);
-
-            //var shapee = collider.CreateShape(game.Services);
-            //var collider = new ConvexHullColliderShape(points, uintIndices, Vector3.Zero);
-            //var cs = new PhysicsColliderShape(descriptions);
-
-
-            List<IAssetColliderShapeDesc> descriptions = [];
-
-            descriptions.Add(collider);
-
-            var colliderShapeAsset = new ColliderShapeAssetDesc
-            {
-                Shape = new PhysicsColliderShape(descriptions)
-            };
-
-            options.PhysicsComponent.ColliderShapes.Add(colliderShapeAsset);
-            //options.PhysicsComponent.ColliderShape = shapee;
-            //options.PhysicsComponent.ColliderShape = collider;
-        }
-        else
-        {
-            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
-
-            if (colliderShape is null) return entity;
-
-            options.PhysicsComponent.ColliderShapes.Add(colliderShape);
-        }
-
-        entity.Add(options.PhysicsComponent);
-
-        return entity;
-    }
-
-    /// <summary>
-    /// Sets the maximum frames per second (FPS) rate for the game.
-    /// Set <param name="targetFPS"/> to 0 for max possible FPS.
-    /// </summary>
-    /// <param name="game"></param>
-    /// <param name="targetFPS"></param>
-    public static void SetMaxFPS(this IGame game, int targetFPS)
-    {
-        var gameBase = (GameBase)game;
-        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000 / targetFPS);
-    }
-
     private static IInlineColliderShapeDesc? Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0)
         => type switch
         {
@@ -839,11 +846,4 @@ public static class GameExtensions
             PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y, Is2D = is2D },
             _ => throw new InvalidOperationException(),
         };
-
-    /// <summary>
-    /// Retrieves the current frames per second (FPS) rate of the running game.
-    /// </summary>
-    /// <param name="game">The game instance from which to obtain the FPS rate.</param>
-    /// <returns>The current FPS rate of the game.</returns>
-    public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
 }
