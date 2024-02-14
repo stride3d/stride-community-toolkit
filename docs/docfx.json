@@ -4,7 +4,8 @@
       "src": [
         {
           "files": [
-            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj"
+            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj",
+            "Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj"
           ],
           "src": "../src",
           "properties": {
