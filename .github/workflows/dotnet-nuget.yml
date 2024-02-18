@@ -29,7 +29,7 @@ jobs:
         Set-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Value $updatedCsprojContent
 
     # Stride.CommunityToolkit
-    - name: Restore dependencies
+    - name: Restore dependencies - Stride.CommunityToolkit
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
     - name: Build
@@ -45,8 +45,8 @@ jobs:
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
-    # Stride.CommunityToolkit
-    - name: Restore dependencies.Skyboxes
+    # Stride.CommunityToolkit.Skyboxes
+    - name: Restore dependencies - Stride.CommunityToolkit.Skyboxes
       run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
 
     - name: Build
@@ -61,6 +61,7 @@ jobs:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_SKYBOX }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        TAG_COMMIT: false
 
     # Create release
     - name: Create GitHub Release
