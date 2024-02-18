@@ -1,8 +1,7 @@
-using Stride.CommunityToolkit.ProceduralModels;
-using Stride.Core.Mathematics;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Rendering;
 
-namespace Example_2D_Playground;
+namespace Example.Common;
 
 public class Shape3DModel
 {

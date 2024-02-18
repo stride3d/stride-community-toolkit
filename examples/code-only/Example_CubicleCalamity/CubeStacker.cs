@@ -1,7 +1,7 @@
 using CubicleCalamity.Components;
 using CubicleCalamity.Scripts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -139,7 +139,7 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = game.CreatePrimitive(PrimitiveModelType.Cube, new()
+        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
         {
             EntityName = "Cube",
             Material = _materials[color],

@@ -1,7 +1,8 @@
 name: .NET Build Test
 
 env:
-  PROJECT_PATH: src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj
+  PROJECT_PATH_CORE: src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj
+  PROJECT_PATH_SKYBOX: src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj
 
 on:
   workflow_dispatch:
@@ -19,11 +20,17 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH }}
+    - name: Restore Stride.CommunityToolkit dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore
+    - name: Build Stride.CommunityToolkit
+      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
 
-    - name: Test
-      run: dotnet test ${{ env.PROJECT_PATH }} --no-build --verbosity normal
+    - name: Test Stride.CommunityToolkit
+      run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
+
+    - name: Restore Stride.CommunityToolkit.Skyboxes dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
+
+    - name: Build Stride.CommunityToolkit.Skyboxes
+      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore

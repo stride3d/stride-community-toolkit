@@ -195,21 +195,30 @@ public class MeshBuilder : IDisposable
     public void AddIndex(int vertexIndex)
     {
         if (vertexIndex < 0 || vertexIndex > VertexCount)
+        {
             throw new ArgumentOutOfRangeException(nameof(vertexIndex),
                 $"VertexIndex must be a value between 0 and {VertexCount}");
+        }
 
         if (_indexStride == Unsafe.SizeOf<short>() && vertexIndex > short.MaxValue)
+        {
             throw new ArgumentOutOfRangeException(nameof(vertexIndex),
                 $"VertexIndex must be a value between 0 and {short.MaxValue}. To use bigger values use indexing type {IndexingType.Int32}");
+        }
 
-        if (_indexStride == 0) throw new InvalidOperationException("The mesh builder was not defined to use indices.");
+        if (_indexStride == 0)
+        {
+            throw new InvalidOperationException("The mesh builder was not defined to use indices.");
+        }
 
         if ((IndexCount + 1) * _indexStride <= _indexBuffer.Length)
         {
             IndexCount++;
+
             var indexOffset = (IndexCount - 1) * _indexStride;
-            ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer),
-                (nuint)indexOffset);
+
+            ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)indexOffset);
+
             if (_indexStride == 2)
                 Unsafe.WriteUnaligned(ref address, (short)vertexIndex);
             else
@@ -228,6 +237,7 @@ public class MeshBuilder : IDisposable
     {
         var nextCapacity = Math.Max(MinCapacity * _indexStride, _indexBuffer.Length * 2);
         var nextBuffer = ArrayPool<byte>.Shared.Rent(nextCapacity);
+
         if (_indexBuffer.Length > 0)
         {
             Buffer.BlockCopy(_indexBuffer, 0, nextBuffer, 0, _indexBuffer.Length);
@@ -235,11 +245,13 @@ public class MeshBuilder : IDisposable
         }
 
         _indexBuffer = nextBuffer;
+
         IndexCount++;
 
         var indexOffset = (IndexCount - 1) * _indexStride;
-        ref var address =
-            ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)indexOffset);
+
+        ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)indexOffset);
+
         if (_indexStride == 2)
             Unsafe.WriteUnaligned(ref address, (short)vertexIndex);
         else
@@ -355,6 +367,7 @@ public class MeshBuilder : IDisposable
                 $"Value has a size of {Unsafe.SizeOf<T>()}, but was defined with a size of {element.Size}", nameof(T));
 
         var elementOffset = vertexIndex * _vertexStride + element.Offset;
+
         return ref Unsafe.As<byte, T>(ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_vertexBuffer),
             (nuint)elementOffset));
     }

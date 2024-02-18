@@ -8,11 +8,13 @@
     </PropertyGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="copy ..\Resources\background.jpg $(OutDir)" />
+        <Exec Command="copy ..\Resources\JumpyJetBackground.jpg $(OutDir)" />
     </Target>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+        <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>
 
 </Project>

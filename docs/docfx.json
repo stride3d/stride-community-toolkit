@@ -4,7 +4,8 @@
       "src": [
         {
           "files": [
-            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj"
+            "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj",
+            "Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj"
           ],
           "src": "../src",
           "properties": {
@@ -27,7 +28,8 @@
   ],
   "build": {
     "xref": [
-      "https://stride-doc-staging.azurewebsites.net/latest/en/xrefmap.yml"
+      "https://doc.stride3d.net/latest/en/xrefmap.yml",
+      "https://github.com/dotnet/docfx/raw/main/.xrefmap.json"
     ],
     "globalMetadata": {
       "_appTitle": "Stride Community Toolkit",

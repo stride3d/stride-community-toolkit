@@ -31,3 +31,8 @@
 /*    --bs-link-color-rgb: 245, 122, 122 !important;
     --bs-link-hover-color-rgb: 247, 149, 149 !important;*/
 }
+
+.link-secondary {
+    padding-left: 10px;
+    display: block;
+}

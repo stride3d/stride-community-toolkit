@@ -41,7 +41,7 @@ The provided C# code example is designed to showcase the basic usage of the Stri
 
 ```csharp
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
@@ -53,7 +53,7 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -65,12 +65,12 @@ void Start(Scene rootScene)
 1. The `game.Run(start: Start);` line starts the game, and it specifies that the `Start` method should be called when the game begins.
 1. `void Start(Scene rootScene)` is the method that is called when the game starts. It takes in a `Scene` object, which represents the game scene that is currently being played.
 1. Inside the `Start` method, `game.SetupBase3DScene();` sets up a basic 3D scene.
-1. `var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);` creates a new primitive entity of type `Capsule`, and assigns it to the `entity` variable.
+1. `var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);` creates a new primitive entity of type `Capsule`, and assigns it to the `entity` variable.
 1. `entity.Transform.Position = new Vector3(0, 8, 0);` sets the position of the entity in the 3D space. The position is set to (0, 8, 0), which means the capsule is placed 8 units above the ground.
 1. `entity.Scene = rootScene;` adds the entity to the root scene of the game.
 
 
-The `CreatePrimitive()` method creates a Capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it
+The `Create3DPrimitive()` method creates a Capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it
 
 ![image](https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png)
 

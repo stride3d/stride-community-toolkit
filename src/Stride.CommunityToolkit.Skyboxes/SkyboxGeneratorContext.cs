@@ -1,3 +1,4 @@
+using Stride.Core;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;

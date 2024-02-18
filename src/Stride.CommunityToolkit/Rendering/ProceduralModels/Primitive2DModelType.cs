@@ -1,4 +1,4 @@
-﻿namespace Stride.CommunityToolkit.ProceduralModels;
+namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
 public enum Primitive2DModelType
 {

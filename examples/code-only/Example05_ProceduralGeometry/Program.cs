@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -16,6 +17,7 @@ game.Run(start: Start, update: Update);
 void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
+    game.AddSkybox();
 
     AddMesh(game.GraphicsDevice, rootScene, Vector3.Zero, GiveMeATriangle);
     AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, GiveMeAPlane);

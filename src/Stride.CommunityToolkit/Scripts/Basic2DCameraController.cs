@@ -66,13 +66,13 @@ public class Basic2DCameraController : SyncScript
         var moveDirection = Vector3.Zero;
 
         // Update moveDirection based on key input
-        if (Input.IsKeyDown(Keys.W) || Input.IsKeyDown(Keys.Up))
+        if (Input.IsKeyDown(Keys.Up))
             moveDirection.Y++;
-        if (Input.IsKeyDown(Keys.S) || Input.IsKeyDown(Keys.Down))
+        if (Input.IsKeyDown(Keys.Down))
             moveDirection.Y--;
-        if (Input.IsKeyDown(Keys.A) || Input.IsKeyDown(Keys.Left))
+        if (Input.IsKeyDown(Keys.Left))
             moveDirection.X--;
-        if (Input.IsKeyDown(Keys.D) || Input.IsKeyDown(Keys.Right))
+        if (Input.IsKeyDown(Keys.Right))
             moveDirection.X++;
 
         // Normalize the moveDirection to ensure consistent movement speed, for example when moving diagonally

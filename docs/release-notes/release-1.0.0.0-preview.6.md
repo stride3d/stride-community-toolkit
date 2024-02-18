@@ -1,17 +1,9 @@
-# What's new in Stride Community Toolkit 1.0
+# What's new in Stride Community Toolkit 1.0.0.0-preview.6
 
-This article highlights the most significant changes in Stride Community Toolkit 1.0 with links to relevant documentation.
-
-Release notes for 1.0.0.0
-
-<!-- Release notes generated using configuration in .github/release.yml at main -->
+This article lists the most significant changes in Stride Community Toolkit preview `1.0.0.0-preview.6`. 
 
 ## What's Changed
 ### 💪 Other Changes
-* Update 5 - Content improvements by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/37
-* 38 footer fix the name by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/40
-* chore: Stride NuGet bumped by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/41
-* Update 4 - Toolkit Improvements by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/36
 * Merge NexCoreExtensions into  it by @IXLLEGACYIXL in https://github.com/stride3d/stride-community-toolkit/pull/18
 * Merged Doprez.Stride extensions by @Doprez in https://github.com/stride3d/stride-community-toolkit/pull/20
 * Add more extensions by @IXLLEGACYIXL in https://github.com/stride3d/stride-community-toolkit/pull/24
