@@ -33,6 +33,9 @@ changelog:
     - title: 🎓 Examples
       labels:
         - 'example'
+    - title: 🔁 Build & Deploy
+      labels:
+        - 'ci-cd'
     - title: 💪 Other Changes
       labels:
         - "*"
