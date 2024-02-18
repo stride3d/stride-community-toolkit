@@ -125,7 +125,7 @@
 <h2 id="example-code">Example Code</h2>
 <p>The provided C# code example is designed to showcase the basic usage of the Stride Game Engine.</p>
 <pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
@@ -137,7 +137,7 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
-    var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -149,11 +149,11 @@ void Start(Scene rootScene)
 <li>The <code>game.Run(start: Start);</code> line starts the game, and it specifies that the <code>Start</code> method should be called when the game begins.</li>
 <li><code>void Start(Scene rootScene)</code> is the method that is called when the game starts. It takes in a <code>Scene</code> object, which represents the game scene that is currently being played.</li>
 <li>Inside the <code>Start</code> method, <code>game.SetupBase3DScene();</code> sets up a basic 3D scene.</li>
-<li><code>var entity = game.CreatePrimitive(PrimitiveModelType.Capsule);</code> creates a new primitive entity of type <code>Capsule</code>, and assigns it to the <code>entity</code> variable.</li>
+<li><code>var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);</code> creates a new primitive entity of type <code>Capsule</code>, and assigns it to the <code>entity</code> variable.</li>
 <li><code>entity.Transform.Position = new Vector3(0, 8, 0);</code> sets the position of the entity in the 3D space. The position is set to (0, 8, 0), which means the capsule is placed 8 units above the ground.</li>
 <li><code>entity.Scene = rootScene;</code> adds the entity to the root scene of the game.</li>
 </ol>
-<p>The <code>CreatePrimitive()</code> method creates a Capsule with <a href="https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html">rigid body physics</a>. Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it</p>
+<p>The <code>Create3DPrimitive()</code> method creates a Capsule with <a href="https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html">rigid body physics</a>. Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it</p>
 <p><img src="https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png" alt="image"></p>
 <h2 id="additional-examples">Additional Examples</h2>
 <p>Explore more examples listed in the menu on the left, categorized by the programming language and level of complexity. These examples provide a deeper understanding of how to work with a code-only project in Stride, showcasing various functionalities and implementations.</p>

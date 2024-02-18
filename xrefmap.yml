@@ -1238,6 +1238,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround
   nameWithType: GameExtensions.Add3DGround
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
+  name: Add3DGroundWithBepu(Game, string?, Vector2?, bool)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DGroundWithBepu_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
+  name.vb: Add3DGroundWithBepu(Game, String, Vector2?, Boolean)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?, bool)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?, Boolean)
+  nameWithType: GameExtensions.Add3DGroundWithBepu(Game, string?, Vector2?, bool)
+  nameWithType.vb: GameExtensions.Add3DGroundWithBepu(Game, String, Vector2?, Boolean)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu*
+  name: Add3DGroundWithBepu
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DGroundWithBepu_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu
+  nameWithType: GameExtensions.Add3DGroundWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting(Stride.Engine.Game,System.Single,System.Boolean)
   name: AddAllDirectionLighting(Game, float, bool)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddAllDirectionLighting_Stride_Engine_Game_System_Single_System_Boolean_
@@ -1331,28 +1347,15 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler
   nameWithType: GameExtensions.AddProfiler
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
-  name: AddSkybox(Game, string?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
-  name.vb: AddSkybox(Game, String)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game, string?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox(Stride.Engine.Game, String)
-  nameWithType: GameExtensions.AddSkybox(Game, string?)
-  nameWithType.vb: GameExtensions.AddSkybox(Game, String)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox*
-  name: AddSkybox
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSkybox_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSkybox
-  nameWithType: GameExtensions.AddSkybox
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame)
-  name: Create2DPrimitive(IGame)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitive_Stride_Games_IGame_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame)
-  nameWithType: GameExtensions.Create2DPrimitive(IGame)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptions)
+  name: Create2DPrimitive(IGame, Primitive2DModelType, Primitive2DCreationOptions?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptions)
+  name.vb: Create2DPrimitive(IGame, Primitive2DModelType, Primitive2DCreationOptions)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.CommunityToolkit.Engine.Primitive2DCreationOptions?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.CommunityToolkit.Engine.Primitive2DCreationOptions)
+  nameWithType: GameExtensions.Create2DPrimitive(IGame, Primitive2DModelType, Primitive2DCreationOptions?)
+  nameWithType.vb: GameExtensions.Create2DPrimitive(IGame, Primitive2DModelType, Primitive2DCreationOptions)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive*
   name: Create2DPrimitive
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitive_
@@ -1360,6 +1363,54 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive
   nameWithType: GameExtensions.Create2DPrimitive
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu)
+  name: Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitiveWithBepu_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu)
+  name.vb: Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu)
+  nameWithType: GameExtensions.Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu?)
+  nameWithType.vb: GameExtensions.Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu*
+  name: Create2DPrimitiveWithBepu
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitiveWithBepu_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu
+  nameWithType: GameExtensions.Create2DPrimitiveWithBepu
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptions)
+  name: Create3DPrimitive(IGame, PrimitiveModelType, Primitive3DCreationOptions?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptions)
+  name.vb: Create3DPrimitive(IGame, PrimitiveModelType, Primitive3DCreationOptions)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.Primitive3DCreationOptions?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.Primitive3DCreationOptions)
+  nameWithType: GameExtensions.Create3DPrimitive(IGame, PrimitiveModelType, Primitive3DCreationOptions?)
+  nameWithType.vb: GameExtensions.Create3DPrimitive(IGame, PrimitiveModelType, Primitive3DCreationOptions)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive*
+  name: Create3DPrimitive
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitive_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive
+  nameWithType: GameExtensions.Create3DPrimitive
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu)
+  name: Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitiveWithBepu_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu)
+  name.vb: Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu)
+  nameWithType: GameExtensions.Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu?)
+  nameWithType.vb: GameExtensions.Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu*
+  name: Create3DPrimitiveWithBepu
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitiveWithBepu_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu
+  nameWithType: GameExtensions.Create3DPrimitiveWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
   name: CreateMaterial(IGame, Color?, float, float)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_Stride_Games_IGame_System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Single_
@@ -1376,22 +1427,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
   nameWithType: GameExtensions.CreateMaterial
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.PrimitiveCreationOptions)
-  name: CreatePrimitive(IGame, PrimitiveModelType, PrimitiveCreationOptions?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_Stride_Games_IGame_Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.PrimitiveCreationOptions)
-  name.vb: CreatePrimitive(IGame, PrimitiveModelType, PrimitiveCreationOptions)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.PrimitiveCreationOptions?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame, Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.PrimitiveCreationOptions)
-  nameWithType: GameExtensions.CreatePrimitive(IGame, PrimitiveModelType, PrimitiveCreationOptions?)
-  nameWithType.vb: GameExtensions.CreatePrimitive(IGame, PrimitiveModelType, PrimitiveCreationOptions)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive*
-  name: CreatePrimitive
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreatePrimitive_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive
-  nameWithType: GameExtensions.CreatePrimitive
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
   name: DeltaTime(IGame)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_Stride_Games_IGame_
@@ -1498,6 +1533,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene
   nameWithType: GameExtensions.SetupBase2DScene
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu(Stride.Engine.Game)
+  name: SetupBase2DSceneWithBepu(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase2DSceneWithBepu_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu(Stride.Engine.Game)
+  nameWithType: GameExtensions.SetupBase2DSceneWithBepu(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu*
+  name: SetupBase2DSceneWithBepu
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase2DSceneWithBepu_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu
+  nameWithType: GameExtensions.SetupBase2DSceneWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
   name: SetupBase3DScene(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_
@@ -1511,6 +1559,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene
   nameWithType: GameExtensions.SetupBase3DScene
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu(Stride.Engine.Game)
+  name: SetupBase3DSceneWithBepu(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DSceneWithBepu_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu(Stride.Engine.Game)
+  nameWithType: GameExtensions.SetupBase3DSceneWithBepu(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu*
+  name: SetupBase3DSceneWithBepu
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DSceneWithBepu_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu
+  nameWithType: GameExtensions.SetupBase3DSceneWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders(Stride.Engine.Game)
   name: ShowColliders(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_ShowColliders_Stride_Engine_Game_
@@ -1569,103 +1630,394 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices
   nameWithType: ModelComponentExtensions.GetMeshVerticesAndIndices
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions
-  name: PrimitiveCreationOptions
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html
-  commentId: T:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions
-  nameWithType: PrimitiveCreationOptions
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions
+  name: Primitive2DCreationOptions
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html
+  commentId: T:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions
+  nameWithType: Primitive2DCreationOptions
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth
+  name: Depth
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Depth
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth
+  nameWithType: Primitive2DCreationOptions.Depth
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth*
+  name: Depth
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Depth_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth
+  nameWithType: Primitive2DCreationOptions.Depth
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName
   name: EntityName
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_EntityName
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName
-  nameWithType: PrimitiveCreationOptions.EntityName
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName*
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_EntityName
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName
+  nameWithType: Primitive2DCreationOptions.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName*
   name: EntityName
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_EntityName_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_EntityName_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName
-  nameWithType: PrimitiveCreationOptions.EntityName
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName
+  nameWithType: Primitive2DCreationOptions.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider
   name: IncludeCollider
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_IncludeCollider
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider
-  nameWithType: PrimitiveCreationOptions.IncludeCollider
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider*
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_IncludeCollider
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider
+  nameWithType: Primitive2DCreationOptions.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider*
   name: IncludeCollider
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_IncludeCollider_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_IncludeCollider_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider
-  nameWithType: PrimitiveCreationOptions.IncludeCollider
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Is2D
-  name: Is2D
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Is2D
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Is2D
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Is2D
-  nameWithType: PrimitiveCreationOptions.Is2D
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Is2D*
-  name: Is2D
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Is2D_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Is2D
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Is2D
-  nameWithType: PrimitiveCreationOptions.Is2D
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider
+  nameWithType: Primitive2DCreationOptions.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material
   name: Material
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Material
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material
-  nameWithType: PrimitiveCreationOptions.Material
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material*
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Material
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material
+  nameWithType: Primitive2DCreationOptions.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material*
   name: Material
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Material_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Material_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material
-  nameWithType: PrimitiveCreationOptions.Material
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.PhysicsComponent
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material
+  nameWithType: Primitive2DCreationOptions.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent
   name: PhysicsComponent
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_PhysicsComponent
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.PhysicsComponent
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.PhysicsComponent
-  nameWithType: PrimitiveCreationOptions.PhysicsComponent
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.PhysicsComponent*
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_PhysicsComponent
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent
+  nameWithType: Primitive2DCreationOptions.PhysicsComponent
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent*
   name: PhysicsComponent
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_PhysicsComponent_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.PhysicsComponent
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_PhysicsComponent_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.PhysicsComponent
-  nameWithType: PrimitiveCreationOptions.PhysicsComponent
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent
+  nameWithType: Primitive2DCreationOptions.PhysicsComponent
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup
   name: RenderGroup
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_RenderGroup
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup
-  nameWithType: PrimitiveCreationOptions.RenderGroup
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup*
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup
+  nameWithType: Primitive2DCreationOptions.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup*
   name: RenderGroup
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_RenderGroup_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup
-  nameWithType: PrimitiveCreationOptions.RenderGroup
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Size
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup
+  nameWithType: Primitive2DCreationOptions.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size
   name: Size
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Size
-  commentId: P:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Size
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Size
-  nameWithType: PrimitiveCreationOptions.Size
-- uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Size*
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Size
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size
+  nameWithType: Primitive2DCreationOptions.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size*
   name: Size
-  href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Size_
-  commentId: Overload:Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Size_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Size
-  nameWithType: PrimitiveCreationOptions.Size
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size
+  nameWithType: Primitive2DCreationOptions.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu
+  name: Primitive2DCreationOptionsWithBepu
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html
+  commentId: T:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu
+  nameWithType: Primitive2DCreationOptionsWithBepu
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
+  name: Component
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Component
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
+  nameWithType: Primitive2DCreationOptionsWithBepu.Component
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component*
+  name: Component
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Component_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
+  nameWithType: Primitive2DCreationOptionsWithBepu.Component
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
+  name: Depth
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Depth
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
+  nameWithType: Primitive2DCreationOptionsWithBepu.Depth
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth*
+  name: Depth
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Depth_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
+  nameWithType: Primitive2DCreationOptionsWithBepu.Depth
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.EntityName
+  name: EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_EntityName
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.EntityName
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.EntityName
+  nameWithType: Primitive2DCreationOptionsWithBepu.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.EntityName*
+  name: EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_EntityName_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.EntityName
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.EntityName
+  nameWithType: Primitive2DCreationOptionsWithBepu.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.IncludeCollider
+  name: IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_IncludeCollider
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.IncludeCollider
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.IncludeCollider
+  nameWithType: Primitive2DCreationOptionsWithBepu.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.IncludeCollider*
+  name: IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_IncludeCollider_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.IncludeCollider
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.IncludeCollider
+  nameWithType: Primitive2DCreationOptionsWithBepu.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Material
+  name: Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Material
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Material
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Material
+  nameWithType: Primitive2DCreationOptionsWithBepu.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Material*
+  name: Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Material_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Material
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Material
+  nameWithType: Primitive2DCreationOptionsWithBepu.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.RenderGroup
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.RenderGroup
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.RenderGroup
+  nameWithType: Primitive2DCreationOptionsWithBepu.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.RenderGroup*
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.RenderGroup
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.RenderGroup
+  nameWithType: Primitive2DCreationOptionsWithBepu.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Size
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
+  nameWithType: Primitive2DCreationOptionsWithBepu.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Size_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
+  nameWithType: Primitive2DCreationOptionsWithBepu.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions
+  name: Primitive3DCreationOptions
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html
+  commentId: T:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions
+  nameWithType: Primitive3DCreationOptions
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.EntityName
+  name: EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_EntityName
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.EntityName
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.EntityName
+  nameWithType: Primitive3DCreationOptions.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.EntityName*
+  name: EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_EntityName_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.EntityName
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.EntityName
+  nameWithType: Primitive3DCreationOptions.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.IncludeCollider
+  name: IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_IncludeCollider
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.IncludeCollider
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.IncludeCollider
+  nameWithType: Primitive3DCreationOptions.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.IncludeCollider*
+  name: IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_IncludeCollider_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.IncludeCollider
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.IncludeCollider
+  nameWithType: Primitive3DCreationOptions.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Is2D
+  name: Is2D
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Is2D
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Is2D
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Is2D
+  nameWithType: Primitive3DCreationOptions.Is2D
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Is2D*
+  name: Is2D
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Is2D_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Is2D
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Is2D
+  nameWithType: Primitive3DCreationOptions.Is2D
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Material
+  name: Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Material
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Material
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Material
+  nameWithType: Primitive3DCreationOptions.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Material*
+  name: Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Material_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Material
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Material
+  nameWithType: Primitive3DCreationOptions.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent
+  name: PhysicsComponent
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_PhysicsComponent
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent
+  nameWithType: Primitive3DCreationOptions.PhysicsComponent
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent*
+  name: PhysicsComponent
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_PhysicsComponent_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent
+  nameWithType: Primitive3DCreationOptions.PhysicsComponent
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.RenderGroup
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.RenderGroup
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.RenderGroup
+  nameWithType: Primitive3DCreationOptions.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.RenderGroup*
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.RenderGroup
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.RenderGroup
+  nameWithType: Primitive3DCreationOptions.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Size
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size
+  nameWithType: Primitive3DCreationOptions.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Size_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size
+  nameWithType: Primitive3DCreationOptions.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu
+  name: Primitive3DCreationOptionsWithBepu
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html
+  commentId: T:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu
+  nameWithType: Primitive3DCreationOptionsWithBepu
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
+  name: Component
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Component
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
+  nameWithType: Primitive3DCreationOptionsWithBepu.Component
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component*
+  name: Component
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Component_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
+  nameWithType: Primitive3DCreationOptionsWithBepu.Component
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Depth
+  name: Depth
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Depth
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Depth
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Depth
+  nameWithType: Primitive3DCreationOptionsWithBepu.Depth
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Depth*
+  name: Depth
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Depth_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Depth
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Depth
+  nameWithType: Primitive3DCreationOptionsWithBepu.Depth
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.EntityName
+  name: EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_EntityName
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.EntityName
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.EntityName
+  nameWithType: Primitive3DCreationOptionsWithBepu.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.EntityName*
+  name: EntityName
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_EntityName_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.EntityName
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.EntityName
+  nameWithType: Primitive3DCreationOptionsWithBepu.EntityName
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.IncludeCollider
+  name: IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_IncludeCollider
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.IncludeCollider
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.IncludeCollider
+  nameWithType: Primitive3DCreationOptionsWithBepu.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.IncludeCollider*
+  name: IncludeCollider
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_IncludeCollider_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.IncludeCollider
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.IncludeCollider
+  nameWithType: Primitive3DCreationOptionsWithBepu.IncludeCollider
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Material
+  name: Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Material
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Material
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Material
+  nameWithType: Primitive3DCreationOptionsWithBepu.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Material*
+  name: Material
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Material_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Material
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Material
+  nameWithType: Primitive3DCreationOptionsWithBepu.Material
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.RenderGroup
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.RenderGroup
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.RenderGroup
+  nameWithType: Primitive3DCreationOptionsWithBepu.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.RenderGroup*
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.RenderGroup
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.RenderGroup
+  nameWithType: Primitive3DCreationOptionsWithBepu.RenderGroup
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Size
+  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
+  nameWithType: Primitive3DCreationOptionsWithBepu.Size
+- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Size_
+  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
+  nameWithType: Primitive3DCreationOptionsWithBepu.Size
 - uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions
   name: ScriptComponentExtensions
   href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html
@@ -2365,120 +2717,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast
   nameWithType: SimulationExtensions.Raycast
-- uid: Stride.CommunityToolkit.ProceduralModels
-  name: Stride.CommunityToolkit.ProceduralModels
-  href: api/Stride.CommunityToolkit.ProceduralModels.html
-  commentId: N:Stride.CommunityToolkit.ProceduralModels
-  fullName: Stride.CommunityToolkit.ProceduralModels
-  nameWithType: Stride.CommunityToolkit.ProceduralModels
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType
-  name: Primitive2DModelType
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html
-  commentId: T:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType
-  nameWithType: Primitive2DModelType
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Capsule
-  name: Capsule
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Capsule
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Capsule
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Capsule
-  nameWithType: Primitive2DModelType.Capsule
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Circle
-  name: Circle
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Circle
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Circle
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Circle
-  nameWithType: Primitive2DModelType.Circle
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Polygon
-  name: Polygon
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Polygon
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Polygon
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Polygon
-  nameWithType: Primitive2DModelType.Polygon
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Quad
-  name: Quad
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Quad
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Quad
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Quad
-  nameWithType: Primitive2DModelType.Quad
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Rectangle
-  name: Rectangle
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Rectangle
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Rectangle
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Rectangle
-  nameWithType: Primitive2DModelType.Rectangle
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Square
-  name: Square
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Square
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Square
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Square
-  nameWithType: Primitive2DModelType.Square
-- uid: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Triangle
-  name: Triangle
-  href: api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_ProceduralModels_Primitive2DModelType_Triangle
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Triangle
-  fullName: Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.Triangle
-  nameWithType: Primitive2DModelType.Triangle
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType
-  name: PrimitiveModelType
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html
-  commentId: T:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType
-  nameWithType: PrimitiveModelType
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Capsule
-  name: Capsule
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Capsule
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Capsule
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Capsule
-  nameWithType: PrimitiveModelType.Capsule
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cone
-  name: Cone
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Cone
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cone
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cone
-  nameWithType: PrimitiveModelType.Cone
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cube
-  name: Cube
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Cube
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cube
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cube
-  nameWithType: PrimitiveModelType.Cube
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cylinder
-  name: Cylinder
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Cylinder
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cylinder
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Cylinder
-  nameWithType: PrimitiveModelType.Cylinder
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.InfinitePlane
-  name: InfinitePlane
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_InfinitePlane
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.InfinitePlane
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.InfinitePlane
-  nameWithType: PrimitiveModelType.InfinitePlane
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Plane
-  name: Plane
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Plane
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Plane
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Plane
-  nameWithType: PrimitiveModelType.Plane
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Sphere
-  name: Sphere
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Sphere
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Sphere
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Sphere
-  nameWithType: PrimitiveModelType.Sphere
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Teapot
-  name: Teapot
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Teapot
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Teapot
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Teapot
-  nameWithType: PrimitiveModelType.Teapot
-- uid: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Torus
-  name: Torus
-  href: api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_ProceduralModels_PrimitiveModelType_Torus
-  commentId: F:Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Torus
-  fullName: Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.Torus
-  nameWithType: PrimitiveModelType.Torus
 - uid: Stride.CommunityToolkit.Rendering.Compositing
   name: Stride.CommunityToolkit.Rendering.Compositing
   href: api/Stride.CommunityToolkit.Rendering.Compositing.html
@@ -3013,6 +3251,317 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial
   nameWithType: TranslationGizmo.GetAxisDefaultMaterial
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels
+  name: Stride.CommunityToolkit.Rendering.ProceduralModels
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.html
+  commentId: N:Stride.CommunityToolkit.Rendering.ProceduralModels
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels
+  nameWithType: Stride.CommunityToolkit.Rendering.ProceduralModels
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType
+  name: Primitive2DModelType
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType
+  nameWithType: Primitive2DModelType
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Capsule
+  name: Capsule
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Capsule
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Capsule
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Capsule
+  nameWithType: Primitive2DModelType.Capsule
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Circle
+  name: Circle
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Circle
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Circle
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Circle
+  nameWithType: Primitive2DModelType.Circle
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Polygon
+  name: Polygon
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Polygon
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Polygon
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Polygon
+  nameWithType: Primitive2DModelType.Polygon
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Quad
+  name: Quad
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Quad
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Quad
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Quad
+  nameWithType: Primitive2DModelType.Quad
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Rectangle
+  name: Rectangle
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Rectangle
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Rectangle
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Rectangle
+  nameWithType: Primitive2DModelType.Rectangle
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Square
+  name: Square
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Square
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Square
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Square
+  nameWithType: Primitive2DModelType.Square
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Triangle
+  name: Triangle
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Triangle
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Triangle
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.Triangle
+  nameWithType: Primitive2DModelType.Triangle
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType
+  name: PrimitiveModelType
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType
+  nameWithType: PrimitiveModelType
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Capsule
+  name: Capsule
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Capsule
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Capsule
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Capsule
+  nameWithType: PrimitiveModelType.Capsule
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cone
+  name: Cone
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Cone
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cone
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cone
+  nameWithType: PrimitiveModelType.Cone
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cube
+  name: Cube
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Cube
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cube
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cube
+  nameWithType: PrimitiveModelType.Cube
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cylinder
+  name: Cylinder
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Cylinder
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cylinder
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Cylinder
+  nameWithType: PrimitiveModelType.Cylinder
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.InfinitePlane
+  name: InfinitePlane
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_InfinitePlane
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.InfinitePlane
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.InfinitePlane
+  nameWithType: PrimitiveModelType.InfinitePlane
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Plane
+  name: Plane
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Plane
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Plane
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Plane
+  nameWithType: PrimitiveModelType.Plane
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.RectangularPrism
+  name: RectangularPrism
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_RectangularPrism
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.RectangularPrism
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.RectangularPrism
+  nameWithType: PrimitiveModelType.RectangularPrism
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Sphere
+  name: Sphere
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Sphere
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Sphere
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Sphere
+  nameWithType: PrimitiveModelType.Sphere
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Teapot
+  name: Teapot
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Teapot
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Teapot
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Teapot
+  nameWithType: PrimitiveModelType.Teapot
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Torus
+  name: Torus
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Torus
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Torus
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.Torus
+  nameWithType: PrimitiveModelType.Torus
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.TriangularPrism
+  name: TriangularPrism
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html#Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_TriangularPrism
+  commentId: F:Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.TriangularPrism
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.TriangularPrism
+  nameWithType: PrimitiveModelType.TriangularPrism
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder
+  name: Procedural2DModelBuilder
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder
+  nameWithType: Procedural2DModelBuilder
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,System.Nullable{Stride.Core.Mathematics.Vector2},System.Single)
+  name: Build(Primitive2DModelType, Vector2?, float)
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Procedural2DModelBuilder_Build_Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_System_Nullable_Stride_Core_Mathematics_Vector2__System_Single_
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,System.Nullable{Stride.Core.Mathematics.Vector2},System.Single)
+  name.vb: Build(Primitive2DModelType, Vector2?, Single)
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.Core.Mathematics.Vector2?, float)
+  fullName.vb: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.Core.Mathematics.Vector2?, Single)
+  nameWithType: Procedural2DModelBuilder.Build(Primitive2DModelType, Vector2?, float)
+  nameWithType.vb: Procedural2DModelBuilder.Build(Primitive2DModelType, Vector2?, Single)
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build*
+  name: Build
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Procedural2DModelBuilder_Build_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.Build
+  nameWithType: Procedural2DModelBuilder.Build
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder
+  name: Procedural3DModelBuilder
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder
+  nameWithType: Procedural3DModelBuilder
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,System.Nullable{Stride.Core.Mathematics.Vector3})
+  name: Build(PrimitiveModelType, Vector3?)
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Procedural3DModelBuilder_Build_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_System_Nullable_Stride_Core_Mathematics_Vector3__
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,System.Nullable{Stride.Core.Mathematics.Vector3})
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.Build(Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.Core.Mathematics.Vector3?)
+  nameWithType: Procedural3DModelBuilder.Build(PrimitiveModelType, Vector3?)
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.Build*
+  name: Build
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.html#Stride_CommunityToolkit_Rendering_ProceduralModels_Procedural3DModelBuilder_Build_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.Build
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.Build
+  nameWithType: Procedural3DModelBuilder.Build
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel
+  name: SquareProceduralModel
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel
+  nameWithType: SquareProceduralModel
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.CreatePrimitiveMeshData
+  name: CreatePrimitiveMeshData()
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_SquareProceduralModel_CreatePrimitiveMeshData
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.CreatePrimitiveMeshData
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.CreatePrimitiveMeshData()
+  nameWithType: SquareProceduralModel.CreatePrimitiveMeshData()
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.CreatePrimitiveMeshData*
+  name: CreatePrimitiveMeshData
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_SquareProceduralModel_CreatePrimitiveMeshData_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.CreatePrimitiveMeshData
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.CreatePrimitiveMeshData
+  nameWithType: SquareProceduralModel.CreatePrimitiveMeshData
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New(Stride.Core.Mathematics.Vector2,System.Single,System.Single,System.Boolean)
+  name: New(Vector2, float, float, bool)
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_SquareProceduralModel_New_Stride_Core_Mathematics_Vector2_System_Single_System_Single_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New(Stride.Core.Mathematics.Vector2,System.Single,System.Single,System.Boolean)
+  name.vb: New(Vector2, Single, Single, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New(Stride.Core.Mathematics.Vector2, float, float, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New(Stride.Core.Mathematics.Vector2, Single, Single, Boolean)
+  nameWithType: SquareProceduralModel.New(Vector2, float, float, bool)
+  nameWithType.vb: SquareProceduralModel.New(Vector2, Single, Single, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New*
+  name: New
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_SquareProceduralModel_New_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.New
+  nameWithType: SquareProceduralModel.New
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_SquareProceduralModel_Size
+  commentId: P:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.Size
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.Size
+  nameWithType: SquareProceduralModel.Size
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_SquareProceduralModel_Size_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.Size
+  nameWithType: SquareProceduralModel.Size
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel
+  name: TriangleProceduralModel
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel
+  nameWithType: TriangleProceduralModel
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.CreatePrimitiveMeshData
+  name: CreatePrimitiveMeshData()
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangleProceduralModel_CreatePrimitiveMeshData
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.CreatePrimitiveMeshData
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.CreatePrimitiveMeshData()
+  nameWithType: TriangleProceduralModel.CreatePrimitiveMeshData()
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.CreatePrimitiveMeshData*
+  name: CreatePrimitiveMeshData
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangleProceduralModel_CreatePrimitiveMeshData_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.CreatePrimitiveMeshData
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.CreatePrimitiveMeshData
+  nameWithType: TriangleProceduralModel.CreatePrimitiveMeshData
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New(Stride.Core.Mathematics.Vector2,System.Single,System.Single,System.Boolean)
+  name: New(Vector2, float, float, bool)
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangleProceduralModel_New_Stride_Core_Mathematics_Vector2_System_Single_System_Single_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New(Stride.Core.Mathematics.Vector2,System.Single,System.Single,System.Boolean)
+  name.vb: New(Vector2, Single, Single, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New(Stride.Core.Mathematics.Vector2, float, float, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New(Stride.Core.Mathematics.Vector2, Single, Single, Boolean)
+  nameWithType: TriangleProceduralModel.New(Vector2, float, float, bool)
+  nameWithType.vb: TriangleProceduralModel.New(Vector2, Single, Single, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New*
+  name: New
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangleProceduralModel_New_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.New
+  nameWithType: TriangleProceduralModel.New
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangleProceduralModel_Size
+  commentId: P:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.Size
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.Size
+  nameWithType: TriangleProceduralModel.Size
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangleProceduralModel_Size_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.Size
+  nameWithType: TriangleProceduralModel.Size
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel
+  name: TriangularPrismProceduralModel
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html
+  commentId: T:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel
+  nameWithType: TriangularPrismProceduralModel
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.CreatePrimitiveMeshData
+  name: CreatePrimitiveMeshData()
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangularPrismProceduralModel_CreatePrimitiveMeshData
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.CreatePrimitiveMeshData
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.CreatePrimitiveMeshData()
+  nameWithType: TriangularPrismProceduralModel.CreatePrimitiveMeshData()
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.CreatePrimitiveMeshData*
+  name: CreatePrimitiveMeshData
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangularPrismProceduralModel_CreatePrimitiveMeshData_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.CreatePrimitiveMeshData
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.CreatePrimitiveMeshData
+  nameWithType: TriangularPrismProceduralModel.CreatePrimitiveMeshData
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New(Stride.Core.Mathematics.Vector3,System.Single,System.Single,System.Boolean)
+  name: New(Vector3, float, float, bool)
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangularPrismProceduralModel_New_Stride_Core_Mathematics_Vector3_System_Single_System_Single_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New(Stride.Core.Mathematics.Vector3,System.Single,System.Single,System.Boolean)
+  name.vb: New(Vector3, Single, Single, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New(Stride.Core.Mathematics.Vector3, float, float, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New(Stride.Core.Mathematics.Vector3, Single, Single, Boolean)
+  nameWithType: TriangularPrismProceduralModel.New(Vector3, float, float, bool)
+  nameWithType.vb: TriangularPrismProceduralModel.New(Vector3, Single, Single, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New*
+  name: New
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangularPrismProceduralModel_New_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.New
+  nameWithType: TriangularPrismProceduralModel.New
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.Size
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangularPrismProceduralModel_Size
+  commentId: P:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.Size
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.Size
+  nameWithType: TriangularPrismProceduralModel.Size
+- uid: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.Size*
+  name: Size
+  href: api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html#Stride_CommunityToolkit_Rendering_ProceduralModels_TriangularPrismProceduralModel_Size_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.Size
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.Size
+  nameWithType: TriangularPrismProceduralModel.Size
 - uid: Stride.CommunityToolkit.Rendering.Utilities
   name: Stride.CommunityToolkit.Rendering.Utilities
   href: api/Stride.CommunityToolkit.Rendering.Utilities.html
@@ -4347,6 +4896,28 @@ references:
   commentId: N:Stride.CommunityToolkit.Skyboxes
   fullName: Stride.CommunityToolkit.Skyboxes
   nameWithType: Stride.CommunityToolkit.Skyboxes
+- uid: Stride.CommunityToolkit.Skyboxes.GameExtensions
+  name: GameExtensions
+  href: api/Stride.CommunityToolkit.Skyboxes.GameExtensions.html
+  commentId: T:Stride.CommunityToolkit.Skyboxes.GameExtensions
+  fullName: Stride.CommunityToolkit.Skyboxes.GameExtensions
+  nameWithType: GameExtensions
+- uid: Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
+  name: AddSkybox(Game, string?)
+  href: api/Stride.CommunityToolkit.Skyboxes.GameExtensions.html#Stride_CommunityToolkit_Skyboxes_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_
+  commentId: M:Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)
+  name.vb: AddSkybox(Game, String)
+  fullName: Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game, string?)
+  fullName.vb: Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game, String)
+  nameWithType: GameExtensions.AddSkybox(Game, string?)
+  nameWithType.vb: GameExtensions.AddSkybox(Game, String)
+- uid: Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox*
+  name: AddSkybox
+  href: api/Stride.CommunityToolkit.Skyboxes.GameExtensions.html#Stride_CommunityToolkit_Skyboxes_GameExtensions_AddSkybox_
+  commentId: Overload:Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox
+  nameWithType: GameExtensions.AddSkybox
 - uid: Stride.CommunityToolkit.Skyboxes.SkyboxGenerator
   name: SkyboxGenerator
   href: api/Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html

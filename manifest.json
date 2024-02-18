@@ -147,10 +147,40 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.yml",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html"
+          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html"
         }
       },
       "version": ""
@@ -287,36 +317,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.ProceduralModels.Primitive2DModelType.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.ProceduralModels.PrimitiveModelType.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.ProceduralModels.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.ProceduralModels.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.yml",
       "output": {
         ".html": {
@@ -401,6 +401,86 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.html"
         }
       },
       "version": ""
@@ -521,6 +601,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Scripts.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Skyboxes.GameExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Skyboxes.GameExtensions.html"
         }
       },
       "version": ""
@@ -1363,10 +1453,100 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "release-notes/stride-community-toolkit-1.0.md",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.11.md",
       "output": {
         ".html": {
-          "relative_path": "release-notes/stride-community-toolkit-1.0.html"
+          "relative_path": "release-notes/release-1.0.0.0-preview.11.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.12.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.12.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.13.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.13.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.14.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.14.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.15.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.15.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.16.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.16.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.17.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.17.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.6.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.6.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.7.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.7.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.html"
         }
       },
       "version": ""

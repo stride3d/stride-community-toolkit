@@ -92,7 +92,8 @@
 
 <p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_FSharp">GitHub</a>.</p>
 <pre><code class="lang-fsharp">open Stride.CommunityToolkit.Engine;
-open Stride.CommunityToolkit.ProceduralModels;
+open Stride.CommunityToolkit.Skyboxes;
+open Stride.CommunityToolkit.Rendering.ProceduralModels;
 open Stride.Core.Mathematics;
 open Stride.Engine;
 
@@ -100,9 +101,10 @@ let game = new Game()
 
 let Start rootScene =
     game.SetupBase3DScene()
+    game.AddSkybox() |&gt; ignore
     game.AddProfiler() |&gt; ignore
 
-    let firstBox = game.CreatePrimitive(PrimitiveModelType.Capsule);
+    let firstBox = game.Create3DPrimitive(PrimitiveModelType.Capsule);
     firstBox.Transform.Position &lt;- new Vector3(0f, 2.5f, 0f)
     firstBox.Scene &lt;- rootScene
 
