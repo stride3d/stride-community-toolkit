@@ -48,13 +48,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example_2D_Playground", "ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example_Bepu_Playground", "examples\code-only\Example_Bepu_Playground\Example_Bepu_Playground.csproj", "{D12C2C1E-9316-4C8D-B773-B84213AB4389}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.BepuPhysics._2D", "..\Stride.BepuPhysics\Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.csproj", "{20CA9DD6-A2E0-4211-8997-DE002ECD0246}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.BepuPhysics", "..\Stride.BepuPhysics\Stride.BepuPhysics\Stride.BepuPhysics.csproj", "{0D048D92-229C-4EAD-AA53-6A49FA3B20DE}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Common", "examples\code-only\Example.Common\Example.Common.csproj", "{D2092F94-19E8-45CC-8B5F-DAE680A276AC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Skyboxes", "src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj", "{423A1266-4A6D-425F-96CE-945A1802F711}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.BepuPhysics._2D", "src\Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.csproj", "{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,14 +127,6 @@ Global
 		{D12C2C1E-9316-4C8D-B773-B84213AB4389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D12C2C1E-9316-4C8D-B773-B84213AB4389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D12C2C1E-9316-4C8D-B773-B84213AB4389}.Release|Any CPU.Build.0 = Release|Any CPU
-		{20CA9DD6-A2E0-4211-8997-DE002ECD0246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20CA9DD6-A2E0-4211-8997-DE002ECD0246}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20CA9DD6-A2E0-4211-8997-DE002ECD0246}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20CA9DD6-A2E0-4211-8997-DE002ECD0246}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0D048D92-229C-4EAD-AA53-6A49FA3B20DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0D048D92-229C-4EAD-AA53-6A49FA3B20DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0D048D92-229C-4EAD-AA53-6A49FA3B20DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0D048D92-229C-4EAD-AA53-6A49FA3B20DE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2092F94-19E8-45CC-8B5F-DAE680A276AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2092F94-19E8-45CC-8B5F-DAE680A276AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2092F94-19E8-45CC-8B5F-DAE680A276AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -145,6 +135,10 @@ Global
 		{423A1266-4A6D-425F-96CE-945A1802F711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423A1266-4A6D-425F-96CE-945A1802F711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423A1266-4A6D-425F-96CE-945A1802F711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
