@@ -1,7 +1,8 @@
 name: .NET Build and Publish Nuget
 
 env:
-  PROJECT_PATH: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  PROJECT_PATH_SKYBOX: src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
 
@@ -27,22 +28,41 @@ jobs:
         $updatedCsprojContent = $settingsContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
         Set-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Value $updatedCsprojContent
 
+    # Stride.CommunityToolkit
     - name: Restore dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH }}
+      run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
     - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore
+      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
 
     - name: Test
-      run: dotnet test ${{ env.PROJECT_PATH }} --no-build --verbosity normal
+      run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
 
     - name: Publish Stride Community Toolkit
       uses: alirezanet/publish-nuget@v3.1.0
       with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_CORE }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
+    # Stride.CommunityToolkit
+    - name: Restore dependencies.Skyboxes
+      run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
+
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore
+
+    - name: Test
+      run: dotnet test ${{ env.PROJECT_PATH_SKYBOX }} --no-build --verbosity normal
+
+    - name: Publish Stride Community Toolkit - Skyboxes
+      uses: alirezanet/publish-nuget@v3.1.0
+      with:
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_SKYBOX }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+    # Create release
     - name: Create GitHub Release
       run: |
         gh release create ${{ env.VERSION }} --title "v${{ env.VERSION }}" --notes "Release notes for ${{ env.VERSION }}" --draft
