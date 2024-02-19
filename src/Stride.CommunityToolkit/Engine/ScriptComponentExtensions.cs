@@ -23,7 +23,7 @@ public static class ScriptComponentExtensions
     /// </remarks>
     /// <param name="scriptComponent">The script component from which to access the GraphicsCompositor.</param>
     /// <returns>The <see cref="CameraComponent"/> named "Main", if found; otherwise, null.</returns>
-    [Obsolete("Use GetGCCamera instead")]
+    [Obsolete("Use GetGCCamera instead or use Scene.GetCamera")]
     public static CameraComponent? GetCamera(this ScriptComponent scriptComponent)
     {
         var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
@@ -71,7 +71,7 @@ public static class ScriptComponentExtensions
     /// <param name="scriptComponent">The script component from which to access the GraphicsCompositor.</param>
     /// <param name="cameraName">The name of the camera to retrieve.</param>
     /// <returns>The <see cref="CameraComponent"/> with the given name, if found; otherwise, null.</returns>
-    [Obsolete("Use GetGCCamera instead")]
+    [Obsolete("Use GetGCCamera instead or use Scene.GetCamera")]
     public static CameraComponent? GetCamera(this ScriptComponent scriptComponent, string cameraName)
     {
         var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
@@ -119,7 +119,7 @@ public static class ScriptComponentExtensions
     /// </remarks>
     /// <param name="scriptComponent">The script component from which to access the GraphicsCompositor.</param>
     /// <returns>The <see cref="CameraComponent"/> with the given name, if found; otherwise, null.</returns>
-    [Obsolete("Use GetFirstGCCamera instead")]
+    [Obsolete("Use GetFirstGCCamera instead or use Scene.GetCamera")]
     public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponent)
     {
         SceneCameraSlotCollection cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
