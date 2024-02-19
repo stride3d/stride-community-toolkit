@@ -145,19 +145,19 @@ public static class EntityExtensions
     /// <summary>
     /// Searches for an entity by name within the top-level entities of the current scene.
     /// </summary>
-    /// <param name="entity">The reference entity used to access the scene.</param>
+    /// <param name="parent">The reference entity used to access the scene.</param>
     /// <param name="name">The name of the entity to find.</param>
     /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
-    public static Entity? FindEntityRecursive(this Entity entity, string name)
+    public static Entity? FindEntityRecursive(this Entity parent, string name)
     {
-        var entities = entity.Scene.Entities;
-        for (int i = 0; i < entities.Count; i++)
+        var entities = parent.Scene.Entities;
+        foreach(var entity in entities)
         {
-            if (entities[i].Name == name)
+            if (entity.Name == name)
             {
-                return entities[i];
+                return entity;
             }
-            var child = entities[i].FindChild(name);
+            var child = entity.FindChild(name);
             if(child != null && child.Name == name)
             {
                 return child;
