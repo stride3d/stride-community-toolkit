@@ -13,7 +13,7 @@ public class GizmoBillboardLetterScript : SyncScript
     {
         if (_camera is null)
         {
-            _camera = this.GetCamera();
+            _camera = this.GetGCCamera();
 
             return;
         }
