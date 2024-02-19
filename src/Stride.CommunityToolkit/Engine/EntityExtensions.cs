@@ -85,6 +85,32 @@ public static class EntityExtensions
     }
 
     /// <summary>
+    /// Recursively searches for the first component of the specified type in the entity's children.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    public static T? GetComponentInChildren<T>(this Entity entity)
+    {
+        var result = entity.OfType<T>().FirstOrDefault();
+
+        if (result is null)
+        {
+            var children = entity.GetChildren();
+            foreach(var child in children)
+            {
+                result = child.GetComponentInChildren<T>();
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Retrieves all components of the specified type from the entity.
     /// </summary>
     /// <typeparam name="T">The type of components to retrieve.</typeparam>
@@ -114,6 +140,31 @@ public static class EntityExtensions
     public static Entity? FindEntity(this Entity entity, string name)
     {
         return entity.Scene.Entities.FirstOrDefault(w => w.Name == name);
+    }
+
+    /// <summary>
+    /// Searches for an entity by name within the top-level entities of the current scene.
+    /// </summary>
+    /// <param name="entity">The reference entity used to access the scene.</param>
+    /// <param name="name">The name of the entity to find.</param>
+    /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
+    public static Entity? FindEntityRecursive(this Entity entity, string name)
+    {
+        var entities = entity.Scene.Entities;
+        for (int i = 0; i < entities.Count; i++)
+        {
+            if (entities[i].Name == name)
+            {
+                return entities[i];
+            }
+            var child = entities[i].FindChild(name);
+            if(child != null && child.Name == name)
+            {
+                return child;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
