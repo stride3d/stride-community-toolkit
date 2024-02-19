@@ -12,13 +12,13 @@ public class RaycastHandler : AsyncScript
 
     public override async Task Execute()
     {
-        var cameraComponent = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+        var cameraComponent = Entity.Scene.GetCamera();
 
         // working after x frames
-        var cameraComponent2 = this.GetCamera();
+        var cameraComponent2 = this.GetGCCamera();
 
         //  working after x frames
-        var cameraComponent3 = this.GetFirstCamera();
+        var cameraComponent3 = this.GetFirstGCCamera();
 
         //var simulation = this.GetSimulation();
 
