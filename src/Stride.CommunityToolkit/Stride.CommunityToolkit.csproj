@@ -4,7 +4,6 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Title>Stride Community Toolkit</Title>
         <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET 8.</Description>
-        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
@@ -21,24 +20,12 @@
         <PackageReference Include="Stride.Particles" Version="4.2.*" />
         <PackageReference Include="Stride.Physics" Version="4.2.*" />
         <PackageReference Include="Stride.UI" Version="4.2.*" />
+        <PackageReference Include="Stride.BepuPhysics" Version="0.9.2" />
         <!--<PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.1" IncludeAssets="build;buildTransitive" />
         <PackageReference Include="Stride.Engine" Version="4.2.0.1" />
         <PackageReference Include="Stride.Particles" Version="4.2.0.1" />
         <PackageReference Include="Stride.Physics" Version="4.2.0.1" />
         <PackageReference Include="Stride.UI" Version="4.2.0.1" />-->
     </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.csproj">
-            <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-            <!--<IncludeAssets>Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.dll</IncludeAssets>-->
-        </ProjectReference>
-    </ItemGroup>
-
-    <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
-        <ItemGroup>
-            <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
-        </ItemGroup>
-    </Target>
 
 </Project>

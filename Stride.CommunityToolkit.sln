@@ -52,8 +52,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Common", "examples\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Skyboxes", "src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj", "{423A1266-4A6D-425F-96CE-945A1802F711}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.BepuPhysics._2D", "src\Stride.BepuPhysics._2D\Stride.BepuPhysics._2D.csproj", "{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,10 +133,6 @@ Global
 		{423A1266-4A6D-425F-96CE-945A1802F711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423A1266-4A6D-425F-96CE-945A1802F711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423A1266-4A6D-425F-96CE-945A1802F711}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAD3CB11-EE8E-4C66-9A7B-CE0EC230CC25}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
