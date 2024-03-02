@@ -96,42 +96,20 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
-using Stride.Graphics;
 
 using var game = new Game();
-
-SpriteBatch? spriteBatch = null;
-
-SpriteFont? font = null;
 
 game.Run(start: (Scene rootScene) =&gt;
 {
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    font = game.Content.Load&lt;SpriteFont&gt;(&quot;StrideDefaultFont&quot;);
-    spriteBatch = new SpriteBatch(game.GraphicsDevice);
-
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
     entity.Scene = rootScene;
-}, update: Update);
-
-void Update(Scene scene, GameTime time)
-{
-
-    // don't forget the begin
-    spriteBatch.Begin(game.GraphicsContext);
-
-    // draw the text &quot;Helloworld!&quot; in red from the center of the screen
-    spriteBatch.DrawString(font, &quot;Helloworld!&quot;, new Vector2(0.5f, 0.5f), Color.Red);
-
-    // don't forget the end
-    spriteBatch.End();
-}
+});
 </code></pre>
 <ul>
 <li><code>using var game = new Game();</code> This line of code creates a new instance of the <a href="https://doc.stride3d.net/latest/en/api/Stride.Engine.Game.html"><code>Game</code></a> class. The <code>Game</code> class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The <code>using</code> keyword ensures that the <code>Dispose()</code> method is called on the <code>game</code> object when it goes out of scope, ensuring that any resources it uses are properly cleaned up</li>

@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions" class="text-break">
-Class Primitive2DCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L7"><i class="bi bi-code-slash"></i></a>
+Class Primitive2DCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L6"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -101,7 +101,7 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Primitive2DCreationOptions</code></pre>
+    <pre><code class="lang-csharp hljs">public class Primitive2DCreationOptions : PrimitiveCreationOptions</code></pre>
   </div>
 
 
@@ -111,12 +111,29 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
     <dt>Inheritance</dt>
     <dd>
       <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html">PrimitiveCreationOptions</a></div>
       <div><span class="xref">Primitive2DCreationOptions</span></div>
     </dd>
   </dl>
 
 
 
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_EntityName">PrimitiveCreationOptions.EntityName</a>
+    </div>
+    <div>
+      <a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Material">PrimitiveCreationOptions.Material</a>
+    </div>
+    <div>
+      <a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_IncludeCollider">PrimitiveCreationOptions.IncludeCollider</a>
+    </div>
+    <div>
+      <a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html#Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_RenderGroup">PrimitiveCreationOptions.RenderGroup</a>
+    </div>
+  </dd></dl>
 
 
 
@@ -131,7 +148,7 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Depth" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth">
   Depth
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -158,107 +175,11 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 
 
 
-  <a id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_EntityName_" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_EntityName" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.EntityName">
-  EntityName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L12"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Gets or sets the name of the entity.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string? EntityName { get; set; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <a id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_IncludeCollider_" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_IncludeCollider" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.IncludeCollider">
-  IncludeCollider
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L22"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Determines whether to include a collider component in the entity. Defaults to true.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool IncludeCollider { get; set; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
-  <a id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Material_" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Material" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Material">
-  Material
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L17"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Gets or sets the material to be applied to the primitive model.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Material? Material { get; set; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
   <a id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_PhysicsComponent_" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_PhysicsComponent" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent">
   PhysicsComponent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the physics component to be added to the entity. Defaults to a new instance of RigidbodyComponent.</p>
@@ -286,43 +207,11 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 
 
 
-  <a id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_RenderGroup_" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_RenderGroup" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.RenderGroup">
-  RenderGroup
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L32"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Gets or sets the render group for the entity. Defaults to RenderGroup.Group0.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public RenderGroup RenderGroup { get; set; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Rendering.RenderGroup.html">RenderGroup</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
   <a id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Size_" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Size" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size">
   Size
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the size of the primitive model. If null, default dimensions are used.</p>
@@ -354,7 +243,7 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L7" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L6" class="edit-link">Edit this page</a>
         </div>
 
 
