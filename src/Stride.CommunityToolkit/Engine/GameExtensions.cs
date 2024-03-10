@@ -781,7 +781,19 @@ public static class GameExtensions
     public static void SetMaxFPS(this IGame game, int targetFPS)
     {
         var gameBase = (GameBase)game;
-        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000 / targetFPS);
+        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000f / targetFPS);
+    }
+
+    /// <summary>
+    /// Sets the maximum frames per second (FPS) rate for the game when not in focus.
+    /// Set <param name="targetFPS"/> to 0 for max possible FPS.
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="targetFPS"></param>
+    public static void SetFocusLostFPS(this IGame game, int targetFPS)
+    {
+        var gameBase = (GameBase)game;
+        gameBase.MinimizedMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000f / targetFPS);
     }
 
     /// <summary>
@@ -789,7 +801,7 @@ public static class GameExtensions
     /// </summary>
     /// <param name="game">The game instance from which to obtain the FPS rate.</param>
     /// <returns>The current FPS rate of the game.</returns>
-    public static float FPS(this Game game) => game.UpdateTime.FramePerSecond;
+    public static float FPS(this IGame game) => game.UpdateTime.FramePerSecond;
 
     private static ColliderBase? Get2DColliderShapeWithBepu(Primitive2DModelType type, Vector2? size = null, float depth = 0)
     {
