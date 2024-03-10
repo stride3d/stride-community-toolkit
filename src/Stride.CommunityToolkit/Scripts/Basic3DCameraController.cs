@@ -15,11 +15,14 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
+    private int DebugInfoX = 100;
+    private const int DebugInfoIncrement = 20;
 
-    private Vector3 upVector;
-    private Vector3 translation;
-    private float yaw;
-    private float pitch;
+    private Vector3 _upVector;
+    private Vector3 _translation;
+    private float _yaw;
+    private float _pitch;
+    private bool _showInstructions = true;
 
     public bool Gamepad { get; set; }
 
@@ -39,8 +42,10 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
+        DebugInfoX = Game.GraphicsDevice.Presenter.BackBuffer.Width - 210;
+
         // Default up-direction
-        upVector = Vector3.UnitY;
+        _upVector = Vector3.UnitY;
 
         // Configure touch input
         if (!Platform.IsWindowsDesktop)
@@ -54,166 +59,190 @@ public class Basic3DCameraController : SyncScript
     {
         ProcessInput();
         UpdateTransform();
+
+        if (_showInstructions)
+        {
+            PrintControlInstructions();
+        }
     }
 
     private void ProcessInput()
     {
         float deltaTime = (float)Game.UpdateTime.Elapsed.TotalSeconds;
-        translation = Vector3.Zero;
-        yaw = 0f;
-        pitch = 0f;
+        _translation = Vector3.Zero;
+        _yaw = 0f;
+        _pitch = 0f;
 
-        // Keyboard and Gamepad based movement
+        if (Input.HasKeyboard && Input.IsKeyPressed(Keys.F2))
         {
-            // Our base speed is: one unit per second:
-            //    deltaTime contains the duration of the previous frame, let's say that in this update
-            //    or frame it is equal to 1/60, that means that the previous update ran 1/60 of a second ago
-            //    and the next will, in most cases, run in around 1/60 of a second from now. Knowing that,
-            //    we can move 1/60 of a unit on this frame so that in around 60 frames(1 second)
-            //    we will have travelled one whole unit in a second.
-            //    If you don't use deltaTime your speed will be dependant on the amount of frames rendered
-            //    on screen which often are inconsistent, meaning that if the player has performance issues,
-            //    this entity will move around slower.
-            float speed = 1f * deltaTime;
-
-            Vector3 dir = Vector3.Zero;
-
-            if (Gamepad && Input.HasGamePad)
-            {
-                GamePadState padState = Input.DefaultGamePad.State;
-                // LeftThumb can be positive or negative on both axis (pushed to the right or to the left)
-                dir.Z += padState.LeftThumb.Y;
-                dir.X += padState.LeftThumb.X;
-
-                // Triggers are always positive, in this case using one to increase and the other to decrease
-                dir.Y -= padState.LeftTrigger;
-                dir.Y += padState.RightTrigger;
-
-                // Increase speed when pressing A, LeftShoulder or RightShoulder
-                // Here:does the enum flag 'Buttons' has one of the flag ('A','LeftShoulder' or 'RightShoulder') set
-                if ((padState.Buttons & (GamePadButton.A | GamePadButton.LeftShoulder | GamePadButton.RightShoulder)) != 0)
-                    speed *= SpeedFactor;
-            }
-
-            if (Input.HasKeyboard)
-            {
-                // Move with keyboard
-                // Forward/Backward
-                if (Input.IsKeyDown(Keys.W) || Input.IsKeyDown(Keys.Up))
-                    dir.Z += 1;
-                if (Input.IsKeyDown(Keys.S) || Input.IsKeyDown(Keys.Down))
-                    dir.Z -= 1;
-
-                // Left/Right
-                if (Input.IsKeyDown(Keys.A) || Input.IsKeyDown(Keys.Left))
-                    dir.X -= 1;
-                if (Input.IsKeyDown(Keys.D) || Input.IsKeyDown(Keys.Right))
-                    dir.X += 1;
-
-                // Down/Up
-                if (Input.IsKeyDown(Keys.Q))
-                    dir.Y -= 1;
-                if (Input.IsKeyDown(Keys.E))
-                    dir.Y += 1;
-
-                // Increase speed when pressing shift
-                if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
-                    speed *= SpeedFactor;
-
-                // If the player pushes down two or more buttons, the direction and ultimately the base speed
-                // will be greater than one (vector(1, 1) is farther away from zero than vector(0, 1)),
-                // normalizing the vector ensures that whichever direction the player chooses, that direction
-                // will always be at most one unit in length.
-                // We're keeping dir as is if isn't longer than one to retain sub unit movement:
-                // a stick not entirely pushed forward should make the entity move slower.
-                if (dir.Length() > 1f)
-                    dir = Vector3.Normalize(dir);
-            }
-
-            // Finally, push all of that to the translation variable which will be used within UpdateTransform()
-            translation += dir * KeyboardMovementSpeed * speed;
+            _showInstructions = !_showInstructions;
         }
 
-        // Keyboard and Gamepad based Rotation
+        KeyboardAndGamePadBasedMovement(deltaTime);
+
+        KeyboardAndGamePadBasedRotation(deltaTime);
+
+        MouseMovementAndGestures();
+    }
+
+    private void KeyboardAndGamePadBasedMovement(float deltaTime)
+    {
+        // Our base speed is: one unit per second:
+        // deltaTime contains the duration of the previous frame, let's say that in this update
+        // or frame it is equal to 1/60, that means that the previous update ran 1/60 of a second ago
+        // and the next will, in most cases, run in around 1/60 of a second from now. Knowing that,
+        // we can move 1/60 of a unit on this frame so that in around 60 frames(1 second)
+        // we will have travelled one whole unit in a second.
+        // If you don't use deltaTime your speed will be dependant on the amount of frames rendered
+        // on screen which often are inconsistent, meaning that if the player has performance issues,
+        // this entity will move around slower.
+
+        float speed = 1f * deltaTime;
+
+        Vector3 dir = Vector3.Zero;
+
+        if (Gamepad && Input.HasGamePad)
         {
-            // See Keyboard & Gamepad translation's deltaTime usage
-            float speed = 1f * deltaTime;
-            Vector2 rotation = Vector2.Zero;
-            if (Gamepad && Input.HasGamePad)
-            {
-                GamePadState padState = Input.DefaultGamePad.State;
-                rotation.X += padState.RightThumb.Y;
-                rotation.Y += -padState.RightThumb.X;
-            }
+            GamePadState padState = Input.DefaultGamePad.State;
+            // LeftThumb can be positive or negative on both axis (pushed to the right or to the left)
+            dir.Z += padState.LeftThumb.Y;
+            dir.X += padState.LeftThumb.X;
 
-            if (Input.HasKeyboard)
-            {
-                if (Input.IsKeyDown(Keys.NumPad2))
-                    rotation.X += 1;
-                if (Input.IsKeyDown(Keys.NumPad8))
-                    rotation.X -= 1;
+            // Triggers are always positive, in this case using one to increase and the other to decrease
+            dir.Y -= padState.LeftTrigger;
+            dir.Y += padState.RightTrigger;
 
-                if (Input.IsKeyDown(Keys.NumPad4))
-                    rotation.Y += 1;
-                if (Input.IsKeyDown(Keys.NumPad6))
-                    rotation.Y -= 1;
-
-                // See Keyboard & Gamepad translation's Normalize() usage
-                if (rotation.Length() > 1f)
-                    rotation = Vector2.Normalize(rotation);
-            }
-
-            // Modulate by speed
-            rotation *= KeyboardRotationSpeed * speed;
-
-            // Finally, push all of that to pitch & yaw which are going to be used within UpdateTransform()
-            pitch += rotation.X;
-            yaw += rotation.Y;
+            // Increase speed when pressing A, LeftShoulder or RightShoulder
+            // Here:does the enum flag 'Buttons' has one of the flag ('A','LeftShoulder' or 'RightShoulder') set
+            if ((padState.Buttons & (GamePadButton.A | GamePadButton.LeftShoulder | GamePadButton.RightShoulder)) != 0)
+                speed *= SpeedFactor;
         }
 
-        // Mouse movement and gestures
+        if (Input.HasKeyboard)
         {
-            // This type of input should not use delta time at all, they already are frame-rate independent.
-            //    Lets say that you are going to move your finger/mouse for one second over 40 units, it doesn't matter
-            //    the amount of frames occuring within that time frame, each frame will receive the right amount of delta:
-            //    a quarter of a second -> 10 units, half a second -> 20 units, one second -> your 40 units.
+            // Move with keyboard
+            // Forward/Backward
+            if (Input.IsKeyDown(Keys.W) || Input.IsKeyDown(Keys.Up))
+                dir.Z += 1;
+            if (Input.IsKeyDown(Keys.S) || Input.IsKeyDown(Keys.Down))
+                dir.Z -= 1;
 
-            if (Input.HasMouse)
-                // Rotate with mouse
-                if (Input.IsMouseButtonDown(MouseButton.Right))
-                {
-                    Input.LockMousePosition();
-                    Game.IsMouseVisible = false;
+            // Left/Right
+            if (Input.IsKeyDown(Keys.A) || Input.IsKeyDown(Keys.Left))
+                dir.X -= 1;
+            if (Input.IsKeyDown(Keys.D) || Input.IsKeyDown(Keys.Right))
+                dir.X += 1;
 
-                    yaw -= Input.MouseDelta.X * MouseRotationSpeed.X;
-                    pitch -= Input.MouseDelta.Y * MouseRotationSpeed.Y;
-                }
-                else
-                {
-                    Input.UnlockMousePosition();
-                    Game.IsMouseVisible = true;
-                }
+            // Down/Up
+            if (Input.IsKeyDown(Keys.Q))
+                dir.Y -= 1;
+            if (Input.IsKeyDown(Keys.E))
+                dir.Y += 1;
 
-            // Handle gestures
-            foreach (var gestureEvent in Input.GestureEvents)
-                switch (gestureEvent.Type)
-                {
-                    // Rotate by dragging
-                    case GestureType.Drag:
-                        var drag = (GestureEventDrag)gestureEvent;
-                        var dragDistance = drag.DeltaTranslation;
-                        yaw = -dragDistance.X * TouchRotationSpeed.X;
-                        pitch = -dragDistance.Y * TouchRotationSpeed.Y;
-                        break;
+            // Increase speed when pressing shift
+            if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+                speed *= SpeedFactor;
 
-                    // Move along z-axis by scaling and in xy-plane by multi-touch dragging
-                    case GestureType.Composite:
-                        var composite = (GestureEventComposite)gestureEvent;
-                        translation.X = -composite.DeltaTranslation.X * TouchMovementSpeed.X;
-                        translation.Y = -composite.DeltaTranslation.Y * TouchMovementSpeed.Y;
-                        translation.Z = (float)Math.Log(composite.DeltaScale + 1) * TouchMovementSpeed.Z;
-                        break;
-                }
+            // If the player pushes down two or more buttons, the direction and ultimately the base speed
+            // will be greater than one (vector(1, 1) is farther away from zero than vector(0, 1)),
+            // normalizing the vector ensures that whichever direction the player chooses, that direction
+            // will always be at most one unit in length.
+            // We're keeping dir as is if isn't longer than one to retain sub unit movement:
+            // a stick not entirely pushed forward should make the entity move slower.
+            if (dir.Length() > 1f)
+                dir = Vector3.Normalize(dir);
+        }
+
+        // Finally, push all of that to the translation variable which will be used within UpdateTransform()
+        _translation += dir * KeyboardMovementSpeed * speed;
+    }
+
+    private void KeyboardAndGamePadBasedRotation(float deltaTime)
+    {
+        // See Keyboard & Gamepad translation's deltaTime usage
+
+        float speed = 1f * deltaTime;
+
+        Vector2 rotation = Vector2.Zero;
+
+        if (Gamepad && Input.HasGamePad)
+        {
+            GamePadState padState = Input.DefaultGamePad.State;
+            rotation.X += padState.RightThumb.Y;
+            rotation.Y += -padState.RightThumb.X;
+        }
+
+        if (Input.HasKeyboard)
+        {
+            if (Input.IsKeyDown(Keys.NumPad2))
+                rotation.X += 1;
+            if (Input.IsKeyDown(Keys.NumPad8))
+                rotation.X -= 1;
+
+            if (Input.IsKeyDown(Keys.NumPad4))
+                rotation.Y += 1;
+            if (Input.IsKeyDown(Keys.NumPad6))
+                rotation.Y -= 1;
+
+            // See Keyboard & Gamepad translation's Normalize() usage
+            if (rotation.Length() > 1f)
+                rotation = Vector2.Normalize(rotation);
+        }
+
+        // Modulate by speed
+        rotation *= KeyboardRotationSpeed * speed;
+
+        // Finally, push all of that to pitch & yaw which are going to be used within UpdateTransform()
+        _pitch += rotation.X;
+        _yaw += rotation.Y;
+    }
+
+    private void MouseMovementAndGestures()
+    {
+        // This type of input should not use delta time at all, they already are frame-rate independent.
+        // Lets say that you are going to move your finger/mouse for one second over 40 units, it doesn't matter
+        // the amount of frames occurring within that time frame, each frame will receive the right amount of delta:
+        // a quarter of a second -> 10 units, half a second -> 20 units, one second -> your 40 units.
+
+        if (Input.HasMouse)
+        {
+            // Rotate with mouse
+            if (Input.IsMouseButtonDown(MouseButton.Right))
+            {
+                Input.LockMousePosition();
+                Game.IsMouseVisible = false;
+
+                _yaw -= Input.MouseDelta.X * MouseRotationSpeed.X;
+                _pitch -= Input.MouseDelta.Y * MouseRotationSpeed.Y;
+            }
+            else
+            {
+                Input.UnlockMousePosition();
+                Game.IsMouseVisible = true;
+            }
+        }
+
+        // Handle gestures
+        foreach (var gestureEvent in Input.GestureEvents)
+        {
+            switch (gestureEvent.Type)
+            {
+                // Rotate by dragging
+                case GestureType.Drag:
+                    var drag = (GestureEventDrag)gestureEvent;
+                    var dragDistance = drag.DeltaTranslation;
+                    _yaw = -dragDistance.X * TouchRotationSpeed.X;
+                    _pitch = -dragDistance.Y * TouchRotationSpeed.Y;
+                    break;
+
+                // Move along z-axis by scaling and in xy-plane by multi-touch dragging
+                case GestureType.Composite:
+                    var composite = (GestureEventComposite)gestureEvent;
+                    _translation.X = -composite.DeltaTranslation.X * TouchMovementSpeed.X;
+                    _translation.Y = -composite.DeltaTranslation.Y * TouchMovementSpeed.Y;
+                    _translation.Z = (float)Math.Log(composite.DeltaScale + 1) * TouchMovementSpeed.Z;
+                    break;
+            }
         }
     }
 
@@ -223,7 +252,7 @@ public class Basic3DCameraController : SyncScript
         var rotation = Matrix.RotationQuaternion(Entity.Transform.Rotation);
 
         // Enforce the global up-vector by adjusting the local x-axis
-        var right = Vector3.Cross(rotation.Forward, upVector);
+        var right = Vector3.Cross(rotation.Forward, _upVector);
         var up = Vector3.Cross(right, rotation.Forward);
 
         // Stabilize
@@ -231,10 +260,10 @@ public class Basic3DCameraController : SyncScript
         up.Normalize();
 
         // Adjust pitch. Prevent it from exceeding up and down facing. Stabilize edge cases.
-        var currentPitch = MathUtil.PiOverTwo - (float)Math.Acos(Vector3.Dot(rotation.Forward, upVector));
-        pitch = MathUtil.Clamp(currentPitch + pitch, -MaximumPitch, MaximumPitch) - currentPitch;
+        var currentPitch = MathUtil.PiOverTwo - (float)Math.Acos(Vector3.Dot(rotation.Forward, _upVector));
+        _pitch = MathUtil.Clamp(currentPitch + _pitch, -MaximumPitch, MaximumPitch) - currentPitch;
 
-        Vector3 finalTranslation = translation;
+        Vector3 finalTranslation = _translation;
         finalTranslation.Z = -finalTranslation.Z;
         finalTranslation = Vector3.TransformCoordinate(finalTranslation, rotation);
 
@@ -242,6 +271,28 @@ public class Basic3DCameraController : SyncScript
         Entity.Transform.Position += finalTranslation;
 
         // Yaw around global up-vector, pitch and roll in local space
-        Entity.Transform.Rotation *= Quaternion.RotationAxis(right, pitch) * Quaternion.RotationAxis(upVector, yaw);
+        Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(_upVector, _yaw);
+    }
+
+    private void PrintControlInstructions()
+    {
+        DebugText.Print("CONTROL INSTRUCTIONS", new Int2(DebugInfoX, 10));
+        DebugText.Print("F2: Toggle Help", new Int2(DebugInfoX, 35), Color.Red);
+
+        var space = 60;
+
+        Print("WASD: Move");
+        Print("Arrow Keys: Move");
+        Print("Q/E: Ascend/Descend");
+        Print("Hold Shift: Increase speed");
+        Print("Numpad 2/4/6/8: Rotation");
+        Print("Right Mouse Button: Rotate");
+
+        void Print(string text)
+        {
+            DebugText.Print(text, new Int2(DebugInfoX, space));
+
+            space += DebugInfoIncrement;
+        }
     }
 }
