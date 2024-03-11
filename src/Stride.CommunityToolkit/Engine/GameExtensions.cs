@@ -1,3 +1,4 @@
+using DebugShapes;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering.Compositing;
@@ -705,6 +706,24 @@ public static class GameExtensions
         }
 
         return entity;
+    }
+
+    /// <summary>
+    /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
+    /// <para>Registers the system to the service registry for easy access.</para>
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="debugShapeRenderFroup"></param>
+    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderFroup = RenderGroup.Group1)
+    {
+        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
+
+        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderFroup);
+#if DEBUG
+        debugDraw.Visible = true;
+#endif
+        game.Services.AddService(debugDraw);
+        game.GameSystems.Add(debugDraw);
     }
 
     public static Entity Create3DPrimitiveWithBepu(this IGame game, PrimitiveModelType type, Primitive3DCreationOptionsWithBepu? options = null)

@@ -16,12 +16,12 @@ void Start(Scene rootScene)
 
 void SetupBaseScene()
 {
-    game.AddGraphicsCompositor()
-        .AddImmediateDebugRenderFeature();
+    game.AddGraphicsCompositor();
     game.Add3DCamera().Add3DCameraController();
     game.AddDirectionalLight();
     game.AddSkybox();
     game.Add3DGround();
+    game.AddDebugShapes();
 }
 
 void AddDebugComponent(Scene scene)
