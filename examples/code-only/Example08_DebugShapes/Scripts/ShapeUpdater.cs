@@ -95,30 +95,18 @@ public class ShapeUpdater : SyncScript
     {
         CurrentCamera = SceneSystem.SceneInstance.RootScene.Entities.First(e => e.Get<CameraComponent>() != null).Get<CameraComponent>();
 
-        RenderStage FindRenderStage(RenderSystem renderSystem, string name)
-        {
-            for (int i = 0; i < renderSystem.RenderStages.Count; ++i)
-            {
-                var stage = renderSystem.RenderStages[i];
-                if (stage.Name == name)
-                {
-                    return stage;
-                }
-            }
+        // Gets added in the program.cs class by the AddDebugShapes() extension.
+        DebugDraw = Services.GetService<ImmediateDebugRenderSystem>();
 
-            return null;
-        }
-
-        DebugDraw = new ImmediateDebugRenderSystem(Services, RenderGroup.Group1);
         DebugDraw.PrimitiveColor = Color.Green;
         DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
         DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
+
+        // keep DebugDraw visible in release builds too
         DebugDraw.Visible = true;
 
         // keep DebugText visible in release builds too
         DebugText.Visible = true;
-        Services.AddService(DebugDraw);
-        Game.GameSystems.Add(DebugDraw);
 
         InitializePrimitives(0, currentNumPrimitives);
     }
