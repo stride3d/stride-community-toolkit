@@ -12,7 +12,7 @@
         <PackageIcon>nuget-icon.png</PackageIcon>
         <Copyright>Stride Contributors</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
+        <!--<GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>-->
     </PropertyGroup>
 
     <ItemGroup>
