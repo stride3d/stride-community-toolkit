@@ -43,6 +43,7 @@ jobs:
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_CORE }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NO_BUILD: true
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
     # Stride.CommunityToolkit.Skyboxes
@@ -60,6 +61,7 @@ jobs:
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_SKYBOX }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NO_BUILD: true
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         TAG_COMMIT: false
 
