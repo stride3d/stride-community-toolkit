@@ -13,7 +13,7 @@
         <Copyright>Stride Contributors</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <!--<GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>-->
+        <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
     </PropertyGroup>
 
     <ItemGroup>
