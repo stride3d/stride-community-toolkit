@@ -9,8 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
-    # runs-on: windows-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout Stride Community Toolkit
@@ -40,10 +39,10 @@ jobs:
     - name: Build Stride.CommunityToolkit
       run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
 
-    - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
-      run: |
-        Copy-Item "c:\Users\Vacla\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
-      shell: pwsh      
+#    - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
+#      run: |
+#        Copy-Item "C:\Users\runneradmin\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
+#      shell: pwsh      
 
     - name: Test Stride.CommunityToolkit
       run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
