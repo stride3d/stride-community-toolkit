@@ -23,26 +23,26 @@ jobs:
     - name: Restore Stride.CommunityToolkit dependencies
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
-#    - name: Get NuGet global-packages location
-#      id: nuget-cache
-#      run: |
-#        $cacheDir = dotnet nuget locals global-packages --list | Out-String
-#        $path = $cacheDir -replace "global-packages: ", "" -replace "`r`n", ""
-#        echo "NUGET_CACHE_DIR=$path" | Out-File -FilePath $env:GITHUB_ENV -Append
-#      shell: pwsh
+    # - name: Get NuGet global-packages location
+    #   id: nuget-cache
+    #   run: |
+    #     $cacheDir = dotnet nuget locals global-packages --list | Out-String
+    #     $path = $cacheDir -replace "global-packages: ", "" -replace "`r`n", ""
+    #     echo "NUGET_CACHE_DIR=$path" | Out-File -FilePath $env:GITHUB_ENV -Append
+    #   shell: pwsh
 
-#    - name: List contents of System.Security.Cryptography.Pkcs package directory
-#      run: |
-#        Get-ChildItem "${{ env.NUGET_CACHE_DIR }}\system.security.cryptography.pkcs\" -Recurse | Select-Object FullName
-#      shell: pwsh
+    # - name: List contents of System.Security.Cryptography.Pkcs package directory
+    #   run: |
+    #     Get-ChildItem "${{ env.NUGET_CACHE_DIR }}\system.security.cryptography.pkcs\" -Recurse | Select-Object FullName
+    #   shell: pwsh
 
     - name: Build Stride.CommunityToolkit
       run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
 
-#    - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
-#      run: |
-#        Copy-Item "C:\Users\runneradmin\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
-#      shell: pwsh      
+    # - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
+    #   run: |
+    #     Copy-Item "c:\Users\Vacla\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
+    #   shell: pwsh
 
     - name: Test Stride.CommunityToolkit
       run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal

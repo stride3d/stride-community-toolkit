@@ -38,11 +38,11 @@ jobs:
 #    - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
 #      run: |
 #        Copy-Item "c:\Users\Vacla\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
-#      shell: pwsh         
+#      shell: pwsh
 
     - name: Test
       run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
-    
+
 #    - name: Publish Stride Community Toolkit
 #      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
 
