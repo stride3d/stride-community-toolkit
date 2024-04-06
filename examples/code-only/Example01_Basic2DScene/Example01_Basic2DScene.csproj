@@ -7,6 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <!--<ItemGroup>
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2122" IncludeAssets="build" />
+    </ItemGroup>-->
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="copy ..\Resources\JumpyJetBackground.jpg $(OutDir)" />
     </Target>
