@@ -23,6 +23,11 @@ jobs:
     - name: Restore Stride.CommunityToolkit dependencies
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
+    - name: List contents of System.Security.Cryptography.Pkcs package directory
+      run: |
+        Get-ChildItem "${{ github.workspace }}\.nuget\packages\system.security.cryptography.pkcs\" -Recurse | Select-Object FullName
+      shell: pwsh
+
     - name: Build Stride.CommunityToolkit
       run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
 
