@@ -12,8 +12,8 @@
         <PackageIcon>nuget-icon.png</PackageIcon>
         <Copyright>Stride Contributors</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
+        <!-- <GeneratePackageOnBuild>True</GeneratePackageOnBuild> -->
+        <!-- <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile> -->
     </PropertyGroup>
 
     <ItemGroup>
