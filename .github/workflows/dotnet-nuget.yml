@@ -22,6 +22,18 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Install Visual C++ Runtime 2019
+      run: |
+        # Download the Visual C++ Redistributable installer
+        $url = "https://aka.ms/vs/16/release/vc_redist.x64.exe" # Update the URL if necessary
+        $output = "vc_redist.x64.exe"
+        Invoke-WebRequest -Uri $url -OutFile $output
+        
+        # Install the redistributable silently
+        Start-Process -FilePath $output -ArgumentList "/install", "/quiet", "/norestart" -Wait -PassThru
+
+      shell: pwsh
+
     - name: Set Version in csproj
       run: |
         $settingsContent = Get-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Raw
