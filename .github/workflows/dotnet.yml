@@ -9,7 +9,8 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: self-hosted
+    # runs-on: windows-latest
 
     steps:
     - name: Checkout Stride Community Toolkit
