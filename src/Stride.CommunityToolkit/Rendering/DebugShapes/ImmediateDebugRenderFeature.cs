@@ -3,7 +3,6 @@
 
 using Stride.Core.Collections;
 using Stride.Core.Threading;
-using Stride.DebugRendering;
 using Stride.Graphics;
 using Stride.Rendering;
 using System.Runtime.InteropServices;
@@ -720,10 +719,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         commandList.SetPipelineState(pipelineState.CurrentState);
 
         // we set line width to something absurdly high to avoid having to alter our shader substantially for now
-        primitiveEffect.Parameters.Set(PrimitiveShaderKeys.LineWidthMultiplier, fillMode == FillMode.Solid ? 10000.0f : 1.0f);
-        primitiveEffect.Parameters.Set(PrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
-        primitiveEffect.Parameters.Set(PrimitiveShaderKeys.Transforms, transformBuffer);
-        primitiveEffect.Parameters.Set(PrimitiveShaderKeys.Colors, colorBuffer);
+        //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.LineWidthMultiplier, fillMode == FillMode.Solid ? 10000.0f : 1.0f);
+        //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
+        //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.Transforms, transformBuffer);
+        //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.Colors, colorBuffer);
 
         primitiveEffect.UpdateEffect(context.GraphicsDevice);
         primitiveEffect.Apply(context.GraphicsContext);
@@ -735,7 +734,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             SetPrimitiveRenderingPipelineState(commandList, depthTest, fillMode, isDoubleSided: false, hasTransparency: hasTransparency);
             commandList.SetPipelineState(pipelineState.CurrentState);
 
-            primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Spheres);
+            //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Spheres);
             primitiveEffect.Apply(context.GraphicsContext);
 
             commandList.DrawIndexedInstanced(sphere.Indices.Length, counts.Spheres, primitiveIndexOffsets.Spheres, primitiveVertexOffsets.Spheres);
@@ -752,7 +751,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.Quads > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Quads);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Quads);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(plane.Indices.Length, counts.Quads, primitiveIndexOffsets.Quads, primitiveVertexOffsets.Quads);
@@ -763,7 +762,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.Circles > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Circles);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Circles);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(circle.Indices.Length, counts.Circles, primitiveIndexOffsets.Circles, primitiveVertexOffsets.Circles);
@@ -774,7 +773,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.HalfSpheres > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.HalfSpheres);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.HalfSpheres);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 // HACK: we sort of abuse knowledge of the mesh primitive here.. :P
@@ -794,7 +793,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.Cubes > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cubes);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cubes);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(cube.Indices.Length, counts.Cubes, primitiveIndexOffsets.Cubes, primitiveVertexOffsets.Cubes);
@@ -805,7 +804,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.Capsules > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Capsules);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Capsules);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(capsule.Indices.Length, counts.Capsules, primitiveIndexOffsets.Capsules, primitiveVertexOffsets.Capsules);
@@ -816,7 +815,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.Cylinders > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cylinders);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cylinders);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(cylinder.Indices.Length, counts.Cylinders, primitiveIndexOffsets.Cylinders, primitiveVertexOffsets.Cylinders);
@@ -827,7 +826,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             if (counts.Cones > 0)
             {
 
-                primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cones);
+                //primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cones);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(cone.Indices.Length, counts.Cones, primitiveIndexOffsets.Cones, primitiveVertexOffsets.Cones);
@@ -844,7 +843,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             commandList.SetVertexBuffer(0, lineVertexBuffer, 0, LineVertex.Layout.VertexStride);
             commandList.SetPipelineState(pipelineState.CurrentState);
 
-            lineEffect.Parameters.Set(LinePrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
+            //lineEffect.Parameters.Set(LinePrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
             lineEffect.UpdateEffect(context.GraphicsDevice);
             lineEffect.Apply(context.GraphicsContext);
 
