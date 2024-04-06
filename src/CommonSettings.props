@@ -12,6 +12,7 @@
         <PackageIcon>nuget-icon.png</PackageIcon>
         <Copyright>Stride Contributors</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <!-- Once the issue with deployment is resolved, this can be removed -->
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     </PropertyGroup>
 
