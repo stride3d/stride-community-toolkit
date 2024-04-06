@@ -1,0 +1,79 @@
+name: Self-Hosted .NET Build and Publish Nuget
+
+env:
+  PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  PROJECT_PATH_SKYBOX: src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj
+  COMMON_SETTINGS_PATH: src/CommonSettings.props
+  VERSION: "1.0.0.0-preview.${{ github.run_number }}"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Stride Community Toolkit
+      uses: actions/checkout@v4
+
+    - name: .NET Setup
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Set Version in csproj
+      run: |
+        $settingsContent = Get-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Raw
+        $updatedCsprojContent = $settingsContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
+        Set-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Value $updatedCsprojContent
+
+    # Stride.CommunityToolkit
+    - name: Restore dependencies - Stride.CommunityToolkit
+      run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
+
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
+
+    - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
+      run: |
+        Copy-Item ""c:\Users\Vacla\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
+      shell: pwsh         
+
+    - name: Test
+      run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
+    
+#    - name: Publish Stride Community Toolkit
+#      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
+
+    - name: Publish Stride Community Toolkit
+      uses: alirezanet/publish-nuget@v3.1.0
+      with:
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_CORE }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+    # Stride.CommunityToolkit.Skyboxes
+    - name: Restore dependencies - Stride.CommunityToolkit.Skyboxes
+      run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
+
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore
+
+    - name: Test
+      run: dotnet test ${{ env.PROJECT_PATH_SKYBOX }} --no-build --verbosity normal
+
+    - name: Publish Stride Community Toolkit - Skyboxes
+      uses: alirezanet/publish-nuget@v3.1.0
+      with:
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_SKYBOX }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        TAG_COMMIT: false
+
+    # Create release
+    - name: Create GitHub Release
+      run: |
+        gh release create ${{ env.VERSION }} --title "v${{ env.VERSION }}" --notes "Release notes for ${{ env.VERSION }}" --draft
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
