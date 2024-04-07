@@ -22,27 +22,6 @@ jobs:
 
     - name: Restore Stride.CommunityToolkit dependencies
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
-
-    - name: Modify Stride.Core.Assets.CompilerApp.targets
-      shell: pwsh
-      run: |
-        $targetsPath = Join-Path -Path (Get-ChildItem -Path "${env:USERPROFILE}\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive" -Filter "Stride.Core.Assets.CompilerApp.targets" -Recurse).DirectoryName -ChildPath "Stride.Core.Assets.CompilerApp.targets"
-        
-        [xml]$targetsXml = Get-Content -Path $targetsPath
-        $namespaceManager = New-Object System.Xml.XmlNamespaceManager($targetsXml.NameTable)
-        $namespaceManager.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003")
-        
-        $targetNode = $targetsXml.SelectSingleNode("//msbuild:Target[@Name='_StridePrepareAssetsForPack']", $namespaceManager)
-        if ($targetNode -ne $null)
-        {
-            $targetNode.SetAttribute("Condition", "false")
-            $targetsXml.Save($targetsPath)
-            Write-Host "Modified _StridePrepareAssetsForPack target in Stride.Core.Assets.CompilerApp.targets"
-        }
-        else
-        {
-            Write-Host "_StridePrepareAssetsForPack target not found in Stride.Core.Assets.CompilerApp.targets"
-        }
       
     # - name: Get NuGet global-packages location
     #   id: nuget-cache
@@ -70,6 +49,27 @@ jobs:
 
     - name: Restore Stride.CommunityToolkit.Skyboxes dependencies
       run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
+
+    - name: Modify Stride.Core.Assets.CompilerApp.targets
+      shell: pwsh
+      run: |
+        $targetsPath = Join-Path -Path (Get-ChildItem -Path "${env:USERPROFILE}\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive" -Filter "Stride.Core.Assets.CompilerApp.targets" -Recurse).DirectoryName -ChildPath "Stride.Core.Assets.CompilerApp.targets"
+        
+        [xml]$targetsXml = Get-Content -Path $targetsPath
+        $namespaceManager = New-Object System.Xml.XmlNamespaceManager($targetsXml.NameTable)
+        $namespaceManager.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003")
+        
+        $targetNode = $targetsXml.SelectSingleNode("//msbuild:Target[@Name='_StridePrepareAssetsForPack']", $namespaceManager)
+        if ($targetNode -ne $null)
+        {
+            $targetNode.SetAttribute("Condition", "false")
+            $targetsXml.Save($targetsPath)
+            Write-Host "Modified _StridePrepareAssetsForPack target in Stride.Core.Assets.CompilerApp.targets"
+        }
+        else
+        {
+            Write-Host "_StridePrepareAssetsForPack target not found in Stride.Core.Assets.CompilerApp.targets"
+        }      
 
     - name: Build Stride.CommunityToolkit.Skyboxes
       run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore
