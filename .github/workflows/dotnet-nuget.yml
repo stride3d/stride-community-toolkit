@@ -2,7 +2,8 @@ name: .NET Build and Publish Nuget
 
 env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
-  PROJECT_PATH_SKYBOX: src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj
+  PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
+  PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
 
@@ -33,26 +34,26 @@ jobs:
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
     # Temporary solution, because of System.Security.Cryptography.Pkcs not found issue
-    - name: Modify Stride.Core.Assets.CompilerApp.targets
-      shell: pwsh
-      run: |
-        $targetsPath = Join-Path -Path (Get-ChildItem -Path "${env:USERPROFILE}\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive" -Filter "Stride.Core.Assets.CompilerApp.targets" -Recurse).DirectoryName -ChildPath "Stride.Core.Assets.CompilerApp.targets"
+    # - name: Modify Stride.Core.Assets.CompilerApp.targets
+    #   shell: pwsh
+    #   run: |
+    #     $targetsPath = Join-Path -Path (Get-ChildItem -Path "${env:USERPROFILE}\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive" -Filter "Stride.Core.Assets.CompilerApp.targets" -Recurse).DirectoryName -ChildPath "Stride.Core.Assets.CompilerApp.targets"
 
-        [xml]$targetsXml = Get-Content -Path $targetsPath
-        $namespaceManager = New-Object System.Xml.XmlNamespaceManager($targetsXml.NameTable)
-        $namespaceManager.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003")
+    #     [xml]$targetsXml = Get-Content -Path $targetsPath
+    #     $namespaceManager = New-Object System.Xml.XmlNamespaceManager($targetsXml.NameTable)
+    #     $namespaceManager.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003")
 
-        $targetNode = $targetsXml.SelectSingleNode("//msbuild:Target[@Name='_StridePrepareAssetsForPack']", $namespaceManager)
-        if ($targetNode -ne $null)
-        {
-            $targetNode.SetAttribute("Condition", "false")
-            $targetsXml.Save($targetsPath)
-            Write-Host "Modified _StridePrepareAssetsForPack target in Stride.Core.Assets.CompilerApp.targets"
-        }
-        else
-        {
-            Write-Host "_StridePrepareAssetsForPack target not found in Stride.Core.Assets.CompilerApp.targets"
-        }
+    #     $targetNode = $targetsXml.SelectSingleNode("//msbuild:Target[@Name='_StridePrepareAssetsForPack']", $namespaceManager)
+    #     if ($targetNode -ne $null)
+    #     {
+    #         $targetNode.SetAttribute("Condition", "false")
+    #         $targetsXml.Save($targetsPath)
+    #         Write-Host "Modified _StridePrepareAssetsForPack target in Stride.Core.Assets.CompilerApp.targets"
+    #     }
+    #     else
+    #     {
+    #         Write-Host "_StridePrepareAssetsForPack target not found in Stride.Core.Assets.CompilerApp.targets"
+    #     }
 
     - name: Build
       run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
@@ -69,6 +70,24 @@ jobs:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_CORE }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+    # Stride.CommunityToolkit.Windows
+    - name: Restore dependencies - Stride.CommunityToolkit.Windows
+      run: dotnet restore ${{ env.PROJECT_PATH_WINDOWS }}
+
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH_WINDOWS }} --no-restore
+
+    - name: Test
+      run: dotnet test ${{ env.PROJECT_PATH_WINDOWS }} --no-build --verbosity normal
+
+    - name: Publish Stride Community Toolkit - Windows
+      uses: alirezanet/publish-nuget@v3.1.0
+      with:
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_WINDOWS }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        TAG_COMMIT: false
 
     # Stride.CommunityToolkit.Skyboxes
     - name: Restore dependencies - Stride.CommunityToolkit.Skyboxes
