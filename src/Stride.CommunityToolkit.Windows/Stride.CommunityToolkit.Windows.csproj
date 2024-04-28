@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    </PropertyGroup>
+
+    <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+        <!-- The light requires a shader defined in the engine assemblies - but shaders are assets and I think they are compiled by the asset compiler per Graphics API target, that's why we need Stride.Core.Assets.CompilerApp -->
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2122" IncludeAssets="build;buildTransitive" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+</Project>
