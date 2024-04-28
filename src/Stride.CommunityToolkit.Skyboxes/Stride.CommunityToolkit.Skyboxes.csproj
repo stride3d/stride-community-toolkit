@@ -9,16 +9,8 @@
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <!-- The light requires a shader defined in the engine assemblies - but shaders are assets and I think they are compiled by the asset compiler per Graphics API target, that's why we need Stride.Core.Assets.CompilerApp -->
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2122" IncludeAssets="build;buildTransitive" />
         <PackageReference Include="Stride.Engine" Version="4.2.0.2122" />
-        <!--<PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.1" IncludeAssets="build;buildTransitive" />
-        <PackageReference Include="Stride.Engine" Version="4.2.0.1" />-->
     </ItemGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>$(DefineConstants)TRACE;CODE_ANALYSIS</DefineConstants>
-    </PropertyGroup>
 
     <ItemGroup>
         <None Remove="Resources\skybox_texture_hdr.dds" />

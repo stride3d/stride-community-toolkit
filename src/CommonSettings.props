@@ -13,7 +13,7 @@
         <Copyright>Stride Contributors</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <!-- Once the issue with deployment is resolved, this can be removed -->
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <!--<GeneratePackageOnBuild>True</GeneratePackageOnBuild>-->
     </PropertyGroup>
 
     <ItemGroup>
