@@ -24,7 +24,9 @@ Ensure the following are installed to build/run the project. If you're on Stride
 
 ## 📦 Adding the NuGet package
 
-The toolkit is encapsulated in a single package named `Stride.CommunityToolkit`. This package embodies all the toolkit's functionalities. You can use your preferred IDE or the command line to add this package to your project.
+The toolkit is available through several packages named `Stride.CommunityToolkit` and `Stride.CommunityToolkit.*`. The main package includes all functionalities of the toolkit. You can add this package to your project using your preferred IDE or via the command line. It is designed to be compatible with both regular Stride game projects and code-only game projects.
+
+
 
 To add the NuGet package using the command line, execute the following command:
 
@@ -32,4 +34,12 @@ To add the NuGet package using the command line, execute the following command:
 dotnet add package Stride.CommunityToolkit --prerelease
 ```
 
-Use the left navigation to check our extension or dive in code-only section for simple examples.
+> [!NOTE]
+> When using `Stride.CommunityToolkit` in a code-only project, you will need to manually add certain dependencies to your project file. However, if you are using the `Stride.CommunityToolkit.Windows` package, it automatically handles these dependencies for you.
+
+### Additional toolkit packages
+
+- `Stride.CommunityToolkit.Windows`: This package includes the [necessary dependencies](https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj) required for code-only projects.
+- `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
+
+Explore the extensions available in the left navigation or dive into the code-only section for simple examples.
