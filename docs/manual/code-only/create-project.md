@@ -11,7 +11,7 @@ The following instructions will guide you through the process of creating a new 
    ```
 1. **Add NuGet Package:** Execute the following command to add the necessary NuGet package.
    ```
-   dotnet add package Stride.CommunityToolkit --prerelease
+   dotnet add package Stride.CommunityToolkit.Windows --prerelease
    ```
 1. **Update Program.cs:** Paste the [example code](#example-code) (below) into your `Program.cs` file.
 1. **Build the Project (Optional):** The `dotnet build` command is used to compile your Stride project, generating executable files and checking for any errors in your code. This step is optional as the subsequent `dotnet run` command will automatically build the project if it hasn't been built already. To manually build the project, execute the following command:
@@ -32,7 +32,6 @@ The following instructions will guide you through the process of creating a new 
 1. **Update Program.cs:** Paste the example code (provided below) into your `Program.cs` file.
 1. **Run the Project:** Build and run your project using the IDE's run functionality.
 1. **Enjoy Stride:** If everything is set up correctly, you should now be able to run and enjoy your Stride project.
-
 
 ## Example Code
 
