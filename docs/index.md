@@ -14,11 +14,11 @@ The [Stride Community Toolkit](https://github.com/stride3d/stride-community-tool
 
 ## 📦 Libraries
 
-The Stride Community Toolkit consists of the following libraries:
+The toolkit includes the following libraries:
 
-- `Stride.CommunityToolkit`: Core library
-- `Stride.CommunityToolkit.Windows`: Windows-specific extensions
-- `Stride.CommunityToolkit.Skybox`: Skybox extensions
+- `Stride.CommunityToolkit`: This is the core library. Use it for general-purpose extensions in a regular Stride project or for a code-only approach.
+- `Stride.CommunityToolkit.Windows`: This library contains Windows-specific dependencies required for code-only approach.
+- `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
 
 ## 🔧 Installation
 
@@ -26,11 +26,11 @@ The toolkit, available as a 📦 [NuGet package](https://www.nuget.org/profiles/
 
 ## 🚀 Fast-Paced Development
 
-This toolkit serves as our preferred solution for rapid 🏃 prototyping and accelerated game development. Unlike the more stable Stride Game Engine, the Stride Community Toolkit aims for a faster development momentum. As such, you should expect that **breaking changes** are likely to occur. This approach allows us to quickly iterate and integrate new features and improvements. We believe this pace serves the needs of developers who are looking for cutting-edge tools and are comfortable with a more dynamic environment.
+This toolkit serves as our preferred solution for rapid 🏃 prototyping and accelerated game development. Unlike the more stable Stride Game Engine, the Stride Community Toolkit aims for faster development momentum. As such, you should expect that **breaking changes** are likely to occur. This approach allows us to quickly iterate and integrate new features and improvements. We believe this pace serves the needs of developers who are looking for cutting-edge tools and are comfortable with a more dynamic environment.
 
 ## 🛠️ Toolkit Repository
 
-The Stride Community Toolkit is an open-source, MIT licensed project hosted on GitHub and supported by the community. Access the source code or contribute 🤝 to the toolkit on its [GitHub Repository](https://github.com/stride3d/stride-community-toolkit).
+The Stride Community Toolkit is an open-source, MIT-licensed project hosted on GitHub and supported by the community. Access the source code or contribute 🤝 to the toolkit on its [GitHub Repository](https://github.com/stride3d/stride-community-toolkit).
 
 ## 🎮 Stride Game Engine Repository
 
@@ -38,14 +38,14 @@ Access the source code or contribute 🤝 to the Stride Game Engine on its [GitH
 
 ## 📃 Documentation & Resources
 
-Explore a range of resources to help you get the most out of the Stride Community Toolkit:
+Explore a range of resources to help you get the most out of the toolkit:
 
-- [Manual](manual/index.md): Get detailed guidance and best practices for using the toolkit
+- [Manual](manual/index.md): Detailed guidance and best practices for using the toolkit
 - [Tutorials](tutorials/index.md): Step-by-step tutorials to help you learn various features of the toolkit
 - [Release Notes](release-notes/index.md): Stay updated with the latest changes and improvements
 - [API Reference](api/index.md): In-depth API documentation for a deep dive into the toolkit's capabilities
 
-These resources are designed to provide comprehensive information and support for developers at all levels, from beginners to advanced users.
+These resources provide comprehensive information and support for developers at all levels, from beginners to advanced users.
 
 ## 👥 Contributors
 
@@ -54,7 +54,7 @@ We would like to thank our contributors for expanding the toolkit's capabilities
 - [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
 - [Doprez](https://github.com/Doprez): Extensions
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
-- [Vaclav Elias](https://github.com/VaclavElias): Code only approach implementation, toolkit docs
+- [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs
 - [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
 - [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
 - [DockFrankenstein](https://github.com/DockFrankenstein): Script System Extensions
