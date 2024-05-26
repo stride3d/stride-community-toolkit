@@ -36,14 +36,15 @@
       "_appTitle": "Stride Community Toolkit",
       "_enableSearch": true,
       "_appLogoPath": "media/stride-logo-blue-toolkit.svg",
-      "_appFooter": "<div class=\"d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small\"><p >Supported by the <a href=\"https://dotnetfoundation.org/\" target=\"_blank\" rel=\"noopener\">.NET Foundation</a></p><p>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></p><p >Stride Community Toolkit Website v.1.0.0.1</p><p>&copy; .NET Foundation and Contributors</p></div>"
+      "_appFooter": "<div class=\"d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small\"><p >Supported by the <a href=\"https://dotnetfoundation.org/\" target=\"_blank\" rel=\"noopener\">.NET Foundation</a></p><p>Made with <a href=\"https://dotnet.github.io/docfx\">docfx</a></p><p >Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>"
     },
     "fileMetadata": {
       "_appTitle": {
-        "tutorials/**/*.md": "Stride Tutorials",
-        "manual/**/*.md": "Stride Manual",
-        "ReleaseNotes/**/*.md": "Stride Release Notes",
-        "api/**/*.md": "Stride API"
+        "api/**/*.md": "Stride Community Toolkit API",
+        "tutorials/**/*.md": "Stride Community Toolkit Tutorials",
+        "release-notes/**/*.md": "Stride Community Toolkit Release Notes",
+        "manual/**/*.md": "Stride Community Toolkit Manual",
+        "contributing/**/*.md": "Stride Community Toolkit Contributing"
       }
     },
     "sitemap": {
@@ -61,13 +62,13 @@
           "release-notes/toc.yml",
           "release-notes/**/*.md",
           "manual/toc.yml",
-          "manual/**/*.md"
+          "manual/**/*.md",
+          "contributing/toc.yml",
+          "contributing/**/*.md"
         ]
       },
       {
         "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
           "toc.yml",
           "*.md"
         ]

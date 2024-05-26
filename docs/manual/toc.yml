@@ -4,7 +4,7 @@
   href: getting-started.md
 # - name: What's new in docs
 #   href: whats-new.md
-- name: Code Only
+- name: Code-Only
   href: code-only/index.md
   items:
   - name: Create Project
@@ -41,21 +41,25 @@
       href: code-only/examples/capsule-with-rigid-body-vb.md
   - name: Extensions
     href: code-only/extensions.md
-- name: Animation Extensions
-  href: animation-extensions/index.md
-- name: Camera Extensions
-  href: camera-extensions/index.md
-- name: Entity Extensions
-  href: entity-extensions/index.md
-- name: Game Extensions
-  href: game-extensions/index.md
-- name: Model Extensions
-  href: model-extensions/index.md
-- name: Script Extensions
-  href: script-extensions/index.md
-- name: Script System Extensions
-  href: script-system-extensions/index.md
+- name: Extensions
+  expanded: true
+  items:
+    - name: Animation
+      href: animation-extensions/index.md
+    - name: Camera
+      href: camera-extensions/index.md
+    - name: Entity
+      href: entity-extensions/index.md
+    - name: Game
+      href: game-extensions/index.md
+    - name: Model
+      href: model-extensions/index.md
+    - name: Script
+      href: script-extensions/index.md
+    - name: Script System
+      href: script-system-extensions/index.md
 - name: Rendering
+  expanded: true
   items:
   - name: MeshBuilder
     href: rendering/mesh-builder.md
@@ -63,3 +67,5 @@
     href: rendering/texture-canvas.md
 - name: Troubleshooting
   href: troubleshooting.md
+- name: Contributing
+  href: ../contributing/index.md

@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Common", "examples\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Skyboxes", "src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj", "{423A1266-4A6D-425F-96CE-945A1802F711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Windows", "src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj", "{E5E01EDB-524C-4FC2-951B-321E5D08C972}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Windows", "src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj", "{E5E01EDB-524C-4FC2-951B-321E5D08C972}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
