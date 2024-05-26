@@ -749,6 +749,16 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "contributing/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Resource",
       "source_relative_path": "favicon.ico",
       "output": {
@@ -1577,6 +1587,16 @@
       "output": {
         ".html": {
           "relative_path": "release-notes/release-1.0.0.0-preview.20.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.39.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.39.html"
         }
       },
       "version": ""

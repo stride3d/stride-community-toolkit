@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Contributing | Stride Community Toolkit Contributing </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Contributing | Stride Community Toolkit Contributing ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="../manual/toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/contributing/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="contributing">Contributing</h1>
+
+<h2 id="welcome-contributors">Welcome Contributors</h2>
+<p>We appreciate your interest in contributing to the Stride Community Toolkit. This section provides all the information you need to get started, including guidelines, best practices, and resources to help you make meaningful contributions to the project. Whether you're fixing bugs, adding new features, or improving documentation, your efforts are valuable and greatly appreciated.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Since the toolkit is currently in preview, we don't have extensive instructions for contributors. However, you can follow these general guidelines to get started:</p>
+<ul>
+<li>Feel free to make Pull Requests (PRs) directly to speed up your process. Optionally, create an issue on our <a href="https://github.com/stride3d/stride-community-toolkit/issues">GitHub Issues</a> page, or work on an existing issue. Alternatively, you can start a discussion on our <a href="https://github.com/stride3d/stride-community-toolkit/discussions">GitHub Discussions</a> page.</li>
+<li>For quick communication with the community, join our Discord server and participate in the #toolkit channel <a href="https://discord.com/channels/500285081265635328/1179562410655363132">here</a>.</li>
+</ul>
+<h2 id="documentation">Documentation</h2>
+<p>We use DocFX for our documentation. The easiest way to contribute to the documentation is by looking at existing docs, duplicating pages, and updating the content accordingly. You can find helpful information on using DocFX and writing Markdown <a href="https://dotnet.github.io/docfx/docs/markdown.html">here</a>. We will also assist you in getting started with the documentation.</p>
+<h2 id="major-release-workflow">Major Release Workflow</h2>
+<p>When preparing for a major release, such as upgrading from <strong>.NET 8</strong> to <strong>.NET 9</strong>, there are several key steps and pages that need to be updated. This section will list the necessary instructions to ensure a smooth transition.</p>
+<h3 id="steps-for-major-release">Steps for Major Release:</h3>
+<ol>
+<li>Update .NET reference on the Home page's <code>index.md</code></li>
+<li>Update .NET reference in <code>manual\gettings-started.md</code></li>
+<li>Update .NET reference in <code>manual\code-only\create-project.md</code></li>
+<li>Update <code>TargetFramework</code> in all <code>.csproj</code> files</li>
+<li>Test all examples and ensure they work as expected</li>
+</ol>
+<p>By following these steps, you can help ensure that each major release is well-documented and thoroughly tested, providing a smooth experience for all users of the toolkit.</p>
+<h2 id="additional-resources">Additional Resources</h2>
+<ul>
+<li><a href="https://github.com/stride3d/stride-community-toolkit">Stride Community Toolkit GitHub Repository</a></li>
+<li><a href="https://github.com/stride3d/stride">Stride Game Engine GitHub Repository</a></li>
+<li><a href="https://doc.stride3d.net/">Stride Docs</a></li>
+</ul>
+<p>Thank you for contributing to the Stride Community Toolkit 🙂.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/contributing/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

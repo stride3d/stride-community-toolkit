@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Create Project | Stride Manual </title>
+      <title>Create Project | Stride Community Toolkit Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Create Project | Stride Manual ">
+      <meta name="title" content="Create Project | Stride Community Toolkit Manual ">
       
       
       <link rel="icon" href="../../favicon.ico">
@@ -29,15 +29,15 @@
       <meta name="loc:changeTheme" content="Change theme">
       <meta name="loc:copy" content="Copy">
       <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
   </head>
-
-  <script type="module" src="./../../public/docfx.min.js"></script>
-
-  <script>
-    const theme = localStorage.getItem('theme') || 'auto'
-    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
-  </script>
-
 
   <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
     <header class="bg-body border-bottom">
@@ -88,18 +88,18 @@
 <h1 id="create-project">Create Project</h1>
 
 <h2 id="command-line-and-visual-studio-code-instructions">Command Line and Visual Studio Code Instructions</h2>
-<p>The following instructions will guide you through the process of creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same instructions in the Visual Studio Code Terminal.</p>
+<p>The following instructions will guide you through creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same steps in the Visual Studio Code Terminal.</p>
 <ol>
-<li><strong>Prerequisites:</strong> Make sure you have all prerequisites installed. See the <a href="../getting-started.html">Prerequisites</a> section for more information.</li>
-<li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about how to create a new console application.
+<li><strong>Prerequisites:</strong> Ensure you have all the prerequisites installed. Refer to the <a href="../getting-started.html">Prerequisites</a> section for more information.</li>
+<li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about creating a new console application. Use the following command:
 <pre><code>dotnet new console --framework net8.0
 </code></pre>
 </li>
 <li><strong>Add NuGet Package:</strong> Execute the following command to add the necessary NuGet package.
-<pre><code>dotnet add package Stride.CommunityToolkit --prerelease
+<pre><code>dotnet add package Stride.CommunityToolkit.Windows --prerelease
 </code></pre>
 </li>
-<li><strong>Update Program.cs:</strong> Paste the <a href="#example-code">example code</a> (below) into your <code>Program.cs</code> file.</li>
+<li><strong>Update Program.cs:</strong> Paste the <a href="#example-code">example code</a> provided below into your <code>Program.cs</code> file.</li>
 <li><strong>Build the Project (Optional):</strong> The <code>dotnet build</code> command is used to compile your Stride project, generating executable files and checking for any errors in your code. This step is optional as the subsequent <code>dotnet run</code> command will automatically build the project if it hasn't been built already. To manually build the project, execute the following command:
 <pre><code class="lang-bash">dotnet build
 </code></pre>
@@ -113,9 +113,9 @@
 <h2 id="visual-studio-2022-and-rider-instructions">Visual Studio 2022 and Rider Instructions</h2>
 <ol>
 <li><strong>Create a C# Console Application:</strong> Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 8.</li>
-<li><strong>Add NuGet Package:</strong> Search for and add the <strong>Stride.CommunityToolkit</strong> NuGet package, ensuring you opt for the pre-release version.
+<li><strong>Add NuGet Package:</strong> Search for and add the <code>Stride.CommunityToolkit.Windows</code> NuGet package, ensuring you opt for the pre-release version.
 <ul>
-<li>This package will install all needed Stride NuGet packages</li>
+<li>This package will install all the necessary Stride NuGet packages.</li>
 </ul>
 </li>
 <li><strong>Update Program.cs:</strong> Paste the example code (provided below) into your <code>Program.cs</code> file.</li>
@@ -123,7 +123,7 @@
 <li><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</li>
 </ol>
 <h2 id="example-code">Example Code</h2>
-<p>The provided C# code example is designed to showcase the basic usage of the Stride Game Engine.</p>
+<p>The provided C# code example demonstrates the basic usage of the Stride Game Engine.</p>
 <pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -151,18 +151,22 @@ void Start(Scene rootScene)
 <li>Inside the <code>Start</code> method, <code>game.SetupBase3DScene();</code> sets up a basic 3D scene.</li>
 <li><code>var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);</code> creates a new primitive entity of type <code>Capsule</code>, and assigns it to the <code>entity</code> variable.</li>
 <li><code>entity.Transform.Position = new Vector3(0, 8, 0);</code> sets the position of the entity in the 3D space. The position is set to (0, 8, 0), which means the capsule is placed 8 units above the ground.</li>
-<li><code>entity.Scene = rootScene;</code> adds the entity to the root scene of the game.</li>
+<li><code>entity.Scene = rootScene;</code> adds the entity to the root scene of the game. This step is crucial because assigning the entity to the scene ensures it is rendered and visible in the game. Without this assignment, the entity would not be part of the scene graph, and therefore, it would not appear in the game.</li>
 </ol>
-<p>The <code>Create3DPrimitive()</code> method creates a Capsule with <a href="https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html">rigid body physics</a>. Because the capsule is placed 8 units above the ground, it will fall due to gravity. Note that it's important to remove the capsule from memory once it's no longer visible in the scene, to free up resources and ensure the CPU isn't unnecessarily calculating physics for it</p>
+<p>The <code>Create3DPrimitive()</code> method creates a Capsule with <a href="https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html">rigid body physics</a>. Since the capsule is placed 8 units above the ground, it will fall due to gravity.</p>
+<div class="TIP">
+<h5>Tip</h5>
+<p>It's important to remove the capsule from memory once it's no longer visible in the scene to free up resources and ensure the CPU isn't unnecessarily calculating physics for it.</p>
+</div>
 <p><img src="https://user-images.githubusercontent.com/4528464/180097697-8352e30c-3750-42f1-aef9-ecd6c8e6255e.png" alt="image"></p>
 <h2 id="additional-examples">Additional Examples</h2>
-<p>Explore more examples listed in the menu on the left, categorized by the programming language and level of complexity. These examples provide a deeper understanding of how to work with a code-only project in Stride, showcasing various functionalities and implementations.</p>
+<p>Explore more examples listed in the menu on the left, categorized by programming language and level of complexity. These examples provide a deeper understanding of how to work with a code-only project in Stride, showcasing various functionalities and implementations.</p>
 <p>The examples are organized under the following sections:</p>
 <ul>
-<li><strong>C# Basic Examples</strong>: Contains basic examples demonstrating fundamental concepts using C#.</li>
-<li><strong>C# Advanced Examples</strong>: Features more advanced scenarios and implementations using C#.</li>
-<li><strong>F# Basic Examples</strong>: Basic examples showcasing fundamental concepts using F#.</li>
-<li><strong>VB Basic Examples</strong>: Demonstrates fundamental concepts using Visual Basic.</li>
+<li><a href="examples/basic-examples.html">C# Basic Examples</a>: Basic examples demonstrating fundamental concepts using C#.</li>
+<li><a href="examples/advance-examples.html">C# Advanced Examples</a>: Advanced scenarios and implementations using C#.</li>
+<li><a href="examples/basic-examples-fs.html">F# Basic Examples</a>: Fundamental concepts demonstrated using F#.</li>
+<li><a href="examples/basic-examples-vb.html">VB Basic Examples</a>: Fundamental concepts demonstrated using Visual Basic.</li>
 </ul>
 <p>To view an example, click on its name in the menu, and you will be navigated to a page with a detailed explanation and code snippets.</p>
 
@@ -186,7 +190,7 @@ void Start(Scene rootScene)
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>What&#39;s new in Stride Community Toolkit 1.0.0.0-preview.20 | Stride Community Toolkit Release Notes </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="What&#39;s new in Stride Community Toolkit 1.0.0.0-preview.20 | Stride Community Toolkit Release Notes ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/release-notes/release-1.0.0.0-preview.39.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="whats-new-in-stride-community-toolkit-1000-preview20">What's new in Stride Community Toolkit 1.0.0.0-preview.20</h1>
+
+<p>This article lists the most significant changes in Stride Community Toolkit preview <code>1.0.0.0-preview.39</code>.</p>
+<p>This release adds Bepu Physics integration, a new upcoming physics engine for Stride. Some of the new Bepu extensions are specific for code-only approach, while other can be used in the editor generated projects as well.</p>
+<p>This update mainly focused on this issue <a href="https://github.com/stride3d/stride-community-toolkit/issues/133">https://github.com/stride3d/stride-community-toolkit/issues/133</a>.</p>
+<p>I was able to debug the error but I wasn't able to find the issue itself because it happens in the NuGet library itself. I moved on and these are the suggetions for the toolkit for now:</p>
+<p>Anywhere we reference <code>Stride.Core.Assets.CompilerApp</code> we have to add also <code>&lt;RuntimeIdentifier&gt;win-x64&lt;/RuntimeIdentifier&gt;</code> which makes it Windows only.</p>
+<ul>
+<li><code>Stride.CommunityToolkit</code> library will have no <code>Stride.Core.Assets.CompilerApp</code> references, so it can be built correctly and be platfom agnostic. Should work in code-only and regular Stride Projects.</li>
+<li>The new <code>Stride.CommunityToolkit.Windows</code> library will have <code>Stride.Core.Assets.CompilerApp</code> reference and also <code>&lt;RuntimeIdentifier&gt;win-x64&lt;/RuntimeIdentifier&gt;</code>, at the moment it is an empty library refrencing  <code>Stride.CommunityToolkit</code> project mainly for code-only purpose, just to remove the above boilerplate. That means, code only examples would reference  <code>Stride.CommunityToolkit.Windows</code> instead of  <code>Stride.CommunityToolkit</code>. This could be done also for Linux later.</li>
+<li><code>Stride.CommunityToolkit.Skyboxes</code> library mainly for code-only purpose, will have <code>Stride.Core.Assets.CompilerApp</code> reference removed so the NuGet package can be created. Because it is used with <code>Stride.CommunityToolkit.Windows</code>, it should build correctly</li>
+</ul>
+<!-- Release notes generated using configuration in .github/release.yml at main -->
+<h2 id="whats-changed">What's Changed</h2>
+<h3 id="-build--deploy">🔁 Build &amp; Deploy</h3>
+<ul>
+<li>Update 15 - Cross platform improvements by @VaclavElias in <a href="https://github.com/stride3d/stride-community-toolkit/pull/134">https://github.com/stride3d/stride-community-toolkit/pull/134</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a href="https://github.com/stride3d/stride-community-toolkit/compare/1.0.0.0-preview.38...1.0.0.0-preview.39">https://github.com/stride3d/stride-community-toolkit/compare/1.0.0.0-preview.38...1.0.0.0-preview.39</a></p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/release-notes/release-1.0.0.0-preview.39.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1391,6 +1391,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting
   nameWithType: GameExtensions.AddAllDirectionLighting
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddDebugShapes(Stride.Engine.Game,Stride.Rendering.RenderGroup)
+  name: AddDebugShapes(Game, RenderGroup)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDebugShapes_Stride_Engine_Game_Stride_Rendering_RenderGroup_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddDebugShapes(Stride.Engine.Game,Stride.Rendering.RenderGroup)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddDebugShapes(Stride.Engine.Game, Stride.Rendering.RenderGroup)
+  nameWithType: GameExtensions.AddDebugShapes(Game, RenderGroup)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddDebugShapes*
+  name: AddDebugShapes
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDebugShapes_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddDebugShapes
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddDebugShapes
+  nameWithType: GameExtensions.AddDebugShapes
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)
   name: AddDirectionalLight(Game, string?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddDirectionalLight_Stride_Engine_Game_System_String_
@@ -1574,12 +1587,12 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate
   nameWithType: GameExtensions.DeltaTimeAccurate
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)
-  name: FPS(Game)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)
-  nameWithType: GameExtensions.FPS(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)
+  name: FPS(IGame)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)
+  nameWithType: GameExtensions.FPS(IGame)
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS*
   name: FPS
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_
@@ -1612,6 +1625,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Run
   nameWithType: GameExtensions.Run
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)
+  name: SetFocusLostFPS(IGame, int)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetFocusLostFPS_Stride_Games_IGame_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)
+  name.vb: SetFocusLostFPS(IGame, Integer)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame, int)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame, Integer)
+  nameWithType: GameExtensions.SetFocusLostFPS(IGame, int)
+  nameWithType.vb: GameExtensions.SetFocusLostFPS(IGame, Integer)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS*
+  name: SetFocusLostFPS
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetFocusLostFPS_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS
+  nameWithType: GameExtensions.SetFocusLostFPS
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
   name: SetMaxFPS(IGame, int)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetMaxFPS_Stride_Games_IGame_System_Int32_

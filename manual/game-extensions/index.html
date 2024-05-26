@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>GameExtensions.cs | Stride Manual </title>
+      <title>GameExtensions.cs | Stride Community Toolkit Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="GameExtensions.cs | Stride Manual ">
+      <meta name="title" content="GameExtensions.cs | Stride Community Toolkit Manual ">
       
       
       <link rel="icon" href="../../favicon.ico">
@@ -29,15 +29,15 @@
       <meta name="loc:changeTheme" content="Change theme">
       <meta name="loc:copy" content="Copy">
       <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
   </head>
-
-  <script type="module" src="./../../public/docfx.min.js"></script>
-
-  <script>
-    const theme = localStorage.getItem('theme') || 'auto'
-    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
-  </script>
-
 
   <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
     <header class="bg-body border-bottom">
@@ -98,7 +98,7 @@
 <li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_"><code>Create3DPrimitive()</code></a> - Creates a primitive 3D model entity of the specified type with optional customizations</li>
 <li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_Stride_Games_IGame_"><code>DeltaTime()</code></a> - Gets the time elapsed since the last game update in seconds as a single-precision floating-point number</li>
 <li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_"><code>DeltaTimeAccurate()</code></a> - Gets the time elapsed since the last game update in seconds as a double-precision floating-point</li>
-<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Engine_Game_"><code>FPS()</code></a> - Retrieves the current frames per second (FPS) rate of the running game</li>
+<li><a class="xref" href="../../api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Games_IGame_"><code>FPS()</code></a> - Retrieves the current frames per second (FPS) rate of the running game</li>
 </ul>
 <p><img src="https://img.shields.io/badge/status-todo-orange" alt="ToDo"></p>
 <ul>
@@ -126,7 +126,7 @@
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.0</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>
