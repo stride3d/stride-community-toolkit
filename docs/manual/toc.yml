@@ -59,6 +59,7 @@
     - name: Script System
       href: script-system-extensions/index.md
 - name: Rendering
+  expanded: true
   items:
   - name: MeshBuilder
     href: rendering/mesh-builder.md
