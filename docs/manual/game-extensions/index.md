@@ -13,7 +13,7 @@ Here's a brief overview of the functionalities provided by these extension metho
 - [`Create3DPrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptions)) - Creates a primitive 3D model entity of the specified type with optional customizations
 - [`DeltaTime()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a single-precision floating-point number
 - [`DeltaTimeAccurate()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a double-precision floating-point
-- [`FPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Engine.Game)) - Retrieves the current frames per second (FPS) rate of the running game
+- [`FPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)) - Retrieves the current frames per second (FPS) rate of the running game
 
 ![ToDo](https://img.shields.io/badge/status-todo-orange)
 
