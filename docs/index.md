@@ -12,6 +12,9 @@ _disableToc: false
 
 The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a set of C# helpers and [extensions](manual/animation-extensions/index.md) designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and streamlines routine development tasks 🛠️, making it easier to build applications for Stride using .NET 8 🎉.
 
+> [!TIP]
+> While the toolkit's extensions are helpful for many developers, experienced game developers may prefer to examine the toolkit's source code directly. The extensions are essentially convenience wrappers, and advanced users might benefit from implementing their own solutions based on the toolkit's code.
+
 ## 📦 Libraries
 
 The toolkit includes the following libraries:
