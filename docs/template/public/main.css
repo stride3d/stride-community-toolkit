@@ -36,3 +36,7 @@
     padding-left: 10px;
     display: block;
 }
+
+li pre {
+    margin-bottom: 0;
+}

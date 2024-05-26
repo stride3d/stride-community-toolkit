@@ -18,15 +18,13 @@ Ensure the following are installed to build/run the project. If you're on Stride
    - Visual Studio 2022
       - [Visual Studio 2022 Community](https://visualstudio.microsoft.com/vs/) (Free)
    - [Visual Studio Code](https://code.visualstudio.com/) (Free, 95MB)
-      - Install **C# Dev Kit** extension 
+      - Install the **C# Dev Kit** extension 
       - Restart Visual Studio Code to ensure `dotnet` command functions properly
    - Rider (Paid)
 
 ## 📦 Adding the NuGet package
 
 The toolkit is available through several packages named `Stride.CommunityToolkit` and `Stride.CommunityToolkit.*`. The main package includes all functionalities of the toolkit. You can add this package to your project using your preferred IDE or via the command line. It is designed to be compatible with both regular Stride game projects and code-only game projects.
-
-
 
 To add the NuGet package using the command line, execute the following command:
 
@@ -39,7 +37,7 @@ dotnet add package Stride.CommunityToolkit --prerelease
 
 ### Additional toolkit packages
 
-- `Stride.CommunityToolkit.Windows`: This package includes the [necessary dependencies](https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj) required for code-only projects.
+- `Stride.CommunityToolkit.Windows`: This package includes the [necessary dependencies](https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj) required for code-only projects (`RuntimeIdentifier`, package reference `Stride.Core.Assets.CompilerApp`).
 - `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
 
 Explore the extensions available in the left navigation or dive into the code-only section for simple examples.
