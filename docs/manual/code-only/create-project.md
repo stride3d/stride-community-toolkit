@@ -65,7 +65,7 @@ void Start(Scene rootScene)
 1. Inside the `Start` method, `game.SetupBase3DScene();` sets up a basic 3D scene.
 1. `var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);` creates a new primitive entity of type `Capsule`, and assigns it to the `entity` variable.
 1. `entity.Transform.Position = new Vector3(0, 8, 0);` sets the position of the entity in the 3D space. The position is set to (0, 8, 0), which means the capsule is placed 8 units above the ground.
-1. `entity.Scene = rootScene;` adds the entity to the root scene of the game.
+1. `entity.Scene = rootScene;` adds the entity to the root scene of the game. This step is crucial because assigning the entity to the scene ensures it is rendered and visible in the game. Without this assignment, the entity would not be part of the scene graph, and therefore, it would not appear in the game.
 
 The `Create3DPrimitive()` method creates a Capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Since the capsule is placed 8 units above the ground, it will fall due to gravity. 
 
