@@ -4,7 +4,7 @@
   href: getting-started.md
 # - name: What's new in docs
 #   href: whats-new.md
-- name: Code Only
+- name: Code-Only
   href: code-only/index.md
   items:
   - name: Create Project
@@ -67,3 +67,5 @@
     href: rendering/texture-canvas.md
 - name: Troubleshooting
   href: troubleshooting.md
+- name: Contributing
+  href: ../contributing/index.md
