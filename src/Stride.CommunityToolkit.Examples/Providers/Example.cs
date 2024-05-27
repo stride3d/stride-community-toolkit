@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Examples;
+namespace Stride.CommunityToolkit.Examples.Providers;
 
 public class Example
 {

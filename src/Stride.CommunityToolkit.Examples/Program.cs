@@ -1,8 +1,8 @@
 using Pastel;
-using Stride.CommunityToolkit.Examples;
+using Stride.CommunityToolkit.Examples.Providers;
 using System.Drawing;
 
-var examples = ExampleProvider.GetExamples();
+var examples = new ExampleProvider().GetExamples();
 
 DisplayMenu();
 
@@ -32,7 +32,7 @@ void HandleUserInput()
 
     var choice = Console.ReadLine() ?? "";
 
-    var example = examples.FirstOrDefault(x => string.Equals(x.Id, choice, StringComparison.OrdinalIgnoreCase));
+    var example = examples.Find(x => string.Equals(x.Id, choice, StringComparison.OrdinalIgnoreCase));
 
     if (example is null)
     {
