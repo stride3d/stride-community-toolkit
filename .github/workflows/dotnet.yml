@@ -22,7 +22,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Create .sarif Directory
-      run: New-Item -ItemType Directory -Force -Path ${{ github.workspace }}\.sarif
+      run: New-Item -ItemType Directory -Force -Path D:\.sarif
       shell: pwsh        
 
     # Stride.CommunityToolkit
