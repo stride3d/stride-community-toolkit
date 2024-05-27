@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Title>Stride Community Toolkit - Windows</Title>
         <Description>This library serves to simplify the setup for Stride code-only projects by automatically including the `Stride.Core.Assets.CompilerApp` package and specifying `RuntimeIdentifier` in the project file. This eliminates the need for boilerplate code, making it easier to demonstrate and develop simple Stride projects without additional configuration.</Description>
-        <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+        <RuntimeIdentifier>AnyCPU</RuntimeIdentifier>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
