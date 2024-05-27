@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 
 namespace Stride.CommunityToolkit.Scripts;
@@ -13,12 +12,12 @@ public class GizmoBillboardLetterScript : SyncScript
     {
         if (_camera is null)
         {
-            _camera = this.GetGCCamera();
-
-            return;
+            _camera = GetGCCamera();
         }
-
-        UpdateLetterRotation(_camera.Entity.Transform.Position);
+        else
+        {
+            UpdateLetterRotation(_camera.Entity.Transform.Position);
+        }
     }
 
     public void UpdateLetterRotation(Vector3 cameraPosition)
@@ -35,5 +34,19 @@ public class GizmoBillboardLetterScript : SyncScript
         var additionalRotation = Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(DefaultRotation));
 
         Entity.Transform.Rotation = lookAtRotation * additionalRotation;
+    }
+
+    // This is same as in our extension but to avoid circular dependency we have to copy it here
+    public CameraComponent? GetGCCamera()
+    {
+        foreach (var sceneCamera in SceneSystem.GraphicsCompositor.Cameras)
+        {
+            if (sceneCamera.Name == "Main")
+            {
+                return sceneCamera.Camera;
+            }
+        }
+
+        return null;
     }
 }
