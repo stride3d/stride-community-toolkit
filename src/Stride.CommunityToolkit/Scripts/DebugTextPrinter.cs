@@ -5,10 +5,11 @@ public class DebugTextPrinter
     private const int LineIncrement = 20;
 
     private readonly Profiling.DebugTextSystem _debugTextSystem;
+    private readonly Int2 _basePosition = new(5, 10);
+    private readonly Int2 _screenSize;
+
     private Int2 _textSize = new(205, 175);
-    private Int2 _basePosition = new(5, 10);
     private Int2 _screenPosition;
-    private Int2 _screenSize;
     private DisplayPosition _currentPosition = DisplayPosition.TopRight;
 
     public DebugTextPrinter(Profiling.DebugTextSystem debugTextSystem, Int2 screenSize)
