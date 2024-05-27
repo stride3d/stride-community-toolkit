@@ -11,9 +11,11 @@ Here's a brief overview of the functionalities provided by these extension metho
 - [`CreateMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)) - Creates a basic material with optional color, specular reflection, and micro-surface smoothness values
 - [`Create2DPrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptions)) - Creates a primitive 2D model entity of the specified type with optional customizations
 - [`Create3DPrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptions)) - Creates a primitive 3D model entity of the specified type with optional customizations
-- [`DeltaTime()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a single-precision floating-point number
-- [`DeltaTimeAccurate()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a double-precision floating-point
-- [`FPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)) - Retrieves the current frames per second (FPS) rate of the running game
+- [`DeltaTime()`](xref:Stride.CommunityToolkit.Games.GameExtensions.DeltaTime(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a single-precision floating-point number
+- [`DeltaTimeAccurate()`](xref:Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)) - Gets the time elapsed since the last game update in seconds as a double-precision floating-point
+- [`FPS()`](xref:Stride.CommunityToolkit.Games.GameExtensions.FPS(Stride.Games.IGame)) - Retrieves the current frames per second (FPS) rate of the running game
+- [`SetFocusLostFPS()`](xref:Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)) - Sets the maximum frames per second (FPS) rate for the game when not in focus
+- [`SetMaxFPS()`](xref:Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)) - Sets the maximum frames per second (FPS) rate for the game
 
 ![ToDo](https://img.shields.io/badge/status-todo-orange)
 

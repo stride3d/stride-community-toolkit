@@ -1,0 +1,1 @@
+This `README.md` file was added to the folder `.sarif` so the folder is included in the repository but not the `*.json` files.
