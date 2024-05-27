@@ -15,13 +15,12 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
-    private int DebugInfoX = 100;
-    private const int DebugInfoIncrement = 20;
-
     private Vector3 _upVector;
     private Vector3 _translation;
     private float _yaw;
     private float _pitch;
+
+    private DebugTextPrinter? _instructions;
     private bool _showInstructions = true;
 
     public bool Gamepad { get; set; }
@@ -42,7 +41,7 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
-        DebugInfoX = Game.GraphicsDevice.Presenter.BackBuffer.Width - 210;
+        _instructions = new DebugTextPrinter(DebugText, new(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height));
 
         // Default up-direction
         _upVector = Vector3.UnitY;
@@ -62,7 +61,7 @@ public class Basic3DCameraController : SyncScript
 
         if (_showInstructions)
         {
-            PrintControlInstructions();
+            _instructions?.Print();
         }
     }
 
@@ -76,6 +75,11 @@ public class Basic3DCameraController : SyncScript
         if (Input.HasKeyboard && Input.IsKeyPressed(Keys.F2))
         {
             _showInstructions = !_showInstructions;
+        }
+
+        if (Input.HasKeyboard && Input.IsKeyPressed(Keys.F3))
+        {
+            _instructions?.ChangeStartPosition();
         }
 
         KeyboardAndGamePadBasedMovement(deltaTime);
@@ -97,20 +101,20 @@ public class Basic3DCameraController : SyncScript
         // on screen which often are inconsistent, meaning that if the player has performance issues,
         // this entity will move around slower.
 
-        float speed = 1f * deltaTime;
+        var speed = 1f * deltaTime;
 
-        Vector3 dir = Vector3.Zero;
+        var movementDirection = Vector3.Zero;
 
         if (Gamepad && Input.HasGamePad)
         {
             GamePadState padState = Input.DefaultGamePad.State;
             // LeftThumb can be positive or negative on both axis (pushed to the right or to the left)
-            dir.Z += padState.LeftThumb.Y;
-            dir.X += padState.LeftThumb.X;
+            movementDirection.Z += padState.LeftThumb.Y;
+            movementDirection.X += padState.LeftThumb.X;
 
             // Triggers are always positive, in this case using one to increase and the other to decrease
-            dir.Y -= padState.LeftTrigger;
-            dir.Y += padState.RightTrigger;
+            movementDirection.Y -= padState.LeftTrigger;
+            movementDirection.Y += padState.RightTrigger;
 
             // Increase speed when pressing A, LeftShoulder or RightShoulder
             // Here:does the enum flag 'Buttons' has one of the flag ('A','LeftShoulder' or 'RightShoulder') set
@@ -123,21 +127,21 @@ public class Basic3DCameraController : SyncScript
             // Move with keyboard
             // Forward/Backward
             if (Input.IsKeyDown(Keys.W) || Input.IsKeyDown(Keys.Up))
-                dir.Z += 1;
+                movementDirection.Z += 1;
             if (Input.IsKeyDown(Keys.S) || Input.IsKeyDown(Keys.Down))
-                dir.Z -= 1;
+                movementDirection.Z -= 1;
 
             // Left/Right
             if (Input.IsKeyDown(Keys.A) || Input.IsKeyDown(Keys.Left))
-                dir.X -= 1;
+                movementDirection.X -= 1;
             if (Input.IsKeyDown(Keys.D) || Input.IsKeyDown(Keys.Right))
-                dir.X += 1;
+                movementDirection.X += 1;
 
             // Down/Up
             if (Input.IsKeyDown(Keys.Q))
-                dir.Y -= 1;
+                movementDirection.Y -= 1;
             if (Input.IsKeyDown(Keys.E))
-                dir.Y += 1;
+                movementDirection.Y += 1;
 
             // Increase speed when pressing shift
             if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
@@ -149,12 +153,12 @@ public class Basic3DCameraController : SyncScript
             // will always be at most one unit in length.
             // We're keeping dir as is if isn't longer than one to retain sub unit movement:
             // a stick not entirely pushed forward should make the entity move slower.
-            if (dir.Length() > 1f)
-                dir = Vector3.Normalize(dir);
+            if (movementDirection.Length() > 1f)
+                movementDirection = Vector3.Normalize(movementDirection);
         }
 
         // Finally, push all of that to the translation variable which will be used within UpdateTransform()
-        _translation += dir * KeyboardMovementSpeed * speed;
+        _translation += movementDirection * KeyboardMovementSpeed * speed;
     }
 
     private void KeyboardAndGamePadBasedRotation(float deltaTime)
@@ -272,27 +276,5 @@ public class Basic3DCameraController : SyncScript
 
         // Yaw around global up-vector, pitch and roll in local space
         Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(_upVector, _yaw);
-    }
-
-    private void PrintControlInstructions()
-    {
-        DebugText.Print("CONTROL INSTRUCTIONS", new Int2(DebugInfoX, 10));
-        DebugText.Print("F2: Toggle Help", new Int2(DebugInfoX, 35), Color.Red);
-
-        var space = 60;
-
-        Print("WASD: Move");
-        Print("Arrow Keys: Move");
-        Print("Q/E: Ascend/Descend");
-        Print("Hold Shift: Increase speed");
-        Print("Numpad 2/4/6/8: Rotation");
-        Print("Right Mouse Button: Rotate");
-
-        void Print(string text)
-        {
-            DebugText.Print(text, new Int2(DebugInfoX, space));
-
-            space += DebugInfoIncrement;
-        }
     }
 }
