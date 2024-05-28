@@ -29,6 +29,10 @@ jobs:
         $updatedCsprojContent = $settingsContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
         Set-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Value $updatedCsprojContent
 
+    - name: Create .sarif Directory
+      run: New-Item -ItemType Directory -Force -Path D:\.sarif
+      shell: pwsh           
+
     # Stride.CommunityToolkit
     - name: Restore dependencies - Stride.CommunityToolkit
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
