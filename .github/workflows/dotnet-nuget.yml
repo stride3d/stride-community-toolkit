@@ -77,7 +77,7 @@ jobs:
 
     # Stride.CommunityToolkit.Windows
     - name: Restore dependencies - Stride.CommunityToolkit.Windows
-      run: dotnet restore ${{ env.PROJECT_PATH_WINDOWS }}
+      run: dotnet restore ${{ env.PROJECT_PATH_WINDOWS }} --runtime win-x64
 
     - name: Build
       run: dotnet build ${{ env.PROJECT_PATH_WINDOWS }} --no-restore
