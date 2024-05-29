@@ -21,9 +21,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Create .sarif Directory
-      run: New-Item -ItemType Directory -Force -Path D:\.sarif
-      shell: pwsh        
+    # Not needed as Directory.Build.props added a condition to this target
+    # - name: Create .sarif Directory
+    #   run: New-Item -ItemType Directory -Force -Path D:\.sarif
+    #   shell: pwsh
 
     # Stride.CommunityToolkit
     - name: Restore Stride.CommunityToolkit dependencies
