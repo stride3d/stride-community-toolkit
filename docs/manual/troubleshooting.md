@@ -9,7 +9,7 @@
         compile --project-configuration "Debug" --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path="C:\Projects\StrideDemo\bin\Debug\net6.0\data" --build-path="C:\Projects\StrideDemo\obj\stride\assetbuild\data" --package-file="C:\Projects\StrideDemo\StrideDemo.csproj" --msbuild-up 
         todatecheck-filebase="C:\Projects\StrideDemo\obj\Debug\net6.0\stride\assetcompiler-uptodatecheck"" exited with code -532462766. [C:\Projects\StrideDemo\StrideDemo.csproj]
        ```
-2. **Error - Unable to instantiate compiler**
+1. **Error - Unable to instantiate compiler**
    - Missing Microsoft Visual C++ Redistributable
         ```
         EXEC : error 6.206s: [AssetsCompiler.AttributeBasedRegistry] Unable to instantiate compiler [Stride.A
@@ -34,4 +34,16 @@
             erRegistry.cs:line 198
             System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocati
             on.
+        ```
+1. **Error - Exited with code 1.**
+   - Missing Stride NuGet package dependencies. Use `dotnet restore --runtime win-x64` or `dotnet build --runtime win-x64` to restore the missing dependencies. This error can occur when the build is run for the first time on your computer.
+        ```
+        C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive\Stride.Core.Assets.CompilerApp
+        .targets(153,5): error MSB3073: The command "C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\
+        buildTransitive\..\lib\net8.0\Stride.Core.Assets.CompilerApp.exe"  --disable-auto-compile --project-configuration "Debu
+        g" --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path="D:\P
+        rojects\GitHub\Stride Projects\Console01\bin\Debug\net8.0\data" --build-path="D:\Projects\GitHub\Stride Projects\Consol
+        e01\obj\stride\assetbuild\data" --package-file="D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj" --msbuil
+        d-uptodatecheck-filebase="D:\Projects\GitHub\Stride Projects\Console01\obj\Debug\net8.0\stride\assetcompiler-uptodatech
+        eck" exited with code 1. [D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj]
         ```
