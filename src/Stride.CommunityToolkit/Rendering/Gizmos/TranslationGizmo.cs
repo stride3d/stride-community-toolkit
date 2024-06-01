@@ -194,6 +194,6 @@ public class TranslationGizmo : AxialGizmo
         0 => RedUniformMaterial,
         1 => GreenUniformMaterial,
         2 => BlueUniformMaterial,
-        _ => throw new ArgumentOutOfRangeException("axisIndex"),
+        _ => throw new ArgumentOutOfRangeException(nameof(axisIndex)),
     };
 }
