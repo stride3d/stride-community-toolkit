@@ -5,6 +5,8 @@ namespace Stride.CommunityToolkit.Extensions;
 
 public static class TextureExtensions
 {
+    private const string SourceFileIdentifier = "Source: !file";
+
     /// <summary>
     /// Retrieves the full filename of the Source of an asset.
     /// workDir should be your Assets directory.
@@ -37,9 +39,9 @@ public static class TextureExtensions
             string line = lines[i];
 
             // Process line
-            if (line.IndexOf("Source: !file") >= 0)
+            if (line.StartsWith(SourceFileIdentifier))
             {
-                outFilename = line.Substring(13);
+                outFilename = line.Substring(SourceFileIdentifier.Length);
                 break;
             }
         }
