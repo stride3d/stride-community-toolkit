@@ -5,7 +5,6 @@ using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
 using Stride.Physics;
-using Stride.Rendering;
 
 namespace Example08_DebugShapes.Scripts;
 
@@ -48,7 +47,7 @@ public class ShapeUpdater : SyncScript
     FastList<Vector3> primitiveRotVelocities = new FastList<Vector3>(InitialNumPrimitives);
     FastList<Color> primitiveColors = new FastList<Color>(InitialNumPrimitives);
 
-    public CameraComponent CurrentCamera;
+    public CameraComponent? CurrentCamera;
 
     private void InitializePrimitives(int from, int to)
     {
@@ -111,7 +110,7 @@ public class ShapeUpdater : SyncScript
         InitializePrimitives(0, currentNumPrimitives);
     }
 
-    private int Clamp(int v, int min, int max)
+    private static int Clamp(int v, int min, int max)
     {
         if (v < min)
         {
@@ -312,7 +311,7 @@ public class ShapeUpdater : SyncScript
         DebugDraw.DrawBounds(new Vector3(-5, 0, -5), new Vector3(5, 5, 5), color: Color.White);
         DebugDraw.DrawBounds(new Vector3(-AreaSize), new Vector3(AreaSize), color: Color.HotPink);
 
-        if (Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left))
+        if (Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left) && CurrentCamera != null)
         {
             var clickPos = Input.MousePosition;
             var result = ScreenPositionToWorldPositionRaycast(clickPos, CurrentCamera, this.GetSimulation());
@@ -355,10 +354,10 @@ public class ShapeUpdater : SyncScript
 
     public static HitResult ScreenPositionToWorldPositionRaycast(Vector2 screenPos, CameraComponent camera, Simulation simulation)
     {
-        Matrix invViewProj = Matrix.Invert(camera.ViewProjectionMatrix);
+        var invertedViewProjection = Matrix.Invert(camera.ViewProjectionMatrix);
 
         // Reconstruct the projection-space position in the (-1, +1) range.
-        //    Don't forget that Y is down in screen coordinates, but up in projection space
+        // Don't forget that Y is down in screen coordinates, but up in projection space
         Vector3 sPos;
         sPos.X = screenPos.X * 2f - 1f;
         sPos.Y = 1f - screenPos.Y * 2f;
@@ -367,18 +366,19 @@ public class ShapeUpdater : SyncScript
         // It's assumed to have the same projection space (x,y) coordinates and z = 0 (lying on the near plane)
         // We need to unproject it to world space
         sPos.Z = 0f;
-        var vectorNear = Vector3.Transform(sPos, invViewProj);
+        var vectorNear = Vector3.Transform(sPos, invertedViewProjection);
         vectorNear /= vectorNear.W;
 
         // Compute the far (end) point for the raycast
         // It's assumed to have the same projection space (x,y) coordinates and z = 1 (lying on the far plane)
         // We need to unproject it to world space
         sPos.Z = 1f;
-        var vectorFar = Vector3.Transform(sPos, invViewProj);
+        var vectorFar = Vector3.Transform(sPos, invertedViewProjection);
         vectorFar /= vectorFar.W;
 
         // Raycast from the point on the near plane to the point on the far plane and get the collision result
         var result = simulation.Raycast(vectorNear.XYZ(), vectorFar.XYZ());
+
         return result;
     }
 }
