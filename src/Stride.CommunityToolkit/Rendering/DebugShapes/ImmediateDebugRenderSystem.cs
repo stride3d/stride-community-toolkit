@@ -9,10 +9,8 @@ using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Rendering.DebugShapes;
 
-
 public class ImmediateDebugRenderSystem : GameSystemBase
 {
-
     internal enum DebugRenderableType : byte
     {
         Quad,
@@ -135,7 +133,6 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
         public DebugDrawCone ConeData;
-
     }
 
     internal struct DebugDrawQuad
@@ -504,5 +501,4 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         }
 
     }
-
 }
