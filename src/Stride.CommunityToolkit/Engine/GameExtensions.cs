@@ -99,13 +99,15 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets up essential components for the game including a GraphicsCompositor, a camera, and a directional light.
+    /// Sets up essential components for the game, including a GraphicsCompositor, a camera, and a directional light.
     /// </summary>
     /// <remarks>
     /// This method performs the following operations:
-    /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.
-    /// 2. Adds a camera to the game.
-    /// 3. Adds a directional light to the game.
+    /// <list type="bullet">
+    /// <item><description>Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.</description></item>
+    /// <item><description>Adds a camera to the game.</description></item>
+    /// <item><description>Adds a directional light to the game.</description></item>
+    /// </list>
     /// </remarks>
     /// <param name="game">The Game instance that will receive the base setup.</param>
     public static void SetupBase(this Game game)
