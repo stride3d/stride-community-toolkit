@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Scripts.Utils;
 using Stride.Engine;
 using Stride.Input;
 
@@ -17,6 +18,8 @@ public class Basic3DCameraController : SyncScript
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
     private Vector3 _upVector;
     private Vector3 _translation;
+    private Vector3 _defaultCameraPosition;
+    private Quaternion _defaultCameraRotation;
     private float _yaw;
     private float _pitch;
 
@@ -41,10 +44,33 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
-        _instructions = new DebugTextPrinter(DebugText, new(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height));
+        _instructions = new DebugTextPrinter()
+        {
+            DebugTextSystem = DebugText,
+            TextSize = new(205, 17 * 11),
+            ScreenSize = new(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height),
+            Instructions =
+            [
+                new("CONTROL INSTRUCTIONS"),
+                new("F2: Toggle Help", Color.Red),
+                new("F3: Reposition Help", Color.Red),
+                new("WASD: Move"),
+                new("Arrow Keys: Move"),
+                new("Q/E: Ascend/Descend"),
+                new("Hold Shift: Increase speed"),
+                new("Numpad 2/4/6/8: Rotation"),
+                new("Right Mouse Button: Rotate"),
+                new("H: Reset Camera"),
+            ]
+        };
+
+        _instructions.Initialize();
 
         // Default up-direction
         _upVector = Vector3.UnitY;
+
+        _defaultCameraPosition = Entity.Transform.Position;
+        _defaultCameraRotation = Entity.Transform.Rotation;
 
         // Configure touch input
         if (!Platform.IsWindowsDesktop)
@@ -67,7 +93,7 @@ public class Basic3DCameraController : SyncScript
 
     private void ProcessInput()
     {
-        float deltaTime = (float)Game.UpdateTime.Elapsed.TotalSeconds;
+        var deltaTime = (float)Game.UpdateTime.Elapsed.TotalSeconds;
         _translation = Vector3.Zero;
         _yaw = 0f;
         _pitch = 0f;
@@ -87,6 +113,8 @@ public class Basic3DCameraController : SyncScript
         KeyboardAndGamePadBasedRotation(deltaTime);
 
         MouseMovementAndGestures();
+
+        ResetCameraToDefault();
     }
 
     private void KeyboardAndGamePadBasedMovement(float deltaTime)
@@ -276,5 +304,16 @@ public class Basic3DCameraController : SyncScript
 
         // Yaw around global up-vector, pitch and roll in local space
         Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(_upVector, _yaw);
+    }
+
+    /// <summary>
+    /// Reset camera to default position and orthographic size when 'H' key is pressed
+    /// </summary>
+    private void ResetCameraToDefault()
+    {
+        if (!Input.IsKeyPressed(Keys.H)) return;
+
+        Entity.Transform.Position = _defaultCameraPosition;
+        Entity.Transform.Rotation = _defaultCameraRotation;
     }
 }
