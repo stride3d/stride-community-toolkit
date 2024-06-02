@@ -3,21 +3,20 @@
 
 using Stride.Rendering;
 using System.ComponentModel;
-using static DebugShapes.ImmediateDebugRenderFeature;
+using static Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature;
 
-namespace DebugShapes;
+namespace Stride.CommunityToolkit.Rendering.DebugShapes;
 
 public class ImmediateDebugRenderStageSelector : RenderStageSelector
 {
-
     [DefaultValue(RenderGroupMask.All)]
     public RenderGroupMask RenderGroup { get; set; } = RenderGroupMask.All;
 
     [DefaultValue(null)]
-    public RenderStage OpaqueRenderStage { get; set; }
+    public RenderStage? OpaqueRenderStage { get; set; }
 
     [DefaultValue(null)]
-    public RenderStage TransparentRenderStage { get; set; }
+    public RenderStage? TransparentRenderStage { get; set; }
 
     public override void Process(RenderObject renderObject)
     {
@@ -25,11 +24,9 @@ public class ImmediateDebugRenderStageSelector : RenderStageSelector
         {
             var debugObject = (ImmediateDebugRenderObject)renderObject;
             var renderStage = debugObject.Stage == DebugRenderStage.Opaque ? OpaqueRenderStage : TransparentRenderStage;
+
             if (renderStage != null)
-            {
                 renderObject.ActiveRenderStages[renderStage.Index] = new ActiveRenderStage(null);
-            }
         }
     }
-
 }

@@ -76,7 +76,7 @@
 using Stride.Graphics;
 using Stride.Graphics.GeometricPrimitives;
 
-namespace DebugShapes;
+namespace Stride.CommunityToolkit.Rendering.DebugShapes;
 
 public class ImmediateDebugPrimitives
 {

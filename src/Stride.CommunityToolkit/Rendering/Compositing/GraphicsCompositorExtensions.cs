@@ -1,4 +1,4 @@
-using DebugShapes;
+using Stride.CommunityToolkit.Rendering.DebugShapes;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Images;
@@ -76,6 +76,7 @@ public static class GraphicsCompositorExtensions
         {
             throw new NullReferenceException("Opaque RenderStage not found");
         }
+
         if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
         {
             throw new NullReferenceException("Transparent RenderStage not found");
@@ -98,19 +99,24 @@ public static class GraphicsCompositorExtensions
         }
     }
 
-    public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage renderFeature)
+    public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage? renderStage)
     {
-        renderFeature = null;
+        renderStage = null;
+
         var renderSystem = graphicsCompositor.RenderSystem;
+
         for (int i = 0; i < renderSystem.RenderStages.Count; ++i)
         {
             var stage = renderSystem.RenderStages[i];
+
             if (stage.Name == effectName)
             {
-                renderFeature = stage;
+                renderStage = stage;
+
                 return true;
             }
         }
+
         return false;
     }
 
