@@ -128,6 +128,21 @@ null]. Exception: TargetInvocationException: Exception has been thrown by the ta
 </li>
 </ul>
 </li>
+<li><strong>Error - Exited with code 1.</strong>
+<ul>
+<li>Missing Stride NuGet package dependencies. Use <code>dotnet restore --runtime win-x64</code> or <code>dotnet build --runtime win-x64</code> to restore the missing dependencies. This error can occur when the build is run for the first time on your computer.
+<pre><code>C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive\Stride.Core.Assets.CompilerApp
+.targets(153,5): error MSB3073: The command &quot;C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\
+buildTransitive\..\lib\net8.0\Stride.Core.Assets.CompilerApp.exe&quot;  --disable-auto-compile --project-configuration &quot;Debu
+g&quot; --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path=&quot;D:\P
+rojects\GitHub\Stride Projects\Console01\bin\Debug\net8.0\data&quot; --build-path=&quot;D:\Projects\GitHub\Stride Projects\Consol
+e01\obj\stride\assetbuild\data&quot; --package-file=&quot;D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj&quot; --msbuil
+d-uptodatecheck-filebase=&quot;D:\Projects\GitHub\Stride Projects\Console01\obj\Debug\net8.0\stride\assetcompiler-uptodatech
+eck&quot; exited with code 1. [D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj]
+</code></pre>
+</li>
+</ul>
+</li>
 </ol>
 
 </article>

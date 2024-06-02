@@ -1,787 +1,6 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
-- uid: DebugShapes
-  name: DebugShapes
-  href: api/DebugShapes.html
-  commentId: N:DebugShapes
-  fullName: DebugShapes
-  nameWithType: DebugShapes
-- uid: DebugShapes.ImmediateDebugPrimitives
-  name: ImmediateDebugPrimitives
-  href: api/DebugShapes.ImmediateDebugPrimitives.html
-  commentId: T:DebugShapes.ImmediateDebugPrimitives
-  fullName: DebugShapes.ImmediateDebugPrimitives
-  nameWithType: ImmediateDebugPrimitives
-- uid: DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture},Stride.Graphics.VertexPositionTexture[]@,System.Int32[]@)
-  name: CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture>, ref VertexPositionTexture[], ref int[])
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_CopyFromGeometricPrimitive_Stride_Graphics_GeometricMeshData_Stride_Graphics_VertexPositionNormalTexture__Stride_Graphics_VertexPositionTexture____System_Int32____
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture},Stride.Graphics.VertexPositionTexture[]@,System.Int32[]@)
-  name.vb: CopyFromGeometricPrimitive(GeometricMeshData(Of VertexPositionNormalTexture), VertexPositionTexture(), Integer())
-  fullName: DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData<Stride.Graphics.VertexPositionNormalTexture>, ref Stride.Graphics.VertexPositionTexture[], ref int[])
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData(Of Stride.Graphics.VertexPositionNormalTexture), Stride.Graphics.VertexPositionTexture(), Integer())
-  nameWithType: ImmediateDebugPrimitives.CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture>, ref VertexPositionTexture[], ref int[])
-  nameWithType.vb: ImmediateDebugPrimitives.CopyFromGeometricPrimitive(GeometricMeshData(Of VertexPositionNormalTexture), VertexPositionTexture(), Integer())
-- uid: DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive*
-  name: CopyFromGeometricPrimitive
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_CopyFromGeometricPrimitive_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive
-  nameWithType: ImmediateDebugPrimitives.CopyFromGeometricPrimitive
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(System.Single,System.Single,System.Int32,System.Int32)
-  name: GenerateCapsule(float, float, int, int)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCapsule_System_Single_System_Single_System_Int32_System_Int32_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(System.Single,System.Single,System.Int32,System.Int32)
-  name.vb: GenerateCapsule(Single, Single, Integer, Integer)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(float, float, int, int)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(Single, Single, Integer, Integer)
-  nameWithType: ImmediateDebugPrimitives.GenerateCapsule(float, float, int, int)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateCapsule(Single, Single, Integer, Integer)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCapsule*
-  name: GenerateCapsule
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCapsule_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateCapsule
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCapsule
-  nameWithType: ImmediateDebugPrimitives.GenerateCapsule
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCircle(System.Single,System.Int32,System.Int32,System.Single,System.Boolean,System.Int32)
-  name: GenerateCircle(float, int, int, float, bool, int)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCircle_System_Single_System_Int32_System_Int32_System_Single_System_Boolean_System_Int32_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateCircle(System.Single,System.Int32,System.Int32,System.Single,System.Boolean,System.Int32)
-  name.vb: GenerateCircle(Single, Integer, Integer, Single, Boolean, Integer)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCircle(float, int, int, float, bool, int)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateCircle(Single, Integer, Integer, Single, Boolean, Integer)
-  nameWithType: ImmediateDebugPrimitives.GenerateCircle(float, int, int, float, bool, int)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateCircle(Single, Integer, Integer, Single, Boolean, Integer)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCircle*
-  name: GenerateCircle
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCircle_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateCircle
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCircle
-  nameWithType: ImmediateDebugPrimitives.GenerateCircle
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCone(System.Single,System.Single,System.Int32,System.Int32,System.Int32)
-  name: GenerateCone(float, float, int, int, int)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCone_System_Single_System_Single_System_Int32_System_Int32_System_Int32_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateCone(System.Single,System.Single,System.Int32,System.Int32,System.Int32)
-  name.vb: GenerateCone(Single, Single, Integer, Integer, Integer)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCone(float, float, int, int, int)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateCone(Single, Single, Integer, Integer, Integer)
-  nameWithType: ImmediateDebugPrimitives.GenerateCone(float, float, int, int, int)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateCone(Single, Single, Integer, Integer, Integer)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCone*
-  name: GenerateCone
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCone_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateCone
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCone
-  nameWithType: ImmediateDebugPrimitives.GenerateCone
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCube(System.Single)
-  name: GenerateCube(float)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCube_System_Single_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateCube(System.Single)
-  name.vb: GenerateCube(Single)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCube(float)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateCube(Single)
-  nameWithType: ImmediateDebugPrimitives.GenerateCube(float)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateCube(Single)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCube*
-  name: GenerateCube
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCube_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateCube
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCube
-  nameWithType: ImmediateDebugPrimitives.GenerateCube
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(System.Single,System.Single,System.Int32,System.Int32,System.Nullable{System.Int32})
-  name: GenerateCylinder(float, float, int, int, int?)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCylinder_System_Single_System_Single_System_Int32_System_Int32_System_Nullable_System_Int32__
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(System.Single,System.Single,System.Int32,System.Int32,System.Nullable{System.Int32})
-  name.vb: GenerateCylinder(Single, Single, Integer, Integer, Integer?)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(float, float, int, int, int?)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(Single, Single, Integer, Integer, Integer?)
-  nameWithType: ImmediateDebugPrimitives.GenerateCylinder(float, float, int, int, int?)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateCylinder(Single, Single, Integer, Integer, Integer?)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateCylinder*
-  name: GenerateCylinder
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateCylinder_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateCylinder
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateCylinder
-  nameWithType: ImmediateDebugPrimitives.GenerateCylinder
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateQuad(System.Single,System.Single)
-  name: GenerateQuad(float, float)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateQuad_System_Single_System_Single_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateQuad(System.Single,System.Single)
-  name.vb: GenerateQuad(Single, Single)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateQuad(float, float)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateQuad(Single, Single)
-  nameWithType: ImmediateDebugPrimitives.GenerateQuad(float, float)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateQuad(Single, Single)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateQuad*
-  name: GenerateQuad
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateQuad_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateQuad
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateQuad
-  nameWithType: ImmediateDebugPrimitives.GenerateQuad
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateSphere(System.Single,System.Int32,System.Int32,System.Int32)
-  name: GenerateSphere(float, int, int, int)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateSphere_System_Single_System_Int32_System_Int32_System_Int32_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GenerateSphere(System.Single,System.Int32,System.Int32,System.Int32)
-  name.vb: GenerateSphere(Single, Integer, Integer, Integer)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateSphere(float, int, int, int)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GenerateSphere(Single, Integer, Integer, Integer)
-  nameWithType: ImmediateDebugPrimitives.GenerateSphere(float, int, int, int)
-  nameWithType.vb: ImmediateDebugPrimitives.GenerateSphere(Single, Integer, Integer, Integer)
-- uid: DebugShapes.ImmediateDebugPrimitives.GenerateSphere*
-  name: GenerateSphere
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GenerateSphere_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GenerateSphere
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GenerateSphere
-  nameWithType: ImmediateDebugPrimitives.GenerateSphere
-- uid: DebugShapes.ImmediateDebugPrimitives.GetCircleVector(System.Int32,System.Int32)
-  name: GetCircleVector(int, int)
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GetCircleVector_System_Int32_System_Int32_
-  commentId: M:DebugShapes.ImmediateDebugPrimitives.GetCircleVector(System.Int32,System.Int32)
-  name.vb: GetCircleVector(Integer, Integer)
-  fullName: DebugShapes.ImmediateDebugPrimitives.GetCircleVector(int, int)
-  fullName.vb: DebugShapes.ImmediateDebugPrimitives.GetCircleVector(Integer, Integer)
-  nameWithType: ImmediateDebugPrimitives.GetCircleVector(int, int)
-  nameWithType.vb: ImmediateDebugPrimitives.GetCircleVector(Integer, Integer)
-- uid: DebugShapes.ImmediateDebugPrimitives.GetCircleVector*
-  name: GetCircleVector
-  href: api/DebugShapes.ImmediateDebugPrimitives.html#DebugShapes_ImmediateDebugPrimitives_GetCircleVector_
-  commentId: Overload:DebugShapes.ImmediateDebugPrimitives.GetCircleVector
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugPrimitives.GetCircleVector
-  nameWithType: ImmediateDebugPrimitives.GetCircleVector
-- uid: DebugShapes.ImmediateDebugRenderFeature
-  name: ImmediateDebugRenderFeature
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html
-  commentId: T:DebugShapes.ImmediateDebugRenderFeature
-  fullName: DebugShapes.ImmediateDebugRenderFeature
-  nameWithType: ImmediateDebugRenderFeature
-- uid: DebugShapes.ImmediateDebugRenderFeature.#ctor
-  name: ImmediateDebugRenderFeature()
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature__ctor
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.#ctor
-  name.vb: New()
-  fullName: DebugShapes.ImmediateDebugRenderFeature.ImmediateDebugRenderFeature()
-  fullName.vb: DebugShapes.ImmediateDebugRenderFeature.New()
-  nameWithType: ImmediateDebugRenderFeature.ImmediateDebugRenderFeature()
-  nameWithType.vb: ImmediateDebugRenderFeature.New()
-- uid: DebugShapes.ImmediateDebugRenderFeature.#ctor*
-  name: ImmediateDebugRenderFeature
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature__ctor_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: DebugShapes.ImmediateDebugRenderFeature.ImmediateDebugRenderFeature
-  fullName.vb: DebugShapes.ImmediateDebugRenderFeature.New
-  nameWithType: ImmediateDebugRenderFeature.ImmediateDebugRenderFeature
-  nameWithType.vb: ImmediateDebugRenderFeature.New
-- uid: DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext,Stride.Rendering.RenderView,Stride.Rendering.RenderViewStage,System.Int32,System.Int32)
-  name: Draw(RenderDrawContext, RenderView, RenderViewStage, int, int)
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Draw_Stride_Rendering_RenderDrawContext_Stride_Rendering_RenderView_Stride_Rendering_RenderViewStage_System_Int32_System_Int32_
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext,Stride.Rendering.RenderView,Stride.Rendering.RenderViewStage,System.Int32,System.Int32)
-  name.vb: Draw(RenderDrawContext, RenderView, RenderViewStage, Integer, Integer)
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext, Stride.Rendering.RenderView, Stride.Rendering.RenderViewStage, int, int)
-  fullName.vb: DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext, Stride.Rendering.RenderView, Stride.Rendering.RenderViewStage, Integer, Integer)
-  nameWithType: ImmediateDebugRenderFeature.Draw(RenderDrawContext, RenderView, RenderViewStage, int, int)
-  nameWithType.vb: ImmediateDebugRenderFeature.Draw(RenderDrawContext, RenderView, RenderViewStage, Integer, Integer)
-- uid: DebugShapes.ImmediateDebugRenderFeature.Draw*
-  name: Draw
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Draw_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.Draw
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Draw
-  nameWithType: ImmediateDebugRenderFeature.Draw
-- uid: DebugShapes.ImmediateDebugRenderFeature.Extract
-  name: Extract()
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Extract
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.Extract
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Extract()
-  nameWithType: ImmediateDebugRenderFeature.Extract()
-- uid: DebugShapes.ImmediateDebugRenderFeature.Extract*
-  name: Extract
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Extract_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.Extract
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Extract
-  nameWithType: ImmediateDebugRenderFeature.Extract
-- uid: DebugShapes.ImmediateDebugRenderFeature.Flush(Stride.Rendering.RenderDrawContext)
-  name: Flush(RenderDrawContext)
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Flush_Stride_Rendering_RenderDrawContext_
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.Flush(Stride.Rendering.RenderDrawContext)
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Flush(Stride.Rendering.RenderDrawContext)
-  nameWithType: ImmediateDebugRenderFeature.Flush(RenderDrawContext)
-- uid: DebugShapes.ImmediateDebugRenderFeature.Flush*
-  name: Flush
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Flush_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.Flush
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Flush
-  nameWithType: ImmediateDebugRenderFeature.Flush
-- uid: DebugShapes.ImmediateDebugRenderFeature.InitializeCore
-  name: InitializeCore()
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_InitializeCore
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.InitializeCore
-  fullName: DebugShapes.ImmediateDebugRenderFeature.InitializeCore()
-  nameWithType: ImmediateDebugRenderFeature.InitializeCore()
-- uid: DebugShapes.ImmediateDebugRenderFeature.InitializeCore*
-  name: InitializeCore
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_InitializeCore_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.InitializeCore
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.InitializeCore
-  nameWithType: ImmediateDebugRenderFeature.InitializeCore
-- uid: DebugShapes.ImmediateDebugRenderFeature.Prepare(Stride.Rendering.RenderDrawContext)
-  name: Prepare(RenderDrawContext)
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Prepare_Stride_Rendering_RenderDrawContext_
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.Prepare(Stride.Rendering.RenderDrawContext)
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Prepare(Stride.Rendering.RenderDrawContext)
-  nameWithType: ImmediateDebugRenderFeature.Prepare(RenderDrawContext)
-- uid: DebugShapes.ImmediateDebugRenderFeature.Prepare*
-  name: Prepare
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Prepare_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.Prepare
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Prepare
-  nameWithType: ImmediateDebugRenderFeature.Prepare
-- uid: DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
-  name: SupportedRenderObjectType
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_SupportedRenderObjectType
-  commentId: P:DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
-  fullName: DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
-  nameWithType: ImmediateDebugRenderFeature.SupportedRenderObjectType
-- uid: DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType*
-  name: SupportedRenderObjectType
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_SupportedRenderObjectType_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
-  nameWithType: ImmediateDebugRenderFeature.SupportedRenderObjectType
-- uid: DebugShapes.ImmediateDebugRenderFeature.Unload
-  name: Unload()
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Unload
-  commentId: M:DebugShapes.ImmediateDebugRenderFeature.Unload
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Unload()
-  nameWithType: ImmediateDebugRenderFeature.Unload()
-- uid: DebugShapes.ImmediateDebugRenderFeature.Unload*
-  name: Unload
-  href: api/DebugShapes.ImmediateDebugRenderFeature.html#DebugShapes_ImmediateDebugRenderFeature_Unload_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderFeature.Unload
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderFeature.Unload
-  nameWithType: ImmediateDebugRenderFeature.Unload
-- uid: DebugShapes.ImmediateDebugRenderObject
-  name: ImmediateDebugRenderObject
-  href: api/DebugShapes.ImmediateDebugRenderObject.html
-  commentId: T:DebugShapes.ImmediateDebugRenderObject
-  fullName: DebugShapes.ImmediateDebugRenderObject
-  nameWithType: ImmediateDebugRenderObject
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCapsule(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawCapsule(ref Vector3, float, float, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCapsule_Stride_Core_Mathematics_Vector3__System_Single_System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawCapsule(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawCapsule(Vector3, Single, Single, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCapsule(ref Stride.Core.Mathematics.Vector3, float, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawCapsule(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawCapsule(ref Vector3, float, float, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawCapsule(Vector3, Single, Single, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCapsule*
-  name: DrawCapsule
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCapsule_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawCapsule
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCapsule
-  nameWithType: ImmediateDebugRenderObject.DrawCapsule
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCircle(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawCircle(ref Vector3, float, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCircle_Stride_Core_Mathematics_Vector3__System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawCircle(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawCircle(Vector3, Single, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCircle(ref Stride.Core.Mathematics.Vector3, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawCircle(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawCircle(ref Vector3, float, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawCircle(Vector3, Single, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCircle*
-  name: DrawCircle
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCircle_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawCircle
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCircle
-  nameWithType: ImmediateDebugRenderObject.DrawCircle
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCone(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawCone(ref Vector3, float, float, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCone_Stride_Core_Mathematics_Vector3__System_Single_System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawCone(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawCone(Vector3, Single, Single, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCone(ref Stride.Core.Mathematics.Vector3, float, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawCone(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawCone(ref Vector3, float, float, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawCone(Vector3, Single, Single, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCone*
-  name: DrawCone
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCone_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawCone
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCone
-  nameWithType: ImmediateDebugRenderObject.DrawCone
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCube(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawCube(ref Vector3, ref Vector3, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCube_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawCube(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawCube(Vector3, Vector3, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCube(ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawCube(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawCube(ref Vector3, ref Vector3, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawCube(Vector3, Vector3, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCube*
-  name: DrawCube
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCube_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawCube
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCube
-  nameWithType: ImmediateDebugRenderObject.DrawCube
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCylinder(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawCylinder(ref Vector3, float, float, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCylinder_Stride_Core_Mathematics_Vector3__System_Single_System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawCylinder(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawCylinder(Vector3, Single, Single, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCylinder(ref Stride.Core.Mathematics.Vector3, float, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawCylinder(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawCylinder(ref Vector3, float, float, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawCylinder(Vector3, Single, Single, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawCylinder*
-  name: DrawCylinder
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawCylinder_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawCylinder
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawCylinder
-  nameWithType: ImmediateDebugRenderObject.DrawCylinder
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawHalfSphere(ref Vector3, float, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawHalfSphere_Stride_Core_Mathematics_Vector3__System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawHalfSphere(Vector3, Single, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(ref Stride.Core.Mathematics.Vector3, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawHalfSphere(ref Vector3, float, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawHalfSphere(Vector3, Single, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere*
-  name: DrawHalfSphere
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawHalfSphere_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere
-  nameWithType: ImmediateDebugRenderObject.DrawHalfSphere
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawLine(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawLine(ref Vector3, ref Vector3, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawLine_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawLine(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawLine(Vector3, Vector3, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawLine(ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawLine(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawLine(ref Vector3, ref Vector3, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawLine(Vector3, Vector3, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawLine*
-  name: DrawLine
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawLine_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawLine
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawLine
-  nameWithType: ImmediateDebugRenderObject.DrawLine
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawQuad(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector2@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawQuad(ref Vector3, ref Vector2, ref Quaternion, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawQuad_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector2__Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawQuad(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector2@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawQuad(Vector3, Vector2, Quaternion, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawQuad(ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Vector2, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawQuad(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawQuad(ref Vector3, ref Vector2, ref Quaternion, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawQuad(Vector3, Vector2, Quaternion, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawQuad*
-  name: DrawQuad
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawQuad_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawQuad
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawQuad
-  nameWithType: ImmediateDebugRenderObject.DrawQuad
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Color@,System.Boolean)
-  name: DrawSphere(ref Vector3, float, ref Color, bool)
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawSphere_Stride_Core_Mathematics_Vector3__System_Single_Stride_Core_Mathematics_Color__System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderObject.DrawSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Color@,System.Boolean)
-  name.vb: DrawSphere(Vector3, Single, Color, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawSphere(ref Stride.Core.Mathematics.Vector3, float, ref Stride.Core.Mathematics.Color, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderObject.DrawSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Color, Boolean)
-  nameWithType: ImmediateDebugRenderObject.DrawSphere(ref Vector3, float, ref Color, bool)
-  nameWithType.vb: ImmediateDebugRenderObject.DrawSphere(Vector3, Single, Color, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderObject.DrawSphere*
-  name: DrawSphere
-  href: api/DebugShapes.ImmediateDebugRenderObject.html#DebugShapes_ImmediateDebugRenderObject_DrawSphere_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderObject.DrawSphere
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderObject.DrawSphere
-  nameWithType: ImmediateDebugRenderObject.DrawSphere
-- uid: DebugShapes.ImmediateDebugRenderStageSelector
-  name: ImmediateDebugRenderStageSelector
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html
-  commentId: T:DebugShapes.ImmediateDebugRenderStageSelector
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector
-  nameWithType: ImmediateDebugRenderStageSelector
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
-  name: OpaqueRenderStage
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_OpaqueRenderStage
-  commentId: P:DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
-  nameWithType: ImmediateDebugRenderStageSelector.OpaqueRenderStage
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage*
-  name: OpaqueRenderStage
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_OpaqueRenderStage_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
-  nameWithType: ImmediateDebugRenderStageSelector.OpaqueRenderStage
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.Process(Stride.Rendering.RenderObject)
-  name: Process(RenderObject)
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_Process_Stride_Rendering_RenderObject_
-  commentId: M:DebugShapes.ImmediateDebugRenderStageSelector.Process(Stride.Rendering.RenderObject)
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.Process(Stride.Rendering.RenderObject)
-  nameWithType: ImmediateDebugRenderStageSelector.Process(RenderObject)
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.Process*
-  name: Process
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_Process_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderStageSelector.Process
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.Process
-  nameWithType: ImmediateDebugRenderStageSelector.Process
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
-  name: RenderGroup
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_RenderGroup
-  commentId: P:DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
-  nameWithType: ImmediateDebugRenderStageSelector.RenderGroup
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup*
-  name: RenderGroup
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_RenderGroup_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
-  nameWithType: ImmediateDebugRenderStageSelector.RenderGroup
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
-  name: TransparentRenderStage
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_TransparentRenderStage
-  commentId: P:DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
-  nameWithType: ImmediateDebugRenderStageSelector.TransparentRenderStage
-- uid: DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage*
-  name: TransparentRenderStage
-  href: api/DebugShapes.ImmediateDebugRenderStageSelector.html#DebugShapes_ImmediateDebugRenderStageSelector_TransparentRenderStage_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
-  nameWithType: ImmediateDebugRenderStageSelector.TransparentRenderStage
-- uid: DebugShapes.ImmediateDebugRenderSystem
-  name: ImmediateDebugRenderSystem
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html
-  commentId: T:DebugShapes.ImmediateDebugRenderSystem
-  fullName: DebugShapes.ImmediateDebugRenderSystem
-  nameWithType: ImmediateDebugRenderSystem
-- uid: DebugShapes.ImmediateDebugRenderSystem.#ctor(Stride.Core.IServiceRegistry,Stride.Rendering.RenderGroup)
-  name: ImmediateDebugRenderSystem(IServiceRegistry, RenderGroup)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem__ctor_Stride_Core_IServiceRegistry_Stride_Rendering_RenderGroup_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.#ctor(Stride.Core.IServiceRegistry,Stride.Rendering.RenderGroup)
-  name.vb: New(IServiceRegistry, RenderGroup)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.ImmediateDebugRenderSystem(Stride.Core.IServiceRegistry, Stride.Rendering.RenderGroup)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.New(Stride.Core.IServiceRegistry, Stride.Rendering.RenderGroup)
-  nameWithType: ImmediateDebugRenderSystem.ImmediateDebugRenderSystem(IServiceRegistry, RenderGroup)
-  nameWithType.vb: ImmediateDebugRenderSystem.New(IServiceRegistry, RenderGroup)
-- uid: DebugShapes.ImmediateDebugRenderSystem.#ctor*
-  name: ImmediateDebugRenderSystem
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem__ctor_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: DebugShapes.ImmediateDebugRenderSystem.ImmediateDebugRenderSystem
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.New
-  nameWithType: ImmediateDebugRenderSystem.ImmediateDebugRenderSystem
-  nameWithType.vb: ImmediateDebugRenderSystem.New
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawArrow(Vector3, Vector3, float, float, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawArrow_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawArrow(Vector3, Vector3, Single, Single, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawArrow(Vector3, Vector3, float, float, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawArrow(Vector3, Vector3, Single, Single, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawArrow*
-  name: DrawArrow
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawArrow_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawArrow
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawArrow
-  nameWithType: ImmediateDebugRenderSystem.DrawArrow
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawBounds(Vector3, Vector3, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawBounds_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawBounds(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawBounds(Vector3, Vector3, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawBounds(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawBounds*
-  name: DrawBounds
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawBounds_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawBounds
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawBounds
-  nameWithType: ImmediateDebugRenderSystem.DrawBounds
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawCapsule(Vector3, float, float, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCapsule_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawCapsule(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawCapsule(Vector3, float, float, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawCapsule(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCapsule*
-  name: DrawCapsule
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCapsule_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawCapsule
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCapsule
-  nameWithType: ImmediateDebugRenderSystem.DrawCapsule
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawCircle(Vector3, float, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCircle_Stride_Core_Mathematics_Vector3_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawCircle(Vector3, Single, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawCircle(Vector3, float, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawCircle(Vector3, Single, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCircle*
-  name: DrawCircle
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCircle_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawCircle
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCircle
-  nameWithType: ImmediateDebugRenderSystem.DrawCircle
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawCone(Vector3, float, float, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCone_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawCone(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawCone(Vector3, float, float, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawCone(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCone*
-  name: DrawCone
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCone_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawCone
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCone
-  nameWithType: ImmediateDebugRenderSystem.DrawCone
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawCube(Vector3, Vector3, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCube_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawCube(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawCube(Vector3, Vector3, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawCube(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCube*
-  name: DrawCube
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCube_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawCube
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCube
-  nameWithType: ImmediateDebugRenderSystem.DrawCube
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawCylinder(Vector3, float, float, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCylinder_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawCylinder(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawCylinder(Vector3, float, float, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawCylinder(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawCylinder*
-  name: DrawCylinder
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawCylinder_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawCylinder
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawCylinder
-  nameWithType: ImmediateDebugRenderSystem.DrawCylinder
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,Stride.Core.Mathematics.Quaternion,System.Single,System.Boolean,System.Boolean)
-  name: DrawHalfSphere(Vector3, float, Color, Quaternion, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawHalfSphere_Stride_Core_Mathematics_Vector3_System_Single_Stride_Core_Mathematics_Color_Stride_Core_Mathematics_Quaternion_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,Stride.Core.Mathematics.Quaternion,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawHalfSphere(Vector3, Single, Color, Quaternion, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3, float, Stride.Core.Mathematics.Color, Stride.Core.Mathematics.Quaternion, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Color, Stride.Core.Mathematics.Quaternion, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawHalfSphere(Vector3, float, Color, Quaternion, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawHalfSphere(Vector3, Single, Color, Quaternion, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere*
-  name: DrawHalfSphere
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawHalfSphere_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere
-  nameWithType: ImmediateDebugRenderSystem.DrawHalfSphere
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
-  name: DrawLine(Vector3, Vector3, Color, float, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawLine_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Color_System_Single_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
-  name.vb: DrawLine(Vector3, Vector3, Color, Single, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, float, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, Single, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawLine(Vector3, Vector3, Color, float, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawLine(Vector3, Vector3, Color, Single, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawLine*
-  name: DrawLine
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawLine_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawLine
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawLine
-  nameWithType: ImmediateDebugRenderSystem.DrawLine
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3[],System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Boolean)
-  name: DrawLines(Vector3[], Color?, float, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawLines_Stride_Core_Mathematics_Vector3___System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3[],System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Boolean)
-  name.vb: DrawLines(Vector3(), Color?, Single, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3[], Stride.Core.Mathematics.Color?, float, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3(), Stride.Core.Mathematics.Color?, Single, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawLines(Vector3[], Color?, float, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawLines(Vector3(), Color?, Single, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawLines*
-  name: DrawLines
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawLines_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawLines
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawLines
-  nameWithType: ImmediateDebugRenderSystem.DrawLines
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawQuad(Vector3, Vector2, Quaternion, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawQuad_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawQuad(Vector3, Vector2, Quaternion, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawQuad(Vector3, Vector2, Quaternion, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawQuad(Vector3, Vector2, Quaternion, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawQuad*
-  name: DrawQuad
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawQuad_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawQuad
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawQuad
-  nameWithType: ImmediateDebugRenderSystem.DrawQuad
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
-  name: DrawRay(Vector3, Vector3, Color, float, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawRay_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Color_System_Single_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
-  name.vb: DrawRay(Vector3, Vector3, Color, Single, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, float, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, Single, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawRay(Vector3, Vector3, Color, float, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawRay(Vector3, Vector3, Color, Single, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawRay*
-  name: DrawRay
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawRay_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawRay
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawRay
-  nameWithType: ImmediateDebugRenderSystem.DrawRay
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name: DrawSphere(Vector3, float, Color, float, bool, bool)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawSphere_Stride_Core_Mathematics_Vector3_System_Single_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
-  name.vb: DrawSphere(Vector3, Single, Color, Single, Boolean, Boolean)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3, float, Stride.Core.Mathematics.Color, float, bool, bool)
-  fullName.vb: DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
-  nameWithType: ImmediateDebugRenderSystem.DrawSphere(Vector3, float, Color, float, bool, bool)
-  nameWithType.vb: ImmediateDebugRenderSystem.DrawSphere(Vector3, Single, Color, Single, Boolean, Boolean)
-- uid: DebugShapes.ImmediateDebugRenderSystem.DrawSphere*
-  name: DrawSphere
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_DrawSphere_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.DrawSphere
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.DrawSphere
-  nameWithType: ImmediateDebugRenderSystem.DrawSphere
-- uid: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
-  name: MaxPrimitives
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_MaxPrimitives
-  commentId: P:DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
-  fullName: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
-  nameWithType: ImmediateDebugRenderSystem.MaxPrimitives
-- uid: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives*
-  name: MaxPrimitives
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_MaxPrimitives_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
-  nameWithType: ImmediateDebugRenderSystem.MaxPrimitives
-- uid: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-  name: MaxPrimitivesWithLifetime
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_MaxPrimitivesWithLifetime
-  commentId: P:DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-  fullName: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-  nameWithType: ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-- uid: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime*
-  name: MaxPrimitivesWithLifetime
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_MaxPrimitivesWithLifetime_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-  nameWithType: ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
-- uid: DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
-  name: PrimitiveColor
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_PrimitiveColor
-  commentId: P:DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
-  fullName: DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
-  nameWithType: ImmediateDebugRenderSystem.PrimitiveColor
-- uid: DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor*
-  name: PrimitiveColor
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_PrimitiveColor_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
-  nameWithType: ImmediateDebugRenderSystem.PrimitiveColor
-- uid: DebugShapes.ImmediateDebugRenderSystem.RenderGroup
-  name: RenderGroup
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_RenderGroup
-  commentId: P:DebugShapes.ImmediateDebugRenderSystem.RenderGroup
-  fullName: DebugShapes.ImmediateDebugRenderSystem.RenderGroup
-  nameWithType: ImmediateDebugRenderSystem.RenderGroup
-- uid: DebugShapes.ImmediateDebugRenderSystem.RenderGroup*
-  name: RenderGroup
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_RenderGroup_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.RenderGroup
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.RenderGroup
-  nameWithType: ImmediateDebugRenderSystem.RenderGroup
-- uid: DebugShapes.ImmediateDebugRenderSystem.Update(Stride.Games.GameTime)
-  name: Update(GameTime)
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_Update_Stride_Games_GameTime_
-  commentId: M:DebugShapes.ImmediateDebugRenderSystem.Update(Stride.Games.GameTime)
-  fullName: DebugShapes.ImmediateDebugRenderSystem.Update(Stride.Games.GameTime)
-  nameWithType: ImmediateDebugRenderSystem.Update(GameTime)
-- uid: DebugShapes.ImmediateDebugRenderSystem.Update*
-  name: Update
-  href: api/DebugShapes.ImmediateDebugRenderSystem.html#DebugShapes_ImmediateDebugRenderSystem_Update_
-  commentId: Overload:DebugShapes.ImmediateDebugRenderSystem.Update
-  isSpec: "True"
-  fullName: DebugShapes.ImmediateDebugRenderSystem.Update
-  nameWithType: ImmediateDebugRenderSystem.Update
 - uid: Stride.CommunityToolkit.Bepu
   name: Stride.CommunityToolkit.Bepu
   href: api/Stride.CommunityToolkit.Bepu.html
@@ -1561,45 +780,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial
   nameWithType: GameExtensions.CreateMaterial
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
-  name: DeltaTime(IGame)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_Stride_Games_IGame_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)
-  nameWithType: GameExtensions.DeltaTime(IGame)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime*
-  name: DeltaTime
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTime_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime
-  nameWithType: GameExtensions.DeltaTime
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
-  name: DeltaTimeAccurate(IGame)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
-  nameWithType: GameExtensions.DeltaTimeAccurate(IGame)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate*
-  name: DeltaTimeAccurate
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_DeltaTimeAccurate_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate
-  nameWithType: GameExtensions.DeltaTimeAccurate
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)
-  name: FPS(IGame)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_Stride_Games_IGame_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)
-  nameWithType: GameExtensions.FPS(IGame)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.FPS*
-  name: FPS
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_FPS_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.FPS
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.FPS
-  nameWithType: GameExtensions.FPS
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.Games.GameContext,System.Action{Stride.Engine.Game},System.Action{Stride.Engine.Game})
   name: Run(Game, GameContext?, Action<Game>?, Action<Game>?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Run_Stride_Engine_Game_Stride_Games_GameContext_System_Action_Stride_Engine_Game__System_Action_Stride_Engine_Game__
@@ -1625,38 +805,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Run
   nameWithType: GameExtensions.Run
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)
-  name: SetFocusLostFPS(IGame, int)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetFocusLostFPS_Stride_Games_IGame_System_Int32_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)
-  name.vb: SetFocusLostFPS(IGame, Integer)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame, int)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame, Integer)
-  nameWithType: GameExtensions.SetFocusLostFPS(IGame, int)
-  nameWithType.vb: GameExtensions.SetFocusLostFPS(IGame, Integer)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS*
-  name: SetFocusLostFPS
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetFocusLostFPS_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS
-  nameWithType: GameExtensions.SetFocusLostFPS
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
-  name: SetMaxFPS(IGame, int)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetMaxFPS_Stride_Games_IGame_System_Int32_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
-  name.vb: SetMaxFPS(IGame, Integer)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame, int)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame, Integer)
-  nameWithType: GameExtensions.SetMaxFPS(IGame, int)
-  nameWithType.vb: GameExtensions.SetMaxFPS(IGame, Integer)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS*
-  name: SetMaxFPS
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetMaxFPS_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS
-  nameWithType: GameExtensions.SetMaxFPS
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase(Stride.Engine.Game)
   name: SetupBase(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase_Stride_Engine_Game_
@@ -2267,6 +1415,89 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Extensions.TextureExtensions.Resize
   nameWithType: TextureExtensions.Resize
+- uid: Stride.CommunityToolkit.Games
+  name: Stride.CommunityToolkit.Games
+  href: api/Stride.CommunityToolkit.Games.html
+  commentId: N:Stride.CommunityToolkit.Games
+  fullName: Stride.CommunityToolkit.Games
+  nameWithType: Stride.CommunityToolkit.Games
+- uid: Stride.CommunityToolkit.Games.GameExtensions
+  name: GameExtensions
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html
+  commentId: T:Stride.CommunityToolkit.Games.GameExtensions
+  fullName: Stride.CommunityToolkit.Games.GameExtensions
+  nameWithType: GameExtensions
+- uid: Stride.CommunityToolkit.Games.GameExtensions.DeltaTime(Stride.Games.IGame)
+  name: DeltaTime(IGame)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_DeltaTime_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.DeltaTime(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.DeltaTime(Stride.Games.IGame)
+  nameWithType: GameExtensions.DeltaTime(IGame)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.DeltaTime*
+  name: DeltaTime
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_DeltaTime_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.DeltaTime
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.DeltaTime
+  nameWithType: GameExtensions.DeltaTime
+- uid: Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  name: DeltaTimeAccurate(IGame)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)
+  nameWithType: GameExtensions.DeltaTimeAccurate(IGame)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate*
+  name: DeltaTimeAccurate
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_DeltaTimeAccurate_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate
+  nameWithType: GameExtensions.DeltaTimeAccurate
+- uid: Stride.CommunityToolkit.Games.GameExtensions.FPS(Stride.Games.IGame)
+  name: FPS(IGame)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_FPS_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.FPS(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.FPS(Stride.Games.IGame)
+  nameWithType: GameExtensions.FPS(IGame)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.FPS*
+  name: FPS
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_FPS_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.FPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.FPS
+  nameWithType: GameExtensions.FPS
+- uid: Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)
+  name: SetFocusLostFPS(IGame, int)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_SetFocusLostFPS_Stride_Games_IGame_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)
+  name.vb: SetFocusLostFPS(IGame, Integer)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS(Stride.Games.IGame, int)
+  fullName.vb: Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS(Stride.Games.IGame, Integer)
+  nameWithType: GameExtensions.SetFocusLostFPS(IGame, int)
+  nameWithType.vb: GameExtensions.SetFocusLostFPS(IGame, Integer)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS*
+  name: SetFocusLostFPS
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_SetFocusLostFPS_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS
+  nameWithType: GameExtensions.SetFocusLostFPS
+- uid: Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
+  name: SetMaxFPS(IGame, int)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_SetMaxFPS_Stride_Games_IGame_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)
+  name.vb: SetMaxFPS(IGame, Integer)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS(Stride.Games.IGame, int)
+  fullName.vb: Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS(Stride.Games.IGame, Integer)
+  nameWithType: GameExtensions.SetMaxFPS(IGame, int)
+  nameWithType.vb: GameExtensions.SetMaxFPS(IGame, Integer)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS*
+  name: SetMaxFPS
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_SetMaxFPS_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS
+  nameWithType: GameExtensions.SetMaxFPS
 - uid: Stride.CommunityToolkit.Graphics
   name: Stride.CommunityToolkit.Graphics
   href: api/Stride.CommunityToolkit.Graphics.html
@@ -2806,13 +2037,13 @@ references:
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer
   nameWithType: GraphicsCompositorExtensions.AddSceneRenderer
 - uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage(Stride.Rendering.Compositing.GraphicsCompositor,System.String,Stride.Rendering.RenderStage@)
-  name: TryGetRenderStage(GraphicsCompositor, string, out RenderStage)
+  name: TryGetRenderStage(GraphicsCompositor, string, out RenderStage?)
   href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_TryGetRenderStage_Stride_Rendering_Compositing_GraphicsCompositor_System_String_Stride_Rendering_RenderStage__
   commentId: M:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage(Stride.Rendering.Compositing.GraphicsCompositor,System.String,Stride.Rendering.RenderStage@)
   name.vb: TryGetRenderStage(GraphicsCompositor, String, RenderStage)
-  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage(Stride.Rendering.Compositing.GraphicsCompositor, string, out Stride.Rendering.RenderStage)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage(Stride.Rendering.Compositing.GraphicsCompositor, string, out Stride.Rendering.RenderStage?)
   fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage(Stride.Rendering.Compositing.GraphicsCompositor, String, Stride.Rendering.RenderStage)
-  nameWithType: GraphicsCompositorExtensions.TryGetRenderStage(GraphicsCompositor, string, out RenderStage)
+  nameWithType: GraphicsCompositorExtensions.TryGetRenderStage(GraphicsCompositor, string, out RenderStage?)
   nameWithType.vb: GraphicsCompositorExtensions.TryGetRenderStage(GraphicsCompositor, String, RenderStage)
 - uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage*
   name: TryGetRenderStage
@@ -2821,6 +2052,787 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage
   nameWithType: GraphicsCompositorExtensions.TryGetRenderStage
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes
+  name: Stride.CommunityToolkit.Rendering.DebugShapes
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.html
+  commentId: N:Stride.CommunityToolkit.Rendering.DebugShapes
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes
+  nameWithType: Stride.CommunityToolkit.Rendering.DebugShapes
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives
+  name: ImmediateDebugPrimitives
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html
+  commentId: T:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives
+  nameWithType: ImmediateDebugPrimitives
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture},Stride.Graphics.VertexPositionTexture[]@,System.Int32[]@)
+  name: CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture>, ref VertexPositionTexture[], ref int[])
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_CopyFromGeometricPrimitive_Stride_Graphics_GeometricMeshData_Stride_Graphics_VertexPositionNormalTexture__Stride_Graphics_VertexPositionTexture____System_Int32____
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture},Stride.Graphics.VertexPositionTexture[]@,System.Int32[]@)
+  name.vb: CopyFromGeometricPrimitive(GeometricMeshData(Of VertexPositionNormalTexture), VertexPositionTexture(), Integer())
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData<Stride.Graphics.VertexPositionNormalTexture>, ref Stride.Graphics.VertexPositionTexture[], ref int[])
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive(Stride.Graphics.GeometricMeshData(Of Stride.Graphics.VertexPositionNormalTexture), Stride.Graphics.VertexPositionTexture(), Integer())
+  nameWithType: ImmediateDebugPrimitives.CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture>, ref VertexPositionTexture[], ref int[])
+  nameWithType.vb: ImmediateDebugPrimitives.CopyFromGeometricPrimitive(GeometricMeshData(Of VertexPositionNormalTexture), VertexPositionTexture(), Integer())
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive*
+  name: CopyFromGeometricPrimitive
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_CopyFromGeometricPrimitive_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.CopyFromGeometricPrimitive
+  nameWithType: ImmediateDebugPrimitives.CopyFromGeometricPrimitive
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(System.Single,System.Single,System.Int32,System.Int32)
+  name: GenerateCapsule(float, float, int, int)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCapsule_System_Single_System_Single_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(System.Single,System.Single,System.Int32,System.Int32)
+  name.vb: GenerateCapsule(Single, Single, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(float, float, int, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule(Single, Single, Integer, Integer)
+  nameWithType: ImmediateDebugPrimitives.GenerateCapsule(float, float, int, int)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateCapsule(Single, Single, Integer, Integer)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule*
+  name: GenerateCapsule
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCapsule_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCapsule
+  nameWithType: ImmediateDebugPrimitives.GenerateCapsule
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle(System.Single,System.Int32,System.Int32,System.Single,System.Boolean,System.Int32)
+  name: GenerateCircle(float, int, int, float, bool, int)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCircle_System_Single_System_Int32_System_Int32_System_Single_System_Boolean_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle(System.Single,System.Int32,System.Int32,System.Single,System.Boolean,System.Int32)
+  name.vb: GenerateCircle(Single, Integer, Integer, Single, Boolean, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle(float, int, int, float, bool, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle(Single, Integer, Integer, Single, Boolean, Integer)
+  nameWithType: ImmediateDebugPrimitives.GenerateCircle(float, int, int, float, bool, int)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateCircle(Single, Integer, Integer, Single, Boolean, Integer)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle*
+  name: GenerateCircle
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCircle_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCircle
+  nameWithType: ImmediateDebugPrimitives.GenerateCircle
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone(System.Single,System.Single,System.Int32,System.Int32,System.Int32)
+  name: GenerateCone(float, float, int, int, int)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCone_System_Single_System_Single_System_Int32_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone(System.Single,System.Single,System.Int32,System.Int32,System.Int32)
+  name.vb: GenerateCone(Single, Single, Integer, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone(float, float, int, int, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone(Single, Single, Integer, Integer, Integer)
+  nameWithType: ImmediateDebugPrimitives.GenerateCone(float, float, int, int, int)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateCone(Single, Single, Integer, Integer, Integer)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone*
+  name: GenerateCone
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCone_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCone
+  nameWithType: ImmediateDebugPrimitives.GenerateCone
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube(System.Single)
+  name: GenerateCube(float)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCube_System_Single_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube(System.Single)
+  name.vb: GenerateCube(Single)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube(float)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube(Single)
+  nameWithType: ImmediateDebugPrimitives.GenerateCube(float)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateCube(Single)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube*
+  name: GenerateCube
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCube_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCube
+  nameWithType: ImmediateDebugPrimitives.GenerateCube
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(System.Single,System.Single,System.Int32,System.Int32,System.Nullable{System.Int32})
+  name: GenerateCylinder(float, float, int, int, int?)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCylinder_System_Single_System_Single_System_Int32_System_Int32_System_Nullable_System_Int32__
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(System.Single,System.Single,System.Int32,System.Int32,System.Nullable{System.Int32})
+  name.vb: GenerateCylinder(Single, Single, Integer, Integer, Integer?)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(float, float, int, int, int?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder(Single, Single, Integer, Integer, Integer?)
+  nameWithType: ImmediateDebugPrimitives.GenerateCylinder(float, float, int, int, int?)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateCylinder(Single, Single, Integer, Integer, Integer?)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder*
+  name: GenerateCylinder
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateCylinder_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateCylinder
+  nameWithType: ImmediateDebugPrimitives.GenerateCylinder
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad(System.Single,System.Single)
+  name: GenerateQuad(float, float)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateQuad_System_Single_System_Single_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad(System.Single,System.Single)
+  name.vb: GenerateQuad(Single, Single)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad(float, float)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad(Single, Single)
+  nameWithType: ImmediateDebugPrimitives.GenerateQuad(float, float)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateQuad(Single, Single)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad*
+  name: GenerateQuad
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateQuad_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateQuad
+  nameWithType: ImmediateDebugPrimitives.GenerateQuad
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere(System.Single,System.Int32,System.Int32,System.Int32)
+  name: GenerateSphere(float, int, int, int)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateSphere_System_Single_System_Int32_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere(System.Single,System.Int32,System.Int32,System.Int32)
+  name.vb: GenerateSphere(Single, Integer, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere(float, int, int, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere(Single, Integer, Integer, Integer)
+  nameWithType: ImmediateDebugPrimitives.GenerateSphere(float, int, int, int)
+  nameWithType.vb: ImmediateDebugPrimitives.GenerateSphere(Single, Integer, Integer, Integer)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere*
+  name: GenerateSphere
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GenerateSphere_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GenerateSphere
+  nameWithType: ImmediateDebugPrimitives.GenerateSphere
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector(System.Int32,System.Int32)
+  name: GetCircleVector(int, int)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GetCircleVector_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector(System.Int32,System.Int32)
+  name.vb: GetCircleVector(Integer, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector(int, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector(Integer, Integer)
+  nameWithType: ImmediateDebugPrimitives.GetCircleVector(int, int)
+  nameWithType.vb: ImmediateDebugPrimitives.GetCircleVector(Integer, Integer)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector*
+  name: GetCircleVector
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugPrimitives_GetCircleVector_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.GetCircleVector
+  nameWithType: ImmediateDebugPrimitives.GetCircleVector
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature
+  name: ImmediateDebugRenderFeature
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html
+  commentId: T:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature
+  nameWithType: ImmediateDebugRenderFeature
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.#ctor
+  name: ImmediateDebugRenderFeature()
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature__ctor
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.#ctor
+  name.vb: New()
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.ImmediateDebugRenderFeature()
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.New()
+  nameWithType: ImmediateDebugRenderFeature.ImmediateDebugRenderFeature()
+  nameWithType.vb: ImmediateDebugRenderFeature.New()
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.#ctor*
+  name: ImmediateDebugRenderFeature
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.ImmediateDebugRenderFeature
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.New
+  nameWithType: ImmediateDebugRenderFeature.ImmediateDebugRenderFeature
+  nameWithType.vb: ImmediateDebugRenderFeature.New
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext,Stride.Rendering.RenderView,Stride.Rendering.RenderViewStage,System.Int32,System.Int32)
+  name: Draw(RenderDrawContext, RenderView, RenderViewStage, int, int)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Draw_Stride_Rendering_RenderDrawContext_Stride_Rendering_RenderView_Stride_Rendering_RenderViewStage_System_Int32_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext,Stride.Rendering.RenderView,Stride.Rendering.RenderViewStage,System.Int32,System.Int32)
+  name.vb: Draw(RenderDrawContext, RenderView, RenderViewStage, Integer, Integer)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext, Stride.Rendering.RenderView, Stride.Rendering.RenderViewStage, int, int)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw(Stride.Rendering.RenderDrawContext, Stride.Rendering.RenderView, Stride.Rendering.RenderViewStage, Integer, Integer)
+  nameWithType: ImmediateDebugRenderFeature.Draw(RenderDrawContext, RenderView, RenderViewStage, int, int)
+  nameWithType.vb: ImmediateDebugRenderFeature.Draw(RenderDrawContext, RenderView, RenderViewStage, Integer, Integer)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw*
+  name: Draw
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Draw_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Draw
+  nameWithType: ImmediateDebugRenderFeature.Draw
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Extract
+  name: Extract()
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Extract
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Extract
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Extract()
+  nameWithType: ImmediateDebugRenderFeature.Extract()
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Extract*
+  name: Extract
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Extract_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Extract
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Extract
+  nameWithType: ImmediateDebugRenderFeature.Extract
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Flush(Stride.Rendering.RenderDrawContext)
+  name: Flush(RenderDrawContext)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Flush_Stride_Rendering_RenderDrawContext_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Flush(Stride.Rendering.RenderDrawContext)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Flush(Stride.Rendering.RenderDrawContext)
+  nameWithType: ImmediateDebugRenderFeature.Flush(RenderDrawContext)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Flush*
+  name: Flush
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Flush_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Flush
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Flush
+  nameWithType: ImmediateDebugRenderFeature.Flush
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.InitializeCore
+  name: InitializeCore()
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_InitializeCore
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.InitializeCore
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.InitializeCore()
+  nameWithType: ImmediateDebugRenderFeature.InitializeCore()
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.InitializeCore*
+  name: InitializeCore
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_InitializeCore_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.InitializeCore
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.InitializeCore
+  nameWithType: ImmediateDebugRenderFeature.InitializeCore
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Prepare(Stride.Rendering.RenderDrawContext)
+  name: Prepare(RenderDrawContext)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Prepare_Stride_Rendering_RenderDrawContext_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Prepare(Stride.Rendering.RenderDrawContext)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Prepare(Stride.Rendering.RenderDrawContext)
+  nameWithType: ImmediateDebugRenderFeature.Prepare(RenderDrawContext)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Prepare*
+  name: Prepare
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Prepare_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Prepare
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Prepare
+  nameWithType: ImmediateDebugRenderFeature.Prepare
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
+  name: SupportedRenderObjectType
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_SupportedRenderObjectType
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
+  nameWithType: ImmediateDebugRenderFeature.SupportedRenderObjectType
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType*
+  name: SupportedRenderObjectType
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_SupportedRenderObjectType_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.SupportedRenderObjectType
+  nameWithType: ImmediateDebugRenderFeature.SupportedRenderObjectType
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Unload
+  name: Unload()
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Unload
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Unload
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Unload()
+  nameWithType: ImmediateDebugRenderFeature.Unload()
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Unload*
+  name: Unload
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderFeature_Unload_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Unload
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Unload
+  nameWithType: ImmediateDebugRenderFeature.Unload
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject
+  name: ImmediateDebugRenderObject
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html
+  commentId: T:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject
+  nameWithType: ImmediateDebugRenderObject
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawCapsule(ref Vector3, float, float, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCapsule_Stride_Core_Mathematics_Vector3__System_Single_System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawCapsule(Vector3, Single, Single, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule(ref Stride.Core.Mathematics.Vector3, float, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawCapsule(ref Vector3, float, float, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawCapsule(Vector3, Single, Single, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule*
+  name: DrawCapsule
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCapsule_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCapsule
+  nameWithType: ImmediateDebugRenderObject.DrawCapsule
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawCircle(ref Vector3, float, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCircle_Stride_Core_Mathematics_Vector3__System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawCircle(Vector3, Single, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle(ref Stride.Core.Mathematics.Vector3, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawCircle(ref Vector3, float, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawCircle(Vector3, Single, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle*
+  name: DrawCircle
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCircle_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCircle
+  nameWithType: ImmediateDebugRenderObject.DrawCircle
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawCone(ref Vector3, float, float, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCone_Stride_Core_Mathematics_Vector3__System_Single_System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawCone(Vector3, Single, Single, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone(ref Stride.Core.Mathematics.Vector3, float, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawCone(ref Vector3, float, float, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawCone(Vector3, Single, Single, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone*
+  name: DrawCone
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCone_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCone
+  nameWithType: ImmediateDebugRenderObject.DrawCone
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawCube(ref Vector3, ref Vector3, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCube_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawCube(Vector3, Vector3, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube(ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawCube(ref Vector3, ref Vector3, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawCube(Vector3, Vector3, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube*
+  name: DrawCube
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCube_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCube
+  nameWithType: ImmediateDebugRenderObject.DrawCube
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawCylinder(ref Vector3, float, float, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCylinder_Stride_Core_Mathematics_Vector3__System_Single_System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder(Stride.Core.Mathematics.Vector3@,System.Single,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawCylinder(Vector3, Single, Single, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder(ref Stride.Core.Mathematics.Vector3, float, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawCylinder(ref Vector3, float, float, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawCylinder(Vector3, Single, Single, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder*
+  name: DrawCylinder
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawCylinder_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawCylinder
+  nameWithType: ImmediateDebugRenderObject.DrawCylinder
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawHalfSphere(ref Vector3, float, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawHalfSphere_Stride_Core_Mathematics_Vector3__System_Single_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawHalfSphere(Vector3, Single, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(ref Stride.Core.Mathematics.Vector3, float, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawHalfSphere(ref Vector3, float, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawHalfSphere(Vector3, Single, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere*
+  name: DrawHalfSphere
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawHalfSphere_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawHalfSphere
+  nameWithType: ImmediateDebugRenderObject.DrawHalfSphere
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawLine(ref Vector3, ref Vector3, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawLine_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawLine(Vector3, Vector3, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine(ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawLine(ref Vector3, ref Vector3, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawLine(Vector3, Vector3, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine*
+  name: DrawLine
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawLine_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawLine
+  nameWithType: ImmediateDebugRenderObject.DrawLine
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector2@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawQuad(ref Vector3, ref Vector2, ref Quaternion, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawQuad_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector2__Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector2@,Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawQuad(Vector3, Vector2, Quaternion, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad(ref Stride.Core.Mathematics.Vector3, ref Stride.Core.Mathematics.Vector2, ref Stride.Core.Mathematics.Quaternion, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawQuad(ref Vector3, ref Vector2, ref Quaternion, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawQuad(Vector3, Vector2, Quaternion, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad*
+  name: DrawQuad
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawQuad_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawQuad
+  nameWithType: ImmediateDebugRenderObject.DrawQuad
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Color@,System.Boolean)
+  name: DrawSphere(ref Vector3, float, ref Color, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawSphere_Stride_Core_Mathematics_Vector3__System_Single_Stride_Core_Mathematics_Color__System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere(Stride.Core.Mathematics.Vector3@,System.Single,Stride.Core.Mathematics.Color@,System.Boolean)
+  name.vb: DrawSphere(Vector3, Single, Color, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere(ref Stride.Core.Mathematics.Vector3, float, ref Stride.Core.Mathematics.Color, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Color, Boolean)
+  nameWithType: ImmediateDebugRenderObject.DrawSphere(ref Vector3, float, ref Color, bool)
+  nameWithType.vb: ImmediateDebugRenderObject.DrawSphere(Vector3, Single, Color, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere*
+  name: DrawSphere
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderObject_DrawSphere_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.DrawSphere
+  nameWithType: ImmediateDebugRenderObject.DrawSphere
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector
+  name: ImmediateDebugRenderStageSelector
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html
+  commentId: T:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector
+  nameWithType: ImmediateDebugRenderStageSelector
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
+  name: OpaqueRenderStage
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_OpaqueRenderStage
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
+  nameWithType: ImmediateDebugRenderStageSelector.OpaqueRenderStage
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage*
+  name: OpaqueRenderStage
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_OpaqueRenderStage_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.OpaqueRenderStage
+  nameWithType: ImmediateDebugRenderStageSelector.OpaqueRenderStage
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.Process(Stride.Rendering.RenderObject)
+  name: Process(RenderObject)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_Process_Stride_Rendering_RenderObject_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.Process(Stride.Rendering.RenderObject)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.Process(Stride.Rendering.RenderObject)
+  nameWithType: ImmediateDebugRenderStageSelector.Process(RenderObject)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.Process*
+  name: Process
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_Process_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.Process
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.Process
+  nameWithType: ImmediateDebugRenderStageSelector.Process
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
+  nameWithType: ImmediateDebugRenderStageSelector.RenderGroup
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup*
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.RenderGroup
+  nameWithType: ImmediateDebugRenderStageSelector.RenderGroup
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
+  name: TransparentRenderStage
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_TransparentRenderStage
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
+  nameWithType: ImmediateDebugRenderStageSelector.TransparentRenderStage
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage*
+  name: TransparentRenderStage
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderStageSelector_TransparentRenderStage_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.TransparentRenderStage
+  nameWithType: ImmediateDebugRenderStageSelector.TransparentRenderStage
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem
+  name: ImmediateDebugRenderSystem
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html
+  commentId: T:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem
+  nameWithType: ImmediateDebugRenderSystem
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.#ctor(Stride.Core.IServiceRegistry,Stride.Rendering.RenderGroup)
+  name: ImmediateDebugRenderSystem(IServiceRegistry, RenderGroup)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem__ctor_Stride_Core_IServiceRegistry_Stride_Rendering_RenderGroup_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.#ctor(Stride.Core.IServiceRegistry,Stride.Rendering.RenderGroup)
+  name.vb: New(IServiceRegistry, RenderGroup)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.ImmediateDebugRenderSystem(Stride.Core.IServiceRegistry, Stride.Rendering.RenderGroup)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.New(Stride.Core.IServiceRegistry, Stride.Rendering.RenderGroup)
+  nameWithType: ImmediateDebugRenderSystem.ImmediateDebugRenderSystem(IServiceRegistry, RenderGroup)
+  nameWithType.vb: ImmediateDebugRenderSystem.New(IServiceRegistry, RenderGroup)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.#ctor*
+  name: ImmediateDebugRenderSystem
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.ImmediateDebugRenderSystem
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.New
+  nameWithType: ImmediateDebugRenderSystem.ImmediateDebugRenderSystem
+  nameWithType.vb: ImmediateDebugRenderSystem.New
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawArrow(Vector3, Vector3, float, float, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawArrow_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawArrow(Vector3, Vector3, Single, Single, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawArrow(Vector3, Vector3, float, float, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawArrow(Vector3, Vector3, Single, Single, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow*
+  name: DrawArrow
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawArrow_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawArrow
+  nameWithType: ImmediateDebugRenderSystem.DrawArrow
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawBounds(Vector3, Vector3, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawBounds_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawBounds(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawBounds(Vector3, Vector3, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawBounds(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds*
+  name: DrawBounds
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawBounds_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawBounds
+  nameWithType: ImmediateDebugRenderSystem.DrawBounds
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawCapsule(Vector3, float, float, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCapsule_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawCapsule(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawCapsule(Vector3, float, float, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawCapsule(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule*
+  name: DrawCapsule
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCapsule_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule
+  nameWithType: ImmediateDebugRenderSystem.DrawCapsule
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawCircle(Vector3, float, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCircle_Stride_Core_Mathematics_Vector3_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawCircle(Vector3, Single, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawCircle(Vector3, float, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawCircle(Vector3, Single, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle*
+  name: DrawCircle
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCircle_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCircle
+  nameWithType: ImmediateDebugRenderSystem.DrawCircle
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawCone(Vector3, float, float, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCone_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawCone(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawCone(Vector3, float, float, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawCone(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone*
+  name: DrawCone
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCone_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCone
+  nameWithType: ImmediateDebugRenderSystem.DrawCone
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawCube(Vector3, Vector3, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCube_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawCube(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawCube(Vector3, Vector3, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawCube(Vector3, Vector3, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube*
+  name: DrawCube
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCube_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCube
+  nameWithType: ImmediateDebugRenderSystem.DrawCube
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawCylinder(Vector3, float, float, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCylinder_Stride_Core_Mathematics_Vector3_System_Single_System_Single_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3,System.Single,System.Single,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawCylinder(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3, float, float, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder(Stride.Core.Mathematics.Vector3, Single, Single, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawCylinder(Vector3, float, float, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawCylinder(Vector3, Single, Single, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder*
+  name: DrawCylinder
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawCylinder_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder
+  nameWithType: ImmediateDebugRenderSystem.DrawCylinder
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,Stride.Core.Mathematics.Quaternion,System.Single,System.Boolean,System.Boolean)
+  name: DrawHalfSphere(Vector3, float, Color, Quaternion, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawHalfSphere_Stride_Core_Mathematics_Vector3_System_Single_Stride_Core_Mathematics_Color_Stride_Core_Mathematics_Quaternion_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,Stride.Core.Mathematics.Quaternion,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawHalfSphere(Vector3, Single, Color, Quaternion, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3, float, Stride.Core.Mathematics.Color, Stride.Core.Mathematics.Quaternion, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Color, Stride.Core.Mathematics.Quaternion, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawHalfSphere(Vector3, float, Color, Quaternion, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawHalfSphere(Vector3, Single, Color, Quaternion, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere*
+  name: DrawHalfSphere
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawHalfSphere_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere
+  nameWithType: ImmediateDebugRenderSystem.DrawHalfSphere
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
+  name: DrawLine(Vector3, Vector3, Color, float, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawLine_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Color_System_Single_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
+  name.vb: DrawLine(Vector3, Vector3, Color, Single, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, float, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, Single, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawLine(Vector3, Vector3, Color, float, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawLine(Vector3, Vector3, Color, Single, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine*
+  name: DrawLine
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawLine_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLine
+  nameWithType: ImmediateDebugRenderSystem.DrawLine
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3[],System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Boolean)
+  name: DrawLines(Vector3[], Color?, float, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawLines_Stride_Core_Mathematics_Vector3___System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3[],System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Boolean)
+  name.vb: DrawLines(Vector3(), Color?, Single, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3[], Stride.Core.Mathematics.Color?, float, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines(Stride.Core.Mathematics.Vector3(), Stride.Core.Mathematics.Color?, Single, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawLines(Vector3[], Color?, float, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawLines(Vector3(), Color?, Single, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines*
+  name: DrawLines
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawLines_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawLines
+  nameWithType: ImmediateDebugRenderSystem.DrawLines
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawQuad(Vector3, Vector2, Quaternion, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawQuad_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Quaternion_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Quaternion,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawQuad(Vector3, Vector2, Quaternion, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector2, Stride.Core.Mathematics.Quaternion, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawQuad(Vector3, Vector2, Quaternion, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawQuad(Vector3, Vector2, Quaternion, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad*
+  name: DrawQuad
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawQuad_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawQuad
+  nameWithType: ImmediateDebugRenderSystem.DrawQuad
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
+  name: DrawRay(Vector3, Vector3, Color, float, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawRay_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Color_System_Single_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Color,System.Single,System.Boolean)
+  name.vb: DrawRay(Vector3, Vector3, Color, Single, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, float, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay(Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Vector3, Stride.Core.Mathematics.Color, Single, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawRay(Vector3, Vector3, Color, float, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawRay(Vector3, Vector3, Color, Single, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay*
+  name: DrawRay
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawRay_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawRay
+  nameWithType: ImmediateDebugRenderSystem.DrawRay
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name: DrawSphere(Vector3, float, Color, float, bool, bool)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawSphere_Stride_Core_Mathematics_Vector3_System_Single_Stride_Core_Mathematics_Color_System_Single_System_Boolean_System_Boolean_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3,System.Single,Stride.Core.Mathematics.Color,System.Single,System.Boolean,System.Boolean)
+  name.vb: DrawSphere(Vector3, Single, Color, Single, Boolean, Boolean)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3, float, Stride.Core.Mathematics.Color, float, bool, bool)
+  fullName.vb: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere(Stride.Core.Mathematics.Vector3, Single, Stride.Core.Mathematics.Color, Single, Boolean, Boolean)
+  nameWithType: ImmediateDebugRenderSystem.DrawSphere(Vector3, float, Color, float, bool, bool)
+  nameWithType.vb: ImmediateDebugRenderSystem.DrawSphere(Vector3, Single, Color, Single, Boolean, Boolean)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere*
+  name: DrawSphere
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_DrawSphere_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.DrawSphere
+  nameWithType: ImmediateDebugRenderSystem.DrawSphere
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
+  name: MaxPrimitives
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_MaxPrimitives
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
+  nameWithType: ImmediateDebugRenderSystem.MaxPrimitives
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives*
+  name: MaxPrimitives
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_MaxPrimitives_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitives
+  nameWithType: ImmediateDebugRenderSystem.MaxPrimitives
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+  name: MaxPrimitivesWithLifetime
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_MaxPrimitivesWithLifetime
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+  nameWithType: ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime*
+  name: MaxPrimitivesWithLifetime
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_MaxPrimitivesWithLifetime_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+  nameWithType: ImmediateDebugRenderSystem.MaxPrimitivesWithLifetime
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
+  name: PrimitiveColor
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_PrimitiveColor
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
+  nameWithType: ImmediateDebugRenderSystem.PrimitiveColor
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor*
+  name: PrimitiveColor
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_PrimitiveColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.PrimitiveColor
+  nameWithType: ImmediateDebugRenderSystem.PrimitiveColor
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.RenderGroup
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_RenderGroup
+  commentId: P:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.RenderGroup
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.RenderGroup
+  nameWithType: ImmediateDebugRenderSystem.RenderGroup
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.RenderGroup*
+  name: RenderGroup
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_RenderGroup_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.RenderGroup
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.RenderGroup
+  nameWithType: ImmediateDebugRenderSystem.RenderGroup
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.Update(Stride.Games.GameTime)
+  name: Update(GameTime)
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_Update_Stride_Games_GameTime_
+  commentId: M:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.Update(Stride.Games.GameTime)
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.Update(Stride.Games.GameTime)
+  nameWithType: ImmediateDebugRenderSystem.Update(GameTime)
+- uid: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.Update*
+  name: Update
+  href: api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html#Stride_CommunityToolkit_Rendering_DebugShapes_ImmediateDebugRenderSystem_Update_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.Update
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.Update
+  nameWithType: ImmediateDebugRenderSystem.Update
 - uid: Stride.CommunityToolkit.Rendering.Gizmos
   name: Stride.CommunityToolkit.Rendering.Gizmos
   href: api/Stride.CommunityToolkit.Rendering.Gizmos.html
@@ -4592,6 +4604,87 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.Basic3DCameraController.Update
   nameWithType: Basic3DCameraController.Update
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter
+  name: DebugTextPrinter
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html
+  commentId: T:Stride.CommunityToolkit.Scripts.DebugTextPrinter
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter
+  nameWithType: DebugTextPrinter
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor(Stride.Profiling.DebugTextSystem,Stride.Core.Mathematics.Int2)
+  name: DebugTextPrinter(DebugTextSystem, Int2)
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter__ctor_Stride_Profiling_DebugTextSystem_Stride_Core_Mathematics_Int2_
+  commentId: M:Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor(Stride.Profiling.DebugTextSystem,Stride.Core.Mathematics.Int2)
+  name.vb: New(DebugTextSystem, Int2)
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.DebugTextPrinter(Stride.Profiling.DebugTextSystem, Stride.Core.Mathematics.Int2)
+  fullName.vb: Stride.CommunityToolkit.Scripts.DebugTextPrinter.New(Stride.Profiling.DebugTextSystem, Stride.Core.Mathematics.Int2)
+  nameWithType: DebugTextPrinter.DebugTextPrinter(DebugTextSystem, Int2)
+  nameWithType.vb: DebugTextPrinter.New(DebugTextSystem, Int2)
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor*
+  name: DebugTextPrinter
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.DebugTextPrinter
+  fullName.vb: Stride.CommunityToolkit.Scripts.DebugTextPrinter.New
+  nameWithType: DebugTextPrinter.DebugTextPrinter
+  nameWithType.vb: DebugTextPrinter.New
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
+  name: ChangeStartPosition()
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_ChangeStartPosition
+  commentId: M:Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition()
+  nameWithType: DebugTextPrinter.ChangeStartPosition()
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition*
+  name: ChangeStartPosition
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_ChangeStartPosition_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
+  nameWithType: DebugTextPrinter.ChangeStartPosition
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
+  name: Print()
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_Print
+  commentId: M:Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print()
+  nameWithType: DebugTextPrinter.Print()
+- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print*
+  name: Print
+  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_Print_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
+  nameWithType: DebugTextPrinter.Print
+- uid: Stride.CommunityToolkit.Scripts.DisplayPosition
+  name: DisplayPosition
+  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html
+  commentId: T:Stride.CommunityToolkit.Scripts.DisplayPosition
+  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition
+  nameWithType: DisplayPosition
+- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomLeft
+  name: BottomLeft
+  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_BottomLeft
+  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.BottomLeft
+  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomLeft
+  nameWithType: DisplayPosition.BottomLeft
+- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomRight
+  name: BottomRight
+  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_BottomRight
+  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.BottomRight
+  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomRight
+  nameWithType: DisplayPosition.BottomRight
+- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.TopLeft
+  name: TopLeft
+  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_TopLeft
+  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.TopLeft
+  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.TopLeft
+  nameWithType: DisplayPosition.TopLeft
+- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.TopRight
+  name: TopRight
+  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_TopRight
+  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.TopRight
+  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.TopRight
+  nameWithType: DisplayPosition.TopRight
 - uid: Stride.CommunityToolkit.Scripts.GameProfiler
   name: GameProfiler
   href: api/Stride.CommunityToolkit.Scripts.GameProfiler.html
@@ -4708,6 +4801,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.DefaultRotation
   nameWithType: GizmoBillboardLetterScript.DefaultRotation
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.GetGCCamera
+  name: GetGCCamera()
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_GetGCCamera
+  commentId: M:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.GetGCCamera
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.GetGCCamera()
+  nameWithType: GizmoBillboardLetterScript.GetGCCamera()
+- uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.GetGCCamera*
+  name: GetGCCamera
+  href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_GetGCCamera_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.GetGCCamera
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.GetGCCamera
+  nameWithType: GizmoBillboardLetterScript.GetGCCamera
 - uid: Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.Update
   name: Update()
   href: api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html#Stride_CommunityToolkit_Scripts_GizmoBillboardLetterScript_Update

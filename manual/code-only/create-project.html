@@ -90,25 +90,31 @@
 <h2 id="command-line-and-visual-studio-code-instructions">Command Line and Visual Studio Code Instructions</h2>
 <p>The following instructions will guide you through creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same steps in the Visual Studio Code Terminal.</p>
 <ol>
-<li><strong>Prerequisites:</strong> Ensure you have all the prerequisites installed. Refer to the <a href="../getting-started.html">Prerequisites</a> section for more information.</li>
-<li><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about creating a new console application. Use the following command:
+<li><p><strong>Prerequisites:</strong> Ensure you have all the prerequisites installed. Refer to the <a href="../getting-started.html">Prerequisites</a> section for more information.</p>
+</li>
+<li><p><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about creating a new console application. Use the following command:</p>
 <pre><code>dotnet new console --framework net8.0
 </code></pre>
 </li>
-<li><strong>Add NuGet Package:</strong> Execute the following command to add the necessary NuGet package.
+<li><p><strong>Add NuGet Package:</strong> Execute the following command to add the necessary NuGet package.</p>
 <pre><code>dotnet add package Stride.CommunityToolkit.Windows --prerelease
 </code></pre>
 </li>
-<li><strong>Update Program.cs:</strong> Paste the <a href="#example-code">example code</a> provided below into your <code>Program.cs</code> file.</li>
-<li><strong>Build the Project (Optional):</strong> The <code>dotnet build</code> command is used to compile your Stride project, generating executable files and checking for any errors in your code. This step is optional as the subsequent <code>dotnet run</code> command will automatically build the project if it hasn't been built already. To manually build the project, execute the following command:
+<li><p><strong>Update Program.cs:</strong> Paste the <a href="#example-code">example code</a> provided below into your <code>Program.cs</code> file.</p>
+</li>
+<li><p><strong>Build the Project (Optional):</strong> The <code>dotnet build</code> command is used to compile your Stride project, generating executable files and checking for any errors in your code. This step is optional as the subsequent <code>dotnet run</code> command will automatically build the project if it hasn't been built already. To manually build the project, execute the following command:</p>
 <pre><code class="lang-bash">dotnet build
 </code></pre>
+<p>or when running for the <a href="../troubleshooting.html">first time</a> on your computer:</p>
+<pre><code class="lang-bash">dotnet build --runtime win-x64
+</code></pre>
 </li>
-<li><strong>Run the Project:</strong> The <code>dotnet run</code> command will build (if necessary) and execute your project. Run the following command to start your Stride project:
+<li><p><strong>Run the Project:</strong> The <code>dotnet run</code> command will build (if necessary) and execute your project. Run the following command to start your Stride project:</p>
 <pre><code>dotnet run
 </code></pre>
 </li>
-<li><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</li>
+<li><p><strong>Enjoy Stride:</strong> If everything is set up correctly, you should now be able to run and enjoy your Stride project.</p>
+</li>
 </ol>
 <h2 id="visual-studio-2022-and-rider-instructions">Visual Studio 2022 and Rider Instructions</h2>
 <ol>

@@ -27,66 +27,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/DebugShapes.ImmediateDebugPrimitives.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/DebugShapes.ImmediateDebugPrimitives.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderFeature.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/DebugShapes.ImmediateDebugRenderFeature.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderObject.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/DebugShapes.ImmediateDebugRenderObject.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderStageSelector.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/DebugShapes.ImmediateDebugRenderStageSelector.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/DebugShapes.ImmediateDebugRenderSystem.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/DebugShapes.ImmediateDebugRenderSystem.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/DebugShapes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/DebugShapes.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Body2DComponent.yml",
       "output": {
         ".html": {
@@ -297,6 +237,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Games.GameExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Games.GameExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Games.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Games.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.yml",
       "output": {
         ".html": {
@@ -381,6 +341,66 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.html"
         }
       },
       "version": ""
@@ -611,6 +631,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Basic3DCameraController.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.DisplayPosition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.DisplayPosition.html"
         }
       },
       "version": ""

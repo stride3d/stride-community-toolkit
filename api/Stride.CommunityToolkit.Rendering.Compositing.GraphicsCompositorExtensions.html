@@ -254,15 +254,15 @@ the existing game and the new scene renderer. In either case, the GraphicsCompos
   <a id="Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_TryGetRenderStage_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage*"></a>
 
   <h3 id="Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_TryGetRenderStage_Stride_Rendering_Compositing_GraphicsCompositor_System_String_Stride_Rendering_RenderStage__" data-uid="Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.TryGetRenderStage(Stride.Rendering.Compositing.GraphicsCompositor,System.String,Stride.Rendering.RenderStage@)">
-  TryGetRenderStage(GraphicsCompositor, string, out RenderStage)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/GraphicsCompositorExtensions.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  TryGetRenderStage(GraphicsCompositor, string, out RenderStage?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/GraphicsCompositorExtensions.cs/#L102"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage renderFeature)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage? renderStage)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -271,7 +271,7 @@ the existing game and the new scene renderer. In either case, the GraphicsCompos
     <dd></dd>
     <dt><code>effectName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd></dd>
-    <dt><code>renderFeature</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/RenderStage.cs">RenderStage</a></dt>
+    <dt><code>renderStage</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/RenderStage.cs">RenderStage</a></dt>
     <dd></dd>
   </dl>
 
