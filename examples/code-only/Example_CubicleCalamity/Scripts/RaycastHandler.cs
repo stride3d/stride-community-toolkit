@@ -1,10 +1,11 @@
-using CubicleCalamity.Components;
+using Example_CubicleCalamity.Components;
+using Example_CubicleCalamity.Shared;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
 
-namespace CubicleCalamity.Scripts;
+namespace Example_CubicleCalamity.Scripts;
 
 public class RaycastHandler : AsyncScript
 {
@@ -31,9 +32,7 @@ public class RaycastHandler : AsyncScript
                 var hitResult = cameraComponent.RaycastMouse(this);
 
                 if (hitResult.Succeeded)
-                {
                     OnEntityHit(hitResult.Collider.Entity);
-                }
             }
 
             await Script.NextFrame();
@@ -60,9 +59,7 @@ public class RaycastHandler : AsyncScript
             Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count()).Calculations}, Total Score: {_totalScore - score} + {score}");
 
             foreach (var cube in cubesToRemove)
-            {
                 cube.Remove();
-            }
 
             entity.Remove();
         }
@@ -85,9 +82,7 @@ public class RaycastHandler : AsyncScript
                 .Where(cube => !processedCubes.Contains(cube) && !cubesToCheck.Contains(cube));
 
             foreach (var touchingCube in touchingCubes)
-            {
                 cubesToCheck.Enqueue(touchingCube);
-            }
         }
 
         return processedCubes;
