@@ -9,7 +9,7 @@ using Stride.Rendering;
 using System.Runtime.InteropServices;
 using Buffer = Stride.Graphics.Buffer;
 
-namespace DebugShapes;
+namespace Stride.CommunityToolkit.Rendering.DebugShapes;
 
 public class ImmediateDebugRenderFeature : RootRenderFeature
 {
@@ -597,7 +597,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             debugObject.totalPrimitivesNoDepth.Clear();
 
         }
-
     }
 
     private unsafe static void UpdateBufferIfNecessary(GraphicsDevice device, CommandList commandList, ref Buffer buffer, DataPointer dataPtr, int elementSize)
@@ -622,10 +621,8 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     private void CheckBuffers(RenderDrawContext context)
     {
-
         unsafe
         {
-
             fixed (Matrix* transformsPtr = transforms.Items)
             {
                 UpdateBufferIfNecessary(
@@ -652,14 +649,11 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                     elementSize: Marshal.SizeOf<LineVertex>()
                 );
             }
-
         }
-
     }
 
     public override void Prepare(RenderDrawContext context)
     {
-
         transforms.Resize(instances.Count, true);
         colors.Resize(instances.Count, true);
 
@@ -674,12 +668,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         CheckBuffers(context);
         lineVertices.Clear(true);
         instances.Clear(true);
-
     }
 
     private void SetPrimitiveRenderingPipelineState(CommandList commandList, bool depthTest, FillMode selectedFillMode, bool isDoubleSided = false, bool hasTransparency = false)
     {
-
         pipelineState.State.SetDefaults();
         pipelineState.State.PrimitiveType = PrimitiveType.TriangleList;
         pipelineState.State.RootSignature = primitiveEffect.RootSignature;
@@ -691,7 +683,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         pipelineState.State.Output.CaptureState(commandList);
         pipelineState.State.InputElements = inputElements;
         pipelineState.Update();
-
     }
 
     private void SetLineRenderingPipelineState(CommandList commandList, bool depthTest, bool hasTransparency = false)
@@ -711,7 +702,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     private void RenderPrimitives(RenderDrawContext context, RenderView renderView, ref Primitives offsets, ref Primitives counts, bool depthTest, FillMode fillMode, bool hasTransparency)
     {
-
         var commandList = context.CommandList;
 
         // set buffers and our current pipeline state
@@ -731,7 +721,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         // draw spheres
         if (counts.Spheres > 0)
         {
-
             SetPrimitiveRenderingPipelineState(commandList, depthTest, fillMode, isDoubleSided: false, hasTransparency: hasTransparency);
             commandList.SetPipelineState(pipelineState.CurrentState);
 
@@ -739,12 +728,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             primitiveEffect.Apply(context.GraphicsContext);
 
             commandList.DrawIndexedInstanced(sphere.Indices.Length, counts.Spheres, primitiveIndexOffsets.Spheres, primitiveVertexOffsets.Spheres);
-
         }
 
         if (counts.Quads > 0 || counts.Circles > 0 || counts.HalfSpheres > 0)
         {
-
             SetPrimitiveRenderingPipelineState(commandList, depthTest, fillMode, isDoubleSided: true, hasTransparency: hasTransparency);
             commandList.SetPipelineState(pipelineState.CurrentState);
 
@@ -781,12 +768,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                 commandList.DrawIndexedInstanced(sphere.Indices.Length / 2, counts.HalfSpheres, primitiveIndexOffsets.HalfSpheres, primitiveVertexOffsets.HalfSpheres);
 
             }
-
         }
 
         if (counts.Cubes > 0 || counts.Capsules > 0 || counts.Cylinders > 0 || counts.Cones > 0)
         {
-
             SetPrimitiveRenderingPipelineState(commandList, depthTest, fillMode, isDoubleSided: false, hasTransparency: hasTransparency);
             commandList.SetPipelineState(pipelineState.CurrentState);
 
@@ -833,7 +818,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                 commandList.DrawIndexedInstanced(cone.Indices.Length, counts.Cones, primitiveIndexOffsets.Cones, primitiveVertexOffsets.Cones);
 
             }
-
         }
 
         // draw lines
@@ -851,12 +835,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             commandList.Draw(counts.Lines * 2, offsets.Lines);
 
         }
-
     }
 
     public override void Draw(RenderDrawContext context, RenderView renderView, RenderViewStage renderViewStage, int startIndex, int endIndex)
     {
-
         var commandList = context.CommandList;
 
         for (int index = startIndex; index < endIndex; index++)
@@ -875,7 +857,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             RenderPrimitives(context, renderView, offsets: ref debugObject.instanceOffsetsNoDepth, counts: ref debugObject.primitivesToDrawNoDepth, depthTest: false, fillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
 
         }
-
     }
 
     public override void Flush(RenderDrawContext context)
@@ -893,5 +874,4 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         indexBuffer.Dispose();
         lineVertexBuffer.Dispose();
     }
-
 }

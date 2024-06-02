@@ -76,12 +76,12 @@
 using Stride.Graphics;
 using Stride.Graphics.GeometricPrimitives;
 
-namespace DebugShapes;
+namespace Stride.CommunityToolkit.Rendering.DebugShapes;
 
-public class ImmediateDebugPrimitives
+public static class ImmediateDebugPrimitives
 {
-    static private Vector2 noLineUv = new Vector2(0.5f);
-    static private Vector2 lineUv = new Vector2(1.0f);
+    private static readonly Vector2 _noLineUv = new(0.5f);
+    private static readonly Vector2 _lineUv = new(1.0f);
 
     public static Vector3 GetCircleVector(int i, int tessellation)
     {
@@ -161,13 +161,13 @@ public class ImmediateDebugPrimitives
 
         // center of our circle
         vertices[0].Position = new Vector3(0.0f, yOffset, 0.0f);
-        vertices[0].TextureCoordinate = noLineUv;
+        vertices[0].TextureCoordinate = _noLineUv;
 
         // center, but with uv coords set
         if (hasUvSplits > 0)
         {
             vertices[1].Position = new Vector3(0.0f, yOffset, 0.0f);
-            vertices[1].TextureCoordinate = lineUv;
+            vertices[1].TextureCoordinate = _lineUv;
         }
 
         int offset = 1 + hasUvSplits;
@@ -175,7 +175,7 @@ public class ImmediateDebugPrimitives
         {
             var normal = GetCircleVector(i, tesselations);
             vertices[offset + i].Position = normal * radius + new Vector3(0.0f, yOffset, 0.0f);
-            vertices[offset + i].TextureCoordinate = lineUv;
+            vertices[offset + i].TextureCoordinate = _lineUv;
         }
 
         int curVert = tesselations + offset;
@@ -191,11 +191,11 @@ public class ImmediateDebugPrimitives
 
                 indices[i + 1] = curVert;
                 vertices[curVert] = vertices[offset + i / 3 % tesselations];
-                vertices[curVert++].TextureCoordinate = lineUv;
+                vertices[curVert++].TextureCoordinate = _lineUv;
 
                 indices[i + 2] = curVert;
                 vertices[curVert] = vertices[offset + (i / 3 + 1) % tesselations];
-                vertices[curVert++].TextureCoordinate = noLineUv;
+                vertices[curVert++].TextureCoordinate = _noLineUv;
 
                 // FIXME: this is shit geometry really
                 indices[curIdx++] = offset + i / 3 % tesselations;
@@ -217,7 +217,6 @@ public class ImmediateDebugPrimitives
         }
 
         return (vertices, indices);
-
     }
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCube(float size = 1.0f)
@@ -295,7 +294,7 @@ public class ImmediateDebugPrimitives
 
             // the first point
             var firstNormal = new Vector3(0, dy, dxz);
-            var firstHorizontalVertex = new VertexPositionTexture(firstNormal * radius, noLineUv);
+            var firstHorizontalVertex = new VertexPositionTexture(firstNormal * radius, _noLineUv);
             vertices[vertexCount++] = firstHorizontalVertex;
 
             // Create a single ring of vertices at this latitude.
@@ -310,13 +309,13 @@ public class ImmediateDebugPrimitives
                 dz *= dxz;
 
                 var normal = new Vector3(dx, dy, dz);
-                var textureCoordinate = noLineUv;
+                var textureCoordinate = _noLineUv;
 
                 vertices[vertexCount++] = new VertexPositionTexture(normal * radius, textureCoordinate);
             }
 
             // the last point equal to the first point
-            firstHorizontalVertex.TextureCoordinate = noLineUv;
+            firstHorizontalVertex.TextureCoordinate = _noLineUv;
             vertices[vertexCount++] = firstHorizontalVertex;
         }
 
@@ -324,7 +323,7 @@ public class ImmediateDebugPrimitives
         for (int j = 0; j <= horizontalSegments; j++)
         {
             var normal = new Vector3(0, 1, 0);
-            var textureCoordinate = noLineUv;
+            var textureCoordinate = _noLineUv;
             vertices[vertexCount++] = new VertexPositionTexture(normal * radius, textureCoordinate);
         }
 
@@ -345,11 +344,11 @@ public class ImmediateDebugPrimitives
                 {
 
                     vertices[newVertexCount] = vertices[i * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     indices[indexCount++] = i * stride + nextJ;
@@ -358,11 +357,11 @@ public class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
 
                 }
@@ -376,11 +375,11 @@ public class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
 
                 }
@@ -388,11 +387,11 @@ public class ImmediateDebugPrimitives
                 {
 
                     vertices[newVertexCount] = vertices[i * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     indices[indexCount++] = i * stride + nextJ;
@@ -478,21 +477,21 @@ public class ImmediateDebugPrimitives
             int? sideModulo = uvSplits > 0 ? (i + 1 - uvOffset) % (tesselations / uvSplits) : null;
 
             vertices[curVert].Position = curBottomPos;
-            vertices[curVert].TextureCoordinate = sideModulo == 0 ? lineUv : noLineUv;
+            vertices[curVert].TextureCoordinate = sideModulo == 0 ? _lineUv : _noLineUv;
             var ip = curVert++;
 
             var nextBottomNormal = GetCircleVector(i + 1, tesselations) * radius - Vector3.UnitY * (height / 2.0f);
             vertices[curVert].Position = nextBottomNormal;
-            vertices[curVert].TextureCoordinate = noLineUv;
+            vertices[curVert].TextureCoordinate = _noLineUv;
             var ip1 = curVert++;
 
             vertices[curVert].Position = curTopPos;
-            vertices[curVert].TextureCoordinate = sideModulo == 0 ? lineUv : noLineUv;
+            vertices[curVert].TextureCoordinate = sideModulo == 0 ? _lineUv : _noLineUv;
             var ipv = curVert++;
 
             var nextTopNormal = GetCircleVector(i + 1, tesselations) * radius + Vector3.UnitY * (height / 2.0f);
             vertices[curVert].Position = nextTopNormal;
-            vertices[curVert].TextureCoordinate = noLineUv;
+            vertices[curVert].TextureCoordinate = _noLineUv;
             var ipv1 = curVert++;
 
             // reuse the old stuff yo
@@ -635,7 +634,7 @@ public class ImmediateDebugPrimitives
                 dz *= dxz;
 
                 var normal = new Vector3(dx, dy, dz);
-                var textureCoordinate = noLineUv;
+                var textureCoordinate = _noLineUv;
                 var position = radius * normal + new Vector3(0, deltaY, 0);
 
                 vertices[vertexCount++] = new VertexPositionTexture(position, textureCoordinate);
@@ -659,11 +658,11 @@ public class ImmediateDebugPrimitives
                 {
 
                     vertices[newVertexCount] = vertices[i * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     indices[indexCount++] = i * stride + nextJ;
@@ -672,11 +671,11 @@ public class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
 
                 }
@@ -690,11 +689,11 @@ public class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
 
                 }
@@ -702,11 +701,11 @@ public class ImmediateDebugPrimitives
                 {
 
                     vertices[newVertexCount] = vertices[i * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
-                    vertices[newVertexCount].TextureCoordinate = lineUv;
+                    vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     indices[indexCount++] = i * stride + nextJ;

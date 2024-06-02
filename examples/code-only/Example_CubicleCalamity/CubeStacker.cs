@@ -1,5 +1,6 @@
-using CubicleCalamity.Components;
-using CubicleCalamity.Scripts;
+using Example_CubicleCalamity.Components;
+using Example_CubicleCalamity.Scripts;
+using Example_CubicleCalamity.Shared;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -10,7 +11,7 @@ using Stride.Rendering;
 using Stride.Rendering.Colors;
 using Stride.Rendering.Lights;
 
-namespace CubicleCalamity;
+namespace Example_CubicleCalamity;
 
 public class CubeStacker
 {
@@ -96,7 +97,6 @@ public class CubeStacker
         var entities = new List<Entity>();
 
         for (var x = 0; x < Constants.Rows; x++)
-        {
             for (var z = 0; z < Constants.Rows; z++)
             {
                 var entity = CreateCube(_game, Constants.CubeSize);
@@ -111,7 +111,6 @@ public class CubeStacker
 
                 entities.Add(entity);
             }
-        }
 
         return entities;
     }
@@ -183,9 +182,7 @@ public class CubeStacker
             entity.Scene = scene;
 
             if (showLightGizmo)
-            {
                 entity.AddLightDirectionalGizmo(_game.GraphicsDevice);
-            }
         }
     }
 }

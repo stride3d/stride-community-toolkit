@@ -1,4 +1,4 @@
-using CubicleCalamity;
+using Example_CubicleCalamity;
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 

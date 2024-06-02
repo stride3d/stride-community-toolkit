@@ -4,19 +4,17 @@
 using Stride.Core.Collections;
 using Stride.Graphics;
 using Stride.Rendering;
+using static Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature;
+using Capsule = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Capsule;
+using Cone = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Cone;
+using Cube = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Cube;
+using Cylinder = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Cylinder;
+using Sphere = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Sphere;
 
-using static DebugShapes.ImmediateDebugRenderFeature;
-using Capsule = DebugShapes.ImmediateDebugRenderFeature.Capsule;
-using Cone = DebugShapes.ImmediateDebugRenderFeature.Cone;
-using Cube = DebugShapes.ImmediateDebugRenderFeature.Cube;
-using Cylinder = DebugShapes.ImmediateDebugRenderFeature.Cylinder;
-using Sphere = DebugShapes.ImmediateDebugRenderFeature.Sphere;
-
-namespace DebugShapes;
+namespace Stride.CommunityToolkit.Rendering.DebugShapes;
 
 public class ImmediateDebugRenderObject : RenderObject
 {
-
     /* messages */
     internal readonly FastList<Renderable> renderablesWithDepth = new FastList<Renderable>();
     internal readonly FastList<Renderable> renderablesNoDepth = new FastList<Renderable>();
@@ -178,5 +176,4 @@ public class ImmediateDebugRenderObject : RenderObject
             totalPrimitivesNoDepth.Lines++;
         }
     }
-
 }

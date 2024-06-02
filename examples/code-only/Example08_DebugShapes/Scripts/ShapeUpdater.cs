@@ -1,4 +1,4 @@
-using DebugShapes;
+using Stride.CommunityToolkit.Rendering.DebugShapes;
 using Stride.Core;
 using Stride.Core.Collections;
 using Stride.Core.Mathematics;
