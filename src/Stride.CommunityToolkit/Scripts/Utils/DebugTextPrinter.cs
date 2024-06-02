@@ -36,7 +36,7 @@ public class DebugTextPrinter
         SetStartPosition(_currentPosition);
     }
 
-    private DisplayPosition GetNextPosition(DisplayPosition currentPosition) => currentPosition switch
+    private static DisplayPosition GetNextPosition(DisplayPosition currentPosition) => currentPosition switch
     {
         DisplayPosition.TopLeft => DisplayPosition.TopRight,
         DisplayPosition.TopRight => DisplayPosition.BottomRight,
