@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Games;
+using Stride.CommunityToolkit.Scripts.Utils;
 using Stride.Engine;
 using Stride.Input;
 
@@ -20,8 +21,8 @@ namespace Stride.CommunityToolkit.Scripts;
 /// </remarks>
 public class Basic2DCameraController : SyncScript
 {
-    // Speed at which the camera moves
-    private const float MoveSpeed = 5.0f;
+    private const float CameraMoveSpeed = 5.0f;
+    private const float OrthographicSizeDefault = 10.0f;
 
     // Additional speed multiplier when holding shift
     private const float SpeedFactor = 5.0f;
@@ -29,16 +30,36 @@ public class Basic2DCameraController : SyncScript
     // Speed of zooming in and out
     private const float ZoomSpeed = 50.0f;
 
-    // Default orthographic size
-    private const float OrthographicSizeDefault = 10.0f;
-
-    // Default camera position
-    private static readonly Vector3 _defaultPosition = new(0, 0, 50);
-
     // Width of the screen edge border for triggering movement
     private const float ScreenEdgeBorderWidth = 10.0f;
 
+    private static readonly Vector3 _defaultCameraPosition = new(0, 0, 50);
     private CameraComponent? _camera;
+
+    private DebugTextPrinter? _instructions;
+    private bool _showInstructions = true;
+
+    public override void Start()
+    {
+        _instructions = new DebugTextPrinter()
+        {
+            DebugTextSystem = DebugText,
+            TextSize = new(205, 18 * 7),
+            ScreenSize = new(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height),
+            Instructions =
+            [
+                new("CONTROL INSTRUCTIONS"),
+                new("F2: Toggle Help", Color.Red),
+                new("F3: Reposition Help", Color.Red),
+                new("Arrow Keys: Move"),
+                new("Hold Shift: Increase speed"),
+                new("Mouse Wheel: Zoom"),
+                new("H: Reset Camera"),
+            ]
+        };
+
+        _instructions.Initialize();
+    }
 
     public override void Update()
     {
@@ -49,6 +70,8 @@ public class Basic2DCameraController : SyncScript
             if (_camera == null) return; // Ensure we have a camera component
         }
 
+        ToggleInstructionKeys();
+
         ProcessCameraMovement();
 
         ProcessScreenEdgeMovement();
@@ -56,6 +79,26 @@ public class Basic2DCameraController : SyncScript
         ProcessCameraZoom();
 
         ResetCameraToDefault();
+
+        if (_showInstructions)
+        {
+            _instructions?.Print();
+        }
+    }
+
+    private void ToggleInstructionKeys()
+    {
+        if (!Input.HasKeyboard) return;
+
+        if (Input.IsKeyPressed(Keys.F2))
+        {
+            _showInstructions = !_showInstructions;
+        }
+
+        if (Input.IsKeyPressed(Keys.F3))
+        {
+            _instructions?.ChangeStartPosition();
+        }
     }
 
     /// <summary>
@@ -84,7 +127,7 @@ public class Basic2DCameraController : SyncScript
             moveDirection *= SpeedFactor;
 
         // Apply movement to the camera position
-        Entity.Transform.Position += moveDirection * MoveSpeed * Game.DeltaTime();
+        Entity.Transform.Position += moveDirection * CameraMoveSpeed * Game.DeltaTime();
     }
 
     private void ProcessScreenEdgeMovement()
@@ -121,7 +164,7 @@ public class Basic2DCameraController : SyncScript
             moveDirection.Normalize();
 
         // Apply the movement
-        Entity.Transform.Position += moveDirection * MoveSpeed * Game.DeltaTime();
+        Entity.Transform.Position += moveDirection * CameraMoveSpeed * Game.DeltaTime();
     }
 
     private void ProcessCameraZoom()
@@ -139,7 +182,7 @@ public class Basic2DCameraController : SyncScript
     {
         if (!Input.IsKeyPressed(Keys.H)) return;
 
-        Entity.Transform.Position = _defaultPosition;
+        Entity.Transform.Position = _defaultCameraPosition;
 
         _camera!.OrthographicSize = OrthographicSizeDefault;
     }

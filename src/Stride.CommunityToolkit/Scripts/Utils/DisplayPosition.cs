@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Scripts;
+namespace Stride.CommunityToolkit.Scripts.Utils;
 
 public enum DisplayPosition
 {

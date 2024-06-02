@@ -6,7 +6,7 @@ Imports Stride.Engine
 Imports GameExtensions = Stride.CommunityToolkit.Engine.GameExtensions
 
 Module Program
-    Private game As New Game()
+    Private ReadOnly game As New Game()
 
     Sub Main()
         GameExtensions.Run(game, Nothing, AddressOf StartGame)
