@@ -98,15 +98,7 @@ public class Basic3DCameraController : SyncScript
         _yaw = 0f;
         _pitch = 0f;
 
-        if (Input.HasKeyboard && Input.IsKeyPressed(Keys.F2))
-        {
-            _showInstructions = !_showInstructions;
-        }
-
-        if (Input.HasKeyboard && Input.IsKeyPressed(Keys.F3))
-        {
-            _instructions?.ChangeStartPosition();
-        }
+        ToggleInstructionKeys();
 
         KeyboardAndGamePadBasedMovement(deltaTime);
 
@@ -115,6 +107,21 @@ public class Basic3DCameraController : SyncScript
         MouseMovementAndGestures();
 
         ResetCameraToDefault();
+    }
+
+    private void ToggleInstructionKeys()
+    {
+        if (!Input.HasKeyboard) return;
+
+        if (Input.IsKeyPressed(Keys.F2))
+        {
+            _showInstructions = !_showInstructions;
+        }
+
+        if (Input.IsKeyPressed(Keys.F3))
+        {
+            _instructions?.ChangeStartPosition();
+        }
     }
 
     private void KeyboardAndGamePadBasedMovement(float deltaTime)
