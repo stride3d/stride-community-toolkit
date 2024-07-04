@@ -14,11 +14,37 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="4.2.0.2122" />
-        <PackageReference Include="Stride.Particles" Version="4.2.0.2122" />
-        <PackageReference Include="Stride.Physics" Version="4.2.0.2122" />
-        <PackageReference Include="Stride.UI" Version="4.2.0.2122" />
+        <PackageReference Include="Stride.Engine" Version="4.2.0.2188" />
+        <PackageReference Include="Stride.Particles" Version="4.2.0.2188" />
+        <PackageReference Include="Stride.Physics" Version="4.2.0.2188" />
+        <PackageReference Include="Stride.UI" Version="4.2.0.2188" />
         <PackageReference Include="Stride.BepuPhysics" Version="0.9.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>LinePrimitiveShader.sdsl</DependentUpon>
+      </Compile>
+      <Compile Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PrimitiveShader.sdsl</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl">
+        <Generator>StrideShaderKeyGenerator</Generator>
+        <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
+      </None>
+      <None Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl">
+        <Generator>StrideShaderKeyGenerator</Generator>
+        <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
 </Project>
