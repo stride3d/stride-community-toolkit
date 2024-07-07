@@ -54,4 +54,22 @@ public static class GameExtensions
         var gameBase = (GameBase)game;
         gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000f / targetFPS);
     }
+
+    /// <summary>
+    /// Enables vertical synchronization (VSync) to prevent screen tearing.
+    /// </summary>
+    /// <param name="game"></param>
+    public static void EnableVSync(this IGame game)
+    {
+        game.GraphicsDevice.Presenter.PresentInterval = Stride.Graphics.PresentInterval.Two;
+    }
+
+    /// <summary>
+    /// Disables vertical synchronization (VSync) to allow for uncapped frame rates.
+    /// </summary>
+    /// <param name="game"></param>
+    public static void DisableVSync(this IGame game)
+    {
+        game.GraphicsDevice.Presenter.PresentInterval = Stride.Graphics.PresentInterval.Immediate;
+    }
 }
