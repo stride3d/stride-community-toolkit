@@ -54,4 +54,14 @@ public static class GameExtensions
         var gameBase = (GameBase)game;
         gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000f / targetFPS);
     }
+
+    public static void EnableVSync(this IGame game)
+    {
+        game.GraphicsDevice.Presenter.PresentInterval = Stride.Graphics.PresentInterval.Two;
+    }
+
+    public static void DisableVSync(this IGame game)
+    {
+        game.GraphicsDevice.Presenter.PresentInterval = Stride.Graphics.PresentInterval.Immediate;
+    }
 }
