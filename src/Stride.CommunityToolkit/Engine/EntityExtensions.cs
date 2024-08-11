@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Graphics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -177,7 +178,7 @@ public static class EntityExtensions
     /// <c>true</c> if a component of type <typeparamref name="T"/> is found in the entity;
     /// otherwise, <c>false</c>.
     /// </returns>
-    public static bool TryGetComponent<T>(this Entity entity, out T? result)
+    public static bool TryGetComponent<T>(this Entity entity, [MaybeNullWhen(false)] out T result)
     {
         result = entity.GetComponent<T>();
         if (result is null)
