@@ -12,6 +12,7 @@
         <PackageIcon>nuget-icon.png</PackageIcon>
         <Copyright>Stride Contributors</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
