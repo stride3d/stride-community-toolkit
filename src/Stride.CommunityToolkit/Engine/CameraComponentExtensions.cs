@@ -6,39 +6,84 @@ using Stride.Physics;
 
 namespace Stride.CommunityToolkit.Engine;
 
+/// <summary>
+/// Provides a set of static methods for working with <see cref="CameraComponent"/> instances.
+/// </summary>
+/// <remarks>
+/// This class includes extension methods for performing various operations with <see cref="CameraComponent"/> instances,
+/// such as raycasting, converting screen positions to world positions, and more. These methods are useful for implementing
+/// features like object picking, camera control, and coordinate transformations in a 3D environment.
+/// </remarks>
 public static class CameraComponentExtensions
 {
     /// <summary>
-    /// Calculates a ray from the camera through a point on the screen in world space.
+    /// Calculates a ray from the camera's position through a specified point on the screen, projecting from screen space into the 3D world space.
     /// </summary>
-    /// <param name="camera">The camera component used for the calculation.</param>
-    /// <param name="screenPosition">The position on the screen, typically the mouse position, normalized between (0,0) and (1,1).</param>
-    /// <returns>A <see cref="Ray"/> starting from the camera and pointing into the scene through the specified screen position.</returns>
+    /// <param name="camera">The <see cref="CameraComponent"/> used to generate the view and projection matrices for the calculation.</param>
+    /// <param name="screenPosition">
+    /// The normalized position on the screen (typically the mouse position), with coordinates ranging from (0,0) at the bottom-left to (1,1) at the top-right.
+    /// </param>
+    /// <returns>
+    /// A tuple containing two points:
+    /// <c>nearPoint</c>, which is the world-space position on the near plane, and
+    /// <c>farPoint</c>, which is the world-space position on the far plane.
+    /// These two points define the ray from the camera into the 3D world through the specified screen position.
+    /// </returns>
     /// <remarks>
-    /// This method is useful for implementing features like object picking where you want to select or interact with objects in the 3D world based on screen coordinates.
+    /// This method is typically used for raycasting and object picking in 3D space, where you need to determine what objects lie under a particular screen-space position, such as the mouse cursor.
+    /// The ray is defined by transforming the screen position into world space, calculating points on the near and far planes of the camera's view frustum.
     /// </remarks>
-    public static Ray GetPickRay(this CameraComponent camera, Vector2 screenPosition)
+    public static (Vector3 nearPoint, Vector3 farPoint) CalculateRayFromScreenPosition(this CameraComponent camera, Vector2 screenPosition)
     {
+        // Invert the view-projection matrix to transform from screen space to world space
         var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
 
+        // Reconstruct the projection-space position in the (-1, +1) range.
+        // The X coordinate maps directly from screen space (0,1) to projection space (-1,+1).
+        // The Y coordinate is inverted because screen space is Y-down, while projection space is Y-up.
         Vector3 position;
         position.X = screenPosition.X * 2f - 1f;
         position.Y = 1f - screenPosition.Y * 2f;
-        position.Z = 0f;
 
+        // Set Z = 0 for the near plane (the starting point of the ray)
+        // Unproject the near point from projection space to world space
+        position.Z = 0f;
         var vectorNear = Vector3.Transform(position, invertedMatrix);
         vectorNear /= vectorNear.W;
 
+        // Set Z = 1 for the far plane (the end point of the ray)
+        // Unproject the far point from projection space to world space
         position.Z = 1f;
-
         var vectorFar = Vector3.Transform(position, invertedMatrix);
         vectorFar /= vectorFar.W;
 
-        Vector3 dir = vectorFar.XYZ() - vectorNear.XYZ();
+        return (vectorNear.XYZ(), vectorFar.XYZ());
+    }
 
-        dir.Normalize();
+    /// <summary>
+    /// Calculates a ray from the camera through a specified point on the screen, projecting into the 3D world space.
+    /// </summary>
+    /// <param name="camera">The <see cref="CameraComponent"/> used for the ray calculation.</param>
+    /// <param name="screenPosition">
+    /// The position on the screen, typically the mouse position, normalized between (0,0) (bottom-left) and (1,1) (top-right).
+    /// </param>
+    /// <returns>
+    /// A <see cref="Ray"/> starting from the camera and pointing into the 3D world through the specified screen position.
+    /// </returns>
+    /// <remarks>
+    /// This method is commonly used for object picking or raycasting operations, where interaction with 3D objects is based on screen space coordinates (e.g., mouse cursor).
+    /// The ray is calculated by transforming the screen position into world space, creating a direction vector from the camera's near plane to its far plane.
+    /// </remarks>
+    ///
+    public static Ray GetPickRay(this CameraComponent camera, Vector2 screenPosition)
+    {
+        var (nearPoint, farPoint) = camera.CalculateRayFromScreenPosition(screenPosition);
 
-        return new Ray(vectorNear.XYZ(), dir);
+        var direction = farPoint - nearPoint;
+
+        direction.Normalize();
+
+        return new Ray(nearPoint, direction);
     }
 
     /// <summary>
@@ -148,30 +193,10 @@ public static class CameraComponentExtensions
     /// </remarks>///
     public static HitResult Raycast(this CameraComponent camera, Simulation simulation, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
     {
-        // Invert the view-projection matrix to transform from screen space to world space
-        var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
-
-        // Reconstruct the projection-space position in the (-1, +1) range.
-        // The X coordinate maps directly from screen space (0,1) to projection space (-1,+1).
-        // The Y coordinate is inverted because screen space is Y-down, while projection space is Y-up.
-        Vector3 position;
-        position.X = screenPosition.X * 2f - 1f;
-        position.Y = 1f - screenPosition.Y * 2f;
-
-        // Set Z = 0 for the near plane (the starting point of the ray)
-        // Unproject the near point from projection space to world space
-        position.Z = 0f;
-        var vectorNear = Vector3.Transform(position, invertedMatrix);
-        vectorNear /= vectorNear.W; // Normalize by the homogeneous W component
-
-        // Set Z = 1 for the far plane (the end point of the ray)
-        // Unproject the far point from projection space to world space
-        position.Z = 1f;
-        var vectorFar = Vector3.Transform(position, invertedMatrix);
-        vectorFar /= vectorFar.W;
+        var (nearPoint, farPoint) = camera.CalculateRayFromScreenPosition(screenPosition);
 
         // Perform the raycast from the near point to the far point and return the result
-        return simulation.Raycast(vectorNear.XYZ(), vectorFar.XYZ(), collisionGroups, collisionFilterGroupFlags);
+        return simulation.Raycast(nearPoint, farPoint, collisionGroups, collisionFilterGroupFlags);
     }
 
     /// <summary>
