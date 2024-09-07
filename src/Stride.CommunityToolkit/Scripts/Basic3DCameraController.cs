@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Scripts.Utils;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
 using Stride.Input;
 
