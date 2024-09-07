@@ -373,16 +373,25 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a ground with default Size 10,10.
+    /// Adds a 3D ground entity to the game with a default size of 10x10 units. The ground is created as a plane, and a collider can be optionally added.
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="entityName"></param>
-    /// <param name="size"></param>
-    /// <param name="includeCollider">Adds a collider</param>
-    /// <returns></returns>
+    /// <param name="game">The Game instance to which the ground entity will be added.</param>
+    /// <param name="entityName">The optional name for the ground entity. If not provided, it defaults to "Ground".</param>
+    /// <param name="size">The size of the ground, specified as a 2D vector. If not provided, it defaults to (10, 10) units.</param>
+    /// <param name="includeCollider">Specifies whether to add a collider to the ground. Defaults to true.</param>
+    /// <returns>The created Entity object representing the 3D ground.</returns>
     public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
 
+    /// <summary>
+    /// Adds an infinite 3D ground entity to the game. The visible part of the ground is defined by the <paramref name="size"/> parameter,
+    /// while the collider is infinite and extends beyond the visible ground.
+    /// </summary>
+    /// <param name="game">The Game instance to which the infinite ground entity will be added.</param>
+    /// <param name="entityName">The optional name for the ground entity. If not provided, it defaults to "Ground".</param>
+    /// <param name="size">Defines the visible part of the ground, specified as a 2D vector. If not provided, it defaults to (10, 10) units.</param>
+    /// <param name="includeCollider">Specifies whether to add a collider to the ground. The collider is infinite, extending beyond the visible part. Defaults to true.</param>
+    /// <returns>The created Entity object representing the infinite 3D ground.</returns>
     public static Entity AddInfinite3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.InfinitePlane);
 

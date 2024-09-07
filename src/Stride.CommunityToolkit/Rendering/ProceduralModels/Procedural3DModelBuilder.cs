@@ -2,16 +2,27 @@ using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
+/// <summary>
+/// A helper class for generating 3D procedural models based on a specified primitive model type and size.
+/// </summary>
 public static class Procedural3DModelBuilder
 {
     /// <summary>
-    /// Generates a procedural model based on the specified type and size.
+    /// Generates a 3D procedural model based on the specified primitive model type and size.
     /// </summary>
-    /// <param name="type">The type of primitive model to create.</param>
-    /// <param name="size">The size parameters for the model, or null to use default size values. The dimensions in the Vector3 are used in the order X, Y, Z.</param>
-    /// <returns>A primitive procedural model of the specified type, with dimensions specified by <paramref name="size"/> or default dimensions if <paramref name="size"/> is null.</returns>
+    /// <param name="type">The type of 3D primitive model to create (e.g., Cube, Sphere, Capsule).</param>
+    /// <param name="size">
+    /// The size parameters for the model as a <see cref="Vector3"/>, where X, Y, and Z represent the dimensions.
+    /// If null, default dimensions for the model type will be used.
+    /// </param>
+    /// <returns>
+    /// A <see cref="PrimitiveProceduralModelBase"/> object representing the generated 3D model.
+    /// The dimensions of the model will be determined by the provided <paramref name="size"/> or default dimensions if <paramref name="size"/> is null.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">Thrown when an unsupported <paramref name="type"/> is specified.</exception>
     /// <remarks>
-    /// If <paramref name="size"/> is null, default dimensions are used for the model.
+    /// This method allows for the creation of different types of primitive 3D models (such as Cube, Sphere, etc.) with the specified size.
+    /// If no size is provided, default dimensions for each model type will be used.
     /// </remarks>
     public static PrimitiveProceduralModelBase Build(PrimitiveModelType type, Vector3? size = null)
         => type switch
@@ -31,16 +42,28 @@ public static class Procedural3DModelBuilder
         };
 }
 
+/// <summary>
+/// A helper class for generating 2D procedural models based on a specified primitive model type and size.
+/// </summary>
 public static class Procedural2DModelBuilder
 {
     /// <summary>
-    /// Generates a procedural model based on the specified type and size.
+    /// Generates a 2D procedural model based on the specified primitive model type, size, and depth.
     /// </summary>
-    /// <param name="type">The type of primitive model to create.</param>
-    /// <param name="size">The size parameters for the model, or null to use default size values. The dimensions in the Vector3 are used in the order X, Y, Z.</param>
-    /// <returns>A primitive procedural model of the specified type, with dimensions specified by <paramref name="size"/> or default dimensions if <paramref name="size"/> is null.</returns>
+    /// <param name="type">The type of 2D primitive model to create (e.g., Circle, Square, Triangle).</param>
+    /// <param name="size">
+    /// The size parameters for the model as a <see cref="Vector2"/>, where X and Y represent the dimensions.
+    /// If null, default dimensions for the model type will be used.
+    /// </param>
+    /// <param name="depth">The depth of the 2D model, which affects its thickness in 3D space.</param>
+    /// <returns>
+    /// A <see cref="PrimitiveProceduralModelBase"/> object representing the generated 2D model.
+    /// The dimensions of the model will be determined by the provided <paramref name="size"/> and <paramref name="depth"/>, or default dimensions if <paramref name="size"/> is null.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">Thrown when an unsupported <paramref name="type"/> is specified.</exception>
     /// <remarks>
-    /// If <paramref name="size"/> is null, default dimensions are used for the model.
+    /// This method creates different types of 2D procedural models (such as Rectangle, Circle, etc.) with the specified size and depth.
+    /// The depth adds a third dimension to the 2D shape, turning it into a 3D object (e.g., a 2D rectangle becomes a 3D rectangular prism).
     /// </remarks>
     public static PrimitiveProceduralModelBase Build(Primitive2DModelType type, Vector2? size = null, float depth = 0)
         => type switch
