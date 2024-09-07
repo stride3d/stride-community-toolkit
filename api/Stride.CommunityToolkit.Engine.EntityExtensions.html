@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class EntityExtensions | Stride Community Toolkit ">
       
-      <meta name="description" content="Provides extension methods for  to simplify common operations.">
+      <meta name="description" content="Provides extension methods for the  class to simplify common operations, such as adding camera controllers, gizmos, and retrieving or manipulating components.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_EntityExtensions" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions" class="text-break">
-Class EntityExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L11"><i class="bi bi-code-slash"></i></a>
+Class EntityExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class EntityExtensions  <a class="header-action link-secondary" title="View sour
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"><p>Provides extension methods for <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to simplify common operations.</p>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> class to simplify common operations,
+such as adding camera controllers, gizmos, and retrieving or manipulating components.</p>
 </div>
   <div class="markdown conceptual"></div>
 
@@ -132,7 +133,7 @@ Class EntityExtensions  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Add2DCameraController_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Add2DCameraController(Stride.Engine.Entity)">
   Add2DCameraController(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -163,10 +164,11 @@ Class EntityExtensions  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Add3DCameraController_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity)">
   Add3DCameraController(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L25"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Adds an interactive camera script <a class="xref" href="Stride.CommunityToolkit.Scripts.Basic3DCameraController.html">Basic3DCameraController</a> to the specified entity, enabling camera movement and rotation through various input methods.</p>
+  <div class="markdown level1 summary"><p>Adds an interactive camera script <a class="xref" href="Stride.CommunityToolkit.Scripts.Basic3DCameraController.html">Basic3DCameraController</a> to the specified entity,
+enabling camera movement and rotation through various input methods.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -189,8 +191,9 @@ Class EntityExtensions  <a class="header-action link-secondary" title="View sour
 
 
   <h4 class="section" id="Stride_CommunityToolkit_Engine_EntityExtensions_Add3DCameraController_Stride_Engine_Entity__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
-Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.</p>
+  <div class="markdown level1 remarks"><p>The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick
+or by dragging/scaling using multi-touch. Rotation is achieved using the Numpad, the mouse while holding
+the right mouse button, a gamepad's right stick, or by dragging using single-touch.</p>
 </div>
 
 
@@ -200,7 +203,7 @@ Rotation is achieved using the Numpad, the mouse while holding the right mouse b
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_AddGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Boolean_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Boolean,System.Boolean)">
   AddGizmo(Entity, GraphicsDevice, Color?, Color?, Color?, bool, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L43"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a TranslationGizmo to the specified entity with optional custom colors.</p>
@@ -229,9 +232,11 @@ Rotation is achieved using the Numpad, the mouse while holding the right mouse b
     <dd><p>Optional custom color for the Z-axis of the gizmo. If not specified, a default color is used.</p>
 </dd>
     <dt><code>showAxisName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p>Optional flag to show axis names. Default is false.</p>
+</dd>
     <dt><code>rotateAxisNames</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p>Optional flag to rotate axis names. Default is true.</p>
+</dd>
   </dl>
 
 
@@ -255,10 +260,11 @@ entity.AddGizmo(game.GraphicsDevice);</code></pre>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_AddLightDirectionalGizmo_Stride_Engine_Entity_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.AddLightDirectionalGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})">
   AddLightDirectionalGizmo(Entity, GraphicsDevice, Color?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L75"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Adds a directional light gizmo to the specified entity for visual representation and manipulation in the editor or during runtime.</p>
+  <div class="markdown level1 summary"><p>Adds a directional light gizmo to the specified entity for visual representation and manipulation
+in the editor or during runtime.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -304,7 +310,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_FindEntity_Stride_Engine_Entity_System_String_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)">
   FindEntity(Entity, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L140"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L149"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Searches for an entity by name within the top-level entities of the current scene.</p>
@@ -346,7 +352,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_FindEntityRecursive_Stride_Engine_Entity_System_String_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.FindEntityRecursive(Stride.Engine.Entity,System.String)">
   FindEntityRecursive(Entity, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L151"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L160"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Searches for an entity by name within the top-level entities of the current scene.</p>
@@ -388,7 +394,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponentInChildren__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponentInChildren``1(Stride.Engine.Entity)">
   GetComponentInChildren&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L100"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Recursively searches for the first component of the specified type in the entity's children.</p>
@@ -402,19 +408,22 @@ The gizmo can be used during runtime to provide a visual reference for the light
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The entity from which to start the search.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><span class="xref">T</span></dt>
-    <dd></dd>
+    <dd><p>The first component of the specified type found in the entity's children, or null if no such component exists.</p>
+</dd>
   </dl>
 
   <h4 class="section">Type Parameters</h4>
   <dl class="parameters">
     <dt><code>T</code></dt>
-    <dd></dd>
+    <dd><p>The type of component to retrieve.</p>
+</dd>
   </dl>
 
 
@@ -430,7 +439,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponent__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)">
   GetComponent&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L87"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the first component of the specified type from the entity.</p>
@@ -474,7 +483,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)">
   GetComponents&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L118"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L127"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves all components of the specified type from the entity.</p>
@@ -494,7 +503,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
-    <dd><p>An IEnumerable of components of the specified type.</p>
+    <dd><p>An <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a> of components of the specified type.</p>
 </dd>
   </dl>
 
@@ -518,7 +527,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Remove_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)">
   Remove(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L129"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Removes the entity from its current scene by setting its <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a> property to null.</p>
@@ -550,8 +559,8 @@ The gizmo can be used during runtime to provide a visual reference for the light
   <a id="Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent__1_Stride_Engine_Entity___0__" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)">
-  TryGetComponent&lt;T&gt;(Entity, out T?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L180"><i class="bi bi-code-slash"></i></a>
+  TryGetComponent&lt;T&gt;(Entity, out T)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L192"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Tries to retrieve a component of type <code class="typeparamref">T</code> from the given entity.</p>
@@ -559,7 +568,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static bool TryGetComponent&lt;T&gt;(this Entity entity, out T? result)</code></pre>
+    <pre><code class="lang-csharp hljs">public static bool TryGetComponent&lt;T&gt;(this Entity entity, out T result)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
@@ -600,10 +609,11 @@ otherwise, <code>false</code>.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)">
   WorldPosition(Entity, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L196"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L206"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>An easier way to get the previous frames world position rather than getting <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Matrix.cs">TranslationVector</a> from <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">WorldMatrix</a></p>
+  <div class="markdown level1 summary"><p>Retrieves the world position of the entity. This is a convenience method to get the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Matrix.cs">TranslationVector</a>
+from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/TransformComponent.cs">WorldMatrix</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -614,17 +624,17 @@ otherwise, <code>false</code>.</p>
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to get the World Position</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to get the world position from.</p>
 </dd>
     <dt><code>updateTransforms</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd><p>If true it will get the current frames world matrix</p>
+    <dd><p>If true, it will update the world matrix to the current frame's world matrix.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a> as the World Position of the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a> representing the world position of the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a>.</p>
 </dd>
   </dl>
 
@@ -642,7 +652,7 @@ otherwise, <code>false</code>.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L11" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L13" class="edit-link">Edit this page</a>
         </div>
 
 

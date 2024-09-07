@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class ScriptComponentExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for  to enhance interactions with game timing and cameras in the .">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions" class="text-break">
-Class ScriptComponentExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
+Class ScriptComponentExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L9"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class ScriptComponentExtensions  <a class="header-action link-secondary" title="
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> to enhance interactions with game timing and cameras in the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,7 +132,7 @@ Class ScriptComponentExtensions  <a class="header-action link-secondary" title="
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_DeltaTime_Stride_Engine_ScriptComponent_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.DeltaTime(Stride.Engine.ScriptComponent)">
   DeltaTime(ScriptComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L16"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the time elapsed since the last game update in seconds.</p>
@@ -145,14 +146,14 @@ Class ScriptComponentExtensions  <a class="header-action link-secondary" title="
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component used to access game timing information.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> used to access game timing information.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd><p>The delta time in seconds as a single-precision floating-point number.</p>
+    <dd><p>The time elapsed since the last game update, in seconds, as a single-precision floating-point number.</p>
 </dd>
   </dl>
 
@@ -162,138 +163,6 @@ Class ScriptComponentExtensions  <a class="header-action link-secondary" title="
 
 
 
-
-
-
-
-  <a id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)">
-  GetCamera(ScriptComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L26"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Retrieves the camera named &quot;Main&quot; from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>. Note that the camera might not be available during the first 2-3 frames.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use GetGCCamera instead or use Scene.GetCamera&quot;)]
-public static CameraComponent? GetCamera(this ScriptComponent scriptComponent)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component from which to access the GraphicsCompositor.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> named &quot;Main&quot;, if found; otherwise, null.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.</p>
-</div>
-
-
-
-
-  <a id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_System_String_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)">
-  GetCamera(ScriptComponent, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L74"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Retrieves the camera from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a> with the specified name. Note that the camera might not be available during the first 2-3 frames.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use GetGCCamera instead or use Scene.GetCamera&quot;)]
-public static CameraComponent? GetCamera(this ScriptComponent scriptComponent, string cameraName)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component from which to access the GraphicsCompositor.</p>
-</dd>
-    <dt><code>cameraName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>The name of the camera to retrieve.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> with the given name, if found; otherwise, null.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_System_String__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.</p>
-</div>
-
-
-
-
-  <a id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstCamera_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstCamera_Stride_Engine_ScriptComponent_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)">
-  GetFirstCamera(ScriptComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L122"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Gets the first camera from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>. Note that the camera might not be available during the first 2-3 frames.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use GetFirstGCCamera instead or use Scene.GetCamera&quot;)]
-public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponent)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component from which to access the GraphicsCompositor.</p>
-</dd>
-  </dl>
-
-  <h4 class="section">Returns</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> with the given name, if found; otherwise, null.</p>
-</dd>
-  </dl>
-
-
-
-
-
-
-
-  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstCamera_Stride_Engine_ScriptComponent__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.</p>
-</div>
 
 
 
@@ -302,10 +171,11 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstGCCamera_Stride_Engine_ScriptComponent_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstGCCamera(Stride.Engine.ScriptComponent)">
   GetFirstGCCamera(ScriptComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L138"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L79"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the first camera from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>. Note that the camera might not be available during the first 2-3 frames.</p>
+  <div class="markdown level1 summary"><p>Retrieves the first camera from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>.
+Note that the camera might not be available during the first 2-3 frames.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -316,14 +186,14 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component from which to access the GraphicsCompositor.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> from which to access the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> with the given name, if found; otherwise, null.</p>
+    <dd><p>The first <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> in the camera collection.</p>
 </dd>
   </dl>
 
@@ -334,7 +204,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 
 
   <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstGCCamera_Stride_Engine_ScriptComponent__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.</p>
+  <div class="markdown level1 remarks"><p>Ensure that the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a> is initialized with cameras before calling this method.</p>
 </div>
 
 
@@ -344,10 +214,11 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetGCCamera_Stride_Engine_ScriptComponent_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetGCCamera(Stride.Engine.ScriptComponent)">
   GetGCCamera(ScriptComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L50"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L30"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieves the camera named &quot;Main&quot; from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>. Note that the camera might not be available during the first 2-3 frames.</p>
+  <div class="markdown level1 summary"><p>Retrieves the camera named &quot;Main&quot; from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>.
+Note that the camera might not be available during the first 2-3 frames.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -358,7 +229,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component from which to access the GraphicsCompositor.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> from which to access the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>.</p>
 </dd>
   </dl>
 
@@ -376,7 +247,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 
 
   <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetGCCamera_Stride_Engine_ScriptComponent__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.</p>
+  <div class="markdown level1 remarks"><p>Ensure that the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a> is initialized with cameras before calling this method, or it may return null.</p>
 </div>
 
 
@@ -386,10 +257,11 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetGCCamera_Stride_Engine_ScriptComponent_System_String_" data-uid="Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetGCCamera(Stride.Engine.ScriptComponent,System.String)">
   GetGCCamera(ScriptComponent, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L99"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L55"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieves the camera from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a> with the specified name. Note that the camera might not be available during the first 2-3 frames.</p>
+  <div class="markdown level1 summary"><p>Retrieves a camera from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a> with the specified name.
+Note that the camera might not be available during the first 2-3 frames.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -400,7 +272,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scriptComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a></dt>
-    <dd><p>The script component from which to access the GraphicsCompositor.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> from which to access the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a>.</p>
 </dd>
     <dt><code>cameraName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
     <dd><p>The name of the camera to retrieve.</p>
@@ -410,7 +282,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> with the given name, if found; otherwise, null.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> with the specified name, if found; otherwise, null.</p>
 </dd>
   </dl>
 
@@ -421,7 +293,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 
 
   <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetGCCamera_Stride_Engine_ScriptComponent_System_String__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>Ensure that the GraphicsCompositor is initialized with cameras; otherwise, this method will fail.</p>
+  <div class="markdown level1 remarks"><p>Ensure that the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs">GraphicsCompositor</a> is initialized with cameras before calling this method, or it may return null.</p>
 </div>
 
 
@@ -431,7 +303,7 @@ public static CameraComponent GetFirstCamera(this ScriptComponent scriptComponen
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L6" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptComponentExtensions.cs/#L9" class="edit-link">Edit this page</a>
         </div>
 
 

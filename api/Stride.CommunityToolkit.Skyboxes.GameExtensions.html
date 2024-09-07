@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class GameExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  class to enhance functionality such as adding skyboxes and other game elements.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Skyboxes_GameExtensions" data-uid="Stride.CommunityToolkit.Skyboxes.GameExtensions" class="text-break">
-Class GameExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Skyboxes/GameExtensions.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class GameExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Skyboxes/GameExtensions.cs/#L15"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.Skyboxes.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a> class to enhance functionality such as adding skyboxes and other game elements.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -121,6 +122,9 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
 
 
+  <h2 id="Stride_CommunityToolkit_Skyboxes_GameExtensions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>These methods allow for easy integration of common game elements into a Stride game project, reducing the need for manual setup.</p>
+</div>
 
 
   <h2 class="section" id="methods">Methods
@@ -131,7 +135,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Skyboxes_GameExtensions_AddSkybox_Stride_Engine_Game_System_String_" data-uid="Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)">
   AddSkybox(Game, string?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Skyboxes/GameExtensions.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Skyboxes/GameExtensions.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.</p>
@@ -139,23 +143,23 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static Entity AddSkybox(this Game game, string? entityName = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static Entity AddSkybox(this Game game, string? entityName = &quot;Skybox&quot;)</code></pre>
   </div>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd><p>The game instance to which the skybox will be added.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a> instance to which the skybox will be added.</p>
 </dd>
     <dt><code>entityName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd><p>The name for the skybox entity. If null, a default name will be used.</p>
+    <dd><p>The optional name for the skybox entity. If null, a default name (&quot;Skybox&quot;) will be used.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd><p>The created skybox entity.</p>
+    <dd><p>The created <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> representing the skybox.</p>
 </dd>
   </dl>
 
@@ -164,11 +168,15 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Skyboxes_GameExtensions_AddSkybox_Stride_Engine_Game_System_String__examples">Examples</h4>
+  <p>This example demonstrates how to add a skybox to a game:</p>
+<pre><code class="lang-csharp">game.AddSkybox();</code></pre>
+
 
   <h4 class="section" id="Stride_CommunityToolkit_Skyboxes_GameExtensions_AddSkybox_Stride_Engine_Game_System_String__remarks">Remarks</h4>
-  <div class="markdown level1 remarks"><p>The skybox texture is loaded from the Resources folder, and is used to generate a skybox using the <a class="xref" href="Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html">SkyboxGenerator</a>.
-A new entity is created with a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/BackgroundComponent.cs">BackgroundComponent</a> and a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/LightComponent.cs">LightComponent</a>, both configured for the skybox, and is added to the game scene.
-The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
+  <div class="markdown level1 remarks"><p>The skybox texture is loaded from the Resources folder and is used to generate a skybox using the <a class="xref" href="Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html">SkyboxGenerator</a>.
+The skybox entity is created with both a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/BackgroundComponent.cs">BackgroundComponent</a> and a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/LightComponent.cs">LightComponent</a>, configured for the skybox.
+The entity is added to the root scene of the game and placed at the default position (0.0f, 2.0f, -2.0f).</p>
 </div>
 
 
@@ -178,7 +186,7 @@ The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Skyboxes/GameExtensions.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Skyboxes/GameExtensions.cs/#L15" class="edit-link">Edit this page</a>
         </div>
 
 

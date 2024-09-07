@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class Primitive2DCreationOptions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides options for creating a 2D primitive entity, such as a square or rectangle. Inherits common entity creation options from  and adds specific settings for 2D primitive models.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions" class="text-break">
-Class Primitive2DCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L6"><i class="bi bi-code-slash"></i></a>
+Class Primitive2DCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,10 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides options for creating a 2D primitive entity, such as a square or rectangle.
+Inherits common entity creation options from <a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html">PrimitiveCreationOptions</a>
+and adds specific settings for 2D primitive models.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -148,10 +151,14 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Depth" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Depth">
   Depth
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L25"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets or sets the depth of the 2D primitive. Defaults to 0.04f.
+The depth adds a third dimension (Z-axis) to the 2D object, making it slightly thicker than a flat object.
+This is useful for the physics engine, which may be optimized for 3D physics calculations.
+Even when handling 2D objects, the physics system often operates in 3D space with constraints applied to specific axes.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -179,10 +186,11 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_PhysicsComponent" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.PhysicsComponent">
   PhysicsComponent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the physics component to be added to the entity. Defaults to a new instance of RigidbodyComponent.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the physics component to be added to the entity. Defaults to a new instance of <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Elements/RigidbodyComponent.cs">RigidbodyComponent</a>.
+This component allows the 2D primitive to interact with the physics system, enabling movement and collisions.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -211,10 +219,11 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_Size" data-uid="Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size">
   Size
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the size of the primitive model. If null, default dimensions are used.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the size of the 2D primitive model.
+If null, default size values will be used. The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a> represents width (X) and height (Y) dimensions.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -243,7 +252,7 @@ Class Primitive2DCreationOptions  <a class="header-action link-secondary" title=
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L6" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive2DCreationOptions.cs/#L11" class="edit-link">Edit this page</a>
         </div>
 
 

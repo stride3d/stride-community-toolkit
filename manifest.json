@@ -277,6 +277,26 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Helpers.VectorHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Helpers.VectorHelper.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Helpers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Helpers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.yml",
       "output": {
         ".html": {
@@ -637,26 +657,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.DisplayPosition.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Scripts.DisplayPosition.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Scripts.GameProfiler.yml",
       "output": {
         ".html": {
@@ -681,6 +681,46 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Scripts.RaySegment.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.html"
         }
       },
       "version": ""

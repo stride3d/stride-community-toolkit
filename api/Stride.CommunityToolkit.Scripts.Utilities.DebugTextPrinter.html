@@ -1,0 +1,370 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DebugTextPrinter | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DebugTextPrinter | Stride Community Toolkit ">
+      
+      <meta name="description" content="A utility class for printing debug text to the screen at various positions. Manages the layout of text, allowing it to be displayed in different areas of the screen and handling multi-line printing.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter">
+
+
+
+  <h1 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter" class="text-break">
+Class DebugTextPrinter  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L7"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Scripts.html">Scripts</a>.<a class="xref" href="Stride.CommunityToolkit.Scripts.Utilities.html">Utilities</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A utility class for printing debug text to the screen at various positions.
+Manages the layout of text, allowing it to be displayed in different areas of the screen and handling multi-line printing.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DebugTextPrinter</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">DebugTextPrinter</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_DebugTextSystem_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_DebugTextSystem" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem">
+  DebugTextSystem
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the debug text system responsible for rendering text to the screen.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public required DebugTextSystem DebugTextSystem { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Profiling/DebugTextSystem.cs">DebugTextSystem</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Instructions_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Instructions" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions">
+  Instructions
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the list of text elements (instructions) to be printed on the screen.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;TextElement&gt; Instructions { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="Stride.CommunityToolkit.Scripts.Utilities.TextElement.html">TextElement</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ScreenSize_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ScreenSize" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize">
+  ScreenSize
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the screen size, which defines the boundaries for placing text on the screen.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Int2 ScreenSize { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_TextSize_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_TextSize" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize">
+  TextSize
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the size of the text elements, typically defining the dimensions of each line of text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Int2 TextSize { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ChangeStartPosition_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ChangeStartPosition" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition">
+  ChangeStartPosition()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Changes the starting position for printing text, rotating through predefined screen positions (TopRight, BottomRight, BottomLeft, TopLeft).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ChangeStartPosition()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize">
+  Initialize()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes the screen position by setting the starting position based on the current display position.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Initialize()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print" data-uid="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print">
+  Print()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Prints all text elements in the <a class="xref" href="Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Instructions">Instructions</a> list, rendering them line by line on the screen.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Print()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Scripts/Utilities/DebugTextPrinter.cs/#L7" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

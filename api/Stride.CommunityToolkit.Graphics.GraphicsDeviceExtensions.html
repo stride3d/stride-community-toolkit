@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class GraphicsDeviceExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  to simplify common operations related to graphics rendering.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Graphics_GraphicsDeviceExtensions" data-uid="Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions" class="text-break">
-Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Graphics/GraphicsDeviceExtensions.cs/#L5"><i class="bi bi-code-slash"></i></a>
+Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Graphics/GraphicsDeviceExtensions.cs/#L8"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="V
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a> to simplify common operations related to graphics rendering.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,10 @@ Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="V
 
   <h3 id="Stride_CommunityToolkit_Graphics_GraphicsDeviceExtensions_GetWindowSize_Stride_Graphics_GraphicsDevice_" data-uid="Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize(Stride.Graphics.GraphicsDevice)">
   GetWindowSize(GraphicsDevice)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Graphics/GraphicsDeviceExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Graphics/GraphicsDeviceExtensions.cs/#L22"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Retrieves the current window size of the GraphicsDevice as a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a>.</p>
+  <div class="markdown level1 summary"><p>Retrieves the current window size of the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a> as an <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a> structure.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -145,14 +146,15 @@ Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="V
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>graphics</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd><p>The GraphicsDevice for which the window size should be retrieved.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a> for which the window size should be retrieved.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a></dt>
-    <dd><p>An <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a> representing the current window size, where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">X</a> is the width and <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Y</a> is the height.</p>
+    <dd><p>An <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Int2</a> representing the current window size. The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">X</a> value corresponds to the window's width,
+and the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Int2.cs">Y</a> value corresponds to the window's height.</p>
 </dd>
   </dl>
 
@@ -162,6 +164,10 @@ Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="V
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Graphics_GraphicsDeviceExtensions_GetWindowSize_Stride_Graphics_GraphicsDevice__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method provides a convenient way to access the dimensions of the back buffer, which corresponds to the size of the window
+in which the game or application is running.</p>
+</div>
 
 
 
@@ -170,7 +176,7 @@ Class GraphicsDeviceExtensions  <a class="header-action link-secondary" title="V
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Graphics/GraphicsDeviceExtensions.cs/#L5" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Graphics/GraphicsDeviceExtensions.cs/#L8" class="edit-link">Edit this page</a>
         </div>
 
 

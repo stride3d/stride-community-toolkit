@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class GameExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  interface, enhancing game management and performance tuning functionality.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Games_GameExtensions" data-uid="Stride.CommunityToolkit.Games.GameExtensions" class="text-break">
-Class GameExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L5"><i class="bi bi-code-slash"></i></a>
+Class GameExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> interface, enhancing game management and performance tuning functionality.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -121,6 +122,9 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
 
 
+  <h2 id="Stride_CommunityToolkit_Games_GameExtensions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>These methods offer additional control over the game's timing, frame rate, and vertical synchronization, allowing for both performance optimization and flexibility.</p>
+</div>
 
 
   <h2 class="section" id="methods">Methods
@@ -131,7 +135,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Games_GameExtensions_DeltaTime_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.DeltaTime(Stride.Games.IGame)">
   DeltaTime(IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L18"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.</p>
@@ -144,8 +148,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>gameTime</code> <a class="xref" href="api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd><p>The IGame interface providing access to game timing information.</p>
+    <dt><code>gameTime</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> interface providing access to game timing information.</p>
 </dd>
   </dl>
 
@@ -170,7 +174,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Games_GameExtensions_DeltaTimeAccurate_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)">
   DeltaTimeAccurate(IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.</p>
@@ -183,8 +187,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>gameTime</code> <a class="xref" href="api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd><p>The IGame interface providing access to game timing information.</p>
+    <dt><code>gameTime</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> interface providing access to game timing information.</p>
 </dd>
   </dl>
 
@@ -205,11 +209,77 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
 
 
+  <a id="Stride_CommunityToolkit_Games_GameExtensions_DisableVSync_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.DisableVSync*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Games_GameExtensions_DisableVSync_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.DisableVSync(Stride.Games.IGame)">
+  DisableVSync(IGame)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L77"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Disables vertical synchronization (VSync) to allow for uncapped frame rates, potentially increasing performance at the cost of possible screen tearing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void DisableVSync(this IGame game)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>game</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> instance on which to disable VSync.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Games_GameExtensions_EnableVSync_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.EnableVSync*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Games_GameExtensions_EnableVSync_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.EnableVSync(Stride.Games.IGame)">
+  EnableVSync(IGame)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Enables vertical synchronization (VSync) to prevent screen tearing by synchronizing the frame rate with the display's refresh rate.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void EnableVSync(this IGame game)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>game</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> instance on which to enable VSync.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
   <a id="Stride_CommunityToolkit_Games_GameExtensions_FPS_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.FPS*"></a>
 
   <h3 id="Stride_CommunityToolkit_Games_GameExtensions_FPS_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.FPS(Stride.Games.IGame)">
   FPS(IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L32"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L38"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the current frames per second (FPS) rate of the running game.</p>
@@ -222,8 +292,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>game</code> <a class="xref" href="api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd><p>The game instance from which to obtain the FPS rate.</p>
+    <dt><code>game</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> instance from which to obtain the FPS rate.</p>
 </dd>
   </dl>
 
@@ -248,11 +318,11 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Games_GameExtensions_SetFocusLostFPS_Stride_Games_IGame_System_Int32_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)">
   SetFocusLostFPS(IGame, int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L40"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Sets the maximum frames per second (FPS) rate for the game when not in focus.
-Set <param name="targetFPS"> to 0 for max possible FPS.</p>
+Set <code class="paramref">targetFPS</code> to 0 for uncapped FPS.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -262,10 +332,12 @@ Set <param name="targetFPS"> to 0 for max possible FPS.</p>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>game</code> <a class="xref" href="api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd></dd>
+    <dt><code>game</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> instance on which to set the FPS limit.</p>
+</dd>
     <dt><code>targetFPS</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd></dd>
+    <dd><p>The target FPS rate. Set to 0 for uncapped FPS.</p>
+</dd>
   </dl>
 
 
@@ -283,11 +355,11 @@ Set <param name="targetFPS"> to 0 for max possible FPS.</p>
 
   <h3 id="Stride_CommunityToolkit_Games_GameExtensions_SetMaxFPS_Stride_Games_IGame_System_Int32_" data-uid="Stride.CommunityToolkit.Games.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)">
   SetMaxFPS(IGame, int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L58"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Sets the maximum frames per second (FPS) rate for the game.
-Set <param name="targetFPS"> to 0 for max possible FPS.</p>
+Set <code class="paramref">targetFPS</code> to 0 for uncapped FPS.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -297,10 +369,12 @@ Set <param name="targetFPS"> to 0 for max possible FPS.</p>
 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
-    <dt><code>game</code> <a class="xref" href="api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd></dd>
+    <dt><code>game</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
+    <dd><p>The <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a> instance on which to set the FPS limit.</p>
+</dd>
     <dt><code>targetFPS</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd></dd>
+    <dd><p>The target FPS rate. Set to 0 for uncapped FPS.</p>
+</dd>
   </dl>
 
 
@@ -318,7 +392,7 @@ Set <param name="targetFPS"> to 0 for max possible FPS.</p>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L5" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Games/GameExtensions.cs/#L11" class="edit-link">Edit this page</a>
         </div>
 
 

@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class SceneExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  class to enhance camera-related functionality.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_SceneExtensions" data-uid="Stride.CommunityToolkit.Engine.SceneExtensions" class="text-break">
-Class SceneExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L4"><i class="bi bi-code-slash"></i></a>
+Class SceneExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L8"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a> class to enhance camera-related functionality.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,10 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="Stride_CommunityToolkit_Engine_SceneExtensions_GetCamera_Stride_Engine_Scene_" data-uid="Stride.CommunityToolkit.Engine.SceneExtensions.GetCamera(Stride.Engine.Scene)">
   GetCamera(Scene)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L21"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the first camera in the scene.</p>
+  <div class="markdown level1 summary"><p>Retrieves the first <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> found in the scene.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -145,13 +146,15 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scene</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a> in which to search for the camera.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The first <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> found in the scene, or <code>null</code> if no camera is present.</p>
+</dd>
   </dl>
 
 
@@ -160,6 +163,10 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_SceneExtensions_GetCamera_Stride_Engine_Scene__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method searches through the scene's entities and returns the first camera it finds.
+It performs a recursive search through child entities as well.</p>
+</div>
 
 
 
@@ -168,10 +175,10 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
 
   <h3 id="Stride_CommunityToolkit_Engine_SceneExtensions_GetCamera_Stride_Engine_Scene_System_String_" data-uid="Stride.CommunityToolkit.Engine.SceneExtensions.GetCamera(Stride.Engine.Scene,System.String)">
   GetCamera(Scene, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the first camera in the scene with the specified <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> name.</p>
+  <div class="markdown level1 summary"><p>Retrieves the first <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> in the scene that belongs to an entity with the specified name.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -182,15 +189,18 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scene</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a> in which to search for the camera.</p>
+</dd>
     <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
+    <dd><p>The name of the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> containing the desired camera.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a></dt>
-    <dd></dd>
+    <dd><p>The first <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/CameraComponent.cs">CameraComponent</a> found with the specified entity name, or <code>null</code> if no matching camera is found.</p>
+</dd>
   </dl>
 
 
@@ -199,6 +209,10 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_SceneExtensions_GetCamera_Stride_Engine_Scene_System_String__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method searches through the scene's entities for a camera that belongs to an entity with the given name.
+It performs a recursive search through child entities as well.</p>
+</div>
 
 
 
@@ -207,7 +221,7 @@ Class SceneExtensions  <a class="header-action link-secondary" title="View sourc
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L4" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/SceneExtensions.cs/#L8" class="edit-link">Edit this page</a>
         </div>
 
 

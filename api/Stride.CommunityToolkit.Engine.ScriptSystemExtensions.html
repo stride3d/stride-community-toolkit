@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class ScriptSystemExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  to facilitate time-based operations, including delays and frame-based executions. These extensions are useful for managing time in game logic, such as delaying actions or executing logic over a period of time.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions" class="text-break">
-Class ScriptSystemExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L5"><i class="bi bi-code-slash"></i></a>
+Class ScriptSystemExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,9 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a> to facilitate time-based operations, including delays and frame-based executions.
+These extensions are useful for managing time in game logic, such as delaying actions or executing logic over a period of time.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -120,7 +122,31 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
 
 
+  <h2 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_examples">Examples</h2>
+  <p>
+Example 1: Delaying an action for 2 seconds in game time (affected by time warp):
+</p>
+<pre><code class="lang-csharp">await scriptSystem.DelayWarped(2.0f);
+// Action will be delayed for 2 in-game seconds, accounting for any time warp factors.</code></pre>
+<p>
+Example 2: Running a continuous action for 5 seconds of real time (unaffected by time warp):
+</p>
+<pre><code class="lang-csharp">await scriptSystem.ExecuteInTime(5.0f, elapsed =&gt;
+{
+    // Perform action based on the elapsed time in real seconds.
+    DebugText.Print($"Time elapsed: {elapsed} seconds");
+});</code></pre>
+<p>
+Example 3: Delaying an action for 3 real-time seconds (unaffected by time warp):
+</p>
+<pre><code class="lang-csharp">await scriptSystem.Delay(3.0f);
+// Action will be delayed for exactly 3 real seconds.</code></pre>
 
+
+  <h2 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>These extensions allow you to control how game logic interacts with time, whether you need frame-based operations or time delays.
+The methods are useful for both real-time and in-game time-based operations.</p>
+</div>
 
 
   <h2 class="section" id="methods">Methods
@@ -131,10 +157,10 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_Delay_Stride_Engine_Processors_ScriptSystem_System_Single_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.Delay(Stride.Engine.Processors.ScriptSystem,System.Single)">
   Delay(ScriptSystem, float)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L29"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L65"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Waits for a specified amount of time.</p>
+  <div class="markdown level1 summary"><p>Waits for a specified amount of real time (not accounting for any time warp factors).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -145,17 +171,17 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>script</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
-    <dd><p>The script system.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a> instance used to execute the delay.</p>
 </dd>
     <dt><code>seconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd><p>The amount of time to be delayed.</p>
+    <dd><p>The number of seconds to delay execution.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> that represents the time delay.</p>
+    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> representing the delay.</p>
 </dd>
   </dl>
 
@@ -165,6 +191,9 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_Delay_Stride_Engine_Processors_ScriptSystem_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This delay operates in real time without considering the game's time warp.</p>
+</div>
 
 
 
@@ -173,10 +202,10 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_DelayWarped_Stride_Engine_Processors_ScriptSystem_System_Single_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.DelayWarped(Stride.Engine.Processors.ScriptSystem,System.Single)">
   DelayWarped(ScriptSystem, float)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L48"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Waits for a specified amount of time while taking into account the Update Time factor.</p>
+  <div class="markdown level1 summary"><p>Waits for a specified amount of time, adjusting for any time warp factors.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -187,17 +216,17 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>script</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
-    <dd><p>The script system.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a> instance used to execute the delay.</p>
 </dd>
     <dt><code>seconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd><p>The amount of time to be delayed.</p>
+    <dd><p>The number of seconds to delay execution.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> that represents the time delay.</p>
+    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> representing the delay.</p>
 </dd>
   </dl>
 
@@ -207,6 +236,9 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_DelayWarped_Stride_Engine_Processors_ScriptSystem_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This delay takes into account the game's time warp factor, using the <code>WarpElapsed</code> property of <code>UpdateTime</code>.</p>
+</div>
 
 
 
@@ -215,10 +247,10 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_ExecuteInTime_Stride_Engine_Processors_ScriptSystem_System_Single_System_Action_System_Single__" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.ExecuteInTime(Stride.Engine.Processors.ScriptSystem,System.Single,System.Action{System.Single})">
   ExecuteInTime(ScriptSystem, float, Action&lt;float&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L95"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Continuously executes an action every frame during a specified amount of time.</p>
+  <div class="markdown level1 summary"><p>Executes an action every frame for a specified duration, using real time (not accounting for any time warp factors).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -229,20 +261,20 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>script</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
-    <dd><p>The script system.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a> instance used to execute the action.</p>
 </dd>
     <dt><code>seconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd><p>The duration in seconds.</p>
+    <dd><p>The duration in seconds for which the action will be executed.</p>
 </dd>
     <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>&gt;</dt>
-    <dd><p>The action that will be executed every frame.</p>
+    <dd><p>The action to perform on each frame, which receives the elapsed time as a parameter.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> that represents the execution.</p>
+    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> representing the action execution.</p>
 </dd>
   </dl>
 
@@ -252,6 +284,9 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_ExecuteInTime_Stride_Engine_Processors_ScriptSystem_System_Single_System_Action_System_Single___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method operates in real time, without considering the game's time warp.</p>
+</div>
 
 
 
@@ -260,10 +295,10 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_ExecuteInWarpedTime_Stride_Engine_Processors_ScriptSystem_System_Single_System_Action_System_Single__" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.ExecuteInWarpedTime(Stride.Engine.Processors.ScriptSystem,System.Single,System.Action{System.Single})">
   ExecuteInWarpedTime(ScriptSystem, float, Action&lt;float&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L76"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Continuously executes an action every frame during a specified amount of time while taking into account the Update Time factor.</p>
+  <div class="markdown level1 summary"><p>Executes an action every frame for a specified duration, adjusting for any time warp factors.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -274,20 +309,20 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>script</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
-    <dd><p>The script system.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a> instance used to execute the action.</p>
 </dd>
     <dt><code>seconds</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd><p>The duration in seconds.</p>
+    <dd><p>The duration in seconds for which the action will be executed.</p>
 </dd>
     <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>&gt;</dt>
-    <dd><p>The action that will be executed every frame.</p>
+    <dd><p>The action to perform on each frame, which receives the elapsed time as a parameter.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
-    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> that represents the execution.</p>
+    <dd><p>A <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> representing the action execution.</p>
 </dd>
   </dl>
 
@@ -297,6 +332,9 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_ExecuteInWarpedTime_Stride_Engine_Processors_ScriptSystem_System_Single_System_Action_System_Single___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method accounts for the game's <code>WarpElapsed</code> time factor during execution.</p>
+</div>
 
 
 
@@ -305,7 +343,7 @@ Class ScriptSystemExtensions  <a class="header-action link-secondary" title="Vie
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L5" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L39" class="edit-link">Edit this page</a>
         </div>
 
 

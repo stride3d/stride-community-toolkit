@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class SimulationExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  class to perform raycasting operations in a game simulation.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Physics_SimulationExtensions" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions" class="text-break">
-Class SimulationExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
+Class SimulationExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L9"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a> class to perform raycasting operations in a game simulation.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,10 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 
   <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)">
   Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>A Raycast method based on the example in the fps demo</p>
+  <div class="markdown level1 summary"><p>Performs a raycast from the given entity's position in the specified direction, with the specified length.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -145,23 +146,30 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a> instance in which the raycast is performed.</p>
+</dd>
     <dt><code>entityPosition</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the ray starts. The ray is cast from the entity's current world position.</p>
+</dd>
     <dt><code>direction</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
-    <dd></dd>
+    <dd><p>The direction in which the ray is cast.</p>
+</dd>
     <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd></dd>
-    <dt><code>collisionFlags</code> <a class="xref" href="api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
-    <dd></dd>
-    <dt><code>eFlags</code> <a class="xref" href="api/Stride.Physics.EFlags.html">EFlags</a></dt>
-    <dd></dd>
+    <dd><p>The length of the ray, which determines how far it should extend from the entity. Defaults to 1.</p>
+</dd>
+    <dt><code>collisionFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
+    <dd><p>Specifies which collision groups to include in the raycast. Defaults to <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html#Stride_Physics_CollisionFilterGroupFlags_AllFilter">AllFilter</a>.</p>
+</dd>
+    <dt><code>eFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.EFlags.html">EFlags</a></dt>
+    <dd><p>Additional raycasting flags for fine-tuning the behavior. Defaults to <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.EFlags.html#Stride_Physics_EFlags_None">None</a>.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="api/Stride.Physics.HitResult.html">HitResult</a></dt>
-    <dd></dd>
+    <dt><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a></dt>
+    <dd><p>A <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a> that contains information about the first object hit by the ray, or an empty result if nothing is hit.</p>
+</dd>
   </dl>
 
 
@@ -178,11 +186,10 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 
   <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)">
   Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L23"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>A Raycast method based on the example in the fps demo</p>
-<p>Make sure you are using the actual rotating Entity otherwise you will waste hours like I did debugging a non issue</p>
+  <div class="markdown level1 summary"><p>Performs a raycast from the given entity's position in the direction the entity is facing, with the specified length.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -193,21 +200,27 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a> instance in which the raycast is performed.</p>
+</dd>
     <dt><code>entityPosition</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the ray starts. The ray is cast from the entity's current world position and direction.</p>
+</dd>
     <dt><code>length</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
-    <dd></dd>
-    <dt><code>collisionFlags</code> <a class="xref" href="api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
-    <dd></dd>
-    <dt><code>eFlags</code> <a class="xref" href="api/Stride.Physics.EFlags.html">EFlags</a></dt>
-    <dd></dd>
+    <dd><p>The length of the ray, which determines how far it should extend from the entity. Defaults to 1.</p>
+</dd>
+    <dt><code>collisionFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
+    <dd><p>Specifies which collision groups to include in the raycast. Defaults to <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html#Stride_Physics_CollisionFilterGroupFlags_AllFilter">AllFilter</a>.</p>
+</dd>
+    <dt><code>eFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.EFlags.html">EFlags</a></dt>
+    <dd><p>Additional raycasting flags for fine-tuning the behavior. Defaults to <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.EFlags.html#Stride_Physics_EFlags_None">None</a>.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="api/Stride.Physics.HitResult.html">HitResult</a></dt>
-    <dd></dd>
+    <dt><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a></dt>
+    <dd><p>A <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a> that contains information about the first object hit by the ray, or an empty result if nothing is hit.</p>
+</dd>
   </dl>
 
 
@@ -216,6 +229,9 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Ensure that you are using the actual rotating entity, as debugging with the wrong entity can lead to unexpected results.</p>
+</div>
 
 
 
@@ -224,7 +240,7 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L6" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L9" class="edit-link">Edit this page</a>
         </div>
 
 

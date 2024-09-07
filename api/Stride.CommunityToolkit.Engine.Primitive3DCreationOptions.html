@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_Primitive3DCreationOptions" data-uid="Stride.CommunityToolkit.Engine.Primitive3DCreationOptions" class="text-break">
-Class Primitive3DCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class Primitive3DCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -139,6 +139,10 @@ Class Primitive3DCreationOptions  <a class="header-action link-secondary" title=
 
 
 
+  <h2 id="Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This class inherits from <a class="xref" href="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html">PrimitiveCreationOptions</a> and extends it with properties
+specific to 3D models, such as size and physics components.</p>
+</div>
 
 
   <h2 class="section" id="properties">Properties
@@ -149,10 +153,10 @@ Class Primitive3DCreationOptions  <a class="header-action link-secondary" title=
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_PhysicsComponent" data-uid="Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.PhysicsComponent">
   PhysicsComponent
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L19"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the physics component to be added to the entity. Defaults to a new instance of RigidbodyComponent.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the physics component to be added to the entity. Defaults to a new instance of <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Elements/RigidbodyComponent.cs">RigidbodyComponent</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -173,6 +177,10 @@ Class Primitive3DCreationOptions  <a class="header-action link-secondary" title=
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_PhysicsComponent_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>By default, a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Elements/RigidbodyComponent.cs">RigidbodyComponent</a> is assigned to the entity to handle physics simulations,
+but you can override this with a custom physics component if needed.</p>
+</div>
 
 
 
@@ -181,10 +189,10 @@ Class Primitive3DCreationOptions  <a class="header-action link-secondary" title=
 
   <h3 id="Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Size" data-uid="Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size">
   Size
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L22"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the size of the primitive model. If null, default dimensions are used.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the size of the 3D primitive model. If null, default dimensions are used.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -205,6 +213,10 @@ Class Primitive3DCreationOptions  <a class="header-action link-secondary" title=
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Size_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>The <a class="xref" href="Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_Size">Size</a> property allows you to specify custom dimensions for the 3D model.
+If no size is specified, default dimensions will be applied, based on the type of primitive.</p>
+</div>
 
 
 
@@ -213,7 +225,7 @@ Class Primitive3DCreationOptions  <a class="header-action link-secondary" title=
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/Primitive3DCreationOptions.cs/#L13" class="edit-link">Edit this page</a>
         </div>
 
 

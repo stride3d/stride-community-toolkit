@@ -124,6 +124,19 @@ references:
   commentId: T:Stride.CommunityToolkit.Engine.CameraComponentExtensions
   fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions
   nameWithType: CameraComponentExtensions
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.CalculateRayFromScreenPosition(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  name: CalculateRayFromScreenPosition(CameraComponent, Vector2)
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_CalculateRayFromScreenPosition_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
+  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.CalculateRayFromScreenPosition(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.CalculateRayFromScreenPosition(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2)
+  nameWithType: CameraComponentExtensions.CalculateRayFromScreenPosition(CameraComponent, Vector2)
+- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.CalculateRayFromScreenPosition*
+  name: CalculateRayFromScreenPosition
+  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_CalculateRayFromScreenPosition_
+  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.CalculateRayFromScreenPosition
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.CalculateRayFromScreenPosition
+  nameWithType: CameraComponentExtensions.CalculateRayFromScreenPosition
 - uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.GetPickRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
   name: GetPickRay(CameraComponent, Vector2)
   href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_GetPickRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
@@ -484,13 +497,13 @@ references:
   fullName: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent
   nameWithType: EntityExtensions.TryGetComponent
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)
-  name: TryGetComponent<T>(Entity, out T?)
+  name: TryGetComponent<T>(Entity, out T)
   href: api/Stride.CommunityToolkit.Engine.EntityExtensions.html#Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent__1_Stride_Engine_Entity___0__
   commentId: M:Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)
   name.vb: TryGetComponent(Of T)(Entity, T)
-  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent<T>(Stride.Engine.Entity, out T?)
+  fullName: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent<T>(Stride.Engine.Entity, out T)
   fullName.vb: Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent(Of T)(Stride.Engine.Entity, T)
-  nameWithType: EntityExtensions.TryGetComponent<T>(Entity, out T?)
+  nameWithType: EntityExtensions.TryGetComponent<T>(Entity, out T)
   nameWithType.vb: EntityExtensions.TryGetComponent(Of T)(Entity, T)
 - uid: Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)
   name: WorldPosition(Entity, bool)
@@ -1187,41 +1200,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.DeltaTime
   nameWithType: ScriptComponentExtensions.DeltaTime
-- uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)
-  name: GetCamera(ScriptComponent)
-  href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_
-  commentId: M:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)
-  fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent)
-  nameWithType: ScriptComponentExtensions.GetCamera(ScriptComponent)
-- uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)
-  name: GetCamera(ScriptComponent, string)
-  href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_Stride_Engine_ScriptComponent_System_String_
-  commentId: M:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent,System.String)
-  name.vb: GetCamera(ScriptComponent, String)
-  fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent, string)
-  fullName.vb: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera(Stride.Engine.ScriptComponent, String)
-  nameWithType: ScriptComponentExtensions.GetCamera(ScriptComponent, string)
-  nameWithType.vb: ScriptComponentExtensions.GetCamera(ScriptComponent, String)
-- uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera*
-  name: GetCamera
-  href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetCamera_
-  commentId: Overload:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetCamera
-  nameWithType: ScriptComponentExtensions.GetCamera
-- uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)
-  name: GetFirstCamera(ScriptComponent)
-  href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstCamera_Stride_Engine_ScriptComponent_
-  commentId: M:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)
-  fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera(Stride.Engine.ScriptComponent)
-  nameWithType: ScriptComponentExtensions.GetFirstCamera(ScriptComponent)
-- uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera*
-  name: GetFirstCamera
-  href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstCamera_
-  commentId: Overload:Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstCamera
-  nameWithType: ScriptComponentExtensions.GetFirstCamera
 - uid: Stride.CommunityToolkit.Engine.ScriptComponentExtensions.GetFirstGCCamera(Stride.Engine.ScriptComponent)
   name: GetFirstGCCamera(ScriptComponent)
   href: api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html#Stride_CommunityToolkit_Engine_ScriptComponentExtensions_GetFirstGCCamera_Stride_Engine_ScriptComponent_
@@ -1453,6 +1431,32 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Games.GameExtensions.DeltaTimeAccurate
   nameWithType: GameExtensions.DeltaTimeAccurate
+- uid: Stride.CommunityToolkit.Games.GameExtensions.DisableVSync(Stride.Games.IGame)
+  name: DisableVSync(IGame)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_DisableVSync_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.DisableVSync(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.DisableVSync(Stride.Games.IGame)
+  nameWithType: GameExtensions.DisableVSync(IGame)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.DisableVSync*
+  name: DisableVSync
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_DisableVSync_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.DisableVSync
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.DisableVSync
+  nameWithType: GameExtensions.DisableVSync
+- uid: Stride.CommunityToolkit.Games.GameExtensions.EnableVSync(Stride.Games.IGame)
+  name: EnableVSync(IGame)
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_EnableVSync_Stride_Games_IGame_
+  commentId: M:Stride.CommunityToolkit.Games.GameExtensions.EnableVSync(Stride.Games.IGame)
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.EnableVSync(Stride.Games.IGame)
+  nameWithType: GameExtensions.EnableVSync(IGame)
+- uid: Stride.CommunityToolkit.Games.GameExtensions.EnableVSync*
+  name: EnableVSync
+  href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_EnableVSync_
+  commentId: Overload:Stride.CommunityToolkit.Games.GameExtensions.EnableVSync
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Games.GameExtensions.EnableVSync
+  nameWithType: GameExtensions.EnableVSync
 - uid: Stride.CommunityToolkit.Games.GameExtensions.FPS(Stride.Games.IGame)
   name: FPS(IGame)
   href: api/Stride.CommunityToolkit.Games.GameExtensions.html#Stride_CommunityToolkit_Games_GameExtensions_FPS_Stride_Games_IGame_
@@ -1523,6 +1527,59 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.GetWindowSize
   nameWithType: GraphicsDeviceExtensions.GetWindowSize
+- uid: Stride.CommunityToolkit.Helpers
+  name: Stride.CommunityToolkit.Helpers
+  href: api/Stride.CommunityToolkit.Helpers.html
+  commentId: N:Stride.CommunityToolkit.Helpers
+  fullName: Stride.CommunityToolkit.Helpers
+  nameWithType: Stride.CommunityToolkit.Helpers
+- uid: Stride.CommunityToolkit.Helpers.VectorHelper
+  name: VectorHelper
+  href: api/Stride.CommunityToolkit.Helpers.VectorHelper.html
+  commentId: T:Stride.CommunityToolkit.Helpers.VectorHelper
+  fullName: Stride.CommunityToolkit.Helpers.VectorHelper
+  nameWithType: VectorHelper
+- uid: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(System.Single,System.Single,System.Random)
+  name: RandomVector3(float, float, Random?)
+  href: api/Stride.CommunityToolkit.Helpers.VectorHelper.html#Stride_CommunityToolkit_Helpers_VectorHelper_RandomVector3_System_Single_System_Single_System_Random_
+  commentId: M:Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(System.Single,System.Single,System.Random)
+  name.vb: RandomVector3(Single, Single, Random)
+  fullName: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(float, float, System.Random?)
+  fullName.vb: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(Single, Single, System.Random)
+  nameWithType: VectorHelper.RandomVector3(float, float, Random?)
+  nameWithType.vb: VectorHelper.RandomVector3(Single, Single, Random)
+- uid: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(System.Single[],System.Single[],System.Single[],System.Random)
+  name: RandomVector3(float[], float[], float[], Random?)
+  href: api/Stride.CommunityToolkit.Helpers.VectorHelper.html#Stride_CommunityToolkit_Helpers_VectorHelper_RandomVector3_System_Single___System_Single___System_Single___System_Random_
+  commentId: M:Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(System.Single[],System.Single[],System.Single[],System.Random)
+  name.vb: RandomVector3(Single(), Single(), Single(), Random)
+  fullName: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(float[], float[], float[], System.Random?)
+  fullName.vb: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(Single(), Single(), Single(), System.Random)
+  nameWithType: VectorHelper.RandomVector3(float[], float[], float[], Random?)
+  nameWithType.vb: VectorHelper.RandomVector3(Single(), Single(), Single(), Random)
+- uid: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3*
+  name: RandomVector3
+  href: api/Stride.CommunityToolkit.Helpers.VectorHelper.html#Stride_CommunityToolkit_Helpers_VectorHelper_RandomVector3_
+  commentId: Overload:Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3
+  nameWithType: VectorHelper.RandomVector3
+- uid: Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom(System.Int32)
+  name: SeedRandom(int)
+  href: api/Stride.CommunityToolkit.Helpers.VectorHelper.html#Stride_CommunityToolkit_Helpers_VectorHelper_SeedRandom_System_Int32_
+  commentId: M:Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom(System.Int32)
+  name.vb: SeedRandom(Integer)
+  fullName: Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom(int)
+  fullName.vb: Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom(Integer)
+  nameWithType: VectorHelper.SeedRandom(int)
+  nameWithType.vb: VectorHelper.SeedRandom(Integer)
+- uid: Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom*
+  name: SeedRandom
+  href: api/Stride.CommunityToolkit.Helpers.VectorHelper.html#Stride_CommunityToolkit_Helpers_VectorHelper_SeedRandom_
+  commentId: Overload:Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Helpers.VectorHelper.SeedRandom
+  nameWithType: VectorHelper.SeedRandom
 - uid: Stride.CommunityToolkit.Physics
   name: Stride.CommunityToolkit.Physics
   href: api/Stride.CommunityToolkit.Physics.html
@@ -4468,6 +4525,19 @@ references:
   commentId: T:Stride.CommunityToolkit.Scripts.Basic2DCameraController
   fullName: Stride.CommunityToolkit.Scripts.Basic2DCameraController
   nameWithType: Basic2DCameraController
+- uid: Stride.CommunityToolkit.Scripts.Basic2DCameraController.Start
+  name: Start()
+  href: api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.html#Stride_CommunityToolkit_Scripts_Basic2DCameraController_Start
+  commentId: M:Stride.CommunityToolkit.Scripts.Basic2DCameraController.Start
+  fullName: Stride.CommunityToolkit.Scripts.Basic2DCameraController.Start()
+  nameWithType: Basic2DCameraController.Start()
+- uid: Stride.CommunityToolkit.Scripts.Basic2DCameraController.Start*
+  name: Start
+  href: api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.html#Stride_CommunityToolkit_Scripts_Basic2DCameraController_Start_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Basic2DCameraController.Start
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Basic2DCameraController.Start
+  nameWithType: Basic2DCameraController.Start
 - uid: Stride.CommunityToolkit.Scripts.Basic2DCameraController.Update
   name: Update()
   href: api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.html#Stride_CommunityToolkit_Scripts_Basic2DCameraController_Update
@@ -4604,87 +4674,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.Basic3DCameraController.Update
   nameWithType: Basic3DCameraController.Update
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter
-  name: DebugTextPrinter
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html
-  commentId: T:Stride.CommunityToolkit.Scripts.DebugTextPrinter
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter
-  nameWithType: DebugTextPrinter
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor(Stride.Profiling.DebugTextSystem,Stride.Core.Mathematics.Int2)
-  name: DebugTextPrinter(DebugTextSystem, Int2)
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter__ctor_Stride_Profiling_DebugTextSystem_Stride_Core_Mathematics_Int2_
-  commentId: M:Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor(Stride.Profiling.DebugTextSystem,Stride.Core.Mathematics.Int2)
-  name.vb: New(DebugTextSystem, Int2)
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.DebugTextPrinter(Stride.Profiling.DebugTextSystem, Stride.Core.Mathematics.Int2)
-  fullName.vb: Stride.CommunityToolkit.Scripts.DebugTextPrinter.New(Stride.Profiling.DebugTextSystem, Stride.Core.Mathematics.Int2)
-  nameWithType: DebugTextPrinter.DebugTextPrinter(DebugTextSystem, Int2)
-  nameWithType.vb: DebugTextPrinter.New(DebugTextSystem, Int2)
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor*
-  name: DebugTextPrinter
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter__ctor_
-  commentId: Overload:Stride.CommunityToolkit.Scripts.DebugTextPrinter.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.DebugTextPrinter
-  fullName.vb: Stride.CommunityToolkit.Scripts.DebugTextPrinter.New
-  nameWithType: DebugTextPrinter.DebugTextPrinter
-  nameWithType.vb: DebugTextPrinter.New
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
-  name: ChangeStartPosition()
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_ChangeStartPosition
-  commentId: M:Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition()
-  nameWithType: DebugTextPrinter.ChangeStartPosition()
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition*
-  name: ChangeStartPosition
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_ChangeStartPosition_
-  commentId: Overload:Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.ChangeStartPosition
-  nameWithType: DebugTextPrinter.ChangeStartPosition
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
-  name: Print()
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_Print
-  commentId: M:Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print()
-  nameWithType: DebugTextPrinter.Print()
-- uid: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print*
-  name: Print
-  href: api/Stride.CommunityToolkit.Scripts.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_DebugTextPrinter_Print_
-  commentId: Overload:Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Scripts.DebugTextPrinter.Print
-  nameWithType: DebugTextPrinter.Print
-- uid: Stride.CommunityToolkit.Scripts.DisplayPosition
-  name: DisplayPosition
-  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html
-  commentId: T:Stride.CommunityToolkit.Scripts.DisplayPosition
-  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition
-  nameWithType: DisplayPosition
-- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomLeft
-  name: BottomLeft
-  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_BottomLeft
-  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.BottomLeft
-  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomLeft
-  nameWithType: DisplayPosition.BottomLeft
-- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomRight
-  name: BottomRight
-  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_BottomRight
-  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.BottomRight
-  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.BottomRight
-  nameWithType: DisplayPosition.BottomRight
-- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.TopLeft
-  name: TopLeft
-  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_TopLeft
-  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.TopLeft
-  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.TopLeft
-  nameWithType: DisplayPosition.TopLeft
-- uid: Stride.CommunityToolkit.Scripts.DisplayPosition.TopRight
-  name: TopRight
-  href: api/Stride.CommunityToolkit.Scripts.DisplayPosition.html#Stride_CommunityToolkit_Scripts_DisplayPosition_TopRight
-  commentId: F:Stride.CommunityToolkit.Scripts.DisplayPosition.TopRight
-  fullName: Stride.CommunityToolkit.Scripts.DisplayPosition.TopRight
-  nameWithType: DisplayPosition.TopRight
 - uid: Stride.CommunityToolkit.Scripts.GameProfiler
   name: GameProfiler
   href: api/Stride.CommunityToolkit.Scripts.GameProfiler.html
@@ -5033,6 +5022,190 @@ references:
   fullName.vb: Stride.CommunityToolkit.Scripts.RaySegment.<>
   nameWithType: RaySegment.operator !=
   nameWithType.vb: RaySegment.<>
+- uid: Stride.CommunityToolkit.Scripts.Utilities
+  name: Stride.CommunityToolkit.Scripts.Utilities
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.html
+  commentId: N:Stride.CommunityToolkit.Scripts.Utilities
+  fullName: Stride.CommunityToolkit.Scripts.Utilities
+  nameWithType: Stride.CommunityToolkit.Scripts.Utilities
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter
+  name: DebugTextPrinter
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html
+  commentId: T:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter
+  nameWithType: DebugTextPrinter
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition
+  name: ChangeStartPosition()
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ChangeStartPosition
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition()
+  nameWithType: DebugTextPrinter.ChangeStartPosition()
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition*
+  name: ChangeStartPosition
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ChangeStartPosition_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ChangeStartPosition
+  nameWithType: DebugTextPrinter.ChangeStartPosition
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem
+  name: DebugTextSystem
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_DebugTextSystem
+  commentId: P:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem
+  nameWithType: DebugTextPrinter.DebugTextSystem
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem*
+  name: DebugTextSystem
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_DebugTextSystem_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem
+  nameWithType: DebugTextPrinter.DebugTextSystem
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
+  name: Initialize()
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize()
+  nameWithType: DebugTextPrinter.Initialize()
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize*
+  name: Initialize
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
+  nameWithType: DebugTextPrinter.Initialize
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions
+  name: Instructions
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Instructions
+  commentId: P:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions
+  nameWithType: DebugTextPrinter.Instructions
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions*
+  name: Instructions
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Instructions_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Instructions
+  nameWithType: DebugTextPrinter.Instructions
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print
+  name: Print()
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print()
+  nameWithType: DebugTextPrinter.Print()
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print*
+  name: Print
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print
+  nameWithType: DebugTextPrinter.Print
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize
+  name: ScreenSize
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ScreenSize
+  commentId: P:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize
+  nameWithType: DebugTextPrinter.ScreenSize
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize*
+  name: ScreenSize
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_ScreenSize_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.ScreenSize
+  nameWithType: DebugTextPrinter.ScreenSize
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize
+  name: TextSize
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_TextSize
+  commentId: P:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize
+  nameWithType: DebugTextPrinter.TextSize
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize*
+  name: TextSize
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_TextSize_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize
+  nameWithType: DebugTextPrinter.TextSize
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition
+  name: DisplayPosition
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html
+  commentId: T:Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition
+  nameWithType: DisplayPosition
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.BottomLeft
+  name: BottomLeft
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html#Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition_BottomLeft
+  commentId: F:Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.BottomLeft
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.BottomLeft
+  nameWithType: DisplayPosition.BottomLeft
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.BottomRight
+  name: BottomRight
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html#Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition_BottomRight
+  commentId: F:Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.BottomRight
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.BottomRight
+  nameWithType: DisplayPosition.BottomRight
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.TopLeft
+  name: TopLeft
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html#Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition_TopLeft
+  commentId: F:Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.TopLeft
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.TopLeft
+  nameWithType: DisplayPosition.TopLeft
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.TopRight
+  name: TopRight
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html#Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition_TopRight
+  commentId: F:Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.TopRight
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.TopRight
+  nameWithType: DisplayPosition.TopRight
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement
+  name: TextElement
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html
+  commentId: T:Stride.CommunityToolkit.Scripts.Utilities.TextElement
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement
+  nameWithType: TextElement
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement.#ctor(System.String,System.Nullable{Stride.Core.Mathematics.Color})
+  name: TextElement(string, Color?)
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html#Stride_CommunityToolkit_Scripts_Utilities_TextElement__ctor_System_String_System_Nullable_Stride_Core_Mathematics_Color__
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.TextElement.#ctor(System.String,System.Nullable{Stride.Core.Mathematics.Color})
+  name.vb: New(String, Color?)
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement.TextElement(string, Stride.Core.Mathematics.Color?)
+  fullName.vb: Stride.CommunityToolkit.Scripts.Utilities.TextElement.New(String, Stride.Core.Mathematics.Color?)
+  nameWithType: TextElement.TextElement(string, Color?)
+  nameWithType.vb: TextElement.New(String, Color?)
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement.#ctor*
+  name: TextElement
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html#Stride_CommunityToolkit_Scripts_Utilities_TextElement__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.TextElement.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement.TextElement
+  fullName.vb: Stride.CommunityToolkit.Scripts.Utilities.TextElement.New
+  nameWithType: TextElement.TextElement
+  nameWithType.vb: TextElement.New
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Color
+  name: Color
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html#Stride_CommunityToolkit_Scripts_Utilities_TextElement_Color
+  commentId: P:Stride.CommunityToolkit.Scripts.Utilities.TextElement.Color
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Color
+  nameWithType: TextElement.Color
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Color*
+  name: Color
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html#Stride_CommunityToolkit_Scripts_Utilities_TextElement_Color_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.TextElement.Color
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Color
+  nameWithType: TextElement.Color
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Text
+  name: Text
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html#Stride_CommunityToolkit_Scripts_Utilities_TextElement_Text
+  commentId: P:Stride.CommunityToolkit.Scripts.Utilities.TextElement.Text
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Text
+  nameWithType: TextElement.Text
+- uid: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Text*
+  name: Text
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html#Stride_CommunityToolkit_Scripts_Utilities_TextElement_Text_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.TextElement.Text
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.TextElement.Text
+  nameWithType: TextElement.Text
 - uid: Stride.CommunityToolkit.Skyboxes
   name: Stride.CommunityToolkit.Skyboxes
   href: api/Stride.CommunityToolkit.Skyboxes.html

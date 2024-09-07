@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class CameraDefaults | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides default settings for camera initialization within a game or scene, including default positions, rotations, and the main camera name.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_CameraDefaults" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults" class="text-break">
-Class CameraDefaults  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L3"><i class="bi bi-code-slash"></i></a>
+Class CameraDefaults  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L7"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,9 @@ Class CameraDefaults  <a class="header-action link-secondary" title="View source
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides default settings for camera initialization within a game or scene,
+including default positions, rotations, and the main camera name.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -130,10 +132,12 @@ Class CameraDefaults  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_Initial2DPosition" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DPosition">
   Initial2DPosition
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L25"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Specifies the default initial position for a 2D camera within the game or scene.
+This position is set as (0, 0, 50), placing the camera far enough from the origin to see the 2D plane.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -160,10 +164,12 @@ Class CameraDefaults  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_Initial2DRotation" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.Initial2DRotation">
   Initial2DRotation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L19"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L31"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Specifies the default initial rotation for a 2D camera within the game or scene.
+This rotation is set as (0, 0, 0) by default, representing no rotation around the X, Y, and Z axes.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -190,11 +196,11 @@ Class CameraDefaults  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_Initial3DPosition" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DPosition">
   Initial3DPosition
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L9"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L13"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Specifies the initial position for a camera within the game or scene.
-This position is set as (6, 6, 6) by default.</p>
+  <div class="markdown level1 summary"><p>Specifies the default initial position for a 3D camera within the game or scene.
+This position is set as (6, 6, 6) by default, representing the X, Y, and Z coordinates.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -222,11 +228,11 @@ This position is set as (6, 6, 6) by default.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_Initial3DRotation" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.Initial3DRotation">
   Initial3DRotation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L19"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Specifies the initial rotation (in degrees) for a camera within the game or scene.
-This rotation is set as (45, -30, 0) by default, representing rotations around the X, Y, and Z axes respectively.</p>
+  <div class="markdown level1 summary"><p>Specifies the default initial rotation (in degrees) for a 3D camera within the game or scene.
+The rotation is set as (45, -30, 0) by default, representing rotations around the Yaw (X), Pitch (Y), and Roll (Z) axes.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -254,10 +260,10 @@ This rotation is set as (45, -30, 0) by default, representing rotations around t
 
   <h3 id="Stride_CommunityToolkit_Engine_CameraDefaults_MainCameraName" data-uid="Stride.CommunityToolkit.Engine.CameraDefaults.MainCameraName">
   MainCameraName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Main camera name used be default in Stride</p>
+  <div class="markdown level1 summary"><p>The default name for the main camera used in Stride game projects.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -286,7 +292,7 @@ This rotation is set as (45, -30, 0) by default, representing rotations around t
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L3" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/CameraDefaults.cs/#L7" class="edit-link">Edit this page</a>
         </div>
 
 

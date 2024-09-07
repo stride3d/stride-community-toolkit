@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class PrimitiveCreationOptions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides options for creating a primitive entity, such as a cube, sphere, or other 3D object. These options allow customization of the entity&#39;s name, material, collider inclusion, and render group.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -77,7 +77,7 @@
 
       <div class="content">
         <div class="actionbar">
-          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
             <i class="bi bi-list"></i>
           </button>
 
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_PrimitiveCreationOptions" data-uid="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions" class="text-break">
-Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L5"><i class="bi bi-code-slash"></i></a>
+Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L9"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,9 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides options for creating a primitive entity, such as a cube, sphere, or other 3D object.
+These options allow customization of the entity's name, material, collider inclusion, and render group.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -140,10 +142,11 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
 
   <h3 id="Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_EntityName" data-uid="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.EntityName">
   EntityName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L15"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the name of the entity.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the name of the entity.
+This can be useful for identifying the entity within the scene or debugging purposes.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -172,10 +175,11 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
 
   <h3 id="Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_IncludeCollider" data-uid="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.IncludeCollider">
   IncludeCollider
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L27"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Determines whether to include a collider component in the entity. Defaults to true.</p>
+  <div class="markdown level1 summary"><p>Determines whether to include a collider component in the entity. Defaults to true.
+A collider is necessary for physics interactions, such as detecting collisions with other entities.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -204,10 +208,11 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
 
   <h3 id="Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_Material" data-uid="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.Material">
   Material
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L21"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the material to be applied to the primitive model.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the material to be applied to the primitive model.
+The material defines the appearance of the primitive, including its color and texture.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -236,10 +241,12 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
 
   <h3 id="Stride_CommunityToolkit_Engine_PrimitiveCreationOptions_RenderGroup" data-uid="Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.RenderGroup">
   RenderGroup
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L34"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the render group for the entity. Defaults to RenderGroup.Group0.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the render group for the entity. Defaults to <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Rendering.RenderGroup.html#Stride_Rendering_RenderGroup_Group0">Group0</a>.
+Render groups allow different entities to be rendered in separate stages or layers,
+which can be useful for organizing complex scenes or applying different rendering effects.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -253,7 +260,7 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
 
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
-    <dt><a class="xref" href="api/Stride.Rendering.RenderGroup.html">RenderGroup</a></dt>
+    <dt><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Rendering.RenderGroup.html">RenderGroup</a></dt>
     <dd></dd>
   </dl>
 
@@ -268,7 +275,7 @@ Class PrimitiveCreationOptions  <a class="header-action link-secondary" title="V
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L5" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/PrimitiveCreationOptions.cs/#L9" class="edit-link">Edit this page</a>
         </div>
 
 
