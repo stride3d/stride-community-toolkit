@@ -18,7 +18,9 @@ using Stride.Rendering.Materials.ComputeColors;
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// Extensions for <see cref="IGame"/>
+/// Provides extension methods for the <see cref="Game"/> class to simplify common game setup tasks,
+/// such as adding cameras, lights, and ground entities, as well as configuring scenes
+/// and running the game with custom logic.
 /// </summary>
 public static class GameExtensions
 {
