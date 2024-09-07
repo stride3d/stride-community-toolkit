@@ -8,9 +8,30 @@ using Stride.Shaders;
 
 namespace Stride.CommunityToolkit.Skyboxes;
 
-// Taken from Stride.Assets.Skyboxes
+/// <summary>
+/// Provides functionality to generate a skybox with diffuse and specular lighting parameters from a given texture.
+/// </summary>
+/// <remarks>
+/// This class handles the conversion of a texture to a cubemap, performs spherical harmonics filtering for diffuse lighting,
+/// and prefilters the texture for specular lighting using GGX reflection. The original logic is from Stride.Assets.Skyboxes
+/// </remarks>
 public static class SkyboxGenerator
 {
+    /// <summary>
+    /// Generates a skybox using the provided texture and context, applying both diffuse and specular lighting.
+    /// </summary>
+    /// <param name="skybox">The skybox instance to apply the generated parameters to.</param>
+    /// <param name="context">The context required for rendering, which includes services and draw context.</param>
+    /// <param name="skyboxTexture">The texture used to generate the skybox cubemap.</param>
+    /// <returns>The modified <see cref="Skybox"/> with diffuse and specular lighting applied.</returns>
+    /// <remarks>
+    /// The method performs the following:
+    /// <list type="number">
+    ///   <item>Converts the provided texture into a cubemap with a computed resolution based on the texture width.</item>
+    ///   <item>Applies Lambertian spherical harmonics filtering for diffuse lighting.</item>
+    ///   <item>Performs GGX prefiltering for specular lighting and generates a cubemap for reflection purposes.</item>
+    /// </list>
+    /// </remarks>
     public static Skybox Generate(Skybox skybox, SkyboxGeneratorContext context, Texture skyboxTexture)
     {
         var cubemapSize = (int)Math.Pow(2, Math.Ceiling(Math.Log(skyboxTexture.Width / 4) / Math.Log(2))); // maximum resolution is around horizontal middle line which composes 4 images.
