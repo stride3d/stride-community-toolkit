@@ -18,7 +18,9 @@ using Stride.Rendering.Materials.ComputeColors;
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// Extensions for <see cref="IGame"/>
+/// Provides extension methods for the <see cref="Game"/> class to simplify common game setup tasks,
+/// such as adding cameras, lights, and ground entities, as well as configuring scenes
+/// and running the game with custom logic.
 /// </summary>
 public static class GameExtensions
 {
@@ -175,6 +177,17 @@ public static class GameExtensions
         return graphicsCompositor;
     }
 
+    /// <summary>
+    /// Adds a 2D camera entity to the game's root scene with customizable position and rotation, defaulting to orthographic projection.
+    /// </summary>
+    /// <param name="game">The Game instance to which the camera entity will be added.</param>
+    /// <param name="cameraName">Optional name for the camera entity and camera slot. Defaults to "MainCamera" if not provided. If null, the entity will not be named.</param>
+    /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 2D position.</param>
+    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to the default 2D orientation.</param>
+    /// <returns>The created Entity object representing the 2D camera.</returns>
+    /// <remarks>
+    /// The camera entity will be created with an orthographic projection mode and added to the game's root scene. It will also be assigned to the first available camera slot in the GraphicsCompositor.
+    /// </remarks>
     public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
     {
         return game.Add3DCamera(
@@ -185,17 +198,18 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a camera entity to the game's root scene with customizable position and rotation, and default camera name "Main"
+    /// Adds a 3D camera entity to the game's root scene with customizable position, rotation, projection mode and default camera name "Main".
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="cameraName">Optional name for the camera entity and camera slot. If null, the entity will not be named.</param>
-    /// <param name="initialPosition">Initial position for the camera entity. If null, the camera will be positioned at the default position (6, 6, 6).</param>
-    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If null, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
-    /// <returns>The created Entity object representing the camera.</returns>
+    /// <param name="cameraName">Optional name for the camera entity and camera slot. Defaults to "MainCamera" if not provided. If null, the entity will not be named.</param>
+    /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 3D position (6, 6, 6).</param>
+    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
+    /// <param name="projectionMode">The projection mode for the camera (Perspective or Orthographic). Defaults to Perspective.</param>
+    /// <returns>The created Entity object representing the 3D camera.</returns>
     /// <remarks>
-    /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
-    /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
+    /// The camera entity will be created with the specified projection mode and added to the game's root scene. It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
+    /// <exception cref="InvalidOperationException">Thrown if the GraphicsCompositor does not have any camera slots defined.</exception>
     public static Entity Add3DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null, CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
     {
         if (game.SceneSystem.GraphicsCompositor.Cameras.Count == 0)
@@ -249,7 +263,7 @@ public static class GameExtensions
     /// </para>
     /// <para>The entity will be added to the game's root scene. You can customize the light properties by accessing the returned Entity object.</para>
     /// </remarks>
-    public static Entity AddDirectionalLight(this Game game, string? entityName = null)
+    public static Entity AddDirectionalLight(this Game game, string? entityName = "Directional Light")
     {
         var entity = new Entity(entityName)
         {
@@ -359,16 +373,25 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a ground with default Size 10,10.
+    /// Adds a 3D ground entity to the game with a default size of 10x10 units. The ground is created as a plane, and a collider can be optionally added.
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="entityName"></param>
-    /// <param name="size"></param>
-    /// <param name="includeCollider">Adds a collider</param>
-    /// <returns></returns>
+    /// <param name="game">The Game instance to which the ground entity will be added.</param>
+    /// <param name="entityName">The optional name for the ground entity. If not provided, it defaults to "Ground".</param>
+    /// <param name="size">The size of the ground, specified as a 2D vector. If not provided, it defaults to (10, 10) units.</param>
+    /// <param name="includeCollider">Specifies whether to add a collider to the ground. Defaults to true.</param>
+    /// <returns>The created Entity object representing the 3D ground.</returns>
     public static Entity Add3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
 
+    /// <summary>
+    /// Adds an infinite 3D ground entity to the game. The visible part of the ground is defined by the <paramref name="size"/> parameter,
+    /// while the collider is infinite and extends beyond the visible ground.
+    /// </summary>
+    /// <param name="game">The Game instance to which the infinite ground entity will be added.</param>
+    /// <param name="entityName">The optional name for the ground entity. If not provided, it defaults to "Ground".</param>
+    /// <param name="size">Defines the visible part of the ground, specified as a 2D vector. If not provided, it defaults to (10, 10) units.</param>
+    /// <param name="includeCollider">Specifies whether to add a collider to the ground. The collider is infinite, extending beyond the visible part. Defaults to true.</param>
+    /// <returns>The created Entity object representing the infinite 3D ground.</returns>
     public static Entity AddInfinite3DGround(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.InfinitePlane);
 
@@ -419,6 +442,23 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Adds a ground gizmo to the game's root scene, attached to an existing ground entity.
+    /// </summary>
+    /// <param name="game">The <see cref="Game"/> instance in which the ground gizmo will be added.</param>
+    /// <param name="position">
+    /// The position of the gizmo in 3D space. If null, the gizmo will be placed at the origin (0, 0, 0).
+    /// </param>
+    /// <param name="showAxisName">
+    /// A boolean indicating whether the axis names (X, Y, Z) should be displayed on the gizmo. Default is false.
+    /// </param>
+    /// <param name="rotateAxisNames">
+    /// A boolean indicating whether the axis names should rotate to always face the camera. Default is true.
+    /// </param>
+    /// <remarks>
+    /// The gizmo is added as a child to an existing ground entity. If the ground entity is not found, the method will return without adding the gizmo.
+    /// The gizmo helps visualize the ground with axis indicators in 3D space.
+    /// </remarks>
     public static void AddGroundGizmo(this Game game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
         var groundEntity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);
@@ -446,7 +486,7 @@ public static class GameExtensions
     /// This extension method creates an entity and attaches a <see cref="GameProfiler"/> script to it, enabling in-game profiling.
     /// The profiler's behaviour can be interacted with using various keyboard shortcuts as described in the <see cref="GameProfiler"/> class.
     /// </remarks>
-    public static Entity AddProfiler(this Game game, string? entityName = null)
+    public static Entity AddProfiler(this Game game, string? entityName = "Game Profiler")
     {
         var entity = new Entity(entityName) { new GameProfiler() };
 
