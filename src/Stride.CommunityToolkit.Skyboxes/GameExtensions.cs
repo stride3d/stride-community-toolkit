@@ -21,7 +21,7 @@ public static class GameExtensions
     /// A new entity is created with a <see cref="BackgroundComponent"/> and a <see cref="LightComponent"/>, both configured for the skybox, and is added to the game scene.
     /// The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).
     /// </remarks>
-    public static Entity AddSkybox(this Game game, string? entityName = null)
+    public static Entity AddSkybox(this Game game, string? entityName = "Skybox")
     {
         using var stream = new FileStream($"{AppContext.BaseDirectory}Resources\\{SkyboxTexture}", FileMode.Open, FileAccess.Read);
 
