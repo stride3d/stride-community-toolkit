@@ -442,6 +442,23 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Adds a ground gizmo to the game's root scene, attached to an existing ground entity.
+    /// </summary>
+    /// <param name="game">The <see cref="Game"/> instance in which the ground gizmo will be added.</param>
+    /// <param name="position">
+    /// The position of the gizmo in 3D space. If null, the gizmo will be placed at the origin (0, 0, 0).
+    /// </param>
+    /// <param name="showAxisName">
+    /// A boolean indicating whether the axis names (X, Y, Z) should be displayed on the gizmo. Default is false.
+    /// </param>
+    /// <param name="rotateAxisNames">
+    /// A boolean indicating whether the axis names should rotate to always face the camera. Default is true.
+    /// </param>
+    /// <remarks>
+    /// The gizmo is added as a child to an existing ground entity. If the ground entity is not found, the method will return without adding the gizmo.
+    /// The gizmo helps visualize the ground with axis indicators in 3D space.
+    /// </remarks>
     public static void AddGroundGizmo(this Game game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
         var groundEntity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == DefaultGroundName);

@@ -6,6 +6,12 @@ using Stride.Rendering.Skyboxes;
 
 namespace Stride.CommunityToolkit.Skyboxes;
 
+/// <summary>
+/// Provides extension methods for the <see cref="Game"/> class to enhance functionality such as adding skyboxes and other game elements.
+/// </summary>
+/// <remarks>
+/// These methods allow for easy integration of common game elements into a Stride game project, reducing the need for manual setup.
+/// </remarks>
 public static class GameExtensions
 {
     private const string SkyboxTexture = "skybox_texture_hdr.dds";
@@ -13,14 +19,20 @@ public static class GameExtensions
     /// <summary>
     /// Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.
     /// </summary>
-    /// <param name="game">The game instance to which the skybox will be added.</param>
-    /// <param name="entityName">The name for the skybox entity. If null, a default name will be used.</param>
-    /// <returns>The created skybox entity.</returns>
+    /// <param name="game">The <see cref="Game"/> instance to which the skybox will be added.</param>
+    /// <param name="entityName">The optional name for the skybox entity. If null, a default name ("Skybox") will be used.</param>
+    /// <returns>The created <see cref="Entity"/> representing the skybox.</returns>
     /// <remarks>
-    /// The skybox texture is loaded from the Resources folder, and is used to generate a skybox using the <see cref="SkyboxGenerator"/>.
-    /// A new entity is created with a <see cref="BackgroundComponent"/> and a <see cref="LightComponent"/>, both configured for the skybox, and is added to the game scene.
-    /// The default position of the skybox entity is set to (0.0f, 2.0f, -2.0f).
+    /// The skybox texture is loaded from the Resources folder and is used to generate a skybox using the <see cref="SkyboxGenerator"/>.
+    /// The skybox entity is created with both a <see cref="BackgroundComponent"/> and a <see cref="LightComponent"/>, configured for the skybox.
+    /// The entity is added to the root scene of the game and placed at the default position (0.0f, 2.0f, -2.0f).
     /// </remarks>
+    /// <example>
+    /// This example demonstrates how to add a skybox to a game:
+    /// <code>
+    /// game.AddSkybox();
+    /// </code>
+    /// </example>
     public static Entity AddSkybox(this Game game, string? entityName = "Skybox")
     {
         using var stream = new FileStream($"{AppContext.BaseDirectory}Resources\\{SkyboxTexture}", FileMode.Open, FileAccess.Read);

@@ -2,6 +2,12 @@ using Stride.Games;
 
 namespace Stride.CommunityToolkit.Games;
 
+/// <summary>
+/// Provides extension methods for the <see cref="IGame"/> interface, enhancing game management and performance tuning functionality.
+/// </summary>
+/// <remarks>
+/// These methods offer additional control over the game's timing, frame rate, and vertical synchronization, allowing for both performance optimization and flexibility.
+/// </remarks>
 public static class GameExtensions
 {
     /// <summary>
