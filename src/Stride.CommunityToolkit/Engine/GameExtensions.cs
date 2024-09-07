@@ -249,7 +249,7 @@ public static class GameExtensions
     /// </para>
     /// <para>The entity will be added to the game's root scene. You can customize the light properties by accessing the returned Entity object.</para>
     /// </remarks>
-    public static Entity AddDirectionalLight(this Game game, string? entityName = null)
+    public static Entity AddDirectionalLight(this Game game, string? entityName = "Directional Light")
     {
         var entity = new Entity(entityName)
         {
@@ -446,7 +446,7 @@ public static class GameExtensions
     /// This extension method creates an entity and attaches a <see cref="GameProfiler"/> script to it, enabling in-game profiling.
     /// The profiler's behaviour can be interacted with using various keyboard shortcuts as described in the <see cref="GameProfiler"/> class.
     /// </remarks>
-    public static Entity AddProfiler(this Game game, string? entityName = null)
+    public static Entity AddProfiler(this Game game, string? entityName = "Game Profiler")
     {
         var entity = new Entity(entityName) { new GameProfiler() };
 
