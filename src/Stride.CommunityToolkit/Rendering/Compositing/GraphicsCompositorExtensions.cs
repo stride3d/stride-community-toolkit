@@ -6,6 +6,11 @@ using Stride.Rendering.UI;
 
 namespace Stride.CommunityToolkit.Rendering.Compositing;
 
+/// <summary>
+/// Provides extension methods for the <see cref="GraphicsCompositor"/> class to enhance its functionality.
+/// These methods allow for the addition of UI stages, scene renderers, and debug render features,
+/// as well as utility methods for working with render stages.
+/// </summary>
 public static class GraphicsCompositorExtensions
 {
     private const string UiStageName = "UiStage";
@@ -68,6 +73,15 @@ public static class GraphicsCompositorExtensions
         return graphicsCompositor;
     }
 
+    /// <summary>
+    /// Adds an immediate debug render feature to the specified <see cref="GraphicsCompositor"/>.
+    /// This method ensures the debug render feature is added only once and links it with both the
+    /// "Opaque" and "Transparent" render stages.
+    /// </summary>
+    /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> to modify.</param>
+    /// <exception cref="NullReferenceException">
+    /// Thrown when the "Opaque" or "Transparent" render stages are not found in the <paramref name="graphicsCompositor"/>.
+    /// </exception>
     public static void AddImmediateDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
     {
         var debugRenderFeatures = graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
@@ -99,6 +113,18 @@ public static class GraphicsCompositorExtensions
         }
     }
 
+    /// <summary>
+    /// Attempts to retrieve a render stage from the specified <see cref="GraphicsCompositor"/> based on the provided effect name.
+    /// </summary>
+    /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> containing the render stages.</param>
+    /// <param name="effectName">The name of the render stage to search for.</param>
+    /// <param name="renderStage">
+    /// When this method returns, contains the <see cref="RenderStage"/> if the render stage was found; otherwise, <c>null</c>.
+    /// This parameter is passed uninitialized.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if the render stage is found; otherwise, <c>false</c>.
+    /// </returns>
     public static bool TryGetRenderStage(this GraphicsCompositor graphicsCompositor, string effectName, out RenderStage? renderStage)
     {
         renderStage = null;

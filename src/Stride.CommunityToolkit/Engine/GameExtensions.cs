@@ -177,6 +177,17 @@ public static class GameExtensions
         return graphicsCompositor;
     }
 
+    /// <summary>
+    /// Adds a 2D camera entity to the game's root scene with customizable position and rotation, defaulting to orthographic projection.
+    /// </summary>
+    /// <param name="game">The Game instance to which the camera entity will be added.</param>
+    /// <param name="cameraName">Optional name for the camera entity and camera slot. Defaults to "MainCamera" if not provided. If null, the entity will not be named.</param>
+    /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 2D position.</param>
+    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to the default 2D orientation.</param>
+    /// <returns>The created Entity object representing the 2D camera.</returns>
+    /// <remarks>
+    /// The camera entity will be created with an orthographic projection mode and added to the game's root scene. It will also be assigned to the first available camera slot in the GraphicsCompositor.
+    /// </remarks>
     public static Entity Add2DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null)
     {
         return game.Add3DCamera(
@@ -187,17 +198,18 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a camera entity to the game's root scene with customizable position and rotation, and default camera name "Main"
+    /// Adds a 3D camera entity to the game's root scene with customizable position, rotation, projection mode and default camera name "Main".
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="cameraName">Optional name for the camera entity and camera slot. If null, the entity will not be named.</param>
-    /// <param name="initialPosition">Initial position for the camera entity. If null, the camera will be positioned at the default position (6, 6, 6).</param>
-    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If null, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
-    /// <returns>The created Entity object representing the camera.</returns>
+    /// <param name="cameraName">Optional name for the camera entity and camera slot. Defaults to "MainCamera" if not provided. If null, the entity will not be named.</param>
+    /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 3D position (6, 6, 6).</param>
+    /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
+    /// <param name="projectionMode">The projection mode for the camera (Perspective or Orthographic). Defaults to Perspective.</param>
+    /// <returns>The created Entity object representing the 3D camera.</returns>
     /// <remarks>
-    /// The camera entity will be created with a perspective projection mode and will be added to the game's root scene.
-    /// It will also be assigned to the first available camera slot in the GraphicsCompositor.
+    /// The camera entity will be created with the specified projection mode and added to the game's root scene. It will also be assigned to the first available camera slot in the GraphicsCompositor.
     /// </remarks>
+    /// <exception cref="InvalidOperationException">Thrown if the GraphicsCompositor does not have any camera slots defined.</exception>
     public static Entity Add3DCamera(this Game game, string? cameraName = CameraDefaults.MainCameraName, Vector3? initialPosition = null, Vector3? initialRotation = null, CameraProjectionMode projectionMode = CameraProjectionMode.Perspective)
     {
         if (game.SceneSystem.GraphicsCompositor.Cameras.Count == 0)

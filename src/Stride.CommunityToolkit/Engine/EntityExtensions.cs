@@ -7,17 +7,20 @@ using System.Diagnostics.CodeAnalysis;
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// Provides extension methods for <see cref="Entity"/> to simplify common operations.
+/// Provides extension methods for the <see cref="Entity"/> class to simplify common operations,
+/// such as adding camera controllers, gizmos, and retrieving or manipulating components.
 /// </summary>
 public static class EntityExtensions
 {
     /// <summary>
-    /// Adds an interactive camera script <see cref="Basic3DCameraController"/> to the specified entity, enabling camera movement and rotation through various input methods.
+    /// Adds an interactive camera script <see cref="Basic3DCameraController"/> to the specified entity,
+    /// enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
     /// <remarks>
-    /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick or dragging/scaling using multi-touch.
-    /// Rotation is achieved using the Numpad, the mouse while holding the right mouse button, a gamepad's right stick, or dragging using single-touch.
+    /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick
+    /// or by dragging/scaling using multi-touch. Rotation is achieved using the Numpad, the mouse while holding
+    /// the right mouse button, a gamepad's right stick, or by dragging using single-touch.
     /// </remarks>
     public static void Add3DCameraController(this Entity entity)
         => entity.Add(new Basic3DCameraController());
@@ -33,6 +36,8 @@ public static class EntityExtensions
     /// <param name="redColor">Optional custom color for the X-axis of the gizmo. If not specified, a default color is used.</param>
     /// <param name="greenColor">Optional custom color for the Y-axis of the gizmo. If not specified, a default color is used.</param>
     /// <param name="blueColor">Optional custom color for the Z-axis of the gizmo. If not specified, a default color is used.</param>
+    /// <param name="showAxisName">Optional flag to show axis names. Default is false.</param>
+    /// <param name="rotateAxisNames">Optional flag to rotate axis names. Default is true.</param>
     /// <example>
     /// This example shows how to add a gizmo to an entity with the default colors:
     /// <code>
@@ -49,7 +54,8 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Adds a directional light gizmo to the specified entity for visual representation and manipulation in the editor or during runtime.
+    /// Adds a directional light gizmo to the specified entity for visual representation and manipulation
+    /// in the editor or during runtime.
     /// </summary>
     /// <param name="entity">The entity to which the directional light gizmo will be added.</param>
     /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
@@ -88,9 +94,9 @@ public static class EntityExtensions
     /// <summary>
     /// Recursively searches for the first component of the specified type in the entity's children.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="entity"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">The type of component to retrieve.</typeparam>
+    /// <param name="entity">The entity from which to start the search.</param>
+    /// <returns>The first component of the specified type found in the entity's children, or null if no such component exists.</returns>
     public static T? GetComponentInChildren<T>(this Entity entity)
     {
         var result = entity.OfType<T>().FirstOrDefault();
@@ -98,9 +104,11 @@ public static class EntityExtensions
         if (result is null)
         {
             var children = entity.GetChildren();
-            foreach(var child in children)
+
+            foreach (var child in children)
             {
                 result = child.GetComponentInChildren<T>();
+
                 if (result != null)
                 {
                     return result;
@@ -115,7 +123,7 @@ public static class EntityExtensions
     /// Retrieves all components of the specified type from the entity.
     /// </summary>
     /// <typeparam name="T">The type of components to retrieve.</typeparam>
-    /// <returns>An IEnumerable of components of the specified type.</returns>
+    /// <returns>An <see cref="IEnumerable{T}"/> of components of the specified type.</returns>
     public static IEnumerable<T> GetComponents<T>(this Entity entity)
     {
         var result = entity.OfType<T>();
@@ -152,14 +160,17 @@ public static class EntityExtensions
     public static Entity? FindEntityRecursive(this Entity parent, string name)
     {
         var entities = parent.Scene.Entities;
-        foreach(var entity in entities)
+
+        foreach (var entity in entities)
         {
             if (entity.Name == name)
             {
                 return entity;
             }
+
             var child = entity.FindChild(name);
-            if(child != null && child.Name == name)
+
+            if (child != null && child.Name == name)
             {
                 return child;
             }
@@ -181,19 +192,17 @@ public static class EntityExtensions
     public static bool TryGetComponent<T>(this Entity entity, [MaybeNullWhen(false)] out T result)
     {
         result = entity.GetComponent<T>();
-        if (result is null)
-        {
-            return false;
-        }
-        return true;
+
+        return result is not null;
     }
 
     /// <summary>
-    /// An easier way to get the previous frames world position rather than getting <see cref="Matrix.TranslationVector"/> from <see cref="TransformComponent.WorldMatrix"/>
+    /// Retrieves the world position of the entity. This is a convenience method to get the <see cref="Matrix.TranslationVector"/>
+    /// from the <see cref="TransformComponent.WorldMatrix"/>.
     /// </summary>
-    /// <param name="entity">The <see cref="Entity"/> to get the World Position</param>
-    /// <param name="updateTransforms"> If true it will get the current frames world matrix</param>
-    /// <returns>The <see cref="Vector3"/> as the World Position of the <see cref="Entity"/></returns>
+    /// <param name="entity">The <see cref="Entity"/> to get the world position from.</param>
+    /// <param name="updateTransforms">If true, it will update the world matrix to the current frame's world matrix.</param>
+    /// <returns>The <see cref="Vector3"/> representing the world position of the <see cref="Entity"/>.</returns>
     public static Vector3 WorldPosition(this Entity entity, bool updateTransforms = true)
     {
         if (updateTransforms)
