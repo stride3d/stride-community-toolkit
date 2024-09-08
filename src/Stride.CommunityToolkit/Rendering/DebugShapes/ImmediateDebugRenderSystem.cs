@@ -1,6 +1,7 @@
 // Copyright (c) Stride contributors (https://stride3d.net)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
+using Stride.CommunityToolkit.Extensions;
 using Stride.Core.Collections;
 using Stride.Games;
 using Stride.Graphics;
@@ -208,8 +209,8 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         public Color Color;
     }
 
-    private readonly FastList<DebugRenderable> renderMessages = new FastList<DebugRenderable>();
-    private readonly FastList<DebugRenderable> renderMessagesWithLifetime = new FastList<DebugRenderable>();
+    private readonly List<DebugRenderable> renderMessages = [];
+    private readonly List<DebugRenderable> renderMessagesWithLifetime = [];
 
     private ImmediateDebugRenderObject solidPrimitiveRenderer;
     private ImmediateDebugRenderObject wireframePrimitiveRenderer;
@@ -420,31 +421,34 @@ public class ImmediateDebugRenderSystem : GameSystemBase
                 return;
         }
 
+        var renderMessagesSpan = renderMessages.AsSpan();
+        var renderMessagesWithLifetimeSpan = renderMessagesWithLifetime.AsSpan();
+
         // TODO: check if i'm doing this correctly..
         solidPrimitiveRenderer.RenderGroup = RenderGroup;
         wireframePrimitiveRenderer.RenderGroup = RenderGroup;
         transparentSolidPrimitiveRenderer.RenderGroup = RenderGroup;
         transparentWireframePrimitiveRenderer.RenderGroup = RenderGroup;
 
-        HandlePrimitives(gameTime, renderMessages);
-        HandlePrimitives(gameTime, renderMessagesWithLifetime);
+        HandlePrimitives(gameTime, renderMessagesSpan);
+        HandlePrimitives(gameTime, renderMessagesWithLifetimeSpan);
 
         float delta = (float)gameTime.Elapsed.TotalSeconds;
 
         /* clear out any messages with no lifetime left */
-        for (int i = 0; i < renderMessagesWithLifetime.Count; ++i)
+        for (int i = 0; i < renderMessagesWithLifetimeSpan.Length; ++i)
         {
-            renderMessagesWithLifetime.Items[i].Lifetime -= delta;
+            renderMessagesWithLifetimeSpan[i].Lifetime -= delta;
         }
 
         renderMessagesWithLifetime.RemoveAll((msg) => msg.Lifetime <= 0.0f);
 
         /* just clear our per-frame array */
-        renderMessages.Clear(true);
+        renderMessages.Clear();
 
     }
 
-    private void HandlePrimitives(GameTime gameTime, FastList<DebugRenderable> messages)
+    private void HandlePrimitives(GameTime gameTime, Span<DebugRenderable> messages)
     {
 
         ImmediateDebugRenderObject ChooseRenderer(DebugRenderableFlags flags, byte alpha)
@@ -459,14 +463,14 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             }
         }
 
-        if (messages.Count == 0)
+        if (messages.Length == 0)
         {
             return;
         }
 
-        for (int i = 0; i < messages.Count; ++i)
+        for (int i = 0; i < messages.Length; ++i)
         {
-            ref var msg = ref messages.Items[i];
+            ref var msg = ref messages[i];
             var useDepthTest = (msg.Flags & DebugRenderableFlags.DepthTest) != 0;
             switch (msg.Type)
             {
