@@ -3,6 +3,11 @@ using System.Reflection;
 
 namespace Stride.CommunityToolkit.Extensions;
 
+/// <summary>
+/// Provides extension methods for working with <see cref="Texture"/> objects.
+/// This includes methods for finding asset source directories, resizing textures,
+/// and reformatting textures.
+/// </summary>
 public static class TextureExtensions
 {
     private const string SourceFileIdentifier = "Source: !file";
