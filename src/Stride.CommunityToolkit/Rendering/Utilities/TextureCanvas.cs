@@ -5,9 +5,12 @@ using Stride.Rendering.Images;
 namespace Stride.CommunityToolkit.Rendering.Utilities;
 
 /// <summary>
-/// A helper class for simple image processing
+/// Provides functionality for drawing and manipulating textures on a canvas.
+/// This class supports various operations such as drawing rectangles, drawing textures,
+/// applying filters, transforming colors, and resampling textures. It is designed to work
+/// with the Stride graphics framework and provides methods for loading and storing texture data.
 /// </summary>
-public class TextureCanvas : IDisposable
+public partial class TextureCanvas : IDisposable
 {
     private PixelFormat _pixelFormat;
     private Texture? _primaryBuffer;
@@ -20,6 +23,9 @@ public class TextureCanvas : IDisposable
     private GraphicsDevice GraphicsDevice => RenderContext.GraphicsDevice;
     private CommandList CommandList => GraphicsContext.CommandList;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TextureCanvas"/> class.
+    /// </summary>
     public TextureCanvas(RenderContext renderContext, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
     {
         RenderContext = renderContext;
@@ -68,12 +74,22 @@ public class TextureCanvas : IDisposable
     /// </summary>
     public int ByteSize => EnsurePrimary().CalculatePixelDataCount<byte>();
 
+    /// <summary>
+    /// Releases all resources used by the <see cref="TextureCanvas"/> object.
+    /// </summary>
     public void Dispose()
     {
         Clear();
         GC.SuppressFinalize(this);
     }
 
+    /// <summary>
+    /// Draws a rectangle on the canvas.
+    /// </summary>
+    /// <param name="destinationRect">The destination rectangle where the rectangle will be drawn.</param>
+    /// <param name="stretch">The stretch mode to apply to the rectangle.</param>
+    /// <param name="anchor">The anchor point for the rectangle.</param>
+    /// <param name="samplingPattern">The sampling pattern to use for drawing.</param>
     public void DrawRect(
         Rectangle destinationRect,
         Stretch stretch = Stretch.Stretch,
@@ -653,83 +669,5 @@ public class TextureCanvas : IDisposable
             (int)(size.Width * sourceRect.Width),
             (int)(size.Width * sourceRect.Height)
         );
-    }
-    /// <summary>
-    ///     Stretch modes when textures to a <see cref="TextureCanvas" />
-    /// </summary>
-    public enum Stretch
-    {
-        /// <summary>
-        ///     The texture preserves its original size. Overflowing content is cropped.
-        /// </summary>
-        None,
-
-        /// <summary>
-        ///     The texture is resized to fill the destination dimensions. The aspect ratio is not preserved.
-        /// </summary>
-        Stretch,
-
-        /// <summary>
-        ///     The texture is resized to fit in the destination dimensions while it preserves its native aspect ratio.
-        /// </summary>
-        Contain,
-
-        /// <summary>
-        ///     The texture is resized to fill the destination dimensions while it preserves its native aspect ratio. If the aspect
-        ///     ratio of the destination rectangle differs from the source, the source texture is clipped to fit in the destination
-        ///     dimensions.
-        /// </summary>
-        Cover
-    }
-
-    /// <summary>
-    ///     Anchor positions when drawing to a <see cref="TextureCanvas" />
-    /// </summary>
-    public enum Anchor
-    {
-        /// <summary>
-        ///     Adjust the position so the top-left corner of the source and target rect are aligned.
-        /// </summary>
-        TopLeft,
-
-        /// <summary>
-        ///     Adjust the position so the top-edge center of the source and target rect are aligned.
-        /// </summary>
-        Top,
-
-        /// <summary>
-        ///     Adjust the position so the top-right corner of the source and target rect are aligned.
-        /// </summary>
-        TopRight,
-
-        /// <summary>
-        ///     Adjust the position so the left-edge center of the source and target rect are aligned.
-        /// </summary>
-        Left,
-
-        /// <summary>
-        ///     Adjust the position so the center of the source and target rect are aligned.
-        /// </summary>
-        Center,
-
-        /// <summary>
-        ///     Adjust the position so the right-edge center of the source and target rect are aligned.
-        /// </summary>
-        Right,
-
-        /// <summary>
-        ///     Adjust the position so the bottom-left corner of the source and target rect are aligned.
-        /// </summary>
-        BottomLeft,
-
-        /// <summary>
-        ///     Adjust the position so the bottom-edge center of the source and target rect are aligned.
-        /// </summary>
-        Bottom,
-
-        /// <summary>
-        ///     Adjust the position so the bottom-right corner of the source and target rect are aligned.
-        /// </summary>
-        BottomRight
     }
 }
