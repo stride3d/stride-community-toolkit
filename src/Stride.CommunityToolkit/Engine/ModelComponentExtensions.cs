@@ -4,6 +4,10 @@ using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.Engine;
 
+/// <summary>
+/// Provides extension methods for the <see cref="ModelComponent"/> class, enabling additional functionality
+/// such as calculating model dimensions and extracting mesh data.
+/// </summary>
 public static class ModelComponentExtensions
 {
     /// <summary>
@@ -36,6 +40,7 @@ public static class ModelComponentExtensions
     public static float GetMeshHeight(this ModelComponent modelComponent)
     {
         var boundingBox = modelComponent.Model.BoundingBox;
+
         var height = boundingBox.Maximum.Y - boundingBox.Minimum.Y;
 
         return height;
