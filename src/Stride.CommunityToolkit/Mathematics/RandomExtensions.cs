@@ -94,7 +94,6 @@ public static class RandomExtensions
         };
     }
 
-
     /// <summary>
     /// Generates a random color.
     /// </summary>
