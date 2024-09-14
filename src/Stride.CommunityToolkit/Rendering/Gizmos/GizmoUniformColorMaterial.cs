@@ -17,7 +17,7 @@ public static class GizmoUniformColorMaterial
     /// <param name="color">The <see cref="Color"/> to apply to the material.</param>
     /// <returns>A new <see cref="Material"/> with the specified uniform diffuse color.</returns>
     /// <remarks>
-    /// If the color contains transparency (alpha < 255), transparency is enabled for the material.
+    /// If the color contains transparency (alpha &lt; 255), transparency is enabled for the material.
     /// </remarks>
     public static Material Create(GraphicsDevice device, Color color)
     {
