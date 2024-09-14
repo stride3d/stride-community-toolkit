@@ -10,3 +10,17 @@ In this tutorial, we will explore how to dynamically apply a texture to a 3D obj
 ## Code Walkthrough
 
 [!code-csharp[AnimationBasics](../../../examples/snippets/TextureMapping_Example01/Program.cs)]
+
+## Running the Code
+
+When you run this code, the game will display a 3D cube with the specified texture applied to its surface. The texture will be visible, and the cube will be placed 8 units above the ground.
+
+## Summary
+
+This example demonstrates how to dynamically load and apply a texture to a 3D object at runtime in Stride. The process involves:
+
+- Loading a texture from an image file.
+- Creating a material to define how the texture should be rendered.
+- Applying the material to a 3D primitive and adding it to the scene.
+
+This approach can be extended to various other 3D models and textures, allowing you to dynamically change the appearance of objects in your game.

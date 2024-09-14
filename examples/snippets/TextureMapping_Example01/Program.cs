@@ -30,8 +30,13 @@ void Start(Scene rootScene)
        new MaterialAttributes
        {
            Diffuse = new MaterialDiffuseMapFeature(new ComputeTextureColor(texture)),
+
+           // Configures using the Lambert lighting model,
+           // which simulates how light interacts with the surface
            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-           CullMode = CullMode.Back // Specifies the back-face culling mode
+
+           // Specifies the back-face culling mode
+           CullMode = CullMode.Back
        }
     };
 
@@ -43,6 +48,7 @@ void Start(Scene rootScene)
     {
         Material = material,
     });
+
     entity.Transform.Position = new Vector3(0, 8, 0);
 
     // Add the cube to the root scene
