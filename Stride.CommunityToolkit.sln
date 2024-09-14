@@ -59,6 +59,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Win
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Benchmarks", "src\Stride.CommunityToolkit.Benchmarks\Stride.CommunityToolkit.Benchmarks.csproj", "{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextureMapping_Example01", "examples\snippets\TextureMapping_Example01\TextureMapping_Example01.csproj", "{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "snippets", "snippets", "{A9C673A6-1426-40DD-A060-B0749261DB7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -148,6 +152,10 @@ Global
 		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +176,7 @@ Global
 		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{D12C2C1E-9316-4C8D-B773-B84213AB4389} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{D2092F94-19E8-45CC-8B5F-DAE680A276AC} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104} = {A9C673A6-1426-40DD-A060-B0749261DB7C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}

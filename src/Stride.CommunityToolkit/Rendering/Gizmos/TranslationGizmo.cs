@@ -6,6 +6,14 @@ using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.Rendering.Gizmos;
 
+/// <summary>
+/// Represents a visual translation gizmo used for moving objects in a 3D scene.
+/// </summary>
+/// <remarks>
+/// This class creates a visual aid for object manipulation, consisting of axis arrows and planes,
+/// which can be used to indicate or manipulate movement along specific axes or planes.
+/// It is designed as an extension and can be added to any entity in a scene for visual feedback.
+/// </remarks>
 public class TranslationGizmo : AxialGizmo
 {
     private const float AxisConeRadius = GizmoExtremitySize / 3f;
@@ -15,16 +23,33 @@ public class TranslationGizmo : AxialGizmo
     private const float OriginRadius = GizmoOriginScale * AxisConeRadius;
 
     private readonly Material[] _planeMaterials = new Material[3];
-    private readonly List<Entity>[] _translationAxes = { new(), new(), new() };
-    private readonly List<Entity>[] _translationPlanes = { new(), new(), new() };
-    private readonly List<Entity>[] _translationPlaneEdges = { new(), new(), new() };
-    private readonly List<Entity> _translationPlaneRoots = new();
-    private readonly List<ModelComponent>[] _translationOppositeAxes = { new(), new(), new(), };
+    private readonly List<Entity>[] _translationAxes = [[], [], []];
+    private readonly List<Entity>[] _translationPlanes = [[], [], []];
+    private readonly List<Entity>[] _translationPlaneEdges = [[], [], []];
+    private readonly List<Entity> _translationPlaneRoots = [];
+    private readonly List<ModelComponent>[] _translationOppositeAxes = [[], [], []];
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TranslationGizmo"/> class with the specified graphics device.
+    /// </summary>
+    /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
     public TranslationGizmo(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TranslationGizmo"/> class with the specified graphics device and optional colors for each axis.
+    /// </summary>
+    /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
+    /// <param name="xColor">Optional color for the X-axis.</param>
+    /// <param name="yColor">Optional color for the Y-axis.</param>
+    /// <param name="zColor">Optional color for the Z-axis.</param>
     public TranslationGizmo(GraphicsDevice graphicsDevice, Color? xColor = null, Color? yColor = null, Color? zColor = null) : base(graphicsDevice, xColor, yColor, zColor) { }
 
+    /// <summary>
+    /// Creates the translation gizmo entities and adds them to the specified parent entity.
+    /// </summary>
+    /// <param name="entity">The entity to which the gizmo will be added.</param>
+    /// <param name="showAxisName">Determines whether the axis names should be displayed.</param>
+    /// <param name="rotateAxisNames">Determines whether the axis names should be rotated to match the axes' orientation.</param>
     public void Create(Entity entity, bool showAxisName = false, bool rotateAxisNames = true)
     {
         base.Create();
@@ -56,9 +81,15 @@ public class TranslationGizmo : AxialGizmo
         entity.Transform.Children.Add(translationOrigin.Transform);
     }
 
+    /// <summary>
+    /// Adds axis names (X, Y, Z) to the translation gizmo.
+    /// </summary>
+    /// <param name="entity">The entity to which the axis names will be added.</param>
+    /// <param name="showAxisName">Determines whether the axis names should be displayed.</param>
+    /// <param name="rotateAxisNames">Determines whether the axis names should rotate with the axes.</param>
     private void AddAxisNames(Entity entity, bool showAxisName, bool rotateAxisNames)
     {
-        if (showAxisName is false) return;
+        if (!showAxisName) return;
 
         var letter = new Letter3D(GraphicsDevice, rotateAxisNames);
 
@@ -78,6 +109,11 @@ public class TranslationGizmo : AxialGizmo
         entity.AddChild(zLetter);
     }
 
+    /// <summary>
+    /// Creates and returns a new translation gizmo entity, adding it to the specified scene.
+    /// </summary>
+    /// <param name="scene">The scene to which the gizmo will be added.</param>
+    /// <returns>The created translation gizmo entity.</returns>
     public Entity Create(Scene scene)
     {
         var entity = new Entity("Translation gizmo")
@@ -90,6 +126,10 @@ public class TranslationGizmo : AxialGizmo
         return entity;
     }
 
+    /// <summary>
+    /// Creates a sphere at the origin of the gizmo for visual reference.
+    /// </summary>
+    /// <returns>An entity representing the origin sphere.</returns>
     private Entity CreateMiddleSphere()
     {
         var sphereMeshDraw = GeometricPrimitive.Sphere.New(GraphicsDevice, OriginRadius, GizmoTessellation).ToMeshDraw();
@@ -102,6 +142,10 @@ public class TranslationGizmo : AxialGizmo
         return translationOrigin;
     }
 
+    /// <summary>
+    /// Creates arrow-shaped entities for the gizmo axes and adds them to the root entities for each axis.
+    /// </summary>
+    /// <param name="axisRootEntities">The root entities for each axis to which the arrows will be added.</param>
     private void CreateAxisArrow(Entity[] axisRootEntities)
     {
         var coneMesh = GeometricPrimitive.Cone.New(GraphicsDevice, AxisConeRadius, AxisConeHeight, GizmoTessellation).ToMeshDraw();
@@ -124,19 +168,19 @@ public class TranslationGizmo : AxialGizmo
             bodyEntity.Transform.RotationEulerXYZ = -MathUtil.Pi / 2 * Vector3.UnitZ;
             _translationAxes[axis].Add(bodyEntity);
 
-            // oposite side part (cylinder shown when camera is looking oposite direction to the axis)
+            // opposite side part (cylinder shown when camera is looking opposite direction to the axis)
             var frameMesh = GeometricPrimitive.Cylinder.New(GraphicsDevice, GizmoPlaneLength, AxisBodyRadius, GizmoTessellation).ToMeshDraw();
-            var opositeFrameEntity = new Entity("Oposite Frame" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = frameMesh } }, RenderGroup = RenderGroup } };
-            opositeFrameEntity.Transform.Position.X = -GizmoPlaneLength / 2;
-            opositeFrameEntity.Transform.RotationEulerXYZ = -MathUtil.Pi / 2 * Vector3.UnitZ;
-            _translationAxes[axis].Add(opositeFrameEntity);
-            _translationOppositeAxes[axis].Add(opositeFrameEntity.Get<ModelComponent>());
+            var oppositeFrameEntity = new Entity("Oposite Frame" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = frameMesh } }, RenderGroup = RenderGroup } };
+            oppositeFrameEntity.Transform.Position.X = -GizmoPlaneLength / 2;
+            oppositeFrameEntity.Transform.RotationEulerXYZ = -MathUtil.Pi / 2 * Vector3.UnitZ;
+            _translationAxes[axis].Add(oppositeFrameEntity);
+            _translationOppositeAxes[axis].Add(oppositeFrameEntity.Get<ModelComponent>());
 
             // create the arrow entity composed of the cone and body
             var arrowEntity = new Entity("ArrowEntity" + axis);
             arrowEntity.Transform.Children.Add(coneEntity.Transform);
             arrowEntity.Transform.Children.Add(bodyEntity.Transform);
-            arrowEntity.Transform.Children.Add(opositeFrameEntity.Transform);
+            arrowEntity.Transform.Children.Add(oppositeFrameEntity.Transform);
 
 
             // Add the arrow entity to the gizmo entity
@@ -144,6 +188,10 @@ public class TranslationGizmo : AxialGizmo
         }
     }
 
+    /// <summary>
+    /// Creates the translation planes for each axis, allowing movement along planes.
+    /// </summary>
+    /// <param name="axisRootEntities">The root entities for each axis to which the translation planes will be added.</param>
     private void CreateTranslationPlanes(Entity[] axisRootEntities)
     {
         for (int axis = 0; axis < 3; ++axis)
@@ -186,9 +234,19 @@ public class TranslationGizmo : AxialGizmo
         }
     }
 
+    /// <summary>
+    /// Creates a uniform color material for the gizmo.
+    /// </summary>
+    /// <param name="color">The color of the material.</param>
+    /// <returns>The created material.</returns>
     protected Material CreateUniformColorMaterial(Color color)
         => GizmoUniformColorMaterial.Create(GraphicsDevice, color);
 
+    /// <summary>
+    /// Retrieves the default material for the specified axis.
+    /// </summary>
+    /// <param name="axisIndex">The index of the axis (0 for X, 1 for Y, 2 for Z).</param>
+    /// <returns>The material for the specified axis.</returns>
     protected Material? GetAxisDefaultMaterial(int axisIndex) => axisIndex switch
     {
         0 => RedUniformMaterial,
