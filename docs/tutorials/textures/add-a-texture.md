@@ -9,7 +9,7 @@ In this tutorial, we will explore how to dynamically apply a texture to a 3D obj
 
 ## Code Walkthrough
 
-[!code-csharp[AnimationBasics](../../../examples/snippets/TextureMapping_Example01/Program.cs)]
+[!code-csharp[Adding a Texture at Runtime](../../../examples/snippets/TextureMapping_Example01/Program.cs)]
 
 ## Running the Code
 
