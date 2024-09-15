@@ -10,7 +10,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// Provides extension methods for the <see cref="Entity"/> class to simplify common operations,
 /// such as adding camera controllers, gizmos, and retrieving or manipulating components.
 /// </summary>
-public static class EntityExtensions
+public static partial class EntityExtensions
 {
     /// <summary>
     /// Adds an interactive camera script <see cref="Basic3DCameraController"/> to the specified entity,
