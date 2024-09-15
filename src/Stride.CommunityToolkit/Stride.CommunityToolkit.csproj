@@ -22,6 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Engine\EntityExtensions.GetComponents.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>EntityExtensions.GetComponents.tt</DependentUpon>
+      </Compile>
       <Compile Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl.cs">
         <DesignTime>True</DesignTime>
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -37,6 +42,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Engine\EntityExtensions.GetComponents.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>EntityExtensions.GetComponents.cs</LastGenOutput>
+      </None>
       <None Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl">
         <Generator>StrideShaderKeyGenerator</Generator>
         <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
@@ -45,6 +54,10 @@
         <Generator>StrideShaderKeyGenerator</Generator>
         <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     </ItemGroup>
 
 </Project>
