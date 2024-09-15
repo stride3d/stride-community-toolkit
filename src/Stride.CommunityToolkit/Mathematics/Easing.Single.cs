@@ -3,7 +3,6 @@ namespace Stride.CommunityToolkit.Mathematics;
 /// <summary>
 /// A collection of easing functions.
 /// </summary>
-/// <remarks>
 public static partial class Easing
 {
     /// <summary>
@@ -362,15 +361,11 @@ public static partial class Easing
         }
     }
 
-    /// <remarks>
-    /// </remarks>
     public static float BounceEaseIn(float amount)
     {
         return 1 - BounceEaseOut(1 - amount);
     }
 
-    /// <remarks>
-    /// </remarks>
     public static float BounceEaseOut(float amount)
     {
         if (amount < 4 / 11.0f)
@@ -391,8 +386,6 @@ public static partial class Easing
         }
     }
 
-    /// <remarks>
-    /// </remarks>
     public static float BounceEaseInOut(float amount)
     {
         if (amount < 0.5f)

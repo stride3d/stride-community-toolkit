@@ -360,15 +360,11 @@ public static partial class Easing
         }
     }
 
-    /// <remarks>
-    /// </remarks>
     public static double BounceEaseIn(double amount)
     {
         return 1 - BounceEaseOut(1 - amount);
     }
 
-    /// <remarks>
-    /// </remarks>
     public static double BounceEaseOut(double amount)
     {
         if (amount < 4 / 11.0)
@@ -389,8 +385,6 @@ public static partial class Easing
         }
     }
 
-    /// <remarks>
-    /// </remarks>
     public static double BounceEaseInOut(double amount)
     {
         if (amount < 0.5)
