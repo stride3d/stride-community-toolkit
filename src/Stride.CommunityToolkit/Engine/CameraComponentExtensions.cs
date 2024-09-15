@@ -299,20 +299,46 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
-    /// Converts the world position to clip space coordinates relative to camera.
+    /// Transforms a world-space position to clip space coordinates relative to camera,
+    /// using the camera's view-projection matrix.
+    /// The result is returned as a <see cref="Vector3"/>.
     /// </summary>
-    /// <param name="cameraComponent">The camera component used for the transformation.</param>
-    /// <param name="position">The position in world space to be transformed.</param>
-    /// <returns>The position in clip space.</returns>
+    /// <param name="cameraComponent">The camera component whose view-projection matrix will be used.</param>
+    /// <param name="position">The world-space position to be transformed.</param>
+    /// <returns>The position in clip space as a <see cref="Vector3"/>.</returns>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
-    public static Vector3 WorldToClipSpace(this CameraComponent cameraComponent, ref Vector3 position)
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
+    public static Vector3 WorldToClip(this CameraComponent cameraComponent, ref Vector3 position)
     {
+        ArgumentNullException.ThrowIfNull(cameraComponent);
+
         Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewProjectionMatrix, out var result);
 
         return result;
+    }
+
+
+    /// <summary>
+    /// Transforms a world-space position to clip space coordinates relative to camera,
+    /// using the camera's view-projection matrix.
+    /// The result is returned via the <paramref name="result"/> parameter.
+    /// </summary>
+    /// <param name="cameraComponent">The camera component whose view-projection matrix will be used.</param>
+    /// <param name="position">The world-space position to be transformed.</param>
+    /// <param name="result">The resulting position in clip space.</param>
+    /// <remarks>
+    /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
+    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
+    public static void WorldToClip(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
+    {
+        ArgumentNullException.ThrowIfNull(cameraComponent);
+
+        Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewProjectionMatrix, out result);
     }
 
     /// <summary>
@@ -330,11 +356,36 @@ public static class CameraComponentExtensions
     /// </remarks>
     public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position)
     {
-        var clipSpace = cameraComponent.WorldToClipSpace(ref position);
+        var clipSpace = cameraComponent.WorldToClip(ref position);
 
         Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewMatrix, out var viewSpace);
 
         return new Vector3
+        {
+            X = (clipSpace.X + 1f) / 2f,
+            Y = 1f - (clipSpace.Y + 1f) / 2f,
+            Z = viewSpace.Z + cameraComponent.NearClipPlane,
+        };
+    }
+
+    /// <summary>
+    /// Converts the world position to screen space coordinates relative to camera.
+    /// </summary>
+    /// <param name="cameraComponent"></param>
+    /// <param name="position"></param>
+    /// <param name="result">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.</param>
+    /// <exception cref="ArgumentNullException">If the cameraComponent argument is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
+    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// </remarks>
+    public static void WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
+    {
+        cameraComponent.WorldToClip(ref position, out var clipSpace);
+
+        Vector3.TransformCoordinate(ref position, ref cameraComponent.ViewMatrix, out var viewSpace);
+
+        result = new Vector3
         {
             X = (clipSpace.X + 1f) / 2f,
             Y = 1f - (clipSpace.Y + 1f) / 2f,
