@@ -13,21 +13,27 @@ public static class GameExtensions
     /// <summary>
     /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
     /// </summary>
-    /// <param name="gameTime">The <see cref="IGame"/> interface providing access to game timing information.</param>
+    /// <param name="game">The <see cref="IGame"/> interface providing access to game timing information.</param>
     /// <returns>The time elapsed since the last game update in seconds.</returns>
-    public static float DeltaTime(this IGame gameTime)
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="game"/> is null.</exception>
+    public static float DeltaTime(this IGame game)
     {
-        return (float)gameTime.UpdateTime.Elapsed.TotalSeconds;
+        ArgumentNullException.ThrowIfNull(game);
+
+        return (float)game.UpdateTime.Elapsed.TotalSeconds;
     }
 
     /// <summary>
     /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
     /// </summary>
-    /// <param name="gameTime">The <see cref="IGame"/> interface providing access to game timing information.</param>
+    /// <param name="game">The <see cref="IGame"/> interface providing access to game timing information.</param>
     /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
-    public static double DeltaTimeAccurate(this IGame gameTime)
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="game"/> is null.</exception>
+    public static double DeltaTimeAccurate(this IGame game)
     {
-        return gameTime.UpdateTime.Elapsed.TotalSeconds;
+        ArgumentNullException.ThrowIfNull(game);
+
+        return game.UpdateTime.Elapsed.TotalSeconds;
     }
 
     /// <summary>
@@ -77,5 +83,24 @@ public static class GameExtensions
     public static void DisableVSync(this IGame game)
     {
         game.GraphicsDevice.Presenter.PresentInterval = Stride.Graphics.PresentInterval.Immediate;
+    }
+
+    /// <summary>
+    /// Exits the game if it inherits from <see cref="GameBase"/>; otherwise, throws an exception.
+    /// </summary>
+    /// <param name="game">The game to exit.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if the <paramref name="game"/> does not inherit from <see cref="GameBase"/>.</exception>
+    public static void Exit(this IGame game)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+
+
+        if (game is not GameBase gameBase)
+        {
+            throw new ArgumentException($"The provided game instance must inherit from {nameof(GameBase)} in order to exit properly.", nameof(game));
+        }
+
+        gameBase.Exit();
     }
 }
