@@ -5,14 +5,14 @@ namespace Stride.CommunityToolkit.Engine;
 public static partial class EntityExtensions
 {
     /// <summary>
-    /// Gets the two specified components.
+    /// Gets two specified components from the entity.
     /// </summary>
-    /// <typeparam name="TComponent1">The type of the first component the method returns.</typeparam>
-    /// <typeparam name="TComponent2">The type of the second component the method returns.</typeparam>
-    /// <param name="entity">The <see cref="Entity"/> to get the components from.</param>
-    /// <returns>The tuple of the two components or <c>null</c> if component does not exist.</returns>
-    /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
-    public static (TComponent1, TComponent2) Get<TComponent1, TComponent2>(this Entity entity)
+    /// <typeparam name="TComponent1">The type of the first component to retrieve.</typeparam>
+    /// <typeparam name="TComponent2">The type of the second component to retrieve.</typeparam>
+    /// <param name="entity">The <see cref="Entity"/> from which the components are retrieved.</param>
+    /// <returns>A tuple containing the two components, which may be <c>null</c> if they do not exist.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="entity"/> is <c>null</c>.</exception>
+    public static (TComponent1?, TComponent2?) Get<TComponent1, TComponent2>(this Entity entity)
         where TComponent1 : EntityComponent
         where TComponent2 : EntityComponent
     {
