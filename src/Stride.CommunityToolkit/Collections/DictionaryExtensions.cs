@@ -16,7 +16,6 @@ public static class DictionaryExtensions
     public static void MergeInto<TKey, TValue>(this IDictionary<TKey, TValue> source, IDictionary<TKey, TValue> target)
     {
         ArgumentNullException.ThrowIfNull(source);
-
         ArgumentNullException.ThrowIfNull(target);
 
         foreach (var item in source)
