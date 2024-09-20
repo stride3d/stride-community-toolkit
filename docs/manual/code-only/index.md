@@ -1,6 +1,6 @@
 # Code-Only
 
-## Why Opt for Code-Only Over the Stride Editor?
+## Why Opt for Code-Only Over Stride's Game Studio?
 
 There are numerous reasons to consider using the code-only approach, especially if:
 
@@ -19,17 +19,17 @@ Have more reasons to add? Feel free to suggest them through our [GitHub Issues](
 
 ## Extensions and Helpers
 
-Our extensions and helpers provide a simplified pathway for game creation, specifically designed for **code-only** projects within the Stride Game Engine. While they are not essential for running a game, they serve as time-saving tools to aid users, particularly those new to Stride, in quickly getting started.
+Our code-only specific extensions and helpers provide a simplified pathway for game creation, specifically designed for **code-only** projects within the Stride Game Engine. While they are not essential for running a game, they serve as time-saving tools to help users, particularly those new to Stride, get started quickly.
 
-These extensions rely heavily on default settings to ease your initiation into the engine. However, they are not rigid; if the default settings don't fully meet your needs, you have the option to delve into the extension's implementation and create a custom version tailored to your preferences.
+These extensions rely heavily on default settings to ease your entry into the engine. However, they are flexible; if the default settings don't fully meet your needs, you can explore the extension's implementation and create a custom version tailored to your preferences.
 
-Please note, although these extensions have been created with an opinionated approach to help beginners get up and running quickly, experienced users can also find value in them. They can serve as a foundation upon which you can build, modify, and extend to create more complex and customized solutions.
+Please note that while these extensions have been created with a beginner-friendly, opinionated approach to help users get up and running quickly, experienced users can also benefit from them. They can serve as a foundation upon which you can build, modify, and extend to create more complex and customized solutions.
 
 ## Functionality
 
-Some functionality you would expect and which works in the Stride Editor might not be possible yet. Please add your vote or submit another request in the [GitHub Issues](https://github.com/stride3d/stride-community-toolkit/issues).
+Some functionality you might expect and which works in the Stride Game Studio may not yet be available. Please add your vote or submit a request in the [GitHub Issues](https://github.com/stride3d/stride-community-toolkit/issues).
 
 ## References
 
 - [Stride Issue - Code-Only Approach](https://github.com/stride3d/stride/issues/1295)
-- [Stride Discussions - Code-Only / Minimal Stride API Projec](https://github.com/stride3d/stride/discussions/1253)
+- [Stride Discussions - Code-Only / Minimal Stride API Project](https://github.com/stride3d/stride/discussions/1253)
