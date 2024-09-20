@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Myra.Stride" Version="1.5.5" />
+      <PackageReference Include="Myra.Stride" Version="1.5.6" />
     </ItemGroup>
 
 </Project>
