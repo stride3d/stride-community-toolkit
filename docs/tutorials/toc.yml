@@ -1,5 +1,9 @@
 - name: Tutorials
   href: index.md
+- name: Mathematics
+  items:
+  - name: Easing
+    href: mathematics/easing.md
 - name: Textures
   items:
   - name: Add a Texture at Runtime
