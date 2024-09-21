@@ -11,7 +11,7 @@ using var game = new Game();
 
 game.Run(start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     // Set up a base 3D scene with default lighting and camera
     game.SetupBase3DScene();
@@ -52,5 +52,5 @@ void Start(Scene rootScene)
     entity.Transform.Position = new Vector3(0, 8, 0);
 
     // Add the cube to the root scene
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
