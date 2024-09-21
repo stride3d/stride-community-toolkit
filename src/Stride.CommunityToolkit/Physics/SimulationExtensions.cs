@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Physics;
 
@@ -47,6 +48,105 @@ public static class SimulationExtensions
         var raycastEnd = raycastStart + direction * length;
 
         var result = simulation.Raycast(raycastStart, raycastEnd, filterFlags: collisionFlags, eFlags: eFlags);
+
+        return result;
+    }
+
+    /// <summary>
+    /// Raycasts and stops at the first hit.
+    /// </summary>
+    /// <param name="simulation">Physics simulation.</param>
+    /// <param name="raySegment">Ray.</param>
+    /// <returns>The hit results.</returns>
+    /// <exception cref="ArgumentNullException">If the simulation argument is null.</exception>
+    public static HitResult Raycast(this Simulation simulation, RaySegment raySegment)
+    {
+        ArgumentNullException.ThrowIfNull(simulation);
+
+        return simulation.Raycast(raySegment.Start, raySegment.End);
+    }
+
+    /// <summary>
+    /// Raycasts and stops at the first hit.
+    /// </summary>
+    /// <param name="simulation">Physics simulation.</param>
+    /// <param name="raySegment">Ray.</param>
+    /// <param name="collisionFilterGroups">The collision group of this shape sweep</param>
+    /// <param name="collisionFilterGroupFlags">The collision group that this shape sweep can collide with</param>
+    /// <returns>The hit results.</returns>
+    /// <exception cref="ArgumentNullException">If the simulation argument is null.</exception>
+    public static HitResult Raycast(this Simulation simulation, RaySegment raySegment, CollisionFilterGroups collisionFilterGroups, CollisionFilterGroupFlags collisionFilterGroupFlags)
+    {
+        ArgumentNullException.ThrowIfNull(simulation);
+
+        return simulation.Raycast(raySegment.Start, raySegment.End, collisionFilterGroups, collisionFilterGroupFlags);
+    }
+
+    /// <summary>
+    /// Raycasts penetrating any shape the ray encounters.
+    /// </summary>
+    /// <param name="simulation">Physics simulation.</param>
+    /// <param name="raySegment">Ray.</param>
+    /// <param name="resultsOutput">The list to fill with results.</param>
+    /// <exception cref="ArgumentNullException">If the simulation argument is null.</exception>
+    public static void RaycastPenetrating(this Simulation simulation, RaySegment raySegment, IList<HitResult> resultsOutput)
+    {
+        ArgumentNullException.ThrowIfNull(simulation);
+
+        simulation.RaycastPenetrating(raySegment.Start, raySegment.End, resultsOutput);
+    }
+
+    /// <summary>
+    /// Raycasts penetrating any shape the ray encounters.
+    /// </summary>
+    /// <param name="simulation">Physics simulation.</param>
+    /// <param name="raySegment">Ray.</param>
+    /// <returns>The list with hit results.</returns>
+    /// <exception cref="ArgumentNullException">If the simulation argument is null.</exception>
+    public static List<HitResult> RaycastPenetrating(this Simulation simulation, RaySegment raySegment)
+    {
+        ArgumentNullException.ThrowIfNull(simulation);
+
+        var resultsOutput = new List<HitResult>();
+
+        simulation.RaycastPenetrating(raySegment.Start, raySegment.End, resultsOutput);
+
+        return resultsOutput;
+    }
+
+    /// <summary>
+    /// Raycasts penetrating any shape the ray encounters.
+    /// Filtering by CollisionGroup
+    /// </summary>
+    /// <param name="simulation">Physics simulation.</param>
+    /// <param name="raySegment">Ray.</param>
+    /// <param name="resultsOutput">The list to fill with results.</param>
+    /// <param name="collisionFilterGroups">The collision group of this shape sweep</param>
+    /// <param name="collisionFilterGroupFlags">The collision group that this shape sweep can collide with</param>
+    /// <exception cref="ArgumentNullException">If the simulation argument is null.</exception>
+    public static void RaycastPenetrating(this Simulation simulation, RaySegment raySegment, IList<HitResult> resultsOutput, CollisionFilterGroups collisionFilterGroups, CollisionFilterGroupFlags collisionFilterGroupFlags)
+    {
+        ArgumentNullException.ThrowIfNull(simulation);
+
+        simulation.RaycastPenetrating(raySegment.Start, raySegment.End, resultsOutput, collisionFilterGroups, collisionFilterGroupFlags);
+    }
+
+    /// <summary>
+    /// Raycasts penetrating any shape the ray encounters.
+    /// </summary>
+    /// <param name="simulation">Physics simulation.</param>
+    /// <param name="raySegment">Ray.</param>
+    /// <param name="collisionFilterGroups">The collision group of this shape sweep</param>
+    /// <param name="collisionFilterGroupFlags">The collision group that this shape sweep can collide with</param>
+    /// <returns>The list with hit results.</returns>
+    /// <exception cref="ArgumentNullException">If the simulation argument is null.</exception>
+    public static List<HitResult> RaycastPenetrating(this Simulation simulation, RaySegment raySegment, CollisionFilterGroups collisionFilterGroups, CollisionFilterGroupFlags collisionFilterGroupFlags)
+    {
+        ArgumentNullException.ThrowIfNull(simulation);
+
+        var result = new List<HitResult>();
+
+        simulation.RaycastPenetrating(raySegment.Start, raySegment.End, result, collisionFilterGroups, collisionFilterGroupFlags);
 
         return result;
     }

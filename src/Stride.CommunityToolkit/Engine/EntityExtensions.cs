@@ -10,7 +10,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// Provides extension methods for the <see cref="Entity"/> class to simplify common operations,
 /// such as adding camera controllers, gizmos, and retrieving or manipulating components.
 /// </summary>
-public static class EntityExtensions
+public static partial class EntityExtensions
 {
     /// <summary>
     /// Adds an interactive camera script <see cref="Basic3DCameraController"/> to the specified entity,
@@ -92,13 +92,16 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Recursively searches for the first component of the specified type in the entity's children.
+    /// Recursively searches the entity's children and their descendants using a depth-first search (DFS) for the first component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
-    /// <param name="entity">The entity from which to start the search.</param>
-    /// <returns>The first component of the specified type found in the entity's children, or null if no such component exists.</returns>
+    /// <param name="entity">The <see cref="Entity"/> from which to start the search.</param>
+    /// <returns>The first component of the specified type found in the entity's children or descendants, or <c>null</c> if no such component exists.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="entity"/> is <c>null</c>.</exception>
     public static T? GetComponentInChildren<T>(this Entity entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         var result = entity.OfType<T>().FirstOrDefault();
 
         if (result is null)

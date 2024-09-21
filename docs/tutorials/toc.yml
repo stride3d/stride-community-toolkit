@@ -1,5 +1,13 @@
 - name: Tutorials
   href: index.md
+- name: Mathematics
+  items:
+  - name: Easing
+    href: mathematics/easing.md
+- name: Physics
+  items:
+  - name: Pick and aim
+    href: physics/pick-and-aim.md
 - name: Textures
   items:
   - name: Add a Texture at Runtime
