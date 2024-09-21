@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class AxialGizmo | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Represents a base class for creating an Axial Gizmo, which visually represents 3D axes in the scene. The Gizmo consists of three axes (X, Y, Z), each represented by a different color (Red, Green, Blue). This class provides the foundational functionality for rendering and configuring the visual aspects of the Gizmo.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo" class="text-break">
-Class AxialGizmo  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L7"><i class="bi bi-code-slash"></i></a>
+Class AxialGizmo  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Represents a base class for creating an Axial Gizmo, which visually represents 3D axes in the scene.
+The Gizmo consists of three axes (X, Y, Z), each represented by a different color (Red, Green, Blue).
+This class provides the foundational functionality for rendering and configuring the visual aspects of the Gizmo.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -137,10 +140,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo__ctor_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})">
   AxialGizmo(GraphicsDevice, Color?, Color?, Color?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L118"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html">AxialGizmo</a> class with optional custom axis colors.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -150,13 +154,17 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>graphicsDevice</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd></dd>
+    <dd><p>The graphics device used to render the Gizmo.</p>
+</dd>
     <dt><code>redColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>Optional custom color for the X-axis (Red). If null, a default red color is used.</p>
+</dd>
     <dt><code>greenColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>Optional custom color for the Y-axis (Green). If null, a default green color is used.</p>
+</dd>
     <dt><code>blueColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>Optional custom color for the Z-axis (Blue). If null, a default blue color is used.</p>
+</dd>
   </dl>
 
 
@@ -177,10 +185,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoDefaultSize" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoDefaultSize">
   GizmoDefaultSize
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L49"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The default size of the Gizmo when rendered on the screen, measured in pixels. This controls how large the Gizmo appears relative to the screen.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -207,10 +216,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoExtremitySize" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoExtremitySize">
   GizmoExtremitySize
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L33"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The size of the object placed at the extremities of the Gizmo's axes (e.g., arrowheads or markers).</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -237,10 +247,12 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoOriginScale" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoOriginScale">
   GizmoOriginScale
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L39"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The scale factor of the object placed at the origin of the Gizmo, compared to the objects at the extremities.
+Typically, the object at the origin is larger to make it more noticeable.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -267,10 +279,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoPlaneLength" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoPlaneLength">
   GizmoPlaneLength
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The size of the Gizmo's small planes, which are used for transformations along specific axes or planes.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -297,10 +310,12 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GizmoTessellation" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GizmoTessellation">
   GizmoTessellation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L28"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Defines the tessellation level of the Gizmo, which affects how smoothly the object is rendered.
+A higher value results in smoother rendering at the cost of performance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -332,10 +347,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_BlueUniformMaterial" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.BlueUniformMaterial">
   BlueUniformMaterial
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L88"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>A uniform blue material</p>
+  <div class="markdown level1 summary"><p>Gets the material for the Z-axis (Blue) of the Gizmo.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -364,10 +379,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_DefaultOriginMaterial" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.DefaultOriginMaterial">
   DefaultOriginMaterial
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L43"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L73"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the default material for the Gizmo's origin, typically represented in white.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -395,10 +411,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GraphicsDevice" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GraphicsDevice">
   GraphicsDevice
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L22"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets the graphics device.</p>
+  <div class="markdown level1 summary"><p>Gets the graphics device used for rendering the Gizmo.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -413,8 +429,7 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Property Value</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd><p>The graphics device.</p>
-</dd>
+    <dd></dd>
   </dl>
 
 
@@ -428,10 +443,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GreenUniformMaterial" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GreenUniformMaterial">
   GreenUniformMaterial
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L53"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L83"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>A uniform green material</p>
+  <div class="markdown level1 summary"><p>Gets the material for the Y-axis (Green) of the Gizmo.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -460,10 +475,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_RedUniformMaterial" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RedUniformMaterial">
   RedUniformMaterial
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L78"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>A uniform red material</p>
+  <div class="markdown level1 summary"><p>Gets the material for the X-axis (Red) of the Gizmo.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -492,10 +507,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_RenderGroup" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.RenderGroup">
   RenderGroup
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L12"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Gets or sets the entity group of the Gizmo</p>
+  <div class="markdown level1 summary"><p>Gets or sets the render group of the Gizmo. This determines which render group the Gizmo will belong to.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -528,10 +543,12 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_Create" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.Create">
   Create()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L96"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates the base components of the Gizmo, such as the default origin and axis materials.
+This method should be called in derived classes to initialize the Gizmo's materials.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -542,7 +559,8 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> representing the Gizmo, or <code>null</code> if no entity is created.</p>
+</dd>
   </dl>
 
 
@@ -552,6 +570,12 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">InvalidOperationException</a></dt>
+    <dd><p>Thrown if the <a class="xref" href="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html#Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GraphicsDevice">GraphicsDevice</a> is not initialized.</p>
+</dd>
+  </dl>
 
 
 
@@ -559,10 +583,10 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_CreateEmissiveColorMaterial_Stride_Core_Mathematics_Color_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.CreateEmissiveColorMaterial(Stride.Core.Mathematics.Color)">
   CreateEmissiveColorMaterial(Color)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L131"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Creates an emissive color material.</p>
+  <div class="markdown level1 summary"><p>Creates a material with an emissive color to visually represent the Gizmo's axes.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -573,14 +597,14 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd><p>The color of the material</p>
+    <dd><p>The color of the material.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd><p>the material</p>
+    <dd><p>A <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> instance with the specified emissive color.</p>
 </dd>
   </dl>
 
@@ -598,10 +622,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetBlueColor" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetBlueColor">
   GetBlueColor()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L150"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Retrieves the color for the Z-axis (Blue). Returns the default blue color if none is specified.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -612,7 +637,8 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd></dd>
+    <dd><p>The color for the Z-axis.</p>
+</dd>
   </dl>
 
 
@@ -629,10 +655,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetGreenColor" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetGreenColor">
   GetGreenColor()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L144"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Retrieves the color for the Y-axis (Green). Returns the default green color if none is specified.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -643,7 +670,8 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd></dd>
+    <dd><p>The color for the Y-axis.</p>
+</dd>
   </dl>
 
 
@@ -660,10 +688,11 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_AxialGizmo_GetRedColor" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.GetRedColor">
   GetRedColor()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L91"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L138"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Retrieves the color for the X-axis (Red). Returns the default red color if none is specified.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -674,7 +703,8 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd></dd>
+    <dd><p>The color for the X-axis.</p>
+</dd>
   </dl>
 
 
@@ -691,7 +721,7 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L7" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/AxialGizmo.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -707,7 +737,7 @@ Class AxialGizmo  <a class="header-action link-secondary" title="View source" hr
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

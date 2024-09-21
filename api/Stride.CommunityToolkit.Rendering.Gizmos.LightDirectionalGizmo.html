@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class LightDirectionalGizmo | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Represents a directional light gizmo used to visually represent light direction in a 3D scene.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo" class="text-break">
-Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Represents a directional light gizmo used to visually represent light direction in a 3D scene.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,11 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo__ctor_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color})">
   LightDirectionalGizmo(GraphicsDevice, Color?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L22"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html">LightDirectionalGizmo</a> class with the specified graphics device and optional color.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -144,9 +146,11 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>graphicsDevice</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd></dd>
+    <dd><p>The graphics device used to render the gizmo.</p>
+</dd>
     <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>An optional color to apply to the gizmo. If null, white is used.</p>
+</dd>
   </dl>
 
 
@@ -157,6 +161,12 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown if the <code class="paramref">graphicsDevice</code> is null.</p>
+</dd>
+  </dl>
 
 
 
@@ -167,10 +177,11 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo_GizmoTessellation" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.GizmoTessellation">
   GizmoTessellation
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>The tessellation value for the gizmo, which defines the level of detail for its geometry.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -202,10 +213,11 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_LightDirectionalGizmo_Create_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.Create(Stride.Engine.Entity)">
   Create(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L46"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates the directional light gizmo and attaches it to the specified root entity.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -215,13 +227,15 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>root</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The root entity to which the light gizmo is attached.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The root entity with the light gizmo added.</p>
+</dd>
   </dl>
 
 
@@ -238,7 +252,7 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/LightDirectionalGizmo.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -254,7 +268,7 @@ Class LightDirectionalGizmo  <a class="header-action link-secondary" title="View
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

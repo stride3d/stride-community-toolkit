@@ -1,0 +1,1038 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class MathUtilEx | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class MathUtilEx | Stride Community Toolkit ">
+      
+      <meta name="description" content="Some more common utility methods for math operations.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Mathematics_MathUtilEx.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Mathematics.MathUtilEx%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx">
+
+
+
+  <h1 id="Stride_CommunityToolkit_Mathematics_MathUtilEx" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx" class="text-break">
+Class MathUtilEx  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L8"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Mathematics.html">Mathematics</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Some more common utility methods for math operations.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class MathUtilEx</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">MathUtilEx</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_CeilingToInt_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.CeilingToInt*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_CeilingToInt_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.CeilingToInt(System.Single)">
+  CeilingToInt(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the smallest integer greater than or equal to the amount.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int CeilingToInt(this float value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The smallest integer greater than or equal to the amount.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Clamp01_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Clamp01*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Clamp01_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Clamp01(System.Single)">
+  Clamp01(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Clamps the value between 0 and 1.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float Clamp01(float value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The Value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value clamped between 0 and 1.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_FloorToInt_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.FloorToInt*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_FloorToInt_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.FloorToInt(System.Single)">
+  FloorToInt(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets largest integer less than or equal to the amount.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int FloorToInt(this float value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The largest integer less than or equal to the amount.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Color_Stride_Core_Mathematics_Color_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Color,Stride.Core.Mathematics.Color,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Interpolate(Color, Color, float, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L351"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two colors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Color Interpolate(Color start, Color end, float amount, EasingFunction easingFunction)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
+    <dd><p>Start color.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
+    <dd><p>End color.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
+    <dd><p>The interpolation of the two colors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Color_Stride_Core_Mathematics_Color_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Color__Stride_Core_Mathematics_Color__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Color@,Stride.Core.Mathematics.Color@,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction,Stride.Core.Mathematics.Color@)">
+  Interpolate(ref Color, ref Color, float, EasingFunction, out Color)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L334"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two colors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Interpolate(ref Color start, ref Color end, float amount, EasingFunction easingFunction, out Color result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
+    <dd><p>Start color.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
+    <dd><p>End color.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
+    <dd><p>When the method completes, contains the interpolation of the two colors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Color__Stride_Core_Mathematics_Color__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Color___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector2_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Vector2,Stride.Core.Mathematics.Vector2,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Interpolate(Vector2, Vector2, float, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L249"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two vectors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector2 Interpolate(Vector2 start, Vector2 end, float amount, EasingFunction easingFunction)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>Start vector.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>End vector.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>The interpolation of the two vectors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector2_Stride_Core_Mathematics_Vector2_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector2__Stride_Core_Mathematics_Vector2__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Vector2__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Vector2@,Stride.Core.Mathematics.Vector2@,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction,Stride.Core.Mathematics.Vector2@)">
+  Interpolate(ref Vector2, ref Vector2, float, EasingFunction, out Vector2)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L232"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two vectors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Interpolate(ref Vector2 start, ref Vector2 end, float amount, EasingFunction easingFunction, out Vector2 result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>Start vector.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>End vector.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a></dt>
+    <dd><p>When the method completes, contains the interpolation of the two vectors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector2__Stride_Core_Mathematics_Vector2__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Vector2___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Interpolate(Vector3, Vector3, float, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L284"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two vectors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 Interpolate(Vector3 start, Vector3 end, float amount, EasingFunction easingFunction)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>Start vector.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>End vector.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The interpolation of the two vectors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction,Stride.Core.Mathematics.Vector3@)">
+  Interpolate(ref Vector3, ref Vector3, float, EasingFunction, out Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L266"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two vectors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Interpolate(ref Vector3 start, ref Vector3 end, float amount, EasingFunction easingFunction, out Vector3 result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>Start vector.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>End vector.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>When the method completes, contains the interpolation of the two vectors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Vector3___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector4_Stride_Core_Mathematics_Vector4_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Vector4,Stride.Core.Mathematics.Vector4,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Interpolate(Vector4, Vector4, float, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L317"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two vectors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector4 Interpolate(Vector4 start, Vector4 end, float amount, EasingFunction easingFunction)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a></dt>
+    <dd><p>Start vector.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a></dt>
+    <dd><p>End vector.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a></dt>
+    <dd><p>The interpolation of the two vectors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector4_Stride_Core_Mathematics_Vector4_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector4__Stride_Core_Mathematics_Vector4__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Vector4__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(Stride.Core.Mathematics.Vector4@,Stride.Core.Mathematics.Vector4@,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction,Stride.Core.Mathematics.Vector4@)">
+  Interpolate(ref Vector4, ref Vector4, float, EasingFunction, out Vector4)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L300"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two vectors using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Interpolate(ref Vector4 start, ref Vector4 end, float amount, EasingFunction easingFunction, out Vector4 result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a></dt>
+    <dd><p>Start vector.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a></dt>
+    <dd><p>End vector.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector4.cs">Vector4</a></dt>
+    <dd><p>When the method completes, contains the interpolation of the two vectors.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_Stride_Core_Mathematics_Vector4__Stride_Core_Mathematics_Vector4__System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_Stride_Core_Mathematics_Vector4___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_System_Single_System_Single_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Interpolate(System.Single,System.Single,System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Interpolate(float, float, float, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L215"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs an interpolation between two values using an easing function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float Interpolate(float start, float end, float amount, EasingFunction easingFunction)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>start</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Start value.</p>
+</dd>
+    <dt><code>end</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>End value.</p>
+</dd>
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>Value between 0 and 1 indicating the weight of <code class="paramref">end</code>.</p>
+</dd>
+    <dt><code>easingFunction</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The function used to ease the interpolation.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Interpolate_System_Single_System_Single_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Passing <code class="paramref">amount</code> a value of 0 will cause <code class="paramref">start</code> to be returned; a value of 1 will cause <code class="paramref">end</code> to be returned.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_LookRotation_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.LookRotation*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_LookRotation_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.LookRotation(Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3)">
+  LookRotation(Vector3, Vector3, Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a rotation with the specified forward and upwards directions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Quaternion LookRotation(Vector3 eye, Vector3 target, Vector3 up)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>eye</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The postion of the observer. i.e. camera</p>
+</dd>
+    <dt><code>target</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The location of the object to look-at.</p>
+</dd>
+    <dt><code>up</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The vector that defines which direction is up.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a></dt>
+    <dd><p>The created quaternion rotation</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_LookRotation_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3_Stride_Core_Mathematics_Vector3__examples">Examples</h4>
+  <p>var cameraRotation = Quaternion.LookRotation(cameraPosition, targetPosition, Vector3.UnitY);</p>
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_LookRotation_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.LookRotation*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_LookRotation_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Quaternion__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.LookRotation(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Quaternion@)">
+  LookRotation(ref Vector3, ref Vector3, ref Vector3, out Quaternion)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Creates a rotation with the specified forward and upwards directions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void LookRotation(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Quaternion result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>eye</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The postion of the observer. i.e. camera</p>
+</dd>
+    <dt><code>target</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The location of the object to look-at.</p>
+</dd>
+    <dt><code>up</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The vector that defines which direction is up.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a></dt>
+    <dd><p>The created quaternion rotation</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Orthonormalize_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Orthonormalize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Orthonormalize_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.Orthonormalize(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Vector3@)">
+  Orthonormalize(ref Vector3, ref Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L51"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Orthonormalizes 2 vectors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Orthonormalize(ref Vector3 normal, ref Vector3 tangent)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>normal</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The normal vector.</p>
+</dd>
+    <dt><code>tangent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The tangent vector.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_MathUtilEx_Orthonormalize_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Vector3___remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Makes vectors normalized and orthogonal to each other.
+Normalizes normal. Normalizes tangent and makes sure it is orthogonal to normal.</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_RoundToInt_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.RoundToInt*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_RoundToInt_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.RoundToInt(System.Single)">
+  RoundToInt(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the integer value nearest to the amount.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int RoundToInt(this float value)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>value</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The integer value nearest to the amount.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToQuaternion_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToQuaternion*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToQuaternion_Stride_Core_Mathematics_Vector3_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToQuaternion(Stride.Core.Mathematics.Vector3)">
+  ToQuaternion(Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L152"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Convert rotation Euler angles to a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Quaternion ToQuaternion(this Vector3 rotationEulerXYZ)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>rotationEulerXYZ</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The euler rotation, with XYZ order.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a></dt>
+    <dd><p>Resulting quaternion rotation</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToQuaternion_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToQuaternion*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToQuaternion_Stride_Core_Mathematics_Vector3__Stride_Core_Mathematics_Quaternion__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToQuaternion(Stride.Core.Mathematics.Vector3@,Stride.Core.Mathematics.Quaternion@)">
+  ToQuaternion(ref Vector3, out Quaternion)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L119"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Convert rotation Euler angles to a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ToQuaternion(ref Vector3 rotationEulerXYZ, out Quaternion result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>rotationEulerXYZ</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>The euler rotation, with XYZ order.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a></dt>
+    <dd><p>Resulting quaternion rotation</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToRotationEulerXYZ_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToRotationEulerXYZ*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToRotationEulerXYZ_Stride_Core_Mathematics_Quaternion_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToRotationEulerXYZ(Stride.Core.Mathematics.Quaternion)">
+  ToRotationEulerXYZ(Quaternion)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L199"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Convert <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a> to rotation Euler angles.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Vector3 ToRotationEulerXYZ(this Quaternion rotation)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>rotation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a></dt>
+    <dd><p>The rotation.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>Reulting euler rotation, with XYZ order.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToRotationEulerXYZ_" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToRotationEulerXYZ*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_MathUtilEx_ToRotationEulerXYZ_Stride_Core_Mathematics_Quaternion__Stride_Core_Mathematics_Vector3__" data-uid="Stride.CommunityToolkit.Mathematics.MathUtilEx.ToRotationEulerXYZ(Stride.Core.Mathematics.Quaternion@,Stride.Core.Mathematics.Vector3@)">
+  ToRotationEulerXYZ(ref Quaternion, out Vector3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L163"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Convert <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a> to rotation Euler angles.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ToRotationEulerXYZ(ref Quaternion rotation, out Vector3 result)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>rotation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Quaternion.cs">Quaternion</a></dt>
+    <dd><p>The rotation.</p>
+</dd>
+    <dt><code>result</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector3.cs">Vector3</a></dt>
+    <dd><p>Reulting euler rotation, with XYZ order.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/MathUtilEx.cs/#L8" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

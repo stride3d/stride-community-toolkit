@@ -1,0 +1,2678 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class Easing | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Easing | Stride Community Toolkit ">
+      
+      <meta name="description" content="A collection of easing functions.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Mathematics_Easing.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Mathematics.Easing%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.Mathematics.Easing">
+
+
+
+  <h1 id="Stride_CommunityToolkit_Mathematics_Easing" data-uid="Stride.CommunityToolkit.Mathematics.Easing" class="text-break">
+Class Easing  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L6"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Mathematics.html">Mathematics</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A collection of easing functions.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class Easing</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Easing</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseIn(System.Double)">
+  BackEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L330"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double BackEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the overshooting cubic y = x^3-x<em>sin(x</em>pi)</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseIn(System.Single)">
+  BackEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L331"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float BackEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the overshooting cubic y = x^3-x<em>sin(x</em>pi)</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseInOut(System.Double)">
+  BackEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L349"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double BackEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise overshooting cubic function:
+y = (1/2)<em>((2x)^3-(2x)<em>sin(2</em>x</em>pi))           ; [0, 0.5)
+y = (1/2)*(1-((1-x)^3-(1-x)*sin((1-x)*pi))+1) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseInOut(System.Single)">
+  BackEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L350"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float BackEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise overshooting cubic function:
+y = (1/2)<em>((2x)^3-(2x)<em>sin(2</em>x</em>pi))           ; [0, 0.5]
+y = (1/2)*(1-((1-x)^3-(1-x)*sin((1-x)*pi))+1) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseOut(System.Double)">
+  BackEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L338"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double BackEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after overshooting cubic y = 1-((1-x)^3-(1-x)*sin((1-x)*pi))</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BackEaseOut(System.Single)">
+  BackEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L339"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float BackEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_BackEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after overshooting cubic y = 1-((1-x)^3-(1-x)*sin((1-x)*pi))</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseIn(System.Double)">
+  BounceEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L363"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double BounceEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseIn(System.Single)">
+  BounceEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L364"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float BounceEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseInOut(System.Double)">
+  BounceEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L388"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double BounceEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseInOut(System.Single)">
+  BounceEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L389"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float BounceEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseOut(System.Double)">
+  BounceEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L368"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double BounceEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_BounceEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.BounceEaseOut(System.Single)">
+  BounceEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L369"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float BounceEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseIn(System.Double)">
+  CircularEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L229"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double CircularEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after shifted quadrant IV of unit circle</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseIn(System.Single)">
+  CircularEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L230"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float CircularEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after shifted quadrant IV of unit circle</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseInOut(System.Double)">
+  CircularEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L247"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double CircularEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise circular function
+y = (1/2)(1 - Math.Sqrt(1 - 4x^2))           ; [0, 0.5]
+y = (1/2)(Math.Sqrt(-(2x - 3)*(2x - 1)) + 1) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseInOut(System.Single)">
+  CircularEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L248"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float CircularEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise circular function
+y = (1/2)(1 - Math.Sqrt(1 - 4x^2))           ; [0, 0.5]
+y = (1/2)(Math.Sqrt(-(2x - 3)*(2x - 1)) + 1) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseOut(System.Double)">
+  CircularEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L237"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double CircularEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after shifted quadrant II of unit circle</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CircularEaseOut(System.Single)">
+  CircularEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L238"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float CircularEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CircularEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after shifted quadrant II of unit circle</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseIn(System.Double)">
+  CubicEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double CubicEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the cubic y = x^3</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseIn(System.Single)">
+  CubicEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L101"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float CubicEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the cubic y = x^3</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseInOut(System.Double)">
+  CubicEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L119"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double CubicEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise cubic
+y = (1/2)((2x)^3)       ; [0, 0.5]
+y = (1/2)((2x-2)^3 + 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseInOut(System.Single)">
+  CubicEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L120"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float CubicEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise cubic
+y = (1/2)((2x)^3)       ; [0, 0.5]
+y = (1/2)((2x-2)^3 + 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseOut(System.Double)">
+  CubicEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L108"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double CubicEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the cubic y = (x - 1)^3 + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.CubicEaseOut(System.Single)">
+  CubicEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float CubicEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_CubicEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the cubic y = (x - 1)^3 + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_Ease_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Ease*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_Ease_System_Double_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Ease(System.Double,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Ease(double, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs easing using the specified function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double Ease(double amount, EasingFunction function)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The amount.</p>
+</dd>
+    <dt><code>function</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The easing function to use.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The amount eased using the specified function.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_Ease_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Ease*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_Ease_System_Single_Stride_CommunityToolkit_Mathematics_EasingFunction_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Ease(System.Single,Stride.CommunityToolkit.Mathematics.EasingFunction)">
+  Ease(float, EasingFunction)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs easing using the specified function.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float Ease(float amount, EasingFunction function)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The amount.</p>
+</dd>
+    <dt><code>function</code> <a class="xref" href="Stride.CommunityToolkit.Mathematics.EasingFunction.html">EasingFunction</a></dt>
+    <dd><p>The easing function to use.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The amount eased using the specified function.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseIn(System.Double)">
+  ElasticEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L297"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double ElasticEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the damped sine wave y = sin(13pi/2*x)*Math.Pow(2, 10 * (x - 1))</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseIn(System.Single)">
+  ElasticEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L298"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float ElasticEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the damped sine wave y = sin(13pi/2*x)*Math.Pow(2, 10 * (x - 1))</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseInOut(System.Double)">
+  ElasticEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L315"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double ElasticEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise exponentially-damped sine wave:
+y = (1/2)<em>sin(13pi/2</em>(2<em>x))<em>Math.Pow(2, 10 * ((2</em>x) - 1))      ; [0,0.5]
+y = (1/2)</em>(sin(-13pi/2*((2x-1)+1))<em>Math.Pow(2,-10(2</em>x-1)) + 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseInOut(System.Single)">
+  ElasticEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L316"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float ElasticEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise exponentially-damped sine wave:
+y = (1/2)<em>sin(13pi/2</em>(2<em>x))<em>Math.Pow(2, 10 * ((2</em>x) - 1))      ; [0,0.5]
+y = (1/2)</em>(sin(-13pi/2*((2x-1)+1))<em>Math.Pow(2,-10(2</em>x-1)) + 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseOut(System.Double)">
+  ElasticEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L305"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double ElasticEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the damped sine wave y = sin(-13pi/2*(x + 1))*Math.Pow(2, -10x) + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ElasticEaseOut(System.Single)">
+  ElasticEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L306"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float ElasticEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ElasticEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the damped sine wave y = sin(-13pi/2*(x + 1))*Math.Pow(2, -10x) + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseIn(System.Double)">
+  ExponentialEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L262"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double ExponentialEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the exponential function y = 2^(10(x - 1))</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseIn(System.Single)">
+  ExponentialEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L263"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float ExponentialEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the exponential function y = 2^(10(x - 1))</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseInOut(System.Double)">
+  ExponentialEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L280"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double ExponentialEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise exponential
+y = (1/2)2^(10(2x - 1))         ; [0,0.5)
+y = -(1/2)*2^(-10(2x - 1))) + 1 ; [0.5,1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseInOut(System.Single)">
+  ExponentialEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L281"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float ExponentialEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise exponential
+y = (1/2)2^(10(2x - 1))         ; [0,0.5]
+y = -(1/2)*2^(-10(2x - 1))) + 1 ; [0.5,1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseOut(System.Double)">
+  ExponentialEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L270"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double ExponentialEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the exponential function y = -2^(-10x) + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.ExponentialEaseOut(System.Single)">
+  ExponentialEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L271"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float ExponentialEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_ExponentialEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the exponential function y = -2^(-10x) + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_Linear_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Linear*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_Linear_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Linear(System.Double)">
+  Linear(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a linear easing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double Linear(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The amount.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd><p>The amount eased.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_Linear_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the line y = x</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_Linear_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Linear*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_Linear_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.Linear(System.Single)">
+  Linear(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L60"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a linear easing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float Linear(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The amount.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd><p>The amount eased.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_Linear_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the line y = x</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseIn(System.Double)">
+  QuadraticEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuadraticEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the parabola y = x^2</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseIn(System.Single)">
+  QuadraticEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L68"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuadraticEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the parabola y = x^2</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseInOut(System.Double)">
+  QuadraticEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuadraticEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise quadratic
+y = (1/2)((2x)^2)             ; [0, 0.5]
+y = -(1/2)((2x-1)*(2x-3) - 1) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseInOut(System.Single)">
+  QuadraticEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuadraticEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise quadratic
+y = (1/2)((2x)^2)             ; [0, 0.5]
+y = -(1/2)((2x-1)*(2x-3) - 1) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseOut(System.Double)">
+  QuadraticEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuadraticEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the parabola y = -x^2 + 2x</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuadraticEaseOut(System.Single)">
+  QuadraticEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuadraticEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuadraticEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the parabola y = -x^2 + 2x</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseIn(System.Double)">
+  QuarticEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L135"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuarticEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quartic x^4</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseIn(System.Single)">
+  QuarticEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L136"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuarticEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quartic x^4</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseInOut(System.Double)">
+  QuarticEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L154"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuarticEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise quartic
+y = (1/2)((2x)^4)        ; [0, 0.5]
+y = -(1/2)((2x-2)^4 - 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseInOut(System.Single)">
+  QuarticEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L155"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuarticEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise quartic
+y = (1/2)((2x)^4)        ; [0, 0.5]
+y = -(1/2)((2x-2)^4 - 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseOut(System.Double)">
+  QuarticEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L143"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuarticEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quartic y = 1 - (x - 1)^4</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuarticEaseOut(System.Single)">
+  QuarticEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L144"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuarticEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuarticEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quartic y = 1 - (x - 1)^4</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseIn(System.Double)">
+  QuinticEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L170"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuinticEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quintic y = x^5</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseIn(System.Single)">
+  QuinticEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L171"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuinticEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quintic y = x^5</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseInOut(System.Double)">
+  QuinticEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L189"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuinticEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise quintic
+y = (1/2)((2x)^5)       ; [0, 0.5]
+y = (1/2)((2x-2)^5 + 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseInOut(System.Single)">
+  QuinticEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L190"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuinticEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the piecewise quintic
+y = (1/2)((2x)^5)       ; [0, 0.5]
+y = (1/2)((2x-2)^5 + 2) ; [0.5, 1]</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseOut(System.Double)">
+  QuinticEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L178"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double QuinticEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quintic y = (x - 1)^5 + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.QuinticEaseOut(System.Single)">
+  QuinticEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L179"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float QuinticEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_QuinticEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after the quintic y = (x - 1)^5 + 1</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseIn_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseIn(System.Double)">
+  SineEaseIn(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L205"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double SineEaseIn(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseIn_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after quarter-cycle of sine wave</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseIn_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseIn*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseIn_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseIn(System.Single)">
+  SineEaseIn(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L206"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float SineEaseIn(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseIn_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after quarter-cycle of sine wave</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseInOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseInOut(System.Double)">
+  SineEaseInOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L221"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double SineEaseInOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseInOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after half sine wave</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseInOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseInOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseInOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseInOut(System.Single)">
+  SineEaseInOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L222"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float SineEaseInOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseInOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after half sine wave</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseOut_System_Double_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseOut(System.Double)">
+  SineEaseOut(double)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Double.cs/#L213"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double SineEaseOut(double amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseOut_System_Double__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after quarter-cycle of sine wave (different phase)</p>
+</div>
+
+
+
+
+  <a id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseOut_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseOut*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseOut_System_Single_" data-uid="Stride.CommunityToolkit.Mathematics.Easing.SineEaseOut(System.Single)">
+  SineEaseOut(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L214"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float SineEaseOut(float amount)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>amount</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Mathematics_Easing_SineEaseOut_System_Single__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Modeled after quarter-cycle of sine wave (different phase)</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Mathematics/Easing.Single.cs/#L6" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

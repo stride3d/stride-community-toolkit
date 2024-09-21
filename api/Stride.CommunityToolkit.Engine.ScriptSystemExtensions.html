@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions" class="text-break">
-Class ScriptSystemExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L39"><i class="bi bi-code-slash"></i></a>
+Class ScriptSystemExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L42"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -153,11 +153,608 @@ The methods are useful for both real-time and in-game time-based operations.</p>
 </h2>
 
 
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddAction_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddAction*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddAction_Stride_Engine_Processors_ScriptSystem_System_Action_System_TimeSpan_System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddAction(Stride.Engine.Processors.ScriptSystem,System.Action,System.TimeSpan,System.Int64)">
+  AddAction(ScriptSystem, Action, TimeSpan, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L406"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes after waiting specified delay.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddAction(this ScriptSystem scriptSystem, Action action, TimeSpan delay, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>delay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait for.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddAction_Stride_Engine_Processors_ScriptSystem_System_Action_System_TimeSpan_System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">delay</code> is less than zero.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddAction_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddAction*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddAction_Stride_Engine_Processors_ScriptSystem_System_Action_System_TimeSpan_System_TimeSpan_System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddAction(Stride.Engine.Processors.ScriptSystem,System.Action,System.TimeSpan,System.TimeSpan,System.Int64)">
+  AddAction(ScriptSystem, Action, TimeSpan, TimeSpan, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L517"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes after waiting specified delay and repeats execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddAction(this ScriptSystem scriptSystem, Action action, TimeSpan delay, TimeSpan repeatEvery, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a></dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>delay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait for.</p>
+</dd>
+    <dt><code>repeatEvery</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait for between repetition.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddAction_Stride_Engine_Processors_ScriptSystem_System_Action_System_TimeSpan_System_TimeSpan_System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">delay</code> or <code class="paramref">repeatEvery</code> is less than zero.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventAction_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventAction*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventAction__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventKey___0__System_Action___0__System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventAction``1(Stride.Engine.Processors.ScriptSystem,Stride.Engine.Events.EventKey{``0},System.Action{``0},System.Int64)">
+  AddOnEventAction&lt;T&gt;(ScriptSystem, EventKey&lt;T&gt;, Action&lt;T&gt;, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L175"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes when the event is published.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddOnEventAction&lt;T&gt;(this ScriptSystem scriptSystem, EventKey&lt;T&gt; eventKey, Action&lt;T&gt; action, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>eventKey</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Events/EventKey.cs">EventKey</a>&lt;T&gt;</dt>
+    <dd><p>The event to wait for.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;T&gt;</dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of the event handler parameter.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventAction__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventKey___0__System_Action___0__System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code>, <code class="paramref">eventKey</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventAction_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventAction*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventAction__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventReceiver___0__System_Action___0__System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventAction``1(Stride.Engine.Processors.ScriptSystem,Stride.Engine.Events.EventReceiver{``0},System.Action{``0},System.Int64)">
+  AddOnEventAction&lt;T&gt;(ScriptSystem, EventReceiver&lt;T&gt;, Action&lt;T&gt;, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L213"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes when the event is published.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddOnEventAction&lt;T&gt;(this ScriptSystem scriptSystem, EventReceiver&lt;T&gt; receiver, Action&lt;T&gt; action, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>receiver</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Events/EventReceiver.cs">EventReceiver</a>&lt;T&gt;</dt>
+    <dd><p>The event reciever to listen to for.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;T&gt;</dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of the event handler parameter.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventAction__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventReceiver___0__System_Action___0__System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code>, <code class="paramref">receiver</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventTask_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventTask*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventTask__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventKey___0__System_Func___0_System_Threading_Tasks_Task__System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventTask``1(Stride.Engine.Processors.ScriptSystem,Stride.Engine.Events.EventKey{``0},System.Func{``0,System.Threading.Tasks.Task},System.Int64)">
+  AddOnEventTask&lt;T&gt;(ScriptSystem, EventKey&lt;T&gt;, Func&lt;T, Task&gt;, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L267"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes when the event is published.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddOnEventTask&lt;T&gt;(this ScriptSystem scriptSystem, EventKey&lt;T&gt; eventKey, Func&lt;T, Task&gt; action, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>eventKey</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Events/EventKey.cs">EventKey</a>&lt;T&gt;</dt>
+    <dd><p>The event to wait for.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a>&gt;</dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of the event handler parameter.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventTask__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventKey___0__System_Func___0_System_Threading_Tasks_Task__System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code>, <code class="paramref">eventKey</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventTask_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventTask*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventTask__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventReceiver___0__System_Func___0_System_Threading_Tasks_Task__System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventTask``1(Stride.Engine.Processors.ScriptSystem,Stride.Engine.Events.EventReceiver{``0},System.Func{``0,System.Threading.Tasks.Task},System.Int64)">
+  AddOnEventTask&lt;T&gt;(ScriptSystem, EventReceiver&lt;T&gt;, Func&lt;T, Task&gt;, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L305"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes when the event is published.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddOnEventTask&lt;T&gt;(this ScriptSystem scriptSystem, EventReceiver&lt;T&gt; receiver, Func&lt;T, Task&gt; action, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>receiver</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Events/EventReceiver.cs">EventReceiver</a>&lt;T&gt;</dt>
+    <dd><p>The event reciever to listen to for.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;T, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a>&gt;</dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of the event handler parameter.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOnEventTask__1_Stride_Engine_Processors_ScriptSystem_Stride_Engine_Events_EventReceiver___0__System_Func___0_System_Threading_Tasks_Task__System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code>, <code class="paramref">receiver</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOverTimeAction_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOverTimeAction*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOverTimeAction_Stride_Engine_Processors_ScriptSystem_System_Action_System_Single__System_TimeSpan_System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOverTimeAction(Stride.Engine.Processors.ScriptSystem,System.Action{System.Single},System.TimeSpan,System.Int64)">
+  AddOverTimeAction(ScriptSystem, Action&lt;float&gt;, TimeSpan, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L581"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes after waiting specified delay and repeats execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddOverTimeAction(this ScriptSystem scriptSystem, Action&lt;float&gt; action, TimeSpan duration, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action-1">Action</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>&gt;</dt>
+    <dd><p>The micro thread function to execute. The parameter is the progress over time from 0.0f to 1.0f.</p>
+</dd>
+    <dt><code>duration</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The duration of the time to execute the micro thread function for.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddOverTimeAction_Stride_Engine_Processors_ScriptSystem_System_Action_System_Single__System_TimeSpan_System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">duration</code> is less than zero.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddTask_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddTask*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddTask_Stride_Engine_Processors_ScriptSystem_System_Func_System_Threading_Tasks_Task__System_TimeSpan_System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddTask(Stride.Engine.Processors.ScriptSystem,System.Func{System.Threading.Tasks.Task},System.TimeSpan,System.Int64)">
+  AddTask(ScriptSystem, Func&lt;Task&gt;, TimeSpan, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L360"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes after waiting specified delay.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddTask(this ScriptSystem scriptSystem, Func&lt;Task&gt; action, TimeSpan delay, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-1">Func</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a>&gt;</dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>delay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait for.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddTask_Stride_Engine_Processors_ScriptSystem_System_Func_System_Threading_Tasks_Task__System_TimeSpan_System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">delay</code> is less than zero.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddTask_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddTask*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddTask_Stride_Engine_Processors_ScriptSystem_System_Func_System_Threading_Tasks_Task__System_TimeSpan_System_TimeSpan_System_Int64_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddTask(Stride.Engine.Processors.ScriptSystem,System.Func{System.Threading.Tasks.Task},System.TimeSpan,System.TimeSpan,System.Int64)">
+  AddTask(ScriptSystem, Func&lt;Task&gt;, TimeSpan, TimeSpan, long)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L457"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a micro thread function to the <code class="paramref">scriptSystem</code> that executes after waiting specified delay and repeats execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static MicroThread AddTask(this ScriptSystem scriptSystem, Func&lt;Task&gt; action, TimeSpan delay, TimeSpan repeatEvery, long priority = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>action</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-1">Func</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a>&gt;</dt>
+    <dd><p>The micro thread function to execute.</p>
+</dd>
+    <dt><code>delay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait for.</p>
+</dd>
+    <dt><code>repeatEvery</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait for between repetition.</p>
+</dd>
+    <dt><code>priority</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></dt>
+    <dd><p>The priority of the micro thread action being added.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_AddTask_Stride_Engine_Processors_ScriptSystem_System_Func_System_Threading_Tasks_Task__System_TimeSpan_System_TimeSpan_System_Int64__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the <code class="paramref">action</code> is a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> instance method the micro thread will be automatically stopped if the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ScriptComponent.cs">ScriptComponent</a> or <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> is removed.</p>
+</div>
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">scriptSystem</code> or <code class="paramref">action</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">delay</code> or <code class="paramref">repeatEvery</code> is less than zero.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_CancelAll_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.CancelAll*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_CancelAll_System_Collections_Generic_ICollection_Stride_Core_MicroThreading_MicroThread__" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.CancelAll(System.Collections.Generic.ICollection{Stride.Core.MicroThreading.MicroThread})">
+  CancelAll(ICollection&lt;MicroThread&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L636"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Cancels all <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a> and clears the <code class="paramref">microThreads</code> collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void CancelAll(this ICollection&lt;MicroThread&gt; microThreads)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>microThreads</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1">ICollection</a>&lt;<a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a>&gt;</dt>
+    <dd><p>A collection of <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.MicroThreading/MicroThread.cs">MicroThread</a> to cancel.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">microThreads</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
   <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_Delay_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.Delay*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_Delay_Stride_Engine_Processors_ScriptSystem_System_Single_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.Delay(Stride.Engine.Processors.ScriptSystem,System.Single)">
   Delay(ScriptSystem, float)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L65"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L68"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Waits for a specified amount of real time (not accounting for any time warp factors).</p>
@@ -202,7 +799,7 @@ The methods are useful for both real-time and in-game time-based operations.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_DelayWarped_Stride_Engine_Processors_ScriptSystem_System_Single_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.DelayWarped(Stride.Engine.Processors.ScriptSystem,System.Single)">
   DelayWarped(ScriptSystem, float)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L51"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Waits for a specified amount of time, adjusting for any time warp factors.</p>
@@ -247,7 +844,7 @@ The methods are useful for both real-time and in-game time-based operations.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_ExecuteInTime_Stride_Engine_Processors_ScriptSystem_System_Single_System_Action_System_Single__" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.ExecuteInTime(Stride.Engine.Processors.ScriptSystem,System.Single,System.Action{System.Single})">
   ExecuteInTime(ScriptSystem, float, Action&lt;float&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L95"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L98"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Executes an action every frame for a specified duration, using real time (not accounting for any time warp factors).</p>
@@ -295,7 +892,7 @@ The methods are useful for both real-time and in-game time-based operations.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_ExecuteInWarpedTime_Stride_Engine_Processors_ScriptSystem_System_Single_System_Action_System_Single__" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.ExecuteInWarpedTime(Stride.Engine.Processors.ScriptSystem,System.Single,System.Action{System.Single})">
   ExecuteInWarpedTime(ScriptSystem, float, Action&lt;float&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L79"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Executes an action every frame for a specified duration, adjusting for any time warp factors.</p>
@@ -339,11 +936,53 @@ The methods are useful for both real-time and in-game time-based operations.</p>
 
 
 
+  <a id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_WaitFor_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.WaitFor*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ScriptSystemExtensions_WaitFor_Stride_Engine_Processors_ScriptSystem_System_TimeSpan_" data-uid="Stride.CommunityToolkit.Engine.ScriptSystemExtensions.WaitFor(Stride.Engine.Processors.ScriptSystem,System.TimeSpan)">
+  WaitFor(ScriptSystem, TimeSpan)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L115"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Waits for the specified delay <code class="paramref">delay</code> .</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>scriptSystem</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Processors/ScriptSystem.cs">ScriptSystem</a>.</p>
+</dd>
+    <dt><code>delay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.timespan">TimeSpan</a></dt>
+    <dd><p>The amount of time to wait.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a></dt>
+    <dd><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task">Task</a> to await.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L39" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ScriptSystemExtensions.cs/#L42" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -359,7 +998,7 @@ The methods are useful for both real-time and in-game time-based operations.</p>
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

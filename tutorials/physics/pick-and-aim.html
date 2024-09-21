@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Raycasting and Camera Focus | Stride Community Toolkit Tutorials </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Raycasting and Camera Focus | Stride Community Toolkit Tutorials ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/tutorials/physics/pick-and-aim.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="raycasting-and-camera-focus">Raycasting and Camera Focus</h1>
+
+<p>In this tutorial, we will learn how to use <strong>raycasting</strong> to detect entities in a 3D scene and adjust the camera to focus on them. This technique is useful for games or simulations where you need to interact with objects using the mouse and smoothly transition the camera's focus based on those interactions.</p>
+<h2 id="what-youll-learn">What You'll Learn</h2>
+<ul>
+<li>How to create 3D entities and assign materials to them.</li>
+<li>How to use <strong>raycasting</strong> to detect objects in a 3D scene.</li>
+<li>How to use the camera to smoothly look at the target entity.</li>
+</ul>
+<h2 id="code-walkthrough">Code Walkthrough</h2>
+<pre><code class="lang-csharp" name="Pick and Aim">using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
+using Stride.CommunityToolkit.Physics;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Games;
+using Stride.Physics;
+
+Entity? target = null;
+CameraComponent? camera = null;
+Simulation? simulation = null;
+
+using var game = new Game();
+
+game.Run(start: Start, update: Update);
+
+void Start(Scene scene)
+{
+    // Set up a base 3D scene with default lighting and camera
+    game.SetupBase3DScene();
+
+    // Add a gizmo to help visualize the ground plane and axis directions
+    game.AddGroundGizmo(showAxisName: true);
+
+    // Create a cube entity with a violet material and position it in the scene
+    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    {
+        Material = game.CreateMaterial(Color.Violet),
+    });
+
+    // Set the position of the cube
+    cube.Transform.Position = new Vector3(0, 8, -3);
+
+    // Add cube to the scene
+    cube.Scene = scene;
+
+    // Create a sphere entity with a wheat-colored material
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    {
+        Material = game.CreateMaterial(Color.Wheat),
+    });
+
+    // Set the position of the sphere
+    entity.Transform.Position = new Vector3(-4, 8, 0);
+
+    // Add sphere to the scene
+    entity.Scene = scene;
+
+    // Retrieve the camera and the physics simulation from the scene
+    camera = scene.GetCamera();
+    simulation = game.SceneSystem.SceneInstance.GetProcessor&lt;PhysicsProcessor&gt;()?.Simulation;
+}
+
+// Update method called every frame to handle game logic
+void Update(Scene scene, GameTime gameTime)
+{
+    // Ensure that the camera and simulation are initialized
+    if (simulation == null || camera is null) return;
+
+    // Check if the left mouse button is pressed
+    if (game.Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left))
+    {
+        // Cast a ray from the mouse position into the world
+        var ray = camera.ScreenToWorldRaySegment(game.Input.MousePosition);
+
+        // Perform raycasting in the simulation to detect any entities
+        var hitResult = simulation.Raycast(ray);
+
+        if (hitResult.Succeeded)
+        {
+            // If the ray hits an entity, set it as the camera's target
+            target = hitResult.Collider.Entity;
+        }
+    }
+
+    // If a target entity is set, make the camera smoothly look at it
+    if (target != null)
+    {
+        camera.Entity.Transform.LookAt(target.Transform, game.DeltaTime() * 3.0f);
+    }
+}
+</code></pre><h2 id="code-walkthrough-1">Code Walkthrough</h2>
+<ul>
+<li><p><strong>Game Setup:</strong> In the <code>Start()</code> method, we set up a basic 3D scene with lighting and a camera using the <code>SetupBase3DScene()</code> helper method. We then create two 3D entities, a <strong>cube</strong> and a <strong>sphere</strong>, and position them in the scene with different materials.</p>
+</li>
+<li><p><strong>Raycasting with Mouse Input:</strong> In the <code>Update()</code> method, we check if the left mouse button is pressed. If pressed, a ray is cast from the mouse position into the 3D world using <code>ScreenToWorldRaySegment()</code>. This ray is used to check for collisions with 3D entities in the scene via <strong>raycasting</strong>.</p>
+</li>
+<li><p><strong>Camera Focus:</strong> If the ray successfully hits an entity, that entity becomes the <strong>target</strong>. The camera then uses the <code>LookAt()</code> method to smoothly focus on the target entity, giving the player a clear view of the object they clicked on.</p>
+</li>
+</ul>
+<h2 id="running-the-code">Running the Code</h2>
+<p>When you run this code, the game will display a 3D scene with a cube and a sphere. By clicking on either object with the mouse, the camera will smoothly rotate to focus on the clicked object. The left mouse button controls the focus.</p>
+<h2 id="summary">Summary</h2>
+<p>This example demonstrates how to use raycasting to detect entities in a scene based on mouse input and how to adjust the camera to focus on those entities. This technique is useful for games that require interactive environments, object selection, or camera-based interactions.</p>
+<p>Feel free to extend this concept by adding more entities, adjusting the camera's behavior, or experimenting with different easing functions for camera movement.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/tutorials/physics/pick-and-aim.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

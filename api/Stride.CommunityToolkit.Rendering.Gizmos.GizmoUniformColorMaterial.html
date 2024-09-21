@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class GizmoUniformColorMaterial | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="A utility class for creating and updating materials with uniform color properties for gizmos.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial" class="text-break">
-Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoEmissiveColorMaterial.cs/#L43"><i class="bi bi-code-slash"></i></a>
+Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoUniformColorMaterial.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>A utility class for creating and updating materials with uniform color properties for gizmos.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,11 @@ Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_Create_Stride_Graphics_GraphicsDevice_Stride_Core_Mathematics_Color_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.Create(Stride.Graphics.GraphicsDevice,Stride.Core.Mathematics.Color)">
   Create(GraphicsDevice, Color)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoEmissiveColorMaterial.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoUniformColorMaterial.cs/#L22"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates a new material with uniform diffuse color properties based on the specified color.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -144,15 +146,18 @@ Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>device</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a> used to create the material.</p>
+</dd>
     <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a> to apply to the material.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
+    <dd><p>A new <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> with the specified uniform diffuse color.</p>
+</dd>
   </dl>
 
 
@@ -161,41 +166,9 @@ Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="
 
 
 
-
-
-
-
-  <a id="Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_UpdateColor_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_UpdateColor_Stride_Graphics_GraphicsDevice_Stride_Rendering_Material_Stride_Core_Mathematics_Color_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.UpdateColor(Stride.Graphics.GraphicsDevice,Stride.Rendering.Material,Stride.Core.Mathematics.Color)">
-  UpdateColor(GraphicsDevice, Material, Color)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoEmissiveColorMaterial.cs/#L68"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void UpdateColor(GraphicsDevice device, Material material, Color color)</code></pre>
-  </div>
-
-  <h4 class="section">Parameters</h4>
-  <dl class="parameters">
-    <dt><code>device</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd></dd>
-    <dt><code>material</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
-    <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
+  <h4 class="section" id="Stride_CommunityToolkit_Rendering_Gizmos_GizmoUniformColorMaterial_Create_Stride_Graphics_GraphicsDevice_Stride_Core_Mathematics_Color__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the color contains transparency (alpha &lt; 255), transparency is enabled for the material.</p>
+</div>
 
 
 
@@ -204,7 +177,7 @@ Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoEmissiveColorMaterial.cs/#L43" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/GizmoUniformColorMaterial.cs/#L11" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -220,7 +193,7 @@ Class GizmoUniformColorMaterial  <a class="header-action link-secondary" title="
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

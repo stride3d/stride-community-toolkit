@@ -1,0 +1,1007 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class EntitySearchExtensions | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class EntitySearchExtensions | Stride Community Toolkit ">
+      
+      <meta name="description" content="Provides extension methods for searching and retrieving  instances within an  hierarchy. This class includes methods for performing breadth-first and depth-first searches to find components in children, descendants, and ancestors of an entity.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Engine_EntitySearchExtensions.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Engine.EntitySearchExtensions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions">
+
+
+
+  <h1 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions" class="text-break">
+Class EntitySearchExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L29"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Engine.html">Engine</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides extension methods for searching and retrieving <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/EntityComponent.cs">EntityComponent</a> instances
+within an <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> hierarchy. This class includes methods for performing breadth-first
+and depth-first searches to find components in children, descendants, and ancestors of an entity.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class EntitySearchExtensions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">EntitySearchExtensions</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+  <h2 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_examples">Examples</h2>
+  <p>Example usage:</p>
+<pre><code class="lang-csharp">var component = entity.GetComponentInChildrenBFS&lt;MyComponent&gt;();
+var allComponents = entity.GetComponentsInDescendants&lt;MyComponent&gt;();</code></pre>
+
+
+  <h2 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>The methods in this class support various search options, including:</p>
+<ul><li>Searching only in children or including the entity itself.</li><li>Including or excluding disabled components.</li><li>Retrieving a single component or all components of a specified type.</li></ul>
+</div>
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildrenAndSelf_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildrenAndSelf*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildrenAndSelf__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildrenAndSelf``1(Stride.Engine.Entity)">
+  GetComponentInChildrenAndSelf&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L57"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a breadth first search of the entity and it's children for a component of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? GetComponentInChildrenAndSelf&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The component or null if does no exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildrenAndSelf_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildrenAndSelf*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildrenAndSelf__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildrenAndSelf``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentInChildrenAndSelf&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L122"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a breadth first search of the entity and it's children for a component of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? GetComponentInChildrenAndSelf&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The component or null if does no exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildrenBFS_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildrenBFS*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildrenBFS__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildrenBFS``1(Stride.Engine.Entity)">
+  GetComponentInChildrenBFS&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Searches the entity's children using a breadth-first search (BFS) to find the first component of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? GetComponentInChildrenBFS&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> to search within.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The first component of type <code class="typeparamref">T</code> found in the entity's children, or <code>null</code> if none exists.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown if the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildren_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildren*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInChildren__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildren``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentInChildren&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L102"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a breadth first search of the entities children for a component of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? GetComponentInChildren&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The component or null if does no exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInParent_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInParent*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInParent__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInParent``1(Stride.Engine.Entity)">
+  GetComponentInParent&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L409"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a search of the entity and it's ancestors for a component of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? GetComponentInParent&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The component or <code>null</code> if does no exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInParent_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInParent*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentInParent__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInParent``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentInParent&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L437"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a search of the entity and it's ancestors for a component of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T? GetComponentInParent&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">T</span></dt>
+    <dd><p>The component or <code>null</code> if does no exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildrenAndSelf_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildrenAndSelf*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildrenAndSelf__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildrenAndSelf``1(Stride.Engine.Entity)">
+  GetComponentsInChildrenAndSelf&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L184"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entity and it's children for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInChildrenAndSelf&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildrenAndSelf_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildrenAndSelf*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildrenAndSelf__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildrenAndSelf``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentsInChildrenAndSelf&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L239"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entity and it's children for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInChildrenAndSelf&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildren_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildren*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildren__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildren``1(Stride.Engine.Entity)">
+  GetComponentsInChildren&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L165"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entities children for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInChildren&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildren_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildren*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInChildren__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInChildren``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentsInChildren&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L219"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entities children for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInChildren&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendantsAndSelf_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendantsAndSelf*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendantsAndSelf__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendantsAndSelf``1(Stride.Engine.Entity)">
+  GetComponentsInDescendantsAndSelf&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L295"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entity and it's decendants for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInDescendantsAndSelf&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendantsAndSelf_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendantsAndSelf*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendantsAndSelf__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendantsAndSelf``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentsInDescendantsAndSelf&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L361"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entity and it's decendants for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInDescendantsAndSelf&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendants_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendants*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendants__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendants``1(Stride.Engine.Entity)">
+  GetComponentsInDescendants&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L276"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entities decendants for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInDescendants&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendants_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendants*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInDescendants__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInDescendants``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentsInDescendants&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L341"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a depth first search of the entity and it's decendants for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInDescendants&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInParent_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInParent*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInParent__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInParent``1(Stride.Engine.Entity)">
+  GetComponentsInParent&lt;T&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L464"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a search of the entity and it's ancestors for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInParent&lt;T&gt;(this Entity entity) where T : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInParent_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInParent*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntitySearchExtensions_GetComponentsInParent__1_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInParent``1(Stride.Engine.Entity,System.Boolean)">
+  GetComponentsInParent&lt;T&gt;(Entity, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L489"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Performs a search of the entity and it's ancestors for all components of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;T&gt; GetComponentsInParent&lt;T&gt;(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The entity.</p>
+</dd>
+    <dt><code>includeDisabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p>Should search include <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">ActivableEntityComponent</a> where <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ActivableEntityComponent.cs">Enabled</a> is <code>false</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;T&gt;</dt>
+    <dd><p>An iteration on the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of component.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>The entity was <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntitySearchExtensions.cs/#L29" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

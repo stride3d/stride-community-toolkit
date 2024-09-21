@@ -57,6 +57,66 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Collections.CollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Collections.CollectionExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Collections.DictionaryExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Collections.DictionaryExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Collections.EnumerableExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Collections.EnumerableExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Collections.ListStackExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Collections.ListStackExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Collections.RandomListExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Collections.RandomListExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Collections.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Collections.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.yml",
       "output": {
         ".html": {
@@ -87,10 +147,30 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.EntityComponentCollectionExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.EntityComponentCollectionExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.EntityExtensions.yml",
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Engine.EntityExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.EntitySearchExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.EntitySearchExtensions.html"
         }
       },
       "version": ""
@@ -111,6 +191,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Engine.ModelComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.PrefabExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.PrefabExtensions.html"
         }
       },
       "version": ""
@@ -191,6 +281,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Engine.ScriptSystemExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Space.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.Space.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.TransformExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.TransformExtensions.html"
         }
       },
       "version": ""
@@ -291,6 +401,56 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Helpers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Mathematics.Easing.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Mathematics.Easing.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Mathematics.EasingFunction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Mathematics.EasingFunction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Mathematics.MathUtilEx.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Mathematics.MathUtilEx.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Mathematics.RandomExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Mathematics.RandomExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Mathematics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Mathematics.html"
         }
       },
       "version": ""
@@ -497,6 +657,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.MaterialExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.MaterialExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.yml",
       "output": {
         ".html": {
@@ -631,6 +801,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.html"
         }
       },
       "version": ""
@@ -1763,6 +1943,36 @@
       "output": {
         ".html": {
           "relative_path": "tutorials/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/mathematics/easing.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/mathematics/easing.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/physics/pick-and-aim.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/physics/pick-and-aim.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/textures/add-a-texture.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/textures/add-a-texture.html"
         }
       },
       "version": ""

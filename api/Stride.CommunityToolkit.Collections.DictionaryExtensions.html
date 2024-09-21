@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class DictionaryExtensions | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class DictionaryExtensions | Stride Community Toolkit ">
+      
+      <meta name="description" content="Extension methods for .">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_Collections_DictionaryExtensions.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.Collections.DictionaryExtensions%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions">
+
+
+
+  <h1 id="Stride_CommunityToolkit_Collections_DictionaryExtensions" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions" class="text-break">
+Class DictionaryExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L6"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.Collections.html">Collections</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Extension methods for <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary&lt;TKey, TValue&gt;</a>.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class DictionaryExtensions</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">DictionaryExtensions</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_Collections_DictionaryExtensions_GetOrAdd_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.GetOrAdd*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Collections_DictionaryExtensions_GetOrAdd__2_System_Collections_Generic_IDictionary___0___1____0_System_Func___0___1__" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,System.Func{``0,``1})">
+  GetOrAdd&lt;TKey, TValue&gt;(IDictionary&lt;TKey, TValue&gt;, TKey, Func&lt;TKey, TValue&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the element with the specified key or adds it if it is not in the dictionary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TValue? GetOrAdd&lt;TKey, TValue&gt;(this IDictionary&lt;TKey, TValue&gt; dictionary, TKey key, Func&lt;TKey, TValue&gt; getValue)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>dictionary</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The dictionary to get element from.</p>
+</dd>
+    <dt><code>key</code> <span class="xref">TKey</span></dt>
+    <dd><p>The key of the element to get.</p>
+</dd>
+    <dt><code>getValue</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The callback delegate to return value if element with specified key does not exist in the <code class="paramref">dictionary</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TValue</span></dt>
+    <dd><p>The element with the specified key, or the added value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TKey</code></dt>
+    <dd><p>The type of keys in the dictionary.</p>
+</dd>
+    <dt><code>TValue</code></dt>
+    <dd><p>The type of values in the dictionary.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">dictionary</code> or <code class="paramref">getValue</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Collections_DictionaryExtensions_GetOrAdd_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.GetOrAdd*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Collections_DictionaryExtensions_GetOrAdd__2_System_Collections_Generic_IDictionary___0___1____0_System_Func___0___1__System_Func___1_System_Boolean__" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,System.Func{``0,``1},System.Func{``1,System.Boolean})">
+  GetOrAdd&lt;TKey, TValue&gt;(IDictionary&lt;TKey, TValue&gt;, TKey, Func&lt;TKey, TValue&gt;, Func&lt;TValue, bool&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L85"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the element with the specified key in the dictionary or the new value returned from the <code class="paramref">getValue</code> callback.
+If the <code class="paramref">shouldAdd</code> callback returns <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> then the new value is added to the dictionary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TValue? GetOrAdd&lt;TKey, TValue&gt;(this IDictionary&lt;TKey, TValue&gt; dictionary, TKey key, Func&lt;TKey, TValue&gt; getValue, Func&lt;TValue, bool&gt; shouldAdd)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>dictionary</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The dictionary to get element from.</p>
+</dd>
+    <dt><code>key</code> <span class="xref">TKey</span></dt>
+    <dd><p>The key of the element to get.</p>
+</dd>
+    <dt><code>getValue</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The callback delegate to return value if element with specified key does not exist in the <code class="paramref">dictionary</code>.</p>
+</dd>
+    <dt><code>shouldAdd</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-2">Func</a>&lt;TValue, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>&gt;</dt>
+    <dd><p>The callback delegate to determine if the new value should be added to the <code class="paramref">dictionary</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TValue</span></dt>
+    <dd><p>The element with the specified key, or the new value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TKey</code></dt>
+    <dd><p>The type of keys in the dictionary.</p>
+</dd>
+    <dt><code>TValue</code></dt>
+    <dd><p>The type of values in the dictionary.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">dictionary</code>, <code class="paramref">getValue</code> or <code class="paramref">shouldAdd</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Collections_DictionaryExtensions_GetOrDefault_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.GetOrDefault*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Collections_DictionaryExtensions_GetOrDefault__2_System_Collections_Generic_IDictionary___0___1____0___1_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.GetOrDefault``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+  GetOrDefault&lt;TKey, TValue&gt;(IDictionary&lt;TKey, TValue&gt;, TKey, TValue?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L37"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the element with the specified key or a default value if it is not in the dictionary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TValue? GetOrDefault&lt;TKey, TValue&gt;(this IDictionary&lt;TKey, TValue&gt; dictionary, TKey key, TValue? defaultValue = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>dictionary</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The dictionary to get element from.</p>
+</dd>
+    <dt><code>key</code> <span class="xref">TKey</span></dt>
+    <dd><p>The key of the element to get.</p>
+</dd>
+    <dt><code>defaultValue</code> <span class="xref">TValue</span></dt>
+    <dd><p>The value to return if element with specified key does not exist in the <code class="paramref">dictionary</code>.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TValue</span></dt>
+    <dd><p>The element with the specified key, or the default value.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TKey</code></dt>
+    <dd><p>The type of keys in the dictionary.</p>
+</dd>
+    <dt><code>TValue</code></dt>
+    <dd><p>The type of values in the dictionary.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">dictionary</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Collections_DictionaryExtensions_Increment_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.Increment*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Collections_DictionaryExtensions_Increment__1_System_Collections_Generic_IDictionary___0_System_Int32____0_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.Increment``1(System.Collections.Generic.IDictionary{``0,System.Int32},``0)">
+  Increment&lt;TKey&gt;(IDictionary&lt;TKey, int&gt;, TKey)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Increments integer value in a dictionary by 1.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int Increment&lt;TKey&gt;(this IDictionary&lt;TKey, int&gt; dictionary, TKey key)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>dictionary</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;TKey, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</dt>
+    <dd><p>The dictionary to get element from.</p>
+</dd>
+    <dt><code>key</code> <span class="xref">TKey</span></dt>
+    <dd><p>The key of the element to increment and get.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The element incremented by 1 with the specified key.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TKey</code></dt>
+    <dd><p>The type of keys in the dictionary.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">dictionary</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Collections_DictionaryExtensions_MergeInto_" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.MergeInto*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Collections_DictionaryExtensions_MergeInto__2_System_Collections_Generic_IDictionary___0___1__System_Collections_Generic_IDictionary___0___1__" data-uid="Stride.CommunityToolkit.Collections.DictionaryExtensions.MergeInto``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+  MergeInto&lt;TKey, TValue&gt;(IDictionary&lt;TKey, TValue&gt;, IDictionary&lt;TKey, TValue&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L16"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds items from one dictionary to the other.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void MergeInto&lt;TKey, TValue&gt;(this IDictionary&lt;TKey, TValue&gt; source, IDictionary&lt;TKey, TValue&gt; target)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>source</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The dictionary items are copied from.</p>
+</dd>
+    <dt><code>target</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;TKey, TValue&gt;</dt>
+    <dd><p>The dictionary items are added to.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TKey</code></dt>
+    <dd><p>The type of keys in the dictionary.</p>
+</dd>
+    <dt><code>TValue</code></dt>
+    <dd><p>The type of values in the dictionary.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">source</code> or <code class="paramref">target</code> are <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+  </dl>
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Collections/DictionaryExtensions.cs/#L6" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

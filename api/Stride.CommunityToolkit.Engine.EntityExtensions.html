@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_EntityExtensions" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions" class="text-break">
-Class EntityExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L13"><i class="bi bi-code-slash"></i></a>
+Class EntityExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L10"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -310,7 +310,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_FindEntity_Stride_Engine_Entity_System_String_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.FindEntity(Stride.Engine.Entity,System.String)">
   FindEntity(Entity, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L149"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L152"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Searches for an entity by name within the top-level entities of the current scene.</p>
@@ -352,7 +352,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_FindEntityRecursive_Stride_Engine_Entity_System_String_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.FindEntityRecursive(Stride.Engine.Entity,System.String)">
   FindEntityRecursive(Entity, string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L160"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L163"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Searches for an entity by name within the top-level entities of the current scene.</p>
@@ -394,10 +394,10 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponentInChildren__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponentInChildren``1(Stride.Engine.Entity)">
   GetComponentInChildren&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L100"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L101"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"><p>Recursively searches for the first component of the specified type in the entity's children.</p>
+  <div class="markdown level1 summary"><p>Recursively searches the entity's children and their descendants using a depth-first search (DFS) for the first component of the specified type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
 
@@ -408,14 +408,14 @@ The gizmo can be used during runtime to provide a visual reference for the light
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd><p>The entity from which to start the search.</p>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which to start the search.</p>
 </dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><span class="xref">T</span></dt>
-    <dd><p>The first component of the specified type found in the entity's children, or null if no such component exists.</p>
+    <dd><p>The first component of the specified type found in the entity's children or descendants, or <code>null</code> if no such component exists.</p>
 </dd>
   </dl>
 
@@ -432,6 +432,12 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
 
 
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
 
 
 
@@ -483,7 +489,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_GetComponents__1_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)">
   GetComponents&lt;T&gt;(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L127"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L130"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves all components of the specified type from the entity.</p>
@@ -523,11 +529,1136 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
 
 
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__10_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``10(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L220"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets ten specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10)</dt>
+    <dd><p>A tuple containing the ten components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__11_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``11(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L254"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets eleven specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?, TComponent11?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent where TComponent11 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11)</dt>
+    <dd><p>A tuple containing the eleven components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent11</code></dt>
+    <dd><p>The type of the eleventh component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__12_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``12(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L290"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets twelve specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?, TComponent11?, TComponent12?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent where TComponent11 : EntityComponent where TComponent12 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12)</dt>
+    <dd><p>A tuple containing the twelve components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent11</code></dt>
+    <dd><p>The type of the eleventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent12</code></dt>
+    <dd><p>The type of the twelfth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__13_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``13(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L328"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets thirteen specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?, TComponent11?, TComponent12?, TComponent13?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent where TComponent11 : EntityComponent where TComponent12 : EntityComponent where TComponent13 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13)</dt>
+    <dd><p>A tuple containing the thirteen components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent11</code></dt>
+    <dd><p>The type of the eleventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent12</code></dt>
+    <dd><p>The type of the twelfth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent13</code></dt>
+    <dd><p>The type of the thirteenth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__14_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``14(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L368"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets fourteen specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?, TComponent11?, TComponent12?, TComponent13?, TComponent14?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent where TComponent11 : EntityComponent where TComponent12 : EntityComponent where TComponent13 : EntityComponent where TComponent14 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14)</dt>
+    <dd><p>A tuple containing the fourteen components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent11</code></dt>
+    <dd><p>The type of the eleventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent12</code></dt>
+    <dd><p>The type of the twelfth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent13</code></dt>
+    <dd><p>The type of the thirteenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent14</code></dt>
+    <dd><p>The type of the fourteenth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__15_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``15(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14, TComponent15&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L410"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets fifteen specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?, TComponent11?, TComponent12?, TComponent13?, TComponent14?, TComponent15?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14, TComponent15&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent where TComponent11 : EntityComponent where TComponent12 : EntityComponent where TComponent13 : EntityComponent where TComponent14 : EntityComponent where TComponent15 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14, TComponent15)</dt>
+    <dd><p>A tuple containing the fifteen components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent11</code></dt>
+    <dd><p>The type of the eleventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent12</code></dt>
+    <dd><p>The type of the twelfth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent13</code></dt>
+    <dd><p>The type of the thirteenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent14</code></dt>
+    <dd><p>The type of the fourteenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent15</code></dt>
+    <dd><p>The type of the fifteenth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__16_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``16(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14, TComponent15, TComponent16&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L454"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets sixteen specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?, TComponent10?, TComponent11?, TComponent12?, TComponent13?, TComponent14?, TComponent15?, TComponent16?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14, TComponent15, TComponent16&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent where TComponent10 : EntityComponent where TComponent11 : EntityComponent where TComponent12 : EntityComponent where TComponent13 : EntityComponent where TComponent14 : EntityComponent where TComponent15 : EntityComponent where TComponent16 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9, TComponent10, TComponent11, TComponent12, TComponent13, TComponent14, TComponent15, TComponent16)</dt>
+    <dd><p>A tuple containing the sixteen components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent10</code></dt>
+    <dd><p>The type of the tenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent11</code></dt>
+    <dd><p>The type of the eleventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent12</code></dt>
+    <dd><p>The type of the twelfth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent13</code></dt>
+    <dd><p>The type of the thirteenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent14</code></dt>
+    <dd><p>The type of the fourteenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent15</code></dt>
+    <dd><p>The type of the fifteenth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent16</code></dt>
+    <dd><p>The type of the sixteenth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__2_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``2(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets two specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?) Get&lt;TComponent1, TComponent2&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2)</dt>
+    <dd><p>A tuple containing the two components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__3_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``3(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets three specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?) Get&lt;TComponent1, TComponent2, TComponent3&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3)</dt>
+    <dd><p>A tuple containing the three components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__4_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``4(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L58"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets four specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4)</dt>
+    <dd><p>A tuple containing the four components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__5_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``5(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets five specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5)</dt>
+    <dd><p>A tuple containing the five components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__6_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``6(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets six specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6)</dt>
+    <dd><p>A tuple containing the six components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__7_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``7(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L130"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets seven specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7)</dt>
+    <dd><p>A tuple containing the seven components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__8_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``8(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L158"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets eight specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8)</dt>
+    <dd><p>A tuple containing the eight components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Get_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Get__9_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Get``9(Stride.Engine.Entity)">
+  Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9&gt;(Entity)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L188"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets nine specified components from the entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static (TComponent1?, TComponent2?, TComponent3?, TComponent4?, TComponent5?, TComponent6?, TComponent7?, TComponent8?, TComponent9?) Get&lt;TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9&gt;(this Entity entity) where TComponent1 : EntityComponent where TComponent2 : EntityComponent where TComponent3 : EntityComponent where TComponent4 : EntityComponent where TComponent5 : EntityComponent where TComponent6 : EntityComponent where TComponent7 : EntityComponent where TComponent8 : EntityComponent where TComponent9 : EntityComponent</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> from which the components are retrieved.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt>(TComponent1, TComponent2, TComponent3, TComponent4, TComponent5, TComponent6, TComponent7, TComponent8, TComponent9)</dt>
+    <dd><p>A tuple containing the nine components, which may be <code>null</code> if they do not exist.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent1</code></dt>
+    <dd><p>The type of the first component to retrieve.</p>
+</dd>
+    <dt><code>TComponent2</code></dt>
+    <dd><p>The type of the second component to retrieve.</p>
+</dd>
+    <dt><code>TComponent3</code></dt>
+    <dd><p>The type of the third component to retrieve.</p>
+</dd>
+    <dt><code>TComponent4</code></dt>
+    <dd><p>The type of the fourth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent5</code></dt>
+    <dd><p>The type of the fifth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent6</code></dt>
+    <dd><p>The type of the sixth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent7</code></dt>
+    <dd><p>The type of the seventh component to retrieve.</p>
+</dd>
+    <dt><code>TComponent8</code></dt>
+    <dd><p>The type of the eighth component to retrieve.</p>
+</dd>
+    <dt><code>TComponent9</code></dt>
+    <dd><p>The type of the ninth component to retrieve.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>Thrown when the <code class="paramref">entity</code> is <code>null</code>.</p>
+</dd>
+  </dl>
+
+
+
   <a id="Stride_CommunityToolkit_Engine_EntityExtensions_Remove_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Remove*"></a>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_Remove_Stride_Engine_Entity_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)">
   Remove(Entity)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L138"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L141"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Removes the entity from its current scene by setting its <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a> property to null.</p>
@@ -560,7 +1691,7 @@ The gizmo can be used during runtime to provide a visual reference for the light
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_TryGetComponent__1_Stride_Engine_Entity___0__" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)">
   TryGetComponent&lt;T&gt;(Entity, out T)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L192"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L195"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Tries to retrieve a component of type <code class="typeparamref">T</code> from the given entity.</p>
@@ -609,7 +1740,7 @@ otherwise, <code>false</code>.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_EntityExtensions_WorldPosition_Stride_Engine_Entity_System_Boolean_" data-uid="Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)">
   WorldPosition(Entity, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L206"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L209"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the world position of the entity. This is a convenience method to get the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Matrix.cs">TranslationVector</a>
@@ -652,7 +1783,7 @@ from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sour
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.cs/#L13" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/EntityExtensions.GetComponents.cs/#L10" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -668,7 +1799,7 @@ from the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sour
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

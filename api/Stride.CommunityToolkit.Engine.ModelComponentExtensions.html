@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class ModelComponentExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  class, enabling additional functionality such as calculating model dimensions and extracting mesh data.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions" class="text-break">
-Class ModelComponentExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L7"><i class="bi bi-code-slash"></i></a>
+Class ModelComponentExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,9 @@ Class ModelComponentExtensions  <a class="header-action link-secondary" title="V
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> class, enabling additional functionality
+such as calculating model dimensions and extracting mesh data.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,7 +133,7 @@ Class ModelComponentExtensions  <a class="header-action link-secondary" title="V
 
   <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshHWL_Stride_Engine_ModelComponent_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshHWL(Stride.Engine.ModelComponent)">
   GetMeshHWL(ModelComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L23"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Calculates the height, width, and length of the model represented by the ModelComponent.</p>
@@ -174,7 +176,7 @@ width (X-axis), and length (Z-axis) of the bounding box.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshHeight_Stride_Engine_ModelComponent_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshHeight(Stride.Engine.ModelComponent)">
   GetMeshHeight(ModelComponent)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L36"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L41"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Calculates the height of the model represented by the ModelComponent.</p>
@@ -216,7 +218,7 @@ width (X-axis), and length (Z-axis) of the bounding box.</p>
 
   <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_GetMeshVerticesAndIndices_Stride_Engine_ModelComponent_Stride_Games_IGame_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.GetMeshVerticesAndIndices(Stride.Engine.ModelComponent,Stride.Games.IGame)">
   GetMeshVerticesAndIndices(ModelComponent, IGame)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L55"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L61"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Retrieves the vertices and indices from the ModelComponent's mesh data.</p>
@@ -259,11 +261,688 @@ Note that this method extracts combined vertex and index data from all meshes in
 
 
 
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ObjectParameterAccessor___0____0_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ObjectParameterAccessor{``0},``0,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ObjectParameterAccessor&lt;T&gt;, T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets an object of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ObjectParameterAccessor&lt;T&gt; parameterAccessor, T value, int materialIndex = 0, int passIndex = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameterAccessor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Rendering/ObjectParameterAccessor.cs">ObjectParameterAccessor</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ObjectParameterKey___0____0_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ObjectParameterKey{``0},``0,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ObjectParameterKey&lt;T&gt;, T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L253"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets an object of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ObjectParameterKey&lt;T&gt; parameter, T value, int materialIndex = 0, int passIndex = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Effects/ParameterKey.cs">ObjectParameterKey</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_PermutationParameterKey___0____0_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.PermutationParameterKey{``0},``0,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, PermutationParameterKey&lt;T&gt;, T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L272"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets a permutation of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, PermutationParameterKey&lt;T&gt; parameter, T value, int materialIndex = 0, int passIndex = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Effects/ParameterKey.cs">PermutationParameterKey</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_PermutationParameter___0____0_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.PermutationParameter{``0},``0,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, PermutationParameter&lt;T&gt;, T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L234"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets a permutation of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, PermutationParameter&lt;T&gt; parameter, T value, int materialIndex = 0, int passIndex = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Rendering/PermutationParameter.cs">PermutationParameter</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameterKey___0__System_Int32___0__System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameterKey{``0},System.Int32,``0@,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameterKey&lt;T&gt;, int, ref T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L158"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets blittable values of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameterKey&lt;T&gt; parameter, int count, ref T firstValue, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Effects/ParameterKey.cs">ValueParameterKey</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>count</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Number of values.</p>
+</dd>
+    <dt><code>firstValue</code> <span class="xref">T</span></dt>
+    <dd><p>The values.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameterKey___0____0_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameterKey{``0},``0,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameterKey&lt;T&gt;, T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L215"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets a blittable of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameterKey&lt;T&gt; parameter, T value, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Effects/ParameterKey.cs">ValueParameterKey</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameterKey___0____0__System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameterKey{``0},``0@,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameterKey&lt;T&gt;, ref T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L196"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets a blittable value of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameterKey&lt;T&gt; parameter, ref T value, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Effects/ParameterKey.cs">ValueParameterKey</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameterKey___0____0___System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameterKey{``0},``0[],System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameterKey&lt;T&gt;, T[], int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L177"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets blittable values of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameterKey&lt;T&gt; parameter, T[] values, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Effects/ParameterKey.cs">ValueParameterKey</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>values</code> T[]</dt>
+    <dd><p>The values.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameter___0__System_Int32___0__System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameter{``0},System.Int32,``0@,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameter&lt;T&gt;, int, ref T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L119"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets blittable values of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameter&lt;T&gt; parameter, int count, ref T firstValue, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Rendering/ValueParameter.cs">ValueParameter</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>count</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>Number of values.</p>
+</dd>
+    <dt><code>firstValue</code> <span class="xref">T</span></dt>
+    <dd><p>The values.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameter___0____0_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameter{``0},``0,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameter&lt;T&gt;, T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L99"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets a blittable value of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameter&lt;T&gt; parameter, T value, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Rendering/ValueParameter.cs">ValueParameter</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Engine_ModelComponentExtensions_SetMaterialParameter__1_Stride_Engine_ModelComponent_Stride_Rendering_ValueParameter___0____0__System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.Engine.ModelComponentExtensions.SetMaterialParameter``1(Stride.Engine.ModelComponent,Stride.Rendering.ValueParameter{``0},``0@,System.Int32,System.Int32)">
+  SetMaterialParameter&lt;T&gt;(ModelComponent, ValueParameter&lt;T&gt;, ref T, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L138"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets blittable value of the material pass parameter. Cloning the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a> if required.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMaterialParameter&lt;T&gt;(this ModelComponent modelComponent, ValueParameter&lt;T&gt; parameter, ref T value, int materialIndex = 0, int passIndex = 0) where T : struct</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>modelComponent</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a></dt>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">ModelComponent</a> to update material parameter on.</p>
+</dd>
+    <dt><code>parameter</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride/Rendering/ValueParameter.cs">ValueParameter</a>&lt;T&gt;</dt>
+    <dd><p>The parameter to update.</p>
+</dd>
+    <dt><code>value</code> <span class="xref">T</span></dt>
+    <dd><p>The value.</p>
+</dd>
+    <dt><code>materialIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the material to update. Default is 0.</p>
+</dd>
+    <dt><code>passIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The index of the pass of the material to update. Default is 0.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of value.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If <code class="paramref">modelComponent</code> is <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>.</p>
+</dd>
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></dt>
+    <dd><p>If <code class="paramref">materialIndex</code> is less than 0 or greater than <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">GetMaterialCount()</a> and not in <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/ModelComponent.cs">Materials</a>.
+Or if <code class="paramref">passIndex</code> is less than 0 or greater than or equal to the mu,ber of passes the material has.</p>
+</dd>
+  </dl>
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L7" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Engine/ModelComponentExtensions.cs/#L12" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -279,7 +958,7 @@ Note that this method extracts combined vertex and index data from all meshes in
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

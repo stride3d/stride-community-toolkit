@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class TextureCanvasExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for creating instances of .">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Extensions_TextureCanvasExtensions" data-uid="Stride.CommunityToolkit.Extensions.TextureCanvasExtensions" class="text-break">
-Class TextureCanvasExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L8"><i class="bi bi-code-slash"></i></a>
+Class TextureCanvasExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L11"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for creating instances of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,11 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
 
   <h3 id="Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_Stride_Core_IServiceRegistry_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_" data-uid="Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Core.IServiceRegistry,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)">
   CreateTextureCanvas(IServiceRegistry, Size2?, PixelFormat)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L32"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates a new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> using the specified <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Core.IServiceRegistry.html">IServiceRegistry</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -144,17 +146,21 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>services</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Core.IServiceRegistry.html">IServiceRegistry</a></dt>
-    <dd></dd>
+    <dd><p>The service registry to use for creating the texture canvas.</p>
+</dd>
     <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Size2.cs">Size2</a>?</dt>
-    <dd></dd>
+    <dd><p>The size of the texture canvas. If null, a default size will be used.</p>
+</dd>
     <dt><code>pixelFormat</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
-    <dd></dd>
+    <dd><p>The pixel format of the texture canvas. Default is <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Graphics.PixelFormat.html#Stride_Graphics_PixelFormat_R8G8B8A8_UNorm">R8G8B8A8_UNorm</a>.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a></dt>
-    <dd></dd>
+    <dd><p>A new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.</p>
+</dd>
   </dl>
 
 
@@ -171,10 +177,11 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
 
   <h3 id="Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_Stride_Games_IGame_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_" data-uid="Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)">
   CreateTextureCanvas(IGame, Size2?, PixelFormat)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L44"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates a new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> using the specified <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -184,17 +191,21 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGame.html">IGame</a></dt>
-    <dd></dd>
+    <dd><p>The game instance to use for creating the texture canvas.</p>
+</dd>
     <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Size2.cs">Size2</a>?</dt>
-    <dd></dd>
+    <dd><p>The size of the texture canvas. If null, a default size will be used.</p>
+</dd>
     <dt><code>pixelFormat</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
-    <dd></dd>
+    <dd><p>The pixel format of the texture canvas. Default is <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Graphics.PixelFormat.html#Stride_Graphics_PixelFormat_R8G8B8A8_UNorm">R8G8B8A8_UNorm</a>.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a></dt>
-    <dd></dd>
+    <dd><p>A new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.</p>
+</dd>
   </dl>
 
 
@@ -211,10 +222,11 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
 
   <h3 id="Stride_CommunityToolkit_Extensions_TextureCanvasExtensions_CreateTextureCanvas_Stride_Rendering_RenderContext_System_Nullable_Stride_Core_Mathematics_Size2__Stride_Graphics_PixelFormat_" data-uid="Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.CreateTextureCanvas(Stride.Rendering.RenderContext,System.Nullable{Stride.Core.Mathematics.Size2},Stride.Graphics.PixelFormat)">
   CreateTextureCanvas(RenderContext, Size2?, PixelFormat)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L10"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L20"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates a new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> using the specified <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/RenderContext.cs">RenderContext</a>.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -224,17 +236,21 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>renderContext</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/RenderContext.cs">RenderContext</a></dt>
-    <dd></dd>
+    <dd><p>The render context to use for creating the texture canvas.</p>
+</dd>
     <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Size2.cs">Size2</a>?</dt>
-    <dd></dd>
+    <dd><p>The size of the texture canvas. If null, a default size will be used.</p>
+</dd>
     <dt><code>pixelFormat</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Graphics.PixelFormat.html">PixelFormat</a></dt>
-    <dd></dd>
+    <dd><p>The pixel format of the texture canvas. Default is <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Graphics.PixelFormat.html#Stride_Graphics_PixelFormat_R8G8B8A8_UNorm">R8G8B8A8_UNorm</a>.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a></dt>
-    <dd></dd>
+    <dd><p>A new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a>.</p>
+</dd>
   </dl>
 
 
@@ -251,7 +267,7 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L8" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Extensions/TextureCanvasExtensions.cs/#L11" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -267,7 +283,7 @@ Class TextureCanvasExtensions  <a class="header-action link-secondary" title="Vi
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

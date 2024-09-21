@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class TranslationGizmo | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Represents a visual translation gizmo used for moving objects in a 3D scene.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo" class="text-break">
-Class TranslationGizmo  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class TranslationGizmo  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Represents a visual translation gizmo used for moving objects in a 3D scene.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -174,6 +175,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
 
 
+  <h2 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_remarks">Remarks</h2>
+  <div class="markdown level0 remarks"><p>This class creates a visual aid for object manipulation, consisting of axis arrows and planes,
+which can be used to indicate or manipulate movement along specific axes or planes.
+It is designed as an extension and can be added to any entity in a scene for visual feedback.</p>
+</div>
 
 
   <h2 class="section" id="constructors">Constructors
@@ -184,10 +190,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo__ctor_Stride_Graphics_GraphicsDevice_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor(Stride.Graphics.GraphicsDevice)">
   TranslationGizmo(GraphicsDevice)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L24"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L36"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html">TranslationGizmo</a> class with the specified graphics device.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -197,7 +204,8 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>graphicsDevice</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd></dd>
+    <dd><p>The graphics device used to render the gizmo.</p>
+</dd>
   </dl>
 
 
@@ -215,10 +223,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo__ctor_Stride_Graphics_GraphicsDevice_System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__System_Nullable_Stride_Core_Mathematics_Color__" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.#ctor(Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color})">
   TranslationGizmo(GraphicsDevice, Color?, Color?, Color?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html">TranslationGizmo</a> class with the specified graphics device and optional colors for each axis.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -228,13 +237,17 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>graphicsDevice</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/GraphicsDevice.Direct3D.cs">GraphicsDevice</a></dt>
-    <dd></dd>
+    <dd><p>The graphics device used to render the gizmo.</p>
+</dd>
     <dt><code>xColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>Optional color for the X-axis.</p>
+</dd>
     <dt><code>yColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>Optional color for the Y-axis.</p>
+</dd>
     <dt><code>zColor</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a>?</dt>
-    <dd></dd>
+    <dd><p>Optional color for the Z-axis.</p>
+</dd>
   </dl>
 
 
@@ -256,10 +269,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Entity_System_Boolean_System_Boolean_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Entity,System.Boolean,System.Boolean)">
   Create(Entity, bool, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L53"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates the translation gizmo entities and adds them to the specified parent entity.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -269,11 +283,14 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>entity</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The entity to which the gizmo will be added.</p>
+</dd>
     <dt><code>showAxisName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p>Determines whether the axis names should be displayed.</p>
+</dd>
     <dt><code>rotateAxisNames</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p>Determines whether the axis names should be rotated to match the axes' orientation.</p>
+</dd>
   </dl>
 
 
@@ -291,10 +308,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_Create_Stride_Engine_Scene_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.Create(Stride.Engine.Scene)">
   Create(Scene)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L117"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates and returns a new translation gizmo entity, adding it to the specified scene.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -304,13 +322,15 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>scene</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Scene.cs">Scene</a></dt>
-    <dd></dd>
+    <dd><p>The scene to which the gizmo will be added.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The created translation gizmo entity.</p>
+</dd>
   </dl>
 
 
@@ -327,10 +347,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_CreateUniformColorMaterial_Stride_Core_Mathematics_Color_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.CreateUniformColorMaterial(Stride.Core.Mathematics.Color)">
   CreateUniformColorMaterial(Color)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L189"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L242"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Creates a uniform color material for the gizmo.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -340,13 +361,15 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color.Palette.cs">Color</a></dt>
-    <dd></dd>
+    <dd><p>The color of the material.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
+    <dd><p>The created material.</p>
+</dd>
   </dl>
 
 
@@ -363,10 +386,11 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 
   <h3 id="Stride_CommunityToolkit_Rendering_Gizmos_TranslationGizmo_GetAxisDefaultMaterial_System_Int32_" data-uid="Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.GetAxisDefaultMaterial(System.Int32)">
   GetAxisDefaultMaterial(int)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L192"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L250"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Retrieves the default material for the specified axis.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -376,13 +400,15 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>axisIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
-    <dd></dd>
+    <dd><p>The index of the axis (0 for X, 1 for Y, 2 for Z).</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Rendering/Rendering/Material.cs">Material</a></dt>
-    <dd></dd>
+    <dd><p>The material for the specified axis.</p>
+</dd>
   </dl>
 
 
@@ -399,7 +425,7 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Gizmos/TranslationGizmo.cs/#L17" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -415,7 +441,7 @@ Class TranslationGizmo  <a class="header-action link-secondary" title="View sour
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

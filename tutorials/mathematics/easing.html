@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Using Easing Functions: Animating Position and Material Color | Stride Community Toolkit Tutorials </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Using Easing Functions: Animating Position and Material Color | Stride Community Toolkit Tutorials ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/tutorials/mathematics/easing.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="using-easing-functions-animating-position-and-material-color">Using Easing Functions: Animating Position and Material Color</h1>
+
+<p><strong>Easing functions</strong> are used in animations to create smooth transitions between values over a specified time. In this tutorial, we'll explore how to use easing functions not only to move a 3D object but also to interpolate its material color. This will allow us to create animations that blend both movement and visual effects.</p>
+<h2 id="what-youll-learn">What You'll Learn</h2>
+<ul>
+<li>How to create a 3D primitive (cube).</li>
+<li>How to implement easing functions for smooth transitions in animations.</li>
+<li>How to animate the movement of a 3D object using easing functions.</li>
+<li>How to interpolate and change the material color of a 3D object dynamically.</li>
+</ul>
+<h2 id="code-walkthrough">Code Walkthrough</h2>
+<pre><code class="lang-csharp" name="Easing demo">using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Games;
+using Stride.Input;
+using Stride.Rendering.Materials;
+
+// Time elapsed since the start of the animation
+var elapsed = TimeSpan.Zero;
+
+// Duration of the animation (2 seconds)
+var duration = TimeSpan.FromSeconds(2);
+
+// Target position (where the object will ease to)
+var bottom = new Vector3(0, 2, 0);
+
+// Starting position of the object
+var startPosition = new Vector3(0, 8, 0);
+
+// 3D entity to be animated
+var entity = new Entity();
+
+// Color to interpolate to, initilized to white
+Color color = Color.White;
+
+// Initialize a new game instance
+using var game = new Game();
+
+// Run the game, specifying both the Start and Update methods
+game.Run(start: Start, update: Update);
+
+// Setup and initialize the scene
+void Start(Scene scene)
+{
+    // Set up a base 3D scene with default lighting and camera
+    game.SetupBase3DScene();
+
+    // Create a 3D sphere primitive and assign the material to it
+    entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    {
+        Material = game.CreateMaterial(Color.White)
+    });
+
+    // Add the sphere entity to the root scene
+    entity.Scene = scene;
+
+    var random = new Random();
+
+    // Generate a random color to interpolate to
+    color = random.NextColor();
+}
+
+// Update the scene every frame (for animations and input handling)
+void Update(Scene scene, GameTime time)
+{
+    // Calculate the progress of the animation as a ratio between 0 and 1
+    var progress = (float)(elapsed.TotalSeconds / duration.TotalSeconds);
+
+    if (progress &gt; 1.0f)
+    {
+        progress = 1.0f;
+    }
+
+    // Interpolate the position of the object using a quintic easing function
+    var position = MathUtilEx.Interpolate(startPosition, bottom, progress, EasingFunction.QuinticEaseOut);
+
+    Console.WriteLine(position);
+
+    // Apply the new position to the entity
+    entity.Transform.Position = position;
+
+    // Interpolate the color using a linear easing function
+    var diffuse = MathUtilEx.Interpolate(Color.White, color, progress, EasingFunction.Linear);
+
+    // Apply the interpolated color to the material
+    entity.Get&lt;ModelComponent&gt;().SetMaterialParameter(MaterialKeys.DiffuseValue, diffuse);
+
+    // Update the elapsed time with the time since the last frame
+    elapsed += time.Elapsed;
+
+    // Reset the animation when the spacebar is pressed
+    if (game.Input.IsKeyPressed(Keys.Space))
+    {
+        elapsed = TimeSpan.Zero;
+    }
+}
+</code></pre><h2 id="code-breakdown">Code Breakdown</h2>
+<ul>
+<li><strong>Position Animation:</strong> The <code>MathUtilEx.Interpolate</code> method is used with a quintic easing function to smoothly transition the sphere's position from its start to its end position.</li>
+<li><strong>Material Color Animation:</strong> The same interpolation approach is applied to change the color of the sphere’s material. A <strong>linear easing function</strong> is used to gradually change the color from white to a randomly generated color.</li>
+<li><strong>Resetting the Animation:</strong> The animation is reset each time the spacebar is pressed, allowing the movement and color transition to start over.</li>
+</ul>
+<h2 id="running-the-code">Running the Code</h2>
+<p>When you run the code, you'll see a 3D sphere smoothly moving from the starting position (8 units above the ground) to the bottom (2 units above the ground) over a duration of 2 seconds. At the same time, the sphere’s material color will gradually change from white to a randomly generated color. You can press the <strong>spacebar</strong> to reset the animation and see the sphere rise back to the top while its color returns to white.</p>
+<h2 id="summary">Summary</h2>
+<p>In this tutorial, you learned how to animate both the position and material color of a 3D object using easing functions. This technique allows you to create smooth and visually appealing transitions, which are essential for creating polished game experiences.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/tutorials/mathematics/easing.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

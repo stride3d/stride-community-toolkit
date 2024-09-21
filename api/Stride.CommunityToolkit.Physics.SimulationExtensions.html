@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Physics_SimulationExtensions" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions" class="text-break">
-Class SimulationExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L9"><i class="bi bi-code-slash"></i></a>
+Class SimulationExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L10"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -130,9 +130,111 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 
   <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast*"></a>
 
+  <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)">
+  Raycast(Simulation, RaySegment)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L62"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raycasts and stops at the first hit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static HitResult Raycast(this Simulation simulation, RaySegment raySegment)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
+    <dd><p>Physics simulation.</p>
+</dd>
+    <dt><code>raySegment</code> <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a></dt>
+    <dd><p>Ray.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a></dt>
+    <dd><p>The hit results.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If the simulation argument is null.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
+  Raycast(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L78"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raycasts and stops at the first hit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static HitResult Raycast(this Simulation simulation, RaySegment raySegment, CollisionFilterGroups collisionFilterGroups, CollisionFilterGroupFlags collisionFilterGroupFlags)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
+    <dd><p>Physics simulation.</p>
+</dd>
+    <dt><code>raySegment</code> <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a></dt>
+    <dd><p>Ray.</p>
+</dd>
+    <dt><code>collisionFilterGroups</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroups.html">CollisionFilterGroups</a></dt>
+    <dd><p>The collision group of this shape sweep</p>
+</dd>
+    <dt><code>collisionFilterGroupFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
+    <dd><p>The collision group that this shape sweep can collide with</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a></dt>
+    <dd><p>The hit results.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If the simulation argument is null.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast*"></a>
+
   <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)">
   Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L44"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L45"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs a raycast from the given entity's position in the specified direction, with the specified length.</p>
@@ -186,7 +288,7 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 
   <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)">
   Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L24"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Performs a raycast from the given entity's position in the direction the entity is facing, with the specified length.</p>
@@ -236,11 +338,210 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
 
 
 
+  <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)">
+  RaycastPenetrating(Simulation, RaySegment)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L106"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raycasts penetrating any shape the ray encounters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;HitResult&gt; RaycastPenetrating(this Simulation simulation, RaySegment raySegment)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
+    <dd><p>Physics simulation.</p>
+</dd>
+    <dt><code>raySegment</code> <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a></dt>
+    <dd><p>Ray.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a>&gt;</dt>
+    <dd><p>The list with hit results.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If the simulation argument is null.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
+  RaycastPenetrating(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L143"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raycasts penetrating any shape the ray encounters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static List&lt;HitResult&gt; RaycastPenetrating(this Simulation simulation, RaySegment raySegment, CollisionFilterGroups collisionFilterGroups, CollisionFilterGroupFlags collisionFilterGroupFlags)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
+    <dd><p>Physics simulation.</p>
+</dd>
+    <dt><code>raySegment</code> <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a></dt>
+    <dd><p>Ray.</p>
+</dd>
+    <dt><code>collisionFilterGroups</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroups.html">CollisionFilterGroups</a></dt>
+    <dd><p>The collision group of this shape sweep</p>
+</dd>
+    <dt><code>collisionFilterGroupFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
+    <dd><p>The collision group that this shape sweep can collide with</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a>&gt;</dt>
+    <dd><p>The list with hit results.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If the simulation argument is null.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_System_Collections_Generic_IList_Stride_Physics_HitResult__" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult})">
+  RaycastPenetrating(Simulation, RaySegment, IList&lt;HitResult&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raycasts penetrating any shape the ray encounters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RaycastPenetrating(this Simulation simulation, RaySegment raySegment, IList&lt;HitResult&gt; resultsOutput)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
+    <dd><p>Physics simulation.</p>
+</dd>
+    <dt><code>raySegment</code> <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a></dt>
+    <dd><p>Ray.</p>
+</dd>
+    <dt><code>resultsOutput</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a>&gt;</dt>
+    <dd><p>The list to fill with results.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If the simulation argument is null.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_System_Collections_Generic_IList_Stride_Physics_HitResult__Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_" data-uid="Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult},Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)">
+  RaycastPenetrating(Simulation, RaySegment, IList&lt;HitResult&gt;, CollisionFilterGroups, CollisionFilterGroupFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L127"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Raycasts penetrating any shape the ray encounters.
+Filtering by CollisionGroup</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RaycastPenetrating(this Simulation simulation, RaySegment raySegment, IList&lt;HitResult&gt; resultsOutput, CollisionFilterGroups collisionFilterGroups, CollisionFilterGroupFlags collisionFilterGroupFlags)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>simulation</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Physics/Simulation.cs">Simulation</a></dt>
+    <dd><p>Physics simulation.</p>
+</dd>
+    <dt><code>raySegment</code> <a class="xref" href="Stride.CommunityToolkit.Scripts.RaySegment.html">RaySegment</a></dt>
+    <dd><p>Ray.</p>
+</dd>
+    <dt><code>resultsOutput</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.HitResult.html">HitResult</a>&gt;</dt>
+    <dd><p>The list to fill with results.</p>
+</dd>
+    <dt><code>collisionFilterGroups</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroups.html">CollisionFilterGroups</a></dt>
+    <dd><p>The collision group of this shape sweep</p>
+</dd>
+    <dt><code>collisionFilterGroupFlags</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Physics.CollisionFilterGroupFlags.html">CollisionFilterGroupFlags</a></dt>
+    <dd><p>The collision group that this shape sweep can collide with</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></dt>
+    <dd><p>If the simulation argument is null.</p>
+</dd>
+  </dl>
+
+
+
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L9" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Physics/SimulationExtensions.cs/#L10" class="edit-link">Edit this page</a>
         </div>
 
 
@@ -256,7 +557,7 @@ Class SimulationExtensions  <a class="header-action link-secondary" title="View 
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.2</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>
