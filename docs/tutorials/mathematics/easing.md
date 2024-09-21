@@ -10,7 +10,7 @@
 
 ## Code Walkthrough
 
-[!code-csharp[Adding a Texture at Runtime](../../../examples/snippets/Easing_Example01/Program.cs)]
+[!code-csharp[Easing demo](../../../examples/snippets/Easing_Example01/Program.cs)]
 
 ## Code Breakdown
 
