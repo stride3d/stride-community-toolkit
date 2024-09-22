@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AssemblyName>Stride.CommunityToolkit.Skyboxes</AssemblyName>
-    <Title>Stride Community Toolkit - Skybox</Title>
-    <Description>A specialized extension of the Stride Community Toolkit, providing easy-to-use skybox utilities for code-only Stride projects. Enhance your Stride scenes with dynamic skyboxes without needing additional assets or complex setup.</Description>
-  </PropertyGroup>
-  <Import Project="..\CommonSettings.props" />
-  <ItemGroup>
-    <PackageReference Include="Stride.Engine" Version="4.2.0.2188" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Resources\skybox_texture_hdr.dds" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\skybox_texture_hdr.dds">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-  </ItemGroup>
+    <PropertyGroup>
+        <AssemblyName>Stride.CommunityToolkit.Skyboxes</AssemblyName>
+        <Title>Stride Community Toolkit - Skybox</Title>
+        <Description>A specialized extension of the Stride Community Toolkit, providing easy-to-use skybox utilities for code-only Stride projects. Enhance your Stride scenes with dynamic skyboxes without needing additional assets or complex setup.</Description>
+    </PropertyGroup>
+    <Import Project="..\CommonSettings.props" />
+    <ItemGroup>
+        <PackageReference Include="Stride.Engine" Version="4.2.0.2230" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Resources\skybox_texture_hdr.dds" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Resources\skybox_texture_hdr.dds">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <PackageCopyToOutput>true</PackageCopyToOutput>
+        </Content>
+    </ItemGroup>
 </Project>
