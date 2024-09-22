@@ -14,50 +14,50 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="4.2.0.2188" />
-        <PackageReference Include="Stride.Particles" Version="4.2.0.2188" />
-        <PackageReference Include="Stride.Physics" Version="4.2.0.2188" />
-        <PackageReference Include="Stride.UI" Version="4.2.0.2188" />
+        <PackageReference Include="Stride.Engine" Version="4.2.0.2230" />
+        <PackageReference Include="Stride.Particles" Version="4.2.0.2230" />
+        <PackageReference Include="Stride.Physics" Version="4.2.0.2230" />
+        <PackageReference Include="Stride.UI" Version="4.2.0.2230" />
         <PackageReference Include="Stride.BepuPhysics" Version="0.9.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Engine\EntityExtensions.GetComponents.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>EntityExtensions.GetComponents.tt</DependentUpon>
-      </Compile>
-      <Compile Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl.cs">
-        <DesignTime>True</DesignTime>
-        <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>LinePrimitiveShader.sdsl</DependentUpon>
-      </Compile>
-      <Compile Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl.cs">
-        <DesignTime>True</DesignTime>
-        <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>PrimitiveShader.sdsl</DependentUpon>
-      </Compile>
+        <Compile Update="Engine\EntityExtensions.GetComponents.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>EntityExtensions.GetComponents.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl.cs">
+            <DesignTime>True</DesignTime>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>LinePrimitiveShader.sdsl</DependentUpon>
+        </Compile>
+        <Compile Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl.cs">
+            <DesignTime>True</DesignTime>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>PrimitiveShader.sdsl</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Engine\EntityExtensions.GetComponents.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>EntityExtensions.GetComponents.cs</LastGenOutput>
-      </None>
-      <None Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl">
-        <Generator>StrideShaderKeyGenerator</Generator>
-        <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
-      </None>
-      <None Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl">
-        <Generator>StrideShaderKeyGenerator</Generator>
-        <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
-      </None>
+        <None Update="Engine\EntityExtensions.GetComponents.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>EntityExtensions.GetComponents.cs</LastGenOutput>
+        </None>
+        <None Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl">
+            <Generator>StrideShaderKeyGenerator</Generator>
+            <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
+        </None>
+        <None Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl">
+            <Generator>StrideShaderKeyGenerator</Generator>
+            <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+        <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     </ItemGroup>
 
 </Project>
