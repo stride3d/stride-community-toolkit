@@ -18,10 +18,6 @@ The following instructions will guide you through creating a new Stride project 
    ```bash
    dotnet build
    ```
-   or when running for the [first time](../troubleshooting.md) on your computer:
-   ```bash
-   dotnet build --runtime win-x64
-   ```
 1. **Run the Project:** The `dotnet run` command will build (if necessary) and execute your project. Run the following command to start your Stride project:
 
    ```
