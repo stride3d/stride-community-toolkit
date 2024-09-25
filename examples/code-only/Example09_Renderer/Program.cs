@@ -113,6 +113,7 @@ public class SpriteBatchRenderer : SyncScript
 
         spriteBatch.Begin(drawContext.GraphicsContext);
         spriteBatch.DrawString(_font, "Hello World 2", 20, screen + new Vector2(0, -50), Color.Red);
+        //spriteBatch.DrawString(_font, "Hello World 2", screen + new Vector2(0, -50), Color.Red, rotation: 0.5f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f, TextAlignment.Left);
         spriteBatch.End();
     }
 }

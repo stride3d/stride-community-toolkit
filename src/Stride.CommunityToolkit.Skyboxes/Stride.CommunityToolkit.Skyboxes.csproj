@@ -6,7 +6,7 @@
     </PropertyGroup>
     <Import Project="..\CommonSettings.props" />
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="4.2.0.2230" />
+        <PackageReference Include="Stride.Engine" Version="4.2.0.2232" />
     </ItemGroup>
     <ItemGroup>
         <None Remove="Resources\skybox_texture_hdr.dds" />
