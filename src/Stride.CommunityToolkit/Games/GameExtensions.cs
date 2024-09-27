@@ -95,7 +95,6 @@ public static class GameExtensions
     {
         ArgumentNullException.ThrowIfNull(game);
 
-
         if (game is not GameBase gameBase)
         {
             throw new ArgumentException($"The provided game instance must inherit from {nameof(GameBase)} in order to exit properly.", nameof(game));
