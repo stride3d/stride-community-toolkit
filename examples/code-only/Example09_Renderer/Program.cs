@@ -8,14 +8,17 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
+
+
 using var game = new Game();
 
 game.Run(start: (Scene rootScene) =>
 {
-    game.AddGraphicsCompositor().AddCleanUIStage().AddSceneRenderer(new MyCustomRenderer());
+    game.AddGraphicsCompositor().AddCleanUIStage().AddSceneRenderer(new MyCustomRenderer(rootScene));
     game.Add3DCamera().Add3DCameraController();
     game.AddDirectionalLight();
     game.Add3DGround();
+    game.AddProfiler();
 
     game.AddSkybox();
 
@@ -25,13 +28,20 @@ game.Run(start: (Scene rootScene) =>
 
     entity.Scene = rootScene;
 
-    entity.Add(new SpriteBatchRenderer());
+    //entity.Add(new SpriteBatchRenderer());
 });
 
 public class MyCustomRenderer : SceneRendererBase
 {
     private SpriteBatch? _spriteBatch;
     private SpriteFont? _font;
+    private readonly Scene _scene;
+    private CameraComponent? _camera;
+
+    public MyCustomRenderer(Scene scene)
+    {
+        _scene = scene;
+    }
 
     protected override void InitializeCore()
     {
@@ -39,6 +49,7 @@ public class MyCustomRenderer : SceneRendererBase
 
         _font = Content.Load<SpriteFont>("StrideDefaultFont");
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _camera = _scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
     }
 
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
@@ -54,6 +65,22 @@ public class MyCustomRenderer : SceneRendererBase
         _spriteBatch.DrawString(_font, "Hello Stride 1.2", 20, new Vector2(100, 100), Color.White);
         //_spriteBatch.Draw(_texture, Vector2.Zero);
         _spriteBatch.End();
+
+        // Get a refence to scene entities from context?
+
+        foreach (var entity in _scene.Entities)
+        {
+            var spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+
+            //var screen = entity.Transform.Position;
+
+            spriteBatch.Begin(drawContext.GraphicsContext);
+            spriteBatch.DrawString(_font, $"{entity.Name}: {entity.Transform.Position:N1}", 14, screen + new Vector2(0, -50), Color.Wheat);
+            //spriteBatch.DrawString(_font, "Hello World 2", screen + new Vector2(0, -50), Color.Red, rotation: 0.5f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f, TextAlignment.Left);
+            spriteBatch.End();
+        }
     }
 }
 
