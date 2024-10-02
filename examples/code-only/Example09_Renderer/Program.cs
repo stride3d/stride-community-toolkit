@@ -49,7 +49,7 @@ public class MyCustomRenderer : SceneRendererBase
         _font = Content.Load<SpriteFont>("StrideDefaultFont");
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, new[] { Color.White });
-        _camera = _scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+        //_camera = _scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
     }
 
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
@@ -60,7 +60,18 @@ public class MyCustomRenderer : SceneRendererBase
         // Clears the current render target
         //commandList.Clear(commandList.RenderTargets[0], Color.CornflowerBlue);
 
-        if (_spriteBatch is null) return;
+        // get camera from context or drawContext
+
+        var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
+
+        if (graphicsCompositor is null) return;
+
+        if (_camera is null)
+        {
+            _camera = graphicsCompositor.Cameras[0].Camera;
+        }
+
+        if (_spriteBatch is null || _camera is null) return;
 
         _spriteBatch.Begin(drawContext.GraphicsContext);
         _spriteBatch.DrawString(_font, "Hello Stride 1.2", 20, new Vector2(100, 100), Color.White);
@@ -73,15 +84,24 @@ public class MyCustomRenderer : SceneRendererBase
 
         const int x = 20;
         const int y = 20;
+        var reposition = new Vector2(0, -50);
 
         foreach (var entity in _scene.Entities)
         {
             var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
 
+            var text = $"{entity.Name}: {entity.Transform.Position:N1}";
             //var screen = entity.Transform.Position;
 
-            _spriteBatch.Draw(_colorTexture, new Rectangle(x, y, (int)30, (int)10), Color.Green);
-            _spriteBatch.DrawString(_font, $"{entity.Name}: {entity.Transform.Position:N1}", 12, screen + new Vector2(0, -50), Color.Wheat);
+            var dim = _spriteBatch.MeasureString(_font, text, 12);
+
+            _spriteBatch.Draw(_colorTexture, new Rectangle(
+                (int)screen.X + (int)reposition.X,
+                (int)screen.Y + (int)reposition.Y,
+                (int)dim.X,
+                (int)dim.Y), new Color(200, 200, 200, 100));
+
+            _spriteBatch.DrawString(_font, text, 12, screen + reposition, Color.Black);
             //spriteBatch.DrawString(_font, "Hello World 2", screen + new Vector2(0, -50), Color.Red, rotation: 0.5f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f, TextAlignment.Left);
         }
 
