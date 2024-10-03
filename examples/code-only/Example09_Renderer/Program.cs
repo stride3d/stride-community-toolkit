@@ -33,13 +33,13 @@ public class MyCustomRenderer : SceneRendererBase
 {
     private SpriteBatch? _spriteBatch;
     private SpriteFont? _font;
-    private readonly Scene _scene;
+    private Scene _scene;
     private CameraComponent? _camera;
     private Texture? _colorTexture = null;
 
     public MyCustomRenderer(Scene scene)
     {
-        _scene = scene;
+        //_scene = scene;
     }
 
     protected override void InitializeCore()
@@ -66,12 +66,21 @@ public class MyCustomRenderer : SceneRendererBase
 
         if (graphicsCompositor is null) return;
 
-        if (_camera is null)
+        _camera ??= graphicsCompositor.Cameras[0].Camera;
+
+        //if (_camera is null)
+        //{
+        //    _camera = graphicsCompositor.Cameras[0].Camera;
+        //}
+
+        if (_scene is null)
         {
-            _camera = graphicsCompositor.Cameras[0].Camera;
+            _scene = context.Tags.Get(SceneInstance.Current).RootScene;
         }
 
-        if (_spriteBatch is null || _camera is null) return;
+        //_scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
+
+        if (_spriteBatch is null || _camera is null || _scene is null) return;
 
         _spriteBatch.Begin(drawContext.GraphicsContext);
         _spriteBatch.DrawString(_font, "Hello Stride 1.2", 20, new Vector2(100, 100), Color.White);
