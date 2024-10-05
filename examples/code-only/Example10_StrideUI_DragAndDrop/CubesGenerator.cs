@@ -67,6 +67,11 @@ public class CubesGenerator
         entity.Scene = _scene;
     }
 
+    public void SubtractTotalCubes(int count)
+    {
+        _totalCubes -= count;
+    }
+
     /// <summary>
     /// Configures the transform properties (scale and position) of the given entity.
     /// </summary>

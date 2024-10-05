@@ -4,16 +4,19 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 
 UIManager? _uiManager = null;
 CubesGenerator? _cubesGenerator = null;
 
-const int _cubesCount = 100;
+const int CubesCount = 100;
+const int RemovalThresholdY = -30;
+const string TotalCubes = "Total Cubes: ";
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(start: Start, update: Update);
 
 void Start(Scene scene)
 {
@@ -21,7 +24,10 @@ void Start(Scene scene)
     game.SetupBase3DScene();
 
     // Add debugging aids: entity names, positions
-    game.AddEntityDebugRenderer();
+    game.AddEntityDebugRenderer(new()
+    {
+        ShowFontBackground = true
+    });
 
     game.AddSkybox();
     game.AddProfiler();
@@ -35,6 +41,21 @@ void Start(Scene scene)
 
     // Add an example 3D capsule entity to the scene for visual reference
     AddSampleCapsule(scene);
+}
+
+void Update(Scene scene, GameTime time)
+{
+    foreach (var entity in scene.Entities)
+    {
+        if (entity.Transform.Position.Y < RemovalThresholdY)
+        {
+            entity.Scene = null;
+
+            _cubesGenerator?.SubtractTotalCubes(1);
+
+            _uiManager?.UpdateTextBlock($"{TotalCubes} {_cubesGenerator?.TotalCubes ?? 0}");
+        }
+    }
 }
 
 void CreateAndAddUI(Scene scene, SpriteFont font)
@@ -55,7 +76,7 @@ void AddSampleCapsule(Scene scene)
 
 void GenerateRandomCubes()
 {
-    var totalCubes = _cubesGenerator?.Generate(_cubesCount, PrimitiveModelType.Sphere);
+    var totalCubes = _cubesGenerator?.Generate(CubesCount, PrimitiveModelType.Sphere);
 
-    _uiManager?.UpdateTextBlock($"Total Cubes: {totalCubes ?? 0}");
+    _uiManager?.UpdateTextBlock($"{TotalCubes} {totalCubes ?? 0}");
 }
