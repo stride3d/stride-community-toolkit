@@ -9,14 +9,29 @@ namespace Example10_StrideUI_DragAndDrop;
 
 public class CubesGenerator
 {
+    public int TotalCubes => _totalCubes;
+
     private readonly Game _game;
     private readonly Scene _scene;
     private readonly Random _random = new();
+    private int _totalCubes;
 
     public CubesGenerator(Game game, Scene scene)
     {
         _game = game ?? throw new ArgumentNullException(nameof(game));
         _scene = scene ?? throw new ArgumentNullException(nameof(scene));
+    }
+
+    public int GenerateRandomCubes(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            Generate(PrimitiveModelType.Sphere);
+
+            _totalCubes++;
+        }
+
+        return _totalCubes;
     }
 
     /// <summary>
@@ -42,7 +57,7 @@ public class CubesGenerator
     /// Configures the transform properties (scale and position) of the given entity.
     /// </summary>
     /// <param name="entity">The entity to configure.</param>
-    private void ConfigureTransform(Entity entity)
+    private static void ConfigureTransform(Entity entity)
     {
         entity.Transform.Scale = new Vector3(0.3f);
 

@@ -85,7 +85,7 @@ public class DragAndDropCanvas : Canvas
     /// <summary>
     /// Creates the content for the close button (an "x" character).
     /// </summary>
-    private UIElement GetCloseButtonTitle() => new TextBlock
+    private TextBlock GetCloseButtonTitle() => new TextBlock
     {
         Text = "x",
         Width = _closeButtonSize,
