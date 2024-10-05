@@ -6,6 +6,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
+using Stride.Rendering;
 
 UIManager? _uiManager = null;
 CubesGenerator? _cubesGenerator = null;
@@ -41,6 +42,8 @@ void Start(Scene scene)
 
     // Add an example 3D capsule entity to the scene for visual reference
     AddSampleCapsule(scene);
+
+    MoveToAnotherProjectOrSnippetExample(scene, game);
 }
 
 void Update(Scene scene, GameTime time)
@@ -79,4 +82,42 @@ void GenerateRandomCubes()
     var totalCubes = _cubesGenerator?.Generate(CubesCount, PrimitiveModelType.Sphere);
 
     _uiManager?.UpdateTextBlock($"{TotalCubes} {totalCubes ?? 0}");
+}
+
+static void MoveToAnotherProjectOrSnippetExample(Scene scene, Game game)
+{
+    var vertices = new VertexPositionTexture[4];
+    vertices[0].Position = new Vector3(0f, 0f, 1f);
+    vertices[1].Position = new Vector3(0f, 1f, 0f);
+    vertices[2].Position = new Vector3(0f, 1f, 1f);
+    //vertices[3].Position = new Vector3(1f, 0f, 1f);
+    var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(game.GraphicsDevice, vertices,
+                                                         GraphicsResourceUsage.Dynamic);
+    int[] indices = { 0, 2, 1 };
+    var indexBuffer = Stride.Graphics.Buffer.Index.New(game.GraphicsDevice, indices);
+
+    var customMesh = new Mesh
+    {
+        Draw = new MeshDraw
+        {
+            /* Vertex buffer and index buffer setup */
+            PrimitiveType = PrimitiveType.TriangleList,
+            DrawCount = indices.Length,
+            IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
+            VertexBuffers = new[] { new VertexBufferBinding(vertexBuffer,
+                                  VertexPositionTexture.Layout, vertexBuffer.ElementCount) },
+        }
+    };
+
+    var entity = new Entity();
+
+    var model = new Model();
+
+    model.Meshes.Add(customMesh);
+
+    model.Materials.Add(game.CreateMaterial());
+
+    entity.Components.Add(new ModelComponent(model));
+
+    entity.Scene = scene;
 }
