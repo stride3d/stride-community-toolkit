@@ -43,6 +43,35 @@ public static class GraphicsCompositorExtensions
     }
 
     /// <summary>
+    /// Adds an <see cref="EntityDebugRenderer"/> to the <see cref="GraphicsCompositor"/> for rendering entity debug information.
+    /// </summary>
+    /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> to which the entity debug renderer will be added.</param>
+    /// <param name="options">Optional settings to customize the appearance of the debug renderer. If not provided, default options will be used.</param>
+    /// <returns>The modified <see cref="GraphicsCompositor"/> instance with the entity debug renderer added.</returns>
+    /// <remarks>
+    /// This method adds a custom <see cref="EntityDebugRenderer"/> to the graphics compositor, allowing the display of debug information
+    /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
+    /// which allows the user to define font size, color, and other settings.
+    /// </remarks>
+    /// <example>
+    /// The following example demonstrates how to add an entity debug renderer with default settings:
+    /// <code>
+    /// graphicsCompositor.AddEntityDebugRenderer();
+    /// </code>
+    /// You can also specify custom options:
+    /// <code>
+    /// var options = new EntityDebugRendererOptions { FontSize = 16, FontColor = Color.Red };
+    /// graphicsCompositor.AddEntityDebugRenderer(options);
+    /// </code>
+    /// </example>
+    public static GraphicsCompositor AddEntityDebugRenderer(this GraphicsCompositor graphicsCompositor, EntityDebugRendererOptions? options = null)
+    {
+        graphicsCompositor.AddSceneRenderer(new EntityDebugRenderer(options));
+
+        return graphicsCompositor;
+    }
+
+    /// <summary>
     /// Adds a new scene renderer to the given GraphicsCompositor's game. If the game is already a collection of scene renderers,
     /// the new scene renderer is added to that collection. Otherwise, a new scene renderer collection is created to house both
     /// the existing game and the new scene renderer.
