@@ -1,6 +1,7 @@
 using Example10_StrideUI_DragAndDrop;
 using Example10_StrideUI_DragAndDrop.UI;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -24,7 +25,12 @@ game.Run(start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
+    //game.SetupBase3DScene();
+    game.AddGraphicsCompositor().AddCleanUIStage().AddSceneRenderer(new EntityDebugRenderer());
+    game.Add3DCamera().Add3DCameraController();
+    game.AddDirectionalLight();
+    game.Add3DGround();
+    game.AddProfiler();
     game.AddSkybox();
 
     _cubesGenerator = new CubesGenerator(game, scene);
