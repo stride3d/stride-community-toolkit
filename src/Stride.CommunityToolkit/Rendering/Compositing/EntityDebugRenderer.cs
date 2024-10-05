@@ -97,8 +97,10 @@ public class EntityDebugRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Builds the debug text to display for an entity based on the rendering options.
+    /// Builds the debug text for a given entity based on the renderer's options.
     /// </summary>
+    /// <param name="entity">The entity for which to generate the debug text.</param>
+    /// <returns>The debug text to be rendered for the entity, or an empty string if no text should be shown.</returns>
     private string BuildDebugText(Entity entity)
     {
         var stringBuilder = new StringBuilder();
@@ -119,8 +121,10 @@ public class EntityDebugRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Draws a background for the debug text if the option is enabled.
+    /// Draws a background rectangle behind the debug text to make it more readable.
     /// </summary>
+    /// <param name="screenPosition">The screen position where the debug text will be drawn.</param>
+    /// <param name="text">The text for which the background will be rendered.</param>
     private void DrawBackground(Vector2 screenPosition, string text)
     {
         if (!_options.ShowFontBackground) return;
