@@ -47,7 +47,7 @@ public class DragAndDropCanvas : Canvas
     {
         Text = title,
         TextColor = Color.White,
-        TextSize = 20,
+        TextSize = 14,
         Font = _font,
         Margin = new Thickness(3, 3, 3, 0),
     });
@@ -91,7 +91,7 @@ public class DragAndDropCanvas : Canvas
         Width = _closeButtonSize,
         Height = _closeButtonSize,
         TextColor = Color.White,
-        TextSize = 20,
+        TextSize = 16,
         Font = _font,
         TextAlignment = TextAlignment.Center,
         VerticalAlignment = VerticalAlignment.Center

@@ -76,6 +76,7 @@ DragAndDropCanvas CreateMainWindow()
     var canvas = CreateWindow("Main Window");
 
     _textBlock = GetTextBlock(GetTotal());
+
     _textBlock.Margin = new Thickness(10, 140, 0, 0);
 
     canvas.Children.Add(_textBlock);
@@ -123,7 +124,7 @@ TextBlock GetTextBlock(string title) => new TextBlock
 {
     Text = title,
     TextColor = Color.White,
-    TextSize = 18,
+    TextSize = 16,
     Font = _font,
     TextAlignment = TextAlignment.Center,
     VerticalAlignment = VerticalAlignment.Center
