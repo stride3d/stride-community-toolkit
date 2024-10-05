@@ -6,11 +6,10 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 
-SpriteFont? _font;
 UIManager? _uiManager = null;
 CubesGenerator? _cubesGenerator = null;
 
-int _cubesCount = 100;
+const int _cubesCount = 100;
 
 using var game = new Game();
 
@@ -18,10 +17,10 @@ game.Run(start: Start);
 
 void Start(Scene scene)
 {
-    // Setup the base 3D scene with default settings
+    // Setup the base 3D scene with default lighting, camera, etc.
     game.SetupBase3DScene();
 
-    // Add visual aids and debug rendering
+    // Add debugging aids: entity names, positions
     game.AddEntityDebugRenderer();
 
     game.AddSkybox();
@@ -29,21 +28,18 @@ void Start(Scene scene)
 
     _cubesGenerator = new CubesGenerator(game, scene);
 
-    LoadRequiredFont();
+    var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
 
-    CreateAndAddUI(scene);
+    // Create and display the UI components on screen
+    CreateAndAddUI(scene, font);
 
+    // Add an example 3D capsule entity to the scene for visual reference
     AddSampleCapsule(scene);
 }
 
-void LoadRequiredFont()
+void CreateAndAddUI(Scene scene, SpriteFont font)
 {
-    _font = game.Content.Load<SpriteFont>("StrideDefaultFont");
-}
-
-void CreateAndAddUI(Scene scene)
-{
-    _uiManager = new UIManager(_font, GenerateRandomCubes);
+    _uiManager = new UIManager(font, GenerateRandomCubes);
 
     _uiManager.Entity.Scene = scene;
 }
