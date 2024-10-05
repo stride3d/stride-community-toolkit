@@ -59,7 +59,7 @@ void AddSampleCapsule(Scene scene)
 
 void GenerateRandomCubes()
 {
-    var totalCubes = _cubesGenerator?.GenerateRandomCubes(_cubesCount);
+    var totalCubes = _cubesGenerator?.Generate(_cubesCount, PrimitiveModelType.Sphere);
 
     _uiManager?.UpdateTextBlock($"Total Cubes: {totalCubes ?? 0}");
 }

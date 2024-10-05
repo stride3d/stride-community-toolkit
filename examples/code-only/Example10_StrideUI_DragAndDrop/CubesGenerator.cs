@@ -9,6 +9,9 @@ namespace Example10_StrideUI_DragAndDrop;
 
 public class CubesGenerator
 {
+    /// <summary>
+    /// Total number of cubes generated.
+    /// </summary>
     public int TotalCubes => _totalCubes;
 
     private readonly Game _game;
@@ -16,17 +19,28 @@ public class CubesGenerator
     private readonly Random _random = new();
     private int _totalCubes;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CubesGenerator"/> class.
+    /// </summary>
+    /// <param name="game">The game instance to use for generating cubes.</param>
+    /// <param name="scene">The scene where cubes will be generated.</param>
+    /// <exception cref="ArgumentNullException">Thrown if game or scene is null.</exception>
     public CubesGenerator(Game game, Scene scene)
     {
         _game = game ?? throw new ArgumentNullException(nameof(game));
         _scene = scene ?? throw new ArgumentNullException(nameof(scene));
     }
 
-    public int GenerateRandomCubes(int count)
+    /// <summary>
+    /// Generates the specified number of random primitives and returns the total count.
+    /// </summary>
+    /// <param name="count">The number of primitives to generate.</param>
+    /// <returns>The updated total number of primitives generated.</returns>
+    public int Generate(int count, PrimitiveModelType type)
     {
         for (int i = 0; i < count; i++)
         {
-            Generate(PrimitiveModelType.Sphere);
+            Generate(type);
 
             _totalCubes++;
         }
