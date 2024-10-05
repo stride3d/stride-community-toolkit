@@ -104,11 +104,13 @@ public class DragAndDropCanvas : Canvas
     {
         if (Parent is not Canvas parent) return;
 
+        PreviewTouchDown -= OnTouchDown;
+
         parent.Children.Remove(this);
     }
 
     /// <summary>
-    /// Handles the touch down event for drag-and-drop behavior.
+    /// Handles the touch down event for drag-and-drop behaviour.
     /// </summary>
     private void OnTouchDown(object? sender, TouchEventArgs e)
     {

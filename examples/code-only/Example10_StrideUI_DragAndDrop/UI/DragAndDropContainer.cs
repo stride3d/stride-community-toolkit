@@ -46,4 +46,10 @@ public class DragAndDropContainer : Canvas
     /// </summary>
     private void OnTouchUp(object? sender, TouchEventArgs e)
         => _draggedElement = null;
+
+    public void CleanUp()
+    {
+        PreviewTouchMove -= OnTouchMove;
+        PreviewTouchUp -= OnTouchUp;
+    }
 }

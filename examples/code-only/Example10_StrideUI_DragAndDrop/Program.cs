@@ -27,7 +27,7 @@ void Start(Scene scene)
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    _cubesGenerator = new CubesGenerator(game.Services, scene);
+    _cubesGenerator = new CubesGenerator(game, scene);
 
     AddCapsule(scene);
 
@@ -135,7 +135,8 @@ void GenerateCubes(int count)
 
     for (int i = 0; i < count; i++)
     {
-        _cubesGenerator.Generate();
+        _cubesGenerator.Generate(PrimitiveModelType.Sphere);
+
         _totalCubes++;
     }
 }
