@@ -3,9 +3,17 @@ using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
+using System.Text;
 
 namespace Stride.CommunityToolkit.Rendering.Compositing;
 
+/// <summary>
+/// Renders debug information (such as entity names and positions) for all entities in a scene.
+/// </summary>
+/// <remarks>
+/// This class is designed to display debug information such as entity names and positions on the screen
+/// using 2D text rendering over the 3D scene. It also allows optional customization, such as font size, color, and background.
+/// </remarks>
 public class EntityDebugRenderer : SceneRendererBase
 {
     private SpriteBatch? _spriteBatch;
@@ -15,11 +23,20 @@ public class EntityDebugRenderer : SceneRendererBase
     private Texture? _colorTexture;
     private readonly EntityDebugRendererOptions _options;
 
-    public EntityDebugRenderer(EntityDebugRendererOptions? options = null)
-    {
-        _options = options ?? new();
-    }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntityDebugRenderer"/> class with default rendering options.
+    /// </summary>
+    public EntityDebugRenderer() => _options = new();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EntityDebugRenderer"/> class with the specified rendering options.
+    /// </summary>
+    /// <param name="options">The options to customize the appearance of the debug text. If null, default options are used.</param>
+    public EntityDebugRenderer(EntityDebugRendererOptions? options = null) => _options = options ?? new();
+
+    /// <summary>
+    /// Initializes core resources needed by the renderer, such as the font and sprite batch.
+    /// </summary>
     protected override void InitializeCore()
     {
         base.InitializeCore();
@@ -29,6 +46,11 @@ public class EntityDebugRenderer : SceneRendererBase
         _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, new[] { Color.White });
     }
 
+    /// <summary>
+    /// Draws debug information (such as entity names and positions) for all entities in the current scene.
+    /// </summary>
+    /// <param name="context">The current rendering context, which provides information such as the scene and camera.</param>
+    /// <param name="drawContext">The context used to draw graphical elements.</param>
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
         var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
@@ -55,46 +77,62 @@ public class EntityDebugRenderer : SceneRendererBase
 
         foreach (var entity in _scene.Entities)
         {
-            var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
 
-            string text = string.Empty;
+            var debugText = BuildDebugText(entity);
 
-            if (_options.ShowEntityName)
-            {
-                text += entity.Name;
-            }
+            if (string.IsNullOrWhiteSpace(debugText)) continue;
 
-            if (_options.ShowEntityPosition)
-            {
-                text += $": {entity.Transform.Position:N1}";
-            }
-
-            if (string.IsNullOrWhiteSpace(text)) continue;
-
-            ShowBackground(screen, text);
+            DrawBackground(screenPosition, debugText);
 
             _spriteBatch.DrawString(
                 _font,
-                text,
+                debugText,
                 _options.FontSize,
-                screen + _options.Offset,
+                screenPosition + _options.Offset,
                 _options.FontColor);
         }
 
         _spriteBatch.End();
     }
 
-    private void ShowBackground(Vector2 screen, string text)
+    /// <summary>
+    /// Builds the debug text to display for an entity based on the rendering options.
+    /// </summary>
+    private string BuildDebugText(Entity entity)
+    {
+        var stringBuilder = new StringBuilder();
+
+        if (_options.ShowEntityName)
+        {
+            stringBuilder.Append(entity.Name);
+        }
+
+        if (_options.ShowEntityPosition)
+        {
+            if (stringBuilder.Length > 0) stringBuilder.Append(": ");
+
+            stringBuilder.AppendFormat("{0:N1}", entity.Transform.Position);
+        }
+
+        return stringBuilder.ToString();
+    }
+
+    /// <summary>
+    /// Draws a background for the debug text if the option is enabled.
+    /// </summary>
+    private void DrawBackground(Vector2 screenPosition, string text)
     {
         if (!_options.ShowFontBackground) return;
 
-        var dim = _spriteBatch!.MeasureString(_font, text, _options.FontSize);
+        var textDimensions = _spriteBatch!.MeasureString(_font, text, _options.FontSize);
 
-        _spriteBatch.Draw(_colorTexture, new Rectangle(
-            (int)screen.X + (int)_options.Offset.X,
-            (int)screen.Y + (int)_options.Offset.Y,
-            (int)dim.X,
-            (int)dim.Y), new Color(200, 200, 200, 100));
+        var backgroundRectangle = new Rectangle(
+           (int)(screenPosition.X + _options.Offset.X),
+           (int)(screenPosition.Y + _options.Offset.Y),
+           (int)textDimensions.X,
+           (int)textDimensions.Y);
 
+        _spriteBatch.Draw(_colorTexture, backgroundRectangle, new Color(200, 200, 200, 100));
     }
 }
