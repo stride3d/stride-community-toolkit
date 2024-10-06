@@ -15,25 +15,25 @@ using var game = new Game();
 
 game.Run(start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    AddCapsule(rootScene);
+    AddCapsule(scene);
 
     LoadFont();
 
-    AddWindow(rootScene);
+    AddWindow(scene);
 }
 
-void AddCapsule(Scene rootScene)
+void AddCapsule(Scene scene)
 {
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 void LoadFont()
@@ -41,11 +41,11 @@ void LoadFont()
     _font = game.Content.Load<SpriteFont>("StrideDefaultFont");
 }
 
-void AddWindow(Scene rootScene)
+void AddWindow(Scene scene)
 {
     var uiEntity = CreateUIEntity();
 
-    uiEntity.Scene = rootScene;
+    uiEntity.Scene = scene;
 }
 
 Entity CreateUIEntity()

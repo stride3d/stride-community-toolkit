@@ -8,17 +8,14 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
-
-
 using var game = new Game();
 
 game.Run(start: (Scene rootScene) =>
 {
-    game.AddGraphicsCompositor().AddCleanUIStage().AddSceneRenderer(new MyCustomRenderer(rootScene));
-    game.Add3DCamera().Add3DCameraController();
-    game.AddDirectionalLight();
-    game.Add3DGround();
+    game.SetupBase3DScene();
     game.AddProfiler();
+
+    game.AddSceneRenderer(new MyCustomRenderer(rootScene));
 
     game.AddSkybox();
 
@@ -35,12 +32,13 @@ public class MyCustomRenderer : SceneRendererBase
 {
     private SpriteBatch? _spriteBatch;
     private SpriteFont? _font;
-    private readonly Scene _scene;
+    private Scene _scene;
     private CameraComponent? _camera;
+    private Texture? _colorTexture = null;
 
     public MyCustomRenderer(Scene scene)
     {
-        _scene = scene;
+        //_scene = scene;
     }
 
     protected override void InitializeCore()
@@ -49,7 +47,8 @@ public class MyCustomRenderer : SceneRendererBase
 
         _font = Content.Load<SpriteFont>("StrideDefaultFont");
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _camera = _scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+        _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, new[] { Color.White });
+        //_camera = _scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
     }
 
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
@@ -60,27 +59,61 @@ public class MyCustomRenderer : SceneRendererBase
         // Clears the current render target
         //commandList.Clear(commandList.RenderTargets[0], Color.CornflowerBlue);
 
-        //_spriteBatch = new SpriteBatch(graphicsDevice);
+        // get camera from context or drawContext
+
+        var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
+
+        if (graphicsCompositor is null) return;
+
+        _camera ??= graphicsCompositor.Cameras[0].Camera;
+
+        //if (_camera is null)
+        //{
+        //    _camera = graphicsCompositor.Cameras[0].Camera;
+        //}
+
+        if (_scene is null)
+        {
+            _scene = context.Tags.Get(SceneInstance.Current).RootScene;
+        }
+
+        //_scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
+
+        if (_spriteBatch is null || _camera is null || _scene is null) return;
+
         _spriteBatch.Begin(drawContext.GraphicsContext);
         _spriteBatch.DrawString(_font, "Hello Stride 1.2", 20, new Vector2(100, 100), Color.White);
         //_spriteBatch.Draw(_texture, Vector2.Zero);
         _spriteBatch.End();
 
         // Get a refence to scene entities from context?
+        _spriteBatch.Begin(drawContext.GraphicsContext);
+
+
+        const int x = 20;
+        const int y = 20;
+        var reposition = new Vector2(0, -50);
 
         foreach (var entity in _scene.Entities)
         {
-            var spriteBatch = new SpriteBatch(GraphicsDevice);
-
             var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
 
+            var text = $"{entity.Name}: {entity.Transform.Position:N1}";
             //var screen = entity.Transform.Position;
 
-            spriteBatch.Begin(drawContext.GraphicsContext);
-            spriteBatch.DrawString(_font, $"{entity.Name}: {entity.Transform.Position:N1}", 14, screen + new Vector2(0, -50), Color.Wheat);
+            var dim = _spriteBatch.MeasureString(_font, text, 12);
+
+            _spriteBatch.Draw(_colorTexture, new Rectangle(
+                (int)screen.X + (int)reposition.X,
+                (int)screen.Y + (int)reposition.Y,
+                (int)dim.X,
+                (int)dim.Y), new Color(200, 200, 200, 100));
+
+            _spriteBatch.DrawString(_font, text, 12, screen + reposition, Color.Black);
             //spriteBatch.DrawString(_font, "Hello World 2", screen + new Vector2(0, -50), Color.Red, rotation: 0.5f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f, TextAlignment.Left);
-            spriteBatch.End();
         }
+
+        _spriteBatch.End();
     }
 }
 
@@ -93,6 +126,7 @@ public class SpriteBatchRenderer : SyncScript
     private string _text = "This text is in Arial 20 with anti-alias\nand multiline...";
     private DelegateSceneRenderer? _sceneRenderer;
     private CameraComponent? _camera = null;
+
 
     public override void Start()
     {

@@ -731,21 +731,66 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Adds a scene renderer to the game's <see cref="GraphicsCompositor"/>.
+    /// </summary>
+    /// <param name="game">The <see cref="Game"/> instance to add the renderer to.</param>
+    /// <param name="renderer">The scene renderer to be added, inheriting from <see cref="SceneRendererBase"/>.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="renderer"/> is null.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
+    public static void AddSceneRenderer(this Game game, SceneRendererBase renderer)
+    {
+        ArgumentNullException.ThrowIfNull(renderer);
+
+        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException("GraphicsCompositor is not set.");
+
+        graphicsCompositor.AddSceneRenderer(renderer);
+    }
+
+    /// <summary>
     /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
     /// <para>Registers the system to the service registry for easy access.</para>
     /// </summary>
     /// <param name="game"></param>
-    /// <param name="debugShapeRenderFroup"></param>
-    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderFroup = RenderGroup.Group1)
+    /// <param name="debugShapeRenderGroup"></param>
+    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
     {
         game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
 
-        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderFroup);
+        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
 #if DEBUG
         debugDraw.Visible = true;
 #endif
         game.Services.AddService(debugDraw);
         game.GameSystems.Add(debugDraw);
+    }
+
+    /// <summary>
+    /// Adds an <see cref="EntityDebugSceneRenderer"/> to the game's <see cref="GraphicsCompositor"/> for rendering entity debug information.
+    /// </summary>
+    /// <param name="game">The <see cref="Game"/> instance to which the entity debug renderer will be added.</param>
+    /// <param name="options">Optional settings to customize the appearance of the debug renderer. If not provided, default options will be used.</param>
+    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
+    /// <remarks>
+    /// This method adds a custom <see cref="EntityDebugSceneRenderer"/> to the game's graphics compositor, allowing the display of debug information
+    /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
+    /// which allows the user to define font size, color, and other settings.
+    /// </remarks>
+    /// <example>
+    /// The following example demonstrates how to add an entity debug renderer with default settings:
+    /// <code>
+    /// game.EntityDebugSceneRenderer();
+    /// </code>
+    /// You can also specify custom options:
+    /// <code>
+    /// var options = new EntityDebugRendererOptions { FontSize = 16, FontColor = Color.Red };
+    /// game.EntityDebugSceneRenderer(options);
+    /// </code>
+    /// </example>
+    public static void AddEntityDebugSceneRenderer(this Game game, EntityDebugSceneRendererOptions? options = null)
+    {
+        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException("GraphicsCompositor is not set.");
+
+        graphicsCompositor.AddEntityDebugRenderer(options);
     }
 
     public static Entity Create3DPrimitiveWithBepu(this IGame game, PrimitiveModelType type, Primitive3DCreationOptionsWithBepu? options = null)
