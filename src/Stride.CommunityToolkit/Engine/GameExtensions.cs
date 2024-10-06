@@ -25,6 +25,8 @@ namespace Stride.CommunityToolkit.Engine;
 public static class GameExtensions
 {
     private const string DefaultGroundName = "Ground";
+    private const string GraphicsCompositorNotSet = "GraphicsCompositor is not set.";
+
     private static readonly Vector2 _default3DGroundSize = new(15f);
     private static readonly Vector3 _default2DGroundSize = new(15, 0.1f, 0);
     private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
@@ -741,7 +743,7 @@ public static class GameExtensions
     {
         ArgumentNullException.ThrowIfNull(renderer);
 
-        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException("GraphicsCompositor is not set.");
+        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException(GraphicsCompositorNotSet);
 
         graphicsCompositor.AddSceneRenderer(renderer);
     }
@@ -788,7 +790,7 @@ public static class GameExtensions
     /// </example>
     public static void AddEntityDebugSceneRenderer(this Game game, EntityDebugSceneRendererOptions? options = null)
     {
-        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException("GraphicsCompositor is not set.");
+        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException(GraphicsCompositorNotSet);
 
         graphicsCompositor.AddEntityDebugRenderer(options);
     }

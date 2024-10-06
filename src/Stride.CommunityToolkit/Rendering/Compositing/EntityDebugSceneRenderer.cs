@@ -57,19 +57,9 @@ public class EntityDebugSceneRenderer : SceneRendererBase
 
         if (graphicsCompositor is null) return;
 
-        if (_camera is null)
-        {
-            _camera = graphicsCompositor.Cameras[0].Camera;
-        }
+        _camera ??= graphicsCompositor.Cameras[0].Camera;
 
-        //_camera ??= graphicsCompositor.Cameras[0].Camera;
-
-        if (_scene is null)
-        {
-            _scene = context.Tags.Get(SceneInstance.Current).RootScene;
-        }
-
-        //_scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
+        _scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
 
         if (_spriteBatch is null || _camera is null || _scene is null) return;
 
