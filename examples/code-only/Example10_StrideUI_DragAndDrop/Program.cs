@@ -25,7 +25,7 @@ void Start(Scene scene)
     game.SetupBase3DScene();
 
     // Add debugging aids: entity names, positions
-    game.AddEntityDebugRenderer(new()
+    game.AddEntityDebugSceneRenderer(new()
     {
         ShowFontBackground = true
     });

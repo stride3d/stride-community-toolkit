@@ -12,11 +12,10 @@ using var game = new Game();
 
 game.Run(start: (Scene rootScene) =>
 {
-    game.AddGraphicsCompositor().AddCleanUIStage().AddSceneRenderer(new MyCustomRenderer(rootScene));
-    game.Add3DCamera().Add3DCameraController();
-    game.AddDirectionalLight();
-    game.Add3DGround();
+    game.SetupBase3DScene();
     game.AddProfiler();
+
+    game.AddSceneRenderer(new MyCustomRenderer(rootScene));
 
     game.AddSkybox();
 

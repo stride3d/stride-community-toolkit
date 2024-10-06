@@ -14,25 +14,25 @@ namespace Stride.CommunityToolkit.Rendering.Compositing;
 /// This class is designed to display debug information such as entity names and positions on the screen
 /// using 2D text rendering over the 3D scene. It also allows optional customization, such as font size, color, and background.
 /// </remarks>
-public class EntityDebugRenderer : SceneRendererBase
+public class EntityDebugSceneRenderer : SceneRendererBase
 {
     private SpriteBatch? _spriteBatch;
     private SpriteFont? _font;
     private Scene? _scene;
     private CameraComponent? _camera;
     private Texture? _colorTexture;
-    private readonly EntityDebugRendererOptions _options;
+    private readonly EntityDebugSceneRendererOptions _options;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EntityDebugRenderer"/> class with default rendering options.
+    /// Initializes a new instance of the <see cref="EntityDebugSceneRenderer"/> class with default rendering options.
     /// </summary>
-    public EntityDebugRenderer() => _options = new();
+    public EntityDebugSceneRenderer() => _options = new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EntityDebugRenderer"/> class with the specified rendering options.
+    /// Initializes a new instance of the <see cref="EntityDebugSceneRenderer"/> class with the specified rendering options.
     /// </summary>
     /// <param name="options">The options to customize the appearance of the debug text. If null, default options are used.</param>
-    public EntityDebugRenderer(EntityDebugRendererOptions? options = null) => _options = options ?? new();
+    public EntityDebugSceneRenderer(EntityDebugSceneRendererOptions? options = null) => _options = options ?? new();
 
     /// <summary>
     /// Initializes core resources needed by the renderer, such as the font and sprite batch.

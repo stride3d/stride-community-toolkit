@@ -3,7 +3,7 @@ namespace Stride.CommunityToolkit.Rendering.Compositing;
 /// <summary>
 /// Options for rendering debug information for entities in the scene.
 /// </summary>
-public class EntityDebugRendererOptions
+public class EntityDebugSceneRendererOptions
 {
     /// <summary>
     /// Gets or sets the font size for the debug text. Default is 12.
@@ -37,16 +37,16 @@ public class EntityDebugRendererOptions
     public Vector2 Offset { get; set; } = new Vector2(0, -25);
 
     /// <summary>
-    /// Initializes a new instance of <see cref="EntityDebugRendererOptions"/> with default settings.
+    /// Initializes a new instance of <see cref="EntityDebugSceneRendererOptions"/> with default settings.
     /// </summary>
-    public EntityDebugRendererOptions() { }
+    public EntityDebugSceneRendererOptions() { }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="EntityDebugRendererOptions"/> with specified font size and color.
+    /// Initializes a new instance of <see cref="EntityDebugSceneRendererOptions"/> with specified font size and color.
     /// </summary>
     /// <param name="fontSize">The size of the debug font text.</param>
     /// <param name="fontColor">The color of the debug font text.</param>
-    public EntityDebugRendererOptions(int fontSize, Color fontColor)
+    public EntityDebugSceneRendererOptions(int fontSize, Color fontColor)
     {
         FontSize = fontSize;
         FontColor = fontColor;
@@ -55,8 +55,8 @@ public class EntityDebugRendererOptions
     /// <summary>
     /// Provides default settings for rendering entity debug information.
     /// </summary>
-    /// <returns>A new instance of <see cref="EntityDebugRendererOptions"/> with default values.</returns>
-    public static EntityDebugRendererOptions CreateDefault() => new EntityDebugRendererOptions
+    /// <returns>A new instance of <see cref="EntityDebugSceneRendererOptions"/> with default values.</returns>
+    public static EntityDebugSceneRendererOptions CreateDefault() => new EntityDebugSceneRendererOptions
     {
         FontSize = 12,
         FontColor = Color.Black,
