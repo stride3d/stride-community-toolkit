@@ -577,7 +577,7 @@ public static class TransformExtensions
         }
         else
         {
-            // Prevents crash caused by NaN values due to entities being directly behind eachother.
+            // Prevents crash caused by NaN values due to entities being directly behind each other.
             // This does mean that there is an angle where the entity will not rotate.
             var angle = Quaternion.AngleBetween(transform.Rotation, lookRotation);
             if (!float.IsNaN(angle))
