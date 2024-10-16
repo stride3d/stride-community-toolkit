@@ -577,7 +577,13 @@ public static class TransformExtensions
         }
         else
         {
-            Quaternion.Slerp(ref transform.Rotation, ref lookRotation, smooth, out transform.Rotation);
+            // Prevents crash caused by NaN values due to entities being directly behind eachother.
+            // This does mean that there is an angle where the entity will not rotate.
+            var angle = Quaternion.AngleBetween(transform.Rotation, lookRotation);
+            if (!float.IsNaN(angle))
+            {
+                Quaternion.Slerp(ref transform.Rotation, ref lookRotation, smooth, out transform.Rotation);
+            }
         }
 
 
