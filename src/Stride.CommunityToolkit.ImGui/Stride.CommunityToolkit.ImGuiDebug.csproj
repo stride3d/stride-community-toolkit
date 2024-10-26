@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+    <Import Project="..\CommonSettings.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Hexa.NET.ImGui" Version="2.0.1" />
+    <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2232" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Effects\ImGuiShader.sdsl.cs">
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Effects\ImGuiShader.sdsl">
+      <LastGenOutput>ImGuiShader.sdsl.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>
