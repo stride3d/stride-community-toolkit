@@ -1,4 +1,4 @@
-Stride.CommunityToolkit.ImGui
+Stride.CommunityToolkit.ImGuiDebug
 =====
 
 Bare-bone implementation of ImGui and a couple of debug tools for Stride
@@ -10,11 +10,11 @@ Bare-bone implementation of ImGui and a couple of debug tools for Stride
 * Add a project reference pointing to this project inside your game's .csproj.
 * Reference Hexa.NET.ImGui's nuget package in your game's project, see below.
 ```xml
-<ProjectReference Include="..\Stride.CommunityToolkit.ImGui\Stride.CommunityToolkit.ImGui.csproj" />
+<ProjectReference Include="..\Stride.CommunityToolkit.ImGuiDebug.csproj" />
 ```
 * Start ImGui within your game's BeginRun():
 ```cs
-using Stride.CommunityToolkit.ImGui;
+using Stride.CommunityToolkit.ImGuiDebug;
 protected override void BeginRun()
 {
     base.BeginRun();
@@ -33,9 +33,9 @@ Example interface implementation:
 ```cs
 using System.Numerics;
 using static Hexa.NET.ImGui.ImGui;
-using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
+using static Stride.CommunityToolkit.ImGuiDebug.ImGuiExtension;
 
-public class YourInterface : Stride.CommunityToolkit.ImGui.BaseWindow
+public class YourInterface : Stride.CommunityToolkit.ImGuiDebug.BaseWindow
 {
     bool my_tool_active;
     Vector4 my_color;
@@ -107,7 +107,7 @@ Create ImNodes widgets as needed
 ```cs
 using Hexa.NET.ImNodes;
 using Stride.Core;
-using Stride.CommunityToolkit.ImGui;
+using Stride.CommunityToolkit.ImGuiDebug;
 using static Hexa.NET.ImGui.ImGui;
 using static Hexa.NET.ImNodes.ImNodes;
 
@@ -162,6 +162,8 @@ Credits
 [Profan's contribution](https://github.com/profan/dear-xenko)
 
 [jazzay's contribution](https://github.com/jazzay/Xenko.Extensions#xenkoimgui)
+
+[Eideren's contribution](https://github.com/Eideren/StrideCommunity.ImGuiDebug)
 
 [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)
 
