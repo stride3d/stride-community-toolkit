@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.ImGuiDebug;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
@@ -30,4 +31,7 @@ void Start(Scene scene)
     new HierarchyView(game.Services);
     new PerfMonitor(game.Services);
     Inspector.FindFreeInspector(game.Services).Target = game.SceneSystem.SceneInstance;
+
+    // makes the profiling much easier to read.
+    game.SetMaxFPS(60);
 }
