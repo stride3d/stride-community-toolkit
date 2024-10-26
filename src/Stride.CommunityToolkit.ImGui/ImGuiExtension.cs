@@ -20,10 +20,10 @@ public class ImGuiExtension
     /// </summary>
     /// <param name="texture"></param>
     /// <returns></returns>
-    internal static nint GetTextureKey(Texture texture)
+    internal static ulong GetTextureKey(Texture texture)
     {
         _textureRegistry.Add(texture);
-        nint id = _textureRegistry.Count;
+        ulong id = (ulong)_textureRegistry.Count;
 
         return id;
     }
@@ -34,7 +34,7 @@ public class ImGuiExtension
     /// <param name="key"></param>
     /// <param name="texture"></param>
     /// <returns></returns>
-    internal static bool TryGetTexture(nint key, out Texture texture)
+    internal static bool TryGetTexture(ulong key, out Texture texture)
     {
         int index = (int)key - 1;
         if (index >= 0 && index < _textureRegistry.Count)
@@ -89,7 +89,7 @@ public class ImGuiExtension
     public static unsafe DisposableImGui Child([CallerLineNumber] int cln = 0, Vector2 size = default,
         ImGuiChildFlags childFlags = ImGuiChildFlags.None, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
     {
-        BeginChild(cln, size, childFlags, flags);
+        BeginChild(cln.ToString(), size, childFlags, flags);
         return new DisposableImGui(true, DisposableTypes.Child);
     }
 

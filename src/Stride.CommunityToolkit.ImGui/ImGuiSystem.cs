@@ -35,6 +35,7 @@ public class ImGuiSystem : GameSystemBase
     const int INITIAL_INDEX_BUFFER_SIZE = 128;
 
     private ImGuiIOPtr _io;
+    private ImGuiPlatformIOPtr _platform;
 
     // dependencies
     readonly InputManager input;
@@ -76,6 +77,7 @@ public class ImGuiSystem : GameSystemBase
         ImGui.SetCurrentContext(ImGuiContext);
 
         _io = ImGui.GetIO();
+        _platform = ImGui.GetPlatformIO();
 
         // SETTO
         SetupInput();
@@ -130,8 +132,8 @@ public class ImGuiSystem : GameSystemBase
         setClipboardFn = SetClipboard;
         getClipboardFn = GetClipboard;
 
-        _io.SetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(setClipboardFn);
-        _io.GetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(getClipboardFn);
+        _platform.PlatformSetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(setClipboardFn);
+        _platform.PlatformGetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(getClipboardFn);
     }
 
     [FixedAddressValueType]
@@ -152,7 +154,7 @@ public class ImGuiSystem : GameSystemBase
 
     unsafe IntPtr GetClipboard()
     {
-        return (nint)_io.ClipboardUserData;
+        return (nint)_platform.PlatformClipboardUserData;
     }
 
     void CreateDeviceObjects()
