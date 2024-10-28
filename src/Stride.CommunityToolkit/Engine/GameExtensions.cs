@@ -663,7 +663,7 @@ public static class GameExtensions
     /// <param name="game"></param>
     /// <param name="fileName">creates a file with this name</param>
     /// <param name="fileType"></param>
-    public static void TakeScreenShot(this Game game, string fileName, ImageFileType fileType = ImageFileType.Png)
+    public static void TakeScreenShot(this IGame game, string fileName, ImageFileType fileType = ImageFileType.Png)
     {
         using (var stream = File.Create(fileName))
         {
