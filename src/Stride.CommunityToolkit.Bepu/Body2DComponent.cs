@@ -1,6 +1,8 @@
 using BepuPhysics;
 using BepuPhysics.Collidables;
 using Stride.BepuPhysics;
+using Stride.Core;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using System.Reflection;
 
