@@ -7,6 +7,7 @@ using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Engine.Processors;
 using Stride.Games;
+using Stride.Graphics;
 using Stride.Physics;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
@@ -654,6 +655,21 @@ public static class GameExtensions
         entity.Add(options.PhysicsComponent);
 
         return entity;
+    }
+
+    /// <summary>
+    /// Saves a screenshot of the current frame to the specified file path.
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="fileName">creates a file with this name</param>
+    /// <param name="fileType"></param>
+    public static void TakeScreenShot(this Game game, string fileName, ImageFileType fileType = ImageFileType.Png)
+    {
+        using (var stream = File.Create(fileName))
+        {
+            var commandList = game.GraphicsContext.CommandList;
+            commandList.RenderTarget.Save(commandList, stream, fileType);
+        }
     }
 
     public static Entity Create2DPrimitiveWithBepu(this IGame game, Primitive2DModelType type, Primitive2DCreationOptionsWithBepu? options = null)
