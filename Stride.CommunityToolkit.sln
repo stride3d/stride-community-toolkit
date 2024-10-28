@@ -71,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example09_Renderer", "examp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example10_StrideUI_DragAndDrop", "examples\code-only\Example10_StrideUI_DragAndDrop\Example10_StrideUI_DragAndDrop.csproj", "{2D37B4BA-50F7-4347-8DC0-FA58C2AC2803}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Bepu", "Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj", "{6DBF3EF9-4094-4DE4-93E3-E1A113472E3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Bepu", "src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj", "{B96F03C2-C738-4C7E-8677-DA27533DAC82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -182,10 +182,10 @@ Global
 		{2D37B4BA-50F7-4347-8DC0-FA58C2AC2803}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D37B4BA-50F7-4347-8DC0-FA58C2AC2803}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D37B4BA-50F7-4347-8DC0-FA58C2AC2803}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DBF3EF9-4094-4DE4-93E3-E1A113472E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DBF3EF9-4094-4DE4-93E3-E1A113472E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DBF3EF9-4094-4DE4-93E3-E1A113472E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DBF3EF9-4094-4DE4-93E3-E1A113472E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B96F03C2-C738-4C7E-8677-DA27533DAC82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B96F03C2-C738-4C7E-8677-DA27533DAC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B96F03C2-C738-4C7E-8677-DA27533DAC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B96F03C2-C738-4C7E-8677-DA27533DAC82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
