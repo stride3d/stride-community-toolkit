@@ -1,6 +1,7 @@
 using Example.Common;
 using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Bepu.Engine;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;

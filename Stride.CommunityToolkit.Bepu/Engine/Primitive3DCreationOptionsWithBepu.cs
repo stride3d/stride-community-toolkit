@@ -1,8 +1,9 @@
-using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
+using Stride.BepuPhysics;
+using Stride.CommunityToolkit.Engine;
+using Stride.Core.Mathematics;
 
-namespace Stride.CommunityToolkit.Engine;
-
+namespace Stride.CommunityToolkit.Bepu.Engine;
 /// <summary>
 /// Provides options for creating a primitive entity in a 3D scene.
 /// </summary>

@@ -1,5 +1,6 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Components;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 
 namespace Stride.CommunityToolkit.Bepu;
