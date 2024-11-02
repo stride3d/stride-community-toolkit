@@ -4,6 +4,8 @@ env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
   PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
+  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGuiDebug/Stride.CommunityToolkit.ImGuiDebug.csproj
 
 on:
   workflow_dispatch:
