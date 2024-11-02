@@ -1,13 +1,14 @@
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.Games;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Bepu.Engine;
+
 public static class BepuGameExtensions
 {
     private const string DefaultGroundName = "Ground";
@@ -32,9 +33,9 @@ public static class BepuGameExtensions
         game.AddDirectionalLight();
         game.Add3DGroundWithBepu();
     }
+
     public static Entity Add3DGroundWithBepu(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGroundWithBepu(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
-
 
     private static Entity CreateGroundWithBepu(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
     {

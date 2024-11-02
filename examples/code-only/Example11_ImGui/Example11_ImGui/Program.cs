@@ -1,13 +1,8 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.ImGuiDebug;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
-using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
-using Stride.Graphics;
-using Stride.Rendering;
 
 using var game = new Game();
 
