@@ -1,9 +1,10 @@
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 
 namespace Stride.CommunityToolkit.Bepu.Engine;
+
 public class Primitive2DCreationOptionsWithBepu : PrimitiveCreationOptions
 {
     /// <summary>

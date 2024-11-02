@@ -1,17 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Title>Stride Community Toolkit - Bepu</Title>
+        <Description>
+            A specialized extension of the Stride Community Toolkit, providing easy-to-use Bepu physics utilities for Stride projects. Enhance your Stride scenes with realistic physics simulations without needing additional assets or complex setup.
+        </Description>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Stride.BepuPhysics" Version="0.9.2" />
-  </ItemGroup>
+    <Import Project="..\CommonSettings.props" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Stride.BepuPhysics" Version="0.9.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
 
 </Project>

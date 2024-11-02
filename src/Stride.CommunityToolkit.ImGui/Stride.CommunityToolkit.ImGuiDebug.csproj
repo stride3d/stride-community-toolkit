@@ -1,34 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Title>Stride Community Toolkit - ImgGui</Title>
+        <Description>
+            A specialized extension of the Stride Community Toolkit, providing easy-to-use ImGui utilities for Stride projects. Enhance your Stride scenes with dynamic UI without needing additional assets or complex setup.
+        </Description>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
     <Import Project="..\CommonSettings.props" />
 
-  <ItemGroup>
-    <PackageReference Include="Hexa.NET.ImGui" Version="2.1.9" />
-    <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2232" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Hexa.NET.ImGui" Version="2.1.9" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2232" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Effects\ImGuiShader.sdsl.cs">
-      <DesignTime>True</DesignTime>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Effects\ImGuiShader.sdsl.cs">
+            <DesignTime>True</DesignTime>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+        </Compile>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Effects\ImGuiShader.sdsl">
-      <LastGenOutput>ImGuiShader.sdsl.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="Effects\ImGuiShader.sdsl">
+            <LastGenOutput>ImGuiShader.sdsl.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
 
 </Project>
