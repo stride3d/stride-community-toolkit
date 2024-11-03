@@ -1,7 +1,6 @@
-using System;
 using System.Diagnostics;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
+namespace Stride.CommunityToolkit.ImGui;
 
 public struct LightweightTimer
 {

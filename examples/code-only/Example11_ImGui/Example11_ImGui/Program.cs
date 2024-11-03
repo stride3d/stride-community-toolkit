@@ -1,6 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
-using Stride.CommunityToolkit.ImGuiDebug;
+using Stride.CommunityToolkit.ImGui;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 

@@ -1,20 +1,15 @@
 using Stride.Core;
-
-using System;
-using System.Linq;
-using System.Reflection;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
 using System.Numerics;
-
-using ImGuiDir = Hexa.NET.ImGui.ImGuiDir;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using static Hexa.NET.ImGui.ImGui;
-using static Stride.CommunityToolkit.ImGuiDebug.ImGuiExtension;
-using Stride.CommunityToolkit.ImGuiDebug;
+using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
+using ImGuiDir = Hexa.NET.ImGui.ImGuiDir;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
+namespace Stride.CommunityToolkit.ImGui;
+
 public class Inspector : BaseWindow
 {
     /// <summary> Array of all possible <see cref="Filter"/> values </summary>
@@ -351,7 +346,7 @@ public class Inspector : BaseWindow
                 TextUnformatted(value.ToString());
             }
 
-        RECURSE:
+RECURSE:
 
             if (recurse) // Pass in this member's id to properly offset sub-members' hash
                 valueChanged = valueChanged || DrawMembers(value, memberInHierarchyId);

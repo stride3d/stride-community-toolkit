@@ -1,18 +1,17 @@
-using Stride.Core.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Numerics;
-using System.Threading.Channels;
-using TimeSpan = System.TimeSpan;
 using Hexa.NET.ImGui;
+using Stride.Core.Diagnostics;
 using Stride.Engine;
 using Stride.Games;
-using static Hexa.NET.ImGui.ImGui;
-using static Stride.CommunityToolkit.ImGuiDebug.ImGuiExtension;
 using Stride.Graphics;
-using System.Collections.Generic;
-using System.Threading;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Threading.Channels;
+using static Hexa.NET.ImGui.ImGui;
+using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
+using TimeSpan = System.TimeSpan;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
+namespace Stride.CommunityToolkit.ImGui;
+
 public class PerfMonitor : BaseWindow
 {
     public float GraphHeight = 48;

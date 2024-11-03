@@ -7,13 +7,12 @@ using Stride.Graphics;
 using Stride.Input;
 using Stride.Profiling;
 using Stride.Rendering;
-using System.Collections.Generic;
-using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using static Hexa.NET.ImGui.ImGui;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
+namespace Stride.CommunityToolkit.ImGui;
 
 public class ImGuiSystem : GameSystemBase
 {
@@ -73,11 +72,11 @@ public class ImGuiSystem : GameSystemBase
         effectSystem = Services.GetService<EffectSystem>();
         Debug.Assert(effectSystem != null, "ImGuiSystem: EffectSystem must be available!");
 
-        ImGuiContext = ImGui.CreateContext();
-        ImGui.SetCurrentContext(ImGuiContext);
+        ImGuiContext = CreateContext();
+        SetCurrentContext(ImGuiContext);
 
-        _io = ImGui.GetIO();
-        _platform = ImGui.GetPlatformIO();
+        _io = GetIO();
+        _platform = GetPlatformIO();
 
         // SETTO
         SetupInput();
@@ -99,7 +98,7 @@ public class ImGuiSystem : GameSystemBase
 
     protected override void Destroy()
     {
-        ImGui.DestroyContext(ImGuiContext);
+        DestroyContext(ImGuiContext);
         base.Destroy();
     }
 
@@ -281,13 +280,13 @@ public class ImGuiSystem : GameSystemBase
             _io.KeyCtrl = input.IsKeyDown(Keys.LeftCtrl) || input.IsKeyDown(Keys.RightCtrl);
             _io.KeySuper = input.IsKeyDown(Keys.LeftWin) || input.IsKeyDown(Keys.RightWin);
         }
-        ImGui.NewFrame();
+        Hexa.NET.ImGui.ImGui.NewFrame();
     }
 
     public override void EndDraw()
     {
-        ImGui.Render();
-        RenderDrawLists(ImGui.GetDrawData());
+        Hexa.NET.ImGui.ImGui.Render();
+        RenderDrawLists(Hexa.NET.ImGui.ImGui.GetDrawData());
         ImGuiExtension.ClearTextures();
     }
 
@@ -384,7 +383,7 @@ public class ImGuiSystem : GameSystemBase
                 commandList.DrawIndexed((int)cmd.ElemCount, idxOffset, vtxOffset);
 
                 idxOffset += (int)cmd.ElemCount;
-            
+
             }
 
             vtxOffset += cmdList.VtxBuffer.Size;

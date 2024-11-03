@@ -4,6 +4,8 @@ env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
   PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
+  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
 
 on:
   workflow_dispatch:
@@ -86,3 +88,17 @@ jobs:
 
     - name: Build Stride.CommunityToolkit.Skyboxes
       run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore
+
+    # Stride.CommunityToolkit.Bepu
+    - name: Restore Stride.CommunityToolkit.Bepu dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH_BEPU }}
+
+    - name: Build Stride.CommunityToolkit.Bepu
+      run: dotnet build ${{ env.PROJECT_PATH_BEPU }} --no-restore
+
+    # Stride.CommunityToolkit.ImGui
+    - name: Restore Stride.CommunityToolkit.ImGui dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH_IMGUI }}
+
+    - name: Build Stride.CommunityToolkit.ImGui
+      run: dotnet build ${{ env.PROJECT_PATH_IMGUI }} --no-restore

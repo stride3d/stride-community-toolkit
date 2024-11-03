@@ -1,11 +1,11 @@
-Stride.CommunityToolkit.ImGuiDebug
-=====
+# Stride.CommunityToolkit.ImGuiDebug
 
 Bare-bone implementation of ImGui and a couple of debug tools for Stride
 
 ![](https://user-images.githubusercontent.com/5742236/55237373-563a1400-5232-11e9-8c24-beeaf127c0ac.png)
 
-### How to:
+## How to:
+
 * Add this repo as a submodule of your game's repo.
 * Add a project reference pointing to this project inside your game's .csproj.
 * Reference Hexa.NET.ImGui's nuget package in your game's project, see below.
@@ -23,6 +23,7 @@ protected override void BeginRun()
 ```
 
 Builtin Debug interfaces:
+
 ```cs
 new HierarchyView( Services );
 new PerfMonitor( Services );
@@ -30,6 +31,7 @@ Inspector.FindFreeInspector( Services ).Target = objectToInspect;
 ```
 
 Example interface implementation:
+
 ```cs
 using System.Numerics;
 using static Hexa.NET.ImGui.ImGui;
@@ -84,15 +86,15 @@ public class YourInterface : Stride.CommunityToolkit.ImGuiDebug.BaseWindow
 
 ```
 
+## Add-ons
 
-### Add-ons
--------
+### ImNodes
 
-#### ImNodes
 Add the Hexa.NET.ImNodes package
 `dotnet add package Hexa.NET.ImNodes`
 
 In your Game class add the `ImNodes` context after the `ImGuiSystem` and add the context to `ImNodes`
+
 ```cs
 protected override void BeginRun()
 {
@@ -104,6 +106,7 @@ protected override void BeginRun()
 ```
 
 Create ImNodes widgets as needed
+
 ```cs
 using Hexa.NET.ImNodes;
 using Stride.Core;
@@ -157,14 +160,10 @@ public class HelloNodesWindow : BaseWindow
 }
 ```
 
-Credits
--------
-[Profan's contribution](https://github.com/profan/dear-xenko)
+## Credits
 
-[jazzay's contribution](https://github.com/jazzay/Xenko.Extensions#xenkoimgui)
-
-[Eideren's contribution](https://github.com/Eideren/StrideCommunity.ImGuiDebug)
-
-[Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)
-
-[Dear ImGui](https://github.com/ocornut/imgui)
+- [Profan's contribution](https://github.com/profan/dear-xenko)
+- [jazzay's contribution](https://github.com/jazzay/Xenko.Extensions#xenkoimgui)
+- [Eideren's contribution](https://github.com/Eideren/StrideCommunity.ImGuiDebug)
+- [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui)
+- [Dear ImGui](https://github.com/ocornut/imgui)
