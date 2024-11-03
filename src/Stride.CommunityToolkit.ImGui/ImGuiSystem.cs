@@ -10,6 +10,7 @@ using Stride.Rendering;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using static Hexa.NET.ImGui.ImGui;
 
 namespace Stride.CommunityToolkit.ImGui;
 
@@ -71,11 +72,11 @@ public class ImGuiSystem : GameSystemBase
         effectSystem = Services.GetService<EffectSystem>();
         Debug.Assert(effectSystem != null, "ImGuiSystem: EffectSystem must be available!");
 
-        ImGuiContext = Hexa.NET.ImGui.ImGui.CreateContext();
-        Hexa.NET.ImGui.ImGui.SetCurrentContext(ImGuiContext);
+        ImGuiContext = CreateContext();
+        SetCurrentContext(ImGuiContext);
 
-        _io = Hexa.NET.ImGui.ImGui.GetIO();
-        _platform = Hexa.NET.ImGui.ImGui.GetPlatformIO();
+        _io = GetIO();
+        _platform = GetPlatformIO();
 
         // SETTO
         SetupInput();
@@ -97,7 +98,7 @@ public class ImGuiSystem : GameSystemBase
 
     protected override void Destroy()
     {
-        Hexa.NET.ImGui.ImGui.DestroyContext(ImGuiContext);
+        DestroyContext(ImGuiContext);
         base.Destroy();
     }
 

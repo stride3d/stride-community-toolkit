@@ -3,6 +3,7 @@ using Stride.Core;
 using Stride.Engine;
 using Stride.Games;
 using System.Numerics;
+using static Hexa.NET.ImGui.ImGui;
 using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
 
 namespace Stride.CommunityToolkit.ImGui;
@@ -58,9 +59,10 @@ public abstract class BaseWindow : GameSystem
         }
 
         if (WindowPos != null)
-            Hexa.NET.ImGui.ImGui.SetNextWindowPos(WindowPos.Value);
+            SetNextWindowPos(WindowPos.Value);
         if (WindowSize != null)
-            Hexa.NET.ImGui.ImGui.SetNextWindowSize(WindowSize.Value);
+            SetNextWindowSize(WindowSize.Value);
+
         using (Window(_uniqueName, ref Open, out bool collapsed, WindowFlags))
         {
             OnDraw(collapsed);
@@ -72,7 +74,9 @@ public abstract class BaseWindow : GameSystem
             Dispose();
         }
     }
+
     protected abstract void OnDraw(bool collapsed);
+
     protected abstract void OnDestroy();
 
     protected override void Destroy()
