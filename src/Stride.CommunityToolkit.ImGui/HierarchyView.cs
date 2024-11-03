@@ -1,16 +1,13 @@
-
-using System.Numerics;
-using System.Collections.Generic;
-using Guid = System.Guid;
-
+using Hexa.NET.ImGui;
 using Stride.Core;
 using Stride.Engine;
-
-using Hexa.NET.ImGui;
+using System.Numerics;
 using static Hexa.NET.ImGui.ImGui;
-using static Stride.CommunityToolkit.ImGuiDebug.ImGuiExtension;
+using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
+using Guid = System.Guid;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
+namespace Stride.CommunityToolkit.ImGui;
+
 public class HierarchyView : BaseWindow
 {
     /// <summary>

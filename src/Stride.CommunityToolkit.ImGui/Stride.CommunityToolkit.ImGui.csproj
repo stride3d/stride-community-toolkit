@@ -19,18 +19,4 @@
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="Effects\ImGuiShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="Effects\ImGuiShader.sdsl">
-            <LastGenOutput>ImGuiShader.sdsl.cs</LastGenOutput>
-        </None>
-    </ItemGroup>
-
 </Project>

@@ -1,15 +1,13 @@
-using System.Numerics;
-using IDisposable = System.IDisposable;
-using ArgumentOutOfRangeException = System.ArgumentOutOfRangeException;
-
 using Hexa.NET.ImGui;
-using static Hexa.NET.ImGui.ImGui;
-using System.Runtime.CompilerServices;
 using Stride.Graphics;
-using System.Collections.Generic;
-using System;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using static Hexa.NET.ImGui.ImGui;
+using ArgumentOutOfRangeException = System.ArgumentOutOfRangeException;
+using IDisposable = System.IDisposable;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
+namespace Stride.CommunityToolkit.ImGui;
+
 public class ImGuiExtension
 {
     // Dictionary to hold textures
@@ -96,7 +94,7 @@ public class ImGuiExtension
     public static bool ColorPicker3(string label, ref Stride.Core.Mathematics.Color3 color)
     {
         var lightColorVector = new Vector3(color.R, color.G, color.B);
-        var changed = ImGui.ColorPicker3(label, ref lightColorVector);
+        var changed = Hexa.NET.ImGui.ImGui.ColorPicker3(label, ref lightColorVector);
         if (changed)
         {
             color.R = lightColorVector.X;
@@ -112,7 +110,7 @@ public class ImGuiExtension
     /// <param name="texture"></param>
     public static void Image(Texture texture)
     {
-        ImGui.Image(GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
+        Hexa.NET.ImGui.ImGui.Image(GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
     }
 
     /// <summary>
@@ -123,7 +121,7 @@ public class ImGuiExtension
     /// <param name="height"></param>
     public static void Image(Texture texture, int width, int height)
     {
-        ImGui.Image(GetTextureKey(texture), new Vector2(width, height));
+        Hexa.NET.ImGui.ImGui.Image(GetTextureKey(texture), new Vector2(width, height));
     }
 
     /// <summary>
@@ -134,7 +132,7 @@ public class ImGuiExtension
     /// <returns></returns>
     public static bool ImageButton(string text, Texture texture)
     {
-        return ImGui.ImageButton(text, GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
+        return Hexa.NET.ImGui.ImGui.ImageButton(text, GetTextureKey(texture), new Vector2(texture.Width, texture.Height));
     }
 
     /// <summary>
@@ -147,7 +145,7 @@ public class ImGuiExtension
     /// <returns></returns>
     public static bool ImageButton(string strid, Texture texture, int width, int height)
     {
-        return ImGui.ImageButton(strid, GetTextureKey(texture), new Vector2(width, height));
+        return Hexa.NET.ImGui.ImGui.ImageButton(strid, GetTextureKey(texture), new Vector2(width, height));
     }
 
     public static DisposableImGui MenuBar(out bool open) => new DisposableImGui(open = BeginMenuBar(), DisposableTypes.MenuBar);
@@ -225,6 +223,6 @@ public class ImGuiExtension
         Vector2 size = default,
         int stride = 4)
     {
-        ImGui.PlotLines(label, ref values, count, offset, overlay, valueMin, valueMax, size, stride);
+        Hexa.NET.ImGui.ImGui.PlotLines(label, ref values, count, offset, overlay, valueMin, valueMax, size, stride);
     }
 }

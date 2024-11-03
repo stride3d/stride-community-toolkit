@@ -69,7 +69,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example09_Renderer", "examp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example10_StrideUI_DragAndDrop", "examples\code-only\Example10_StrideUI_DragAndDrop\Example10_StrideUI_DragAndDrop.csproj", "{2D37B4BA-50F7-4347-8DC0-FA58C2AC2803}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.ImGuiDebug", "src\Stride.CommunityToolkit.ImGui\Stride.CommunityToolkit.ImGuiDebug.csproj", "{43BB82C0-78B8-4DE9-8F14-0664973CCB7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.ImGui", "src\Stride.CommunityToolkit.ImGui\Stride.CommunityToolkit.ImGui.csproj", "{43BB82C0-78B8-4DE9-8F14-0664973CCB7B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example11_ImGui", "examples\code-only\Example11_ImGui\Example11_ImGui\Example11_ImGui.csproj", "{EE31DB88-2FE2-45ED-B80F-76F0C1CB2008}"
 EndProject

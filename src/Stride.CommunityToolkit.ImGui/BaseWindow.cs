@@ -1,14 +1,12 @@
+using Hexa.NET.ImGui;
 using Stride.Core;
 using Stride.Engine;
 using Stride.Games;
-
 using System.Numerics;
+using static Stride.CommunityToolkit.ImGui.ImGuiExtension;
 
-using Hexa.NET.ImGui;
-using static Stride.CommunityToolkit.ImGuiDebug.ImGuiExtension;
-using System.Collections.Generic;
+namespace Stride.CommunityToolkit.ImGui;
 
-namespace Stride.CommunityToolkit.ImGuiDebug;
 public abstract class BaseWindow : GameSystem
 {
     public float Scale => _imgui.Scale;
@@ -60,9 +58,9 @@ public abstract class BaseWindow : GameSystem
         }
 
         if (WindowPos != null)
-            ImGui.SetNextWindowPos(WindowPos.Value);
+            Hexa.NET.ImGui.ImGui.SetNextWindowPos(WindowPos.Value);
         if (WindowSize != null)
-            ImGui.SetNextWindowSize(WindowSize.Value);
+            Hexa.NET.ImGui.ImGui.SetNextWindowSize(WindowSize.Value);
         using (Window(_uniqueName, ref Open, out bool collapsed, WindowFlags))
         {
             OnDraw(collapsed);
