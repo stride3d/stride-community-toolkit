@@ -142,7 +142,7 @@ jobs:
     - name: Test
       run: dotnet test ${{ env.PROJECT_PATH_IMGUI }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - Bepu
+    - name: Publish Stride Community Toolkit - ImGui
       uses: alirezanet/publish-nuget@v3.1.0
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_IMGUI }}
