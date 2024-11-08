@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Rendering.DebugShapes;
+using Stride.Particles.Rendering;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Images;
@@ -211,6 +212,34 @@ public static class GraphicsCompositorExtensions
         });
 
         UpdateSceneRendererCollection(graphicsCompositor, cameraSlot, uiStage);
+    }
+
+    public static void AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
+    {
+        if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
+        {
+            throw new NullReferenceException("Opaque RenderStage not found");
+        }
+
+        if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
+        {
+            throw new NullReferenceException("Transparent RenderStage not found");
+        }
+
+        graphicsCompositor.RenderFeatures.Add(new ParticleEmitterRenderFeature()
+        {
+            Name = "ParticleEmitterRenderFeature",
+            RenderStageSelectors =
+            {
+                new ParticleEmitterTransparentRenderStageSelector()
+                {
+                    EffectName = "ParticleEmitterTransparent",
+                    RenderGroup = RenderGroupMaskAllExcludingGroup31(),
+                    OpaqueRenderStage = opaqueRenderStage,
+                    TransparentRenderStage = transparentRenderStage
+                }
+            }
+        });
     }
 
     private static void UpdateSceneRendererCollection(GraphicsCompositor graphicsCompositor, SceneCameraSlot cameraSlot, RenderStage uiStage)

@@ -666,6 +666,11 @@ public static class GameExtensions
         game.GameSystems.Add(debugDraw);
     }
 
+    public static void AddParticleRenderer(this Game game)
+    {
+        game.SceneSystem.GraphicsCompositor.AddParticleStagesAndFeatures();
+    }
+
     /// <summary>
     /// Adds an <see cref="EntityDebugSceneRenderer"/> to the game's <see cref="GraphicsCompositor"/> for rendering entity debug information.
     /// </summary>
