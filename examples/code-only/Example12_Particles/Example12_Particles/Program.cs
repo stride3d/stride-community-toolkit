@@ -1,7 +1,5 @@
-using Stride.Animations;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
-using Stride.CommunityToolkit.ImGui;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -22,16 +20,9 @@ void Start(Scene scene)
 {
     SetupBaseScene();
 
-    // Add debugging aids: entity names, positions
-    //game.AddEntityDebugSceneRenderer(new()
-    //{
-    //    ShowFontBackground = true
-    //});
-
     game.AddSkybox();
     game.AddProfiler();
 
-    // makes the profiling much easier to read.
     game.SetMaxFPS(60);
 
     CreateParticleEffect();
@@ -64,7 +55,6 @@ void CreateParticleEffect()
                 Value = new Color4(0, 0, 1, 1)
             }
         },
-        Enabled = true,
     };
 
     emitter.Spawners.Add(new SpawnerPerSecond()
@@ -73,7 +63,6 @@ void CreateParticleEffect()
         Delay = new Vector2(),
         Duration = new Vector2(1, 1),
         SpawnCount = 50,
-        Enabled = true,
     });
 
     var sizeInitializer = new InitialSizeSeed()
@@ -110,7 +99,6 @@ void CreateParticleEffect()
         Color = Color.White,
         RenderGroup = Stride.Rendering.RenderGroup.Group0,
         Speed = 1,
-        Enabled = true,
     };
     particles.ParticleSystem.Emitters.Add(emitter);
     particles.ParticleSystem.Settings = particleSettings;
@@ -121,7 +109,4 @@ void CreateParticleEffect()
     };
     entity.Name = "Particles";
     entity.Scene = game.SceneSystem.SceneInstance.RootScene;
-    entity.Transform.Position = new Vector3(0, 0, 0);
-
-    particles.Enabled = true;
 }
