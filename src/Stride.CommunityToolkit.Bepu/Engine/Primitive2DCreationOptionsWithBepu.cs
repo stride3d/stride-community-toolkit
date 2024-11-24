@@ -17,5 +17,5 @@ public class Primitive2DCreationOptionsWithBepu : PrimitiveCreationOptions
     /// <summary>
     /// Gets or sets the physics component to be added to the entity.
     /// </summary>
-    public ContainerComponent Component { get; set; } = new Body2DComponent() { Collider = new CompoundCollider() };
+    public CollidableComponent Component { get; set; } = new Body2DComponent() { Collider = new CompoundCollider() };
 }

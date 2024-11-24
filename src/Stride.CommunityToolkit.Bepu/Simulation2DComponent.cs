@@ -7,24 +7,26 @@ namespace Stride.CommunityToolkit.Bepu;
 
 // ToDo Remove this class once it is implemented in Stride
 [ComponentCategory("Bepu")]
-public class Simulation2DComponent : SimulationUpdateComponent
+public class Simulation2DComponent : SyncScript, ISimulationUpdate
 {
+    //public Entity Entity => throw new NotImplementedException();
+
     //public float MaxZLiberty { get; set; } = 0.05f;
 
-    public override void SimulationUpdate(float simTimeStep)
+    public void SimulationUpdate(BepuSimulation sim, float simTimeStep)
     {
 
     }
 
-    public override void AfterSimulationUpdate(float simTimeStep)
+    public void AfterSimulationUpdate(BepuSimulation sim, float simTimeStep)
     {
-        if (BepuSimulation == null)
+        if (sim.Simulation == null)
             return;
 
-        for (int i = 0; i < BepuSimulation.Simulation.Bodies.ActiveSet.Count; i++)
+        for (int i = 0; i < sim.Simulation.Bodies.ActiveSet.Count; i++)
         {
-            var handle = BepuSimulation.Simulation.Bodies.ActiveSet.IndexToHandle[i];
-            var body = BepuSimulation.GetContainer(handle);
+            var handle = sim.Simulation.Bodies.ActiveSet.IndexToHandle[i];
+            var body = sim.GetComponent(handle);
 
             if (body is not Body2DComponent)
                 continue;
