@@ -210,25 +210,23 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
         var vectorFar = Vector3.Transform(position, invertedMatrix);
         vectorFar /= vectorFar.W;
 
-        var buffer = System.Buffers.ArrayPool<HitInfo>.Shared.Rent(100);
+        Span<HitInfoStack> buffer = stackalloc HitInfoStack[16];
 
-        _bepuConfig.BepuSimulations[_simulationIndex].RaycastPenetrating(vectorNear.XYZ(), vectorFar.XYZ() - vectorNear.XYZ(), _maxDistance, buffer, out var hits);
+        var hits = _bepuConfig.BepuSimulations[_simulationIndex].RayCastPenetrating(vectorNear.XYZ(), vectorFar.XYZ() - vectorNear.XYZ(), _maxDistance, buffer);
 
-        if (hits.Length > 0)
+        if (hits.Span.Length > 0)
         {
             var space = 0;
 
-            for (int j = 0; j < hits.Length; j++)
+            foreach (var hitInfo in hits)
             {
-                var hitInfo = hits[j];
-
-                if (hitInfo.Container.Entity.Name == ShapeName)
+                if (hitInfo.Collidable.Entity.Name == ShapeName)
                 {
-                    game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
+                    game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Collidable.Entity}", new Int2(x: debugX, y: 200 + space));
 
                     space += 20;
 
-                    var body2D = hitInfo.Container.Entity.Get<BodyComponent>();
+                    var body2D = hitInfo.Collidable.Entity.Get<BodyComponent>();
 
                     if (body2D == null) continue;
 
@@ -238,6 +236,27 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
                     body2D.LinearVelocity = direction * 1;
                 }
             }
+
+            //for (int j = 0; j < hits.Span.Length; j++)
+            //{
+            //    var hitInfo = hits.Span[j].HitInfo;
+
+            //    if (hitInfo.Collidable.Entity.Name == ShapeName)
+            //    {
+            //        game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
+
+            //        space += 20;
+
+            //        var body2D = hitInfo.Container.Entity.Get<BodyComponent>();
+
+            //        if (body2D == null) continue;
+
+            //        var direction = new Vector3(0, 20, 0);
+
+            //        body2D.ApplyImpulse(direction * 10, new());
+            //        body2D.LinearVelocity = direction * 1;
+            //    }
+            //}
         }
         else
         {
