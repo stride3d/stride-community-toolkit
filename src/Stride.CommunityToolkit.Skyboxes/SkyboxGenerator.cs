@@ -36,9 +36,12 @@ public static class SkyboxGenerator
     {
         var cubemapSize = (int)Math.Pow(2, Math.Ceiling(Math.Log(skyboxTexture.Width / 4) / Math.Log(2))); // maximum resolution is around horizontal middle line which composes 4 images.
 
-        skyboxTexture = CubemapFromTextureRenderer.GenerateCubemap(context.Services, context.RenderDrawContext, skyboxTexture, cubemapSize);
+        if (skyboxTexture.Dimension != TextureDimension.TextureCube)
+        {
+            skyboxTexture = CubemapFromTextureRenderer.GenerateCubemap(context.Services, context.RenderDrawContext, skyboxTexture, cubemapSize);
+        }
 
-        var lamberFiltering = new LambertianPrefilteringSHNoCompute(context.RenderContext)
+        using var lamberFiltering = new LambertianPrefilteringSHNoCompute(context.RenderContext)
         {
             HarmonicOrder = 3,
             RadianceMap = skyboxTexture
@@ -52,7 +55,7 @@ public static class SkyboxGenerator
         skybox.DiffuseLightingParameters.Set(SkyboxKeys.Shader, new ShaderClassSource("SphericalHarmonicsEnvironmentColor", lamberFiltering.HarmonicOrder));
         skybox.DiffuseLightingParameters.Set(SphericalHarmonicsEnvironmentColorKeys.SphericalColors, coefficients);
 
-        var specularRadiancePrefilterGGX = new RadiancePrefilteringGGXNoCompute(context.RenderContext);
+        using var specularRadiancePrefilterGGX = new RadiancePrefilteringGGXNoCompute(context.RenderContext);
 
         //var textureSize = asset.SpecularCubeMapSize <= 0 ? 64 : asset.SpecularCubeMapSize;
         // Not sure what should be here
