@@ -103,6 +103,11 @@ public static class GraphicsCompositorExtensions
         return graphicsCompositor;
     }
 
+    public static void AddRootRenderFeature(this GraphicsCompositor graphicsCompositor, RootRenderFeature renderFeature)
+    {
+        graphicsCompositor.RenderFeatures.Add(renderFeature);
+    }
+
     /// <summary>
     /// Adds an immediate debug render feature to the specified <see cref="GraphicsCompositor"/>.
     /// This method ensures the debug render feature is added only once and links it with both the
