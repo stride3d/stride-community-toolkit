@@ -4,7 +4,6 @@ using Stride.Rendering;
 namespace Example13_RootRendererShader.Renderers;
 public class RibbonRenderBackground : RenderObject
 {
-    public bool Is2D;
     public float Intensity;
     public float Frequency;
     public float Amplitude;

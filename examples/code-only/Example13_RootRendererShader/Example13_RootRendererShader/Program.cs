@@ -1,13 +1,8 @@
 using Example13_RootRendererShader.Renderers;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.CommunityToolkit.Rendering.DebugShapes;
-using Stride.CommunityToolkit.Skyboxes;
-using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Rendering;
-using Stride.Rendering.Compositing;
 
 using var game = new Game();
 
@@ -16,7 +11,7 @@ game.Run(start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
+    game.SetupBase();
     AddRenderFeature();
     game.AddProfiler();
 
@@ -35,6 +30,8 @@ void Start(Scene scene)
     // Once this gets added to the scene, the render processor will be added to the scene.
     var entity = new Entity { new RibbonBackgroundComponent() };
     scene.Entities.Add(entity);
+
+    game.Window.Position = new Stride.Core.Mathematics.Int2(50, 50);
 }
 
 // This method adds the render feature to the game.
