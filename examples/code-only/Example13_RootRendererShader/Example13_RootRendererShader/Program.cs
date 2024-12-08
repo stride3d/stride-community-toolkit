@@ -32,6 +32,7 @@ void Start(Scene scene)
     scene.Entities.Add(entity);
 
     game.Window.Position = new Stride.Core.Mathematics.Int2(50, 50);
+    game.Window.AllowUserResizing = true;
 }
 
 // This method adds the render feature to the game.
