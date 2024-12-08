@@ -1,3 +1,5 @@
+// converted from: https://www.shadertoy.com/view/7slcWj
+
 shader RibbonBackgroundShader : SpriteBase
 {
     stage float3 Top;
