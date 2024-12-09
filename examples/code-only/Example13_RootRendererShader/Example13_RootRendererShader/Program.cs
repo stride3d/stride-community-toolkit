@@ -8,7 +8,6 @@ using var game = new Game();
 
 game.Run(start: Start);
 
-
 void Start(Scene scene)
 {
     game.SetupBase();
