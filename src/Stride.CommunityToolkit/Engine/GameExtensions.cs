@@ -258,11 +258,14 @@ public static class GameExtensions
                 Intensity =  20.0f,
                 Type = new LightDirectional
                 {
+                    Color = new ColorRgbProvider(Color.White),
                     Shadow =
                     {
                         Enabled = true,
                         Size = LightShadowMapSize.Large,
                         Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
+                        PartitionMode = new LightDirectionalShadowMap.PartitionLogarithmic(),
+                        ComputeTransmittance = false
                     }
                 }
             }

@@ -39,16 +39,15 @@ public static class GameExtensions
 
         var texture = Texture.Load(game.GraphicsDevice, stream, TextureFlags.ShaderResource, GraphicsResourceUsage.Dynamic);
 
-        var skyboxGeneratorContext = new SkyboxGeneratorContext(game);
+        using var context = new SkyboxGeneratorContext(game);
 
         var skybox = new Skybox();
 
-        skybox = SkyboxGenerator.Generate(skybox, skyboxGeneratorContext, texture);
+        skybox = SkyboxGenerator.Generate(skybox, context, texture);
 
         var entity = new Entity(entityName) {
-                new BackgroundComponent { Intensity = 1.0f, Texture = texture },
+                new BackgroundComponent { Texture = texture },
                 new LightComponent {
-                    Intensity = 1.0f,
                     Type = new LightSkybox() { Skybox = skybox }
                 }
         };
