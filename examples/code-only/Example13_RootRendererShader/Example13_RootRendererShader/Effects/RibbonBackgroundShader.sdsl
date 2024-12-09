@@ -1,0 +1,52 @@
+// converted from: https://www.shadertoy.com/view/7slcWj
+
+shader RibbonBackgroundShader : SpriteBase
+{
+    stage float3 Top;
+    stage float3 Bottom;
+    stage float WidthFactor;
+    stage float DeltaTime;
+    stage float Frequency;
+    stage float Amplitude;
+    stage float Speed;
+    stage float Intensity;
+
+    // Shading of the sprite
+    stage override float4 Shading()
+    {
+        float2 uv = streams.TexCoord.xy;
+
+        float3 color = float3(lerp(Top, Bottom, uv.x * uv.y));
+        color = color + CalcSine(uv, Speed * 0.2f, Frequency * 0.20f, Amplitude * 0.2f, 0.0f, 0.5f, float3(0.3f, 0.3f, 0.3f), 0.1f, 15.0f,false);
+        color = color + CalcSine(uv, Speed * 0.4f, Frequency * 0.40f, Amplitude * 0.15f, 0.0f, 0.5f, float3(0.3f, 0.3f, 0.3f), 0.1f, 17.0f,false);
+        color = color + CalcSine(uv, Speed * 0.3f, Frequency * 0.60f, Amplitude * 0.15f, 0.0f, 0.5f, float3(0.3f, 0.3f, 0.3f), 0.05f, 23.0f,false);
+
+        color = color + CalcSine(uv, Speed * 0.1f, Frequency * 0.26f, Amplitude * 0.07f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.1f, 17.0f,true);
+        color = color + CalcSine(uv, Speed * 0.3f, Frequency * 0.36f, Amplitude * 0.07f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.1f, 17.0f,true);
+        color = color + CalcSine(uv, Speed * 0.5f, Frequency * 0.46f, Amplitude * 0.07f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.05f, 23.0f,true);
+        color = color + CalcSine(uv, Speed * 0.2f, Frequency * 0.58f, Amplitude * 0.05f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.2f, 15.0f,true);
+        
+        return float4(color.x, color.y, color.z, 0.5f) * Intensity;
+    }
+
+    stage float3 CalcSine(float2 uv, float speed, float frequency, float amplitude, float shift, float offset, float3 color, float width, float exponent, bool dir)
+    {
+        float pi = 3.14159265359f;
+        float angle = DeltaTime * speed * frequency * -1.0f + (shift + uv.x) * 2.0f;
+    
+        float y = sin(angle) * amplitude + offset;
+        float diffY = y - uv.y;
+        
+        float dsqr = distance(y, uv.y);
+        float scale = 1.0f;
+        
+        if(dir && diffY > 0.0f || !dir && diffY < 0.0f)
+        {
+            dsqr = dsqr * 3.0f;
+        }
+        
+        scale = pow(smoothstep(width * WidthFactor, 0.0f, dsqr), exponent);
+        
+        return min(color * scale, color);
+    }
+};

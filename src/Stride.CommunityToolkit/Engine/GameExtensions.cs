@@ -651,6 +651,11 @@ public static class GameExtensions
         graphicsCompositor.AddSceneRenderer(renderer);
     }
 
+    public static void AddRootRenderFeature(this Game game, RootRenderFeature renderFeature)
+    {
+        game.SceneSystem.GraphicsCompositor.AddRootRenderFeature(renderFeature);
+    }
+
     /// <summary>
     /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
     /// <para>Registers the system to the service registry for easy access.</para>

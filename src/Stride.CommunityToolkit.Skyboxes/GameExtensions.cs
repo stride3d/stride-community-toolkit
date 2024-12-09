@@ -35,7 +35,7 @@ public static class GameExtensions
     /// </example>
     public static Entity AddSkybox(this Game game, string? entityName = "Skybox")
     {
-        using var stream = new FileStream($"{AppContext.BaseDirectory}Resources\\{SkyboxTexture}", FileMode.Open, FileAccess.Read);
+        using var stream = new FileStream(Path.Combine(AppContext.BaseDirectory, "Resources", SkyboxTexture), FileMode.Open, FileAccess.Read);
 
         var texture = Texture.Load(game.GraphicsDevice, stream, TextureFlags.ShaderResource, GraphicsResourceUsage.Dynamic);
 
