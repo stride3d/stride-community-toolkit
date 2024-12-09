@@ -258,11 +258,14 @@ public static class GameExtensions
                 Intensity =  20.0f,
                 Type = new LightDirectional
                 {
+                    Color = new ColorRgbProvider(Color.White),
                     Shadow =
                     {
                         Enabled = true,
                         Size = LightShadowMapSize.Large,
                         Filter = new LightShadowMapFilterTypePcf { FilterSize = LightShadowMapFilterTypePcfSize.Filter5x5 },
+                        PartitionMode = new LightDirectionalShadowMap.PartitionLogarithmic(),
+                        ComputeTransmittance = false
                     }
                 }
             }
@@ -646,6 +649,11 @@ public static class GameExtensions
         var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException(GraphicsCompositorNotSet);
 
         graphicsCompositor.AddSceneRenderer(renderer);
+    }
+
+    public static void AddRootRenderFeature(this Game game, RootRenderFeature renderFeature)
+    {
+        game.SceneSystem.GraphicsCompositor.AddRootRenderFeature(renderFeature);
     }
 
     /// <summary>
