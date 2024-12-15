@@ -2,6 +2,7 @@ using Stride.Core.Reflection;
 using System.Reflection;
 
 namespace Stride.CommunityToolkit;
+
 internal class Module
 {
     [ModuleInitializer]
