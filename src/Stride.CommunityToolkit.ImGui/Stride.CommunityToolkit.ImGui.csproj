@@ -11,7 +11,7 @@
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <PackageReference Include="Hexa.NET.ImGui" Version="2.1.9" />
+        <PackageReference Include="Hexa.NET.ImGui" Version="2.2.4" />
         <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2282" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
     </ItemGroup>
 
