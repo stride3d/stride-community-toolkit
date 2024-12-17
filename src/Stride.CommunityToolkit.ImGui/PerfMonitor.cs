@@ -200,7 +200,7 @@ public class PerfMonitor : BaseWindow
                     min = v;
             }
 
-            PlotLines("", ref _graph[0].FrameTime, _graph.Length,
+            PlotLines("Frame Time Graph", ref _graph[0].FrameTime, _graph.Length,
                 overlay: $"~{S(Average.FrameTime)}ms({S(1f / (Average.FrameTime / 1000f))}fps)",
                 // Reduce the size somewhat to make space for the text
                 size: GetGraphSize() - new Vector2(48f, 0f),
@@ -223,7 +223,7 @@ public class PerfMonitor : BaseWindow
                         min = v;
                 }
 
-                PlotLines("", ref _graph[0].TotalManagedMB, _graph.Length,
+                PlotLines("Managed Memory Graph", ref _graph[0].TotalManagedMB, _graph.Length,
                     overlay: $"Total: ~{S(Average.TotalManagedMB)}MB ({S(max - min)}d)",
                     size: GetGraphSize(),
                     stride: GraphPoint.SizeOf);
@@ -233,7 +233,7 @@ public class PerfMonitor : BaseWindow
 
             if (CollapsingHeader("Draw calls"))
             {
-                PlotLines("", ref _graph[0].DrawCalls, _graph.Length,
+                PlotLines("Draw Calls Graph", ref _graph[0].DrawCalls, _graph.Length,
                     valueMin: 0f,
                     overlay: $"~{S(Average.DrawCalls)}",
                     size: GetGraphSize(),
@@ -245,7 +245,7 @@ public class PerfMonitor : BaseWindow
         {
             if (CollapsingHeader("Buffer Memory"))
             {
-                PlotLines("", ref _graph[0].BufferMemMB, _graph.Length,
+                PlotLines("Buffer Memory Graph", ref _graph[0].BufferMemMB, _graph.Length,
                     valueMin: 0f,
                     overlay: $"~{S(Average.BufferMemMB)}MB",
                     size: GetGraphSize(),
@@ -256,7 +256,7 @@ public class PerfMonitor : BaseWindow
 
             if (CollapsingHeader("Texture Memory"))
             {
-                PlotLines("", ref _graph[0].TexMemMB, _graph.Length,
+                PlotLines("Texture Memory Graph", ref _graph[0].TexMemMB, _graph.Length,
                     valueMin: 0f,
                     overlay: $"~{S(Average.TexMemMB)}MB",
                     size: GetGraphSize(),

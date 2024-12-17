@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Example11_ImGui": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
