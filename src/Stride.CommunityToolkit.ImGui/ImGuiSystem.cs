@@ -55,6 +55,8 @@ public class ImGuiSystem : GameSystemBase
 
     private Dictionary<Keys, ImGuiKey> _keys = [];
 
+    private bool _isFirstFrame = true;
+
     public ImGuiSystem([NotNull] IServiceRegistry registry, [NotNull] GraphicsDeviceManager graphicsDeviceManager, InputManager inputManager = null) : base(registry)
     {
         input = inputManager ?? Services.GetService<InputManager>();
@@ -233,9 +235,15 @@ public class ImGuiSystem : GameSystemBase
 
     public override void Update(GameTime gameTime)
     {
+        var deltaTime = (float)gameTime.Elapsed.TotalSeconds;
+        if (_isFirstFrame)
+        {
+            _isFirstFrame = false;
+            deltaTime = 1 / 60f;
+        }
         var surfaceSize = Game.Window.ClientBounds;
         _io.DisplaySize = new System.Numerics.Vector2(surfaceSize.Width, surfaceSize.Height);
-        _io.DeltaTime = (float)gameTime.TimePerFrame.TotalSeconds;
+        _io.DeltaTime = deltaTime;
 
         if (input.HasMouse == false || input.IsMousePositionLocked == false)
         {
