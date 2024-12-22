@@ -22,6 +22,12 @@
         <ProjectReference Include="..\..\examples\code-only\Example05_ProceduralGeometry\Example05_ProceduralGeometry.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example06_ImageProcessing\Example06_ImageProcessing.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example07_CubeClicker\Example07_CubeClicker.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example08_DebugShapes\Example08_DebugShapes.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example09_Renderer\Example09_Renderer.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example10_StrideUI_DragAndDrop\Example10_StrideUI_DragAndDrop.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example11_ImGui\Example11_ImGui\Example11_ImGui.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example12_Particles\Example12_Particles\Example12_Particles.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example13_RootRendererShader\Example13_RootRendererShader\Example13_RootRendererShader.csproj" />
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 

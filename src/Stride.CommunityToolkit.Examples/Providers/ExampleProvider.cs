@@ -27,6 +27,12 @@ public class ExampleProvider
             nameof(Example04_MyraUI)),
         CreateExample("Advance Example - Image Processing",
             nameof(Example06_ImageProcessing)),
+        CreateExample("Other - CubeClicker",
+            nameof(Example07_CubeClicker)),
+        CreateExample("Other - Debug Shapes",
+            nameof(Example08_DebugShapes)),
+        CreateExample("Other - Renderer",
+            nameof(Example09_Renderer)),
         new Example("Q", "Quit", () => Environment.Exit(0))
     ];
 
