@@ -79,6 +79,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example12_Particles", "exam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example13_RootRendererShader", "examples\code-only\Example13_RootRendererShader\Example13_RootRendererShader\Example13_RootRendererShader.csproj", "{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Bullet", "src\Stride.CommunityToolkit.Bullet\Stride.CommunityToolkit.Bullet.csproj", "{648369C0-1090-4414-BCE1-D661CE85583F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -208,6 +210,10 @@ Global
 		{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{648369C0-1090-4414-BCE1-D661CE85583F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{648369C0-1090-4414-BCE1-D661CE85583F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{648369C0-1090-4414-BCE1-D661CE85583F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{648369C0-1090-4414-BCE1-D661CE85583F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
