@@ -1,7 +1,9 @@
+using Stride.CommunityToolkit.Engine;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Bullet;
 
 /// <summary>
 /// Provides options for creating a 2D primitive entity, such as a square or rectangle.
