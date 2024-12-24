@@ -1,6 +1,7 @@
 using Example07_CubeClicker.Managers;
 using Example07_CubeClicker.Scripts;
 using NexVYaml;
+using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;

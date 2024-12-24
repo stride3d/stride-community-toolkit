@@ -71,13 +71,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example10_StrideUI_DragAndD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.ImGui", "src\Stride.CommunityToolkit.ImGui\Stride.CommunityToolkit.ImGui.csproj", "{43BB82C0-78B8-4DE9-8F14-0664973CCB7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example11_ImGui", "examples\code-only\Example11_ImGui\Example11_ImGui\Example11_ImGui.csproj", "{EE31DB88-2FE2-45ED-B80F-76F0C1CB2008}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example11_ImGui", "examples\code-only\Example11_ImGui\Example11_ImGui.csproj", "{EE31DB88-2FE2-45ED-B80F-76F0C1CB2008}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Bepu", "src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj", "{60A78B61-DCCC-4EBC-A617-234C54DFB9D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example12_Particles", "examples\code-only\Example12_Particles\Example12_Particles\Example12_Particles.csproj", "{8821704B-5698-4C9A-B05F-C18B7122DD8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example12_Particles", "examples\code-only\Example12_Particles\Example12_Particles.csproj", "{8821704B-5698-4C9A-B05F-C18B7122DD8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example13_RootRendererShader", "examples\code-only\Example13_RootRendererShader\Example13_RootRendererShader\Example13_RootRendererShader.csproj", "{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example13_RootRendererShader", "examples\code-only\Example13_RootRendererShader\Example13_RootRendererShader.csproj", "{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Bullet", "src\Stride.CommunityToolkit.Bullet\Stride.CommunityToolkit.Bullet.csproj", "{648369C0-1090-4414-BCE1-D661CE85583F}"
 EndProject
