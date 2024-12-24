@@ -373,7 +373,7 @@ public static class GameExtensions
         {
             Attributes =
                 {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults._defaultMaterialColor)),
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
                     DiffuseModel = new MaterialDiffuseLambertModelFeature(),
                     Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
                     SpecularModel = new MaterialSpecularMicrofacetModelFeature(),

@@ -7,43 +7,35 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-namespace Stride.CommunityToolkit.Bepu.Engine;
+namespace Stride.CommunityToolkit.Bepu;
 
-public static class BepuGameExtensions
+public static class GameExtensions
 {
-    private const string DefaultGroundName = "Ground";
-    private const string GraphicsCompositorNotSet = "GraphicsCompositor is not set.";
-
-    private static readonly Vector2 _default3DGroundSize = new(15f);
-    private static readonly Vector3 _default2DGroundSize = new(15, 0.1f, 0);
-    private static readonly Color _defaultMaterialColor = Color.FromBgra(0xFF8C8C8C);
-    private static readonly Color _defaultGroundMaterialColor = Color.FromBgra(0xFF242424);
-
-    public static void SetupBase2DSceneWithBepu(this Game game)
+    public static void SetupBase2DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add2DCamera().Add2DCameraController();
-        game.Add3DGroundWithBepu();
+        game.Add3DGround();
     }
 
-    public static void SetupBase3DSceneWithBepu(this Game game)
+    public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add3DCamera().Add3DCameraController();
         game.AddDirectionalLight();
-        game.Add3DGroundWithBepu();
+        game.Add3DGround();
     }
 
-    public static Entity Add3DGroundWithBepu(this Game game, string? entityName = DefaultGroundName, Vector2? size = null, bool includeCollider = true)
-        => CreateGroundWithBepu(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
+    public static Entity Add3DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+        => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
 
-    private static Entity CreateGroundWithBepu(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
+    private static Entity CreateGround(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
     {
-        var validSize = size ?? _default3DGroundSize;
+        var validSize = size ?? GameDefaults.Default3DGroundSize;
 
-        var material = game.CreateMaterial(_defaultGroundMaterialColor, 0.0f, 0.1f);
+        var material = game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.Create3DPrimitiveWithBepu(type, new Primitive3DCreationOptionsWithBepu()
+        var entity = game.Create3DPrimitive(type, new Primitive3DCreationOptions()
         {
             EntityName = entityName,
             Material = material,
@@ -57,7 +49,7 @@ public static class BepuGameExtensions
         return entity;
     }
 
-    public static Entity Create2DPrimitiveWithBepu(this IGame game, Primitive2DModelType type, Primitive2DCreationOptionsWithBepu? options = null)
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
     {
         options ??= new();
 
@@ -66,9 +58,7 @@ public static class BepuGameExtensions
         var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
-        {
             model.Materials.Add(options.Material);
-        }
 
         var entity = new Entity(options.EntityName);
 
@@ -79,9 +69,7 @@ public static class BepuGameExtensions
             entity.AddChild(childEntity);
         }
         else
-        {
             entity.Add(new ModelComponent(model) { RenderGroup = options.RenderGroup });
-        }
 
         if (!options.IncludeCollider) return entity;
 
@@ -119,7 +107,7 @@ public static class BepuGameExtensions
         }
         else
         {
-            var colliderShape = Get2DColliderShapeWithBepu(type, options.Size, options.Depth);
+            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
 
             if (colliderShape is null) return entity;
 
@@ -133,7 +121,7 @@ public static class BepuGameExtensions
         return entity;
     }
 
-    public static Entity Create3DPrimitiveWithBepu(this IGame game, PrimitiveModelType type, Primitive3DCreationOptionsWithBepu? options = null)
+    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
     {
         options ??= new();
 
@@ -142,9 +130,7 @@ public static class BepuGameExtensions
         var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
-        {
             model.Materials.Add(options.Material);
-        }
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 
@@ -184,7 +170,7 @@ public static class BepuGameExtensions
         }
         else
         {
-            var colliderShape = Get3DColliderShapeWithBepu(type, options.Size);
+            var colliderShape = Get3DColliderShape(type, options.Size);
 
             if (colliderShape is null) return entity;
 
@@ -198,7 +184,7 @@ public static class BepuGameExtensions
         return entity;
     }
 
-    private static ColliderBase? Get2DColliderShapeWithBepu(Primitive2DModelType type, Vector2? size = null, float depth = 0)
+    private static ColliderBase? Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0)
     {
         return type switch
         {
@@ -215,10 +201,11 @@ public static class BepuGameExtensions
         };
     }
 
-    private static ColliderBase? Get3DColliderShapeWithBepu(PrimitiveModelType type, Vector3? size = null)
+    private static ColliderBase? Get3DColliderShape(PrimitiveModelType type, Vector3? size = null)
     => type switch
     {
         PrimitiveModelType.Plane => size is null ? new BoxCollider() : new() { Size = new Vector3(size.Value.X, 0, size.Value.Y) },
+        PrimitiveModelType.Sphere => size is null ? new SphereCollider() : new() { Radius = size.Value.X },
         PrimitiveModelType.Cube => size is null ? new BoxCollider() : new() { Size = size ?? Vector3.One },
         PrimitiveModelType.RectangularPrism => size is null ? new BoxCollider() : new() { Size = size ?? Vector3.One },
         PrimitiveModelType.Cylinder => size is null ? new CylinderCollider() : new()
@@ -227,6 +214,7 @@ public static class BepuGameExtensions
             Length = size.Value.Z,
             //RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
         },
+        PrimitiveModelType.Capsule => size is null ? new CapsuleCollider() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y },
         _ => throw new InvalidOperationException(),
     };
 }

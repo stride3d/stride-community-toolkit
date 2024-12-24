@@ -65,9 +65,9 @@ public static class GameExtensions
 
     public static Entity Add2DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector2? size = null)
     {
-        var validSize = size is null ? GameDefaults._default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
+        var validSize = size is null ? GameDefaults.Default2DGroundSize : new Vector3(size.Value.X, size.Value.Y, 0);
 
-        var material = game.CreateMaterial(GameDefaults._defaultGroundMaterialColor, 0.0f, 0.1f);
+        var material = game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
         var proceduralModel = Procedural3DModelBuilder.Build(PrimitiveModelType.Cube, validSize);
         var model = proceduralModel.Generate(game.Services);
@@ -218,9 +218,9 @@ public static class GameExtensions
 
     private static Entity CreateGround(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
     {
-        var validSize = size ?? GameDefaults._default3DGroundSize;
+        var validSize = size ?? GameDefaults.Default3DGroundSize;
 
-        var material = game.CreateMaterial(GameDefaults._defaultGroundMaterialColor, 0.0f, 0.1f);
+        var material = game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
         var entity = game.Create3DPrimitive(type, new()
         {
