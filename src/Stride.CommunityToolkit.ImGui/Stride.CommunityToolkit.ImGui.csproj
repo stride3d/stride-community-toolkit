@@ -12,7 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Hexa.NET.ImGui" Version="2.2.4" />
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2282" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2293" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
     </ItemGroup>
 
     <ItemGroup>
