@@ -27,36 +27,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Body2DComponent.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Bepu.Body2DComponent.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Bepu.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Collections.CollectionExtensions.yml",
       "output": {
         ".html": {
@@ -217,30 +187,10 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.yml",
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html"
         }
       },
       "version": ""
@@ -501,6 +451,26 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Physics.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html"
         }
       },
       "version": ""
@@ -1913,6 +1883,16 @@
         },
         ".json": {
           "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials.html"
         }
       },
       "version": ""

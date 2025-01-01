@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -54,7 +54,7 @@
             <div id="navbar">
               <form class="search" role="search" id="search">
                 <i class="bi bi-search"></i>
-                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
               </form>
             </div>
           </div>
@@ -90,10 +90,10 @@
 <p>In this example, we demonstrate how to set up a 3D scene that includes a capsule with a rigid body as well as a simple window displaying a text message.</p>
 <p>This example is organized into multiple methods for better readability and maintainability. It is structured as follows:</p>
 <ul>
-<li><code>Start(Scene rootScene)</code> This is the entry point for setting up the scene. It calls other methods to set up the 3D scene, add the capsule, load the font, and add the window.</li>
-<li><code>AddCapsule(Scene rootScene)</code> This method creates a 3D capsule and adds it to the scene at a specific position.</li>
+<li><code>Start(Scene scene)</code> This is the entry point for setting up the scene. It calls other methods to set up the 3D scene, add the capsule, load the font, and add the window.</li>
+<li><code>AddCapsule(Scene scene)</code> This method creates a 3D capsule and adds it to the scene at a specific position.</li>
 <li><code>LoadFont()</code> This method loads the font that will be used for the UI window.</li>
-<li><code>AddWindow(Scene rootScene)</code> This method calls <code>CreateUIEntity()</code> to create an entity with a UI component, and then adds this entity to the root scene.</li>
+<li><code>AddWindow(Scene scene)</code> This method calls <code>CreateUIEntity()</code> to create an entity with a UI component, and then adds this entity to the root scene.</li>
 <li><code>CreateUIEntity()</code> This method creates an entity that has a UI component. The UI component includes a canvas as its root element.</li>
 <li><code>CreateCanvas()</code> This method creates a canvas element that will be the root of the UI component.</li>
 <li><code>CreateTextBlock(SpriteFont? _font)</code> This method creates a <code>TextBlock</code> element that displays the message &quot;Hello, World&quot;. It uses the loaded font and sets other properties like color and size.</li>
@@ -118,25 +118,25 @@ using var game = new Game();
 
 game.Run(start: Start);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    AddCapsule(rootScene);
+    AddCapsule(scene);
 
     LoadFont();
 
-    AddWindow(rootScene);
+    AddWindow(scene);
 }
 
-void AddCapsule(Scene rootScene)
+void AddCapsule(Scene scene)
 {
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
-    entity.Scene = rootScene;
+    entity.Scene = scene;
 }
 
 void LoadFont()
@@ -144,11 +144,11 @@ void LoadFont()
     _font = game.Content.Load&lt;SpriteFont&gt;(&quot;StrideDefaultFont&quot;);
 }
 
-void AddWindow(Scene rootScene)
+void AddWindow(Scene scene)
 {
     var uiEntity = CreateUIEntity();
 
-    uiEntity.Scene = rootScene;
+    uiEntity.Scene = scene;
 }
 
 Entity CreateUIEntity()
@@ -209,7 +209,7 @@ TextBlock CreateTextBlock(SpriteFont? _font)
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.3</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.4</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

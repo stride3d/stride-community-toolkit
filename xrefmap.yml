@@ -1,95 +1,6 @@
 ### YamlMime:XRefMap
 sorted: true
 references:
-- uid: Stride.CommunityToolkit.Bepu
-  name: Stride.CommunityToolkit.Bepu
-  href: api/Stride.CommunityToolkit.Bepu.html
-  commentId: N:Stride.CommunityToolkit.Bepu
-  fullName: Stride.CommunityToolkit.Bepu
-  nameWithType: Stride.CommunityToolkit.Bepu
-- uid: Stride.CommunityToolkit.Bepu.Body2DComponent
-  name: Body2DComponent
-  href: api/Stride.CommunityToolkit.Bepu.Body2DComponent.html
-  commentId: T:Stride.CommunityToolkit.Bepu.Body2DComponent
-  fullName: Stride.CommunityToolkit.Bepu.Body2DComponent
-  nameWithType: Body2DComponent
-- uid: Stride.CommunityToolkit.Bepu.Body2DComponent.AccessBodyReference(Stride.Core.Mathematics.Vector3)
-  name: AccessBodyReference(Vector3)
-  href: api/Stride.CommunityToolkit.Bepu.Body2DComponent.html#Stride_CommunityToolkit_Bepu_Body2DComponent_AccessBodyReference_Stride_Core_Mathematics_Vector3_
-  commentId: M:Stride.CommunityToolkit.Bepu.Body2DComponent.AccessBodyReference(Stride.Core.Mathematics.Vector3)
-  fullName: Stride.CommunityToolkit.Bepu.Body2DComponent.AccessBodyReference(Stride.Core.Mathematics.Vector3)
-  nameWithType: Body2DComponent.AccessBodyReference(Vector3)
-- uid: Stride.CommunityToolkit.Bepu.Body2DComponent.AccessBodyReference*
-  name: AccessBodyReference
-  href: api/Stride.CommunityToolkit.Bepu.Body2DComponent.html#Stride_CommunityToolkit_Bepu_Body2DComponent_AccessBodyReference_
-  commentId: Overload:Stride.CommunityToolkit.Bepu.Body2DComponent.AccessBodyReference
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Bepu.Body2DComponent.AccessBodyReference
-  nameWithType: Body2DComponent.AccessBodyReference
-- uid: Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner(BepuPhysics.RigidPose,BepuPhysics.BodyInertia,BepuPhysics.Collidables.TypedIndex)
-  name: AttachInner(RigidPose, BodyInertia, TypedIndex)
-  href: api/Stride.CommunityToolkit.Bepu.Body2DComponent.html#Stride_CommunityToolkit_Bepu_Body2DComponent_AttachInner_BepuPhysics_RigidPose_BepuPhysics_BodyInertia_BepuPhysics_Collidables_TypedIndex_
-  commentId: M:Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner(BepuPhysics.RigidPose,BepuPhysics.BodyInertia,BepuPhysics.Collidables.TypedIndex)
-  fullName: Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner(BepuPhysics.RigidPose, BepuPhysics.BodyInertia, BepuPhysics.Collidables.TypedIndex)
-  nameWithType: Body2DComponent.AttachInner(RigidPose, BodyInertia, TypedIndex)
-- uid: Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner*
-  name: AttachInner
-  href: api/Stride.CommunityToolkit.Bepu.Body2DComponent.html#Stride_CommunityToolkit_Bepu_Body2DComponent_AttachInner_
-  commentId: Overload:Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner
-  nameWithType: Body2DComponent.AttachInner
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent
-  name: Simulation2DComponent
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html
-  commentId: T:Stride.CommunityToolkit.Bepu.Simulation2DComponent
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent
-  nameWithType: Simulation2DComponent
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate(System.Single)
-  name: AfterSimulationUpdate(float)
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html#Stride_CommunityToolkit_Bepu_Simulation2DComponent_AfterSimulationUpdate_System_Single_
-  commentId: M:Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate(System.Single)
-  name.vb: AfterSimulationUpdate(Single)
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate(float)
-  fullName.vb: Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate(Single)
-  nameWithType: Simulation2DComponent.AfterSimulationUpdate(float)
-  nameWithType.vb: Simulation2DComponent.AfterSimulationUpdate(Single)
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate*
-  name: AfterSimulationUpdate
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html#Stride_CommunityToolkit_Bepu_Simulation2DComponent_AfterSimulationUpdate_
-  commentId: Overload:Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent.AfterSimulationUpdate
-  nameWithType: Simulation2DComponent.AfterSimulationUpdate
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate(System.Single)
-  name: SimulationUpdate(float)
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html#Stride_CommunityToolkit_Bepu_Simulation2DComponent_SimulationUpdate_System_Single_
-  commentId: M:Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate(System.Single)
-  name.vb: SimulationUpdate(Single)
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate(float)
-  fullName.vb: Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate(Single)
-  nameWithType: Simulation2DComponent.SimulationUpdate(float)
-  nameWithType.vb: Simulation2DComponent.SimulationUpdate(Single)
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate*
-  name: SimulationUpdate
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html#Stride_CommunityToolkit_Bepu_Simulation2DComponent_SimulationUpdate_
-  commentId: Overload:Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent.SimulationUpdate
-  nameWithType: Simulation2DComponent.SimulationUpdate
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent.Update
-  name: Update()
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html#Stride_CommunityToolkit_Bepu_Simulation2DComponent_Update
-  commentId: M:Stride.CommunityToolkit.Bepu.Simulation2DComponent.Update
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent.Update()
-  nameWithType: Simulation2DComponent.Update()
-- uid: Stride.CommunityToolkit.Bepu.Simulation2DComponent.Update*
-  name: Update
-  href: api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html#Stride_CommunityToolkit_Bepu_Simulation2DComponent_Update_
-  commentId: Overload:Stride.CommunityToolkit.Bepu.Simulation2DComponent.Update
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Bepu.Simulation2DComponent.Update
-  nameWithType: Simulation2DComponent.Update
 - uid: Stride.CommunityToolkit.Collections
   name: Stride.CommunityToolkit.Collections
   href: api/Stride.CommunityToolkit.Collections.html
@@ -1349,22 +1260,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGround
   nameWithType: GameExtensions.Add3DGround
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
-  name: Add3DGroundWithBepu(Game, string?, Vector2?, bool)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DGroundWithBepu_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)
-  name.vb: Add3DGroundWithBepu(Game, String, Vector2?, Boolean)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game, string?, Stride.Core.Mathematics.Vector2?, bool)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu(Stride.Engine.Game, String, Stride.Core.Mathematics.Vector2?, Boolean)
-  nameWithType: GameExtensions.Add3DGroundWithBepu(Game, string?, Vector2?, bool)
-  nameWithType.vb: GameExtensions.Add3DGroundWithBepu(Game, String, Vector2?, Boolean)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu*
-  name: Add3DGroundWithBepu
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Add3DGroundWithBepu_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Add3DGroundWithBepu
-  nameWithType: GameExtensions.Add3DGroundWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting(Stride.Engine.Game,System.Single,System.Boolean)
   name: AddAllDirectionLighting(Game, float, bool)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddAllDirectionLighting_Stride_Engine_Game_System_Single_System_Boolean_
@@ -1410,6 +1305,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight
   nameWithType: GameExtensions.AddDirectionalLight
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer(Stride.Engine.Game,Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  name: AddEntityDebugSceneRenderer(Game, EntityDebugSceneRendererOptions?)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddEntityDebugSceneRenderer_Stride_Engine_Game_Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer(Stride.Engine.Game,Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  name.vb: AddEntityDebugSceneRenderer(Game, EntityDebugSceneRendererOptions)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer(Stride.Engine.Game, Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions?)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer(Stride.Engine.Game, Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  nameWithType: GameExtensions.AddEntityDebugSceneRenderer(Game, EntityDebugSceneRendererOptions?)
+  nameWithType.vb: GameExtensions.AddEntityDebugSceneRenderer(Game, EntityDebugSceneRendererOptions)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer*
+  name: AddEntityDebugSceneRenderer
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddEntityDebugSceneRenderer_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddEntityDebugSceneRenderer
+  nameWithType: GameExtensions.AddEntityDebugSceneRenderer
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game)
   name: AddGraphicsCompositor(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddGraphicsCompositor_Stride_Engine_Game_
@@ -1455,6 +1366,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddInfinite3DGround
   nameWithType: GameExtensions.AddInfinite3DGround
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer(Stride.Engine.Game)
+  name: AddParticleRenderer(Game)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddParticleRenderer_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer(Stride.Engine.Game)
+  nameWithType: GameExtensions.AddParticleRenderer(Game)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer*
+  name: AddParticleRenderer
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddParticleRenderer_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddParticleRenderer
+  nameWithType: GameExtensions.AddParticleRenderer
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Engine.Game,System.String)
   name: AddProfiler(Game, string?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddProfiler_Stride_Engine_Game_System_String_
@@ -1471,6 +1395,32 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler
   nameWithType: GameExtensions.AddProfiler
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature(Stride.Engine.Game,Stride.Rendering.RootRenderFeature)
+  name: AddRootRenderFeature(Game, RootRenderFeature)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddRootRenderFeature_Stride_Engine_Game_Stride_Rendering_RootRenderFeature_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature(Stride.Engine.Game,Stride.Rendering.RootRenderFeature)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature(Stride.Engine.Game, Stride.Rendering.RootRenderFeature)
+  nameWithType: GameExtensions.AddRootRenderFeature(Game, RootRenderFeature)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature*
+  name: AddRootRenderFeature
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddRootRenderFeature_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddRootRenderFeature
+  nameWithType: GameExtensions.AddRootRenderFeature
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer(Stride.Engine.Game,Stride.Rendering.Compositing.SceneRendererBase)
+  name: AddSceneRenderer(Game, SceneRendererBase)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSceneRenderer_Stride_Engine_Game_Stride_Rendering_Compositing_SceneRendererBase_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer(Stride.Engine.Game,Stride.Rendering.Compositing.SceneRendererBase)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer(Stride.Engine.Game, Stride.Rendering.Compositing.SceneRendererBase)
+  nameWithType: GameExtensions.AddSceneRenderer(Game, SceneRendererBase)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer*
+  name: AddSceneRenderer
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_AddSceneRenderer_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.AddSceneRenderer
+  nameWithType: GameExtensions.AddSceneRenderer
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptions)
   name: Create2DPrimitive(IGame, Primitive2DModelType, Primitive2DCreationOptions?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Stride_CommunityToolkit_Engine_Primitive2DCreationOptions_
@@ -1487,22 +1437,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive
   nameWithType: GameExtensions.Create2DPrimitive
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu)
-  name: Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitiveWithBepu_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu)
-  name.vb: Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType, Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu)
-  nameWithType: GameExtensions.Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu?)
-  nameWithType.vb: GameExtensions.Create2DPrimitiveWithBepu(IGame, Primitive2DModelType, Primitive2DCreationOptionsWithBepu)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu*
-  name: Create2DPrimitiveWithBepu
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create2DPrimitiveWithBepu_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitiveWithBepu
-  nameWithType: GameExtensions.Create2DPrimitiveWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptions)
   name: Create3DPrimitive(IGame, PrimitiveModelType, Primitive3DCreationOptions?)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Engine_Primitive3DCreationOptions_
@@ -1519,22 +1453,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive
   nameWithType: GameExtensions.Create3DPrimitive
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu)
-  name: Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu?)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitiveWithBepu_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu)
-  name.vb: Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu?)
-  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu(Stride.Games.IGame, Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType, Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu)
-  nameWithType: GameExtensions.Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu?)
-  nameWithType.vb: GameExtensions.Create3DPrimitiveWithBepu(IGame, PrimitiveModelType, Primitive3DCreationOptionsWithBepu)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu*
-  name: Create3DPrimitiveWithBepu
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_Create3DPrimitiveWithBepu_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitiveWithBepu
-  nameWithType: GameExtensions.Create3DPrimitiveWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)
   name: CreateMaterial(IGame, Color?, float, float)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_CreateMaterial_Stride_Games_IGame_System_Nullable_Stride_Core_Mathematics_Color__System_Single_System_Single_
@@ -1602,19 +1520,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DScene
   nameWithType: GameExtensions.SetupBase2DScene
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu(Stride.Engine.Game)
-  name: SetupBase2DSceneWithBepu(Game)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase2DSceneWithBepu_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu(Stride.Engine.Game)
-  nameWithType: GameExtensions.SetupBase2DSceneWithBepu(Game)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu*
-  name: SetupBase2DSceneWithBepu
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase2DSceneWithBepu_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2DSceneWithBepu
-  nameWithType: GameExtensions.SetupBase2DSceneWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene(Stride.Engine.Game)
   name: SetupBase3DScene(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DScene_Stride_Engine_Game_
@@ -1628,19 +1533,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DScene
   nameWithType: GameExtensions.SetupBase3DScene
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu(Stride.Engine.Game)
-  name: SetupBase3DSceneWithBepu(Game)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DSceneWithBepu_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu(Stride.Engine.Game)
-  nameWithType: GameExtensions.SetupBase3DSceneWithBepu(Game)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu*
-  name: SetupBase3DSceneWithBepu
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_SetupBase3DSceneWithBepu_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3DSceneWithBepu
-  nameWithType: GameExtensions.SetupBase3DSceneWithBepu
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders(Stride.Engine.Game)
   name: ShowColliders(Game)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_ShowColliders_Stride_Engine_Game_
@@ -1654,6 +1546,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders
   nameWithType: GameExtensions.ShowColliders
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)
+  name: TakeScreenShot(IGame, string, ImageFileType)
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_TakeScreenShot_Stride_Games_IGame_System_String_Stride_Graphics_ImageFileType_
+  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)
+  name.vb: TakeScreenShot(IGame, String, ImageFileType)
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame, string, Stride.Graphics.ImageFileType)
+  fullName.vb: Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame, String, Stride.Graphics.ImageFileType)
+  nameWithType: GameExtensions.TakeScreenShot(IGame, string, ImageFileType)
+  nameWithType.vb: GameExtensions.TakeScreenShot(IGame, String, ImageFileType)
+- uid: Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot*
+  name: TakeScreenShot
+  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_TakeScreenShot_
+  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot
+  nameWithType: GameExtensions.TakeScreenShot
 - uid: Stride.CommunityToolkit.Engine.ModelComponentExtensions
   name: ModelComponentExtensions
   href: api/Stride.CommunityToolkit.Engine.ModelComponentExtensions.html
@@ -2026,51 +1934,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.Size
   nameWithType: Primitive2DCreationOptions.Size
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu
-  name: Primitive2DCreationOptionsWithBepu
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html
-  commentId: T:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu
-  nameWithType: Primitive2DCreationOptionsWithBepu
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
-  name: Component
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Component
-  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
-  nameWithType: Primitive2DCreationOptionsWithBepu.Component
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component*
-  name: Component
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Component_
-  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Component
-  nameWithType: Primitive2DCreationOptionsWithBepu.Component
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
-  name: Depth
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Depth
-  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
-  nameWithType: Primitive2DCreationOptionsWithBepu.Depth
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth*
-  name: Depth
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Depth_
-  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Depth
-  nameWithType: Primitive2DCreationOptionsWithBepu.Depth
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
-  name: Size
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Size
-  commentId: P:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
-  nameWithType: Primitive2DCreationOptionsWithBepu.Size
-- uid: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size*
-  name: Size
-  href: api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive2DCreationOptionsWithBepu_Size_
-  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.Primitive2DCreationOptionsWithBepu.Size
-  nameWithType: Primitive2DCreationOptionsWithBepu.Size
 - uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions
   name: Primitive3DCreationOptions
   href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html
@@ -2103,38 +1966,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.Size
   nameWithType: Primitive3DCreationOptions.Size
-- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu
-  name: Primitive3DCreationOptionsWithBepu
-  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html
-  commentId: T:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu
-  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu
-  nameWithType: Primitive3DCreationOptionsWithBepu
-- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
-  name: Component
-  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Component
-  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
-  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
-  nameWithType: Primitive3DCreationOptionsWithBepu.Component
-- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component*
-  name: Component
-  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Component_
-  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Component
-  nameWithType: Primitive3DCreationOptionsWithBepu.Component
-- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
-  name: Size
-  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Size
-  commentId: P:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
-  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
-  nameWithType: Primitive3DCreationOptionsWithBepu.Size
-- uid: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size*
-  name: Size
-  href: api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.html#Stride_CommunityToolkit_Engine_Primitive3DCreationOptionsWithBepu_Size_
-  commentId: Overload:Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.Primitive3DCreationOptionsWithBepu.Size
-  nameWithType: Primitive3DCreationOptionsWithBepu.Size
 - uid: Stride.CommunityToolkit.Engine.PrimitiveCreationOptions
   name: PrimitiveCreationOptions
   href: api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html
@@ -4942,6 +4773,191 @@ references:
   commentId: N:Stride.CommunityToolkit.Rendering.Compositing
   fullName: Stride.CommunityToolkit.Rendering.Compositing
   nameWithType: Stride.CommunityToolkit.Rendering.Compositing
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer
+  name: EntityDebugSceneRenderer
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer
+  nameWithType: EntityDebugSceneRenderer
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.#ctor
+  name: EntityDebugSceneRenderer()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer__ctor
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.#ctor
+  name.vb: New()
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.EntityDebugSceneRenderer()
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.New()
+  nameWithType: EntityDebugSceneRenderer.EntityDebugSceneRenderer()
+  nameWithType.vb: EntityDebugSceneRenderer.New()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.#ctor(Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  name: EntityDebugSceneRenderer(EntityDebugSceneRendererOptions?)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer__ctor_Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.#ctor(Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  name.vb: New(EntityDebugSceneRendererOptions)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.EntityDebugSceneRenderer(Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.New(Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  nameWithType: EntityDebugSceneRenderer.EntityDebugSceneRenderer(EntityDebugSceneRendererOptions?)
+  nameWithType.vb: EntityDebugSceneRenderer.New(EntityDebugSceneRendererOptions)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.#ctor*
+  name: EntityDebugSceneRenderer
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.EntityDebugSceneRenderer
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.New
+  nameWithType: EntityDebugSceneRenderer.EntityDebugSceneRenderer
+  nameWithType.vb: EntityDebugSceneRenderer.New
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore(Stride.Rendering.RenderContext,Stride.Rendering.RenderDrawContext)
+  name: DrawCore(RenderContext, RenderDrawContext)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_DrawCore_Stride_Rendering_RenderContext_Stride_Rendering_RenderDrawContext_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore(Stride.Rendering.RenderContext,Stride.Rendering.RenderDrawContext)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore(Stride.Rendering.RenderContext, Stride.Rendering.RenderDrawContext)
+  nameWithType: EntityDebugSceneRenderer.DrawCore(RenderContext, RenderDrawContext)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore*
+  name: DrawCore
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_DrawCore_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore
+  nameWithType: EntityDebugSceneRenderer.DrawCore
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.InitializeCore
+  name: InitializeCore()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_InitializeCore
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.InitializeCore
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.InitializeCore()
+  nameWithType: EntityDebugSceneRenderer.InitializeCore()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.InitializeCore*
+  name: InitializeCore
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_InitializeCore_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.InitializeCore
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.InitializeCore
+  nameWithType: EntityDebugSceneRenderer.InitializeCore
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions
+  name: EntityDebugSceneRendererOptions
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions
+  nameWithType: EntityDebugSceneRendererOptions
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor
+  name: EntityDebugSceneRendererOptions()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions__ctor
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor
+  name.vb: New()
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions()
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.New()
+  nameWithType: EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions()
+  nameWithType.vb: EntityDebugSceneRendererOptions.New()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor(System.Int32,Stride.Core.Mathematics.Color)
+  name: EntityDebugSceneRendererOptions(int, Color)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions__ctor_System_Int32_Stride_Core_Mathematics_Color_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor(System.Int32,Stride.Core.Mathematics.Color)
+  name.vb: New(Integer, Color)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions(int, Stride.Core.Mathematics.Color)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.New(Integer, Stride.Core.Mathematics.Color)
+  nameWithType: EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions(int, Color)
+  nameWithType.vb: EntityDebugSceneRendererOptions.New(Integer, Color)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor*
+  name: EntityDebugSceneRendererOptions
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.New
+  nameWithType: EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions
+  nameWithType.vb: EntityDebugSceneRendererOptions.New
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault
+  name: CreateDefault()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_CreateDefault
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault()
+  nameWithType: EntityDebugSceneRendererOptions.CreateDefault()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault*
+  name: CreateDefault
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_CreateDefault_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault
+  nameWithType: EntityDebugSceneRendererOptions.CreateDefault
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor
+  name: FontColor
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_FontColor
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor
+  nameWithType: EntityDebugSceneRendererOptions.FontColor
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor*
+  name: FontColor
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_FontColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor
+  nameWithType: EntityDebugSceneRendererOptions.FontColor
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontSize
+  name: FontSize
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_FontSize
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontSize
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontSize
+  nameWithType: EntityDebugSceneRendererOptions.FontSize
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontSize*
+  name: FontSize
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_FontSize_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontSize
+  nameWithType: EntityDebugSceneRendererOptions.FontSize
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset
+  name: Offset
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_Offset
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset
+  nameWithType: EntityDebugSceneRendererOptions.Offset
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset*
+  name: Offset
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_Offset_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset
+  nameWithType: EntityDebugSceneRendererOptions.Offset
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName
+  name: ShowEntityName
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityName
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName
+  nameWithType: EntityDebugSceneRendererOptions.ShowEntityName
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName*
+  name: ShowEntityName
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityName_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName
+  nameWithType: EntityDebugSceneRendererOptions.ShowEntityName
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition
+  name: ShowEntityPosition
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityPosition
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition
+  nameWithType: EntityDebugSceneRendererOptions.ShowEntityPosition
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition*
+  name: ShowEntityPosition
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityPosition_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition
+  nameWithType: EntityDebugSceneRendererOptions.ShowEntityPosition
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
+  name: ShowFontBackground
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowFontBackground
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
+  nameWithType: EntityDebugSceneRendererOptions.ShowFontBackground
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground*
+  name: ShowFontBackground
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowFontBackground_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
+  nameWithType: EntityDebugSceneRendererOptions.ShowFontBackground
 - uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions
   name: GraphicsCompositorExtensions
   href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html
@@ -4961,6 +4977,22 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddCleanUIStage
   nameWithType: GraphicsCompositorExtensions.AddCleanUIStage
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer(Stride.Rendering.Compositing.GraphicsCompositor,Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  name: AddEntityDebugRenderer(GraphicsCompositor, EntityDebugSceneRendererOptions?)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddEntityDebugRenderer_Stride_Rendering_Compositing_GraphicsCompositor_Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer(Stride.Rendering.Compositing.GraphicsCompositor,Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  name.vb: AddEntityDebugRenderer(GraphicsCompositor, EntityDebugSceneRendererOptions)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer(Stride.Rendering.Compositing.GraphicsCompositor, Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions?)
+  fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer(Stride.Rendering.Compositing.GraphicsCompositor, Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions)
+  nameWithType: GraphicsCompositorExtensions.AddEntityDebugRenderer(GraphicsCompositor, EntityDebugSceneRendererOptions?)
+  nameWithType.vb: GraphicsCompositorExtensions.AddEntityDebugRenderer(GraphicsCompositor, EntityDebugSceneRendererOptions)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer*
+  name: AddEntityDebugRenderer
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddEntityDebugRenderer_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddEntityDebugRenderer
+  nameWithType: GraphicsCompositorExtensions.AddEntityDebugRenderer
 - uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddImmediateDebugRenderFeature(Stride.Rendering.Compositing.GraphicsCompositor)
   name: AddImmediateDebugRenderFeature(GraphicsCompositor)
   href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddImmediateDebugRenderFeature_Stride_Rendering_Compositing_GraphicsCompositor_
@@ -4974,6 +5006,32 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddImmediateDebugRenderFeature
   nameWithType: GraphicsCompositorExtensions.AddImmediateDebugRenderFeature
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddParticleStagesAndFeatures(Stride.Rendering.Compositing.GraphicsCompositor)
+  name: AddParticleStagesAndFeatures(GraphicsCompositor)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddParticleStagesAndFeatures_Stride_Rendering_Compositing_GraphicsCompositor_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddParticleStagesAndFeatures(Stride.Rendering.Compositing.GraphicsCompositor)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddParticleStagesAndFeatures(Stride.Rendering.Compositing.GraphicsCompositor)
+  nameWithType: GraphicsCompositorExtensions.AddParticleStagesAndFeatures(GraphicsCompositor)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddParticleStagesAndFeatures*
+  name: AddParticleStagesAndFeatures
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddParticleStagesAndFeatures_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddParticleStagesAndFeatures
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddParticleStagesAndFeatures
+  nameWithType: GraphicsCompositorExtensions.AddParticleStagesAndFeatures
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddRootRenderFeature(Stride.Rendering.Compositing.GraphicsCompositor,Stride.Rendering.RootRenderFeature)
+  name: AddRootRenderFeature(GraphicsCompositor, RootRenderFeature)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddRootRenderFeature_Stride_Rendering_Compositing_GraphicsCompositor_Stride_Rendering_RootRenderFeature_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddRootRenderFeature(Stride.Rendering.Compositing.GraphicsCompositor,Stride.Rendering.RootRenderFeature)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddRootRenderFeature(Stride.Rendering.Compositing.GraphicsCompositor, Stride.Rendering.RootRenderFeature)
+  nameWithType: GraphicsCompositorExtensions.AddRootRenderFeature(GraphicsCompositor, RootRenderFeature)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddRootRenderFeature*
+  name: AddRootRenderFeature
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddRootRenderFeature_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddRootRenderFeature
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddRootRenderFeature
+  nameWithType: GraphicsCompositorExtensions.AddRootRenderFeature
 - uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.AddSceneRenderer(Stride.Rendering.Compositing.GraphicsCompositor,Stride.Rendering.Compositing.SceneRendererBase)
   name: AddSceneRenderer(GraphicsCompositor, SceneRendererBase)
   href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html#Stride_CommunityToolkit_Rendering_Compositing_GraphicsCompositorExtensions_AddSceneRenderer_Stride_Rendering_Compositing_GraphicsCompositor_Stride_Rendering_Compositing_SceneRendererBase_
