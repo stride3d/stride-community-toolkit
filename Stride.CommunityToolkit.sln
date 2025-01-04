@@ -81,6 +81,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example13_RootRendererShade
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Bullet", "src\Stride.CommunityToolkit.Bullet\Stride.CommunityToolkit.Bullet.csproj", "{648369C0-1090-4414-BCE1-D661CE85583F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic3DScene_BulletPhysics", "examples\code-only\Example01_Basic3DScene_BulletPhysics\Example01_Basic3DScene_BulletPhysics.csproj", "{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -214,6 +216,10 @@ Global
 		{648369C0-1090-4414-BCE1-D661CE85583F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{648369C0-1090-4414-BCE1-D661CE85583F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{648369C0-1090-4414-BCE1-D661CE85583F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -242,6 +248,7 @@ Global
 		{EE31DB88-2FE2-45ED-B80F-76F0C1CB2008} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{8821704B-5698-4C9A-B05F-C18B7122DD8B} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{E8FA4D0B-D5B3-48B4-AFB5-CEF86BFF88BC} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
