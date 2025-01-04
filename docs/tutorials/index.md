@@ -13,8 +13,8 @@ New to Stride? Start with these tutorials to get familiar with the basics of the
 ## Stride Community Toolkit Tutorials
 
 1. Mathematics
- - [Easing](mathematics/easing.md)
+   - [Easing](mathematics/easing.md)
 1. Physics
- - [Pick and aim](physics/pick-and-aim.md)
+   - [Pick and aim](physics/pick-and-aim.md)
 1. Textures
- - [Adding a Texture at Runtime](textures/add-a-texture.md)
+   - [Adding a Texture at Runtime](textures/add-a-texture.md)
