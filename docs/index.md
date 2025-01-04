@@ -13,15 +13,18 @@ _disableToc: false
 The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a set of C# helpers and [extensions](manual/animation-extensions/index.md) designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and streamlines routine development tasks 🛠️, making it easier to build applications for Stride using .NET 8 🎉.
 
 > [!TIP]
-> While the toolkit's extensions are helpful for many developers, experienced game developers may prefer to examine the toolkit's source code directly. The extensions are essentially convenience wrappers, and advanced users might benefit from implementing their own solutions based on the toolkit's code.
+> Experienced developers might prefer exploring the toolkit's source code directly. These extensions are convenience wrappers, offering a foundation for advanced users to build custom solutions.
 
 ## 📦 Libraries
 
 The toolkit includes the following libraries:
 
-- `Stride.CommunityToolkit`: This is the core library. Use it for general-purpose extensions in a regular Stride project or for a code-only approach.
-- `Stride.CommunityToolkit.Windows`: This library contains Windows-specific dependencies required for code-only approach.
-- `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
+- [`Stride.CommunityToolkit`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit): This is the core library. Use it for general-purpose extensions in a regular Stride project or for a code-only approach.
+- [`Stride.CommunityToolkit.Bepu`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu): This library contains Bepu Physics extensions.
+- [`Stride.CommunityToolkit.Bullet`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet): This library contains Bullet Physics extensions.
+- [`Stride.CommunityToolkit.ImGui`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui): This library contains ImgGui extensions.
+- [`Stride.CommunityToolkit.Skyboxes`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes): Enhances code-only projects by adding skybox functionality.
+- [`Stride.CommunityToolkit.Windows`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows): This library contains Windows-specific dependencies required for code-only approach.
 
 ## 🔧 Installation
 
