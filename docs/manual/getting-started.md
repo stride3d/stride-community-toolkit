@@ -37,7 +37,6 @@ dotnet add package Stride.CommunityToolkit --prerelease
 
 ### Additional toolkit packages
 
-- `Stride.CommunityToolkit.Windows`: This package includes the [necessary dependencies](https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj) required for code-only projects (`RuntimeIdentifier`, package reference `Stride.Core.Assets.CompilerApp`).
-- `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
+[!INCLUDE [global-note](../includes/libraries.md)]
 
 Explore the extensions available in the left navigation or dive into the code-only section for simple examples.

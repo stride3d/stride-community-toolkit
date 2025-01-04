@@ -17,14 +17,9 @@ The [Stride Community Toolkit](https://github.com/stride3d/stride-community-tool
 
 ## 📦 Libraries  
 
-The toolkit includes the following libraries, each designed to extend and enhance your Stride development experience:  
+The toolkit includes the following libraries, each designed to extend and enhance your Stride development experience:
 
-- [`Stride.CommunityToolkit`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit): The core library, providing general-purpose extensions for both regular Stride projects and code-only approaches.  
-- [`Stride.CommunityToolkit.Bepu`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu): Adds support for [BEPU Physics](https://github.com/bepu/bepuphysics2), a pure C# 3D real time physics simulation library.   
-- [`Stride.CommunityToolkit.Bullet`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet): Adds support for [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html). Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.  
-- [`Stride.CommunityToolkit.ImGui`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui): Includes extensions for [Dear ImGui](https://github.com/ocornut/imgui), a fast and simple-to-use graphical user interface (GUI) library, through a C# wrapper [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui). Ideal for creating debugging tools, editor windows, and in-game UI elements.  
-- [`Stride.CommunityToolkit.Skyboxes`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes): Enhances code-only projects by adding skybox functionality.
-- [`Stride.CommunityToolkit.Windows`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows): This library contains Windows-specific dependencies required for code-only approach.
+[!INCLUDE [global-note](includes/libraries.md)]
 
 ## 🔧 Installation
 
