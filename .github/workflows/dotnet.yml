@@ -2,10 +2,11 @@ name: .NET Build Test
 
 env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+  PROJECT_PATH_BULLET: src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
+  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
   PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
-  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
-  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
 
 on:
   workflow_dispatch:
@@ -95,6 +96,13 @@ jobs:
 
     - name: Build Stride.CommunityToolkit.Bepu
       run: dotnet build ${{ env.PROJECT_PATH_BEPU }} --no-restore
+
+    # Stride.CommunityToolkit.Bullet
+    - name: Restore Stride.CommunityToolkit.Bullet dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH_BULLET }}
+
+    - name: Build Stride.CommunityToolkit.Bullet
+      run: dotnet build ${{ env.PROJECT_PATH_BULLET }} --no-restore
 
     # Stride.CommunityToolkit.ImGui
     - name: Restore Stride.CommunityToolkit.ImGui dependencies
