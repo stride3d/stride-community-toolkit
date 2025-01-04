@@ -23,9 +23,9 @@ Some extensions return `Entity` so it can be further modified.
 - [`Add3DCamera()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCamera(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector3},System.Nullable{Stride.Core.Mathematics.Vector3},Stride.Engine.Processors.CameraProjectionMode)) - Adds 3D camera
 - [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String)) - Adds directional light
 - [`AddSkybox()`](xref:Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)) - Adds skybox
-- [`Add2DGround()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add2DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2})) - Adds 2D ground
+- [`Add2DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.Add2DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2})) - Adds 2D ground
 - [`Add3DGround()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.Add3DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)) - Adds 3D ground
-- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddInfinite3DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)) - Adds infinite 3D ground 
+- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)) - Adds infinite 3D ground 
 
 ## GraphicsCompositorExtensions.cs
 
