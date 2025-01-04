@@ -1,4 +1,4 @@
-Imports Stride.CommunityToolkit.Bullet
+Imports Stride.CommunityToolkit.Bepu
 Imports Stride.CommunityToolkit.Engine
 Imports Stride.CommunityToolkit.Rendering.ProceduralModels
 Imports Stride.CommunityToolkit.Skyboxes
