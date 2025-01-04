@@ -20,7 +20,7 @@ Ensure the following are installed to build/run the project. If you're on Stride
    - [Visual Studio Code](https://code.visualstudio.com/) (Free, 95MB)
       - Install the **C# Dev Kit** extension 
       - Restart Visual Studio Code to ensure `dotnet` command functions properly
-   - Rider (Paid)
+   - [Rider](https://www.jetbrains.com/rider/) (Free for non-commercial use)
 
 ## 📦 Adding the NuGet package
 
