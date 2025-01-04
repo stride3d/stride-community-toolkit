@@ -39,6 +39,7 @@ The following instructions will guide you through creating a new Stride project 
 The provided C# code example demonstrates the basic usage of the Stride Game Engine.
 
 ```csharp
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
