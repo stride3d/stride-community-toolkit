@@ -15,14 +15,14 @@ The [Stride Community Toolkit](https://github.com/stride3d/stride-community-tool
 > [!TIP]
 > Experienced developers might prefer exploring the toolkit's source code directly. These extensions are convenience wrappers, offering a foundation for advanced users to build custom solutions.
 
-## 📦 Libraries
+## 📦 Libraries  
 
-The toolkit includes the following libraries:
+The toolkit includes the following libraries, each designed to extend and enhance your Stride development experience:  
 
-- [`Stride.CommunityToolkit`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit): This is the core library. Use it for general-purpose extensions in a regular Stride project or for a code-only approach.
-- [`Stride.CommunityToolkit.Bepu`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu): This library contains Bepu Physics extensions.
-- [`Stride.CommunityToolkit.Bullet`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet): This library contains Bullet Physics extensions.
-- [`Stride.CommunityToolkit.ImGui`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui): This library contains ImgGui extensions.
+- [`Stride.CommunityToolkit`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit): The core library, providing general-purpose extensions for both regular Stride projects and code-only approaches.  
+- [`Stride.CommunityToolkit.Bepu`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu): Adds support for [BEPU Physics](https://github.com/bepu/bepuphysics2), a pure C# 3D real time physics simulation library.   
+- [`Stride.CommunityToolkit.Bullet`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet): Adds support for [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html). Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.  
+- [`Stride.CommunityToolkit.ImGui`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui): Includes extensions for [Dear ImGui](https://github.com/ocornut/imgui), a fast and simple-to-use graphical user interface (GUI) library, through a C# wrapper [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui). Ideal for creating debugging tools, editor windows, and in-game UI elements.  
 - [`Stride.CommunityToolkit.Skyboxes`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes): Enhances code-only projects by adding skybox functionality.
 - [`Stride.CommunityToolkit.Windows`](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows): This library contains Windows-specific dependencies required for code-only approach.
 
@@ -57,10 +57,11 @@ These resources provide comprehensive information and support for developers at 
 
 We would like to thank our contributors for expanding the toolkit's capabilities:
 
-- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
-- [Doprez](https://github.com/Doprez): Extensions
-- [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
-- [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs
 - [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
-- [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
 - [DockFrankenstein](https://github.com/DockFrankenstein): Script System Extensions
+- [Doprez](https://github.com/Doprez): Extensions, docs
+- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
+- [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
+- [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
+- [Johan Gustafsson](https://github.com/johang88): Extensions
+- [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs
