@@ -11,7 +11,6 @@ game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase3DScene();
     game.AddSkybox();
-    game.AddProfiler();
 
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
