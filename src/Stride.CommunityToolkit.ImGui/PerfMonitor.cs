@@ -553,8 +553,6 @@ public class PerfMonitor : BaseWindow
         readonly ThreadSampleCollection _target;
         readonly bool _customDepth;
 
-
-
         public PerfSampler(string id, PerfMonitor monitor, int customDepthParam = -1)
         {
             _id = id;
