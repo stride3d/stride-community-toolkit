@@ -13,6 +13,10 @@ The following instructions will guide you through creating a new Stride project 
    ```
    dotnet add package Stride.CommunityToolkit.Windows --prerelease
    ```
+1. **Add NuGet Package:** Execute the following command to add the Physics package.
+   ```
+   dotnet add package Stride.CommunityToolkit.Bepu --prerelease
+   ```
 1. **Update Program.cs:** Paste the [example code](#example-code) provided below into your `Program.cs` file.
 1. **Build the Project (Optional):** The `dotnet build` command is used to compile your Stride project, generating executable files and checking for any errors in your code. This step is optional as the subsequent `dotnet run` command will automatically build the project if it hasn't been built already. To manually build the project, execute the following command:
    ```bash
@@ -29,7 +33,9 @@ The following instructions will guide you through creating a new Stride project 
  
 1. **Create a C# Console Application:** Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 8.
 1. **Add NuGet Package:** Search for and add the `Stride.CommunityToolkit.Windows` NuGet package, ensuring you opt for the pre-release version.
-   - This package will install all the necessary Stride NuGet packages.
+   - This package will add all the necessary Stride NuGet packages.
+1. **Add NuGet Package:** Search for and add the `Stride.CommunityToolkit.Bepu` NuGet package, ensuring you opt for the pre-release version.
+   - This package will add the Bepu Physics library to your project.
 1. **Update Program.cs:** Paste the example code (provided below) into your `Program.cs` file.
 1. **Run the Project:** Build and run your project using the IDE's run functionality.
 1. **Enjoy Stride:** If everything is set up correctly, you should now be able to run and enjoy your Stride project.
