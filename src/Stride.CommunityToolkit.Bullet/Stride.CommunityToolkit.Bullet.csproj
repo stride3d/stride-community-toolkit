@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Title>Stride Community Toolkit - Bullet Physics</Title>
+        <Description>
+            A specialized extension of the Stride Community Toolkit, providing easy-to-use Bullet Physics utilities for Stride projects. Enhance your Stride scenes with realistic physics simulations without needing additional assets or complex setup.
+        </Description>
+    </PropertyGroup>
+
+    <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,3 +1,4 @@
+open Stride.CommunityToolkit.Bepu;
 open Stride.CommunityToolkit.Engine;
 open Stride.CommunityToolkit.Skyboxes;
 open Stride.CommunityToolkit.Rendering.ProceduralModels;

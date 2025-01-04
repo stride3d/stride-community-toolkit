@@ -540,7 +540,7 @@ public class PerfMonitor : BaseWindow
     /// <summary>
     /// Put this within a using statement to log performance of the code within it.
     /// Creates a new <see cref="SampleInstance"/> for the attached <see cref="PerfMonitor"/>
-    /// once <see cref="PerfSampler(string, PerfMonitor)"/> and <see cref="Dispose()"/> have been called.
+    /// once <see cref="PerfSampler(string, PerfMonitor, int)"/> and <see cref="Dispose()"/> have been called.
     /// The duration sent to the <see cref="PerfMonitor"/> will be the one between those calls.
     /// </summary>
     public readonly struct PerfSampler : System.IDisposable
@@ -552,8 +552,6 @@ public class PerfMonitor : BaseWindow
         readonly long? _mem;
         readonly ThreadSampleCollection _target;
         readonly bool _customDepth;
-
-
 
         public PerfSampler(string id, PerfMonitor monitor, int customDepthParam = -1)
         {

@@ -7,16 +7,14 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
-
-void Start(Scene rootScene)
+game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube);
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
+    entity.Transform.Position = new Vector3(0, 8, 0);
 
     entity.Scene = rootScene;
-}
+});

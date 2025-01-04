@@ -13,15 +13,13 @@ _disableToc: false
 The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a set of C# helpers and [extensions](manual/animation-extensions/index.md) designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and streamlines routine development tasks 🛠️, making it easier to build applications for Stride using .NET 8 🎉.
 
 > [!TIP]
-> While the toolkit's extensions are helpful for many developers, experienced game developers may prefer to examine the toolkit's source code directly. The extensions are essentially convenience wrappers, and advanced users might benefit from implementing their own solutions based on the toolkit's code.
+> Experienced developers might prefer exploring the toolkit's source code directly. These extensions are convenience wrappers, offering a foundation for advanced users to build custom solutions.
 
-## 📦 Libraries
+## 📦 Libraries  
 
-The toolkit includes the following libraries:
+The toolkit includes the following libraries, each designed to extend and enhance your Stride development experience:
 
-- `Stride.CommunityToolkit`: This is the core library. Use it for general-purpose extensions in a regular Stride project or for a code-only approach.
-- `Stride.CommunityToolkit.Windows`: This library contains Windows-specific dependencies required for code-only approach.
-- `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
+[!INCLUDE [global-note](includes/libraries.md)]
 
 ## 🔧 Installation
 
@@ -54,10 +52,11 @@ These resources provide comprehensive information and support for developers at 
 
 We would like to thank our contributors for expanding the toolkit's capabilities:
 
-- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
-- [Doprez](https://github.com/Doprez): Extensions
-- [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
-- [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs
 - [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
-- [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
 - [DockFrankenstein](https://github.com/DockFrankenstein): Script System Extensions
+- [Doprez](https://github.com/Doprez): Extensions, docs
+- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
+- [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
+- [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
+- [Johan Gustafsson](https://github.com/johang88): Extensions
+- [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs

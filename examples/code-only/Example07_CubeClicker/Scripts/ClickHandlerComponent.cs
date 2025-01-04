@@ -1,4 +1,5 @@
 using Example07_CubeClicker.Managers;
+using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;

@@ -1,7 +1,6 @@
 using Example.Common;
 using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Bepu.Engine;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
@@ -54,7 +53,7 @@ game.Run(start: (Action<Scene>?)((Scene rootScene) =>
     game.Window.AllowUserResizing = true;
     game.Window.Title = "2D Example";
 
-    game.SetupBase3DSceneWithBepu();
+    game.SetupBase3DScene();
     game.AddSkybox();
     //game.SetupBase2DSceneWithBepu();
 
@@ -275,7 +274,7 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 
         if (shapeModel == null) return;
 
-        var entity = game.Create2DPrimitiveWithBepu(shapeModel.Type,
+        var entity = game.Create2DPrimitive(shapeModel.Type,
             new()
             {
                 Size = shapeModel.Size,
@@ -307,7 +306,7 @@ void Add3DShapes(PrimitiveModelType? type = null, int count = 5)
 
         if (shapeModel == null) return;
 
-        var entity = game.Create3DPrimitiveWithBepu(shapeModel.Type,
+        var entity = game.Create3DPrimitive(shapeModel.Type,
             new()
             {
                 Size = shapeModel.Size,
