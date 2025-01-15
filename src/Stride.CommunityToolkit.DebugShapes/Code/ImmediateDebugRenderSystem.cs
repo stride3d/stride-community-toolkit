@@ -9,7 +9,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.Rendering.DebugShapes;
+namespace Stride.CommunityToolkit.DebugShapes.Code;
 
 public class ImmediateDebugRenderSystem : GameSystemBase
 {

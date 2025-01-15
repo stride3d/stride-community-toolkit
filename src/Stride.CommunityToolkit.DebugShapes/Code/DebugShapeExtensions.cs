@@ -1,12 +1,6 @@
-using Stride.CommunityToolkit.Rendering.DebugShapes;
 using Stride.Engine;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 public static class DebugShapeExtensions
