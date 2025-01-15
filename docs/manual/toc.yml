@@ -54,6 +54,8 @@
       href: game-extensions/index.md
     - name: Model
       href: model-extensions/index.md
+    - name: Physics
+      href: physics-extensions/index.md
     - name: Script
       href: script-extensions/index.md
     - name: Script System

@@ -1,7 +1,9 @@
-using Stride.Engine;
-using Stride.Physics;
+using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
+using Stride.CommunityToolkit.Engine;
+using Stride.Core.Mathematics;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
 /// Provides options for creating a primitive entity in a 3D scene.
@@ -22,11 +24,11 @@ public class Primitive3DCreationOptions : PrimitiveCreationOptions
     public Vector3? Size { get; set; }
 
     /// <summary>
-    /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of <see cref="RigidbodyComponent"/>.
+    /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of <see cref="BodyComponent"/>.
     /// </summary>
     /// <remarks>
-    /// By default, a <see cref="RigidbodyComponent"/> is assigned to the entity to handle physics simulations,
+    /// By default, a <see cref="BodyComponent"/> is assigned to the entity to handle physics simulations,
     /// but you can override this with a custom physics component if needed.
     /// </remarks>
-    public PhysicsComponent? PhysicsComponent { get; set; } = new RigidbodyComponent();
+    public CollidableComponent Component { get; set; } = new BodyComponent() { Collider = new CompoundCollider() };
 }

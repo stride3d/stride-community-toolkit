@@ -20,7 +20,7 @@ Ensure the following are installed to build/run the project. If you're on Stride
    - [Visual Studio Code](https://code.visualstudio.com/) (Free, 95MB)
       - Install the **C# Dev Kit** extension 
       - Restart Visual Studio Code to ensure `dotnet` command functions properly
-   - Rider (Paid)
+   - [Rider](https://www.jetbrains.com/rider/) (Free for non-commercial use)
 
 ## 📦 Adding the NuGet package
 
@@ -37,7 +37,6 @@ dotnet add package Stride.CommunityToolkit --prerelease
 
 ### Additional toolkit packages
 
-- `Stride.CommunityToolkit.Windows`: This package includes the [necessary dependencies](https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj) required for code-only projects (`RuntimeIdentifier`, package reference `Stride.Core.Assets.CompilerApp`).
-- `Stride.CommunityToolkit.Skyboxes`: Enhances code-only projects by adding skybox functionality.
+[!INCLUDE [global-note](../includes/libraries.md)]
 
 Explore the extensions available in the left navigation or dive into the code-only section for simple examples.

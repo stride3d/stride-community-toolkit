@@ -1,5 +1,7 @@
 //using DebugShapes;
 using Example.Common;
+using Example_2D_Playground;
+using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -96,6 +98,8 @@ void Start(Scene rootScene)
     //game.DebugTextSystem.Visible = true;
     //game.Services.AddService(DebugDraw);
     //game.GameSystems.Add(DebugDraw);
+
+    game.ShowColliders();
 }
 
 void Update(Scene scene, GameTime time)
@@ -218,9 +222,13 @@ void AddBackground(string fileName)
     entity.Scene = scene;
 }
 
+// Search ImmediateDebugRenderObject in the project
+
 void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 {
     var entity = new Entity();
+
+    entity.Add(new CustomScriptComponent());
 
     for (int i = 1; i <= count; i++)
     {
@@ -230,7 +238,7 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 
         if (type == null || i == 1)
         {
-            entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
+            entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size });
         }
         else
         {

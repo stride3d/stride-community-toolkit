@@ -1,5 +1,6 @@
 using Example08_DebugShapes.Scripts;
 using Stride.CommunityToolkit.DebugShapes.Code;
+using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;

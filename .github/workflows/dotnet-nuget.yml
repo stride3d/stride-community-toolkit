@@ -2,10 +2,11 @@ name: .NET Build and Publish Nuget
 
 env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+  PROJECT_PATH_BULLET: src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
+  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
   PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
-  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
-  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
 
@@ -128,6 +129,24 @@ jobs:
       uses: alirezanet/publish-nuget@v3.1.0
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_BEPU }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        TAG_COMMIT: false
+
+    # Stride.CommunityToolkit.Bullet
+    - name: Restore dependencies - Stride.CommunityToolkit.Bullet
+      run: dotnet restore ${{ env.PROJECT_PATH_BULLET }}
+
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH_BULLET }} --no-restore
+
+    - name: Test
+      run: dotnet test ${{ env.PROJECT_PATH_BULLET }} --no-build --verbosity normal
+
+    - name: Publish Stride Community Toolkit - Bullet
+      uses: alirezanet/publish-nuget@v3.1.0
+      with:
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_BULLET }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         TAG_COMMIT: false

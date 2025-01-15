@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
