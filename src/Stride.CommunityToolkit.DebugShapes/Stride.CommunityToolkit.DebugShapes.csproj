@@ -25,4 +25,26 @@ A specialized extension of the Stride Community Toolkit, providing easy-to-use D
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Effects\LinePrimitiveShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Effects\PrimitiveShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Effects\LinePrimitiveShader.sdsl">
+        <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
+      </None>
+      <None Update="Effects\PrimitiveShader.sdsl">
+        <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
 </Project>
