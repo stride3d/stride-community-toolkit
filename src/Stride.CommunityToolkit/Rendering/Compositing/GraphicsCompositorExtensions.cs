@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Rendering.DebugShapes;
 using Stride.Particles.Rendering;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
@@ -106,46 +105,6 @@ public static class GraphicsCompositorExtensions
     public static void AddRootRenderFeature(this GraphicsCompositor graphicsCompositor, RootRenderFeature renderFeature)
     {
         graphicsCompositor.RenderFeatures.Add(renderFeature);
-    }
-
-    /// <summary>
-    /// Adds an immediate debug render feature to the specified <see cref="GraphicsCompositor"/>.
-    /// This method ensures the debug render feature is added only once and links it with both the
-    /// "Opaque" and "Transparent" render stages.
-    /// </summary>
-    /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> to modify.</param>
-    /// <exception cref="NullReferenceException">
-    /// Thrown when the "Opaque" or "Transparent" render stages are not found in the <paramref name="graphicsCompositor"/>.
-    /// </exception>
-    public static void AddImmediateDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
-    {
-        var debugRenderFeatures = graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
-
-        if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
-        {
-            throw new NullReferenceException("Opaque RenderStage not found");
-        }
-
-        if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
-        {
-            throw new NullReferenceException("Transparent RenderStage not found");
-        }
-
-        if (!debugRenderFeatures.Any())
-        {
-            var newDebugRenderFeature = new ImmediateDebugRenderFeature()
-            {
-                RenderStageSelectors = {
-                        new ImmediateDebugRenderStageSelector
-                        {
-                            OpaqueRenderStage = opaqueRenderStage,
-                            TransparentRenderStage = transparentRenderStage
-                        }
-                    }
-            };
-
-            graphicsCompositor.RenderFeatures.Add(newDebugRenderFeature);
-        }
     }
 
     /// <summary>

@@ -4,9 +4,14 @@
         <Title>Stride Community Toolkit</Title>
         <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET 8.</Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PackageVersion>1.0.2</PackageVersion>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+        <None Include="*.sdpkg" Pack="true" PackagePath="stride" />
+    </ItemGroup>
 
     <ItemGroup>
         <Using Include="Stride.Core" />
@@ -26,32 +31,12 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>EntityExtensions.GetComponents.tt</DependentUpon>
         </Compile>
-        <Compile Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>LinePrimitiveShader.sdsl</DependentUpon>
-        </Compile>
-        <Compile Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>PrimitiveShader.sdsl</DependentUpon>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>
         <None Update="Engine\EntityExtensions.GetComponents.tt">
             <Generator>TextTemplatingFileGenerator</Generator>
             <LastGenOutput>EntityExtensions.GetComponents.cs</LastGenOutput>
-        </None>
-        <None Update="Rendering\DebugShapes\Effects\LinePrimitiveShader.sdsl">
-            <Generator>StrideShaderKeyGenerator</Generator>
-            <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
-        </None>
-        <None Update="Rendering\DebugShapes\Effects\PrimitiveShader.sdsl">
-            <Generator>StrideShaderKeyGenerator</Generator>
-            <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
         </None>
     </ItemGroup>
 

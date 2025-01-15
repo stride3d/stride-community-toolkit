@@ -2,6 +2,7 @@
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using Stride.Core.Collections;
+using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering;
 using static Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature;
