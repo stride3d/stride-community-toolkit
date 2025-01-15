@@ -2,6 +2,7 @@
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using Stride.Core.Collections;
+using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.DebugRendering;
 using Stride.Graphics;
@@ -9,7 +10,7 @@ using Stride.Rendering;
 using System.Runtime.InteropServices;
 using Buffer = Stride.Graphics.Buffer;
 
-namespace Stride.CommunityToolkit.Rendering.DebugShapes;
+namespace Stride.CommunityToolkit.DebugShapes.Code;
 
 public class ImmediateDebugRenderFeature : RootRenderFeature
 {
@@ -393,9 +394,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             ];
 
             if (indexData.Length >= 0xFFFF && device.Features.CurrentProfile <= GraphicsProfile.Level_9_3)
-            {
                 throw new InvalidOperationException("Cannot generate more than 65535 indices on feature level HW <= 9.3");
-            }
 
             // copy all our primitive data into the buffers
 
@@ -614,9 +613,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             buffer = newBuffer;
         }
         else
-        {
             buffer.SetData(commandList, dataPtr);
-        }
     }
 
     private void CheckBuffers(RenderDrawContext context)

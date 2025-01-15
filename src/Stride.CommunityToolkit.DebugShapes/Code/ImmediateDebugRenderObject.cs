@@ -2,16 +2,17 @@
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using Stride.Core.Collections;
+using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering;
-using static Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature;
-using Capsule = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Capsule;
-using Cone = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Cone;
-using Cube = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Cube;
-using Cylinder = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Cylinder;
-using Sphere = Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.Sphere;
+using static Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature;
+using Capsule = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Capsule;
+using Cone = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Cone;
+using Cube = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Cube;
+using Cylinder = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Cylinder;
+using Sphere = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Sphere;
 
-namespace Stride.CommunityToolkit.Rendering.DebugShapes;
+namespace Stride.CommunityToolkit.DebugShapes.Code;
 
 public class ImmediateDebugRenderObject : RenderObject
 {

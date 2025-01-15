@@ -3,9 +3,9 @@
 
 using Stride.Rendering;
 using System.ComponentModel;
-using static Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature;
+using static Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature;
 
-namespace Stride.CommunityToolkit.Rendering.DebugShapes;
+namespace Stride.CommunityToolkit.DebugShapes.Code;
 
 public class ImmediateDebugRenderStageSelector : RenderStageSelector
 {

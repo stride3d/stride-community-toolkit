@@ -1,24 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Title>Stride Community Toolkit - ImgGui</Title>
+        <Title>Stride Community Toolkit - DebugShapes</Title>
         <Description>
-            A specialized extension of the Stride Community Toolkit, providing easy-to-use ImGui utilities for Stride projects. Enhance your Stride scenes with dynamic UI without needing additional assets or complex setup.
+A specialized extension of the Stride Community Toolkit, providing easy-to-use Debug shapes to be able to visualize and debug your Stride scenes. Enhance your Stride scenes with dynamic models without needing additional assets or complex setup.
         </Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
-
+    
     <ItemGroup>
         <None Include="Assets\*.*" Pack="true" PackagePath="stride\Assets" />
         <None Include="Resources\*.*" Pack="true" PackagePath="stride\Resources" />
         <None Include="Effects\*.*" Pack="true" PackagePath="stride\Effects" />
         <None Include="*.sdpkg" Pack="true" PackagePath="stride" />
     </ItemGroup>
-
+    
     <ItemGroup>
-        <PackageReference Include="Hexa.NET.ImGui" Version="2.2.4" />
         <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2293" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
     </ItemGroup>
 
@@ -27,7 +26,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Effects\ImGuiShader.sdsl.cs">
+      <Compile Update="Effects\LinePrimitiveShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Effects\PrimitiveShader.sdsl.cs">
         <DesignTime>True</DesignTime>
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
         <AutoGen>True</AutoGen>
@@ -35,8 +39,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Effects\ImGuiShader.sdsl">
-        <LastGenOutput>ImGuiShader.sdsl.cs</LastGenOutput>
+      <None Update="Effects\LinePrimitiveShader.sdsl">
+        <LastGenOutput>LinePrimitiveShader.sdsl.cs</LastGenOutput>
+      </None>
+      <None Update="Effects\PrimitiveShader.sdsl">
+        <LastGenOutput>PrimitiveShader.sdsl.cs</LastGenOutput>
       </None>
     </ItemGroup>
 

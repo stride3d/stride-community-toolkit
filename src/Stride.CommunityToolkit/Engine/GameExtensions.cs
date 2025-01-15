@@ -1,5 +1,5 @@
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.CommunityToolkit.Rendering.DebugShapes;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Engine.Processors;
@@ -420,24 +420,6 @@ public static class GameExtensions
     public static void AddRootRenderFeature(this Game game, RootRenderFeature renderFeature)
     {
         game.SceneSystem.GraphicsCompositor.AddRootRenderFeature(renderFeature);
-    }
-
-    /// <summary>
-    /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
-    /// <para>Registers the system to the service registry for easy access.</para>
-    /// </summary>
-    /// <param name="game"></param>
-    /// <param name="debugShapeRenderGroup"></param>
-    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
-    {
-        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
-
-        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
-#if DEBUG
-        debugDraw.Visible = true;
-#endif
-        game.Services.AddService(debugDraw);
-        game.GameSystems.Add(debugDraw);
     }
 
     public static void AddParticleRenderer(this Game game)
