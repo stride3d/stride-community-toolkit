@@ -8,7 +8,8 @@
     - The home page
     - Getings Started page
 1. Update `docs/docfx.json` with the new `.csproj` location, so the [API](../../api/index.md) documentation is generated for the new library.
-1. Update 
+1. Update `.github\workflows\dotnet.yml` with the new project
+1. Update `.github\workflows\dotnet-nuget.yml` with the new project
 1. <span class="badge text-bg-secondary">Optional</span> If you are adding an example projects, follow the folder structure pattern of the existing examples.
 1. <span class="badge text-bg-secondary">Optional</span> If you would like to add some guidance content, make sure you add new pages in the `docs/manual` folder and update the `toc.yml` file.
 
