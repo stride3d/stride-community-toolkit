@@ -7,7 +7,7 @@ The following instructions will guide you through creating a new Stride project 
 1. **Prerequisites:** Ensure you have all the prerequisites installed. Refer to the [Prerequisites](../getting-started.md) section for more information.
 1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to learn more about creating a new console application. Use the following command:
    ```
-   dotnet new console --framework net8.0
+   dotnet new console --framework net8.0 --name YourProjectName
    ```
 1. **Add NuGet Package:** Execute the following command to add the necessary NuGet package.
    ```
