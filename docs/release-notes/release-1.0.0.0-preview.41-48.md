@@ -43,7 +43,6 @@ This article lists the most significant changes in Stride Community Toolkit prev
 
 ### 📄 Docs
 * docs: Reference runtime win-x64 removed by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/160
-* docs: Reference runtime win-x64 removed by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/160
 * feat: Docs updated, mentioning --runtime win-x64 by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/141
 * docs: Description and Title added by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/135
 
@@ -65,10 +64,11 @@ This article lists the most significant changes in Stride Community Toolkit prev
 * refactor: Code improvements by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/183
 * feat: Enables sourcelink by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/184
 
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.47...v1.0.0.0-preview.48
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.46...1.0.0.0-preview.47
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.45...1.0.0.0-preview.46
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.44...1.0.0.0-preview.45
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.42...1.0.0.0-preview.44
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.41...1.0.0.0-preview.42
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.39...1.0.0.0-preview.41
+**Full Changelog**:
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.47...v1.0.0.0-preview.48
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.46...1.0.0.0-preview.47
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.45...1.0.0.0-preview.46
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.44...1.0.0.0-preview.45
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.42...1.0.0.0-preview.44
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.41...1.0.0.0-preview.42
+- https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.39...1.0.0.0-preview.41
