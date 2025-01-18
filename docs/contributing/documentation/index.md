@@ -21,7 +21,7 @@ Run the following command to build the documentation
 run.bat
 ```
 
-You should be ablet to access the documentation at `http://localhost:8080/`
+You should be able to access the documentation at `http://localhost:8080/`
 
 You can make changes to the documentation by editing the markdown files in the `docs` folder. Once you are done, re-run the `run.bat` file to see the changes.
 

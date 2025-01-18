@@ -3,7 +3,9 @@
 - [Stride.CommunityToolkit.Bepu](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu)
   - Adds support for [BEPU Physics](https://github.com/bepu/bepuphysics2), a pure C# 3D real time physics simulation library.   
 - [Stride.CommunityToolkit.Bullet](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet)
-  - Adds support for [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html). Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.  
+  - Adds support for [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html). Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.
+- [Stride.CommunityToolkit.DebugShapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.DebugShapes)
+  - Provides easy-to-use Debug shapes to be able to visualize and debug your Stride scenes   
 - [Stride.CommunityToolkit.ImGui](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui)
   - Includes extensions for [Dear ImGui](https://github.com/ocornut/imgui), a fast, simple-to-use graphical user interface (GUI) library, accessed via the C# wrapper [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui). Ideal for creating debugging tools, editor windows, and in-game UI elements.  
 - [Stride.CommunityToolkit.Skyboxes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes)
