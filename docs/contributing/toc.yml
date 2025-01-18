@@ -1,0 +1,23 @@
+items:
+- name: 🌟 Ways to Contribute
+  href: index.md
+  expanded: true
+- name: ⚙️ Major Release Workflow
+  href: major-release-workflow.md
+- name: 🤝 Contribution Workflow
+  expanded: false
+  href: https://doc.stride3d.net/latest/en/contributors/contribution-workflow/index.html
+  items:
+    - name: GitHub Pull Request Guidelines
+      href: https://doc.stride3d.net/latest/en/contributors/contribution-workflow/github-pull-request-guidelines.html
+    - name: XML Comments and Docs
+      href: https://doc.stride3d.net/latest/en/contributors/contribution-workflow/xml-comments-and-docs.html
+- name: 🛠️ Contribute to the toolkit
+  expanded: false
+  href: toolkit/index.md
+  items:
+  - name: New library project
+    href: toolkit/library-project.md
+- name: 📖 Contribute to the documentation
+  expanded: false
+  href: documentation/index.md
