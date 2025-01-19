@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class ImGuiExtension | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class ImGuiExtension | Stride Community Toolkit ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_ImGui_ImGuiExtension.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.ImGui.ImGuiExtension%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension">
+
+
+
+  <h1 id="Stride_CommunityToolkit_ImGui_ImGuiExtension" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension" class="text-break">
+Class ImGuiExtension  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.html">ImGui</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.ImGui.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ImGuiExtension</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">ImGuiExtension</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Child_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Child*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Child_System_Int32_System_Numerics_Vector2_Hexa_NET_ImGui_ImGuiChildFlags_Hexa_NET_ImGui_ImGuiWindowFlags_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Child(System.Int32,System.Numerics.Vector2,Hexa.NET.ImGui.ImGuiChildFlags,Hexa.NET.ImGui.ImGuiWindowFlags)">
+  Child(int, Vector2, ImGuiChildFlags, ImGuiWindowFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L87"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui Child(int cln = 0, Vector2 size = default, ImGuiChildFlags childFlags = ImGuiChildFlags.None, ImGuiWindowFlags flags = ImGuiWindowFlags.None)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>cln</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.vector2">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>childFlags</code> <span class="xref">ImGuiChildFlags</span></dt>
+    <dd></dd>
+    <dt><code>flags</code> <span class="xref">ImGuiWindowFlags</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ColorPicker3_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ColorPicker3*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ColorPicker3_System_String_Stride_Core_Mathematics_Color3__" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ColorPicker3(System.String,Stride.Core.Mathematics.Color3@)">
+  ColorPicker3(string, ref Color3)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L94"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool ColorPicker3(string label, ref Color3 color)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>label</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>color</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color3.cs">Color3</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ID_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ID*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ID_System_Int32_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ID(System.Int32)">
+  ID(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui ID(int id)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>id</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ID_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ID*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ID_System_String_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ID(System.String)">
+  ID(string)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui ID(string id)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>id</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Image_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Image*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Image_Stride_Graphics_Texture_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Image(Stride.Graphics.Texture)">
+  Image(Texture)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L111"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a texture to the ImGui element with the Texture width and height</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Image(Texture texture)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Image_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Image*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Image_Stride_Graphics_Texture_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Image(Stride.Graphics.Texture,System.Int32,System.Int32)">
+  Image(Texture, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L122"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a texture to the ImGui element with a custom width and height</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Image(Texture texture, int width, int height)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>texture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd></dd>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ImageButton_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ImageButton*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ImageButton_System_String_Stride_Graphics_Texture_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ImageButton(System.String,Stride.Graphics.Texture)">
+  ImageButton(string, Texture)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L133"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a texture to the ImGui element button with the Texture width and height</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool ImageButton(string text, Texture texture)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>text</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>texture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ImageButton_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ImageButton*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_ImageButton_System_String_Stride_Graphics_Texture_System_Int32_System_Int32_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.ImageButton(System.String,Stride.Graphics.Texture,System.Int32,System.Int32)">
+  ImageButton(string, Texture, int, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L146"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a texture to the ImGui element button with a custom width and height</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool ImageButton(string strid, Texture texture, int width, int height)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>strid</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>texture</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Graphics/Direct3D/Texture.Direct3D.cs">Texture</a></dt>
+    <dd></dd>
+    <dt><code>width</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>height</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Menu_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Menu*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Menu_System_String_System_Boolean__System_Boolean_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Menu(System.String,System.Boolean@,System.Boolean)">
+  Menu(string, out bool, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L152"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui Menu(string label, out bool open, bool enabled = true)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>label</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>open</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+    <dt><code>enabled</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_MenuBar_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.MenuBar*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_MenuBar_System_Boolean__" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.MenuBar(System.Boolean@)">
+  MenuBar(out bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L151"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui MenuBar(out bool open)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>open</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_PlotLines_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.PlotLines*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_PlotLines_System_String_System_Single__System_Int32_System_Int32_System_String_System_Single_System_Single_System_Numerics_Vector2_System_Int32_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.PlotLines(System.String,System.Single@,System.Int32,System.Int32,System.String,System.Single,System.Single,System.Numerics.Vector2,System.Int32)">
+  PlotLines(string, ref float, int, int, string, float, float, Vector2, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L214"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void PlotLines(string label, ref float values, int count, int offset = 0, string overlay = null, float valueMin = 3.4028235E+38, float valueMax = 3.4028235E+38, Vector2 size = default, int stride = 4)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>label</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>values</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>count</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>offset</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>overlay</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>valueMin</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>valueMax</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+    <dt><code>size</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.vector2">Vector2</a></dt>
+    <dd></dd>
+    <dt><code>stride</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Tooltip_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Tooltip*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Tooltip" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Tooltip">
+  Tooltip()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L70"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui Tooltip()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_UColumns_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.UColumns*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_UColumns_System_Int32_System_String_System_Boolean_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.UColumns(System.Int32,System.String,System.Boolean)">
+  UColumns(int, string, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L76"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui UColumns(int count, string id = null, bool border = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>count</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>id</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>border</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_UCombo_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.UCombo*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_UCombo_System_String_System_String_System_Boolean__Hexa_NET_ImGui_ImGuiComboFlags_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.UCombo(System.String,System.String,System.Boolean@,Hexa.NET.ImGui.ImGuiComboFlags)">
+  UCombo(string, string, out bool, ImGuiComboFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L66"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui UCombo(string label, string previewValue, out bool open, ImGuiComboFlags flags = ImGuiComboFlags.None)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>label</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>previewValue</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>open</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+    <dt><code>flags</code> <span class="xref">ImGuiComboFlags</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_UIndent_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.UIndent*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_UIndent_System_Single_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.UIndent(System.Single)">
+  UIndent(float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGuiIndent UIndent(float size = 0)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>size</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGuiIndent.html">DisposableImGuiIndent</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Window_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Window*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_ImGuiExtension_Window_System_String_System_Boolean__System_Boolean__Hexa_NET_ImGui_ImGuiWindowFlags_" data-uid="Stride.CommunityToolkit.ImGui.ImGuiExtension.Window(System.String,System.Boolean@,System.Boolean@,Hexa.NET.ImGui.ImGuiWindowFlags)">
+  Window(string, ref bool, out bool, ImGuiWindowFlags)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ImGuiExtension.DisposableImGui Window(string name, ref bool open, out bool collapsed, ImGuiWindowFlags flags = ImGuiWindowFlags.None)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>name</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd></dd>
+    <dt><code>open</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+    <dt><code>collapsed</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+    <dt><code>flags</code> <span class="xref">ImGuiWindowFlags</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.html">ImGuiExtension</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html">DisposableImGui</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/ImGuiExtension.cs/#L11" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

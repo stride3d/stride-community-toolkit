@@ -118,7 +118,7 @@
 <li>Restart Visual Studio Code to ensure <code>dotnet</code> command functions properly</li>
 </ul>
 </li>
-<li>Rider (Paid)</li>
+<li><a href="https://www.jetbrains.com/rider/">Rider</a> (Free for non-commercial use)</li>
 </ul>
 </li>
 </ol>
@@ -133,9 +133,43 @@
 </div>
 <h3 id="additional-toolkit-packages">Additional toolkit packages</h3>
 <ul>
-<li><code>Stride.CommunityToolkit.Windows</code>: This package includes the <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj">necessary dependencies</a> required for code-only projects (<code>RuntimeIdentifier</code>, package reference <code>Stride.Core.Assets.CompilerApp</code>).</li>
-<li><code>Stride.CommunityToolkit.Skyboxes</code>: Enhances code-only projects by adding skybox functionality.</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit">Stride.CommunityToolkit</a>
+<ul>
+<li>The core library, providing general-purpose extensions for both regular Stride projects and code-only approaches.</li>
 </ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu">Stride.CommunityToolkit.Bepu</a>
+<ul>
+<li>Adds support for <a href="https://github.com/bepu/bepuphysics2">BEPU Physics</a>, a pure C# 3D real time physics simulation library.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet">Stride.CommunityToolkit.Bullet</a>
+<ul>
+<li>Adds support for <a href="https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html">Bullet Physics</a>. Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.DebugShapes">Stride.CommunityToolkit.DebugShapes</a>
+<ul>
+<li>Provides easy-to-use Debug shapes to be able to visualize and debug your Stride scenes</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui">Stride.CommunityToolkit.ImGui</a>
+<ul>
+<li>Includes extensions for <a href="https://github.com/ocornut/imgui">Dear ImGui</a>, a fast, simple-to-use graphical user interface (GUI) library, accessed via the C# wrapper <a href="https://github.com/HexaEngine/Hexa.NET.ImGui">Hexa.NET.ImGui</a>. Ideal for creating debugging tools, editor windows, and in-game UI elements.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes">Stride.CommunityToolkit.Skyboxes</a>
+<ul>
+<li>Enhances code-only projects by adding skybox functionality.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows">Stride.CommunityToolkit.Windows</a>
+<ul>
+<li>This library contains Windows-specific <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj">dependencies</a> required for code-only approach (<code>RuntimeIdentifier</code> and package reference <code>Stride.Core.Assets.CompilerApp</code>).</li>
+</ul>
+</li>
+</ul>
+
 <p>Explore the extensions available in the left navigation or dive into the code-only section for simple examples.</p>
 
 </article>
@@ -158,7 +192,7 @@
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.4</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

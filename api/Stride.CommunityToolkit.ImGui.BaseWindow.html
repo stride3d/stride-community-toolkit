@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class BaseWindow | Stride Community Toolkit </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class BaseWindow | Stride Community Toolkit ">
+      
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/new/main/apiSpec/new?filename=Stride_CommunityToolkit_ImGui_BaseWindow.md&amp;value=---%0Auid%3A%20Stride.CommunityToolkit.ImGui.BaseWindow%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Stride.CommunityToolkit.ImGui.BaseWindow">
+
+
+
+  <h1 id="Stride_CommunityToolkit_ImGui_BaseWindow" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow" class="text-break">
+Class BaseWindow  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L11"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Stride.html">Stride</a>.<a class="xref" href="Stride.CommunityToolkit.html">CommunityToolkit</a>.<a class="xref" href="Stride.CommunityToolkit.ImGui.html">ImGui</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.ImGui.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"></div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class BaseWindow : GameSystem, IDisposable, ICollectorHolder, IGameSystemBase, IComponent, IReferencable, IUpdateable, IDrawable, IContentable</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/DisposeBase.cs">DisposeBase</a></div>
+      <div><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/ComponentBase.cs">ComponentBase</a></div>
+      <div><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase</a></div>
+      <div><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/GameSystem.cs">GameSystem</a></div>
+      <div><span class="xref">BaseWindow</span></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist implements">
+    <dt>Implements</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Core.ICollectorHolder.html">ICollectorHolder</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IGameSystemBase.html">IGameSystemBase</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Core.IComponent.html">IComponent</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Core.IReferencable.html">IReferencable</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IUpdateable.html">IUpdateable</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IDrawable.html">IDrawable</a></div>
+      <div><a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Games.IContentable.html">IContentable</a></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist derived">
+    <dt>Derived</dt>
+    <dd>
+      <div><a class="xref" href="Stride.CommunityToolkit.ImGui.HierarchyView.html">HierarchyView</a></div>
+      <div><a class="xref" href="Stride.CommunityToolkit.ImGui.Inspector.html">Inspector</a></div>
+      <div><a class="xref" href="Stride.CommunityToolkit.ImGui.PerfMonitor.html">PerfMonitor</a></div>
+    </dd>
+  </dl>
+
+  <dl class="typelist inheritedMembers">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/GameSystem.cs">GameSystem.Game</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.BeginDraw()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.Draw(GameTime)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.EndDraw()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.Initialize()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.InitGraphicsDeviceService()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.OnDrawOrderChanged(object, EventArgs)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.OnUpdateOrderChanged(object, EventArgs)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.LoadContent()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.UnloadContent()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.Services</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.Content</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.GraphicsDevice</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.Visible</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.DrawOrder</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.Enabled</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.UpdateOrder</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.DrawOrderChanged</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.VisibleChanged</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.EnabledChanged</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameSystemBase.cs">GameSystemBase.UpdateOrderChanged</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/ComponentBase.cs">ComponentBase.Tags</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/ComponentBase.cs">ComponentBase.OnNameChanged()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/ComponentBase.cs">ComponentBase.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/ComponentBase.cs">ComponentBase.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/DisposeBase.cs">DisposeBase.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/DisposeBase.cs">DisposeBase.OnAddReference()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/DisposeBase.cs">DisposeBase.OnReleaseReference()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core/DisposeBase.cs">DisposeBase.IsDisposed</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow__ctor_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.#ctor*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow__ctor_Stride_Core_IServiceRegistry_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.#ctor(Stride.Core.IServiceRegistry)">
+  BaseWindow(IServiceRegistry)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L25"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BaseWindow(IServiceRegistry services)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>services</code> <a class="xref" href="https://doc.stride3d.net/latest/en/api/Stride.Core.IServiceRegistry.html">IServiceRegistry</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="fields">Fields
+</h2>
+
+
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_Id" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Id">
+  Id
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected uint Id</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_Open" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Open">
+  Open
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L17"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected bool Open</code></pre>
+  </div>
+
+
+
+
+  <h4 class="section">Field Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_Scale_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Scale*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_Scale" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Scale">
+  Scale
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float Scale { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_WindowFlags_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.WindowFlags*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_WindowFlags" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.WindowFlags">
+  WindowFlags
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L19"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual ImGuiWindowFlags WindowFlags { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">ImGuiWindowFlags</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_WindowPos_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.WindowPos*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_WindowPos" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.WindowPos">
+  WindowPos
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Vector2? WindowPos { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.vector2">Vector2</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_WindowSize_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.WindowSize*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_WindowSize" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.WindowSize">
+  WindowSize
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Vector2? WindowSize { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.vector2">Vector2</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_Destroy_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Destroy*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_Destroy" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Destroy">
+  Destroy()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L82"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Disposes of object resources.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Destroy()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_OnDestroy_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.OnDestroy*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_OnDestroy" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.OnDestroy">
+  OnDestroy()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void OnDestroy()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_OnDraw_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.OnDraw*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_OnDraw_System_Boolean_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.OnDraw(System.Boolean)">
+  OnDraw(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L78"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void OnDraw(bool collapsed)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>collapsed</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_ImGui_BaseWindow_Update_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Update*"></a>
+
+  <h3 id="Stride_CommunityToolkit_ImGui_BaseWindow_Update_Stride_Games_GameTime_" data-uid="Stride.CommunityToolkit.ImGui.BaseWindow.Update(Stride.Games.GameTime)">
+  Update(GameTime)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>This method is called when this game component is updated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Update(GameTime gameTime)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>gameTime</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Games/GameTime.cs">GameTime</a></dt>
+    <dd><p>The current timing.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.ImGui/BaseWindow.cs/#L11" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Creating a New Library Project | Stride Community Toolkit Contributing </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Creating a New Library Project | Stride Community Toolkit Contributing ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/contributing/toolkit/library-project.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="creating-a-new-library-project">Creating a New Library Project</h1>
+
+<h2 id="steps-to-create-a-new-nuget-library">Steps to Create a New NuGet Library</h2>
+<ol>
+<li><strong>Create the Project</strong>:
+<ul>
+<li>Add a new project in the <code>src</code> folder, following the naming convention: <code>Stride.CommunityToolkit.&lt;LibraryName&gt;</code>.</li>
+<li>Refer to the <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src">existing libraries</a> to ensure consistency with the folder/subfolder structure.</li>
+</ul>
+</li>
+<li><strong>Configure the Project File</strong>:
+<ul>
+<li>Update the <code>.csproj</code> file with the correct package metadata.</li>
+<li>Review existing library project files to ensure all necessary properties (e.g., <code>Title</code>, <code>Description</code>, <code>Import</code>) are included.</li>
+</ul>
+</li>
+<li><strong>Update Documentation</strong>:
+<ul>
+<li>Add the new library's name and description to <code>includes/libraries.md</code>. This will display the library on:
+<ul>
+<li>The home page.</li>
+<li>The Getting Started page.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Generate API Documentation</strong>:
+<ul>
+<li>Update <code>docs/docfx.json</code> to include the new <code>.csproj</code> location, ensuring that the <a href="../../api/index.html">API documentation</a> is generated for the new library.</li>
+</ul>
+</li>
+<li><strong>Update CI/CD Workflows</strong>:
+<ul>
+<li>Add the new project to:
+<ul>
+<li><code>.github\workflows\dotnet.yml</code> (<code>PROJECTS</code>).</li>
+<li><code>.github\workflows\dotnet-nuget.yml</code> (<code>env</code> and <code># Stride.CommunityToolkit.&lt;LibraryName&gt;</code> section).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Optional: Add Example Projects</strong>:
+<ul>
+<li>If adding example projects, follow the existing folder structure pattern in the <code>examples</code> directory.</li>
+</ul>
+</li>
+<li><strong>Optional: Add Guidance Content</strong>:
+<ul>
+<li>If you plan to include guidance or tutorials for the new library:
+<ul>
+<li>Add new pages to the <code>docs/manual</code> folder.</li>
+<li>Update the <code>toc.yml</code> file to include links to the new content.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Don't hesitate to reach out to the maintainers for assistance. Whether it's improving the process, code, clarifying steps, or helping with code, we're here to help!</p>
+</div>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/contributing/toolkit/library-project.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

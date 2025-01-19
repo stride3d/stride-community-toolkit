@@ -97,14 +97,46 @@
 <p>The <a href="https://github.com/stride3d/stride-community-toolkit">Stride Community Toolkit</a> is a set of C# helpers and <a href="manual/animation-extensions/index.html">extensions</a> designed to enhance your experience with the <a href="https://www.stride3d.net/">Stride Game Engine</a>. It simplifies and streamlines routine development tasks 🛠️, making it easier to build applications for Stride using .NET 8 🎉.</p>
 <div class="TIP">
 <h5>Tip</h5>
-<p>While the toolkit's extensions are helpful for many developers, experienced game developers may prefer to examine the toolkit's source code directly. The extensions are essentially convenience wrappers, and advanced users might benefit from implementing their own solutions based on the toolkit's code.</p>
+<p>Experienced developers might prefer exploring the toolkit's source code directly. These extensions are convenience wrappers, offering a foundation for advanced users to build custom solutions.</p>
 </div>
 <h2 id="-libraries">📦 Libraries</h2>
-<p>The toolkit includes the following libraries:</p>
+<p>The toolkit includes the following libraries, each designed to extend and enhance your Stride development experience:</p>
 <ul>
-<li><code>Stride.CommunityToolkit</code>: This is the core library. Use it for general-purpose extensions in a regular Stride project or for a code-only approach.</li>
-<li><code>Stride.CommunityToolkit.Windows</code>: This library contains Windows-specific dependencies required for code-only approach.</li>
-<li><code>Stride.CommunityToolkit.Skyboxes</code>: Enhances code-only projects by adding skybox functionality.</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit">Stride.CommunityToolkit</a>
+<ul>
+<li>The core library, providing general-purpose extensions for both regular Stride projects and code-only approaches.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu">Stride.CommunityToolkit.Bepu</a>
+<ul>
+<li>Adds support for <a href="https://github.com/bepu/bepuphysics2">BEPU Physics</a>, a pure C# 3D real time physics simulation library.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet">Stride.CommunityToolkit.Bullet</a>
+<ul>
+<li>Adds support for <a href="https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html">Bullet Physics</a>. Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.DebugShapes">Stride.CommunityToolkit.DebugShapes</a>
+<ul>
+<li>Provides easy-to-use Debug shapes to be able to visualize and debug your Stride scenes</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui">Stride.CommunityToolkit.ImGui</a>
+<ul>
+<li>Includes extensions for <a href="https://github.com/ocornut/imgui">Dear ImGui</a>, a fast, simple-to-use graphical user interface (GUI) library, accessed via the C# wrapper <a href="https://github.com/HexaEngine/Hexa.NET.ImGui">Hexa.NET.ImGui</a>. Ideal for creating debugging tools, editor windows, and in-game UI elements.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes">Stride.CommunityToolkit.Skyboxes</a>
+<ul>
+<li>Enhances code-only projects by adding skybox functionality.</li>
+</ul>
+</li>
+<li><a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows">Stride.CommunityToolkit.Windows</a>
+<ul>
+<li>This library contains Windows-specific <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj">dependencies</a> required for code-only approach (<code>RuntimeIdentifier</code> and package reference <code>Stride.Core.Assets.CompilerApp</code>).</li>
+</ul>
+</li>
 </ul>
 <h2 id="-installation">🔧 Installation</h2>
 <p>The toolkit, available as a 📦 <a href="https://www.nuget.org/profiles/StrideCommunity">NuGet package</a>, can be integrated into new or existing Stride Game C# projects. For more information on how to get started, please refer to the <a href="manual/getting-started.html">Getting Started</a> page.</p>
@@ -126,13 +158,14 @@
 <h2 id="-contributors">👥 Contributors</h2>
 <p>We would like to thank our contributors for expanding the toolkit's capabilities:</p>
 <ul>
-<li><a href="https://github.com/dotlogix">DotLogix</a>: Utility <a class="xref" href="api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html">MeshBuilder</a>, <a class="xref" href="api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> and docs</li>
-<li><a href="https://github.com/Doprez">Doprez</a>: Extensions</li>
-<li><a href="https://github.com/IXLLEGACYIXL">IXLLEGACYIXL</a>: Extensions</li>
-<li><a href="https://github.com/VaclavElias">Vaclav Elias</a>: Code-only approach implementation, toolkit docs</li>
 <li><a href="https://github.com/dfkeenan">dfkeenan</a>: Previous toolkit implementation</li>
-<li><a href="https://github.com/Idomeneas1970">Idomeneas1970</a>: Heightmap extensions</li>
 <li><a href="https://github.com/DockFrankenstein">DockFrankenstein</a>: Script System Extensions</li>
+<li><a href="https://github.com/Doprez">Doprez</a>: Extensions, docs</li>
+<li><a href="https://github.com/dotlogix">DotLogix</a>: Utility <a class="xref" href="api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html">MeshBuilder</a>, <a class="xref" href="api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html">TextureCanvas</a> and docs</li>
+<li><a href="https://github.com/Idomeneas1970">Idomeneas1970</a>: Heightmap extensions</li>
+<li><a href="https://github.com/IXLLEGACYIXL">IXLLEGACYIXL</a>: Extensions</li>
+<li><a href="https://github.com/johang88">Johan Gustafsson</a>: Extensions</li>
+<li><a href="https://github.com/VaclavElias">Vaclav Elias</a>: Code-only approach implementation, toolkit docs</li>
 </ul>
 
 </article>
@@ -155,7 +188,7 @@
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.4</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>

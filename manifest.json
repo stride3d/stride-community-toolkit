@@ -27,6 +27,106 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Body2DComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.Body2DComponent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.GameExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.GameExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Primitive2DCreationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.Primitive2DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Primitive3DCreationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.Primitive3DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bullet.GameExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bullet.GameExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bullet.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bullet.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Collections.CollectionExtensions.yml",
       "output": {
         ".html": {
@@ -81,6 +181,76 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Collections.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugPrimitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugPrimitives.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderObject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderStageSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderStageSelector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.html"
         }
       },
       "version": ""
@@ -147,6 +317,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.GameDefaults.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.GameDefaults.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Engine.GameExtensions.yml",
       "output": {
         ".html": {
@@ -171,26 +351,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Engine.PrefabExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive2DCreationOptions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Engine.Primitive3DCreationOptions.html"
         }
       },
       "version": ""
@@ -357,6 +517,166 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.BaseWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.BaseWindow.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.HierarchyView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.HierarchyView.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGuiIndent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGuiIndent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableTypes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableTypes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiSystem.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.Filter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.Filter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.ValueHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.ValueHandler.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.LightweightTimer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.LightweightTimer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.PerfMonitor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.PerfMonitor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.XMLDocumentation.CachedDocumentation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.XMLDocumentation.CachedDocumentation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.XMLDocumentation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.XMLDocumentation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.ImGui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.ImGui.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Mathematics.Easing.yml",
       "output": {
         ".html": {
@@ -491,66 +811,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugPrimitives.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderFeature.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderObject.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderStageSelector.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.ImmediateDebugRenderSystem.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Rendering.DebugShapes.html"
         }
       },
       "version": ""
@@ -956,6 +1216,26 @@
       "version": ""
     },
     {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Rendering.ImGuiShaderKeys.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Rendering.ImGuiShaderKeys.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.Rendering.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.Rendering.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
@@ -980,10 +1260,63 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "contributing/documentation/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/documentation/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "contributing/index.md",
       "output": {
         ".html": {
           "relative_path": "contributing/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "contributing/major-release-workflow.md",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/major-release-workflow.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "contributing/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/toc.html"
+        },
+        ".json": {
+          "relative_path": "contributing/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "contributing/toolkit/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/toolkit/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "contributing/toolkit/library-project.md",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/toolkit/library-project.html"
         }
       },
       "version": ""
@@ -1294,6 +1627,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/model-extensions/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/physics-extensions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/physics-extensions/index.html"
         }
       },
       "version": ""
@@ -1827,6 +2170,26 @@
       "output": {
         ".html": {
           "relative_path": "release-notes/release-1.0.0.0-preview.39.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.41-48.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.41-48.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "release-notes/release-1.0.0.0-preview.49.md",
+      "output": {
+        ".html": {
+          "relative_path": "release-notes/release-1.0.0.0-preview.49.html"
         }
       },
       "version": ""

@@ -89,15 +89,23 @@
 
 <h2 id="command-line-and-visual-studio-code-instructions">Command Line and Visual Studio Code Instructions</h2>
 <p>The following instructions will guide you through creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same steps in the Visual Studio Code Terminal.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>These instructions are intended for Windows users. While we have successfully build and run code-only projects on Linux, the <a href="https://github.com/stride3d/stride/issues/2596">setup process is currently more complex</a>. We are working on simplifying the process and will provide instructions in the future.</p>
+</div>
 <ol>
 <li><p><strong>Prerequisites:</strong> Ensure you have all the prerequisites installed. Refer to the <a href="../getting-started.html">Prerequisites</a> section for more information.</p>
 </li>
 <li><p><strong>Create a Console App:</strong> Follow the <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0">Microsoft tutorial</a> to learn more about creating a new console application. Use the following command:</p>
-<pre><code>dotnet new console --framework net8.0
+<pre><code>dotnet new console --framework net8.0 --name YourProjectName
 </code></pre>
 </li>
 <li><p><strong>Add NuGet Package:</strong> Execute the following command to add the necessary NuGet package.</p>
 <pre><code>dotnet add package Stride.CommunityToolkit.Windows --prerelease
+</code></pre>
+</li>
+<li><p><strong>Add NuGet Package:</strong> Execute the following command to add the Physics package.</p>
+<pre><code>dotnet add package Stride.CommunityToolkit.Bepu --prerelease
 </code></pre>
 </li>
 <li><p><strong>Update Program.cs:</strong> Paste the <a href="#example-code">example code</a> provided below into your <code>Program.cs</code> file.</p>
@@ -118,7 +126,12 @@
 <li><strong>Create a C# Console Application:</strong> Open Visual Studio 2022 or Rider and create a new C# Console Application targeting .NET 8.</li>
 <li><strong>Add NuGet Package:</strong> Search for and add the <code>Stride.CommunityToolkit.Windows</code> NuGet package, ensuring you opt for the pre-release version.
 <ul>
-<li>This package will install all the necessary Stride NuGet packages.</li>
+<li>This package will add all the necessary Stride NuGet packages.</li>
+</ul>
+</li>
+<li><strong>Add NuGet Package:</strong> Search for and add the <code>Stride.CommunityToolkit.Bepu</code> NuGet package, ensuring you opt for the pre-release version.
+<ul>
+<li>This package will add the Bepu Physics library to your project.</li>
 </ul>
 </li>
 <li><strong>Update Program.cs:</strong> Paste the example code (provided below) into your <code>Program.cs</code> file.</li>
@@ -127,7 +140,8 @@
 </ol>
 <h2 id="example-code">Example Code</h2>
 <p>The provided C# code example demonstrates the basic usage of the Stride Game Engine.</p>
-<pre><code class="lang-csharp">using Stride.CommunityToolkit.Engine;
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -193,7 +207,7 @@ void Start(Scene rootScene)
     <footer class="border-top text-secondary">
       <div class="container-xxl">
         <div class="flex-fill">
-          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.4</p><p>&copy; .NET Foundation and Contributors</p></div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.5</p><p>&copy; .NET Foundation and Contributors</p></div>
         </div>
       </div>
     </footer>
