@@ -5,6 +5,8 @@
   href: tutorials/index.md
 - name: 📝 Release Notes
   href: release-notes/index.md
+- name: 🌟 Contributing
+  href: contributing/index.md
 - name: 🔧 API
   href: api/
   homepage: api/index.md

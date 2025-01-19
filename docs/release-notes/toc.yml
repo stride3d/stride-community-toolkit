@@ -2,8 +2,12 @@
   href: index.md
 # - name: What's new in 1.1
 #   href: stride-community-toolkit-1.1.md
-- name: What's new in 1.0
-  href: release-1.0.md
+# - name: What's new in 1.0
+#   href: release-1.0.md
+- name: What's new in 1.0.0.0-preview.49
+  href: release-1.0.0.0-preview.49.md
+- name: What's new in 1.0.0.0-preview.41-48
+  href: release-1.0.0.0-preview.41-48.md
 - name: What's new in 1.0.0.0-preview.39
   href: release-1.0.0.0-preview.39.md
 - name: What's new in 1.0.0.0-preview.20

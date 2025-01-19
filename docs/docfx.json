@@ -7,13 +7,14 @@
             "Stride.CommunityToolkit/Stride.CommunityToolkit.csproj",
             "Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj",
             "Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj",
+            "Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj",
             "Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj",
             "Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj",
             "Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj"
           ],
           "src": "../src",
           "properties": {
-            "TargetFramework": "net6.0",
+            "TargetFramework": "net8.0",
             "StrideBuildDoc": "true"
           }
         }

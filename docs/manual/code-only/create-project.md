@@ -4,10 +4,13 @@
 
 The following instructions will guide you through creating a new Stride project using the command line. If you prefer to use Visual Studio Code, you can follow the same steps in the Visual Studio Code Terminal.
 
+> [!Note]
+> These instructions are intended for Windows users. While we have successfully build and run code-only projects on Linux, the [setup process is currently more complex](https://github.com/stride3d/stride/issues/2596). We are working on simplifying the process and will provide instructions in the future.
+
 1. **Prerequisites:** Ensure you have all the prerequisites installed. Refer to the [Prerequisites](../getting-started.md) section for more information.
 1. **Create a Console App:** Follow the [Microsoft tutorial](https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0) to learn more about creating a new console application. Use the following command:
    ```
-   dotnet new console --framework net8.0
+   dotnet new console --framework net8.0 --name YourProjectName
    ```
 1. **Add NuGet Package:** Execute the following command to add the necessary NuGet package.
    ```

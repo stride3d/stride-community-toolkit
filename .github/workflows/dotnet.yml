@@ -15,6 +15,17 @@ jobs:
   build:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        project:
+          - src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+          - src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+          - src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
+          - src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
+          - src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
+          - src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
+          - src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
+
     steps:
     - name: Checkout Stride Community Toolkit
       uses: actions/checkout@v4
@@ -24,14 +35,16 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    - name: Restore dependencies
+      run: dotnet restore ${{ matrix.project }}
+
+    - name: Build project
+      run: dotnet build ${{ matrix.project }} --no-restore
+
     # Not needed as Directory.Build.props added a condition to this target
     # - name: Create .sarif Directory
     #   run: New-Item -ItemType Directory -Force -Path D:\.sarif
     #   shell: pwsh
-
-    # Stride.CommunityToolkit
-    - name: Restore Stride.CommunityToolkit dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
     # Temporary solution, because of System.Security.Cryptography.Pkcs not found issue
     # - name: Modify Stride.Core.Assets.CompilerApp.targets
@@ -68,45 +81,9 @@ jobs:
     #     Get-ChildItem "${{ env.NUGET_CACHE_DIR }}\system.security.cryptography.pkcs\" -Recurse | Select-Object FullName
     #   shell: pwsh
 
-    - name: Build Stride.CommunityToolkit
-      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
-
     # - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
     #   run: |
     #     Copy-Item "C:\Users\runneradmin\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
     #   shell: pwsh
 
-    # Stride.CommunityToolkit.Windows
-    - name: Restore Stride.CommunityToolkit.Windows dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH_WINDOWS }}
 
-    - name: Build Stride.CommunityToolkit.Windows
-      run: dotnet build ${{ env.PROJECT_PATH_WINDOWS }} --no-restore
-
-    # Stride.CommunityToolkit.Skyboxes
-    - name: Restore Stride.CommunityToolkit.Skyboxes dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
-
-    - name: Build Stride.CommunityToolkit.Skyboxes
-      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore
-
-    # Stride.CommunityToolkit.Bepu
-    - name: Restore Stride.CommunityToolkit.Bepu dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH_BEPU }}
-
-    - name: Build Stride.CommunityToolkit.Bepu
-      run: dotnet build ${{ env.PROJECT_PATH_BEPU }} --no-restore
-
-    # Stride.CommunityToolkit.Bullet
-    - name: Restore Stride.CommunityToolkit.Bullet dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH_BULLET }}
-
-    - name: Build Stride.CommunityToolkit.Bullet
-      run: dotnet build ${{ env.PROJECT_PATH_BULLET }} --no-restore
-
-    # Stride.CommunityToolkit.ImGui
-    - name: Restore Stride.CommunityToolkit.ImGui dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH_IMGUI }}
-
-    - name: Build Stride.CommunityToolkit.ImGui
-      run: dotnet build ${{ env.PROJECT_PATH_IMGUI }} --no-restore

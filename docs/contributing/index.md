@@ -2,37 +2,26 @@
 
 ## Welcome Contributors
 
-We appreciate your interest in contributing to the Stride Community Toolkit. This section provides all the information you need to get started, including guidelines, best practices, and resources to help you make meaningful contributions to the project. Whether you're fixing bugs, adding new features, or improving documentation, your efforts are valuable and greatly appreciated.
+Thank you for your interest in contributing to the **Stride Community Toolkit**. This guide will help you get started by providing guidelines, best practices, and resources for making meaningful contributions to the project. Whether you're fixing bugs, adding new features, or enhancing the documentation, your efforts are greatly appreciated and help make this toolkit better for everyone.
 
-## Getting Started
+> [!TIP]
+> Interested in contributing to the **Stride Engine** itself? Check out the official [Stride Engine Contribution Guide](https://doc.stride3d.net/latest/en/contributors/index.html).
 
-Since the toolkit is currently in preview, we don't have extensive instructions for contributors. However, you can follow these general guidelines to get started:
+## Ways to Contribute
 
-- Feel free to make Pull Requests (PRs) directly to speed up your process. Optionally, create an issue on our [GitHub Issues](https://github.com/stride3d/stride-community-toolkit/issues) page, or work on an existing issue. Alternatively, you can start a discussion on our [GitHub Discussions](https://github.com/stride3d/stride-community-toolkit/discussions) page.
-- For quick communication with the community, join our Discord server and participate in the #toolkit channel [here](https://discord.com/channels/500285081265635328/1179562410655363132).
+Since the toolkit is currently in preview, we don't have extensive contribution instructions. However, you can follow these general guidelines to get started:
 
-## Documentation
-
-We use DocFX for our documentation. The easiest way to contribute to the documentation is by looking at existing docs, duplicating pages, and updating the content accordingly. You can find helpful information on using DocFX and writing Markdown [here](https://dotnet.github.io/docfx/docs/markdown.html). We will also assist you in getting started with the documentation.
-
-## Major Release Workflow
-
-When preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, there are several key steps and pages that need to be updated. This section will list the necessary instructions to ensure a smooth transition. 
-
-### Steps for Major Release:
-
-1. Update .NET reference on the Home page's `index.md`
-1. Update .NET reference in `manual\gettings-started.md`
-1. Update .NET reference in `manual\code-only\create-project.md`
-1. Update `TargetFramework` in all `.csproj` files
-1. Test all examples and ensure they work as expected
- 
-By following these steps, you can help ensure that each major release is well-documented and thoroughly tested, providing a smooth experience for all users of the toolkit.
+- **Submit Pull Requests (PRs):** You're welcome to make PRs directly to the [GitHub repository](https://github.com/stride3d/stride-community-toolkit). This is the quickest way to contribute.
+- **Report or Solve Issues:** Create a new issue on our [GitHub Issues](https://github.com/stride3d/stride-community-toolkit/issues) page or work on an existing one.
+- **Start a Discussion:** Use the [GitHub Discussions](https://github.com/stride3d/stride/discussions) page to share ideas, ask questions, or collaborate on future toolkit features.
+- **Join the Community on Discord:** For real-time discussions, join our Discord server and participate in the `#toolkit` channel [here](https://discord.com/channels/500285081265635328/1179562410655363132).
 
 ## Additional Resources
 
-- [Stride Community Toolkit GitHub Repository](https://github.com/stride3d/stride-community-toolkit)
-- [Stride Game Engine GitHub Repository](https://github.com/stride3d/stride)
-- [Stride Docs](https://doc.stride3d.net/)
+Here are some helpful links to get you started:
 
-Thank you for contributing to the Stride Community Toolkit 🙂.
+- [Stride Community Toolkit GitHub Repository](https://github.com/stride3d/stride-community-toolkit): Explore the code, issues, and pull requests.
+- [Stride Game Engine GitHub Repository](https://github.com/stride3d/stride): Learn more about the main Stride Engine project.
+- [Stride Documentation](https://doc.stride3d.net/): Find official guides, APIs, and tutorials.
+
+We appreciate your time and effort in helping improve the **Stride Community Toolkit**. Your contributions make a difference, whether you're fixing a small bug, suggesting a new feature, or enhancing the documentation 🙂.
