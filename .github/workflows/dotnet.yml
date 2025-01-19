@@ -1,31 +1,21 @@
 name: .NET Build Test
 
 env:
-  PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
-  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
-  PROJECT_PATH_BULLET: src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
-  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
-  PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-  PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
-
+  PROJECTS: |
+    src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+    src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+    src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
+    src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
+    src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
+    src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
+    src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
 on:
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-
-    strategy:
-      matrix:
-        project:
-          - src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
-          - src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
-          - src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
-          - src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
-          - src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
-          - src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-          - src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
-
+    
     steps:
     - name: Checkout Stride Community Toolkit
       uses: actions/checkout@v4
@@ -35,55 +25,11 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore ${{ matrix.project }}
-
-    - name: Build project
-      run: dotnet build ${{ matrix.project }} --no-restore
-
-    # Not needed as Directory.Build.props added a condition to this target
-    # - name: Create .sarif Directory
-    #   run: New-Item -ItemType Directory -Force -Path D:\.sarif
-    #   shell: pwsh
-
-    # Temporary solution, because of System.Security.Cryptography.Pkcs not found issue
-    # - name: Modify Stride.Core.Assets.CompilerApp.targets
-    #   shell: pwsh
-    #   run: |
-    #     $targetsPath = Join-Path -Path (Get-ChildItem -Path "${env:USERPROFILE}\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive" -Filter "Stride.Core.Assets.CompilerApp.targets" -Recurse).DirectoryName -ChildPath "Stride.Core.Assets.CompilerApp.targets"
-
-    #     [xml]$targetsXml = Get-Content -Path $targetsPath
-    #     $namespaceManager = New-Object System.Xml.XmlNamespaceManager($targetsXml.NameTable)
-    #     $namespaceManager.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003")
-
-    #     $targetNode = $targetsXml.SelectSingleNode("//msbuild:Target[@Name='_StridePrepareAssetsForPack']", $namespaceManager)
-    #     if ($targetNode -ne $null)
-    #     {
-    #         $targetNode.SetAttribute("Condition", "false")
-    #         $targetsXml.Save($targetsPath)
-    #         Write-Host "Modified _StridePrepareAssetsForPack target in Stride.Core.Assets.CompilerApp.targets"
-    #     }
-    #     else
-    #     {
-    #         Write-Host "_StridePrepareAssetsForPack target not found in Stride.Core.Assets.CompilerApp.targets"
-    #     }
-
-    # - name: Get NuGet global-packages location
-    #   id: nuget-cache
-    #   run: |
-    #     $cacheDir = dotnet nuget locals global-packages --list | Out-String
-    #     $path = $cacheDir -replace "global-packages: ", "" -replace "`r`n", ""
-    #     echo "NUGET_CACHE_DIR=$path" | Out-File -FilePath $env:GITHUB_ENV -Append
-    #   shell: pwsh
-
-    # - name: List contents of System.Security.Cryptography.Pkcs package directory
-    #   run: |
-    #     Get-ChildItem "${{ env.NUGET_CACHE_DIR }}\system.security.cryptography.pkcs\" -Recurse | Select-Object FullName
-    #   shell: pwsh
-
-    # - name: Copy System.Security.Cryptography.Pkcs DLL to output directory
-    #   run: |
-    #     Copy-Item "C:\Users\runneradmin\.nuget\packages\system.security.cryptography.pkcs\6.0.4\lib\net6.0\System.Security.Cryptography.Pkcs.dll" -Destination "src/Stride.CommunityToolkit/bin/Debug/net8.0/"
-    #   shell: pwsh
-
-
+    - name: Build projects
+      run: |
+        for project in ${{ env.PROJECTS }}; do
+          echo "Building $project"
+          dotnet restore $project
+          dotnet build $project --no-restore
+        done
+      shell: bash
