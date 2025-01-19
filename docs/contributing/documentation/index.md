@@ -1,28 +1,36 @@
 # Documentation
 
-We use [DocFX](https://github.com/dotnet/docfx) for our documentation. The easiest way to contribute to the documentation is by looking at existing docs, duplicating pages, and updating the content accordingly. You can find helpful information on using DocFX and writing Markdown [here](https://dotnet.github.io/docfx/docs/markdown.html). We will also assist you in getting started with the documentation.
+We use [DocFX](https://github.com/dotnet/docfx) to generate our documentation. Contributing to the documentation is straightforward: explore the existing docs, duplicate relevant pages, and update the content as needed. For more information on DocFX and Markdown syntax, refer to the [official guide](https://dotnet.github.io/docfx/docs/markdown.html). If you're new to the process, we're happy to assist you in getting started.
 
-Enter the following command to install the latest docfx
+## Installing DocFX
 
-```
+To install the latest version of DocFX, use the following command:
+
+```bash
 dotnet tool install -g docfx
 ```
 
-Locate the docs folder on your computer
+## Building the Documentation
 
-```
-stride-community-toolkit\docs\
+1. Navigate to the docs folder in the project directory:
+   ```
+   stride-community-toolkit\docs\
+   ```
+1. Run the `run.bat`` file to build the documentation:
+   ```
+   run.bat
+   ```
+1. Once the process completes, you can access the documentation in your browser at:
+   ```
+   http://localhost:8080/
+   ```
 
-```
+## Editing the Documentation
 
-Run the following command to build the documentation
+- All documentation files are located in the `docs` folder. You can edit these Markdown files to update or add content.
+- After making changes, re-run the `run.bat` command to rebuild the documentation and preview your updates in your browser.
 
-```
-run.bat
-```
+## Submitting Changes
 
-You should be able to access the documentation at `http://localhost:8080/`
-
-You can make changes to the documentation by editing the markdown files in the `docs` folder. Once you are done, re-run the `run.bat` file to see the changes.
-
- Once you are happy with your results and have tested the changes, you can submit a pull request to the `main` branch.
+- Ensure you’re satisfied with the results.
+- Submit a pull request to the `main` branch for review.

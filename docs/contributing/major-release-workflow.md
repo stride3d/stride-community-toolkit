@@ -1,18 +1,23 @@
 # Major Release Workflow
 
-When preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, there are several key steps and pages that need to be updated. This section will list the necessary instructions to ensure a smooth transition. 
+Preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, involves updating several key areas to ensure a seamless transition. This guide outlines the necessary steps to update the toolkit and associated documentation.
 
 ## Steps for Major Release:
 
-1. Update .NET reference on the Home page's `index.md`
-1. Update .NET reference in `manual\gettings-started.md`
-1. Update .NET reference in `manual\code-only\create-project.md`
-1. Update `TargetFramework` in all `.csproj` files
-1. Update `TargetFramework` in `docs\docfx.json` file
-1. Update version in `docs\docfx.json` file, section `build:globalMetadata:_appFooter`
-1. Update `dotnet-version` in:
-   - `.github\workflows\dotnet.yml`
-   - `.github\workflows\dotnet-nuget.yml`
-1. Test all examples and ensure they work as expected
- 
-By following these steps, you can help ensure that each major release is well-documented and thoroughly tested, providing a smooth experience for all users of the toolkit.
+1. **Update Documentation References**:
+   - Update `.NET` references on the Home page (`index.md`).
+   - Update `.NET` references in `manual\gettings-started.md`.
+   - Update `.NET` references in `manual\code-only\create-project.md`.
+2. **Update Project Files**:
+   - Update the `TargetFramework` in all `.csproj` files.
+   - Update the `TargetFramework` in `docs\docfx.json`.
+   - Update the version in `docs\docfx.json`, under `build:globalMetadata:_appFooter`.
+3. **Update CI/CD Workflows**:
+   - Update the `dotnet-version` in:
+     - `.github\workflows\dotnet.yml`.
+     - `.github\workflows\dotnet-nuget.yml`.
+4. **Test Examples**:
+   - Test all examples to ensure they function as expected with the new framework version.
+    
+
+By following these steps, you ensure the toolkit is fully updated, well-documented, and thoroughly tested for each major release, providing users with a reliable and smooth experience.

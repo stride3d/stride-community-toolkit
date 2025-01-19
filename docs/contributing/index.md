@@ -2,11 +2,11 @@
 
 ## Welcome Contributors
 
-We appreciate your interest in contributing to the Stride Community Toolkit. This section provides all the information you need to get started, including guidelines, best practices, and resources to help you make meaningful contributions to the project. Whether you're fixing bugs, adding new features, or improving documentation, your efforts are valuable and greatly appreciated.
+Thank you for your interest in contributing to the **Stride Community Toolkit**. This guide will help you get started by providing guidelines, best practices, and resources for making meaningful contributions to the project. Whether you're fixing bugs, adding new features, or enhancing the documentation, your efforts are greatly appreciated and help make this toolkit better for everyone.
 
 Additionaly, click this link if you would like to contribute to the Stride Engine: [Stride Engine Contribution](https://doc.stride3d.net/latest/en/contributors/index.html)
 
-## Getting Started
+## Ways to Contribute
 
 Since the toolkit is currently in preview, we don't have extensive instructions for contributors. However, you can follow these general guidelines to get started:
 
