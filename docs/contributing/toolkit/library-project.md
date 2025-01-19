@@ -16,8 +16,8 @@
    - Update `docs/docfx.json` to include the new `.csproj` location, ensuring that the [API documentation](../../api/index.md) is generated for the new library.
 5. **Update CI/CD Workflows**:
    - Add the new project to:
-     - `.github\workflows\dotnet.yml`.
-     - `.github\workflows\dotnet-nuget.yml`.
+     - `.github\workflows\dotnet.yml` (`PROJECTS`).
+     - `.github\workflows\dotnet-nuget.yml` (`env` and `# Stride.CommunityToolkit.<LibraryName>` section).
 6. **Optional: Add Example Projects**:
    - If adding example projects, follow the existing folder structure pattern in the `examples` directory.
 7. **Optional: Add Guidance Content**:

@@ -4,6 +4,7 @@ env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
   PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
   PROJECT_PATH_BULLET: src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
+  PROJECT_PATH_DEBUG: src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
   PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
   PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
@@ -40,28 +41,6 @@ jobs:
     # Stride.CommunityToolkit
     - name: Restore dependencies - Stride.CommunityToolkit
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
-
-    # Temporary solution, because of System.Security.Cryptography.Pkcs not found issue
-    # - name: Modify Stride.Core.Assets.CompilerApp.targets
-    #   shell: pwsh
-    #   run: |
-    #     $targetsPath = Join-Path -Path (Get-ChildItem -Path "${env:USERPROFILE}\.nuget\packages\stride.core.assets.compilerapp\4.2.0.2122\buildTransitive" -Filter "Stride.Core.Assets.CompilerApp.targets" -Recurse).DirectoryName -ChildPath "Stride.Core.Assets.CompilerApp.targets"
-
-    #     [xml]$targetsXml = Get-Content -Path $targetsPath
-    #     $namespaceManager = New-Object System.Xml.XmlNamespaceManager($targetsXml.NameTable)
-    #     $namespaceManager.AddNamespace("msbuild", "http://schemas.microsoft.com/developer/msbuild/2003")
-
-    #     $targetNode = $targetsXml.SelectSingleNode("//msbuild:Target[@Name='_StridePrepareAssetsForPack']", $namespaceManager)
-    #     if ($targetNode -ne $null)
-    #     {
-    #         $targetNode.SetAttribute("Condition", "false")
-    #         $targetsXml.Save($targetsPath)
-    #         Write-Host "Modified _StridePrepareAssetsForPack target in Stride.Core.Assets.CompilerApp.targets"
-    #     }
-    #     else
-    #     {
-    #         Write-Host "_StridePrepareAssetsForPack target not found in Stride.Core.Assets.CompilerApp.targets"
-    #     }
 
     - name: Build
       run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
@@ -147,6 +126,24 @@ jobs:
       uses: alirezanet/publish-nuget@v3.1.0
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_BULLET }}
+        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        TAG_COMMIT: false
+
+    # Stride.CommunityToolkit.DebugShapes
+    - name: Restore dependencies - Stride.CommunityToolkit.DebugShapes
+      run: dotnet restore ${{ env.PROJECT_PATH_DEBUG }}
+
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH_DEBUG }} --no-restore
+
+    - name: Test
+      run: dotnet test ${{ env.PROJECT_PATH_DEBUG }} --no-build --verbosity normal
+
+    - name: Publish Stride Community Toolkit - Bullet
+      uses: alirezanet/publish-nuget@v3.1.0
+      with:
+        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_DEBUG }}
         VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         TAG_COMMIT: false
