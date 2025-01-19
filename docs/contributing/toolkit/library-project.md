@@ -9,7 +9,7 @@
    - Update the `.csproj` file with the correct package metadata.
    - Review existing library project files to ensure all necessary properties (e.g., `Title`, `Description`, `Import`) are included.
 3. **Update Documentation**:
-   - Add the new library's name and description to `includes/libraries.md`. This will display the library on:
+   - Add the new library's name and description to `docs/includes/libraries.md`. This will display the library on:
      - The home page.
      - The Getting Started page.
 4. **Generate API Documentation**:
