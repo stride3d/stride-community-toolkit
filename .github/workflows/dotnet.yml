@@ -27,8 +27,8 @@ jobs:
 
     - name: Build projects
       run: |
-        IFS=$'\n' read -r -d '' -a projects <<< "${{ env.PROJECTS }}"
-        for project in "${projects[@]}"; do
+        IFS=$'\n'
+        for project in $PROJECTS; do
           echo "Building $project"
           dotnet restore "$project"
           dotnet build "$project" --no-restore
