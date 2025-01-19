@@ -21,6 +21,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="*.sdpkg" Pack="true" PackagePath="stride" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Update="Engine\EntityExtensions.GetComponents.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>
