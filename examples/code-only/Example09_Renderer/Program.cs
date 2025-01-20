@@ -1,5 +1,5 @@
 using Example09_Renderer;
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -36,6 +36,13 @@ game.Run(start: (scene) =>
     // Creates a 3D capsule primitive and sets its position in the scene.
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
     entity.Transform.Position = new Vector3(0, 8, 0);
+
+    // Let's rotate the capsule a tiny bit
+    entity.Transform.Rotation = Quaternion.RotationZ(MathUtil.DegreesToRadians(2));
+
+    // Let's add some momentum so it rolls after it falls, the rigid body is already added by Create3DPrimitive
+    // Not Working
+    //entity.Get<BodyComponent>().ApplyAngularImpulse(new Vector3(10, 0, 0));
 
     // Example 2: Adds a custom startup script to the entity, which draws specific text
     // (e.g., "Hello Stride 2") using SpriteBatch when the game is running.
