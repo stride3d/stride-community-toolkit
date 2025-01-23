@@ -25,7 +25,7 @@ shader RibbonBackgroundShader : SpriteBase
         color = color + CalcSine(uv, Speed * 0.3f, Frequency * 0.36f, Amplitude * 0.07f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.1f, 17.0f,true);
         color = color + CalcSine(uv, Speed * 0.5f, Frequency * 0.46f, Amplitude * 0.07f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.05f, 23.0f,true);
         color = color + CalcSine(uv, Speed * 0.2f, Frequency * 0.58f, Amplitude * 0.05f, 0.0f, 0.3f, float3(0.3f, 0.3f, 0.3f), 0.2f, 15.0f,true);
-        
+
         return float4(color.x, color.y, color.z, 0.5f) * Intensity;
     }
 
@@ -33,20 +33,20 @@ shader RibbonBackgroundShader : SpriteBase
     {
         float pi = 3.14159265359f;
         float angle = DeltaTime * speed * frequency * -1.0f + (shift + uv.x) * 2.0f;
-    
+
         float y = sin(angle) * amplitude + offset;
         float diffY = y - uv.y;
-        
+
         float dsqr = distance(y, uv.y);
         float scale = 1.0f;
-        
+
         if(dir && diffY > 0.0f || !dir && diffY < 0.0f)
         {
             dsqr = dsqr * 3.0f;
         }
-        
+
         scale = pow(smoothstep(width * WidthFactor, 0.0f, dsqr), exponent);
-        
+
         return min(color * scale, color);
     }
 };

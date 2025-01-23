@@ -5,6 +5,7 @@ using Stride.Rendering;
 using Stride.Streaming;
 
 namespace Example13_RootRendererShader.Renderers;
+
 public class RibbonBackgroundRenderFeature : RootRenderFeature
 {
     private SpriteBatch _spriteBatch;
@@ -72,6 +73,7 @@ public class RibbonBackgroundRenderFeature : RootRenderFeature
         var imageBufferMinRatio = Math.Min(textureSize.Width / (float)target.ViewWidth, textureSize.Height / (float)target.ViewHeight);
         var sourceSize = new Vector2(target.ViewWidth * imageBufferMinRatio, target.ViewHeight * imageBufferMinRatio);
         var source = new RectangleF((textureSize.Width - sourceSize.X) / 2, (textureSize.Height - sourceSize.Y) / 2, sourceSize.X, sourceSize.Y);
+
         if (textureIsLoading)
         {
             var verticalRatio = texture.ViewHeight / (float)textureSize.Height;

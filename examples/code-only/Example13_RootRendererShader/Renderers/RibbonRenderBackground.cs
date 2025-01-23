@@ -2,6 +2,7 @@ using Stride.Core.Mathematics;
 using Stride.Rendering;
 
 namespace Example13_RootRendererShader.Renderers;
+
 public class RibbonRenderBackground : RenderObject
 {
     public float Intensity;

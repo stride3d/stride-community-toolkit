@@ -1,11 +1,12 @@
-using Stride.Core.Annotations;
 using Stride.Core;
-using Stride.Engine.Design;
-using Stride.Engine;
-using Stride.Rendering;
+using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Engine.Design;
+using Stride.Rendering;
 
 namespace Example13_RootRendererShader.Renderers;
+
 [DataContract("RibbonBackgroundComponent")]
 [ComponentCategory("Xmb")]
 [Display("Ribbon Background", Expand = ExpandRule.Once)]
