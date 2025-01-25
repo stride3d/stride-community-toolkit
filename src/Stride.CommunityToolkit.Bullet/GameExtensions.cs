@@ -216,6 +216,22 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Enables the visualization of collider shapes in the game scene. This feature is useful for debugging physics-related issues.
+    /// </summary>
+    /// <param name="game">The current game instance.</param>
+    /// <remarks>
+    /// This method activates the rendering of collider shapes within the physics simulation. It helps to visually inspect and debug the positioning and behaviour of colliders at runtime.
+    /// </remarks>
+    public static void ShowColliders(this Game game)
+    {
+        var simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+
+        if (simulation is null) return;
+
+        simulation.ColliderShapesRendering = true;
+    }
+
     private static Entity CreateGround(Game game, string? entityName, Vector2? size, bool includeCollider, PrimitiveModelType type)
     {
         var validSize = size ?? GameDefaults.Default3DGroundSize;
