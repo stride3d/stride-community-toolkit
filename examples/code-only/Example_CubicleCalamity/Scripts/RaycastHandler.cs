@@ -1,5 +1,6 @@
 using Example_CubicleCalamity.Components;
 using Example_CubicleCalamity.Shared;
+using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
