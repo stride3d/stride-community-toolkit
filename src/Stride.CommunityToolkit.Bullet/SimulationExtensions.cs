@@ -1,11 +1,12 @@
 using Stride.CommunityToolkit.Scripts;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
 
-namespace Stride.CommunityToolkit.Physics;
+namespace Stride.CommunityToolkit.Bullet;
 
 /// <summary>
-/// Provides extension methods for the <see cref="Simulation"/> class to perform raycasting operations in a game simulation.
+/// Provides extension methods for the <see cref="Simulation"/> class to perform raycasting operations in a game simulation fro the Bullet physics.
 /// </summary>
 public static class SimulationExtensions
 {
