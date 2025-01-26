@@ -14,9 +14,9 @@ public static class CameraComponentExtensions
     {
         var (nearPoint, farPoint) = camera.CalculateRayFromScreenPosition(screenPosition);
 
-        var result = camera.Entity.GetSimulation().RayCast(nearPoint, farPoint, maxDistance, out HitInfo hit, collisionMask);
+        var isHit = camera.Entity.GetSimulation().RayCast(nearPoint, farPoint, maxDistance, out HitInfo hit, collisionMask);
 
-        if (!result) return null;
+        if (!isHit) return null;
 
         return hit;
     }
