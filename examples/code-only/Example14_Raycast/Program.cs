@@ -35,17 +35,13 @@ void Update(Scene scene, GameTime time)
 
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))
     {
-        var hit = camera.Raycast(game.Input.MousePosition);
+        var hit = camera.Raycast(game.Input.MousePosition, 100, out var hitInfo);
 
-        if (hit == null)
+        if (hit)
         {
-            Console.WriteLine("No hit");
-        }
-        else
-        {
-            Console.WriteLine(hit.Value.Collidable.Entity);
+            Console.WriteLine(hitInfo.Collidable.Entity);
 
-            var body = hit.Value.Collidable.Entity.Get<BodyComponent>();
+            var body = hitInfo.Collidable.Entity.Get<BodyComponent>();
 
             if (body is null) return;
 
@@ -53,6 +49,10 @@ void Update(Scene scene, GameTime time)
 
             body.ApplyImpulse(direction * 1, new());
             body.Awake = true;
+        }
+        else
+        {
+            Console.WriteLine("No hit");
         }
     }
 }
