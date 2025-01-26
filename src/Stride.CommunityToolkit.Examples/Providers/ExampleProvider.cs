@@ -36,6 +36,9 @@ public class ExampleProvider
         CreateExample("Advance Example - Myra UI - Draggable Window, GetService()",
             nameof(Example04_MyraUI)),
 
+        CreateExample("Advance Example - Stride UI - Draggable Window",
+            nameof(Example10_StrideUI_DragAndDrop)),
+
         CreateExample("Advance Example - Image Processing",
             nameof(Example06_ImageProcessing)),
 
