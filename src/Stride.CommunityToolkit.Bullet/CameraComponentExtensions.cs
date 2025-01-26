@@ -30,19 +30,6 @@ public static class CameraComponentExtensions
     }
 
     /// <summary>
-    /// Performs a raycasting operation from the specified <see cref="CameraComponent"/>'s position through the specified screen position in world coordinates,
-    /// using the <see cref="Simulation"/> from the specified <see cref="ScriptComponent"/>, and returns information about the hit result.
-    /// </summary>
-    /// <param name="camera">The <see cref="CameraComponent"/> from which the ray should be cast.</param>
-    /// <param name="component">The <see cref="ScriptComponent"/> that contains the <see cref="Simulation"/> used for raycasting.</param>
-    /// <param name="screenPosition">The screen position in world coordinates through which the ray should be cast.</param>
-    /// <param name="collisionGroups">Optional. The collision filter group to consider during the raycasting. Default is <see cref="CollisionFilterGroups.DefaultFilter"/>.</param>
-    /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is <see cref="CollisionFilterGroupFlags.DefaultFilter"/>.</param>
-    /// <returns>A <see cref="HitResult"/> containing information about the hit result, including the hit location and other collision data.</returns>
-    public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
-        => Raycast(camera, component.GetSimulation(), screenPosition, collisionGroups, collisionFilterGroupFlags);
-
-    /// <summary>
     /// Performs a raycasting operation from the specified <see cref="CameraComponent"/>'s position through a specified screen position,
     /// using the provided <see cref="Simulation"/>, and returns information about the hit result.
     /// </summary>
@@ -56,6 +43,19 @@ public static class CameraComponentExtensions
     {
         return camera.Raycast(simulation, screenPosition, collisionGroups, collisionFilterGroupFlags);
     }
+
+    /// <summary>
+    /// Performs a raycasting operation from the specified <see cref="CameraComponent"/>'s position through the specified screen position in world coordinates,
+    /// using the <see cref="Simulation"/> from the specified <see cref="ScriptComponent"/>, and returns information about the hit result.
+    /// </summary>
+    /// <param name="camera">The <see cref="CameraComponent"/> from which the ray should be cast.</param>
+    /// <param name="component">The <see cref="ScriptComponent"/> that contains the <see cref="Simulation"/> used for raycasting.</param>
+    /// <param name="screenPosition">The screen position in world coordinates through which the ray should be cast.</param>
+    /// <param name="collisionGroups">Optional. The collision filter group to consider during the raycasting. Default is <see cref="CollisionFilterGroups.DefaultFilter"/>.</param>
+    /// <param name="collisionFilterGroupFlags">Optional. The collision filter group flags to consider during the raycasting. Default is <see cref="CollisionFilterGroupFlags.DefaultFilter"/>.</param>
+    /// <returns>A <see cref="HitResult"/> containing information about the hit result, including the hit location and other collision data.</returns>
+    public static HitResult Raycast(this CameraComponent camera, ScriptComponent component, Vector2 screenPosition, CollisionFilterGroups collisionGroups = CollisionFilterGroups.DefaultFilter, CollisionFilterGroupFlags collisionFilterGroupFlags = CollisionFilterGroupFlags.DefaultFilter)
+        => Raycast(camera, component.GetSimulation(), screenPosition, collisionGroups, collisionFilterGroupFlags);
 
     /// <summary>
     /// Performs a raycasting operation from the specified <see cref="CameraComponent"/>'s position through a specified screen position,
