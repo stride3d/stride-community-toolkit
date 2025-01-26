@@ -1,3 +1,4 @@
+using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -17,6 +18,7 @@ void Start(Scene scene)
 {
     game.SetupBase3DScene();
     game.AddSkybox();
+    game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
 
@@ -42,6 +44,15 @@ void Update(Scene scene, GameTime time)
         else
         {
             Console.WriteLine(hit.Value.Collidable.Entity);
+
+            var body = hit.Value.Collidable.Entity.Get<BodyComponent>();
+
+            if (body is null) return;
+
+            var direction = new Vector3(1, 1, 1);
+
+            body.ApplyImpulse(direction * 1, new());
+            body.Awake = true;
         }
     }
 }
