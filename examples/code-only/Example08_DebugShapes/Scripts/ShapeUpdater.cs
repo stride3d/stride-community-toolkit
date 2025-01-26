@@ -352,6 +352,7 @@ public class ShapeUpdater : SyncScript
 
     }
 
+    // ToDo, this method is already in CameraComponentExtensions?
     public static HitResult ScreenPositionToWorldPositionRaycast(Vector2 screenPos, CameraComponent camera, Simulation simulation)
     {
         var invertedViewProjection = Matrix.Invert(camera.ViewProjectionMatrix);

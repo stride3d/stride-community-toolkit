@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example10_StrideUI_DragAndD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example10_StrideUI_DragAndDrop_BulletPhysics", "examples\code-only\Example10_StrideUI_DragAndDrop_BulletPhysics\Example10_StrideUI_DragAndDrop_BulletPhysics.csproj", "{A8DBD6E0-47F3-4CAC-A5F9-DA6E4AB78726}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example14_Raycast", "examples\code-only\Example14_Raycast\Example14_Raycast.csproj", "{B442A84F-737B-45CC-B2DE-89495E2FDDBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -232,6 +234,10 @@ Global
 		{A8DBD6E0-47F3-4CAC-A5F9-DA6E4AB78726}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8DBD6E0-47F3-4CAC-A5F9-DA6E4AB78726}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8DBD6E0-47F3-4CAC-A5F9-DA6E4AB78726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B442A84F-737B-45CC-B2DE-89495E2FDDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B442A84F-737B-45CC-B2DE-89495E2FDDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B442A84F-737B-45CC-B2DE-89495E2FDDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B442A84F-737B-45CC-B2DE-89495E2FDDBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -262,6 +268,7 @@ Global
 		{F55B9EC1-1C44-4CFD-B151-F0F05DEB43EA} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{BD3BA6F3-9BE4-4EA7-B496-847AEDB6F3C1} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{A8DBD6E0-47F3-4CAC-A5F9-DA6E4AB78726} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{B442A84F-737B-45CC-B2DE-89495E2FDDBC} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
