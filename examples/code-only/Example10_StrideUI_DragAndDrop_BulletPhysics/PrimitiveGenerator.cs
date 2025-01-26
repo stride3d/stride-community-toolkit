@@ -60,7 +60,8 @@ public class PrimitiveGenerator
 
         var entity = _game.Create3DPrimitive(modelType, new Primitive3DCreationOptions
         {
-            Material = _game.CreateMaterial(selectedColor)
+            Material = _game.CreateMaterial(selectedColor),
+            Size = new Vector3(0.3f)
         });
 
         ConfigureTransform(entity);
@@ -79,8 +80,6 @@ public class PrimitiveGenerator
     /// <param name="entity">The entity to configure.</param>
     private static void ConfigureTransform(Entity entity)
     {
-        entity.Transform.Scale = new Vector3(0.3f);
-
         // Set a random position within specified bounds
         entity.Transform.Position = VectorHelper.RandomVector3(
             xRange: [-4, 4],
