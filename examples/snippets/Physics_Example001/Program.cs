@@ -1,15 +1,13 @@
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using Stride.Physics;
 
 Entity? target = null;
 CameraComponent? camera = null;
-Simulation? simulation = null;
 
 using var game = new Game();
 
@@ -47,30 +45,30 @@ void Start(Scene scene)
     // Add sphere to the scene
     entity.Scene = scene;
 
-    // Retrieve the camera and the physics simulation from the scene
+    // Retrieve the camera from the scene
     camera = scene.GetCamera();
-    simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 }
 
 // Update method called every frame to handle game logic
 void Update(Scene scene, GameTime gameTime)
 {
-    // Ensure that the camera and simulation are initialized
-    if (simulation == null || camera is null) return;
+    game.DebugTextSystem.Print("Click on a sphere, cube or ground to move camera", new Int2(5, 10));
+
+    // Ensure that the camera is initialized
+    if (camera is null) return;
 
     // Check if the left mouse button is pressed
     if (game.Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left))
     {
-        // Cast a ray from the mouse position into the world
-        var ray = camera.ScreenToWorldRaySegment(game.Input.MousePosition);
+        var hit = camera.Raycast(game.Input.MousePosition, 100, out var hitInfo);
 
-        // Perform raycasting in the simulation to detect any entities
-        var hitResult = simulation.Raycast(ray);
-
-        if (hitResult.Succeeded)
+        if (hit)
         {
-            // If the ray hits an entity, set it as the camera's target
-            target = hitResult.Collider.Entity;
+            target = hitInfo.Collidable.Entity;
+        }
+        else
+        {
+            Console.WriteLine("No hit");
         }
     }
 

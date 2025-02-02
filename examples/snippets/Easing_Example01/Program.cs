@@ -1,4 +1,6 @@
-using Stride.CommunityToolkit.Bullet;
+using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -41,7 +43,12 @@ void Start(Scene scene)
     // Create a 3D sphere primitive and assign the material to it
     entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
     {
-        Material = game.CreateMaterial(Color.White)
+        Material = game.CreateMaterial(Color.White),
+        Component = new BodyComponent()
+        {
+            Collider = new CompoundCollider(),
+            Kinematic = true
+        }
     });
 
     // Add the sphere entity to the root scene
