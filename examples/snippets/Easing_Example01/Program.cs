@@ -1,4 +1,6 @@
-using Stride.CommunityToolkit.Bullet;
+using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -41,7 +43,12 @@ void Start(Scene scene)
     // Create a 3D sphere primitive and assign the material to it
     entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
     {
-        Material = game.CreateMaterial(Color.White)
+        Material = game.CreateMaterial(Color.White),
+        Component = new BodyComponent()
+        {
+            Collider = new CompoundCollider(),
+            Kinematic = true
+        }
     });
 
     // Add the sphere entity to the root scene
@@ -56,6 +63,8 @@ void Start(Scene scene)
 // Update the scene every frame (for animations and input handling)
 void Update(Scene scene, GameTime time)
 {
+    game.DebugTextSystem.Print("Press Space to reset", new Int2(5, 10));
+
     // Calculate the progress of the animation as a ratio between 0 and 1
     var progress = (float)(elapsed.TotalSeconds / duration.TotalSeconds);
 

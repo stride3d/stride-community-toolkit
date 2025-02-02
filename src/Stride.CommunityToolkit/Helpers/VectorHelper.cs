@@ -22,6 +22,7 @@ public static class VectorHelper
     public static Vector3 RandomVector3(float max, float min = 0f, Random? random = null)
     {
         random ??= _defaultRandom;
+
         return new Vector3(
             RandomRange(min, max, random),
             RandomRange(min, max, random),
@@ -43,6 +44,7 @@ public static class VectorHelper
             throw new ArgumentException("Each range array must have exactly two elements [min, max].");
 
         random ??= _defaultRandom;
+
         return new Vector3(
             RandomRange(xRange[0], xRange[1], random),
             RandomRange(yRange[0], yRange[1], random),
@@ -54,15 +56,10 @@ public static class VectorHelper
     /// Helper method to generate a random float between min and max.
     /// </summary>
     private static float RandomRange(float min, float max, Random random)
-    {
-        return (float)(random.NextDouble() * (max - min) + min);
-    }
+        => (float)((random.NextDouble() * (max - min)) + min);
 
     /// <summary>
     /// Optionally re-seeds the default random generator for the application.
     /// </summary>
-    public static void SeedRandom(int seed)
-    {
-        _defaultRandom = new Random(seed);
-    }
+    public static void SeedRandom(int seed) => _defaultRandom = new Random(seed);
 }

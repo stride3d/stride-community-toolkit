@@ -18,6 +18,9 @@ items:
   items:
   - name: New library project
     href: toolkit/library-project.md
+- name: 💡Contribute to the examples
+  expanded: false
+  href: examples/index.md
 - name: 📖 Contribute to the documentation
   expanded: false
   href: documentation/index.md

@@ -1,11 +1,9 @@
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Engine.Processors;
 using Stride.Games;
 using Stride.Graphics;
-using Stride.Physics;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
@@ -344,22 +342,6 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Enables the visualization of collider shapes in the game scene. This feature is useful for debugging physics-related issues.
-    /// </summary>
-    /// <param name="game">The current game instance.</param>
-    /// <remarks>
-    /// This method activates the rendering of collider shapes within the physics simulation. It helps to visually inspect and debug the positioning and behaviour of colliders at runtime.
-    /// </remarks>
-    public static void ShowColliders(this Game game)
-    {
-        var simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
-
-        if (simulation is null) return;
-
-        simulation.ColliderShapesRendering = true;
-    }
-
-    /// <summary>
     /// Creates a basic material with optional color, specular reflection, and microsurface smoothness values.
     /// </summary>
     /// <param name="game">The game instance used to access the graphics device.</param>
@@ -382,7 +364,7 @@ public static class GameExtensions
         };
 
         return Material.New(game.GraphicsDevice, materialDescription);
-            //options.Size /= 2;
+        //options.Size /= 2;
 
     }
 

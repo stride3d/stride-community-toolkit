@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Skyboxes;
@@ -41,7 +41,6 @@ void SetupBaseScene()
 
 void CreateParticleEffect()
 {
-
     var emitter = new ParticleEmitter
     {
         ParticleLifetime = new Vector2(0.5f, 0.5f),

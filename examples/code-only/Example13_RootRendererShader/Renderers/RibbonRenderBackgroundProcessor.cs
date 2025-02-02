@@ -2,6 +2,7 @@ using Stride.Engine;
 using Stride.Rendering;
 
 namespace Example13_RootRendererShader.Renderers;
+
 public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundComponent, RibbonRenderBackground>, IEntityComponentRenderProcessor
 {
     public VisibilityGroup VisibilityGroup { get; set; }

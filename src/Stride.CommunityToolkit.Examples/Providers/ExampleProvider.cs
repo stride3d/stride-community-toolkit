@@ -11,28 +11,49 @@ public class ExampleProvider
     [
         CreateExample("Basic Example - Capsule with rigid body",
             nameof(Example01_Basic3DScene)),
+
         CreateExample("Basic Example - Capsule with rigid body in F#",
             nameof(Example01_Basic3DScene_FSharp)),
+
         CreateExample("Basic Example - Capsule with rigid body in Visual Basic",
             nameof(Example01_Basic3DScene_VBasic)),
+
         CreateExample("Basic Example - Give me a cube",
             nameof(Example02_GiveMeACube)),
+
         CreateExample("Basic Example - Stride UI - Canvas - Capsule with rigid body and Window",
             nameof(Example03_StrideUI_CapsuleAndWindow)),
+
         CreateExample("Basic Example - Stride UI - Grid - Save and load game state",
             nameof(Example07_CubeClicker)),
+
         CreateExample("Basic Example - Procedural Geometry",
             nameof(Example05_ProceduralGeometry)),
+
+        CreateExample("Basic Example - Particles",
+            nameof(Example12_Particles)),
+
         CreateExample("Advance Example - Myra UI - Draggable Window, GetService()",
             nameof(Example04_MyraUI)),
+
+        CreateExample("Advance Example - Stride UI - Draggable Window",
+            nameof(Example10_StrideUI_DragAndDrop)),
+
         CreateExample("Advance Example - Image Processing",
             nameof(Example06_ImageProcessing)),
+
+        CreateExample("Advance Example - Root Renderer Shader",
+            nameof(Example13_RootRendererShader)),
+
         CreateExample("Other - CubeClicker",
             nameof(Example07_CubeClicker)),
+
         CreateExample("Other - Debug Shapes",
             nameof(Example08_DebugShapes)),
+
         CreateExample("Other - Renderer",
             nameof(Example09_Renderer)),
+
         new Example("Q", "Quit", () => Environment.Exit(0))
     ];
 

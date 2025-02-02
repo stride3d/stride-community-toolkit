@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Mathematics;
@@ -8,12 +8,12 @@ using Stride.Engine;
 
 namespace Example10_StrideUI_DragAndDrop;
 
-public class CubesGenerator
+public class PrimitiveGenerator
 {
     /// <summary>
     /// Total number of cubes generated.
     /// </summary>
-    public int TotalCubes => _totalCubes;
+    public int TotalShapes => _totalCubes;
 
     private readonly Game _game;
     private readonly Scene _scene;
@@ -21,12 +21,12 @@ public class CubesGenerator
     private int _totalCubes;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CubesGenerator"/> class.
+    /// Initializes a new instance of the <see cref="PrimitiveGenerator"/> class.
     /// </summary>
     /// <param name="game">The game instance to use for generating cubes.</param>
     /// <param name="scene">The scene where cubes will be generated.</param>
     /// <exception cref="ArgumentNullException">Thrown if game or scene is null.</exception>
-    public CubesGenerator(Game game, Scene scene)
+    public PrimitiveGenerator(Game game, Scene scene)
     {
         _game = game ?? throw new ArgumentNullException(nameof(game));
         _scene = scene ?? throw new ArgumentNullException(nameof(scene));
@@ -60,7 +60,8 @@ public class CubesGenerator
 
         var entity = _game.Create3DPrimitive(modelType, new Primitive3DCreationOptions
         {
-            Material = _game.CreateMaterial(selectedColor)
+            Material = _game.CreateMaterial(selectedColor),
+            Size = new Vector3(0.3f)
         });
 
         ConfigureTransform(entity);
@@ -79,8 +80,6 @@ public class CubesGenerator
     /// <param name="entity">The entity to configure.</param>
     private static void ConfigureTransform(Entity entity)
     {
-        entity.Transform.Scale = new Vector3(0.3f);
-
         // Set a random position within specified bounds
         entity.Transform.Position = VectorHelper.RandomVector3(
             xRange: [-4, 4],
