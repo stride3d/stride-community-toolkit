@@ -96,7 +96,9 @@
 <li>How to interpolate and change the material color of a 3D object dynamically.</li>
 </ul>
 <h2 id="code-walkthrough">Code Walkthrough</h2>
-<pre><code class="lang-csharp" name="Easing demo">using Stride.CommunityToolkit.Bullet;
+<pre><code class="lang-csharp" name="Easing demo">using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -139,7 +141,12 @@ void Start(Scene scene)
     // Create a 3D sphere primitive and assign the material to it
     entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
     {
-        Material = game.CreateMaterial(Color.White)
+        Material = game.CreateMaterial(Color.White),
+        Component = new BodyComponent()
+        {
+            Collider = new CompoundCollider(),
+            Kinematic = true
+        }
     });
 
     // Add the sphere entity to the root scene
@@ -154,6 +161,8 @@ void Start(Scene scene)
 // Update the scene every frame (for animations and input handling)
 void Update(Scene scene, GameTime time)
 {
+    game.DebugTextSystem.Print(&quot;Press Space to reset&quot;, new Int2(5, 10));
+
     // Calculate the progress of the animation as a ratio between 0 and 1
     var progress = (float)(elapsed.TotalSeconds / duration.TotalSeconds);
 

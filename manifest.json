@@ -37,6 +37,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Bepu.GameExtensions.yml",
       "output": {
         ".html": {
@@ -87,6 +97,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Bullet.GameExtensions.yml",
       "output": {
         ".html": {
@@ -111,6 +131,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Bullet.SimulationExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html"
         }
       },
       "version": ""
@@ -757,16 +787,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Stride.CommunityToolkit.Physics.SimulationExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Stride.CommunityToolkit.Physics.SimulationExtensions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Stride.CommunityToolkit.Physics.yml",
       "output": {
         ".html": {
@@ -1264,6 +1284,16 @@
       "output": {
         ".html": {
           "relative_path": "contributing/documentation/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "contributing/examples/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "contributing/examples/index.html"
         }
       },
       "version": ""

@@ -103,7 +103,7 @@
 <p><img src="media/stride-game-engine-example04-myra-ui-draggable-window.webp" alt="Stride UI Example"></p>
 <p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI">GitHub</a>.</p>
 <pre><code class="lang-csharp">using Example04_MyraUI;
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Skyboxes;
@@ -138,9 +138,8 @@ void SetupBase3DScene()
     game.Add3DGround();
 }
 
-/// &lt;summary&gt;
-/// Initializes the health bar if it is not already visible.
-/// &lt;/summary&gt;
+
+// Initializes the health bar if it is not already visible.
 void InitializeHealthBar()
 {
     if (isHealthBarVisible) return;

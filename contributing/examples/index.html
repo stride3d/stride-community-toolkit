@@ -2,21 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>C# Code Only Basic Examples | Stride Community Toolkit Manual </title>
+      <title>Contribute Examples | Stride Community Toolkit Contributing </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="C# Code Only Basic Examples | Stride Community Toolkit Manual ">
+      <meta name="title" content="Contribute Examples | Stride Community Toolkit Contributing ">
       
       
-      <link rel="icon" href="../../../favicon.ico">
-      <link rel="stylesheet" href="../../../public/docfx.min.css">
-      <link rel="stylesheet" href="../../../public/main.css">
-      <meta name="docfx:navrel" content="../../../toc.html">
-      <meta name="docfx:tocrel" content="../../toc.html">
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
       
-      <meta name="docfx:rel" content="../../../">
+      <meta name="docfx:rel" content="../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/basic-examples.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/contributing/examples/index.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -30,7 +30,7 @@
       <meta name="loc:copy" content="Copy">
       <meta name="loc:downloadPdf" content="Download PDF">
 
-      <script type="module" src="./../../../public/docfx.min.js"></script>
+      <script type="module" src="./../../public/docfx.min.js"></script>
 
       <script>
         const theme = localStorage.getItem('theme') || 'auto'
@@ -43,8 +43,8 @@
     <header class="bg-body border-bottom">
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
-          <a class="navbar-brand" href="../../../index.html">
-            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../media/stride-logo-blue-toolkit.svg" alt="">
             
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,36 +85,26 @@
         </div>
 
         <article data-uid="">
-<h1 id="c-code-only-basic-examples">C# Code Only Basic Examples</h1>
+<h1 id="contribute-examples">Contribute Examples</h1>
 
-<p>This page provides a brief overview of the basic examples available for code-only projects in Stride. You can explore each example in detail. Each linked example page contains detailed code snippets and explanations.</p>
-<h2 id="examples-overview">Examples Overview</h2>
-<ul>
-<li><a href="capsule-with-rigid-body.html">Capsule with rigid body</a>:
-<ul>
-<li>Demonstrates how to create a 3D capsule entity and position it in a scene.</li>
-</ul>
+<p>You can see all examples in the <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only">examples</a> folder.</p>
+<p>If you would like your example be launchable from the console application, you can add it to the <code>Stride.CommunityToolkit.Examples</code> project which you can find here: <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples">Stride.CommunityToolkit.Examples</a>.</p>
+<ol>
+<li>Make sure you create an anchor class named <code>NamespaceAnchor.cs</code> if your example contains only <code>Programs.cs</code>, so the namespace can be accessible from <code>Stride.CommunityToolkit.Examples</code>.
+<pre><code class="lang-csharp">namespace ExampleXY_YourExampleNamespace;
+
+/// &lt;summary&gt;
+/// This empty class is here to make the namespace available in the nameof() operator in the main examples project.
+/// &lt;/summary&gt;
+internal static class NamespaceAnchor;
+</code></pre>
 </li>
-<li><a href="give-me-cube-body.html">Give me a cube</a>:
-<ul>
-<li>A variation of the above example, positioning a 3D cube in a scene.</li>
-</ul>
-</li>
-<li><a href="stride-ui-capsule-with-rigid-body.html">Stride UI - Capsule with rigid body and Window</a>:
-<ul>
-<li>Demonstrates how to create a 3D capsule entity and position it in a scene, and how to create a simple window displaying a text message.</li>
-</ul>
-</li>
-<li><a href="procedural-geometry.html">Procedural geometry</a>:
-<ul>
-<li>Demonstrates how to create procedural geometry meshes such as a triangle, plane, and circle, and how to add them to a scene.</li>
-</ul>
-</li>
-</ul>
-<h2 id="interactive-console-application">Interactive Console Application</h2>
-<p>For those who prefer a more interactive approach, we provide a console application that allows you to run these examples directly. This console app, available in the <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples"><code>Stride.CommunityToolkit.Examples</code></a> project, offers an interactive menu for selecting and running the examples.</p>
-<p>Here's a glimpse of the interactive menu provided by the console application:</p>
-<pre><code class="lang-plaintext">Stride Community Toolkit Examples
+<li>Add your example project to <code>Stride.CommunityToolkit.Examples</code> project.</li>
+<li>Update <code>Providers/ExampleProvider.cs</code></li>
+<li>Run <code>Stride.CommunityToolkit.Examples</code></li>
+<li>You should see your example listed in the console application.</li>
+</ol>
+<pre><code>Stride Community Toolkit Examples
 
 [1] Basic Example - Capsule with rigid body
 [2] Basic Example - Capsule with rigid body in F#
@@ -125,21 +115,23 @@
 [7] Basic Example - Procedural Geometry
 [8] Basic Example - Particles
 [9] Advance Example - Myra UI - Draggable Window, GetService()
-[10] Advance Example - Stride UI - Draggable Window
-[11] Advance Example - Image Processing
-[12] Advance Example - Root Renderer Shader
-[13] Other - CubeClicker
-[14] Other - Debug Shapes
-[15] Other - Renderer
+[10] Advance Example - Image Processing
+[11] Advance Example - Root Renderer Shader
+[12] Other - CubeClicker
+[13] Other - Debug Shapes
+[14] Other - Renderer
 [Q] Quit
 
 Enter choice and press ENTER to continue
 </code></pre>
+<ol>
+<li>Update the <code>Stride.CommunityToolkit.Docs/includes/manual/examples/basic-examples-outro.md</code> file with the new example.</li>
+</ol>
 
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/basic-examples.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/contributing/examples/index.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

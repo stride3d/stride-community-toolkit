@@ -39,6 +39,44 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Bepu.Body2DComponent.AttachInner
   nameWithType: Body2DComponent.AttachInner
+- uid: Stride.CommunityToolkit.Bepu.CameraComponentExtensions
+  name: CameraComponentExtensions
+  href: api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html
+  commentId: T:Stride.CommunityToolkit.Bepu.CameraComponentExtensions
+  fullName: Stride.CommunityToolkit.Bepu.CameraComponentExtensions
+  nameWithType: CameraComponentExtensions
+- uid: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)
+  name: Raycast(CameraComponent, Vector2, float, out HitInfo, CollisionMask)
+  href: api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html#Stride_CommunityToolkit_Bepu_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_System_Single_Stride_BepuPhysics_HitInfo__Stride_BepuPhysics_CollisionMask_
+  commentId: M:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)
+  name.vb: Raycast(CameraComponent, Vector2, Single, HitInfo, CollisionMask)
+  fullName: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, float, out Stride.BepuPhysics.HitInfo, Stride.BepuPhysics.CollisionMask)
+  fullName.vb: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Core.Mathematics.Vector2, Single, Stride.BepuPhysics.HitInfo, Stride.BepuPhysics.CollisionMask)
+  nameWithType: CameraComponentExtensions.Raycast(CameraComponent, Vector2, float, out HitInfo, CollisionMask)
+  nameWithType.vb: CameraComponentExtensions.Raycast(CameraComponent, Vector2, Single, HitInfo, CollisionMask)
+- uid: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast*
+  name: Raycast
+  href: api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html#Stride_CommunityToolkit_Bepu_CameraComponentExtensions_Raycast_
+  commentId: Overload:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast
+  nameWithType: CameraComponentExtensions.Raycast
+- uid: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)
+  name: RaycastMouse(CameraComponent, ScriptComponent, float, out HitInfo, CollisionMask)
+  href: api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html#Stride_CommunityToolkit_Bepu_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_System_Single_Stride_BepuPhysics_HitInfo__Stride_BepuPhysics_CollisionMask_
+  commentId: M:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)
+  name.vb: RaycastMouse(CameraComponent, ScriptComponent, Single, HitInfo, CollisionMask)
+  fullName: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, float, out Stride.BepuPhysics.HitInfo, Stride.BepuPhysics.CollisionMask)
+  fullName.vb: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Single, Stride.BepuPhysics.HitInfo, Stride.BepuPhysics.CollisionMask)
+  nameWithType: CameraComponentExtensions.RaycastMouse(CameraComponent, ScriptComponent, float, out HitInfo, CollisionMask)
+  nameWithType.vb: CameraComponentExtensions.RaycastMouse(CameraComponent, ScriptComponent, Single, HitInfo, CollisionMask)
+- uid: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse*
+  name: RaycastMouse
+  href: api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html#Stride_CommunityToolkit_Bepu_CameraComponentExtensions_RaycastMouse_
+  commentId: Overload:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse
+  nameWithType: CameraComponentExtensions.RaycastMouse
 - uid: Stride.CommunityToolkit.Bepu.GameExtensions
   name: GameExtensions
   href: api/Stride.CommunityToolkit.Bepu.GameExtensions.html
@@ -253,6 +291,50 @@ references:
   commentId: N:Stride.CommunityToolkit.Bullet
   fullName: Stride.CommunityToolkit.Bullet
   nameWithType: Stride.CommunityToolkit.Bullet
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions
+  name: CameraComponentExtensions
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html
+  commentId: T:Stride.CommunityToolkit.Bullet.CameraComponentExtensions
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions
+  nameWithType: CameraComponentExtensions
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html#Stride_CommunityToolkit_Bullet_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: Raycast(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html#Stride_CommunityToolkit_Bullet_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Physics_Simulation_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Physics.Simulation, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.Raycast(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast*
+  name: Raycast
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html#Stride_CommunityToolkit_Bullet_CameraComponentExtensions_Raycast_
+  commentId: Overload:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast
+  nameWithType: CameraComponentExtensions.Raycast
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html#Stride_CommunityToolkit_Bullet_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RaycastMouse(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html#Stride_CommunityToolkit_Bullet_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Physics_Simulation_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Physics.Simulation, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: CameraComponentExtensions.RaycastMouse(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse*
+  name: RaycastMouse
+  href: api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html#Stride_CommunityToolkit_Bullet_CameraComponentExtensions_RaycastMouse_
+  commentId: Overload:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse
+  nameWithType: CameraComponentExtensions.RaycastMouse
 - uid: Stride.CommunityToolkit.Bullet.GameExtensions
   name: GameExtensions
   href: api/Stride.CommunityToolkit.Bullet.GameExtensions.html
@@ -365,6 +447,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Bullet.GameExtensions.SetupBase3DScene
   nameWithType: GameExtensions.SetupBase3DScene
+- uid: Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Engine.Game)
+  name: ShowColliders(Game)
+  href: api/Stride.CommunityToolkit.Bullet.GameExtensions.html#Stride_CommunityToolkit_Bullet_GameExtensions_ShowColliders_Stride_Engine_Game_
+  commentId: M:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Engine.Game)
+  fullName: Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Engine.Game)
+  nameWithType: GameExtensions.ShowColliders(Game)
+- uid: Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders*
+  name: ShowColliders
+  href: api/Stride.CommunityToolkit.Bullet.GameExtensions.html#Stride_CommunityToolkit_Bullet_GameExtensions_ShowColliders_
+  commentId: Overload:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders
+  nameWithType: GameExtensions.ShowColliders
 - uid: Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions
   name: Primitive2DCreationOptions
   href: api/Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions.html
@@ -442,6 +537,86 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions.Size
   nameWithType: Primitive3DCreationOptions.Size
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions
+  name: SimulationExtensions
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html
+  commentId: T:Stride.CommunityToolkit.Bullet.SimulationExtensions
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions
+  nameWithType: SimulationExtensions
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
+  name: Raycast(Simulation, RaySegment)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: SimulationExtensions.Raycast(Simulation, RaySegment)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: Raycast(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: SimulationExtensions.Raycast(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name: Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name.vb: Raycast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  fullName.vb: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  nameWithType: SimulationExtensions.Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
+  nameWithType.vb: SimulationExtensions.Raycast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name: Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
+  name.vb: Raycast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  fullName.vb: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
+  nameWithType: SimulationExtensions.Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
+  nameWithType.vb: SimulationExtensions.Raycast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast*
+  name: Raycast
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_Raycast_
+  commentId: Overload:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast
+  nameWithType: SimulationExtensions.Raycast
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
+  name: RaycastPenetrating(Simulation, RaySegment)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment)
+  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RaycastPenetrating(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult})
+  name: RaycastPenetrating(Simulation, RaySegment, IList<HitResult>)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_System_Collections_Generic_IList_Stride_Physics_HitResult__
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult})
+  name.vb: RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult))
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList<Stride.Physics.HitResult>)
+  fullName.vb: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList(Of Stride.Physics.HitResult))
+  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList<HitResult>)
+  nameWithType.vb: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult))
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult},Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name: RaycastPenetrating(Simulation, RaySegment, IList<HitResult>, CollisionFilterGroups, CollisionFilterGroupFlags)
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_System_Collections_Generic_IList_Stride_Physics_HitResult__Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
+  commentId: M:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult},Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
+  name.vb: RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult), CollisionFilterGroups, CollisionFilterGroupFlags)
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList<Stride.Physics.HitResult>, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  fullName.vb: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList(Of Stride.Physics.HitResult), Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
+  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList<HitResult>, CollisionFilterGroups, CollisionFilterGroupFlags)
+  nameWithType.vb: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult), CollisionFilterGroups, CollisionFilterGroupFlags)
+- uid: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating*
+  name: RaycastPenetrating
+  href: api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html#Stride_CommunityToolkit_Bullet_SimulationExtensions_RaycastPenetrating_
+  commentId: Overload:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating
+  nameWithType: SimulationExtensions.RaycastPenetrating
 - uid: Stride.CommunityToolkit.Collections
   name: Stride.CommunityToolkit.Collections
   href: api/Stride.CommunityToolkit.Collections.html
@@ -1660,44 +1835,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.LogicDirectionToWorldDirection
   nameWithType: CameraComponentExtensions.LogicDirectionToWorldDirection
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: CameraComponentExtensions.Raycast(CameraComponent, ScriptComponent, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: Raycast(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_Raycast_Stride_Engine_CameraComponent_Stride_Physics_Simulation_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent, Stride.Physics.Simulation, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: CameraComponentExtensions.Raycast(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast*
-  name: Raycast
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_Raycast_
-  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.Raycast
-  nameWithType: CameraComponentExtensions.Raycast
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Engine_ScriptComponent_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Engine.ScriptComponent, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: CameraComponentExtensions.RaycastMouse(CameraComponent, ScriptComponent, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: RaycastMouse(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_RaycastMouse_Stride_Engine_CameraComponent_Stride_Physics_Simulation_Stride_Core_Mathematics_Vector2_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Physics.Simulation,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent, Stride.Physics.Simulation, Stride.Core.Mathematics.Vector2, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: CameraComponentExtensions.RaycastMouse(CameraComponent, Simulation, Vector2, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse*
-  name: RaycastMouse
-  href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_RaycastMouse_
-  commentId: Overload:Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.CameraComponentExtensions.RaycastMouse
-  nameWithType: CameraComponentExtensions.RaycastMouse
 - uid: Stride.CommunityToolkit.Engine.CameraComponentExtensions.ScreenPointToRay(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2)
   name: ScreenPointToRay(CameraComponent, Vector2)
   href: api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html#Stride_CommunityToolkit_Engine_CameraComponentExtensions_ScreenPointToRay_Stride_Engine_CameraComponent_Stride_Core_Mathematics_Vector2_
@@ -2726,19 +2863,6 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Engine.GameExtensions.SetupBase
   nameWithType: GameExtensions.SetupBase
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders(Stride.Engine.Game)
-  name: ShowColliders(Game)
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_ShowColliders_Stride_Engine_Game_
-  commentId: M:Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders(Stride.Engine.Game)
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders(Stride.Engine.Game)
-  nameWithType: GameExtensions.ShowColliders(Game)
-- uid: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders*
-  name: ShowColliders
-  href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_ShowColliders_
-  commentId: Overload:Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Engine.GameExtensions.ShowColliders
-  nameWithType: GameExtensions.ShowColliders
 - uid: Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)
   name: TakeScreenShot(IGame, string, ImageFileType)
   href: api/Stride.CommunityToolkit.Engine.GameExtensions.html#Stride_CommunityToolkit_Engine_GameExtensions_TakeScreenShot_Stride_Games_IGame_System_String_Stride_Graphics_ImageFileType_
@@ -7014,86 +7138,6 @@ references:
   fullName.vb: Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.<>
   nameWithType: HeightmapExtensions.VertexTypePosTexNormColor.operator !=
   nameWithType.vb: HeightmapExtensions.VertexTypePosTexNormColor.<>
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions
-  name: SimulationExtensions
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html
-  commentId: T:Stride.CommunityToolkit.Physics.SimulationExtensions
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions
-  nameWithType: SimulationExtensions
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
-  name: Raycast(Simulation, RaySegment)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment)
-  nameWithType: SimulationExtensions.Raycast(Simulation, RaySegment)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: Raycast(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: SimulationExtensions.Raycast(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name: Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_Stride_Core_Mathematics_Vector3_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,Stride.Core.Mathematics.Vector3,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name.vb: Raycast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  fullName.vb: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Stride.Core.Mathematics.Vector3, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  nameWithType: SimulationExtensions.Raycast(Simulation, Entity, Vector3, float, CollisionFilterGroupFlags, EFlags)
-  nameWithType.vb: SimulationExtensions.Raycast(Simulation, Entity, Vector3, Single, CollisionFilterGroupFlags, EFlags)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name: Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_Stride_Physics_Simulation_Stride_Engine_Entity_System_Single_Stride_Physics_CollisionFilterGroupFlags_Stride_Physics_EFlags_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.Engine.Entity,System.Single,Stride.Physics.CollisionFilterGroupFlags,Stride.Physics.EFlags)
-  name.vb: Raycast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, float, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  fullName.vb: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast(Stride.Physics.Simulation, Stride.Engine.Entity, Single, Stride.Physics.CollisionFilterGroupFlags, Stride.Physics.EFlags)
-  nameWithType: SimulationExtensions.Raycast(Simulation, Entity, float, CollisionFilterGroupFlags, EFlags)
-  nameWithType.vb: SimulationExtensions.Raycast(Simulation, Entity, Single, CollisionFilterGroupFlags, EFlags)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast*
-  name: Raycast
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_Raycast_
-  commentId: Overload:Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.Raycast
-  nameWithType: SimulationExtensions.Raycast
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
-  name: RaycastPenetrating(Simulation, RaySegment)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment)
-  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: RaycastPenetrating(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult})
-  name: RaycastPenetrating(Simulation, RaySegment, IList<HitResult>)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_System_Collections_Generic_IList_Stride_Physics_HitResult__
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult})
-  name.vb: RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult))
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList<Stride.Physics.HitResult>)
-  fullName.vb: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList(Of Stride.Physics.HitResult))
-  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList<HitResult>)
-  nameWithType.vb: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult))
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult},Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name: RaycastPenetrating(Simulation, RaySegment, IList<HitResult>, CollisionFilterGroups, CollisionFilterGroupFlags)
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_Stride_Physics_Simulation_Stride_CommunityToolkit_Scripts_RaySegment_System_Collections_Generic_IList_Stride_Physics_HitResult__Stride_Physics_CollisionFilterGroups_Stride_Physics_CollisionFilterGroupFlags_
-  commentId: M:Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment,System.Collections.Generic.IList{Stride.Physics.HitResult},Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)
-  name.vb: RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult), CollisionFilterGroups, CollisionFilterGroupFlags)
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList<Stride.Physics.HitResult>, Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  fullName.vb: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation, Stride.CommunityToolkit.Scripts.RaySegment, System.Collections.Generic.IList(Of Stride.Physics.HitResult), Stride.Physics.CollisionFilterGroups, Stride.Physics.CollisionFilterGroupFlags)
-  nameWithType: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList<HitResult>, CollisionFilterGroups, CollisionFilterGroupFlags)
-  nameWithType.vb: SimulationExtensions.RaycastPenetrating(Simulation, RaySegment, IList(Of HitResult), CollisionFilterGroups, CollisionFilterGroupFlags)
-- uid: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating*
-  name: RaycastPenetrating
-  href: api/Stride.CommunityToolkit.Physics.SimulationExtensions.html#Stride_CommunityToolkit_Physics_SimulationExtensions_RaycastPenetrating_
-  commentId: Overload:Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating
-  isSpec: "True"
-  fullName: Stride.CommunityToolkit.Physics.SimulationExtensions.RaycastPenetrating
-  nameWithType: SimulationExtensions.RaycastPenetrating
 - uid: Stride.CommunityToolkit.Rendering
   name: Stride.CommunityToolkit.Rendering
   href: api/Stride.CommunityToolkit.Rendering.html
