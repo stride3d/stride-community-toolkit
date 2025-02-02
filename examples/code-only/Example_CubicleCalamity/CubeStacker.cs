@@ -26,6 +26,7 @@ public class CubeStacker
     private double _elapsedTime;
     private int _layer = 1;
     private Simulation? _simulation;
+    private bool _layersCreated;
 
     public CubeStacker(Game game) => _game = game;
 
@@ -77,11 +78,25 @@ public class CubeStacker
         {
             _elapsedTime = 0;
 
-            var entities = CreateCubeLayer(_layer + 2.5f, scene);
+            var entities = CreateCubeLayer(_layer + 0.5f, scene);
 
             //AddColliders(entities);
 
             _layer++;
+        }
+
+        if (!_layersCreated && _layer == Constants.MaxLayers)
+        {
+            _layersCreated = true;
+
+            foreach (var cube in scene.Entities)
+            {
+                if (cube.Name != "Cube") continue;
+
+                var body = cube.Get<BodyComponent>();
+
+                body.Kinematic = false;
+            }
         }
 
         foreach (var cube in scene.Entities)
@@ -90,7 +105,45 @@ public class CubeStacker
 
             var body = cube.Get<BodyComponent>();
 
-            //if (body.Awake && body.AngularVelocity.LengthSquared() > 0.001f)
+            //body.AngularVelocity = Vector3.Zero;
+            //body.LinearVelocity = Vector3.Zero;
+
+            //body.AngularVelocity = Vector3.Zero;
+            //body.LinearVelocity = new(0, -0.1f, 0);
+
+            //  Make all sleeping except those moving down
+            //body.Awake = false;
+            //body.Gravity = new Vector3(0, -10, 0);
+            //body.Kinematic = true;
+
+            //body.BodyInertia = new BodyInertia
+            //{
+            //    //InverseMass = 1,
+            //    InverseInertiaTensor = new BepuUtilities.Symmetric3x3
+            //    {
+            //        XX = 1,
+            //        ZY = 1,
+            //        YX = 1,
+            //        YY = 1,
+            //        ZX = 1,
+            //        ZZ = 1
+            //    }
+            //};
+
+            //if (body.AngularVelocity.LengthSquared() > 0.001f)
+            //{
+            //    body.AngularVelocity = Vector3.Zero;
+            //}
+
+            //if (body.Awake && body.LinearVelocity.LengthSquared() > 0.1f)
+            //{
+            //    body.LinearVelocity = Vector3.Zero;
+            //}
+
+            //body.SpringDampingRatio = 1;
+            //body.SpringFrequency = 40;
+
+            //if (body.Awake && body.AngularVelocitys.LengthSquared() > 0.001f)
             //{
             //    //body.BodyInertia = new BodyInertia
             //    //{
@@ -169,6 +222,7 @@ public class CubeStacker
         var boxCollider = new BoxCollider
         {
             Size = Constants.CubeSize,
+            Mass = 1000000000,
         };
 
         compoundCollider.Colliders.Add(boxCollider);
@@ -191,9 +245,18 @@ public class CubeStacker
         //var shapeIndex = body.ShapeIndex;
         //var pos = body.Pose;
 
-        //body.Kinematic = false;
+        body.Kinematic = true;
 
         //var pose = body.Pose;
+
+        body.BodyInertia = new BodyInertia
+        {
+            InverseMass = 1 / boxCollider.Mass,
+            InverseInertiaTensor = default
+        };
+
+        //body.SleepThreshold = 0.01f;
+        //body.MinimumTimestepCountUnderThreshold = 32;
 
         entity.Add(body);
 
@@ -202,8 +265,14 @@ public class CubeStacker
         //body.SpringFrequency = 1;
         //body.SpringDampingRatio = 0;
 
+
         //body.AngularVelocity = Vector3.Zero;
         //body.LinearVelocity = Vector3.Zero;
+        //body.FrictionCoefficient = 3f;
+        //body.MaximumRecoveryVelocity = 10;
+        //body.SpringDampingRatio = 10000000;
+        //body.SpringFrequency = 1000;
+        //body.SpeculativeMargin = 10;
 
         // This works differently when set here
         //body.BodyInertia = zeroInertia;
@@ -245,6 +314,16 @@ public class CubeStacker
         //entity.GetSimulation().Simulation.Bodies.Add(bodyDescription);
         // Apply the OneBodyAngularServo constraint to keep the box's orientation fixed.
 
+        var ballSocket = new BallSocketConstraintComponent
+        {
+            A = body,
+            //B = body,
+            LocalOffsetA = Vector3.Zero,
+            LocalOffsetB = Vector3.Zero,
+            SpringDampingRatio = 1,
+            SpringFrequency = 30
+        };
+
         var oneBodyLinearServo = new OneBodyLinearServoConstraintComponent
         {
             A = body,
@@ -269,8 +348,70 @@ public class CubeStacker
             SpringFrequency = 30,
         };
 
-        entity.Add(oneBodyLinearServo);
+        var pointOnLine = new PointOnLineServoConstraintComponent
+        {
+            A = body,
+            B = body,
+            LocalOffsetA = Vector3.Zero,
+            LocalOffsetB = Vector3.Zero,
+            LocalDirection = Vector3.UnitY,
+            SpringDampingRatio = 1,
+            SpringFrequency = 30,
+        };
+
+        var linearAxisServe = new LinearAxisServoConstraintComponent
+        {
+            A = body,
+            B = body,
+            LocalOffsetA = Vector3.Zero,
+            LocalOffsetB = Vector3.Zero,
+            LocalPlaneNormal = Vector3.UnitX,
+            SpringDampingRatio = 1,
+            SpringFrequency = 30,
+        };
+
+        var linearAxisServe2 = new LinearAxisServoConstraintComponent
+        {
+            A = body,
+            B = body,
+            LocalOffsetA = Vector3.Zero,
+            LocalOffsetB = Vector3.Zero,
+            LocalPlaneNormal = Vector3.UnitZ,
+            SpringDampingRatio = 1,
+            SpringFrequency = 30,
+        };
+
+        var angularServo = new AngularServoConstraintComponent
+        {
+            A = body,
+            B = body,
+            TargetRelativeRotationLocalA = Quaternion.Identity,
+        };
+
+        var _oblscc = new OneBodyLinearServoConstraintComponent();
+        _oblscc.ServoMaximumSpeed = float.MaxValue;
+        _oblscc.ServoBaseSpeed = 0;
+        _oblscc.ServoMaximumForce = 1000;
+        _oblscc.A = body;
+        _oblscc.Enabled = false;
+
+        var _obascc = new OneBodyAngularServoConstraintComponent();
+        _obascc.ServoMaximumSpeed = float.MaxValue;
+        _obascc.ServoBaseSpeed = 0;
+        _obascc.ServoMaximumForce = 1000;
+        _obascc.A = body;
+        _obascc.Enabled = false;
+
+        //entity.Add(_oblscc);
+        //entity.Add(_obascc);
+
+        //entity.Add(oneBodyLinearServo);
         //entity.Add(angularServo);
+        //entity.Add(linearAxisServe);
+        //entity.Add(linearAxisServe2);
+        //entity.Add(angularServo);
+
+
 
         //var angularServo = new AngularServoConstraintComponent
         //{
