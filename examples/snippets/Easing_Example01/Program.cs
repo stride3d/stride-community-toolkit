@@ -56,6 +56,8 @@ void Start(Scene scene)
 // Update the scene every frame (for animations and input handling)
 void Update(Scene scene, GameTime time)
 {
+    game.DebugTextSystem.Print("Press Space to reset", new Int2(5, 10));
+
     // Calculate the progress of the animation as a ratio between 0 and 1
     var progress = (float)(elapsed.TotalSeconds / duration.TotalSeconds);
 
