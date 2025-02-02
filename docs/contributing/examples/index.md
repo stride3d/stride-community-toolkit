@@ -16,7 +16,7 @@ If you would like your example be launchable from the console application, you c
 1. Add your example project to `Stride.CommunityToolkit.Examples` project.
 1. Update `Providers/ExampleProvider.cs`
 1. Run `Stride.CommunityToolkit.Examples`
-1. You should see your example listed
+1. You should see your example listed in the console application.
 ```
 Stride Community Toolkit Examples
 
@@ -38,3 +38,4 @@ Stride Community Toolkit Examples
 
 Enter choice and press ENTER to continue
 ```
+1. Update the `Stride.CommunityToolkit.Docs/includes/manual/examples/basic-examples-outro.md` file with the new example.
