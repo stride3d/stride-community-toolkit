@@ -34,9 +34,8 @@ void SetupBase3DScene()
     game.Add3DGround();
 }
 
-/// <summary>
-/// Initializes the health bar if it is not already visible.
-/// </summary>
+
+// Initializes the health bar if it is not already visible.
 void InitializeHealthBar()
 {
     if (isHealthBarVisible) return;
