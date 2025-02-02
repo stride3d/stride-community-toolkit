@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -43,6 +44,10 @@ static Entity CreateLineEntity(Game game)
     var indices = new short[] { 0, 1 };
     var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer);
 
+    var material = GizmoEmissiveColorMaterial.Create(game.GraphicsDevice, Color.DarkMagenta);
+    // Or use this for a specific color
+    //var material = game.CreateMaterial(Color.DarkMagenta);
+
     var meshDraw = new MeshDraw
     {
         PrimitiveType = PrimitiveType.LineList,
@@ -52,7 +57,7 @@ static Entity CreateLineEntity(Game game)
     };
 
     var mesh = new Mesh { Draw = meshDraw };
-    var model = new Model { mesh, game.CreateMaterial(Color.Blue) };
+    var model = new Model { mesh, material };
 
     return new Entity { new ModelComponent(model) };
 }
