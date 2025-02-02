@@ -10,4 +10,4 @@ del /Q "api\.manifest"
 
 REM --maxParallelism 1
 
-docfx docfx.json --serve --maxParallelism 1
+docfx docfx.json --maxParallelism 1 --serve
