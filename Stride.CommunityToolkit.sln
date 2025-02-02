@@ -91,6 +91,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example14_Raycast", "exampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example15_Constraint", "examples\code-only\Example15_Constraint\Example15_Constraint.csproj", "{490BB399-8A47-43C7-9D8C-7D7DF900CB50}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic3DScene_MeshLine", "examples\code-only\Example01_Basic3DScene_MeshLine\Example01_Basic3DScene_MeshLine.csproj", "{24CE40E8-F42C-44E4-936F-86BB74CAFDBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +246,10 @@ Global
 		{490BB399-8A47-43C7-9D8C-7D7DF900CB50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{490BB399-8A47-43C7-9D8C-7D7DF900CB50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{490BB399-8A47-43C7-9D8C-7D7DF900CB50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24CE40E8-F42C-44E4-936F-86BB74CAFDBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24CE40E8-F42C-44E4-936F-86BB74CAFDBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24CE40E8-F42C-44E4-936F-86BB74CAFDBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24CE40E8-F42C-44E4-936F-86BB74CAFDBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -276,6 +282,7 @@ Global
 		{A8DBD6E0-47F3-4CAC-A5F9-DA6E4AB78726} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{B442A84F-737B-45CC-B2DE-89495E2FDDBC} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{490BB399-8A47-43C7-9D8C-7D7DF900CB50} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{24CE40E8-F42C-44E4-936F-86BB74CAFDBF} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
