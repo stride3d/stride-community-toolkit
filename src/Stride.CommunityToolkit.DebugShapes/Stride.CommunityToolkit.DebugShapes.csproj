@@ -18,7 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2371" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2374" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
     </ItemGroup>
 
     <ItemGroup>
