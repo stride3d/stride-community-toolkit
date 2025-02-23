@@ -4,6 +4,8 @@ updates:
     directory: "/src/Stride.CommunityToolkit"
     schedule:
       interval: daily
+    allow:
+      - dependency-name: "Stride.*"    
     groups:
       stride:
         patterns:
@@ -12,6 +14,8 @@ updates:
     directory: "/src/Stride.CommunityToolkit.Bepu"
     schedule:
       interval: daily
+    allow:
+      - dependency-name: "Stride.*"      
     groups:
       stride:
         patterns:
@@ -20,6 +24,8 @@ updates:
     directory: "/src/Stride.CommunityToolkit.DebugShapes"
     schedule:
       interval: daily
+    allow:
+      - dependency-name: "Stride.*"      
     groups:
       stride:
         patterns:
@@ -28,6 +34,8 @@ updates:
     directory: "/src/Stride.CommunityToolkit.ImGui"
     schedule:
       interval: daily
+    allow:
+      - dependency-name: "Stride.*"      
     groups:
       stride:
         patterns:
@@ -36,6 +44,8 @@ updates:
     directory: "/src/Stride.CommunityToolkit.Skyboxes"
     schedule:
       interval: daily
+    allow:
+      - dependency-name: "Stride.*"      
     groups:
       stride:
         patterns:
@@ -44,6 +54,8 @@ updates:
     directory: "/src/Stride.CommunityToolkit.Windows"
     schedule:
       interval: daily
+    allow:
+      - dependency-name: "Stride.*"      
     groups:
       stride:
         patterns:
