@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.Core.Assets.CompilerApp. -->
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2293" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.0.2371" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>
