@@ -1,4 +1,5 @@
 version: 2
+# Selected directories
 updates:
   - package-ecosystem: nuget
     directory: "/src/Stride.CommunityToolkit"
