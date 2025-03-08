@@ -1,5 +1,5 @@
 version: 2
-# Selected directories 
+# Selected directories
 updates:
   - package-ecosystem: nuget
     directory: "/src/Stride.CommunityToolkit.Bepu"
@@ -11,24 +11,24 @@ updates:
       stride:
         patterns:
           - "Stride.*"
-  - package-ecosystem: nuget
-    directory: "/src/Stride.CommunityToolkit.DebugShapes"
-    schedule:
-      interval: daily
-    allow:
-      - dependency-name: "Stride.*"      
-  - package-ecosystem: nuget
-    directory: "/src/Stride.CommunityToolkit.ImGui"
-    schedule:
-      interval: daily
-    allow:
-      - dependency-name: "Stride.*"      
-  - package-ecosystem: nuget
-    directory: "/src/Stride.CommunityToolkit.Skyboxes"
-    schedule:
-      interval: daily
-    allow:
-      - dependency-name: "Stride.*"      
+#  - package-ecosystem: nuget
+#    directory: "/src/Stride.CommunityToolkit.DebugShapes"
+#    schedule:
+#      interval: daily
+#    allow:
+#      - dependency-name: "Stride.*"      
+#  - package-ecosystem: nuget
+#    directory: "/src/Stride.CommunityToolkit.ImGui"
+#    schedule:
+#      interval: daily
+#    allow:
+#      - dependency-name: "Stride.*"      
+#  - package-ecosystem: nuget
+#    directory: "/src/Stride.CommunityToolkit.Skyboxes"
+#    schedule:
+#      interval: daily
+#    allow:
+#      - dependency-name: "Stride.*"      
   - package-ecosystem: nuget
     directory: "/src/Stride.CommunityToolkit.Windows"
     schedule:
