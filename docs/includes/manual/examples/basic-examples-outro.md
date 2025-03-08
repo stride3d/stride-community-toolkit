@@ -15,13 +15,14 @@ Stride Community Toolkit Examples
 [6] Basic Example - Stride UI - Grid - Save and load game state
 [7] Basic Example - Procedural Geometry
 [8] Basic Example - Particles
-[9] Advance Example - Myra UI - Draggable Window, GetService()
-[10] Advance Example - Stride UI - Draggable Window
-[11] Advance Example - Image Processing
-[12] Advance Example - Root Renderer Shader
-[13] Other - CubeClicker
-[14] Other - Debug Shapes
-[15] Other - Renderer
+[9] Basic Example - CollisionGroup
+[10] Advance Example - Myra UI - Draggable Window, GetService()
+[11] Advance Example - Stride UI - Draggable Window
+[12] Advance Example - Image Processing
+[13] Advance Example - Root Renderer Shader
+[14] Other - CubeClicker
+[15] Other - Debug Shapes
+[16] Other - Renderer
 [Q] Quit
 
 Enter choice and press ENTER to continue
