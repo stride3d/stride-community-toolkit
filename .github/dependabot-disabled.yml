@@ -1,5 +1,6 @@
 version: 2
 # Selected directories
+# It creates multiple PRs. Activate if we can fix that, in the meantime there is workflows/bump-stride-nuget-packages.yml
 updates:
   - package-ecosystem: nuget
     directory: "/src/Stride.CommunityToolkit.Bepu"
