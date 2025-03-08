@@ -44,11 +44,13 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
+        var screenSize = new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
+
         _instructions = new DebugTextPrinter()
         {
             DebugTextSystem = DebugText,
             TextSize = new(205, 17 * 11),
-            ScreenSize = new(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height),
+            ScreenSize = screenSize,
             Instructions =
             [
                 new("CONTROL INSTRUCTIONS"),

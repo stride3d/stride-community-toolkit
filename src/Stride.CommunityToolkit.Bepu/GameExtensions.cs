@@ -130,7 +130,9 @@ public static class GameExtensions
         var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
+        {
             model.Materials.Add(options.Material);
+        }
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
 
