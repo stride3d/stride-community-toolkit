@@ -1,5 +1,5 @@
 version: 2
-# Selected directories
+# Selected directories 
 updates:
   - package-ecosystem: nuget
     directory: "/src/Stride.CommunityToolkit.Bepu"
