@@ -2,7 +2,7 @@
 
 ![Done](https://img.shields.io/badge/status-done-green)
 
-`GameExtensions.cs` provides a suite of extension methods for the Game class in the Stride game engine, enhancing its capabilities and offering convenient functionalities to game developers. These methods streamline common tasks in game development, ranging from performance monitoring to material creation and entity manipulation.
+`GameExtensions.cs` provides a suite of extension methods for the `Game` class, enhancing its capabilities and offering convenient functionalities to game developers. These methods streamline common tasks in game development, ranging from performance monitoring to material creation and entity manipulation.
 
 Here's a brief overview of the functionalities provided by these extension methods:
 

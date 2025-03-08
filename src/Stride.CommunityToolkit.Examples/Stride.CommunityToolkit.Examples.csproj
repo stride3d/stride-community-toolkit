@@ -28,6 +28,7 @@
         <ProjectReference Include="..\..\examples\code-only\Example11_ImGui\Example11_ImGui.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example12_Particles\Example12_Particles.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example13_RootRendererShader\Example13_RootRendererShader.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example16_CollisionGroup\Example16_CollisionGroup.csproj" />
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 

@@ -33,6 +33,9 @@ public class ExampleProvider
         CreateExample("Basic Example - Particles",
             nameof(Example12_Particles)),
 
+        CreateExample("Basic Example - CollisionGroup",
+            nameof(Example16_CollisionGroup)),
+
         CreateExample("Advance Example - Myra UI - Draggable Window, GetService()",
             nameof(Example04_MyraUI)),
 
