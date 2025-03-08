@@ -14,7 +14,7 @@ This example is organized into multiple methods for better readability and maint
 
 This modular approach makes the code easier to understand and maintain. Each method has a clear responsibility.
 
-[!INCLUDE [note-additional-pakcages](../../../includes/manual/examples/note-additional-pakcages.md)]
+[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
 
 ![Stride UI Example](media/stride-game-engine-example03-stride-ui-basic-window.webp)
 
