@@ -2,7 +2,7 @@
 
 ![Done](https://img.shields.io/badge/status-done-green)
 
-`EntityExtensions.cs` is a collection of extension methods enhancing the functionality of entities within the Stride game engine. These methods provide additional capabilities to entities, making it easier to work with them in various scenarios. From adding gizmos and interactive scripts to retrieving components and managing entity positions, these extensions offer a variety of useful tools for developers.
+`EntityExtensions.cs` is a collection of extension methods enhancing the functionality of entities within the Stride game engine. These methods provide additional capabilities to entities, making it easier to work with them in various scenarios. From adding gizmos and interactive scripts to retrieving components and managing entity positions.
 
 Here is an overview of the available extension methods:
 
