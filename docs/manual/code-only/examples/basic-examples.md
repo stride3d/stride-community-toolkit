@@ -12,5 +12,7 @@
   - Demonstrates how to create a 3D capsule entity and position it in a scene, and how to create a simple window displaying a text message.
 - [Procedural geometry](procedural-geometry.md):
   - Demonstrates how to create procedural geometry meshes such as a triangle, plane, and circle, and how to add them to a scene.
+- [Collision Group](collision-group.md):
+  - Demonstrates how to create a simple scene with two players and an enemy entity and set up collision groups to control which objects can collide with each other. 
   
 [!INCLUDE [basic-examples](../../../includes/manual/examples/basic-examples-outro.md)]
