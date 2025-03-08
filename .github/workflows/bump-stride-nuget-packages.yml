@@ -26,7 +26,7 @@ jobs:
         id: update
         run: |
           # Run the update on the solution level (assumes the .sln is in the root folder)
-          dotnet outdated -u
+          dotnet outdated -u --include "Stride."
           
           # Configure Git user for commit attribution
           git config --global user.email "actions@github.com"
