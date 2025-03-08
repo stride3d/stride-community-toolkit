@@ -5,7 +5,6 @@
 
 Welcome to the Stride Community Toolkit repository. This toolkit serves as a comprehensive collection of helpers and extensions designed to simplify and accelerate development with the [Stride Game Engine](https://www.stride3d.net/) using .NET and C#.
 
-
 * 🚀 [Getting Started](#-getting-started)
 * 🤝 [Contributing](#-contributing)
 * 📖 [Stride Documentation Landscape](#-stride-documentation-landscape)
