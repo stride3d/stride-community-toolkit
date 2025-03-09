@@ -9,7 +9,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-
 // This example demonstrates two different ways of adding custom rendering logic to a Stride game.
 // 1. Using a custom SceneRenderer via MyCustomSceneRenderer, which renders text for all entities.
 // 2. Using a StartupScript via SpriteBatchRendererScript, which draws specific text for a single entity.

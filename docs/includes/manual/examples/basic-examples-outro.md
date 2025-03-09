@@ -10,21 +10,22 @@ Stride Community Toolkit Examples
 [1] Basic Example - Capsule with rigid body
 [2] Basic Example - Capsule with rigid body in F#
 [3] Basic Example - Capsule with rigid body in Visual Basic
-[4] Basic Example - Material
-[5] Basic Example - Give me a cube
-[6] Basic Example - Stride UI - Canvas - Capsule with rigid body and Window
-[7] Basic Example - Procedural Geometry
+[4] Basic Example - Mesh Line
+[5] Basic Example - Material
+[6] Basic Example - Give me a cube
+[7] Basic Example - Stride UI - Canvas - Capsule with rigid body and Window
 [8] Basic Example - Stride UI - Grid - Save and load game state
-[9] Basic Example - Particles
-[10] Basic Example - CollisionGroup
-[11] Basic Example - CollisionLayer
-[12] Advance Example - Myra UI - Draggable Window, GetService()
-[13] Advance Example - Stride UI - Draggable Window
-[14] Advance Example - Image Processing
-[15] Advance Example - Root Renderer Shader
-[16] Other - CubeClicker
-[17] Other - Debug Shapes
-[18] Other - Renderer
+[9] Basic Example - Procedural Geometry
+[10] Basic Example - Particles
+[11] Basic Example - CollisionGroup
+[12] Basic Example - CollisionLayer
+[13] Advance Example - Simple Constraint
+[14] Advance Example - Myra UI - Draggable Window, GetService()
+[15] Advance Example - Stride UI - Draggable Window
+[16] Advance Example - Image Processing
+[17] Advance Example - Root Renderer Shader
+[18] Other - Debug Shapes
+[19] Other - Renderer
 [Q] Quit
 
 Enter choice and press ENTER to continue

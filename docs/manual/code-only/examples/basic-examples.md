@@ -8,6 +8,8 @@
   - Demonstrates how to create a 3D capsule entity and position it in a scene.
 - [Give me a cube](give-me-cube-body.md):
   - A variation of the above example, positioning a 3D cube in a scene.
+- [Mesh line](mesh-line.md):
+  - Demonstrates how to create a mesh line and add it to a scene.
 - [Stride UI - Capsule with rigid body and Window](stride-ui-capsule-with-rigid-body.md):
   - Demonstrates how to create a 3D capsule entity and position it in a scene, and how to create a simple window displaying a text message.
 - [Stride UI - Grid - Save and load game state](stride-ui-cube-clicker.md)
