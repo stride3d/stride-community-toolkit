@@ -47,8 +47,6 @@
       href: code-only/examples/root-renderer-shader.md
   - name: C# Other Examples
     items:
-    - name: CubeClicker
-      href: code-only/examples/cube-clicker.md
     - name: DebugShapes
       href: code-only/examples/debug-shapes.md
     - name: Renderer

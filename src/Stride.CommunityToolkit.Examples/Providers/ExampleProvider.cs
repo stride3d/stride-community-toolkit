@@ -60,9 +60,6 @@ public class ExampleProvider
         CreateExample("Advance Example - Root Renderer Shader",
             nameof(Example13_RootRendererShader)),
 
-        CreateExample("Other - CubeClicker",
-            nameof(Example07_CubeClicker)),
-
         CreateExample("Other - Debug Shapes",
             nameof(Example08_DebugShapes)),
 
