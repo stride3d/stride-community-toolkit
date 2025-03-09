@@ -18,6 +18,9 @@ public class ExampleProvider
         CreateExample("Basic Example - Capsule with rigid body in Visual Basic",
             nameof(Example01_Basic3DScene_VBasic)),
 
+        CreateExample("Basic Example - Mesh Line",
+            nameof(Example01_Basic3DScene_MeshLine)),
+
         CreateExample("Basic Example - Material",
             nameof(Example01_Material)),
 
@@ -42,8 +45,11 @@ public class ExampleProvider
         CreateExample("Basic Example - CollisionLayer",
             nameof(Example16_CollisionLayer)),
 
-        CreateExample("Advance Example - Myra UI - Draggable Window, GetService()",
-            nameof(Example04_MyraUI)),
+        CreateExample("Advance Example - CollisionLayer",
+            nameof(Example16_CollisionLayer)),
+
+        CreateExample("Advance Example - Simple Constraint",
+            nameof(Example15_Constraint_Simple)),
 
         CreateExample("Advance Example - Stride UI - Draggable Window",
             nameof(Example10_StrideUI_DragAndDrop)),
