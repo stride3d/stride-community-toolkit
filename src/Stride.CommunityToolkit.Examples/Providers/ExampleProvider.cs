@@ -18,17 +18,20 @@ public class ExampleProvider
         CreateExample("Basic Example - Capsule with rigid body in Visual Basic",
             nameof(Example01_Basic3DScene_VBasic)),
 
+        CreateExample("Basic Example - Material",
+            nameof(Example01_Material)),
+
         CreateExample("Basic Example - Give me a cube",
             nameof(Example02_GiveMeACube)),
 
         CreateExample("Basic Example - Stride UI - Canvas - Capsule with rigid body and Window",
             nameof(Example03_StrideUI_CapsuleAndWindow)),
 
-        CreateExample("Basic Example - Stride UI - Grid - Save and load game state",
-            nameof(Example07_CubeClicker)),
-
         CreateExample("Basic Example - Procedural Geometry",
             nameof(Example05_ProceduralGeometry)),
+
+        CreateExample("Basic Example - Stride UI - Grid - Save and load game state",
+            nameof(Example07_CubeClicker)),
 
         CreateExample("Basic Example - Particles",
             nameof(Example12_Particles)),
