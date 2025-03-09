@@ -27,11 +27,11 @@ public class ExampleProvider
         CreateExample("Basic Example - Stride UI - Canvas - Capsule with rigid body and Window",
             nameof(Example03_StrideUI_CapsuleAndWindow)),
 
-        CreateExample("Basic Example - Procedural Geometry",
-            nameof(Example05_ProceduralGeometry)),
-
         CreateExample("Basic Example - Stride UI - Grid - Save and load game state",
             nameof(Example07_CubeClicker)),
+
+        CreateExample("Basic Example - Procedural Geometry",
+            nameof(Example05_ProceduralGeometry)),
 
         CreateExample("Basic Example - Particles",
             nameof(Example12_Particles)),
