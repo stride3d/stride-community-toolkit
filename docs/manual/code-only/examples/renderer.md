@@ -2,14 +2,13 @@
 
 This example demonstrates two distinct approaches for implementing custom rendering in Stride, allowing developers to extend the default rendering pipeline with their own 2D visualization code:
 
-1. **Global Scene Renderer Implementation (MyCustomSceneRenderer)**:
+1. Global Scene Renderer Implementation - `MyCustomSceneRenderer`:
    - Creates a custom renderer that operates on all entities in the scene
    - Implements SceneRendererBase to hook into Stride's rendering pipeline
    - Renders both static text ("Hello Stride") and dynamic per-entity information
    - Displays entity names and positions with semi-transparent backgrounds
    - Converts 3D world positions to 2D screen coordinates for text placement
-
-2. **Entity-Specific Renderer Implementation (SpriteBatchRendererScript)**:
+2. Entity-Specific Renderer Implementation - `SpriteBatchRendererScript`:
    - Attaches a custom renderer to a specific entity via a StartupScript
    - Creates a DelegateSceneRenderer to handle rendering without subclassing
    - Displays "Hello Stride 2" text specifically for its parent entity
