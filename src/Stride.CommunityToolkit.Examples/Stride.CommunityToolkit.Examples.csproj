@@ -16,6 +16,7 @@
         <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene\Example01_Basic3DScene.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene_FSharp\Example01_Basic3DScene_FSharp.fsproj" />
         <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene_VBasic\Example01_Basic3DScene_VBasic.vbproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example01_Material\Example01_Material.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example02_GiveMeACube\Example02_GiveMeACube.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example03_StrideUI_CapsuleAndWindow\Example03_StrideUI_CapsuleAndWindow.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example04_MyraUI\Example04_MyraUI.csproj" />

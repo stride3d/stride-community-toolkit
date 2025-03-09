@@ -18,6 +18,9 @@ public class ExampleProvider
         CreateExample("Basic Example - Capsule with rigid body in Visual Basic",
             nameof(Example01_Basic3DScene_VBasic)),
 
+        CreateExample("Basic Example - Material",
+            nameof(Example01_Material)),
+
         CreateExample("Basic Example - Give me a cube",
             nameof(Example02_GiveMeACube)),
 

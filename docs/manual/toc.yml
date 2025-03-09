@@ -20,6 +20,8 @@
       href: code-only/examples/stride-ui-capsule-with-rigid-body.md
     - name: Stride UI - Grid - Save and load game state
       href: code-only/examples/stride-ui-cube-clicker.md
+    - name: Material
+      href: code-only/examples/material.md
     - name: Procedural Geometry
       href: code-only/examples/procedural-geometry.md
     - name: Particles
