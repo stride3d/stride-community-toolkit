@@ -16,6 +16,8 @@
       href: code-only/examples/capsule-with-rigid-body.md
     - name: Give me a cube
       href: code-only/examples/give-me-cube-body.md
+    - name: Mesh line
+      href: code-only/examples/mesh-line.md
     - name: Stride UI - Capsule with rigid body and Window
       href: code-only/examples/stride-ui-capsule-with-rigid-body.md
     - name: Stride UI - Grid - Save and load game state
@@ -33,10 +35,24 @@
   - name: C# Advance Examples
     href: code-only/examples/advance-examples.md
     items:
+    - name: Simple Constraint
+      href: code-only/examples/simple-constraint.md
     - name: Myra UI - Draggable Window, GetService()
       href: code-only/examples/myra-ui-draggable-window-and-services.md
+    - name: Stride UI - Draggable Window
+      href: code-only/examples/stride-ui-draggable-window.md
     - name: Image Processing
       href: code-only/examples/image-processing.md
+    - name: Root Renderer Shader
+      href: code-only/examples/root-renderer-shader.md
+  - name: C# Other Examples
+    items:
+    - name: CubeClicker
+      href: code-only/examples/cube-clicker.md
+    - name: DebugShapes
+      href: code-only/examples/debug-shapes.md
+    - name: Renderer
+      href: code-only/examples/renderer.md
   - name: F# Basic Examples
     href: code-only/examples/basic-examples-fs.md
     items:
