@@ -9591,6 +9591,12 @@ references:
   commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
   fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize()
   nameWithType: DebugTextPrinter.Initialize()
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)
+  name: Initialize(DisplayPosition)
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition_
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)
+  nameWithType: DebugTextPrinter.Initialize(DisplayPosition)
 - uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize*
   name: Initialize
   href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_
@@ -9617,6 +9623,15 @@ references:
   commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print
   fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print()
   nameWithType: DebugTextPrinter.Print()
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List{Stride.CommunityToolkit.Scripts.Utilities.TextElement})
+  name: Print(List<TextElement>)
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_System_Collections_Generic_List_Stride_CommunityToolkit_Scripts_Utilities_TextElement__
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List{Stride.CommunityToolkit.Scripts.Utilities.TextElement})
+  name.vb: Print(List(Of TextElement))
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List<Stride.CommunityToolkit.Scripts.Utilities.TextElement>)
+  fullName.vb: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List(Of Stride.CommunityToolkit.Scripts.Utilities.TextElement))
+  nameWithType: DebugTextPrinter.Print(List<TextElement>)
+  nameWithType.vb: DebugTextPrinter.Print(List(Of TextElement))
 - uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print*
   name: Print
   href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_

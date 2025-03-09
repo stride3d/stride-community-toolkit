@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Mesh line | Stride Community Toolkit Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Mesh line | Stride Community Toolkit Manual ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/mesh-line.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="mesh-line">Mesh line</h1>
+
+<p>This example demonstrates how to create a simple 3D scene with a custom mesh line connecting two objects. The code shows:</p>
+<ul>
+<li>Setting up a basic 3D scene</li>
+<li>Creating two sphere entities positioned in 3D space</li>
+<li>Building a custom mesh line by:
+<ul>
+<li>Defining vertices for start and end points</li>
+<li>Creating vertex and index buffers</li>
+<li>Configuring a mesh draw with line list primitive type</li>
+<li>Applying an emissive color material for visibility</li>
+</ul>
+</li>
+</ul>
+<p>The line is attached as a child to one of the spheres, creating a visual connection between the two objects. This approach illustrates how to create basic geometric primitives and custom line visualizations in a Stride 3D environment using low-level graphics APIs.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This example requires the additional NuGet packages <code>Stride.CommunityToolkit.Skyboxes</code> and <code>Stride.CommunityToolkit.Bepu</code>. Make sure to install <strong>both</strong> before running the code.</p>
+</div>
+
+<p><img src="media/stride-game-engine-example-01-mesh-line.webp" alt="Stride UI Example"></p>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_MeshLine">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Gizmos;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering;
+using Buffer = Stride.Graphics.Buffer;
+
+using var game = new Game();
+
+game.Run(start: Start);
+
+void Start(Scene rootScene)
+{
+    game.SetupBase3DScene();
+    game.AddSkybox();
+
+    var lineEntity = CreateLineEntity(game);
+
+    var entity1 = CreateSphereEntity(game);
+    entity1.Transform.Position = new Vector3(0, 8, 0);
+    entity1.AddChild(lineEntity);
+
+    var entity2 = CreateSphereEntity(game);
+    entity2.Transform.Position = new Vector3(-0.01f, 9, -0.01f);
+
+    entity1.Scene = rootScene;
+    entity2.Scene = rootScene;
+};
+
+static Entity CreateSphereEntity(Game game)
+    =&gt; game.Create3DPrimitive(PrimitiveModelType.Sphere);
+
+static Entity CreateLineEntity(Game game)
+{
+    // Create vertex buffer with start and end points
+    var vertices = new Vector3[] { new(0, 0, 0), new(1, 1, -1) };
+    var vertexBuffer = Buffer.New(game.GraphicsDevice, vertices, BufferFlags.VertexBuffer);
+
+    // Create index buffer
+    var indices = new short[] { 0, 1 };
+    var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer);
+
+    var material = GizmoEmissiveColorMaterial.Create(game.GraphicsDevice, Color.DarkMagenta);
+    // Or use this for a specific color
+    //var material = game.CreateMaterial(Color.DarkMagenta);
+
+    var meshDraw = new MeshDraw
+    {
+        PrimitiveType = PrimitiveType.LineList,
+        VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position&lt;Vector3&gt;()), vertices.Length)],
+        IndexBuffer = new IndexBufferBinding(indexBuffer, is32Bit: false, indices.Length),
+        DrawCount = indices.Length
+    };
+
+    var mesh = new Mesh { Draw = meshDraw };
+    var model = new Model { mesh, material };
+
+    return new Entity { new ModelComponent(model) };
+}
+</code></pre>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/mesh-line.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.6</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

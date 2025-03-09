@@ -33,7 +33,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.Body2DComponent.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu.Body2DComponent",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -43,7 +47,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu.CameraComponentExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bepu.CameraComponentExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for <xref href=\"Stride.Engine.CameraComponent\" data-throw-if-not-resolved=\"false\"></xref> to facilitate raycasting functionality.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -53,7 +61,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.GameExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu.GameExtensions",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -63,7 +75,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.Primitive2DCreationOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu.Primitive2DCreationOptions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bepu.Primitive2DCreationOptions.yml\" sourcestartlinenumber=\"1\">Provides options for creating a 2D primitive entity, such as a square or rectangle.\nInherits common entity creation options from <xref href=\"Stride.CommunityToolkit.Engine.PrimitiveCreationOptions\" data-throw-if-not-resolved=\"false\"></xref>\nand adds specific settings for 2D primitive models.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -73,7 +89,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.Primitive3DCreationOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu.Primitive3DCreationOptions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bepu.Primitive3DCreationOptions.yml\" sourcestartlinenumber=\"1\">Provides options for creating a primitive entity in a 3D scene.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -83,7 +103,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.Simulation2DComponent.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu.Simulation2DComponent",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -93,7 +117,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bepu.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bepu",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -103,7 +131,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bullet.CameraComponentExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bullet.CameraComponentExtensions.yml\" sourcestartlinenumber=\"1\">Provides a set of static methods for working with <xref href=\"Stride.Engine.CameraComponent\" data-throw-if-not-resolved=\"false\"></xref> instances.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -113,7 +145,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bullet.GameExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bullet.GameExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bullet.GameExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Game\" data-throw-if-not-resolved=\"false\"></xref> class to simplify common game setup tasks for the Bullet Physics engine.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -123,7 +159,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bullet.Primitive2DCreationOptions.yml\" sourcestartlinenumber=\"1\">Provides options for creating a 2D primitive entity, such as a square or rectangle.\nInherits common entity creation options from <xref href=\"Stride.CommunityToolkit.Engine.PrimitiveCreationOptions\" data-throw-if-not-resolved=\"false\"></xref>\nand adds specific settings for 2D primitive models.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -133,7 +173,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bullet.Primitive3DCreationOptions.yml\" sourcestartlinenumber=\"1\">Provides options for creating a primitive entity in a 3D scene.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -143,7 +187,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bullet.SimulationExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bullet.SimulationExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bullet.SimulationExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Physics.Simulation\" data-throw-if-not-resolved=\"false\"></xref> class to perform raycasting operations in a game simulation fro the Bullet physics.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -153,7 +201,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Bullet.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Bullet",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -163,7 +215,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Collections.CollectionExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Collections.CollectionExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Collections.CollectionExtensions.yml\" sourcestartlinenumber=\"1\">Provides a set of extension methods for common collection types, including <xref href=\"System.Collections.Generic.ICollection%601\" data-throw-if-not-resolved=\"false\"></xref>, <xref href=\"System.Collections.Generic.Queue%601\" data-throw-if-not-resolved=\"false\"></xref>,\nand <xref href=\"System.Collections.Generic.Stack%601\" data-throw-if-not-resolved=\"false\"></xref>. These methods offer additional functionality for efficiently adding or manipulating multiple elements in bulk.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -173,7 +229,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Collections.DictionaryExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Collections.DictionaryExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Collections.DictionaryExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"System.Collections.Generic.IDictionary%602\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -183,7 +243,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Collections.EnumerableExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Collections.EnumerableExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Collections.EnumerableExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"System.Collections.Generic.IEnumerable%601\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -193,7 +257,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Collections.ListStackExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Collections.ListStackExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Collections.ListStackExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods to use stack like methods for <xref href=\"System.Collections.Generic.IList%601\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -203,7 +271,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Collections.RandomListExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Collections.RandomListExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Collections.RandomListExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"System.Random\" data-throw-if-not-resolved=\"false\"></xref> class to facilitate random selection and shuffling of collections.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -213,7 +285,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Collections.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Collections",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -223,7 +299,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -233,7 +313,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugPrimitives.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugPrimitives",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -243,7 +327,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -253,7 +341,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderObject.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderObject",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -263,7 +355,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderStageSelector.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderStageSelector",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -273,7 +369,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -283,7 +383,11 @@
           "relative_path": "api/Stride.CommunityToolkit.DebugShapes.Code.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.DebugShapes.Code",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -293,7 +397,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.AnimationComponentExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.AnimationComponentExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.AnimationComponent\" data-throw-if-not-resolved=\"false\"></xref> to enhance animation playback functionality.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -303,7 +411,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.CameraComponentExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.CameraComponentExtensions.yml\" sourcestartlinenumber=\"1\">Provides a set of static methods for working with <xref href=\"Stride.Engine.CameraComponent\" data-throw-if-not-resolved=\"false\"></xref> instances.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -313,7 +425,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.CameraDefaults.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.CameraDefaults",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.CameraDefaults.yml\" sourcestartlinenumber=\"1\">Provides default settings for camera initialization within a game or scene,\nincluding default positions, rotations, and the main camera name.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -323,7 +439,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.EntityComponentCollectionExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.EntityComponentCollectionExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.EntityComponentCollectionExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"System.Collections.Generic.IEnumerable%601\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"System.Collections.Generic.IEnumerable%601\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -333,7 +453,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.EntityExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.EntityExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.EntityExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Entity\" data-throw-if-not-resolved=\"false\"></xref> class to simplify common operations,\nsuch as adding camera controllers, gizmos, and retrieving or manipulating components.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -343,7 +467,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.EntitySearchExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.EntitySearchExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.EntitySearchExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for searching and retrieving <xref href=\"Stride.Engine.EntityComponent\" data-throw-if-not-resolved=\"false\"></xref> instances\nwithin an <xref href=\"Stride.Engine.Entity\" data-throw-if-not-resolved=\"false\"></xref> hierarchy. This class includes methods for performing breadth-first\nand depth-first searches to find components in children, descendants, and ancestors of an entity.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -353,7 +481,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.GameDefaults.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.GameDefaults",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.GameDefaults.yml\" sourcestartlinenumber=\"1\">Provides default values for the game project.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -363,7 +495,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.GameExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.GameExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.GameExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Game\" data-throw-if-not-resolved=\"false\"></xref> class to simplify common game setup tasks,\nsuch as adding cameras, lights, and ground entities, as well as configuring scenes\nand running the game with custom logic.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -373,7 +509,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.ModelComponentExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.ModelComponentExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.ModelComponentExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.ModelComponent\" data-throw-if-not-resolved=\"false\"></xref> class, enabling additional functionality\nsuch as calculating model dimensions and extracting mesh data.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -383,7 +523,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.PrefabExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.PrefabExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.PrefabExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Stride.Engine.Prefab\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -393,7 +537,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.PrimitiveCreationOptions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.PrimitiveCreationOptions.yml\" sourcestartlinenumber=\"1\">Provides options for creating a primitive entity, such as a cube, sphere, or other 3D object.\nThese options allow customization of the entity's name, material, collider inclusion, and render group.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -403,7 +551,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.SceneExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.SceneExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.SceneExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Scene\" data-throw-if-not-resolved=\"false\"></xref> class to enhance camera-related functionality.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -413,7 +565,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.ScriptComponentExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.ScriptComponentExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for <xref href=\"Stride.Engine.ScriptComponent\" data-throw-if-not-resolved=\"false\"></xref> to enhance interactions with game timing and cameras in the <xref href=\"Stride.Rendering.Compositing.GraphicsCompositor\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -423,7 +579,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.ScriptSystemExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.ScriptSystemExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.ScriptSystemExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Processors.ScriptSystem\" data-throw-if-not-resolved=\"false\"></xref> to facilitate time-based operations, including delays and frame-based executions.\nThese extensions are useful for managing time in game logic, such as delaying actions or executing logic over a period of time.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -433,7 +593,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.Space.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.Space",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.Space.yml\" sourcestartlinenumber=\"1\">The coordinate space in which to operate.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -443,7 +607,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.TransformExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.TransformExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.TransformExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Stride.Engine.TransformComponent\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -453,7 +621,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Engine.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -463,7 +635,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Extensions.TextureCanvasExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Extensions.TextureCanvasExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for creating instances of <xref href=\"Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -473,7 +649,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Extensions.TextureExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Extensions.TextureExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Extensions.TextureExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for working with <xref href=\"Stride.Graphics.Texture\" data-throw-if-not-resolved=\"false\"></xref> objects.\nThis includes methods for finding asset source directories, resizing textures,\nand reformatting textures.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -483,7 +663,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Extensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Extensions",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -493,7 +677,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Games.GameExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Games.GameExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Games.GameExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Games.IGame\" data-throw-if-not-resolved=\"false\"></xref> interface, enhancing game management and performance tuning functionality.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -503,7 +691,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Games.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Games",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -513,7 +705,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Graphics.GraphicsDeviceExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Graphics.GraphicsDevice\" data-throw-if-not-resolved=\"false\"></xref> to simplify common operations related to graphics rendering.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -523,7 +719,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Graphics.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Graphics",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -533,7 +733,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Helpers.VectorHelper.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Helpers.VectorHelper",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Helpers.VectorHelper.yml\" sourcestartlinenumber=\"1\">Provides helper methods for generating and manipulating <xref href=\"Stride.Core.Mathematics.Vector3\" data-throw-if-not-resolved=\"false\"></xref> objects.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -543,7 +747,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Helpers.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Helpers",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -553,7 +761,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.BaseWindow.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.BaseWindow",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -563,7 +775,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.HierarchyView.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.HierarchyView",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -573,7 +789,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGui",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -583,7 +803,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGuiIndent.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableImGuiIndent",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -593,7 +817,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableTypes.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.ImGuiExtension.DisposableTypes",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -603,7 +831,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiExtension.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.ImGuiExtension",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -613,7 +845,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.ImGuiSystem.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.ImGuiSystem",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -623,7 +859,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.Filter.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.Inspector.Filter",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -633,7 +873,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.ValueHandler.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.Inspector.ValueHandler",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.ImGui.Inspector.ValueHandler.yml\" sourcestartlinenumber=\"1\">A UI handler function to draw and modify values</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -643,7 +887,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.Inspector.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.Inspector",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -653,7 +901,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.LightweightTimer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.LightweightTimer",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -663,7 +915,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler.yml\" sourcestartlinenumber=\"1\">Put this within a using statement to log performance of the code within it.\nCreates a new <xref href=\"Stride.CommunityToolkit.ImGui.PerfMonitor.SampleInstance\" data-throw-if-not-resolved=\"false\"></xref> for the attached <xref href=\"Stride.CommunityToolkit.ImGui.PerfMonitor\" data-throw-if-not-resolved=\"false\"></xref>\nonce <xref href=\"Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler.%23ctor(System.String%2cStride.CommunityToolkit.ImGui.PerfMonitor%2cSystem.Int32)\" data-throw-if-not-resolved=\"false\"></xref> and <xref href=\"Stride.CommunityToolkit.ImGui.PerfMonitor.PerfSampler.Dispose\" data-throw-if-not-resolved=\"false\"></xref> have been called.\nThe duration sent to the <xref href=\"Stride.CommunityToolkit.ImGui.PerfMonitor\" data-throw-if-not-resolved=\"false\"></xref> will be the one between those calls.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -673,7 +929,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.PerfMonitor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.PerfMonitor",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -683,7 +943,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.XMLDocumentation.CachedDocumentation.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.XMLDocumentation.CachedDocumentation",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -693,7 +957,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.XMLDocumentation.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui.XMLDocumentation",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.ImGui.XMLDocumentation.yml\" sourcestartlinenumber=\"1\">Utility class to provide documentation for various types where available with the assembly</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -703,7 +971,11 @@
           "relative_path": "api/Stride.CommunityToolkit.ImGui.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.ImGui",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -713,7 +985,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Mathematics.Easing.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Mathematics.Easing",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Mathematics.Easing.yml\" sourcestartlinenumber=\"1\">A collection of easing functions.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -723,7 +999,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Mathematics.EasingFunction.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Mathematics.EasingFunction",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Mathematics.EasingFunction.yml\" sourcestartlinenumber=\"1\">The type of easing functions implemented in <xref href=\"Stride.CommunityToolkit.Mathematics.Easing\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -733,7 +1013,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Mathematics.MathUtilEx.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Mathematics.MathUtilEx",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Mathematics.MathUtilEx.yml\" sourcestartlinenumber=\"1\">Some more common utility methods for math operations.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -743,7 +1027,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Mathematics.RandomExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Mathematics.RandomExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Mathematics.RandomExtensions.yml\" sourcestartlinenumber=\"1\">Extensions for <xref href=\"System.Random\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -753,7 +1041,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Mathematics.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Mathematics",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -763,7 +1055,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Physics.HeightmapExtensions.FloatRGBAConverter.yml\" sourcestartlinenumber=\"1\">Float from bytes and back, like the Union structure from c++</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -773,7 +1069,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Physics.HeightmapExtensions.VertexTypePosTexNormColor.yml\" sourcestartlinenumber=\"1\">Custom vertex type so that we can generate tangents for supporting normal maps</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -783,7 +1083,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Physics.HeightmapExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Physics.HeightmapExtensions",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -793,7 +1097,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Physics.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Physics",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -803,7 +1111,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.yml\" sourcestartlinenumber=\"1\">Renders debug information (such as entity names and positions) for all entities in a scene.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -813,7 +1125,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.yml\" sourcestartlinenumber=\"1\">Options for rendering debug information for entities in the scene.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -823,7 +1139,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Rendering.Compositing.GraphicsCompositor\" data-throw-if-not-resolved=\"false\"></xref> class to enhance its functionality.\nThese methods allow for the addition of UI stages, scene renderers, and debug render features,\nas well as utility methods for working with render stages.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -833,7 +1153,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Compositing",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -843,7 +1167,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Gizmos.AxialGizmo.yml\" sourcestartlinenumber=\"1\">Represents a base class for creating an Axial Gizmo, which visually represents 3D axes in the scene.\nThe Gizmo consists of three axes (X, Y, Z), each represented by a different color (Red, Green, Blue).\nThis class provides the foundational functionality for rendering and configuring the visual aspects of the Gizmo.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -853,7 +1181,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoEmissiveColorMaterial.yml\" sourcestartlinenumber=\"1\">A utility class for creating and updating materials with emissive color properties for gizmos.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -863,7 +1195,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Gizmos.GizmoUniformColorMaterial.yml\" sourcestartlinenumber=\"1\">A utility class for creating and updating materials with uniform color properties for gizmos.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -873,7 +1209,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.Letter3D.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos.Letter3D",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -883,7 +1223,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Gizmos.LightDirectionalGizmo.yml\" sourcestartlinenumber=\"1\">Represents a directional light gizmo used to visually represent light direction in a 3D scene.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -893,7 +1237,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Gizmos.TranslationGizmo.yml\" sourcestartlinenumber=\"1\">Represents a visual translation gizmo used for moving objects in a 3D scene.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -903,7 +1251,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Gizmos.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Gizmos",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -913,7 +1265,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.MaterialExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.MaterialExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.MaterialExtensions.yml\" sourcestartlinenumber=\"1\">Extension methods for <xref href=\"Stride.Rendering.Material\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -923,7 +1279,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType.yml\" sourcestartlinenumber=\"1\">Specifies the types of 2D primitive models that can be created.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -933,7 +1293,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType.yml\" sourcestartlinenumber=\"1\">Specifies the type of primitive model to be created. Available options: Sphere, Cube, Cylinder, Torus, Plane, InfinitePlane, Teapot, Cone, Capsule. Source Stride.Assets.Presentation.Preview.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -943,7 +1307,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural2DModelBuilder.yml\" sourcestartlinenumber=\"1\">A helper class for generating 2D procedural models based on a specified primitive model type and size.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -953,7 +1321,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.ProceduralModels.Procedural3DModelBuilder.yml\" sourcestartlinenumber=\"1\">A helper class for generating 3D procedural models based on a specified primitive model type and size.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -963,7 +1335,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.SquareProceduralModel",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -973,7 +1349,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.TriangleProceduralModel",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -983,7 +1363,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.ProceduralModels.TriangularPrismProceduralModel.yml\" sourcestartlinenumber=\"1\">A triangular prism with a triangular face visible from the side.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -993,7 +1377,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.ProceduralModels.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.ProceduralModels",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1003,7 +1391,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.IndexingType.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Utilities.IndexingType",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1013,7 +1405,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.yml\" sourcestartlinenumber=\"1\">A utility class for building meshes by defining vertex elements with different data types and primitives types.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1023,7 +1419,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Anchor.yml\" sourcestartlinenumber=\"1\">Anchor positions when drawing to a <xref href=\"Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1033,7 +1433,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.Stretch.yml\" sourcestartlinenumber=\"1\">Stretch modes when textures to a <xref href=\"Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas\" data-throw-if-not-resolved=\"false\"></xref></p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1043,7 +1447,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas.yml\" sourcestartlinenumber=\"1\">Provides functionality for drawing and manipulating textures on a canvas.\nThis class supports various operations such as drawing rectangles, drawing textures,\napplying filters, transforming colors, and resampling textures. It is designed to work\nwith the Stride graphics framework and provides methods for loading and storing texture data.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1053,7 +1461,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.Utilities.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Utilities",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1063,7 +1475,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Rendering.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1073,7 +1489,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.Basic2DCameraController",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.Basic2DCameraController.yml\" sourcestartlinenumber=\"1\">Provides an interactive 2D camera controller for navigating 2D scenes in Stride.\nThis controller supports movement in the XY-plane using keyboard inputs (W, A, S, D, arrow keys),\nzooming in and out with the mouse wheel, and moving the camera based on mouse position near screen edges.\nAdditional features include a speed boost when holding shift and the ability to reset the camera\nto a default position and zoom level using the 'H' key.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1083,7 +1503,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Basic3DCameraController.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.Basic3DCameraController",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.Basic3DCameraController.yml\" sourcestartlinenumber=\"1\">A script that allows to move and rotate an entity through keyboard, mouse and touch input to provide basic camera navigation.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1093,7 +1517,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.GameProfiler.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.GameProfiler",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.GameProfiler.yml\" sourcestartlinenumber=\"1\">Provides in-game profiling functionality, allowing the monitoring and analysis of game performance in real time.\nThis script facilitates the toggling of profiling, setting display preferences, and navigating through profiling data.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1103,7 +1531,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.GizmoBillboardLetterScript",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1113,7 +1545,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.RaySegment.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.RaySegment",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.RaySegment.yml\" sourcestartlinenumber=\"1\">Represents a three dimensional line based on a 2 points in space.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1123,7 +1559,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.yml\" sourcestartlinenumber=\"1\">A utility class for printing debug text to the screen at various positions.\nManages the layout of text, allowing it to be displayed in different areas of the screen and handling multi-line printing.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1133,7 +1573,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.yml\" sourcestartlinenumber=\"1\">Represents the possible positions on the screen where text or other UI elements can be displayed.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1143,7 +1587,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.Utilities.TextElement",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Scripts.Utilities.TextElement.yml\" sourcestartlinenumber=\"1\">Represents a text element with optional color information.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1153,7 +1601,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.Utilities.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts.Utilities",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1163,7 +1615,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Scripts.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Scripts",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1173,7 +1629,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Skyboxes.GameExtensions.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Skyboxes.GameExtensions",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Skyboxes.GameExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Game\" data-throw-if-not-resolved=\"false\"></xref> class to enhance functionality such as adding skyboxes and other game elements.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1183,7 +1643,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Skyboxes.SkyboxGenerator",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Skyboxes.SkyboxGenerator.yml\" sourcestartlinenumber=\"1\">Provides functionality to generate a skybox with diffuse and specular lighting parameters from a given texture.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1193,7 +1657,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Skyboxes.SkyboxGeneratorContext.yml\" sourcestartlinenumber=\"1\">Provides context for generating a skybox by encapsulating relevant services and rendering contexts.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1203,7 +1671,11 @@
           "relative_path": "api/Stride.CommunityToolkit.Skyboxes.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Skyboxes",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1213,7 +1685,11 @@
           "relative_path": "api/Stride.DebugRendering.LinePrimitiveShaderKeys.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.DebugRendering.LinePrimitiveShaderKeys",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1223,7 +1699,11 @@
           "relative_path": "api/Stride.DebugRendering.PrimitiveShaderKeys.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.DebugRendering.PrimitiveShaderKeys",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1233,7 +1713,11 @@
           "relative_path": "api/Stride.DebugRendering.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.DebugRendering",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1243,7 +1727,11 @@
           "relative_path": "api/Stride.Rendering.ImGuiShaderKeys.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.Rendering.ImGuiShaderKeys",
+      "Summary": null
     },
     {
       "type": "ManagedReference",
@@ -1253,7 +1741,11 @@
           "relative_path": "api/Stride.Rendering.html"
         }
       },
-      "version": ""
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.Rendering",
+      "Summary": null
     },
     {
       "type": "Conceptual",
@@ -1483,6 +1975,36 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/collision-group.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/collision-group.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/collision-layer.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/collision-layer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/debug-shapes.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/debug-shapes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/give-me-cube-body.md",
       "output": {
         ".html": {
@@ -1497,6 +2019,86 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/image-processing.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/material.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/material.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-01-material.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-01-material.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-01-mesh-line.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-01-mesh-line.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-06-image-processing.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-06-image-processing.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-10-draggable-window.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-10-draggable-window.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-12-particles.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-12-particles.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-13-root-renderer-shader.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-13-root-renderer-shader.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-15-simple-contraint.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-15-simple-contraint.webp"
         }
       },
       "version": ""
@@ -1543,10 +2145,60 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example08-debug-shapes.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example08-debug-shapes.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example09-renderer.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example09-renderer.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example16-collision-group.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example16-collision-group.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example16-collision-layer.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example16-collision-layer.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "manual/code-only/examples/media/stride-game-engine-procedural-geometry.webp",
       "output": {
         "resource": {
           "relative_path": "manual/code-only/examples/media/stride-game-engine-procedural-geometry.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/mesh-line.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/mesh-line.html"
         }
       },
       "version": ""
@@ -1563,10 +2215,50 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/particles.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/particles.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/procedural-geometry.md",
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/procedural-geometry.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/renderer.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/renderer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/root-renderer-shader.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/root-renderer-shader.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/simple-constraint.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/simple-constraint.html"
         }
       },
       "version": ""
@@ -1587,6 +2279,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/stride-ui-cube-clicker.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/stride-ui-draggable-window.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/stride-ui-draggable-window.html"
         }
       },
       "version": ""

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Stride UI - Draggable Window | Stride Community Toolkit Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Stride UI - Draggable Window | Stride Community Toolkit Manual ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/stride-ui-draggable-window.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="stride-ui---draggable-window">Stride UI - Draggable Window</h1>
+
+<p>This example demonstrates how to create interactive, draggable UI windows in Stride using custom UI components. The project showcases:</p>
+<ul>
+<li>Creating a draggable window system using Stride's built-in UI framework</li>
+<li>Implementing window management with proper z-index handling (windows coming to front when clicked)</li>
+<li>Building a UI manager that handles window creation and management</li>
+<li>Dynamically spawning 3D objects from UI interactions</li>
+<li>Tracking object counts and updating UI elements accordingly</li>
+</ul>
+<p>The code sets up a basic 3D scene with a draggable UI window containing buttons to:</p>
+<ol>
+<li>Create additional draggable windows</li>
+<li>Generate random 3D sphere objects that fall with physics</li>
+</ol>
+<p>Each window includes a title bar, divider line, close button, and maintains proper stacking order when interacted with. The main window also displays a counter showing the total number of 3D shapes in the scene.</p>
+<p>This example implements the functionality through several key classes:</p>
+<ul>
+<li><code>UIManager</code> - Creates and manages UI windows, handles text updates</li>
+<li><code>DragAndDropContainer</code> - Root canvas that tracks and manages draggable elements</li>
+<li><code>DragAndDropCanvas</code> - Individual window implementation with title and interactive features</li>
+<li><code>PrimitiveGenerator</code> - Creates and tracks 3D objects generated through UI actions</li>
+</ul>
+<p>The project also includes cleanup functionality to remove objects that fall below a threshold, updating the counter accordingly. This demonstrates a complete UI workflow from user interaction to scene manipulation.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This example requires the additional NuGet packages <code>Stride.CommunityToolkit.Skyboxes</code> and <code>Stride.CommunityToolkit.Bepu</code>. Make sure to install <strong>both</strong> before running the code.</p>
+</div>
+
+<p><img src="media/stride-game-engine-example-10-draggable-window.webp" alt="Stride UI Example"></p>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example10_StrideUI_DragAndDrop">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Example10_StrideUI_DragAndDrop;
+using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Games;
+using Stride.Graphics;
+using Stride.Rendering;
+
+UIManager? _uiManager = null;
+PrimitiveGenerator? _shapeGenerator = null;
+
+const int ShapeCount = 100;
+const int RemovalThresholdY = -30;
+const string TotalCubes = &quot;Total Shapes: &quot;;
+
+using var game = new Game();
+
+game.Run(start: Start, update: Update);
+
+void Start(Scene scene)
+{
+    // Setup the base 3D scene with default lighting, camera, etc.
+    game.SetupBase3DScene();
+
+    // Add debugging aids: entity names, positions
+    game.AddEntityDebugSceneRenderer(new()
+    {
+        ShowFontBackground = false
+    });
+
+    game.AddSkybox();
+    game.AddProfiler();
+
+    _shapeGenerator = new PrimitiveGenerator(game, scene);
+
+    var font = game.Content.Load&lt;SpriteFont&gt;(&quot;StrideDefaultFont&quot;);
+
+    // Create and display the UI components on screen
+    CreateAndAddUI(scene, font);
+
+    // Add an example 3D capsule entity to the scene for visual reference
+    AddExampleShape(scene);
+
+    MoveToAnotherProjectOrSnippetExample(scene, game);
+}
+
+void Update(Scene scene, GameTime time)
+{
+    foreach (var entity in scene.Entities)
+    {
+        if (entity.Transform.Position.Y &lt; RemovalThresholdY)
+        {
+            entity.Scene = null;
+
+            _shapeGenerator?.SubtractTotalCubes(1);
+
+            _uiManager?.UpdateTextBlock($&quot;{TotalCubes} {_shapeGenerator?.TotalShapes ?? 0}&quot;);
+        }
+    }
+}
+
+void CreateAndAddUI(Scene scene, SpriteFont font)
+{
+    _uiManager = new UIManager(font, GenerateRandomSpheres);
+
+    _uiManager.Entity.Scene = scene;
+}
+
+void AddExampleShape(Scene scene)
+{
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    entity.Scene = scene;
+}
+
+void GenerateRandomSpheres()
+{
+    var totalShapes = _shapeGenerator?.Generate(ShapeCount, PrimitiveModelType.Sphere);
+
+    _uiManager?.UpdateTextBlock($&quot;{TotalCubes} {totalShapes ?? 0}&quot;);
+}
+
+static void MoveToAnotherProjectOrSnippetExample(Scene scene, Game game)
+{
+    var vertices = new VertexPositionTexture[4];
+    vertices[0].Position = new Vector3(0f, 0f, 1f);
+    vertices[1].Position = new Vector3(0f, 1f, 0f);
+    vertices[2].Position = new Vector3(0f, 1f, 1f);
+    //vertices[3].Position = new Vector3(1f, 0f, 1f);
+    var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(game.GraphicsDevice, vertices,
+                                                         GraphicsResourceUsage.Dynamic);
+    int[] indices = { 0, 2, 1 };
+    var indexBuffer = Stride.Graphics.Buffer.Index.New(game.GraphicsDevice, indices);
+
+    var customMesh = new Mesh
+    {
+        Draw = new MeshDraw
+        {
+            /* Vertex buffer and index buffer setup */
+            PrimitiveType = PrimitiveType.TriangleList,
+            DrawCount = indices.Length,
+            IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
+            VertexBuffers = new[] { new VertexBufferBinding(vertexBuffer,
+                                  VertexPositionTexture.Layout, vertexBuffer.ElementCount) },
+        }
+    };
+
+    var entity = new Entity();
+
+    var model = new Model();
+
+    model.Meshes.Add(customMesh);
+
+    model.Materials.Add(game.CreateMaterial());
+
+    entity.Components.Add(new ModelComponent(model));
+
+    entity.Scene = scene;
+}
+</code></pre>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/stride-ui-draggable-window.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.6</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

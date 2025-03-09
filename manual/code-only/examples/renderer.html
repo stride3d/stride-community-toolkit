@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Renderer | Stride Community Toolkit Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Renderer | Stride Community Toolkit Manual ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/renderer.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="renderer">Renderer</h1>
+
+<p>This example demonstrates two distinct approaches for implementing custom rendering in Stride, allowing developers to extend the default rendering pipeline with their own 2D visualization code:</p>
+<ol>
+<li>Global Scene Renderer Implementation - <code>MyCustomSceneRenderer</code>:
+<ul>
+<li>Creates a custom renderer that operates on all entities in the scene</li>
+<li>Implements SceneRendererBase to hook into Stride's rendering pipeline</li>
+<li>Renders both static text (&quot;Hello Stride&quot;) and dynamic per-entity information</li>
+<li>Displays entity names and positions with semi-transparent backgrounds</li>
+<li>Converts 3D world positions to 2D screen coordinates for text placement</li>
+</ul>
+</li>
+<li>Entity-Specific Renderer Implementation - <code>SpriteBatchRendererScript</code>:
+<ul>
+<li>Attaches a custom renderer to a specific entity via a StartupScript</li>
+<li>Creates a DelegateSceneRenderer to handle rendering without subclassing</li>
+<li>Displays &quot;Hello Stride 2&quot; text specifically for its parent entity</li>
+<li>Demonstrates renderer initialization and integration through the component system</li>
+</ul>
+</li>
+</ol>
+<p>The example also includes physics interactions, applying an impulse to make the capsule roll after falling, showcasing how rendering can visualize dynamic object behavior. The combination of these approaches illustrates different architectural patterns for extending Stride's rendering capabilities:</p>
+<ul>
+<li>The scene-wide approach for global visualization needs (debug overlays, HUD elements)</li>
+<li>The entity-specific approach for object-focused rendering (labels, status indicators)</li>
+</ul>
+<p>Both techniques utilize SpriteBatch for efficient 2D rendering within a 3D scene context, showing how to properly initialize resources, convert between coordinate systems, and integrate with Stride's render stages.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This example requires the additional NuGet packages <code>Stride.CommunityToolkit.Skyboxes</code> and <code>Stride.CommunityToolkit.Bepu</code>. Make sure to install <strong>both</strong> before running the code.</p>
+</div>
+
+<p><img src="media/stride-game-engine-example09-renderer.webp" alt="Stride UI Example"></p>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example09_Renderer">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Example09_Renderer;
+using Stride.BepuPhysics;
+using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Games;
+
+// This example demonstrates two different ways of adding custom rendering logic to a Stride game.
+// 1. Using a custom SceneRenderer via MyCustomSceneRenderer, which renders text for all entities.
+// 2. Using a StartupScript via SpriteBatchRendererScript, which draws specific text for a single entity.
+// Both approaches integrate into the Stride rendering pipeline, demonstrating how to extend the default rendering behaviour.
+
+BodyComponent? body = null;
+bool impluseApplied = false;
+
+using var game = new Game();
+
+/// &lt;summary&gt;
+/// Entry point for the game setup. The game runs with two main customizations:
+/// 1. A custom scene renderer is added to display entity debug information using SpriteBatch.
+/// 2. A custom script is added to an entity for specific entity-related rendering (e.g., &quot;Hello Stride&quot;).
+/// &lt;/summary&gt;
+game.Run(start: Start, update: Update);
+
+void Start(Scene scene)
+{
+    // Sets up the base 3D scene, including lighting, camera, and default settings.
+    game.SetupBase3DScene();
+
+    // Adds the built-in profiler, which provides real-time performance metrics.
+    game.AddProfiler();
+
+    // Example 1: Adds a custom scene renderer to render text for all entities in the scene.
+    game.AddSceneRenderer(new MyCustomSceneRenderer());
+
+    // Adds a skybox (a background environment) to the scene.
+    game.AddSkybox();
+
+    // Creates a 3D capsule primitive and sets its position in the scene.
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    entity.Transform.Position = new Vector3(0, 8, 0);
+
+    // Let's rotate the capsule a tiny bit
+    entity.Transform.Rotation = Quaternion.RotationZ(MathUtil.DegreesToRadians(2));
+
+    // Get the body component
+    body = entity.Get&lt;BodyComponent&gt;();
+
+    // Example 2: Adds a custom startup script to the entity, which draws specific text
+    // (e.g., &quot;Hello Stride 2&quot;) using SpriteBatch when the game is running.
+    entity.Add(new SpriteBatchRendererScript());
+
+    // Assigns the entity to the root scene to ensure it is rendered and updated.
+    entity.Scene = scene;
+}
+
+void Update(Scene scene, GameTime time)
+{
+    if (body is null) return;
+
+    if (impluseApplied) return;
+
+    // Let's add some momentum so it rolls after it falls, the rigid body is already added by Create3DPrimitive
+    body.ApplyImpulse(new(0, 0, 1f), new());
+    body.ApplyAngularImpulse(new(2, 0, 0));
+
+    impluseApplied = true;
+}
+</code></pre>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/renderer.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.6</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
