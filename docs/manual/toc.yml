@@ -39,6 +39,8 @@
     items:
     - name: Simple Constraint
       href: code-only/examples/simple-constraint.md
+    - name: Various Constraints
+      href: code-only/examples/constraints.md
     - name: Myra UI - Draggable Window, GetService()
       href: code-only/examples/myra-ui-draggable-window-and-services.md
     - name: Stride UI - Draggable Window

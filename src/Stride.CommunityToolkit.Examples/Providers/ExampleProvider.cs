@@ -51,6 +51,9 @@ public class ExampleProvider
         CreateExample("Advance Example - Simple Constraint",
             nameof(Example15_Constraint_Simple)),
 
+        CreateExample("Advance Example - Various Constraints",
+            nameof(Example15_Constraint)),
+
         CreateExample("Advance Example - Myra UI - Draggable Window, GetService()",
             nameof(Example04_MyraUI)),
 
