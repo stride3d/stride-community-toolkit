@@ -31,6 +31,7 @@
         <ProjectReference Include="..\..\examples\code-only\Example12_Particles\Example12_Particles.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example13_RootRendererShader\Example13_RootRendererShader.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example14_Raycast\Example14_Raycast.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example15_Constraint\Example15_Constraint.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example15_Constraint_Simple\Example15_Constraint_Simple.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example16_CollisionGroup\Example16_CollisionGroup.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example16_CollisionLayer\Example16_CollisionLayer.csproj" />
