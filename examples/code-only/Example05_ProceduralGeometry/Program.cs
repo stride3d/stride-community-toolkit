@@ -20,18 +20,18 @@ void Start(Scene rootScene)
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    AddMesh(game.GraphicsDevice, rootScene, Vector3.Zero, GiveMeATriangle);
-    AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, GiveMeAPlane);
+    CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.Zero, CreateTriangleMesh);
+    CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, CreatePlaneMesh);
 }
 
 void Update(Scene rootScene, GameTime gameTime)
 {
     var segments = (int)((Math.Cos(gameTime.Total.TotalMilliseconds / 500) + 1) / 2 * 47) + 3;
     circleEntity?.Remove();
-    circleEntity = AddMesh(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, b => GiveMeACircle(b, segments));
+    circleEntity = CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * -2, b => CreateCircleMesh(b, segments));
 }
 
-void GiveMeATriangle(MeshBuilder meshBuilder)
+void CreateTriangleMesh(MeshBuilder meshBuilder)
 {
     meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
@@ -56,7 +56,7 @@ void GiveMeATriangle(MeshBuilder meshBuilder)
     meshBuilder.AddIndex(1);
 }
 
-void GiveMeAPlane(MeshBuilder meshBuilder)
+void CreatePlaneMesh(MeshBuilder meshBuilder)
 {
     meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
@@ -89,7 +89,7 @@ void GiveMeAPlane(MeshBuilder meshBuilder)
     meshBuilder.AddIndex(3);
 }
 
-void GiveMeACircle(MeshBuilder meshBuilder, int segments)
+void CreateCircleMesh(MeshBuilder meshBuilder, int segments)
 {
     meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
@@ -120,29 +120,36 @@ void GiveMeACircle(MeshBuilder meshBuilder, int segments)
     }
 }
 
-Entity AddMesh(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, Action<MeshBuilder> build)
+Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 position, Action<MeshBuilder> build)
 {
     using var meshBuilder = new MeshBuilder();
+
     build(meshBuilder);
 
     var entity = new Entity { Scene = rootScene, Transform = { Position = position } };
+
+    var material = Material.New(graphicsDevice, new MaterialDescriptor
+    {
+        Attributes = new MaterialAttributes
+        {
+            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+            Diffuse = new MaterialDiffuseMapFeature
+            {
+                DiffuseMap = new ComputeVertexStreamColor()
+            },
+        }
+    });
+
     var model = new Model
     {
-        new MaterialInstance {
-            Material = Material.New(graphicsDevice, new MaterialDescriptor {
-                Attributes = new MaterialAttributes {
-                    DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                    Diffuse = new MaterialDiffuseMapFeature {
-                        DiffuseMap = new ComputeVertexStreamColor()
-                    },
-                }
-            })
-        },
+        new MaterialInstance { Material = material  },
         new Mesh {
             Draw = meshBuilder.ToMeshDraw(graphicsDevice),
             MaterialIndex = 0
         }
     };
+
     entity.Add(new ModelComponent { Model = model });
+
     return entity;
 }

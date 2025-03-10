@@ -39,6 +39,9 @@ public class ExampleProvider
         CreateExample("Basic Example - Particles",
             nameof(Example12_Particles)),
 
+        CreateExample("Basic Example - Raycast",
+            nameof(Example14_Raycast)),
+
         CreateExample("Basic Example - CollisionGroup",
             nameof(Example16_CollisionGroup)),
 

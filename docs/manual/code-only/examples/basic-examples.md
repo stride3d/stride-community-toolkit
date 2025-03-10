@@ -20,6 +20,8 @@
   - Demonstrates how to create procedural geometry meshes such as a triangle, plane, and circle, and how to add them to a scene.
 - [Particles](particles.md):
   - Demonstrates how to create a particle system and add it to a scene.
+- [Raycast](raycast.md):
+  - Demonstrates how to implement raycasting and physics interactions.   
 - [Collision Group](collision-group.md):
   - Demonstrates how to create a simple scene with two players and an enemy entity and set up collision groups to control which objects can collide with each other.
 - [Collision Layer](collision-layer.md):
