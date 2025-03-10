@@ -1995,6 +1995,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/constraints.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/constraints.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/debug-shapes.md",
       "output": {
         ".html": {
@@ -2089,6 +2099,26 @@
       "output": {
         "resource": {
           "relative_path": "manual/code-only/examples/media/stride-game-engine-example-13-root-renderer-shader.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-14-raycast.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-14-raycast.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-15-contraints.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-15-contraints.webp"
         }
       },
       "version": ""
@@ -2229,6 +2259,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/procedural-geometry.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/raycast.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/raycast.html"
         }
       },
       "version": ""
