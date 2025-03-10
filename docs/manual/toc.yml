@@ -28,6 +28,8 @@
       href: code-only/examples/procedural-geometry.md
     - name: Particles
       href: code-only/examples/particles.md
+    - name: Raycast
+      href: code-only/examples/raycast.md
     - name: Collision Group
       href: code-only/examples/collision-group.md
     - name: Collision Layer
