@@ -9,7 +9,7 @@
 - [Give me a cube](give-me-cube-body.md):
   - A variation of the above example, positioning a 3D cube in a scene.
 - [Mesh line](mesh-line.md):
-  - Demonstrates how to create a mesh line and add it to a scene.
+  - Demonstrates how to create a mesh line.
 - [Stride UI - Capsule with rigid body and Window](stride-ui-capsule-with-rigid-body.md):
   - Demonstrates how to create a 3D capsule entity and position it in a scene, and how to create a simple window displaying a text message.
 - [Stride UI - Grid - Save and load game state](stride-ui-cube-clicker.md)
@@ -18,8 +18,10 @@
   - Demonstrates how to create a material and apply it to a 3D entity.
 - [Procedural geometry](procedural-geometry.md):
   - Demonstrates how to create procedural geometry meshes such as a triangle, plane, and circle, and how to add them to a scene.
+- [Cylinder mesh](cylinder-mesh.md):
+  - Demonstrates how to create a cylinder mesh.   
 - [Particles](particles.md):
-  - Demonstrates how to create a particle system and add it to a scene.
+  - Demonstrates how to create a particle system.
 - [Raycast](raycast.md):
   - Demonstrates how to implement raycasting and physics interactions.   
 - [Collision Group](collision-group.md):
