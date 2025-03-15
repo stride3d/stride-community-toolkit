@@ -128,21 +128,9 @@ Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 
 
     var entity = new Entity { Scene = rootScene, Transform = { Position = position } };
 
-    var material = Material.New(graphicsDevice, new MaterialDescriptor
-    {
-        Attributes = new MaterialAttributes
-        {
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Diffuse = new MaterialDiffuseMapFeature
-            {
-                DiffuseMap = new ComputeVertexStreamColor()
-            },
-        }
-    });
-
     var model = new Model
     {
-        new MaterialInstance { Material = material  },
+        new MaterialInstance { Material = CreateMaterial(graphicsDevice)  },
         new Mesh {
             Draw = meshBuilder.ToMeshDraw(graphicsDevice),
             MaterialIndex = 0
@@ -153,3 +141,15 @@ Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene rootScene, Vector3 
 
     return entity;
 }
+
+static Material CreateMaterial(GraphicsDevice graphicsDevice) => Material.New(graphicsDevice, new MaterialDescriptor
+{
+    Attributes = new MaterialAttributes
+    {
+        DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+        Diffuse = new MaterialDiffuseMapFeature
+        {
+            DiffuseMap = new ComputeVertexStreamColor()
+        },
+    }
+});
