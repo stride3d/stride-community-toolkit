@@ -102,6 +102,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example16_CollisionLayer", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example16_CollisionGroup", "examples\code-only\Example16_CollisionGroup\Example16_CollisionGroup.csproj", "{94AED8E3-940E-141E-91BC-40E3684C764C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example05_CylinderMesh", "examples\code-only\Example05_CylinderMesh\Example05_CylinderMesh.csproj", "{B434E827-72A7-47EA-AE63-4613CF45EDDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -275,6 +277,10 @@ Global
 		{94AED8E3-940E-141E-91BC-40E3684C764C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94AED8E3-940E-141E-91BC-40E3684C764C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94AED8E3-940E-141E-91BC-40E3684C764C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B434E827-72A7-47EA-AE63-4613CF45EDDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B434E827-72A7-47EA-AE63-4613CF45EDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B434E827-72A7-47EA-AE63-4613CF45EDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B434E827-72A7-47EA-AE63-4613CF45EDDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -312,6 +318,7 @@ Global
 		{90E859C7-EB5E-4423-85F4-7B65FEAF5B5E} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{6A36FE98-B0C2-946A-E4B4-955533489DE2} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{94AED8E3-940E-141E-91BC-40E3684C764C} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{B434E827-72A7-47EA-AE63-4613CF45EDDD} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}

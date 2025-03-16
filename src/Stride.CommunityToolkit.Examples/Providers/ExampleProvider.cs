@@ -36,6 +36,9 @@ public class ExampleProvider
         CreateExample("Basic Example - Procedural Geometry",
             nameof(Example05_ProceduralGeometry)),
 
+        CreateExample("Basic Example - Cylinder Mesh",
+            nameof(Example05_CylinderMesh)),
+
         CreateExample("Basic Example - Particles",
             nameof(Example12_Particles)),
 

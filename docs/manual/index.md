@@ -8,15 +8,13 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
 
 - [Getting Started](getting-started.md): A guide for newcomers on how to set up and start using the toolkit.
 - [Code-Only Approach](code-only/index.md): Learn how to create and manage Stride projects using only C# code.
-  - [Create Project](code-only/create-project.md)
-  - C# Basic Examples
-    - [Capsule with Rigid Body](code-only/examples/capsule-with-rigid-body.md)
-    - [Give me a Cube](code-only/examples/give-me-cube-body.md)
-    - [Stride UI - Capsule with Rigid Body and Window](code-only/examples/stride-ui-capsule-with-rigid-body.md)
-    - [Procedural Geometry](code-only/examples/procedural-geometry.md)
-  - C# Advanced Examples
-    - [Myra UI - Draggable Window, GetService()](code-only/examples/myra-ui-draggable-window-and-services.md)
-    - [Image Processing](code-only/examples/image-processing.md)
+  - [Create Project](code-only/create-project.md): A step-by-step guide on creating a new Stride project using C# console application.
+  - [C# Basic Examples](code-only/examples/basic-examples.md)
+      [!INCLUDE [basic-examples](../includes/manual/basic-examples.md)] 
+  - [C# Advanced Examples](code-only/examples/advance-examples.md)
+      [!INCLUDE [basic-examples](../includes/manual/advance-examples.md)]
+  - Other Examples
+      [!INCLUDE [other-examples](../includes/manual/other-examples.md)]  
   - [F# Basic Examples](code-only/examples/basic-examples-fs.md)
     - [Capsule with Rigid Body (F#)](code-only/examples/capsule-with-rigid-body-fs.md)
   - [VB Basic Examples](code-only/examples/basic-examples-vb.md)

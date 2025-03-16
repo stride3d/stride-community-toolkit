@@ -26,6 +26,8 @@
       href: code-only/examples/material.md
     - name: Procedural Geometry
       href: code-only/examples/procedural-geometry.md
+    - name: Cylinder Mesh
+      href: code-only/examples/cylinder-mesh.md
     - name: Particles
       href: code-only/examples/particles.md
     - name: Raycast
