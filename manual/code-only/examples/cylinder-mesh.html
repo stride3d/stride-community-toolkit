@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Cylinder mesh | Stride Community Toolkit Manual </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Cylinder mesh | Stride Community Toolkit Manual ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/cylinder-mesh.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../media/stride-logo-blue-toolkit.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cylinder-mesh">Cylinder mesh</h1>
+
+<p>This example demonstrates creating a 3D cylinder mesh programmatically by breaking down the process into clear, distinct steps:</p>
+<ol>
+<li>Setting up a basic 3D scene with a skybox</li>
+<li>Creating precisely defined geometry using low-level mesh construction techniques</li>
+<li>Demonstrating a structured approach to 3D mesh generation by dividing it into logical components:
+<ul>
+<li>Creating ring vertices</li>
+<li>Building side walls</li>
+<li>Adding end caps</li>
+</ul>
+</li>
+</ol>
+<p>We will be utilizing the <a class="xref" href="../../../api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html">MeshBuilder</a> class from the toolkit, the process of crafting and rendering these geometries is streamlined.</p>
+<p><img src="media/stride-game-engine-example-05-cylinder-mesh.webp" alt="Stride UI Example"></p>
+<p>For more details of <code>MeshBuilder</code>, refer to our <a href="../../rendering/mesh-builder.html">MeshBuilder manual</a>.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This example requires the additional NuGet packages <code>Stride.CommunityToolkit.Skyboxes</code> and <code>Stride.CommunityToolkit.Bepu</code>. Make sure to install <strong>both</strong> before running the code.</p>
+</div>
+
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_CylinderMesh">GitHub</a>.</p>
+<pre><code class="lang-csharp">using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.CommunityToolkit.Skyboxes;
+using Stride.Core.Mathematics;
+using Stride.Engine;
+using Stride.Graphics;
+using Stride.Rendering;
+using Stride.Rendering.Materials;
+using Stride.Rendering.Materials.ComputeColors;
+
+/*
+  Procedural Cylinder Mesh Generation
+
+  This example demonstrates creating a 3D cylinder mesh programmatically by breaking down
+  the process into clear, distinct steps:
+
+  1. Setting up a basic 3D scene with a skybox
+  2. Creating precisely defined geometry using low-level mesh construction techniques
+  3. Demonstrating a structured approach to 3D mesh generation by dividing it into logical components:
+     - Creating ring vertices
+     - Building side walls
+     - Adding end caps
+
+  The example showcases proper 3D graphics fundamentals like vertex positioning, normal
+  definitions, triangle winding order, and efficient vertex reuse through indexing. It also
+  demonstrates good software engineering practices by separating concerns into well-named
+  methods with clear responsibilities.
+*/
+
+const int Segments = 1000;
+const float Radius = 0.5f;
+const float Length = 8;
+
+using var game = new Game();
+
+game.Run(start: (Scene rootScene) =&gt;
+{
+    game.SetupBase3DScene();
+    game.AddSkybox();
+
+    CreateMeshEntity(game.GraphicsDevice, rootScene, new(0, 1, -Length / 2), b =&gt; BuildCylinderMesh(b, Segments, Radius, Length));
+});
+
+void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, float length)
+{
+    meshBuilder.WithIndexType(IndexingType.Int16);
+    meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
+
+    var position = meshBuilder.WithPosition&lt;Vector3&gt;();
+    var normal = meshBuilder.WithNormal&lt;Vector3&gt;();
+
+    // Create the vertices for both circular ends
+    // First end (z = 0)
+    CreateRingVertices(meshBuilder, segments, radius, position, normal, 0);
+    // Second end (z = length)
+    CreateRingVertices(meshBuilder, segments, radius, position, normal, length);
+
+    CreateCylinderSideWalls(meshBuilder, segments);
+
+    // Create the first end cap (closing the cylinder)
+    CreateCircularEndCap(meshBuilder, segments, position, normal, 0, false);
+
+    // Create the second end cap (closing the cylinder)
+    CreateCircularEndCap(meshBuilder, segments, position, normal, length, true);
+}
+
+Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 position, Action&lt;MeshBuilder&gt; build)
+{
+    using var meshBuilder = new MeshBuilder();
+
+    build(meshBuilder);
+
+    var model = new Model
+    {
+        new MaterialInstance { Material = CreateMaterial(game) },
+        new Mesh {
+            Draw = meshBuilder.ToMeshDraw(graphicsDevice),
+            MaterialIndex = 0
+        }
+    };
+
+    var entity = new Entity { Scene = scene, Transform = { Position = position } };
+
+    entity.Add(new ModelComponent { Model = model });
+
+    return entity;
+}
+
+static Material CreateMaterial(Game game) =&gt; Material.New(game.GraphicsDevice, new()
+{
+    Attributes = new()
+    {
+        MicroSurface = new MaterialGlossinessMapFeature
+        {
+            GlossinessMap = new ComputeFloat(0.9f)
+        },
+        Diffuse = new MaterialDiffuseMapFeature
+        {
+            DiffuseMap = new ComputeColor(new Color4(1, 0.3f, 0.5f, 1))
+        },
+        DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+        Specular = new MaterialMetalnessMapFeature
+        {
+            MetalnessMap = new ComputeFloat(0.0f)
+        },
+        SpecularModel = new MaterialSpecularMicrofacetModelFeature
+        {
+            Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()
+        },
+    }
+});
+
+static void CreateRingVertices(MeshBuilder meshBuilder, int segments, float radius, int position, int normal, float zPosition)
+{
+    for (var i = 0; i &lt; segments; i++)
+    {
+        var x = radius * (float)Math.Sin(Math.Tau / segments * i);
+        var y = radius * (float)Math.Cos(Math.Tau / segments * i);
+
+        meshBuilder.AddVertex();
+        meshBuilder.SetElement(position, new Vector3(x, y, zPosition));
+        meshBuilder.SetElement(normal, new Vector3(x, y, 0));
+    }
+}
+
+// Creates the triangles that form the curved side wall of the cylinder
+static void CreateCylinderSideWalls(MeshBuilder meshBuilder, int segments)
+{
+    for (var i = 0; i &lt; segments; i++)
+    {
+        var i_next = (i + 1) % segments;
+
+        // First triangle of the quad
+        meshBuilder.AddIndex(i);
+        meshBuilder.AddIndex(i_next + segments);
+        meshBuilder.AddIndex(i + segments);
+
+        // Second triangle of the quad
+        meshBuilder.AddIndex(i);
+        meshBuilder.AddIndex(i_next);
+        meshBuilder.AddIndex(i_next + segments);
+    }
+}
+
+// Creates a circular cap to close one end of the cylinder
+static void CreateCircularEndCap(MeshBuilder meshBuilder, int segments, int position, int normal, float zPosition, bool isEndFacingPositiveZ)
+{
+    // Create center vertex
+    int centerVertexIndex = meshBuilder.AddVertex();
+    meshBuilder.SetElement(position, new Vector3(0f, 0f, zPosition));
+
+    // Set normal direction based on which end we're creating
+    var normalDirection = isEndFacingPositiveZ ? new Vector3(0, 0, 1) : new Vector3(0, 0, -1);
+    meshBuilder.SetElement(normal, normalDirection);
+
+    // First end cap has vertices from 0 to segments-1
+    // Second end cap has vertices from segments to 2*segments-1
+    int vertexOffset = isEndFacingPositiveZ ? segments : 0;
+
+    // Create triangles to form the cap
+    for (var i = 0; i &lt; segments; i++)
+    {
+        if (isEndFacingPositiveZ)
+        {
+            // For end cap with Z+ normal
+            meshBuilder.AddIndex(((i + 1) % segments) + vertexOffset);
+            meshBuilder.AddIndex(centerVertexIndex);
+            meshBuilder.AddIndex(i + vertexOffset);
+        }
+        else
+        {
+            // For end cap with Z- normal
+            meshBuilder.AddIndex(((i + 1) % segments) + vertexOffset);
+            meshBuilder.AddIndex(i + vertexOffset);
+            meshBuilder.AddIndex(centerVertexIndex);
+        }
+    }
+}
+</code></pre>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/cylinder-mesh.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-1 text-center small"><p>Supported by the <a href="https://dotnetfoundation.org/" target="_blank" rel="noopener">.NET Foundation</a></p><p>Made with <a href="https://dotnet.github.io/docfx">docfx</a></p><p>Stride Community Toolkit Website v.1.0.0.6</p><p>&copy; .NET Foundation and Contributors</p></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

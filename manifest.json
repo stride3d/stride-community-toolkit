@@ -2005,6 +2005,16 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/cylinder-mesh.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/cylinder-mesh.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/code-only/examples/debug-shapes.md",
       "output": {
         ".html": {
@@ -2059,6 +2069,16 @@
       "output": {
         "resource": {
           "relative_path": "manual/code-only/examples/media/stride-game-engine-example-01-mesh-line.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-05-cylinder-mesh.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-05-cylinder-mesh.webp"
         }
       },
       "version": ""
