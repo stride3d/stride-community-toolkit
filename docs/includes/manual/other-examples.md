@@ -1,0 +1,2 @@
+- [Debug Shapes](../../manual/code-only/examples/debug-shapes.md): This example sets up a basic 3D scene and adds debugging visuals.
+- [Renderer](../../manual/code-only/examples/renderer.md): Demonstrates two distinct approaches for implementing custom rendering in Stride.
