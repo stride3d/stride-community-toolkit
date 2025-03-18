@@ -108,6 +108,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example_CubicleCalamity_Bul
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Example05_PartialTorus_FSharp", "examples\code-only\Example05_PartialTorus_FSharp\Example05_PartialTorus_FSharp.fsproj", "{6F8B6CD7-C771-46C8-B941-4A1A4479C2B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example05_PartialTorus", "examples\code-only\Example05_PartialTorus\Example05_PartialTorus.csproj", "{A17C4E37-FBC2-4A96-97E3-AB2A35AB1482}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -293,6 +295,10 @@ Global
 		{6F8B6CD7-C771-46C8-B941-4A1A4479C2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F8B6CD7-C771-46C8-B941-4A1A4479C2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F8B6CD7-C771-46C8-B941-4A1A4479C2B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A17C4E37-FBC2-4A96-97E3-AB2A35AB1482}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17C4E37-FBC2-4A96-97E3-AB2A35AB1482}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17C4E37-FBC2-4A96-97E3-AB2A35AB1482}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17C4E37-FBC2-4A96-97E3-AB2A35AB1482}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -333,6 +339,7 @@ Global
 		{B434E827-72A7-47EA-AE63-4613CF45EDDD} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{CBFB73FE-8B98-E226-8F99-881923C75C57} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{6F8B6CD7-C771-46C8-B941-4A1A4479C2B1} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{A17C4E37-FBC2-4A96-97E3-AB2A35AB1482} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
