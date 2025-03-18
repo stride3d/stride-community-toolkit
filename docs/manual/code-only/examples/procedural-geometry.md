@@ -10,8 +10,7 @@ The `Update` method demonstrates a dynamic adjustment to the circle's segments c
 
 For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
 
-> [!TIP]
-> Notice the effect of back-face culling when moving the camera around the triangle, plane, and circle. With the default culling mode enabled, back faces are not rendered, optimizing performance by avoiding the drawing of surfaces that are not visible to the camera.
+[!INCLUDE [back-culling](../../../includes/manual/examples/back-culling.md)]
 
 [!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
 
