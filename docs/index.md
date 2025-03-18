@@ -59,4 +59,5 @@ We would like to thank our contributors for expanding the toolkit's capabilities
 - [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
 - [Johan Gustafsson](https://github.com/johang88): Extensions
+- [Martin Blackman](https://github.com/mpblackman): Examples
 - [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs
