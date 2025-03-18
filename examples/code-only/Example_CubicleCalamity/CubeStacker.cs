@@ -7,13 +7,18 @@ using Stride.BepuPhysics.Constraints;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Graphics;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
+using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
 using Stride.Rendering.Lights;
+using Stride.Rendering.Materials;
+using Stride.Rendering.Materials.ComputeColors;
 
 namespace Example_CubicleCalamity;
 
@@ -32,7 +37,11 @@ public class CubeStacker
 
     public void Start(Scene scene)
     {
-        _game.SetupBase3DScene();
+        //_game.SetupBase3DScene();
+        _game.AddGraphicsCompositor().AddCleanUIStage();
+        _game.Add3DCamera().Add3DCameraController();
+        _game.AddDirectionalLight();
+        _game.Add3DGround();
         _game.AddProfiler();
 
         AddMaterials();
@@ -42,7 +51,7 @@ public class CubeStacker
         //var gizmoEntity = _translationGizmo.Create(scene);
         //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
-        AddAllDirectionLighting(scene, intensity: 20f);
+        AddAllDirectionLighting(scene, intensity: 5f);
         AddFirstLayer(scene, 0.5f);
         AddGameManagerEntity(scene);
 
@@ -169,10 +178,53 @@ public class CubeStacker
     {
         foreach (var color in Constants.Colours)
         {
-            var material = _game.CreateMaterial(color);
+            var material = CreateMaterial(color);
 
             _materials.Add(color, material);
         }
+    }
+
+    public Material CreateMaterial(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
+    {
+        var materialDescription2 = new MaterialDescriptor
+        {
+            Attributes =
+                {
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
+                    DiffuseModel = new MaterialLightmapModelFeature(),
+                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
+                    SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
+                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(microSurface))
+                }
+        };
+
+        var materialDescription = new MaterialDescriptor
+        {
+            Attributes =
+                {
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
+                    DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(0)),
+                    SpecularModel = new MaterialSpecularMicrofacetModelFeature()
+                    {
+                        Fresnel = new MaterialSpecularMicrofacetFresnelSchlick(),
+                        Visibility = new MaterialSpecularMicrofacetVisibilitySmithSchlickGGX(),
+                        NormalDistribution = new MaterialSpecularMicrofacetNormalDistributionGGX(),
+                        Environment = new MaterialSpecularMicrofacetEnvironmentGGXLUT(),
+                    },
+                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0)),
+                }
+        };
+
+        // from toolkit Stride.CommunityToolkit.Graphics
+        var windowSize = _game.GraphicsDevice.GetWindowSize();
+
+        // from Stride.Graphics
+        var whiteTexture = _game.GraphicsDevice.GetSharedWhiteTexture();
+
+        return Material.New(_game.GraphicsDevice, materialDescription);
+        //options.Size /= 2;
+
     }
 
     private void AddFirstLayer(Scene scene, float y)

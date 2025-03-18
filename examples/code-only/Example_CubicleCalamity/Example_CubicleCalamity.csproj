@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -11,6 +11,20 @@
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Effects\MaterialSurfaceShadingLightmap.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Effects\MaterialSurfaceShadingLightmap.sdsl">
+        <LastGenOutput>MaterialSurfaceShadingLightmap.sdsl.cs</LastGenOutput>
+      </None>
     </ItemGroup>
 
 </Project>
