@@ -42,6 +42,28 @@ game.Run(start: (Scene rootScene) =>
     CreateMeshEntity(game.GraphicsDevice, rootScene, new(0, 1, -Length / 2), b => BuildCylinderMesh(b, Segments, Radius, Length));
 });
 
+Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 position, Action<MeshBuilder> build)
+{
+    using var meshBuilder = new MeshBuilder();
+
+    build(meshBuilder);
+
+    var model = new Model
+    {
+        new MaterialInstance { Material = CreateMaterial(game) },
+        new Mesh {
+            Draw = meshBuilder.ToMeshDraw(graphicsDevice),
+            MaterialIndex = 0
+        }
+    };
+
+    var entity = new Entity { Scene = scene, Transform = { Position = position } };
+
+    entity.Add(new ModelComponent { Model = model });
+
+    return entity;
+}
+
 void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, float length)
 {
     meshBuilder.WithIndexType(IndexingType.Int16);
@@ -63,28 +85,6 @@ void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, floa
 
     // Create the second end cap (closing the cylinder)
     CreateCircularEndCap(meshBuilder, segments, position, normal, length, true);
-}
-
-Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 position, Action<MeshBuilder> build)
-{
-    using var meshBuilder = new MeshBuilder();
-
-    build(meshBuilder);
-
-    var model = new Model
-    {
-        new MaterialInstance { Material = CreateMaterial(game) },
-        new Mesh {
-            Draw = meshBuilder.ToMeshDraw(graphicsDevice),
-            MaterialIndex = 0
-        }
-    };
-
-    var entity = new Entity { Scene = scene, Transform = { Position = position } };
-
-    entity.Add(new ModelComponent { Model = model });
-
-    return entity;
 }
 
 static Material CreateMaterial(Game game) => Material.New(game.GraphicsDevice, new()
