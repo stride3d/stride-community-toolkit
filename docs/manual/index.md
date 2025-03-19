@@ -16,7 +16,7 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
   - Other Examples
       [!INCLUDE [other-examples](../includes/manual/other-examples.md)]  
   - [F# Basic Examples](code-only/examples/basic-examples-fs.md)
-    - [Capsule with Rigid Body (F#)](code-only/examples/capsule-with-rigid-body-fs.md)
+      [!INCLUDE [basic-examples-fs](../includes/manual/basic-examples-fs.md)]
   - [VB Basic Examples](code-only/examples/basic-examples-vb.md)
     - [Capsule with Rigid Body (VB)](code-only/examples/capsule-with-rigid-body-vb.md)
   - [Extensions](code-only/extensions.md)

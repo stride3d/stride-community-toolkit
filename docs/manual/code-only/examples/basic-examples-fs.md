@@ -4,7 +4,6 @@
 
 ## Examples Overview
 
-- [Capsule with rigid body](capsule-with-rigid-body-fs.md):
-  - Demonstrates how to create a 3D capsule entity and position it in a scene.
+[!INCLUDE [basic-examples-fs](../../../includes/manual/basic-examples-fs.md)]
 
 [!INCLUDE [basic-examples](../../../includes/manual/examples/basic-examples-outro.md)]
