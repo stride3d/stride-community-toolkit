@@ -16,18 +16,21 @@ Stride Community Toolkit Examples
 [7] Basic Example - Stride UI - Canvas - Capsule with rigid body and Window
 [8] Basic Example - Stride UI - Grid - Save and load game state
 [9] Basic Example - Procedural Geometry
-[10] Basic Example - Particles
-[11] Basic Example - Raycast
-[12] Basic Example - CollisionGroup
-[13] Basic Example - CollisionLayer
-[14] Advance Example - Simple Constraint
-[15] Advance Example - Various Constraints
-[16] Advance Example - Myra UI - Draggable Window, GetService()
-[17] Advance Example - Stride UI - Draggable Window
-[18] Advance Example - Image Processing
-[19] Advance Example - Root Renderer Shader
-[20] Other - Debug Shapes
-[21] Other - Renderer
+[10] Basic Example - Cylinder Mesh
+[11] Basic Example - Partial Torus
+[12] Basic Example - Partial Torus in F#
+[13] Basic Example - Particles
+[14] Basic Example - Raycast
+[15] Basic Example - CollisionGroup
+[16] Basic Example - CollisionLayer
+[17] Advance Example - Simple Constraint
+[18] Advance Example - Various Constraints
+[19] Advance Example - Myra UI - Draggable Window, GetService()
+[20] Advance Example - Stride UI - Draggable Window
+[21] Advance Example - Image Processing
+[22] Advance Example - Root Renderer Shader
+[23] Other - Debug Shapes
+[24] Other - Renderer
 [Q] Quit
 
 Enter choice and press ENTER to continue
