@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Cylinder mesh | Stride Community Toolkit Manual </title>
+      <title>Partial torus mesh | Stride Community Toolkit Manual </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Cylinder mesh | Stride Community Toolkit Manual ">
+      <meta name="title" content="Partial torus mesh | Stride Community Toolkit Manual ">
       
       
       <link rel="icon" href="../../../favicon.ico">
@@ -16,7 +16,7 @@
       <meta name="docfx:rel" content="../../../">
       
       
-      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/cylinder-mesh.md/#L1">
+      <meta name="docfx:docurl" content="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/partial-torus-mesh.md/#L1">
       <meta name="loc:inThisArticle" content="In this article">
       <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
       <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
@@ -85,29 +85,36 @@
         </div>
 
         <article data-uid="">
-<h1 id="cylinder-mesh">Cylinder mesh</h1>
+<h1 id="partial-torus-mesh">Partial torus mesh</h1>
 
-<p>This example demonstrates creating a 3D cylinder mesh programmatically by breaking down the process into clear, distinct steps:</p>
+<p>This example demonstrates creating a 3D partial torus mesh programmatically by breaking down
+the process into clear, distinct steps:</p>
 <ol>
 <li>Setting up a basic 3D scene with a skybox</li>
-<li>Creating precisely defined geometry using low-level mesh construction techniques</li>
-<li>Demonstrating a structured approach to 3D mesh generation by dividing it into logical components:
-<ul>
-<li>Creating ring vertices</li>
-<li>Building side walls</li>
-<li>Adding end caps</li>
-</ul>
-</li>
+<li>Creating a parametrically defined torus geometry using mathematical formulas</li>
+<li>Demonstrating how to generate a partial (incomplete) torus by constraining the bend angle</li>
+<li>Building structured 3D mesh generation with proper vertex positioning and normal definitions</li>
 </ol>
-<p>We will be utilizing the <a class="xref" href="../../../api/Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.html">MeshBuilder</a> class from the toolkit, the process of crafting and rendering these geometries is streamlined.</p>
-<p><img src="media/stride-game-engine-example-05-cylinder-mesh.webp" alt="Stride UI Example"></p>
+<p>The example showcases important 3D graphics concepts including:</p>
+<ul>
+<li>Parametric surface generation using two angle parameters (circumference and bend)</li>
+<li>Correct normal calculation for accurate lighting and shading</li>
+<li>Triangle winding order for proper face orientation</li>
+<li>Vertex indexing to efficiently reuse vertices between adjacent triangles</li>
+</ul>
+<p><img src="media/stride-game-engine-example-05-partial-torus-mesh.webp" alt="Stride UI Example"></p>
 <p>For more details of <code>MeshBuilder</code>, refer to our <a href="../../rendering/mesh-builder.html">MeshBuilder manual</a>.</p>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Notice the effect of back-face culling when moving the camera around the objects. With the default culling mode enabled, back faces are not rendered, optimizing performance by avoiding the drawing of surfaces that are not visible to the camera.</p>
+<p>For open or partially open 3D models, viewing from inside or even from outside through an open area may cause the model to appear incomplete. This is normal behavior since back-face culling intentionally omits surfaces facing away from the camera.</p>
+</div>
 <div class="NOTE">
 <h5>Note</h5>
 <p>This example requires the additional NuGet packages <code>Stride.CommunityToolkit.Skyboxes</code> and <code>Stride.CommunityToolkit.Bepu</code>. Make sure to install <strong>both</strong> before running the code.</p>
 </div>
 
-<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_CylinderMesh">GitHub</a>.</p>
+<p>View on <a href="https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_PartialTorus">GitHub</a>.</p>
 <pre><code class="lang-csharp">using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Utilities;
@@ -120,27 +127,34 @@ using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
 /*
-  Procedural Cylinder Mesh Generation
+  Procedural Partial Torus Mesh Generation
 
-  This example demonstrates creating a 3D cylinder mesh programmatically by breaking down
+  This example demonstrates creating a 3D partial torus mesh programmatically by breaking down
   the process into clear, distinct steps:
 
   1. Setting up a basic 3D scene with a skybox
-  2. Creating precisely defined geometry using low-level mesh construction techniques
-  3. Demonstrating a structured approach to 3D mesh generation by dividing it into logical components:
-     - Creating ring vertices
-     - Building side walls
-     - Adding end caps
+  2. Creating a parametrically defined torus geometry using mathematical formulas
+  3. Demonstrating how to generate a partial (incomplete) torus by constraining the bend angle
+  4. Building structured 3D mesh generation with proper vertex positioning and normal definitions
 
-  The example showcases proper 3D graphics fundamentals like vertex positioning, normal
-  definitions, triangle winding order, and efficient vertex reuse through indexing. It also
-  demonstrates good software engineering practices by separating concerns into well-named
-  methods with clear responsibilities.
+  The example showcases important 3D graphics concepts including:
+  - Parametric surface generation using two angle parameters (circumference and bend)
+  - Correct normal calculation for accurate lighting and shading
+  - Triangle winding order for proper face orientation
+  - Vertex indexing to efficiently reuse vertices between adjacent triangles
+
+  The partial nature of the torus also highlights the effect of back-face culling. When viewing
+  the open ends of the torus from certain angles, you can see through to the inside or outside,
+  as surfaces facing away from the camera are not rendered. This is normal behavior and improves
+  performance by avoiding the drawing of surfaces that wouldn't be visible in a complete object.
 */
 
-const int Segments = 1000;
-const float Radius = 0.5f;
-const float Length = 8;
+// Torus parameters
+const float CylinderRadius = 0.3f;
+const float TorusAngle = 270.0f;
+const float BendRadius = 1.0f;
+const int CircumferenceStepsCount = 20;
+const int BendSegmentSteps = 40;
 
 using var game = new Game();
 
@@ -149,7 +163,12 @@ game.Run(start: (Scene rootScene) =&gt;
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    CreateMeshEntity(game.GraphicsDevice, rootScene, new(0, 1, -Length / 2), b =&gt; BuildCylinderMesh(b, Segments, Radius, Length));
+    CreateMeshEntity(
+        game.GraphicsDevice,
+        rootScene,
+        new Vector3(0.0f, 1.0f, 0.0f),
+        b =&gt; BuildPartialTorusMesh(b, CylinderRadius, TorusAngle, BendRadius, CircumferenceStepsCount, BendSegmentSteps)
+    );
 });
 
 Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 position, Action&lt;MeshBuilder&gt; build)
@@ -161,7 +180,8 @@ Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 posi
     var model = new Model
     {
         new MaterialInstance { Material = CreateMaterial(game) },
-        new Mesh {
+        new Mesh
+        {
             Draw = meshBuilder.ToMeshDraw(graphicsDevice),
             MaterialIndex = 0
         }
@@ -174,124 +194,92 @@ Entity CreateMeshEntity(GraphicsDevice graphicsDevice, Scene scene, Vector3 posi
     return entity;
 }
 
-void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, float length)
+void BuildPartialTorusMesh(MeshBuilder meshBuilder, float cylinderRadius, float torusAngle, float bendRadius, int circumferenceStepsCount, int bendSegmentSteps)
 {
+    // for partial torus up to 360 degrees (torusAngle in degrees)
     meshBuilder.WithIndexType(IndexingType.Int16);
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
     var position = meshBuilder.WithPosition&lt;Vector3&gt;();
     var normal = meshBuilder.WithNormal&lt;Vector3&gt;();
 
-    // Create the vertices for both circular ends
-    // First end (z = 0)
-    CreateRingVertices(meshBuilder, segments, radius, position, normal, 0);
-    // Second end (z = length)
-    CreateRingVertices(meshBuilder, segments, radius, position, normal, length);
-
-    CreateCylinderSideWalls(meshBuilder, segments);
-
-    // Create the first end cap (closing the cylinder)
-    CreateCircularEndCap(meshBuilder, segments, position, normal, 0, false);
-
-    // Create the second end cap (closing the cylinder)
-    CreateCircularEndCap(meshBuilder, segments, position, normal, length, true);
-}
-
-static Material CreateMaterial(Game game) =&gt; Material.New(game.GraphicsDevice, new()
-{
-    Attributes = new()
+    // vertices
+    for (int j = 0; j &lt;= bendSegmentSteps; j++)
     {
-        MicroSurface = new MaterialGlossinessMapFeature
+        // Torus angle position Phi starts at 0 in line with Z-axis and increases to Pi/2 at X-axis
+        double tPhi = j * torusAngle / bendSegmentSteps * Math.PI / 180.0;
+        double xc = bendRadius * Math.Sin(tPhi);
+        double zc = bendRadius * Math.Cos(tPhi);
+
+        for (int i = 0; i &lt; circumferenceStepsCount; i++)
         {
-            GlossinessMap = new ComputeFloat(0.9f)
-        },
-        Diffuse = new MaterialDiffuseMapFeature
-        {
-            DiffuseMap = new ComputeColor(new Color4(1, 0.3f, 0.5f, 1))
-        },
-        DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-        Specular = new MaterialMetalnessMapFeature
-        {
-            MetalnessMap = new ComputeFloat(0.0f)
-        },
-        SpecularModel = new MaterialSpecularMicrofacetModelFeature
-        {
-            Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()
-        },
-    }
-});
+            // Circumference angle tTheta
+            double tTheta = i * Math.Tau / circumferenceStepsCount;
+            double yr = cylinderRadius * Math.Sin(tTheta);
+            double xr = cylinderRadius * Math.Cos(tTheta) * Math.Sin(tPhi);
+            double zr = cylinderRadius * Math.Cos(tTheta) * Math.Cos(tPhi);
 
-static void CreateRingVertices(MeshBuilder meshBuilder, int segments, float radius, int position, int normal, float zPosition)
-{
-    for (var i = 0; i &lt; segments; i++)
-    {
-        var x = radius * (float)Math.Sin(Math.Tau / segments * i);
-        var y = radius * (float)Math.Cos(Math.Tau / segments * i);
+            var tNorm = new Vector3((float)xr, (float)yr, (float)zr);
+            var tPos = new Vector3((float)(xc + xr), (float)yr, (float)(zc + zr));
 
-        meshBuilder.AddVertex();
-        meshBuilder.SetElement(position, new Vector3(x, y, zPosition));
-        meshBuilder.SetElement(normal, new Vector3(x, y, 0));
-    }
-}
-
-// Creates the triangles that form the curved side wall of the cylinder
-static void CreateCylinderSideWalls(MeshBuilder meshBuilder, int segments)
-{
-    for (var i = 0; i &lt; segments; i++)
-    {
-        var i_next = (i + 1) % segments;
-
-        // First triangle of the quad
-        meshBuilder.AddIndex(i);
-        meshBuilder.AddIndex(i_next + segments);
-        meshBuilder.AddIndex(i + segments);
-
-        // Second triangle of the quad
-        meshBuilder.AddIndex(i);
-        meshBuilder.AddIndex(i_next);
-        meshBuilder.AddIndex(i_next + segments);
-    }
-}
-
-// Creates a circular cap to close one end of the cylinder
-static void CreateCircularEndCap(MeshBuilder meshBuilder, int segments, int position, int normal, float zPosition, bool isEndFacingPositiveZ)
-{
-    // Create center vertex
-    int centerVertexIndex = meshBuilder.AddVertex();
-    meshBuilder.SetElement(position, new Vector3(0f, 0f, zPosition));
-
-    // Set normal direction based on which end we're creating
-    var normalDirection = isEndFacingPositiveZ ? new Vector3(0, 0, 1) : new Vector3(0, 0, -1);
-    meshBuilder.SetElement(normal, normalDirection);
-
-    // First end cap has vertices from 0 to segments-1
-    // Second end cap has vertices from segments to 2*segments-1
-    int vertexOffset = isEndFacingPositiveZ ? segments : 0;
-
-    // Create triangles to form the cap
-    for (var i = 0; i &lt; segments; i++)
-    {
-        if (isEndFacingPositiveZ)
-        {
-            // For end cap with Z+ normal
-            meshBuilder.AddIndex(((i + 1) % segments) + vertexOffset);
-            meshBuilder.AddIndex(centerVertexIndex);
-            meshBuilder.AddIndex(i + vertexOffset);
-        }
-        else
-        {
-            // For end cap with Z- normal
-            meshBuilder.AddIndex(((i + 1) % segments) + vertexOffset);
-            meshBuilder.AddIndex(i + vertexOffset);
-            meshBuilder.AddIndex(centerVertexIndex);
+            meshBuilder.AddVertex();
+            meshBuilder.SetElement(position, tPos);
+            meshBuilder.SetElement(normal, tNorm);
         }
     }
+
+    // Triangle indices
+    for (int j = 0; j &lt; bendSegmentSteps; j++)
+    {
+        for (int i = 0; i &lt; circumferenceStepsCount; i++)
+        {
+            int i_tot = i + j * circumferenceStepsCount;
+            int i_next = (i + 1) % circumferenceStepsCount + j * circumferenceStepsCount;
+
+            // Triangle 1
+            meshBuilder.AddIndex(i_tot);
+            meshBuilder.AddIndex(i_next + circumferenceStepsCount);
+            meshBuilder.AddIndex(i_tot + circumferenceStepsCount);
+
+            // Triangle 2
+            meshBuilder.AddIndex(i_tot);
+            meshBuilder.AddIndex(i_next);
+            meshBuilder.AddIndex(i_next + circumferenceStepsCount);
+        }
+    }
+}
+
+static Material CreateMaterial(Game game)
+{
+    return Material.New(game.GraphicsDevice, new MaterialDescriptor
+    {
+        Attributes = new MaterialAttributes
+        {
+            MicroSurface = new MaterialGlossinessMapFeature
+            {
+                GlossinessMap = new ComputeFloat(0.9f)
+            },
+            Diffuse = new MaterialDiffuseMapFeature
+            {
+                DiffuseMap = new ComputeColor(new Color4(1.0f, 0.3f, 0.5f, 1.0f))
+            },
+            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+            Specular = new MaterialMetalnessMapFeature
+            {
+                MetalnessMap = new ComputeFloat(0.0f)
+            },
+            SpecularModel = new MaterialSpecularMicrofacetModelFeature
+            {
+                Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()
+            }
+        }
+    });
 }
 </code></pre>
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/cylinder-mesh.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/docs/manual/code-only/examples/partial-torus-mesh.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>

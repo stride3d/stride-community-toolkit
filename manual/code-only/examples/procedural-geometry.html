@@ -92,6 +92,11 @@
 <p>The <code>MeshBuilder</code> class is employed to define the layout and data for each mesh. For instance, the <code>GiveMeATriangle</code>, <code>GiveMeAPlane</code>, and <code>GiveMeACircle</code> methods demonstrate how to configure vertices, indices, and other properties to form a triangle, a plane, and a circle, respectively.</p>
 <p>The <code>Update</code> method demonstrates a dynamic adjustment to the circle's segments count over time, showcasing a simple animation effect.</p>
 <p>For more details of <code>MeshBuilder</code>, refer to our <a href="../../rendering/mesh-builder.html">MeshBuilder manual</a>.</p>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Notice the effect of back-face culling when moving the camera around the objects. With the default culling mode enabled, back faces are not rendered, optimizing performance by avoiding the drawing of surfaces that are not visible to the camera.</p>
+<p>For open or partially open 3D models, viewing from inside or even from outside through an open area may cause the model to appear incomplete. This is normal behavior since back-face culling intentionally omits surfaces facing away from the camera.</p>
+</div>
 <div class="NOTE">
 <h5>Note</h5>
 <p>This example requires the additional NuGet packages <code>Stride.CommunityToolkit.Skyboxes</code> and <code>Stride.CommunityToolkit.Bepu</code>. Make sure to install <strong>both</strong> before running the code.</p>

@@ -2085,6 +2085,16 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-05-partial-torus-mesh.webp",
+      "output": {
+        "resource": {
+          "relative_path": "manual/code-only/examples/media/stride-game-engine-example-05-partial-torus-mesh.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "manual/code-only/examples/media/stride-game-engine-example-06-image-processing.webp",
       "output": {
         "resource": {
@@ -2259,6 +2269,26 @@
       "output": {
         ".html": {
           "relative_path": "manual/code-only/examples/myra-ui-draggable-window-and-services.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/partial-torus-mesh-fs.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/partial-torus-mesh-fs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/code-only/examples/partial-torus-mesh.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/code-only/examples/partial-torus-mesh.html"
         }
       },
       "version": ""
