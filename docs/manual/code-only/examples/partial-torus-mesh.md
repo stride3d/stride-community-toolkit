@@ -1,4 +1,4 @@
-# Cylinder mesh
+# Partial torus mesh
 
 This example demonstrates creating a 3D partial torus mesh programmatically by breaking down
 the process into clear, distinct steps:
