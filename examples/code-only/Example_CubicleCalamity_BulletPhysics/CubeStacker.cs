@@ -97,7 +97,7 @@ public class CubeStacker
 
     public Material CreateMaterial(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
     {
-        var materialDescription2 = new MaterialDescriptor
+        var materialDescription = new MaterialDescriptor
         {
             Attributes =
                 {
@@ -109,7 +109,25 @@ public class CubeStacker
                 }
         };
 
-        var materialDescription = new MaterialDescriptor
+        var materialDescription3 = new MaterialDescriptor
+        {
+            Attributes =
+                {
+                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
+                    DiffuseModel = new MaterialLightmapModelFeature(),
+                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(0)),
+                                  SpecularModel = new MaterialSpecularMicrofacetModelFeature()
+                    {
+                        Fresnel = new MaterialSpecularMicrofacetFresnelSchlick(),
+                        Visibility = new MaterialSpecularMicrofacetVisibilitySmithSchlickGGX(),
+                        NormalDistribution = new MaterialSpecularMicrofacetNormalDistributionGGX(),
+                        Environment = new MaterialSpecularMicrofacetEnvironmentGGXLUT(),
+                    },
+                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0))
+                }
+        };
+
+        var materialDescription2 = new MaterialDescriptor
         {
             Attributes =
                 {
