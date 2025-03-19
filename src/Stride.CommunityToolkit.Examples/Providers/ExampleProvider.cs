@@ -39,6 +39,12 @@ public class ExampleProvider
         CreateExample("Basic Example - Cylinder Mesh",
             nameof(Example05_CylinderMesh)),
 
+        CreateExample("Basic Example - Partial Torus",
+            nameof(Example05_PartialTorus)),
+
+        CreateExample("Basic Example - Partial Torus in F#",
+            nameof(Example05_PartialTorus_FSharp)),
+
         CreateExample("Basic Example - Particles",
             nameof(Example12_Particles)),
 

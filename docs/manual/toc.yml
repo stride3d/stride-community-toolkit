@@ -28,6 +28,8 @@
       href: code-only/examples/procedural-geometry.md
     - name: Cylinder Mesh
       href: code-only/examples/cylinder-mesh.md
+    - name: Partial Torus Mesh
+      href: code-only/examples/partial-torus-mesh.md
     - name: Particles
       href: code-only/examples/particles.md
     - name: Raycast
@@ -62,6 +64,8 @@
     items:
     - name: Capsule with rigid body
       href: code-only/examples/capsule-with-rigid-body-fs.md
+    - name: Partial Torus Mesh
+      href: code-only/examples/partial-torus-mesh-fs.md
   - name: VB Basic Examples
     href: code-only/examples/basic-examples-vb.md
     items:

@@ -10,6 +10,8 @@ The `Update` method demonstrates a dynamic adjustment to the circle's segments c
 
 For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
 
+[!INCLUDE [back-culling](../../../includes/manual/examples/back-culling.md)]
+
 [!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_ProceduralGeometry).

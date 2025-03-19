@@ -5,7 +5,8 @@
 - [Stride UI - Grid - Save and load game state](../../manual/code-only/examples/stride-ui-cube-clicker.md): Shows how to create a simple game where clicking a cube increases the score and manages game state.
 - [Material](../../manual/code-only/examples/material.md): Shows how to create a material and apply it to a 3D entity.
 - [Procedural geometry](../../manual/code-only/examples/procedural-geometry.md): Shows how to create procedural geometry meshes—such as a triangle, plane, and circle—and add them to a scene.
-- [Cylinder mesh](../../manual/code-only/examples/cylinder-mesh.md): Shows how to create a cylinder mesh.   
+- [Cylinder mesh](../../manual/code-only/examples/cylinder-mesh.md): Shows how to create a cylinder mesh.
+- [Partial torus mesh](../../manual/code-only/examples/partial-torus-mesh.md): Shows how to create a partial torus mesh.
 - [Particles](../../manual/code-only/examples/particles.md): Shows how to create a particle system.
 - [Raycast](../../manual/code-only/examples/raycast.md): Shows how to implement raycasting and physics interactions.
 - [Collision Group](../../manual/code-only/examples/collision-group.md): Shows how to create a scene with two players and an enemy entity and set up collision groups.
