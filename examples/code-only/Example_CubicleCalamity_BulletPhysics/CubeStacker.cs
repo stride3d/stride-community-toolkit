@@ -1,6 +1,7 @@
 using Example_CubicleCalamity.Components;
 using Example_CubicleCalamity.Scripts;
 using Example_CubicleCalamity.Shared;
+using Example_CubicleCalamity_BulletPhysics;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
