@@ -40,6 +40,10 @@ public class CubeStacker
         //_game.SetupBase3DScene();
         _game.AddGraphicsCompositor().AddCleanUIStage();
         _game.Add3DCamera().Add3DCameraController();
+        //_game.AddEntityDebugSceneRenderer(new()
+        //{
+        //    ShowFontBackground = false
+        //});
         _game.AddDirectionalLight();
         _game.Add3DGround();
         _game.AddProfiler();
