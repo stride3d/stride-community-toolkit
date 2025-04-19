@@ -63,7 +63,7 @@ public class CubeStacker
     {
         var entity = new Entity("GameManager")
         {
-            new RaycastHandler()
+            new RaycastInteractionScript()
         };
         entity.Scene = scene;
 

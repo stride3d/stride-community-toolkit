@@ -8,7 +8,7 @@ using Stride.Input;
 
 namespace Example_CubicleCalamity.Scripts;
 
-public class RaycastHandler : AsyncScript
+public class RaycastInteractionScript : AsyncScript
 {
     private int _totalScore;
 
