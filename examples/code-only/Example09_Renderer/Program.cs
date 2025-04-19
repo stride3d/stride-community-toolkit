@@ -36,6 +36,7 @@ void Start(Scene scene)
 
     // Example 1: Adds a custom scene renderer to render text for all entities in the scene.
     game.AddSceneRenderer(new MyCustomSceneRenderer());
+    game.AddSceneRenderer(new EntityTextRenderer());
 
     // Adds a skybox (a background environment) to the scene.
     game.AddSkybox();
@@ -52,10 +53,35 @@ void Start(Scene scene)
 
     // Example 2: Adds a custom startup script to the entity, which draws specific text
     // (e.g., "Hello Stride 2") using SpriteBatch when the game is running.
+
     entity.Add(new SpriteBatchRendererScript());
+
+    var textComponent = new EntityTextComponent()
+    {
+        Text = "Hello Boss",
+        FontSize = 13,
+        TextColor = Color.Green,
+        Offset = new(0, -100)
+    };
+    entity.Add(textComponent);
 
     // Assigns the entity to the root scene to ensure it is rendered and updated.
     entity.Scene = scene;
+
+    ////////////////
+    ///
+    var entity2 = game.Create3DPrimitive(PrimitiveModelType.Cube);
+    entity2.Transform.Position = new Vector3(0, 3, 0);
+
+    var textComponent2 = new EntityTextComponent()
+    {
+        Text = "Hello Stride 2026",
+        FontSize = 14,
+        TextColor = Color.Red,
+    };
+    entity2.Add(textComponent2);
+
+    entity2.Scene = scene;
 }
 
 void Update(Scene scene, GameTime time)
