@@ -1,3 +1,4 @@
+
 namespace Stride.CommunityToolkit.Scripts.Utilities;
 
 /// <summary>
@@ -14,7 +15,7 @@ public class DebugTextPrinter
     /// <summary>
     /// Gets or sets the screen size, which defines the boundaries for placing text on the screen.
     /// </summary>
-    public Int2 ScreenSize { get; init; }
+    public Int2 ScreenSize { get; set; }
 
     /// <summary>
     /// Gets or sets the size of the text elements, typically defining the dimensions of each line of text.
@@ -101,5 +102,17 @@ public class DebugTextPrinter
             DisplayPosition.BottomRight => new(ScreenSize.X - TextSize.X, ScreenSize.Y - TextSize.Y),
             _ => new(ScreenSize.X - TextSize.X, _basePosition.Y),
         };
+    }
+
+    /// <summary>
+    /// Updates the screen size, which defines the boundaries for placing text on the screen.
+    /// </summary>
+    public void UpdateScreenSize(Int2 int2)
+    {
+        if (int2 == ScreenSize) return;
+
+        ScreenSize = int2;
+
+        SetStartPosition(_currentPosition);
     }
 }
