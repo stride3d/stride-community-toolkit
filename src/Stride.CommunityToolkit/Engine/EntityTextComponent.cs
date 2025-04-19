@@ -53,6 +53,16 @@ public class EntityTextComponent : EntityComponent
     public TextAlignment Alignment { get; set; } = TextAlignment.Left;
 
     /// <summary>
+    /// Gets or sets the color of the background behind the text.
+    /// </summary>
+    public Color4? BackgroundColor { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to use a background behind the text.
+    /// </summary>
+    public bool EnableBackground { get; set; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="EntityTextComponent"/> class.
     /// </summary>
     public EntityTextComponent() { }
