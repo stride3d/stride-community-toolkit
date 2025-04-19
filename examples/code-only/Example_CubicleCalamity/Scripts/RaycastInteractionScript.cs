@@ -65,6 +65,7 @@ public class RaycastInteractionScript : AsyncScript
     {
         if (entity.Name == "Cube")
         {
+            _soundInstance?.Stop();
             _soundInstance?.Play();
 
             var cubeComponent = entity.Get<CubeComponent>();
