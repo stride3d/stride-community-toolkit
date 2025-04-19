@@ -11,10 +11,13 @@ namespace Example_CubicleCalamity.Scripts;
 public class RaycastInteractionScript : AsyncScript
 {
     private int _totalScore;
+    private EntityTextComponent? _scoreComponent;
 
     public override async Task Execute()
     {
         var cameraComponent = Entity.Scene.GetCamera();
+        var totalScoreEntity = Entity.Scene.Entities.FirstOrDefault(e => e.Name == "TotalScore");
+        _scoreComponent = totalScoreEntity?.Get<EntityTextComponent>();
 
         //var simulation = this.GetSimulation();
 
@@ -22,30 +25,33 @@ public class RaycastInteractionScript : AsyncScript
 
         while (Game.IsRunning)
         {
-            if (Input.HasMouse && Input.IsKeyDown(Keys.LeftShift))
+            if (!Input.HasMouse)
             {
-                if (Input.IsMouseButtonDown(MouseButton.Left))
-                {
-                    var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);
+                await Script.NextFrame();
 
-                    if (hit)
-                    {
-                        OnEntityHit(hitInfo.Collidable.Entity);
-                    }
-                }
+                continue;
             }
 
-            if (Input.HasMouse && Input.IsMouseButtonPressed(MouseButton.Left))
+            if (Input.IsKeyDown(Keys.LeftShift) && Input.IsMouseButtonDown(MouseButton.Left))
             {
-                var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);
-
-                if (hit)
-                {
-                    OnEntityHit(hitInfo.Collidable.Entity);
-                }
+                ProcessMouseRaycast(cameraComponent);
+            }
+            else if (Input.IsMouseButtonPressed(MouseButton.Left))
+            {
+                ProcessMouseRaycast(cameraComponent);
             }
 
             await Script.NextFrame();
+        }
+    }
+
+    private void ProcessMouseRaycast(CameraComponent cameraComponent)
+    {
+        var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);
+
+        if (hit)
+        {
+            OnEntityHit(hitInfo.Collidable.Entity);
         }
     }
 
@@ -65,6 +71,11 @@ public class RaycastInteractionScript : AsyncScript
             var score = CalculateScore(cubesToRemove.Count()).Result;
 
             _totalScore += score;
+
+            if (_scoreComponent != null)
+            {
+                _scoreComponent.Text = $"{Constants.TotalScore}: {_totalScore:N0}";
+            }
 
             Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count()).Calculations}, Total Score: {_totalScore - score} + {score}");
 
