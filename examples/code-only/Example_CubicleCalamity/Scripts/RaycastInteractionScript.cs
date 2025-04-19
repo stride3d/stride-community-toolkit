@@ -68,9 +68,11 @@ public class RaycastInteractionScript : AsyncScript
 
     private void AddDisplayScoreEntity(Vector3 position, int score)
     {
+        var fontSize = score > 10000 ? 24 : 18;
+
         var entity = new Entity("DisplayScore", position)
         {
-            new EntityTextComponent() { Text = score.ToString() },
+            new EntityTextComponent() { Text = score.ToString(), FontSize = fontSize },
             new ScoreScript()
         };
 
