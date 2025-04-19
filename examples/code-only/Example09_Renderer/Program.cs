@@ -10,7 +10,7 @@ using Stride.Engine;
 using Stride.Games;
 
 // This example demonstrates three different ways of adding custom rendering logic to a Stride game.
-// 1. Using a custom SceneRenderer via MyCustomSceneRenderer, which renders text for all entities.
+// 1. Using a custom SceneRenderer via MyCustomSceneRenderer, which renders text for all entities and static text.
 // 2. Using a custom EntityTextComponent, which is a component that can be added to any entity to render text.
 // 3. Using a StartupScript via SpriteBatchRendererScript, which draws specific text for a single entity.
 // All approaches integrate into the Stride rendering pipeline, demonstrating how to extend the default rendering behaviour.
@@ -51,7 +51,7 @@ void Start(Scene scene)
     // Example 2: Adds an EntityTextComponent to the cube entity, which renders text
     cube.Add(new EntityTextComponent()
     {
-        Text = "Me, Cube",
+        Text = "Example2: Me, Cube",
         FontSize = 12,
         TextColor = Color.Purple,
     });
@@ -73,7 +73,7 @@ void Start(Scene scene)
 
     var textComponent = new EntityTextComponent()
     {
-        Text = "Hello, Stride!",
+        Text = "Example2: Hello, Stride!",
         FontSize = 13,
         TextColor = Color.Green,
         Offset = new(0, -100),

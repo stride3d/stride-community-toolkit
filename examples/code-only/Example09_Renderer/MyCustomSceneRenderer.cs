@@ -35,6 +35,8 @@ public class MyCustomSceneRenderer : SceneRendererBase
     // A texture used to draw the background behind the text
     private Texture? _colorTexture;
 
+    private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
+
     // Offset for positioning the text relative to the entity's screen position
     private Vector2 _offset = new(0, -50);
 
@@ -45,14 +47,14 @@ public class MyCustomSceneRenderer : SceneRendererBase
     {
         base.InitializeCore();
 
-        // Load the default font used for rendering text
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
-
         // Create a SpriteBatch instance for rendering 2D content
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        // Load the default font used for rendering text
+        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+
         // Create a small texture (1x1 pixel) for drawing the background behind the text
-        _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, new[] { Color.White });
+        _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
     }
 
     /// <summary>
@@ -72,16 +74,20 @@ public class MyCustomSceneRenderer : SceneRendererBase
         _camera ??= graphicsCompositor.Cameras[0].Camera;
 
         // Get the root scene for the current frame
-        _scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
+        _scene ??= SceneInstance.GetCurrent(context).RootScene;
 
         // Ensure all required components are initialized
         if (_spriteBatch is null || _camera is null || _scene is null) return;
 
         // Begin the SpriteBatch for rendering static 2D text
-        _spriteBatch.Begin(drawContext.GraphicsContext);
+        _spriteBatch.Begin(drawContext.GraphicsContext,
+            sortMode: SpriteSortMode.Deferred,
+            blendState: BlendStates.AlphaBlend,
+            samplerState: null,
+            depthStencilState: DepthStencilStates.None);
 
         // Example of static text rendering (does not depend on entities)
-        _spriteBatch.DrawString(_font, "Hello Stride", 20, new Vector2(100, 100), Color.White);
+        _spriteBatch.DrawString(_font, "Example 1", 20, new Vector2(100, 100), _defaultBackground);
 
         _spriteBatch.End();
 
@@ -91,7 +97,8 @@ public class MyCustomSceneRenderer : SceneRendererBase
         foreach (var entity in _scene.Entities)
         {
             // Convert the entity's world position to screen space
-            var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var finalPosition = screenPosition + _offset;
 
             // Text to display the entity's name and position
             var text = $"{entity.Name}: {entity.Transform.Position:N1}";
@@ -101,13 +108,13 @@ public class MyCustomSceneRenderer : SceneRendererBase
 
             // Draw a semi-transparent background behind the text
             _spriteBatch.Draw(_colorTexture, new Rectangle(
-                (int)screen.X + (int)_offset.X,
-                (int)screen.Y + (int)_offset.Y,
-                (int)textDimensions.X,
-                (int)textDimensions.Y), new Color(200, 200, 200, 100));
+                (int)finalPosition.X - 2,
+                (int)finalPosition.Y - 2,
+                (int)textDimensions.X + 4,
+                (int)textDimensions.Y + 4), _defaultBackground);
 
             // Draw the entity's name and position as text on the screen
-            _spriteBatch.DrawString(_font, text, _fontSize, screen + _offset, Color.Black);
+            _spriteBatch.DrawString(_font, text, _fontSize, finalPosition, Color.Black);
         }
 
         // End the SpriteBatch

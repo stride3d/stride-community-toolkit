@@ -25,7 +25,7 @@ public class SpriteBatchRendererScript : StartupScript
     private SpriteFont? _font;
 
     // Font size for the text
-    private float _fontSize = 18;
+    private float _fontSize = 12;
 
     // Reference to the camera component used for world-to-screen transformation
     private CameraComponent? _camera;
@@ -71,8 +71,8 @@ public class SpriteBatchRendererScript : StartupScript
         // Begin the 2D rendering process using SpriteBatch
         _spriteBatch.Begin(drawContext.GraphicsContext);
 
-        // Draw a red "Hello Stride 2" text at the specified screen position, applying the offset
-        _spriteBatch.DrawString(_font, "Hello Stride 2", _fontSize, screen + _offset, Color.Red);
+        // Draw a red "I am a capsule" text at the specified screen position, applying the offset
+        _spriteBatch.DrawString(_font, "Example 3: I am a capsule", _fontSize, screen + _offset, Color.Red);
 
         // End the SpriteBatch rendering process
         _spriteBatch.End();
