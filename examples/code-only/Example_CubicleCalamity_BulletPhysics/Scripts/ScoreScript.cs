@@ -8,7 +8,7 @@ public class ScoreScript : SyncScript
 {
     private float _maxHeight = 25f;
     private TimeSpan _elapsed = TimeSpan.Zero;
-    private TimeSpan _duration = TimeSpan.FromSeconds(3);
+    private TimeSpan _duration = TimeSpan.FromSeconds(4);
     private Vector3 _startPosition = new(0, 8, 0);
 
     public override void Start()

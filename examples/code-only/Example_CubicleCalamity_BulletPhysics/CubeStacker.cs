@@ -55,6 +55,10 @@ public class CubeStacker
         AddAllDirectionLighting(scene, intensity: 5f);
         AddFirstLayer(scene, 0.5f);
         AddGameManagerEntity(scene);
+        AddTotalScoreEntity(scene);
+
+        var camera = scene.GetCamera();
+        camera?.Entity.Add(new CameraRotationScript());
     }
 
     private void AddGizmo(Scene scene)
@@ -72,8 +76,22 @@ public class CubeStacker
             new RaycastInteractionScript()
         };
         entity.Scene = scene;
+    }
 
-        //scene.Entities.Add(entity);
+    private static void AddTotalScoreEntity(Scene scene)
+    {
+        var entity = new Entity(Constants.TotalScore)
+        {
+            new EntityTextComponent()
+            {
+                Text = "Total Score: 0",
+                FontSize = 20,
+                Position = new Vector2(0, 20),
+                TextColor = new Color(255, 255, 255),
+            }
+        };
+
+        entity.Scene = scene;
     }
 
     public void Update(Scene scene, GameTime time)

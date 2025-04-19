@@ -1,0 +1,8 @@
+!Sound
+Id: daf2da16-0f0e-45fd-b080-43dd9a5d7266
+SerializedVersion: {Stride: 2.0.0.0}
+Source: !file ../Resources/wood-tap-5.mp3
+SampleRate: 24000
+CompressionRatio: 15
+StreamFromDisk: false
+Spatialized: false
