@@ -28,13 +28,23 @@ public class EntityDebugSceneRendererOptions
     /// <summary>
     /// Gets or sets a value indicating whether to display a background behind the text.
     /// </summary>
-    public bool ShowFontBackground { get; set; }
+    public bool EnableBackground { get; set; }
 
     /// <summary>
     /// Gets or sets the offset for positioning the debug text relative to the entity.
     /// Default offset is (0, -25).
     /// </summary>
     public Vector2 Offset { get; set; } = new Vector2(0, -25);
+
+    /// <summary>
+    /// Gets or sets the color of the background behind the text.
+    /// </summary>
+    public Color4? BackgroundColor { get; set; }
+
+    /// <summary>
+    /// Gets or sets the padding around the text.
+    /// </summary>
+    public float Padding { get; set; } = 2;
 
     /// <summary>
     /// Initializes a new instance of <see cref="EntityDebugSceneRendererOptions"/> with default settings.
@@ -62,7 +72,7 @@ public class EntityDebugSceneRendererOptions
         FontColor = Color.Black,
         ShowEntityName = true,
         ShowEntityPosition = false,
-        ShowFontBackground = false,
+        EnableBackground = false,
         Offset = new Vector2(0, -25)
     };
 }

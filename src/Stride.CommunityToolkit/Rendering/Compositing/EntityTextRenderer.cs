@@ -12,7 +12,9 @@ namespace Stride.CommunityToolkit.Rendering.Compositing;
 /// </summary>
 /// <remarks>
 /// This renderer uses <see cref="SceneRendererBase"/> to hook into the Stride rendering pipeline, rendering text above each entity
-/// with details like the entity's name and position. The renderer demonstrates both static and dynamic text rendering.
+/// with details like the entity's name and position. The renderer demonstrates both dynamic text rendering.
+/// This is useful for debugging or displaying information in a game scene.
+/// The text change isn't supported at the moment. Use it just for static text.
 /// </remarks>
 public class EntityTextRenderer : SceneRendererBase
 {
@@ -21,7 +23,8 @@ public class EntityTextRenderer : SceneRendererBase
     private Scene? _scene;
     private CameraComponent? _camera;
     private Texture? _backgroundTexture;
-    private readonly Color4 _defaultBackground = new(0.2f, 0.2f, 0.2f, 0.8f);
+    private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
+    private readonly Dictionary<Entity, Vector2> _metricsCache = [];
 
     /// <summary>
     /// Initializes the renderer by loading necessary resources like fonts and creating a <see cref="SpriteBatch"/> for rendering 2D elements.
@@ -30,11 +33,11 @@ public class EntityTextRenderer : SceneRendererBase
     {
         base.InitializeCore();
 
-        // Load the default font used for rendering text
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
-
         // Create a SpriteBatch instance for rendering 2D content
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        // Load the default font used for rendering text
+        _font = Content.Load<SpriteFont>("StrideDefaultFont");
 
         // Create a small texture (1x1 pixel) for drawing the background behind the text
         _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
@@ -76,8 +79,10 @@ public class EntityTextRenderer : SceneRendererBase
             if (textDisplay == null) continue;
 
             // Convert the entity's world position to screen space
-            var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
-            var finalPosition = screen + textDisplay.Offset;
+            var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var finalPosition = screenPosition + textDisplay.Offset;
+
+            DrawTextBackground(entity, textDisplay, finalPosition);
 
             _spriteBatch.DrawString(
                 _font,
@@ -87,22 +92,29 @@ public class EntityTextRenderer : SceneRendererBase
                 textDisplay.TextColor,
                 textDisplay.Alignment
             );
-
-            // Draw background
-            if (textDisplay.EnableBackground)
-            {
-                var textDimensions = _spriteBatch.MeasureString(_font, textDisplay.Text, textDisplay.FontSize);
-                var padding = 4f;
-                var bgRect = new RectangleF(
-                    (int)screen.X + (int)textDisplay.Offset.X - padding,
-                    (int)screen.Y + (int)textDisplay.Offset.Y - padding,
-                    textDimensions.X + padding * 2,
-                    textDimensions.Y + padding * 2);
-                _spriteBatch.Draw(_backgroundTexture, bgRect, textDisplay.BackgroundColor ?? _defaultBackground);
-            }
         }
 
         _spriteBatch.End();
+    }
+
+    private void DrawTextBackground(Entity entity, EntityTextComponent textDisplay, Vector2 finalPosition)
+    {
+        if (!textDisplay.EnableBackground) return;
+
+        if (_metricsCache.TryGetValue(entity, out var textDimensions))
+        {
+            var backgroundRectangle = new RectangleF(
+                finalPosition.X - textDisplay.Padding,
+                finalPosition.Y - textDisplay.Padding,
+                textDimensions.X + textDisplay.Padding * 2,
+                textDimensions.Y + textDisplay.Padding * 2);
+
+            _spriteBatch!.Draw(_backgroundTexture, backgroundRectangle, textDisplay.BackgroundColor ?? _defaultBackground);
+        }
+        else
+        {
+            _metricsCache[entity] = _spriteBatch!.MeasureString(_font, textDisplay.Text, textDisplay.FontSize);
+        }
     }
 
     /// <summary>
