@@ -13,6 +13,14 @@ namespace Stride.CommunityToolkit.Bullet;
 /// </summary>
 public static class GameExtensions
 {
+    public static void SetupBase2DScene(this Game game)
+    {
+        game.AddGraphicsCompositor().AddCleanUIStage();
+        game.Add2DCamera().Add2DCameraController();
+        //game.AddDirectionalLight();
+        game.Add2DGround();
+    }
+
     /// <summary>
     /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
@@ -32,16 +40,8 @@ public static class GameExtensions
         game.Add3DGround();
     }
 
-    public static void SetupBase2DScene(this Game game)
-    {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add2DCamera().Add2DCameraController();
-        //game.AddDirectionalLight();
-        game.Add2DGround();
-    }
-
     /// <summary>
-    /// Adds a 3D ground entity to the game with a default size of 10x10 units. The ground is created as a plane, and a collider can be optionally added.
+    /// Adds a 3D ground entity to the game with a default size of 15x15 units. The ground is created as a plane, and a collider can be optionally added.
     /// </summary>
     /// <param name="game">The Game instance to which the ground entity will be added.</param>
     /// <param name="entityName">The optional name for the ground entity. If not provided, it defaults to "Ground".</param>
