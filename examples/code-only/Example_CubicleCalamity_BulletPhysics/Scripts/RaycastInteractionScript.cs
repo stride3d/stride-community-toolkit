@@ -16,12 +16,6 @@ public class RaycastInteractionScript : AsyncScript
     {
         var cameraComponent = Entity.Scene.GetCamera();
 
-        // working after x frames
-        var cameraComponent2 = this.GetGCCamera();
-
-        //  working after x frames
-        var cameraComponent3 = this.GetFirstGCCamera();
-
         //var simulation = this.GetSimulation();
 
         if (cameraComponent == null) return;
@@ -60,10 +54,27 @@ public class RaycastInteractionScript : AsyncScript
             Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count()).Calculations}, Total Score: {_totalScore - score} + {score}");
 
             foreach (var cube in cubesToRemove)
+            {
                 cube.Remove();
+            }
+
+            AddDisplayScoreEntity(entity.Transform.Position, score);
 
             entity.Remove();
         }
+    }
+
+    private void AddDisplayScoreEntity(Vector3 position, int score)
+    {
+        var fontSize = score > 10000 ? 24 : 18;
+
+        var entity = new Entity("DisplayScore", position)
+        {
+            new EntityTextComponent() { Text = score.ToString(), FontSize = fontSize },
+            new ScoreScript()
+        };
+
+        entity.Scene = SceneSystem.SceneInstance.RootScene;
     }
 
     private static IEnumerable<Entity> GetCubesToRemove(Entity entity, Color color)
@@ -114,7 +125,7 @@ public class RaycastInteractionScript : AsyncScript
     {
         int baseScore = numberOfCubes * Constants.BasePointsPerCube;
 
-        int bonus = numberOfCubes * numberOfCubes;
+        int bonus = (numberOfCubes == 1 ? 0 : numberOfCubes) * numberOfCubes * 10;
 
         return (baseScore + bonus, $"{numberOfCubes} * {Constants.BasePointsPerCube} + {numberOfCubes} * {numberOfCubes}");
     }

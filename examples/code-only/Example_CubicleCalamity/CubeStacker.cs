@@ -25,7 +25,7 @@ namespace Example_CubicleCalamity;
 public class CubeStacker
 {
     private readonly Game _game;
-    private readonly Dictionary<Color, Material> _materials = new();
+    private readonly Dictionary<Color, Material> _materials = [];
     private const int Seed = 1;
     private readonly Random _random = new(Seed);
     private double _elapsedTime;
@@ -63,6 +63,7 @@ public class CubeStacker
 
         var camera = scene.GetCamera();
 
+        camera?.Entity.Add(new CameraRotationScript());
         //_simulation = camera?.Entity.GetSimulation().Simulation;
     }
 

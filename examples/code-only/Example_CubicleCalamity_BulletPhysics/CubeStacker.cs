@@ -33,8 +33,14 @@ public class CubeStacker
     public void Start(Scene scene)
     {
         //_game.SetupBase3DScene();
+        _game.Window.AllowUserResizing = true;
         _game.AddGraphicsCompositor().AddCleanUIStage();
         _game.Add3DCamera().Add3DCameraController();
+        //_game.AddEntityDebugSceneRenderer(new()
+        //{
+        //    ShowFontBackground = false
+        //});
+        _game.AddSceneRenderer(new EntityTextRenderer());
         _game.AddDirectionalLight();
         _game.Add3DGround();
         _game.AddProfiler();
