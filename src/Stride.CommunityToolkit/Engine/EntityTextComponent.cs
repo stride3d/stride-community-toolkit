@@ -58,6 +58,11 @@ public class EntityTextComponent : EntityComponent
     public Color4? BackgroundColor { get; set; }
 
     /// <summary>
+    /// Gets or sets the padding around the text.
+    /// </summary>
+    public float Padding { get; set; } = 2;
+
+    /// <summary>
     /// Gets or sets a value indicating whether to use a background behind the text.
     /// </summary>
     public bool EnableBackground { get; set; }
