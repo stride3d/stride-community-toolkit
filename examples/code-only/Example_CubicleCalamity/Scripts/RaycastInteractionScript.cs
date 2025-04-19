@@ -22,6 +22,19 @@ public class RaycastInteractionScript : AsyncScript
 
         while (Game.IsRunning)
         {
+            if (Input.HasMouse && Input.IsKeyDown(Keys.LeftShift))
+            {
+                if (Input.IsMouseButtonDown(MouseButton.Left))
+                {
+                    var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);
+
+                    if (hit)
+                    {
+                        OnEntityHit(hitInfo.Collidable.Entity);
+                    }
+                }
+            }
+
             if (Input.HasMouse && Input.IsMouseButtonPressed(MouseButton.Left))
             {
                 var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);

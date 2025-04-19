@@ -11,7 +11,7 @@ public class CameraRotationScript : SyncScript
     private const string GroundEntityName = "Ground";
     private float _rotationSpeed = 45f; // degrees per second
     private Vector3 _rotationCentre;
-    DebugTextPrinter? instructions = null;
+    DebugTextPrinter? _instructions;
 
     public override void Start()
     {
@@ -70,14 +70,14 @@ public class CameraRotationScript : SyncScript
 
     void DisplayInstructions()
     {
-        instructions?.Print(GenerateInstructions(Entity.Transform.Position));
+        _instructions?.Print(GenerateInstructions(Entity.Transform.Position));
     }
 
     void InitializeDebugTextPrinter()
     {
         var screenSize = new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
 
-        instructions = new DebugTextPrinter()
+        _instructions = new DebugTextPrinter()
         {
             DebugTextSystem = DebugText,
             TextSize = new(205, 17 * 4),
@@ -85,7 +85,7 @@ public class CameraRotationScript : SyncScript
             Instructions = GenerateInstructions(Entity.Transform.Position)
         };
 
-        instructions.Initialize(DisplayPosition.BottomLeft);
+        _instructions.Initialize(DisplayPosition.BottomLeft);
     }
 
     static List<TextElement> GenerateInstructions(Vector3 cameraPosition)
