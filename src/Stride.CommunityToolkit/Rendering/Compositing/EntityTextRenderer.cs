@@ -16,20 +16,12 @@ namespace Stride.CommunityToolkit.Rendering.Compositing;
 /// </remarks>
 public class EntityTextRenderer : SceneRendererBase
 {
-    // Instance of SpriteBatch used to render 2D elements like text
     private SpriteBatch? _spriteBatch;
-
-    // Font used for rendering text
     private SpriteFont? _font;
-
-    // The current scene being rendered
     private Scene? _scene;
-
-    // The camera used to convert world positions to screen positions
     private CameraComponent? _camera;
-
-    // A texture used to draw the background behind the text
-    private Texture? _colorTexture;
+    private Texture? _backgroundTexture;
+    private readonly Color4 _defaultBackground = new(0.2f, 0.2f, 0.2f, 0.8f);
 
     /// <summary>
     /// Initializes the renderer by loading necessary resources like fonts and creating a <see cref="SpriteBatch"/> for rendering 2D elements.
@@ -45,7 +37,7 @@ public class EntityTextRenderer : SceneRendererBase
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // Create a small texture (1x1 pixel) for drawing the background behind the text
-        _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [Color.White]);
+        _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
     }
 
     /// <summary>
@@ -65,14 +57,17 @@ public class EntityTextRenderer : SceneRendererBase
         _camera ??= graphicsCompositor.Cameras[0].Camera;
 
         // Get the root scene for the current frame
-        //_scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
         _scene ??= SceneInstance.GetCurrent(context).RootScene;
 
         // Ensure all required components are initialized
         if (_spriteBatch is null || _camera is null || _scene is null) return;
 
         // Begin the SpriteBatch for rendering
-        _spriteBatch.Begin(drawContext.GraphicsContext);
+        _spriteBatch.Begin(drawContext.GraphicsContext,
+            sortMode: SpriteSortMode.Deferred,
+            blendState: BlendStates.AlphaBlend,
+            samplerState: null,
+            depthStencilState: DepthStencilStates.None);
 
         foreach (var entity in _scene.Entities)
         {
@@ -82,34 +77,42 @@ public class EntityTextRenderer : SceneRendererBase
 
             // Convert the entity's world position to screen space
             var screen = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
-
-            // Text to display the entity's name and position
-            var text = $"{entity.Name}: {entity.Transform.Position:N1}";
-
-            //// Measure the dimensions of the text to calculate background size
-            //var textDimensions = _spriteBatch.MeasureString(_font, text, _fontSize);
+            var finalPosition = screen + textDisplay.Offset;
 
             _spriteBatch.DrawString(
                 _font,
                 textDisplay.Text,
                 textDisplay.FontSize,
-                screen + textDisplay.Offset,
+                finalPosition,
                 textDisplay.TextColor,
                 textDisplay.Alignment
             );
 
-            // Draw a semi-transparent background behind the text
-            //_spriteBatch.Draw(_colorTexture, new Rectangle(
-            //    (int)screen.X + (int)_offset.X,
-            //    (int)screen.Y + (int)_offset.Y,
-            //    (int)textDimensions.X,
-            //    (int)textDimensions.Y), new Color(200, 200, 200, 100));
-
-            // Draw the entity's name and position as text on the screen
-            //_spriteBatch.DrawString(_font, text, _fontSize, screen + _offset, Color.Black);
+            // Draw background
+            if (textDisplay.EnableBackground)
+            {
+                var textDimensions = _spriteBatch.MeasureString(_font, textDisplay.Text, textDisplay.FontSize);
+                var padding = 4f;
+                var bgRect = new RectangleF(
+                    (int)screen.X + (int)textDisplay.Offset.X - padding,
+                    (int)screen.Y + (int)textDisplay.Offset.Y - padding,
+                    textDimensions.X + padding * 2,
+                    textDimensions.Y + padding * 2);
+                _spriteBatch.Draw(_backgroundTexture, bgRect, textDisplay.BackgroundColor ?? _defaultBackground);
+            }
         }
 
-        // End the SpriteBatch
         _spriteBatch.End();
+    }
+
+    /// <summary>
+    /// Cleans up resources used by the renderer, such as the sprite batch and background texture.
+    /// </summary>
+    protected override void Destroy()
+    {
+        base.Destroy();
+
+        _spriteBatch?.Dispose();
+        _backgroundTexture?.Dispose();
     }
 }
