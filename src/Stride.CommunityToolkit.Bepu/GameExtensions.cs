@@ -9,6 +9,9 @@ using Stride.Games;
 
 namespace Stride.CommunityToolkit.Bepu;
 
+/// <summary>
+///  Provides extension methods for the <see cref="Game"/> class to simplify common game setup tasks for the Bepu Physics engine.
+/// </summary>
 public static class GameExtensions
 {
     public static void SetupBase2DScene(this Game game)
@@ -18,6 +21,17 @@ public static class GameExtensions
         game.Add3DGround();
     }
 
+    /// <summary>
+    /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
+    /// </summary>
+    /// <remarks>
+    /// This method performs the following setup operations in sequence:
+    /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.
+    /// 2. Adds a camera to the game and sets it up with a MouseLookCamera component.
+    /// 3. Adds a directional light to the game scene.
+    /// 4. Adds ground geometry to the game scene.
+    /// </remarks>
+    /// <param name="game">The Game instance for which the base 3D scene will be set up.</param>
     public static void SetupBase3DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
@@ -26,6 +40,30 @@ public static class GameExtensions
         game.Add3DGround();
     }
 
+    /// <summary>
+    /// Adds a 3D ground entity to the game with a default size of 15x15 units. The ground is created as a plane, and a collider can be optionally added.
+    /// </summary>
+    /// <param name="game">
+    /// The <see cref="Game"/> instance to which the ground entity will be added.
+    /// </param>
+    /// <param name="entityName">
+    /// The name to assign to the new ground entity.
+    /// If <c>null</c>, <see cref="GameDefaults.DefaultGroundName"/> is used.
+    /// </param>
+    /// <param name="size">
+    /// The width and length of the ground plane as a <see cref="Vector2"/>.
+    /// If <c>null</c>, <see cref="GameDefaults.Default3DGroundSize"/> is used.
+    /// </param>
+    /// <param name="includeCollider">
+    /// If <c>true</c>, a <see cref="CompoundCollider"/> is added to the entity for physics interactions; otherwise no collider is created.
+    /// </param>
+    /// <returns>The newly created <see cref="Entity"/> representing the 3D ground plane.</returns>
+    /// <example>
+    /// <code>
+    /// // Add a 20×20 ground plane named "MyGround" with a collider
+    /// var ground = game.Add3DGround("MyGround", new Vector2(20, 20), includeCollider: true);
+    /// </code>
+    /// </example>
     public static Entity Add3DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
 

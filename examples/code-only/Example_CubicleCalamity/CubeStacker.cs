@@ -25,12 +25,12 @@ namespace Example_CubicleCalamity;
 public class CubeStacker
 {
     private readonly Game _game;
-    private readonly Dictionary<Color, Material> _materials = new();
+    private readonly Dictionary<Color, Material> _materials = [];
     private const int Seed = 1;
     private readonly Random _random = new(Seed);
     private double _elapsedTime;
     private int _layer = 1;
-    private Simulation? _simulation;
+    private BepuSimulation? _simulation;
     private bool _layersCreated;
 
     public CubeStacker(Game game) => _game = game;
@@ -38,8 +38,14 @@ public class CubeStacker
     public void Start(Scene scene)
     {
         //_game.SetupBase3DScene();
+        _game.Window.AllowUserResizing = true;
         _game.AddGraphicsCompositor().AddCleanUIStage();
         _game.Add3DCamera().Add3DCameraController();
+        //_game.AddEntityDebugSceneRenderer(new()
+        //{
+        //    ShowFontBackground = false
+        //});
+        _game.AddSceneRenderer(new EntityTextRenderer());
         _game.AddDirectionalLight();
         _game.Add3DGround();
         _game.AddProfiler();
@@ -54,10 +60,11 @@ public class CubeStacker
         AddAllDirectionLighting(scene, intensity: 5f);
         AddFirstLayer(scene, 0.5f);
         AddGameManagerEntity(scene);
+        AddTotalScoreEntity(scene);
 
         var camera = scene.GetCamera();
-
-        _simulation = camera?.Entity.GetSimulation().Simulation;
+        camera?.Entity.Add(new CameraRotationScript());
+        //_simulation = camera?.Entity.GetSimulation().Simulation;
     }
 
     private void AddGizmo(Scene scene)
@@ -72,11 +79,25 @@ public class CubeStacker
     {
         var entity = new Entity("GameManager")
         {
-            new RaycastHandler()
+            new RaycastInteractionScript()
         };
         entity.Scene = scene;
+    }
 
-        //scene.Entities.Add(entity);
+    private static void AddTotalScoreEntity(Scene scene)
+    {
+        var entity = new Entity(Constants.TotalScore)
+        {
+            new EntityTextComponent()
+            {
+                Text = "Total Score: 0",
+                FontSize = 20,
+                Position = new Vector2(0, 20),
+                TextColor = new Color(255, 255, 255),
+            }
+        };
+
+        entity.Scene = scene;
     }
 
     public void Update(Scene scene, GameTime time)

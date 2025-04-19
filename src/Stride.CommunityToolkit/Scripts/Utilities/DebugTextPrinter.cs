@@ -1,3 +1,4 @@
+
 namespace Stride.CommunityToolkit.Scripts.Utilities;
 
 /// <summary>
@@ -14,7 +15,7 @@ public class DebugTextPrinter
     /// <summary>
     /// Gets or sets the screen size, which defines the boundaries for placing text on the screen.
     /// </summary>
-    public Int2 ScreenSize { get; init; }
+    public Int2 ScreenSize { get; set; }
 
     /// <summary>
     /// Gets or sets the size of the text elements, typically defining the dimensions of each line of text.
@@ -40,23 +41,23 @@ public class DebugTextPrinter
 
         foreach (var instruction in Instructions)
         {
-            PrintText(instruction.Text, instruction.Color);
-        }
-
-        void PrintText(string text, Color? color = null)
-        {
-            DebugTextSystem.Print(text, new Int2(_screenPosition.X, currentYPosition), color);
+            PrintText(instruction.Text, instruction.Color, currentYPosition);
 
             currentYPosition += LineIncrement;
         }
     }
 
+    private void PrintText(string text, Color? color, int currentYPosition)
+        => DebugTextSystem.Print(text, new Int2(_screenPosition.X, currentYPosition), color);
+
     /// <summary>
     /// Prints the specified list of text elements, rendering them line by line on the screen.
     /// </summary>
     /// <param name="textElements"></param>
-    public void Print(List<TextElement> textElements)
+    public void Print(IReadOnlyCollection<TextElement> textElements)
     {
+        //ArgumentNullException.ThrowIfNull(textElements);
+
         Instructions.Clear();
         Instructions.AddRange(textElements);
 
@@ -74,15 +75,22 @@ public class DebugTextPrinter
     }
 
     /// <summary>
-    /// Initializes the screen position by setting the starting position based on the current display position.
-    /// </summary>
-    public void Initialize() => SetStartPosition(_currentPosition);
-
-    /// <summary>
     /// Initializes the screen position by setting the starting position based on the specified display position.
     /// </summary>
     /// <param name="startPosition"></param>
-    public void Initialize(DisplayPosition startPosition) => SetStartPosition(startPosition);
+    public void Initialize(DisplayPosition? startPosition = null) => SetStartPosition(startPosition ?? _currentPosition);
+
+    /// <summary>
+    /// Updates the screen size, which defines the boundaries for placing text on the screen.
+    /// </summary>
+    public void UpdateScreenSize(Int2 int2)
+    {
+        if (int2 == ScreenSize) return;
+
+        ScreenSize = int2;
+
+        SetStartPosition(_currentPosition);
+    }
 
     private static DisplayPosition GetNextPosition(DisplayPosition currentPosition) => currentPosition switch
     {
@@ -92,14 +100,11 @@ public class DebugTextPrinter
         _ => DisplayPosition.TopLeft,
     };
 
-    private void SetStartPosition(DisplayPosition position)
+    private void SetStartPosition(DisplayPosition position) => _screenPosition = position switch
     {
-        _screenPosition = position switch
-        {
-            DisplayPosition.TopLeft => _basePosition,
-            DisplayPosition.BottomLeft => new(_basePosition.X, ScreenSize.Y - TextSize.Y),
-            DisplayPosition.BottomRight => new(ScreenSize.X - TextSize.X, ScreenSize.Y - TextSize.Y),
-            _ => new(ScreenSize.X - TextSize.X, _basePosition.Y),
-        };
-    }
+        DisplayPosition.TopLeft => _basePosition,
+        DisplayPosition.BottomLeft => new(_basePosition.X, ScreenSize.Y - TextSize.Y),
+        DisplayPosition.BottomRight => new(ScreenSize.X - TextSize.X, ScreenSize.Y - TextSize.Y),
+        _ => new(ScreenSize.X - TextSize.X, _basePosition.Y),
+    };
 }

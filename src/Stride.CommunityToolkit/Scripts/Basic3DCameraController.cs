@@ -44,13 +44,11 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
-        var screenSize = new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
-
         _instructions = new DebugTextPrinter()
         {
             DebugTextSystem = DebugText,
             TextSize = new(205, 17 * 11),
-            ScreenSize = screenSize,
+            ScreenSize = GetScreenSize(),
             Instructions =
             [
                 new("CONTROL INSTRUCTIONS"),
@@ -82,6 +80,8 @@ public class Basic3DCameraController : SyncScript
         }
     }
 
+    private Int2 GetScreenSize() => new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
+
     public override void Update()
     {
         ProcessInput();
@@ -89,6 +89,7 @@ public class Basic3DCameraController : SyncScript
 
         if (_showInstructions)
         {
+            _instructions?.UpdateScreenSize(GetScreenSize());
             _instructions?.Print();
         }
     }

@@ -20,7 +20,8 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     private SpriteFont? _font;
     private Scene? _scene;
     private CameraComponent? _camera;
-    private Texture? _colorTexture;
+    private Texture? _backgroundTexture;
+    private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
     private readonly EntityDebugSceneRendererOptions _options;
 
     /// <summary>
@@ -41,9 +42,9 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     {
         base.InitializeCore();
 
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, new[] { Color.White });
+        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
     }
 
     /// <summary>
@@ -59,27 +60,32 @@ public class EntityDebugSceneRenderer : SceneRendererBase
 
         _camera ??= graphicsCompositor.Cameras[0].Camera;
 
-        _scene ??= context.Tags.Get(SceneInstance.Current).RootScene;
+        _scene ??= SceneInstance.GetCurrent(context).RootScene;
 
         if (_spriteBatch is null || _camera is null || _scene is null) return;
 
-        _spriteBatch.Begin(drawContext.GraphicsContext);
+        _spriteBatch.Begin(drawContext.GraphicsContext,
+            sortMode: SpriteSortMode.Deferred,
+            blendState: BlendStates.AlphaBlend,
+            samplerState: null,
+            depthStencilState: DepthStencilStates.None);
 
         foreach (var entity in _scene.Entities)
         {
             var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var finalPosition = screenPosition + _options.Offset;
 
-            var debugText = BuildDebugText(entity);
+            var textDisplay = GetDisplayText(entity);
 
-            if (string.IsNullOrWhiteSpace(debugText)) continue;
+            if (string.IsNullOrWhiteSpace(textDisplay)) continue;
 
-            DrawBackground(screenPosition, debugText);
+            DrawTextBackground(textDisplay, finalPosition);
 
             _spriteBatch.DrawString(
                 _font,
-                debugText,
+                textDisplay,
                 _options.FontSize,
-                screenPosition + _options.Offset,
+                finalPosition,
                 _options.FontColor);
         }
 
@@ -91,7 +97,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// </summary>
     /// <param name="entity">The entity for which to generate the debug text.</param>
     /// <returns>The debug text to be rendered for the entity, or an empty string if no text should be shown.</returns>
-    private string BuildDebugText(Entity entity)
+    private string GetDisplayText(Entity entity)
     {
         var stringBuilder = new StringBuilder();
 
@@ -113,20 +119,31 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <summary>
     /// Draws a background rectangle behind the debug text to make it more readable.
     /// </summary>
-    /// <param name="screenPosition">The screen position where the debug text will be drawn.</param>
     /// <param name="text">The text for which the background will be rendered.</param>
-    private void DrawBackground(Vector2 screenPosition, string text)
+    /// <param name="finalPosition">The screen position where the debug text will be drawn.</param>
+    private void DrawTextBackground(string text, Vector2 finalPosition)
     {
-        if (!_options.ShowFontBackground) return;
+        if (!_options.EnableBackground) return;
 
         var textDimensions = _spriteBatch!.MeasureString(_font, text, _options.FontSize);
 
-        var backgroundRectangle = new Rectangle(
-           (int)(screenPosition.X + _options.Offset.X),
-           (int)(screenPosition.Y + _options.Offset.Y),
-           (int)textDimensions.X,
-           (int)textDimensions.Y);
+        var backgroundRectangle = new RectangleF(
+            finalPosition.X - _options.Padding,
+            finalPosition.Y - _options.Padding,
+            textDimensions.X + _options.Padding * 2,
+            textDimensions.Y + _options.Padding * 2);
 
-        _spriteBatch.Draw(_colorTexture, backgroundRectangle, new Color(200, 200, 200, 100));
+        _spriteBatch.Draw(_backgroundTexture, backgroundRectangle, _options.BackgroundColor ?? _defaultBackground);
+    }
+
+    /// <summary>
+    /// Cleans up resources used by the renderer, such as the sprite batch and background texture.
+    /// </summary>
+    protected override void Destroy()
+    {
+        base.Destroy();
+
+        _spriteBatch?.Dispose();
+        _backgroundTexture?.Dispose();
     }
 }
