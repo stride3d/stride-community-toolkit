@@ -41,23 +41,23 @@ public class DebugTextPrinter
 
         foreach (var instruction in Instructions)
         {
-            PrintText(instruction.Text, instruction.Color);
-        }
-
-        void PrintText(string text, Color? color = null)
-        {
-            DebugTextSystem.Print(text, new Int2(_screenPosition.X, currentYPosition), color);
+            PrintText(instruction.Text, instruction.Color, currentYPosition);
 
             currentYPosition += LineIncrement;
         }
     }
 
+    private void PrintText(string text, Color? color, int currentYPosition)
+        => DebugTextSystem.Print(text, new Int2(_screenPosition.X, currentYPosition), color);
+
     /// <summary>
     /// Prints the specified list of text elements, rendering them line by line on the screen.
     /// </summary>
     /// <param name="textElements"></param>
-    public void Print(List<TextElement> textElements)
+    public void Print(IReadOnlyCollection<TextElement> textElements)
     {
+        //ArgumentNullException.ThrowIfNull(textElements);
+
         Instructions.Clear();
         Instructions.AddRange(textElements);
 
@@ -75,34 +75,10 @@ public class DebugTextPrinter
     }
 
     /// <summary>
-    /// Initializes the screen position by setting the starting position based on the current display position.
-    /// </summary>
-    public void Initialize() => SetStartPosition(_currentPosition);
-
-    /// <summary>
     /// Initializes the screen position by setting the starting position based on the specified display position.
     /// </summary>
     /// <param name="startPosition"></param>
-    public void Initialize(DisplayPosition startPosition) => SetStartPosition(startPosition);
-
-    private static DisplayPosition GetNextPosition(DisplayPosition currentPosition) => currentPosition switch
-    {
-        DisplayPosition.TopLeft => DisplayPosition.TopRight,
-        DisplayPosition.TopRight => DisplayPosition.BottomRight,
-        DisplayPosition.BottomRight => DisplayPosition.BottomLeft,
-        _ => DisplayPosition.TopLeft,
-    };
-
-    private void SetStartPosition(DisplayPosition position)
-    {
-        _screenPosition = position switch
-        {
-            DisplayPosition.TopLeft => _basePosition,
-            DisplayPosition.BottomLeft => new(_basePosition.X, ScreenSize.Y - TextSize.Y),
-            DisplayPosition.BottomRight => new(ScreenSize.X - TextSize.X, ScreenSize.Y - TextSize.Y),
-            _ => new(ScreenSize.X - TextSize.X, _basePosition.Y),
-        };
-    }
+    public void Initialize(DisplayPosition? startPosition = null) => SetStartPosition(startPosition ?? _currentPosition);
 
     /// <summary>
     /// Updates the screen size, which defines the boundaries for placing text on the screen.
@@ -115,4 +91,20 @@ public class DebugTextPrinter
 
         SetStartPosition(_currentPosition);
     }
+
+    private static DisplayPosition GetNextPosition(DisplayPosition currentPosition) => currentPosition switch
+    {
+        DisplayPosition.TopLeft => DisplayPosition.TopRight,
+        DisplayPosition.TopRight => DisplayPosition.BottomRight,
+        DisplayPosition.BottomRight => DisplayPosition.BottomLeft,
+        _ => DisplayPosition.TopLeft,
+    };
+
+    private void SetStartPosition(DisplayPosition position) => _screenPosition = position switch
+    {
+        DisplayPosition.TopLeft => _basePosition,
+        DisplayPosition.BottomLeft => new(_basePosition.X, ScreenSize.Y - TextSize.Y),
+        DisplayPosition.BottomRight => new(ScreenSize.X - TextSize.X, ScreenSize.Y - TextSize.Y),
+        _ => new(ScreenSize.X - TextSize.X, _basePosition.Y),
+    };
 }
