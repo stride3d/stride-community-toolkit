@@ -8,19 +8,13 @@ using Stride.Input;
 
 namespace Example_CubicleCalamity.Scripts;
 
-public class RaycastHandler : AsyncScript
+public class RaycastInteractionScript : AsyncScript
 {
     private int _totalScore;
 
     public override async Task Execute()
     {
         var cameraComponent = Entity.Scene.GetCamera();
-
-        // working after x frames
-        var cameraComponent2 = this.GetGCCamera();
-
-        //  working after x frames
-        var cameraComponent3 = this.GetFirstGCCamera();
 
         //var simulation = this.GetSimulation();
 
@@ -33,7 +27,9 @@ public class RaycastHandler : AsyncScript
                 var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);
 
                 if (hit)
-                { OnEntityHit(hitInfo.Collidable.Entity); }
+                {
+                    OnEntityHit(hitInfo.Collidable.Entity);
+                }
             }
 
             await Script.NextFrame();
@@ -60,10 +56,25 @@ public class RaycastHandler : AsyncScript
             Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count()).Calculations}, Total Score: {_totalScore - score} + {score}");
 
             foreach (var cube in cubesToRemove)
+            {
                 cube.Remove();
+            }
+
+            AddDisplayScoreEntity(entity.Transform.Position, score);
 
             entity.Remove();
         }
+    }
+
+    private void AddDisplayScoreEntity(Vector3 position, int score)
+    {
+        var entity = new Entity("DisplayScore", position)
+        {
+            new EntityTextComponent() { Text = score.ToString() },
+            new ScoreScript()
+        };
+
+        entity.Scene = SceneSystem.SceneInstance.RootScene;
     }
 
     private static IEnumerable<Entity> GetCubesToRemove(Entity entity, Color color)
@@ -114,7 +125,7 @@ public class RaycastHandler : AsyncScript
     {
         int baseScore = numberOfCubes * Constants.BasePointsPerCube;
 
-        int bonus = numberOfCubes * numberOfCubes;
+        int bonus = (numberOfCubes == 1 ? 0 : numberOfCubes) * numberOfCubes * 10;
 
         return (baseScore + bonus, $"{numberOfCubes} * {Constants.BasePointsPerCube} + {numberOfCubes} * {numberOfCubes}");
     }

@@ -30,7 +30,7 @@ public class CubeStacker
     private readonly Random _random = new(Seed);
     private double _elapsedTime;
     private int _layer = 1;
-    private Simulation? _simulation;
+    private BepuSimulation? _simulation;
     private bool _layersCreated;
 
     public CubeStacker(Game game) => _game = game;
@@ -44,6 +44,7 @@ public class CubeStacker
         //{
         //    ShowFontBackground = false
         //});
+        _game.AddSceneRenderer(new EntityTextRenderer());
         _game.AddDirectionalLight();
         _game.Add3DGround();
         _game.AddProfiler();
@@ -61,7 +62,7 @@ public class CubeStacker
 
         var camera = scene.GetCamera();
 
-        _simulation = camera?.Entity.GetSimulation().Simulation;
+        //_simulation = camera?.Entity.GetSimulation().Simulation;
     }
 
     private void AddGizmo(Scene scene)
@@ -76,7 +77,7 @@ public class CubeStacker
     {
         var entity = new Entity("GameManager")
         {
-            new RaycastHandler()
+            new RaycastInteractionScript()
         };
         entity.Scene = scene;
 

@@ -73,15 +73,6 @@ public class EntityTextComponent : EntityComponent
     public EntityTextComponent() { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EntityTextComponent"/> class with specified text.
-    /// </summary>
-    /// <param name="text">The text to display.</param>
-    public EntityTextComponent(string text)
-    {
-        Text = text ?? throw new ArgumentNullException(nameof(text));
-    }
-
-    /// <summary>
     /// Validates that the component has valid configuration.
     /// </summary>
     /// <returns>True if valid; otherwise, false.</returns>
