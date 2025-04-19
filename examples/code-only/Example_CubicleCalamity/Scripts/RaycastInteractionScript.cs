@@ -1,5 +1,6 @@
 using Example_CubicleCalamity.Components;
 using Example_CubicleCalamity.Shared;
+using Stride.Audio;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
@@ -11,6 +12,7 @@ namespace Example_CubicleCalamity.Scripts;
 public class RaycastInteractionScript : AsyncScript
 {
     private int _totalScore;
+    private SoundInstance? _soundInstance;
     private EntityTextComponent? _scoreComponent;
 
     public override async Task Execute()
@@ -23,6 +25,9 @@ public class RaycastInteractionScript : AsyncScript
         //var simulation = this.GetSimulation();
 
         if (cameraComponent == null) return;
+
+        var sound = Game.Content.Load<Sound>("wood-tap-5");
+        _soundInstance = sound.CreateInstance(Audio.AudioEngine.DefaultListener);
 
         while (Game.IsRunning)
         {
@@ -60,6 +65,8 @@ public class RaycastInteractionScript : AsyncScript
     {
         if (entity.Name == "Cube")
         {
+            _soundInstance?.Play();
+
             var cubeComponent = entity.Get<CubeComponent>();
 
             Console.WriteLine($"Cube hit: {cubeComponent.Color}");
@@ -111,41 +118,43 @@ public class RaycastInteractionScript : AsyncScript
 
         cubesToCheck.Enqueue(entity);
 
-        while (cubesToCheck.Count > 0)
+        while (cubesToCheck.TryDequeue(out var currentCube))
         {
-            var currentCube = cubesToCheck.Dequeue();
+            if (!processedCubes.Add(currentCube)) continue;
 
-            processedCubes.Add(currentCube);
+            foreach (var touchingCube in GetTouchingCubes(currentCube, color))
+            {
+                if (processedCubes.Contains(touchingCube)) continue;
 
-            var touchingCubes = GetTouchingCubes(currentCube, color)
-                .Where(cube => !processedCubes.Contains(cube) && !cubesToCheck.Contains(cube));
-
-            foreach (var touchingCube in touchingCubes)
                 cubesToCheck.Enqueue(touchingCube);
+            }
         }
 
         return processedCubes;
     }
 
-    private static IEnumerable<Entity> GetTouchingCubes(Entity entity, Color color) => entity.Scene.Entities
-        .Where(x => x.Name == "Cube"
-            && (Equals(x.Transform.Position.Y, entity.Transform.Position.Y)
-                    && ((Equals(x.Transform.Position.X, entity.Transform.Position.X - Constants.CubeSize.X)
-                        || Equals(x.Transform.Position.X, entity.Transform.Position.X + Constants.CubeSize.X))
-                        && Equals(x.Transform.Position.Z, entity.Transform.Position.Z)
-                        || (Equals(x.Transform.Position.Z, entity.Transform.Position.Z - Constants.CubeSize.Z)
-                        || Equals(x.Transform.Position.Z, entity.Transform.Position.Z + Constants.CubeSize.Z))
-                        && Equals(x.Transform.Position.X, entity.Transform.Position.X)
-                    )
-                || (Equals(x.Transform.Position.Y, entity.Transform.Position.Y - Constants.CubeSize.Y)
-                    || Equals(x.Transform.Position.Y, entity.Transform.Position.Y + Constants.CubeSize.Y))
-                    && Equals(x.Transform.Position.X, entity.Transform.Position.X)
-                    && Equals(x.Transform.Position.Z, entity.Transform.Position.Z)
-                )
-            && x.Get<CubeComponent>().Color == color
-        );
+    private static IEnumerable<Entity> GetTouchingCubes(Entity entity, Color color)
+    {
+        var position = entity.Transform.Position;
 
-    private static bool Equals(float a, float b, float tolerance = 0.1f)
+        return entity.Scene.Entities.Where(x =>
+            x.Name == "Cube" &&
+            x.Get<CubeComponent>().Color == color &&
+            IsNeighbor(position, x.Transform.Position, Constants.CubeSize));
+    }
+
+    private static bool IsNeighbor(Vector3 position, Vector3 otherPosition, Vector3 cubeSize)
+        => AreEqual(position.Y, otherPosition.Y) && (
+                (AreEqual(position.X, otherPosition.X - cubeSize.X) || AreEqual(position.X, otherPosition.X + cubeSize.X)) &&
+                AreEqual(position.Z, otherPosition.Z) ||
+                (AreEqual(position.Z, otherPosition.Z - cubeSize.Z) || AreEqual(position.Z, otherPosition.Z + cubeSize.Z)) &&
+                AreEqual(position.X, otherPosition.X)
+            ) ||
+            AreEqual(position.X, otherPosition.X) &&
+            AreEqual(position.Z, otherPosition.Z) &&
+            (AreEqual(position.Y, otherPosition.Y - cubeSize.Y) || AreEqual(position.Y, otherPosition.Y + cubeSize.Y));
+
+    private static bool AreEqual(float a, float b, float tolerance = 0.1f)
         => Math.Abs(a - b) < tolerance;
 
     public static (int Result, string Calculations) CalculateScore(int numberOfCubes)
