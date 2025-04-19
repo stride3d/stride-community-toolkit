@@ -16,7 +16,8 @@ public class RaycastInteractionScript : AsyncScript
     public override async Task Execute()
     {
         var cameraComponent = Entity.Scene.GetCamera();
-        var totalScoreEntity = Entity.Scene.Entities.FirstOrDefault(e => e.Name == "TotalScore");
+        var totalScoreEntity = Entity.Scene.Entities.FirstOrDefault(e => e.Name == Constants.TotalScore);
+
         _scoreComponent = totalScoreEntity?.Get<EntityTextComponent>();
 
         //var simulation = this.GetSimulation();
