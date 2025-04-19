@@ -132,7 +132,7 @@ Class EntityDebugSceneRendererOptions  <a class="header-action link-secondary" t
 
   <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions__ctor" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor">
   EntityDebugSceneRendererOptions()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L52"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html">EntityDebugSceneRendererOptions</a> with default settings.</p>
@@ -159,7 +159,7 @@ Class EntityDebugSceneRendererOptions  <a class="header-action link-secondary" t
 
   <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions__ctor_System_Int32_Stride_Core_Mathematics_Color_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.#ctor(System.Int32,Stride.Core.Mathematics.Color)">
   EntityDebugSceneRendererOptions(int, Color)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L59"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Initializes a new instance of <a class="xref" href="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html">EntityDebugSceneRendererOptions</a> with specified font size and color.</p>
@@ -193,6 +193,70 @@ Class EntityDebugSceneRendererOptions  <a class="header-action link-secondary" t
 
   <h2 class="section" id="properties">Properties
 </h2>
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_BackgroundColor_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_BackgroundColor" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor">
+  BackgroundColor
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L42"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the color of the background behind the text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Color4? BackgroundColor { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Color4.cs">Color4</a>?</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_EnableBackground_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_EnableBackground" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground">
+  EnableBackground
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether to display a background behind the text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool EnableBackground { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
 
 
   <a id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_FontColor_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor*"></a>
@@ -292,6 +356,38 @@ Default offset is (0, -25).</p>
 
 
 
+  <a id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_Padding_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding*"></a>
+
+  <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_Padding" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding">
+  Padding
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L47"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets or sets the padding around the text.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float Padding { get; set; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
   <a id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityName_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName*"></a>
 
   <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityName" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName">
@@ -356,38 +452,6 @@ Default offset is (0, -25).</p>
 
 
 
-  <a id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowFontBackground_" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground*"></a>
-
-  <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowFontBackground" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground">
-  ShowFontBackground
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L31"><i class="bi bi-code-slash"></i></a>
-  </h3>
-
-  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether to display a background behind the text.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool ShowFontBackground { get; set; }</code></pre>
-  </div>
-
-
-
-
-
-  <h4 class="section">Property Value</h4>
-  <dl class="parameters">
-    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
-  </dl>
-
-
-
-
-
-
-
-
   <h2 class="section" id="methods">Methods
 </h2>
 
@@ -396,7 +460,7 @@ Default offset is (0, -25).</p>
 
   <h3 id="Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_CreateDefault" data-uid="Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault">
   CreateDefault()
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L59"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit/Rendering/Compositing/EntityDebugSceneRendererOptions.cs/#L69"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Provides default settings for rendering entity debug information.</p>

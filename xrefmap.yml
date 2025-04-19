@@ -2597,6 +2597,161 @@ references:
   fullName.vb: Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentsInParent(Of T)(Stride.Engine.Entity, Boolean)
   nameWithType: EntitySearchExtensions.GetComponentsInParent<T>(Entity, bool)
   nameWithType.vb: EntitySearchExtensions.GetComponentsInParent(Of T)(Entity, Boolean)
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent
+  name: EntityTextComponent
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html
+  commentId: T:Stride.CommunityToolkit.Engine.EntityTextComponent
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent
+  nameWithType: EntityTextComponent
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.#ctor
+  name: EntityTextComponent()
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent__ctor
+  commentId: M:Stride.CommunityToolkit.Engine.EntityTextComponent.#ctor
+  name.vb: New()
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.EntityTextComponent()
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityTextComponent.New()
+  nameWithType: EntityTextComponent.EntityTextComponent()
+  nameWithType.vb: EntityTextComponent.New()
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.#ctor*
+  name: EntityTextComponent
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent__ctor_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.EntityTextComponent
+  fullName.vb: Stride.CommunityToolkit.Engine.EntityTextComponent.New
+  nameWithType: EntityTextComponent.EntityTextComponent
+  nameWithType.vb: EntityTextComponent.New
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Alignment
+  name: Alignment
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Alignment
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.Alignment
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Alignment
+  nameWithType: EntityTextComponent.Alignment
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Alignment*
+  name: Alignment
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Alignment_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.Alignment
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Alignment
+  nameWithType: EntityTextComponent.Alignment
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.BackgroundColor
+  name: BackgroundColor
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_BackgroundColor
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.BackgroundColor
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.BackgroundColor
+  nameWithType: EntityTextComponent.BackgroundColor
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.BackgroundColor*
+  name: BackgroundColor
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_BackgroundColor_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.BackgroundColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.BackgroundColor
+  nameWithType: EntityTextComponent.BackgroundColor
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.EnableBackground
+  name: EnableBackground
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_EnableBackground
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.EnableBackground
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.EnableBackground
+  nameWithType: EntityTextComponent.EnableBackground
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.EnableBackground*
+  name: EnableBackground
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_EnableBackground_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.EnableBackground
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.EnableBackground
+  nameWithType: EntityTextComponent.EnableBackground
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.FontSize
+  name: FontSize
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_FontSize
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.FontSize
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.FontSize
+  nameWithType: EntityTextComponent.FontSize
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.FontSize*
+  name: FontSize
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_FontSize_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.FontSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.FontSize
+  nameWithType: EntityTextComponent.FontSize
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Offset
+  name: Offset
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Offset
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.Offset
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Offset
+  nameWithType: EntityTextComponent.Offset
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Offset*
+  name: Offset
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Offset_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.Offset
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Offset
+  nameWithType: EntityTextComponent.Offset
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Padding
+  name: Padding
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Padding
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.Padding
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Padding
+  nameWithType: EntityTextComponent.Padding
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Padding*
+  name: Padding
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Padding_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.Padding
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Padding
+  nameWithType: EntityTextComponent.Padding
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Position
+  name: Position
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Position
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.Position
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Position
+  nameWithType: EntityTextComponent.Position
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Position*
+  name: Position
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Position_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.Position
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Position
+  nameWithType: EntityTextComponent.Position
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Text
+  name: Text
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Text
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.Text
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Text
+  nameWithType: EntityTextComponent.Text
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Text*
+  name: Text
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Text_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.Text
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Text
+  nameWithType: EntityTextComponent.Text
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.TextColor
+  name: TextColor
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_TextColor
+  commentId: P:Stride.CommunityToolkit.Engine.EntityTextComponent.TextColor
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.TextColor
+  nameWithType: EntityTextComponent.TextColor
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.TextColor*
+  name: TextColor
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_TextColor_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.TextColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.TextColor
+  nameWithType: EntityTextComponent.TextColor
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Validate
+  name: Validate()
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Validate
+  commentId: M:Stride.CommunityToolkit.Engine.EntityTextComponent.Validate
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Validate()
+  nameWithType: EntityTextComponent.Validate()
+- uid: Stride.CommunityToolkit.Engine.EntityTextComponent.Validate*
+  name: Validate
+  href: api/Stride.CommunityToolkit.Engine.EntityTextComponent.html#Stride_CommunityToolkit_Engine_EntityTextComponent_Validate_
+  commentId: Overload:Stride.CommunityToolkit.Engine.EntityTextComponent.Validate
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Engine.EntityTextComponent.Validate
+  nameWithType: EntityTextComponent.Validate
 - uid: Stride.CommunityToolkit.Engine.GameDefaults
   name: GameDefaults
   href: api/Stride.CommunityToolkit.Engine.GameDefaults.html
@@ -7184,6 +7339,19 @@ references:
   fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.New
   nameWithType: EntityDebugSceneRenderer.EntityDebugSceneRenderer
   nameWithType.vb: EntityDebugSceneRenderer.New
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.Destroy
+  name: Destroy()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_Destroy
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.Destroy
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.Destroy()
+  nameWithType: EntityDebugSceneRenderer.Destroy()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.Destroy*
+  name: Destroy
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_Destroy_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.Destroy
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.Destroy
+  nameWithType: EntityDebugSceneRenderer.Destroy
 - uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.DrawCore(Stride.Rendering.RenderContext,Stride.Rendering.RenderDrawContext)
   name: DrawCore(RenderContext, RenderDrawContext)
   href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRenderer_DrawCore_Stride_Rendering_RenderContext_Stride_Rendering_RenderDrawContext_
@@ -7244,6 +7412,19 @@ references:
   fullName.vb: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.New
   nameWithType: EntityDebugSceneRendererOptions.EntityDebugSceneRendererOptions
   nameWithType.vb: EntityDebugSceneRendererOptions.New
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor
+  name: BackgroundColor
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_BackgroundColor
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor
+  nameWithType: EntityDebugSceneRendererOptions.BackgroundColor
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor*
+  name: BackgroundColor
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_BackgroundColor_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.BackgroundColor
+  nameWithType: EntityDebugSceneRendererOptions.BackgroundColor
 - uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault
   name: CreateDefault()
   href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_CreateDefault
@@ -7257,6 +7438,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.CreateDefault
   nameWithType: EntityDebugSceneRendererOptions.CreateDefault
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground
+  name: EnableBackground
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_EnableBackground
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground
+  nameWithType: EntityDebugSceneRendererOptions.EnableBackground
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground*
+  name: EnableBackground
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_EnableBackground_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.EnableBackground
+  nameWithType: EntityDebugSceneRendererOptions.EnableBackground
 - uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.FontColor
   name: FontColor
   href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_FontColor
@@ -7296,6 +7490,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Offset
   nameWithType: EntityDebugSceneRendererOptions.Offset
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding
+  name: Padding
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_Padding
+  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding
+  nameWithType: EntityDebugSceneRendererOptions.Padding
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding*
+  name: Padding
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_Padding_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.Padding
+  nameWithType: EntityDebugSceneRendererOptions.Padding
 - uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityName
   name: ShowEntityName
   href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowEntityName
@@ -7322,19 +7529,51 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowEntityPosition
   nameWithType: EntityDebugSceneRendererOptions.ShowEntityPosition
-- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
-  name: ShowFontBackground
-  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowFontBackground
-  commentId: P:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
-  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
-  nameWithType: EntityDebugSceneRendererOptions.ShowFontBackground
-- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground*
-  name: ShowFontBackground
-  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.html#Stride_CommunityToolkit_Rendering_Compositing_EntityDebugSceneRendererOptions_ShowFontBackground_
-  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer
+  name: EntityTextRenderer
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html
+  commentId: T:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer
+  nameWithType: EntityTextRenderer
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.Destroy
+  name: Destroy()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityTextRenderer_Destroy
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.Destroy
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.Destroy()
+  nameWithType: EntityTextRenderer.Destroy()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.Destroy*
+  name: Destroy
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityTextRenderer_Destroy_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.Destroy
   isSpec: "True"
-  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.ShowFontBackground
-  nameWithType: EntityDebugSceneRendererOptions.ShowFontBackground
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.Destroy
+  nameWithType: EntityTextRenderer.Destroy
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.DrawCore(Stride.Rendering.RenderContext,Stride.Rendering.RenderDrawContext)
+  name: DrawCore(RenderContext, RenderDrawContext)
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityTextRenderer_DrawCore_Stride_Rendering_RenderContext_Stride_Rendering_RenderDrawContext_
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.DrawCore(Stride.Rendering.RenderContext,Stride.Rendering.RenderDrawContext)
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.DrawCore(Stride.Rendering.RenderContext, Stride.Rendering.RenderDrawContext)
+  nameWithType: EntityTextRenderer.DrawCore(RenderContext, RenderDrawContext)
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.DrawCore*
+  name: DrawCore
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityTextRenderer_DrawCore_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.DrawCore
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.DrawCore
+  nameWithType: EntityTextRenderer.DrawCore
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.InitializeCore
+  name: InitializeCore()
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityTextRenderer_InitializeCore
+  commentId: M:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.InitializeCore
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.InitializeCore()
+  nameWithType: EntityTextRenderer.InitializeCore()
+- uid: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.InitializeCore*
+  name: InitializeCore
+  href: api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html#Stride_CommunityToolkit_Rendering_Compositing_EntityTextRenderer_InitializeCore_
+  commentId: Overload:Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.InitializeCore
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.InitializeCore
+  nameWithType: EntityTextRenderer.InitializeCore
 - uid: Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions
   name: GraphicsCompositorExtensions
   href: api/Stride.CommunityToolkit.Rendering.Compositing.GraphicsCompositorExtensions.html
@@ -9585,18 +9824,12 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.DebugTextSystem
   nameWithType: DebugTextPrinter.DebugTextSystem
-- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
-  name: Initialize()
-  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize
-  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize
-  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize()
-  nameWithType: DebugTextPrinter.Initialize()
-- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)
-  name: Initialize(DisplayPosition)
-  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition_
-  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)
-  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)
-  nameWithType: DebugTextPrinter.Initialize(DisplayPosition)
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(System.Nullable{Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition})
+  name: Initialize(DisplayPosition?)
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_System_Nullable_Stride_CommunityToolkit_Scripts_Utilities_DisplayPosition__
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(System.Nullable{Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition})
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize(Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition?)
+  nameWithType: DebugTextPrinter.Initialize(DisplayPosition?)
 - uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Initialize*
   name: Initialize
   href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Initialize_
@@ -9623,15 +9856,15 @@ references:
   commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print
   fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print()
   nameWithType: DebugTextPrinter.Print()
-- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List{Stride.CommunityToolkit.Scripts.Utilities.TextElement})
-  name: Print(List<TextElement>)
-  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_System_Collections_Generic_List_Stride_CommunityToolkit_Scripts_Utilities_TextElement__
-  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List{Stride.CommunityToolkit.Scripts.Utilities.TextElement})
-  name.vb: Print(List(Of TextElement))
-  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List<Stride.CommunityToolkit.Scripts.Utilities.TextElement>)
-  fullName.vb: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.List(Of Stride.CommunityToolkit.Scripts.Utilities.TextElement))
-  nameWithType: DebugTextPrinter.Print(List<TextElement>)
-  nameWithType.vb: DebugTextPrinter.Print(List(Of TextElement))
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.IReadOnlyCollection{Stride.CommunityToolkit.Scripts.Utilities.TextElement})
+  name: Print(IReadOnlyCollection<TextElement>)
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_System_Collections_Generic_IReadOnlyCollection_Stride_CommunityToolkit_Scripts_Utilities_TextElement__
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.IReadOnlyCollection{Stride.CommunityToolkit.Scripts.Utilities.TextElement})
+  name.vb: Print(IReadOnlyCollection(Of TextElement))
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.IReadOnlyCollection<Stride.CommunityToolkit.Scripts.Utilities.TextElement>)
+  fullName.vb: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print(System.Collections.Generic.IReadOnlyCollection(Of Stride.CommunityToolkit.Scripts.Utilities.TextElement))
+  nameWithType: DebugTextPrinter.Print(IReadOnlyCollection<TextElement>)
+  nameWithType.vb: DebugTextPrinter.Print(IReadOnlyCollection(Of TextElement))
 - uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.Print*
   name: Print
   href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_Print_
@@ -9665,6 +9898,19 @@ references:
   isSpec: "True"
   fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.TextSize
   nameWithType: DebugTextPrinter.TextSize
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.UpdateScreenSize(Stride.Core.Mathematics.Int2)
+  name: UpdateScreenSize(Int2)
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_UpdateScreenSize_Stride_Core_Mathematics_Int2_
+  commentId: M:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.UpdateScreenSize(Stride.Core.Mathematics.Int2)
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.UpdateScreenSize(Stride.Core.Mathematics.Int2)
+  nameWithType: DebugTextPrinter.UpdateScreenSize(Int2)
+- uid: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.UpdateScreenSize*
+  name: UpdateScreenSize
+  href: api/Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.html#Stride_CommunityToolkit_Scripts_Utilities_DebugTextPrinter_UpdateScreenSize_
+  commentId: Overload:Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.UpdateScreenSize
+  isSpec: "True"
+  fullName: Stride.CommunityToolkit.Scripts.Utilities.DebugTextPrinter.UpdateScreenSize
+  nameWithType: DebugTextPrinter.UpdateScreenSize
 - uid: Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition
   name: DisplayPosition
   href: api/Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition.html

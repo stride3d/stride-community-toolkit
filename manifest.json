@@ -65,7 +65,7 @@
       "Uid": null,
       "IsMRef": true,
       "Title": "Stride.CommunityToolkit.Bepu.GameExtensions",
-      "Summary": null
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Bepu.GameExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for the <xref href=\"Stride.Engine.Game\" data-throw-if-not-resolved=\"false\"></xref> class to simplify common game setup tasks for the Bepu Physics engine.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -472,6 +472,20 @@
       "IsMRef": true,
       "Title": "Stride.CommunityToolkit.Engine.EntitySearchExtensions",
       "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.EntitySearchExtensions.yml\" sourcestartlinenumber=\"1\">Provides extension methods for searching and retrieving <xref href=\"Stride.Engine.EntityComponent\" data-throw-if-not-resolved=\"false\"></xref> instances\nwithin an <xref href=\"Stride.Engine.Entity\" data-throw-if-not-resolved=\"false\"></xref> hierarchy. This class includes methods for performing breadth-first\nand depth-first searches to find components in children, descendants, and ancestors of an entity.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Engine.EntityTextComponent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Engine.EntityTextComponent.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Engine.EntityTextComponent",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Engine.EntityTextComponent.yml\" sourcestartlinenumber=\"1\">Represents a text rendering component that can be attached to an entity to display screen-space text.</p>\n"
     },
     {
       "type": "ManagedReference",
@@ -1130,6 +1144,20 @@
       "IsMRef": true,
       "Title": "Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions",
       "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Compositing.EntityDebugSceneRendererOptions.yml\" sourcestartlinenumber=\"1\">Options for rendering debug information for entities in the scene.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer",
+      "Summary": "<p sourcefile=\"api/Stride.CommunityToolkit.Rendering.Compositing.EntityTextRenderer.yml\" sourcestartlinenumber=\"1\">A custom scene renderer that renders 2D text and a background for each entity in the scene.\nThis class demonstrates how to use <xref href=\"Stride.Graphics.SpriteBatch\" data-throw-if-not-resolved=\"false\"></xref> for 2D rendering within a 3D scene.</p>\n"
     },
     {
       "type": "ManagedReference",

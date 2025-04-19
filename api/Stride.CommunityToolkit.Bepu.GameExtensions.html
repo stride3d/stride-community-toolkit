@@ -6,7 +6,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="title" content="Class GameExtensions | Stride Community Toolkit ">
       
-      
+      <meta name="description" content="Provides extension methods for the  class to simplify common game setup tasks for the Bepu Physics engine.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -89,7 +89,7 @@
 
 
   <h1 id="Stride_CommunityToolkit_Bepu_GameExtensions" data-uid="Stride.CommunityToolkit.Bepu.GameExtensions" class="text-break">
-Class GameExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L12"><i class="bi bi-code-slash"></i></a>
+Class GameExtensions  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L15"><i class="bi bi-code-slash"></i></a>
   </h1>
 
   <div class="facts text-secondary">
@@ -97,7 +97,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
   <dl><dt>Assembly</dt><dd>Stride.CommunityToolkit.Bepu.dll</dd></dl>
   </div>
 
-  <div class="markdown summary"></div>
+  <div class="markdown summary"><p>Provides extension methods for the <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a> class to simplify common game setup tasks for the Bepu Physics engine.</p>
+</div>
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
@@ -131,10 +132,11 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Bepu_GameExtensions_Add3DGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean_" data-uid="Stride.CommunityToolkit.Bepu.GameExtensions.Add3DGround(Stride.Engine.Game,System.String,System.Nullable{Stride.Core.Mathematics.Vector2},System.Boolean)">
   Add3DGround(Game, string?, Vector2?, bool)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L29"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L67"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Adds a 3D ground entity to the game with a default size of 15x15 units. The ground is created as a plane, and a collider can be optionally added.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -144,25 +146,36 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a> instance to which the ground entity will be added.</p>
+</dd>
     <dt><code>entityName</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
-    <dd></dd>
+    <dd><p>The name to assign to the new ground entity.
+If <code>null</code>, <a class="xref" href="Stride.CommunityToolkit.Engine.GameDefaults.html#Stride_CommunityToolkit_Engine_GameDefaults_DefaultGroundName">DefaultGroundName</a> is used.</p>
+</dd>
     <dt><code>size</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a>?</dt>
-    <dd></dd>
+    <dd><p>The width and length of the ground plane as a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/core/Stride.Core.Mathematics/Vector2.cs">Vector2</a>.
+If <code>null</code>, <a class="xref" href="Stride.CommunityToolkit.Engine.GameDefaults.html#Stride_CommunityToolkit_Engine_GameDefaults_Default3DGroundSize">Default3DGroundSize</a> is used.</p>
+</dd>
     <dt><code>includeCollider</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
-    <dd></dd>
+    <dd><p>If <code>true</code>, a <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.BepuPhysics/Stride.BepuPhysics/Definitions/Colliders/CompoundCollider.cs">CompoundCollider</a> is added to the entity for physics interactions; otherwise no collider is created.</p>
+</dd>
   </dl>
 
   <h4 class="section">Returns</h4>
   <dl class="parameters">
     <dt><a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a></dt>
-    <dd></dd>
+    <dd><p>The newly created <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Entity.cs">Entity</a> representing the 3D ground plane.</p>
+</dd>
   </dl>
 
 
 
 
 
+
+  <h4 class="section" id="Stride_CommunityToolkit_Bepu_GameExtensions_Add3DGround_Stride_Engine_Game_System_String_System_Nullable_Stride_Core_Mathematics_Vector2__System_Boolean__examples">Examples</h4>
+  <pre><code class="lang-csharp">// Add a 20×20 ground plane named "MyGround" with a collider
+var ground = game.Add3DGround("MyGround", new Vector2(20, 20), includeCollider: true);</code></pre>
 
 
 
@@ -173,7 +186,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Bepu_GameExtensions_Create2DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_Primitive2DModelType_Stride_CommunityToolkit_Bepu_Primitive2DCreationOptions_" data-uid="Stride.CommunityToolkit.Bepu.GameExtensions.Create2DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Bepu.Primitive2DCreationOptions)">
   Create2DPrimitive(IGame, Primitive2DModelType, Primitive2DCreationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L52"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L90"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -213,7 +226,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Bepu_GameExtensions_Create3DPrimitive_Stride_Games_IGame_Stride_CommunityToolkit_Rendering_ProceduralModels_PrimitiveModelType_Stride_CommunityToolkit_Bepu_Primitive3DCreationOptions_" data-uid="Stride.CommunityToolkit.Bepu.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Bepu.Primitive3DCreationOptions)">
   Create3DPrimitive(IGame, PrimitiveModelType, Primitive3DCreationOptions?)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L124"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L162"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -253,7 +266,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Bepu_GameExtensions_SetupBase2DScene_Stride_Engine_Game_" data-uid="Stride.CommunityToolkit.Bepu.GameExtensions.SetupBase2DScene(Stride.Engine.Game)">
   SetupBase2DScene(Game)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L17"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"></div>
@@ -284,10 +297,11 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
   <h3 id="Stride_CommunityToolkit_Bepu_GameExtensions_SetupBase3DScene_Stride_Engine_Game_" data-uid="Stride.CommunityToolkit.Bepu.GameExtensions.SetupBase3DScene(Stride.Engine.Game)">
   SetupBase3DScene(Game)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L21"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L35"><i class="bi bi-code-slash"></i></a>
   </h3>
 
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Sets up a default 3D scene for the game, similar to creating an empty project through the editor.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
 
   <div class="codewrapper">
@@ -297,7 +311,8 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
   <h4 class="section">Parameters</h4>
   <dl class="parameters">
     <dt><code>game</code> <a class="xref" href="https://github.com/stride3d/stride/blob/main/sources/engine/Stride.Engine/Engine/Game.cs">Game</a></dt>
-    <dd></dd>
+    <dd><p>The Game instance for which the base 3D scene will be set up.</p>
+</dd>
   </dl>
 
 
@@ -307,6 +322,15 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 
 
 
+  <h4 class="section" id="Stride_CommunityToolkit_Bepu_GameExtensions_SetupBase3DScene_Stride_Engine_Game__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method performs the following setup operations in sequence:</p>
+<ol>
+<li>Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.</li>
+<li>Adds a camera to the game and sets it up with a MouseLookCamera component.</li>
+<li>Adds a directional light to the game scene.</li>
+<li>Adds ground geometry to the game scene.</li>
+</ol>
+</div>
 
 
 
@@ -315,7 +339,7 @@ Class GameExtensions  <a class="header-action link-secondary" title="View source
 </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L12" class="edit-link">Edit this page</a>
+          <a href="https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Bepu/GameExtensions.cs/#L15" class="edit-link">Edit this page</a>
         </div>
 
 
