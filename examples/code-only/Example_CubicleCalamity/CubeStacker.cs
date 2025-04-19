@@ -63,7 +63,6 @@ public class CubeStacker
         AddTotalScoreEntity(scene);
 
         var camera = scene.GetCamera();
-
         camera?.Entity.Add(new CameraRotationScript());
         //_simulation = camera?.Entity.GetSimulation().Simulation;
     }
