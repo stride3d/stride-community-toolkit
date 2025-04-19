@@ -36,6 +36,11 @@ public class EntityTextComponent : EntityComponent
     public Vector2 Offset { get; set; }
 
     /// <summary>
+    /// Gets or sets an optional position of the text in screen space.
+    /// </summary>
+    public Vector2? Position { get; set; }
+
+    /// <summary>
     /// Gets or sets the color of the rendered text.
     /// </summary>
     /// <value>

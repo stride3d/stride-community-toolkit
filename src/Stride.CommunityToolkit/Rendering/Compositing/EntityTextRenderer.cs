@@ -78,9 +78,12 @@ public class EntityTextRenderer : SceneRendererBase
 
             if (textDisplay == null) continue;
 
+            var screenPosition = textDisplay.Position;
+
             // Convert the entity's world position to screen space
-            var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
-            var finalPosition = screenPosition + textDisplay.Offset;
+            screenPosition ??= _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+
+            var finalPosition = screenPosition.Value + textDisplay.Offset;
 
             DrawTextBackground(entity, textDisplay, finalPosition);
 
