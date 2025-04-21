@@ -11,7 +11,7 @@ public class CameraRotationScript : SyncScript
     private const string GroundEntityName = "Ground";
     private float _rotationSpeed = 45f; // degrees per second
     private Vector3 _rotationCentre;
-    DebugTextPrinter? _instructions;
+    DebugTextPrinter? _instructionsPrinter;
 
     public override void Start()
     {
@@ -35,13 +35,11 @@ public class CameraRotationScript : SyncScript
 
         float deltaRotation = 0f;
 
-        if (!Input.IsKeyDown(Keys.LeftShift)) return;
-
-        if (Input.IsKeyDown(Keys.A))
+        if (Input.IsKeyDown(Keys.Z))
         {
             deltaRotation = -_rotationSpeed * deltaTime;
         }
-        else if (Input.IsKeyDown(Keys.D))
+        else if (Input.IsKeyDown(Keys.C))
         {
             deltaRotation = +_rotationSpeed * deltaTime;
         }
@@ -70,29 +68,32 @@ public class CameraRotationScript : SyncScript
 
     void DisplayInstructions()
     {
-        _instructions?.Print(GenerateInstructions(Entity.Transform.Position));
+        _instructionsPrinter?.Print(GenerateInstructions(Entity.Transform.Position));
     }
 
     void InitializeDebugTextPrinter()
     {
         var screenSize = new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
+        var instructions = GenerateInstructions(Entity.Transform.Position);
 
-        _instructions = new DebugTextPrinter()
+        _instructionsPrinter = new DebugTextPrinter()
         {
             DebugTextSystem = DebugText,
-            TextSize = new(205, 17 * 4),
+            TextSize = new(205, 17 * instructions.Count),
             ScreenSize = screenSize,
-            Instructions = GenerateInstructions(Entity.Transform.Position)
+            Instructions = instructions,
         };
 
-        _instructions.Initialize(DisplayPosition.BottomLeft);
+        _instructionsPrinter.Initialize(DisplayPosition.BottomLeft);
     }
 
     static List<TextElement> GenerateInstructions(Vector3 cameraPosition)
      => [
             new("GAME INSTRUCTIONS"),
             //new("Click the golden sphere and drag to move it (Y-axis locked)"),
-            new("Hold Shift + A (or D) to orbit around the ground", Color.Yellow),
+            new("Click a cube", Color.Yellow),
+            new("Hold Shift: Left mouse button down", Color.Yellow),
+            new("Z/C orbit around the ground", Color.Yellow),
             new($"Camera Position: {cameraPosition}", Color.Yellow),
         ];
 }
