@@ -3,6 +3,7 @@ using Example_CubicleCalamity.Shared;
 using Stride.Audio;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
@@ -37,6 +38,8 @@ public class RaycastInteractionScript : AsyncScript
 
                 continue;
             }
+
+            var currentTime = Game.DeltaTime();
 
             if (Input.IsKeyDown(Keys.LeftShift) && Input.IsMouseButtonDown(MouseButton.Left))
             {
