@@ -9,7 +9,7 @@
     </div>
     <div class="card-footer mb-2">
         <div class="mt-1 mb-3">
-            <input type="text" class="form-control" id="floatingInputValue" placeholder="Message" @bind="inputValue">
+            <input type="text" class="form-control" placeholder="Message" @bind="inputValue">
         </div>
         <button @onclick="SendMessageAsync" class="btn btn-sm btn-@GetEntityType()">Send message</button>
     </div>
@@ -18,7 +18,7 @@
     [Parameter]
     public required string Title { get; set; }
     [Parameter]
-    public string? Description { get; set; } = "Some quick example text to build on the card title and make up the bulk of the card's content.";
+    public string? Description { get; set; } = $"This will request {Constants.DefaultEntitiesCount} entities in Stride game.";
     [Parameter]
     public EntityType Type { get; set; } = EntityType.Success;
     [Parameter]

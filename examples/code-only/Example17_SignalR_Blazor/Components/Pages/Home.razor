@@ -2,16 +2,9 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
 
-<PageTitle>Home</PageTitle>
+<PageTitle>SignalR with Stride</PageTitle>
 
-<h1>Hello, world!</h1>
-
-<ul id="messagesList">
-    @foreach (var message in messages)
-    {
-        <li>@message</li>
-    }
-</ul>
+<h1>Hello, Stride Community!</h1>
 
 <div class="row gy-4">
     <div class="col-3">
@@ -50,4 +43,11 @@
                     Title="Secondaries"
                     Type="EntityType.Secondary" />
     </div>
+</div>
+<div class="mt-3">
+    @for (int i = messages.Count - 1; i >= 0; i--)
+    {
+        var message = messages[i];
+        <div class="text-@(message.Type.ToString().ToLowerInvariant())">@message.Text</div>
+    }
 </div>

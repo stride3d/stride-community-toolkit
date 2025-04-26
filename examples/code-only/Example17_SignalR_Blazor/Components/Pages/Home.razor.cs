@@ -5,7 +5,7 @@ namespace Example17_SignalR_Blazor.Components.Pages;
 public partial class Home
 {
     private HubConnection? _hubConnection;
-    private readonly List<string> messages = [];
+    private readonly List<MessageDto> messages = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -15,18 +15,18 @@ public partial class Home
 
         _hubConnection.On(Constants.ReceiveMessageMethod, (MessageDto dto) =>
         {
-            var encodedMsg = $"{dto.Type}: {dto.Text}";
-
-            messages.Add(encodedMsg);
+            messages.Add(dto);
 
             InvokeAsync(StateHasChanged);
         });
 
         _hubConnection.On(Constants.ReceiveCountMethod, (CountDto dto) =>
         {
-            var encodedMsg = $"{dto.Type}: {dto.Count}";
-
-            messages.Add(encodedMsg);
+            messages.Add(new()
+            {
+                Text = dto.Count.ToString(),
+                Type = dto.Type
+            });
 
             InvokeAsync(StateHasChanged);
         });
