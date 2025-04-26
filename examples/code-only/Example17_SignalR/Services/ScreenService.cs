@@ -1,3 +1,5 @@
+using Example17_SignalR_Shared.Core;
+using Example17_SignalR_Shared.Dtos;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Example17_SignalR.Services;
@@ -18,14 +20,18 @@ public class ScreenService
             await Connection.StartAsync();
         };
 
-        Connection.On<string, string>("ReceiveMessage", (user, message) =>
+        Connection.On<MessageDto>(Constants.ReceiveMessageMethod, (dto) =>
         {
-            var encodedMsg = $"{user}: {message}";
+            var encodedMsg = $"{dto.Type}: {dto.Text}";
 
             Console.WriteLine(encodedMsg);
+        });
 
-            //messages.Add(encodedMsg);
-            //StateHasChanged();
+        Connection.On<CountDto>(Constants.ReceiveCountMethod, (dto) =>
+        {
+            var encodedMsg = $"{dto.Type}: {dto.Count}";
+
+            Console.WriteLine(encodedMsg);
         });
     }
 }

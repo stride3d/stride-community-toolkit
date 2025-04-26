@@ -1,5 +1,4 @@
 using Example17_SignalR_Blazor.Components;
-using Example17_SignalR_Blazor.Core;
 using Example17_SignalR_Blazor.Hubs;
 using Microsoft.AspNetCore.ResponseCompression;
 

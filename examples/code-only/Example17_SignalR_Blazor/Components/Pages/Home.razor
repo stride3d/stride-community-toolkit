@@ -6,22 +6,6 @@
 
 <h1>Hello, world!</h1>
 
-<div class="form-group">
-    <label>
-        User:
-        <input @bind="userInput" />
-    </label>
-</div>
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="messageInput" size="50" />
-    </label>
-</div>
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
-
-<hr>
-
 <ul id="messagesList">
     @foreach (var message in messages)
     {
@@ -31,21 +15,39 @@
 
 <div class="row gy-4">
     <div class="col-3">
-        <EntityCard Title="Greens" Type="EntityType.Success" />
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Greens"
+                    Type="EntityType.Success" />
     </div>
     <div class="col-3">
-        <EntityCard Title="Reds" Type="EntityType.Danger" />
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Reds"
+                    Type="EntityType.Danger" />
     </div>
     <div class="col-3">
-        <EntityCard Title="Yellows" Type="EntityType.Warning" />
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Yellows"
+                    Type="EntityType.Warning" />
     </div>
     <div class="col-3">
-        <EntityCard Title="Blues" Type="EntityType.Primary" />
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Blues"
+                    Type="EntityType.Primary" />
     </div>
     <div class="col-3">
-        <EntityCard Title="Infos" Type="EntityType.Info" />
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Infos"
+                    Type="EntityType.Info" />
     </div>
     <div class="col-3">
-        <EntityCard Title="Secondaries" Type="EntityType.Secondary" />
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Secondaries"
+                    Type="EntityType.Secondary" />
     </div>
 </div>

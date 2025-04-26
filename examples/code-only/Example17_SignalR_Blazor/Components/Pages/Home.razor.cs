@@ -1,49 +1,61 @@
-using Example17_SignalR_Blazor.Core;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Example17_SignalR_Blazor.Components.Pages;
 
 public partial class Home
 {
-    private HubConnection? hubConnection;
-    private List<string> messages = [];
-    private string? userInput;
-    private string? messageInput;
+    private HubConnection? _hubConnection;
+    private readonly List<string> messages = [];
 
     protected override async Task OnInitializedAsync()
     {
-        hubConnection = new HubConnectionBuilder()
+        _hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri(Constants.HubUrl))
             .Build();
 
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        _hubConnection.On(Constants.ReceiveMessageMethod, (MessageDto dto) =>
         {
-            var encodedMsg = $"{user}: {message}";
+            var encodedMsg = $"{dto.Type}: {dto.Text}";
 
             messages.Add(encodedMsg);
 
             InvokeAsync(StateHasChanged);
         });
 
-        await hubConnection.StartAsync();
-    }
-
-    private async Task Send()
-    {
-        if (hubConnection is not null)
+        _hubConnection.On(Constants.ReceiveCountMethod, (CountDto dto) =>
         {
-            await hubConnection.SendAsync("SendMessage", userInput, messageInput);
-        }
+            var encodedMsg = $"{dto.Type}: {dto.Count}";
+
+            messages.Add(encodedMsg);
+
+            InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
     }
 
     public bool IsConnected =>
-        hubConnection?.State == HubConnectionState.Connected;
+        _hubConnection?.State == HubConnectionState.Connected;
 
     public async ValueTask DisposeAsync()
     {
-        if (hubConnection is not null)
+        if (_hubConnection is not null)
         {
-            await hubConnection.DisposeAsync();
+            await _hubConnection.DisposeAsync();
         }
+    }
+
+    private async Task OnMessageCallback(MessageDto dto)
+    {
+        if (_hubConnection is null) return;
+
+        await _hubConnection.SendAsync(Constants.SendMessageMethod, dto);
+    }
+
+    private async Task OnCountCallback(CountDto dto)
+    {
+        if (_hubConnection is null) return;
+
+        await _hubConnection.SendAsync(Constants.SendCountMethod, dto);
     }
 }
