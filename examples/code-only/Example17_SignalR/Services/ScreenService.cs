@@ -1,3 +1,4 @@
+using Example17_SignalR.Core;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -22,14 +23,16 @@ public class ScreenService
 
         Connection.On<MessageDto>(Constants.ReceiveMessageMethod, (dto) =>
         {
-            var encodedMsg = $"{dto.Type}: {dto.Text}";
+            var encodedMsg = $"From Hub: {dto.Type}: {dto.Text}";
 
             Console.WriteLine(encodedMsg);
         });
 
         Connection.On<CountDto>(Constants.ReceiveCountMethod, (dto) =>
         {
-            var encodedMsg = $"{dto.Type}: {dto.Count}";
+            GlobalEvents.CountReceivedEventKey.Broadcast(dto);
+
+            var encodedMsg = $"From Hub: {dto.Type}: {dto.Count}";
 
             Console.WriteLine(encodedMsg);
         });

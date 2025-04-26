@@ -15,6 +15,7 @@ game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase3DScene();
     game.AddSkybox();
+    game.AddProfiler();
 
     var screenManager = new Entity("ScreenManager")
     {
