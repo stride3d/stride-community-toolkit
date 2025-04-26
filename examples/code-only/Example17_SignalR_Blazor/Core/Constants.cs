@@ -1,4 +1,4 @@
-namespace Example17_SignalR_Blazor;
+namespace Example17_SignalR_Blazor.Core;
 
 public static class Constants
 {
@@ -7,4 +7,5 @@ public static class Constants
     public const string HubName = "Screen1Hub";
     public const string ReceiveMessageMethod = "ReceiveMessage";
     public const string SendMessageMethod = "SendMessage";
+    public const int DefaultEntitiesCount = 10;
 }

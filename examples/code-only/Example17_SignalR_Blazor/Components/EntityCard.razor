@@ -1,0 +1,40 @@
+<div class="card bg-@GetEntityType()-subtle">
+    <div class="card-header text-bg-@GetEntityType()">
+        <strong>@Title</strong>
+    </div>
+    <div class="card-body">
+        <p class="card-text"><strong>Total:</strong> 10</p>
+        <p class="card-text">@Description</p>
+        <button class="btn btn-sm btn-@GetEntityType()">Give me @Title</button>
+    </div>
+    <div class="card-footer mb-2">
+        <div class="mt-1 mb-3">
+            <input type="text" class="form-control" id="floatingInputValue" placeholder="Message" value="">
+        </div>
+        <button class="btn btn-sm btn-@GetEntityType()">Send message</button>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public required string Title { get; set; }
+    [Parameter]
+    public string? Description { get; set; } = "Some quick example text to build on the card title and make up the bulk of the card's content.";
+    [Parameter]
+    public EntityType Type { get; set; } = EntityType.Success;
+
+    public EventCallback<MessageDto> MessageCallback { get; set; }
+    public EventCallback<CountDto> CountCallback { get; set; }
+
+    private string GetEntityType() => Type.ToString().ToLowerInvariant();
+
+    private async Task SendMessageAsync()
+    {
+        var message = new MessageDto
+            {
+                Type = Type,
+                Text = "Hello from " + Title,
+            };
+
+        await MessageCallback.InvokeAsync(message);
+    }
+}

@@ -10,8 +10,4 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.15" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Core\" />
-    </ItemGroup>
-
 </Project>
