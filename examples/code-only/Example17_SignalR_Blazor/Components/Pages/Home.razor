@@ -1,11 +1,12 @@
 @page "/"
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
-
 <PageTitle>SignalR with Stride</PageTitle>
-
 <h1>Hello, Stride Community!</h1>
-
+<p>
+    Total entities requested: <strong class="me-4">@_totalEntitiesRequested</strong>
+    Total entities removed: <strong>@_totalEntitiesRemoved</strong>
+</p>
 <div class="row gy-4">
     <div class="col-3">
         <EntityCard CountCallback="OnCountCallback"
@@ -45,9 +46,9 @@
     </div>
 </div>
 <div class="mt-3">
-    @for (int i = messages.Count - 1; i >= 0; i--)
+    @for (int i = _messages.Count - 1; i >= 0; i--)
     {
-        var message = messages[i];
+        var message = _messages[i];
         <div class="text-@(message.Type.ToString().ToLowerInvariant())">@message.Text</div>
     }
 </div>

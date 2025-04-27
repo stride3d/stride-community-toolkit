@@ -3,13 +3,13 @@
         <strong>@Title</strong>
     </div>
     <div class="card-body">
-        <p class="card-text"><strong>Total:</strong> 10</p>
+        <p class="card-text"><strong>Total:</strong> @_totalGenerated</p>
         <p class="card-text">@Description</p>
         <button @onclick="RequestEntitiesAsync" class="btn btn-sm btn-@GetEntityType()">Give me @Title</button>
     </div>
     <div class="card-footer mb-2">
         <div class="mt-1 mb-3">
-            <input type="text" class="form-control" placeholder="Message" @bind="inputValue">
+            <input type="text" class="form-control" placeholder="Message" @bind="_inputValue">
         </div>
         <button @onclick="SendMessageAsync" class="btn btn-sm btn-@GetEntityType()">Send message</button>
     </div>
@@ -26,7 +26,8 @@
     [Parameter]
     public EventCallback<CountDto> CountCallback { get; set; }
 
-    private string? inputValue;
+    private string? _inputValue;
+    private int _totalGenerated;
     private string GetEntityType() => Type.ToString().ToLowerInvariant();
 
     private async Task SendMessageAsync()
@@ -34,12 +35,12 @@
         var message = new MessageDto
             {
                 Type = Type,
-                Text = string.IsNullOrWhiteSpace(inputValue) ? Constants.DefaultMessage : inputValue
+                Text = string.IsNullOrWhiteSpace(_inputValue) ? Constants.DefaultMessage : _inputValue
             };
 
         await MessageCallback.InvokeAsync(message);
 
-        inputValue = string.Empty;
+        _inputValue = string.Empty;
     }
 
     private async Task RequestEntitiesAsync()
@@ -49,6 +50,8 @@
                 Type = Type,
                 Count = 10
             };
+
+        _totalGenerated += count.Count;
 
         await CountCallback.InvokeAsync(count);
     }

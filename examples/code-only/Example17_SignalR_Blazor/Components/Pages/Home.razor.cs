@@ -5,7 +5,9 @@ namespace Example17_SignalR_Blazor.Components.Pages;
 public partial class Home
 {
     private HubConnection? _hubConnection;
-    private readonly List<MessageDto> messages = [];
+    private readonly List<MessageDto> _messages = [];
+    private int _totalEntitiesRequested;
+    private int _totalEntitiesRemoved;
 
     protected override async Task OnInitializedAsync()
     {
@@ -15,16 +17,27 @@ public partial class Home
 
         _hubConnection.On(Constants.ReceiveMessageMethod, (MessageDto dto) =>
         {
-            messages.Add(dto);
+            _messages.Add(dto);
 
             InvokeAsync(StateHasChanged);
         });
 
         _hubConnection.On(Constants.ReceiveCountMethod, (CountDto dto) =>
         {
-            messages.Add(new()
+            _messages.Add(new()
             {
                 Text = dto.Count.ToString(),
+                Type = dto.Type
+            });
+
+            InvokeAsync(StateHasChanged);
+        });
+
+        _hubConnection.On("SendUnitsRemoved", (CountDto dto) =>
+        {
+            _messages.Add(new()
+            {
+                Text = $"Removed: {dto.Count}",
                 Type = dto.Type
             });
 
@@ -55,6 +68,8 @@ public partial class Home
     private async Task OnCountCallback(CountDto dto)
     {
         if (_hubConnection is null) return;
+
+        _totalEntitiesRequested += dto.Count;
 
         await _hubConnection.SendAsync(Constants.SendCountMethod, dto);
     }
