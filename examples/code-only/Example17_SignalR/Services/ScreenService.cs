@@ -23,6 +23,8 @@ public class ScreenService
 
         Connection.On<MessageDto>(Constants.ReceiveMessageMethod, (dto) =>
         {
+            GlobalEvents.MessageReceivedEventKey.Broadcast(dto);
+
             var encodedMsg = $"From Hub: {dto.Type}: {dto.Text}";
 
             Console.WriteLine(encodedMsg);

@@ -3,27 +3,27 @@ using Example17_SignalR.Services;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
 using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Events;
 using Stride.Rendering;
-using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 
 namespace Example17_SignalR.Scripts;
 
 public class ScreenManagerScript : AsyncScript
 {
     private readonly Dictionary<EntityType, Material> _materials = [];
+    private MaterialBuilder? _materialBuilder;
+    private readonly FixedSizeQueue _messageQueue = new(10);
 
     public override async Task Execute()
     {
         var screenService = Services.GetService<ScreenService>();
 
         if (screenService == null) return;
+
+        _materialBuilder = new MaterialBuilder(Game.GraphicsDevice);
 
         AddMaterials();
 
@@ -37,6 +37,8 @@ public class ScreenManagerScript : AsyncScript
         }
 
         var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
+
+        var messageReceiver = new EventReceiver<MessageDto>(GlobalEvents.MessageReceivedEventKey);
 
         while (Game.IsRunning)
         {
@@ -52,6 +54,13 @@ public class ScreenManagerScript : AsyncScript
             {
                 CreatePrimitives(countDto);
             }
+
+            if (messageReceiver.TryReceive(out var messageDto))
+            {
+                _messageQueue.Enqueue(messageDto);
+            }
+
+            PrintMessage();
 
             await Script.NextFrame();
         }
@@ -77,48 +86,28 @@ public class ScreenManagerScript : AsyncScript
         }
     }
 
-    private void AddMaterials()
+    private void PrintMessage()
     {
-        foreach (var colorType in Colours.ColourTypes)
-        {
-            var material = CreateMaterial(colorType.Value);
+        if (_messageQueue.Count == 0) return;
 
-            _materials.Add(colorType.Key, material);
+        var messages = _messageQueue.AsSpan();
+
+        for (int i = 0; i < messages.Length; i++)
+        {
+            ref readonly var message = ref messages[i];
+            DebugText.Print(message.Text, new(10, 30 + i * 15), Colours.ColourTypes[message.Type]);
         }
     }
 
-    public Material CreateMaterial(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
+    private void AddMaterials()
     {
-        var materialDescription2 = new MaterialDescriptor
-        {
-            Attributes =
-                {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
-                    //DiffuseModel = new MaterialLightmapModelFeature(),
-                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
-                    SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(microSurface))
-                }
-        };
+        if (_materialBuilder == null) return;
 
-        var materialDescription = new MaterialDescriptor
+        foreach (var colorType in Colours.ColourTypes)
         {
-            Attributes =
-                {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
-                    DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(0)),
-                    SpecularModel = new MaterialSpecularMicrofacetModelFeature()
-                    {
-                        Fresnel = new MaterialSpecularMicrofacetFresnelSchlick(),
-                        Visibility = new MaterialSpecularMicrofacetVisibilitySmithSchlickGGX(),
-                        NormalDistribution = new MaterialSpecularMicrofacetNormalDistributionGGX(),
-                        Environment = new MaterialSpecularMicrofacetEnvironmentGGXLUT(),
-                    },
-                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0)),
-                }
-        };
+            var material = _materialBuilder.CreateMaterial(colorType.Value);
 
-        return Material.New(Game.GraphicsDevice, materialDescription);
+            _materials.Add(colorType.Key, material);
+        }
     }
 }
