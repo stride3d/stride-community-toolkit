@@ -95,7 +95,7 @@ public class ScreenManagerScript : AsyncScript
         for (int i = 0; i < messages.Length; i++)
         {
             ref readonly var message = ref messages[i];
-            DebugText.Print(message.Text, new(10, 30 + i * 15), Colours.ColourTypes[message.Type]);
+            DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
         }
     }
 
