@@ -8,6 +8,30 @@ public partial class Home
     private readonly List<MessageDto> _messages = [];
     private int _totalEntitiesRequested;
     private int _totalEntitiesRemoved;
+    private Queue<string> _funnyMessages = new(
+    [
+        "Why did the programmer quit his job?",
+        "Because he didn't get arrays!",
+        "Is your refrigerator running?",
+        "Better go catch it!",
+        "I told my wife she was drawing her eyebrows too high.",
+        "She looked surprised.",
+        "My code doesn't work and I don't know why.",
+        "My code works and I don't know why.",
+        "Just burned 2,000 calories.",
+        "That's the last time I leave brownies in the oven while napping.",
+        "I'm on a seafood diet.",
+        "I see food and I eat it.",
+        "Why don't scientists trust atoms?",
+        "Because they make up everything!",
+        "I'd tell you a UDP joke, but you might not get it.",
+        "What's the object-oriented way to become wealthy?",
+        "Inheritance!",
+        "I would tell you a joke about null references.",
+        "But then I'd have nothing to say.",
+        "Did you hear about the mathematician who's afraid of negative numbers?",
+        "He'll stop at nothing to avoid them!"
+    ]);
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,7 +86,20 @@ public partial class Home
     {
         if (_hubConnection is null) return;
 
+        UpdateMessageText(dto);
+
         await _hubConnection.SendAsync(Constants.SendMessageMethod, dto);
+    }
+
+    private void UpdateMessageText(MessageDto dto)
+    {
+        if (dto.Text != Constants.DefaultMessage) return;
+
+        if (_funnyMessages.Count == 0) return;
+
+        dto.Text = _funnyMessages.Dequeue();
+
+        _funnyMessages.Enqueue(dto.Text);
     }
 
     private async Task OnCountCallback(CountDto dto)
