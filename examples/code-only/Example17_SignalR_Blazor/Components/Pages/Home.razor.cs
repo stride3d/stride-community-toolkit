@@ -1,14 +1,18 @@
+using Example17_SignalR_Blazor.Hubs;
+using Example17_SignalR_Shared.Interfaces;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Example17_SignalR_Blazor.Components.Pages;
 
-public partial class Home
+public partial class Home(NavigationManager navigation) : IAsyncDisposable
 {
+    private readonly NavigationManager _navigation = navigation;
     private HubConnection? _hubConnection;
     private readonly List<MessageDto> _messages = [];
     private int _totalEntitiesRequested;
     private int _totalEntitiesRemoved;
-    private Queue<string> _funnyMessages = new(
+    private readonly Queue<string> _funnyMessages = new(
     [
         "Why did the programmer quit his job?",
         "Because he didn't get arrays!",
@@ -36,17 +40,17 @@ public partial class Home
     protected override async Task OnInitializedAsync()
     {
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl(Navigation.ToAbsoluteUri(Constants.HubUrl))
+            .WithUrl(_navigation.ToAbsoluteUri(Constants.HubUrl))
             .Build();
 
-        _hubConnection.On(Constants.ReceiveMessageMethod, (MessageDto dto) =>
+        _hubConnection.On(nameof(IScreenClient.ReceiveMessageAsync), (MessageDto dto) =>
         {
             _messages.Add(dto);
 
             InvokeAsync(StateHasChanged);
         });
 
-        _hubConnection.On(Constants.ReceiveCountMethod, (CountDto dto) =>
+        _hubConnection.On(nameof(IScreenClient.ReceiveCountAsync), (CountDto dto) =>
         {
             _messages.Add(new()
             {
@@ -57,7 +61,7 @@ public partial class Home
             InvokeAsync(StateHasChanged);
         });
 
-        _hubConnection.On("SendUnitsRemoved", (CountDto dto) =>
+        _hubConnection.On(nameof(IScreenClient.ReceiveUnitsRemovedAsync), (CountDto dto) =>
         {
             _messages.Add(new()
             {
@@ -71,24 +75,22 @@ public partial class Home
         await _hubConnection.StartAsync();
     }
 
-    public bool IsConnected =>
-        _hubConnection?.State == HubConnectionState.Connected;
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_hubConnection is not null)
-        {
-            await _hubConnection.DisposeAsync();
-        }
-    }
-
     private async Task OnMessageCallback(MessageDto dto)
     {
         if (_hubConnection is null) return;
 
         UpdateMessageText(dto);
 
-        await _hubConnection.SendAsync(Constants.SendMessageMethod, dto);
+        await _hubConnection.SendAsync(nameof(Screen1Hub.SendMessage), dto);
+    }
+
+    private async Task OnCountCallback(CountDto dto)
+    {
+        if (_hubConnection is null) return;
+
+        _totalEntitiesRequested += dto.Count;
+
+        await _hubConnection.SendAsync(nameof(Screen1Hub.SendCount), dto);
     }
 
     private void UpdateMessageText(MessageDto dto)
@@ -102,12 +104,12 @@ public partial class Home
         _funnyMessages.Enqueue(dto.Text);
     }
 
-    private async Task OnCountCallback(CountDto dto)
+    public bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
     {
         if (_hubConnection is null) return;
 
-        _totalEntitiesRequested += dto.Count;
-
-        await _hubConnection.SendAsync(Constants.SendCountMethod, dto);
+        await _hubConnection.DisposeAsync();
     }
 }

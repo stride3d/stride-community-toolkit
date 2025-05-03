@@ -1,6 +1,5 @@
 @page "/"
 @using Microsoft.AspNetCore.SignalR.Client
-@inject NavigationManager Navigation
 <PageTitle>SignalR with Stride</PageTitle>
 <h1>Hello, Stride Community!</h1>
 <p>
@@ -12,36 +11,42 @@
         <EntityCard CountCallback="OnCountCallback"
                     MessageCallback="OnMessageCallback"
                     Title="Greens"
+                    IsDisabled="!IsConnected"
                     Type="EntityType.Success" />
     </div>
     <div class="col-3">
         <EntityCard CountCallback="OnCountCallback"
                     MessageCallback="OnMessageCallback"
                     Title="Reds"
+                    IsDisabled="!IsConnected"
                     Type="EntityType.Danger" />
     </div>
     <div class="col-3">
         <EntityCard CountCallback="OnCountCallback"
                     MessageCallback="OnMessageCallback"
                     Title="Yellows"
+                    IsDisabled="!IsConnected"
                     Type="EntityType.Warning" />
     </div>
     <div class="col-3">
         <EntityCard CountCallback="OnCountCallback"
                     MessageCallback="OnMessageCallback"
                     Title="Blues"
+                    IsDisabled="!IsConnected"
                     Type="EntityType.Primary" />
     </div>
     <div class="col-3">
         <EntityCard CountCallback="OnCountCallback"
                     MessageCallback="OnMessageCallback"
                     Title="Infos"
+                    IsDisabled="!IsConnected"
                     Type="EntityType.Info" />
     </div>
     <div class="col-3">
         <EntityCard CountCallback="OnCountCallback"
                     MessageCallback="OnMessageCallback"
                     Title="Secondaries"
+                    IsDisabled="!IsConnected"
                     Type="EntityType.Secondary" />
     </div>
 </div>

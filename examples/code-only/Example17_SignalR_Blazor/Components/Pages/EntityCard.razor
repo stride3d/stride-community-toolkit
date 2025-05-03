@@ -5,18 +5,20 @@
     <div class="card-body">
         <p class="card-text"><strong>Total:</strong> @_totalGenerated</p>
         <p class="card-text">@Description</p>
-        <button @onclick="RequestEntitiesAsync" class="btn btn-sm btn-@GetEntityType()">Give me @Title</button>
+        <button @onclick="RequestEntitiesAsync" disabled="@(IsDisabled)" class="btn btn-sm btn-@GetEntityType()">Give me @Title</button>
     </div>
     <div class="card-footer mb-2">
         <div class="mt-1 mb-3">
             <input type="text" class="form-control" placeholder="Message" @bind="_inputValue">
         </div>
-        <button @onclick="SendMessageAsync" class="btn btn-sm btn-@GetEntityType()">Send message</button>
+        <button @onclick="SendMessageAsync" disabled="@(IsDisabled)" class="btn btn-sm btn-@GetEntityType()">Send message</button>
     </div>
 </div>
 @code {
     [Parameter]
     public required string Title { get; set; }
+    [Parameter]
+    public required bool IsDisabled { get; set; }
     [Parameter]
     public string? Description { get; set; } = $"This will request {Constants.DefaultEntitiesCount} entities in Stride game.";
     [Parameter]
