@@ -1,6 +1,6 @@
 using Example17_SignalR.Core;
-using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
+using Example17_SignalR_Shared.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Example17_SignalR.Services;
@@ -21,7 +21,7 @@ public class ScreenService
             await Connection.StartAsync();
         };
 
-        Connection.On<MessageDto>(Constants.ReceiveMessageMethod, (dto) =>
+        Connection.On<MessageDto>(nameof(IScreenClient.ReceiveMessageAsync), (dto) =>
         {
             GlobalEvents.MessageReceivedEventKey.Broadcast(dto);
 
@@ -30,7 +30,7 @@ public class ScreenService
             Console.WriteLine(encodedMsg);
         });
 
-        Connection.On<CountDto>(Constants.ReceiveCountMethod, (dto) =>
+        Connection.On<CountDto>(nameof(IScreenClient.ReceiveCountAsync), (dto) =>
         {
             GlobalEvents.CountReceivedEventKey.Broadcast(dto);
 
