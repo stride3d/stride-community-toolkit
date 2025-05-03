@@ -23,8 +23,7 @@ public class FixedSizeQueue
         _queue.Enqueue(item);
     }
 
-    public ReadOnlySpan<MessageDto> AsSpan()
-    {
-        return new ReadOnlySpan<MessageDto>(_queue.ToArray());
-    }
+    public ReadOnlySpan<MessageDto> AsSpan() => new(_queue.ToArray());
+
+    public List<MessageDto> ToList() => _queue.ToList();
 }
