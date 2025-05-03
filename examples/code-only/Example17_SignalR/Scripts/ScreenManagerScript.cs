@@ -90,6 +90,18 @@ public class ScreenManagerScript : AsyncScript
     {
         if (_messageQueue.Count == 0) return;
 
+        var messages = _messageQueue.ToList();
+
+        for (int i = 0; i < messages.Count; i++)
+        {
+            DebugText.Print(messages[i].Text, new(5, 30 + i * 18), Colours.ColourTypes[messages[i].Type]);
+        }
+    }
+
+    private void PrintMessage2()
+    {
+        if (_messageQueue.Count == 0) return;
+
         var messages = _messageQueue.AsSpan();
 
         for (int i = 0; i < messages.Length; i++)
