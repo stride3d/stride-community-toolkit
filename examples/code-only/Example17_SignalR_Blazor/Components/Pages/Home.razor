@@ -1,0 +1,59 @@
+@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+<PageTitle>SignalR with Stride</PageTitle>
+<h1>Hello, Stride Community!</h1>
+<p>
+    Total entities requested: <strong class="me-4">@_totalEntitiesRequested</strong>
+    Total entities removed: <strong>@_totalEntitiesRemoved</strong>
+</p>
+<div class="row gy-4">
+    <div class="col-3">
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Greens"
+                    IsDisabled="!IsConnected"
+                    Type="EntityType.Success" />
+    </div>
+    <div class="col-3">
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Reds"
+                    IsDisabled="!IsConnected"
+                    Type="EntityType.Danger" />
+    </div>
+    <div class="col-3">
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Yellows"
+                    IsDisabled="!IsConnected"
+                    Type="EntityType.Warning" />
+    </div>
+    <div class="col-3">
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Blues"
+                    IsDisabled="!IsConnected"
+                    Type="EntityType.Primary" />
+    </div>
+    <div class="col-3">
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Infos"
+                    IsDisabled="!IsConnected"
+                    Type="EntityType.Info" />
+    </div>
+    <div class="col-3">
+        <EntityCard CountCallback="OnCountCallback"
+                    MessageCallback="OnMessageCallback"
+                    Title="Secondaries"
+                    IsDisabled="!IsConnected"
+                    Type="EntityType.Secondary" />
+    </div>
+</div>
+<div class="mt-3">
+    @for (int i = _messages.Count - 1; i >= 0; i--)
+    {
+        var message = _messages[i];
+        <div class="text-@(message.Type.ToString().ToLowerInvariant())">@message.Text</div>
+    }
+</div>
