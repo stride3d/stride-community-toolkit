@@ -12,8 +12,8 @@ namespace Example17_SignalR.Scripts;
 public class ScreenManagerScript : AsyncScript
 {
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
-    private readonly FixedSizeQueue _messageQueue = new(10);
     private PrimitiveBuilder? _primitiveBuilder;
+    private MessagePrinter? _messagePrinter;
     private bool _isCreatingPrimitives;
 
     public override async Task Execute()
@@ -33,6 +33,8 @@ public class ScreenManagerScript : AsyncScript
 
         var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
         _primitiveBuilder = new PrimitiveBuilder(Game, materialManager);
+
+        _messagePrinter = new MessagePrinter(DebugText);
 
         var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
         var messageReceiver = new EventReceiver<MessageDto>(GlobalEvents.MessageReceivedEventKey);
@@ -54,10 +56,10 @@ public class ScreenManagerScript : AsyncScript
 
             if (messageReceiver.TryReceive(out var messageDto))
             {
-                _messageQueue.Enqueue(messageDto);
+                _messagePrinter.Enqueue(messageDto);
             }
 
-            PrintMessage();
+            _messagePrinter.PrintMessage();
 
             if (Input.IsMouseButtonPressed(MouseButton.Left))
             {
@@ -91,22 +93,6 @@ public class ScreenManagerScript : AsyncScript
             _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
 
             _isCreatingPrimitives = false;
-        }
-    }
-
-    private void PrintMessage()
-    {
-        if (_messageQueue.Count == 0) return;
-
-        var messages = _messageQueue.AsSpan();
-
-        for (int i = 0; i < messages.Length; i++)
-        {
-            var message = messages[i];
-
-            if (message == null) continue;
-
-            DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
         }
     }
 }

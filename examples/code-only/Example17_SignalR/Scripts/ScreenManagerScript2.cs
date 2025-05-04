@@ -3,9 +3,6 @@ using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
 using Example17_SignalR_Shared.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
-using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Helpers;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
 using Stride.Input;
 using System.Collections.Concurrent;
@@ -15,17 +12,17 @@ namespace Example17_SignalR.Scripts;
 public class ScreenManagerScript2 : AsyncScript
 {
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
-    private readonly FixedSizeQueue _messageQueue = new(10);
     private HubConnection? _connection;
-    private MaterialManager? _materialManager;
+    private PrimitiveBuilder? _primitiveBuilder;
+    private MessagePrinter? _messagePrinter;
     private bool _isCreatingPrimitives;
-
-    private void QueuePrimitiveCreation(CountDto countDto)
-        => _primitiveCreationQueue.Enqueue(countDto);
 
     public override async Task Execute()
     {
-        //var screenService = Services.GetService<ScreenService>();
+        var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
+        _primitiveBuilder = new PrimitiveBuilder(Game, materialManager);
+
+        _messagePrinter = new MessagePrinter(DebugText);
 
         _connection = new HubConnectionBuilder()
               .WithUrl("https://localhost:44369/screen1")
@@ -39,7 +36,7 @@ public class ScreenManagerScript2 : AsyncScript
 
         _connection.On<MessageDto>(nameof(IScreenClient.ReceiveMessageAsync), (dto) =>
         {
-            _messageQueue.Enqueue(dto);
+            _messagePrinter.Enqueue(dto);
 
             var encodedMsg = $"From Hub: {dto.Type}: {dto.Text}";
 
@@ -55,8 +52,6 @@ public class ScreenManagerScript2 : AsyncScript
             Console.WriteLine(encodedMsg);
         });
 
-        _materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
-
         try
         {
             await _connection.StartAsync();
@@ -68,13 +63,13 @@ public class ScreenManagerScript2 : AsyncScript
 
         while (Game.IsRunning)
         {
-            PrintMessage();
+            _messagePrinter.PrintMessage();
 
             if (Input.IsMouseButtonPressed(MouseButton.Left))
             {
                 QueuePrimitiveCreation(new CountDto
                 {
-                    Type = EntityType.Primary,
+                    Type = EntityType.Destroyer,
                     Count = 10,
                 });
             }
@@ -84,6 +79,9 @@ public class ScreenManagerScript2 : AsyncScript
             await Script.NextFrame();
         }
     }
+
+    private void QueuePrimitiveCreation(CountDto countDto)
+        => _primitiveCreationQueue.Enqueue(countDto);
 
     private void ProcessPrimitiveQueue()
     {
@@ -95,45 +93,9 @@ public class ScreenManagerScript2 : AsyncScript
 
             _isCreatingPrimitives = true;
 
-            CreatePrimitives(nextBatch);
+            _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
 
             _isCreatingPrimitives = false;
-        }
-    }
-
-    private void CreatePrimitives(CountDto countDto)
-    {
-        var formattedMessage = $"From Script: {countDto.Type}: {countDto.Count}";
-
-        Console.WriteLine(formattedMessage);
-
-        for (var i = 0; i < countDto.Count; i++)
-        {
-            var entity = Game.Create3DPrimitive(PrimitiveModelType.Cube,
-                new()
-                {
-                    EntityName = $"Entity",
-                    Material = _materialManager.GetMaterial(countDto.Type),
-                });
-
-            entity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [5, 10], [-5, 5]);
-            entity.Scene = Entity.Scene;
-        }
-    }
-
-    private void PrintMessage()
-    {
-        if (_messageQueue.Count == 0) return;
-
-        var messages = _messageQueue.AsSpan();
-
-        for (int i = 0; i < messages.Length; i++)
-        {
-            var message = messages[i];
-
-            if (message == null) continue;
-
-            DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
         }
     }
 }
