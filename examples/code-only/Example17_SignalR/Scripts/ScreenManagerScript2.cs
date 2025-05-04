@@ -9,6 +9,7 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
 using Stride.Input;
 using Stride.Rendering;
+using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Scripts;
 
@@ -18,6 +19,13 @@ public class ScreenManagerScript2 : AsyncScript
     private MaterialBuilder? _materialBuilder;
     private HubConnection? _connection;
     private readonly FixedSizeQueue _messageQueue = new(10);
+    private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
+    private bool _isCreatingPrimitives;
+
+    private void QueuePrimitiveCreation(CountDto countDto)
+    {
+        _primitiveCreationQueue.Enqueue(countDto);
+    }
 
     public override async Task Execute()
     {
@@ -44,7 +52,7 @@ public class ScreenManagerScript2 : AsyncScript
 
         _connection.On<CountDto>(nameof(IScreenClient.ReceiveCountAsync), (dto) =>
         {
-            CreatePrimitives(dto);
+            QueuePrimitiveCreation(dto);
 
             var encodedMsg = $"From Hub: {dto.Type}: {dto.Count}";
 
@@ -70,14 +78,30 @@ public class ScreenManagerScript2 : AsyncScript
 
             if (Input.IsMouseButtonPressed(MouseButton.Left))
             {
-                CreatePrimitives(new CountDto
+                QueuePrimitiveCreation(new CountDto
                 {
                     Type = EntityType.Primary,
                     Count = 10,
                 });
             }
 
+            ProcessPrimitiveQueue();
+
             await Script.NextFrame();
+        }
+    }
+
+    private void ProcessPrimitiveQueue()
+    {
+        if (_isCreatingPrimitives) return;
+
+        if (_primitiveCreationQueue.TryDequeue(out CountDto? nextBatch))
+        {
+            _isCreatingPrimitives = true;
+
+            CreatePrimitives(nextBatch);
+
+            _isCreatingPrimitives = false;
         }
     }
 
