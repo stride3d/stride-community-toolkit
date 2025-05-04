@@ -8,24 +8,20 @@ using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
 using Stride.Input;
-using Stride.Rendering;
 using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Scripts;
 
 public class ScreenManagerScript2 : AsyncScript
 {
-    private readonly Dictionary<EntityType, Material> _materials = [];
-    private MaterialBuilder? _materialBuilder;
-    private HubConnection? _connection;
-    private readonly FixedSizeQueue _messageQueue = new(10);
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
+    private readonly FixedSizeQueue _messageQueue = new(10);
+    private HubConnection? _connection;
+    private MaterialManager? _materialManager;
     private bool _isCreatingPrimitives;
 
     private void QueuePrimitiveCreation(CountDto countDto)
-    {
-        _primitiveCreationQueue.Enqueue(countDto);
-    }
+        => _primitiveCreationQueue.Enqueue(countDto);
 
     public override async Task Execute()
     {
@@ -59,9 +55,7 @@ public class ScreenManagerScript2 : AsyncScript
             Console.WriteLine(encodedMsg);
         });
 
-        _materialBuilder = new MaterialBuilder(Game.GraphicsDevice);
-
-        AddMaterials();
+        _materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
 
         try
         {
@@ -97,6 +91,8 @@ public class ScreenManagerScript2 : AsyncScript
 
         if (_primitiveCreationQueue.TryDequeue(out CountDto? nextBatch))
         {
+            if (nextBatch == null) return;
+
             _isCreatingPrimitives = true;
 
             CreatePrimitives(nextBatch);
@@ -117,7 +113,7 @@ public class ScreenManagerScript2 : AsyncScript
                 new()
                 {
                     EntityName = $"Entity",
-                    Material = _materials[countDto.Type],
+                    Material = _materialManager.GetMaterial(countDto.Type),
                 });
 
             entity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [5, 10], [-5, 5]);
@@ -138,18 +134,6 @@ public class ScreenManagerScript2 : AsyncScript
             if (message == null) continue;
 
             DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
-        }
-    }
-
-    private void AddMaterials()
-    {
-        if (_materialBuilder == null) return;
-
-        foreach (var colorType in Colours.ColourTypes)
-        {
-            var material = _materialBuilder.CreateMaterial(colorType.Value);
-
-            _materials.Add(colorType.Key, material);
         }
     }
 }

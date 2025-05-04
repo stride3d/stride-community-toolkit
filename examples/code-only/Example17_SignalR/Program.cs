@@ -19,7 +19,7 @@ game.Run(start: (Scene rootScene) =>
 
     var screenManager = new Entity("ScreenManager")
     {
-        new ScreenManagerScript2()
+        new ScreenManagerScript()
     };
     screenManager.Scene = rootScene;
 

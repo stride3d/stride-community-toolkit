@@ -2,30 +2,25 @@ using Example17_SignalR.Core;
 using Example17_SignalR.Services;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
-using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Helpers;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
 using Stride.Engine.Events;
-using Stride.Rendering;
+using Stride.Input;
+using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Scripts;
 
 public class ScreenManagerScript : AsyncScript
 {
-    private readonly Dictionary<EntityType, Material> _materials = [];
-    private MaterialBuilder? _materialBuilder;
+    private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
     private readonly FixedSizeQueue _messageQueue = new(10);
+    private PrimitiveBuilder? _primitiveBuilder;
+    private bool _isCreatingPrimitives;
 
     public override async Task Execute()
     {
         var screenService = Services.GetService<ScreenService>();
 
         if (screenService == null) return;
-
-        _materialBuilder = new MaterialBuilder(Game.GraphicsDevice);
-
-        AddMaterials();
 
         try
         {
@@ -36,13 +31,15 @@ public class ScreenManagerScript : AsyncScript
             Console.WriteLine($"Error starting connection: {ex.Message}");
         }
 
-        var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
+        var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
+        _primitiveBuilder = new PrimitiveBuilder(Game, materialManager);
 
+        var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
         var messageReceiver = new EventReceiver<MessageDto>(GlobalEvents.MessageReceivedEventKey);
 
         while (Game.IsRunning)
         {
-            // This example will be waitig for the event to be received
+            // This example will be waiting for the event to be received
             // the rest of the code will be executed when the event is received
             //var result = await countReceiver.ReceiveAsync();
             //var formattedMessage = $"From Script: {result.Type}: {result.Count}";
@@ -52,7 +49,7 @@ public class ScreenManagerScript : AsyncScript
             // the rest of the code will be executed every frame
             if (countReceiver.TryReceive(out var countDto))
             {
-                CreatePrimitives(countDto);
+                QueuePrimitiveCreation(countDto);
             }
 
             if (messageReceiver.TryReceive(out var messageDto))
@@ -62,27 +59,38 @@ public class ScreenManagerScript : AsyncScript
 
             PrintMessage();
 
+            if (Input.IsMouseButtonPressed(MouseButton.Left))
+            {
+                // ToDo: Destroy existing entities on collision
+                QueuePrimitiveCreation(new CountDto
+                {
+                    Type = EntityType.Destroyer,
+                    Count = 10,
+                });
+            }
+
+            ProcessPrimitiveQueue();
+
             await Script.NextFrame();
         }
     }
 
-    private void CreatePrimitives(CountDto countDto)
+    private void QueuePrimitiveCreation(CountDto countDto)
+        => _primitiveCreationQueue.Enqueue(countDto);
+
+    private void ProcessPrimitiveQueue()
     {
-        var formattedMessage = $"From Script: {countDto.Type}: {countDto.Count}";
+        if (_isCreatingPrimitives) return;
 
-        Console.WriteLine(formattedMessage);
-
-        for (var i = 0; i < countDto.Count; i++)
+        if (_primitiveCreationQueue.TryDequeue(out CountDto? nextBatch))
         {
-            var entity = Game.Create3DPrimitive(PrimitiveModelType.Cube,
-                new()
-                {
-                    EntityName = $"Entity",
-                    Material = _materials[countDto.Type],
-                });
+            if (nextBatch == null) return;
 
-            entity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [5, 10], [-5, 5]);
-            entity.Scene = Entity.Scene;
+            _isCreatingPrimitives = true;
+
+            _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
+
+            _isCreatingPrimitives = false;
         }
     }
 
@@ -99,18 +107,6 @@ public class ScreenManagerScript : AsyncScript
             if (message == null) continue;
 
             DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
-        }
-    }
-
-    private void AddMaterials()
-    {
-        if (_materialBuilder == null) return;
-
-        foreach (var colorType in Colours.ColourTypes)
-        {
-            var material = _materialBuilder.CreateMaterial(colorType.Value);
-
-            _materials.Add(colorType.Key, material);
         }
     }
 }
