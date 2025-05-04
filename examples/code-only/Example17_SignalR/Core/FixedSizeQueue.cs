@@ -1,4 +1,5 @@
 using Example17_SignalR_Shared.Dtos;
+using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Core;
 
@@ -6,20 +7,25 @@ public class FixedSizeQueue
 {
     public int Count => _queue.Count;
 
-    private readonly Queue<MessageDto> _queue;
+    private readonly ConcurrentQueue<MessageDto> _queue;
     private readonly int _maxSize;
 
     public FixedSizeQueue(int maxSize)
     {
         _maxSize = maxSize;
-        _queue = new Queue<MessageDto>(maxSize);
+
+        _queue = new ConcurrentQueue<MessageDto>();
     }
-    public void Enqueue(MessageDto item)
+
+    public void Enqueue(MessageDto? item)
     {
-        if (_queue.Count == _maxSize)
+        if (item == null) return;
+
+        if (_queue.Count == _maxSize && _queue.Count > 0)
         {
-            _queue.Dequeue();
+            _queue.TryDequeue(out _);
         }
+
         _queue.Enqueue(item);
     }
 
