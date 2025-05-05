@@ -12,6 +12,7 @@ public static class Colours
         { EntityType.Warning, new Color(255, 193, 7) },
         { EntityType.Primary, new Color(13, 110, 253) },
         { EntityType.Info, new Color(13, 202, 240) },
-        { EntityType.Secondary, new Color(108, 117, 125) }
+        { EntityType.Secondary, new Color(108, 117, 125) },
+        { EntityType.Destroyer, new Color(0, 0, 0) }
     };
 }

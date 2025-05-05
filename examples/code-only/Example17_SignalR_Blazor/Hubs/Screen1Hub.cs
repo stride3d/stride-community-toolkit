@@ -11,6 +11,6 @@ public class Screen1Hub : Hub<IScreenClient>
     public Task SendCount(CountDto dto)
         => Clients.All.ReceiveCountAsync(dto);
 
-    public Task SendUnitsRemoved(List<CountDto> units)
+    public Task SendUnitsRemoved(CountDto units)
         => Clients.All.ReceiveUnitsRemovedAsync(units);
 }
