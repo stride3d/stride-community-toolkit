@@ -1,0 +1,60 @@
+<div class="card bg-@GetEntityType()-subtle">
+    <div class="card-header text-bg-@GetEntityType()">
+        <strong>@Title</strong>
+    </div>
+    <div class="card-body">
+        <p class="card-text"><strong>Total:</strong> @_totalGenerated</p>
+        <p class="card-text">@Description</p>
+        <button @onclick="RequestEntitiesAsync" disabled="@(IsDisabled)" class="btn btn-sm btn-@GetEntityType()">Give me @Title</button>
+    </div>
+    <div class="card-footer mb-2">
+        <div class="mt-1 mb-3">
+            <input type="text" class="form-control" placeholder="Message" @bind="_inputValue">
+        </div>
+        <button @onclick="SendMessageAsync" disabled="@(IsDisabled)" class="btn btn-sm btn-@GetEntityType()">Send message</button>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public required string Title { get; set; }
+    [Parameter]
+    public required bool IsDisabled { get; set; }
+    [Parameter]
+    public string? Description { get; set; } = $"This will request {Constants.DefaultEntitiesCount} entities in Stride game.";
+    [Parameter]
+    public EntityType Type { get; set; } = EntityType.Success;
+    [Parameter]
+    public EventCallback<MessageDto> MessageCallback { get; set; }
+    [Parameter]
+    public EventCallback<CountDto> CountCallback { get; set; }
+
+    private string? _inputValue;
+    private int _totalGenerated;
+    private string GetEntityType() => Type.ToString().ToLowerInvariant();
+
+    private async Task SendMessageAsync()
+    {
+        var message = new MessageDto
+            {
+                Type = Type,
+                Text = string.IsNullOrWhiteSpace(_inputValue) ? Constants.DefaultMessage : _inputValue
+            };
+
+        await MessageCallback.InvokeAsync(message);
+
+        _inputValue = string.Empty;
+    }
+
+    private async Task RequestEntitiesAsync()
+    {
+        var count = new CountDto
+            {
+                Type = Type,
+                Count = 10
+            };
+
+        _totalGenerated += count.Count;
+
+        await CountCallback.InvokeAsync(count);
+    }
+}

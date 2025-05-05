@@ -54,13 +54,13 @@ public class Basic3DCameraController : SyncScript
                 new("CONTROL INSTRUCTIONS"),
                 new("F2: Toggle Help", Color.Red),
                 new("F3: Reposition Help", Color.Red),
-                new("WASD: Move"),
-                new("Arrow Keys: Move"),
-                new("Q/E: Ascend/Descend"),
-                new("Hold Shift: Increase speed"),
-                new("Numpad 2/4/6/8: Rotation"),
-                new("Right Mouse Button: Rotate"),
-                new("H: Reset Camera"),
+                new("WASD: Move", Color.LightGreen),
+                new("Arrow Keys: Move", Color.LightGreen),
+                new("Q/E: Ascend/Descend", Color.LightGreen),
+                new("Hold Shift: Increase speed", Color.LightGreen),
+                new("Numpad 2/4/6/8: Rotation", Color.LightGreen),
+                new("Right Mouse Button: Rotate", Color.LightGreen),
+                new("H: Reset Camera", Color.LightGreen),
             ]
         };
 
