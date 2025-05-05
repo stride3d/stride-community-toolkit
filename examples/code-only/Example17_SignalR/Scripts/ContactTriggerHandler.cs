@@ -40,6 +40,9 @@ public class ContactTriggerHandler : IContactEventHandler
     {
         if (robotComponent == null) return;
 
+        // ToDo: Not working
+        //robotComponent.Entity.Scene = null;
+
         robotComponent.IsDeleted = true;
     }
 }
