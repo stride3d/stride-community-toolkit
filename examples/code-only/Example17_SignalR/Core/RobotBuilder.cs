@@ -15,6 +15,7 @@ public class RobotBuilder
     private readonly IGame _game;
     private readonly MaterialManager _materialManager;
     private readonly ContactTriggerHandler _triggerScript = new();
+    private int _count = 1;
 
     public RobotBuilder(IGame game, MaterialManager materialManager)
     {
@@ -29,7 +30,7 @@ public class RobotBuilder
             var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube,
                 new()
                 {
-                    EntityName = $"Entity - {countDto.Type}",
+                    EntityName = $"Entity {_count++} - {countDto.Type}",
                     Material = _materialManager.GetMaterial(countDto.Type),
                     Size = countDto.Type == EntityType.Destroyer ? new(0.5f, 0.5f, 0.5f) : new(1, 1, 1)
                 });

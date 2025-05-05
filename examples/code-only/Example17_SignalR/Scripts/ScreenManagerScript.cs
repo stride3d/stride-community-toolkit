@@ -2,6 +2,7 @@ using Example17_SignalR.Core;
 using Example17_SignalR.Services;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
+using Microsoft.AspNetCore.SignalR.Client;
 using Stride.Engine;
 using Stride.Engine.Events;
 using Stride.Input;
@@ -12,19 +13,21 @@ namespace Example17_SignalR.Scripts;
 public class ScreenManagerScript : AsyncScript
 {
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
+    private readonly ConcurrentQueue<CountDto> _removeRequestQueue = new();
     private RobotBuilder? _primitiveBuilder;
     private MessagePrinter? _messagePrinter;
+    private ScreenService? _screenService;
     private bool _isCreatingPrimitives;
 
     public override async Task Execute()
     {
-        var screenService = Services.GetService<ScreenService>();
+        _screenService = Services.GetService<ScreenService>();
 
-        if (screenService == null) return;
+        if (_screenService == null) return;
 
         try
         {
-            await screenService.Connection.StartAsync();
+            await _screenService.Connection.StartAsync();
         }
         catch (Exception ex)
         {
@@ -38,6 +41,7 @@ public class ScreenManagerScript : AsyncScript
 
         var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
         var messageReceiver = new EventReceiver<MessageDto>(GlobalEvents.MessageReceivedEventKey);
+        var removeRequestReceiver = new EventReceiver<CountDto>(GlobalEvents.RemoveRequestEventKey);
 
         while (Game.IsRunning)
         {
@@ -54,6 +58,13 @@ public class ScreenManagerScript : AsyncScript
                 QueuePrimitiveCreation(countDto);
             }
 
+            if (removeRequestReceiver.TryReceive(out var countDto2))
+            {
+                Console.WriteLine($"Broadcast received");
+
+                QueueRemoveRequest(countDto2);
+            }
+
             if (messageReceiver.TryReceive(out var messageDto))
             {
                 _messagePrinter.Enqueue(messageDto);
@@ -63,7 +74,8 @@ public class ScreenManagerScript : AsyncScript
 
             if (Input.IsMouseButtonPressed(MouseButton.Left))
             {
-                // ToDo: Destroy existing entities on collision
+                Console.WriteLine($"---------------------------------------------------------");
+
                 QueuePrimitiveCreation(new CountDto
                 {
                     Type = EntityType.Destroyer,
@@ -73,12 +85,17 @@ public class ScreenManagerScript : AsyncScript
 
             ProcessPrimitiveQueue();
 
+            await ProcessRemoveQueue();
+
             await Script.NextFrame();
         }
     }
 
     private void QueuePrimitiveCreation(CountDto countDto)
         => _primitiveCreationQueue.Enqueue(countDto);
+
+    private void QueueRemoveRequest(CountDto countDto)
+        => _removeRequestQueue.Enqueue(countDto);
 
     private void ProcessPrimitiveQueue()
     {
@@ -93,6 +110,16 @@ public class ScreenManagerScript : AsyncScript
             _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
 
             _isCreatingPrimitives = false;
+        }
+    }
+
+    private async Task ProcessRemoveQueue()
+    {
+        if (_removeRequestQueue.TryDequeue(out CountDto? nextRemoveRequest))
+        {
+            if (nextRemoveRequest == null) return;
+
+            await _screenService!.Connection.SendAsync("SendUnitsRemoved", nextRemoveRequest);
         }
     }
 }
