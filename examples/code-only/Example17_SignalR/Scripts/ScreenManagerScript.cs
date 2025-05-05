@@ -2,47 +2,50 @@ using Example17_SignalR.Core;
 using Example17_SignalR.Services;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
-using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Helpers;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Microsoft.AspNetCore.SignalR.Client;
 using Stride.Engine;
 using Stride.Engine.Events;
-using Stride.Rendering;
+using Stride.Input;
+using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Scripts;
 
 public class ScreenManagerScript : AsyncScript
 {
-    private readonly Dictionary<EntityType, Material> _materials = [];
-    private MaterialBuilder? _materialBuilder;
-    private readonly FixedSizeQueue _messageQueue = new(10);
+    private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
+    private readonly ConcurrentQueue<CountDto> _removeRequestQueue = new();
+    private RobotBuilder? _primitiveBuilder;
+    private MessagePrinter? _messagePrinter;
+    private ScreenService? _screenService;
+    private bool _isCreatingPrimitives;
 
     public override async Task Execute()
     {
-        var screenService = Services.GetService<ScreenService>();
+        _screenService = Services.GetService<ScreenService>();
 
-        if (screenService == null) return;
-
-        _materialBuilder = new MaterialBuilder(Game.GraphicsDevice);
-
-        AddMaterials();
+        if (_screenService == null) return;
 
         try
         {
-            await screenService.Connection.StartAsync();
+            await _screenService.Connection.StartAsync();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error starting connection: {ex.Message}");
         }
 
-        var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
+        var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
+        _primitiveBuilder = new RobotBuilder(Game, materialManager);
 
+        _messagePrinter = new MessagePrinter(DebugText);
+
+        var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
         var messageReceiver = new EventReceiver<MessageDto>(GlobalEvents.MessageReceivedEventKey);
+        var removeRequestReceiver = new EventReceiver<CountDto>(GlobalEvents.RemoveRequestEventKey);
 
         while (Game.IsRunning)
         {
-            // This example will be waitig for the event to be received
+            // This example will be waiting for the event to be received
             // the rest of the code will be executed when the event is received
             //var result = await countReceiver.ReceiveAsync();
             //var formattedMessage = $"From Script: {result.Type}: {result.Count}";
@@ -52,65 +55,71 @@ public class ScreenManagerScript : AsyncScript
             // the rest of the code will be executed every frame
             if (countReceiver.TryReceive(out var countDto))
             {
-                CreatePrimitives(countDto);
+                QueuePrimitiveCreation(countDto);
+            }
+
+            if (removeRequestReceiver.TryReceive(out var countDto2))
+            {
+                Console.WriteLine($"Broadcast received");
+
+                QueueRemoveRequest(countDto2);
             }
 
             if (messageReceiver.TryReceive(out var messageDto))
             {
-                _messageQueue.Enqueue(messageDto);
+                _messagePrinter.Enqueue(messageDto);
             }
 
-            PrintMessage();
+            _messagePrinter.PrintMessage();
+
+            if (Input.IsMouseButtonPressed(MouseButton.Left))
+            {
+                Console.WriteLine($"---------------------------------------------------------");
+
+                QueuePrimitiveCreation(new CountDto
+                {
+                    Type = EntityType.Destroyer,
+                    Count = 10,
+                });
+            }
+
+            ProcessPrimitiveQueue();
+
+            await ProcessRemoveQueue();
 
             await Script.NextFrame();
         }
     }
 
-    private void CreatePrimitives(CountDto countDto)
+    private void QueuePrimitiveCreation(CountDto countDto)
+        => _primitiveCreationQueue.Enqueue(countDto);
+
+    private void QueueRemoveRequest(CountDto countDto)
+        => _removeRequestQueue.Enqueue(countDto);
+
+    private void ProcessPrimitiveQueue()
     {
-        var formattedMessage = $"From Script: {countDto.Type}: {countDto.Count}";
+        if (_isCreatingPrimitives) return;
 
-        Console.WriteLine(formattedMessage);
-
-        for (var i = 0; i < countDto.Count; i++)
+        if (_primitiveCreationQueue.TryDequeue(out CountDto? nextBatch))
         {
-            var entity = Game.Create3DPrimitive(PrimitiveModelType.Cube,
-                new()
-                {
-                    EntityName = $"Entity",
-                    Material = _materials[countDto.Type],
-                });
+            if (nextBatch == null) return;
 
-            entity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [5, 10], [-5, 5]);
-            entity.Scene = Entity.Scene;
+            _isCreatingPrimitives = true;
+
+            _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
+
+            _isCreatingPrimitives = false;
         }
     }
 
-    private void PrintMessage()
+    private async Task ProcessRemoveQueue()
     {
-        if (_messageQueue.Count == 0) return;
-
-        var messages = _messageQueue.AsSpan();
-
-        for (int i = 0; i < messages.Length; i++)
+        if (_removeRequestQueue.TryDequeue(out CountDto? nextRemoveRequest))
         {
-            var message = messages[i];
+            if (nextRemoveRequest == null) return;
 
-            if (message == null) continue;
-
-            DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
-        }
-    }
-
-    private void AddMaterials()
-    {
-        if (_materialBuilder == null) return;
-
-        foreach (var colorType in Colours.ColourTypes)
-        {
-            var material = _materialBuilder.CreateMaterial(colorType.Value);
-
-            _materials.Add(colorType.Key, material);
+            await _screenService!.Connection.SendAsync("SendUnitsRemoved", nextRemoveRequest);
         }
     }
 }

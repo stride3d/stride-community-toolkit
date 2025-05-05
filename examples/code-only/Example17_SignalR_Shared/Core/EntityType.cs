@@ -8,4 +8,5 @@ public enum EntityType
     Danger,
     Warning,
     Info,
+    Destroyer
 }

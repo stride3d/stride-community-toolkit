@@ -6,5 +6,5 @@ public interface IScreenClient
 {
     Task ReceiveMessageAsync(MessageDto dto);
     Task ReceiveCountAsync(CountDto dto);
-    Task ReceiveUnitsRemovedAsync(List<CountDto> units);
+    Task ReceiveUnitsRemovedAsync(CountDto units);
 }

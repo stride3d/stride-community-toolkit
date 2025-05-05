@@ -69,6 +69,8 @@ public partial class Home(NavigationManager navigation) : IAsyncDisposable
                 Type = dto.Type
             });
 
+            _totalEntitiesRemoved += dto.Count;
+
             InvokeAsync(StateHasChanged);
         });
 

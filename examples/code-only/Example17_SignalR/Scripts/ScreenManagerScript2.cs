@@ -3,25 +3,26 @@ using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
 using Example17_SignalR_Shared.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
-using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Helpers;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
 using Stride.Input;
-using Stride.Rendering;
+using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Scripts;
 
 public class ScreenManagerScript2 : AsyncScript
 {
-    private readonly Dictionary<EntityType, Material> _materials = [];
-    private MaterialBuilder? _materialBuilder;
+    private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
     private HubConnection? _connection;
-    private readonly FixedSizeQueue _messageQueue = new(10);
+    private RobotBuilder? _primitiveBuilder;
+    private MessagePrinter? _messagePrinter;
+    private bool _isCreatingPrimitives;
 
     public override async Task Execute()
     {
-        //var screenService = Services.GetService<ScreenService>();
+        var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
+        _primitiveBuilder = new RobotBuilder(Game, materialManager);
+
+        _messagePrinter = new MessagePrinter(DebugText);
 
         _connection = new HubConnectionBuilder()
               .WithUrl("https://localhost:44369/screen1")
@@ -35,7 +36,7 @@ public class ScreenManagerScript2 : AsyncScript
 
         _connection.On<MessageDto>(nameof(IScreenClient.ReceiveMessageAsync), (dto) =>
         {
-            _messageQueue.Enqueue(dto);
+            _messagePrinter.Enqueue(dto);
 
             var encodedMsg = $"From Hub: {dto.Type}: {dto.Text}";
 
@@ -44,16 +45,12 @@ public class ScreenManagerScript2 : AsyncScript
 
         _connection.On<CountDto>(nameof(IScreenClient.ReceiveCountAsync), (dto) =>
         {
-            CreatePrimitives(dto);
+            QueuePrimitiveCreation(dto);
 
             var encodedMsg = $"From Hub: {dto.Type}: {dto.Count}";
 
             Console.WriteLine(encodedMsg);
         });
-
-        _materialBuilder = new MaterialBuilder(Game.GraphicsDevice);
-
-        AddMaterials();
 
         try
         {
@@ -66,66 +63,39 @@ public class ScreenManagerScript2 : AsyncScript
 
         while (Game.IsRunning)
         {
-            PrintMessage();
+            _messagePrinter.PrintMessage();
 
             if (Input.IsMouseButtonPressed(MouseButton.Left))
             {
-                CreatePrimitives(new CountDto
+                QueuePrimitiveCreation(new CountDto
                 {
-                    Type = EntityType.Primary,
+                    Type = EntityType.Destroyer,
                     Count = 10,
                 });
             }
+
+            ProcessPrimitiveQueue();
 
             await Script.NextFrame();
         }
     }
 
-    private void CreatePrimitives(CountDto countDto)
+    private void QueuePrimitiveCreation(CountDto countDto)
+        => _primitiveCreationQueue.Enqueue(countDto);
+
+    private void ProcessPrimitiveQueue()
     {
-        var formattedMessage = $"From Script: {countDto.Type}: {countDto.Count}";
+        if (_isCreatingPrimitives) return;
 
-        Console.WriteLine(formattedMessage);
-
-        for (var i = 0; i < countDto.Count; i++)
+        if (_primitiveCreationQueue.TryDequeue(out CountDto? nextBatch))
         {
-            var entity = Game.Create3DPrimitive(PrimitiveModelType.Cube,
-                new()
-                {
-                    EntityName = $"Entity",
-                    Material = _materials[countDto.Type],
-                });
+            if (nextBatch == null) return;
 
-            entity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [5, 10], [-5, 5]);
-            entity.Scene = Entity.Scene;
-        }
-    }
+            _isCreatingPrimitives = true;
 
-    private void PrintMessage()
-    {
-        if (_messageQueue.Count == 0) return;
+            _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
 
-        var messages = _messageQueue.AsSpan();
-
-        for (int i = 0; i < messages.Length; i++)
-        {
-            var message = messages[i];
-
-            if (message == null) continue;
-
-            DebugText.Print(message.Text, new(5, 30 + i * 18), Colours.ColourTypes[message.Type]);
-        }
-    }
-
-    private void AddMaterials()
-    {
-        if (_materialBuilder == null) return;
-
-        foreach (var colorType in Colours.ColourTypes)
-        {
-            var material = _materialBuilder.CreateMaterial(colorType.Value);
-
-            _materials.Add(colorType.Key, material);
+            _isCreatingPrimitives = false;
         }
     }
 }
