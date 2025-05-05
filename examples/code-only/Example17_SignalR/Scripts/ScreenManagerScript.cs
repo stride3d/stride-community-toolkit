@@ -12,7 +12,7 @@ namespace Example17_SignalR.Scripts;
 public class ScreenManagerScript : AsyncScript
 {
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
-    private PrimitiveBuilder? _primitiveBuilder;
+    private RobotBuilder? _primitiveBuilder;
     private MessagePrinter? _messagePrinter;
     private bool _isCreatingPrimitives;
 
@@ -32,7 +32,7 @@ public class ScreenManagerScript : AsyncScript
         }
 
         var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
-        _primitiveBuilder = new PrimitiveBuilder(Game, materialManager);
+        _primitiveBuilder = new RobotBuilder(Game, materialManager);
 
         _messagePrinter = new MessagePrinter(DebugText);
 

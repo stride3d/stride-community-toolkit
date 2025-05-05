@@ -13,14 +13,14 @@ public class ScreenManagerScript2 : AsyncScript
 {
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
     private HubConnection? _connection;
-    private PrimitiveBuilder? _primitiveBuilder;
+    private RobotBuilder? _primitiveBuilder;
     private MessagePrinter? _messagePrinter;
     private bool _isCreatingPrimitives;
 
     public override async Task Execute()
     {
         var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
-        _primitiveBuilder = new PrimitiveBuilder(Game, materialManager);
+        _primitiveBuilder = new RobotBuilder(Game, materialManager);
 
         _messagePrinter = new MessagePrinter(DebugText);
 
