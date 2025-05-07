@@ -58,10 +58,9 @@ public class RaycastInteractionScript : AsyncScript
     {
         var hit = cameraComponent.RaycastMouse(this, 100, out var hitInfo);
 
-        if (hit)
-        {
-            OnEntityHit(hitInfo.Collidable.Entity);
-        }
+        if (!hit) return;
+
+        OnEntityHit(hitInfo.Collidable.Entity);
     }
 
     private void OnEntityHit(Entity entity)
@@ -78,9 +77,9 @@ public class RaycastInteractionScript : AsyncScript
 
             var cubesToRemove = GetCubesToRemove(entity, cubeComponent.Color);
 
-            Console.WriteLine($"Cubes to remove: {cubesToRemove.Count()}");
+            Console.WriteLine($"Cubes to remove: {cubesToRemove.Count}");
 
-            var score = CalculateScore(cubesToRemove.Count()).Result;
+            var score = CalculateScore(cubesToRemove.Count).Result;
 
             _totalScore += score;
 
@@ -89,33 +88,33 @@ public class RaycastInteractionScript : AsyncScript
                 _scoreComponent.Text = $"{Constants.TotalScore}: {_totalScore:N0}";
             }
 
-            Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count()).Calculations}, Total Score: {_totalScore - score} + {score}");
+            Console.WriteLine($"Score: {CalculateScore(cubesToRemove.Count).Calculations}, Total Score: {_totalScore - score} + {score}");
 
             foreach (var cube in cubesToRemove)
             {
                 cube.Remove();
             }
 
-            AddDisplayScoreEntity(entity.Transform.Position, score);
+            AddDisplayScoreEntity(entity.Transform.Position, score, cubesToRemove.Count);
 
             entity.Remove();
         }
     }
 
-    private void AddDisplayScoreEntity(Vector3 position, int score)
+    private void AddDisplayScoreEntity(Vector3 position, int score, int boxes)
     {
         var fontSize = score > 10000 ? 24 : 18;
 
         var entity = new Entity("DisplayScore", position)
         {
-            new EntityTextComponent() { Text = score.ToString(), FontSize = fontSize },
+            new EntityTextComponent() { Text = $"{score} ({boxes} box{(boxes == 1 ? "" : "es")})", FontSize = fontSize },
             new ScoreScript()
         };
 
         entity.Scene = SceneSystem.SceneInstance.RootScene;
     }
 
-    private static IEnumerable<Entity> GetCubesToRemove(Entity entity, Color color)
+    private static HashSet<Entity> GetCubesToRemove(Entity entity, Color color)
     {
         var processedCubes = new HashSet<Entity>();
         var cubesToCheck = new Queue<Entity>();
