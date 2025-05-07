@@ -25,6 +25,7 @@ namespace Example_CubicleCalamity;
 public class CubeStacker
 {
     private const int Seed = 1;
+    private Vector3 _startPosition = new(-4, 1, -4);
 
     private readonly Game _game;
     private readonly Random _random = new(Seed);
@@ -61,7 +62,7 @@ public class CubeStacker
         //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
         AddAllDirectionLighting(intensity: 5f);
-        AddNewFirstLayer(0.5f);
+        AddNewFirstLayer(_startPosition);
         AddFirstLayer(0.5f);
         AddGameManagerEntity();
         AddTotalScoreEntity();
@@ -128,6 +129,8 @@ public class CubeStacker
                 if (cube.Name != "Cube") continue;
 
                 var body = cube.Get<BodyComponent>();
+
+                if (body == null) continue;
 
                 body.Kinematic = false;
             }
@@ -252,8 +255,17 @@ public class CubeStacker
 
     }
 
-    private void AddNewFirstLayer(float y)
+    private void AddNewFirstLayer(Vector3 startPosition)
     {
+        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        {
+            EntityName = "Cube1",
+            Material = _materials[Constants.Colours[0]],
+            IncludeCollider = false,
+            Size = Constants.CubeSize
+        });
+        cube.Transform.Position = startPosition;
+        cube.Scene = _scene;
         //var entities = CreateCubeLayer(y, scene);
         //AddColliders(entities);
     }
