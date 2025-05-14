@@ -187,10 +187,10 @@ void InitializeEntities(Scene scene)
     CreateReferenceCube(scene);
     CreateReferenceCapsule(scene);
 
-    CreateDistanceLimintConstraintExamples(scene);
+    CreateDistanceLimitConstraintExamples(scene);
     CreateDistanceServoConstraintExamples(scene);
     CreateBallSocketConstraintExample(scene);
-    CreatePointOnLineServoConstraintExample2(scene);
+    CreatePointOnLineServoConstraintExample(scene);
 }
 
 void CreateReferenceCube(Scene scene)
@@ -224,7 +224,7 @@ void CreateReferenceCapsule(Scene scene)
     referenceCapsule.Scene = scene;
 }
 
-void CreateDistanceLimintConstraintExamples(Scene scene)
+void CreateDistanceLimitConstraintExamples(Scene scene)
 {
     // Create the draggable sphere with a golden material
     // Initially, the sphere is not kinematic. It will become kinematic while dragging
@@ -332,13 +332,13 @@ void CreateBallSocketConstraintExample(Scene scene)
     bodies.AddRange([foundationBody, platformBody]);
 }
 
-void CreatePointOnLineServoConstraintExample2(Scene scene)
+void CreatePointOnLineServoConstraintExample(Scene scene)
 {
     // Create two separate line entities for better control of each stack
 
     var lineSize = new Vector3(0.1f, 10, 0.1f);
     var lineOffset = new Vector3(-4, 5f, 0);
-    var libeBOffset = new Vector3(0, 0, -1);
+    var lineBOffset = new Vector3(0, 0, -1);
 
     var lineAPosition = lineOffset;
     var lineEntityA = CreateCubeEntity("LineA", Color.Gold, lineAPosition, lineSize);
@@ -348,7 +348,7 @@ void CreatePointOnLineServoConstraintExample2(Scene scene)
     lineBodyA.CollisionLayer = CollisionLayer.Layer1;
     lineEntityA.Scene = scene;
 
-    var lineBPosition = lineOffset + libeBOffset;
+    var lineBPosition = lineOffset + lineBOffset;
     var lineEntityB = CreateCubeEntity("LineB", Color.Gold, lineBPosition, lineSize);
 
     var lineBodyB = lineEntityB.Get<BodyComponent>();
@@ -375,7 +375,7 @@ void CreatePointOnLineServoConstraintExample2(Scene scene)
         cubeEntitySetA.Scene = scene;
 
         // Second stack (SetB)
-        var cubePositionB = lineOffset + libeBOffset + new Vector3(0, i * 2, 0);
+        var cubePositionB = lineOffset + lineBOffset + new Vector3(0, i * 2, 0);
         var cubeEntitySetB = CreateCubeEntity("CubeStackB", Color.DarkRed, cubePositionB, cubeSize);
         var cubeBodySetB = SetupCubeBody(cubeEntitySetB);
 

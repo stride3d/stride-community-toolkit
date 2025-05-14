@@ -24,14 +24,17 @@ namespace Example_CubicleCalamity;
 
 public class CubeStacker
 {
-    private readonly Game _game;
-    private readonly Dictionary<Color, Material> _materials = [];
     private const int Seed = 1;
+    private Vector3 _startPosition = new(-4, 1, -4);
+
+    private readonly Game _game;
     private readonly Random _random = new(Seed);
+    private readonly Dictionary<Color, Material> _materials = [];
     private double _elapsedTime;
     private int _layer = 1;
-    private BepuSimulation? _simulation;
     private bool _layersCreated;
+    private BepuSimulation? _simulation;
+    private Scene? _scene;
 
     public CubeStacker(Game game) => _game = game;
 
@@ -49,6 +52,7 @@ public class CubeStacker
         _game.AddDirectionalLight();
         _game.Add3DGround();
         _game.AddProfiler();
+        _scene = scene;
 
         AddMaterials();
         AddGizmo(scene);
@@ -57,12 +61,13 @@ public class CubeStacker
         //var gizmoEntity = _translationGizmo.Create(scene);
         //gizmoEntity.Transform.Position = new Vector3(-10, 0, 0);
 
-        AddAllDirectionLighting(scene, intensity: 5f);
-        AddFirstLayer(scene, 0.5f);
-        AddGameManagerEntity(scene);
-        AddTotalScoreEntity(scene);
+        AddAllDirectionLighting(intensity: 5f);
+        AddNewFirstLayer(_startPosition);
+        AddFirstLayer(0.5f);
+        AddGameManagerEntity();
+        AddTotalScoreEntity();
 
-        var camera = scene.GetCamera();
+        var camera = _scene.GetCamera();
         camera?.Entity.Add(new CameraRotationScript());
         //_simulation = camera?.Entity.GetSimulation().Simulation;
     }
@@ -75,16 +80,16 @@ public class CubeStacker
         entity.Scene = scene;
     }
 
-    private static void AddGameManagerEntity(Scene scene)
+    private void AddGameManagerEntity()
     {
         var entity = new Entity("GameManager")
         {
             new RaycastInteractionScript()
         };
-        entity.Scene = scene;
+        entity.Scene = _scene;
     }
 
-    private static void AddTotalScoreEntity(Scene scene)
+    private void AddTotalScoreEntity()
     {
         var entity = new Entity(Constants.TotalScore)
         {
@@ -97,7 +102,7 @@ public class CubeStacker
             }
         };
 
-        entity.Scene = scene;
+        entity.Scene = _scene;
     }
 
     public void Update(Scene scene, GameTime time)
@@ -108,7 +113,7 @@ public class CubeStacker
         {
             _elapsedTime = 0;
 
-            var entities = CreateCubeLayer(_layer + 0.5f, scene);
+            var entities = CreateCubeLayer(_layer + 0.5f);
 
             //AddColliders(entities);
 
@@ -124,6 +129,8 @@ public class CubeStacker
                 if (cube.Name != "Cube") continue;
 
                 var body = cube.Get<BodyComponent>();
+
+                if (body == null) continue;
 
                 body.Kinematic = false;
             }
@@ -248,27 +255,43 @@ public class CubeStacker
 
     }
 
-    private void AddFirstLayer(Scene scene, float y)
+    private void AddNewFirstLayer(Vector3 startPosition)
     {
-        var entities = CreateCubeLayer(y, scene);
+        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        {
+            EntityName = "Cube1",
+            Material = _materials[Constants.Colours[0]],
+            IncludeCollider = false,
+            Size = Constants.CubeSize
+        });
+        cube.Transform.Position = startPosition;
+        cube.Scene = _scene;
+        //var entities = CreateCubeLayer(y, scene);
+        //AddColliders(entities);
+    }
+
+    private void AddFirstLayer(float y)
+    {
+        var entities = CreateCubeLayer(y);
 
         //AddColliders(entities);
     }
 
-    private List<Entity> CreateCubeLayer(float y, Scene scene)
+    private List<Entity> CreateCubeLayer(float y)
     {
         var entities = new List<Entity>();
 
         for (var x = 0; x < Constants.Rows; x++)
+        {
             for (var z = 0; z < Constants.Rows; z++)
             {
-                var entity = CreateCube(_game, Constants.CubeSize);
+                var entity = CreateCube(Constants.CubeSize);
 
                 entity.Transform.Position = new Vector3(x, y, z) * Constants.CubeSize;
 
                 AddCollider(entity);
 
-                entity.Scene = scene;
+                entity.Scene = _scene;
 
                 //entity.AddGizmo(_game.GraphicsDevice);
 
@@ -276,6 +299,7 @@ public class CubeStacker
 
                 entities.Add(entity);
             }
+        }
 
         return entities;
     }
@@ -501,11 +525,11 @@ public class CubeStacker
         //body.AngularFactor = Vector3.Zero; // Restrict angular rotation on all axes
     }
 
-    private Entity CreateCube(Game game, Vector3 size)
+    private Entity CreateCube(Vector3 size)
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
         {
             EntityName = "Cube",
             Material = _materials[color],
@@ -518,7 +542,7 @@ public class CubeStacker
         return entity;
     }
 
-    public void AddAllDirectionLighting(Scene scene, float intensity, bool showLightGizmo = true)
+    public void AddAllDirectionLighting(float intensity, bool showLightGizmo = true)
     {
         var position = new Vector3(7f, 2f, 0);
 
@@ -546,7 +570,7 @@ public class CubeStacker
 
             entity.Transform.Position = position;
             entity.Transform.Rotation = rotation ?? Quaternion.Identity;
-            entity.Scene = scene;
+            entity.Scene = _scene;
 
             if (showLightGizmo)
                 entity.AddLightDirectionalGizmo(_game.GraphicsDevice);
