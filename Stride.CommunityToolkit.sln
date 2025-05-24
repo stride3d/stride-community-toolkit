@@ -116,6 +116,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example17_SignalR_Blazor", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example17_SignalR_Shared", "examples\code-only\Example17_SignalR_Shared\Example17_SignalR_Shared.csproj", "{88EFA4B1-DEA9-4953-87E5-EBD6387ED706}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example18_Box2DPhysics", "examples\code-only\Example18_Box2DPhysics\Example18_Box2DPhysics.csproj", "{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -317,6 +319,10 @@ Global
 		{88EFA4B1-DEA9-4953-87E5-EBD6387ED706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88EFA4B1-DEA9-4953-87E5-EBD6387ED706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88EFA4B1-DEA9-4953-87E5-EBD6387ED706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -361,6 +367,7 @@ Global
 		{029077B8-B451-4528-9023-3A8537606B98} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{F247EC4E-DB2C-4109-B592-1991B58873CC} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{88EFA4B1-DEA9-4953-87E5-EBD6387ED706} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
