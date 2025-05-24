@@ -4,6 +4,7 @@ using Example_CubicleCalamity.Shared;
 using Example_CubicleCalamity_BulletPhysics;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -233,11 +234,10 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
         {
             EntityName = "Cube",
             Material = _materials[color],
-            IncludeCollider = false,
             Size = size
         });
 

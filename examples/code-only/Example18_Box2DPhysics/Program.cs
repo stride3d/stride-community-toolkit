@@ -1,6 +1,7 @@
 using Box2D.NET;
-using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
+using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -29,11 +30,15 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
+    //game.SetupBase3DScene();
+    game.AddGraphicsCompositor().AddCleanUIStage();
+    game.Add3DCamera().Add3DCameraController();
+    game.AddDirectionalLight();
+
     game.AddSkybox();
     game.AddProfiler();
 
-    boxEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, options: new() { IncludeCollider = false });
+    boxEntity = game.Create3DPrimitive(PrimitiveModelType.Cube);
 
     boxEntity.Transform.Position = new Vector3(0, 4, 0);
 

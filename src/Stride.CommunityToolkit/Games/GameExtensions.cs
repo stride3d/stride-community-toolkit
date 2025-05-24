@@ -1,3 +1,6 @@
+using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.Engine;
 using Stride.Games;
 
 namespace Stride.CommunityToolkit.Games;
@@ -10,6 +13,42 @@ namespace Stride.CommunityToolkit.Games;
 /// </remarks>
 public static class GameExtensions
 {
+    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
+    {
+        options ??= new();
+
+        var modelBase = Procedural3DModelBuilder.Build(type, options.Size);
+
+        var model = modelBase.Generate(game.Services);
+
+        if (options.Material != null)
+        {
+            model.Materials.Add(options.Material);
+        }
+
+        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        return entity;
+    }
+
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
+    {
+        options ??= new();
+
+        var modelBase = Procedural2DModelBuilder.Build(type, options.Size);
+
+        var model = modelBase.Generate(game.Services);
+
+        if (options.Material != null)
+        {
+            model.Materials.Add(options.Material);
+        }
+
+        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        return entity;
+    }
+
     /// <summary>
     /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
     /// </summary>

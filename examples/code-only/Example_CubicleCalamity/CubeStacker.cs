@@ -7,6 +7,7 @@ using Stride.BepuPhysics.Constraints;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Graphics;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -257,11 +258,10 @@ public class CubeStacker
 
     private void AddNewFirstLayer(Vector3 startPosition)
     {
-        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
         {
             EntityName = "Cube1",
             Material = _materials[Constants.Colours[0]],
-            IncludeCollider = false,
             Size = Constants.CubeSize
         });
         cube.Transform.Position = startPosition;
@@ -529,11 +529,10 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
         {
             EntityName = "Cube",
             Material = _materials[color],
-            IncludeCollider = false,
             Size = size
         });
 

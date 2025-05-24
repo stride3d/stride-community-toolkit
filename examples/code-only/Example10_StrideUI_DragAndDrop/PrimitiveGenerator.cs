@@ -58,7 +58,7 @@ public class PrimitiveGenerator
     {
         var selectedColor = color ?? _random.NextColor();
 
-        var entity = _game.Create3DPrimitive(modelType, new Primitive3DCreationOptions
+        var entity = _game.Create3DPrimitive(modelType, new Bepu3DPhysicsOptions
         {
             Material = _game.CreateMaterial(selectedColor),
             Size = new Vector3(0.3f)
