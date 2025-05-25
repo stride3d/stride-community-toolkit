@@ -35,7 +35,7 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var modelBase = Procedural2DModelBuilder.Build(type, options.Size);
+        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
 
         var model = modelBase.Generate(game.Services);
 
