@@ -251,7 +251,7 @@ public static class GameExtensions
     /// This method creates six directional lights positioned around a central point, each aiming from a unique angle to simulate uniform lighting from all directions.
     /// The lights are added at predefined positions and rotations to cover the scene evenly.
     /// </remarks>
-    public static void AddAllDirectionLighting(this Game game, float intensity, bool showLightGizmo = true)
+    public static void AddAllDirectionLighting(this Game game, float intensity = 5, bool showLightGizmo = true)
     {
         var position = new Vector3(7f, 2f, 0);
 
