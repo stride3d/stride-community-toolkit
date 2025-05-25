@@ -6,7 +6,6 @@ using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -17,8 +16,8 @@ using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
 
-const float Depth = 1;
-const string ShapeName = "BepuCube";
+const float Depth = 0.05f;
+const string ShapeName = "Box2DCube";
 
 var boxSize = new Vector3(0.2f, 0.2f, Depth);
 var rectangleSize = new Vector3(0.2f, 0.3f, Depth);
@@ -33,12 +32,12 @@ List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
 ];
 
-List<Shape3DModel> _3DShapes = [
-    new() { Type = PrimitiveModelType.Cube, Color = Color.Green, Size = boxSize },
-    new() { Type = PrimitiveModelType.RectangularPrism, Color = Color.Orange, Size = rectangleSize },
-    new() { Type = PrimitiveModelType.Cylinder, Color = Color.Red, Size = boxSize },
-    new() { Type = PrimitiveModelType.TriangularPrism, Color = Color.Purple, Size = boxSize }
-];
+//List<Shape3DModel> _3DShapes = [
+//    new() { Type = PrimitiveModelType.Cube, Color = Color.Green, Size = boxSize },
+//    new() { Type = PrimitiveModelType.RectangularPrism, Color = Color.Orange, Size = rectangleSize },
+//    new() { Type = PrimitiveModelType.Cylinder, Color = Color.Red, Size = boxSize },
+//    new() { Type = PrimitiveModelType.TriangularPrism, Color = Color.Purple, Size = boxSize }
+//];
 
 Box2DSimulation? box2DSimulation = null;
 
@@ -50,11 +49,12 @@ void Start(Scene rootScene)
 {
     //game.SetupBase3DScene();
     game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add2DCamera().Add2DCameraController();
-    game.AddDirectionalLight();
-
-    game.AddSkybox();
+    game.Add3DCamera().Add3DCameraController();
+    //game.Add2DCamera().Add2DCameraController();
+    //game.AddDirectionalLight();
+    //game.AddSkybox();
     game.AddProfiler();
+    game.AddAllDirectionLighting(intensity: 4);
 
     box2DSimulation = new Box2DSimulation();
 
@@ -111,7 +111,7 @@ void Update(Scene scene, GameTime gameTime)
     }
     else if (game.Input.IsKeyReleased(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").ToList())
+        foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").ToList())
         {
             entity.Remove();
         }
@@ -141,6 +141,7 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
             new()
             {
                 Size = shapeModel.Size,
+                Depth = Depth,
                 Material = game.CreateMaterial(shapeModel.Color)
             });
 
@@ -159,6 +160,7 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
             var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
             b2CreatePolygonShape(bodyId2, ref shapeDef, ref box);
         }
+
         //else if (shapeModel.Type == Primitive2DModelType.Circle)
         //{
         //    var circle = b2MakeCircle(shapeModel.Size.X / 2);
@@ -172,18 +174,19 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
     }
 }
 
-void AddBoxEntityWithPhysics(Scene rootScene)
+void AddBoxEntityWithPhysics(Scene scene)
 {
     for (int i = 0; i < 50; i++)
     {
-        var boxEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions { Size = boxSize });
+        var boxEntity = game.Create2DPrimitive(Primitive2DModelType.Square, new Primitive2DCreationOptions { Size = boxSize.XY(), Depth = Depth });
         boxEntity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [10, 20], [0, 0]);
-        boxEntity.Scene = rootScene;
-        // Register with physics simulation
+        boxEntity.Scene = scene;
+        boxEntity.Name = ShapeName;
+
         var bodyId2 = box2DSimulation.CreateDynamicBody(boxEntity, boxEntity.Transform.Position);
 
         // Create shape for the body
-        var dynamicBox = b2MakeBox(boxSize.X, boxSize.Y);
+        var dynamicBox = b2MakeBox(boxSize.X / 2, boxSize.Y / 2);
         var shapeDef = b2DefaultShapeDef();
         shapeDef.density = 1.0f;
         shapeDef.material.friction = 0.3f;
@@ -195,6 +198,8 @@ void AddBoxEntityWithPhysics(Scene rootScene)
         Console.WriteLine($"Initial Position: {position.X}, {position.Y}");
         Console.WriteLine($"Initial Rotation: {b2Rot_GetAngle(rotation)}, {rotation.c}, {rotation.s}");
     }
+
+    SetCubeCount(scene);
 }
 
 Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
@@ -209,7 +214,7 @@ Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
     return _2DShapes.Find(x => x.Type == type);
 }
 
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").Count();
+void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").Count();
 
 void RenderNavigation()
 {
