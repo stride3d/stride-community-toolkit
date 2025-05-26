@@ -8,7 +8,7 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
     /// <summary>
     /// Gets or sets the total height of the capsule (including the two semicircles).
     /// </summary>
-    public float Height { get; set; } = 1.0f;
+    public float TotalHeight { get; set; } = 1.0f;
 
     /// <summary>
     /// Gets or sets the radius of the capsule.
@@ -24,7 +24,7 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
 
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
     {
-        return New(Height, Radius, Tessellation, UvScale.X, UvScale.Y);
+        return New(TotalHeight, Radius, Tessellation, UvScale.X, UvScale.Y);
     }
 
     public static GeometricMeshData<VertexPositionNormalTexture> New(float height = 1.0f, float radius = 0.25f, int tessellation = 16, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
@@ -42,11 +42,14 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
 
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(float height = 1.0f, float radius = 0.25f, int tessellation = 16, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
+        // Force a minimum rectangle height to ensure rectangular part is visible
+        float actualHeight = Math.Max(height, radius * 3); // Ensure height is at least 3x radius
+
         // Cap the minimum tessellation to prevent issues
         tessellation = Math.Max(4, tessellation);
 
         // Calculate the rectangular part height (total height minus the two semicircle diameters)
-        float rectHeight = Math.Max(0, height - 2 * radius);
+        float rectHeight = Math.Max(0.1f, actualHeight - 2 * radius); // Ensure at least 0.1f height
 
         // Calculate total number of vertices and indices
         int vertexCount = (tessellation + 1) * 2 + 2; // Two semicircles plus two center points

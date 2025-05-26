@@ -28,7 +28,7 @@ public static class Procedural2DModelBuilder
     public static PrimitiveProceduralModelBase Build(Primitive2DModelType type, Vector2? size = null, float depth = 0)
         => type switch
         {
-            Primitive2DModelType.Capsule => size is null ? new CapsuleProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
+            Primitive2DModelType.Capsule => size is null ? new CapsuleProceduralModel() : new() { Radius = size.Value.X / 2, TotalHeight = size.Value.Y },
             Primitive2DModelType.Circle => new CylinderProceduralModel() { Radius = size is null ? 0.5f : size.Value.X, Height = depth },
             Primitive2DModelType.Circle2D => new CircleProceduralModel() { Radius = size is null ? 0.5f : size.Value.X },
             //Primitive2DModelType.Polygon => size is null ? new PolygonProceduralModel() : new() { Radius = size.Value.X, Sides = (int)size.Value.Y },

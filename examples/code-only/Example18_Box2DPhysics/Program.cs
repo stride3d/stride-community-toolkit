@@ -31,7 +31,7 @@ List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Rectangle2D, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle2D, Color = Color.Red, Size = (Vector2)boxSize / 2 },
     new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = (Vector2)boxSize },
-    new() { Type = Primitive2DModelType.Capsule, Color = Color.Blue, Size = (Vector2)boxSize }
+    new() { Type = Primitive2DModelType.Capsule, Color = Color.Blue, Size = new Vector2(boxSize.X, boxSize.Y * 2) }
 ];
 
 Box2DSimulation? box2DSimulation = null;
