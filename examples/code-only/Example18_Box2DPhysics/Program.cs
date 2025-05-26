@@ -41,6 +41,7 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
+    game.Window.AllowUserResizing = true;
     //game.SetupBase3DScene();
     //game.AddGraphicsCompositor().AddCleanUIStage();
     game.Setup2D(Color.CornflowerBlue);
