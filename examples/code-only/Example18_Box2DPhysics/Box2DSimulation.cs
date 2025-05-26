@@ -98,6 +98,11 @@ public class Box2DSimulation : IDisposable
         return _bodyToEntity.TryGetValue(bodyId, out var entity) ? entity : null;
     }
 
+    public List<B2BodyId> GetAllBodyIds()
+    {
+        return _bodyToEntity.Keys.ToList();
+    }
+
     public void Dispose()
     {
         if (_worldId.index1 != 0) // Check if world is valid

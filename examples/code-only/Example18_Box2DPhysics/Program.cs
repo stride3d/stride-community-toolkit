@@ -62,9 +62,11 @@ void Start(Scene rootScene)
     // Define the ground body.
     var groundBodyDef = b2DefaultBodyDef();
     groundBodyDef.position = new B2Vec2(0.0f, -10.0f);
+    groundBodyDef.name = "Ground";
+
     var groundId = b2CreateBody(worldId, ref groundBodyDef);
 
-    B2Polygon groundBox = b2MakeBox(50.0f, 10.0f);
+    B2Polygon groundBox = b2MakeBox(50.0f, 10);
 
     // Add the box shape to the ground body.
     B2ShapeDef groundShapeDef = b2DefaultShapeDef();
@@ -144,28 +146,187 @@ void ProcessMouseInput(Scene scene)
 {
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))
     {
+        // Get the ray segment from the camera through the mouse position
+        var camera = scene.GetCamera();
         var mousePosition = game.Input.MousePosition;
+        var raySegment = camera.ScreenToWorldRaySegment(mousePosition);
 
-        //var input = new B2RayCastInput(new B2Vec2(mousePosition.X, mousePosition.Y), new B2Vec2(mousePosition.X, mousePosition.Y), 1.0f);
+        // Ray: P = Start + t * (End - Start)
+        // Find t where P.Z == 0
+        var start = raySegment.Start;
+        var end = raySegment.End;
+        var dir = end - start;
 
-        B2RayResult result = b2World_CastRayClosest(worldId, new B2Vec2(mousePosition.X, mousePosition.Y), new B2Vec2(mousePosition.X, mousePosition.Y), b2DefaultQueryFilter());
-
-        if (result.hit)
+        if (Math.Abs(dir.Z) > 1e-6f) // Avoid division by zero
         {
-            var bodyId = b2Shape_GetBody(result.shapeId);
-            var entity = box2DSimulation?.GetEntity(bodyId);
+            float t = -start.Z / dir.Z;
+            // Clamp t to [0,1] to stay within the segment
+            t = Math.Clamp(t, 0, 1);
+            var intersection = start + t * dir;
 
-            Console.WriteLine($"Hit Body ID: {bodyId}");
+            // Create a small AABB around the clicked point
+            float querySize = 0.1f; // Half-extent of the AABB
+            var lower = new B2Vec2(intersection.X - querySize, intersection.Y - querySize);
+            var upper = new B2Vec2(intersection.X + querySize, intersection.Y + querySize);
+            var box = new B2AABB { lowerBound = lower, upperBound = upper };
 
-            if (entity != null)
+            // Store the result of the query
+            B2BodyId? hitBodyId = null;
+
+            // Function to be called for each shape that overlaps the AABB
+            bool QueryCallback(B2ShapeId shapeId, object userData)
             {
-                Console.WriteLine($"Hit Entity Name: {entity.Name}");
+                var bodyId = b2Shape_GetBody(shapeId);
+
+                // Optional: Only consider dynamic bodies
+                // var bodyType = b2Body_GetType(bodyId);
+                // if (bodyType != B2BodyType.b2_dynamicBody) return true;
+
+                // Test if the point is inside the shape
+                bool overlap = b2Shape_TestPoint(shapeId, new B2Vec2(intersection.X, intersection.Y));
+                if (overlap)
+                {
+                    hitBodyId = bodyId;
+                    return false; // Stop the query, we found what we're looking for
+                }
+
+                return true; // Continue the query
+            }
+
+            // Perform the overlap query
+            b2World_OverlapAABB(worldId, box, b2DefaultQueryFilter(), QueryCallback, null);
+
+            Console.WriteLine("-----------------");
+            if (hitBodyId.HasValue)
+            {
+                var bodyName = b2Body_GetName(hitBodyId.Value);
+                var entity = box2DSimulation?.GetEntity(hitBodyId.Value);
+
+                Console.WriteLine($"Mouse: {mousePosition}, worldPos: {intersection}, Body ID: {hitBodyId.Value}, name: {bodyName}, entity: {entity?.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"Mouse: {mousePosition}, worldPos: {intersection}, No hit detected.");
+
+                // Debug - print positions of a few bodies
+                int count = 0;
+
+                var bodyIds = box2DSimulation.GetAllBodyIds();
+
+                foreach (var bodyId in bodyIds)
+                {
+                    if (count < 3)
+                    {
+                        var pos = b2Body_GetPosition(bodyId);
+                        Console.WriteLine($"  Body at: ({pos.X}, {pos.Y})");
+                        count++;
+                    }
+                }
             }
         }
         else
         {
-            Console.WriteLine("No hit detected.");
+            Console.WriteLine("Ray is parallel to Z=0 plane.");
+        }
+    }
+}
 
+void ProcessMouseInput3(Scene scene)
+{
+    if (game.Input.IsMouseButtonPressed(MouseButton.Left))
+    {
+        // Get the ray segment from the camera through the mouse position
+        var camera = scene.GetCamera();
+        var mousePosition = game.Input.MousePosition;
+        var raySegment = camera.ScreenToWorldRaySegment(mousePosition);
+
+        // Ray: P = Start + t * (End - Start)
+        // Find t where P.Z == 0
+        var start = raySegment.Start;
+        var end = raySegment.End;
+        var dir = end - start;
+
+        if (Math.Abs(dir.Z) > 1e-6f) // Avoid division by zero
+        {
+            float t = -start.Z / dir.Z;
+            // Clamp t to [0,1] to stay within the segment
+            t = Math.Clamp(t, 0, 1);
+            var intersection = start + t * dir;
+
+            // Use only X and Y for Box2D
+            var rayStart = new B2Vec2(intersection.X, intersection.Y);
+            // Use a very short translation (point query)
+            var rayTranslation = new B2Vec2(0, 0.001f);
+
+            B2RayResult result = b2World_CastRayClosest(worldId, rayStart, rayTranslation, b2DefaultQueryFilter());
+
+            Console.WriteLine("-----------------");
+            if (result.hit)
+            {
+                var bodyId = b2Shape_GetBody(result.shapeId);
+                var bodyName = b2Body_GetName(bodyId);
+                var entity = box2DSimulation?.GetEntity(bodyId);
+
+                Console.WriteLine($"Mouse: {mousePosition}, worldPos: {intersection}, Body ID: {bodyId}, name: {bodyName}, entity: {entity?.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"Mouse: {mousePosition}, worldPos: {intersection}, No hit detected.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Ray is parallel to Z=0 plane.");
+        }
+    }
+}
+
+void ProcessMouseInput2(Scene scene)
+{
+    if (game.Input.IsMouseButtonPressed(MouseButton.Left))
+    {
+        var mousePosition = game.Input.MousePosition;
+
+        var camera = scene.GetCamera();
+        var ray = camera.GetPickRay(game.Input.MousePosition);
+        var worldPos = camera.ScreenToWorldPoint(new Vector3(mousePosition.X, mousePosition.Y, 0));
+
+        //var rayStart = new B2Vec2(ray.Position.X, ray.Position.Y);
+        //var rayDirection = new B2Vec2(ray.Direction.X, ray.Direction.Y);
+        //var rayEnd = new B2Vec2(ray.Position.X + 0.1f, ray.Position.Y + 0.1f);
+
+        //B2Vec2 rayTranslation = b2Sub(rayEnd, rayStart);
+
+        //B2RayResult result = b2World_CastRayClosest(worldId, rayStart, new B2Vec2(0, 0.001f), b2DefaultQueryFilter());
+
+        //var rayLength = 100f; // Adjust as needed for your scene scale
+        //var rayStart = new B2Vec2(ray.Position.X, ray.Position.Y);
+        //var rayDir = new B2Vec2(ray.Direction.X, ray.Direction.Y);
+        //var rayTranslation = new B2Vec2(rayDir.X * rayLength, rayDir.Y * rayLength);
+
+        //B2RayResult result = b2World_CastRayClosest(worldId, rayStart, rayTranslation, b2DefaultQueryFilter());
+
+        // Use only X and Y for Box2D
+        var rayStart = new B2Vec2(worldPos.X, worldPos.Y);
+
+        // Cast a very short ray in Y (or X) direction, or use a point query if available
+        var rayTranslation = new B2Vec2(0, 0.001f); // Very short ray
+
+        B2RayResult result = b2World_CastRayClosest(worldId, rayStart, rayTranslation, b2DefaultQueryFilter());
+
+        Console.WriteLine("-----------------");
+        if (result.hit)
+        {
+            var bodyId = b2Shape_GetBody(result.shapeId);
+            var bodyName = b2Body_GetName(bodyId);
+            var entity = box2DSimulation?.GetEntity(bodyId);
+
+
+            Console.WriteLine($"Mouse: {mousePosition}, worldPos: {worldPos}, Body ID: {bodyId}, name: {bodyName}, entity: {entity?.Name}");
+        }
+        else
+        {
+            Console.WriteLine($"Mouse: {mousePosition}, worldPos: {worldPos}, No hit detected.");
         }
     }
 }
@@ -188,7 +349,7 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
                 Material = game.CreateFlatMaterial(shapeModel.Color)
             });
 
-        entity.Name = $"{type}-{ShapeName}";
+        entity.Name = $"{shapeModel.Type}-{ShapeName}";
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
 
