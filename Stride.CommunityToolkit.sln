@@ -118,6 +118,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example17_SignalR_Shared", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example18_Box2DPhysics", "examples\code-only\Example18_Box2DPhysics\Example18_Box2DPhysics.csproj", "{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.NET", "..\Box2D.NET\src\Box2D.NET\Box2D.NET.csproj", "{62AC7FBF-CC36-EB46-7AEF-0B233DEDC946}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.NET.Samples", "..\Box2D.NET\src\Box2D.NET.Samples\Box2D.NET.Samples.csproj", "{2A1230FC-6547-51EB-2AEE-E536DFED5B2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.NET.Shared", "..\Box2D.NET\src\Box2D.NET.Shared\Box2D.NET.Shared.csproj", "{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -323,6 +329,18 @@ Global
 		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62AC7FBF-CC36-EB46-7AEF-0B233DEDC946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62AC7FBF-CC36-EB46-7AEF-0B233DEDC946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62AC7FBF-CC36-EB46-7AEF-0B233DEDC946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62AC7FBF-CC36-EB46-7AEF-0B233DEDC946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1230FC-6547-51EB-2AEE-E536DFED5B2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1230FC-6547-51EB-2AEE-E536DFED5B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1230FC-6547-51EB-2AEE-E536DFED5B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1230FC-6547-51EB-2AEE-E536DFED5B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

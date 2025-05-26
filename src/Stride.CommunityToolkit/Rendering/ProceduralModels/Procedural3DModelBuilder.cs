@@ -70,12 +70,16 @@ public static class Procedural2DModelBuilder
         {
             //Primitive2DModelType.Capsule => size is null ? new CapsuleProcedural2DModel() : new() { Radius = size.Value.X },
             Primitive2DModelType.Circle => new CylinderProceduralModel() { Radius = size is null ? 0.5f : size.Value.X, Height = depth },
+            Primitive2DModelType.Circle2D => new CircleProceduralModel() { Radius = size is null ? 0.5f : size.Value.X },
             //Primitive2DModelType.Polygon => size is null ? new PolygonProceduralModel() : new() { Radius = size.Value.X, Sides = (int)size.Value.Y },
             //Primitive2DModelType.Quad => size is null ? new QuadProceduralModel() : new() { Size = size.Value.XY() },
             Primitive2DModelType.Rectangle => new CubeProceduralModel() { Size = size is null ? new(2, 1, depth) : new(size.Value.X, size.Value.Y, depth) },
+            Primitive2DModelType.Rectangle2D => new RectangleProceduralModel() { Size = size is null ? new(2, 1) : size.Value },
             Primitive2DModelType.Square => new CubeProceduralModel() { Size = size is null ? new(1, 1, depth) : new(size.Value.X, size.Value.Y, depth) },
+            Primitive2DModelType.Square2D => new RectangleProceduralModel() { Size = size is null ? new(1, 1) : new(size.Value.X, size.Value.X) },
             //Primitive2DModelType.Square => size is null ? new SquareProceduralModel() : new() { Size = size.Value },
             Primitive2DModelType.Triangle => new TriangularPrismProceduralModel() { Size = size is null ? new(1, 1, depth) : new(size.Value.X, size.Value.Y, depth) },
+            Primitive2DModelType.Triangle2D => new TriangleProceduralModel() { Size = size is null ? new(1, 1) : size.Value },
             _ => throw new InvalidOperationException($"Unsupported Primitive2DModelType: {type}")
         };
 }

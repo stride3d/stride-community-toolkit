@@ -26,10 +26,10 @@ int debugX = 5;
 int debugY = 30;
 
 List<Shape2DModel> _2DShapes = [
-    new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
-    new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
-    new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
-    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
+    new() { Type = Primitive2DModelType.Square2D, Color = Color.Green, Size = (Vector2)boxSize },
+    new() { Type = Primitive2DModelType.Rectangle2D, Color = Color.Orange, Size = (Vector2)rectangleSize },
+    new() { Type = Primitive2DModelType.Circle2D, Color = Color.Red, Size = (Vector2)boxSize / 2 },
+    new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = (Vector2)boxSize }
 ];
 
 //List<Shape3DModel> _3DShapes = [
@@ -55,6 +55,7 @@ void Start(Scene rootScene)
     //game.AddSkybox();
     game.AddProfiler();
     game.AddAllDirectionLighting(intensity: 4);
+    game.AddGroundGizmo(new(0, 0, -7.5f), showAxisName: true);
 
     box2DSimulation = new Box2DSimulation();
 
@@ -81,25 +82,25 @@ void Update(Scene scene, GameTime gameTime)
 
     if (game.Input.IsKeyPressed(Keys.M))
     {
-        Add2DShapes(scene, Primitive2DModelType.Square, 10);
+        Add2DShapes(scene, Primitive2DModelType.Square2D, 10);
 
         SetCubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.R))
     {
-        Add2DShapes(scene, Primitive2DModelType.Rectangle, 10);
+        Add2DShapes(scene, Primitive2DModelType.Rectangle2D, 10);
 
         SetCubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.C))
     {
-        Add2DShapes(scene, Primitive2DModelType.Circle, 10);
+        Add2DShapes(scene, Primitive2DModelType.Circle2D, 10);
 
         SetCubeCount(scene);
     }
     else if (game.Input.IsKeyPressed(Keys.T))
     {
-        Add2DShapes(scene, Primitive2DModelType.Triangle, 10);
+        Add2DShapes(scene, Primitive2DModelType.Triangle2D, 10);
 
         SetCubeCount(scene);
     }
@@ -113,6 +114,7 @@ void Update(Scene scene, GameTime gameTime)
     {
         foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").ToList())
         {
+            box2DSimulation?.RemoveBody(entity);
             entity.Remove();
         }
 
@@ -155,17 +157,17 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
         var shapeDef = b2DefaultShapeDef();
         shapeDef.density = 1.0f;
         shapeDef.material.friction = 0.3f;
-        if (shapeModel.Type == Primitive2DModelType.Square || shapeModel.Type == Primitive2DModelType.Rectangle)
+        if (shapeModel.Type == Primitive2DModelType.Square2D || shapeModel.Type == Primitive2DModelType.Rectangle2D)
         {
             var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
             b2CreatePolygonShape(bodyId2, ref shapeDef, ref box);
         }
-
-        //else if (shapeModel.Type == Primitive2DModelType.Circle)
-        //{
-        //    var circle = b2MakeCircle(shapeModel.Size.X / 2);
-        //    b2CreateCircleShape(bodyId2, ref shapeDef, ref circle);
-        //}
+        else if (shapeModel.Type == Primitive2DModelType.Circle2D)
+        {
+            //var circle = b2MakeCircle(shapeModel.Size.X / 2);
+            var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
+            b2CreateCircleShape(bodyId2, ref shapeDef, ref circle);
+        }
         //else if (shapeModel.Type == Primitive2DModelType.Triangle)
         //{
         //    var triangle = b2MakeTriangle(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
@@ -178,7 +180,11 @@ void AddBoxEntityWithPhysics(Scene scene)
 {
     for (int i = 0; i < 50; i++)
     {
-        var boxEntity = game.Create2DPrimitive(Primitive2DModelType.Square, new Primitive2DCreationOptions { Size = boxSize.XY(), Depth = Depth });
+        var shapeModel = Get2DShape(Primitive2DModelType.Rectangle2D);
+
+        if (shapeModel == null) return;
+
+        var boxEntity = game.Create2DPrimitive(shapeModel.Type, new Primitive2DCreationOptions { Size = shapeModel.Size, Depth = Depth });
         boxEntity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [10, 20], [0, 0]);
         boxEntity.Scene = scene;
         boxEntity.Name = ShapeName;
@@ -186,7 +192,7 @@ void AddBoxEntityWithPhysics(Scene scene)
         var bodyId2 = box2DSimulation.CreateDynamicBody(boxEntity, boxEntity.Transform.Position);
 
         // Create shape for the body
-        var dynamicBox = b2MakeBox(boxSize.X / 2, boxSize.Y / 2);
+        var dynamicBox = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
         var shapeDef = b2DefaultShapeDef();
         shapeDef.density = 1.0f;
         shapeDef.material.friction = 0.3f;
