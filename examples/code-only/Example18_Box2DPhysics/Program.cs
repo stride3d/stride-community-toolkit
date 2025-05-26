@@ -30,7 +30,8 @@ List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Square2D, Color = Color.Green, Size = (Vector2)boxSize },
     new() { Type = Primitive2DModelType.Rectangle2D, Color = Color.Orange, Size = (Vector2)rectangleSize },
     new() { Type = Primitive2DModelType.Circle2D, Color = Color.Red, Size = (Vector2)boxSize / 2 },
-    new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = (Vector2)boxSize }
+    new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = (Vector2)boxSize },
+    new() { Type = Primitive2DModelType.Capsule, Color = Color.Blue, Size = (Vector2)boxSize }
 ];
 
 //List<Shape3DModel> _3DShapes = [
@@ -105,12 +106,19 @@ void Update(Scene scene, GameTime gameTime)
 
         SetCubeCount(scene);
     }
-    else if (game.Input.IsKeyPressed(Keys.P))
+    else if (game.Input.IsKeyPressed(Keys.O))
     {
-        Add2DShapes(scene, count: 30);
+        Add2DShapes(scene, Primitive2DModelType.Capsule, 10);
 
         SetCubeCount(scene);
     }
+    else if (game.Input.IsKeyPressed(Keys.P))
+    {
+        Add2DShapes(scene, count: 50);
+
+        SetCubeCount(scene);
+    }
+
     else if (game.Input.IsKeyReleased(Keys.X))
     {
         foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").ToList())
@@ -170,19 +178,22 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
         }
         else if (shapeModel.Type == Primitive2DModelType.Triangle2D)
         {
-            // Define the three vertices of your triangle
-            // For an equilateral triangle centered at origin with size as the width
-            float halfWidth = shapeModel.Size.X / 2;
-            float halfHeight = shapeModel.Size.Y / 2;
+            var meshData = TriangleProceduralModel.New(shapeModel.Size);
+            var points2 = meshData.Vertices.Select(v => new B2Vec2(v.Position.X, v.Position.Y)).ToArray();
 
-            B2Vec2[] points = new B2Vec2[3] {
-                new B2Vec2(0, halfHeight),            // Top vertex
-                new B2Vec2(-halfWidth, -halfHeight),  // Bottom left
-                new B2Vec2(halfWidth, -halfHeight)    // Bottom right
-            };
+            //// Define the three vertices of your triangle
+            //// For an equilateral triangle centered at origin with size as the width
+            //float halfWidth = shapeModel.Size.X / 2;
+            //float halfHeight = shapeModel.Size.Y / 2;
+
+            //B2Vec2[] points = new B2Vec2[3] {
+            //    new B2Vec2(0, halfHeight),            // Top vertex
+            //    new B2Vec2(-halfWidth, -halfHeight),  // Bottom left
+            //    new B2Vec2(halfWidth, -halfHeight)    // Bottom right
+            //};
 
             // Create a hull from these points
-            B2Hull hull = b2ComputeHull(points, 3);
+            B2Hull hull = b2ComputeHull(points2, 3);
 
             // Create a polygon shape from the hull
             B2Polygon triangle = b2MakePolygon(ref hull, 0.0f);
