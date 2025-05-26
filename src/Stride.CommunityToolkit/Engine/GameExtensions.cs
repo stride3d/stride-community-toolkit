@@ -126,6 +126,97 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Sets up the game for 2D rendering with natural colors unaffected by lighting.
+    /// </summary>
+    /// <param name="game">The Game instance to configure.</param>
+    /// <param name="clearColor">Optional background color. Defaults to black if not specified.</param>
+    /// <param name="addCamera">Whether to automatically add a 2D camera. Default is true.</param>
+    /// <returns>The configured GraphicsCompositor for 2D rendering.</returns>
+    public static GraphicsCompositor Setup2D(this Game game, Color? clearColor = null)
+    {
+        // Create a simplified GraphicsCompositor without post-effects
+        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(
+            enablePostEffects: false,
+            clearColor: clearColor ?? Color.Black);
+
+        // Remove the lighting features from the compositor
+        RemoveLightingFeatures(graphicsCompositor);
+
+        // Set the GraphicsCompositor
+        game.SceneSystem.GraphicsCompositor = graphicsCompositor;
+
+        return graphicsCompositor;
+    }
+
+    /// <summary>
+    /// Creates a material with flat colors that aren't affected by lighting, ideal for 2D rendering.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="color">The color of the material. Uses white if not specified.</param>
+    /// <returns>A new material instance with flat coloring unaffected by lighting.</returns>
+    public static Material CreateFlatMaterial(this IGame game, Color? color = null)
+    {
+        var materialColor = color ?? Color.White;
+
+        var materialDescription = new MaterialDescriptor
+        {
+            Attributes =
+        {
+            // Add diffuse color
+            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(materialColor))
+            {
+                // The Enabled property controls whether the feature affects rendering
+                Enabled = true
+            },
+
+            // Use a simple diffuse model, we'll disable lighting with lighting features removal
+            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+
+            // Disable specular reflections completely
+            Specular = null,
+            SpecularModel = null,
+
+            // Add emissive for consistent color rendering regardless of lighting
+            Emissive = new MaterialEmissiveMapFeature(new ComputeColor(materialColor))
+        }
+        };
+
+        return Material.New(game.GraphicsDevice, materialDescription);
+    }
+
+    // Helper method to remove lighting features from a GraphicsCompositor
+    private static void RemoveLightingFeatures(GraphicsCompositor compositor)
+    {
+        // Find and remove all lighting-related render features
+        foreach (var renderFeature in compositor.RenderFeatures)
+        {
+            if (renderFeature is MeshRenderFeature meshRenderFeature)
+            {
+                // We need to store features to remove in a separate list to avoid collection modification during enumeration
+                var featuresToRemove = new List<SubRenderFeature>();
+
+                // Use the correct type for the collection
+                foreach (var feature in meshRenderFeature.RenderFeatures)
+                {
+                    // Check if this is a lighting-related feature
+                    if (feature is ForwardLightingRenderFeature ||
+                        feature.GetType().Name.Contains("Shadow"))
+                    {
+                        // Cast is safe since all items in meshRenderFeature.RenderFeatures are SubRenderFeature
+                        featuresToRemove.Add(feature);
+                    }
+                }
+
+                // Remove all identified features
+                foreach (var feature in featuresToRemove)
+                {
+                    meshRenderFeature.RenderFeatures.Remove(feature);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Adds a 2D camera entity to the game's root scene with customizable position and rotation, defaulting to orthographic projection.
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>

@@ -4,7 +4,6 @@ using Example18_Box2DPhysics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Helpers;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -43,9 +42,10 @@ game.Run(start: Start, update: Update);
 void Start(Scene rootScene)
 {
     //game.SetupBase3DScene();
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add3DCamera().Add3DCameraController();
-    //game.Add2DCamera().Add2DCameraController();
+    //game.AddGraphicsCompositor().AddCleanUIStage();
+    game.Setup2D(Color.CornflowerBlue);
+    //game.Add3DCamera().Add3DCameraController();
+    game.Add2DCamera().Add2DCameraController();
     //game.AddDirectionalLight();
     //game.AddSkybox();
     game.AddProfiler();
@@ -146,7 +146,7 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
             {
                 Size = shapeModel.Size,
                 Depth = Depth,
-                Material = game.CreateMaterial(shapeModel.Color)
+                Material = game.CreateFlatMaterial(shapeModel.Color)
             });
 
         entity.Name = ShapeName;
