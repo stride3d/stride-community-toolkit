@@ -99,7 +99,7 @@ void Update(Scene scene, GameTime gameTime)
 
         SetCubeCount(scene);
     }
-    else if (game.Input.IsKeyPressed(Keys.O))
+    else if (game.Input.IsKeyPressed(Keys.V))
     {
         Add2DShapes(scene, Primitive2DModelType.Capsule, 10);
 
@@ -196,10 +196,10 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
         }
         else if (shapeModel.Type == Primitive2DModelType.Capsule)
         {
-            //var meshData = CapsuleProceduralModel.New(shapeModel.Size.X, shapeModel.Size.Y);
-            //var points2 = meshData.Vertices.Select(v => new B2Vec2(v.Position.X, v.Position.Y)).ToArray();
-
-            B2Capsule capsule = new B2Capsule(new B2Vec2(shapeModel.Size.X / 2, (shapeModel.Size.X / 2) + shapeModel.Size.Y), new B2Vec2(shapeModel.Size.X / 2, shapeModel.Size.X / 2), shapeModel.Size.X / 2);
+            var capsule = new B2Capsule(
+                new(0, -shapeModel.Size.X / 2),
+                new(0, (shapeModel.Size.Y / 2) - shapeModel.Size.X / 2),
+                shapeModel.Size.X / 2);
 
             b2CreateCapsuleShape(bodyId2, ref shapeDef, ref capsule);
         }
@@ -266,6 +266,8 @@ void RenderNavigation()
     game.DebugTextSystem.Print($"C - Generate 2D circles", new Int2(x: debugX, y: debugY + space));
     space += 20;
     game.DebugTextSystem.Print($"T - Generate 2D triangles", new Int2(x: debugX, y: debugY + space));
+    space += 20;
+    game.DebugTextSystem.Print($"V - Generate 2D capsules", new Int2(x: debugX, y: debugY + space));
     space += 20;
     game.DebugTextSystem.Print($"P - Generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
 }
