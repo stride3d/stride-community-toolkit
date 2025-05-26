@@ -15,10 +15,12 @@ using static Box2D.NET.B2Hulls;
 using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
+using static Box2D.NET.B2Worlds;
 
 const float Depth = 0.05f;
-const string ShapeName = "Box2DCube";
+const string ShapeName = "Box2DShape";
 
+B2WorldId worldId = new();
 var boxSize = new Vector3(0.2f, 0.2f, Depth);
 var rectangleSize = new Vector3(0.2f, 0.3f, Depth);
 int cubes = 0;
@@ -55,7 +57,7 @@ void Start(Scene rootScene)
 
     box2DSimulation = new Box2DSimulation();
 
-    var worldId = box2DSimulation.GetWorldId();
+    worldId = box2DSimulation.GetWorldId();
 
     // Define the ground body.
     var groundBodyDef = b2DefaultBodyDef();
@@ -76,6 +78,15 @@ void Update(Scene scene, GameTime gameTime)
     // The simulation handles everything behind the scenes!
     box2DSimulation?.Update(gameTime.Elapsed);
 
+    ProcessInput(scene);
+
+    ProcessMouseInput(scene);
+
+    RenderNavigation();
+}
+
+void ProcessInput(Scene scene)
+{
     if (game.Input.IsKeyPressed(Keys.M))
     {
         Add2DShapes(scene, Primitive2DModelType.Square2D, 10);
@@ -112,10 +123,9 @@ void Update(Scene scene, GameTime gameTime)
 
         SetCubeCount(scene);
     }
-
     else if (game.Input.IsKeyReleased(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").ToList())
+        foreach (var entity in scene.Entities.Where(w => w.Name.EndsWith(ShapeName) || w.Name == "Cube").ToList())
         {
             box2DSimulation?.RemoveBody(entity);
             entity.Remove();
@@ -128,8 +138,36 @@ void Update(Scene scene, GameTime gameTime)
     {
         AddBoxEntityWithPhysics(scene);
     }
+}
 
-    RenderNavigation();
+void ProcessMouseInput(Scene scene)
+{
+    if (game.Input.IsMouseButtonPressed(MouseButton.Left))
+    {
+        var mousePosition = game.Input.MousePosition;
+
+        //var input = new B2RayCastInput(new B2Vec2(mousePosition.X, mousePosition.Y), new B2Vec2(mousePosition.X, mousePosition.Y), 1.0f);
+
+        B2RayResult result = b2World_CastRayClosest(worldId, new B2Vec2(mousePosition.X, mousePosition.Y), new B2Vec2(mousePosition.X, mousePosition.Y), b2DefaultQueryFilter());
+
+        if (result.hit)
+        {
+            var bodyId = b2Shape_GetBody(result.shapeId);
+            var entity = box2DSimulation?.GetEntity(bodyId);
+
+            Console.WriteLine($"Hit Body ID: {bodyId}");
+
+            if (entity != null)
+            {
+                Console.WriteLine($"Hit Entity Name: {entity.Name}");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No hit detected.");
+
+        }
+    }
 }
 
 void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
@@ -150,7 +188,7 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
                 Material = game.CreateFlatMaterial(shapeModel.Color)
             });
 
-        entity.Name = ShapeName;
+        entity.Name = $"{type}-{ShapeName}";
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
 
@@ -251,7 +289,7 @@ Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
     return _2DShapes.Find(x => x.Type == type);
 }
 
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").Count();
+void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name.EndsWith(ShapeName) || w.Name == "Cube").Count();
 
 void RenderNavigation()
 {
