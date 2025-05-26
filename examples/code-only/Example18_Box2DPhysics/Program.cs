@@ -12,6 +12,7 @@ using Stride.Games;
 using Stride.Input;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Geometries;
+using static Box2D.NET.B2Hulls;
 using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
@@ -164,15 +165,31 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
         }
         else if (shapeModel.Type == Primitive2DModelType.Circle2D)
         {
-            //var circle = b2MakeCircle(shapeModel.Size.X / 2);
             var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
             b2CreateCircleShape(bodyId2, ref shapeDef, ref circle);
         }
-        //else if (shapeModel.Type == Primitive2DModelType.Triangle)
-        //{
-        //    var triangle = b2MakeTriangle(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
-        //    b2CreatePolygonShape(bodyId2, ref shapeDef, ref triangle);
-        //}
+        else if (shapeModel.Type == Primitive2DModelType.Triangle2D)
+        {
+            // Define the three vertices of your triangle
+            // For an equilateral triangle centered at origin with size as the width
+            float halfWidth = shapeModel.Size.X / 2;
+            float halfHeight = shapeModel.Size.Y / 2;
+
+            B2Vec2[] points = new B2Vec2[3] {
+                new B2Vec2(0, halfHeight),            // Top vertex
+                new B2Vec2(-halfWidth, -halfHeight),  // Bottom left
+                new B2Vec2(halfWidth, -halfHeight)    // Bottom right
+            };
+
+            // Create a hull from these points
+            B2Hull hull = b2ComputeHull(points, 3);
+
+            // Create a polygon shape from the hull
+            B2Polygon triangle = b2MakePolygon(ref hull, 0.0f);
+
+            // Create the shape on the body
+            b2CreatePolygonShape(bodyId2, ref shapeDef, ref triangle);
+        }
     }
 }
 
