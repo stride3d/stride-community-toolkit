@@ -194,6 +194,15 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
             // Create the shape on the body
             b2CreatePolygonShape(bodyId2, ref shapeDef, ref triangle);
         }
+        else if (shapeModel.Type == Primitive2DModelType.Capsule)
+        {
+            //var meshData = CapsuleProceduralModel.New(shapeModel.Size.X, shapeModel.Size.Y);
+            //var points2 = meshData.Vertices.Select(v => new B2Vec2(v.Position.X, v.Position.Y)).ToArray();
+
+            B2Capsule capsule = new B2Capsule(new B2Vec2(shapeModel.Size.X / 2, (shapeModel.Size.X / 2) + shapeModel.Size.Y), new B2Vec2(shapeModel.Size.X / 2, shapeModel.Size.X / 2), shapeModel.Size.X / 2);
+
+            b2CreateCapsuleShape(bodyId2, ref shapeDef, ref capsule);
+        }
     }
 }
 

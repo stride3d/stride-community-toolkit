@@ -74,8 +74,8 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
 
         // Calculate center points of circles
         float halfRectHeight = rectHeight / 2;
-        Vector3 topCenter = new Vector3(0, halfRectHeight + radius, 0);
-        Vector3 bottomCenter = new Vector3(0, -(halfRectHeight + radius), 0);
+        Vector3 topCircleCenter = new Vector3(0, halfRectHeight, 0); // Removed "+ radius"
+        Vector3 bottomCircleCenter = new Vector3(0, -halfRectHeight, 0); // Removed "- radius"
 
         // Set UV scale
         var uvScale = new Vector2(uScale, vScale);
@@ -86,9 +86,9 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         // Top center point
         int topCenterIndex = currentVertex;
         vertices[currentVertex++] = new VertexPositionNormalTexture(
-            topCenter,
+            topCircleCenter,
             normal,
-            new Vector2(0.5f, 1.0f) * uvScale
+            new Vector2(0.5f, 0.75f) * uvScale // Adjusted UV to match rectangle top
         );
 
         // Top semicircle perimeter
@@ -100,11 +100,11 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
 
             Vector2 texCoord = new Vector2(
                 0.5f + (MathF.Cos(angle) * 0.5f),
-                1.0f
+                0.75f + (MathF.Sin(angle) * 0.25f) // Adjusted UV to match with rectangle
             );
 
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                topCenter + new Vector3(x, y, 0),
+                topCircleCenter + new Vector3(x, y, 0),
                 normal,
                 texCoord * uvScale
             );
@@ -115,27 +115,30 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         if (rectHeight > 0)
         {
             // Define rect vertices - same winding as top semicircle
-            // Set up rectangle in counter-clockwise order
+            // Top-left
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, halfRectHeight, 0),  // Top-left
+                new Vector3(-radius, halfRectHeight, 0),
                 normal,
                 new Vector2(0, 0.75f) * uvScale
             );
 
+            // Bottom-left
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, -halfRectHeight, 0), // Bottom-left
+                new Vector3(-radius, -halfRectHeight, 0),
                 normal,
                 new Vector2(0, 0.25f) * uvScale
             );
 
+            // Bottom-right
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, -halfRectHeight, 0),  // Bottom-right
+                new Vector3(radius, -halfRectHeight, 0),
                 normal,
                 new Vector2(1, 0.25f) * uvScale
             );
 
+            // Top-right
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, halfRectHeight, 0),   // Top-right
+                new Vector3(radius, halfRectHeight, 0),
                 normal,
                 new Vector2(1, 0.75f) * uvScale
             );
@@ -145,9 +148,9 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         // Bottom center point
         int bottomCenterIndex = currentVertex;
         vertices[currentVertex++] = new VertexPositionNormalTexture(
-            bottomCenter,
+            bottomCircleCenter,
             normal,
-            new Vector2(0.5f, 0.0f) * uvScale
+            new Vector2(0.5f, 0.25f) * uvScale // Adjusted UV to match rectangle bottom
         );
 
         // Bottom semicircle perimeter
@@ -160,11 +163,11 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
 
             Vector2 texCoord = new Vector2(
                 0.5f + (MathF.Cos(angle) * 0.5f),
-                0.0f
+                0.25f + (MathF.Sin(angle) * 0.25f) // Adjusted UV to match with rectangle
             );
 
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                bottomCenter + new Vector3(x, y, 0),
+                bottomCircleCenter + new Vector3(x, y, 0),
                 normal,
                 texCoord * uvScale
             );
