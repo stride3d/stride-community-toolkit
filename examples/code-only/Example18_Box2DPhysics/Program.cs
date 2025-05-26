@@ -34,13 +34,6 @@ List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Capsule, Color = Color.Blue, Size = (Vector2)boxSize }
 ];
 
-//List<Shape3DModel> _3DShapes = [
-//    new() { Type = PrimitiveModelType.Cube, Color = Color.Green, Size = boxSize },
-//    new() { Type = PrimitiveModelType.RectangularPrism, Color = Color.Orange, Size = rectangleSize },
-//    new() { Type = PrimitiveModelType.Cylinder, Color = Color.Red, Size = boxSize },
-//    new() { Type = PrimitiveModelType.TriangularPrism, Color = Color.Purple, Size = boxSize }
-//];
-
 Box2DSimulation? box2DSimulation = null;
 
 using var game = new Game();

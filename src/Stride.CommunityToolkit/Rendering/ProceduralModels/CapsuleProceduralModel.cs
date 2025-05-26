@@ -67,6 +67,7 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             ? stackalloc int[indexCount]
             : new int[indexCount];
 
+        // For front-facing polygons, we want Z+ normal for consistency with other shapes
         Vector3 normal = Vector3.UnitZ;
 
         // Calculate center points of circles
@@ -88,10 +89,10 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             new Vector2(0.5f, 1.0f) * uvScale
         );
 
-        // Top semicircle perimeter
+        // Top semicircle perimeter (clockwise - right to left)
         for (int i = 0; i <= tessellation; i++)
         {
-            float angle = (float)i / tessellation * MathF.PI;
+            float angle = i * MathF.PI / tessellation;
             float x = radius * MathF.Cos(angle);
             float y = radius * MathF.Sin(angle);
 
@@ -111,21 +112,6 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         int rectStartIndex = currentVertex;
         if (rectHeight > 0)
         {
-            // Define rectangle vertices in counter-clockwise order
-            // Bottom-left
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, -halfRectHeight, 0),
-                normal,
-                new Vector2(0, 0.25f) * uvScale
-            );
-
-            // Bottom-right
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, -halfRectHeight, 0),
-                normal,
-                new Vector2(1, 0.25f) * uvScale
-            );
-
             // Top-right
             vertices[currentVertex++] = new VertexPositionNormalTexture(
                 new Vector3(radius, halfRectHeight, 0),
@@ -139,6 +125,20 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
                 normal,
                 new Vector2(0, 0.75f) * uvScale
             );
+
+            // Bottom-left
+            vertices[currentVertex++] = new VertexPositionNormalTexture(
+                new Vector3(-radius, -halfRectHeight, 0),
+                normal,
+                new Vector2(0, 0.25f) * uvScale
+            );
+
+            // Bottom-right
+            vertices[currentVertex++] = new VertexPositionNormalTexture(
+                new Vector3(radius, -halfRectHeight, 0),
+                normal,
+                new Vector2(1, 0.25f) * uvScale
+            );
         }
 
         // ===== BOTTOM SEMICIRCLE =====
@@ -150,11 +150,11 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             new Vector2(0.5f, 0.0f) * uvScale
         );
 
-        // Bottom semicircle perimeter
+        // Bottom semicircle perimeter (clockwise - left to right)
         int bottomStartIndex = currentVertex;
         for (int i = 0; i <= tessellation; i++)
         {
-            float angle = MathF.PI + (float)i / tessellation * MathF.PI;
+            float angle = MathF.PI + i * MathF.PI / tessellation;
             float x = radius * MathF.Cos(angle);
             float y = radius * MathF.Sin(angle);
 
@@ -173,67 +173,44 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         // ===== INDEXING =====
         int currentIndex = 0;
 
-        // Top semicircle triangles
+        // Top semicircle triangles - all indices in reverse for front-facing triangles
         for (int i = 0; i < tessellation; i++)
         {
-            if (!toLeftHanded)
-            {
-                indices[currentIndex++] = topCenterIndex;
-                indices[currentIndex++] = topCenterIndex + i + 1;
-                indices[currentIndex++] = topCenterIndex + i + 2;
-            }
-            else
-            {
-                indices[currentIndex++] = topCenterIndex;
-                indices[currentIndex++] = topCenterIndex + i + 2;
-                indices[currentIndex++] = topCenterIndex + i + 1;
-            }
+            // Make sure all triangles face the same direction
+            indices[currentIndex++] = topCenterIndex;
+            indices[currentIndex++] = topCenterIndex + i + 2;
+            indices[currentIndex++] = topCenterIndex + i + 1;
         }
 
         // Rectangle triangles
         if (rectHeight > 0)
         {
-            // Counter-clockwise winding for front-facing triangles
-            if (!toLeftHanded)
-            {
-                // First triangle (bottom-left, bottom-right, top-right)
-                indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 1;
-                indices[currentIndex++] = rectStartIndex + 2;
+            // First triangle - top-right, top-left, bottom-left
+            indices[currentIndex++] = rectStartIndex;
+            indices[currentIndex++] = rectStartIndex + 1;
+            indices[currentIndex++] = rectStartIndex + 2;
 
-                // Second triangle (bottom-left, top-right, top-left)
-                indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 2;
-                indices[currentIndex++] = rectStartIndex + 3;
-            }
-            else
-            {
-                // First triangle (reversed for left-handed)
-                indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 2;
-                indices[currentIndex++] = rectStartIndex + 1;
-
-                // Second triangle (reversed for left-handed)
-                indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 3;
-                indices[currentIndex++] = rectStartIndex + 2;
-            }
+            // Second triangle - top-right, bottom-left, bottom-right
+            indices[currentIndex++] = rectStartIndex;
+            indices[currentIndex++] = rectStartIndex + 2;
+            indices[currentIndex++] = rectStartIndex + 3;
         }
 
-        // Bottom semicircle triangles
+        // Bottom semicircle triangles - all indices in reverse for front-facing triangles
         for (int i = 0; i < tessellation; i++)
         {
-            if (!toLeftHanded)
+            indices[currentIndex++] = bottomCenterIndex;
+            indices[currentIndex++] = bottomCenterIndex + i + 2;
+            indices[currentIndex++] = bottomCenterIndex + i + 1;
+        }
+
+        // Handle left-handed coordinate system if needed
+        if (toLeftHanded)
+        {
+            // Reverse winding order of all triangles
+            for (int i = 0; i < indexCount; i += 3)
             {
-                indices[currentIndex++] = bottomCenterIndex;
-                indices[currentIndex++] = bottomCenterIndex + i + 1;
-                indices[currentIndex++] = bottomCenterIndex + i + 2;
-            }
-            else
-            {
-                indices[currentIndex++] = bottomCenterIndex;
-                indices[currentIndex++] = bottomCenterIndex + i + 2;
-                indices[currentIndex++] = bottomCenterIndex + i + 1;
+                (indices[i + 1], indices[i + 2]) = (indices[i + 2], indices[i + 1]);
             }
         }
 
