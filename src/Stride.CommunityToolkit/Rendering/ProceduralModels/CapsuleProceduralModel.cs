@@ -42,14 +42,14 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
 
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(float height = 1.0f, float radius = 0.25f, int tessellation = 16, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
-        // Force a minimum rectangle height to ensure rectangular part is visible
-        float actualHeight = Math.Max(height, radius * 3); // Ensure height is at least 3x radius
-
         // Cap the minimum tessellation to prevent issues
         tessellation = Math.Max(4, tessellation);
 
-        // Calculate the rectangular part height (total height minus the two semicircle diameters)
-        float rectHeight = Math.Max(0.1f, actualHeight - 2 * radius); // Ensure at least 0.1f height
+        // Make sure the height is greater than twice the radius to ensure we have a rectangular section
+        float totalHeight = Math.Max(height, radius * 2.01f); // Add a small buffer to ensure rectangle exists
+
+        // Calculate the rectangular part height
+        float rectHeight = Math.Max(0.01f, totalHeight - 2 * radius);
 
         // Calculate total number of vertices and indices
         int vertexCount = (tessellation + 1) * 2 + 2; // Two semicircles plus two center points
@@ -70,7 +70,6 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             ? stackalloc int[indexCount]
             : new int[indexCount];
 
-        // For front-facing polygons, we want Z+ normal for consistency with other shapes
         Vector3 normal = Vector3.UnitZ;
 
         // Calculate center points of circles
@@ -92,7 +91,7 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             new Vector2(0.5f, 1.0f) * uvScale
         );
 
-        // Top semicircle perimeter (clockwise - right to left)
+        // Top semicircle perimeter
         for (int i = 0; i <= tessellation; i++)
         {
             float angle = i * MathF.PI / tessellation;
@@ -115,32 +114,30 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         int rectStartIndex = currentVertex;
         if (rectHeight > 0)
         {
-            // Top-right
+            // Define rect vertices - same winding as top semicircle
+            // Set up rectangle in counter-clockwise order
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, halfRectHeight, 0),
-                normal,
-                new Vector2(1, 0.75f) * uvScale
-            );
-
-            // Top-left
-            vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, halfRectHeight, 0),
+                new Vector3(-radius, halfRectHeight, 0),  // Top-left
                 normal,
                 new Vector2(0, 0.75f) * uvScale
             );
 
-            // Bottom-left
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius, -halfRectHeight, 0),
+                new Vector3(-radius, -halfRectHeight, 0), // Bottom-left
                 normal,
                 new Vector2(0, 0.25f) * uvScale
             );
 
-            // Bottom-right
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius, -halfRectHeight, 0),
+                new Vector3(radius, -halfRectHeight, 0),  // Bottom-right
                 normal,
                 new Vector2(1, 0.25f) * uvScale
+            );
+
+            vertices[currentVertex++] = new VertexPositionNormalTexture(
+                new Vector3(radius, halfRectHeight, 0),   // Top-right
+                normal,
+                new Vector2(1, 0.75f) * uvScale
             );
         }
 
@@ -153,7 +150,7 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             new Vector2(0.5f, 0.0f) * uvScale
         );
 
-        // Bottom semicircle perimeter (clockwise - left to right)
+        // Bottom semicircle perimeter
         int bottomStartIndex = currentVertex;
         for (int i = 0; i <= tessellation; i++)
         {
@@ -176,10 +173,9 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         // ===== INDEXING =====
         int currentIndex = 0;
 
-        // Top semicircle triangles - all indices in reverse for front-facing triangles
+        // Top semicircle triangles
         for (int i = 0; i < tessellation; i++)
         {
-            // Make sure all triangles face the same direction
             indices[currentIndex++] = topCenterIndex;
             indices[currentIndex++] = topCenterIndex + i + 2;
             indices[currentIndex++] = topCenterIndex + i + 1;
@@ -188,18 +184,18 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         // Rectangle triangles
         if (rectHeight > 0)
         {
-            // First triangle - top-right, top-left, bottom-left
+            // First triangle
             indices[currentIndex++] = rectStartIndex;
+            indices[currentIndex++] = rectStartIndex + 2;
             indices[currentIndex++] = rectStartIndex + 1;
-            indices[currentIndex++] = rectStartIndex + 2;
 
-            // Second triangle - top-right, bottom-left, bottom-right
+            // Second triangle
             indices[currentIndex++] = rectStartIndex;
-            indices[currentIndex++] = rectStartIndex + 2;
             indices[currentIndex++] = rectStartIndex + 3;
+            indices[currentIndex++] = rectStartIndex + 2;
         }
 
-        // Bottom semicircle triangles - all indices in reverse for front-facing triangles
+        // Bottom semicircle triangles
         for (int i = 0; i < tessellation; i++)
         {
             indices[currentIndex++] = bottomCenterIndex;
@@ -207,13 +203,14 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             indices[currentIndex++] = bottomCenterIndex + i + 1;
         }
 
-        // Handle left-handed coordinate system if needed
+        // Flip winding for left-handed coordinate system
         if (toLeftHanded)
         {
-            // Reverse winding order of all triangles
             for (int i = 0; i < indexCount; i += 3)
             {
-                (indices[i + 1], indices[i + 2]) = (indices[i + 2], indices[i + 1]);
+                int temp = indices[i + 1];
+                indices[i + 1] = indices[i + 2];
+                indices[i + 2] = temp;
             }
         }
 
