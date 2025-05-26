@@ -77,29 +77,23 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
         // Set UV scale
         var uvScale = new Vector2(uScale, vScale);
 
-        // Create top semicircle vertices
         int currentVertex = 0;
 
+        // ===== TOP SEMICIRCLE =====
         // Top center point
+        int topCenterIndex = currentVertex;
         vertices[currentVertex++] = new VertexPositionNormalTexture(
             topCenter,
             normal,
             new Vector2(0.5f, 1.0f) * uvScale
         );
 
-        // Top semicircle perimeter - counter-clockwise for correct winding
+        // Top semicircle perimeter
         for (int i = 0; i <= tessellation; i++)
         {
-            // Use full circle formula but only iterate half way
             float angle = (float)i / tessellation * MathF.PI;
-
-            // Generate points in counter-clockwise direction
             float x = radius * MathF.Cos(angle);
             float y = radius * MathF.Sin(angle);
-
-            // For top circle, y values are positive
-            if (toLeftHanded)
-                x = -x; // Flip X for left-handed coordinate system
 
             Vector2 texCoord = new Vector2(
                 0.5f + (MathF.Cos(angle) * 0.5f),
@@ -113,42 +107,41 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             );
         }
 
-        // Rectangle vertices (if any)
+        // ===== RECTANGLE MIDDLE PART =====
         int rectStartIndex = currentVertex;
         if (rectHeight > 0)
         {
-            // Define rectangle vertices in counter-clockwise order for correct winding
-            float signX = toLeftHanded ? -1.0f : 1.0f; // Flip X for left-handed coordinates
-
-            // Bottom-left of rect
+            // Define rectangle vertices in counter-clockwise order
+            // Bottom-left
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius * signX, -halfRectHeight, 0),
+                new Vector3(-radius, -halfRectHeight, 0),
                 normal,
                 new Vector2(0, 0.25f) * uvScale
             );
 
-            // Top-left of rect
+            // Bottom-right
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(-radius * signX, halfRectHeight, 0),
+                new Vector3(radius, -halfRectHeight, 0),
                 normal,
-                new Vector2(0, 0.75f) * uvScale
+                new Vector2(1, 0.25f) * uvScale
             );
 
-            // Top-right of rect
+            // Top-right
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius * signX, halfRectHeight, 0),
+                new Vector3(radius, halfRectHeight, 0),
                 normal,
                 new Vector2(1, 0.75f) * uvScale
             );
 
-            // Bottom-right of rect
+            // Top-left
             vertices[currentVertex++] = new VertexPositionNormalTexture(
-                new Vector3(radius * signX, -halfRectHeight, 0),
+                new Vector3(-radius, halfRectHeight, 0),
                 normal,
-                new Vector2(1, 0.25f) * uvScale
+                new Vector2(0, 0.75f) * uvScale
             );
         }
 
+        // ===== BOTTOM SEMICIRCLE =====
         // Bottom center point
         int bottomCenterIndex = currentVertex;
         vertices[currentVertex++] = new VertexPositionNormalTexture(
@@ -157,19 +150,13 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             new Vector2(0.5f, 0.0f) * uvScale
         );
 
-        // Bottom semicircle perimeter - counter-clockwise for correct winding
+        // Bottom semicircle perimeter
         int bottomStartIndex = currentVertex;
         for (int i = 0; i <= tessellation; i++)
         {
-            // Use full circle formula but only iterate half way
             float angle = MathF.PI + (float)i / tessellation * MathF.PI;
-
-            // Generate points in counter-clockwise direction
             float x = radius * MathF.Cos(angle);
             float y = radius * MathF.Sin(angle);
-
-            if (toLeftHanded)
-                x = -x; // Flip X for left-handed coordinate system
 
             Vector2 texCoord = new Vector2(
                 0.5f + (MathF.Cos(angle) * 0.5f),
@@ -183,69 +170,70 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
             );
         }
 
-        // Create indices
+        // ===== INDEXING =====
         int currentIndex = 0;
 
-        // Top semicircle triangles - ensure correct winding order
+        // Top semicircle triangles
         for (int i = 0; i < tessellation; i++)
         {
             if (!toLeftHanded)
             {
-                indices[currentIndex++] = 0; // Top center
-                indices[currentIndex++] = i + 2;
-                indices[currentIndex++] = i + 1;
+                indices[currentIndex++] = topCenterIndex;
+                indices[currentIndex++] = topCenterIndex + i + 1;
+                indices[currentIndex++] = topCenterIndex + i + 2;
             }
             else
             {
-                indices[currentIndex++] = 0; // Top center
-                indices[currentIndex++] = i + 1;
-                indices[currentIndex++] = i + 2;
+                indices[currentIndex++] = topCenterIndex;
+                indices[currentIndex++] = topCenterIndex + i + 2;
+                indices[currentIndex++] = topCenterIndex + i + 1;
             }
         }
 
-        // Rectangle triangles (if any) - ensure correct winding order
+        // Rectangle triangles
         if (rectHeight > 0)
         {
+            // Counter-clockwise winding for front-facing triangles
             if (!toLeftHanded)
             {
-                // First triangle
+                // First triangle (bottom-left, bottom-right, top-right)
                 indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 2;
                 indices[currentIndex++] = rectStartIndex + 1;
-
-                // Second triangle
-                indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 3;
                 indices[currentIndex++] = rectStartIndex + 2;
+
+                // Second triangle (bottom-left, top-right, top-left)
+                indices[currentIndex++] = rectStartIndex;
+                indices[currentIndex++] = rectStartIndex + 2;
+                indices[currentIndex++] = rectStartIndex + 3;
             }
             else
             {
-                // First triangle
+                // First triangle (reversed for left-handed)
                 indices[currentIndex++] = rectStartIndex;
+                indices[currentIndex++] = rectStartIndex + 2;
                 indices[currentIndex++] = rectStartIndex + 1;
-                indices[currentIndex++] = rectStartIndex + 2;
 
-                // Second triangle
+                // Second triangle (reversed for left-handed)
                 indices[currentIndex++] = rectStartIndex;
-                indices[currentIndex++] = rectStartIndex + 2;
                 indices[currentIndex++] = rectStartIndex + 3;
+                indices[currentIndex++] = rectStartIndex + 2;
             }
         }
 
-        // Bottom semicircle triangles - ensure correct winding order
+        // Bottom semicircle triangles
         for (int i = 0; i < tessellation; i++)
         {
             if (!toLeftHanded)
             {
-                indices[currentIndex++] = bottomCenterIndex; // Bottom center
-                indices[currentIndex++] = bottomStartIndex + i;
-                indices[currentIndex++] = bottomStartIndex + i + 1;
+                indices[currentIndex++] = bottomCenterIndex;
+                indices[currentIndex++] = bottomCenterIndex + i + 1;
+                indices[currentIndex++] = bottomCenterIndex + i + 2;
             }
             else
             {
-                indices[currentIndex++] = bottomCenterIndex; // Bottom center
-                indices[currentIndex++] = bottomStartIndex + i + 1;
-                indices[currentIndex++] = bottomStartIndex + i;
+                indices[currentIndex++] = bottomCenterIndex;
+                indices[currentIndex++] = bottomCenterIndex + i + 2;
+                indices[currentIndex++] = bottomCenterIndex + i + 1;
             }
         }
 
