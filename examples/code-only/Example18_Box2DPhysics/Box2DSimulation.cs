@@ -3,6 +3,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2MathFunction;
+using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
 using static Box2D.NET.B2Worlds;
 
@@ -101,6 +102,46 @@ public class Box2DSimulation : IDisposable
     public List<B2BodyId> GetAllBodyIds()
     {
         return _bodyToEntity.Keys.ToList();
+    }
+
+    /// <summary>
+    /// Tests if a point overlaps with any physics shape in the world.
+    /// </summary>
+    /// <param name="point">The point to test</param>
+    /// <param name="querySize">Half-extent of the query box around the point</param>
+    /// <returns>The body ID that was hit, or null if nothing was hit</returns>
+    public B2BodyId? OverlapPoint(Vector2 point, float querySize = 0.1f)
+    {
+        // Create a small AABB around the clicked point
+        var lower = new B2Vec2(point.X - querySize, point.Y - querySize);
+        var upper = new B2Vec2(point.X + querySize, point.Y + querySize);
+        var box = new B2AABB { lowerBound = lower, upperBound = upper };
+
+        // Store the result of the query
+        B2BodyId? hitBodyId = null;
+
+        // Perform the overlap query
+        b2World_OverlapAABB(_worldId, box, b2DefaultQueryFilter(), QueryCallback, null);
+
+        return hitBodyId;
+
+        // Function to be called for each shape that overlaps the AABB
+        bool QueryCallback(B2ShapeId shapeId, object userData)
+        {
+            var bodyId = b2Shape_GetBody(shapeId);
+
+            // Test if the point is inside the shape
+            bool overlap = b2Shape_TestPoint(shapeId, new B2Vec2(point.X, point.Y));
+
+            if (overlap)
+            {
+                hitBodyId = bodyId;
+
+                return false; // Stop the query, we found what we're looking for
+            }
+
+            return true; // Continue the query
+        }
     }
 
     public void Dispose()
