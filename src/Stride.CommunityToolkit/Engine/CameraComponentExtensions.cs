@@ -16,6 +16,34 @@ namespace Stride.CommunityToolkit.Engine;
 public static class CameraComponentExtensions
 {
     /// <summary>
+    /// Calculates a 2D point where the camera ray intersects the Z=0 plane.
+    /// Useful for 2D physics engines like Box2D that operate in the XY plane.
+    /// </summary>
+    /// <param name="camera">The camera component used for the ray calculation.</param>
+    /// <param name="screenPosition">The normalized screen position (typically mouse position).</param>
+    /// <returns>A Vector2 representing the intersection point on the Z=0 plane, or null if no intersection.</returns>
+    public static Vector2? CalculateRayPlaneIntersectionPoint(this CameraComponent camera, Vector2 screenPosition)
+    {
+        var (nearPoint, farPoint) = camera.ScreenPointToRay(screenPosition);
+
+        var dir = farPoint - nearPoint;
+
+        // Check if ray is parallel to Z=0 plane
+        if (Math.Abs(dir.Z) < 1e-6f) return null;
+
+        // Calculate intersection with Z=0 plane
+        float t = -nearPoint.Z / dir.Z;
+
+        // Check if intersection is within the ray segment
+        if (t < 0 || t > 1) return null;
+
+        // Calculate intersection point and return just the XY components
+        var intersection = nearPoint + t * dir;
+
+        return new Vector2(intersection.X, intersection.Y);
+    }
+
+    /// <summary>
     /// Calculates a ray from the camera's position through a specified point on the screen, projecting from screen space into the 3D world space.
     /// </summary>
     /// <param name="camera">The <see cref="CameraComponent"/> used to generate the view and projection matrices for the calculation.</param>
