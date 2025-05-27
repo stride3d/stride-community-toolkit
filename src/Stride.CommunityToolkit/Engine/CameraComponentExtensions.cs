@@ -34,29 +34,9 @@ public static class CameraComponentExtensions
     /// </remarks>
     public static (Vector3 nearPoint, Vector3 farPoint) CalculateRayFromScreenPosition(this CameraComponent camera, Vector2 screenPosition)
     {
-        // Invert the view-projection matrix to transform from screen space to world space
-        var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
+        var (nearPoint, farPoint) = camera.ScreenPointToRay(screenPosition);
 
-        // Reconstruct the projection-space position in the (-1, +1) range.
-        // The X coordinate maps directly from screen space (0,1) to projection space (-1,+1).
-        // The Y coordinate is inverted because screen space is Y-down, while projection space is Y-up.
-        Vector3 position;
-        position.X = screenPosition.X * 2f - 1f;
-        position.Y = 1f - screenPosition.Y * 2f;
-
-        // Set Z = 0 for the near plane (the starting point of the ray)
-        // Unproject the near point from projection space to world space
-        position.Z = 0f;
-        var vectorNear = Vector3.Transform(position, invertedMatrix);
-        vectorNear /= vectorNear.W;
-
-        // Set Z = 1 for the far plane (the end point of the ray)
-        // Unproject the far point from projection space to world space
-        position.Z = 1f;
-        var vectorFar = Vector3.Transform(position, invertedMatrix);
-        vectorFar /= vectorFar.W;
-
-        return (vectorNear.XYZ(), vectorFar.XYZ());
+        return (nearPoint.XYZ(), farPoint.XYZ());
     }
 
     /// <summary>
@@ -144,18 +124,25 @@ public static class CameraComponentExtensions
     /// <returns>A tuple containing the near vector (<c>VectorNear</c>) and the far vector (<c>VectorFar</c>) of the ray in world space.</returns>
     public static (Vector4 VectorNear, Vector4 VectorFar) ScreenPointToRay(this CameraComponent camera, Vector2 screenPosition)
     {
+        // Invert the view-projection matrix to transform from screen space to world space
         var invertedMatrix = Matrix.Invert(camera.ViewProjectionMatrix);
 
+        // Reconstruct the projection-space position in the (-1, +1) range.
+        // The X coordinate maps directly from screen space (0,1) to projection space (-1,+1).
+        // The Y coordinate is inverted because screen space is Y-down, while projection space is Y-up.
         Vector3 position;
         position.X = screenPosition.X * 2f - 1f;
         position.Y = 1f - screenPosition.Y * 2f;
-        position.Z = 0f;
 
+        // Set Z = 0 for the near plane (the starting point of the ray)
+        // Unproject the near point from projection space to world space
+        position.Z = 0f;
         var vectorNear = Vector3.Transform(position, invertedMatrix);
         vectorNear /= vectorNear.W;
 
+        // Set Z = 1 for the far plane (the end point of the ray)
+        // Unproject the far point from projection space to world space
         position.Z = 1f;
-
         var vectorFar = Vector3.Transform(position, invertedMatrix);
         vectorFar /= vectorFar.W;
 
