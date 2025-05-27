@@ -112,7 +112,7 @@ public class Box2DSimulation : IDisposable
     /// <returns>The body ID that was hit, or null if nothing was hit</returns>
     public B2BodyId? OverlapPoint(Vector2 point, float querySize = 0.1f)
     {
-        // Create a small AABB around the clicked point
+        // Create a small AABB (Axis-Aligned Bounding Box) around the clicked point
         var lower = new B2Vec2(point.X - querySize, point.Y - querySize);
         var upper = new B2Vec2(point.X + querySize, point.Y + querySize);
         var box = new B2AABB { lowerBound = lower, upperBound = upper };
