@@ -3,7 +3,6 @@ using Example.Common;
 using Example18_Box2DPhysics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
-using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -12,6 +11,7 @@ using Stride.Input;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2Hulls;
+using static Box2D.NET.B2Joints;
 using static Box2D.NET.B2MathFunction;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
@@ -205,6 +205,8 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
 
 void Add2DShapesWithConstraint(Scene scene, int count = 5)
 {
+    var defaultLength = 1f;
+
     for (int i = 1; i <= count; i++)
     {
         var shapeModel1 = Get2DShape();
@@ -213,20 +215,44 @@ void Add2DShapesWithConstraint(Scene scene, int count = 5)
         if (shapeModel1 == null || shapeModel2 == null) return;
 
         var entity1 = CreateEntity(scene, shapeModel1);
+        var entity2 = CreateEntity(scene, shapeModel2);
+        entity2.Transform.Position = new Vector3(entity1.Transform.Position.X + defaultLength, entity1.Transform.Position.Y, entity1.Transform.Position.Z);
 
-        var bodyId = box2DSimulation.CreateDynamicBody(entity1, entity1.Transform.Position);
+        var myBodyIdA = box2DSimulation.CreateDynamicBody(entity1, entity1.Transform.Position);
+        var myBodyIdB = box2DSimulation.CreateDynamicBody(entity2, entity2.Transform.Position);
 
-        Create2DShapePhysics(shapeModel1, bodyId);
+        Create2DShapePhysics(shapeModel1, myBodyIdA);
+        Create2DShapePhysics(shapeModel2, myBodyIdB);
+
+        B2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
+        jointDef.hertz = 2.0f;
+        jointDef.dampingRatio = 0.5f;
+        jointDef.length = defaultLength;
+        jointDef.maxLength = defaultLength;
+        jointDef.minLength = defaultLength;
+        jointDef.enableSpring = false;
+        jointDef.enableLimit = false;
+        //jointDef.collideConnected = true;
+
+        jointDef.bodyIdA = myBodyIdA;
+        jointDef.bodyIdB = myBodyIdB;
+        jointDef.localAnchorA = new B2Vec2(0, 0);
+        jointDef.localAnchorB = new B2Vec2(0.0f, 0);
+
+        var anchorA = b2Body_GetLocalPoint(myBodyIdA, jointDef.localAnchorA);
+        var anchorB = b2Body_GetLocalPoint(myBodyIdB, jointDef.localAnchorB);
+
+        var myJointId = b2CreateDistanceJoint(worldId, ref jointDef);
     }
 }
 
-Entity CreateEntity(Scene scene, Shape2DModel shape)
+Entity CreateEntity(Scene scene, Shape2DModel shape, Color? color = null)
 {
     var entity = game.Create2DPrimitive(shape.Type, new()
     {
         Size = shape.Size,
         Depth = Depth,
-        Material = game.CreateFlatMaterial(shape.Color)
+        Material = game.CreateFlatMaterial(color ?? shape.Color)
     });
 
     entity.Name = $"{shape.Type}-{ShapeName}";
@@ -244,10 +270,7 @@ void AddBoxEntityWithPhysics(Scene scene)
 
         if (shapeModel == null) return;
 
-        var boxEntity = game.Create2DPrimitive(shapeModel.Type, new Primitive2DCreationOptions { Size = shapeModel.Size, Depth = Depth });
-        boxEntity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [10, 20], [0, 0]);
-        boxEntity.Scene = scene;
-        boxEntity.Name = ShapeName;
+        var boxEntity = CreateEntity(scene, shapeModel, Color.Black);
 
         var bodyId2 = box2DSimulation.CreateDynamicBody(boxEntity, boxEntity.Transform.Position);
 
@@ -308,8 +331,9 @@ static void Create2DShapePhysics(Shape2DModel shapeModel, B2BodyId bodyId)
 {
     // Create shape for the body
     var shapeDef = b2DefaultShapeDef();
-    shapeDef.density = 1.0f;
+    shapeDef.density = 2.0f;
     shapeDef.material.friction = 0.3f;
+
     if (shapeModel.Type == Primitive2DModelType.Square2D || shapeModel.Type == Primitive2DModelType.Rectangle2D)
     {
         var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
