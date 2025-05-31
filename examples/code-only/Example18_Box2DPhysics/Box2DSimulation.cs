@@ -52,8 +52,7 @@ public class Box2DSimulation : IDisposable
 
         _remainingUpdateTime += TimeScale == 1f ? elapsed : elapsed * TimeScale;
 
-        for (int stepCount = 0;
-             _remainingUpdateTime >= _fixedTimeStep && stepCount < MaxStepsPerFrame;
+        for (int stepCount = 0; _remainingUpdateTime >= _fixedTimeStep && stepCount < MaxStepsPerFrame;
              stepCount++, _remainingUpdateTime -= _fixedTimeStep)
         {
             float timeStep = (float)_fixedTimeStep.TotalSeconds;
@@ -99,10 +98,7 @@ public class Box2DSimulation : IDisposable
         return _bodyToEntity.TryGetValue(bodyId, out var entity) ? entity : null;
     }
 
-    public List<B2BodyId> GetAllBodyIds()
-    {
-        return _bodyToEntity.Keys.ToList();
-    }
+    public List<B2BodyId> GetAllBodyIds() => _bodyToEntity.Keys.ToList();
 
     /// <summary>
     /// Tests if a point overlaps with any physics shape in the world.

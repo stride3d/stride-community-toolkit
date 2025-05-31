@@ -16,7 +16,6 @@ using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
 
 Box2DSimulation? simulation = null; // The simulation handles everything behind the scenes
-ShapeFactory? shapeFactory = null;
 UiHelper? uiHelper = null;
 InputHandler? inputHandler = null;
 
@@ -35,7 +34,7 @@ void Start(Scene scene)
     game.AddProfiler();
 
     simulation = new Box2DSimulation();
-    shapeFactory = new ShapeFactory(game, scene);
+    var shapeFactory = new ShapeFactory(game, scene);
     uiHelper = new UiHelper(game);
 
     var camera = scene.GetCamera();
@@ -57,7 +56,7 @@ void Update(Scene scene, GameTime gameTime)
     uiHelper?.RenderNavigation(inputHandler?.CubeCount);
 }
 
-record GameConfig
+static class GameConfig
 {
     public const string ShapeName = "Box2DShape";
     public const int DefaultSpacing = 20;
@@ -127,8 +126,8 @@ class InputHandler
     private readonly Box2DSimulation _simulation;
     private readonly CameraComponent _camera;
     private readonly ShapeFactory _shapeFactory;
-    public readonly B2WorldId _worldId;
-    public int CubeCount { get; set; }
+    private readonly B2WorldId _worldId;
+    public int CubeCount { get; private set; }
 
     public InputHandler(Game game, Scene scene, Box2DSimulation simulation,
         CameraComponent camera, ShapeFactory shapeFactory)
@@ -182,9 +181,7 @@ class InputHandler
 
         void ClearAllShapes()
         {
-            if (_simulation is null || _scene is null) return;
-
-            // Should be remove also constraints?
+            // Should we remove also constraints?
             foreach (var entity in _scene.Entities.Where(w => w.Name.EndsWith(GameConfig.ShapeName)).ToList())
             {
                 _simulation?.RemoveBody(entity);
@@ -234,9 +231,7 @@ class InputHandler
 
     private void AddShapes(Primitive2DModelType? type = null, int count = 5, Color? color = null)
     {
-        if (_shapeFactory is null || _simulation is null) return;
-
-        for (int i = 1; i <= count; i++)
+        for (var i = 1; i <= count; i++)
         {
             var shapeModel = _shapeFactory.GetShapeModel(type);
 
@@ -251,17 +246,15 @@ class InputHandler
         SetCubeCount();
     }
 
-    private void SetCubeCount() => CubeCount = _scene?.Entities.Count(w => w.Name.EndsWith(GameConfig.ShapeName)) ?? 0;
+    private void SetCubeCount() => CubeCount = _scene.Entities.Count(w => w.Name.EndsWith(GameConfig.ShapeName));
 
     public void AddBlackRectangleShapes() => AddShapes(Primitive2DModelType.Rectangle2D, 50, Color.Black);
 
     private void AddShapesWithConstraint(int count = 5)
     {
-        if (_simulation is null || _shapeFactory is null) return;
-
         var defaultLength = 1f;
 
-        for (int i = 1; i <= count; i++)
+        for (var i = 1; i <= count; i++)
         {
             var shapeModel1 = _shapeFactory.GetShapeModel();
             var shapeModel2 = _shapeFactory.GetShapeModel();
@@ -294,10 +287,7 @@ class InputHandler
             jointDef.localAnchorA = new B2Vec2(0, 0);
             jointDef.localAnchorB = new B2Vec2(0.0f, 0);
 
-            var anchorA = b2Body_GetLocalPoint(bodyIdA, jointDef.localAnchorA);
-            var anchorB = b2Body_GetLocalPoint(bodyIdB, jointDef.localAnchorB);
-
-            var myJointId = b2CreateDistanceJoint(_worldId, ref jointDef);
+            b2CreateDistanceJoint(_worldId, ref jointDef);
         }
 
         SetCubeCount();
