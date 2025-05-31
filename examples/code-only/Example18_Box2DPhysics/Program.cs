@@ -16,13 +16,14 @@ using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
 
 const string ShapeName = "Box2DShape";
+const int DefaultSpacing = 20;
+const int HeaderSpacing = 30;
+const int DefaultDebugX = 5;
+const int DefaultDebugY = 30;
 
-B2WorldId worldId = new();
 var boxSize = new Vector2(0.2f, 0.2f);
 var rectangleSize = new Vector2(0.2f, 0.3f);
 int cubes = 0;
-int debugX = 5;
-int debugY = 30;
 
 List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Square2D, Color = Color.Green, Size = boxSize },
@@ -32,16 +33,20 @@ List<Shape2DModel> _2DShapes = [
     new() { Type = Primitive2DModelType.Capsule, Color = Color.Blue, Size = new Vector2(boxSize.X, boxSize.Y * 2) }
 ];
 
-// The simulation handles everything behind the scenes!
-Box2DSimulation? box2DSimulation = null;
-CameraComponent? camera = null;
+B2WorldId _worldId = new();
+Scene? _scene = null;
+Box2DSimulation? _box2DSimulation = null; // The simulation handles everything behind the scenes
+CameraComponent? _camera = null;
+(string, Color)[] _commands = GetNavigationCommands();
 
 using var game = new Game();
 
 game.Run(start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
+    _scene = scene;
+
     game.Window.AllowUserResizing = true;
     //game.SetupBase3DScene();
     //game.AddGraphicsCompositor().AddCleanUIStage();
@@ -50,84 +55,87 @@ void Start(Scene rootScene)
     game.Add2DCamera().Add2DCameraController();
     game.AddProfiler();
 
-    camera = rootScene.GetCamera();
+    _camera = _scene.GetCamera();
+    _box2DSimulation = new Box2DSimulation();
+    _worldId = _box2DSimulation.GetWorldId();
 
-    box2DSimulation = new Box2DSimulation();
-
-    worldId = box2DSimulation.GetWorldId();
-
-    AddGround(worldId);
-
-    AddRectangleShapes(rootScene);
+    AddGround(_worldId);
+    AddRectangleShapes();
 }
 
 void Update(Scene scene, GameTime gameTime)
 {
-    box2DSimulation?.Update(gameTime.Elapsed);
+    _box2DSimulation?.Update(gameTime.Elapsed);
 
-    ProcessKeyboardInput(scene);
+    ProcessKeyboardInput();
 
-    ProcessMouseInput(scene);
+    ProcessMouseInput();
 
     RenderNavigation();
 }
 
-void ProcessKeyboardInput(Scene scene)
+void ProcessKeyboardInput()
 {
     if (game.Input.IsKeyPressed(Keys.M))
     {
-        Add2DShapes(scene, Primitive2DModelType.Square2D, 10);
+        Add2DShapes(Primitive2DModelType.Square2D, 10);
     }
     else if (game.Input.IsKeyPressed(Keys.R))
     {
-        Add2DShapes(scene, Primitive2DModelType.Rectangle2D, 10);
+        Add2DShapes(Primitive2DModelType.Rectangle2D, 10);
     }
     else if (game.Input.IsKeyPressed(Keys.C))
     {
-        Add2DShapes(scene, Primitive2DModelType.Circle2D, 10);
+        Add2DShapes(Primitive2DModelType.Circle2D, 10);
     }
     else if (game.Input.IsKeyPressed(Keys.T))
     {
-        Add2DShapes(scene, Primitive2DModelType.Triangle2D, 10);
+        Add2DShapes(Primitive2DModelType.Triangle2D, 10);
     }
     else if (game.Input.IsKeyPressed(Keys.V))
     {
-        Add2DShapes(scene, Primitive2DModelType.Capsule, 10);
+        Add2DShapes(Primitive2DModelType.Capsule, 10);
     }
     else if (game.Input.IsKeyPressed(Keys.P))
     {
-        Add2DShapes(scene, count: 50);
+        Add2DShapes(count: 50);
     }
     else if (game.Input.IsKeyPressed(Keys.J))
     {
-        Add2DShapesWithConstraint(scene, 10);
+        Add2DShapesWithConstraint(10);
     }
     else if (game.Input.IsKeyReleased(Keys.X))
     {
+        ClearAllShapes();
+    }
+    else if (game.Input.IsKeyPressed(Keys.G))
+    {
+        AddRectangleShapes();
+    }
+
+    void ClearAllShapes()
+    {
+        if (_box2DSimulation is null || _scene is null) return;
+
         // Should be remove also constraints?
-        foreach (var entity in scene.Entities.Where(w => w.Name.EndsWith(ShapeName)).ToList())
+        foreach (var entity in _scene.Entities.Where(w => w.Name.EndsWith(ShapeName)).ToList())
         {
-            box2DSimulation?.RemoveBody(entity);
+            _box2DSimulation?.RemoveBody(entity);
             entity.Remove();
         }
 
-        SetCubeCount(scene);
-    }
-
-    if (game.Input.IsKeyPressed(Keys.G))
-    {
-        AddRectangleShapes(scene);
+        SetCubeCount();
     }
 }
 
-void ProcessMouseInput(Scene scene)
+void ProcessMouseInput()
 {
-    if (box2DSimulation is null || camera is null) return;
+    if (_box2DSimulation is null || _camera is null) return;
 
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))
     {
         var mousePosition = game.Input.MousePosition;
-        var ray = camera.CalculateRayPlaneIntersectionPoint(mousePosition);
+        var ray = _camera.CalculateRayPlaneIntersectionPoint(mousePosition);
 
         if (ray is null)
         {
@@ -136,29 +144,32 @@ void ProcessMouseInput(Scene scene)
             return;
         }
 
-        var hitBodyId = box2DSimulation.OverlapPoint(ray.Value);
+        var hitBodyId = _box2DSimulation.OverlapPoint(ray.Value);
 
         if (hitBodyId.HasValue)
         {
-            var entity = box2DSimulation?.GetEntity(hitBodyId.Value);
+            var entity = _box2DSimulation?.GetEntity(hitBodyId.Value);
 
-            if (entity != null)
-            {
-                // If the entity is a 2D primitive, we can apply an impulse to it
-                var impulse = new B2Vec2(0.0f, 3.0f); // Apply an upward impulse
-                b2Body_ApplyLinearImpulseToCenter(hitBodyId.Value, impulse, true);
-                Console.WriteLine($"Applied impulse to {entity.Name} at position {b2Body_GetPosition(hitBodyId.Value)}");
-            }
-            else
+            if (entity == null)
             {
                 var bodyName = b2Body_GetName(hitBodyId.Value);
                 Console.WriteLine($"Hit body with name {bodyName} but no associated entity found.");
+
+                return;
             }
+
+            var position = b2Body_GetPosition(hitBodyId.Value);
+            // If the entity is a 2D primitive, we can apply an impulse to it
+            var impulse = new B2Vec2(0.0f, 3.0f); // Apply an upward impulse
+
+            b2Body_ApplyLinearImpulseToCenter(hitBodyId.Value, impulse, true);
+
+            Console.WriteLine($"Applied impulse to {entity.Name} at position {position.X} , {position.Y}");
         }
     }
 }
 
-void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
+void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
 {
     for (int i = 1; i <= count; i++)
     {
@@ -166,17 +177,17 @@ void Add2DShapes(Scene scene, Primitive2DModelType? type = null, int count = 5)
 
         if (shapeModel == null) return;
 
-        var entity = CreateEntity(scene, shapeModel);
+        var entity = CreateEntity(shapeModel);
 
-        var bodyId = box2DSimulation.CreateDynamicBody(entity, entity.Transform.Position);
+        var bodyId = _box2DSimulation.CreateDynamicBody(entity, entity.Transform.Position);
 
         Create2DShapePhysics(shapeModel, bodyId);
     }
 
-    SetCubeCount(scene);
+    SetCubeCount();
 }
 
-void Add2DShapesWithConstraint(Scene scene, int count = 5)
+void Add2DShapesWithConstraint(int count = 5)
 {
     var defaultLength = 1f;
 
@@ -187,12 +198,12 @@ void Add2DShapesWithConstraint(Scene scene, int count = 5)
 
         if (shapeModel1 == null || shapeModel2 == null) return;
 
-        var entity1 = CreateEntity(scene, shapeModel1);
-        var entity2 = CreateEntity(scene, shapeModel2);
+        var entity1 = CreateEntity(shapeModel1);
+        var entity2 = CreateEntity(shapeModel2);
         entity2.Transform.Position = new Vector3(entity1.Transform.Position.X + defaultLength, entity1.Transform.Position.Y, entity1.Transform.Position.Z);
 
-        var myBodyIdA = box2DSimulation.CreateDynamicBody(entity1, entity1.Transform.Position);
-        var myBodyIdB = box2DSimulation.CreateDynamicBody(entity2, entity2.Transform.Position);
+        var myBodyIdA = _box2DSimulation.CreateDynamicBody(entity1, entity1.Transform.Position);
+        var myBodyIdB = _box2DSimulation.CreateDynamicBody(entity2, entity2.Transform.Position);
 
         Create2DShapePhysics(shapeModel1, myBodyIdA);
         Create2DShapePhysics(shapeModel2, myBodyIdB);
@@ -215,13 +226,13 @@ void Add2DShapesWithConstraint(Scene scene, int count = 5)
         var anchorA = b2Body_GetLocalPoint(myBodyIdA, jointDef.localAnchorA);
         var anchorB = b2Body_GetLocalPoint(myBodyIdB, jointDef.localAnchorB);
 
-        var myJointId = b2CreateDistanceJoint(worldId, ref jointDef);
+        var myJointId = b2CreateDistanceJoint(_worldId, ref jointDef);
     }
 
-    SetCubeCount(scene);
+    SetCubeCount();
 }
 
-Entity CreateEntity(Scene scene, Shape2DModel shape, Color? color = null)
+Entity CreateEntity(Shape2DModel shape, Color? color = null)
 {
     var entity = game.Create2DPrimitive(shape.Type, new()
     {
@@ -231,27 +242,29 @@ Entity CreateEntity(Scene scene, Shape2DModel shape, Color? color = null)
 
     entity.Name = $"{shape.Type}-{ShapeName}";
     entity.Transform.Position = GetRandomPosition();
-    entity.Scene = scene;
+    entity.Scene = _scene;
 
     return entity;
 }
 
-void AddRectangleShapes(Scene scene)
+void AddRectangleShapes()
 {
+    if (_box2DSimulation is null) return;
+
     for (int i = 0; i < 50; i++)
     {
         var shapeModel = Get2DShape(Primitive2DModelType.Rectangle2D);
 
         if (shapeModel == null) return;
 
-        var entity = CreateEntity(scene, shapeModel, Color.Black);
+        var entity = CreateEntity(shapeModel, Color.Black);
 
-        var bodyId = box2DSimulation.CreateDynamicBody(entity, entity.Transform.Position);
+        var bodyId = _box2DSimulation.CreateDynamicBody(entity, entity.Transform.Position);
 
         Create2DShapePhysics(shapeModel, bodyId);
     }
 
-    SetCubeCount(scene);
+    SetCubeCount();
 }
 
 Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
@@ -266,28 +279,43 @@ Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
     return _2DShapes.Find(x => x.Type == type);
 }
 
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Count(w => w.Name.EndsWith(ShapeName));
+void SetCubeCount() => cubes = _scene.Entities.Count(w => w.Name.EndsWith(ShapeName));
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
 
 static void Create2DShapePhysics(Shape2DModel shapeModel, B2BodyId bodyId)
 {
-    // Create shape for the body
     var shapeDef = b2DefaultShapeDef();
     shapeDef.density = 2.0f;
     shapeDef.material.friction = 0.3f;
 
-    if (shapeModel.Type == Primitive2DModelType.Square2D || shapeModel.Type == Primitive2DModelType.Rectangle2D)
+    switch (shapeModel.Type)
     {
-        var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
-        b2CreatePolygonShape(bodyId, ref shapeDef, ref box);
+        case Primitive2DModelType.Square2D:
+        case Primitive2DModelType.Rectangle2D:
+            var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
+            b2CreatePolygonShape(bodyId, ref shapeDef, ref box);
+            break;
+
+        case Primitive2DModelType.Circle2D:
+            var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
+            b2CreateCircleShape(bodyId, ref shapeDef, ref circle);
+            break;
+
+        case Primitive2DModelType.Triangle2D:
+            CreateTriangleShape(shapeModel, bodyId, shapeDef);
+            break;
+
+        case Primitive2DModelType.Capsule:
+            var capsule = new B2Capsule(
+                new(0, -shapeModel.Size.X / 2),
+                new(0, (shapeModel.Size.Y / 2) - shapeModel.Size.X / 2),
+                shapeModel.Size.X / 2);
+            b2CreateCapsuleShape(bodyId, ref shapeDef, ref capsule);
+            break;
     }
-    else if (shapeModel.Type == Primitive2DModelType.Circle2D)
-    {
-        var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
-        b2CreateCircleShape(bodyId, ref shapeDef, ref circle);
-    }
-    else if (shapeModel.Type == Primitive2DModelType.Triangle2D)
+
+    static void CreateTriangleShape(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef shapeDef)
     {
         var meshData = TriangleProceduralModel.New(shapeModel.Size);
         var points2 = meshData.Vertices.Select(v => new B2Vec2(v.Position.X, v.Position.Y)).ToArray();
@@ -312,37 +340,19 @@ static void Create2DShapePhysics(Shape2DModel shapeModel, B2BodyId bodyId)
         // Create the shape on the body
         b2CreatePolygonShape(bodyId, ref shapeDef, ref triangle);
     }
-    else if (shapeModel.Type == Primitive2DModelType.Capsule)
-    {
-        var capsule = new B2Capsule(
-            new(0, -shapeModel.Size.X / 2),
-            new(0, (shapeModel.Size.Y / 2) - shapeModel.Size.X / 2),
-            shapeModel.Size.X / 2);
-
-        b2CreateCapsuleShape(bodyId, ref shapeDef, ref capsule);
-    }
 }
 
 void RenderNavigation()
 {
     var space = 0;
-    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
-    space += 30;
-    game.DebugTextSystem.Print($"X - Delete all cubes and shapes", new Int2(x: debugX, y: debugY + space), Color.Red);
-    space += 20;
-    game.DebugTextSystem.Print($"M - Generate 2D squares", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"R - Generate 2D rectangles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"C - Generate 2D circles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"T - Generate 2D triangles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"V - Generate 2D capsules", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"J - Generate random shapes with constraint", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"P - Generate random shapes", new Int2(x: debugX, y: debugY + space));
+    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: DefaultDebugX, y: DefaultDebugY));
+    space += HeaderSpacing;
+
+    foreach (var (text, color) in _commands)
+    {
+        game.DebugTextSystem.Print(text, new Int2(x: DefaultDebugX, y: DefaultDebugY + space), color);
+        space += DefaultSpacing;
+    }
 }
 
 static void AddGround(B2WorldId worldId)
@@ -360,3 +370,14 @@ static void AddGround(B2WorldId worldId)
     B2ShapeDef groundShapeDef = b2DefaultShapeDef();
     b2CreatePolygonShape(groundId, ref groundShapeDef, ref groundBox);
 }
+
+static (string, Color)[] GetNavigationCommands() => [
+        ("X - Delete all cubes and shapes", Color.Red),
+        ("M - Generate 2D squares", Color.White),
+        ("R - Generate 2D rectangles", Color.White),
+        ("C - Generate 2D circles", Color.White),
+        ("T - Generate 2D triangles", Color.White),
+        ("V - Generate 2D capsules", Color.White),
+        ("J - Generate random shapes with constraint", Color.White),
+        ("P - Generate random shapes", Color.White)
+    ];
