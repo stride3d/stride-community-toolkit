@@ -15,7 +15,7 @@ using static Box2D.NET.B2Joints;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
 
-Box2DSimulation? box2DSimulation = null; // The simulation handles everything behind the scenes
+Box2DSimulation? simulation = null; // The simulation handles everything behind the scenes
 ShapeFactory? shapeFactory = null;
 UiHelper? uiHelper = null;
 InputHandler? inputHandler = null;
@@ -34,29 +34,27 @@ void Start(Scene scene)
     game.Add2DCamera().Add2DCameraController();
     game.AddProfiler();
 
-    var camera = scene.GetCamera();
-    box2DSimulation = new Box2DSimulation();
-    var worldId = box2DSimulation.GetWorldId();
-
+    simulation = new Box2DSimulation();
     shapeFactory = new ShapeFactory(game, scene);
     uiHelper = new UiHelper(game);
 
+    var camera = scene.GetCamera();
     if (camera != null)
     {
-        inputHandler = new InputHandler(game, scene, box2DSimulation, camera, shapeFactory, worldId);
+        inputHandler = new InputHandler(game, scene, simulation, camera, shapeFactory);
     }
 
-    PhysicsHelper.AddGround(worldId);
+    PhysicsHelper.AddGround(simulation.GetWorldId());
 
     inputHandler?.AddBlackRectangleShapes();
 }
 
 void Update(Scene scene, GameTime gameTime)
 {
-    box2DSimulation?.Update(gameTime.Elapsed);
+    simulation?.Update(gameTime.Elapsed);
     inputHandler?.ProcessKeyboardInput();
     inputHandler?.ProcessMouseInput();
-    uiHelper?.RenderNavigation();
+    uiHelper?.RenderNavigation(inputHandler?.CubeCount);
 }
 
 record GameConfig
@@ -133,14 +131,14 @@ class InputHandler
     public int CubeCount { get; set; }
 
     public InputHandler(Game game, Scene scene, Box2DSimulation simulation,
-        CameraComponent camera, ShapeFactory shapeFactory, B2WorldId worldId)
+        CameraComponent camera, ShapeFactory shapeFactory)
     {
         _game = game;
         _scene = scene;
         _simulation = simulation;
         _camera = camera;
         _shapeFactory = shapeFactory;
-        _worldId = worldId;
+        _worldId = simulation.GetWorldId();
     }
 
     public void ProcessKeyboardInput()
@@ -309,12 +307,11 @@ class InputHandler
 class UiHelper(Game game)
 {
     private readonly (string, Color)[] _commands = GetNavigationCommands();
-    public int CubeCount { get; set; }
 
-    public void RenderNavigation()
+    public void RenderNavigation(int? cubeCount = 0)
     {
         var space = 0;
-        game.DebugTextSystem.Print($"Cubes: {CubeCount}",
+        game.DebugTextSystem.Print($"Cubes: {cubeCount}",
             new Int2(x: GameConfig.DefaultDebugX, y: GameConfig.DefaultDebugY));
         space += GameConfig.HeaderSpacing;
 
