@@ -46,6 +46,18 @@ void Start(Scene scene)
     PhysicsHelper.AddGround(simulation.GetWorldId());
 
     inputHandler?.AddBlackRectangleShapes();
+
+    // Learning 2D
+    var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
+
+    if (shape == null) return;
+
+    var entity = shapeFactory.CreateEntity(shape, position: new(0, 2));
+    var bodyId = simulation.CreateDynamicBody(entity, entity.Transform.Position);
+
+    b2Body_SetGravityScale(bodyId, 0);
+
+    PhysicsHelper.CreateShapePhysics(shape, bodyId);
 }
 
 void Update(Scene scene, GameTime gameTime)
@@ -60,9 +72,9 @@ static class GameConfig
 {
     public const string ShapeName = "Box2DShape";
     public const int DefaultSpacing = 20;
-    public const int HeaderSpacing = 30;
     public const int DefaultDebugX = 5;
     public const int DefaultDebugY = 30;
+    public const int HeaderSpacing = 30;
     public static readonly Vector2 BoxSize = new(0.2f, 0.2f);
     public static readonly Vector2 RectangleSize = new(0.2f, 0.3f);
 }
@@ -101,7 +113,7 @@ class ShapeFactory
         return _shapes.Find(x => x.Type == type);
     }
 
-    public Entity CreateEntity(Shape2DModel shape, Color? color = null)
+    public Entity CreateEntity(Shape2DModel shape, Color? color = null, Vector2? position = null)
     {
         var entity = _game.Create2DPrimitive(shape.Type, new()
         {
@@ -110,7 +122,7 @@ class ShapeFactory
         });
 
         entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
-        entity.Transform.Position = GetRandomPosition();
+        entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
         entity.Scene = _scene;
 
         return entity;
@@ -328,27 +340,25 @@ class UiHelper(Game game)
 
 static class PhysicsHelper
 {
-    public static void CreateShapePhysics(Shape2DModel shapeModel, B2BodyId bodyId)
+    public static void CreateShapePhysics(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
     {
-        var shapeDef = b2DefaultShapeDef();
-        shapeDef.density = 2.0f;
-        shapeDef.material.friction = 0.3f;
+        var nonNullableShapeDef = shapeDef ?? CreateDefaultShapeDef();
 
         switch (shapeModel.Type)
         {
             case Primitive2DModelType.Square2D:
             case Primitive2DModelType.Rectangle2D:
                 var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
-                b2CreatePolygonShape(bodyId, ref shapeDef, ref box);
+                b2CreatePolygonShape(bodyId, ref nonNullableShapeDef, ref box);
                 break;
 
             case Primitive2DModelType.Circle2D:
                 var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
-                b2CreateCircleShape(bodyId, ref shapeDef, ref circle);
+                b2CreateCircleShape(bodyId, ref nonNullableShapeDef, ref circle);
                 break;
 
             case Primitive2DModelType.Triangle2D:
-                CreateTriangleShape(shapeModel, bodyId, shapeDef);
+                CreateTriangleShape(shapeModel, bodyId, nonNullableShapeDef);
                 break;
 
             case Primitive2DModelType.Capsule:
@@ -356,7 +366,7 @@ static class PhysicsHelper
                     new(0, -shapeModel.Size.X / 2),
                     new(0, (shapeModel.Size.Y / 2) - shapeModel.Size.X / 2),
                     shapeModel.Size.X / 2);
-                b2CreateCapsuleShape(bodyId, ref shapeDef, ref capsule);
+                b2CreateCapsuleShape(bodyId, ref nonNullableShapeDef, ref capsule);
                 break;
         }
 
@@ -385,6 +395,15 @@ static class PhysicsHelper
             // Create the shape on the body
             b2CreatePolygonShape(bodyId, ref shapeDef, ref triangle);
         }
+    }
+
+    public static B2ShapeDef CreateDefaultShapeDef()
+    {
+        var shapeDef = b2DefaultShapeDef();
+        shapeDef.density = 2.0f;
+        shapeDef.material.friction = 0.3f;
+
+        return shapeDef;
     }
 
     public static void AddGround(B2WorldId worldId)
