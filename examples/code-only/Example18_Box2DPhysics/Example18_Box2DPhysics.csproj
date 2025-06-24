@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Box2D.NET" Version="3.1.0.510" />
+        <PackageReference Include="Box2D.NET" Version="3.1.1.557" />
     </ItemGroup>
 
     <ItemGroup>
