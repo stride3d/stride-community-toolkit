@@ -294,10 +294,10 @@ class InputHandler
             jointDef.enableLimit = false;
             //jointDef.collideConnected = true;
 
-            jointDef.bodyIdA = bodyIdA;
-            jointDef.bodyIdB = bodyIdB;
-            jointDef.localAnchorA = new B2Vec2(0, 0);
-            jointDef.localAnchorB = new B2Vec2(0.0f, 0);
+            jointDef.@base.bodyIdA = bodyIdA;
+            jointDef.@base.bodyIdB = bodyIdB;
+            jointDef.@base.localFrameA.p = new B2Vec2(0, 0);
+            jointDef.@base.localFrameB.p = new B2Vec2(0.0f, 0);
 
             b2CreateDistanceJoint(_worldId, ref jointDef);
         }
