@@ -79,7 +79,7 @@ static class GameConfig
     public static readonly Vector2 RectangleSize = new(0.2f, 0.3f);
 }
 
-class ShapeFactory
+public class ShapeFactory
 {
     private readonly Game _game;
     private readonly Scene _scene;
@@ -338,7 +338,7 @@ class UiHelper(Game game)
     ];
 }
 
-static class PhysicsHelper
+public static class PhysicsHelper
 {
     public static void CreateShapePhysics(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
     {
