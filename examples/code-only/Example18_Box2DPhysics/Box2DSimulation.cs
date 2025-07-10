@@ -92,9 +92,12 @@ public class Box2DSimulation : IDisposable
         var bodyDef = b2DefaultBodyDef();
         bodyDef.type = B2BodyType.b2_kinematicBody;
         bodyDef.position = new B2Vec2(position.X, position.Y);
+
         var bodyId = b2CreateBody(_worldId, ref bodyDef);
+
         _bodyToEntity[bodyId] = entity;
         _entityToBody[entity] = bodyId;
+
         return bodyId;
     }
 
@@ -103,9 +106,12 @@ public class Box2DSimulation : IDisposable
         var bodyDef = b2DefaultBodyDef();
         bodyDef.type = B2BodyType.b2_staticBody;
         bodyDef.position = new B2Vec2(position.X, position.Y);
+
         var bodyId = b2CreateBody(_worldId, ref bodyDef);
+
         _bodyToEntity[bodyId] = entity;
         _entityToBody[entity] = bodyId;
+
         return bodyId;
     }
 
@@ -372,6 +378,7 @@ public class Box2DSimulation : IDisposable
         if (result.hit)
         {
             var bodyId = b2Shape_GetBody(result.shapeId);
+
             return new RaycastHit
             {
                 Entity = GetEntity(bodyId),
@@ -433,8 +440,11 @@ public class Box2DSimulation : IDisposable
         {
             var bodyId = b2Shape_GetBody(shapeId);
             if (!bodies.Contains(bodyId))
+            {
                 bodies.Add(bodyId);
-            return true; // Continue
+            }
+
+            return true;
         }, null);
 
         return bodies;
@@ -454,8 +464,10 @@ public class Box2DSimulation : IDisposable
             {
                 var bodyId = b2Shape_GetBody(shapeId);
                 if (!bodies.Contains(bodyId))
+                {
                     bodies.Add(bodyId);
-                return true; // Continue
+                }
+                return true;
             }, null);
 
         return bodies;
