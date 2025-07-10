@@ -14,6 +14,7 @@ This document provides specific guidance for GitHub Copilot when working on the 
 - `.github/`: CI/CD workflows, release, and configuration files.
 
 ## Coding & Contribution Guidelines
+- Prefer latest C# and .NET features for code.
 - Follow the naming convention: `Stride.CommunityToolkit.<LibraryName>` for new libraries.
 - Add new libraries to documentation and CI/CD workflows as described in `docs/contributing/toolkit/library-project.md`.
 - For examples, ensure discoverability and update the relevant documentation includes.
