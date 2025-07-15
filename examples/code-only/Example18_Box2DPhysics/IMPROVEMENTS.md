@@ -67,9 +67,7 @@ This document tracks improvements for Box2DSimulation.cs, inspired by Box2D.NET 
 - [x] B2Profile and world stats available
 - [ ] Expose SimulationStats struct and GetStats method
 
-## Migration Strategy
-- Add new features incrementally, keeping backward compatibility
-- Use feature flags to enable/disable new systems
+## Example Strategy
 - Add comprehensive examples in Example18_Box2DPhysics2/Program.cs
 
 ## Status
