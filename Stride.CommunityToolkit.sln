@@ -124,6 +124,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.NET.Samples", "..\Box
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.NET.Shared", "..\Box2D.NET\src\Box2D.NET.Shared\Box2D.NET.Shared.csproj", "{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example18_Box2DPhysics2", "examples\code-only\Example18_Box2DPhysics2\Example18_Box2DPhysics2.csproj", "{ADA9619A-CBF5-4926-8137-D144840B2A0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -341,6 +343,10 @@ Global
 		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF2EEB99-923B-BCBC-67C7-0E4F6B8E2CF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -386,6 +392,7 @@ Global
 		{F247EC4E-DB2C-4109-B592-1991B58873CC} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{88EFA4B1-DEA9-4953-87E5-EBD6387ED706} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{ADA9619A-CBF5-4926-8137-D144840B2A0C} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}

@@ -7,9 +7,13 @@ using Stride.Engine;
 using Stride.Games;
 using static Box2D.NET.B2Bodies;
 
-Box2DSimulation? simulation = null; // The simulation handles everything behind the scenes
-UiHelper? uiHelper = null;
-InputHandler? inputHandler = null;
+// Example 18: Box2D Physics Integration
+// This example demonstrates how to integrate Box2D.NET with Stride game engine
+// for 2D physics simulations with shapes, collisions, and interactive controls
+
+// Global variables for the demo
+Box2DSimulation? simulation = null;
+DemoManager? demoManager = null;
 
 using var game = new Game();
 
@@ -17,45 +21,81 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene scene)
 {
+    // Configure the game window and setup 2D scene
     game.Window.AllowUserResizing = true;
-    //game.SetupBase3DScene();
-    //game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Setup2D(Color.CornflowerBlue);
-    //game.Add3DCamera().Add3DCameraController();
+    game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
+    
+    // Setup 2D scene with camera and controls
+    game.Setup2D(GameConfig.BackgroundColor);
     game.Add2DCamera().Add2DCameraController();
     game.AddProfiler();
 
+    // Initialize the Box2D physics simulation
     simulation = new Box2DSimulation();
-    var shapeFactory = new ShapeFactory(game, scene);
-    uiHelper = new UiHelper(game);
+    ConfigurePhysicsWorld(simulation);
 
+    // Initialize the demo manager to handle all demo logic
     var camera = scene.GetCamera();
     if (camera != null)
     {
-        inputHandler = new InputHandler(game, scene, simulation, camera, shapeFactory);
+        demoManager = new DemoManager(game, scene, simulation, camera);
+        demoManager.Initialize();
+    }
+    else
+    {
+        throw new InvalidOperationException("Camera not found in scene");
     }
 
-    PhysicsHelper.AddGround(simulation.GetWorldId());
-
-    inputHandler?.AddBlackRectangleShapes();
-
-    // Learning 2D
-    var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
-
-    if (shape == null) return;
-
-    var entity = shapeFactory.CreateEntity(shape, position: new(0, 2));
-    var bodyId = simulation.CreateDynamicBody(entity, entity.Transform.Position);
-
-    b2Body_SetGravityScale(bodyId, 0);
-
-    PhysicsHelper.CreateShapePhysics(shape, bodyId);
+    // Create the initial scene setup
+    CreateInitialScene(scene);
 }
 
 void Update(Scene scene, GameTime gameTime)
 {
+    // Update physics simulation
     simulation?.Update(gameTime.Elapsed);
-    inputHandler?.ProcessKeyboardInput();
-    inputHandler?.ProcessMouseInput();
-    uiHelper?.RenderNavigation(inputHandler?.CubeCount);
+    
+    // Update demo manager (handles input and UI)
+    demoManager?.Update(gameTime);
+}
+
+void ConfigurePhysicsWorld(Box2DSimulation simulation)
+{
+    // Configure gravity (negative Y is down)
+    simulation.Gravity = new Vector2(0f, GameConfig.Gravity);
+    
+    // Enable contact events for collision detection
+    simulation.EnableContactEvents = true;
+    simulation.EnableSensorEvents = true;
+    
+    // Set physics timestep properties
+    simulation.TimeScale = 1.0f;
+    simulation.MaxStepsPerFrame = 3;
+}
+
+void CreateInitialScene(Scene scene)
+{
+    if (simulation == null) return;
+
+    // Add ground for physics objects to collide with
+    PhysicsHelper.AddGround(simulation.GetWorldId());
+
+    // Create a simple demonstration with a few shapes
+    var shapeFactory = new ShapeFactory(game, scene);
+    
+    // Create a single shape with zero gravity for demonstration
+    var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
+    if (shape != null)
+    {
+        var entity = shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
+        var bodyId = simulation.CreateDynamicBody(entity, entity.Transform.Position);
+        
+        // Set zero gravity for this body to demonstrate control
+        b2Body_SetGravityScale(bodyId, 0);
+        
+        PhysicsHelper.CreateShapePhysics(shape, bodyId);
+    }
+
+    // Add some initial shapes for interaction
+    demoManager?.AddInitialShapes();
 }
