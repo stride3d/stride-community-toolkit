@@ -20,7 +20,7 @@ This document provides specific guidance for GitHub Copilot when working on the 
 - For examples, ensure discoverability and update the relevant documentation includes.
 - Use .NET 8 as the default target unless otherwise specified.
 - Prefer concise, well-documented, and idiomatic C# code.
-- Do not use #region directives; prefer clear, self-documenting code.
+- Do not use `#region` directives; prefer clear, self-documenting code.
 - When refactoring, don't create multiple classes in a single file; keep each class in its own file.
 
 ## Documentation
