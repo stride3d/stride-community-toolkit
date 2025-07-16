@@ -5,7 +5,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
-using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Joints;
 
 namespace Example18_Box2DPhysics.Helpers;
@@ -14,7 +13,7 @@ namespace Example18_Box2DPhysics.Helpers;
 /// Manages the overall demo experience including input handling, shape creation, and user interactions.
 /// This class orchestrates the various components of the Box2D physics demonstration.
 /// </summary>
-public class DemoManager : IDisposable
+public class DemoManager
 {
     private readonly Game _game;
     private readonly Scene _scene;
@@ -38,7 +37,7 @@ public class DemoManager : IDisposable
         _simulation = simulation;
         _camera = camera;
         _worldId = simulation.GetWorldId();
-        
+
         _shapeFactory = new ShapeFactory(game, scene);
         _uiHelper = new UiHelper(game);
         _inputManager = new InputManager(game, _camera);
@@ -50,10 +49,10 @@ public class DemoManager : IDisposable
     public void Initialize()
     {
         LogAction("Demo initialized");
-        
+
         // Register for physics events if needed
         // _simulation.RegisterContactEventHandler(this);
-        
+
         // Could add initial demo shapes here
         // AddInitialShapes();
     }
@@ -66,7 +65,7 @@ public class DemoManager : IDisposable
     {
         ProcessInput();
         UpdateUI();
-        
+
         // Could add periodic demo updates here
         // UpdateDemoLogic(gameTime);
     }
@@ -80,8 +79,6 @@ public class DemoManager : IDisposable
         AddShapes(Primitive2DModelType.Rectangle2D, 10, Color.Black);
         LogAction($"Added {10} initial demo shapes");
     }
-
-    #region Input Processing
 
     private void ProcessInput()
     {
@@ -134,7 +131,7 @@ public class DemoManager : IDisposable
             AddInitialShapes();
             LogAction("Added demo shapes");
         }
-        
+
         // Control commands
         else if (input.IsKeyPressed(Keys.X))
         {
@@ -145,7 +142,7 @@ public class DemoManager : IDisposable
         {
             TogglePhysics();
         }
-        
+
         // Could add more advanced controls
         // Debug/utility commands could go here
     }
@@ -177,10 +174,6 @@ public class DemoManager : IDisposable
         }
     }
 
-    #endregion
-
-    #region Shape Management
-
     private void AddShapes(Primitive2DModelType type, int count, Color? color = null)
     {
         for (int i = 0; i < count; i++)
@@ -190,7 +183,7 @@ public class DemoManager : IDisposable
 
             var entity = _shapeFactory.CreateEntity(shapeModel, color);
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
-            
+
             PhysicsHelper.CreateShapePhysics(shapeModel, bodyId);
             _totalShapesCreated++;
         }
@@ -205,7 +198,7 @@ public class DemoManager : IDisposable
 
             var entity = _shapeFactory.CreateEntity(shapeModel);
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
-            
+
             PhysicsHelper.CreateShapePhysics(shapeModel, bodyId);
             _totalShapesCreated++;
         }
@@ -229,7 +222,7 @@ public class DemoManager : IDisposable
 
         var entity1 = _shapeFactory.CreateEntity(shapeModel1, GameConfig.ConstraintColor);
         var entity2 = _shapeFactory.CreateEntity(shapeModel2, GameConfig.ConstraintColor);
-        
+
         // Position second shape relative to first
         entity2.Transform.Position = new Vector3(
             entity1.Transform.Position.X + GameConfig.DefaultJointLength,
@@ -245,7 +238,7 @@ public class DemoManager : IDisposable
 
         // Create distance joint
         CreateDistanceJoint(bodyIdA, bodyIdB);
-        
+
         _totalShapesCreated += 2;
     }
 
@@ -275,10 +268,10 @@ public class DemoManager : IDisposable
 
         var entity = _shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position);
         var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
-        
+
         PhysicsHelper.CreateShapePhysics(shapeModel, bodyId);
         _totalShapesCreated++;
-        
+
         LogAction($"Created {shapeModel.Type} at mouse position");
     }
 
@@ -297,10 +290,6 @@ public class DemoManager : IDisposable
         _totalShapesCreated = 0;
     }
 
-    #endregion
-
-    #region Physics Interaction
-
     private void ApplyMouseImpulse(B2BodyId bodyId, Vector2 worldPoint)
     {
         var entity = _simulation.GetEntity(bodyId);
@@ -313,7 +302,7 @@ public class DemoManager : IDisposable
         );
 
         PhysicsHelper.ApplyImpulse(bodyId, impulseDirection);
-        
+
         LogAction($"Applied impulse to {entity.Name}");
     }
 
@@ -324,20 +313,16 @@ public class DemoManager : IDisposable
         LogAction($"Physics {status}");
     }
 
-    #endregion
-
-    #region UI Management
-
     private void UpdateUI()
     {
         _uiHelper.RenderNavigation(ShapeCount, _simulation);
-        
+
         // Show last action
         if ((DateTime.Now - _lastActionTime).TotalSeconds < 3)
         {
             _uiHelper.RenderStatusMessage($"Last action: {_lastAction}", Color.LightGreen);
         }
-        
+
         // Could add more UI elements here
         // Performance metrics, physics debug info, etc.
     }
@@ -346,71 +331,7 @@ public class DemoManager : IDisposable
     {
         _lastAction = action;
         _lastActionTime = DateTime.Now;
-        
-        // Could also log to console or file
-        // Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {action}");
-    }
 
-    #endregion
-
-    #region Cleanup
-
-    public void Dispose()
-    {
-        // Cleanup resources if needed
-        // _simulation.UnregisterContactEventHandler(this);
-        _inputManager?.Dispose();
-    }
-
-    #endregion
-}
-
-/// <summary>
-/// Helper class for managing input and coordinate transformations
-/// </summary>
-public class InputManager : IDisposable
-{
-    private readonly Game _game;
-    private readonly CameraComponent _camera;
-
-    public InputManager(Game game, CameraComponent camera)
-    {
-        _game = game;
-        _camera = camera;
-    }
-
-    /// <summary>
-    /// Converts mouse screen coordinates to world coordinates
-    /// </summary>
-    /// <param name="mousePosition">Mouse position in screen coordinates</param>
-    /// <returns>World position, or null if conversion fails</returns>
-    public Vector2? GetWorldPointFromMouse(Vector2 mousePosition)
-    {
-        var ray = _camera.CalculateRayPlaneIntersectionPoint(mousePosition);
-        return ray;
-    }
-
-    /// <summary>
-    /// Checks if a key was just pressed (not held)
-    /// </summary>
-    /// <param name="key">The key to check</param>
-    /// <returns>True if key was just pressed</returns>
-    public bool IsKeyJustPressed(Keys key)
-    {
-        return _game.Input.IsKeyPressed(key);
-    }
-
-    /// <summary>
-    /// Gets the current mouse position in screen coordinates
-    /// </summary>
-    /// <returns>Mouse position</returns>
-    public Vector2 GetMousePosition()
-    {
-        return _game.Input.MousePosition;
-    }
-
-    public void Dispose()
-    {
-        // Cleanup input resources if needed
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] {action}");
     }
 }

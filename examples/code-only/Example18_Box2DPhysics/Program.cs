@@ -24,7 +24,7 @@ void Start(Scene scene)
     // Configure the game window and setup 2D scene
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
-    
+
     // Setup 2D scene with camera and controls
     game.Setup2D(GameConfig.BackgroundColor);
     game.Add2DCamera().Add2DCameraController();
@@ -36,14 +36,14 @@ void Start(Scene scene)
 
     // Initialize the demo manager to handle all demo logic
     var camera = scene.GetCamera();
-    if (camera != null)
+    if (camera == null)
     {
-        demoManager = new DemoManager(game, scene, simulation, camera);
-        demoManager.Initialize();
+        throw new InvalidOperationException("Camera not found in scene");
     }
     else
     {
-        throw new InvalidOperationException("Camera not found in scene");
+        demoManager = new DemoManager(game, scene, simulation, camera);
+        demoManager.Initialize();
     }
 
     // Create the initial scene setup
@@ -54,7 +54,7 @@ void Update(Scene scene, GameTime gameTime)
 {
     // Update physics simulation
     simulation?.Update(gameTime.Elapsed);
-    
+
     // Update demo manager (handles input and UI)
     demoManager?.Update(gameTime);
 }
@@ -63,11 +63,11 @@ void ConfigurePhysicsWorld(Box2DSimulation simulation)
 {
     // Configure gravity (negative Y is down)
     simulation.Gravity = new Vector2(0f, GameConfig.Gravity);
-    
+
     // Enable contact events for collision detection
     simulation.EnableContactEvents = true;
     simulation.EnableSensorEvents = true;
-    
+
     // Set physics timestep properties
     simulation.TimeScale = 1.0f;
     simulation.MaxStepsPerFrame = 3;
@@ -82,17 +82,17 @@ void CreateInitialScene(Scene scene)
 
     // Create a simple demonstration with a few shapes
     var shapeFactory = new ShapeFactory(game, scene);
-    
+
     // Create a single shape with zero gravity for demonstration
     var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
     if (shape != null)
     {
         var entity = shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
         var bodyId = simulation.CreateDynamicBody(entity, entity.Transform.Position);
-        
+
         // Set zero gravity for this body to demonstrate control
         b2Body_SetGravityScale(bodyId, 0);
-        
+
         PhysicsHelper.CreateShapePhysics(shape, bodyId);
     }
 

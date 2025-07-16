@@ -105,7 +105,7 @@ public static class PhysicsHelper
         var groundBox = b2MakeBox(groundSize.X, groundSize.Y);
         var groundShapeDef = CreateDefaultShapeDef();
         groundShapeDef.material.friction = 0.6f; // Higher friction for ground
-        
+
         b2CreatePolygonShape(groundId, ref groundShapeDef, ref groundBox);
 
         return groundId;
@@ -143,15 +143,13 @@ public static class PhysicsHelper
             var bodyId = b2CreateBody(worldId, ref bodyDef);
             var box = b2MakeBox(config.Size.X, config.Size.Y);
             var shapeDef = CreateDefaultShapeDef();
-            
+
             b2CreatePolygonShape(bodyId, ref shapeDef, ref box);
             walls.Add(bodyId);
         }
 
         return walls;
     }
-
-    #region Private Shape Creation Methods
 
     private static void CreateBoxShape(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef shapeDef)
     {
@@ -161,7 +159,7 @@ public static class PhysicsHelper
 
     private static void CreateCircleShape(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef shapeDef)
     {
-        var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X / 2);
+        var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
         b2CreateCircleShape(bodyId, ref shapeDef, ref circle);
     }
 
@@ -182,7 +180,7 @@ public static class PhysicsHelper
         // Create hull and polygon from the triangle vertices
         var hull = b2ComputeHull(points, 3);
         var triangle = b2MakePolygon(ref hull, 0.0f);
-        
+
         b2CreatePolygonShape(bodyId, ref shapeDef, ref triangle);
     }
 
@@ -196,13 +194,9 @@ public static class PhysicsHelper
             new B2Vec2(0, -capsuleHeight),
             new B2Vec2(0, capsuleHeight),
             radius);
-        
+
         b2CreateCapsuleShape(bodyId, ref shapeDef, ref capsule);
     }
-
-    #endregion
-
-    #region Utility Methods
 
     /// <summary>
     /// Applies an impulse to a body at its center
@@ -249,6 +243,4 @@ public static class PhysicsHelper
         var velocity = b2Body_GetLinearVelocity(bodyId);
         return new Vector2(velocity.X, velocity.Y);
     }
-
-    #endregion
 }
