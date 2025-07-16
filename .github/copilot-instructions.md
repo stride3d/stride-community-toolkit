@@ -35,5 +35,11 @@ This document provides specific guidance for GitHub Copilot when working on the 
 - Prioritize Blazor-specific solutions when relevant.
 
 ## Maintenance
-- As the solution/project structure changes, update `.github/copilot-instructions.md` to keep Copilot guidance current.
-- See: https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot
+
+> [!IMPORTANT]  
+> **Note to developers:** Please keep this document up to date as the project evolves. Update these instructions whenever you introduce new technologies, make architectural changes, or establish important new conventions. This ensures GitHub Copilot continues to provide relevant and accurate assistance.
+
+- Review and update `.github/copilot-instructions.md` whenever the solution or project structure changes.
+- Document any new patterns, best practices, or exceptions that Copilot should be aware of.
+- Remove outdated guidance and clarify ambiguous instructions as needed.
+- Refer to the [GitHub Copilot documentation](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot) for details on customizing Copilot for your repository.
