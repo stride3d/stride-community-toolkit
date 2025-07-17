@@ -13,7 +13,7 @@ namespace Example18_Box2DPhysics.Helpers;
 /// Manages the overall demo experience including input handling, shape creation, and user interactions.
 /// This class orchestrates the various components of the Box2D physics demonstration.
 /// </summary>
-public class DemoManager
+public class SceneManager
 {
     private readonly Game _game;
     private readonly Scene _scene;
@@ -30,7 +30,7 @@ public class DemoManager
 
     public int ShapeCount => _scene.Entities.Count(e => e.Name.EndsWith(GameConfig.ShapeName));
 
-    public DemoManager(Game game, Scene scene, Box2DSimulation simulation, CameraComponent camera)
+    public SceneManager(Game game, Scene scene, Box2DSimulation simulation, CameraComponent camera)
     {
         _game = game;
         _scene = scene;

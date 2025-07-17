@@ -13,7 +13,7 @@ using static Box2D.NET.B2Bodies;
 
 // Global variables for the demo
 Box2DSimulation? simulation = null;
-DemoManager? demoManager = null;
+SceneManager? demoManager = null;
 
 using var game = new Game();
 
@@ -42,7 +42,7 @@ void Start(Scene scene)
     }
     else
     {
-        demoManager = new DemoManager(game, scene, simulation, camera);
+        demoManager = new SceneManager(game, scene, simulation, camera);
         demoManager.Initialize();
     }
 
