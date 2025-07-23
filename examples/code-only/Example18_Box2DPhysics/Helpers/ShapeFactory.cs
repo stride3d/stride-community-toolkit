@@ -64,71 +64,30 @@ public class ShapeFactory
 
         if (shape.Type == Primitive2DModelType.Rectangle2D)
         {
-            //var meshData = RectangleProceduralModel.New(size: shape.Size);
-            //var vertices = meshData.Vertices;
-            ////var vertices = new[]
-            ////{
-            ////    new VertexPositionTexture(new Vector3(0.0f, 0.0f, 0.0f), Vector2.Zero),
-            ////    new VertexPositionTexture(new Vector3(0.0f, 1.0f, 0.0f), Vector2.Zero),
-            ////    new VertexPositionTexture(new Vector3(1.0f, 1.0f, 0.0f), Vector2.Zero),
-            ////    new VertexPositionTexture(new Vector3(1.0f, 0.0f, 0.0f), Vector2.Zero),
-            ////};
-            //var vertices2 = new[]
-            //{
-            //    new VertexPositionTexture(new Vector3(0.0f, 0.0f, 0.0f), Vector2.Zero),
-            //    new VertexPositionTexture(new Vector3(0.0f, 1.0f, 0.0f), Vector2.Zero),
-            //    new VertexPositionTexture(new Vector3(1.0f, 1.0f, 0.0f), Vector2.Zero),
-            //    new VertexPositionTexture(new Vector3(1.0f, 0.0f, 0.0f), Vector2.Zero),
-            //    new VertexPositionTexture(new Vector3(0.0f, 0.0f, 0.0f), Vector2.Zero),
-            //};
-            //Console.WriteLine($"Vertices: {string.Join(", ", vertices)}");
-            //var vertexBuffer = Buffer.Vertex.New(_game.GraphicsDevice, vertices);
-            ////var vertexBuffer = Buffer.New(_game.GraphicsDevice, vertices, BufferFlags.VertexBuffer);
-            ////var indices = meshData.Indices;
-            //var indices = new[] { 0, 1, 2, 3, 0 };
-            //Console.WriteLine($"Indices: {string.Join(", ", indices)}");
-            //var indexBuffer = Buffer.New(_game.GraphicsDevice, indices, BufferFlags.IndexBuffer);
+            var meshData = RectangleProceduralModel.New(size: shape.Size);
+            var borderVertices = meshData.Vertices.Select(v => new VertexPositionTexture(new Vector3(v.Position.X, v.Position.Y, 0), v.TextureCoordinate)).ToArray();
+
+            Console.WriteLine($"Vertices: {string.Join(", ", borderVertices)}");
 
             var material = GizmoEmissiveColorMaterial.Create(_game.GraphicsDevice, Color.Orange);
 
-            // Calculate half extents
-            var halfWidth = (shape.Size.X / 2f) + 0.001f;
-            var halfHeight = (shape.Size.Y / 2f) + 0.001f;
-
-            // Define corners in order: bottom-left, top-left, top-right, bottom-right, and repeat first
-            var borderVertices = new[]
-            {
-                new VertexPositionTexture(new Vector3(-halfWidth, -halfHeight, 0), Vector2.Zero),
-                new VertexPositionTexture(new Vector3(-halfWidth,  halfHeight, 0), Vector2.Zero),
-                new VertexPositionTexture(new Vector3( halfWidth,  halfHeight, 0), Vector2.Zero),
-                new VertexPositionTexture(new Vector3( halfWidth, -halfHeight, 0), Vector2.Zero),
-                new VertexPositionTexture(new Vector3(-halfWidth, -halfHeight, 0), Vector2.Zero),
-            };
             var borderIndices = new short[] { 0, 1, 2, 3, 0 };
 
+            Console.WriteLine($"Vertices: {string.Join(", ", borderVertices)}");
+
             var vertexBuffer = Buffer.Vertex.New(_game.GraphicsDevice, borderVertices);
-            var indexBuffer = Buffer.New(_game.GraphicsDevice, borderIndices, BufferFlags.IndexBuffer);
+            var indexBuffer = Buffer.Index.New(_game.GraphicsDevice, borderIndices);
 
             var meshDraw = new MeshDraw
             {
                 StartLocation = 0,
                 PrimitiveType = PrimitiveType.LineStrip,
                 VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector3>(), VertexElement.TextureCoordinate<Vector2>()), borderVertices.Length)],
+                //VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector2>(), VertexElement.TextureCoordinate<Vector2>()), borderVertices.Length)],
+                //VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector3>()), borderVertices.Length)],
                 IndexBuffer = new IndexBufferBinding(indexBuffer, is32Bit: false, borderIndices.Length),
                 DrawCount = borderIndices.Length
             };
-
-            //var meshDraw = new MeshDraw
-            //{
-            //    StartLocation = 0,
-            //    PrimitiveType = PrimitiveType.LineStrip,
-            //    VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector3>(),
-            //                VertexElement.TextureCoordinate<Vector2>()), vertices.Length)],
-            //    //VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector3>()), vertices.Length)],
-            //    //VertexBuffers = [new VertexBufferBinding(vertexBuffer, new VertexDeclaration(VertexElement.Position<Vector2>(), VertexElement.TextureCoordinate<Vector2>()), vertices.Length)],
-            //    IndexBuffer = new IndexBufferBinding(indexBuffer, is32Bit: true, indices.Length),
-            //    DrawCount = indices.Length
-            //};
 
             var mesh = new Mesh { Draw = meshDraw };
             var model = new Model { mesh, material };
@@ -137,10 +96,6 @@ public class ShapeFactory
                 new ModelComponent { Model = model }
             };
 
-            //vertexBuffer.Dispose();
-            //indexBuffer.Dispose();
-
-            //borderEntity.Transform.Position = entity.Transform.Position;
             entity.AddChild(borderEntity);
         }
 
