@@ -22,6 +22,7 @@ public static class GameExtensions
         game.Add3DGround();
     }
 
+    // ToDo: Maybe this could be call SetupDemo3DScene and move to a demo namespace?
     /// <summary>
     /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
