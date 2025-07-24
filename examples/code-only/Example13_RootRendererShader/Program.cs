@@ -10,7 +10,7 @@ game.Run(start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase();
+    game.SetupBase3D();
     AddRenderFeature();
     game.AddProfiler();
 

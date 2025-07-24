@@ -15,7 +15,7 @@ game.Run(start: Start, update: Update);
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
-    game.Setup2D(Color.CornflowerBlue);
+    game.Add2DGraphicsCompositor(Color.CornflowerBlue);
     game.Add2DCamera().Add2DCameraController();
     game.AddProfiler();
 

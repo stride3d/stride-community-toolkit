@@ -90,6 +90,12 @@ public static class GameExtensions
         }
     }
 
+    public static void SetupBase2D(this Game game, Color? clearColor = null)
+    {
+        game.Add2DGraphicsCompositor(clearColor);
+        game.Add2DCamera().Add2DCameraController();
+    }
+
     /// <summary>
     /// Sets up essential components for the game, including a GraphicsCompositor, a camera, and a directional light.
     /// </summary>
@@ -102,7 +108,7 @@ public static class GameExtensions
     /// </list>
     /// </remarks>
     /// <param name="game">The Game instance that will receive the base setup.</param>
-    public static void SetupBase(this Game game)
+    public static void SetupBase3D(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add3DCamera();
@@ -119,7 +125,6 @@ public static class GameExtensions
         // Create a default GraphicsCompositor with enabled post-effects.
         var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(true);
 
-        // Set the GraphicsCompositor for the game's SceneSystem
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
         return graphicsCompositor;
@@ -130,19 +135,16 @@ public static class GameExtensions
     /// </summary>
     /// <param name="game">The Game instance to configure.</param>
     /// <param name="clearColor">Optional background color. Defaults to black if not specified.</param>
-    /// <param name="addCamera">Whether to automatically add a 2D camera. Default is true.</param>
     /// <returns>The configured GraphicsCompositor for 2D rendering.</returns>
-    public static GraphicsCompositor Setup2D(this Game game, Color? clearColor = null)
+    public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
     {
         // Create a simplified GraphicsCompositor without post-effects
         var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(
             enablePostEffects: false,
             clearColor: clearColor ?? Color.Black);
 
-        // Remove the lighting features from the compositor
         RemoveLightingFeatures(graphicsCompositor);
 
-        // Set the GraphicsCompositor
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
         return graphicsCompositor;
