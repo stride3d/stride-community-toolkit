@@ -138,12 +138,20 @@ public static class GameExtensions
     /// <returns>The configured GraphicsCompositor for 2D rendering.</returns>
     public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
     {
+        var graphicsCompositor2 = GraphicsCompositorHelper2D.CreateDefault(
+    clearColor: Color.Black);
+
+        game.SceneSystem.GraphicsCompositor = graphicsCompositor2;
+
+        return graphicsCompositor2;
+
         // Create a simplified GraphicsCompositor without post-effects
         var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(
             enablePostEffects: false,
             clearColor: clearColor ?? Color.Black);
 
-        RemoveLightingFeatures(graphicsCompositor);
+        // ToDo: Do we need this?
+        //RemoveLightingFeatures(graphicsCompositor);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
