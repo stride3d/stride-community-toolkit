@@ -90,6 +90,11 @@ public static class GameExtensions
         }
     }
 
+    /// <summary>
+    /// Configures the game for 2D rendering by setting up the necessary graphics compositor and camera.
+    /// </summary>
+    /// <param name="game">The game instance to configure for 2D rendering.</param>
+    /// <param name="clearColor">The optional background color used to clear the screen. If not specified, a default color is used.</param>
     public static void SetupBase2D(this Game game, Color? clearColor = null)
     {
         game.Add2DGraphicsCompositor(clearColor);
@@ -116,14 +121,13 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a default GraphicsCompositor with enabled post-effects to the specified Game instance and sets it as the game's SceneSystem GraphicsCompositor.
+    /// Adds a default graphics compositor with post-processing effects enabled to the specified game.
     /// </summary>
-    /// <param name="game">The Game instance to which the GraphicsCompositor will be added.</param>
-    /// <returns>The newly configured GraphicsCompositor instance with enabled post-effects.</returns>
+    /// <param name="game">The game to which the graphics compositor will be added. Cannot be null.</param>
+    /// <returns>The newly created <see cref="GraphicsCompositor"/> with post-processing effects enabled.</returns>
     public static GraphicsCompositor AddGraphicsCompositor(this Game game)
     {
-        // Create a default GraphicsCompositor with enabled post-effects.
-        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(true);
+        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: true);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
@@ -131,27 +135,17 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets up the game for 2D rendering with natural colors unaffected by lighting.
+    /// Adds a 2D graphics compositor to the specified game, optionally setting a clear color.
     /// </summary>
-    /// <param name="game">The Game instance to configure.</param>
-    /// <param name="clearColor">Optional background color. Defaults to black if not specified.</param>
-    /// <returns>The configured GraphicsCompositor for 2D rendering.</returns>
+    /// <remarks>This method sets the graphics compositor of the game's scene system to a default 2D
+    /// configuration without post-processing effects. The clear color can be specified to customize the background
+    /// color of the rendered scene.</remarks>
+    /// <param name="game">The game to which the 2D graphics compositor will be added. Cannot be null.</param>
+    /// <param name="clearColor">The optional clear color for the graphics compositor. If null, a default color is used.</param>
+    /// <returns>The newly created 2D graphics compositor.</returns>
     public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
     {
-        var graphicsCompositor2 = GraphicsCompositorHelper2D.CreateDefault(
-    clearColor: Color.Black);
-
-        game.SceneSystem.GraphicsCompositor = graphicsCompositor2;
-
-        return graphicsCompositor2;
-
-        // Create a simplified GraphicsCompositor without post-effects
-        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(
-            enablePostEffects: false,
-            clearColor: clearColor ?? Color.Black);
-
-        // ToDo: Do we need this?
-        //RemoveLightingFeatures(graphicsCompositor);
+        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: false, clearColor: clearColor);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
@@ -500,11 +494,23 @@ public static class GameExtensions
         graphicsCompositor.AddSceneRenderer(renderer);
     }
 
+    /// <summary>
+    /// Adds a root render feature to the game's graphics compositor.
+    /// </summary>
+    /// <param name="game">The game instance to which the render feature will be added. Cannot be null.</param>
+    /// <param name="renderFeature">The root render feature to add. Cannot be null.</param>
     public static void AddRootRenderFeature(this Game game, RootRenderFeature renderFeature)
     {
         game.SceneSystem.GraphicsCompositor.AddRootRenderFeature(renderFeature);
     }
 
+    /// <summary>
+    /// Adds particle rendering capabilities to the specified game.
+    /// </summary>
+    /// <remarks>This method extends the game's graphics compositor by incorporating stages and features
+    /// necessary for rendering particles. Ensure that the game has a valid scene system before invoking this
+    /// method.</remarks>
+    /// <param name="game">The game to which particle rendering stages and features will be added. Cannot be null.</param>
     public static void AddParticleRenderer(this Game game)
     {
         game.SceneSystem.GraphicsCompositor.AddParticleStagesAndFeatures();
