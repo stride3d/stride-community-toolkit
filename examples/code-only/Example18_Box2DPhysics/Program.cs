@@ -13,7 +13,7 @@ using static Box2D.NET.B2Bodies;
 
 // Global variables for the demo
 Box2DSimulation? simulation = null;
-SceneManager? demoManager = null;
+SceneManager? sceneManager = null;
 
 using var game = new Game();
 
@@ -35,14 +35,15 @@ void Start(Scene scene)
 
     // Initialize the demo manager to handle all demo logic
     var camera = scene.GetCamera();
-    if (camera == null)
+
+    if (camera is null)
     {
         throw new InvalidOperationException("Camera not found in scene");
     }
     else
     {
-        demoManager = new SceneManager(game, scene, simulation, camera);
-        demoManager.Initialize();
+        sceneManager = new SceneManager(game, scene, simulation, camera);
+        sceneManager.Initialize();
     }
 
     // Create the initial scene setup
@@ -55,7 +56,7 @@ void Update(Scene scene, GameTime gameTime)
     simulation?.Update(gameTime.Elapsed);
 
     // Update demo manager (handles input and UI)
-    demoManager?.Update(gameTime);
+    sceneManager?.Update(gameTime);
 }
 
 void ConfigurePhysicsWorld(Box2DSimulation simulation)
@@ -84,6 +85,7 @@ void CreateInitialScene(Scene scene)
 
     // Create a single shape with zero gravity for demonstration
     var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
+
     if (shape != null)
     {
         var entity = shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
@@ -96,5 +98,5 @@ void CreateInitialScene(Scene scene)
     }
 
     // Add some initial shapes for interaction
-    demoManager?.AddInitialShapes();
+    sceneManager?.AddInitialShapes();
 }
