@@ -97,6 +97,7 @@ public static class GameExtensions
     /// <param name="clearColor">The optional background color used to clear the screen. If not specified, a default color is used.</param>
     public static void SetupBase2D(this Game game, Color? clearColor = null)
     {
+        //game.AddGraphicsCompositor2();
         game.Add2DGraphicsCompositor(clearColor);
         game.Add2DCamera().Add2DCameraController();
     }
@@ -128,6 +129,15 @@ public static class GameExtensions
     public static GraphicsCompositor AddGraphicsCompositor(this Game game)
     {
         var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: true);
+
+        game.SceneSystem.GraphicsCompositor = graphicsCompositor;
+
+        return graphicsCompositor;
+    }
+
+    public static GraphicsCompositor AddGraphicsCompositor2(this Game game)
+    {
+        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: false);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
