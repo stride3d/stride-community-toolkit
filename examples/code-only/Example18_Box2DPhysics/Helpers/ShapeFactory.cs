@@ -84,18 +84,16 @@ public class ShapeFactory
                     DiffuseMap = new ComputeColor(fillColor.ToColor4()),
                 },
                 DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                // Add subtle emission for Box2D.NET-like appearance
+                // Improved emission - use absolute values instead of multipliers
                 Emissive = new MaterialEmissiveMapFeature
                 {
                     EmissiveMap = new ComputeColor(fillColor.ToColor4())
                 },
-                // Reduce glossiness for flat 2D appearance
+                // Completely flat for 2D appearance
                 MicroSurface = new MaterialGlossinessMapFeature
                 {
-                    GlossinessMap = new ComputeFloat(0.1f)
-                },
-                // Add transparency support for better blending
-                Transparency = new MaterialTransparencyBlendFeature()
+                    GlossinessMap = new ComputeFloat(0.5f)
+                }
             }
         });
     }
@@ -249,7 +247,7 @@ public class ShapeFactory
     private void CreateBorderMesh(Entity parentEntity, VertexPositionTexture[] vertices, short[] indices,
         Color borderColor, string entityName, PrimitiveType primitiveType)
     {
-        // Create enhanced border material with stronger emission and proper transparency
+        // Create enhanced border material without problematic emission multipliers
         var borderMaterial = Material.New(_game.GraphicsDevice, new MaterialDescriptor
         {
             Attributes = new MaterialAttributes
@@ -259,6 +257,7 @@ public class ShapeFactory
                     DiffuseMap = new ComputeColor(borderColor.ToColor4())
                 },
                 DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                // Fixed emission - use small constant value instead of color multiplication
                 Emissive = new MaterialEmissiveMapFeature
                 {
                     EmissiveMap = new ComputeColor(borderColor.ToColor4()) // Increased emission
@@ -268,7 +267,7 @@ public class ShapeFactory
                     GlossinessMap = new ComputeFloat(0.0f)
                 },
                 // Add transparency for better visual blending
-                Transparency = new MaterialTransparencyBlendFeature()
+                //Transparency = new MaterialTransparencyBlendFeature()
             }
         });
 
