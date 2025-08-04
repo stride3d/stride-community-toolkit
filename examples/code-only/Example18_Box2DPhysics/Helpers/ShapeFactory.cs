@@ -357,4 +357,32 @@ public class ShapeFactory
     }
 
     private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
+
+    private Material CreateSDFShaderMaterial(Color baseColor, Primitive2DModelType shapeType)
+    {
+        var effect = new EffectInstance("Box2DStyleShader");
+
+        // Set shader parameters
+        effect.Parameters.Set("BaseColor", baseColor.ToColor4());
+        effect.Parameters.Set("BorderThickness", 0.02f);
+        effect.Parameters.Set("AntiAliasing", 0.003f);
+
+        // Map shape types to shader constants
+        int shaderShapeType = shapeType switch
+        {
+            Primitive2DModelType.Circle2D => 1,
+            Primitive2DModelType.Triangle2D => 2,
+            _ => 0 // Rectangle/Square default
+        };
+        effect.Parameters.Set("ShapeType", shaderShapeType);
+
+        return Material.New(_game.GraphicsDevice, new MaterialDescriptor
+        {
+            Attributes = new MaterialAttributes
+            {
+                // Use your custom shader effect
+                // This will require setting up the effect properly
+            }
+        });
+    }
 }

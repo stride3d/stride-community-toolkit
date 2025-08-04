@@ -18,4 +18,18 @@
         <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Effects\Box2DStyleShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Effects\Box2DStyleShader.sdsl">
+        <LastGenOutput>Box2DStyleShader.sdsl.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
 </Project>

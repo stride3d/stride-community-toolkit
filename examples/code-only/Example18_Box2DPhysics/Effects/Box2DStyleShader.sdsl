@@ -1,0 +1,61 @@
+namespace Stride.Rendering
+{
+    shader Box2DStyleShader : ShaderBase
+    {
+        // Parameters that can be set from C#
+        stage float4 BaseColor;
+        stage float BorderThickness = 0.02f;
+        stage float AntiAliasing = 0.003f;
+        stage int ShapeType = 0; // 0=Rectangle, 1=Circle, 2=Triangle
+
+        // Input streams
+        stream float2 TexCoord : TEXCOORD0;
+
+        override stage void PSMain()
+        {
+            float2 uv = streams.TexCoord;
+
+            // Calculate distance to edge based on shape type
+            float distance = CalculateShapeDistance(uv, ShapeType);
+
+            // Create smooth border/fill transition
+            float borderWidth = BorderThickness;
+            float aa = AntiAliasing;
+
+            // Fill color (darker)
+            float4 fillColor = BaseColor * 0.7f;
+
+            // Border color (lighter)
+            float4 borderColor = BaseColor + float4(0.3f, 0.3f, 0.3f, 0.0f);
+            borderColor = saturate(borderColor);
+
+            // Create smooth transition
+            float fillMask = smoothstep(-aa, aa, distance);
+            float borderMask = smoothstep(borderWidth - aa, borderWidth + aa, distance);
+
+            // Blend fill and border
+            float4 result = lerp(fillColor, borderColor, fillMask);
+            result.a *= (1.0f - borderMask);
+
+            streams.ColorTarget = result;
+        }
+
+        stage float CalculateShapeDistance(float2 uv, int shapeType)
+        {
+            if (shapeType == 1) // Circle
+            {
+                return length(uv - 0.5f) - 0.4f;
+            }
+            else if (shapeType == 2) // Triangle (simplified)
+            {
+                float2 p = abs(uv - 0.5f);
+                return max(p.x * 0.866f + p.y * 0.5f, p.y) - 0.4f;
+            }
+            else // Rectangle (default)
+            {
+                float2 p = abs(uv - 0.5f) - 0.4f;
+                return length(max(p, 0.0f)) + min(max(p.x, p.y), 0.0f);
+            }
+        }
+    };
+}
