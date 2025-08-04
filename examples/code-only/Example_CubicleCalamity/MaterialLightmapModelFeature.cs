@@ -36,11 +36,6 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
 
     public override void GenerateShader(MaterialGeneratorContext context)
     {
-        // Set energy conservation explicitly for testing
-        //((IEnergyConservativeDiffuseModelFeature)this).IsEnergyConservative = true;
-
-        //Console.WriteLine($"[DEBUG] Generating MaterialSurfaceShadingLightmap shader with Intensity: {Intensity}, IsEnergyConservative: {IsEnergyConservative}");
-
         var shaderSource = new ShaderMixinSource();
         shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", Intensity));
 
