@@ -24,11 +24,19 @@
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
         <AutoGen>True</AutoGen>
       </Compile>
+      <Compile Update="Effects\MaterialSurfaceShadingLightmap.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <None Update="Effects\Box2DStyleShader.sdsl">
         <LastGenOutput>Box2DStyleShader.sdsl.cs</LastGenOutput>
+      </None>
+      <None Update="Effects\MaterialSurfaceShadingLightmap.sdsl">
+        <LastGenOutput>MaterialSurfaceShadingLightmap.sdsl.cs</LastGenOutput>
       </None>
     </ItemGroup>
 

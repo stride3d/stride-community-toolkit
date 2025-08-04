@@ -4,7 +4,6 @@ using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
@@ -91,18 +90,58 @@ public class ShapeFactory
                     BorderThickness = 0.02f,
                     AntiAliasing = 0.003f,
                     ShapeType = shaderShapeType,
-                    UseLightBorder = true
+                    UseLightBorder = true,
+                    Intensity = 20000 // Adjust intensity for better visibility
                 },
-                // Provide a simple diffuse color
                 Diffuse = new MaterialDiffuseMapFeature
                 {
-                    DiffuseMap = new ComputeColor(baseColor.ToColor4())
+                    DiffuseMap = new ComputeColor(baseColor.ToColor4()),
                 },
-                // Keep flat microsurface for 2D appearance
+                Specular = new MaterialMetalnessMapFeature(new ComputeFloat(1)),
+                SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
+                Emissive = new MaterialEmissiveMapFeature
+                {
+                    EmissiveMap = new ComputeColor(baseColor.ToColor4())
+                },
+                // Reduce glossiness for flat 2D appearance
+                //MicroSurface = new MaterialGlossinessMapFeature
+                //{
+                //    GlossinessMap = new ComputeFloat(0.1f)
+                //},
+                MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.65f)),
+                // Add transparency support for better blending
+                //Transparency = new MaterialTransparencyBlendFeature()
+            }
+        });
+    }
+
+    /// <summary>
+    /// Creates a Box2D.NET-style material with proper fill and border characteristics
+    /// Do not remove this when refactoring or using Copilot Agent
+    /// </summary>
+    private Material CreateBox2DStyleMaterial(Color fillColor, Color borderColor)
+    {
+        return Material.New(_game.GraphicsDevice, new MaterialDescriptor
+        {
+            Attributes = new MaterialAttributes
+            {
+                Diffuse = new MaterialDiffuseMapFeature
+                {
+                    DiffuseMap = new ComputeColor(fillColor.ToColor4()),
+                },
+                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+                // Add subtle emission for Box2D.NET-like appearance
+                Emissive = new MaterialEmissiveMapFeature
+                {
+                    EmissiveMap = new ComputeColor(fillColor.ToColor4())
+                },
+                // Reduce glossiness for flat 2D appearance
                 MicroSurface = new MaterialGlossinessMapFeature
                 {
-                    GlossinessMap = new ComputeFloat(0.0f)
-                }
+                    GlossinessMap = new ComputeFloat(0.1f)
+                },
+                // Add transparency support for better blending
+                Transparency = new MaterialTransparencyBlendFeature()
             }
         });
     }

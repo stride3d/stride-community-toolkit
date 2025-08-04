@@ -1,7 +1,10 @@
 using Stride.Core;
 using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
+using Stride.Graphics;
+using Stride.Rendering;
 using Stride.Rendering.Materials;
+using Stride.Rendering.Materials.ComputeColors;
 using Stride.Shaders;
 
 namespace Example18_Box2DPhysics.Materials;
@@ -53,17 +56,47 @@ public class MaterialBox2DStyleFeature : MaterialFeature, IMaterialDiffuseModelF
     [Display("Light Border")]
     public bool UseLightBorder { get; set; } = true;
 
+    [DataMember(10)]
+    [Display("LightMap")]
+    [NotNull]
+    public IComputeColor LightMap { get; set; } = new ComputeTextureColor();
+
+    [DataMember(20)]
+    [NotNull]
+    [DataMemberRange(0.0, 1.0, 0.01, 0.1, 3)]
+    public float Intensity { get; set; } = 200; // Added default value
+
+    private static readonly ObjectParameterKey<Texture> Map = ParameterKeys.NewObject<Texture>();
+    private static readonly ValueParameterKey<Color4> Value = ParameterKeys.NewValue<Color4>();
+
     public override void GenerateShader(MaterialGeneratorContext context)
     {
         var shaderSource = new ShaderMixinSource();
+        shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", Intensity));
 
-        // Use the Box2DStyleShader without parameters - parameters will be set via the material
-        shaderSource.Mixins.Add(new ShaderClassSource("Box2DStyleShader"));
+        if (LightMap != null)
+        {
+            Console.WriteLine("[DEBUG] Adding LightMap composition");
+            shaderSource.AddComposition("LightMap", LightMap.GenerateShaderSource(context, new MaterialComputeColorKeys(Map, Value, Color.White)));
+        }
 
-        // Create a shader builder for diffuse model replacement
         var shaderBuilder = context.AddShading(this);
         shaderBuilder.LightDependentSurface = shaderSource;
+
+        Console.WriteLine("[DEBUG] MaterialSurfaceShadingLightmap shader generation completed");
     }
+
+    //public override void GenerateShader(MaterialGeneratorContext context)
+    //{
+    //    var shaderSource = new ShaderMixinSource();
+
+    //    // Use the Box2DStyleShader without parameters - parameters will be set via the material
+    //    shaderSource.Mixins.Add(new ShaderClassSource("Box2DStyleShader"));
+
+    //    // Create a shader builder for diffuse model replacement
+    //    var shaderBuilder = context.AddShading(this);
+    //    shaderBuilder.LightDependentSurface = shaderSource;
+    //}
 
     //public void Visit(MaterialGeneratorContext context)
     //{
