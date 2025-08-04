@@ -1,10 +1,7 @@
 using Stride.Core;
 using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
-using Stride.Graphics;
-using Stride.Rendering;
 using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 using Stride.Shaders;
 
 namespace Example18_Box2DPhysics.Materials;
@@ -60,13 +57,28 @@ public class MaterialBox2DStyleFeature : MaterialFeature, IMaterialDiffuseModelF
     {
         var shaderSource = new ShaderMixinSource();
 
-        // Use the Box2DStyleShader we created with parameters
-        shaderSource.Mixins.Add(new ShaderClassSource("Box2DStyleShader", BaseColor, BorderThickness, AntiAliasing, ShapeType));
+        // Use the Box2DStyleShader without parameters - parameters will be set via the material
+        shaderSource.Mixins.Add(new ShaderClassSource("Box2DStyleShader"));
 
         // Create a shader builder for diffuse model replacement
         var shaderBuilder = context.AddShading(this);
         shaderBuilder.LightDependentSurface = shaderSource;
     }
+
+    //public void Visit(MaterialGeneratorContext context)
+    //{
+    //    // Set shader parameters on the material pass
+    //    if (context.MaterialPass != null)
+    //    {
+    //        // Convert Color4 to Vector4 for shader compatibility
+    //        context.MaterialPass.Parameters.Set(Box2DStyleShaderKeys.BaseColor, new Vector4(BaseColor.R, BaseColor.G, BaseColor.B, BaseColor.A));
+    //        context.MaterialPass.Parameters.Set(Box2DStyleShaderKeys.BorderThickness, BorderThickness);
+    //        context.MaterialPass.Parameters.Set(Box2DStyleShaderKeys.AntiAliasing, AntiAliasing);
+    //        context.MaterialPass.Parameters.Set(Box2DStyleShaderKeys.ShapeType, ShapeType);
+    //    }
+
+    //    base.Visit(context);
+    //}
 
     public bool Equals(IMaterialShadingModelFeature other)
     {
@@ -77,9 +89,9 @@ public class MaterialBox2DStyleFeature : MaterialFeature, IMaterialDiffuseModelF
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return BaseColor.Equals(other.BaseColor) && 
-               BorderThickness.Equals(other.BorderThickness) && 
-               AntiAliasing.Equals(other.AntiAliasing) && 
+        return BaseColor.Equals(other.BaseColor) &&
+               BorderThickness.Equals(other.BorderThickness) &&
+               AntiAliasing.Equals(other.AntiAliasing) &&
                ShapeType == other.ShapeType &&
                UseLightBorder == other.UseLightBorder;
     }
