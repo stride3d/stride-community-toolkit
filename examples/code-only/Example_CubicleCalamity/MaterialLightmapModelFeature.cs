@@ -38,7 +38,10 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
     {
 
         var shaderSource = new ShaderMixinSource();
+
+        // ToDo: MaterialSurfaceShadingLightmap is recognised, when renamed, it crashes
         shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", IsEnergyConservative, Intensity));
+
         if (LightMap != null)
         {
             shaderSource.AddComposition("LightMap", LightMap.GenerateShaderSource(context, new MaterialComputeColorKeys(Map, Value, Color.White)));
