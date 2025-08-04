@@ -34,22 +34,6 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
     [DataMemberRange(0.0, 1.0, 0.01, 0.1, 3)]
     public float Intensity { get; set; } = 1.0f; // Added default value
 
-    public void GenerateShader2(MaterialGeneratorContext context)
-    {
-        var shaderSource = new ShaderMixinSource();
-
-        // Use proper parameter passing to shader
-        shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", IsEnergyConservative, Intensity));
-
-        if (LightMap != null)
-        {
-            shaderSource.AddComposition("LightMap", LightMap.GenerateShaderSource(context, new MaterialComputeColorKeys(Map, Value, Color.White)));
-        }
-
-        var shaderBuilder = context.AddShading(this);
-        shaderBuilder.LightDependentSurface = shaderSource;
-    }
-
     public override void GenerateShader(MaterialGeneratorContext context)
     {
         // Set energy conservation explicitly for testing
