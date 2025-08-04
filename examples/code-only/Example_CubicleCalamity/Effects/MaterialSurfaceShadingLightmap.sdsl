@@ -1,14 +1,11 @@
-shader MaterialSurfaceShadingLightmap<bool TIsEnergyConservative, float TIntensity> : IMaterialSurfaceShading, Math
+shader MaterialSurfaceShadingLightmap<float TIntensity> : IMaterialSurfaceShading, Math
 {
     compose ComputeColor LightMap;
 
     override float3 ComputeDirectLightContribution()
     {
         var diffuseColor = streams.matDiffuseVisible;
-        if (TIsEnergyConservative)
-        {
-            diffuseColor *= (1 - streams.matSpecularVisible);
-        }
+
         return diffuseColor / PI * streams.lightColorNdotL * streams.matDiffuseSpecularAlphaBlend.x;
     }
 
@@ -16,11 +13,6 @@ shader MaterialSurfaceShadingLightmap<bool TIsEnergyConservative, float TIntensi
     {
         var diffuseColor = streams.matDiffuseVisible;
         float3 lightMapColor = LightMap.Compute().rgb;
-
-        if (TIsEnergyConservative)
-        {
-            diffuseColor *= (1 - streams.matSpecularVisible);
-        }
 
         // Enhanced environmental lighting: blend the lightmap with diffuse color
         // This adds the lightmap as ambient lighting while preserving original colors

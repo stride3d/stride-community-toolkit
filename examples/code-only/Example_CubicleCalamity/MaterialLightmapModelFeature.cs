@@ -14,15 +14,15 @@ namespace Example_CubicleCalamity;
 /// </summary>
 [DataContract("MaterialLightmapModelFeature")]
 [Display("Lightmap")]
-public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseModelFeature, IEnergyConservativeDiffuseModelFeature
+public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseModelFeature
 {
     private static readonly ObjectParameterKey<Texture> Map = ParameterKeys.NewObject<Texture>();
     private static readonly ValueParameterKey<Color4> Value = ParameterKeys.NewValue<Color4>();
 
-    [DataMemberIgnore]
-    bool IEnergyConservativeDiffuseModelFeature.IsEnergyConservative { get; set; }
+    //[DataMemberIgnore]
+    //bool IEnergyConservativeDiffuseModelFeature.IsEnergyConservative { get; set; }
 
-    private bool IsEnergyConservative => ((IEnergyConservativeDiffuseModelFeature)this).IsEnergyConservative;
+    //private bool IsEnergyConservative => ((IEnergyConservativeDiffuseModelFeature)this).IsEnergyConservative;
 
     [DataMember(10)]
     [Display("LightMap")]
@@ -37,12 +37,12 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
     public override void GenerateShader(MaterialGeneratorContext context)
     {
         // Set energy conservation explicitly for testing
-        ((IEnergyConservativeDiffuseModelFeature)this).IsEnergyConservative = true;
+        //((IEnergyConservativeDiffuseModelFeature)this).IsEnergyConservative = true;
 
-        Console.WriteLine($"[DEBUG] Generating MaterialSurfaceShadingLightmap shader with Intensity: {Intensity}, IsEnergyConservative: {IsEnergyConservative}");
+        //Console.WriteLine($"[DEBUG] Generating MaterialSurfaceShadingLightmap shader with Intensity: {Intensity}, IsEnergyConservative: {IsEnergyConservative}");
 
         var shaderSource = new ShaderMixinSource();
-        shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", IsEnergyConservative, Intensity));
+        shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", Intensity));
 
         if (LightMap != null)
         {
@@ -60,7 +60,7 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return IsEnergyConservative.Equals(other.IsEnergyConservative) && LightMap.Equals(other.LightMap) && Intensity.Equals(other.Intensity);
+        return LightMap.Equals(other.LightMap) && Intensity.Equals(other.Intensity);
     }
 
     public bool Equals(IMaterialShadingModelFeature other)
@@ -77,6 +77,6 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(IsEnergyConservative, LightMap, Intensity);
+        return HashCode.Combine(LightMap, Intensity);
     }
 }
