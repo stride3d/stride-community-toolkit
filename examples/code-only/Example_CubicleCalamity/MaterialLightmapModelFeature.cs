@@ -32,14 +32,13 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
     [DataMember(20)]
     [NotNull]
     [DataMemberRange(0.0, 1.0, 0.01, 0.1, 3)]
-    public float Intensity { get; set; }
+    public float Intensity { get; set; } = 1.0f; // Added default value
 
-    public override void GenerateShader(MaterialGeneratorContext context)
+    public void GenerateShader2(MaterialGeneratorContext context)
     {
-
         var shaderSource = new ShaderMixinSource();
 
-        // ToDo: MaterialSurfaceShadingLightmap is recognised, when renamed, it crashes
+        // Use proper parameter passing to shader
         shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", IsEnergyConservative, Intensity));
 
         if (LightMap != null)
@@ -51,11 +50,33 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
         shaderBuilder.LightDependentSurface = shaderSource;
     }
 
+    public override void GenerateShader(MaterialGeneratorContext context)
+    {
+        // Set energy conservation explicitly for testing
+        ((IEnergyConservativeDiffuseModelFeature)this).IsEnergyConservative = true;
+
+        Console.WriteLine($"[DEBUG] Generating MaterialSurfaceShadingLightmap shader with Intensity: {Intensity}, IsEnergyConservative: {IsEnergyConservative}");
+
+        var shaderSource = new ShaderMixinSource();
+        shaderSource.Mixins.Add(new ShaderClassSource("MaterialSurfaceShadingLightmap", IsEnergyConservative, Intensity));
+
+        if (LightMap != null)
+        {
+            Console.WriteLine("[DEBUG] Adding LightMap composition");
+            shaderSource.AddComposition("LightMap", LightMap.GenerateShaderSource(context, new MaterialComputeColorKeys(Map, Value, Color.White)));
+        }
+
+        var shaderBuilder = context.AddShading(this);
+        shaderBuilder.LightDependentSurface = shaderSource;
+
+        Console.WriteLine("[DEBUG] MaterialSurfaceShadingLightmap shader generation completed");
+    }
+
     public bool Equals(MaterialLightmapModelFeature other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
-        return IsEnergyConservative.Equals(other.IsEnergyConservative) && LightMap.Equals(other.LightMap);
+        return IsEnergyConservative.Equals(other.IsEnergyConservative) && LightMap.Equals(other.LightMap) && Intensity.Equals(other.Intensity);
     }
 
     public bool Equals(IMaterialShadingModelFeature other)
@@ -72,6 +93,6 @@ public class MaterialLightmapModelFeature : MaterialFeature, IMaterialDiffuseMod
 
     public override int GetHashCode()
     {
-        return IsEnergyConservative.GetHashCode();
+        return HashCode.Combine(IsEnergyConservative, LightMap, Intensity);
     }
 }

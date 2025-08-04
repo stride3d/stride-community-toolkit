@@ -106,6 +106,7 @@ public class CubeStacker
         entity.Scene = _scene;
     }
 
+    // ToDo: Can we change box physics so it doesn't bump?
     public void Update(Scene scene, GameTime time)
     {
         _elapsedTime += time.Elapsed.TotalSeconds;
@@ -207,7 +208,7 @@ public class CubeStacker
     {
         foreach (var color in Constants.Colours)
         {
-            var material = CreateMaterial(color);
+            var material = CreateMaterial(color, specular: 0);
 
             _materials.Add(color, material);
         }
@@ -215,18 +216,27 @@ public class CubeStacker
 
     public Material CreateMaterial(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
     {
-        var materialDescription2 = new MaterialDescriptor
+        var lightmapMaterial = new MaterialDescriptor
         {
             Attributes =
                 {
                     Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
-                    DiffuseModel = new MaterialLightmapModelFeature(),
+                    DiffuseModel = new MaterialLightmapModelFeature()
+                    {
+                        Intensity = 20,
+                        LightMap = new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)
+                    },
                     Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
                     SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
                     MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(microSurface))
                 }
         };
 
+        return Material.New(_game.GraphicsDevice, lightmapMaterial);
+    }
+
+    public Material CreateMaterial2(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
+    {
         var materialDescription = new MaterialDescriptor
         {
             Attributes =
@@ -253,7 +263,6 @@ public class CubeStacker
 
         return Material.New(_game.GraphicsDevice, materialDescription);
         //options.Size /= 2;
-
     }
 
     private void AddNewFirstLayer(Vector3 startPosition)
