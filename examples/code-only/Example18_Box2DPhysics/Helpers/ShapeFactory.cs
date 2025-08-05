@@ -20,7 +20,7 @@ public class ShapeFactory
     private readonly List<Shape2DModel> _shapes =
     [
         new() { Type = Primitive2DModelType.Square2D, Color = Color.Green, Size = GameConfig.BoxSize },
-        new() { Type = Primitive2DModelType.Rectangle2D, Color = new Color(255, 165, 0, 55), Size = GameConfig.RectangleSize },
+        new() { Type = Primitive2DModelType.Rectangle2D, Color = Color.Orange, Size = GameConfig.RectangleSize },
         new() { Type = Primitive2DModelType.Circle2D, Color = Color.Red, Size = GameConfig.BoxSize / 2 },
         new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = GameConfig.BoxSize },
         new()
@@ -55,6 +55,7 @@ public class ShapeFactory
         var entity = _game.Create2DPrimitive(shape.Type, new()
         {
             Size = shape.Size,
+            //Material = CreateBox2DStyleMaterial(actualColor, actualColor)
             Material = CreateBox2DSDFMaterial(actualColor, shape.Type)
         });
 
@@ -91,7 +92,7 @@ public class ShapeFactory
                     AntiAliasing = 0.003f,
                     ShapeType = shaderShapeType,
                     UseLightBorder = true,
-                    Intensity = 20000 // Adjust intensity for better visibility
+                    Intensity = 10 // Adjust intensity for better visibility
                 },
                 Diffuse = new MaterialDiffuseMapFeature
                 {

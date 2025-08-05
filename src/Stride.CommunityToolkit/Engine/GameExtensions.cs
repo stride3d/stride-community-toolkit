@@ -97,8 +97,8 @@ public static class GameExtensions
     /// <param name="clearColor">The optional background color used to clear the screen. If not specified, a default color is used.</param>
     public static void SetupBase2D(this Game game, Color? clearColor = null)
     {
-        //game.AddGraphicsCompositor2();
-        game.Add2DGraphicsCompositor(clearColor);
+        game.AddGraphicsCompositor2();
+        //game.Add2DGraphicsCompositor(clearColor);
         game.Add2DCamera().Add2DCameraController();
     }
 
@@ -137,7 +137,9 @@ public static class GameExtensions
 
     public static GraphicsCompositor AddGraphicsCompositor2(this Game game)
     {
-        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: false);
+        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: true);
+
+        //RemoveLightingFeatures(graphicsCompositor);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
@@ -155,7 +157,9 @@ public static class GameExtensions
     /// <returns>The newly created 2D graphics compositor.</returns>
     public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
     {
-        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: false, clearColor: clearColor);
+        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: true, clearColor: clearColor);
+
+        RemoveLightingFeatures(graphicsCompositor);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
