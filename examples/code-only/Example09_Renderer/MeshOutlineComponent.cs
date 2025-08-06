@@ -39,7 +39,7 @@ public class MeshOutlineComponent : EntityComponent
     /// Gets or sets the intensity of the outline color.
     /// </summary>
     /// <remarks>
-    /// Expected range is from 0.0 (transparent) to 1.0 (fully opaque). Values outside this range may result in unintended visual effects.
+    /// Values greater than 1.0 will increase brightness. Typical range is 0.0 (transparent) and above.
     /// </remarks>
     [DataMember(40)]
     public float Intensity { get; set; } = 1.0f;
