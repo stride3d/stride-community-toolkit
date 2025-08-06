@@ -62,6 +62,7 @@ public class ShapeFactory
         entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
         entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
         entity.Scene = _scene;
+        entity.Add(new SDFPolygonRendererStartup());
 
         return entity;
     }
@@ -80,7 +81,7 @@ public class ShapeFactory
             _ => 0 // Rectangle/Square default
         };
 
-        return Material.New(_game.GraphicsDevice, new MaterialDescriptor
+        var material = Material.New(_game.GraphicsDevice, new MaterialDescriptor
         {
             Attributes = new MaterialAttributes
             {
@@ -91,8 +92,7 @@ public class ShapeFactory
                     BorderThickness = 0.02f,
                     AntiAliasing = 0.003f,
                     ShapeType = shaderShapeType,
-                    UseLightBorder = true,
-                    Intensity = 10 // Adjust intensity for better visibility
+                    UseLightBorder = true
                 },
                 Diffuse = new MaterialDiffuseMapFeature
                 {
@@ -104,16 +104,18 @@ public class ShapeFactory
                 {
                     EmissiveMap = new ComputeColor(baseColor.ToColor4())
                 },
-                // Reduce glossiness for flat 2D appearance
-                //MicroSurface = new MaterialGlossinessMapFeature
-                //{
-                //    GlossinessMap = new ComputeFloat(0.1f)
-                //},
                 MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.65f)),
-                // Add transparency support for better blending
-                //Transparency = new MaterialTransparencyBlendFeature()
             }
         });
+
+        // Set shader parameters directly on the first material pass
+        var parameters = material.Passes[0].Parameters;
+        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.BaseColor, baseColor.ToColor4().ToVector4());
+        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.BorderThickness, 0.02f);
+        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.AntiAliasing, 0.003f);
+        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.ShapeType, shaderShapeType);
+
+        return material;
     }
 
     /// <summary>

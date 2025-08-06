@@ -19,6 +19,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Effects\Box2DPolygonSDFShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
       <Compile Update="Effects\Box2DStyleShader.sdsl.cs">
         <DesignTime>True</DesignTime>
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -32,6 +37,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Effects\Box2DPolygonSDFShader.sdsl">
+        <LastGenOutput>Box2DPolygonSDFShader.sdsl.cs</LastGenOutput>
+      </None>
       <None Update="Effects\Box2DStyleShader.sdsl">
         <LastGenOutput>Box2DStyleShader.sdsl.cs</LastGenOutput>
       </None>
