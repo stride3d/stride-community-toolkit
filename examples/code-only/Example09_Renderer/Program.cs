@@ -8,7 +8,6 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using Stride.Rendering;
 
 // This example demonstrates three different ways of adding custom rendering logic to a Stride game.
 // 1. Using a custom SceneRenderer via MyCustomSceneRenderer, which renders text for all entities and static text.
@@ -17,7 +16,7 @@ using Stride.Rendering;
 // All approaches integrate into the Stride rendering pipeline, demonstrating how to extend the default rendering behaviour.
 
 BodyComponent? body = null;
-bool impluseApplied = false;
+bool impulseApplied = false;
 
 using var game = new Game();
 
@@ -45,17 +44,8 @@ void Start(Scene scene)
     // Example 2: Adds a custom scene renderer to render text for all entities with a component of type EntityTextComponent
     game.AddSceneRenderer(new EntityTextRenderer());
 
-    game.AddRootRenderFeature(new MeshOutlineRenderFeature()
-    {
-        RenderGroupMask = RenderGroupMask.Group5,
-        ScaleAdjust = 0.03f
-    });
-
     // Creates a 3D primitive (a cube) and sets its position in the scene
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, options: new()
-    {
-        RenderGroup = RenderGroup.Group5,
-    });
+    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube);
     cube.Transform.Position = new Vector3(0, 0.5f, 0);
 
     // Example 2: Adds an EntityTextComponent to the cube entity, which renders text
@@ -65,20 +55,11 @@ void Start(Scene scene)
         FontSize = 12,
         TextColor = Color.Purple,
     });
-    cube.Add(new MeshOutlineComponent()
-    {
-        Enabled = true,
-        Color = Color.Red,
-        Intensity = 1f
-    });
 
     cube.Scene = scene;
 
     // Creates a 3D primitive (a capsule) and sets its position in the scene
-    var capsule = game.Create3DPrimitive(PrimitiveModelType.Capsule, options: new()
-    {
-        RenderGroup = RenderGroup.Group5,
-    });
+    var capsule = game.Create3DPrimitive(PrimitiveModelType.Capsule);
     capsule.Transform.Position = new Vector3(0, 8, 0);
 
     // Lets tilt the capsule a bit which should cause it to move after it falls
@@ -89,12 +70,6 @@ void Start(Scene scene)
 
     // Example 3: Adds a custom startup script to the entity, which draws specific text using SpriteBatch when the game is running.
     capsule.Add(new SpriteBatchRendererScript());
-    capsule.Add(new MeshOutlineComponent()
-    {
-        Enabled = true,
-        Color = Color.Green,
-        Intensity = 1f
-    });
 
     var textComponent = new EntityTextComponent()
     {
@@ -114,11 +89,11 @@ void Update(Scene scene, GameTime time)
 {
     if (body is null) return;
 
-    if (impluseApplied) return;
+    if (impulseApplied) return;
 
     // Let's add some momentum so it rolls after it falls, the rigid body is already added by Create3DPrimitive
     //body.ApplyImpulse(new(0, 0, 0.1f), new());
     body.ApplyAngularImpulse(new(0, 10, 0));
 
-    impluseApplied = true;
+    impulseApplied = true;
 }
