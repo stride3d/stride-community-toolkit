@@ -126,6 +126,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Box2D.NET.Shared", "..\Box2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example18_Box2DPhysics2", "examples\code-only\Example18_Box2DPhysics2\Example18_Box2DPhysics2.csproj", "{ADA9619A-CBF5-4926-8137-D144840B2A0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example13_MeshOutline", "examples\code-only\Example13_MeshOutline\Example13_MeshOutline.csproj", "{170666D3-8F9F-151F-C88A-54261B1783C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -347,6 +349,10 @@ Global
 		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADA9619A-CBF5-4926-8137-D144840B2A0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{170666D3-8F9F-151F-C88A-54261B1783C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{170666D3-8F9F-151F-C88A-54261B1783C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{170666D3-8F9F-151F-C88A-54261B1783C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{170666D3-8F9F-151F-C88A-54261B1783C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -393,6 +399,7 @@ Global
 		{88EFA4B1-DEA9-4953-87E5-EBD6387ED706} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{ADA9619A-CBF5-4926-8137-D144840B2A0C} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{170666D3-8F9F-151F-C88A-54261B1783C1} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}

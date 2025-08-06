@@ -16,7 +16,7 @@ using Stride.Games;
 // All approaches integrate into the Stride rendering pipeline, demonstrating how to extend the default rendering behaviour.
 
 BodyComponent? body = null;
-bool impluseApplied = false;
+bool impulseApplied = false;
 
 using var game = new Game();
 
@@ -75,7 +75,7 @@ void Start(Scene scene)
     {
         Text = "Example2: Hello, Stride!",
         FontSize = 13,
-        TextColor = Color.Green,
+        TextColor = Color.Blue,
         Offset = new(0, -100),
         EnableBackground = true,
     };
@@ -89,11 +89,11 @@ void Update(Scene scene, GameTime time)
 {
     if (body is null) return;
 
-    if (impluseApplied) return;
+    if (impulseApplied) return;
 
     // Let's add some momentum so it rolls after it falls, the rigid body is already added by Create3DPrimitive
     //body.ApplyImpulse(new(0, 0, 0.1f), new());
     body.ApplyAngularImpulse(new(0, 10, 0));
 
-    impluseApplied = true;
+    impulseApplied = true;
 }
