@@ -6,6 +6,7 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     float Intensity;
     float OutlineThickness; // normalized thickness [0.0, 1.0], 0.0 = invisible, 1.0 = fills shape
     int ShapeType; // 0 = rectangle, 2 = circle
+    float Radius; // actual mesh radius, passed from C#
 
     cbuffer PerView
     {
@@ -30,12 +31,11 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
 
         if (ShapeType == 2) // Circle
         {
-            float radius = 0.5;
-            float minVisibleThickness = 0.3f; // Based on your test results
-            float maxThickness = radius; // Maximum fills the shape
+            float minVisibleThickness = 0.2f * Radius; // scale min thickness by radius
+            float maxThickness = Radius; // Maximum fills the shape
             float outlineWidth = minVisibleThickness + (OutlineThickness * (maxThickness - minVisibleThickness));
             float dist = length(pos);
-            isOutline = (dist > radius - outlineWidth) && (dist <= radius);
+            isOutline = (dist > Radius - outlineWidth) && (dist <= Radius);
         }
         else // Rectangle
         {

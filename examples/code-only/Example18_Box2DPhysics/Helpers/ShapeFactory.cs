@@ -23,6 +23,7 @@ public class ShapeFactory
         new() { Type = Primitive2DModelType.Square2D, Color = Color.Green, Size = GameConfig.BoxSize },
         new() { Type = Primitive2DModelType.Rectangle2D, Color = Color.Orange, Size = GameConfig.RectangleSize },
         new() { Type = Primitive2DModelType.Circle2D, Color = Color.Red, Size = GameConfig.BoxSize / 2 },
+        new() { Type = Primitive2DModelType.Circle2D, Color = Color.Gold, Size = GameConfig.BoxSize },
         new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = GameConfig.BoxSize },
         new()
         {
@@ -56,7 +57,7 @@ public class ShapeFactory
         var entity = _game.Create2DPrimitive(shape.Type, new()
         {
             Size = shape.Size,
-            //Material = _game.CreateMaterial(actualColor),
+            //Material = _game.CreateMaterial(actualColor), // Do not remove, this is a reminder that this isn't working for 2D with 3D compositor
             Material = _game.CreateFlatMaterial(actualColor),
             //Material = CreateBox2DStyleMaterial(actualColor, actualColor),
             //Material = CreateBox2DSDFMaterial(actualColor, shape.Type),
@@ -72,7 +73,8 @@ public class ShapeFactory
             Intensity = 100f,
             ShapeType = shape.Type,
             //OutlineThickness = 0.1f, // works perfect for circles 0-1
-            OutlineThickness = 0.1f
+            OutlineThickness = 0.1f,
+            Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f
         });
 
         entity.Scene = _scene;

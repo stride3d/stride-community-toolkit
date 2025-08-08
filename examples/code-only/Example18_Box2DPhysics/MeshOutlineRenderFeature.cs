@@ -61,7 +61,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             _pipelineState.State.SetDefaults();
             _pipelineState.State.InputElements = VertexPositionNormalTexture.Layout.CreateInputElements();
             _pipelineState.State.BlendState = BlendStates.AlphaBlend;
-            _pipelineState.State.RasterizerState.CullMode = CullMode.Front;
+            _pipelineState.State.RasterizerState.CullMode = CullMode.Back;
         }
         catch (Exception ex)
         {
@@ -125,8 +125,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             _shader.Parameters.Set(MeshOutlineShaderKeys.Intensity, outlineScript.Intensity);
             _shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
             _shader.Parameters.Set(MeshOutlineShaderKeys.ShapeType, (int)outlineScript.ShapeType);
-
-            Console.WriteLine($"Drawing outline {outlineScript.ShapeType},  {(int)outlineScript.ShapeType}");
+            _shader.Parameters.Set(MeshOutlineShaderKeys.Radius, outlineScript.Radius);
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;

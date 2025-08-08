@@ -45,4 +45,6 @@ public class MeshOutlineComponent : EntityComponent
     public Primitive2DModelType ShapeType { get; set; }
 
     public float OutlineThickness { get; set; } = 1.0f;
+
+    public float Radius { get; set; }
 }
