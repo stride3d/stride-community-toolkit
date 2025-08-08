@@ -69,7 +69,10 @@ public class ShapeFactory
         {
             Enabled = true,
             Color = Color.Green,
-            Intensity = 100f
+            Intensity = 100f,
+            ShapeType = shape.Type,
+            //OutlineThickness = 0.1f, // works perfect for circles 0-1
+            OutlineThickness = 0.1f
         });
 
         entity.Scene = _scene;

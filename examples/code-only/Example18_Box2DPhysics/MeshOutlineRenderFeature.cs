@@ -123,6 +123,10 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             _shader.Parameters.Set(MeshOutlineShaderKeys.Viewport, viewport);
             _shader.Parameters.Set(MeshOutlineShaderKeys.Color, outlineScript.Color);
             _shader.Parameters.Set(MeshOutlineShaderKeys.Intensity, outlineScript.Intensity);
+            _shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
+            _shader.Parameters.Set(MeshOutlineShaderKeys.ShapeType, (int)outlineScript.ShapeType);
+
+            Console.WriteLine($"Drawing outline {outlineScript.ShapeType},  {(int)outlineScript.ShapeType}");
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;

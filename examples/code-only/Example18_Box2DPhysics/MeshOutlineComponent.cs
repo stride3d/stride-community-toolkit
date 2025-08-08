@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -40,4 +41,8 @@ public class MeshOutlineComponent : EntityComponent
     /// </remarks>
     [DataMember(40)]
     public float Intensity { get; set; } = 1.0f;
+
+    public Primitive2DModelType ShapeType { get; set; }
+
+    public float OutlineThickness { get; set; } = 1.0f;
 }

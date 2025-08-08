@@ -2,6 +2,7 @@ using Example18_Box2DPhysics;
 using Example18_Box2DPhysics.Helpers;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -28,10 +29,11 @@ void Start(Scene scene)
 
     // Setup 2D scene with camera and controls
     //game.SetupBase2D();
-    game.Add2DGraphicsCompositor();
-    //game.AddGraphicsCompositor2();
+    //game.AddGraphicsCompositor();
+    game.AddGraphicsCompositor2();
     //game.Add2DGraphicsCompositor(clearColor);
-    game.Add2DCamera().Add3DCameraController();
+    game.Add3DCamera().Add3DCameraController();
+    game.AddSkybox();
     game.AddProfiler();
     game.AddRootRenderFeature(new MeshOutlineRenderFeature()
     {

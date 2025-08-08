@@ -4,6 +4,8 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
 
     float4 Color;
     float Intensity;
+    float OutlineThickness; // normalized thickness [0.0, 1.0], 0.0 = invisible, 1.0 = fills shape
+    int ShapeType; // 0 = rectangle, 2 = circle
 
     cbuffer PerView
     {
@@ -23,6 +25,32 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
 
     stage override void PSMain()
     {
+        float2 pos = streams.Position.xy; // Local mesh position, centered at (0,0)
+        bool isOutline = false;
+
+        if (ShapeType == 2) // Circle
+        {
+            float radius = 0.5;
+            float minVisibleThickness = 0.3f; // Based on your test results
+            float maxThickness = radius; // Maximum fills the shape
+            float outlineWidth = minVisibleThickness + (OutlineThickness * (maxThickness - minVisibleThickness));
+            float dist = length(pos);
+            isOutline = (dist > radius - outlineWidth) && (dist <= radius);
+        }
+        else // Rectangle
+        {
+            float2 uv = pos + 0.5; // Convert [-0.5,0.5] to [0,1] if mesh is centered
+            float2 edgeDist = min(uv, 1.0 - uv);
+            float minDist = min(edgeDist.x, edgeDist.y);
+            float minVisibleThickness = 0.02f; // Minimum thickness to be visible
+            float maxThickness = 0.5; // Maximum fills the shape
+            float outlineWidth = minVisibleThickness + (OutlineThickness * (maxThickness - minVisibleThickness));
+            isOutline = (minDist <= outlineWidth);
+        }
+
+        if (!isOutline)
+            discard;
+
         streams.ColorTarget = Color * Intensity;
     }
 };
