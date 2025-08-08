@@ -11,8 +11,16 @@ This document provides specific guidance for GitHub Copilot when working on the 
 - The toolkit is designed to be used also in a regular Stride project created from the Game Studio template. The code-only examples are meant to demonstrate how to use the toolkit in a straightforward way without relying on the Game Studio UI.
 
 ## Repository Structure
-- `src/`: Core toolkit libraries (e.g., Stride.CommunityToolkit, Stride.CommunityToolkit.Bepu, Stride.CommunityToolkit.Windows, etc.)
-  - **Stride.CommunityToolkit**: Core toolkit with Engine, Extensions, Graphics, Helpers, Mathematics, Physics, Rendering, Scripts
+- `src/`: Core toolkit libraries
+  - **Stride.CommunityToolkit**: Core toolkit
+    - `Engine/`: Game and Entity extensions
+    - `Extensions/`: General-purpose extensions
+    - `Graphics/`: Graphics utilities
+    - `Helpers/`: Helper classes
+    - `Mathematics/`: Math utilities (Easing, etc.)
+    - `Physics/`: Physics extensions
+    - `Rendering/`: Rendering utilities
+    - `Scripts/`: Reusable script components
   - **Stride.CommunityToolkit.Bepu**: Bepu Physics integration
   - **Stride.CommunityToolkit.Bullet**: Bullet Physics integration  
   - **Stride.CommunityToolkit.DebugShapes**: Debug visualization tools
