@@ -32,19 +32,17 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
 
         if (ShapeType == 2) // Circle
         {
-            // 3 / 400 * 0.4 = 0.003
-            // 3 / 400 * 0.2 = 0.0015
-            //float outlineWidth = OutlineThickness / (PixelScale * Radius); // thickness in world units
-            float outlineWidth = OutlineThickness / 100; // thickness in world units
+            float outlineWidth = OutlineThickness / PixelScale; // thickness in world units
             float dist = length(pos);
-            isOutline = (dist > Radius - outlineWidth);
+            //isOutline = (dist > Radius - 80) && (dist <= Radius);
+            isOutline = (dist <= Radius - 100);
         }
         else // Rectangle
         {
             float2 uv = pos + 0.5; // Convert [-0.5,0.5] to [0,1] if mesh is centered
             float2 edgeDist = min(uv, 1.0 - uv);
             float minDist = min(edgeDist.x, edgeDist.y);
-            float outlineWidth = OutlineThickness / (PixelScale * 0.5); // thickness in world units
+            float outlineWidth = OutlineThickness / PixelScale;
             isOutline = (minDist <= outlineWidth);
         }
 

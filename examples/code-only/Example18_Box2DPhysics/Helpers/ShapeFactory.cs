@@ -57,7 +57,7 @@ public class ShapeFactory
         // For 2D, you can estimate pixelScale as: viewportHeight / worldHeight
         // Here, we use a fixed value for demonstration; you may want to calculate it based on camera/view
         //float pixelScale = 540f / 10f; // Example: 540px viewport, 10 world units
-        float pixelScale = 200f;
+        float pixelScale = 400f;
 
         // Create entity with SDF-based Box2D style material
         var entity = _game.Create2DPrimitive(shape.Type, new()
@@ -75,7 +75,7 @@ public class ShapeFactory
             Color = Color.Green,
             Intensity = 100f,
             ShapeType = shape.Type,
-            OutlineThickness = 3.0f, // 3 pixels
+            OutlineThickness = 2.0f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
             PixelScale = pixelScale
         });
