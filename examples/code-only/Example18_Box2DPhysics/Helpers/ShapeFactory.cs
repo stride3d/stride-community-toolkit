@@ -1,13 +1,10 @@
 using Example.Common;
-using Example18_Box2DPhysics.Materials;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering;
-using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 
 namespace Example18_Box2DPhysics.Helpers;
 
@@ -53,10 +50,7 @@ public class ShapeFactory
     {
         var actualColor = color ?? shape.Color;
 
-        // Calculate pixel scale (world units per pixel)
-        // For 2D, you can estimate pixelScale as: viewportHeight / worldHeight
-        // Here, we use a fixed value for demonstration; you may want to calculate it based on camera/view
-        //float pixelScale = 540f / 10f; // Example: 540px viewport, 10 world units
+        // not sure how to get this
         float pixelScale = 400f;
 
         // Create entity with SDF-based Box2D style material
@@ -64,6 +58,7 @@ public class ShapeFactory
         {
             Size = shape.Size,
             Material = _game.CreateFlatMaterial(actualColor),
+            //Material = CreateBox2DStyleMaterial(shape.Color, actualColor),
             RenderGroup = RenderGroup.Group5
         });
 
@@ -75,88 +70,13 @@ public class ShapeFactory
             Color = Color.Green,
             Intensity = 100f,
             ShapeType = shape.Type,
-            OutlineThickness = 2.0f, // 3 pixels
+            OutlineThickness = 10.0f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
             PixelScale = pixelScale
         });
 
         entity.Scene = _scene;
         return entity;
-    }
-
-    /// <summary>
-    /// Creates a Box2D.NET-style material using SDF shader for crisp borders and anti-aliasing
-    /// </summary>
-    private Material CreateBox2DSDFMaterial(Color baseColor, Primitive2DModelType shapeType)
-    {
-        // Map shape types to shader constants
-        int shaderShapeType = shapeType switch
-        {
-            Primitive2DModelType.Circle2D => 1,
-            Primitive2DModelType.Triangle2D => 2,
-            Primitive2DModelType.Capsule => 3,
-            _ => 0 // Rectangle/Square default
-        };
-
-        var material = Material.New(_game.GraphicsDevice, new MaterialDescriptor
-        {
-            Attributes = new MaterialAttributes
-            {
-                // Use our custom Box2D style diffuse model
-                DiffuseModel = new MaterialBox2DStyleFeature
-                {
-                    BaseColor = baseColor.ToColor4(),
-                    BorderThickness = 0.02f,
-                    AntiAliasing = 0.003f,
-                    ShapeType = shaderShapeType,
-                    UseLightBorder = true
-                },
-                Diffuse = new MaterialDiffuseMapFeature
-                {
-                    DiffuseMap = new ComputeColor(baseColor.ToColor4()),
-                },
-                Specular = new MaterialMetalnessMapFeature(new ComputeFloat(1)),
-                SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-                Emissive = new MaterialEmissiveMapFeature
-                {
-                    EmissiveMap = new ComputeColor(baseColor.ToColor4())
-                },
-                MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.65f)),
-            }
-        });
-
-        return material;
-    }
-
-    /// <summary>
-    /// Creates a Box2D.NET-style material with proper fill and border characteristics
-    /// Do not remove this when refactoring or using Copilot Agent
-    /// </summary>
-    private Material CreateBox2DStyleMaterial(Color fillColor, Color borderColor)
-    {
-        return Material.New(_game.GraphicsDevice, new MaterialDescriptor
-        {
-            Attributes = new MaterialAttributes
-            {
-                Diffuse = new MaterialDiffuseMapFeature
-                {
-                    DiffuseMap = new ComputeColor(fillColor.ToColor4()),
-                },
-                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                // Add subtle emission for Box2D.NET-like appearance
-                Emissive = new MaterialEmissiveMapFeature
-                {
-                    EmissiveMap = new ComputeColor(fillColor.ToColor4())
-                },
-                // Reduce glossiness for flat 2D appearance
-                MicroSurface = new MaterialGlossinessMapFeature
-                {
-                    GlossinessMap = new ComputeFloat(0.1f)
-                },
-                // Add transparency support for better blending
-                Transparency = new MaterialTransparencyBlendFeature()
-            }
-        });
     }
 
     private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);

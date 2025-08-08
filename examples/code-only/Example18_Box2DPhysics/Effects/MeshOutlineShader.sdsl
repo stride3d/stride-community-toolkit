@@ -8,6 +8,8 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     int ShapeType; // 0 = rectangle, 2 = circle
     float Radius; // actual mesh radius, passed from C#
     float PixelScale; // world-to-pixel scale, passed from C#
+    float4 FillColor; // Add this for blending (optional)
+    float AntiAlias; // e.g. 1.0f
 
     cbuffer PerView
     {
@@ -29,28 +31,46 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     {
         float2 pos = streams.Position.xy; // Local mesh position, centered at (0,0)
         bool isOutline = false;
+        float alpha = 1.0;
 
         if (ShapeType == 2) // Circle
         {
-            // 3 / 400 * 0.4 = 0.003
-            // 3 / 400 * 0.2 = 0.0015
-            //float outlineWidth = OutlineThickness / (PixelScale * Radius); // thickness in world units
-            float outlineWidth = OutlineThickness / 100; // thickness in world units
+            float outlineWidth = OutlineThickness / PixelScale;
+            float aa = AntiAlias / PixelScale; // anti-aliasing width in world units
             float dist = length(pos);
-            isOutline = (dist > Radius - outlineWidth);
+
+            // Smooth transition for anti-aliased border
+            float edge0 = Radius - outlineWidth - aa;
+            float edge1 = Radius - outlineWidth + aa;
+            float edge2 = Radius - aa;
+            float edge3 = Radius + aa;
+
+            float outlineMask = smoothstep(edge0, edge1, dist) * (1.0 - smoothstep(edge2, edge3, dist));
+            alpha = outlineMask;
+
+            if (alpha < 0.01)
+                discard;
+
+            // Blend outline color with fill color near the edge
+            streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }
-        else // Rectangle
+        else // Rectangle (similar logic can be applied)
         {
-            float2 uv = pos + 0.5; // Convert [-0.5,0.5] to [0,1] if mesh is centered
+            float2 uv = pos + 0.5;
             float2 edgeDist = min(uv, 1.0 - uv);
             float minDist = min(edgeDist.x, edgeDist.y);
-            float outlineWidth = OutlineThickness / (PixelScale * 0.5); // thickness in world units
-            isOutline = (minDist <= outlineWidth);
+            float outlineWidth = OutlineThickness / PixelScale;
+            float aa = AntiAlias / PixelScale;
+
+            float edge0 = outlineWidth - aa;
+            float edge1 = outlineWidth + aa;
+            float outlineMask = 1.0 - smoothstep(edge0, edge1, minDist);
+            alpha = outlineMask;
+
+            if (alpha < 0.01)
+                discard;
+
+            streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }
-
-        if (!isOutline)
-            discard;
-
-        streams.ColorTarget = Color * Intensity;
     }
 };

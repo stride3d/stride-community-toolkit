@@ -126,7 +126,9 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             _shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
             _shader.Parameters.Set(MeshOutlineShaderKeys.ShapeType, (int)outlineScript.ShapeType);
             _shader.Parameters.Set(MeshOutlineShaderKeys.Radius, outlineScript.Radius);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale); // Pass pixel scale to shader
+            _shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale);
+            _shader.Parameters.Set(MeshOutlineShaderKeys.FillColor, outlineScript.Color);
+            _shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 1f); // Adjust anti-aliasing as needed
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;
