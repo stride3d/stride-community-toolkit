@@ -62,7 +62,7 @@ public class ShapeFactory
         entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
         entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
         entity.Scene = _scene;
-        entity.Add(new SDFPolygonRendererStartup());
+        //entity.Add(new SDFPolygonRendererStartup());
 
         return entity;
     }
@@ -107,13 +107,6 @@ public class ShapeFactory
                 MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.65f)),
             }
         });
-
-        // Set shader parameters directly on the first material pass
-        var parameters = material.Passes[0].Parameters;
-        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.BaseColor, baseColor.ToColor4().ToVector4());
-        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.BorderThickness, 0.02f);
-        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.AntiAliasing, 0.003f);
-        parameters.Set(Stride.Rendering.Box2DStyleShaderKeys.ShapeType, shaderShapeType);
 
         return material;
     }
