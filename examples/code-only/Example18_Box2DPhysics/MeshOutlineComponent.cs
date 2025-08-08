@@ -46,5 +46,6 @@ public class MeshOutlineComponent : EntityComponent
 
     public float OutlineThickness { get; set; } = 1.0f;
 
-    public float Radius { get; set; }
+    public float Radius { get; set; } = 1.0f;
+    public float PixelScale { get; set; } = 1.0f; // Add pixel scale property
 }

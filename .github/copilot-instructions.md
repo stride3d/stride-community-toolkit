@@ -90,6 +90,7 @@ game.Run(start: (Scene rootScene) =>
 - **Performance**: Cache component references, avoid allocations in update loops, dispose graphics resources properly
 - **Threading**: Most Stride operations must occur on the main thread
 - **Validation**: Always validate input parameters and provide meaningful error messages
+- **Shaders**: When you make changes to shaders, adding, updating or removing properties, ask the user to regenerate shader `*.cs` file manually otherwise the changes will not be reflected in the code
 
 ## Common Code-Only Example Usage Patterns
 ```csharp

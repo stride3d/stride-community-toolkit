@@ -53,14 +53,17 @@ public class ShapeFactory
     {
         var actualColor = color ?? shape.Color;
 
+        // Calculate pixel scale (world units per pixel)
+        // For 2D, you can estimate pixelScale as: viewportHeight / worldHeight
+        // Here, we use a fixed value for demonstration; you may want to calculate it based on camera/view
+        //float pixelScale = 540f / 10f; // Example: 540px viewport, 10 world units
+        float pixelScale = 200f;
+
         // Create entity with SDF-based Box2D style material
         var entity = _game.Create2DPrimitive(shape.Type, new()
         {
             Size = shape.Size,
-            //Material = _game.CreateMaterial(actualColor), // Do not remove, this is a reminder that this isn't working for 2D with 3D compositor
             Material = _game.CreateFlatMaterial(actualColor),
-            //Material = CreateBox2DStyleMaterial(actualColor, actualColor),
-            //Material = CreateBox2DSDFMaterial(actualColor, shape.Type),
             RenderGroup = RenderGroup.Group5
         });
 
@@ -72,9 +75,9 @@ public class ShapeFactory
             Color = Color.Green,
             Intensity = 100f,
             ShapeType = shape.Type,
-            //OutlineThickness = 0.1f, // works perfect for circles 0-1
-            OutlineThickness = 0.1f,
-            Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f
+            OutlineThickness = 3.0f, // 3 pixels
+            Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
+            PixelScale = pixelScale
         });
 
         entity.Scene = _scene;
