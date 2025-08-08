@@ -51,7 +51,7 @@ void CreateOutlinedPrimitive(Scene rootScene, PrimitiveModelType modelType, Colo
     // Create a primitive entity of the specified type and assign it to RenderGroup.Group5
     var entity = game.Create3DPrimitive(modelType, options: new()
     {
-        RenderGroup = RenderGroup.Group5,
+        RenderGroup = RenderGroup.Group5
     });
 
     entity.Transform.Position = position;
