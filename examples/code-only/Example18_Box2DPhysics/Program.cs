@@ -27,7 +27,11 @@ void Start(Scene scene)
     game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
 
     // Setup 2D scene with camera and controls
-    game.SetupBase2D();
+    //game.SetupBase2D();
+    game.Add2DGraphicsCompositor();
+    //game.AddGraphicsCompositor2();
+    //game.Add2DGraphicsCompositor(clearColor);
+    game.Add2DCamera().Add3DCameraController();
     game.AddProfiler();
     game.AddRootRenderFeature(new MeshOutlineRenderFeature()
     {

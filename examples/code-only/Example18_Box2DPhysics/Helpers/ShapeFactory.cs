@@ -65,14 +65,14 @@ public class ShapeFactory
 
         entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
         entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
-        entity.Scene = _scene;
         entity.Add(new MeshOutlineComponent()
         {
             Enabled = true,
-            Color = Color.Orange,
+            Color = Color.Green,
             Intensity = 100f
         });
 
+        entity.Scene = _scene;
         return entity;
     }
 
