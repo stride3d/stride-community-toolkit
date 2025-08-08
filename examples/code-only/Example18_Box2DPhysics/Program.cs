@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
+using Stride.Rendering;
 using static Box2D.NET.B2Bodies;
 
 // Example 18: Box2D Physics Integration
@@ -28,6 +29,11 @@ void Start(Scene scene)
     // Setup 2D scene with camera and controls
     game.SetupBase2D();
     game.AddProfiler();
+    game.AddRootRenderFeature(new MeshOutlineRenderFeature()
+    {
+        RenderGroupMask = RenderGroupMask.Group5,
+        ScaleAdjust = 0.03f
+    });
 
     // Initialize the Box2D physics simulation
     simulation = new Box2DSimulation();

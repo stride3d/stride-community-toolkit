@@ -2,7 +2,7 @@ using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Example13_MeshOutline;
+namespace Example18_Box2DPhysics;
 
 /// <summary>
 /// Represents a component that enables an outline effect on a mesh entity.

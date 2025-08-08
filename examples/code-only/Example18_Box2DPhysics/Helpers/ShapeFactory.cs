@@ -1,5 +1,6 @@
 using Example.Common;
 using Example18_Box2DPhysics.Materials;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -55,14 +56,22 @@ public class ShapeFactory
         var entity = _game.Create2DPrimitive(shape.Type, new()
         {
             Size = shape.Size,
-            //Material = CreateBox2DStyleMaterial(actualColor, actualColor)
-            Material = CreateBox2DSDFMaterial(actualColor, shape.Type)
+            //Material = _game.CreateMaterial(actualColor),
+            Material = _game.CreateFlatMaterial(actualColor),
+            //Material = CreateBox2DStyleMaterial(actualColor, actualColor),
+            //Material = CreateBox2DSDFMaterial(actualColor, shape.Type),
+            RenderGroup = RenderGroup.Group5
         });
 
         entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
         entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
         entity.Scene = _scene;
-        //entity.Add(new SDFPolygonRendererStartup());
+        entity.Add(new MeshOutlineComponent()
+        {
+            Enabled = true,
+            Color = Color.Orange,
+            Intensity = 100f
+        });
 
         return entity;
     }
