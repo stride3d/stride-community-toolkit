@@ -81,13 +81,21 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
             // Blend outline color with fill color near the edge
             streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }
-        else // Rectangle (similar logic can be applied)
+        else // Polygon/Rectangle/Triangle
         {
             float dist = abs(sdConvexPolygon(pos, PolygonVertexCount));
             float outlineWidth = OutlineThickness / PixelScale;
-            bool isOutline = dist <= outlineWidth;
-            if (!isOutline) discard;
-            streams.ColorTarget = Color * Intensity;
+            float aa = AntiAlias / PixelScale; // anti-aliasing width in world units
+
+            // Anti-aliased mask for the outline band
+            float edge0 = outlineWidth - aa;
+            float edge1 = outlineWidth + aa;
+            float outlineMask = 1.0 - smoothstep(edge0, edge1, dist);
+
+            if (outlineMask < 0.01) discard;
+
+            // Optional: blend with fill color for a softer look
+            streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }
     }
 };

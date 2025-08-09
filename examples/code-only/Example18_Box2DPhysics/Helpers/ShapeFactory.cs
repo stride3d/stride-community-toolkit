@@ -89,7 +89,7 @@ public class ShapeFactory
             Color = Color.Green,
             Intensity = 100f,
             ShapeType = shape.Type,
-            OutlineThickness = 5.0f, // 3 pixels
+            OutlineThickness = 1.0f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
             PixelScale = pixelScale,
             PolygonVertices = polygonVertices

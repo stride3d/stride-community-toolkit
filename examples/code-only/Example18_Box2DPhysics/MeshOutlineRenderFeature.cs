@@ -2,7 +2,6 @@ using Stride.Core;
 using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
 using Buffer = Stride.Graphics.Buffer;
@@ -20,6 +19,9 @@ public class MeshOutlineRenderFeature : RootRenderFeature
 {
     private DynamicEffectInstance? _shader;
     private MutablePipelineState? _pipelineState;
+
+    // Cache for vertex buffers to prevent memory leaks
+    private readonly Dictionary<int, Buffer> _vertexBufferCache = [];
 
     /// <summary>
     /// Default sort key for outline rendering.
@@ -69,6 +71,37 @@ public class MeshOutlineRenderFeature : RootRenderFeature
         {
             throw new InvalidOperationException("Failed to initialize MeshOutlineRenderFeature.", ex);
         }
+    }
+
+    /// <summary>
+    /// Gets or creates a cached vertex buffer for the given vertices.
+    /// </summary>
+    private Buffer GetOrCreateVertexBuffer(Vector2[] vertices)
+    {
+        // Create a hash key based on the vertices content
+        var hashCode = GetVerticesHashCode(vertices);
+
+        if (!_vertexBufferCache.TryGetValue(hashCode, out var buffer))
+        {
+            // Create new buffer and cache it
+            buffer = Buffer.Structured.New<Vector2>(Context.GraphicsDevice, vertices);
+            _vertexBufferCache[hashCode] = buffer;
+        }
+
+        return buffer;
+    }
+
+    /// <summary>
+    /// Computes a hash code for the vertices array.
+    /// </summary>
+    private static int GetVerticesHashCode(Vector2[] vertices)
+    {
+        var hash = vertices.Length.GetHashCode();
+        foreach (var vertex in vertices)
+        {
+            hash = HashCode.Combine(hash, vertex.GetHashCode());
+        }
+        return hash;
     }
 
     /// <inheritdoc/>
@@ -130,10 +163,12 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             _shader.Parameters.Set(MeshOutlineShaderKeys.Radius, outlineScript.Radius);
             _shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale);
             _shader.Parameters.Set(MeshOutlineShaderKeys.FillColor, outlineScript.Color);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 1f); // Adjust anti-aliasing as needed
+            _shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 2);
+
+            // Use cached vertex buffer instead of creating new ones
             if (outlineScript.PolygonVertices.Length > 0)
             {
-                var vertexBuffer = Buffer.Structured.New<Vector2>(context.GraphicsDevice, outlineScript.PolygonVertices);
+                var vertexBuffer = GetOrCreateVertexBuffer(outlineScript.PolygonVertices);
                 _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertices, vertexBuffer);
                 _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, outlineScript.VertexCount);
             }
@@ -141,6 +176,8 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             {
                 _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, 0);
             }
+
+            Console.WriteLine($"{_vertexBufferCache.Count} vertices");
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;
@@ -163,5 +200,20 @@ public class MeshOutlineRenderFeature : RootRenderFeature
                 context.CommandList.Draw(drawData.DrawCount, drawData.StartLocation);
             }
         }
+    }
+
+    /// <summary>
+    /// Cleans up cached vertex buffers.
+    /// </summary>
+    protected override void Destroy()
+    {
+        foreach (var buffer in _vertexBufferCache.Values)
+        {
+            buffer?.Dispose();
+        }
+
+        _vertexBufferCache.Clear();
+
+        base.Destroy();
     }
 }
