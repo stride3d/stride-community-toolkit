@@ -12,28 +12,13 @@ shader MeshOutlineShader2 : ShaderBase, Transformation, Texturing, PositionStrea
         stage float4 Viewport;
     }
 
-    // Projects vertex to clip space applying an outline expansion.
-    // For regular 3D meshes we offset along the vertex normal (classic silhouette outline technique).
-    // For flat 2D meshes (all normals roughly 0,0,1) this would only move in +Z and NOT enlarge the silhouette.
-    // To support 2D shapes we detect a near-axis normal and instead scale in the XY plane from origin (assumes mesh centered).
+    // Projects vertex to clip space applying an outline expansion for 2D meshes only.
     float4 projToWorld(in float4 pos, in float3 normal)
     {
-        // Heuristic: if normal points mostly towards +Z/-Z treat mesh as 2D (sprite / flat shape)
-        bool isFlat2D = abs(normal.z) > 0.9 && abs(normal.x) < 0.1 && abs(normal.y) < 0.1;
-
-        if (isFlat2D)
-        {
-            // Uniform planar scale around origin in XY only (keep original Z)
-            float scaleFactor = 1 + OutlineThickness; // simple multiplicative expansion
-            float2 scaledXY = pos.xy * scaleFactor;
-            return mul(float4(scaledXY, pos.z, 1), WorldViewProjection);
-        }
-        else
-        {
-            // 3D mesh: push along normal by OutlineThickness (independent of existing world scale)
-            float3 offset = normal * OutlineThickness;
-            return mul(pos + float4(offset, 0), WorldViewProjection);
-        }
+        // Uniform planar scale around origin in XY only (keep original Z)
+        float scaleFactor = 1 + OutlineThickness; // simple multiplicative expansion
+        float2 scaledXY = pos.xy * scaleFactor;
+        return mul(float4(scaledXY, pos.z, 1), WorldViewProjection);
     }
 
     stage override void VSMain()
