@@ -1,4 +1,5 @@
 //using DebugShapes;
+using Example.Common;
 using Example_2D_Playground;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;

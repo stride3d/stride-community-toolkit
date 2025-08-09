@@ -1,5 +1,6 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Engine;
+using Example18_Box2DPhysics.Physics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -184,7 +185,7 @@ public class SceneManager
             var entity = _shapeFactory.CreateEntity(shapeModel, color);
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-            PhysicsHelper.CreateShapePhysics(shapeModel, bodyId);
+            ShapeFixtureBuilder.AttachShape(shapeModel, bodyId);
             _totalShapesCreated++;
         }
     }
@@ -199,7 +200,7 @@ public class SceneManager
             var entity = _shapeFactory.CreateEntity(shapeModel);
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-            PhysicsHelper.CreateShapePhysics(shapeModel, bodyId);
+                ShapeFixtureBuilder.AttachShape(shapeModel, bodyId);
             _totalShapesCreated++;
         }
     }
@@ -233,8 +234,8 @@ public class SceneManager
         var bodyIdA = _simulation.CreateDynamicBody(entity1, entity1.Transform.Position);
         var bodyIdB = _simulation.CreateDynamicBody(entity2, entity2.Transform.Position);
 
-        PhysicsHelper.CreateShapePhysics(shapeModel1, bodyIdA);
-        PhysicsHelper.CreateShapePhysics(shapeModel2, bodyIdB);
+            ShapeFixtureBuilder.AttachShape(shapeModel1, bodyIdA);
+            ShapeFixtureBuilder.AttachShape(shapeModel2, bodyIdB);
 
         // Create distance joint
         CreateDistanceJoint(bodyIdA, bodyIdB);
@@ -269,7 +270,7 @@ public class SceneManager
         var entity = _shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position);
         var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-        PhysicsHelper.CreateShapePhysics(shapeModel, bodyId);
+            ShapeFixtureBuilder.AttachShape(shapeModel, bodyId);
         _totalShapesCreated++;
 
         LogAction($"Created {shapeModel.Type} at mouse position");
@@ -301,7 +302,7 @@ public class SceneManager
             GameConfig.ImpulseStrength
         );
 
-        PhysicsHelper.ApplyImpulse(bodyId, impulseDirection);
+    BodyForces.ApplyImpulse(bodyId, impulseDirection);
 
         LogAction($"Applied impulse to {entity.Name}");
     }

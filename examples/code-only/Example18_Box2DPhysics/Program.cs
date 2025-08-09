@@ -1,5 +1,6 @@
 using Example18_Box2DPhysics;
 using Example18_Box2DPhysics.Helpers;
+using Example18_Box2DPhysics.Physics; // new physics utilities
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -93,7 +94,7 @@ void CreateInitialScene(Scene scene)
     if (simulation == null) return;
 
     // Add ground for physics objects to collide with
-    PhysicsHelper.AddGround(simulation.GetWorldId());
+    WorldGeometryBuilder.AddGround(simulation.GetWorldId());
 
     // Create a simple demonstration with a few shapes
     var shapeFactory = new ShapeFactory(game, scene);
@@ -109,7 +110,7 @@ void CreateInitialScene(Scene scene)
         // Set zero gravity for this body to demonstrate control
         b2Body_SetGravityScale(bodyId, 0);
 
-        PhysicsHelper.CreateShapePhysics(shape, bodyId);
+    ShapeFixtureBuilder.AttachShape(shape, bodyId);
     }
 
     // Add some initial shapes for interaction
