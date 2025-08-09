@@ -43,7 +43,7 @@ This document tracks improvements for Box2DSimulation.cs, inspired by Box2D.NET 
 
 ### 7. Debug Drawing Support 🎨 (**Medium Priority**)
 - [x] B2DebugDraw and B2DrawContext are available
-- [ ] Add SetDebugDraw and DebugDraw methods
+- [x] Add SetDebugDraw and DebugDraw methods
 
 ### 8. Component Integration System 🔧 (**Medium Priority**)
 - [ ] Add ISimulationUpdate registration and invocation

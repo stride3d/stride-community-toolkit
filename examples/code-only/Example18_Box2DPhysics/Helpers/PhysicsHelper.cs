@@ -1,5 +1,4 @@
 using Box2D.NET;
-using Example.Common;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using static Box2D.NET.B2Bodies;

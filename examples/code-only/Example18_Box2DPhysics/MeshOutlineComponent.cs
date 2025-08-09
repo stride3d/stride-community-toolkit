@@ -12,6 +12,7 @@ namespace Example18_Box2DPhysics;
 /// <remarks>
 /// The outline effect is controlled by the <see cref="Enabled"/>, <see cref="Color"/>, and <see cref="Intensity"/> properties.
 /// Ensure that MeshOutlineRenderFeature is enabled in the Graphics Compositor for this effect to be visible.
+/// This component is optional for debug visualization.
 /// </remarks>
 public class MeshOutlineComponent : EntityComponent
 {

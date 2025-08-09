@@ -27,7 +27,7 @@ void Start(Scene scene)
     game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
 
     // Setup 2D scene with camera and controls
-    game.SetupBase2D();
+    game.SetupBase2D(new Color(0.2f));
     //game.AddGraphicsCompositor();
     //game.AddGraphicsCompositor2();
     //game.Add2DGraphicsCompositor(clearColor);
@@ -39,6 +39,10 @@ void Start(Scene scene)
         RenderGroupMask = RenderGroupMask.Group5,
         ScaleAdjust = 0.03f
     });
+
+    // Wall colour is: b2_colorPaleGreen = 0x98FB98,
+    // Awake shape colour is:  b2_colorPink = 0xFFC0CB,
+    // Sleep shape colour is:  b2_colorGray = 0x808080,
 
     // Initialize the Box2D physics simulation
     simulation = new Box2DSimulation();
