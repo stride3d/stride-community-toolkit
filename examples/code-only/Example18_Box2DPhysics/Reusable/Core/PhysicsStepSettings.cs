@@ -1,4 +1,4 @@
-﻿namespace Example18_Box2DPhysics.Reusable.Core;
+namespace Example18_Box2DPhysics.Reusable.Core;
 
 /// <summary>
 /// Configuration for fixed timestep simulation stepping. This is an extraction candidate from the

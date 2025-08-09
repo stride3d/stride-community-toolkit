@@ -1,4 +1,4 @@
-﻿using Box2D.NET;
+using Box2D.NET;
 
 namespace Example18_Box2DPhysics.Reusable.Events;
 

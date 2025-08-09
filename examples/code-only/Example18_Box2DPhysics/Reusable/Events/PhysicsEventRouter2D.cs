@@ -1,10 +1,8 @@
 using Box2D.NET;
-using Stride.Engine;
 using Stride.Core.Mathematics;
-using static Box2D.NET.B2Worlds;
+using Stride.Engine;
 using static Box2D.NET.B2Shapes;
-using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Types;
+using static Box2D.NET.B2Worlds;
 
 namespace Example18_Box2DPhysics.Reusable.Events;
 

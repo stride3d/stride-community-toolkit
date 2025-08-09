@@ -12,7 +12,7 @@ namespace Example18_Box2DPhysics.Reusable.Queries;
 /// toolkit library. These wrappers avoid any Stride engine types and operate directly on world IDs
 /// and primitive math structs only.
 /// </summary>
-public static class PhysicsQueries2D
+public static partial class PhysicsQueries2D
 {
     /// <summary>
     /// Performs a closest-hit raycast.
@@ -61,15 +61,6 @@ public static class PhysicsQueries2D
 
         return hit;
     }
-    /// <summary>
-    /// Represents a raw raycast hit without any engine-specific references.
-    /// </summary>
-    public readonly record struct QueryRaycastHit(
-        B2BodyId BodyId,
-        B2ShapeId ShapeId,
-        Vector2 Point,
-        Vector2 Normal,
-        float Fraction);
 
     /// <summary>
     /// Performs a raycast returning all hits along the segment from origin in direction up to maxDistance.

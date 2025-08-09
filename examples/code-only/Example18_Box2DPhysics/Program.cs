@@ -35,7 +35,7 @@ void Start(Scene scene)
     //game.Add3DCamera().Add3DCameraController();
     //game.AddSkybox();
     game.AddProfiler();
-    game.AddRootRenderFeature(new MeshOutlineRenderFeature
+    game.AddRootRenderFeature(new MeshOutlineRenderFeature2
     {
         RenderGroupMask = RenderGroupMask.Group5,
         ScaleAdjust = 0.03f
@@ -110,7 +110,7 @@ void CreateInitialScene(Scene scene)
         // Set zero gravity for this body to demonstrate control
         b2Body_SetGravityScale(bodyId, 0);
 
-    ShapeFixtureBuilder.AttachShape(shape, bodyId);
+        ShapeFixtureBuilder.AttachShape(shape, bodyId);
     }
 
     // Add some initial shapes for interaction
