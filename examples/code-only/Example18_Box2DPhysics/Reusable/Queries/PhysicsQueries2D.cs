@@ -1,5 +1,6 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
+using Example18_Box2DPhysics.Reusable.Core.Results; // QueryRaycastHit location
 using static Box2D.NET.B2Distances;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
@@ -15,8 +16,15 @@ namespace Example18_Box2DPhysics.Reusable.Queries;
 public static partial class PhysicsQueries2D
 {
     /// <summary>
-    /// Performs a closest-hit raycast.
+    /// Performs a closest-hit raycast against every shape in <paramref name="worldId"/> along a segment starting at <paramref name="origin"/> in <paramref name="direction"/> up to <paramref name="maxDistance"/>.
     /// </summary>
+    /// <param name="worldId">Target Box2D world.</param>
+    /// <param name="origin">World-space ray origin.</param>
+    /// <param name="direction">Normalized direction vector.</param>
+    /// <param name="maxDistance">Maximum ray length.</param>
+    /// <returns>
+    /// Tuple: (hit flag, body id, shape id, point, normal, fraction). When hit is false, the remaining values are unspecified.
+    /// </returns>
     public static (bool hit, B2BodyId bodyId, B2ShapeId shapeId, Vector2 point, Vector2 normal, float fraction) RaycastClosest(
         B2WorldId worldId, Vector2 origin, Vector2 direction, float maxDistance)
     {
@@ -35,8 +43,12 @@ public static partial class PhysicsQueries2D
     }
 
     /// <summary>
-    /// Overlaps a point by creating a small AABB around it.
+    /// Tests whether any shape overlaps the given <paramref name="point"/> by constructing a tiny AABB around it.
     /// </summary>
+    /// <param name="worldId">Target Box2D world.</param>
+    /// <param name="point">The point to test.</param>
+    /// <param name="querySize">Half-extent of the temporary AABB used for broad-phase query.</param>
+    /// <returns>The first body id whose shape actually contains the point; null if none.</returns>
     public static B2BodyId? OverlapPoint(B2WorldId worldId, Vector2 point, float querySize = 0.1f)
     {
         var lower = new Box2D.NET.B2Vec2(point.X - querySize, point.Y - querySize);
@@ -63,8 +75,13 @@ public static partial class PhysicsQueries2D
     }
 
     /// <summary>
-    /// Performs a raycast returning all hits along the segment from origin in direction up to maxDistance.
+    /// Performs a raycast returning every hit encountered along the segment starting at <paramref name="origin"/> in <paramref name="direction"/> up to <paramref name="maxDistance"/>.
     /// </summary>
+    /// <param name="worldId">Target Box2D world.</param>
+    /// <param name="origin">World-space ray origin.</param>
+    /// <param name="direction">Normalized direction vector.</param>
+    /// <param name="maxDistance">Maximum ray length.</param>
+    /// <returns>List of raw hit data (unsorted). Empty when nothing is hit.</returns>
     public static List<QueryRaycastHit> RaycastAll(B2WorldId worldId, Vector2 origin, Vector2 direction, float maxDistance)
     {
         var hits = new List<QueryRaycastHit>();
@@ -87,8 +104,12 @@ public static partial class PhysicsQueries2D
     }
 
     /// <summary>
-    /// Overlaps an AABB region and returns all unique bodies inside.
+    /// Collects all unique bodies whose shapes overlap the axis-aligned box defined by <paramref name="lowerBound"/> and <paramref name="upperBound"/>.
     /// </summary>
+    /// <param name="worldId">Target Box2D world.</param>
+    /// <param name="lowerBound">Lower corner of the AABB.</param>
+    /// <param name="upperBound">Upper corner of the AABB.</param>
+    /// <returns>List of body ids (no duplicates).</returns>
     public static List<B2BodyId> OverlapAABB(B2WorldId worldId, Vector2 lowerBound, Vector2 upperBound)
     {
         var bodies = new List<B2BodyId>();
@@ -112,8 +133,12 @@ public static partial class PhysicsQueries2D
     }
 
     /// <summary>
-    /// Overlaps a circle region and returns all unique bodies inside.
+    /// Collects all unique bodies whose shapes overlap a circle centered at <paramref name="center"/> with <paramref name="radius"/>.
     /// </summary>
+    /// <param name="worldId">Target Box2D world.</param>
+    /// <param name="center">World-space circle center.</param>
+    /// <param name="radius">Circle radius.</param>
+    /// <returns>List of body ids (no duplicates).</returns>
     public static List<B2BodyId> OverlapCircle(B2WorldId worldId, Vector2 center, float radius)
     {
         var bodies = new List<B2BodyId>();

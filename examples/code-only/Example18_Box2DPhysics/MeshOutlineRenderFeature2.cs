@@ -4,7 +4,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
-using Buffer = Stride.Graphics.Buffer;
 
 namespace Example18_Box2DPhysics;
 
@@ -20,9 +19,6 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
     private DynamicEffectInstance? _shader;
     private MutablePipelineState? _pipelineState;
 
-    // Cache for vertex buffers to prevent memory leaks
-    private readonly Dictionary<int, Buffer> _vertexBufferCache = [];
-
     /// <summary>
     /// Default sort key for outline rendering.
     /// </summary>
@@ -34,12 +30,6 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
     [DataMember(10)]
     [DataMemberRange(0.0f, 0.1f, 0.001f, 0.002f, 4)]
     public float ScaleAdjust = 0.001f;
-
-    /// <summary>
-    /// Specifies which render groups will have outlines applied.
-    /// </summary>
-    [DataMember(5)]
-    public RenderGroupMask RenderGroupMask;
 
     /// <inheritdoc/>
     public override Type SupportedRenderObjectType => typeof(RenderMesh);
@@ -64,47 +54,15 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
             _pipelineState = new MutablePipelineState(Context.GraphicsDevice);
             _pipelineState.State.SetDefaults();
             _pipelineState.State.InputElements = VertexPositionNormalTexture.Layout.CreateInputElements();
-            // We render the inflated/backface version only; front-face culling reveals the silhouette as an outline.
-            _pipelineState.State.BlendState = BlendStates.AlphaBlend;
-            //_pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
+            //_pipelineState.State.BlendState = BlendStates.AlphaBlend;
+            _pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
             _pipelineState.State.RasterizerState.CullMode = CullMode.Back;
-            //_pipelineState.State.DepthStencilState = DepthStencilStates.DepthRead; // avoid overwriting depth, keeps original sprite/mesh visible
+            _pipelineState.State.DepthStencilState = DepthStencilStates.DepthRead; // avoid overwriting depth, keeps original sprite/mesh visible
         }
         catch (Exception ex)
         {
             throw new InvalidOperationException("Failed to initialize MeshOutlineRenderFeature.", ex);
         }
-    }
-
-    /// <summary>
-    /// Gets or creates a cached vertex buffer for the given vertices.
-    /// </summary>
-    private Buffer GetOrCreateVertexBuffer(Vector2[] vertices)
-    {
-        // Create a hash key based on the vertices content
-        var hashCode = GetVerticesHashCode(vertices);
-
-        if (!_vertexBufferCache.TryGetValue(hashCode, out var buffer))
-        {
-            // Create new buffer and cache it
-            buffer = Buffer.Structured.New<Vector2>(Context.GraphicsDevice, vertices);
-            _vertexBufferCache[hashCode] = buffer;
-        }
-
-        return buffer;
-    }
-
-    /// <summary>
-    /// Computes a hash code for the vertices array.
-    /// </summary>
-    private static int GetVerticesHashCode(Vector2[] vertices)
-    {
-        var hash = vertices.Length.GetHashCode();
-        foreach (var vertex in vertices)
-        {
-            hash = HashCode.Combine(hash, vertex.GetHashCode());
-        }
-        return hash;
     }
 
     /// <inheritdoc/>
@@ -126,11 +84,6 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
         foreach (var renderNode in renderViewStage.SortedRenderNodes)
         {
             if (renderNode.RenderObject is not RenderMesh renderMesh)
-            {
-                continue;
-            }
-
-            if (!RenderGroupMask.Contains(renderMesh.RenderGroup))
             {
                 continue;
             }
@@ -162,28 +115,6 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
             _shader.Parameters.Set(MeshOutlineShader2Keys.Color, outlineScript.Color);
             _shader.Parameters.Set(MeshOutlineShader2Keys.Intensity, outlineScript.Intensity);
             _shader.Parameters.Set(MeshOutlineShader2Keys.OutlineThickness, outlineScript.OutlineThickness);
-            // After regenerating MeshOutlineShader.sdsl.cs (adds OutlineThickness), the next line will compile.
-            // _shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
-            //_shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
-            //_shader.Parameters.Set(MeshOutlineShaderKeys.ShapeType, (int)outlineScript.ShapeType);
-            //_shader.Parameters.Set(MeshOutlineShaderKeys.Radius, outlineScript.Radius);
-            //_shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale);
-            //_shader.Parameters.Set(MeshOutlineShaderKeys.FillColor, outlineScript.Color);
-            //_shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 2);
-
-            //// Use cached vertex buffer instead of creating new ones
-            //if (outlineScript.PolygonVertices.Length > 0)
-            //{
-            //    var vertexBuffer = GetOrCreateVertexBuffer(outlineScript.PolygonVertices);
-            //    _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertices, vertexBuffer);
-            //    _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, outlineScript.VertexCount);
-            //}
-            //else
-            //{
-            //    _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, 0);
-            //}
-
-            Console.WriteLine($"{_vertexBufferCache.Count} vertices");
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;
@@ -206,20 +137,5 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
                 context.CommandList.Draw(drawData.DrawCount, drawData.StartLocation);
             }
         }
-    }
-
-    /// <summary>
-    /// Cleans up cached vertex buffers.
-    /// </summary>
-    protected override void Destroy()
-    {
-        foreach (var buffer in _vertexBufferCache.Values)
-        {
-            buffer?.Dispose();
-        }
-
-        _vertexBufferCache.Clear();
-
-        base.Destroy();
     }
 }

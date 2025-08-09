@@ -8,6 +8,12 @@ using static Box2D.NET.B2Worlds;
 
 namespace Example18_Box2DPhysics;
 
+/// <summary>
+/// High-level integration façade between Box2D.NET and Stride entities for the example.
+/// Wraps a reusable <c>PhysicsWorld2D</c> plus an entity/body bridge and exposes
+/// a simplified stepping, query and event API. Intended to guide future extraction
+/// into a toolkit library (mirroring the design of BepuSimulation in Stride).
+/// </summary>
 public class Box2DSimulation : IDisposable
 {
     // Underlying reusable world + bridge (extraction in progress)
@@ -15,17 +21,25 @@ public class Box2DSimulation : IDisposable
     private readonly Box2DStrideBridge _bridge;
 
     // Stepping configuration now owned directly by PhysicsWorld2D
+    /// <summary>Whether simulation stepping and event processing should occur.</summary>
     public bool Enabled { get; set; } = true;
+    /// <summary>Multiplier applied to incoming delta time before fixed-step accumulation.</summary>
     public float TimeScale { get => _world.TimeScale; set => _world.TimeScale = value; }
+    /// <summary>Maximum number of fixed steps processed per frame (-1 for unlimited) to avoid spiral-of-death.</summary>
     public int MaxStepsPerFrame { get => _world.MaxStepsPerFrame; set => _world.MaxStepsPerFrame = value; }
+    /// <summary>Target simulation frequency in hertz used to derive the fixed step size.</summary>
     public int TargetHz { get => _world.TargetHz; set => _world.TargetHz = value; }
 
     // Contact and sensor event system (delegated to router)
     private readonly PhysicsEventRouter2D _eventRouter = new();
+    /// <summary>Enable dispatch of begin/end contact events.</summary>
     public bool EnableContactEvents { get; set; } = true;
+    /// <summary>Enable dispatch of hit (post-solve / impact style) events.</summary>
     public bool EnableHitEvents { get; set; } = true;
+    /// <summary>Enable dispatch of sensor overlap events.</summary>
     public bool EnableSensorEvents { get; set; } = true;
 
+    /// <summary>World gravity applied to dynamic bodies.</summary>
     public Vector2 Gravity
     {
         get
@@ -36,21 +50,31 @@ public class Box2DSimulation : IDisposable
         set => b2World_SetGravity(_world.WorldId, new B2Vec2(value.X, value.Y));
     }
 
+    /// <summary>Registers a contact event handler.</summary>
     public void RegisterContactEventHandler(IContactEventHandler handler) => _eventRouter.RegisterContactEventHandler(handler); // preserved API
+    /// <summary>Unregisters a contact event handler.</summary>
     public void UnregisterContactEventHandler(IContactEventHandler handler) => _eventRouter.UnregisterContactEventHandler(handler);
+    /// <summary>Registers a sensor event handler.</summary>
     public void RegisterSensorEventHandler(ISensorEventHandler handler) => _eventRouter.RegisterSensorEventHandler(handler);
+    /// <summary>Unregisters a sensor event handler.</summary>
     public void UnregisterSensorEventHandler(ISensorEventHandler handler) => _eventRouter.UnregisterSensorEventHandler(handler);
 
+    /// <summary>Creates a new simulation instance with a fresh Box2D world.</summary>
     public Box2DSimulation()
     {
         _world = new PhysicsWorld2D();
         _bridge = new Box2DStrideBridge(_world);
     }
 
+    /// <summary>Creates a dynamic body associated with the given entity at a world position.</summary>
     public B2BodyId CreateDynamicBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_dynamicBody);
+    /// <summary>Creates a kinematic body associated with the given entity at a world position.</summary>
     public B2BodyId CreateKinematicBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody);
+    /// <summary>Creates a static body associated with the given entity at a world position.</summary>
     public B2BodyId CreateStaticBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_staticBody);
 
+    /// <summary>Advances the simulation by the elapsed real time, executing zero or more fixed steps.</summary>
+    /// <param name="elapsed">Frame time delta.</param>
     public void Update(TimeSpan elapsed)
     {
         if (!Enabled) return;
@@ -70,18 +94,22 @@ public class Box2DSimulation : IDisposable
 
     private void ProcessSensorEvents() => _eventRouter.ProcessSensors(_world.WorldId, id => GetEntity(id), EnableSensorEvents);
 
+    /// <summary>Removes the body associated with <paramref name="entity"/> from the world if present.</summary>
     public void RemoveBody(Entity entity)
     {
         _bridge.RemoveBody(entity);
     }
 
+    /// <summary>Gets the underlying Box2D world id.</summary>
     public B2WorldId GetWorldId() => _world.WorldId;
 
+    /// <summary>Gets the entity previously registered for the given body id (or null).</summary>
     public Entity? GetEntity(B2BodyId bodyId)
     {
         return _bridge.GetEntity(bodyId);
     }
 
+    /// <summary>Returns a snapshot list of all body ids tracked by the bridge.</summary>
     public List<B2BodyId> GetAllBodyIds() => _bridge.Bodies.ToList();
 
     /// <summary>
@@ -160,6 +188,7 @@ public class Box2DSimulation : IDisposable
     public List<B2BodyId> OverlapCircle(Vector2 center, float radius)
         => PhysicsQueries2D.OverlapCircle(_world.WorldId, center, radius);
 
+    /// <summary>Disposes underlying world resources.</summary>
     public void Dispose()
     {
         _world.Dispose();

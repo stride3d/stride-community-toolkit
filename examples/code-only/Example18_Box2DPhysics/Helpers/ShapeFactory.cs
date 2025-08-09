@@ -50,8 +50,13 @@ public class ShapeFactory
     {
         var actualColor = color ?? shape.Color;
 
-        // not sure how to get this
-        float pixelScale = 200f;
+        //Make colour darker from this one  b2_colorPink = 0xFFC0CB,
+
+        actualColor = new Color(
+            (byte)(Color.Pink.R * 0.5f),
+            (byte)(Color.Pink.G * 0.5f),
+            (byte)(Color.Pink.B * 0.5f),
+            actualColor.A);
 
         // Create entity with SDF-based Box2D style material
         var entity = _game.Create2DPrimitive(shape.Type, new()
@@ -86,12 +91,12 @@ public class ShapeFactory
         entity.Add(new MeshOutlineComponent()
         {
             Enabled = true,
-            Color = Color.Green,
-            Intensity = 100f,
+            Color = Color.Pink,
+            Intensity = 1f,
             ShapeType = shape.Type,
             OutlineThickness = 0.05f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
-            PixelScale = pixelScale,
+            PixelScale = 200,
             PolygonVertices = polygonVertices
         });
 
