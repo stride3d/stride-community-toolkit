@@ -72,7 +72,7 @@ public class ShapeFactory
             new Vector2(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f), // Bottom-left
             new Vector2(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),  // Bottom-right
             new Vector2(shape.Size.X * 0.5f, shape.Size.Y * 0.5f),   // Top-right
-            new Vector2(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f)   // Top-left
+            new Vector2(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f)   // Top-lepft
         },
             Primitive2DModelType.Triangle2D => new[]
             {
@@ -89,7 +89,7 @@ public class ShapeFactory
             Color = Color.Green,
             Intensity = 100f,
             ShapeType = shape.Type,
-            OutlineThickness = 1.0f, // 3 pixels
+            OutlineThickness = 3f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
             PixelScale = pixelScale,
             PolygonVertices = polygonVertices
@@ -97,6 +97,19 @@ public class ShapeFactory
 
         entity.Scene = _scene;
         return entity;
+    }
+
+    private Color4 LightenColor(Color actualColor, float factor)
+    {
+
+        return actualColor;
+
+        // Lighten the color by a factor (0.0 to 1.0)
+        return new Color4(
+            Math.Min(actualColor.R + factor, 1.0f),
+            Math.Min(actualColor.G + factor, 1.0f),
+            Math.Min(actualColor.B + factor, 1.0f),
+            actualColor.A);
     }
 
     private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);

@@ -15,7 +15,7 @@ namespace Example18_Box2DPhysics;
 /// Only entities with <see cref="MeshOutlineComponent"/> and matching <see cref="RenderGroupMask"/> will be outlined.
 /// Ensure this feature is enabled in the Graphics Compositor.
 /// </remarks>
-public class MeshOutlineRenderFeature : RootRenderFeature
+public class MeshOutlineRenderFeature2 : RootRenderFeature
 {
     private DynamicEffectInstance? _shader;
     private MutablePipelineState? _pipelineState;
@@ -47,7 +47,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
     /// <summary>
     /// Initializes a new instance of the <see cref="MeshOutlineRenderFeature"/> class.
     /// </summary>
-    public MeshOutlineRenderFeature() => SortKey = DefaultSortKey;
+    public MeshOutlineRenderFeature2() => SortKey = DefaultSortKey;
 
     /// <summary>
     /// Initializes the shader and pipeline state for outline rendering.
@@ -58,7 +58,7 @@ public class MeshOutlineRenderFeature : RootRenderFeature
 
         try
         {
-            _shader = new DynamicEffectInstance("MeshOutlineShader");
+            _shader = new DynamicEffectInstance("MeshOutlineShader2");
             _shader.Initialize(Context.Services);
 
             _pipelineState = new MutablePipelineState(Context.GraphicsDevice);
@@ -158,27 +158,30 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             // Use cached values
             _shader.Parameters.Set(TransformationKeys.WorldViewProjection, renderMesh.World * viewProjection);
             _shader.Parameters.Set(TransformationKeys.WorldScale, worldScale);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.Viewport, viewport);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.Color, outlineScript.Color);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.Intensity, outlineScript.Intensity);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.ShapeType, (int)outlineScript.ShapeType);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.Radius, outlineScript.Radius);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.FillColor, outlineScript.Color);
-            _shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 2);
+            _shader.Parameters.Set(MeshOutlineShader2Keys.Viewport, viewport);
+            _shader.Parameters.Set(MeshOutlineShader2Keys.Color, outlineScript.Color);
+            _shader.Parameters.Set(MeshOutlineShader2Keys.Intensity, outlineScript.Intensity);
+            _shader.Parameters.Set(MeshOutlineShader2Keys.OutlineThickness, outlineScript.OutlineThickness);
+            // After regenerating MeshOutlineShader.sdsl.cs (adds OutlineThickness), the next line will compile.
+            // _shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
+            //_shader.Parameters.Set(MeshOutlineShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
+            //_shader.Parameters.Set(MeshOutlineShaderKeys.ShapeType, (int)outlineScript.ShapeType);
+            //_shader.Parameters.Set(MeshOutlineShaderKeys.Radius, outlineScript.Radius);
+            //_shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale);
+            //_shader.Parameters.Set(MeshOutlineShaderKeys.FillColor, outlineScript.Color);
+            //_shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 2);
 
-            // Use cached vertex buffer instead of creating new ones
-            if (outlineScript.PolygonVertices.Length > 0)
-            {
-                var vertexBuffer = GetOrCreateVertexBuffer(outlineScript.PolygonVertices);
-                _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertices, vertexBuffer);
-                _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, outlineScript.VertexCount);
-            }
-            else
-            {
-                _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, 0);
-            }
+            //// Use cached vertex buffer instead of creating new ones
+            //if (outlineScript.PolygonVertices.Length > 0)
+            //{
+            //    var vertexBuffer = GetOrCreateVertexBuffer(outlineScript.PolygonVertices);
+            //    _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertices, vertexBuffer);
+            //    _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, outlineScript.VertexCount);
+            //}
+            //else
+            //{
+            //    _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, 0);
+            //}
 
             Console.WriteLine($"{_vertexBufferCache.Count} vertices");
 

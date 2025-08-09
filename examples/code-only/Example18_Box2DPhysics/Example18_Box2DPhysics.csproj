@@ -24,9 +24,17 @@
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
         <AutoGen>True</AutoGen>
       </Compile>
+      <Compile Update="Effects\MeshOutlineShader2.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Effects\MeshOutlineShader2.sdsl">
+        <LastGenOutput>MeshOutlineShader2.sdsl.cs</LastGenOutput>
+      </None>
       <None Update="Effects\MeshOutlineShader.sdsl">
         <LastGenOutput>MeshOutlineShader.sdsl.cs</LastGenOutput>
       </None>
