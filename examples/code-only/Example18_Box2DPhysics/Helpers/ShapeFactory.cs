@@ -51,7 +51,7 @@ public class ShapeFactory
         var actualColor = color ?? shape.Color;
 
         // not sure how to get this
-        float pixelScale = 400f;
+        float pixelScale = 200f;
 
         // Create entity with SDF-based Box2D style material
         var entity = _game.Create2DPrimitive(shape.Type, new()
@@ -70,7 +70,7 @@ public class ShapeFactory
             Color = Color.Green,
             Intensity = 100f,
             ShapeType = shape.Type,
-            OutlineThickness = 10.0f, // 3 pixels
+            OutlineThickness = 5.0f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
             PixelScale = pixelScale
         });
