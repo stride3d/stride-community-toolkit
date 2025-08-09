@@ -58,12 +58,31 @@ public class ShapeFactory
         {
             Size = shape.Size,
             Material = _game.CreateFlatMaterial(actualColor),
-            //Material = CreateBox2DStyleMaterial(shape.Color, actualColor),
             RenderGroup = RenderGroup.Group5
         });
 
         entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
         entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
+
+        // Define polygon vertices based on shape type
+        Vector2[] polygonVertices = shape.Type switch
+        {
+            Primitive2DModelType.Square2D or Primitive2DModelType.Rectangle2D => new[]
+            {
+            new Vector2(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f), // Bottom-left
+            new Vector2(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),  // Bottom-right
+            new Vector2(shape.Size.X * 0.5f, shape.Size.Y * 0.5f),   // Top-right
+            new Vector2(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f)   // Top-left
+        },
+            Primitive2DModelType.Triangle2D => new[]
+            {
+            new Vector2(0, shape.Size.Y * 0.5f),              // Top
+            new Vector2(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f), // Bottom-left
+            new Vector2(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f)   // Bottom-right
+        },
+            _ => Array.Empty<Vector2>() // For circles, use existing logic
+        };
+
         entity.Add(new MeshOutlineComponent()
         {
             Enabled = true,
@@ -72,7 +91,8 @@ public class ShapeFactory
             ShapeType = shape.Type,
             OutlineThickness = 5.0f, // 3 pixels
             Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
-            PixelScale = pixelScale
+            PixelScale = pixelScale,
+            PolygonVertices = polygonVertices
         });
 
         entity.Scene = _scene;

@@ -2,8 +2,10 @@ using Stride.Core;
 using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
+using Buffer = Stride.Graphics.Buffer;
 
 namespace Example18_Box2DPhysics;
 
@@ -129,6 +131,16 @@ public class MeshOutlineRenderFeature : RootRenderFeature
             _shader.Parameters.Set(MeshOutlineShaderKeys.PixelScale, outlineScript.PixelScale);
             _shader.Parameters.Set(MeshOutlineShaderKeys.FillColor, outlineScript.Color);
             _shader.Parameters.Set(MeshOutlineShaderKeys.AntiAlias, 1f); // Adjust anti-aliasing as needed
+            if (outlineScript.PolygonVertices.Length > 0)
+            {
+                var vertexBuffer = Buffer.Structured.New<Vector2>(context.GraphicsDevice, outlineScript.PolygonVertices);
+                _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertices, vertexBuffer);
+                _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, outlineScript.VertexCount);
+            }
+            else
+            {
+                _shader.Parameters.Set(MeshOutlineShaderKeys.PolygonVertexCount, 0);
+            }
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;

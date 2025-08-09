@@ -10,6 +10,8 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     float PixelScale; // world-to-pixel scale, passed from C#
     float4 FillColor; // Add this for blending (optional)
     float AntiAlias; // e.g. 1.0f
+    stage StructuredBuffer<float2> PolygonVertices;
+    stage int PolygonVertexCount;
 
     cbuffer PerView
     {
@@ -20,6 +22,32 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     {
         float3 scaling = normal * (WorldScale - 1);
         return mul(pos + float4(scaling.x, scaling.y, scaling.z, 0), WorldViewProjection);
+    }
+
+    float cross2d(float2 v1, float2 v2)
+    {
+        return v1.x * v2.y - v1.y * v2.x;
+    }
+
+    // Signed distance function for convex polygon
+    float sdConvexPolygon(float2 p, int count)
+    {
+        float d = dot(p - PolygonVertices[0], p - PolygonVertices[0]);
+        float side = -1.0;
+        int j = count - 1;
+        for (int i = 0; i < count; ++i)
+        {
+            float2 e = PolygonVertices[i] - PolygonVertices[j];
+            float2 w = p - PolygonVertices[j];
+            float we = dot(w, e);
+            float2 b = w - e * clamp(we / dot(e, e), 0.0, 1.0);
+            float bb = dot(b, b);
+            if (bb < d) d = bb;
+            float s = cross2d(w, e);
+            if (s >= 0.0) side = 1.0;
+            j = i;
+        }
+        return side * sqrt(d);
     }
 
     stage override void VSMain()
@@ -55,16 +83,10 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
         }
         else // Rectangle (similar logic can be applied)
         {
-            float2 uv = pos + 0.5; // Convert [-0.5,0.5] to [0,1] if mesh is centered
-            float2 edgeDist = min(uv, 1.0 - uv);
-            float minDist = min(edgeDist.x, edgeDist.y);
-            float minVisibleThickness = 0.02f; // Minimum thickness to be visible
-            float maxThickness = 0.5; // Maximum fills the shape
-            float outlineWidth = minVisibleThickness + (OutlineThickness * (maxThickness - minVisibleThickness));
-            isOutline = (minDist <= outlineWidth);
-
+            float dist = abs(sdConvexPolygon(pos, PolygonVertexCount));
+            float outlineWidth = OutlineThickness / PixelScale;
+            bool isOutline = dist <= outlineWidth;
             if (!isOutline) discard;
-
             streams.ColorTarget = Color * Intensity;
         }
     }

@@ -34,7 +34,7 @@ void Start(Scene scene)
     //game.Add3DCamera().Add3DCameraController();
     //game.AddSkybox();
     game.AddProfiler();
-    game.AddRootRenderFeature(new MeshOutlineRenderFeature()
+    game.AddRootRenderFeature(new MeshOutlineRenderFeature
     {
         RenderGroupMask = RenderGroupMask.Group5,
         ScaleAdjust = 0.03f

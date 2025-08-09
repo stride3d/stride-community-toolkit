@@ -48,4 +48,15 @@ public class MeshOutlineComponent : EntityComponent
 
     public float Radius { get; set; } = 1.0f;
     public float PixelScale { get; set; } = 1.0f; // Add pixel scale property
+
+    /// <summary>
+    /// Gets or sets the 2D polygon vertices for outline rendering.
+    /// These define the shape's outline in local 2D coordinates.
+    /// </summary>
+    public Vector2[] PolygonVertices { get; set; } = Array.Empty<Vector2>();
+
+    /// <summary>
+    /// Gets the vertex count for the polygon outline.
+    /// </summary>
+    public int VertexCount => PolygonVertices.Length;
 }
