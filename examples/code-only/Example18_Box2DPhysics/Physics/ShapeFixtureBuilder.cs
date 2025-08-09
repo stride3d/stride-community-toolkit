@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
 using Box2D.NET;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Example18_Box2DPhysics.Helpers; // GameConfig
-using Stride.Core.Mathematics;
-using static Box2D.NET.B2Bodies;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2Hulls;
 using static Box2D.NET.B2Shapes;

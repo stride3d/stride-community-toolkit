@@ -1,6 +1,5 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
-using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Distances;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
@@ -24,11 +23,14 @@ public static class PhysicsQueries2D
         var start = new Box2D.NET.B2Vec2(origin.X, origin.Y);
         var translation = new Box2D.NET.B2Vec2(direction.X * maxDistance, direction.Y * maxDistance);
         var result = b2World_CastRayClosest(worldId, start, translation, b2DefaultQueryFilter());
+
         if (!result.hit)
             return (false, default, default, default, default, 0f);
+
         var p = new Vector2(result.point.X, result.point.Y);
         var n = new Vector2(result.normal.X, result.normal.Y);
         var bodyId = b2Shape_GetBody(result.shapeId);
+
         return (true, bodyId, result.shapeId, p, n, result.fraction);
     }
 
@@ -40,24 +42,25 @@ public static class PhysicsQueries2D
         var lower = new Box2D.NET.B2Vec2(point.X - querySize, point.Y - querySize);
         var upper = new Box2D.NET.B2Vec2(point.X + querySize, point.Y + querySize);
         var box = new Box2D.NET.B2AABB { lowerBound = lower, upperBound = upper };
+
         B2BodyId? hit = null;
+
         b2World_OverlapAABB(worldId, box, b2DefaultQueryFilter(), (shapeId, userData) =>
         {
             var bodyId = b2Shape_GetBody(shapeId);
+
             if (b2Shape_TestPoint(shapeId, new Box2D.NET.B2Vec2(point.X, point.Y)))
             {
                 hit = bodyId;
                 return false;
             }
+
             return true;
+
         }, null);
+
         return hit;
     }
-
-    // ---------------------------------------------
-    // Additional generic queries (extracted logic)
-    // ---------------------------------------------
-
     /// <summary>
     /// Represents a raw raycast hit without any engine-specific references.
     /// </summary>

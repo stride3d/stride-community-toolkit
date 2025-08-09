@@ -8,8 +8,7 @@ using static Box2D.NET.B2Worlds;
 
 namespace Example18_Box2DPhysics;
 
-// NOTE: Marked partial to allow incremental extraction of responsibilities
-public partial class Box2DSimulation : IDisposable
+public class Box2DSimulation : IDisposable
 {
     // Underlying reusable world + bridge (extraction in progress)
     private readonly PhysicsWorld2D _world;
@@ -27,7 +26,6 @@ public partial class Box2DSimulation : IDisposable
     public bool EnableHitEvents { get; set; } = true;
     public bool EnableSensorEvents { get; set; } = true;
 
-    // Physics properties
     public Vector2 Gravity
     {
         get
@@ -72,12 +70,6 @@ public partial class Box2DSimulation : IDisposable
 
     private void ProcessSensorEvents() => _eventRouter.ProcessSensors(_world.WorldId, id => GetEntity(id), EnableSensorEvents);
 
-    private void SyncTransformsFromPhysics()
-    {
-        // moved to bridge; keep method for backward compatibility
-        _bridge.SyncTransformsFromPhysics();
-    }
-
     public void RemoveBody(Entity entity)
     {
         _bridge.RemoveBody(entity);
@@ -99,10 +91,7 @@ public partial class Box2DSimulation : IDisposable
     /// <param name="querySize">Half-extent of the query box around the point</param>
     /// <returns>The body ID that was hit, or null if nothing was hit</returns>
     public B2BodyId? OverlapPoint(Vector2 point, float querySize = 0.1f)
-    {
-        // Delegated to generic query helper (extraction in progress)
-        return PhysicsQueries2D.OverlapPoint(_world.WorldId, point, querySize);
-    }
+        => PhysicsQueries2D.OverlapPoint(_world.WorldId, point, querySize);
 
     /// <summary>
     /// Performs a raycast and returns the first hit
@@ -114,17 +103,19 @@ public partial class Box2DSimulation : IDisposable
     public RaycastHit? Raycast(Vector2 origin, Vector2 direction, float maxDistance)
     {
         // Delegated to generic query helper
-        var res = PhysicsQueries2D.RaycastClosest(_world.WorldId, origin, direction, maxDistance);
-        if (!res.hit) return null;
+        var hitResult = PhysicsQueries2D.RaycastClosest(_world.WorldId, origin, direction, maxDistance);
+
+        if (!hitResult.hit) return null;
+
         return new RaycastHit
         {
-            Entity = GetEntity(res.bodyId),
-            BodyId = res.bodyId,
-            ShapeId = res.shapeId,
-            Point = res.point,
-            Normal = res.normal,
-            Distance = maxDistance * res.fraction,
-            Fraction = res.fraction
+            Entity = GetEntity(hitResult.bodyId),
+            BodyId = hitResult.bodyId,
+            ShapeId = hitResult.shapeId,
+            Point = hitResult.point,
+            Normal = hitResult.normal,
+            Distance = maxDistance * hitResult.fraction,
+            Fraction = hitResult.fraction
         };
     }
 
@@ -139,6 +130,7 @@ public partial class Box2DSimulation : IDisposable
     {
         var rawHits = PhysicsQueries2D.RaycastAll(_world.WorldId, origin, direction, maxDistance);
         var converted = new List<RaycastHit>(rawHits.Count);
+
         foreach (var h in rawHits)
         {
             converted.Add(new RaycastHit
@@ -152,6 +144,7 @@ public partial class Box2DSimulation : IDisposable
                 Fraction = h.Fraction
             });
         }
+
         return converted;
     }
 
@@ -159,17 +152,13 @@ public partial class Box2DSimulation : IDisposable
     /// Overlaps an AABB and returns all bodies within it
     /// </summary>
     public List<B2BodyId> OverlapAABB(Vector2 lowerBound, Vector2 upperBound)
-    {
-        return PhysicsQueries2D.OverlapAABB(_world.WorldId, lowerBound, upperBound);
-    }
+        => PhysicsQueries2D.OverlapAABB(_world.WorldId, lowerBound, upperBound);
 
     /// <summary>
     /// Overlaps a circle and returns all bodies within it
     /// </summary>
     public List<B2BodyId> OverlapCircle(Vector2 center, float radius)
-    {
-        return PhysicsQueries2D.OverlapCircle(_world.WorldId, center, radius);
-    }
+        => PhysicsQueries2D.OverlapCircle(_world.WorldId, center, radius);
 
     public void Dispose()
     {

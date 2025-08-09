@@ -75,6 +75,7 @@ public class PhysicsWorld2D : IDisposable
 
         var fixedStep = _settings.FixedDeltaSeconds;
         int performed = 0;
+
         while (_accumulator >= fixedStep && performed < _settings.MaxStepsPerFrame)
         {
             b2World_Step(_worldId, fixedStep, _settings.SubStepCount);
@@ -82,6 +83,7 @@ public class PhysicsWorld2D : IDisposable
             performed++;
             perFixedStep?.Invoke(fixedStep);
         }
+
         return performed;
     }
 
@@ -93,6 +95,7 @@ public class PhysicsWorld2D : IDisposable
         if (_worldId.index1 != 0)
         {
             b2DestroyWorld(_worldId);
+
             _worldId = default;
         }
     }

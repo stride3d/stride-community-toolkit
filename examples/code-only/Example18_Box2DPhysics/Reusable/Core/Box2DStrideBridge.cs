@@ -3,7 +3,6 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Types;
-using static Box2D.NET.B2Worlds;
 
 namespace Example18_Box2DPhysics.Reusable.Core;
 

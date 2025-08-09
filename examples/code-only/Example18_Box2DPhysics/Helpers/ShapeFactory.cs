@@ -99,18 +99,5 @@ public class ShapeFactory
         return entity;
     }
 
-    private Color4 LightenColor(Color actualColor, float factor)
-    {
-
-        return actualColor;
-
-        // Lighten the color by a factor (0.0 to 1.0)
-        return new Color4(
-            Math.Min(actualColor.R + factor, 1.0f),
-            Math.Min(actualColor.G + factor, 1.0f),
-            Math.Min(actualColor.B + factor, 1.0f),
-            actualColor.A);
-    }
-
     private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
 }
