@@ -24,7 +24,7 @@
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
         <AutoGen>True</AutoGen>
       </Compile>
-      <Compile Update="Effects\MeshOutlineShader2.sdsl.cs">
+      <Compile Update="Effects\OuterOutline2DShader.sdsl.cs">
         <DesignTime>True</DesignTime>
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
         <AutoGen>True</AutoGen>
@@ -32,8 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Effects\MeshOutlineShader2.sdsl">
-        <LastGenOutput>MeshOutlineShader2.sdsl.cs</LastGenOutput>
+      <None Update="Effects\OuterOutline2DShader.sdsl">
+        <LastGenOutput>OuterOutline2DShader.sdsl.cs</LastGenOutput>
       </None>
       <None Update="Effects\MeshOutlineShader.sdsl">
         <LastGenOutput>MeshOutlineShader.sdsl.cs</LastGenOutput>

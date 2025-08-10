@@ -48,7 +48,7 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
 
         try
         {
-            _shader = new DynamicEffectInstance("MeshOutlineShader2");
+            _shader = new DynamicEffectInstance("OuterOutline2DShader");
             _shader.Initialize(Context.Services);
 
             _pipelineState = new MutablePipelineState(Context.GraphicsDevice);
@@ -111,10 +111,10 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
             // Use cached values
             _shader.Parameters.Set(TransformationKeys.WorldViewProjection, renderMesh.World * viewProjection);
             _shader.Parameters.Set(TransformationKeys.WorldScale, worldScale);
-            _shader.Parameters.Set(MeshOutlineShader2Keys.Viewport, viewport);
-            _shader.Parameters.Set(MeshOutlineShader2Keys.Color, outlineScript.Color);
-            _shader.Parameters.Set(MeshOutlineShader2Keys.Intensity, outlineScript.Intensity);
-            _shader.Parameters.Set(MeshOutlineShader2Keys.OutlineThickness, outlineScript.OutlineThickness);
+            _shader.Parameters.Set(OuterOutline2DShaderKeys.Viewport, viewport);
+            _shader.Parameters.Set(OuterOutline2DShaderKeys.Color, outlineScript.Color);
+            _shader.Parameters.Set(OuterOutline2DShaderKeys.Intensity, outlineScript.Intensity);
+            _shader.Parameters.Set(OuterOutline2DShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;
