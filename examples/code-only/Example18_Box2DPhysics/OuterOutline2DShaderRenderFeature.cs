@@ -1,5 +1,3 @@
-using Stride.Core;
-using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
@@ -14,7 +12,7 @@ namespace Example18_Box2DPhysics;
 /// Only entities with <see cref="MeshOutlineComponent"/> and matching <see cref="RenderGroupMask"/> will be outlined.
 /// Ensure this feature is enabled in the Graphics Compositor.
 /// </remarks>
-public class MeshOutlineRenderFeature2 : RootRenderFeature
+public class OuterOutline2DShaderRenderFeature : RootRenderFeature
 {
     private DynamicEffectInstance? _shader;
     private MutablePipelineState? _pipelineState;
@@ -24,20 +22,13 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
     /// </summary>
     public const int DefaultSortKey = 255;
 
-    /// <summary>
-    /// Adjusts the scale of the model for outline thickness.
-    /// </summary>
-    [DataMember(10)]
-    [DataMemberRange(0.0f, 0.1f, 0.001f, 0.002f, 4)]
-    public float ScaleAdjust = 0.001f;
-
     /// <inheritdoc/>
     public override Type SupportedRenderObjectType => typeof(RenderMesh);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MeshOutlineRenderFeature"/> class.
     /// </summary>
-    public MeshOutlineRenderFeature2() => SortKey = DefaultSortKey;
+    public OuterOutline2DShaderRenderFeature() => SortKey = DefaultSortKey;
 
     /// <summary>
     /// Initializes the shader and pipeline state for outline rendering.
@@ -76,10 +67,7 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
 
         _shader.UpdateEffect(context.GraphicsDevice);
 
-        // Cache frequently used values outside the loop
         var viewProjection = renderView.ViewProjection;
-        var viewport = new Vector4(context.RenderContext.RenderView.ViewSize, 0, 0);
-        var worldScale = new Vector3(ScaleAdjust + 1.0f);
 
         foreach (var renderNode in renderViewStage.SortedRenderNodes)
         {
@@ -108,10 +96,8 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
                 context.CommandList.SetVertexBuffer(slot, vertexBuffer.Buffer, vertexBuffer.Offset, vertexBuffer.Stride);
             }
 
-            // Use cached values
             _shader.Parameters.Set(TransformationKeys.WorldViewProjection, renderMesh.World * viewProjection);
-            _shader.Parameters.Set(TransformationKeys.WorldScale, worldScale);
-            //_shader.Parameters.Set(OuterOutline2DShaderKeys.Viewport, viewport);
+            _shader.Parameters.Set(TransformationKeys.WorldScale, Vector3.One);
             _shader.Parameters.Set(OuterOutline2DShaderKeys.Color, outlineScript.Color);
             _shader.Parameters.Set(OuterOutline2DShaderKeys.Intensity, outlineScript.Intensity);
             _shader.Parameters.Set(OuterOutline2DShaderKeys.OutlineThickness, outlineScript.OutlineThickness);

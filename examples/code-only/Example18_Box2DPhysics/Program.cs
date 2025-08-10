@@ -34,10 +34,7 @@ void Start(Scene scene)
     //game.Add3DCamera().Add3DCameraController();
     //game.AddSkybox();
     game.AddProfiler();
-    game.AddRootRenderFeature(new MeshOutlineRenderFeature2
-    {
-        ScaleAdjust = 0.04f
-    });
+    game.AddRootRenderFeature(new OuterOutline2DShaderRenderFeature());
 
     // Wall colour is: b2_colorPaleGreen = 0x98FB98,
     // Awake shape colour is:  b2_colorPink = 0xFFC0CB,
