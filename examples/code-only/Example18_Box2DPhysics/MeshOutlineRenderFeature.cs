@@ -130,11 +130,6 @@ public class MeshOutlineRenderFeature : RootRenderFeature
                 continue;
             }
 
-            if (!RenderGroupMask.Contains(renderMesh.RenderGroup))
-            {
-                continue;
-            }
-
             MeshOutlineComponent? outlineScript = null;
 
             if (renderMesh.Source is ModelComponent component)
