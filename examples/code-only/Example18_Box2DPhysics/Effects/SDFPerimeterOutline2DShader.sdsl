@@ -11,8 +11,8 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
     float4 FillColor; // Add this for blending (optional)
     float AntiAlias; // e.g. 1.0f
     float CapsuleHalfHeight; // NEW: (halfHeight - radius) portion of capsule along +Y/-Y
-    float2 CapsuleEndA;             // OPTIONAL: endpoint A (local space)
-    float2 CapsuleEndB;             // OPTIONAL: endpoint B (local space)
+    float2 CapsuleEndA; // OPTIONAL: endpoint A (local space)
+    float2 CapsuleEndB; // OPTIONAL: endpoint B (local space)
     stage StructuredBuffer<float2> PolygonVertices;
     stage int PolygonVertexCount;
 

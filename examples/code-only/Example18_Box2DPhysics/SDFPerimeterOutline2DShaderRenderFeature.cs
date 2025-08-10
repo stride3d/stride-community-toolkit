@@ -157,6 +157,7 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.OutlineThickness, outlineScript.OutlineThickness);
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.ShapeType, (int)outlineScript.ShapeType);
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.Radius, outlineScript.Radius);
+            // ToDo: We need to update PixelScale so when zooming in or out, the outline thickness remains consistent.
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.PixelScale, outlineScript.PixelScale);
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.FillColor, outlineScript.Color);
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.AntiAlias, 2);
@@ -198,6 +199,15 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
             }
         }
     }
+
+    // ToDo: We need to update PixelScale so when zooming in or out, the outline thickness remains consistent.
+    //public static void UpdatePixelScale(GraphicsDevice device, CameraComponent camera, EffectInstance effect)
+    //{
+    //    var vp = device.Presenter.BackBuffer.Viewport;
+    //    float orthoHalfHeight = camera.OrthographicSize; // assuming orthographic
+    //    float pixelsPerWorldUnit = vp.Height / (orthoHalfHeight * 2f);
+    //    effect.Parameters.Set(SDFPerimeterOutline2DShaderKeys.PixelScale, pixelsPerWorldUnit);
+    //}
 
     /// <summary>
     /// Cleans up cached vertex buffers.
