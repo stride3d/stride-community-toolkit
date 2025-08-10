@@ -32,7 +32,7 @@ void Start(Scene scene)
     //game.AddSkybox();
     game.AddProfiler();
     //game.AddRootRenderFeature(new OuterOutline2DShaderRenderFeature());
-    //game.AddRootRenderFeature(new SDFPerimeterOutline2DShaderRenderFeature());
+    game.AddRootRenderFeature(new SDFPerimeterOutline2DShaderRenderFeature());
 
     // Initialize the Box2D physics simulation
     simulation = new Box2DSimulation();
