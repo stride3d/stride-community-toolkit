@@ -94,7 +94,7 @@ public static class GameExtensions
     /// Configures the game for 2D rendering by setting up the necessary graphics compositor and camera.
     /// </summary>
     /// <param name="game">The game instance to configure for 2D rendering.</param>
-    /// <param name="clearColor">The optional background color used to clear the screen. If not specified, a default color is used.</param>
+    /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
     public static void SetupBase2D(this Game game, Color? clearColor = null)
     {
         game.Add2DGraphicsCompositor(clearColor);
@@ -141,7 +141,7 @@ public static class GameExtensions
     /// configuration without post-processing effects. The clear color can be specified to customize the background
     /// color of the rendered scene.</remarks>
     /// <param name="game">The game to which the 2D graphics compositor will be added. Cannot be null.</param>
-    /// <param name="clearColor">The optional clear color for the graphics compositor. If null, a default color is used.</param>
+    /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
     /// <returns>The newly created 2D graphics compositor.</returns>
     public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
     {
