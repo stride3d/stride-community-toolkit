@@ -11,6 +11,8 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
     float4 FillColor; // Add this for blending (optional)
     float AntiAlias; // e.g. 1.0f
     float CapsuleHalfHeight; // NEW: (halfHeight - radius) portion of capsule along +Y/-Y
+    float2 CapsuleEndA;             // OPTIONAL: endpoint A (local space)
+    float2 CapsuleEndB;             // OPTIONAL: endpoint B (local space)
     stage StructuredBuffer<float2> PolygonVertices;
     stage int PolygonVertexCount;
 
@@ -51,15 +53,13 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
         return side * sqrt(d);
     }
 
-    // Signed distance for a vertical (Y-axis) capsule with spherical ends:
-    // total half extent in Y = CapsuleHalfHeight + Radius
-    float sdCapsuleY(float2 p, float halfSegment, float r)
+    // Distance to capsule defined by segment AB and radius r
+    float sdCapsuleSeg(float2 p, float2 a, float2 b, float r)
     {
-        // Shift so we treat the cylindrical part length = 2*halfSegment (excluding hemispheres)
-        // Classic 2D capsule SDF aligned to Y:
-        float2 q = float2(p.x, abs(p.y)) - float2(0.0, halfSegment);
-        float2 d = max(q, 0.0);
-        return min(max(q.x, q.y), 0.0) + length(d) - r;
+        float2 pa = p - a;
+        float2 ba = b - a;
+        float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+        return length(pa - ba * h) - r;
     }
 
     stage override void VSMain()
@@ -87,19 +87,24 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
         }
         else if (ShapeType == 0) // Capsule (vertical)
         {
-            // Signed distance (negative inside)
-            float sd = sdCapsuleY(pos, CapsuleHalfHeight, Radius);
-            // We want band near surface: sd ~= 0. Interior is sd < 0.
-            // Build inner & outer smooth edges around 0 and -outlineWidth.
+            // If endpoints not provided, derive from half height (vertical orientation default)
+            float2 a = CapsuleEndA;
+            float2 b = CapsuleEndB;
+            // Fallback if (0,0)
+            if (all(a == 0) && all(b == 0))
+            {
+                a = float2(0, -CapsuleHalfHeight);
+                b = float2(0,  CapsuleHalfHeight);
+            }
+
+            float sd = sdCapsuleSeg(pos, a, b, Radius);
             float inner0 = -outlineWidth - aa;
             float inner1 = -outlineWidth + aa;
             float outer0 = -aa;
             float outer1 = aa;
-
-            float innerBlend = smoothstep(inner0, inner1, sd);          // Rises as we approach inner edge
-            float outerBlend = 1.0 - smoothstep(outer0, outer1, sd);    // Falls past outer edge
+            float innerBlend = smoothstep(inner0, inner1, sd);
+            float outerBlend = 1.0 - smoothstep(outer0, outer1, sd);
             float outlineMask = innerBlend * outerBlend;
-
             if (outlineMask < 0.01) discard;
             streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }

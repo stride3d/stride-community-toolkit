@@ -97,7 +97,7 @@ public class ShapeFactory
             OutlineThickness = 1f, // 3 pixels
             Radius = GetRadius(shape),
             PixelScale = 200,
-            CapsuleHalfHeight = shape.Size.Y / 4,
+            CapsuleHalfHeight = shape.Size.Y / 2,
             PolygonVertices = polygonVertices
         });
 
