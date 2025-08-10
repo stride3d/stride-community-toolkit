@@ -64,11 +64,9 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
             _pipelineState = new MutablePipelineState(Context.GraphicsDevice);
             _pipelineState.State.SetDefaults();
             _pipelineState.State.InputElements = VertexPositionNormalTexture.Layout.CreateInputElements();
-            // We render the inflated/backface version only; front-face culling reveals the silhouette as an outline.
             _pipelineState.State.BlendState = BlendStates.AlphaBlend;
             //_pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
             _pipelineState.State.RasterizerState.CullMode = CullMode.Back;
-            //_pipelineState.State.DepthStencilState = DepthStencilStates.DepthRead; // avoid overwriting depth, keeps original sprite/mesh visible
         }
         catch (Exception ex)
         {
@@ -175,7 +173,7 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
                 _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.PolygonVertexCount, 0);
             }
 
-            Console.WriteLine($"{_vertexBufferCache.Count} vertices");
+            //Console.WriteLine($"{_vertexBufferCache.Count} vertices");
 
             _pipelineState.State.RootSignature = _shader.RootSignature;
             _pipelineState.State.EffectBytecode = _shader.Effect.Bytecode;
