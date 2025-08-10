@@ -1,6 +1,6 @@
 using Example18_Box2DPhysics;
 using Example18_Box2DPhysics.Helpers;
-using Example18_Box2DPhysics.Physics; // new physics utilities
+using Example18_Box2DPhysics.Physics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -22,12 +22,12 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Configure the game window and setup 2D scene
+    // Configure the game window
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
 
     // Setup 2D scene with camera and controls
-    game.SetupBase2D(new Color(0.2f));
+    game.SetupBase2D(clearColor: new Color(0.2f));
     //game.AddGraphicsCompositor();
     //game.AddGraphicsCompositor2();
     //game.Add2DGraphicsCompositor(clearColor);
