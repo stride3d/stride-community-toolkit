@@ -94,15 +94,23 @@ public class ShapeFactory
             Color = Color.Pink,
             Intensity = 1f,
             ShapeType = shape.Type,
-            OutlineThickness = 0.02f, // 3 pixels
-            Radius = shape.Type == Primitive2DModelType.Circle2D ? shape.Size.X : 0f,
+            OutlineThickness = 1f, // 3 pixels
+            Radius = GetRadius(shape),
             PixelScale = 200,
+            CapsuleHalfHeight = shape.Size.Y / 4,
             PolygonVertices = polygonVertices
         });
 
         entity.Scene = _scene;
         return entity;
     }
+
+    private static float GetRadius(Shape2DModel model) => model.Type switch
+    {
+        Primitive2DModelType.Circle2D => model.Size.X,
+        Primitive2DModelType.Capsule => model.Size.X / 2,
+        _ => 0f
+    };
 
     private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
 }

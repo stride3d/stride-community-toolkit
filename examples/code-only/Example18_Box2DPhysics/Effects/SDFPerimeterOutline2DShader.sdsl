@@ -5,11 +5,12 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
     float4 Color;
     float Intensity;
     float OutlineThickness; // thickness in pixels
-    int ShapeType; // 0 = rectangle, 2 = circle
+    int ShapeType; // 0 = polygon/rect, 1 = capsule (Y axis), 2 = circle
     float Radius; // actual mesh radius, passed from C#
     float PixelScale; // world-to-pixel scale, passed from C#
     float4 FillColor; // Add this for blending (optional)
     float AntiAlias; // e.g. 1.0f
+    float CapsuleHalfHeight; // NEW: (halfHeight - radius) portion of capsule along +Y/-Y
     stage StructuredBuffer<float2> PolygonVertices;
     stage int PolygonVertexCount;
 
@@ -50,6 +51,17 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
         return side * sqrt(d);
     }
 
+    // Signed distance for a vertical (Y-axis) capsule with spherical ends:
+    // total half extent in Y = CapsuleHalfHeight + Radius
+    float sdCapsuleY(float2 p, float halfSegment, float r)
+    {
+        // Shift so we treat the cylindrical part length = 2*halfSegment (excluding hemispheres)
+        // Classic 2D capsule SDF aligned to Y:
+        float2 q = float2(p.x, abs(p.y)) - float2(0.0, halfSegment);
+        float2 d = max(q, 0.0);
+        return min(max(q.x, q.y), 0.0) + length(d) - r;
+    }
+
     stage override void VSMain()
     {
         streams.ShadingPosition = projToWorld(streams.Position, streams.Normal);
@@ -57,44 +69,47 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
 
     stage override void PSMain()
     {
-        float2 pos = streams.Position.xy; // Local mesh position, centered at (0,0)
-        bool isOutline = false;
-        float alpha = 1.0;
+        float2 pos = streams.Position.xy;
+        float outlineWidth = OutlineThickness / PixelScale;
+        float aa = AntiAlias / PixelScale;
 
         if (ShapeType == 2) // Circle
         {
-            float outlineWidth = OutlineThickness / PixelScale;
-            float aa = AntiAlias / PixelScale; // anti-aliasing width in world units
             float dist = length(pos);
-
-            // Smooth transition for anti-aliased border
             float edge0 = Radius - outlineWidth - aa;
             float edge1 = Radius - outlineWidth + aa;
             float edge2 = Radius - aa;
             float edge3 = Radius + aa;
 
             float outlineMask = smoothstep(edge0, edge1, dist) * (1.0 - smoothstep(edge2, edge3, dist));
-            alpha = outlineMask;
+            if (outlineMask < 0.01) discard;
+            streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
+        }
+        else if (ShapeType == 0) // Capsule (vertical)
+        {
+            // Signed distance (negative inside)
+            float sd = sdCapsuleY(pos, CapsuleHalfHeight, Radius);
+            // We want band near surface: sd ~= 0. Interior is sd < 0.
+            // Build inner & outer smooth edges around 0 and -outlineWidth.
+            float inner0 = -outlineWidth - aa;
+            float inner1 = -outlineWidth + aa;
+            float outer0 = -aa;
+            float outer1 = aa;
 
-            if (alpha < 0.01) discard;
+            float innerBlend = smoothstep(inner0, inner1, sd);          // Rises as we approach inner edge
+            float outerBlend = 1.0 - smoothstep(outer0, outer1, sd);    // Falls past outer edge
+            float outlineMask = innerBlend * outerBlend;
 
-            // Blend outline color with fill color near the edge
+            if (outlineMask < 0.01) discard;
             streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }
         else // Polygon/Rectangle/Triangle
         {
             float dist = abs(sdConvexPolygon(pos, PolygonVertexCount));
-            float outlineWidth = OutlineThickness / PixelScale;
-            float aa = AntiAlias / PixelScale; // anti-aliasing width in world units
-
-            // Anti-aliased mask for the outline band
             float edge0 = outlineWidth - aa;
             float edge1 = outlineWidth + aa;
             float outlineMask = 1.0 - smoothstep(edge0, edge1, dist);
-
             if (outlineMask < 0.01) discard;
-
-            // Optional: blend with fill color for a softer look
             streams.ColorTarget = lerp(FillColor, Color * Intensity, outlineMask);
         }
     }

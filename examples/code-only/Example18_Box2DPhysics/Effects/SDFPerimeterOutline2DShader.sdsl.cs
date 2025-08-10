@@ -26,6 +26,7 @@ namespace Stride.Rendering
         public static readonly ValueParameterKey<float> PixelScale = ParameterKeys.NewValue<float>();
         public static readonly ValueParameterKey<Vector4> FillColor = ParameterKeys.NewValue<Vector4>();
         public static readonly ValueParameterKey<float> AntiAlias = ParameterKeys.NewValue<float>();
+        public static readonly ValueParameterKey<float> CapsuleHalfHeight = ParameterKeys.NewValue<float>();
         public static readonly ObjectParameterKey<Buffer> PolygonVertices = ParameterKeys.NewObject<Buffer>();
         public static readonly ValueParameterKey<int> PolygonVertexCount = ParameterKeys.NewValue<int>();
         public static readonly ValueParameterKey<Vector4> Viewport = ParameterKeys.NewValue<Vector4>();

@@ -46,10 +46,12 @@ public class MeshOutlineComponent : EntityComponent
     public Primitive2DModelType ShapeType { get; set; }
 
     [DataMember(50)]
-    public float OutlineThickness { get; set; } = 0.3f; // tuned for 2D world units; adjust per camera scale
+    public float OutlineThickness { get; set; } = 0.3f;
 
     public float Radius { get; set; } = 1.0f;
-    public float PixelScale { get; set; } = 1.0f; // Add pixel scale property
+
+    public float PixelScale { get; set; } = 1.0f;
+    public float CapsuleHalfHeight { get; set; } = 1.0f;
 
     /// <summary>
     /// Gets or sets the 2D polygon vertices for outline rendering.

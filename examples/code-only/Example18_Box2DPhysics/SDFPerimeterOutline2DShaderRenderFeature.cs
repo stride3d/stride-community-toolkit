@@ -64,8 +64,8 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
             _pipelineState = new MutablePipelineState(Context.GraphicsDevice);
             _pipelineState.State.SetDefaults();
             _pipelineState.State.InputElements = VertexPositionNormalTexture.Layout.CreateInputElements();
-            _pipelineState.State.BlendState = BlendStates.AlphaBlend;
-            //_pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
+            //_pipelineState.State.BlendState = BlendStates.AlphaBlend;
+            _pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
             _pipelineState.State.RasterizerState.CullMode = CullMode.Back;
         }
         catch (Exception ex)
@@ -160,6 +160,7 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.PixelScale, outlineScript.PixelScale);
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.FillColor, outlineScript.Color);
             _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.AntiAlias, 2);
+            _shader.Parameters.Set(SDFPerimeterOutline2DShaderKeys.CapsuleHalfHeight, outlineScript.CapsuleHalfHeight - outlineScript.Radius);
 
             // Use cached vertex buffer instead of creating new ones
             if (outlineScript.PolygonVertices.Length > 0)
