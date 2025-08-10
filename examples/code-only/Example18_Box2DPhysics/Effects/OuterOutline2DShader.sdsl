@@ -1,4 +1,4 @@
-shader OuterOutline2DShader : ShaderBase, Transformation, Texturing, PositionStream4
+shader OuterOutline2DShader : ShaderBase, Transformation, PositionStream
 {
     stage stream float3 Normal : NORMAL;
 

@@ -16,7 +16,7 @@ using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.Rendering
 {
-    public static partial class MeshOutlineShaderKeys
+    public static partial class SDFPerimeterOutline2DShaderKeys
     {
         public static readonly ValueParameterKey<Vector4> Color = ParameterKeys.NewValue<Vector4>();
         public static readonly ValueParameterKey<float> Intensity = ParameterKeys.NewValue<float>();

@@ -19,10 +19,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Effects\MeshOutlineShader.sdsl.cs">
+      <Compile Update="Effects\SDFPerimeterOutline2DShader.sdsl.cs">
         <DesignTime>True</DesignTime>
         <DesignTimeSharedInput>True</DesignTimeSharedInput>
         <AutoGen>True</AutoGen>
+        <DependentUpon>SDFPerimeterOutline2DShader.sdsl</DependentUpon>
       </Compile>
       <Compile Update="Effects\OuterOutline2DShader.sdsl.cs">
         <DesignTime>True</DesignTime>
@@ -35,8 +36,8 @@
       <None Update="Effects\OuterOutline2DShader.sdsl">
         <LastGenOutput>OuterOutline2DShader.sdsl.cs</LastGenOutput>
       </None>
-      <None Update="Effects\MeshOutlineShader.sdsl">
-        <LastGenOutput>MeshOutlineShader.sdsl.cs</LastGenOutput>
+      <None Update="Effects\SDFPerimeterOutline2DShader.sdsl">
+        <LastGenOutput>SDFPerimeterOutline2DShader.sdsl.cs</LastGenOutput>
       </None>
     </ItemGroup>
 

@@ -26,7 +26,7 @@ public class OuterOutline2DShaderRenderFeature : RootRenderFeature
     public override Type SupportedRenderObjectType => typeof(RenderMesh);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MeshOutlineRenderFeature"/> class.
+    /// Initializes a new instance of the <see cref="SDFPerimeterOutline2DShaderRenderFeature"/> class.
     /// </summary>
     public OuterOutline2DShaderRenderFeature() => SortKey = DefaultSortKey;
 
