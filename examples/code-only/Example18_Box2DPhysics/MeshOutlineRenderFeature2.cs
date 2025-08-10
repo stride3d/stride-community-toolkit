@@ -57,7 +57,7 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
             //_pipelineState.State.BlendState = BlendStates.AlphaBlend;
             _pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
             _pipelineState.State.RasterizerState.CullMode = CullMode.Back;
-            _pipelineState.State.DepthStencilState = DepthStencilStates.DepthRead; // avoid overwriting depth, keeps original sprite/mesh visible
+            _pipelineState.State.DepthStencilState = DepthStencilStates.DepthRead;
         }
         catch (Exception ex)
         {
