@@ -4,7 +4,6 @@ using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Rendering;
 
 namespace Example18_Box2DPhysics.Helpers;
 
@@ -41,27 +40,23 @@ public class ShapeFactory
     public Shape2DModel GetRandomShapeModel()
         => _shapes[Random.Shared.Next(_shapes.Count)];
 
-    public Entity CreateEntity(Shape2DModel shape, Color? color = null, Vector2? position = null)
+    public Entity CreateEntity(Shape2DModel shape, Color? overrideColor = null, Vector2? position = null, string? name = null)
     {
-        var actualColor = color ?? shape.Color;
+        var actualColor = overrideColor ?? shape.Color;
 
-        //Make colour darker from this one  b2_colorPink = 0xFFC0CB,
-
-        actualColor = new Color(
-            (byte)(GameConfig.ShapeColor.R * 0.5f),
-            (byte)(GameConfig.ShapeColor.G * 0.5f),
-            (byte)(GameConfig.ShapeColor.B * 0.5f),
+        var darkerColor = new Color(
+            (byte)(actualColor.R * 0.5f),
+            (byte)(actualColor.G * 0.5f),
+            (byte)(actualColor.B * 0.5f),
             actualColor.A);
 
-        // Create entity with SDF-based Box2D style material
         var entity = _game.Create2DPrimitive(shape.Type, new()
         {
             Size = shape.Size,
-            Material = _game.CreateFlatMaterial(actualColor),
-            RenderGroup = RenderGroup.Group5
+            Material = _game.CreateFlatMaterial(darkerColor)
         });
 
-        entity.Name = $"{shape.Type}-{GameConfig.ShapeName}";
+        entity.Name = name ?? $"{shape.Type}-{GameConfig.ShapeName}";
         entity.Transform.Position = position.HasValue ? (Vector3)position : GetRandomPosition();
 
         // Define polygon vertices based on shape type
@@ -86,7 +81,7 @@ public class ShapeFactory
         entity.Add(new MeshOutlineComponent()
         {
             Enabled = true,
-            Color = GameConfig.ShapeColor,
+            Color = actualColor,
             Intensity = 1f,
             ShapeType = shape.Type,
             OutlineThickness = 1f, // 3 pixels

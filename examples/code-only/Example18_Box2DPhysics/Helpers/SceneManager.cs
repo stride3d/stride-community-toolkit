@@ -1,4 +1,5 @@
 using Box2D.NET;
+using Example.Common;
 using Example18_Box2DPhysics.Physics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -26,7 +27,7 @@ public class SceneManager
     private readonly InputManager _inputManager;
     private readonly B2WorldId _worldId;
 
-    private int _totalShapesCreated = 0;
+    private int _totalShapesCreated;
     private string _lastAction = "Initialized";
     private DateTime _lastActionTime = DateTime.Now;
 
@@ -68,16 +69,8 @@ public class SceneManager
     void CreateInitialScene()
     {
         // Add ground for physics objects to collide with
-        WorldGeometryBuilder.AddGround(_simulation.GetWorldId());
-
-        //var groundEntity = _shapeFactory.CreateEntity(new Shape2DModel()
-        //{
-        //    Type = Primitive2DModelType.Rectangle2D,
-        //    Color = GameConfig.ShapeColor,
-        //    Size = new Vector2(50, 1),
-        //});
-
-        //var groundBodyId = _simulation.CreateStaticBody(groundEntity, new Vector2(0, -10));
+        //WorldGeometryBuilder.AddGround(_simulation.GetWorldId());
+        AddGroundAndWalls();
 
         // Create a single shape with zero gravity for demonstration
         var shape = _shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
@@ -94,6 +87,42 @@ public class SceneManager
         }
 
         AddInitialShapes();
+    }
+
+    private void AddGroundAndWalls()
+    {
+        const float WallThickness = 1f;
+        const float WallWidth = 50f;
+        const float WallHeight = 10f;
+        const int GroundYPosition = -3;
+
+        var groundShape = new Shape2DModel()
+        {
+            Type = Primitive2DModelType.Rectangle2D,
+            Color = GameConfig.GroundColor,
+            Size = new Vector2(WallWidth, WallThickness),
+        };
+        var groundEntity = _shapeFactory.CreateEntity(groundShape, name: GameConfig.WallName);
+        var groundBodyId = _simulation.CreateStaticBody(groundEntity, new Vector3(0, GroundYPosition, 0));
+        var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
+        shapeDef.material.friction = 0.6f; // Set ground friction
+
+        ShapeFixtureBuilder.AttachShape(groundShape, groundBodyId, shapeDef);
+
+        var wallShape = new Shape2DModel()
+        {
+            Type = Primitive2DModelType.Rectangle2D,
+            Color = GameConfig.GroundColor,
+            Size = new Vector2(WallThickness, WallHeight),
+        };
+
+        var leftWallEntity = _shapeFactory.CreateEntity(wallShape, name: GameConfig.WallName);
+        var leftWallBodyId = _simulation.CreateStaticBody(leftWallEntity, new Vector3(-25 + WallThickness / 2, -GroundYPosition - WallThickness / 2, 0));
+        ShapeFixtureBuilder.AttachShape(wallShape, leftWallBodyId, shapeDef);
+
+        var rightWallEntity = _shapeFactory.CreateEntity(wallShape, name: GameConfig.WallName);
+        var rightWallBodyId = _simulation.CreateStaticBody(rightWallEntity, new Vector3(25 - WallThickness / 2, -GroundYPosition - WallThickness / 2, 0));
+        ShapeFixtureBuilder.AttachShape(wallShape, rightWallBodyId, shapeDef);
     }
 
     /// <summary>
@@ -236,7 +265,7 @@ public class SceneManager
             var shapeModel = _shapeFactory.GetRandomShapeModel();
             if (shapeModel == null) continue;
 
-            var entity = _shapeFactory.CreateEntity(shapeModel);
+            var entity = _shapeFactory.CreateEntity(shapeModel, overrideColor: GameConfig.ShapeColor);
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
             ShapeFixtureBuilder.AttachShape(shapeModel, bodyId);
@@ -304,6 +333,7 @@ public class SceneManager
     private void CreateShapeAtPosition(Vector2 position)
     {
         var shapeModel = _shapeFactory.GetRandomShapeModel();
+
         if (shapeModel == null) return;
 
         var entity = _shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position);

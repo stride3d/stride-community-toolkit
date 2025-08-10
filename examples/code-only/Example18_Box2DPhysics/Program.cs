@@ -32,11 +32,7 @@ void Start(Scene scene)
     //game.AddSkybox();
     game.AddProfiler();
     //game.AddRootRenderFeature(new OuterOutline2DShaderRenderFeature());
-    game.AddRootRenderFeature(new SDFPerimeterOutline2DShaderRenderFeature());
-
-    // Wall colour is: b2_colorPaleGreen = 0x98FB98,
-    // Awake shape colour is:  b2_colorPink = 0xFFC0CB,
-    // Sleep shape colour is:  b2_colorGray = 0x808080,
+    //game.AddRootRenderFeature(new SDFPerimeterOutline2DShaderRenderFeature());
 
     // Initialize the Box2D physics simulation
     simulation = new Box2DSimulation();

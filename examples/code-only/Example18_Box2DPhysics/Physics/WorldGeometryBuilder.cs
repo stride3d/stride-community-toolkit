@@ -20,7 +20,7 @@ public static class WorldGeometryBuilder
         var def = b2DefaultBodyDef();
 
         def.position = new B2Vec2(groundPosition.X, groundPosition.Y);
-        def.name = GameConfig.GroundName;
+        def.name = GameConfig.WallName;
         def.type = B2BodyType.b2_staticBody;
 
         var groundId = b2CreateBody(worldId, ref def);

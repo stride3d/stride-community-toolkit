@@ -9,7 +9,7 @@ public static class GameConfig
 {
     // Entity naming
     public const string ShapeName = "Box2DShape";
-    public const string GroundName = "Ground";
+    public const string WallName = "Wall";
 
     // Display and UI settings
     public const int DefaultSpacing = 20;
@@ -49,6 +49,8 @@ public static class GameConfig
     public static readonly Color SelectedShapeColor = Color.Yellow;
     public static readonly Color ConstraintColor = Color.LightBlue;
     public static readonly Color ShapeColor = Color.Pink; // b2_colorPink = 0xFFC0CB;
+    public static readonly Color ShapeSleepColor = Color.Gray; // b2_colorGray = 0x808080;
+    public static readonly Color GroundColor = Color.PaleGreen; // b2_colorPaleGreen = 0x98FB98
 
     // Input settings
     public const float ImpulseStrength = 5.0f;
