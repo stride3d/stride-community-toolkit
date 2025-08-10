@@ -9,7 +9,7 @@ using Stride.Rendering;
 namespace Example18_Box2DPhysics.Helpers;
 
 /// <summary>
-/// Factory class to create 2D shapes for the Box2D simulation with Box2D.NET-style rendering.
+/// Factory class to create 2D shapes for the Box2D simulation with Box2D.NET
 /// </summary>
 public class ShapeFactory
 {
@@ -35,16 +35,11 @@ public class ShapeFactory
         _scene = scene;
     }
 
-    public Shape2DModel? GetShapeModel(Primitive2DModelType? type = null)
-    {
-        if (type == null)
-        {
-            int randomIndex = Random.Shared.Next(_shapes.Count);
-            return _shapes[randomIndex];
-        }
+    public Shape2DModel? GetShapeModel(Primitive2DModelType type)
+        => _shapes.Find(x => x.Type == type);
 
-        return _shapes.Find(x => x.Type == type);
-    }
+    public Shape2DModel GetRandomShapeModel()
+        => _shapes[Random.Shared.Next(_shapes.Count)];
 
     public Entity CreateEntity(Shape2DModel shape, Color? color = null, Vector2? position = null)
     {

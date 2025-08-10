@@ -70,24 +70,20 @@ public class SceneManager
         // Add ground for physics objects to collide with
         WorldGeometryBuilder.AddGround(_simulation.GetWorldId());
 
-        // Create a simple demonstration with a few shapes
-        var shapeFactory = new ShapeFactory(_game, _scene);
-
         // Create a single shape with zero gravity for demonstration
-        var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
+        var shape = _shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
 
         if (shape != null)
         {
-            var entity = shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
+            var entity = _shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-            // Set zero gravity for this body to demonstrate control
+            // Set zero gravity for this body to demonstrate weightless behavior
             b2Body_SetGravityScale(bodyId, 0);
 
             ShapeFixtureBuilder.AttachShape(shape, bodyId);
         }
 
-        // Add some initial shapes for interaction
         AddInitialShapes();
     }
 
@@ -228,7 +224,7 @@ public class SceneManager
     {
         for (int i = 0; i < count; i++)
         {
-            var shapeModel = _shapeFactory.GetShapeModel(); // Random shape
+            var shapeModel = _shapeFactory.GetRandomShapeModel();
             if (shapeModel == null) continue;
 
             var entity = _shapeFactory.CreateEntity(shapeModel);
@@ -250,8 +246,8 @@ public class SceneManager
     private void CreateConnectedShapePair()
     {
         // Create two shapes
-        var shapeModel1 = _shapeFactory.GetShapeModel();
-        var shapeModel2 = _shapeFactory.GetShapeModel();
+        var shapeModel1 = _shapeFactory.GetRandomShapeModel();
+        var shapeModel2 = _shapeFactory.GetRandomShapeModel();
 
         if (shapeModel1 == null || shapeModel2 == null) return;
 
@@ -298,7 +294,7 @@ public class SceneManager
 
     private void CreateShapeAtPosition(Vector2 position)
     {
-        var shapeModel = _shapeFactory.GetShapeModel();
+        var shapeModel = _shapeFactory.GetRandomShapeModel();
         if (shapeModel == null) return;
 
         var entity = _shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position);
