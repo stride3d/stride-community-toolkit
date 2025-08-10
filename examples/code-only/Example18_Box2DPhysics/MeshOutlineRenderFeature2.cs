@@ -111,7 +111,7 @@ public class MeshOutlineRenderFeature2 : RootRenderFeature
             // Use cached values
             _shader.Parameters.Set(TransformationKeys.WorldViewProjection, renderMesh.World * viewProjection);
             _shader.Parameters.Set(TransformationKeys.WorldScale, worldScale);
-            _shader.Parameters.Set(OuterOutline2DShaderKeys.Viewport, viewport);
+            //_shader.Parameters.Set(OuterOutline2DShaderKeys.Viewport, viewport);
             _shader.Parameters.Set(OuterOutline2DShaderKeys.Color, outlineScript.Color);
             _shader.Parameters.Set(OuterOutline2DShaderKeys.Intensity, outlineScript.Intensity);
             _shader.Parameters.Set(OuterOutline2DShaderKeys.OutlineThickness, outlineScript.OutlineThickness);

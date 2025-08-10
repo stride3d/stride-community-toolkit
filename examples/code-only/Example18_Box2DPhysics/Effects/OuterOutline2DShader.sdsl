@@ -4,26 +4,25 @@ shader OuterOutline2DShader : ShaderBase, Transformation, Texturing, PositionStr
 
     float4 Color;
     float Intensity;
-    // World or planar thickness (in model units) added around the shape.
+    // Thickness in local/model units.
     float OutlineThickness;
 
-    cbuffer PerView
+    // Approx outward dir from origin in XY.
+    float2 OutDir(float2 p)
     {
-        stage float4 Viewport;
+        float len = length(p);
+        return (len > 1e-6) ? p / len : float2(0, 0);
     }
 
-    // Projects vertex to clip space applying an outline expansion for 2D meshes only.
-    float4 projToWorld(in float4 pos, in float3 normal)
+    float4 Expand(float4 pos)
     {
-        // Uniform planar scale around origin in XY only (keep original Z)
-        float scaleFactor = 1 + OutlineThickness; // simple multiplicative expansion
-        float2 scaledXY = pos.xy * scaleFactor;
-        return mul(float4(scaledXY, pos.z, 1), WorldViewProjection);
+        pos.xy += OutDir(pos.xy) * OutlineThickness;
+        return mul(pos, WorldViewProjection);
     }
 
     stage override void VSMain()
     {
-        streams.ShadingPosition = projToWorld(streams.Position, streams.Normal);
+        streams.ShadingPosition = Expand(streams.Position);
     }
 
     stage override void PSMain()
