@@ -32,10 +32,13 @@ public class Box2DSimulation : IDisposable
 
     // Contact and sensor event system (delegated to router)
     private readonly PhysicsEventRouter2D _eventRouter = new();
+
     /// <summary>Enable dispatch of begin/end contact events.</summary>
     public bool EnableContactEvents { get; set; } = true;
+
     /// <summary>Enable dispatch of hit (post-solve / impact style) events.</summary>
     public bool EnableHitEvents { get; set; } = true;
+
     /// <summary>Enable dispatch of sensor overlap events.</summary>
     public bool EnableSensorEvents { get; set; } = true;
 
@@ -45,17 +48,22 @@ public class Box2DSimulation : IDisposable
         get
         {
             var gravity = b2World_GetGravity(_world.WorldId);
+
             return new Vector2(gravity.X, gravity.Y);
         }
+
         set => b2World_SetGravity(_world.WorldId, new B2Vec2(value.X, value.Y));
     }
 
     /// <summary>Registers a contact event handler.</summary>
     public void RegisterContactEventHandler(IContactEventHandler handler) => _eventRouter.RegisterContactEventHandler(handler); // preserved API
+
     /// <summary>Unregisters a contact event handler.</summary>
     public void UnregisterContactEventHandler(IContactEventHandler handler) => _eventRouter.UnregisterContactEventHandler(handler);
+
     /// <summary>Registers a sensor event handler.</summary>
     public void RegisterSensorEventHandler(ISensorEventHandler handler) => _eventRouter.RegisterSensorEventHandler(handler);
+
     /// <summary>Unregisters a sensor event handler.</summary>
     public void UnregisterSensorEventHandler(ISensorEventHandler handler) => _eventRouter.UnregisterSensorEventHandler(handler);
 
@@ -68,8 +76,10 @@ public class Box2DSimulation : IDisposable
 
     /// <summary>Creates a dynamic body associated with the given entity at a world position.</summary>
     public B2BodyId CreateDynamicBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_dynamicBody);
+
     /// <summary>Creates a kinematic body associated with the given entity at a world position.</summary>
     public B2BodyId CreateKinematicBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody);
+
     /// <summary>Creates a static body associated with the given entity at a world position.</summary>
     public B2BodyId CreateStaticBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_staticBody);
 
@@ -189,8 +199,5 @@ public class Box2DSimulation : IDisposable
         => PhysicsQueries2D.OverlapCircle(_world.WorldId, center, radius);
 
     /// <summary>Disposes underlying world resources.</summary>
-    public void Dispose()
-    {
-        _world.Dispose();
-    }
+    public void Dispose() => _world.Dispose();
 }

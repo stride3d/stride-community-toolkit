@@ -1,12 +1,9 @@
 using Example18_Box2DPhysics;
 using Example18_Box2DPhysics.Helpers;
-using Example18_Box2DPhysics.Physics;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using static Box2D.NET.B2Bodies;
 
 // Example 18: Box2D Physics Integration
 // This example demonstrates how to integrate Box2D.NET with Stride game engine
@@ -46,20 +43,8 @@ void Start(Scene scene)
     ConfigurePhysicsWorld(simulation);
 
     // Initialize the demo manager to handle all demo logic
-    var camera = scene.GetCamera();
-
-    if (camera is null)
-    {
-        throw new InvalidOperationException("Camera not found in scene");
-    }
-    else
-    {
-        sceneManager = new SceneManager(game, scene, simulation, camera);
-        sceneManager.Initialize();
-    }
-
-    // Create the initial scene setup
-    CreateInitialScene(scene);
+    sceneManager = new SceneManager(game, scene, simulation);
+    sceneManager.Initialize();
 }
 
 void Update(Scene scene, GameTime gameTime)
@@ -83,32 +68,4 @@ void ConfigurePhysicsWorld(Box2DSimulation simulation)
     // Set physics timestep properties
     simulation.TimeScale = 1.0f;
     simulation.MaxStepsPerFrame = 3;
-}
-
-void CreateInitialScene(Scene scene)
-{
-    if (simulation == null) return;
-
-    // Add ground for physics objects to collide with
-    WorldGeometryBuilder.AddGround(simulation.GetWorldId());
-
-    // Create a simple demonstration with a few shapes
-    var shapeFactory = new ShapeFactory(game, scene);
-
-    // Create a single shape with zero gravity for demonstration
-    var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
-
-    if (shape != null)
-    {
-        var entity = shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
-        var bodyId = simulation.CreateDynamicBody(entity, entity.Transform.Position);
-
-        // Set zero gravity for this body to demonstrate control
-        b2Body_SetGravityScale(bodyId, 0);
-
-        ShapeFixtureBuilder.AttachShape(shape, bodyId);
-    }
-
-    // Add some initial shapes for interaction
-    sceneManager?.AddInitialShapes();
 }

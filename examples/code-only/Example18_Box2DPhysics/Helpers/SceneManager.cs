@@ -6,6 +6,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
+using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Joints;
 
 namespace Example18_Box2DPhysics.Helpers;
@@ -31,10 +32,13 @@ public class SceneManager
 
     public int ShapeCount => _scene.Entities.Count(e => e.Name.EndsWith(GameConfig.ShapeName));
 
-    public SceneManager(Game game, Scene scene, Box2DSimulation simulation, CameraComponent camera)
+    public SceneManager(Game game, Scene scene, Box2DSimulation simulation)
     {
         _game = game;
         _scene = scene;
+
+        var camera = scene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
+
         _simulation = simulation;
         _camera = camera;
         _worldId = simulation.GetWorldId();
@@ -56,6 +60,35 @@ public class SceneManager
 
         // Could add initial demo shapes here
         // AddInitialShapes();
+
+        // Create the initial scene setup
+        CreateInitialScene();
+    }
+
+    void CreateInitialScene()
+    {
+        // Add ground for physics objects to collide with
+        WorldGeometryBuilder.AddGround(_simulation.GetWorldId());
+
+        // Create a simple demonstration with a few shapes
+        var shapeFactory = new ShapeFactory(_game, _scene);
+
+        // Create a single shape with zero gravity for demonstration
+        var shape = shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
+
+        if (shape != null)
+        {
+            var entity = shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
+            var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
+
+            // Set zero gravity for this body to demonstrate control
+            b2Body_SetGravityScale(bodyId, 0);
+
+            ShapeFixtureBuilder.AttachShape(shape, bodyId);
+        }
+
+        // Add some initial shapes for interaction
+        AddInitialShapes();
     }
 
     /// <summary>
