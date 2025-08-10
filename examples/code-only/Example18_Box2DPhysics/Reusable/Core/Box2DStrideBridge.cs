@@ -13,8 +13,8 @@ namespace Example18_Box2DPhysics.Reusable.Core;
 public class Box2DStrideBridge
 {
     private readonly PhysicsWorld2D _world;
-    private readonly Dictionary<B2BodyId, Entity> _bodyToEntity = new();
-    private readonly Dictionary<Entity, B2BodyId> _entityToBody = new();
+    private readonly Dictionary<B2BodyId, Entity> _bodyToEntity = [];
+    private readonly Dictionary<Entity, B2BodyId> _entityToBody = [];
 
     public Box2DStrideBridge(PhysicsWorld2D world)
     {
@@ -58,12 +58,13 @@ public class Box2DStrideBridge
     /// </summary>
     public void SyncTransformsFromPhysics()
     {
-        foreach (var kvp in _bodyToEntity)
+        foreach (var item in _bodyToEntity)
         {
-            var bodyId = kvp.Key;
-            var entity = kvp.Value;
+            var bodyId = item.Key;
+            var entity = item.Value;
             var position = b2Body_GetPosition(bodyId);
             var rotation = b2Body_GetRotation(bodyId);
+
             entity.Transform.Position = new Vector3(position.X, position.Y, 0f);
             entity.Transform.Rotation = Quaternion.RotationZ(B2MathFunction.b2Rot_GetAngle(rotation));
         }

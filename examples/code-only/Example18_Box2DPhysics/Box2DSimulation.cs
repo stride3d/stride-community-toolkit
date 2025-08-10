@@ -75,13 +75,16 @@ public class Box2DSimulation : IDisposable
     }
 
     /// <summary>Creates a dynamic body associated with the given entity at a world position.</summary>
-    public B2BodyId CreateDynamicBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_dynamicBody);
+    public B2BodyId CreateDynamicBody(Entity entity, Vector3 position)
+        => _bridge.CreateBody(entity, position, B2BodyType.b2_dynamicBody);
 
     /// <summary>Creates a kinematic body associated with the given entity at a world position.</summary>
-    public B2BodyId CreateKinematicBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody);
+    public B2BodyId CreateKinematicBody(Entity entity, Vector3 position)
+        => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody);
 
     /// <summary>Creates a static body associated with the given entity at a world position.</summary>
-    public B2BodyId CreateStaticBody(Entity entity, Vector3 position) => _bridge.CreateBody(entity, position, B2BodyType.b2_staticBody);
+    public B2BodyId CreateStaticBody(Entity entity, Vector3 position)
+        => _bridge.CreateBody(entity, position, B2BodyType.b2_staticBody);
 
     /// <summary>Advances the simulation by the elapsed real time, executing zero or more fixed steps.</summary>
     /// <param name="elapsed">Frame time delta.</param>

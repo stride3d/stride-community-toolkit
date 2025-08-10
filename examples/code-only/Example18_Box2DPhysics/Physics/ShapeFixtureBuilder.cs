@@ -14,6 +14,23 @@ namespace Example18_Box2DPhysics.Physics;
 /// </summary>
 public static class ShapeFixtureBuilder
 {
+    /// <summary>
+    /// Creates and attaches a Box2D fixture that matches the provided <paramref name="shapeModel"/> type and dimensions.
+    /// </summary>
+    /// <param name="shapeModel">The toolkit shape model describing size and primitive type.</param>
+    /// <param name="bodyId">The Box2D body to which the generated shape will be attached.</param>
+    /// <param name="shapeDef">
+    /// Optional shape definition (density, friction, restitution, sensor flag). If <c>null</c>,
+    /// <see cref="CreateDefaultShapeDef"/> is used.
+    /// </param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="shapeModel"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">Thrown if the shape type is not supported.</exception>
+    /// <example>
+    /// <code>
+    /// var bodyId = world.CreateStaticBody(position);
+    /// ShapeFixtureBuilder.AttachShape(shapeModel, bodyId);
+    /// </code>
+    /// </example>
     public static void AttachShape(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
     {
         var finalShapeDef = shapeDef ?? CreateDefaultShapeDef();
@@ -39,9 +56,16 @@ public static class ShapeFixtureBuilder
     }
 
     /// <summary>
-    /// Creates a default shape definition with standard properties.
+    /// Creates a default <see cref="B2ShapeDef"/> populated with project-wide physics configuration values
+    /// from <see cref="GameConfig"/>.
     /// </summary>
-    /// <returns>A <see cref="B2ShapeDef"/> with default properties.</returns>
+    /// <returns>A shape definition with default density, friction, and restitution.</returns>
+    /// <example>
+    /// <code>
+    /// var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
+    /// ShapeFixtureBuilder.AttachShape(shapeModel, bodyId, shapeDef);
+    /// </code>
+    /// </example>
     public static B2ShapeDef CreateDefaultShapeDef()
     {
         var shapeDef = b2DefaultShapeDef();
@@ -54,9 +78,19 @@ public static class ShapeFixtureBuilder
     }
 
     /// <summary>
-    /// Creates a custom shape definition with specified properties.
+    /// Creates a custom <see cref="B2ShapeDef"/> with explicitly specified physics material properties.
     /// </summary>
-    /// <returns>A <see cref="B2ShapeDef"/> with custom properties.</returns>
+    /// <param name="density">Mass density (kg/m^2). Higher values increase mass.</param>
+    /// <param name="friction">Coefficient of friction (typical range 0–1).</param>
+    /// <param name="restitution">Bounciness (0 = inelastic, 1 = perfectly elastic).</param>
+    /// <param name="isSensor">If true, the shape detects contacts but produces no collision response.</param>
+    /// <returns>A shape definition initialized with the provided parameters.</returns>
+    /// <example>
+    /// <code>
+    /// var customDef = ShapeFixtureBuilder.CreateCustomShapeDef(2.0f, 0.6f, 0.1f, isSensor: true);
+    /// ShapeFixtureBuilder.AttachShape(sensorShapeModel, bodyId, customDef);
+    /// </code>
+    /// </example>
     public static B2ShapeDef CreateCustomShapeDef(float density, float friction, float restitution, bool isSensor = false)
     {
         var shapeDef = b2DefaultShapeDef();

@@ -70,6 +70,15 @@ public class SceneManager
         // Add ground for physics objects to collide with
         WorldGeometryBuilder.AddGround(_simulation.GetWorldId());
 
+        //var groundEntity = _shapeFactory.CreateEntity(new Shape2DModel()
+        //{
+        //    Type = Primitive2DModelType.Rectangle2D,
+        //    Color = GameConfig.ShapeColor,
+        //    Size = new Vector2(50, 1),
+        //});
+
+        //var groundBodyId = _simulation.CreateStaticBody(groundEntity, new Vector2(0, -10));
+
         // Create a single shape with zero gravity for demonstration
         var shape = _shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
 
