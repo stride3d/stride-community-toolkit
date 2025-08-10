@@ -53,9 +53,9 @@ public class ShapeFactory
         //Make colour darker from this one  b2_colorPink = 0xFFC0CB,
 
         actualColor = new Color(
-            (byte)(Color.Pink.R * 0.5f),
-            (byte)(Color.Pink.G * 0.5f),
-            (byte)(Color.Pink.B * 0.5f),
+            (byte)(GameConfig.ShapeColor.R * 0.5f),
+            (byte)(GameConfig.ShapeColor.G * 0.5f),
+            (byte)(GameConfig.ShapeColor.B * 0.5f),
             actualColor.A);
 
         // Create entity with SDF-based Box2D style material
@@ -77,7 +77,7 @@ public class ShapeFactory
             new Vector2(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f), // Bottom-left
             new Vector2(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),  // Bottom-right
             new Vector2(shape.Size.X * 0.5f, shape.Size.Y * 0.5f),   // Top-right
-            new Vector2(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f)   // Top-lepft
+            new Vector2(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f)   // Top-left
         },
             Primitive2DModelType.Triangle2D => new[]
             {
@@ -91,7 +91,7 @@ public class ShapeFactory
         entity.Add(new MeshOutlineComponent()
         {
             Enabled = true,
-            Color = Color.Pink,
+            Color = GameConfig.ShapeColor,
             Intensity = 1f,
             ShapeType = shape.Type,
             OutlineThickness = 1f, // 3 pixels
@@ -102,6 +102,7 @@ public class ShapeFactory
         });
 
         entity.Scene = _scene;
+
         return entity;
     }
 

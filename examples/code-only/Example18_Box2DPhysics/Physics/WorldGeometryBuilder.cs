@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Box2D.NET;
 using Example18_Box2DPhysics.Helpers; // GameConfig
 using Stride.Core.Mathematics;
@@ -19,14 +18,19 @@ public static class WorldGeometryBuilder
         var groundPosition = position ?? new Vector2(0.0f, -10.0f);
         var groundSize = size ?? new Vector2(50.0f, 10.0f);
         var def = b2DefaultBodyDef();
+
         def.position = new B2Vec2(groundPosition.X, groundPosition.Y);
         def.name = GameConfig.GroundName;
         def.type = B2BodyType.b2_staticBody;
+
         var groundId = b2CreateBody(worldId, ref def);
         var groundBox = b2MakeBox(groundSize.X, groundSize.Y);
         var shapeDef = ShapeFixtureBuilder.CreateDefaultShapeDef();
+
         shapeDef.material.friction = 0.6f;
+
         b2CreatePolygonShape(groundId, ref shapeDef, ref groundBox);
+
         return groundId;
     }
 
@@ -42,6 +46,7 @@ public static class WorldGeometryBuilder
             new { Position = new Vector2(0, halfHeight), Size = new Vector2(width, wallThickness) },
             new { Position = new Vector2(0, -halfHeight), Size = new Vector2(width, wallThickness) }
         };
+
         foreach (var c in configs)
         {
             var def = b2DefaultBodyDef();
@@ -54,6 +59,7 @@ public static class WorldGeometryBuilder
             b2CreatePolygonShape(bodyId, ref shapeDef, ref box);
             walls.Add(bodyId);
         }
+
         return walls;
     }
 }

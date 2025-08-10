@@ -25,10 +25,13 @@ public class Box2DStrideBridge
     {
         var bodyDef = b2DefaultBodyDef();
         bodyDef.type = type;
-        bodyDef.position = new Box2D.NET.B2Vec2(position.X, position.Y);
+        bodyDef.position = new B2Vec2(position.X, position.Y);
+
         var bodyId = b2CreateBody(_world.WorldId, ref bodyDef);
+
         _bodyToEntity[bodyId] = entity;
         _entityToBody[entity] = bodyId;
+
         return bodyId;
     }
 
@@ -37,13 +40,16 @@ public class Box2DStrideBridge
         if (_entityToBody.TryGetValue(entity, out var bodyId))
         {
             b2DestroyBody(bodyId);
+
             _entityToBody.Remove(entity);
             _bodyToEntity.Remove(bodyId);
         }
     }
 
     public Entity? GetEntity(B2BodyId bodyId) => _bodyToEntity.TryGetValue(bodyId, out var e) ? e : null;
+
     public B2BodyId? GetBody(Entity entity) => _entityToBody.TryGetValue(entity, out var id) ? id : null;
+
     public IEnumerable<B2BodyId> Bodies => _bodyToEntity.Keys;
 
     /// <summary>
@@ -59,7 +65,7 @@ public class Box2DStrideBridge
             var position = b2Body_GetPosition(bodyId);
             var rotation = b2Body_GetRotation(bodyId);
             entity.Transform.Position = new Vector3(position.X, position.Y, 0f);
-            entity.Transform.Rotation = Quaternion.RotationZ(Box2D.NET.B2MathFunction.b2Rot_GetAngle(rotation));
+            entity.Transform.Rotation = Quaternion.RotationZ(B2MathFunction.b2Rot_GetAngle(rotation));
         }
     }
 }
