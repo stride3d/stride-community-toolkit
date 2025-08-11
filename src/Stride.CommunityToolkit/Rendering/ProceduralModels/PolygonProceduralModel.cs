@@ -3,18 +3,28 @@ using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
+/// <summary>
+/// Generates a planar polygon mesh (convex fan triangulation) from an arbitrary set of 2D vertices.
+/// </summary>
 public class PolygonProceduralModel : PrimitiveProceduralModelBase
 {
+    /// <summary>
+    /// Vertex positions (XY plane) defining the polygon outline. Must contain at least 3 vertices.
+    /// </summary>
     public Vector2[] Vertices { get; set; } = [];
 
     private static readonly Dictionary<string, GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
 
+    /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
     {
         return New(Vertices, UvScale.X, UvScale.Y);
     }
 
     // Helper methods for common shapes
+    /// <summary>
+    /// Convenience factory for an isosceles triangle centered at the origin.
+    /// </summary>
     public static PolygonProceduralModel CreateTriangle(Vector2 size)
     {
         return new PolygonProceduralModel
@@ -28,6 +38,9 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         };
     }
 
+    /// <summary>
+    /// Convenience factory for an axis-aligned rectangle centered at the origin.
+    /// </summary>
     public static PolygonProceduralModel CreateRectangle(Vector2 size)
     {
         return new PolygonProceduralModel
@@ -42,6 +55,9 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         };
     }
 
+    /// <summary>
+    /// Creates (or retrieves from cache) a mesh for the supplied polygon vertex list.
+    /// </summary>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector2[] vertices, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         if (vertices.Length < 3)
@@ -62,6 +78,9 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         return mesh;
     }
 
+    /// <summary>
+    /// Builds a new mesh for the given points (no caching). Assumes convex ordering; uses fan triangulation.
+    /// </summary>
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(Vector2[] points, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         int vertexCount = points.Length;

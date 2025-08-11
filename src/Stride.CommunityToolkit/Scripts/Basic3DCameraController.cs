@@ -26,20 +26,44 @@ public class Basic3DCameraController : SyncScript
     private DebugTextPrinter? _instructions;
     private bool _showInstructions = true;
 
+    /// <summary>
+    /// Enables gamepad input when <c>true</c>.
+    /// </summary>
     public bool Gamepad { get; set; }
 
+    /// <summary>
+    /// Base translation speed (units/second) for keyboard navigation.
+    /// </summary>
     public Vector3 KeyboardMovementSpeed { get; set; } = new Vector3(5.0f);
 
+    /// <summary>
+    /// Translation speed scaling for touch gestures (XY, Z).
+    /// </summary>
     public Vector3 TouchMovementSpeed { get; set; } = new Vector3(0.7f, 0.7f, 0.3f);
 
+    /// <summary>
+    /// Multiplier applied when sprint modifier (shift / pad buttons) is active.
+    /// </summary>
     public float SpeedFactor { get; set; } = 5.0f;
 
+    /// <summary>
+    /// Rotation speed for keyboard / gamepad discrete rotation.
+    /// </summary>
     public Vector2 KeyboardRotationSpeed { get; set; } = new Vector2(3.0f);
 
+    /// <summary>
+    /// Sensitivity for mouse-driven yaw/pitch adjustments.
+    /// </summary>
     public Vector2 MouseRotationSpeed { get; set; } = new Vector2(1.0f, 1.0f);
 
+    /// <summary>
+    /// Sensitivity for touch drag rotation (yaw, pitch).
+    /// </summary>
     public Vector2 TouchRotationSpeed { get; set; } = new Vector2(1.0f, 0.7f);
 
+    /// <summary>
+    /// Initializes help overlay, caches default transform and configures gesture recognizers.
+    /// </summary>
     public override void Start()
     {
         base.Start();
@@ -82,6 +106,9 @@ public class Basic3DCameraController : SyncScript
 
     private Int2 GetScreenSize() => new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
 
+    /// <summary>
+    /// Per-frame update: processes input and applies translation/rotation.
+    /// </summary>
     public override void Update()
     {
         ProcessInput();

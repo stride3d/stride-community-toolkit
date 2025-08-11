@@ -360,11 +360,21 @@ public static partial class Easing
         }
     }
 
+    /// <summary>
+    /// Produces a bouncing motion that starts slowly, accelerates and ends with bounces (ease-in variant).
+    /// </summary>
+    /// <param name="amount">Normalized time in range [0,1].</param>
+    /// <returns>Interpolated value.</returns>
     public static double BounceEaseIn(double amount)
     {
         return 1 - BounceEaseOut(1 - amount);
     }
 
+    /// <summary>
+    /// Produces a bouncing motion that decelerates towards the end (ease-out variant).
+    /// </summary>
+    /// <param name="amount">Normalized time in range [0,1].</param>
+    /// <returns>Interpolated value.</returns>
     public static double BounceEaseOut(double amount)
     {
         if (amount < 4 / 11.0)
@@ -385,6 +395,11 @@ public static partial class Easing
         }
     }
 
+    /// <summary>
+    /// Produces a bouncing motion that eases in during the first half and eases out with bounces in the second half.
+    /// </summary>
+    /// <param name="amount">Normalized time in range [0,1].</param>
+    /// <returns>Interpolated value.</returns>
     public static double BounceEaseInOut(double amount)
     {
         if (amount < 0.5)

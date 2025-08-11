@@ -39,6 +39,9 @@ public class Basic2DCameraController : SyncScript
     private DebugTextPrinter? _instructions;
     private bool _showInstructions = true;
 
+    /// <summary>
+    /// Initializes on-screen instruction overlay and caches references.
+    /// </summary>
     public override void Start()
     {
         _instructions = new DebugTextPrinter()
@@ -63,6 +66,9 @@ public class Basic2DCameraController : SyncScript
 
     private Int2 GetScreenSize() => new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
 
+    /// <summary>
+    /// Per-frame update handling movement, zoom and help overlay.
+    /// </summary>
     public override void Update()
     {
         if (_camera == null)
@@ -89,6 +95,9 @@ public class Basic2DCameraController : SyncScript
         }
     }
 
+    /// <summary>
+    /// Handles F2/F3 toggles for instruction visibility and position.
+    /// </summary>
     private void ToggleInstructionKeys()
     {
         if (!Input.HasKeyboard) return;
@@ -105,7 +114,7 @@ public class Basic2DCameraController : SyncScript
     }
 
     /// <summary>
-    /// Process camera movement based on mouse movement screen edge proximity
+    /// Processes keyboard-driven camera translation.
     /// </summary>
     private void ProcessCameraMovement()
     {
@@ -133,6 +142,9 @@ public class Basic2DCameraController : SyncScript
         Entity.Transform.Position += moveDirection * CameraMoveSpeed * Game.DeltaTime();
     }
 
+    /// <summary>
+    /// Moves camera when mouse is near screen edges (RTS-style panning).
+    /// </summary>
     private void ProcessScreenEdgeMovement()
     {
         var moveDirection = Vector3.Zero;
@@ -170,6 +182,9 @@ public class Basic2DCameraController : SyncScript
         Entity.Transform.Position += moveDirection * CameraMoveSpeed * Game.DeltaTime();
     }
 
+    /// <summary>
+    /// Adjusts orthographic size using mouse wheel input.
+    /// </summary>
     private void ProcessCameraZoom()
     {
         // In an orthographic camera setup, moving the camera along the Z-axis doesn't create a zoom effect as it would with a perspective camera. This is because an orthographic camera does not have a perspective foreshortening effect – objects appear the same size regardless of their distance from the camera. To create a zoom effect with an orthographic camera, you need to adjust the OrthographicSize property of the camera, which defines the visible height of the camera's view at a given distance.a
@@ -179,7 +194,7 @@ public class Basic2DCameraController : SyncScript
     }
 
     /// <summary>
-    /// Reset camera to default position and orthographic size when 'H' key is pressed
+    /// Resets camera to default position and orthographic size when 'H' is pressed.
     /// </summary>
     private void ResetCameraToDefault()
     {

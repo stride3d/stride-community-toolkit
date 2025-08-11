@@ -20,11 +20,7 @@ public abstract class PrimitiveCreationOptions
     /// </summary>
     public Material? Material { get; set; }
 
-    /// <summary>
-    /// Determines whether to include a collider component in the entity. Defaults to true.
-    /// A collider is necessary for physics interactions, such as detecting collisions with other entities.
-    /// </summary>
-    //public bool IncludeCollider { get; set; } = true;
+    // Note: Collider support intentionally removed for now; add back with proper option when physics integration is finalized.
 
     /// <summary>
     /// Gets or sets the render group for the entity. Defaults to <see cref="RenderGroup.Group0"/>.
