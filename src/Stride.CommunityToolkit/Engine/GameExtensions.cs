@@ -91,6 +91,17 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Configures the game for 2D rendering by setting up the necessary graphics compositor and camera.
+    /// </summary>
+    /// <param name="game">The game instance to configure for 2D rendering.</param>
+    /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
+    public static void SetupBase2D(this Game game, Color? clearColor = null)
+    {
+        game.Add2DGraphicsCompositor(clearColor);
+        game.Add2DCamera().Add2DCameraController();
+    }
+
+    /// <summary>
     /// Sets up essential components for the game, including a GraphicsCompositor, a camera, and a directional light.
     /// </summary>
     /// <remarks>
@@ -102,7 +113,7 @@ public static class GameExtensions
     /// </list>
     /// </remarks>
     /// <param name="game">The Game instance that will receive the base setup.</param>
-    public static void SetupBase(this Game game)
+    public static void SetupBase3D(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
         game.Add3DCamera();
@@ -110,19 +121,103 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a default GraphicsCompositor with enabled post-effects to the specified Game instance and sets it as the game's SceneSystem GraphicsCompositor.
+    /// Adds a default graphics compositor with post-processing effects enabled to the specified game.
     /// </summary>
-    /// <param name="game">The Game instance to which the GraphicsCompositor will be added.</param>
-    /// <returns>The newly configured GraphicsCompositor instance with enabled post-effects.</returns>
+    /// <param name="game">The game to which the graphics compositor will be added. Cannot be null.</param>
+    /// <returns>The newly created <see cref="GraphicsCompositor"/> with post-processing effects enabled.</returns>
     public static GraphicsCompositor AddGraphicsCompositor(this Game game)
     {
-        // Create a default GraphicsCompositor with enabled post-effects.
-        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(true);
+        var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: true);
 
-        // Set the GraphicsCompositor for the game's SceneSystem
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
         return graphicsCompositor;
+    }
+
+    /// <summary>
+    /// Adds a 2D graphics compositor to the specified game, optionally setting a clear color.
+    /// </summary>
+    /// <remarks>This method sets the graphics compositor of the game's scene system to a default 2D
+    /// configuration without post-processing effects. The clear color can be specified to customize the background
+    /// color of the rendered scene.</remarks>
+    /// <param name="game">The game to which the 2D graphics compositor will be added. Cannot be null.</param>
+    /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
+    /// <returns>The newly created 2D graphics compositor.</returns>
+    public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
+    {
+        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: false, clearColor: clearColor);
+
+        game.SceneSystem.GraphicsCompositor = graphicsCompositor;
+
+        return graphicsCompositor;
+    }
+
+    /// <summary>
+    /// Creates a material with flat colors that aren't affected by lighting, ideal for 2D rendering.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="color">The color of the material. Uses white if not specified.</param>
+    /// <returns>A new material instance with flat coloring unaffected by lighting.</returns>
+    public static Material CreateFlatMaterial(this IGame game, Color? color = null)
+    {
+        var materialColor = color ?? Color.White;
+
+        var materialDescription = new MaterialDescriptor
+        {
+            Attributes =
+        {
+            // Add diffuse color
+            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(materialColor))
+            {
+                // The Enabled property controls whether the feature affects rendering
+                Enabled = true
+            },
+
+            // Use a simple diffuse model, we'll disable lighting with lighting features removal
+            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
+
+            // Disable specular reflections completely
+            Specular = null,
+            SpecularModel = null,
+
+            // Add emissive for consistent color rendering regardless of lighting
+            Emissive = new MaterialEmissiveMapFeature(new ComputeColor(materialColor))
+        }
+        };
+
+        return Material.New(game.GraphicsDevice, materialDescription);
+    }
+
+    // Helper method to remove lighting features from a GraphicsCompositor
+    private static void RemoveLightingFeatures(GraphicsCompositor compositor)
+    {
+        // Find and remove all lighting-related render features
+        foreach (var renderFeature in compositor.RenderFeatures)
+        {
+            if (renderFeature is MeshRenderFeature meshRenderFeature)
+            {
+                // We need to store features to remove in a separate list to avoid collection modification during enumeration
+                var featuresToRemove = new List<SubRenderFeature>();
+
+                // Use the correct type for the collection
+                foreach (var feature in meshRenderFeature.RenderFeatures)
+                {
+                    // Check if this is a lighting-related feature
+                    if (feature is ForwardLightingRenderFeature ||
+                        feature.GetType().Name.Contains("Shadow"))
+                    {
+                        // Cast is safe since all items in meshRenderFeature.RenderFeatures are SubRenderFeature
+                        featuresToRemove.Add(feature);
+                    }
+                }
+
+                // Remove all identified features
+                foreach (var feature in featuresToRemove)
+                {
+                    meshRenderFeature.RenderFeatures.Remove(feature);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -251,7 +346,7 @@ public static class GameExtensions
     /// This method creates six directional lights positioned around a central point, each aiming from a unique angle to simulate uniform lighting from all directions.
     /// The lights are added at predefined positions and rotations to cover the scene evenly.
     /// </remarks>
-    public static void AddAllDirectionLighting(this Game game, float intensity, bool showLightGizmo = true)
+    public static void AddAllDirectionLighting(this Game game, float intensity = 5, bool showLightGizmo = true)
     {
         var position = new Vector3(7f, 2f, 0);
 
@@ -399,11 +494,23 @@ public static class GameExtensions
         graphicsCompositor.AddSceneRenderer(renderer);
     }
 
+    /// <summary>
+    /// Adds a root render feature to the game's graphics compositor.
+    /// </summary>
+    /// <param name="game">The game instance to which the render feature will be added. Cannot be null.</param>
+    /// <param name="renderFeature">The root render feature to add. Cannot be null.</param>
     public static void AddRootRenderFeature(this Game game, RootRenderFeature renderFeature)
     {
         game.SceneSystem.GraphicsCompositor.AddRootRenderFeature(renderFeature);
     }
 
+    /// <summary>
+    /// Adds particle rendering capabilities to the specified game.
+    /// </summary>
+    /// <remarks>This method extends the game's graphics compositor by incorporating stages and features
+    /// necessary for rendering particles. Ensure that the game has a valid scene system before invoking this
+    /// method.</remarks>
+    /// <param name="game">The game to which particle rendering stages and features will be added. Cannot be null.</param>
     public static void AddParticleRenderer(this Game game)
     {
         game.SceneSystem.GraphicsCompositor.AddParticleStagesAndFeatures();

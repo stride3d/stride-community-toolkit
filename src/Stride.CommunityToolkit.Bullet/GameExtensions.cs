@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -98,80 +99,13 @@ public static class GameExtensions
         return entity;
     }
 
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Bullet2DPhysicsOptions? options = null)
     {
         options ??= new();
 
-        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
+        var entity = game.Create2DPrimitive(type, (Primitive2DCreationOptions)options);
 
-        //proceduralModel.SetMaterial("Material", options.Material);
-
-        var model = modelBase.Generate(game.Services);
-
-        //model.Add(options.Material);
-
-        if (options.Material != null)
-        {
-            model.Materials.Add(options.Material);
-        }
-
-        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
-
-        if (type == Primitive2DModelType.Circle)
-        {
-            entity.Transform.Rotation = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90));
-        }
-
-        if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
-
-        if (type == Primitive2DModelType.Triangle)
-        {
-            //var a = new TriangularPrismProceduralModel() { Size = new(options.Size.Value.X, options.Size.Value.Y, options.Depth) };
-
-            var meshData = TriangularPrismProceduralModel.New(options.Size is null ? new(1, 1, options.Depth) : new(options.Size.Value.X, options.Size.Value.Y, options.Depth));
-
-            var points = meshData.Vertices.Select(w => w.Position).ToList();
-            var uintIndices = meshData.Indices.Select(w => (uint)w).ToList();
-            var collider = new ConvexHullColliderShapeDesc()
-            {
-                //Model = model, // seems doing nothing
-                Scaling = new(0.9f),
-                //LocalOffset = new(20, 20, 10),
-                ConvexHulls = [],
-                ConvexHullsIndices = []
-            };
-
-            collider.ConvexHulls.Add([points]);
-            collider.ConvexHullsIndices.Add([uintIndices]);
-
-            //var shapee = collider.CreateShape(game.Services);
-            //var collider = new ConvexHullColliderShape(points, uintIndices, Vector3.Zero);
-            //var cs = new PhysicsColliderShape(descriptions);
-
-
-            List<IAssetColliderShapeDesc> descriptions = [];
-
-            descriptions.Add(collider);
-
-            var colliderShapeAsset = new ColliderShapeAssetDesc
-            {
-                Shape = new PhysicsColliderShape(descriptions)
-            };
-
-            options.PhysicsComponent.ColliderShapes.Add(colliderShapeAsset);
-            //options.PhysicsComponent.ColliderShape = shapee;
-            //options.PhysicsComponent.ColliderShape = collider;
-        }
-        else
-        {
-            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
-
-            if (colliderShape is null) return entity;
-
-            options.PhysicsComponent.ColliderShapes.Add(colliderShape);
-        }
-
-        entity.Add(options.PhysicsComponent);
+        entity.AddBullet2DPhysics(type, options);
 
         return entity;
     }
@@ -188,30 +122,13 @@ public static class GameExtensions
     /// collider inclusion, size, render group, and 2D flag. Dimensions in the Vector3 for size are used in the order X, Y, Z.
     /// If size is null, default dimensions are used for the model. If no collider is included, the entity is returned without it.
     /// </remarks>
-    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
+    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Bullet3DPhysicsOptions? options = null)
     {
         options ??= new();
 
-        var modelBase = Procedural3DModelBuilder.Build(type, options.Size);
+        var entity = game.Create3DPrimitive(type, (Primitive3DCreationOptions)options);
 
-        var model = modelBase.Generate(game.Services);
-
-        if (options.Material != null)
-        {
-            model.Materials.Add(options.Material);
-        }
-
-        var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
-
-        if (!options.IncludeCollider || options.PhysicsComponent is null) return entity;
-
-        var colliderShape = Get3DColliderShape(type, options.Size);
-
-        if (colliderShape is null) return entity;
-
-        options.PhysicsComponent.ColliderShapes.Add(colliderShape);
-
-        entity.Add(options.PhysicsComponent);
+        entity.AddBullet3DPhysics(type, options);
 
         return entity;
     }
@@ -238,11 +155,10 @@ public static class GameExtensions
 
         var material = game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.Create3DPrimitive(type, new()
+        var entity = game.Create3DPrimitive(type, new Bullet3DPhysicsOptions()
         {
             EntityName = entityName,
             Material = material,
-            IncludeCollider = includeCollider,
             Size = (Vector3)validSize,
             PhysicsComponent = new StaticColliderComponent()
         });
@@ -255,29 +171,4 @@ public static class GameExtensions
 
         return entity;
     }
-
-    private static IInlineColliderShapeDesc? Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0)
-        => type switch
-        {
-            Primitive2DModelType.Rectangle => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
-            Primitive2DModelType.Square => size is null ? new BoxColliderShapeDesc() { Is2D = true } : new() { Size = new(size.Value.X, size.Value.Y, 0), Is2D = true },
-            Primitive2DModelType.Circle => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X, Is2D = true },
-            Primitive2DModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() : new() { Radius = size.Value.X, Is2D = true },
-            _ => throw new InvalidOperationException(),
-        };
-
-    private static IInlineColliderShapeDesc? Get3DColliderShape(PrimitiveModelType type, Vector3? size = null)
-        => type switch
-        {
-            PrimitiveModelType.Plane => size is null ? new BoxColliderShapeDesc() : new() { Size = new Vector3(size.Value.X, 0, size.Value.Y) },
-            PrimitiveModelType.InfinitePlane => new StaticPlaneColliderShapeDesc(),
-            PrimitiveModelType.Sphere => size is null ? new SphereColliderShapeDesc() : new() { Radius = size.Value.X },
-            PrimitiveModelType.Cube => size is null ? new BoxColliderShapeDesc() : new() { Size = size ?? Vector3.One },
-            PrimitiveModelType.Cylinder => size is null ? new CylinderColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
-            PrimitiveModelType.Torus => null,
-            PrimitiveModelType.Teapot => null,
-            PrimitiveModelType.Cone => size is null ? new ConeColliderShapeDesc() : new() { Radius = size.Value.X, Height = size.Value.Y },
-            PrimitiveModelType.Capsule => size is null ? new CapsuleColliderShapeDesc() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y },
-            _ => throw new InvalidOperationException(),
-        };
 }

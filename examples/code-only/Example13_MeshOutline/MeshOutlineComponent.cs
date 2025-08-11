@@ -12,9 +12,6 @@ namespace Example13_MeshOutline;
 /// The outline effect is controlled by the <see cref="Enabled"/>, <see cref="Color"/>, and <see cref="Intensity"/> properties.
 /// Ensure that MeshOutlineRenderFeature is enabled in the Graphics Compositor for this effect to be visible.
 /// </remarks>
-[DataContract("MeshOutline")]
-[Display("Outline", null, Expand = ExpandRule.Once)]
-[ComponentCategory("Model")]
 public class MeshOutlineComponent : EntityComponent
 {
     /// <summary>

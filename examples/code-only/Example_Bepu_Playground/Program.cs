@@ -159,7 +159,7 @@ void Update(Scene scene, GameTime time)
     }
     else if (game.Input.IsKeyReleased(Keys.X))
     {
-        foreach (var entity in scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").ToList())
+        foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").ToList())
         {
             entity.Remove();
         }
@@ -352,7 +352,7 @@ Shape3DModel? Get3DShape(PrimitiveModelType? type = null)
     return _3DShapes.Find(x => x.Type == type);
 }
 
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == "BepuCube" || w.Name == "Cube").Count();
+void SetCubeCount(Scene scene) => cubes = scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").Count();
 
 static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
 

@@ -7,6 +7,7 @@ using Stride.BepuPhysics.Constraints;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Graphics;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -105,6 +106,7 @@ public class CubeStacker
         entity.Scene = _scene;
     }
 
+    // ToDo: Can we change box physics so it doesn't bump?
     public void Update(Scene scene, GameTime time)
     {
         _elapsedTime += time.Elapsed.TotalSeconds;
@@ -206,7 +208,7 @@ public class CubeStacker
     {
         foreach (var color in Constants.Colours)
         {
-            var material = CreateMaterial(color);
+            var material = CreateMaterial(color, specular: 0);
 
             _materials.Add(color, material);
         }
@@ -214,18 +216,27 @@ public class CubeStacker
 
     public Material CreateMaterial(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
     {
-        var materialDescription2 = new MaterialDescriptor
+        var lightmapMaterial = new MaterialDescriptor
         {
             Attributes =
                 {
                     Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
-                    DiffuseModel = new MaterialLightmapModelFeature(),
+                    DiffuseModel = new MaterialLightmapModelFeature()
+                    {
+                        Intensity = 20,
+                        LightMap = new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)
+                    },
                     Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
                     SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
                     MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(microSurface))
                 }
         };
 
+        return Material.New(_game.GraphicsDevice, lightmapMaterial);
+    }
+
+    public Material CreateMaterial2(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
+    {
         var materialDescription = new MaterialDescriptor
         {
             Attributes =
@@ -252,16 +263,14 @@ public class CubeStacker
 
         return Material.New(_game.GraphicsDevice, materialDescription);
         //options.Size /= 2;
-
     }
 
     private void AddNewFirstLayer(Vector3 startPosition)
     {
-        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
         {
             EntityName = "Cube1",
             Material = _materials[Constants.Colours[0]],
-            IncludeCollider = false,
             Size = Constants.CubeSize
         });
         cube.Transform.Position = startPosition;
@@ -529,11 +538,10 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
         {
             EntityName = "Cube",
             Material = _materials[color],
-            IncludeCollider = false,
             Size = size
         });
 

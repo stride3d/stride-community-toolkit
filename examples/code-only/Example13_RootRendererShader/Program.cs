@@ -10,12 +10,13 @@ game.Run(start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase();
-    AddRenderFeature();
+    game.SetupBase3D();
     game.AddProfiler();
 
+    AddRenderFeature();
+
     // We must use a component here as it makes sure to add the render processor to the scene.
-    // The render prcoessor is responsible for managing render objects for the visibility group.
+    // The render processor is responsible for managing render objects for the visibility group.
     // The visibility group is added when a valid render processor "component" is added to the scene.
     var background = new RibbonBackgroundComponent
     {
@@ -35,7 +36,7 @@ void Start(Scene scene)
 }
 
 // This method adds the render feature to the game.
-//This ensures that the game knows how to render the RibbonBackgroundComponent.
+// This ensures that the game knows how to render the RibbonBackgroundComponent.
 void AddRenderFeature()
 {
     game.SceneSystem.GraphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage);

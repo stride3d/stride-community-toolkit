@@ -85,7 +85,8 @@ public class ScreenManagerScript : AsyncScript
 
             ProcessPrimitiveQueue();
 
-            await ProcessRemoveQueue();
+            // Fire and forget - don't wait for SignalR operation to complete
+            _ = ProcessRemoveQueue();
 
             await Script.NextFrame();
         }

@@ -18,7 +18,7 @@ game.Run(start: Start);
 static void Start(Game game)
 {
     game.Window.SetSize(new Int2(1000, 1080));
-    game.SetupBase();
+    game.SetupBase3D();
 
     var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
     var filePath = Path.Combine(directory, "input.png");

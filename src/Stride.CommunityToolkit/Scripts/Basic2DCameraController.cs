@@ -45,7 +45,7 @@ public class Basic2DCameraController : SyncScript
         {
             DebugTextSystem = DebugText,
             TextSize = new(205, 18 * 7),
-            ScreenSize = new(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height),
+            ScreenSize = GetScreenSize(),
             Instructions =
             [
                 new("CONTROL INSTRUCTIONS"),
@@ -60,6 +60,8 @@ public class Basic2DCameraController : SyncScript
 
         _instructions.Initialize();
     }
+
+    private Int2 GetScreenSize() => new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
 
     public override void Update()
     {
@@ -82,6 +84,7 @@ public class Basic2DCameraController : SyncScript
 
         if (_showInstructions)
         {
+            _instructions?.UpdateScreenSize(GetScreenSize());
             _instructions?.Print();
         }
     }

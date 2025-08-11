@@ -102,6 +102,11 @@ public static class GraphicsCompositorExtensions
         return graphicsCompositor;
     }
 
+    /// <summary>
+    /// Adds a root render feature to the specified graphics compositor.
+    /// </summary>
+    /// <param name="graphicsCompositor">The graphics compositor to which the render feature will be added. Cannot be null.</param>
+    /// <param name="renderFeature">The root render feature to add. Cannot be null.</param>
     public static void AddRootRenderFeature(this GraphicsCompositor graphicsCompositor, RootRenderFeature renderFeature)
     {
         graphicsCompositor.RenderFeatures.Add(renderFeature);
@@ -178,6 +183,15 @@ public static class GraphicsCompositorExtensions
         UpdateSceneRendererCollection(graphicsCompositor, cameraSlot, uiStage);
     }
 
+    /// <summary>
+    /// Adds particle rendering stages and features to the specified graphics compositor.
+    /// </summary>
+    /// <remarks>This method configures the graphics compositor to support particle rendering by adding a <see
+    /// cref="ParticleEmitterRenderFeature"/>. It requires the presence of both "Opaque" and "Transparent" render stages
+    /// in the compositor. The method will throw a <see cref="NullReferenceException"/> if either stage is
+    /// missing.</remarks>
+    /// <param name="graphicsCompositor">The graphics compositor to which the particle stages and features will be added.</param>
+    /// <exception cref="NullReferenceException">Thrown if the "Opaque" or "Transparent" render stage is not found in the graphics compositor.</exception>
     public static void AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
     {
         if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))

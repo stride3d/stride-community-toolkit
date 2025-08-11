@@ -1,4 +1,4 @@
-﻿namespace Stride.DebugRendering
+namespace Stride.DebugRendering
 {
 
     shader LinePrimitiveShader : ShaderBase, ColorBase {
@@ -15,5 +15,4 @@
         }
 
     };
-
 }

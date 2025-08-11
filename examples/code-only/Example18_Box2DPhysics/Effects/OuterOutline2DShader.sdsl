@@ -1,0 +1,32 @@
+shader OuterOutline2DShader : ShaderBase, Transformation, PositionStream
+{
+    stage stream float3 Normal : NORMAL;
+
+    float4 Color;
+    float Intensity;
+    // Thickness in local/model units.
+    float OutlineThickness;
+
+    // Approx outward dir from origin in XY.
+    float2 OutDir(float2 p)
+    {
+        float len = length(p);
+        return (len > 1e-6) ? p / len : float2(0, 0);
+    }
+
+    float4 Expand(float4 pos)
+    {
+        pos.xy += OutDir(pos.xy) * OutlineThickness;
+        return mul(pos, WorldViewProjection);
+    }
+
+    stage override void VSMain()
+    {
+        streams.ShadingPosition = Expand(streams.Position);
+    }
+
+    stage override void PSMain()
+    {
+        streams.ColorTarget = Color * Intensity;
+    }
+};
