@@ -25,6 +25,11 @@ public static partial class EntityExtensions
     public static void Add3DCameraController(this Entity entity)
         => entity.Add(new Basic3DCameraController());
 
+    /// <summary>
+    /// Adds a <see cref="Basic2DCameraController"/> script to the entity enabling panning and zooming
+    /// interactions suitable for orthographic 2D scenes.
+    /// </summary>
+    /// <param name="entity">The camera entity that will receive the controller script.</param>
     public static void Add2DCameraController(this Entity entity)
         => entity.Add(new Basic2DCameraController());
 
@@ -71,7 +76,7 @@ public static partial class EntityExtensions
     /// // Assume 'game' is an existing Game instance
     /// entity.AddLightDirectionalGizmo(game.GraphicsDevice);
     /// </code>
-    /// </example>///
+    /// </example>
     public static void AddLightDirectionalGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? color = null)
     {
         var gizmo = new LightDirectionalGizmo(graphicsDevice, color);

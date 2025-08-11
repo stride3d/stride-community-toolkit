@@ -8,19 +8,27 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 /// </summary>
 public class TriangularPrismProceduralModel : PrimitiveProceduralModelBase
 {
+    /// <summary>
+    /// Overall size of the prism in X (triangle base width), Y (triangle height) and Z (depth).
+    /// </summary>
     public Vector3 Size { get; set; } = Vector3.One;
 
     private static readonly Vector2[] TextureCoordinates = [new(1, 0), new(1, 1), new(0, 1), new(0, 0)];
 
+    /// <summary>
+    /// Builds the mesh data for the current <see cref="Size"/> and UV scale settings.
+    /// </summary>
+    /// <returns>The generated geometric mesh data.</returns>
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData() => New(Size, UvScale.X, UvScale.Y);
 
     /// <summary>
-    /// Creates a triangular prism.
+    /// Creates a triangular prism mesh.
     /// </summary>
-    /// <param name="width">The width of the base triangle.</param>
-    /// <param name="height">The height of the triangular face.</param>
-    /// <param name="depth">The depth of the prism along the Z-axis.</param>
-    /// <returns>A triangular prism.</returns>
+    /// <param name="size">Overall size (X = base width, Y = triangle height, Z = depth).</param>
+    /// <param name="uScale">Optional U texture scale.</param>
+    /// <param name="vScale">Optional V texture scale.</param>
+    /// <param name="toLeftHanded">If true, flips winding for left-handed coordinate systems.</param>
+    /// <returns>Generated mesh data for a triangular prism.</returns>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector3 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         // There are 3 vertices for each of the 2 triangle faces (6 total), and 4 vertices for each of the 3 rectangle faces (12 total).
