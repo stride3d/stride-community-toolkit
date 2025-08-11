@@ -3,6 +3,9 @@ using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
+/// <summary>
+/// Generates a textured rectangle (quad) in the XY plane.
+/// </summary>
 public class RectangleProceduralModel : PrimitiveProceduralModelBase
 {
     /// <summary>
@@ -13,11 +16,15 @@ public class RectangleProceduralModel : PrimitiveProceduralModelBase
     private static readonly Vector2[] TextureCoordinates = [new(1, 0), new(1, 1), new(0, 1), new(0, 0)];
     private static readonly Dictionary<Vector2, GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
 
+    /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
     {
         return New(Size, UvScale.X, UvScale.Y);
     }
 
+    /// <summary>
+    /// Creates (or retrieves from cache) a rectangle mesh of the given size and UV scale.
+    /// </summary>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         // Create a cache key that includes all parameters that affect the mesh
@@ -35,6 +42,9 @@ public class RectangleProceduralModel : PrimitiveProceduralModelBase
         return mesh;
     }
 
+    /// <summary>
+    /// Builds a new rectangle mesh (no caching).
+    /// </summary>
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         Span<VertexPositionNormalTexture> vertices = stackalloc VertexPositionNormalTexture[4];

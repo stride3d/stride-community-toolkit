@@ -50,6 +50,9 @@ public class GameProfiler : AsyncScript
     [Display(3, "Display page")]
     public uint ResultPage { get; set; } = 1;
 
+    /// <summary>
+    /// Main asynchronous loop that applies user input to configure and display profiling information.
+    /// </summary>
     public override async Task Execute()
     {
         if (Enabled)

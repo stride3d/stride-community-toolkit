@@ -7,6 +7,9 @@ using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.Rendering.Gizmos;
 
+/// <summary>
+/// Helper for constructing simple 3D axis letter gizmos (X, Y, Z) composed of cylinder primitives.
+/// </summary>
 public class Letter3D
 {
     private const float CylinderRadius = 0.02f;
@@ -16,6 +19,11 @@ public class Letter3D
     private readonly bool _rotateAxisNames;
     private readonly Material _letterMaterial;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="Letter3D"/>.
+    /// </summary>
+    /// <param name="graphicsDevice">Graphics device used to create primitive meshes.</param>
+    /// <param name="rotateAxisNames">If <c>true</c>, attaches a script that keeps letters facing the camera.</param>
     public Letter3D(GraphicsDevice graphicsDevice, bool rotateAxisNames)
     {
         _graphicsDevice = graphicsDevice;
@@ -23,6 +31,9 @@ public class Letter3D
         _letterMaterial = GizmoUniformColorMaterial.Create(graphicsDevice, Color.White);
     }
 
+    /// <summary>
+    /// Creates an entity representing the letter 'X'.
+    /// </summary>
     public Entity CreateLetterX()
     {
         var part1 = CreatePrimitive();
@@ -43,6 +54,9 @@ public class Letter3D
         return letter;
     }
 
+    /// <summary>
+    /// Creates an entity representing the letter 'Y'.
+    /// </summary>
     public Entity CreateLetterY()
     {
         var stem = CreatePrimitive(height: CylinderHeight * 0.6f);
@@ -68,6 +82,9 @@ public class Letter3D
         return letter;
     }
 
+    /// <summary>
+    /// Creates an entity representing the letter 'Z'.
+    /// </summary>
     public Entity CreateLetterZ()
     {
         var top = CreatePrimitive(height: CylinderHeight / 2);
@@ -94,6 +111,9 @@ public class Letter3D
         return letter;
     }
 
+    /// <summary>
+    /// Creates a cylindrical primitive with the configured material.
+    /// </summary>
     private Entity CreatePrimitive(float radius = CylinderRadius, float height = CylinderHeight, int tessellation = CylinderTessellation)
     {
         var mesh = GeometricPrimitive.Cylinder.New(_graphicsDevice, height, radius, tessellation).ToMeshDraw();

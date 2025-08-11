@@ -3,18 +3,28 @@ using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
+/// <summary>
+/// Generates an isosceles triangle primitive in the XY plane.
+/// </summary>
 public class TriangleProceduralModel : PrimitiveProceduralModelBase
 {
+    /// <summary>
+    /// Base size of the triangle in local space.
+    /// </summary>
     public Vector2 Size { get; set; } = Vector2.One;
 
     private static readonly Vector2[] TextureCoordinates = [new(0.5f, 1), new(0, 0), new(1, 0)];
     private static readonly Dictionary<Vector2, GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
 
+    /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
     {
         return New(Size, UvScale.X, UvScale.Y);
     }
 
+    /// <summary>
+    /// Creates (or retrieves from cache) a triangle mesh of the given size and UV scale.
+    /// </summary>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         // Create a cache key that includes all parameters that affect the mesh
@@ -32,6 +42,9 @@ public class TriangleProceduralModel : PrimitiveProceduralModelBase
         return mesh;
     }
 
+    /// <summary>
+    /// Builds a new triangle mesh (no caching).
+    /// </summary>
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
         Span<VertexPositionNormalTexture> vertices = stackalloc VertexPositionNormalTexture[3];

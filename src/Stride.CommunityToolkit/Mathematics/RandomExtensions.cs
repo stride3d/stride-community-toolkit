@@ -1,8 +1,19 @@
 namespace Stride.CommunityToolkit.Mathematics;
 
 /// <summary>
-/// Extensions for <see cref="Random"/>.
+/// Helper extension methods for <see cref="Random"/> tailored for gameplay and procedural content scenarios.
 /// </summary>
+/// <remarks>
+/// Provides convenience APIs for:
+/// <list type="bullet">
+/// <item><description>Generating scalar values (<see cref="NextSingle"/>) compatible with Stride math types.</description></item>
+/// <item><description>Sampling uniformly within 2D rectangles (<see cref="NextPoint(Random, RectangleF)"/>) and 3D bounding boxes (<see cref="NextPoint(Random, BoundingBox)"/>).</description></item>
+/// <item><description>Producing random direction vectors in 2D/3D (<see cref="NextDirection2D"/>, <see cref="NextDirection3D"/>).</description></item>
+/// <item><description>Sampling a point uniformly inside a circle (<see cref="PointInACircle"/>) using area-correct square–root radial distribution.</description></item>
+/// <item><description>Creating a random opaque color (<see cref="NextColor"/>).</description></item>
+/// </list>
+/// All methods validate the <see cref="Random"/> instance and use single-precision math to align with Stride's <c>Vector2</c>, <c>Vector3</c>, and <c>Color</c> types.
+/// </remarks>
 public static class RandomExtensions
 {
     /// <summary>

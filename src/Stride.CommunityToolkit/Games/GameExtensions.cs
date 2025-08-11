@@ -13,6 +13,13 @@ namespace Stride.CommunityToolkit.Games;
 /// </remarks>
 public static class GameExtensions
 {
+    /// <summary>
+    /// Creates an entity containing a 3D procedural primitive model of the specified <paramref name="type"/>.
+    /// </summary>
+    /// <param name="game">Game services source.</param>
+    /// <param name="type">Type of primitive to build.</param>
+    /// <param name="options">Optional creation parameters (size, material, render group, name).</param>
+    /// <returns>Entity containing a configured <see cref="ModelComponent"/>.</returns>
     public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
     {
         options ??= new();
@@ -31,6 +38,13 @@ public static class GameExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Creates an entity containing a 2D (flat) procedural primitive model of the specified <paramref name="type"/>.
+    /// </summary>
+    /// <param name="game">Game services source.</param>
+    /// <param name="type">Type of 2D primitive.</param>
+    /// <param name="options">Optional creation parameters (size, depth, material, render group, name).</param>
+    /// <returns>Entity containing a configured <see cref="ModelComponent"/>.</returns>
     public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
     {
         options ??= new();

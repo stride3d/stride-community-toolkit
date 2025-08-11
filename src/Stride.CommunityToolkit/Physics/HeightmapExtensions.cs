@@ -4,6 +4,24 @@ using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.Physics;
 
+/// <summary>
+/// Extension helpers for working with <see cref="Heightmap"/> data: sampling heights and normals, ray picking,
+/// exporting raw height values, generating preview textures and building renderable / collision meshes.
+/// </summary>
+/// <remarks>
+/// Typical usage:
+/// <code>
+/// // Sample a height and normal
+/// var h = heightmap.GetHeightAt(x, z);
+/// var n = heightmap.GetNormal(x, z);
+///
+/// // Build a mesh (tessellating every 2nd sample)
+/// var mesh = heightmap.ToMesh(graphicsDevice, 1f, 1f, 4f, out var terrainPoints, tessellation: 2);
+///
+/// // Create a grayscale preview texture
+/// var preview = heightmap.ToTexture(graphicsDevice, commandList);
+/// </code>
+/// </remarks>
 public static partial class HeightmapExtensions
 {
     /// <summary>
@@ -15,6 +33,15 @@ public static partial class HeightmapExtensions
 
     //ToDo: Needs refactoring
     //Example of picking a Heightmap, and its extension
+    /// <summary>
+    /// Tests a ray against each sampled height point (approximated as small spheres) and returns the closest intersection.
+    /// </summary>
+    /// <param name="heightmap">Source heightmap.</param>
+    /// <param name="ray">Ray in heightmap local space.</param>
+    /// <param name="point">Closest intersection point if any.</param>
+    /// <param name="m_QuadSideWidthX">Horizontal spacing between height samples in world units (X axis).</param>
+    /// <param name="m_QuadSideWidthZ">Horizontal spacing between height samples in world units (Z axis).</param>
+    /// <returns><c>true</c> if the ray intersects at least one sample; otherwise <c>false</c>.</returns>
     public static bool IntersectsRay(this Heightmap heightmap, Ray ray, out Vector3 point, float m_QuadSideWidthX = 1.0f, float m_QuadSideWidthZ = 1.0f)
     {
         BoundingSphere sphere = new BoundingSphere(Vector3.Zero, 1.5f);
@@ -45,6 +72,9 @@ public static partial class HeightmapExtensions
         return foundit;
     }
 
+    /// <summary>
+    /// Returns the interpolated height at sample coordinate (x,y) or the minimum height if out of range.
+    /// </summary>
     public static float GetHeightAt(this Heightmap heightmap, int x, int y)
     {
         if (!IsValidCoordinate(heightmap, x, y))
@@ -59,12 +89,21 @@ public static partial class HeightmapExtensions
         return height;
     }
 
+    /// <summary>
+    /// Checks whether the provided coordinate lies within the heightmap sample bounds.
+    /// </summary>
     public static bool IsValidCoordinate(this Heightmap heightmap, int x, int y)
         => x >= 0 && x < heightmap.Size.X && y >= 0 && y < heightmap.Size.Y;
 
+    /// <summary>
+    /// Converts a 2D sample coordinate into the flat array index of <see cref="Heightmap.Shorts"/>.
+    /// </summary>
     public static int GetHeightIndex(this Heightmap heightmap, int x, int y)
         => y * heightmap.Size.X + x;
 
+    /// <summary>
+    /// Estimates the vertex tangent direction at the given sample.
+    /// </summary>
     public static Vector3 GetTangent(this Heightmap heightmap, int x, int z)
     {
         var flip = 1;
@@ -84,6 +123,9 @@ public static partial class HeightmapExtensions
         return tangent;
     }
 
+    /// <summary>
+    /// Estimates a normal vector using central differences at the given sample coordinate.
+    /// </summary>
     public static Vector3 GetNormal(this Heightmap heightmap, int x, int y)
     {
         var heightL = GetHeightAt(heightmap, x - 1, y);
@@ -96,6 +138,9 @@ public static partial class HeightmapExtensions
         return normal;
     }
 
+    /// <summary>
+    /// Copies raw height values (as floats) into a new array for processing/export.
+    /// </summary>
     public static float[] ToFloats(this Heightmap heightmap)
     {
         int i, j, index, m_Width = heightmap.Size.X, m_Height = heightmap.Size.Y;
@@ -111,6 +156,14 @@ public static partial class HeightmapExtensions
         return heightValues;
     }
 
+    /// <summary>
+    /// Generates a grayscale texture representation of the heightmap where each texel encodes height in its color channels.
+    /// Higher height values map to brighter colors.
+    /// </summary>
+    /// <param name="heightmap">Source heightmap.</param>
+    /// <param name="graphicsDevice">Graphics device used to allocate the texture.</param>
+    /// <param name="commandList">Command list used to upload texture data.</param>
+    /// <returns>A newly created 2D texture containing the height preview.</returns>
     public static Texture ToTexture(this Heightmap heightmap, GraphicsDevice graphicsDevice, CommandList commandList)
     {
         int i, j, index, m_Width = heightmap.Size.X, m_Height = heightmap.Size.Y;
@@ -132,17 +185,16 @@ public static partial class HeightmapExtensions
     }
 
     /// <summary>
-    /// Creates the terrain mesh from a given heightmap. Tessellation divides
-    /// the quad numbers.
+    /// Builds a triangle mesh for the heightmap using the specified quad spacing, texture repetition and tessellation stride.
     /// </summary>
-    /// <param name="heightmap"></param>
-    /// <param name="graphicsDevice"></param>
-    /// <param name="m_QuadSideWidthX"></param>
-    /// <param name="m_QuadSideWidthZ"></param>
-    /// <param name="TEXTURE_REPEAT"></param>
-    /// <param name="terrainPoints"></param>
-    /// <param name="tessellation"></param>
-    /// <returns></returns>
+    /// <param name="heightmap">Source heightmap.</param>
+    /// <param name="graphicsDevice">Graphics device used for buffer allocation.</param>
+    /// <param name="m_QuadSideWidthX">Width of a single height sample quad along X.</param>
+    /// <param name="m_QuadSideWidthZ">Width of a single height sample quad along Z.</param>
+    /// <param name="TEXTURE_REPEAT">If &gt; 0, number of times the texture repeats across the terrain extents.</param>
+    /// <param name="terrainPoints">Output array of vertex positions.</param>
+    /// <param name="tessellation">Stride between samples (1 = full resolution).</param>
+    /// <returns>Constructed mesh.</returns>
     public static Mesh ToMesh(this Heightmap heightmap,
         GraphicsDevice graphicsDevice,
         float m_QuadSideWidthX, float m_QuadSideWidthZ, float TEXTURE_REPEAT,
@@ -230,6 +282,9 @@ public static partial class HeightmapExtensions
         };
     }
 
+    /// <summary>
+    /// Converts all sample heights to world-space points using the provided quad spacing.
+    /// </summary>
     public static Vector3[] ToWorldPoints(this Heightmap heightmap,
         float m_QuadSideWidthX, float m_QuadSideWidthZ)
     {
@@ -263,6 +318,9 @@ public static partial class HeightmapExtensions
         return points;
     }
 
+    /// <summary>
+    /// Converts a signed 16-bit height value to a packed <see cref="Color"/> using a float-to-RGBA conversion.
+    /// </summary>
     public static Color AsStrideColor(this short val)
     {
         FloatRGBAConverter converter = new FloatRGBAConverter((float)val);

@@ -1,5 +1,8 @@
 namespace Stride.CommunityToolkit.Rendering.Utilities;
 
+/// <summary>
+/// Specifies index element size used when building indexed geometry.
+/// </summary>
 public enum IndexingType
 {
     /// <summary>
