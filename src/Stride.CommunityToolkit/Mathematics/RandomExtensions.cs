@@ -39,7 +39,7 @@ public static class RandomExtensions
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
     /// <param name="region">A 3D region in which point is generated.</param>
-    /// <returns></returns>
+    /// <returns>A random point whose X/Y/Z components lie within <paramref name="region"/>'s bounds.</returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Vector3 NextPoint(this Random random, BoundingBox region)
     {
@@ -58,7 +58,7 @@ public static class RandomExtensions
     /// Generates a random normalized 2D direction vector.
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
-    /// <returns></returns>
+    /// <returns>A unit-length (or zero) direction vector in the XY plane.</returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Vector2 NextDirection2D(this Random random)
     {
@@ -71,7 +71,7 @@ public static class RandomExtensions
     /// Generates a random normalized 3D direction vector.
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
-    /// <returns></returns>
+    /// <returns>A unit-length (or zero) direction vector in 3D space.</returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Vector3 NextDirection3D(this Random random)
     {
@@ -81,30 +81,28 @@ public static class RandomExtensions
     }
 
     /// <summary>
-    /// Generates a random point in a circle of a given radius.
+    /// Generates a random point uniformly distributed inside a circle of the given <paramref name="radius"/>.
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
     /// <param name="radius">Radius of circle. Default 1.0f.</param>
-    /// <returns>A random point in a circle of a given radius.</returns>
+    /// <returns>A random point whose distance from the origin is &lt;= <paramref name="radius"/>.</returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Vector2 PointInACircle(this Random random, float radius = 1.0f)
     {
         ArgumentNullException.ThrowIfNull(random);
 
-        var randomRadius = random.NextSingle() * radius;
+        // Use a single angle and sqrt on radius factor to achieve uniform area distribution.
+        var angle = random.NextSingle() * MathF.PI * 2f;
+        var r = MathF.Sqrt(random.NextSingle()) * radius;
 
-        return new Vector2
-        {
-            X = (float)Math.Cos(random.NextDouble()) * randomRadius,
-            Y = (float)Math.Sin(random.NextDouble()) * randomRadius,
-        };
+        return new Vector2(MathF.Cos(angle) * r, MathF.Sin(angle) * r);
     }
 
     /// <summary>
     /// Generates a random color.
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
-    /// <returns>A random color. Aplha is set to 255. </returns>
+    /// <returns>A random color. Alpha is set to 255. </returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Color NextColor(this Random random)
     {
