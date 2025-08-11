@@ -29,8 +29,9 @@ public static class RandomExtensions
     {
         ArgumentNullException.ThrowIfNull(random);
 
-        return Vector2.Lerp(region.TopLeft, region.BottomRight, random.NextSingle());
-
+        return new Vector2(
+            random.NextSingle() * region.Width + region.X,
+            random.NextSingle() * region.Height + region.Y);
     }
 
     /// <summary>
@@ -44,8 +45,13 @@ public static class RandomExtensions
     {
         ArgumentNullException.ThrowIfNull(random);
 
-        return Vector3.Lerp(region.Minimum, region.Maximum, random.NextSingle());
+        Vector3 minimum = region.Minimum;
+        Vector3 difference = region.Maximum - minimum;
 
+        return new Vector3(
+            random.NextSingle() * difference.X + minimum.X,
+            random.NextSingle() * difference.Y + minimum.Y,
+            random.NextSingle() * difference.Z + minimum.Z);
     }
 
     /// <summary>
