@@ -68,9 +68,3 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-
-# NOTE:
-# 1. This workflow replaces the third-party peaceiris/actions-gh-pages action (disallowed by Enterprise policy)
-#    with the official GitHub Pages actions (upload-pages-artifact + deploy-pages).
-# 2. Ensure Pages is configured to use GitHub Actions as the source in the repository settings.
-# 3. If a CNAME is required, place the CNAME file in docs/_site before the Upload Pages artifact step (or generate it as part of the build).
