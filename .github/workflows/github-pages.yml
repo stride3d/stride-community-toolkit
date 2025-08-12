@@ -36,9 +36,9 @@ jobs:
       with:
         dotnet-version: 8.x
 
-    - name: Configure Pages
-      id: pages
-      uses: actions/configure-pages@v5
+    # - name: Configure Pages
+    #   id: pages
+    #   uses: actions/configure-pages@v5
 
     - name: Install docfx
       run: dotnet tool update -g docfx
