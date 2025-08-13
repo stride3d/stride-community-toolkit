@@ -17,16 +17,24 @@ public class ExampleProvider
     private static readonly Regex CommentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     // Warning filtering configuration
-    private const bool FilterWarnings = true;                 // Master switch
-    private const bool FilterOnlyShaderWarnings = true;       // If false, all warnings filtered
+    private const bool FilterWarnings = true;
+    private const bool FilterOnlyShaderWarnings = true;
     private static readonly Regex GenericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    // Heuristic: shader/effect/compiler lines
     private static readonly Regex ShaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    // Blank line handling
+    private const bool CollapseConsecutiveBlankLines = true;
+    private const bool RemoveBlankLinesAfterSuppressedBlock = true;
 
     private static bool BypassFiltering =>
         Environment.GetEnvironmentVariable("SHOW_WARNINGS") is string v &&
         (v.Equals("1") || v.Equals("true", StringComparison.OrdinalIgnoreCase));
+
+    // Console state
+    private readonly object _consoleLock = new();
+    private bool _lastPrintedWasBlank;
+    private bool _justSuppressed; // set when we suppressed at least one line since last printed real line
 
     private sealed record ExampleProjectMeta(
         string Id,
@@ -155,19 +163,40 @@ public class ExampleProvider
         while (true)
         {
             string? line;
-            try
-            {
-                line = reader.ReadLine();
-            }
-            catch
-            {
-                break;
-            }
-
+            try { line = reader.ReadLine(); }
+            catch { break; }
             if (line is null) break;
 
             if (ShouldSuppress(line))
+            {
+                _justSuppressed = true;
                 continue;
+            }
+
+            // Handle blank lines intelligently
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                // Remove blank line if it directly follows a suppressed block
+                if (RemoveBlankLinesAfterSuppressedBlock && _justSuppressed)
+                {
+                    continue;
+                }
+
+                lock (_consoleLock)
+                {
+                    if (CollapseConsecutiveBlankLines && _lastPrintedWasBlank)
+                    {
+                        // skip additional blank line
+                        return;
+                    }
+
+                    Console.WriteLine();
+                    _lastPrintedWasBlank = true;
+                    _justSuppressed = false;
+                }
+
+                continue;
+            }
 
             WriteLine(line, isError);
         }
@@ -188,28 +217,33 @@ public class ExampleProvider
         return ShaderWarningRegex.IsMatch(line);
     }
 
-    private static void WriteLine(string line, bool isError)
+    private void WriteLine(string line, bool isError)
     {
-        // Optional: colorize remaining warnings/errors
-        if (GenericWarningRegex.IsMatch(line))
+        lock (_consoleLock)
         {
-            var prev = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            _lastPrintedWasBlank = false;
+            _justSuppressed = false;
+
+            if (GenericWarningRegex.IsMatch(line))
+            {
+                var prev = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(line);
+                Console.ForegroundColor = prev;
+                return;
+            }
+
+            if (isError)
+            {
+                var prev = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine(line);
+                Console.ForegroundColor = prev;
+                return;
+            }
+
             Console.WriteLine(line);
-            Console.ForegroundColor = prev;
-            return;
         }
-
-        if (isError)
-        {
-            var prev = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Error.WriteLine(line);
-            Console.ForegroundColor = prev;
-            return;
-        }
-
-        Console.WriteLine(line);
     }
 
     private string GetIndex() => Interlocked.Increment(ref _index).ToString();
