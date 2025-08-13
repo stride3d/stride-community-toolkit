@@ -10,11 +10,23 @@ public class ExampleProvider
     private readonly string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
     // Configuration (adjust as desired)
-    private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only"; // from launcher bin folder during dev
+    private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only";
     private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
     private const string ExampleTitleElement = "ExampleTitle";
     private const string ExampleOrderElement = "ExampleOrder";
     private static readonly Regex CommentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    // Warning filtering configuration
+    private const bool FilterWarnings = true;                 // Master switch
+    private const bool FilterOnlyShaderWarnings = true;       // If false, all warnings filtered
+    private static readonly Regex GenericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    // Heuristic: shader/effect/compiler lines
+    private static readonly Regex ShaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    private static bool BypassFiltering =>
+        Environment.GetEnvironmentVariable("SHOW_WARNINGS") is string v &&
+        (v.Equals("1") || v.Equals("true", StringComparison.OrdinalIgnoreCase));
 
     private sealed record ExampleProjectMeta(
         string Id,
@@ -28,7 +40,6 @@ public class ExampleProvider
     {
         var metas = DiscoverExamples();
 
-        // Sort: explicit order first, then title
         var ordered = metas
             .OrderBy(m => m.Order.HasValue ? 0 : 1)
             .ThenBy(m => m.Order)
@@ -38,9 +49,7 @@ public class ExampleProvider
         var list = new List<Example>(ordered.Count + 1);
 
         foreach (var meta in ordered)
-        {
             list.Add(new Example(GetIndex(), meta.Title, () => LaunchWithDotNet(meta.ProjectFile)));
-        }
 
         list.Add(new Example("Q", "Quit", () => Environment.Exit(0)));
 
@@ -50,7 +59,6 @@ public class ExampleProvider
     private IEnumerable<ExampleProjectMeta> DiscoverExamples()
     {
         var root = Path.GetFullPath(Path.Combine(_baseDirectory, ExamplesRootRelative));
-
         if (!Directory.Exists(root)) yield break;
 
         foreach (var pattern in ProjectPatterns)
@@ -58,15 +66,8 @@ public class ExampleProvider
             foreach (var proj in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
             {
                 ExampleProjectMeta? meta = null;
-                try
-                {
-                    meta = CreateMetaFromProject(proj);
-                }
-                catch
-                {
-                    // Swallow and continue; optionally log.
-                }
-
+                try { meta = CreateMetaFromProject(proj); }
+                catch { /* ignore */ }
                 if (meta is not null)
                     yield return meta;
             }
@@ -77,7 +78,7 @@ public class ExampleProvider
     {
         var doc = XDocument.Load(projectFile, LoadOptions.None);
         var root = doc.Root ?? throw new InvalidOperationException("Invalid project XML.");
-        var ns = root.Name.Namespace; // Usually empty for SDK-style
+        var ns = root.Name.Namespace;
 
         string? GetProp(string name) =>
             root.Elements(ns + "PropertyGroup")
@@ -96,21 +97,16 @@ public class ExampleProvider
                        ?? assemblyName
                        ?? Path.GetFileNameWithoutExtension(projectFile);
 
-        // ID: use folder or assembly base (stable)
         var id = assemblyName ?? Path.GetFileNameWithoutExtension(projectFile);
-
         return new ExampleProjectMeta(id, title, projectFile, order, category);
     }
 
     private string? TryParseProgramCommentTitle(string projectFile)
     {
-        // Look for Program.* alongside project
         var dir = Path.GetDirectoryName(projectFile);
-
         if (dir is null) return null;
 
-        var programFile = Directory.EnumerateFiles(dir, "Program.*", SearchOption.TopDirectoryOnly)
-                                   .FirstOrDefault();
+        var programFile = Directory.EnumerateFiles(dir, "Program.*", SearchOption.TopDirectoryOnly).FirstOrDefault();
         if (programFile is null) return null;
 
         try
@@ -129,7 +125,6 @@ public class ExampleProvider
 
     private void LaunchWithDotNet(string projectFile)
     {
-        // For faster subsequent runs you can add: --no-build
         var psi = new ProcessStartInfo
         {
             FileName = "dotnet",
@@ -142,30 +137,79 @@ public class ExampleProvider
         };
 
         var process = Process.Start(psi);
-
         if (process == null) return;
 
-        _ = Task.Run(async () =>
+        _ = Task.Run(async () => await StreamProcessOutput(process));
+    }
+
+    private async Task StreamProcessOutput(Process process)
+    {
+        // Process stdout & stderr concurrently
+        var stdout = Task.Run(() => ReadStreamLines(process.StandardOutput, isError: false));
+        var stderr = Task.Run(() => ReadStreamLines(process.StandardError, isError: true));
+        await Task.WhenAll(stdout, stderr);
+    }
+
+    private void ReadStreamLines(StreamReader reader, bool isError)
+    {
+        while (true)
         {
+            string? line;
             try
             {
-                // Stream output (optional: aggregate, colorize, etc.)
-                while (!process.HasExited)
-                {
-                    var line = await process.StandardOutput.ReadLineAsync();
-                    if (line is null) break;
-                    Console.WriteLine(line);
-                }
-
-                while (!process.StandardError.EndOfStream)
-                {
-                    var err = await process.StandardError.ReadLineAsync();
-                    if (err is null) break;
-                    Console.Error.WriteLine(err);
-                }
+                line = reader.ReadLine();
             }
-            catch { /* ignore */ }
-        });
+            catch
+            {
+                break;
+            }
+
+            if (line is null) break;
+
+            if (ShouldSuppress(line))
+                continue;
+
+            WriteLine(line, isError);
+        }
+    }
+
+    private bool ShouldSuppress(string line)
+    {
+        if (!FilterWarnings || BypassFiltering)
+            return false;
+
+        if (!GenericWarningRegex.IsMatch(line))
+            return false; // Not a warning
+
+        if (!FilterOnlyShaderWarnings)
+            return true;
+
+        // Only suppress if it looks shader/effect related
+        return ShaderWarningRegex.IsMatch(line);
+    }
+
+    private static void WriteLine(string line, bool isError)
+    {
+        // Optional: colorize remaining warnings/errors
+        if (GenericWarningRegex.IsMatch(line))
+        {
+            var prev = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(line);
+            Console.ForegroundColor = prev;
+            return;
+        }
+
+        if (isError)
+        {
+            var prev = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine(line);
+            Console.ForegroundColor = prev;
+            return;
+        }
+
+        Console.WriteLine(line);
     }
 
     private string GetIndex() => Interlocked.Increment(ref _index).ToString();
