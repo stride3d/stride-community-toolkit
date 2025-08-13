@@ -76,6 +76,7 @@ game.Run(start: (Scene rootScene) =>
 - Keep nullable reference warnings at zero.
 - Public APIs: complete XML docs (`<summary>`, `<param>`, `<returns>`, `<example>` when useful). Mark experimental with a note: “STATUS: Preview – subject to change”.
 - Naming: `Stride.CommunityToolkit.<LibraryName>` for new libs; PascalCase for types/methods; camelCase for parameters.
+- Terminology / capitalization: Use “Bepu” (capital B only) in identifiers and XML docs; never “BEPU” or “bepu”. Use “Bullet” (capital B) for Bullet physics.
 - One public type per file; avoid unrelated multi-class files.
 - No `#region` blocks; rely on clear structure.
 - Validation: `ArgumentNullException.ThrowIfNull()`; meaningful exception messages for invalid states.
