@@ -81,7 +81,7 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Creates a 3D primitive (cube, sphere, plane, etc.) and attaches BEPU physics to it.
+    /// Creates a 3D primitive (cube, sphere, plane, etc.) and attaches Bepu physics to it.
     /// </summary>
     /// <param name="game">The game instance.</param>
     /// <param name="type">Which primitive shape to create.</param>

@@ -1,20 +1,21 @@
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// Provides options for creating a primitive entity in a 3D scene.
+/// Option set for creating a 3D primitive entity (cube, sphere, capsule, plane, etc.).
 /// </summary>
 /// <remarks>
-/// This class inherits from <see cref="PrimitiveEntityOptions"/> and extends it with properties
-/// specific to 3D models, such as size, entity name and material.
+/// Extends <see cref="PrimitiveEntityOptions"/> with a size override. If <see cref="Size"/> is not provided,
+/// the primitive factory chooses shape‑specific defaults (e.g. unit cube, radius 0.5 sphere).
 /// </remarks>
 public class Primitive3DEntityOptions : PrimitiveEntityOptions
 {
     /// <summary>
-    /// Gets or sets the size of the 3D primitive model. If null, default dimensions are used.
+    /// Gets or sets the desired size/dimensions for the 3D primitive model. When <c>null</c>, shape‑specific
+    /// default dimensions are applied by the creation helper.
     /// </summary>
     /// <remarks>
-    /// The <see cref="Size"/> property allows you to specify custom dimensions for the 3D model.
-    /// If no size is specified, default dimensions will be applied, based on the type of primitive.
+    /// Interpretation depends on primitive type (e.g. box uses all components, sphere may derive radius
+    /// from the largest component, capsules may map Y to height, etc.). Creation helpers document specifics.
     /// </remarks>
     public Vector3? Size { get; set; }
 }

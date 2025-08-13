@@ -5,19 +5,22 @@ using Stride.Physics;
 namespace Stride.CommunityToolkit.Bullet;
 
 /// <summary>
-/// Represents configuration options for the Bullet physics system.
+/// Option set for creating a Bullet-physics enabled 3D primitive entity.
 /// </summary>
-/// <remarks>This class provides options for configuring the physics behavior of entities in the Bullet physics
-/// system. It allows customization of the physics component assigned to an entity, enabling the use of default or
-/// custom components.</remarks>
+/// <remarks>
+/// Inherits geometry / rendering related settings from <see cref="Primitive3DEntityOptions"/> and adds a
+/// configurable Bullet <see cref="PhysicsComponent"/> (default <see cref="RigidbodyComponent"/>) used to
+/// participate in the Bullet simulation. Override <see cref="PhysicsComponent"/> to supply a custom component
+/// (e.g. kinematic rigid body, character controller base, or a preconfigured collider shape).
+/// </remarks>
 public class Bullet3DPhysicsOptions : Primitive3DEntityOptions
 {
     /// <summary>
-    /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of <see cref="RigidbodyComponent"/>.
+    /// Gets or sets the Bullet physics component to attach. Defaults to a new <see cref="RigidbodyComponent"/>.
     /// </summary>
     /// <remarks>
-    /// By default, a <see cref="RigidbodyComponent"/> is assigned to the entity to handle physics simulations,
-    /// but you can override this with a custom physics component if needed.
+    /// Replace with an alternative <see cref="PhysicsComponent"/> (e.g. static or kinematic) to change simulation behavior
+    /// before the entity is created/added to a scene.
     /// </remarks>
     public PhysicsComponent? PhysicsComponent { get; set; } = new RigidbodyComponent();
 }
