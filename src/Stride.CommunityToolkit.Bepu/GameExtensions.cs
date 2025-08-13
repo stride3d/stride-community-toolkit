@@ -73,7 +73,7 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var entity = game.Create2DPrimitive(type, (Primitive2DCreationOptions)options);
+        var entity = game.Create2DPrimitive(type, (Primitive2DEntityOptions)options);
 
         entity.AddBepu2DPhysics(type, options);
 
@@ -94,7 +94,7 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var entity = game.Create3DPrimitive(type, (Primitive3DCreationOptions)options);
+        var entity = game.Create3DPrimitive(type, (Primitive3DEntityOptions)options);
 
         entity.AddBepuPhysics(type, options);
 

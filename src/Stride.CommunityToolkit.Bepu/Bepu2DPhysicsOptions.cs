@@ -4,7 +4,7 @@ using Stride.CommunityToolkit.Engine;
 
 namespace Stride.CommunityToolkit.Bepu;
 
-public class Bepu2DPhysicsOptions : Primitive2DCreationOptions
+public class Bepu2DPhysicsOptions : Primitive2DEntityOptions
 {
     /// <summary>
     /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of <see cref="Body2DComponent"/>.

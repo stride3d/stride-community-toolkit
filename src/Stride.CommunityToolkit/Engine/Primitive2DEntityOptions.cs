@@ -2,10 +2,10 @@ namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
 /// Provides options for creating a 2D primitive entity, such as a square or rectangle.
-/// Inherits common entity creation options from <see cref="PrimitiveCreationOptions"/>
+/// Inherits common entity creation options from <see cref="PrimitiveEntityOptions"/>
 /// and adds specific settings for 2D primitive models.
 /// </summary>
-public class Primitive2DCreationOptions : PrimitiveCreationOptions
+public class Primitive2DEntityOptions : PrimitiveEntityOptions
 {
     /// <summary>
     /// Gets or sets the size of the 2D primitive model.

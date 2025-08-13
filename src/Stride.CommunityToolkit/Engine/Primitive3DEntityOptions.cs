@@ -4,10 +4,10 @@ namespace Stride.CommunityToolkit.Engine;
 /// Provides options for creating a primitive entity in a 3D scene.
 /// </summary>
 /// <remarks>
-/// This class inherits from <see cref="PrimitiveCreationOptions"/> and extends it with properties
+/// This class inherits from <see cref="PrimitiveEntityOptions"/> and extends it with properties
 /// specific to 3D models, such as size, entity name and material.
 /// </remarks>
-public class Primitive3DCreationOptions : PrimitiveCreationOptions
+public class Primitive3DEntityOptions : PrimitiveEntityOptions
 {
     /// <summary>
     /// Gets or sets the size of the 3D primitive model. If null, default dimensions are used.

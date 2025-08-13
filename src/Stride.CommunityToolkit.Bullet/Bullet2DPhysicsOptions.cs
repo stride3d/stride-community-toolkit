@@ -10,7 +10,7 @@ namespace Stride.CommunityToolkit.Bullet;
 /// <remarks>This class provides options for configuring the physics behavior of entities in the Bullet physics
 /// system. It allows customization of the physics component assigned to an entity, enabling the use of default or
 /// custom components.</remarks>
-public class Bullet2DPhysicsOptions : Primitive2DCreationOptions
+public class Bullet2DPhysicsOptions : Primitive2DEntityOptions
 {
     /// <summary>
     /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of <see cref="RigidbodyComponent"/>.

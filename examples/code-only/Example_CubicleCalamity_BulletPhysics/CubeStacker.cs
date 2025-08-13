@@ -234,7 +234,7 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
+        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions()
         {
             EntityName = "Cube",
             Material = _materials[color],
