@@ -30,6 +30,8 @@ public class ShapeUpdater : SyncScript
     const int ChangePerSecond = 8192 + 2048;
     const int InitialNumPrimitives = 1024;
     const int AreaSize = 64;
+    const int TextIncrement = 16;
+    const int StartTextPositionY = 32;
 
     [DataMemberIgnore]
     ImmediateDebugRenderSystem DebugDraw; // this is here to make it look like it should when properly integrated
@@ -168,20 +170,24 @@ public class ShapeUpdater : SyncScript
         }
 
         int textPositionX = (int)Input.Mouse.SurfaceSize.X - 384;
-        DebugText.Print($"Primitive Count: {currentNumPrimitives} (scrollwheel to adjust)",
-            new Int2(textPositionX, 32));
+
+        DebugText.Print($"Primitive Count: {currentNumPrimitives} (scroll wheel to adjust)",
+            new Int2(textPositionX, StartTextPositionY));
+
+        DebugText.Print($" - Hold shift: faster count adjustment",
+            new Int2(textPositionX, StartTextPositionY + TextIncrement));
 
         DebugText.Print($" - Render Mode: {mode} (left alt to switch)",
-            new Int2(textPositionX, 48));
+            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 2)));
 
         DebugText.Print($" - Depth Testing: {(useDepthTesting ? "On " : "Off")} (left ctrl to toggle)",
-            new Int2(textPositionX, 64));
+            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 3)));
 
-        DebugText.Print($" - Fillmode: {(useWireframe ? "Wireframe" : "Solid")} (tab to toggle)",
-            new Int2(textPositionX, 80));
+        DebugText.Print($" - Fill mode: {(useWireframe ? "Wireframe" : "Solid")} (tab to toggle)",
+            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 4)));
 
         DebugText.Print($" - State: {(running ? "Simulating" : "Paused")} (space to toggle)",
-            new Int2(textPositionX, 96));
+            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 5)));
 
         if (running)
         {
@@ -352,6 +358,5 @@ public class ShapeUpdater : SyncScript
 
         // center cone thing yes
         DebugDraw.DrawCone(new Vector3(0, 0.5f, 0), 2.0f, 0.5f, color: Color.HotPink);
-
     }
 }
