@@ -5,19 +5,22 @@ using Stride.CommunityToolkit.Engine;
 namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
-/// Represents configuration options for the Bepu physics system.
+/// Option set for creating a Bepu-physics enabled 3D primitive entity.
 /// </summary>
-/// <remarks>This class provides options for configuring the physics behavior of entities in the Bepu physics
-/// system. It allows customization of the physics component assigned to an entity, enabling the use of default or
-/// custom components.</remarks>
-public class Bepu3DPhysicsOptions : Primitive3DCreationOptions
+/// <remarks>
+/// Inherits geometry / rendering options from <see cref="Primitive3DEntityOptions"/> and adds a configurable Bepu
+/// <see cref="CollidableComponent"/>. The default is a dynamic <see cref="BodyComponent"/> with an empty
+/// <see cref="CompoundCollider"/>; shape(s) are typically populated later by helper extensions based on the chosen primitive type.
+/// </remarks>
+public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
 {
     /// <summary>
-    /// Gets or sets the physics component to be added to the entity. Defaults to a new instance of <see cref="BodyComponent"/>.
+    /// Gets or sets the Bepu collidable component to attach. Defaults to a new dynamic <see cref="BodyComponent"/>
+    /// containing an empty <see cref="CompoundCollider"/>.
     /// </summary>
     /// <remarks>
-    /// By default, a <see cref="BodyComponent"/> is assigned to the entity to handle physics simulations,
-    /// but you can override this with a custom physics component if needed.
+    /// Replace with a <see cref="StaticComponent"/> for immovable geometry or preconfigure collider children before
+    /// passing the options instance to a creation helper.
     /// </remarks>
     public CollidableComponent Component { get; set; } = new BodyComponent()
     {

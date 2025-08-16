@@ -20,7 +20,7 @@ public static class GameExtensions
     /// <param name="type">Type of primitive to build.</param>
     /// <param name="options">Optional creation parameters (size, material, render group, name).</param>
     /// <returns>Entity containing a configured <see cref="ModelComponent"/>.</returns>
-    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DCreationOptions? options = null)
+    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DEntityOptions? options = null)
     {
         options ??= new();
 
@@ -45,7 +45,7 @@ public static class GameExtensions
     /// <param name="type">Type of 2D primitive.</param>
     /// <param name="options">Optional creation parameters (size, depth, material, render group, name).</param>
     /// <returns>Entity containing a configured <see cref="ModelComponent"/>.</returns>
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DCreationOptions? options = null)
+    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DEntityOptions? options = null)
     {
         options ??= new();
 

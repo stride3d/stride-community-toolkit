@@ -267,7 +267,7 @@ public class CubeStacker
 
     private void AddNewFirstLayer(Vector3 startPosition)
     {
-        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
+        var cube = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions()
         {
             EntityName = "Cube1",
             Material = _materials[Constants.Colours[0]],
@@ -538,7 +538,7 @@ public class CubeStacker
     {
         var color = Constants.Colours[_random.Next(0, Constants.Colours.Count)];
 
-        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DCreationOptions()
+        var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions()
         {
             EntityName = "Cube",
             Material = _materials[color],

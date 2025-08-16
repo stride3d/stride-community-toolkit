@@ -1,7 +1,7 @@
 - [Stride.CommunityToolkit](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit)
   - The core library, providing general-purpose extensions for both regular Stride projects and code-only approaches.  
 - [Stride.CommunityToolkit.Bepu](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu)
-  - Adds support for [BEPU Physics](https://github.com/bepu/bepuphysics2), a pure C# 3D real time physics simulation library.   
+  - Adds support for [Bepu Physics](https://github.com/bepu/bepuphysics2), a pure C# 3D real time physics simulation library.   
 - [Stride.CommunityToolkit.Bullet](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet)
   - Adds support for [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html). Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.
 - [Stride.CommunityToolkit.DebugShapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.DebugShapes)

@@ -1,8 +1,10 @@
 using Example07_CubeClicker.Managers;
 using Example07_CubeClicker.Scripts;
 using NexVYaml;
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Graphics;
@@ -23,7 +25,10 @@ game.Run(start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
+    game.AddGraphicsCompositor().AddCleanUIStage();
+    game.Add3DCamera().Add3DCameraController(displayPosition: DisplayPosition.BottomRight);
+    game.AddDirectionalLight();
+    game.Add3DGround();
     game.AddSkybox();
     game.AddGroundGizmo(showAxisName: true);
 

@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Scripts;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
 using Stride.Graphics;
 using System.Diagnostics.CodeAnalysis;
@@ -17,13 +18,14 @@ public static partial class EntityExtensions
     /// enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
+    /// <param name="displayPosition">The position on the screen where the camera controls will be displayed. Defaults to <see cref="DisplayPosition.TopRight"/>.</param>
     /// <remarks>
     /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick
     /// or by dragging/scaling using multi-touch. Rotation is achieved using the Numpad, the mouse while holding
     /// the right mouse button, a gamepad's right stick, or by dragging using single-touch.
     /// </remarks>
-    public static void Add3DCameraController(this Entity entity)
-        => entity.Add(new Basic3DCameraController());
+    public static void Add3DCameraController(this Entity entity, DisplayPosition displayPosition = DisplayPosition.TopRight)
+        => entity.Add(new Basic3DCameraController(displayPosition));
 
     /// <summary>
     /// Adds a <see cref="Basic2DCameraController"/> script to the entity enabling panning and zooming

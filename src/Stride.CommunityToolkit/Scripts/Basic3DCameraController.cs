@@ -16,6 +16,7 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
+    private readonly DisplayPosition _displayPosition = DisplayPosition.TopRight;
     private Vector3 _upVector;
     private Vector3 _translation;
     private Vector3 _defaultCameraPosition;
@@ -25,6 +26,17 @@ public class Basic3DCameraController : SyncScript
 
     private DebugTextPrinter? _instructions;
     private bool _showInstructions = true;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class with the specified display
+    /// position.
+    /// </summary>
+    /// <param name="displayPosition">The position on the screen where the camera controls will be displayed. Defaults to <see cref="DisplayPosition.TopRight"/>.
+    /// </param>
+    public Basic3DCameraController(DisplayPosition displayPosition = DisplayPosition.TopRight)
+    {
+        _displayPosition = displayPosition;
+    }
 
     /// <summary>
     /// Enables gamepad input when <c>true</c>.
@@ -88,7 +100,7 @@ public class Basic3DCameraController : SyncScript
             ]
         };
 
-        _instructions.Initialize();
+        _instructions.Initialize(_displayPosition);
 
         // Default up-direction
         _upVector = Vector3.UnitY;

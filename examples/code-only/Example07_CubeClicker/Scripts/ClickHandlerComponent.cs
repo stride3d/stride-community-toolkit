@@ -1,5 +1,5 @@
 using Example07_CubeClicker.Managers;
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -87,22 +87,19 @@ public class ClickHandlerComponent : AsyncScript
 
     private void ProcessRaycast(MouseButton mouseButton)
     {
-        var hitResult = _camera!.RaycastMouse(this);
-
-        if (hitResult.Succeeded && hitResult.Collider.Entity.Name == HitEntityName)
+        if (_camera!.RaycastMouse(this, 100, out var hitResult) && hitResult.Collidable.Entity.Name == HitEntityName)
         {
             if (mouseButton == MouseButton.Left)
             {
-                AddNewEntity(hitResult.Collider.Entity);
+                AddNewEntity(hitResult.Collidable.Entity);
             }
             else if (mouseButton == MouseButton.Right)
             {
-                RemoveEntity(hitResult.Collider.Entity);
+                RemoveEntity(hitResult.Collidable.Entity);
             }
 
             _gameManager?.HandleClick(mouseButton, GetCubeEntities().ConvertAll(s => s.Transform.Position));
         }
-
     }
 
     private List<Entity> GetCubeEntities()
@@ -116,7 +113,7 @@ public class ClickHandlerComponent : AsyncScript
 
         Console.WriteLine("Adding new entity");
 
-        CreateCube(new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4)));
+        CreateCube(new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4)), Vector3.Zero);
     }
 
     private static void RemoveEntity(Entity entity)
@@ -142,10 +139,11 @@ public class ClickHandlerComponent : AsyncScript
         }
     }
 
-    private void CreateCube(Vector3? position = null)
+    private void CreateCube(Vector3? position = null, Vector3? size = null)
     {
         var entity = Game.Create3DPrimitive(PrimitiveModelType.Cube, new() { EntityName = HitEntityName });
 
+        entity.Transform.Scale = size ?? Vector3.One;
         entity.Transform.Position = position ?? _defaultCubePosition;
         entity.Add(new CubeGrower());
         entity.Scene = Entity.Scene;

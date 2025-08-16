@@ -73,7 +73,7 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var entity = game.Create2DPrimitive(type, (Primitive2DCreationOptions)options);
+        var entity = game.Create2DPrimitive(type, (Primitive2DEntityOptions)options);
 
         entity.AddBepu2DPhysics(type, options);
 
@@ -81,7 +81,7 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Creates a 3D primitive (cube, sphere, plane, etc.) and attaches BEPU physics to it.
+    /// Creates a 3D primitive (cube, sphere, plane, etc.) and attaches Bepu physics to it.
     /// </summary>
     /// <param name="game">The game instance.</param>
     /// <param name="type">Which primitive shape to create.</param>
@@ -94,7 +94,7 @@ public static class GameExtensions
     {
         options ??= new();
 
-        var entity = game.Create3DPrimitive(type, (Primitive3DCreationOptions)options);
+        var entity = game.Create3DPrimitive(type, (Primitive3DEntityOptions)options);
 
         entity.AddBepuPhysics(type, options);
 

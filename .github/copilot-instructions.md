@@ -1,18 +1,25 @@
-# GitHub Copilot Custom Instructions for Stride Community Toolkit
+# Copilot for Stride Community Toolkit
 
-This document provides specific guidance for GitHub Copilot when working on the Stride Community Toolkit repository. It serves as context for understanding the project structure, development workflow, and best practices.
+These repository instructions guide GitHub Copilot (and similar AI assistants) to assist development in the Stride Community Toolkit solution.
+
+## Status & Stability (Preview)
+- The Stride Community Toolkit is currently in **Preview**.
+- Public APIs, namespaces, behaviors, and package layout may change without backward compatibility guarantees until the first stable release.
+- Many extensions and helpers originated from multiple community sources (forum posts, samples, gists, experimental repos). Some code paths have not yet been fully reviewed, optimized, or documented.
+- Treat sparsely documented or unusual APIs as provisional. Prefer improving them (tests + XML docs + consistency) before broad reuse.
+- Prefer well‑documented, core, and recently updated toolkit helpers over unverified examples.
 
 ## Project Overview
-- The Stride Community Toolkit is a comprehensive collection of C# helpers and extensions for the [Stride Game Engine](https://www.stride3d.net/), targeting .NET 8
-- The toolkit provides libraries, code-only examples, and documentation to simplify and accelerate Stride game development
-- The F# or VB.NET code-only examples are only a showcase of the toolkit's capabilities and not a primary focus
-- Uses Stride Game Engine latest version with nullable reference types enabled
-- The repo also includes a Blazor project for one of the examples; prioritize Blazor-specific solutions over Razor Pages or ASP.NET Core MVC
-- The toolkit is designed to be used also in a regular Stride project created from the Game Studio template. The code-only examples are meant to demonstrate how to use the toolkit in a straightforward way without relying on the Game Studio UI.
+- A collection of C# helpers and extensions for the [Stride Game Engine](https://www.stride3d.net/) primarily targeting **.NET 8** (some projects may also multi-target newer frameworks like .NET 9).
+- Provides library projects, code‑only examples, snippet examples, and documentation to simplify Stride game development.
+- F# and VB.NET examples are showcase only (not primary focus).
+- Uses latest Stride version with nullable reference types enabled.
+- Includes a Blazor example project; when web UI comes up, prefer Blazor-centric solutions over Razor Pages or ASP.NET Core MVC.
+- Designed to integrate with a regular Stride Game Studio project; code‑only examples intentionally avoid reliance on the editor UI/assets to demonstrate pure programmatic setup.
 
-## Repository Structure
+## Repository Structure (Summary)
 - `src/`: Core toolkit libraries
-  - **Stride.CommunityToolkit**: Core toolkit
+  - **Stride.CommunityToolkit**: Core library
     - `Engine/`: Game and Entity extensions
     - `Extensions/`: General-purpose extensions
     - `Graphics/`: Graphics utilities
@@ -21,43 +28,43 @@ This document provides specific guidance for GitHub Copilot when working on the 
     - `Physics/`: Physics extensions
     - `Rendering/`: Rendering utilities
     - `Scripts/`: Reusable script components
-  - **Stride.CommunityToolkit.Bepu**: Bepu Physics integration
-  - **Stride.CommunityToolkit.Bullet**: Bullet Physics integration  
+  - **Stride.CommunityToolkit.Bepu**: Bepu Physics integration (primary physics integration)
+  - **Stride.CommunityToolkit.Bullet**: Bullet Physics integration (legacy / transitional physics, pending deprecation)  
   - **Stride.CommunityToolkit.DebugShapes**: Debug visualization tools
   - **Stride.CommunityToolkit.ImGui**: ImGui integration
   - **Stride.CommunityToolkit.Skyboxes**: Skybox utilities
   - **Stride.CommunityToolkit.Windows**: Windows-specific features
-- `examples/`: Code-only and snippet-based example projects in C#, F#, and VB
-- `docs/`: Documentation source (DocFX), including manual, API reference, and contributing guides
-- `.github/`: CI/CD workflows, release, and configuration files
+- `examples/`: Code-only & snippet example projects (C#, F#, VB)
+- `docs/`: DocFX sources (manual, API reference, contributing)
+- `.github/`: GitHub workflows, release metadata, automation & this instruction file
 
-## Stride Game Engine Context
-- **Entity-Component-System (ECS)**: Entity containers hold components (TransformComponent, ModelComponent, etc.)
-- **Scene Management**: Entities must be added to scenes to be processed
-- **Key Components**: Transform (position/rotation/scale), Model (3D mesh), Camera, Rigidbody (physics), Script (behavior)
-- **Physics Engines**: Bepu Physics is the primary 3D physics engine, and Bullet Physics is also supported till it is deprecated
+## Stride Engine Context (Quick Reminders)
+- ECS: Entities aggregate Components (Transform, Model, Camera, Rigidbody, Scripts, etc.).
+- Entities must be added to a Scene graph to be processed.
+- Physics: Prefer Bepu components; Bullet retained only for transition/testing. Avoid mixing both on the same entity.
+- Core components commonly manipulated: Transform (position/rotation/scale), Camera, Rigidbody, Script logic.
 
 ## Toolkit Patterns
-
 ### Extension Method Pattern
-Extensions follow consistent naming and fluent API design:
 ```csharp
-// Typical extension methods that support method chaining
 entity.Add3DCameraController()
       .AddGizmo(graphicsDevice)
       .SetPosition(Vector3.UnitY);
 ```
+Guidelines:
+- Return the modified instance (fluent chaining) where it’s natural.
+- Validate inputs early (`ArgumentNullException.ThrowIfNull`).
+- Avoid burying heavy allocations or long-running work in simple-sounding extension names.
 
 ### Code-Only Scene Creation
-The toolkit showcases programmatic game development:
 ```csharp
 using var game = new Game();
 
 game.Run(start: (Scene rootScene) =>
 {
-    game.SetupBase3DScene(); // Creates camera, lighting, ground
+    game.SetupBase3DScene(); // Camera, lighting, ground
     game.AddSkybox();
-    
+
     var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
@@ -65,57 +72,87 @@ game.Run(start: (Scene rootScene) =>
 ```
 
 ## Coding & Contribution Guidelines
-- **Prefer latest C# and .NET features** for code including nullable reference types, implicit usings, file-scoped namespaces
-- **XML Documentation**: All public APIs must have comprehensive XML documentation with summary, param, and example tags
-- **Extension Method Conventions**: Use PascalCase for classes/methods, camelCase for parameters, enable method chaining where appropriate
-- **Validation**: Use `ArgumentNullException.ThrowIfNull()` for parameter validation
-- **Follow the naming convention**: `Stride.CommunityToolkit.<LibraryName>` for new libraries
-- **Add new libraries** to documentation and CI/CD workflows as described in `docs/contributing/toolkit/library-project.md`
-- **For examples**, ensure discoverability and update the relevant documentation includes
-- **Use .NET 8** as the default target unless otherwise specified
-- **Prefer concise, well-documented, and idiomatic C#** code
-- **Do not use `#region` directives**; prefer clear, self-documenting code
-- **When refactoring**, don't create multiple classes in a single file; keep each class in its own file
+- Use latest C# features (file-scoped namespaces, target-typed `new`, pattern matching, spans where beneficial).
+- Keep nullable reference warnings at zero.
+- Public APIs: complete XML docs (`<summary>`, `<param>`, `<returns>`, `<example>` when useful). Mark experimental with a note: “STATUS: Preview – subject to change”.
+- Naming: `Stride.CommunityToolkit.<LibraryName>` for new libs; PascalCase for types/methods; camelCase for parameters.
+- Terminology / capitalization: Use “Bepu” (capital B only) in identifiers and XML docs; never “BEPU” or “bepu”. Use “Bullet” (capital B) for Bullet physics.
+- One public type per file; avoid unrelated multi-class files.
+- No `#region` blocks; rely on clear structure.
+- Validation: `ArgumentNullException.ThrowIfNull()`; meaningful exception messages for invalid states.
+- Suggestion preference order:
+  1. Existing reviewed toolkit extension/helper
+  2. New small, composable extension (documented) 
+  3. Direct Stride API usage
+  4. External snippet (must justify + ensure license compatibility)
+- Performance:
+  - Cache frequently used component references inside update loops.
+  - Avoid per-frame allocations (consider pooling / struct patterns where appropriate).
+  - Dispose GPU/graphics resources deterministically (`using` / `Dispose`).
+- Threading: Mutations to scene graph, entities, components, graphics resources must occur on main thread.
+- Physics: Don’t combine Bepu and Bullet physics components on same entity.
+- Shaders: After adding/removing/changing shader properties, manually regenerate the associated `*.cs` file (AI should remind contributors).
+- Experimental / provisional APIs: consider an `[Experimental]` attribute (future) or note in summary.
+- Tests: Keep deterministic; avoid relying on real-time frame counts.
 
-## Documentation
-- Documentation is generated with DocFX. All docs are in the `docs/` folder
-- Update documentation and API references when adding or changing features
-- See `docs/contributing/documentation/index.md` for DocFX usage
+## Documentation Guidelines
+- Docs generated with DocFX from `docs/`.
+- Update conceptual docs + XML comments when changing public APIs.
+- New libraries: update navigation, TOC, and contributing guides (`docs/contributing/toolkit/library-project.md`).
+- Provide concise, runnable examples; reduce noise/boilerplate.
 
-## Special Notes
-- **Use and reference the latest .NET features** where possible
-- **When suggesting code**, prefer toolkit helpers and extensions over raw Stride API usage
-- **For new features**, update this file as the project evolves
-- **Prioritize Blazor-specific solutions** when relevant
-- **Performance**: Cache component references, avoid allocations in update loops, dispose graphics resources properly
-- **Threading**: Most Stride operations must occur on the main thread
-- **Validation**: Always validate input parameters and provide meaningful error messages
-- **Shaders**: When you make changes to shaders, adding, updating or removing properties, ask the user to regenerate shader `*.cs` file manually otherwise the changes will not be reflected in the code
+## Verification & Provenance
+- Imported code from external/community sources must have:
+  - Compatible license (or original author permission).
+  - Normalized naming/patterns to match toolkit style.
+  - XML docs added or improved.
+- Refactor legacy “static manager” style toward extension-based or instance-centric patterns.
+- Mark unclear logic or magic numbers with `// TODO:` plus an issue link.
 
-## Common Code-Only Example Usage Patterns
+## Common Code-Only Example Pattern
 ```csharp
-// Typical 3D scene setup with toolkit extensions
 using var game = new Game();
+
 game.Run(start: (Scene rootScene) =>
 {
-    game.SetupBase3DScene(); // Camera, lighting, ground
+    game.SetupBase3DScene();
     game.AddSkybox();
-    
-    // Create primitives with physics
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere);
-    entity.AddRigidBody(RigidBodyTypes.Dynamic);
+
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere)
+                     .AddRigidBody(RigidBodyTypes.Dynamic);
     entity.Transform.Position = new Vector3(0, 10, 0);
     entity.Scene = rootScene;
 });
-
 ```
 
+## AI Assistance Guidance
+- Improve or extend existing helpers instead of duplicating similar logic.
+- Do NOT introduce unrelated frameworks/patterns (e.g., Unity managers, large DI containers, Rx) unless explicitly requested.
+- Highlight potential breaking changes when modifying public APIs (Preview status).
+- Prefer Bepu examples over Bullet unless addressing migration or legacy parity.
+- Remind about shader code regeneration if shaders are touched.
+- For Blazor content: keep solutions Blazor-appropriate; avoid server-only MVC/Razor patterns unless necessary.
+- Avoid speculative APIs; ground suggestions in existing patterns.
+
 ## Maintenance
+> [!IMPORTANT]
+> Keep this document current (architectural shifts, new subsystems, deprecations) so AI assistance stays accurate.
 
-> [!IMPORTANT]  
-> **Note to developers:** Please keep this document up to date as the project evolves. Update these instructions whenever you introduce new technologies, make architectural changes, or establish important new conventions. This ensures GitHub Copilot continues to provide relevant and accurate assistance.
+- Update on structural/convention changes.
+- Prune outdated or redundant guidelines.
+- Add new exceptions/patterns explicitly.
+- Revisit after introducing new physics systems, rendering pipelines, or scripting paradigms.
 
-- Review and update `.github/copilot-instructions.md` whenever the solution or project structure changes
-- Document any new patterns, best practices, or exceptions that Copilot should be aware of
-- Remove outdated guidance and clarify ambiguous instructions as needed
-- Refer to the [GitHub Copilot documentation](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot) for details on customizing Copilot for your repository
+## Quick Checklist (Before Merging)
+- [ ] XML docs complete / updated
+- [ ] Nullability warnings resolved
+- [ ] No unnecessary allocations in hot paths
+- [ ] Fluent extensions return `this` where appropriate
+- [ ] Examples updated (if API changes)
+- [ ] Conceptual + API docs updated
+- [ ] Preview / experimental status noted (if relevant)
+- [ ] Shader regeneration reminder (if shaders changed)
+- [ ] Provenance clarified for imported code
+
+---
+If something here becomes outdated or ambiguous, update it promptly—concise, accurate guidance improves AI output quality and reduces maintenance overhead.

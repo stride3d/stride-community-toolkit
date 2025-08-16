@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Stride.CommunityToolkit.Examples.Providers;
 
@@ -7,100 +9,242 @@ public class ExampleProvider
     private int _index;
     private readonly string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-    public List<Example> GetExamples() =>
-    [
-        CreateExample("Basic Example - Capsule with rigid body",
-            nameof(Example01_Basic3DScene)),
+    // Configuration (adjust as desired)
+    private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only";
+    private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
+    private const string ExampleTitleElement = "ExampleTitle";
+    private const string ExampleOrderElement = "ExampleOrder";
+    private static readonly Regex CommentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        CreateExample("Basic Example - Capsule with rigid body in F#",
-            nameof(Example01_Basic3DScene_FSharp)),
+    // Warning filtering configuration
+    private const bool FilterWarnings = true;
+    private const bool FilterOnlyShaderWarnings = true;
+    private static readonly Regex GenericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex ShaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        CreateExample("Basic Example - Capsule with rigid body in Visual Basic",
-            nameof(Example01_Basic3DScene_VBasic)),
+    // Blank line handling
+    private const bool CollapseConsecutiveBlankLines = true;
+    private const bool RemoveBlankLinesAfterSuppressedBlock = true;
 
-        CreateExample("Basic Example - Mesh Line",
-            nameof(Example01_Basic3DScene_MeshLine)),
+    private static bool BypassFiltering =>
+        Environment.GetEnvironmentVariable("SHOW_WARNINGS") is string v &&
+        (v.Equals("1") || v.Equals("true", StringComparison.OrdinalIgnoreCase));
 
-        CreateExample("Basic Example - Material",
-            nameof(Example01_Material)),
+    // Console state
+    private readonly object _consoleLock = new();
+    private bool _lastPrintedWasBlank;
+    private bool _justSuppressed; // set when we suppressed at least one line since last printed real line
 
-        CreateExample("Basic Example - Give me a cube",
-            nameof(Example02_GiveMeACube)),
+    private sealed record ExampleProjectMeta(
+        string Id,
+        string Title,
+        string ProjectFile,
+        int? Order,
+        string? Category
+    );
 
-        CreateExample("Basic Example - Stride UI - Canvas - Capsule with rigid body and Window",
-            nameof(Example03_StrideUI_CapsuleAndWindow)),
+    public List<Example> GetExamples()
+    {
+        var metas = DiscoverExamples();
 
-        CreateExample("Basic Example - Stride UI - Grid - Save and load game state",
-            nameof(Example07_CubeClicker)),
+        var ordered = metas
+            .OrderBy(m => m.Order.HasValue ? 0 : 1)
+            .ThenBy(m => m.Order)
+            .ThenBy(m => m.Title, StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
-        CreateExample("Basic Example - Procedural Geometry",
-            nameof(Example05_ProceduralGeometry)),
+        var list = new List<Example>(ordered.Count + 1);
 
-        CreateExample("Basic Example - Cylinder Mesh",
-            nameof(Example05_CylinderMesh)),
+        foreach (var meta in ordered)
+            list.Add(new Example(GetIndex(), meta.Title, () => LaunchWithDotNet(meta.ProjectFile)));
 
-        CreateExample("Basic Example - Partial Torus",
-            nameof(Example05_PartialTorus)),
+        list.Add(new Example("Q", "Quit", () => Environment.Exit(0)));
 
-        CreateExample("Basic Example - Partial Torus in F#",
-            nameof(Example05_PartialTorus_FSharp)),
+        return list;
+    }
 
-        CreateExample("Basic Example - Particles",
-            nameof(Example12_Particles)),
+    private IEnumerable<ExampleProjectMeta> DiscoverExamples()
+    {
+        var root = Path.GetFullPath(Path.Combine(_baseDirectory, ExamplesRootRelative));
+        if (!Directory.Exists(root)) yield break;
 
-        CreateExample("Basic Example - Raycast",
-            nameof(Example14_Raycast)),
+        foreach (var pattern in ProjectPatterns)
+        {
+            foreach (var proj in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
+            {
+                ExampleProjectMeta? meta = null;
+                try { meta = CreateMetaFromProject(proj); }
+                catch { /* ignore */ }
+                if (meta is not null)
+                    yield return meta;
+            }
+        }
+    }
 
-        CreateExample("Basic Example - CollisionGroup",
-            nameof(Example16_CollisionGroup)),
+    private ExampleProjectMeta CreateMetaFromProject(string projectFile)
+    {
+        var doc = XDocument.Load(projectFile, LoadOptions.None);
+        var root = doc.Root ?? throw new InvalidOperationException("Invalid project XML.");
+        var ns = root.Name.Namespace;
 
-        CreateExample("Basic Example - CollisionLayer",
-            nameof(Example16_CollisionLayer)),
+        string? GetProp(string name) =>
+            root.Elements(ns + "PropertyGroup")
+                .Elements()
+                .FirstOrDefault(e => e.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                ?.Value?.Trim();
 
-        CreateExample("Advance Example - Simple Constraint",
-            nameof(Example15_Constraint_Simple)),
+        var explicitTitle = GetProp(ExampleTitleElement) ?? GetProp("Title");
+        var assemblyName = GetProp("AssemblyName");
+        var category = GetProp("ExampleCategory");
+        var orderRaw = GetProp(ExampleOrderElement);
+        int? order = int.TryParse(orderRaw, out var o) ? o : null;
 
-        CreateExample("Advance Example - Various Constraints",
-            nameof(Example15_Constraint)),
+        string title = explicitTitle
+                       ?? TryParseProgramCommentTitle(projectFile)
+                       ?? assemblyName
+                       ?? Path.GetFileNameWithoutExtension(projectFile);
 
-        CreateExample("Advance Example - Myra UI - Draggable Window, GetService()",
-            nameof(Example04_MyraUI)),
+        var id = assemblyName ?? Path.GetFileNameWithoutExtension(projectFile);
+        return new ExampleProjectMeta(id, title, projectFile, order, category);
+    }
 
-        CreateExample("Advance Example - Stride UI - Draggable Window",
-            nameof(Example10_StrideUI_DragAndDrop)),
+    private string? TryParseProgramCommentTitle(string projectFile)
+    {
+        var dir = Path.GetDirectoryName(projectFile);
+        if (dir is null) return null;
 
-        CreateExample("Advance Example - Image Processing",
-            nameof(Example06_ImageProcessing)),
+        var programFile = Directory.EnumerateFiles(dir, "Program.*", SearchOption.TopDirectoryOnly).FirstOrDefault();
+        if (programFile is null) return null;
 
-        CreateExample("Advance Example - Root Renderer Shader",
-            nameof(Example13_RootRendererShader)),
+        try
+        {
+            foreach (var line in File.ReadLines(programFile))
+            {
+                var m = CommentTitleRegex.Match(line);
+                if (m.Success)
+                    return m.Groups[1].Value.Trim();
+            }
+        }
+        catch { /* ignore */ }
 
-        CreateExample("Other - Debug Shapes",
-            nameof(Example08_DebugShapes)),
+        return null;
+    }
 
-        CreateExample("Other - Renderer",
-            nameof(Example09_Renderer)),
+    private void LaunchWithDotNet(string projectFile)
+    {
+        var psi = new ProcessStartInfo
+        {
+            FileName = "dotnet",
+            Arguments = $"run --project \"{projectFile}\"",
+            WorkingDirectory = Path.GetDirectoryName(projectFile) ?? Environment.CurrentDirectory,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
+        };
 
-        new Example("Q", "Quit", () => Environment.Exit(0))
-    ];
+        var process = Process.Start(psi);
+        if (process == null) return;
 
-    private Example CreateExample(string title, string projectName)
-        => new(GetIndex(), title, () => StartProcess(projectName));
+        _ = Task.Run(async () => await StreamProcessOutput(process));
+    }
+
+    private async Task StreamProcessOutput(Process process)
+    {
+        // Process stdout & stderr concurrently
+        var stdout = Task.Run(() => ReadStreamLines(process.StandardOutput, isError: false));
+        var stderr = Task.Run(() => ReadStreamLines(process.StandardError, isError: true));
+        await Task.WhenAll(stdout, stderr);
+    }
+
+    private void ReadStreamLines(StreamReader reader, bool isError)
+    {
+        while (true)
+        {
+            string? line;
+            try { line = reader.ReadLine(); }
+            catch { break; }
+            if (line is null) break;
+
+            if (ShouldSuppress(line))
+            {
+                _justSuppressed = true;
+                continue;
+            }
+
+            // Handle blank lines intelligently
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                // Remove blank line if it directly follows a suppressed block
+                if (RemoveBlankLinesAfterSuppressedBlock && _justSuppressed)
+                {
+                    continue;
+                }
+
+                lock (_consoleLock)
+                {
+                    if (CollapseConsecutiveBlankLines && _lastPrintedWasBlank)
+                    {
+                        // skip additional blank line
+                        return;
+                    }
+
+                    Console.WriteLine();
+                    _lastPrintedWasBlank = true;
+                    _justSuppressed = false;
+                }
+
+                continue;
+            }
+
+            WriteLine(line, isError);
+        }
+    }
+
+    private bool ShouldSuppress(string line)
+    {
+        if (!FilterWarnings || BypassFiltering)
+            return false;
+
+        if (!GenericWarningRegex.IsMatch(line))
+            return false; // Not a warning
+
+        if (!FilterOnlyShaderWarnings)
+            return true;
+
+        // Only suppress if it looks shader/effect related
+        return ShaderWarningRegex.IsMatch(line);
+    }
+
+    private void WriteLine(string line, bool isError)
+    {
+        lock (_consoleLock)
+        {
+            _lastPrintedWasBlank = false;
+            _justSuppressed = false;
+
+            if (GenericWarningRegex.IsMatch(line))
+            {
+                var prev = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(line);
+                Console.ForegroundColor = prev;
+                return;
+            }
+
+            if (isError)
+            {
+                var prev = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Error.WriteLine(line);
+                Console.ForegroundColor = prev;
+                return;
+            }
+
+            Console.WriteLine(line);
+        }
+    }
 
     private string GetIndex() => Interlocked.Increment(ref _index).ToString();
-
-    private void StartProcess(string projectName)
-    {
-        var exePath = Path.Combine(_baseDirectory, $"{projectName}.exe");
-        var workingDirectory = Path.GetDirectoryName(exePath);
-
-        Process.Start(new ProcessStartInfo
-        {
-            FileName = exePath,
-            WorkingDirectory = workingDirectory,
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        });
-    }
 }
