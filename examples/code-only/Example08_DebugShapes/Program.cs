@@ -2,6 +2,7 @@ using Example08_DebugShapes.Scripts;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 
@@ -18,11 +19,12 @@ void Start(Scene rootScene)
 void SetupBaseScene()
 {
     game.AddGraphicsCompositor();
-    game.Add3DCamera().Add3DCameraController();
+    game.Add3DCamera().Add3DCameraController(displayPosition: DisplayPosition.BottomRight);
     game.AddDirectionalLight();
     game.AddSkybox();
     game.Add3DGround();
     game.AddDebugShapes();
+    game.AddProfiler();
 }
 
 void AddDebugComponent(Scene scene)
