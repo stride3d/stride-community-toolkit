@@ -21,6 +21,17 @@ public class Box2DStrideBridge
         _world = world;
     }
 
+    public B2BodyId CreateBody(Vector3 position, B2BodyType type)
+    {
+        var bodyDef = b2DefaultBodyDef();
+        bodyDef.type = type;
+        bodyDef.position = new B2Vec2(position.X, position.Y);
+
+        var bodyId = b2CreateBody(_world.WorldId, ref bodyDef);
+
+        return bodyId;
+    }
+
     public B2BodyId CreateBody(Entity entity, Vector3 position, B2BodyType type)
     {
         var bodyDef = b2DefaultBodyDef();

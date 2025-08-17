@@ -24,49 +24,53 @@ public class UiHelper
     /// </summary>
     /// <param name="cubeCount">Current number of physics objects</param>
     /// <param name="simulation">The physics simulation for additional stats</param>
-    public void RenderNavigation(int? cubeCount = 0, Box2DSimulation? simulation = null)
+    public void RenderNavigation(int? cubeCount = 0, int totalShapesCreated = 0, Box2DSimulation? simulation = null)
     {
         var yOffset = GameConfig.DefaultDebugY;
-        
+
         // Display title
-        _game.DebugTextSystem.Print("Box2D Physics Example", 
+        _game.DebugTextSystem.Print("Box2D Physics Example",
             new Int2(GameConfig.DefaultDebugX, yOffset), Color.Yellow);
         yOffset += GameConfig.HeaderSpacing;
 
         // Display physics stats
-        RenderPhysicsStats(yOffset, cubeCount, simulation);
+        RenderPhysicsStats(yOffset, cubeCount, totalShapesCreated, simulation);
         yOffset += GameConfig.HeaderSpacing + (4 * GameConfig.DefaultSpacing);
 
         // Display controls
-        RenderControls(yOffset);
+        RenderControls(yOffset + 10);
     }
 
     /// <summary>
     /// Renders physics-related statistics
     /// </summary>
-    private void RenderPhysicsStats(int yOffset, int? cubeCount, Box2DSimulation? simulation)
+    private void RenderPhysicsStats(int yOffset, int? cubeCount, int totalShapesCreated, Box2DSimulation? simulation)
     {
-        _game.DebugTextSystem.Print("Physics Stats:", 
+        _game.DebugTextSystem.Print("Physics Stats:",
             new Int2(GameConfig.DefaultDebugX, yOffset), Color.Cyan);
         yOffset += GameConfig.DefaultSpacing;
 
-        _game.DebugTextSystem.Print($"Objects: {cubeCount}", 
+        _game.DebugTextSystem.Print($"Objects: {cubeCount}",
+            new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
+        yOffset += GameConfig.DefaultSpacing;
+
+        _game.DebugTextSystem.Print($"Total Created: {totalShapesCreated}",
             new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
         yOffset += GameConfig.DefaultSpacing;
 
         if (simulation != null)
         {
-            _game.DebugTextSystem.Print($"Gravity: {simulation.Gravity}", 
+            _game.DebugTextSystem.Print($"Gravity: {simulation.Gravity}",
                 new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
             yOffset += GameConfig.DefaultSpacing;
 
-            _game.DebugTextSystem.Print($"Time Scale: {simulation.TimeScale:F2}", 
+            _game.DebugTextSystem.Print($"Time Scale: {simulation.TimeScale:F2}",
                 new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
             yOffset += GameConfig.DefaultSpacing;
 
             var enabledText = simulation.Enabled ? "Enabled" : "Disabled";
             var enabledColor = simulation.Enabled ? Color.Green : Color.Red;
-            _game.DebugTextSystem.Print($"Simulation: {enabledText}", 
+            _game.DebugTextSystem.Print($"Simulation: {enabledText}",
                 new Int2(GameConfig.DefaultDebugX, yOffset), enabledColor);
         }
     }
@@ -76,13 +80,13 @@ public class UiHelper
     /// </summary>
     private void RenderControls(int yOffset)
     {
-        _game.DebugTextSystem.Print("Controls:", 
+        _game.DebugTextSystem.Print("Controls:",
             new Int2(GameConfig.DefaultDebugX, yOffset), Color.Cyan);
         yOffset += GameConfig.DefaultSpacing;
 
         foreach (var command in _commands)
         {
-            _game.DebugTextSystem.Print(command.Text, 
+            _game.DebugTextSystem.Print(command.Text,
                 new Int2(GameConfig.DefaultDebugX, yOffset), command.Color);
             yOffset += GameConfig.DefaultSpacing;
         }
@@ -96,8 +100,8 @@ public class UiHelper
     public void RenderStatusMessage(string message, Color color = default)
     {
         if (color == default) color = Color.White;
-        
-        _game.DebugTextSystem.Print(message, 
+
+        _game.DebugTextSystem.Print(message,
             new Int2(GameConfig.DefaultDebugX, GameConfig.DefaultDebugY - 50), color);
     }
 

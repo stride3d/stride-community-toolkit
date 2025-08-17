@@ -78,6 +78,9 @@ public class Box2DSimulation : IDisposable
     public B2BodyId CreateDynamicBody(Entity entity, Vector3 position)
         => _bridge.CreateBody(entity, position, B2BodyType.b2_dynamicBody);
 
+    public B2BodyId CreateDynamicBody(Vector3 position)
+        => _bridge.CreateBody(position, B2BodyType.b2_dynamicBody);
+
     /// <summary>Creates a kinematic body associated with the given entity at a world position.</summary>
     public B2BodyId CreateKinematicBody(Entity entity, Vector3 position)
         => _bridge.CreateBody(entity, position, B2BodyType.b2_kinematicBody);
