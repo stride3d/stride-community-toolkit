@@ -192,7 +192,6 @@ public class ShapeUpdater : SyncScript
         {
             Dispatcher.For(0, currentNumPrimitives, i =>
             {
-
                 ref var position = ref primitivePositions.Items[i];
                 ref var velocity = ref primitiveVelocities.Items[i];
                 ref var rotVelocity = ref primitiveRotVelocities.Items[i];

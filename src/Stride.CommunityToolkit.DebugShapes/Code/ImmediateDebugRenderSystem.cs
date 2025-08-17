@@ -314,11 +314,28 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         PushMessage(ref msg);
     }
 
+    /// <summary>
+    /// Draws a cube in the scene with the specified position, size, rotation, color, and rendering options.
+    /// </summary>
+    /// <remarks>This method allows for flexible rendering of cubes in the scene, with options for wireframe
+    /// or solid rendering, depth testing, and custom colors. Use this method to visualize objects, debug spatial
+    /// layouts, or create temporary visual markers.</remarks>
+    /// <param name="start">The starting position of the cube, representing its center.</param>
+    /// <param name="size">The dimensions of the cube, specified as a <see cref="Vector3"/>.</param>
+    /// <param name="rotation">The rotation of the cube, specified as a <see cref="Quaternion"/>. Defaults to no rotation.</param>
+    /// <param name="color">The color of the cube, specified as a <see cref="Color"/>. Defaults to the primitive color.</param>
+    /// <param name="duration">The duration, in seconds, for which the cube will remain visible. Defaults to 0.0, meaning the cube is rendered
+    /// for a single frame.</param>
+    /// <param name="depthTest">A value indicating whether the cube should be rendered with depth testing. Set to <see langword="true"/> to
+    /// enable depth testing; otherwise, <see langword="false"/>. Defaults to <see langword="true"/>.</param>
+    /// <param name="solid">A value indicating whether the cube should be rendered as a solid shape. Set to <see langword="true"/> for solid
+    /// rendering; otherwise, <see langword="false"/> for wireframe rendering. Defaults to <see langword="false"/>.</param>
     public void DrawCube(Vector3 start, Vector3 size, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
         var cmd = new DebugDrawCube { Position = start, End = start + size, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
+
         PushMessage(ref msg);
     }
 
