@@ -3,6 +3,9 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        <ExampleTitle>Basic Example - Capsule with rigid body - F#</ExampleTitle>
+        <ExampleOrder>300</ExampleOrder>
+        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

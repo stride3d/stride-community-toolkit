@@ -6,8 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <ExampleTitle>Advance Example - Debug Shapes Usage</ExampleTitle>
-        <ExampleOrder>10</ExampleOrder>
-        <ExampleCategory>Advance</ExampleCategory>
+        <ExampleOrder>10000</ExampleOrder>
+        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

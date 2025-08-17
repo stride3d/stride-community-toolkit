@@ -6,8 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <ExampleTitle>Basic Example - Capsule with rigid body</ExampleTitle>
-        <ExampleOrder>10</ExampleOrder>
-        <ExampleCategory>Basic</ExampleCategory>
+        <ExampleOrder>100</ExampleOrder>
+        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

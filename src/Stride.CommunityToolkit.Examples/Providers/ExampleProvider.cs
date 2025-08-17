@@ -4,23 +4,23 @@ using System.Xml.Linq;
 
 namespace Stride.CommunityToolkit.Examples.Providers;
 
-public class ExampleProvider
+public partial class ExampleProvider
 {
     private int _index;
     private readonly string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
     // Configuration (adjust as desired)
     private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only";
-    private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
+    private static readonly string[] _projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
     private const string ExampleTitleElement = "ExampleTitle";
     private const string ExampleOrderElement = "ExampleOrder";
-    private static readonly Regex CommentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex _commentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     // Warning filtering configuration
     private const bool FilterWarnings = true;
     private const bool FilterOnlyShaderWarnings = true;
-    private static readonly Regex GenericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    private static readonly Regex ShaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
+    private static readonly Regex _genericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex _shaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     // Blank line handling
@@ -36,19 +36,12 @@ public class ExampleProvider
     private bool _lastPrintedWasBlank;
     private bool _justSuppressed; // set when we suppressed at least one line since last printed real line
 
-    private sealed record ExampleProjectMeta(
-        string Id,
-        string Title,
-        string ProjectFile,
-        int? Order,
-        string? Category
-    );
-
     public List<Example> GetExamples()
     {
-        var metas = DiscoverExamples();
+        var exampleProjects = DiscoverExamples();
 
-        var ordered = metas
+        var ordered = exampleProjects
+            .OrderBy(m => m.Category)
             .OrderBy(m => m.Order.HasValue ? 0 : 1)
             .ThenBy(m => m.Order)
             .ThenBy(m => m.Title, StringComparer.OrdinalIgnoreCase)
@@ -69,35 +62,39 @@ public class ExampleProvider
         var root = Path.GetFullPath(Path.Combine(_baseDirectory, ExamplesRootRelative));
         if (!Directory.Exists(root)) yield break;
 
-        foreach (var pattern in ProjectPatterns)
+        foreach (var pattern in _projectPatterns)
         {
-            foreach (var proj in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
+            foreach (var project in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
             {
                 ExampleProjectMeta? meta = null;
-                try { meta = CreateMetaFromProject(proj); }
+
+                try { meta = CreateMetaFromProject(project); }
                 catch { /* ignore */ }
+
                 if (meta is not null)
+                {
                     yield return meta;
+                }
             }
         }
     }
 
-    private ExampleProjectMeta CreateMetaFromProject(string projectFile)
+    private ExampleProjectMeta? CreateMetaFromProject(string projectFile)
     {
         var doc = XDocument.Load(projectFile, LoadOptions.None);
         var root = doc.Root ?? throw new InvalidOperationException("Invalid project XML.");
         var ns = root.Name.Namespace;
 
-        string? GetProp(string name) =>
-            root.Elements(ns + "PropertyGroup")
-                .Elements()
-                .FirstOrDefault(e => e.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase))
-                ?.Value?.Trim();
-
         var explicitTitle = GetProp(ExampleTitleElement) ?? GetProp("Title");
         var assemblyName = GetProp("AssemblyName");
         var category = GetProp("ExampleCategory");
         var orderRaw = GetProp(ExampleOrderElement);
+        var enabledRaw = GetProp("ExampleEnabled");
+
+        bool? enabled = bool.TryParse(enabledRaw, out var e) && e;
+
+        if (enabled == false && enabledRaw != null) return null;
+
         int? order = int.TryParse(orderRaw, out var o) ? o : null;
 
         string title = explicitTitle
@@ -106,7 +103,14 @@ public class ExampleProvider
                        ?? Path.GetFileNameWithoutExtension(projectFile);
 
         var id = assemblyName ?? Path.GetFileNameWithoutExtension(projectFile);
+
         return new ExampleProjectMeta(id, title, projectFile, order, category);
+
+        string? GetProp(string name) =>
+            root.Elements(ns + "PropertyGroup")
+                .Elements()
+                .FirstOrDefault(e => e.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                ?.Value?.Trim();
     }
 
     private string? TryParseProgramCommentTitle(string projectFile)
@@ -121,7 +125,7 @@ public class ExampleProvider
         {
             foreach (var line in File.ReadLines(programFile))
             {
-                var m = CommentTitleRegex.Match(line);
+                var m = _commentTitleRegex.Match(line);
                 if (m.Success)
                     return m.Groups[1].Value.Trim();
             }
@@ -207,14 +211,14 @@ public class ExampleProvider
         if (!FilterWarnings || BypassFiltering)
             return false;
 
-        if (!GenericWarningRegex.IsMatch(line))
+        if (!_genericWarningRegex.IsMatch(line))
             return false; // Not a warning
 
         if (!FilterOnlyShaderWarnings)
             return true;
 
         // Only suppress if it looks shader/effect related
-        return ShaderWarningRegex.IsMatch(line);
+        return _shaderWarningRegex.IsMatch(line);
     }
 
     private void WriteLine(string line, bool isError)
@@ -224,7 +228,7 @@ public class ExampleProvider
             _lastPrintedWasBlank = false;
             _justSuppressed = false;
 
-            if (GenericWarningRegex.IsMatch(line))
+            if (_genericWarningRegex.IsMatch(line))
             {
                 var prev = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Yellow;

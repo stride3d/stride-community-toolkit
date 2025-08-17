@@ -5,6 +5,10 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <ExampleTitle>Advance Example - Various Constraints</ExampleTitle>
+        <ExampleOrder>15100</ExampleOrder>
+        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

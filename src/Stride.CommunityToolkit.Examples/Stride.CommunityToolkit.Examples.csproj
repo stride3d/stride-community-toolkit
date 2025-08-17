@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene\Example01_Basic3DScene.csproj" />
+        <!--<ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene\Example01_Basic3DScene.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene_FSharp\Example01_Basic3DScene_FSharp.fsproj" />
         <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene_MeshLine\Example01_Basic3DScene_MeshLine.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example01_Basic3DScene_VBasic\Example01_Basic3DScene_VBasic.vbproj" />
@@ -37,7 +37,7 @@
         <ProjectReference Include="..\..\examples\code-only\Example15_Constraint\Example15_Constraint.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example15_Constraint_Simple\Example15_Constraint_Simple.csproj" />
         <ProjectReference Include="..\..\examples\code-only\Example16_CollisionGroup\Example16_CollisionGroup.csproj" />
-        <ProjectReference Include="..\..\examples\code-only\Example16_CollisionLayer\Example16_CollisionLayer.csproj" />
+        <ProjectReference Include="..\..\examples\code-only\Example16_CollisionLayer\Example16_CollisionLayer.csproj" />-->
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
