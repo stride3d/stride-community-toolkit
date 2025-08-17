@@ -12,8 +12,16 @@ using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
+/// <summary>
+/// Provides functionality for rendering immediate debug primitives such as lines, shapes, and other geometric objects.
+/// </summary>
+/// <remarks>This class is designed to render debug primitives directly to the screen, bypassing typical rendering
+/// pipelines. It supports various geometric shapes, including quads, circles, spheres, cubes, capsules, cylinders,
+/// cones, and lines. The rendering process is optimized for debugging purposes, allowing developers to visualize
+/// objects in real-time.</remarks>
 public class ImmediateDebugRenderFeature : RootRenderFeature
 {
+    /// <inheritdoc/>
     public override Type SupportedRenderObjectType => typeof(ImmediateDebugRenderObject);
 
     internal struct Primitives
@@ -298,6 +306,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         SortKey = 0xFF; // render last! .. or things without depth testing in the opaque stage will have the background rendered over them
     }
 
+    /// <inheritdoc/>
     protected override void InitializeCore()
     {
         var device = Context.GraphicsDevice;
@@ -427,6 +436,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         lineVertexBuffer = Buffer.Vertex.New(device, lineVertices.Items, GraphicsResourceUsage.Dynamic);
     }
 
+    /// <inheritdoc/>
     public override void Extract()
     {
         void ProcessRenderables(FastList<Renderable> renderables, ref Primitives offsets)
@@ -627,6 +637,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         }
     }
 
+    /// <inheritdoc/>
     public override void Prepare(RenderDrawContext context)
     {
         transforms.Resize(instances.Count, true);
@@ -817,12 +828,14 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         }
     }
 
+    /// <inheritdoc/>
     public override void Flush(RenderDrawContext context)
     {
     }
 
     /* FIXME: is there a nicer way to handle dispose, some xenko idiom? */
 
+    /// <inheritdoc/>
     public override void Unload()
     {
         base.Unload();

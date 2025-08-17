@@ -14,6 +14,9 @@ using Sphere = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeat
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
+/// <summary>
+/// Represents a render object for immediate debug rendering, allowing the addition of various shapes and lines
+/// </summary>
 public class ImmediateDebugRenderObject : RenderObject
 {
     /* messages */

@@ -11,6 +11,9 @@ using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
+/// <summary>
+/// Provides a system for immediate debug rendering of various shapes and lines in the game world.
+/// </summary>
 public class ImmediateDebugRenderSystem : GameSystemBase
 {
     internal enum DebugRenderableType : byte
@@ -408,6 +411,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         return true;
     }
 
+    /// <inheritdoc/>
     public override void Update(GameTime gameTime)
     {
         if (!Enabled || !Visible) return;

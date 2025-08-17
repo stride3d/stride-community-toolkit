@@ -235,7 +235,6 @@ public static class ImmediateDebugPrimitives
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateSphere(float radius = 0.5f, int tesselations = 16, int uvSplits = 4, int uvSplitOffsetVertical = 0)
     {
-
         if (tesselations < 3) tesselations = 3;
 
         if (uvSplits != 0 && tesselations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
@@ -420,7 +419,6 @@ public static class ImmediateDebugPrimitives
         }
 
         return (vertices, indices);
-
     }
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCylinder(float height = 1.0f, float radius = 0.5f, int tesselations = 16, int uvSplits = 4, int? uvSidesForCircle = null)
