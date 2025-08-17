@@ -3,11 +3,8 @@
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
-public partial class ImmediateDebugRenderFeature
+internal enum DebugRenderStage
 {
-    internal enum DebugRenderStage
-    {
-        Opaque,
-        Transparent
-    }
+    Opaque,
+    Transparent
 }

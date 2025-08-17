@@ -3,7 +3,6 @@
 
 using Stride.Rendering;
 using System.ComponentModel;
-using static Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 

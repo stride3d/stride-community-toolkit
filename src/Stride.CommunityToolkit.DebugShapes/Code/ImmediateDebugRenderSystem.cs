@@ -376,7 +376,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         var newSolidRenderObject = new ImmediateDebugRenderObject
         {
             CurrentFillMode = FillMode.Solid,
-            Stage = ImmediateDebugRenderFeature.DebugRenderStage.Opaque
+            Stage = DebugRenderStage.Opaque
         };
         visibilityGroup.RenderObjects.Add(newSolidRenderObject);
         solidPrimitiveRenderer = newSolidRenderObject;
@@ -384,7 +384,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         var newWireframeRenderObject = new ImmediateDebugRenderObject
         {
             CurrentFillMode = FillMode.Wireframe,
-            Stage = ImmediateDebugRenderFeature.DebugRenderStage.Opaque
+            Stage = DebugRenderStage.Opaque
         };
         visibilityGroup.RenderObjects.Add(newWireframeRenderObject);
         wireframePrimitiveRenderer = newWireframeRenderObject;
@@ -392,7 +392,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         var newTransparentSolidRenderObject = new ImmediateDebugRenderObject
         {
             CurrentFillMode = FillMode.Solid,
-            Stage = ImmediateDebugRenderFeature.DebugRenderStage.Transparent
+            Stage = DebugRenderStage.Transparent
         };
         visibilityGroup.RenderObjects.Add(newTransparentSolidRenderObject);
         transparentSolidPrimitiveRenderer = newTransparentSolidRenderObject;
@@ -400,7 +400,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         var newTransparentWireframeRenderObject = new ImmediateDebugRenderObject
         {
             CurrentFillMode = FillMode.Wireframe,
-            Stage = ImmediateDebugRenderFeature.DebugRenderStage.Transparent
+            Stage = DebugRenderStage.Transparent
         };
         visibilityGroup.RenderObjects.Add(newTransparentWireframeRenderObject);
         transparentWireframePrimitiveRenderer = newTransparentWireframeRenderObject;

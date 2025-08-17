@@ -12,7 +12,7 @@ using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
-public partial class ImmediateDebugRenderFeature : RootRenderFeature
+public class ImmediateDebugRenderFeature : RootRenderFeature
 {
     public override Type SupportedRenderObjectType => typeof(ImmediateDebugRenderObject);
 
