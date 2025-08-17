@@ -124,6 +124,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example08_DebugShapes_Usage", "examples\code-only\Example08_DebugShapes_Usage\Example08_DebugShapes_Usage.csproj", "{777B81CA-7C38-40DB-AD02-66FB1E5B5738}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -337,6 +339,10 @@ Global
 		{5C1A3E6A-7E65-4F3F-9E6C-5C0A7D9E1234}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C1A3E6A-7E65-4F3F-9E6C-5C0A7D9E1234}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C1A3E6A-7E65-4F3F-9E6C-5C0A7D9E1234}.Release|Any CPU.Build.0 = Release|Any CPU
+		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -384,6 +390,7 @@ Global
 		{17E5E99D-DE7E-438E-BC6B-3A4C06A64387} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{170666D3-8F9F-151F-C88A-54261B1783C1} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{5C1A3E6A-7E65-4F3F-9E6C-5C0A7D9E1234} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{777B81CA-7C38-40DB-AD02-66FB1E5B5738} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
