@@ -12,15 +12,8 @@ using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
-public class ImmediateDebugRenderFeature : RootRenderFeature
+public partial class ImmediateDebugRenderFeature : RootRenderFeature
 {
-
-    internal enum DebugRenderStage
-    {
-        Opaque,
-        Transparent
-    }
-
     public override Type SupportedRenderObjectType => typeof(ImmediateDebugRenderObject);
 
     internal struct Primitives
@@ -78,7 +71,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     [StructLayout(LayoutKind.Explicit)]
     internal struct Renderable
     {
-
         public Renderable(ref Quad q) : this()
         {
             Type = RenderableType.Quad;
@@ -162,7 +154,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
         [FieldOffset(1)]
         public Line LineData;
-
     }
 
     internal struct Quad
@@ -309,7 +300,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     protected override void InitializeCore()
     {
-
         var device = Context.GraphicsDevice;
 
         inputElements = VertexPositionTexture.Layout.CreateInputElements();
@@ -329,7 +319,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         lineEffect.UpdateEffect(device);
 
         {
-
             // create initial vertex and index buffers
             var vertexData = new VertexPositionTexture[
                 circle.Vertices.Length +
@@ -374,13 +363,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             primitiveVertexOffsets.Cones = vertexBufferOffset;
             vertexBufferOffset += cone.Vertices.Length;
 
-            var newVertexBuffer = Buffer.Vertex.New(device, vertexData);
-            vertexBuffer = newVertexBuffer;
-
+            vertexBuffer = Buffer.Vertex.New(device, vertexData);
         }
 
         {
-
             /* set up index buffer data */
 
             var indexData = new int[
@@ -431,27 +417,20 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
             var newIndexBuffer = Buffer.Index.New(device, indexData);
             indexBuffer = newIndexBuffer;
-
         }
 
         // allocate our buffers with position/colour etc data
-        var newTransformBuffer = Buffer.Structured.New<Matrix>(device, 1);
-        transformBuffer = newTransformBuffer;
+        transformBuffer = Buffer.Structured.New<Matrix>(device, 1);
 
-        var newColourBuffer = Buffer.Structured.New(device, colors.Items);
-        colorBuffer = newColourBuffer;
+        colorBuffer = Buffer.Structured.New(device, colors.Items);
 
-        var newLineVertexBuffer = Buffer.Vertex.New(device, lineVertices.Items, GraphicsResourceUsage.Dynamic);
-        lineVertexBuffer = newLineVertexBuffer;
-
+        lineVertexBuffer = Buffer.Vertex.New(device, lineVertices.Items, GraphicsResourceUsage.Dynamic);
     }
 
     public override void Extract()
     {
-
         void ProcessRenderables(FastList<Renderable> renderables, ref Primitives offsets)
         {
-
             for (int i = 0; i < renderables.Count; ++i)
             {
                 ref var cmd = ref renderables.Items[i];
@@ -554,9 +533,9 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
         int lastOffset = 0;
         int lastLineOffset = 0;
+
         foreach (RenderObject renderObject in RenderObjects)
         {
-
             ImmediateDebugRenderObject debugObject = (ImmediateDebugRenderObject)renderObject;
 
             /* everything except lines is included here, as lines just get accumulated into a buffer directly */
@@ -594,7 +573,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             debugObject.renderablesNoDepth.Clear(true);
             debugObject.totalPrimitives.Clear();
             debugObject.totalPrimitivesNoDepth.Clear();
-
         }
     }
 
@@ -735,35 +713,29 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             // draw quads
             if (counts.Quads > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Quads);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(plane.Indices.Length, counts.Quads, primitiveIndexOffsets.Quads, primitiveVertexOffsets.Quads);
-
             }
 
             // draw circles
             if (counts.Circles > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Circles);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(circle.Indices.Length, counts.Circles, primitiveIndexOffsets.Circles, primitiveVertexOffsets.Circles);
-
             }
 
             // draw half spheres
             if (counts.HalfSpheres > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.HalfSpheres);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 // HACK: we sort of abuse knowledge of the mesh primitive here.. :P
                 commandList.DrawIndexedInstanced(sphere.Indices.Length / 2, counts.HalfSpheres, primitiveIndexOffsets.HalfSpheres, primitiveVertexOffsets.HalfSpheres);
-
             }
         }
 
@@ -775,52 +747,43 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             // draw cubes
             if (counts.Cubes > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cubes);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(cube.Indices.Length, counts.Cubes, primitiveIndexOffsets.Cubes, primitiveVertexOffsets.Cubes);
-
             }
 
             // draw capsules
             if (counts.Capsules > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Capsules);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(capsule.Indices.Length, counts.Capsules, primitiveIndexOffsets.Capsules, primitiveVertexOffsets.Capsules);
-
             }
 
             // draw cylinders
             if (counts.Cylinders > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cylinders);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(cylinder.Indices.Length, counts.Cylinders, primitiveIndexOffsets.Cylinders, primitiveVertexOffsets.Cylinders);
-
             }
 
             // draw cones
             if (counts.Cones > 0)
             {
-
                 primitiveEffect.Parameters.Set(PrimitiveShaderKeys.InstanceOffset, offsets.Cones);
                 primitiveEffect.Apply(context.GraphicsContext);
 
                 commandList.DrawIndexedInstanced(cone.Indices.Length, counts.Cones, primitiveIndexOffsets.Cones, primitiveVertexOffsets.Cones);
-
             }
         }
 
         // draw lines
         if (counts.Lines > 0)
         {
-
             SetLineRenderingPipelineState(commandList, depthTest, hasTransparency);
             commandList.SetVertexBuffer(0, lineVertexBuffer, 0, LineVertex.Layout.VertexStride);
             commandList.SetPipelineState(pipelineState.CurrentState);
@@ -830,17 +793,16 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             lineEffect.Apply(context.GraphicsContext);
 
             commandList.Draw(counts.Lines * 2, offsets.Lines);
-
         }
     }
 
+    /// <inheritdoc/>
     public override void Draw(RenderDrawContext context, RenderView renderView, RenderViewStage renderViewStage, int startIndex, int endIndex)
     {
         var commandList = context.CommandList;
 
         for (int index = startIndex; index < endIndex; index++)
         {
-
             var renderNodeReference = renderViewStage.SortedRenderNodes[index].RenderNode;
             var debugObject = (ImmediateDebugRenderObject)GetRenderNode(renderNodeReference).RenderObject;
             bool objectHasTransparency = debugObject.Stage == DebugRenderStage.Transparent;
@@ -852,7 +814,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             // render without depth test second
             SetPrimitiveRenderingPipelineState(commandList, depthTest: false, selectedFillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
             RenderPrimitives(context, renderView, offsets: ref debugObject.instanceOffsetsNoDepth, counts: ref debugObject.primitivesToDrawNoDepth, depthTest: false, fillMode: debugObject.CurrentFillMode, hasTransparency: objectHasTransparency);
-
         }
     }
 

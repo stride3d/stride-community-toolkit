@@ -1,6 +1,5 @@
 namespace Stride.DebugRendering
 {
-
     shader LinePrimitiveShader : ShaderBase, ColorBase {
 
         float4x4 ViewProjection;
@@ -13,6 +12,5 @@ namespace Stride.DebugRendering
         override stage void PSMain() {
             streams.ColorTarget = streams.Color;
         }
-
     };
 }
