@@ -406,20 +406,17 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         transparentWireframePrimitiveRenderer = newTransparentWireframeRenderObject;
 
         return true;
-
     }
 
     public override void Update(GameTime gameTime)
     {
-
-        if (!Enabled || !Visible)
-            return;
+        if (!Enabled || !Visible) return;
 
         if (wireframePrimitiveRenderer == null)
         {
             bool created = CreateDebugRenderObjects();
-            if (!created)
-                return;
+
+            if (!created) return;
         }
 
         // TODO: check if i'm doing this correctly..
@@ -443,12 +440,10 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
         /* just clear our per-frame array */
         renderMessages.Clear(true);
-
     }
 
     private void HandlePrimitives(GameTime gameTime, FastList<DebugRenderable> messages)
     {
-
         ImmediateDebugRenderObject ChooseRenderer(DebugRenderableFlags flags, byte alpha)
         {
             if (alpha < 255)
@@ -461,15 +456,13 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             }
         }
 
-        if (messages.Count == 0)
-        {
-            return;
-        }
+        if (messages.Count == 0) return;
 
         for (int i = 0; i < messages.Count; ++i)
         {
             ref var msg = ref messages.Items[i];
             var useDepthTest = (msg.Flags & DebugRenderableFlags.DepthTest) != 0;
+
             switch (msg.Type)
             {
                 case DebugRenderableType.Quad:
@@ -501,6 +494,5 @@ public class ImmediateDebugRenderSystem : GameSystemBase
                     break;
             }
         }
-
     }
 }

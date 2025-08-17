@@ -3,8 +3,26 @@ using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
+
 public static class DebugShapeExtensions
 {
+    /// <summary>
+    /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
+    /// <para>Registers the system to the service registry for easy access.</para>
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="debugShapeRenderGroup"></param>
+    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
+    {
+        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
+
+        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
+#if DEBUG
+        debugDraw.Visible = true;
+#endif
+        game.Services.AddService(debugDraw);
+        game.GameSystems.Add(debugDraw);
+    }
 
     /// <summary>
     /// Adds an immediate debug render feature to the specified <see cref="GraphicsCompositor"/>.
@@ -77,23 +95,5 @@ public static class DebugShapeExtensions
         }
 
         return false;
-    }
-
-    /// <summary>
-    /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
-    /// <para>Registers the system to the service registry for easy access.</para>
-    /// </summary>
-    /// <param name="game"></param>
-    /// <param name="debugShapeRenderGroup"></param>
-    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
-    {
-        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
-
-        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
-#if DEBUG
-        debugDraw.Visible = true;
-#endif
-        game.Services.AddService(debugDraw);
-        game.GameSystems.Add(debugDraw);
     }
 }

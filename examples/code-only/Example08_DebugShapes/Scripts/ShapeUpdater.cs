@@ -131,7 +131,6 @@ public class ShapeUpdater : SyncScript
 
     public override void Update()
     {
-
         var dt = (float)Game.UpdateTime.Elapsed.TotalSeconds;
 
         var speedyDelta = (Input.IsKeyDown(Stride.Input.Keys.LeftShift)) ? 100.0f : 1.0f;
