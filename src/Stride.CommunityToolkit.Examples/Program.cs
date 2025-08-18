@@ -20,7 +20,7 @@ void DisplayMenu()
 
     foreach (var example in examples)
     {
-        Console.WriteLine($"{Navigation($"[{example.Id}]")} {example.Title}");
+        Console.WriteLine($"{Navigation($"{(example.Id.PadLeft(2, ' ').Contains(' ') ? " " : "")}[{example.Id}]")} {example.Title}");
     }
 
     Console.WriteLine();

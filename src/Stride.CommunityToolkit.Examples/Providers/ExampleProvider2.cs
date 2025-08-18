@@ -24,13 +24,13 @@ public class ExampleProvider2
         //CreateExample("Basic Example - Material",
         //    nameof(Example01_Material)),
 
-        //CreateExample("Basic Example - Give me a cube",
+        //CreateExample("Basic Example - Give me a cube 700",
         //    nameof(Example02_GiveMeACube)),
 
-        //CreateExample("Basic Example - Stride UI - Canvas - Capsule with rigid body and Window",
+        //CreateExample("Basic Example - Stride UI - Canvas - Capsule with rigid body and Window", 800
         //    nameof(Example03_StrideUI_CapsuleAndWindow)),
 
-        //CreateExample("Basic Example - Stride UI - Grid - Save and load game state",
+        //CreateExample("Basic Example - Stride UI - Grid - Save and load game state", 900
         //    nameof(Example07_CubeClicker)),
 
         //CreateExample("Basic Example - Procedural Geometry",
@@ -56,6 +56,8 @@ public class ExampleProvider2
 
         //CreateExample("Basic Example - CollisionLayer",
         //    nameof(Example16_CollisionLayer)),
+
+
 
         //CreateExample("Advance Example - Simple Constraint",
         //    nameof(Example15_Constraint_Simple)),
