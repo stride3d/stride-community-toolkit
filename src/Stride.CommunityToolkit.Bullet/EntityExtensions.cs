@@ -5,8 +5,14 @@ using Stride.Physics;
 
 namespace Stride.CommunityToolkit.Bullet;
 
+/// <summary>
+/// Provides extension methods for the <see cref="Entity"/> class to simplify adding Bullet 2D and 3D physics components.
+/// </summary>
 public static class EntityExtensions
 {
+    /// <summary>
+    /// Adds Bullet 3D physics components to the entity.
+    /// </summary>
     public static Entity AddBullet3DPhysics(this Entity entity, PrimitiveModelType type, Bullet3DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -26,6 +32,13 @@ public static class EntityExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Adds Bullet 2D physics components to the entity.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="type"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public static Entity AddBullet2DPhysics(this Entity entity, Primitive2DModelType type, Bullet2DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);

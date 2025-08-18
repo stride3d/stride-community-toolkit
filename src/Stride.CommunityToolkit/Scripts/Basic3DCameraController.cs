@@ -39,6 +39,11 @@ public class Basic3DCameraController : SyncScript
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class.
+    /// </summary>
+    public Basic3DCameraController() { }
+
+    /// <summary>
     /// Enables gamepad input when <c>true</c>.
     /// </summary>
     public bool Gamepad { get; set; }

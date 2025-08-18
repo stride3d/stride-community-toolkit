@@ -42,6 +42,7 @@ public static class EntitySearchExtensions
 
         // Breadth-first search (BFS)
         var queue = new Queue<Entity>();
+
         queue.EnqueueRange(entity.GetChildren());
 
         return GetComponentInChildrenCore<T>(queue);

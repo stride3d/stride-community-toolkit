@@ -5,8 +5,14 @@ using Stride.Engine;
 
 namespace Stride.CommunityToolkit.Bepu;
 
+/// <summary>
+/// Provides extension methods for the <see cref="Entity"/> class to simplify adding Bepu 2D and 3D physics components.
+/// </summary>
 public static class EntityExtensions
 {
+    /// <summary>
+    /// Adds Bepu 3D physics components to the entity.
+    /// </summary>
     public static Entity AddBepuPhysics(this Entity entity, PrimitiveModelType type, Bepu3DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -60,7 +66,7 @@ public static class EntityExtensions
 
             var compoundCollier = options.Component.Collider as CompoundCollider;
 
-            compoundCollier.Colliders.Add(colliderShape);
+            compoundCollier?.Colliders.Add(colliderShape);
 
             entity.Add(options.Component);
         }
@@ -68,6 +74,9 @@ public static class EntityExtensions
         return entity;
     }
 
+    /// <summary>
+    /// Adds Bepu 2D physics components to the entity.
+    /// </summary>
     public static Entity AddBepu2DPhysics(this Entity entity, Primitive2DModelType type, Bepu2DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -139,7 +148,7 @@ public static class EntityExtensions
 
             var compoundCollier = options.Component.Collider as CompoundCollider;
 
-            compoundCollier.Colliders.Add(colliderShape);
+            compoundCollier?.Colliders.Add(colliderShape);
 
             entity.Add(options.Component);
         }

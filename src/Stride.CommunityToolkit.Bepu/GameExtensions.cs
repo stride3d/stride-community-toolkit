@@ -15,6 +15,9 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </summary>
 public static class GameExtensions
 {
+    /// <summary>
+    /// Sets up a default 2D scene for the game, similar to creating an empty project through the editor.
+    /// </summary>
     public static void SetupBase2DScene(this Game game)
     {
         game.AddGraphicsCompositor().AddCleanUIStage();
