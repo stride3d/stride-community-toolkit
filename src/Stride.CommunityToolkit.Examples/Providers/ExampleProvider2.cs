@@ -33,19 +33,19 @@ public class ExampleProvider2
         //CreateExample("Basic Example - Stride UI - Grid - Save and load game state", 900
         //    nameof(Example07_CubeClicker)),
 
-        //CreateExample("Basic Example - Procedural Geometry",
+        //CreateExample("Basic Example - Procedural Geometry", 1100
         //    nameof(Example05_ProceduralGeometry)),
 
-        //CreateExample("Basic Example - Cylinder Mesh",
+        //CreateExample("Basic Example - Cylinder Mesh", 1000
         //    nameof(Example05_CylinderMesh)),
 
         //CreateExample("Basic Example - Partial Torus",
         //    nameof(Example05_PartialTorus)),
 
-        //CreateExample("Basic Example - Partial Torus in F#",
+        //CreateExample("Basic Example - Partial Torus in F#", 1200
         //    nameof(Example05_PartialTorus_FSharp)),
 
-        //CreateExample("Basic Example - Particles",
+        //CreateExample("Basic Example - Particles", 1300
         //    nameof(Example12_Particles)),
 
         //CreateExample("Basic Example - Raycast",

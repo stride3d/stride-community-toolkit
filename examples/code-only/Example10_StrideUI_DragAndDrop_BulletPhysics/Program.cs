@@ -28,7 +28,7 @@ void Start(Scene scene)
     // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
-        EnableBackground = false
+        EnableBackground = true
     });
 
     game.AddSkybox();

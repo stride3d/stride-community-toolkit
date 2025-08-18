@@ -7,7 +7,8 @@
         <Nullable>enable</Nullable>
 
         <ExampleTitle>Advance Example - Various Constraints</ExampleTitle>
-        <ExampleOrder>15100</ExampleOrder>
+        <ExampleOrder>10100</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
