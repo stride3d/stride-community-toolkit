@@ -274,7 +274,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         for (int i = 0; i < totalVertexPairs; i += 2)
         {
             ref var v1 = ref vertices[i];
-            ref var v2 = ref vertices[i];
+            ref var v2 = ref vertices[i + 1];
             DrawLine(v1, v2, color ?? PrimitiveColor, duration, depthTest);
         }
     }
