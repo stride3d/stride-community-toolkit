@@ -3,6 +3,7 @@ using Stride.Core.Collections; // for FastList baseline
 using Stride.Core.Mathematics;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using System.Runtime.InteropServices; // CollectionsMarshal
 
 namespace Stride.CommunityToolkit.Benchmarks.FastList;
 
@@ -10,9 +11,11 @@ namespace Stride.CommunityToolkit.Benchmarks.FastList;
 /// Compares the existing FastList-based implementation with native C# alternatives:
 /// 1. FastList (baseline) - current implementation style
 /// 2. Raw arrays with manual resize (pow2 growth) + direct ref access
-/// 3. List<T> using Add padding + CollectionsMarshal.AsSpan friendly layout (will show overhead of keeping Count correct)
+/// 3. List<T> using Add padding
+/// 4. List<T> + CollectionsMarshal.AsSpan (span-based mutation to minimize bounds checks)
 ///
 /// NOTE: Only struct element types are used (Vector3, Quaternion, Color) so clearing on shrink is skipped like fastClear=true.
+/// Every benchmark re-initializes its data to isolate container + access cost.
 /// </summary>
 [MemoryDiagnoser]
 public class FastListAlternativeBenchmarks
@@ -202,7 +205,7 @@ public class FastListAlternativeBenchmarks
     }
 
     // =================================================================================================
-    // 3. List<T> (will incur additional cost to grow Count). Shows overhead vs direct array and FastList.
+    // 3. List<T> classic (indexer based)
     // =================================================================================================
     List<Vector3> list_positions = new(4);
     List<Vector3> list_velocities = new(4);
@@ -218,7 +221,6 @@ public class FastListAlternativeBenchmarks
         Grow(list_rotations, N);
         Grow(list_colors, N);
 
-        // Local aliases for faster range checks (JIT can hoist) – using indexer has bounds check but predictable.
         for (int i = 0; i < N; i++)
         {
             list_positions[i] = new Vector3(NextSignedFloat() * 64f, NextSignedFloat() * 64f, NextSignedFloat() * 64f);
@@ -239,7 +241,6 @@ public class FastListAlternativeBenchmarks
         {
             list.Capacity = Math.Max(list.Capacity, size);
             int toAdd = size - list.Count;
-            // Add default(T) without per-element range re-growth.
             for (int i = 0; i < toAdd; i++) list.Add(default!);
         }
     }
@@ -295,6 +296,98 @@ public class FastListAlternativeBenchmarks
             col.B = (byte)(((pos.Z / areaSize) + 1f) * 0.5f * 255f);
             col.A = 255;
             list_colors[i] = col;
+            checksum += col.R + col.G + col.B;
+        }
+        return checksum;
+    }
+
+    // =================================================================================================
+    // 4. List<T> + CollectionsMarshal.AsSpan (span-based loops)
+    //    Minimizes per-iteration bounds checks and copy-in/out for structs, approaching raw array cost.
+    // =================================================================================================
+    void ListSpanEnsureInit()
+    {
+        Grow(list_positions, N);
+        Grow(list_velocities, N);
+        Grow(list_rotVelocities, N);
+        Grow(list_rotations, N);
+        Grow(list_colors, N);
+
+        var posSpan = CollectionsMarshal.AsSpan(list_positions);
+        var velSpan = CollectionsMarshal.AsSpan(list_velocities);
+        var rvelSpan = CollectionsMarshal.AsSpan(list_rotVelocities);
+        var rotSpan = CollectionsMarshal.AsSpan(list_rotations);
+        var colSpan = CollectionsMarshal.AsSpan(list_colors);
+
+        for (int i = 0; i < N; i++)
+        {
+            posSpan[i] = new Vector3(NextSignedFloat() * 64f, NextSignedFloat() * 64f, NextSignedFloat() * 64f);
+            velSpan[i] = new Vector3(NextFloat() * 4f, NextFloat() * 4f, NextFloat() * 4f);
+            rvelSpan[i] = new Vector3(NextFloat(), NextFloat(), NextFloat());
+            rotSpan[i] = Quaternion.Identity;
+            ref var p = ref posSpan[i];
+            colSpan[i] = new Color(
+                (byte)(((p.X / 64f) + 1f) * 0.5f * 255f),
+                (byte)(((p.Y / 64f) + 1f) * 0.5f * 255f),
+                (byte)(((p.Z / 64f) + 1f) * 0.5f * 255f),
+                255);
+        }
+    }
+
+    [Benchmark(Description = "List<T> Span: Resize + init")] 
+    public (Vector3, Quaternion) ListSpan_Init()
+    {
+        ListSpanEnsureInit();
+        var rotSpan = CollectionsMarshal.AsSpan(list_rotations);
+        var posSpan = CollectionsMarshal.AsSpan(list_positions);
+        return (posSpan[N - 1], rotSpan[N - 1]);
+    }
+
+    [Benchmark(Description = "List<T> Span: Update loop")] 
+    public (Vector3, Color) ListSpan_Update()
+    {
+        ListSpanEnsureInit();
+        var posSpan = CollectionsMarshal.AsSpan(list_positions);
+        var velSpan = CollectionsMarshal.AsSpan(list_velocities);
+        var rvelSpan = CollectionsMarshal.AsSpan(list_rotVelocities);
+        var rotSpan = CollectionsMarshal.AsSpan(list_rotations);
+        var colSpan = CollectionsMarshal.AsSpan(list_colors);
+        var dt = 1f / 60f; var areaSize = 64f;
+        for (int i = 0; i < N; i++)
+        {
+            ref var pos = ref posSpan[i];
+            ref var vel = ref velSpan[i];
+            ref var rvel = ref rvelSpan[i];
+            ref var rot = ref rotSpan[i];
+            ref var col = ref colSpan[i];
+            if (pos.X > areaSize || pos.X < -areaSize) vel.X = -vel.X;
+            if (pos.Y > areaSize || pos.Y < -areaSize) vel.Y = -vel.Y;
+            if (pos.Z > areaSize || pos.Z < -areaSize) vel.Z = -vel.Z;
+            pos += vel * dt;
+            rot *= Quaternion.RotationX(rvel.X * dt) * Quaternion.RotationY(rvel.Y * dt) * Quaternion.RotationZ(rvel.Z * dt);
+            col.R = (byte)(((pos.X / areaSize) + 1f) * 0.5f * 255f);
+            col.G = (byte)(((pos.Y / areaSize) + 1f) * 0.5f * 255f);
+            col.B = (byte)(((pos.Z / areaSize) + 1f) * 0.5f * 255f);
+            col.A = 255;
+        }
+        return (posSpan[N - 1], colSpan[N - 1]);
+    }
+
+    [Benchmark(Description = "List<T> Span: Color only")] 
+    public int ListSpan_ColorOnly()
+    {
+        ListSpanEnsureInit();
+        var posSpan = CollectionsMarshal.AsSpan(list_positions);
+        var colSpan = CollectionsMarshal.AsSpan(list_colors);
+        int checksum = 0; var areaSize = 64f;
+        for (int i = 0; i < N; i++)
+        {
+            ref var pos = ref posSpan[i];
+            ref var col = ref colSpan[i];
+            col.R = (byte)(((pos.X / areaSize) + 1f) * 0.5f * 255f);
+            col.G = (byte)(((pos.Y / areaSize) + 1f) * 0.5f * 255f);
+            col.B = (byte)(((pos.Z / areaSize) + 1f) * 0.5f * 255f);
+            col.A = 255;
             checksum += col.R + col.G + col.B;
         }
         return checksum;
