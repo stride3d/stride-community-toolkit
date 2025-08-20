@@ -1,7 +1,8 @@
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.Core;
-using Stride.Core.Collections;
+using System.Runtime.InteropServices; // CollectionsMarshal for span access
+using System.Collections.Generic;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
@@ -44,23 +45,42 @@ public class ShapeUpdater : SyncScript
     bool useWireframe = true;
     bool running = true;
 
-    FastList<Vector3> primitivePositions = new FastList<Vector3>(InitialNumPrimitives);
-    FastList<Quaternion> primitiveRotations = new FastList<Quaternion>(InitialNumPrimitives);
-    FastList<Vector3> primitiveVelocities = new FastList<Vector3>(InitialNumPrimitives);
-    FastList<Vector3> primitiveRotVelocities = new FastList<Vector3>(InitialNumPrimitives);
-    FastList<Color> primitiveColors = new FastList<Color>(InitialNumPrimitives);
+    // Replaced FastList<T> with List<T> + span access via CollectionsMarshal.AsSpan
+    readonly List<Vector3> primitivePositions = new(InitialNumPrimitives);
+    readonly List<Quaternion> primitiveRotations = new(InitialNumPrimitives);
+    readonly List<Vector3> primitiveVelocities = new(InitialNumPrimitives);
+    readonly List<Vector3> primitiveRotVelocities = new(InitialNumPrimitives);
+    readonly List<Color> primitiveColors = new(InitialNumPrimitives);
 
     public CameraComponent? CurrentCamera;
+
+    static void EnsureSize<T>(List<T> list, int size)
+    {
+        if (list.Count < size)
+        {
+            list.Capacity = Math.Max(list.Capacity, size);
+            int toAdd = size - list.Count;
+            for (int i = 0; i < toAdd; i++) list.Add(default!);
+        }
+        // When size shrinks we intentionally do NOT remove tail elements to avoid allocations; logic already tracks currentNumPrimitives.
+    }
 
     private void InitializePrimitives(int from, int to)
     {
         var random = new Random();
 
-        primitivePositions.Resize(to, true);
-        primitiveRotations.Resize(to, true);
-        primitiveVelocities.Resize(to, true);
-        primitiveRotVelocities.Resize(to, true);
-        primitiveColors.Resize(to, true);
+        EnsureSize(primitivePositions, to);
+        EnsureSize(primitiveRotations, to);
+        EnsureSize(primitiveVelocities, to);
+        EnsureSize(primitiveRotVelocities, to);
+        EnsureSize(primitiveColors, to);
+
+        // Use spans for fast ref access
+        var posSpan = CollectionsMarshal.AsSpan(primitivePositions);
+        var rotSpan = CollectionsMarshal.AsSpan(primitiveRotations);
+        var velSpan = CollectionsMarshal.AsSpan(primitiveVelocities);
+        var rvelSpan = CollectionsMarshal.AsSpan(primitiveRotVelocities);
+        var colSpan = CollectionsMarshal.AsSpan(primitiveColors);
 
         for (int i = from; i < to; ++i)
         {
@@ -70,25 +90,26 @@ public class ShapeUpdater : SyncScript
             var randY = random.Next(-AreaSize, AreaSize);
             var randZ = random.Next(-AreaSize, AreaSize);
 
-            var velX = random.NextDouble() * 4.0;
-            var velY = random.NextDouble() * 4.0;
-            var velZ = random.NextDouble() * 4.0;
-            var ballVel = new Vector3((float)velX, (float)velY, (float)velZ);
+            var velX = (float)(random.NextDouble() * 4.0);
+            var velY = (float)(random.NextDouble() * 4.0);
+            var velZ = (float)(random.NextDouble() * 4.0);
+            var ballVel = new Vector3(velX, velY, velZ);
 
-            var rotVelX = random.NextDouble();
-            var rotVelY = random.NextDouble();
-            var rotVelZ = random.NextDouble();
-            var ballRotVel = new Vector3((float)rotVelX, (float)rotVelY, (float)rotVelZ);
+            var rotVelX = (float)random.NextDouble();
+            var rotVelY = (float)random.NextDouble();
+            var rotVelZ = (float)random.NextDouble();
+            var ballRotVel = new Vector3(rotVelX, rotVelY, rotVelZ);
 
-            primitivePositions.Items[i] = new Vector3(randX, randY, randZ);
-            primitiveRotations.Items[i] = Quaternion.Identity;
-            primitiveVelocities.Items[i] = ballVel;
-            primitiveRotVelocities.Items[i] = ballRotVel;
+            posSpan[i] = new Vector3(randX, randY, randZ);
+            rotSpan[i] = Quaternion.Identity;
+            velSpan[i] = ballVel;
+            rvelSpan[i] = ballRotVel;
 
-            ref var color = ref primitiveColors.Items[i];
-            color.R = (byte)(((primitivePositions[i].X / AreaSize) + 1f) / 2.0f * 255.0f);
-            color.G = (byte)(((primitivePositions[i].Y / AreaSize) + 1f) / 2.0f * 255.0f);
-            color.B = (byte)(((primitivePositions[i].Z / AreaSize) + 1f) / 2.0f * 255.0f);
+            ref var color = ref colSpan[i];
+            ref readonly var p = ref posSpan[i];
+            color.R = (byte)(((p.X / AreaSize) + 1f) / 2.0f * 255.0f);
+            color.G = (byte)(((p.Y / AreaSize) + 1f) / 2.0f * 255.0f);
+            color.B = (byte)(((p.Z / AreaSize) + 1f) / 2.0f * 255.0f);
             color.A = 255;
         }
     }
@@ -97,37 +118,18 @@ public class ShapeUpdater : SyncScript
     {
         CurrentCamera = SceneSystem.SceneInstance.RootScene.Entities.First(e => e.Get<CameraComponent>() != null).Get<CameraComponent>();
 
-        // Gets added in the program.cs class by the AddDebugShapes() extension.
         DebugDraw = Services.GetService<ImmediateDebugRenderSystem>();
 
         DebugDraw.PrimitiveColor = Color.Green;
         DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
         DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
-
-        // keep DebugDraw visible in release builds too
         DebugDraw.Visible = true;
-
-        // keep DebugText visible in release builds too
         DebugText.Visible = true;
 
         InitializePrimitives(0, currentNumPrimitives);
     }
 
-    private static int Clamp(int v, int min, int max)
-    {
-        if (v < min)
-        {
-            return min;
-        }
-        else if (v > max)
-        {
-            return max;
-        }
-        else
-        {
-            return v;
-        }
-    }
+    private static int Clamp(int v, int min, int max) => v < min ? min : (v > max ? max : v);
 
     public override void Update()
     {
@@ -136,25 +138,10 @@ public class ShapeUpdater : SyncScript
         var speedyDelta = (Input.IsKeyDown(Stride.Input.Keys.LeftShift)) ? 100.0f : 1.0f;
         var newAmountOfBoxes = Clamp(currentNumPrimitives + (int)(Input.MouseWheelDelta * ChangePerSecond * speedyDelta * dt), minNumberOfPrimitives, maxNumberOfPrimitives);
 
-        if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt))
-        {
-            mode = (CurRenderMode)(((int)mode + 1) % ((int)CurRenderMode.None + 1));
-        }
-
-        if (Input.IsKeyPressed(Stride.Input.Keys.LeftCtrl))
-        {
-            useDepthTesting = !useDepthTesting;
-        }
-
-        if (Input.IsKeyPressed(Stride.Input.Keys.Tab))
-        {
-            useWireframe = !useWireframe;
-        }
-
-        if (Input.IsKeyPressed(Stride.Input.Keys.Space))
-        {
-            running = !running;
-        }
+        if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt)) mode = (CurRenderMode)(((int)mode + 1) % ((int)CurRenderMode.None + 1));
+        if (Input.IsKeyPressed(Stride.Input.Keys.LeftCtrl)) useDepthTesting = !useDepthTesting;
+        if (Input.IsKeyPressed(Stride.Input.Keys.Tab)) useWireframe = !useWireframe;
+        if (Input.IsKeyPressed(Stride.Input.Keys.Space)) running = !running;
 
         if (newAmountOfBoxes > currentNumPrimitives)
         {
@@ -169,49 +156,33 @@ public class ShapeUpdater : SyncScript
         }
 
         int textPositionX = (int)Input.Mouse.SurfaceSize.X - 384;
-
-        DebugText.Print($"Primitive Count: {currentNumPrimitives} (scroll wheel to adjust)",
-            new Int2(textPositionX, StartTextPositionY));
-
-        DebugText.Print($" - Hold shift: faster count adjustment",
-            new Int2(textPositionX, StartTextPositionY + TextIncrement));
-
-        DebugText.Print($" - Render Mode: {mode} (left alt to switch)",
-            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 2)));
-
-        DebugText.Print($" - Depth Testing: {(useDepthTesting ? "On " : "Off")} (left ctrl to toggle)",
-            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 3)));
-
-        DebugText.Print($" - Fill mode: {(useWireframe ? "Wireframe" : "Solid")} (tab to toggle)",
-            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 4)));
-
-        DebugText.Print($" - State: {(running ? "Simulating" : "Paused")} (space to toggle)",
-            new Int2(textPositionX, StartTextPositionY + (TextIncrement * 5)));
+        DebugText.Print($"Primitive Count: {currentNumPrimitives} (scroll wheel to adjust)", new Int2(textPositionX, StartTextPositionY));
+        DebugText.Print(" - Hold shift: faster count adjustment", new Int2(textPositionX, StartTextPositionY + TextIncrement));
+        DebugText.Print($" - Render Mode: {mode} (left alt to switch)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 2)));
+        DebugText.Print($" - Depth Testing: {(useDepthTesting ? "On " : "Off")} (left ctrl to toggle)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 3)));
+        DebugText.Print($" - Fill mode: {(useWireframe ? "Wireframe" : "Solid")} (tab to toggle)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 4)));
+        DebugText.Print($" - State: {(running ? "Simulating" : "Paused")} (space to toggle)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 5)));
 
         if (running)
         {
+            // NOTE: Cannot cache Span outside lambda (ref struct). Reacquire spans inside iteration.
             Dispatcher.For(0, currentNumPrimitives, i =>
             {
-                ref var position = ref primitivePositions.Items[i];
-                ref var velocity = ref primitiveVelocities.Items[i];
-                ref var rotVelocity = ref primitiveRotVelocities.Items[i];
-                ref var rotation = ref primitiveRotations.Items[i];
-                ref var color = ref primitiveColors.Items[i];
+                var posSpan = CollectionsMarshal.AsSpan(primitivePositions);
+                var velSpan = CollectionsMarshal.AsSpan(primitiveVelocities);
+                var rvelSpan = CollectionsMarshal.AsSpan(primitiveRotVelocities);
+                var rotSpan = CollectionsMarshal.AsSpan(primitiveRotations);
+                var colSpan = CollectionsMarshal.AsSpan(primitiveColors);
 
-                if (position.X > AreaSize || position.X < -AreaSize)
-                {
-                    velocity.X = -velocity.X;
-                }
+                ref var position = ref posSpan[i];
+                ref var velocity = ref velSpan[i];
+                ref var rotVelocity = ref rvelSpan[i];
+                ref var rotation = ref rotSpan[i];
+                ref var color = ref colSpan[i];
 
-                if (position.Y > AreaSize || position.Y < -AreaSize)
-                {
-                    velocity.Y = -velocity.Y;
-                }
-
-                if (position.Z > AreaSize || position.Z < -AreaSize)
-                {
-                    velocity.Z = -velocity.Z;
-                }
+                if (position.X > AreaSize || position.X < -AreaSize) velocity.X = -velocity.X;
+                if (position.Y > AreaSize || position.Y < -AreaSize) velocity.Y = -velocity.Y;
+                if (position.Z > AreaSize || position.Z < -AreaSize) velocity.Z = -velocity.Z;
 
                 position += velocity * dt;
 
@@ -224,50 +195,55 @@ public class ShapeUpdater : SyncScript
                 color.G = (byte)(((position.Y / AreaSize) + 1f) / 2.0f * 255.0f);
                 color.B = (byte)(((position.Z / AreaSize) + 1f) / 2.0f * 255.0f);
                 color.A = 255;
-
             });
         }
 
-        int currentShape = 0;
+        // Sequential draw loop: use spans for fewer bounds checks
+        var drawPosSpan = CollectionsMarshal.AsSpan(primitivePositions);
+        var drawRotSpan = CollectionsMarshal.AsSpan(primitiveRotations);
+        var drawVelSpan = CollectionsMarshal.AsSpan(primitiveVelocities);
+        var drawRVelSpan = CollectionsMarshal.AsSpan(primitiveRotVelocities);
+        var drawColorSpan = CollectionsMarshal.AsSpan(primitiveColors);
 
+        int currentShape = 0;
         for (int i = 0; i < currentNumPrimitives; ++i)
         {
-            ref var position = ref primitivePositions.Items[i];
-            ref var rotation = ref primitiveRotations.Items[i];
-            ref var velocity = ref primitiveVelocities.Items[i];
-            ref var rotVelocity = ref primitiveRotVelocities.Items[i];
-            ref var color = ref primitiveColors.Items[i];
+            ref var position = ref drawPosSpan[i];
+            ref var rotation = ref drawRotSpan[i];
+            ref var velocity = ref drawVelSpan[i];
+            ref var rotVelocity = ref drawRVelSpan[i];
+            ref var color = ref drawColorSpan[i];
 
             switch (mode)
             {
                 case CurRenderMode.All:
                     switch (currentShape++)
                     {
-                        case 0: // sphere
+                        case 0:
                             DebugDraw.DrawSphere(position, 0.5f, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 1: // cube
+                        case 1:
                             DebugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 2: // capsule
+                        case 2:
                             DebugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 3: // cylinder
+                        case 3:
                             DebugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 4: // cone
+                        case 4:
                             DebugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 5: // ray
+                        case 5:
                             DebugDraw.DrawRay(position, velocity, color, depthTest: useDepthTesting);
                             break;
-                        case 6: // quad
+                        case 6:
                             DebugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 7: // circle
+                        case 7:
                             DebugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
                             break;
-                        case 8: // half sphere
+                        case 8:
                             DebugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: useDepthTesting, solid: !useWireframe);
                             currentShape = 0;
                             break;
@@ -310,7 +286,6 @@ public class ShapeUpdater : SyncScript
             }
         }
 
-        // CUBE OF ORIGIN!!
         DebugDraw.DrawCube(new Vector3(0, 0, 0), new Vector3(1.0f, 1.0f, 1.0f), color: Color.White);
         DebugDraw.DrawBounds(new Vector3(-5, 0, -5), new Vector3(5, 5, 5), color: Color.White);
         DebugDraw.DrawBounds(new Vector3(-AreaSize), new Vector3(AreaSize), color: Color.HotPink);
@@ -318,7 +293,6 @@ public class ShapeUpdater : SyncScript
         if (Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left) && CurrentCamera != null)
         {
             var clickPos = Input.MousePosition;
-
             var result = CurrentCamera.Raycast(this.GetSimulation(), clickPos);
 
             if (result.Succeeded)
