@@ -2,7 +2,6 @@ using BenchmarkDotNet.Attributes;
 using Stride.Core.Collections; // for FastList baseline
 using Stride.Core.Mathematics;
 using System.Runtime.CompilerServices;
-using System.Collections.Generic;
 using System.Runtime.InteropServices; // CollectionsMarshal
 
 namespace Stride.CommunityToolkit.Benchmarks.FastList;
@@ -62,14 +61,14 @@ public class FastListAlternativeBenchmarks
         }
     }
 
-    [Benchmark(Baseline = true, Description = "FastList: Resize + init")] 
+    [Benchmark(Baseline = true, Description = "FastList: Resize + init")]
     public (Vector3, Quaternion) FastList_Init()
     {
         FastListEnsureInit();
         return (fl_positions.Items[N - 1], fl_rotations.Items[N - 1]);
     }
 
-    [Benchmark(Description = "FastList: Update loop")] 
+    [Benchmark(Description = "FastList: Update loop")]
     public (Vector3, Color) FastList_Update()
     {
         FastListEnsureInit(); // keeps filling every time (intent: isolate structure cost, not separate init)
@@ -94,7 +93,7 @@ public class FastListAlternativeBenchmarks
         return (fl_positions.Items[N - 1], fl_colors.Items[N - 1]);
     }
 
-    [Benchmark(Description = "FastList: Color only")] 
+    [Benchmark(Description = "FastList: Color only")]
     public int FastList_ColorOnly()
     {
         FastListEnsureInit();
@@ -154,14 +153,14 @@ public class FastListAlternativeBenchmarks
         }
     }
 
-    [Benchmark(Description = "Arrays: Resize + init")] 
+    [Benchmark(Description = "Arrays: Resize + init")]
     public (Vector3, Quaternion) Arrays_Init()
     {
         ArraysEnsureInit();
         return (arr_positions[N - 1], arr_rotations[N - 1]);
     }
 
-    [Benchmark(Description = "Arrays: Update loop")] 
+    [Benchmark(Description = "Arrays: Update loop")]
     public (Vector3, Color) Arrays_Update()
     {
         ArraysEnsureInit();
@@ -186,7 +185,7 @@ public class FastListAlternativeBenchmarks
         return (arr_positions[N - 1], arr_colors[N - 1]);
     }
 
-    [Benchmark(Description = "Arrays: Color only")] 
+    [Benchmark(Description = "Arrays: Color only")]
     public int Arrays_ColorOnly()
     {
         ArraysEnsureInit();
@@ -245,14 +244,14 @@ public class FastListAlternativeBenchmarks
         }
     }
 
-    [Benchmark(Description = "List<T>: Resize + init")] 
+    [Benchmark(Description = "List<T>: Resize + init")]
     public (Vector3, Quaternion) List_Init()
     {
         ListEnsureInit();
         return (list_positions[N - 1], list_rotations[N - 1]);
     }
 
-    [Benchmark(Description = "List<T>: Update loop")] 
+    [Benchmark(Description = "List<T>: Update loop")]
     public (Vector3, Color) List_Update()
     {
         ListEnsureInit();
@@ -282,7 +281,7 @@ public class FastListAlternativeBenchmarks
         return (list_positions[N - 1], list_colors[N - 1]);
     }
 
-    [Benchmark(Description = "List<T>: Color only")] 
+    [Benchmark(Description = "List<T>: Color only")]
     public int List_ColorOnly()
     {
         ListEnsureInit();
@@ -334,7 +333,7 @@ public class FastListAlternativeBenchmarks
         }
     }
 
-    [Benchmark(Description = "List<T> Span: Resize + init")] 
+    [Benchmark(Description = "List<T> Span: Resize + init")]
     public (Vector3, Quaternion) ListSpan_Init()
     {
         ListSpanEnsureInit();
@@ -343,7 +342,7 @@ public class FastListAlternativeBenchmarks
         return (posSpan[N - 1], rotSpan[N - 1]);
     }
 
-    [Benchmark(Description = "List<T> Span: Update loop")] 
+    [Benchmark(Description = "List<T> Span: Update loop")]
     public (Vector3, Color) ListSpan_Update()
     {
         ListSpanEnsureInit();
@@ -373,7 +372,7 @@ public class FastListAlternativeBenchmarks
         return (posSpan[N - 1], colSpan[N - 1]);
     }
 
-    [Benchmark(Description = "List<T> Span: Color only")] 
+    [Benchmark(Description = "List<T> Span: Color only")]
     public int ListSpan_ColorOnly()
     {
         ListSpanEnsureInit();

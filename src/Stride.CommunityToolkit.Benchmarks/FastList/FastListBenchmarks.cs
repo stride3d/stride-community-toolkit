@@ -70,7 +70,7 @@ public class FastListBenchmarks
         initializedForN = N;
     }
 
-    [Benchmark(Baseline = true, Description = "Resize + fast init")] // baseline: FastList fast-clear style initialization
+    [Benchmark(Description = "Resize + fast init")] // baseline: FastList fast-clear style initialization
     public (Vector3, Quaternion) ResizeAndInitialize_FastClear()
     {
         // FastList specific Resize with fastClear=true then fill underlying arrays directly
