@@ -1,13 +1,15 @@
-using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using System.Reflection;
 
-var summary = BenchmarkRunner.Run<SampleBenchmarks>();
+var switcher = BenchmarkSwitcher.FromAssembly(Assembly.GetExecutingAssembly());
 
-public class SampleBenchmarks
+if (args == null || args.Length == 0)
 {
-    [Benchmark]
-    public void BenchmarkMethod()
-    {
-        // Place benchmark code here
-    }
+    switcher.RunAll();
 }
+else
+{
+    switcher.Run(args);
+}
+
+return 0;
