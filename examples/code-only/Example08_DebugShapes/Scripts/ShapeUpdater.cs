@@ -1,12 +1,11 @@
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.Core;
-using System.Runtime.InteropServices; // CollectionsMarshal for span access
-using System.Collections.Generic;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
 using Stride.Physics;
+using System.Runtime.InteropServices; // CollectionsMarshal for span access
 
 namespace Example08_DebugShapes.Scripts;
 
