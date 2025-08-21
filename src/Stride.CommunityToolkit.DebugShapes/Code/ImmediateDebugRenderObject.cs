@@ -1,7 +1,6 @@
 // Copyright (c) Stride contributors (https://stride3d.net)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
-using Stride.Core.Collections;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering;
@@ -20,8 +19,8 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 public class ImmediateDebugRenderObject : RenderObject
 {
     /* messages */
-    internal readonly FastList<Renderable> renderablesWithDepth = new FastList<Renderable>();
-    internal readonly FastList<Renderable> renderablesNoDepth = new FastList<Renderable>();
+    internal readonly List<Renderable> renderablesWithDepth = [];
+    internal readonly List<Renderable> renderablesNoDepth = [];
 
     /* accumulators used when data is being pushed to the system */
     internal Primitives totalPrimitives, totalPrimitivesNoDepth;

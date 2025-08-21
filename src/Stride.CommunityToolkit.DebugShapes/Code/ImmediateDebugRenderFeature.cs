@@ -1,7 +1,6 @@
 // Copyright (c) Stride contributors (https://stride3d.net)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
-using Stride.Core.Collections;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.DebugRendering;
@@ -292,14 +291,14 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     private Buffer colorBuffer;
 
     /* intermediate message related data, written to in extract */
-    private readonly FastList<InstanceData> instances = new FastList<InstanceData>(1);
+    private readonly List<InstanceData> instances = new(1);
 
     /* data written to buffers in prepare */
-    private readonly FastList<Matrix> transforms = new FastList<Matrix>(1);
-    private readonly FastList<Color> colors = new FastList<Color>(1);
+    private readonly List<Matrix> transforms = new(1);
+    private readonly List<Color> colors = new(1);
 
     /* data only for line rendering */
-    private readonly FastList<LineVertex> lineVertices = new FastList<LineVertex>(1);
+    private readonly List<LineVertex> lineVertices = new(1);
 
     public ImmediateDebugRenderFeature()
     {
@@ -431,88 +430,112 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         // allocate our buffers with position/colour etc data
         transformBuffer = Buffer.Structured.New<Matrix>(device, 1);
 
-        colorBuffer = Buffer.Structured.New(device, colors.Items);
+        colorBuffer = Buffer.Structured.New<Color>(device, 1);
 
-        lineVertexBuffer = Buffer.Vertex.New(device, lineVertices.Items, GraphicsResourceUsage.Dynamic);
+        lineVertexBuffer = Buffer.Vertex.New(device, new LineVertex[1], GraphicsResourceUsage.Dynamic);
     }
 
     /// <inheritdoc/>
     public override void Extract()
     {
-        void ProcessRenderables(FastList<Renderable> renderables, ref Primitives offsets)
+        void ProcessRenderables(List<Renderable> renderables, ref Primitives offsets)
         {
-            for (int i = 0; i < renderables.Count; ++i)
+            var span = CollectionsMarshal.AsSpan(renderables);
+            for (int i = 0; i < span.Length; ++i)
             {
-                ref var cmd = ref renderables.Items[i];
+                ref readonly var cmd = ref span[i];
                 switch (cmd.Type)
                 {
                     case RenderableType.Quad:
-                        instances.Items[offsets.Quads].Position = cmd.QuadData.Position;
-                        instances.Items[offsets.Quads].Rotation = cmd.QuadData.Rotation;
-                        instances.Items[offsets.Quads].Scale = new Vector3(cmd.QuadData.Size.X, 1.0f, cmd.QuadData.Size.Y);
-                        instances.Items[offsets.Quads].Color = cmd.QuadData.Color;
+                        instances[offsets.Quads] = new InstanceData
+                        {
+                            Position = cmd.QuadData.Position,
+                            Rotation = cmd.QuadData.Rotation,
+                            Scale = new Vector3(cmd.QuadData.Size.X, 1.0f, cmd.QuadData.Size.Y),
+                            Color = cmd.QuadData.Color
+                        };
                         offsets.Quads++;
                         break;
                     case RenderableType.Circle:
-                        instances.Items[offsets.Circles].Position = cmd.CircleData.Position;
-                        instances.Items[offsets.Circles].Rotation = cmd.CircleData.Rotation;
-                        instances.Items[offsets.Circles].Scale = new Vector3(cmd.CircleData.Radius * 2.0f, 0.0f, cmd.CircleData.Radius * 2.0f);
-                        instances.Items[offsets.Circles].Color = cmd.CircleData.Color;
+                        instances[offsets.Circles] = new InstanceData
+                        {
+                            Position = cmd.CircleData.Position,
+                            Rotation = cmd.CircleData.Rotation,
+                            Scale = new Vector3(cmd.CircleData.Radius * 2.0f, 0.0f, cmd.CircleData.Radius * 2.0f),
+                            Color = cmd.CircleData.Color
+                        };
                         offsets.Circles++;
                         break;
                     case RenderableType.Sphere:
-                        instances.Items[offsets.Spheres].Position = cmd.SphereData.Position;
-                        instances.Items[offsets.Spheres].Rotation = Quaternion.Identity;
-                        instances.Items[offsets.Spheres].Scale = new Vector3(cmd.SphereData.Radius * 2);
-                        instances.Items[offsets.Spheres].Color = cmd.SphereData.Color;
+                        instances[offsets.Spheres] = new InstanceData
+                        {
+                            Position = cmd.SphereData.Position,
+                            Rotation = Quaternion.Identity,
+                            Scale = new Vector3(cmd.SphereData.Radius * 2),
+                            Color = cmd.SphereData.Color
+                        };
                         offsets.Spheres++;
                         break;
                     case RenderableType.HalfSphere:
-                        instances.Items[offsets.HalfSpheres].Position = cmd.HalfSphereData.Position;
-                        instances.Items[offsets.HalfSpheres].Rotation = cmd.HalfSphereData.Rotation;
-                        instances.Items[offsets.HalfSpheres].Scale = new Vector3(cmd.HalfSphereData.Radius * 2);
-                        instances.Items[offsets.HalfSpheres].Color = cmd.HalfSphereData.Color;
+                        instances[offsets.HalfSpheres] = new InstanceData
+                        {
+                            Position = cmd.HalfSphereData.Position,
+                            Rotation = cmd.HalfSphereData.Rotation,
+                            Scale = new Vector3(cmd.HalfSphereData.Radius * 2),
+                            Color = cmd.HalfSphereData.Color
+                        };
                         offsets.HalfSpheres++;
                         break;
                     case RenderableType.Cube:
-                        ref var start = ref cmd.CubeData.Start;
-                        ref var end = ref cmd.CubeData.End;
-                        instances.Items[offsets.Cubes].Position = start;
-                        instances.Items[offsets.Cubes].Rotation = cmd.CubeData.Rotation;
-                        instances.Items[offsets.Cubes].Scale = end - start;
-                        instances.Items[offsets.Cubes].Color = cmd.CubeData.Color;
-                        offsets.Cubes++;
-                        break;
+                        {
+                            ref readonly var start = ref cmd.CubeData.Start;
+                            ref readonly var end = ref cmd.CubeData.End;
+                            instances[offsets.Cubes] = new InstanceData
+                            {
+                                Position = start,
+                                Rotation = cmd.CubeData.Rotation,
+                                Scale = end - start,
+                                Color = cmd.CubeData.Color
+                            };
+                            offsets.Cubes++;
+                            break;
+                        }
                     case RenderableType.Capsule:
-                        instances.Items[offsets.Capsules].Position = cmd.CapsuleData.Position;
-                        instances.Items[offsets.Capsules].Rotation = cmd.CapsuleData.Rotation;
-                        instances.Items[offsets.Capsules].Scale = new Vector3(cmd.CapsuleData.Radius * 2.0f, cmd.CapsuleData.Height, cmd.CapsuleData.Radius * 2.0f);
-                        instances.Items[offsets.Capsules].Color = cmd.CapsuleData.Color;
+                        instances[offsets.Capsules] = new InstanceData
+                        {
+                            Position = cmd.CapsuleData.Position,
+                            Rotation = cmd.CapsuleData.Rotation,
+                            Scale = new Vector3(cmd.CapsuleData.Radius * 2.0f, cmd.CapsuleData.Height, cmd.CapsuleData.Radius * 2.0f),
+                            Color = cmd.CapsuleData.Color
+                        };
                         offsets.Capsules++;
                         break;
                     case RenderableType.Cylinder:
-                        instances.Items[offsets.Cylinders].Position = cmd.CylinderData.Position;
-                        instances.Items[offsets.Cylinders].Rotation = cmd.CylinderData.Rotation;
-                        instances.Items[offsets.Cylinders].Scale = new Vector3(cmd.CylinderData.Radius * 2.0f, cmd.CylinderData.Height, cmd.CylinderData.Radius * 2.0f);
-                        instances.Items[offsets.Cylinders].Color = cmd.CylinderData.Color;
+                        instances[offsets.Cylinders] = new InstanceData
+                        {
+                            Position = cmd.CylinderData.Position,
+                            Rotation = cmd.CylinderData.Rotation,
+                            Scale = new Vector3(cmd.CylinderData.Radius * 2.0f, cmd.CylinderData.Height, cmd.CylinderData.Radius * 2.0f),
+                            Color = cmd.CylinderData.Color
+                        };
                         offsets.Cylinders++;
                         break;
                     case RenderableType.Cone:
-                        instances.Items[offsets.Cones].Position = cmd.ConeData.Position;
-                        instances.Items[offsets.Cones].Rotation = cmd.ConeData.Rotation;
-                        instances.Items[offsets.Cones].Scale = new Vector3(cmd.ConeData.Radius * 2.0f, cmd.ConeData.Height, cmd.ConeData.Radius * 2.0f);
-                        instances.Items[offsets.Cones].Color = cmd.ConeData.Color;
+                        instances[offsets.Cones] = new InstanceData
+                        {
+                            Position = cmd.ConeData.Position,
+                            Rotation = cmd.ConeData.Rotation,
+                            Scale = new Vector3(cmd.ConeData.Radius * 2.0f, cmd.ConeData.Height, cmd.ConeData.Radius * 2.0f),
+                            Color = cmd.ConeData.Color
+                        };
                         offsets.Cones++;
                         break;
                     case RenderableType.Line:
-                        lineVertices.Items[offsets.Lines].Position = cmd.LineData.Start;
-                        lineVertices.Items[offsets.Lines++].Color = cmd.LineData.Color;
-                        lineVertices.Items[offsets.Lines].Position = cmd.LineData.End;
-                        lineVertices.Items[offsets.Lines++].Color = cmd.LineData.Color;
+                        lineVertices[offsets.Lines++] = new LineVertex { Position = cmd.LineData.Start, Color = cmd.LineData.Color };
+                        lineVertices[offsets.Lines++] = new LineVertex { Position = cmd.LineData.End, Color = cmd.LineData.Color };
                         break;
                 }
             }
-
         }
 
         int SumBasicPrimitives(ref Primitives primitives)
@@ -548,23 +571,19 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         {
             ImmediateDebugRenderObject debugObject = (ImmediateDebugRenderObject)renderObject;
 
-            /* everything except lines is included here, as lines just get accumulated into a buffer directly */
             int primitivesWithDepth = SumBasicPrimitives(ref debugObject.totalPrimitives);
             int primitivesWithoutDepth = SumBasicPrimitives(ref debugObject.totalPrimitivesNoDepth);
             int totalThingsToDraw = primitivesWithDepth + primitivesWithoutDepth;
 
-            instances.Resize(instances.Count + totalThingsToDraw, true);
-
-            lineVertices.Resize(lineVertices.Count + debugObject.totalPrimitives.Lines * 2 + debugObject.totalPrimitivesNoDepth.Lines * 2, true);
+            EnsureSize(instances, instances.Count + totalThingsToDraw);
+            EnsureSize(lineVertices, lineVertices.Count + debugObject.totalPrimitives.Lines * 2 + debugObject.totalPrimitivesNoDepth.Lines * 2);
 
             var primitiveOffsets = SetupPrimitiveOffsets(ref debugObject.totalPrimitives, lastOffset);
             var primitiveOffsetsNoDepth = SetupPrimitiveOffsets(ref debugObject.totalPrimitivesNoDepth, primitiveOffsets.Cones + debugObject.totalPrimitives.Cones);
 
-            /* line rendering data, separate buffer so offset isnt relative to the other data */
             primitiveOffsets.Lines = 0 + lastLineOffset;
             primitiveOffsetsNoDepth.Lines = debugObject.totalPrimitives.Lines * 2 + lastLineOffset;
 
-            /* save instance offsets before we mutate them as we need them when rendering */
             debugObject.instanceOffsets = primitiveOffsets;
             debugObject.instanceOffsetsNoDepth = primitiveOffsetsNoDepth;
 
@@ -574,86 +593,64 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             debugObject.primitivesToDraw = debugObject.totalPrimitives;
             debugObject.primitivesToDrawNoDepth = debugObject.totalPrimitivesNoDepth;
 
-            // store the last offsets, so we can start from there next iteration
             lastOffset = debugObject.instanceOffsetsNoDepth.Cones + debugObject.totalPrimitivesNoDepth.Cones;
             lastLineOffset = debugObject.instanceOffsetsNoDepth.Lines + debugObject.totalPrimitivesNoDepth.Lines * 2;
 
-            // only now clear this data...
-            debugObject.renderablesWithDepth.Clear(true);
-            debugObject.renderablesNoDepth.Clear(true);
+            // Clear per-frame message queues
+            debugObject.renderablesWithDepth.Clear();
+            debugObject.renderablesNoDepth.Clear();
             debugObject.totalPrimitives.Clear();
             debugObject.totalPrimitivesNoDepth.Clear();
         }
     }
 
-    private unsafe static void UpdateBufferIfNecessary(GraphicsDevice device, CommandList commandList, ref Buffer buffer, DataPointer dataPtr, int elementSize)
+    private static void UpdateBufferIfNecessary<T>(GraphicsDevice device, CommandList commandList, ref Buffer buffer, ReadOnlySpan<T> data) where T : unmanaged
     {
-        int neededBufferSize = dataPtr.Size / elementSize;
+        int neededBufferSize = data.Length;
         if (neededBufferSize > buffer.ElementCount)
         {
             buffer.Dispose();
-            var newBuffer = Stride.Graphics.Buffer.New(
-                device,
-                dataPtr,
-                buffer.StructureByteStride,
-                buffer.Flags
-            );
+            // Recreate buffer preserving flags and usage
+            var newBuffer = Buffer.New(device, data, buffer.Flags, PixelFormat.None, buffer.Usage);
             buffer = newBuffer;
         }
         else
-            buffer.SetData(commandList, dataPtr);
+        {
+            buffer.SetData(commandList, data);
+        }
     }
 
     private void CheckBuffers(RenderDrawContext context)
     {
-        unsafe
-        {
-            fixed (Matrix* transformsPtr = transforms.Items)
-            {
-                UpdateBufferIfNecessary(
-                    context.GraphicsDevice, context.CommandList, buffer: ref transformBuffer,
-                    dataPtr: new DataPointer(transformsPtr, transforms.Count * Marshal.SizeOf<Matrix>()),
-                    elementSize: Marshal.SizeOf<Matrix>()
-                );
-            }
+        var transformsSpan = CollectionsMarshal.AsSpan(transforms);
+        UpdateBufferIfNecessary<Matrix>(context.GraphicsDevice, context.CommandList, ref transformBuffer, transformsSpan);
 
-            fixed (Color* colorsPtr = colors.Items)
-            {
-                UpdateBufferIfNecessary(
-                    context.GraphicsDevice, context.CommandList, buffer: ref colorBuffer,
-                    dataPtr: new DataPointer(colorsPtr, colors.Count * Marshal.SizeOf<Color>()),
-                    elementSize: Marshal.SizeOf<Color>()
-                );
-            }
+        var colorsSpan = CollectionsMarshal.AsSpan(colors);
+        UpdateBufferIfNecessary<Color>(context.GraphicsDevice, context.CommandList, ref colorBuffer, colorsSpan);
 
-            fixed (LineVertex* lineVertsPtr = lineVertices.Items)
-            {
-                UpdateBufferIfNecessary(
-                    context.GraphicsDevice, context.CommandList, buffer: ref lineVertexBuffer,
-                    dataPtr: new DataPointer(lineVertsPtr, lineVertices.Count * Marshal.SizeOf<LineVertex>()),
-                    elementSize: Marshal.SizeOf<LineVertex>()
-                );
-            }
-        }
+        var lineVertsSpan = CollectionsMarshal.AsSpan(lineVertices);
+        UpdateBufferIfNecessary<LineVertex>(context.GraphicsDevice, context.CommandList, ref lineVertexBuffer, lineVertsSpan);
     }
 
     /// <inheritdoc/>
     public override void Prepare(RenderDrawContext context)
     {
-        transforms.Resize(instances.Count, true);
-        colors.Resize(instances.Count, true);
+        int count = instances.Count;
+        SetCount(transforms, count);
+        SetCount(colors, count);
 
-        Dispatcher.For(0, transforms.Count, (i) =>
+        Dispatcher.For(0, count, (i) =>
         {
-            ref var instance = ref instances.Items[i];
-            Matrix.Transformation(ref instance.Scale, ref instance.Rotation, ref instance.Position, out transforms.Items[i]);
+            var instance = instances[i];
+            Matrix.Transformation(ref instance.Scale, ref instance.Rotation, ref instance.Position, out var m);
+            transforms[i] = m;
             colors[i] = instance.Color;
         }
         );
 
         CheckBuffers(context);
-        lineVertices.Clear(true);
-        instances.Clear(true);
+        lineVertices.Clear();
+        instances.Clear();
     }
 
     private void SetPrimitiveRenderingPipelineState(CommandList commandList, bool depthTest, FillMode selectedFillMode, bool isDoubleSided = false, bool hasTransparency = false)
@@ -844,5 +841,25 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         vertexBuffer.Dispose();
         indexBuffer.Dispose();
         lineVertexBuffer.Dispose();
+    }
+
+    private static void EnsureSize<T>(List<T> list, int size)
+    {
+        if (list.Count >= size) return;
+        list.Capacity = Math.Max(list.Capacity, size);
+        int toAdd = size - list.Count;
+        for (int i = 0; i < toAdd; i++) list.Add(default!);
+    }
+
+    private static void SetCount<T>(List<T> list, int size)
+    {
+        if (list.Count < size)
+        {
+            EnsureSize(list, size);
+        }
+        else if (list.Count > size)
+        {
+            list.RemoveRange(size, list.Count - size);
+        }
     }
 }
