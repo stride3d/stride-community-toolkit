@@ -88,7 +88,7 @@ public class ShapeUpdater : SyncScript
         }
     }
 
-    private static Color ComputeColor(in Vector3 p)
+    private static Color ComputeColor(Vector3 p)
     {
         byte r = (byte)(((p.X / AreaSize) + 1f) * 0.5f * 255.0f);
         byte g = (byte)(((p.Y / AreaSize) + 1f) * 0.5f * 255.0f);

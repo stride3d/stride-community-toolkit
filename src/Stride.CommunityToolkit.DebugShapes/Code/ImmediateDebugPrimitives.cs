@@ -505,7 +505,6 @@ public static class ImmediateDebugPrimitives
         }
 
         return (vertices, indices);
-
     }
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCone(float height, float radius, int tesselations, int uvSplits = 4, int uvSplitsBottom = 0)
