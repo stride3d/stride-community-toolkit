@@ -1,6 +1,6 @@
 namespace Example08_DebugShapes.Scripts;
 
-public enum CurRenderMode : byte
+public enum CurrentRenderMode : byte
 {
     All = 0,
     Quad,
