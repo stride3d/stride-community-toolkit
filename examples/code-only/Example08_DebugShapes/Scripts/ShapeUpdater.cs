@@ -1,10 +1,9 @@
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
-using Stride.Physics;
 using System.Runtime.InteropServices;
 
 namespace Example08_DebugShapes.Scripts;
@@ -23,7 +22,7 @@ public class ShapeUpdater : SyncScript
     ImmediateDebugRenderSystem? _debugDraw; // Provided by services
 
     private int _currentNumPrimitives = InitialNumPrimitives;
-    private CurRenderMode _mode = CurRenderMode.All;
+    private CurrentRenderMode _mode = CurrentRenderMode.All;
     private bool _useDepthTesting = true;
     private bool _useWireframe = true;
     private bool _running = true;
@@ -135,7 +134,7 @@ public class ShapeUpdater : SyncScript
 
         newCount = Clamp(_currentNumPrimitives + (int)(Input.MouseWheelDelta * ChangePerSecond * speedyDelta * dt), MinNumberOfPrimitives, MaxNumberOfPrimitives);
 
-        if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt)) _mode = (CurRenderMode)(((int)_mode + 1) % ((int)CurRenderMode.None + 1));
+        if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt)) _mode = (CurrentRenderMode)(((int)_mode + 1) % ((int)CurrentRenderMode.None + 1));
         if (Input.IsKeyPressed(Stride.Input.Keys.LeftCtrl)) _useDepthTesting = !_useDepthTesting;
         if (Input.IsKeyPressed(Stride.Input.Keys.Tab)) _useWireframe = !_useWireframe;
         if (Input.IsKeyPressed(Stride.Input.Keys.Space)) _running = !_running;
@@ -212,7 +211,7 @@ public class ShapeUpdater : SyncScript
 
             switch (_mode)
             {
-                case CurRenderMode.All:
+                case CurrentRenderMode.All:
                     switch (currentShape++)
                     {
                         case 0: _debugDraw.DrawSphere(position, 0.5f, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
@@ -226,17 +225,17 @@ public class ShapeUpdater : SyncScript
                         case 8: _debugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: _useDepthTesting, solid: !_useWireframe); currentShape = 0; break;
                     }
                     break;
-                case CurRenderMode.Quad: _debugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.Circle: _debugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.Sphere: _debugDraw.DrawSphere(position, 0.5f, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.HalfSphere: _debugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.Cube: _debugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe && i % 2 == 0); break;
-                case CurRenderMode.Capsule: _debugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.Cylinder: _debugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.Cone: _debugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.Ray: _debugDraw.DrawRay(position, velocity, color, depthTest: _useDepthTesting); break;
-                case CurRenderMode.Arrow: _debugDraw.DrawArrow(position, position + velocity, color: color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
-                case CurRenderMode.None: break;
+                case CurrentRenderMode.Quad: _debugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Circle: _debugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Sphere: _debugDraw.DrawSphere(position, 0.5f, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.HalfSphere: _debugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Cube: _debugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe && i % 2 == 0); break;
+                case CurrentRenderMode.Capsule: _debugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Cylinder: _debugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Cone: _debugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Ray: _debugDraw.DrawRay(position, velocity, color, depthTest: _useDepthTesting); break;
+                case CurrentRenderMode.Arrow: _debugDraw.DrawArrow(position, position + velocity, color: color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.None: break;
             }
         }
     }
@@ -260,9 +259,9 @@ public class ShapeUpdater : SyncScript
         }
 
         var clickPos = Input.MousePosition;
-        var result = _currentCamera.Raycast(this.GetSimulation(), clickPos);
+        var hit = _currentCamera.Raycast(clickPos, 1000, out var result);
 
-        if (!result.Succeeded) return;
+        if (!hit) return;
 
         var cameraWorldPos = _currentCamera.Entity.Transform.WorldMatrix.TranslationVector;
         var cameraWorldUp = _currentCamera.Entity.Transform.WorldMatrix.Up;
@@ -287,7 +286,7 @@ public class ShapeUpdater : SyncScript
         {
             var p = startPos + new Vector3(i, 0, 0);
             _debugDraw.DrawCube(p, Vector3.One, depthTest: _useDepthTesting, solid: true);
-            _debugDraw.DrawCube(p, Vector3.One, depthTest: _useDepthTesting, solid: false, color: Color.White);
+            _debugDraw.DrawCube(p, Vector3.One, color: Color.White, depthTest: _useDepthTesting, solid: false);
         }
 
         // Show every primitive type in a row
