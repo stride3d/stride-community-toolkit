@@ -11,16 +11,20 @@ public static class ListExtensions
     /// </summary>
     public static void EnsureSize<T>(this List<T> list, int size)
     {
-        if (list is null) throw new ArgumentNullException(nameof(list));
-        if (size < 0) throw new ArgumentOutOfRangeException(nameof(size));
+        ArgumentNullException.ThrowIfNull(list);
 
-        if (list.Count >= size)
-            return;
+        ArgumentOutOfRangeException.ThrowIfNegative(size);
+
+        if (list.Count >= size) return;
 
         list.Capacity = Math.Max(list.Capacity, size);
+
         int toAdd = size - list.Count;
+
         for (int i = 0; i < toAdd; i++)
+        {
             list.Add(default!);
+        }
     }
 
     /// <summary>
@@ -28,8 +32,8 @@ public static class ListExtensions
     /// </summary>
     public static void SetCount<T>(this List<T> list, int size)
     {
-        if (list is null) throw new ArgumentNullException(nameof(list));
-        if (size < 0) throw new ArgumentOutOfRangeException(nameof(size));
+        ArgumentNullException.ThrowIfNull(list);
+        ArgumentOutOfRangeException.ThrowIfNegative(size);
 
         if (list.Count < size)
         {
