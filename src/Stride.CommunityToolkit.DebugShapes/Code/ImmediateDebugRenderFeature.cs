@@ -271,24 +271,24 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     private readonly (VertexPositionTexture[] Vertices, int[] Indices) cone = ImmediateDebugPrimitives.GenerateCone(DefaultConeHeight, DefaultConeRadius, ConeTesselation, uvSplits: 8);
 
     /* vertex and index buffer for our primitive data */
-    private Buffer vertexBuffer;
-    private Buffer indexBuffer;
+    private Buffer? vertexBuffer;
+    private Buffer? indexBuffer;
 
     /* vertex buffer for line rendering */
-    private Buffer lineVertexBuffer;
+    private Buffer? lineVertexBuffer;
 
     /* offsets into our vertex/index buffer */
     private Primitives primitiveVertexOffsets;
     private Primitives primitiveIndexOffsets;
 
     /* other gpu related data */
-    private MutablePipelineState pipelineState;
-    private InputElementDescription[] inputElements;
-    private InputElementDescription[] lineInputElements;
-    private DynamicEffectInstance primitiveEffect;
-    private DynamicEffectInstance lineEffect;
-    private Buffer transformBuffer;
-    private Buffer colorBuffer;
+    private MutablePipelineState? pipelineState;
+    private InputElementDescription[] inputElements = Array.Empty<InputElementDescription>();
+    private InputElementDescription[] lineInputElements = Array.Empty<InputElementDescription>();
+    private DynamicEffectInstance? primitiveEffect;
+    private DynamicEffectInstance? lineEffect;
+    private Buffer? transformBuffer;
+    private Buffer? colorBuffer;
 
     /* intermediate message related data, written to in extract */
     private readonly List<InstanceData> instances = new(1);
@@ -300,10 +300,13 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     /* data only for line rendering */
     private readonly List<LineVertex> lineVertices = new(1);
 
-    public ImmediateDebugRenderFeature()
-    {
-        SortKey = 0xFF; // render last! .. or things without depth testing in the opaque stage will have the background rendered over them
-    }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImmediateDebugRenderFeature"/> class.
+    /// </summary>
+    /// <remarks>This constructor sets the default sort key to ensure that the feature is rendered last,
+    /// preventing background elements from being rendered over objects without depth testing in the opaque
+    /// stage.</remarks>
+    public ImmediateDebugRenderFeature() => SortKey = 0xFF;
 
     /// <inheritdoc/>
     protected override void InitializeCore()
@@ -606,6 +609,9 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     private static void UpdateBufferIfNecessary<T>(GraphicsDevice device, CommandList commandList, ref Buffer buffer, ReadOnlySpan<T> data) where T : unmanaged
     {
+        if (data.IsEmpty)
+            return; // nothing to upload, keep previous content
+
         int neededBufferSize = data.Length;
         if (neededBufferSize > buffer.ElementCount)
         {
@@ -623,13 +629,13 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     private void CheckBuffers(RenderDrawContext context)
     {
         var transformsSpan = CollectionsMarshal.AsSpan(transforms);
-        UpdateBufferIfNecessary<Matrix>(context.GraphicsDevice, context.CommandList, ref transformBuffer, transformsSpan);
+        UpdateBufferIfNecessary<Matrix>(context.GraphicsDevice, context.CommandList, ref transformBuffer!, transformsSpan);
 
         var colorsSpan = CollectionsMarshal.AsSpan(colors);
-        UpdateBufferIfNecessary<Color>(context.GraphicsDevice, context.CommandList, ref colorBuffer, colorsSpan);
+        UpdateBufferIfNecessary<Color>(context.GraphicsDevice, context.CommandList, ref colorBuffer!, colorsSpan);
 
         var lineVertsSpan = CollectionsMarshal.AsSpan(lineVertices);
-        UpdateBufferIfNecessary<LineVertex>(context.GraphicsDevice, context.CommandList, ref lineVertexBuffer, lineVertsSpan);
+        UpdateBufferIfNecessary<LineVertex>(context.GraphicsDevice, context.CommandList, ref lineVertexBuffer!, lineVertsSpan);
     }
 
     /// <inheritdoc/>
@@ -649,16 +655,17 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         );
 
         CheckBuffers(context);
+
         lineVertices.Clear();
         instances.Clear();
     }
 
     private void SetPrimitiveRenderingPipelineState(CommandList commandList, bool depthTest, FillMode selectedFillMode, bool isDoubleSided = false, bool hasTransparency = false)
     {
-        pipelineState.State.SetDefaults();
+        pipelineState!.State.SetDefaults();
         pipelineState.State.PrimitiveType = PrimitiveType.TriangleList;
-        pipelineState.State.RootSignature = primitiveEffect.RootSignature;
-        pipelineState.State.EffectBytecode = primitiveEffect.Effect.Bytecode;
+        pipelineState.State.RootSignature = primitiveEffect!.RootSignature;
+        pipelineState.State.EffectBytecode = primitiveEffect!.Effect.Bytecode;
         pipelineState.State.DepthStencilState = depthTest ? hasTransparency ? DepthStencilStates.DepthRead : DepthStencilStates.Default : DepthStencilStates.None;
         pipelineState.State.RasterizerState.FillMode = selectedFillMode;
         pipelineState.State.RasterizerState.CullMode = selectedFillMode == FillMode.Solid && !isDoubleSided ? CullMode.Back : CullMode.None;
@@ -670,9 +677,9 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     private void SetLineRenderingPipelineState(CommandList commandList, bool depthTest, bool hasTransparency = false)
     {
-        pipelineState.State.SetDefaults();
+        pipelineState!.State.SetDefaults();
         pipelineState.State.PrimitiveType = PrimitiveType.LineList;
-        pipelineState.State.RootSignature = lineEffect.RootSignature;
+        pipelineState.State.RootSignature = lineEffect!.RootSignature;
         pipelineState.State.EffectBytecode = lineEffect.Effect.Bytecode;
         pipelineState.State.DepthStencilState = depthTest ? hasTransparency ? DepthStencilStates.DepthRead : DepthStencilStates.Default : DepthStencilStates.None;
         pipelineState.State.RasterizerState.FillMode = FillMode.Solid;
@@ -690,10 +697,10 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         // set buffers and our current pipeline state
         commandList.SetVertexBuffer(0, vertexBuffer, 0, VertexPositionTexture.Layout.VertexStride);
         commandList.SetIndexBuffer(indexBuffer, 0, is32bits: true);
-        commandList.SetPipelineState(pipelineState.CurrentState);
+        commandList.SetPipelineState(pipelineState!.CurrentState);
 
         // we set line width to something absurdly high to avoid having to alter our shader substantially for now
-        primitiveEffect.Parameters.Set(PrimitiveShaderKeys.LineWidthMultiplier, fillMode == FillMode.Solid ? 10000.0f : 1.0f);
+        primitiveEffect!.Parameters.Set(PrimitiveShaderKeys.LineWidthMultiplier, fillMode == FillMode.Solid ? 10000.0f : 1.0f);
         primitiveEffect.Parameters.Set(PrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
         primitiveEffect.Parameters.Set(PrimitiveShaderKeys.Transforms, transformBuffer);
         primitiveEffect.Parameters.Set(PrimitiveShaderKeys.Colors, colorBuffer);
@@ -796,7 +803,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             commandList.SetVertexBuffer(0, lineVertexBuffer, 0, LineVertex.Layout.VertexStride);
             commandList.SetPipelineState(pipelineState.CurrentState);
 
-            lineEffect.Parameters.Set(LinePrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
+            lineEffect!.Parameters.Set(LinePrimitiveShaderKeys.ViewProjection, renderView.ViewProjection);
             lineEffect.UpdateEffect(context.GraphicsDevice);
             lineEffect.Apply(context.GraphicsContext);
 
@@ -836,11 +843,11 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     public override void Unload()
     {
         base.Unload();
-        transformBuffer.Dispose();
-        colorBuffer.Dispose();
-        vertexBuffer.Dispose();
-        indexBuffer.Dispose();
-        lineVertexBuffer.Dispose();
+        transformBuffer?.Dispose();
+        colorBuffer?.Dispose();
+        vertexBuffer?.Dispose();
+        indexBuffer?.Dispose();
+        lineVertexBuffer?.Dispose();
     }
 
     private static void EnsureSize<T>(List<T> list, int size)
