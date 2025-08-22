@@ -5,6 +5,7 @@ using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
 using System.Runtime.InteropServices;
+using Stride.CommunityToolkit.Collections;
 
 namespace Example08_DebugShapes.Scripts;
 
@@ -38,11 +39,11 @@ public class ShapeUpdater : SyncScript
 
     private void InitializePrimitives(int from, int to)
     {
-        EnsureSize(_primitivePositions, to);
-        EnsureSize(_primitiveRotations, to);
-        EnsureSize(_primitiveVelocities, to);
-        EnsureSize(_primitiveRotVelocities, to);
-        EnsureSize(_primitiveColors, to);
+        _primitivePositions.EnsureSize(to);
+        _primitiveRotations.EnsureSize(to);
+        _primitiveVelocities.EnsureSize(to);
+        _primitiveRotVelocities.EnsureSize(to);
+        _primitiveColors.EnsureSize(to);
 
         var posSpan = CollectionsMarshal.AsSpan(_primitivePositions);
         var rotSpan = CollectionsMarshal.AsSpan(_primitiveRotations);
@@ -71,20 +72,6 @@ public class ShapeUpdater : SyncScript
             velSpan[i] = ballVel;
             rvelSpan[i] = ballRotVel;
             colSpan[i] = ComputeColor(posSpan[i]);
-        }
-    }
-
-    private static void EnsureSize<T>(List<T> list, int size)
-    {
-        if (list.Count >= size) return;
-
-        list.Capacity = Math.Max(list.Capacity, size);
-
-        int toAdd = size - list.Count;
-
-        for (int i = 0; i < toAdd; i++)
-        {
-            list.Add(default!);
         }
     }
 

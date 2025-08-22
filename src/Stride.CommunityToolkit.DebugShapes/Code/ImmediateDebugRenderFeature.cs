@@ -1,6 +1,7 @@
 // Copyright (c) Stride contributors (https://stride3d.net)
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
+using Stride.CommunityToolkit.Collections;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.DebugRendering;
@@ -578,8 +579,8 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             int primitivesWithoutDepth = SumBasicPrimitives(ref debugObject.totalPrimitivesNoDepth);
             int totalThingsToDraw = primitivesWithDepth + primitivesWithoutDepth;
 
-            EnsureSize(instances, instances.Count + totalThingsToDraw);
-            EnsureSize(lineVertices, lineVertices.Count + debugObject.totalPrimitives.Lines * 2 + debugObject.totalPrimitivesNoDepth.Lines * 2);
+            instances.EnsureSize(instances.Count + totalThingsToDraw);
+            lineVertices.EnsureSize(lineVertices.Count + debugObject.totalPrimitives.Lines * 2 + debugObject.totalPrimitivesNoDepth.Lines * 2);
 
             var primitiveOffsets = SetupPrimitiveOffsets(ref debugObject.totalPrimitives, lastOffset);
             var primitiveOffsetsNoDepth = SetupPrimitiveOffsets(ref debugObject.totalPrimitivesNoDepth, primitiveOffsets.Cones + debugObject.totalPrimitives.Cones);
@@ -642,8 +643,8 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     public override void Prepare(RenderDrawContext context)
     {
         int count = instances.Count;
-        SetCount(transforms, count);
-        SetCount(colors, count);
+        transforms.SetCount(count);
+        colors.SetCount(count);
 
         Dispatcher.For(0, count, (i) =>
         {
@@ -850,23 +851,4 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
         lineVertexBuffer?.Dispose();
     }
 
-    private static void EnsureSize<T>(List<T> list, int size)
-    {
-        if (list.Count >= size) return;
-        list.Capacity = Math.Max(list.Capacity, size);
-        int toAdd = size - list.Count;
-        for (int i = 0; i < toAdd; i++) list.Add(default!);
-    }
-
-    private static void SetCount<T>(List<T> list, int size)
-    {
-        if (list.Count < size)
-        {
-            EnsureSize(list, size);
-        }
-        else if (list.Count > size)
-        {
-            list.RemoveRange(size, list.Count - size);
-        }
-    }
 }
