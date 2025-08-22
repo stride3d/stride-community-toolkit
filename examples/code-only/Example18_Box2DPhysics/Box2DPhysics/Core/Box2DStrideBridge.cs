@@ -4,7 +4,7 @@ using Stride.Engine;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Types;
 
-namespace Example18_Box2DPhysics.Reusable.Core;
+namespace Example18_Box2DPhysics.Box2DPhysics.Core;
 
 /// <summary>
 /// Bridge responsible for mapping Box2D bodies to Stride entities and synchronizing transforms.

@@ -1,6 +1,7 @@
 using Box2D.NET;
 using Example.Common;
 using Example18_Box2DPhysics.Physics;
+using Example18_Box2DPhysics.Box2DPhysics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;

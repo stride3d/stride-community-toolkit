@@ -1,12 +1,11 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
-using Example18_Box2DPhysics.Reusable.Core.Results; // QueryRaycastHit location
 using static Box2D.NET.B2Distances;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
 using static Box2D.NET.B2Worlds;
 
-namespace Example18_Box2DPhysics.Reusable.Queries;
+namespace Example18_Box2DPhysics.Box2DPhysics.Queries;
 
 /// <summary>
 /// Stateless helper methods for common Box2D query patterns. Intended for extraction to a reusable

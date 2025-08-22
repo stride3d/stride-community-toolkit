@@ -1,3 +1,4 @@
+using Example18_Box2DPhysics.Box2DPhysics;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 

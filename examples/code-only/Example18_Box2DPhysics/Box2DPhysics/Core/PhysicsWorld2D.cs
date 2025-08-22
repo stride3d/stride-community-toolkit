@@ -2,7 +2,7 @@ using Box2D.NET;
 using static Box2D.NET.B2Types;
 using static Box2D.NET.B2Worlds;
 
-namespace Example18_Box2DPhysics.Reusable.Core;
+namespace Example18_Box2DPhysics.Box2DPhysics.Core;
 
 /// <summary>
 /// Generic 2D physics world wrapper around Box2D.NET intended for future extraction into a reusable

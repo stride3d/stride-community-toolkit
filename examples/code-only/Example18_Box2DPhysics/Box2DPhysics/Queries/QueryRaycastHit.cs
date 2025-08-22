@@ -1,7 +1,7 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
 
-namespace Example18_Box2DPhysics.Reusable.Queries;
+namespace Example18_Box2DPhysics.Box2DPhysics.Queries;
 
 public static partial class PhysicsQueries2D
 {

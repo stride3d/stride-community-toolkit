@@ -4,7 +4,7 @@ using Stride.Engine;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Worlds;
 
-namespace Example18_Box2DPhysics.Reusable.Events;
+namespace Example18_Box2DPhysics.Box2DPhysics.Events;
 
 /// <summary>
 /// Extracted (in-progress) router for Box2D contact and sensor events. Delegates resolution of bodies

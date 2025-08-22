@@ -1,7 +1,7 @@
 using Box2D.NET;
 using Stride.Core.Mathematics;
 
-namespace Example18_Box2DPhysics.Reusable.Core.Results;
+namespace Example18_Box2DPhysics.Box2DPhysics.Core.Results;
 
 /// <summary>
 /// Represents a raw 2D raycast hit returned by <see cref="PhysicsQueries2D"/>.

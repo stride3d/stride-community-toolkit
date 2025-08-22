@@ -1,12 +1,12 @@
 using Box2D.NET;
-using Example18_Box2DPhysics.Reusable.Core; // new reusable core wrappers
-using Example18_Box2DPhysics.Reusable.Events; // event router extraction
-using Example18_Box2DPhysics.Reusable.Queries; // for PhysicsQueries2D extraction
+using Example18_Box2DPhysics.Box2DPhysics.Core; // new reusable core wrappers
+using Example18_Box2DPhysics.Box2DPhysics.Events; // event router extraction
+using Example18_Box2DPhysics.Box2DPhysics.Queries; // for PhysicsQueries2D extraction
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Worlds;
 
-namespace Example18_Box2DPhysics;
+namespace Example18_Box2DPhysics.Box2DPhysics;
 
 /// <summary>
 /// High-level integration façade between Box2D.NET and Stride entities for the example.
@@ -176,7 +176,6 @@ public class Box2DSimulation : IDisposable
         var converted = new List<RaycastHit>(rawHits.Count);
 
         foreach (var h in rawHits)
-        {
             converted.Add(new RaycastHit
             {
                 Entity = GetEntity(h.BodyId),
@@ -187,7 +186,6 @@ public class Box2DSimulation : IDisposable
                 Distance = maxDistance * h.Fraction,
                 Fraction = h.Fraction
             });
-        }
 
         return converted;
     }

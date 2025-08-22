@@ -2,7 +2,7 @@ using Box2D.NET;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Example18_Box2DPhysics.Reusable.Core;
+namespace Example18_Box2DPhysics.Box2DPhysics.Core;
 
 /// <summary>
 /// Component to manage Box2D body properties in Stride entities
