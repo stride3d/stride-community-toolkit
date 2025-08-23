@@ -109,7 +109,6 @@ public static class ImmediateDebugPrimitives
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateQuad(float width, float height)
     {
-
         var quadMeshData = GeometricPrimitive.Plane.New(width, height);
         VertexPositionTexture[] vertices = new VertexPositionTexture[quadMeshData.Vertices.Length];
         int[] indices = new int[quadMeshData.Indices.Length];
@@ -124,7 +123,6 @@ public static class ImmediateDebugPrimitives
         }
 
         return (vertices, indices);
-
     }
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCircle(float radius = 0.5f, int tesselations = 16, int uvSplits = 0, float yOffset = 0.0f, bool isFlipped = false, int uvOffset = 0)
@@ -222,7 +220,6 @@ public static class ImmediateDebugPrimitives
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCube(float size = 1.0f)
     {
-
         var cubeMeshData = GeometricPrimitive.Cube.New(size);
         VertexPositionTexture[] vertices = new VertexPositionTexture[cubeMeshData.Vertices.Length];
         int[] indices = new int[cubeMeshData.Indices.Length];
@@ -230,7 +227,6 @@ public static class ImmediateDebugPrimitives
         CopyFromGeometricPrimitive(cubeMeshData, ref vertices, ref indices);
 
         return (vertices, indices);
-
     }
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateSphere(float radius = 0.5f, int tesselations = 16, int uvSplits = 4, int uvSplitOffsetVertical = 0)
@@ -342,7 +338,6 @@ public static class ImmediateDebugPrimitives
                 int? horizModulo = uvSplits > 0 ? j % (horizontalSegments / uvSplits) : null;
                 if (hasUvSplit > 0 && vertModulo == 0 && horizModulo == 0)
                 {
-
                     vertices[newVertexCount] = vertices[i * stride + j];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
@@ -353,7 +348,6 @@ public static class ImmediateDebugPrimitives
 
                     indices[indexCount++] = i * stride + nextJ;
 
-
                     indices[indexCount++] = i * stride + nextJ;
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
@@ -363,11 +357,9 @@ public static class ImmediateDebugPrimitives
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
-
                 }
                 else if (hasUvSplit > 0 && vertModulo == 0)
                 {
-
                     indices[indexCount++] = i * stride + j;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = i * stride + nextJ;
@@ -381,11 +373,9 @@ public static class ImmediateDebugPrimitives
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
-
                 }
                 else if (hasUvSplit > 0 && horizModulo == 0)
                 {
-
                     vertices[newVertexCount] = vertices[i * stride + j];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
@@ -396,15 +386,12 @@ public static class ImmediateDebugPrimitives
 
                     indices[indexCount++] = i * stride + nextJ;
 
-
                     indices[indexCount++] = i * stride + nextJ;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = nextI * stride + nextJ;
-
                 }
                 else
                 {
-
                     indices[indexCount++] = i * stride + j;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = i * stride + nextJ;
@@ -412,9 +399,7 @@ public static class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = nextI * stride + nextJ;
-
                 }
-
             }
         }
 
@@ -468,7 +453,6 @@ public static class ImmediateDebugPrimitives
         int curIndex = 0;
         for (int i = 0; i < tesselations; ++i)
         {
-
             var normal = GetCircleVector(i, tesselations);
             var curTopPos = normal * radius + Vector3.UnitY * (height / 2.0f);
             var curBottomPos = normal * radius - Vector3.UnitY * (height / 2.0f);
@@ -509,7 +493,6 @@ public static class ImmediateDebugPrimitives
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCone(float height, float radius, int tesselations, int uvSplits = 4, int uvSplitsBottom = 0)
     {
-
         if (tesselations < 3) tesselations = 3;
 
         if (uvSplits != 0 && tesselations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
@@ -554,12 +537,10 @@ public static class ImmediateDebugPrimitives
         vertices[1].Position.Y = height / 2.0f;
 
         return (vertices, indices);
-
     }
 
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCapsule(float length, float radius, int tesselation, int uvSplits = 4)
     {
-
         if (tesselation < 3) tesselation = 3;
 
         if (uvSplits != 0 && tesselation % uvSplits != 0) // FIXME: this can read a lot nicer i think?
@@ -654,7 +635,6 @@ public static class ImmediateDebugPrimitives
                 int? horizModulo = uvSplits > 0 ? j % (horizontalSegments / uvSplits) : null;
                 if (hasUvSplit > 0 && vertModulo == 0 && horizModulo == 0)
                 {
-
                     vertices[newVertexCount] = vertices[i * stride + j];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
@@ -664,8 +644,6 @@ public static class ImmediateDebugPrimitives
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + j);
 
                     indices[indexCount++] = i * stride + nextJ;
-
-
                     indices[indexCount++] = i * stride + nextJ;
 
                     vertices[newVertexCount] = vertices[nextI * stride + j];
@@ -675,11 +653,9 @@ public static class ImmediateDebugPrimitives
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
-
                 }
                 else if (hasUvSplit > 0 && vertModulo == 0)
                 {
-
                     indices[indexCount++] = i * stride + j;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = i * stride + nextJ;
@@ -693,11 +669,9 @@ public static class ImmediateDebugPrimitives
                     vertices[newVertexCount] = vertices[nextI * stride + nextJ];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (nextI * stride + nextJ);
-
                 }
                 else if (hasUvSplit > 0 && horizModulo == 0)
                 {
-
                     vertices[newVertexCount] = vertices[i * stride + j];
                     vertices[newVertexCount].TextureCoordinate = _lineUv;
                     indices[indexCount++] = newVertexCount++; // indices[indexCount++] = (i * stride + j);
@@ -712,11 +686,9 @@ public static class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = nextI * stride + nextJ;
-
                 }
                 else
                 {
-
                     indices[indexCount++] = i * stride + j;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = i * stride + nextJ;
@@ -724,14 +696,10 @@ public static class ImmediateDebugPrimitives
                     indices[indexCount++] = i * stride + nextJ;
                     indices[indexCount++] = nextI * stride + j;
                     indices[indexCount++] = nextI * stride + nextJ;
-
                 }
-
             }
         }
 
         return (vertices, indices);
-
     }
-
 }
