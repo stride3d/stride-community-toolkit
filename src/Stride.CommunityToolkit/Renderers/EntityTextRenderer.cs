@@ -4,7 +4,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
-namespace Stride.CommunityToolkit.Rendering.Compositing;
+namespace Stride.CommunityToolkit.Renderers;
 
 /// <summary>
 /// A custom scene renderer that renders 2D text and a background for each entity in the scene.
@@ -115,9 +115,7 @@ public class EntityTextRenderer : SceneRendererBase
             _spriteBatch!.Draw(_backgroundTexture, backgroundRectangle, textDisplay.BackgroundColor ?? _defaultBackground);
         }
         else
-        {
             _metricsCache[entity] = _spriteBatch!.MeasureString(_font, textDisplay.Text, textDisplay.FontSize);
-        }
     }
 
     /// <summary>

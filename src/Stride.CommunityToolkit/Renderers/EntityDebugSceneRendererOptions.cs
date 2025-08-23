@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Compositing;
+namespace Stride.CommunityToolkit.Renderers;
 
 /// <summary>
 /// Options for rendering debug information for entities in the scene.

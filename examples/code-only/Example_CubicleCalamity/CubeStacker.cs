@@ -9,6 +9,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Graphics;
+using Stride.CommunityToolkit.Renderers;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;

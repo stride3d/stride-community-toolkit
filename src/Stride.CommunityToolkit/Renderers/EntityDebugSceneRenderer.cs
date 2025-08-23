@@ -5,7 +5,7 @@ using Stride.Rendering;
 using Stride.Rendering.Compositing;
 using System.Text;
 
-namespace Stride.CommunityToolkit.Rendering.Compositing;
+namespace Stride.CommunityToolkit.Renderers;
 
 /// <summary>
 /// Renders debug information (such as entity names and positions) for all entities in a scene.
@@ -102,9 +102,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
         var stringBuilder = new StringBuilder();
 
         if (_options.ShowEntityName)
-        {
             stringBuilder.Append(entity.Name);
-        }
 
         if (_options.ShowEntityPosition)
         {
