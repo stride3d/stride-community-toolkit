@@ -2,7 +2,6 @@
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using Stride.Core;
-using Stride.Core.Collections;
 using Stride.Core.Mathematics;
 using Stride.Games;
 using Stride.Graphics;
@@ -199,8 +198,8 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         public Color Color;
     }
 
-    private readonly FastList<DebugRenderable> renderMessages = new FastList<DebugRenderable>();
-    private readonly FastList<DebugRenderable> renderMessagesWithLifetime = new FastList<DebugRenderable>();
+    private readonly List<DebugRenderable> renderMessages = new List<DebugRenderable>();
+    private readonly List<DebugRenderable> renderMessagesWithLifetime = new List<DebugRenderable>();
 
     private ImmediateDebugRenderObject solidPrimitiveRenderer;
     private ImmediateDebugRenderObject wireframePrimitiveRenderer;
@@ -368,7 +367,6 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     private bool CreateDebugRenderObjects()
     {
-
         // TODO: is this sane at all? it still seems a bit off.. what happens if the VisibilityGroups stuff gets changed/updated for instance?
         //  or will that never happen? ask xen2 about this and visibilitygroups again specifically.....
         var renderContext = RenderContext.GetShared(Services);
@@ -438,18 +436,19 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         float delta = (float)gameTime.Elapsed.TotalSeconds;
 
         /* clear out any messages with no lifetime left */
-        for (int i = 0; i < renderMessagesWithLifetime.Count; ++i)
+        var lifetimeSpan = CollectionsMarshal.AsSpan(renderMessagesWithLifetime);
+        for (int i = 0; i < lifetimeSpan.Length; ++i)
         {
-            renderMessagesWithLifetime.Items[i].Lifetime -= delta;
+            lifetimeSpan[i].Lifetime -= delta;
         }
 
         renderMessagesWithLifetime.RemoveAll((msg) => msg.Lifetime <= 0.0f);
 
         /* just clear our per-frame array */
-        renderMessages.Clear(true);
+        renderMessages.Clear();
     }
 
-    private void HandlePrimitives(GameTime gameTime, FastList<DebugRenderable> messages)
+    private void HandlePrimitives(GameTime gameTime, List<DebugRenderable> messages)
     {
         ImmediateDebugRenderObject ChooseRenderer(DebugRenderableFlags flags, byte alpha)
         {
@@ -465,9 +464,10 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
         if (messages.Count == 0) return;
 
-        for (int i = 0; i < messages.Count; ++i)
+        var span = CollectionsMarshal.AsSpan(messages);
+        for (int i = 0; i < span.Length; ++i)
         {
-            ref var msg = ref messages.Items[i];
+            ref var msg = ref span[i];
             var useDepthTest = (msg.Flags & DebugRenderableFlags.DepthTest) != 0;
 
             switch (msg.Type)
