@@ -16,19 +16,6 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 /// </summary>
 public class ImmediateDebugRenderSystem : GameSystemBase
 {
-    internal enum DebugRenderableType : byte
-    {
-        Quad,
-        Circle,
-        Line,
-        Cube,
-        Sphere,
-        HalfSphere,
-        Capsule,
-        Cylinder,
-        Cone
-    }
-
     internal enum DebugRenderableFlags : byte
     {
         Solid = (1 << 0),
@@ -39,72 +26,71 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     [StructLayout(LayoutKind.Explicit)]
     internal struct DebugRenderable
     {
-
         public DebugRenderable(ref DebugDrawQuad q, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Quad;
+            Type = DebugPrimitiveType.Quad;
             Flags = renderFlags;
             QuadData = q;
         }
 
         public DebugRenderable(ref DebugDrawCircle c, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Circle;
+            Type = DebugPrimitiveType.Circle;
             Flags = renderFlags;
             CircleData = c;
         }
 
         public DebugRenderable(ref DebugDrawLine l, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Line;
+            Type = DebugPrimitiveType.Line;
             Flags = renderFlags;
             LineData = l;
         }
 
         public DebugRenderable(ref DebugDrawCube b, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Cube;
+            Type = DebugPrimitiveType.Cube;
             Flags = renderFlags;
             CubeData = b;
         }
 
         public DebugRenderable(ref DebugDrawSphere s, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Sphere;
+            Type = DebugPrimitiveType.Sphere;
             Flags = renderFlags;
             SphereData = s;
         }
 
         public DebugRenderable(ref DebugDrawHalfSphere h, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.HalfSphere;
+            Type = DebugPrimitiveType.HalfSphere;
             Flags = renderFlags;
             HalfSphereData = h;
         }
 
         public DebugRenderable(ref DebugDrawCapsule c, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Capsule;
+            Type = DebugPrimitiveType.Capsule;
             Flags = renderFlags;
             CapsuleData = c;
         }
 
         public DebugRenderable(ref DebugDrawCylinder c, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Cylinder;
+            Type = DebugPrimitiveType.Cylinder;
             Flags = renderFlags;
             CylinderData = c;
         }
 
         public DebugRenderable(ref DebugDrawCone c, DebugRenderableFlags renderFlags) : this()
         {
-            Type = DebugRenderableType.Cone;
+            Type = DebugPrimitiveType.Cone;
             Flags = renderFlags;
             ConeData = c;
         }
 
         [FieldOffset(0)]
-        public DebugRenderableType Type;
+        public DebugPrimitiveType Type;
 
         [FieldOffset(sizeof(byte))]
         public DebugRenderableFlags Flags;
@@ -486,31 +472,31 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
             switch (msg.Type)
             {
-                case DebugRenderableType.Quad:
+                case DebugPrimitiveType.Quad:
                     ChooseRenderer(msg.Flags, msg.QuadData.Color.A).DrawQuad(ref msg.QuadData.Position, ref msg.QuadData.Size, ref msg.QuadData.Rotation, ref msg.QuadData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Circle:
+                case DebugPrimitiveType.Circle:
                     ChooseRenderer(msg.Flags, msg.CircleData.Color.A).DrawCircle(ref msg.CircleData.Position, msg.CircleData.Radius, ref msg.CircleData.Rotation, ref msg.CircleData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Line:
+                case DebugPrimitiveType.Line:
                     ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(ref msg.LineData.Start, ref msg.LineData.End, ref msg.LineData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Cube:
+                case DebugPrimitiveType.Cube:
                     ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(ref msg.CubeData.Position, ref msg.CubeData.End, ref msg.CubeData.Rotation, ref msg.CubeData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Sphere:
+                case DebugPrimitiveType.Sphere:
                     ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(ref msg.SphereData.Position, msg.SphereData.Radius, ref msg.SphereData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.HalfSphere:
+                case DebugPrimitiveType.HalfSphere:
                     ChooseRenderer(msg.Flags, msg.HalfSphereData.Color.A).DrawHalfSphere(ref msg.HalfSphereData.Position, msg.HalfSphereData.Radius, ref msg.HalfSphereData.Rotation, ref msg.HalfSphereData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Capsule:
+                case DebugPrimitiveType.Capsule:
                     ChooseRenderer(msg.Flags, msg.CapsuleData.Color.A).DrawCapsule(ref msg.CapsuleData.Position, msg.CapsuleData.Height, msg.CapsuleData.Radius, ref msg.CapsuleData.Rotation, ref msg.CapsuleData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Cylinder:
+                case DebugPrimitiveType.Cylinder:
                     ChooseRenderer(msg.Flags, msg.CylinderData.Color.A).DrawCylinder(ref msg.CylinderData.Position, msg.CylinderData.Height, msg.CylinderData.Radius, ref msg.CylinderData.Rotation, ref msg.CylinderData.Color, depthTest: useDepthTest);
                     break;
-                case DebugRenderableType.Cone:
+                case DebugPrimitiveType.Cone:
                     ChooseRenderer(msg.Flags, msg.ConeData.Color.A).DrawCone(ref msg.ConeData.Position, msg.ConeData.Height, msg.ConeData.Radius, ref msg.ConeData.Rotation, ref msg.ConeData.Color, depthTest: useDepthTest);
                     break;
             }

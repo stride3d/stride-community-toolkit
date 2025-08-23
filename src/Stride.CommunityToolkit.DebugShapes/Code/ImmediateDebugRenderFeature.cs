@@ -63,78 +63,67 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     }
 
-    internal enum RenderableType : byte
-    {
-        Quad,
-        Circle,
-        Sphere,
-        HalfSphere,
-        Cube,
-        Capsule,
-        Cylinder,
-        Cone,
-        Line
-    }
+    // Removed internal RenderableType enum and replaced usages with shared DebugPrimitiveType enum
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct Renderable
     {
         public Renderable(ref Quad q) : this()
         {
-            Type = RenderableType.Quad;
+            Type = DebugPrimitiveType.Quad;
             QuadData = q;
         }
 
         public Renderable(ref Circle c) : this()
         {
-            Type = RenderableType.Circle;
+            Type = DebugPrimitiveType.Circle;
             CircleData = c;
         }
 
         public Renderable(ref Sphere s) : this()
         {
-            Type = RenderableType.Sphere;
+            Type = DebugPrimitiveType.Sphere;
             SphereData = s;
         }
 
         public Renderable(ref HalfSphere h) : this()
         {
-            Type = RenderableType.HalfSphere;
+            Type = DebugPrimitiveType.HalfSphere;
             HalfSphereData = h;
         }
 
         public Renderable(ref Cube c) : this()
         {
-            Type = RenderableType.Cube;
+            Type = DebugPrimitiveType.Cube;
             CubeData = c;
         }
 
         public Renderable(ref Capsule c) : this()
         {
-            Type = RenderableType.Capsule;
+            Type = DebugPrimitiveType.Capsule;
             CapsuleData = c;
         }
 
         public Renderable(ref Cylinder c) : this()
         {
-            Type = RenderableType.Cylinder;
+            Type = DebugPrimitiveType.Cylinder;
             CylinderData = c;
         }
 
         public Renderable(ref Cone c) : this()
         {
-            Type = RenderableType.Cone;
+            Type = DebugPrimitiveType.Cone;
             ConeData = c;
         }
 
         public Renderable(ref Line l) : this()
         {
-            Type = RenderableType.Line;
+            Type = DebugPrimitiveType.Line;
             LineData = l;
         }
 
         [FieldOffset(0)]
-        public RenderableType Type;
+        public DebugPrimitiveType Type;
 
         [FieldOffset(1)]
         public Quad QuadData;
@@ -450,7 +439,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                 ref readonly var cmd = ref span[i];
                 switch (cmd.Type)
                 {
-                    case RenderableType.Quad:
+                    case DebugPrimitiveType.Quad:
                         instances[offsets.Quads] = new InstanceData
                         {
                             Position = cmd.QuadData.Position,
@@ -460,7 +449,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.Quads++;
                         break;
-                    case RenderableType.Circle:
+                    case DebugPrimitiveType.Circle:
                         instances[offsets.Circles] = new InstanceData
                         {
                             Position = cmd.CircleData.Position,
@@ -470,7 +459,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.Circles++;
                         break;
-                    case RenderableType.Sphere:
+                    case DebugPrimitiveType.Sphere:
                         instances[offsets.Spheres] = new InstanceData
                         {
                             Position = cmd.SphereData.Position,
@@ -480,7 +469,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.Spheres++;
                         break;
-                    case RenderableType.HalfSphere:
+                    case DebugPrimitiveType.HalfSphere:
                         instances[offsets.HalfSpheres] = new InstanceData
                         {
                             Position = cmd.HalfSphereData.Position,
@@ -490,7 +479,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.HalfSpheres++;
                         break;
-                    case RenderableType.Cube:
+                    case DebugPrimitiveType.Cube:
                         {
                             ref readonly var start = ref cmd.CubeData.Start;
                             ref readonly var end = ref cmd.CubeData.End;
@@ -504,7 +493,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                             offsets.Cubes++;
                             break;
                         }
-                    case RenderableType.Capsule:
+                    case DebugPrimitiveType.Capsule:
                         instances[offsets.Capsules] = new InstanceData
                         {
                             Position = cmd.CapsuleData.Position,
@@ -514,7 +503,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.Capsules++;
                         break;
-                    case RenderableType.Cylinder:
+                    case DebugPrimitiveType.Cylinder:
                         instances[offsets.Cylinders] = new InstanceData
                         {
                             Position = cmd.CylinderData.Position,
@@ -524,7 +513,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.Cylinders++;
                         break;
-                    case RenderableType.Cone:
+                    case DebugPrimitiveType.Cone:
                         instances[offsets.Cones] = new InstanceData
                         {
                             Position = cmd.ConeData.Position,
@@ -534,7 +523,7 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
                         };
                         offsets.Cones++;
                         break;
-                    case RenderableType.Line:
+                    case DebugPrimitiveType.Line:
                         lineVertices[offsets.Lines++] = new LineVertex { Position = cmd.LineData.Start, Color = cmd.LineData.Color };
                         lineVertices[offsets.Lines++] = new LineVertex { Position = cmd.LineData.End, Color = cmd.LineData.Color };
                         break;
