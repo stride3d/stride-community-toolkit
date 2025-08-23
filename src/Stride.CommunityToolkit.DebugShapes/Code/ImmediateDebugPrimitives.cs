@@ -79,11 +79,20 @@ using Stride.Graphics.GeometricPrimitives;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
+/// <summary>
+/// Provides methods for generating geometric primitives for debug visualization.
+/// </summary>
 public static class ImmediateDebugPrimitives
 {
     private static readonly Vector2 _noLineUv = new(0.5f);
     private static readonly Vector2 _lineUv = new(1.0f);
 
+    /// <summary>
+    /// Calculates a vector on the circumference of a circle in the XZ plane.
+    /// </summary>
+    /// <param name="i">The index of the segment.</param>
+    /// <param name="tessellation">The total number of segments in the circle.</param>
+    /// <returns>A <see cref="Vector3"/> representing the position on the circle.</returns>
     public static Vector3 GetCircleVector(int i, int tessellation)
     {
         var angle = (float)(i * 2.0 * Math.PI / tessellation);
@@ -93,6 +102,12 @@ public static class ImmediateDebugPrimitives
         return new Vector3(dx, 0, dz);
     }
 
+    /// <summary>
+    /// Copies vertex positions and texture coordinates from a geometric primitive to arrays for rendering.
+    /// </summary>
+    /// <param name="primitiveData">The source geometric mesh data.</param>
+    /// <param name="vertices">The destination vertex array.</param>
+    /// <param name="indices">The destination index array.</param>
     public static void CopyFromGeometricPrimitive(GeometricMeshData<VertexPositionNormalTexture> primitiveData, ref VertexPositionTexture[] vertices, ref int[] indices)
     {
         for (int i = 0; i < vertices.Length; ++i)
@@ -107,6 +122,12 @@ public static class ImmediateDebugPrimitives
         }
     }
 
+    /// <summary>
+    /// Generates a quad (rectangle) mesh with the specified width and height.
+    /// </summary>
+    /// <param name="width">The width of the quad.</param>
+    /// <param name="height">The height of the quad.</param>
+    /// <returns>Arrays of vertices and indices representing the quad.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateQuad(float width, float height)
     {
         var quadMeshData = GeometricPrimitive.Plane.New(width, height);
@@ -115,7 +136,7 @@ public static class ImmediateDebugPrimitives
 
         CopyFromGeometricPrimitive(quadMeshData, ref vertices, ref indices);
 
-        /* transform it because in its default orientation it isnt flat to the normal up */
+        // transform it because in its default orientation it isn't flat to the normal up
         Quaternion rotation = Quaternion.BetweenDirections(Vector3.UnitZ, Vector3.UnitY);
         for (int i = 0; i < vertices.Length; ++i)
         {
@@ -125,6 +146,16 @@ public static class ImmediateDebugPrimitives
         return (vertices, indices);
     }
 
+    /// <summary>
+    /// Generates a circle mesh with optional UV splits and offset.
+    /// </summary>
+    /// <param name="radius">The radius of the circle.</param>
+    /// <param name="tessellations">The number of segments used to approximate the circle.</param>
+    /// <param name="uvSplits">The number of UV splits for wireframe rendering.</param>
+    /// <param name="yOffset">Vertical offset for the circle.</param>
+    /// <param name="isFlipped">Whether to flip the winding order.</param>
+    /// <param name="uvOffset">Offset for UV splits.</param>
+    /// <returns>Arrays of vertices and indices representing the circle.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCircle(float radius = 0.5f, int tessellations = 16, int uvSplits = 0, float yOffset = 0.0f, bool isFlipped = false, int uvOffset = 0)
     {
         if (tessellations < 3) tessellations = 3;
@@ -215,6 +246,11 @@ public static class ImmediateDebugPrimitives
         return (vertices, indices);
     }
 
+    /// <summary>
+    /// Generates a cube mesh with the specified size.
+    /// </summary>
+    /// <param name="size">The size of the cube.</param>
+    /// <returns>Arrays of vertices and indices representing the cube.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCube(float size = 1.0f)
     {
         var cubeMeshData = GeometricPrimitive.Cube.New(size);
@@ -226,6 +262,14 @@ public static class ImmediateDebugPrimitives
         return (vertices, indices);
     }
 
+    /// <summary>
+    /// Generates a sphere mesh with optional UV splits and vertical offset.
+    /// </summary>
+    /// <param name="radius">The radius of the sphere.</param>
+    /// <param name="tessellations">The number of segments used to approximate the sphere.</param>
+    /// <param name="uvSplits">The number of UV splits for wireframe rendering.</param>
+    /// <param name="uvSplitOffsetVertical">Vertical offset for UV splits.</param>
+    /// <returns>Arrays of vertices and indices representing the sphere.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateSphere(float radius = 0.5f, int tessellations = 16, int uvSplits = 4, int uvSplitOffsetVertical = 0)
     {
         if (tessellations < 3) tessellations = 3;
@@ -403,6 +447,15 @@ public static class ImmediateDebugPrimitives
         return (vertices, indices);
     }
 
+    /// <summary>
+    /// Generates a cylinder mesh with optional UV splits and circle side splits.
+    /// </summary>
+    /// <param name="height">The height of the cylinder.</param>
+    /// <param name="radius">The radius of the cylinder.</param>
+    /// <param name="tessellations">The number of segments used to approximate the cylinder.</param>
+    /// <param name="uvSplits">The number of UV splits for wireframe rendering.</param>
+    /// <param name="uvSidesForCircle">Number of sides for the circle caps (optional).</param>
+    /// <returns>Arrays of vertices and indices representing the cylinder.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCylinder(float height = 1.0f, float radius = 0.5f, int tessellations = 16, int uvSplits = 4, int? uvSidesForCircle = null)
     {
         const int uvOffset = 3; // FIXME: this magic constant here is to get the splits to appear aesthetically similar orientation wise for all the shapes
@@ -486,6 +539,15 @@ public static class ImmediateDebugPrimitives
         return (vertices, indices);
     }
 
+    /// <summary>
+    /// Generates a cone mesh with optional UV splits for the top and bottom.
+    /// </summary>
+    /// <param name="height">The height of the cone.</param>
+    /// <param name="radius">The radius of the base of the cone.</param>
+    /// <param name="tessellations">The number of segments used to approximate the cone.</param>
+    /// <param name="uvSplits">The number of UV splits for wireframe rendering (top).</param>
+    /// <param name="uvSplitsBottom">The number of UV splits for wireframe rendering (bottom).</param>
+    /// <returns>Arrays of vertices and indices representing the cone.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCone(float height, float radius, int tessellations, int uvSplits = 4, int uvSplitsBottom = 0)
     {
         if (tessellations < 3) tessellations = 3;
@@ -534,6 +596,14 @@ public static class ImmediateDebugPrimitives
         return (vertices, indices);
     }
 
+    /// <summary>
+    /// Generates a capsule mesh with optional UV splits.
+    /// </summary>
+    /// <param name="length">The length of the capsule (distance between hemispheres).</param>
+    /// <param name="radius">The radius of the capsule.</param>
+    /// <param name="tessellations">The number of segments used to approximate the capsule.</param>
+    /// <param name="uvSplits">The number of UV splits for wireframe rendering.</param>
+    /// <returns>Arrays of vertices and indices representing the capsule.</returns>
     public static (VertexPositionTexture[] Vertices, int[] Indices) GenerateCapsule(float length, float radius, int tessellations, int uvSplits = 4)
     {
         if (tessellations < 3) tessellations = 3;
