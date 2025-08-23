@@ -8,11 +8,11 @@ using System.Text;
 namespace Stride.CommunityToolkit.Renderers;
 
 /// <summary>
-/// Renders debug information (such as entity names and positions) for all entities in a scene.
+/// Scene renderer that draws per-entity debug information (e.g., entity name and/or position) as screen-space text.
 /// </summary>
 /// <remarks>
-/// This class is designed to display debug information such as entity names and positions on the screen
-/// using 2D text rendering over the 3D scene. It also allows optional customization, such as font size, color, and background.
+/// Uses 2D text rendering over the 3D scene via <see cref="SpriteBatch"/>. Appearance can be customized through
+/// <see cref="EntityDebugSceneRendererOptions"/> (font size/color, background, offsets, etc.).
 /// </remarks>
 public class EntityDebugSceneRenderer : SceneRendererBase
 {
@@ -32,11 +32,11 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <summary>
     /// Initializes a new instance of the <see cref="EntityDebugSceneRenderer"/> class with the specified rendering options.
     /// </summary>
-    /// <param name="options">The options to customize the appearance of the debug text. If null, default options are used.</param>
+    /// <param name="options">Options to customize debug text appearance. If null, defaults are used.</param>
     public EntityDebugSceneRenderer(EntityDebugSceneRendererOptions? options = null) => _options = options ?? new();
 
     /// <summary>
-    /// Initializes core resources needed by the renderer, such as the font and sprite batch.
+    /// Initializes core resources needed by the renderer (font, sprite batch, background texture).
     /// </summary>
     protected override void InitializeCore()
     {
@@ -48,10 +48,10 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Draws debug information (such as entity names and positions) for all entities in the current scene.
+    /// Draws the configured debug information for each entity in the current scene.
     /// </summary>
-    /// <param name="context">The current rendering context, which provides information such as the scene and camera.</param>
-    /// <param name="drawContext">The context used to draw graphical elements.</param>
+    /// <param name="context">Rendering context providing access to the compositor and scene.</param>
+    /// <param name="drawContext">Draw context used to submit draw calls.</param>
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
         var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
@@ -95,8 +95,8 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <summary>
     /// Builds the debug text for a given entity based on the renderer's options.
     /// </summary>
-    /// <param name="entity">The entity for which to generate the debug text.</param>
-    /// <returns>The debug text to be rendered for the entity, or an empty string if no text should be shown.</returns>
+    /// <param name="entity">The entity for which to generate debug text.</param>
+    /// <returns>Debug text for the entity, or an empty string if nothing should be displayed.</returns>
     private string GetDisplayText(Entity entity)
     {
         var stringBuilder = new StringBuilder();
@@ -115,10 +115,10 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Draws a background rectangle behind the debug text to make it more readable.
+    /// Draws a background rectangle behind the text to improve readability (when enabled).
     /// </summary>
-    /// <param name="text">The text for which the background will be rendered.</param>
-    /// <param name="finalPosition">The screen position where the debug text will be drawn.</param>
+    /// <param name="text">The text for which the background size is computed.</param>
+    /// <param name="finalPosition">Screen-space position where the text is drawn.</param>
     private void DrawTextBackground(string text, Vector2 finalPosition)
     {
         if (!_options.EnableBackground) return;
@@ -135,7 +135,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Cleans up resources used by the renderer, such as the sprite batch and background texture.
+    /// Disposes resources used by the renderer.
     /// </summary>
     protected override void Destroy()
     {

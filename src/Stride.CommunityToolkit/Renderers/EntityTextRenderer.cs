@@ -7,14 +7,14 @@ using Stride.Rendering.Compositing;
 namespace Stride.CommunityToolkit.Renderers;
 
 /// <summary>
-/// A custom scene renderer that renders 2D text and a background for each entity in the scene.
-/// This class demonstrates how to use <see cref="SpriteBatch"/> for 2D rendering within a 3D scene.
+/// A custom scene renderer that renders 2D text and an optional background for entities in the scene.
+/// Uses <see cref="SpriteBatch"/> for 2D overlay rendering within a 3D scene.
 /// </summary>
 /// <remarks>
-/// This renderer uses <see cref="SceneRendererBase"/> to hook into the Stride rendering pipeline, rendering text above each entity
-/// with details like the entity's name and position. The renderer demonstrates both dynamic text rendering.
-/// This is useful for debugging or displaying information in a game scene.
-/// The text change isn't supported at the moment. Use it just for static text.
+/// This renderer derives from <see cref="SceneRendererBase"/> to integrate into the Stride rendering pipeline.
+/// It draws screen-space text for any entity that has an <see cref="EntityTextComponent"/> attached.
+/// Intended mostly for debugging or simple overlays.
+/// STATUS: Preview – text content is currently treated as static during runtime; frequent per-frame text changes are not optimized.
 /// </remarks>
 public class EntityTextRenderer : SceneRendererBase
 {
@@ -44,11 +44,10 @@ public class EntityTextRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Performs the actual drawing of the scene, including rendering text and backgrounds for each entity.
-    /// This method is called every frame.
+    /// Performs the actual drawing of the scene, including rendering text and optional backgrounds for each eligible entity.
     /// </summary>
-    /// <param name="context">The rendering context that contains information about the current frame.</param>
-    /// <param name="drawContext">The draw context used for issuing draw commands to the graphics card.</param>
+    /// <param name="context">The rendering context for the current frame.</param>
+    /// <param name="drawContext">The draw context used for issuing draw calls.</param>
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
         // Get the active GraphicsCompositor (handles camera and rendering order)
@@ -80,7 +79,7 @@ public class EntityTextRenderer : SceneRendererBase
 
             var screenPosition = textDisplay.Position;
 
-            // Convert the entity's world position to screen space
+            // Convert the entity's world position to screen space if Position is not explicitly provided
             screenPosition ??= _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
 
             var finalPosition = screenPosition.Value + textDisplay.Offset;
@@ -100,6 +99,9 @@ public class EntityTextRenderer : SceneRendererBase
         _spriteBatch.End();
     }
 
+    /// <summary>
+    /// Draws an optional background rectangle behind the text for readability. Uses cached text metrics when available.
+    /// </summary>
     private void DrawTextBackground(Entity entity, EntityTextComponent textDisplay, Vector2 finalPosition)
     {
         if (!textDisplay.EnableBackground) return;
@@ -119,7 +121,7 @@ public class EntityTextRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Cleans up resources used by the renderer, such as the sprite batch and background texture.
+    /// Disposes resources used by the renderer.
     /// </summary>
     protected override void Destroy()
     {

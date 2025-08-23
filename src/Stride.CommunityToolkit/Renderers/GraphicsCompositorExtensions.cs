@@ -26,12 +26,12 @@ public static class GraphicsCompositorExtensions
     /// <example>
     /// The following example demonstrates how to add an entity debug renderer with default settings:
     /// <code>
-    /// graphicsCompositor.EntityDebugSceneRenderer();
+    /// graphicsCompositor.AddEntityDebugRenderer();
     /// </code>
     /// You can also specify custom options:
     /// <code>
-    /// var options = new EntityDebugRendererOptions { FontSize = 16, FontColor = Color.Red };
-    /// graphicsCompositor.EntityDebugSceneRenderer(options);
+    /// var options = new EntityDebugSceneRendererOptions { FontSize = 16, FontColor = Color.Red };
+    /// graphicsCompositor.AddEntityDebugRenderer(options);
     /// </code>
     /// </example>
     public static GraphicsCompositor AddEntityDebugRenderer(this GraphicsCompositor graphicsCompositor, EntityDebugSceneRendererOptions? options = null)
@@ -55,12 +55,12 @@ public static class GraphicsCompositorExtensions
     /// <example>
     /// The following example demonstrates how to add an entity debug renderer with default settings:
     /// <code>
-    /// game.EntityDebugSceneRenderer();
+    /// game.AddEntityDebugSceneRenderer();
     /// </code>
     /// You can also specify custom options:
     /// <code>
-    /// var options = new EntityDebugRendererOptions { FontSize = 16, FontColor = Color.Red };
-    /// game.EntityDebugSceneRenderer(options);
+    /// var options = new EntityDebugSceneRendererOptions { FontSize = 16, FontColor = Color.Red };
+    /// game.AddEntityDebugSceneRenderer(options);
     /// </code>
     /// </example>
     public static void AddEntityDebugSceneRenderer(this Game game, EntityDebugSceneRendererOptions? options = null)
