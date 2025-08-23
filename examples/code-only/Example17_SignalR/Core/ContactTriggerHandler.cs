@@ -1,9 +1,8 @@
-using Example17_SignalR.Core;
 using Example17_SignalR_Shared.Core;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Contacts;
 
-namespace Example17_SignalR.Scripts;
+namespace Example17_SignalR.Core;
 
 public class ContactTriggerHandler : IContactEventHandler
 {

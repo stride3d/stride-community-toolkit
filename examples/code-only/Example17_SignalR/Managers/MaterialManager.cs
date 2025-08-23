@@ -1,7 +1,9 @@
+using Example17_SignalR.Builders;
+using Example17_SignalR.Core;
 using Example17_SignalR_Shared.Core;
 using Stride.Rendering;
 
-namespace Example17_SignalR.Core;
+namespace Example17_SignalR.Managers;
 
 public class MaterialManager
 {
@@ -28,9 +30,7 @@ public class MaterialManager
     public Material GetMaterial(EntityType entityType)
     {
         if (_materials.TryGetValue(entityType, out var material))
-        {
             return material;
-        }
 
         throw new ArgumentException($"Material for {entityType} not found.");
     }

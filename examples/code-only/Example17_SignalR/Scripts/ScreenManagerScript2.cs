@@ -1,4 +1,6 @@
+using Example17_SignalR.Builders;
 using Example17_SignalR.Core;
+using Example17_SignalR.Managers;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
 using Example17_SignalR_Shared.Interfaces;
@@ -14,13 +16,14 @@ public class ScreenManagerScript2 : AsyncScript
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
     private HubConnection? _connection;
     private RobotBuilder? _primitiveBuilder;
+    private MaterialManager? _materialManager;
     private MessagePrinter? _messagePrinter;
     private bool _isCreatingPrimitives;
 
     public override async Task Execute()
     {
-        var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
-        _primitiveBuilder = new RobotBuilder(Game, materialManager);
+        _materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
+        _primitiveBuilder = new RobotBuilder(Game);
 
         _messagePrinter = new MessagePrinter(DebugText);
 
@@ -93,7 +96,10 @@ public class ScreenManagerScript2 : AsyncScript
 
             _isCreatingPrimitives = true;
 
-            _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
+            for (int i = 0; i < nextBatch.Count; i++)
+            {
+                _primitiveBuilder!.CreatePrimitive(i, nextBatch.Type, Entity.Scene, _materialManager!.GetMaterial(nextBatch.Type), new RemoveEntityScript());
+            }
 
             _isCreatingPrimitives = false;
         }

@@ -5,7 +5,7 @@ using Stride.Rendering;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
-namespace Example17_SignalR.Core;
+namespace Example17_SignalR.Builders;
 
 public class MaterialBuilder(GraphicsDevice graphicsDevice)
 {
