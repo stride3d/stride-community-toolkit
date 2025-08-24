@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace Stride.CommunityToolkit.Examples.Providers;
+namespace Stride.CommunityToolkit.Examples.Core;
 
 public partial class ExampleProvider
 {
@@ -63,7 +63,6 @@ public partial class ExampleProvider
         if (!Directory.Exists(root)) yield break;
 
         foreach (var pattern in _projectPatterns)
-        {
             foreach (var project in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
             {
                 ExampleProjectMeta? meta = null;
@@ -72,11 +71,8 @@ public partial class ExampleProvider
                 catch { /* ignore */ }
 
                 if (meta is not null)
-                {
                     yield return meta;
-                }
             }
-        }
     }
 
     private ExampleProjectMeta? CreateMetaFromProject(string projectFile)
@@ -183,17 +179,13 @@ public partial class ExampleProvider
             {
                 // Remove blank line if it directly follows a suppressed block
                 if (RemoveBlankLinesAfterSuppressedBlock && _justSuppressed)
-                {
                     continue;
-                }
 
                 lock (_consoleLock)
                 {
                     if (CollapseConsecutiveBlankLines && _lastPrintedWasBlank)
-                    {
                         // skip additional blank line
                         return;
-                    }
 
                     Console.WriteLine();
                     _lastPrintedWasBlank = true;

@@ -1,5 +1,5 @@
 using Pastel;
-using Stride.CommunityToolkit.Examples.Providers;
+using Stride.CommunityToolkit.Examples.Core;
 using System.Drawing;
 
 var examples = new ExampleProvider().GetExamples();
