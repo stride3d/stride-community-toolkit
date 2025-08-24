@@ -2,9 +2,6 @@
 
 This article lists the most significant changes in Stride Community Toolkit preview `1.0.0.0-preview.50-56`.
 
-## New Contributors
-* @johang88 made their first contribution in https://github.com/stride3d/stride-community-toolkit/pull/179
-
 ## What's Changed
 
 ### 💥 Breaking Changes
