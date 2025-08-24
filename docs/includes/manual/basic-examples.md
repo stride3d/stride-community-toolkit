@@ -1,9 +1,9 @@
 - [Capsule with rigid body](../../manual/code-only/examples/capsule-with-rigid-body.md): Shows how to create a 3D capsule entity and position it in a scene.
-- [Give me a cube](../../manual/code-only/examples/give-me-cube-body.md): Presents a variation of the above example by positioning a 3D cube in a scene.
 - [Mesh line](../../manual/code-only/examples/mesh-line.md): Shows how to create a mesh line.
+- [Material](../../manual/code-only/examples/material.md): Shows how to create a material and apply it to a 3D entity.
+- [Give me a cube](../../manual/code-only/examples/give-me-cube-body.md): Presents a variation of the above example by positioning a 3D cube in a scene.
 - [Stride UI - Capsule with rigid body and Window](../../manual/code-only/examples/stride-ui-capsule-with-rigid-body.md): Shows how to create a 3D capsule entity, position it in a scene, and create a simple window displaying a text message.
 - [Stride UI - Grid - Save and load game state](../../manual/code-only/examples/stride-ui-cube-clicker.md): Shows how to create a simple game where clicking a cube increases the score and manages game state.
-- [Material](../../manual/code-only/examples/material.md): Shows how to create a material and apply it to a 3D entity.
 - [Procedural geometry](../../manual/code-only/examples/procedural-geometry.md): Shows how to create procedural geometry meshes—such as a triangle, plane, and circle—and add them to a scene.
 - [Cylinder mesh](../../manual/code-only/examples/cylinder-mesh.md): Shows how to create a cylinder mesh.
 - [Partial torus mesh](../../manual/code-only/examples/partial-torus-mesh.md): Shows how to create a partial torus mesh.
