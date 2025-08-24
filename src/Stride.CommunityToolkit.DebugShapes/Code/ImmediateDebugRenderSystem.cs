@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 /// <summary>
 /// Provides a system for immediate debug rendering of various shapes and lines in the game world.
 /// </summary>
-public class ImmediateDebugRenderSystem : GameSystemBase
+public partial class ImmediateDebugRenderSystem : GameSystemBase
 {
     internal enum DebugRenderableFlags : byte
     {
@@ -22,116 +22,13 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         DepthTest = (1 << 2)
     }
 
-    [StructLayout(LayoutKind.Explicit)]
-    internal struct DebugRenderable
-    {
-        public DebugRenderable(ref Quad q, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Quad;
-            Flags = renderFlags;
-            QuadData = q;
-        }
+    private readonly List<DebugRenderable> _renderMessages = [];
+    private readonly List<DebugRenderable> _renderMessagesWithLifetime = [];
 
-        public DebugRenderable(ref Circle c, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Circle;
-            Flags = renderFlags;
-            CircleData = c;
-        }
-
-        public DebugRenderable(ref Line l, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Line;
-            Flags = renderFlags;
-            LineData = l;
-        }
-
-        public DebugRenderable(ref Cube b, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Cube;
-            Flags = renderFlags;
-            CubeData = b;
-        }
-
-        public DebugRenderable(ref Sphere s, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Sphere;
-            Flags = renderFlags;
-            SphereData = s;
-        }
-
-        public DebugRenderable(ref HalfSphere h, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.HalfSphere;
-            Flags = renderFlags;
-            HalfSphereData = h;
-        }
-
-        public DebugRenderable(ref Capsule c, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Capsule;
-            Flags = renderFlags;
-            CapsuleData = c;
-        }
-
-        public DebugRenderable(ref Cylinder c, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Cylinder;
-            Flags = renderFlags;
-            CylinderData = c;
-        }
-
-        public DebugRenderable(ref Cone c, DebugRenderableFlags renderFlags) : this()
-        {
-            Type = DebugPrimitiveType.Cone;
-            Flags = renderFlags;
-            ConeData = c;
-        }
-
-        [FieldOffset(0)]
-        public DebugPrimitiveType Type;
-
-        [FieldOffset(sizeof(byte))]
-        public DebugRenderableFlags Flags;
-
-        [FieldOffset(sizeof(byte) * 2)]
-        public float Lifetime;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Quad QuadData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Circle CircleData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Line LineData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Cube CubeData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Sphere SphereData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public HalfSphere HalfSphereData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Capsule CapsuleData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Cylinder CylinderData;
-
-        [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public Cone ConeData;
-    }
-
-    private readonly List<DebugRenderable> renderMessages = new List<DebugRenderable>();
-    private readonly List<DebugRenderable> renderMessagesWithLifetime = new List<DebugRenderable>();
-
-    private ImmediateDebugRenderObject solidPrimitiveRenderer;
-    private ImmediateDebugRenderObject wireframePrimitiveRenderer;
-    private ImmediateDebugRenderObject transparentSolidPrimitiveRenderer;
-    private ImmediateDebugRenderObject transparentWireframePrimitiveRenderer;
+    private ImmediateDebugRenderObject? _solidPrimitiveRenderer;
+    private ImmediateDebugRenderObject? _wireframePrimitiveRenderer;
+    private ImmediateDebugRenderObject? _transparentSolidPrimitiveRenderer;
+    private ImmediateDebugRenderObject? _transparentWireframePrimitiveRenderer;
 
     public Color PrimitiveColor { get; set; } = Color.LightGreen;
 
@@ -155,20 +52,20 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     {
         if (msg.Lifetime > 0.0f)
         {
-            renderMessagesWithLifetime.Add(msg);
+            _renderMessagesWithLifetime.Add(msg);
             // drop one old message if the tail size has been reached
-            if (renderMessagesWithLifetime.Count > MaxPrimitivesWithLifetime)
+            if (_renderMessagesWithLifetime.Count > MaxPrimitivesWithLifetime)
             {
-                renderMessagesWithLifetime.RemoveAt(renderMessagesWithLifetime.Count - 1);
+                _renderMessagesWithLifetime.RemoveAt(_renderMessagesWithLifetime.Count - 1);
             }
         }
         else
         {
-            renderMessages.Add(msg);
+            _renderMessages.Add(msg);
             // drop one old message if the tail size has been reached
-            if (renderMessages.Count > MaxPrimitives)
+            if (_renderMessages.Count > MaxPrimitives)
             {
-                renderMessages.RemoveAt(renderMessages.Count - 1);
+                _renderMessages.RemoveAt(_renderMessages.Count - 1);
             }
         }
     }
@@ -310,7 +207,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             Stage = DebugRenderStage.Opaque
         };
         visibilityGroup.RenderObjects.Add(newSolidRenderObject);
-        solidPrimitiveRenderer = newSolidRenderObject;
+        _solidPrimitiveRenderer = newSolidRenderObject;
 
         var newWireframeRenderObject = new ImmediateDebugRenderObject
         {
@@ -318,7 +215,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             Stage = DebugRenderStage.Opaque
         };
         visibilityGroup.RenderObjects.Add(newWireframeRenderObject);
-        wireframePrimitiveRenderer = newWireframeRenderObject;
+        _wireframePrimitiveRenderer = newWireframeRenderObject;
 
         var newTransparentSolidRenderObject = new ImmediateDebugRenderObject
         {
@@ -326,7 +223,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             Stage = DebugRenderStage.Transparent
         };
         visibilityGroup.RenderObjects.Add(newTransparentSolidRenderObject);
-        transparentSolidPrimitiveRenderer = newTransparentSolidRenderObject;
+        _transparentSolidPrimitiveRenderer = newTransparentSolidRenderObject;
 
         var newTransparentWireframeRenderObject = new ImmediateDebugRenderObject
         {
@@ -334,7 +231,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
             Stage = DebugRenderStage.Transparent
         };
         visibilityGroup.RenderObjects.Add(newTransparentWireframeRenderObject);
-        transparentWireframePrimitiveRenderer = newTransparentWireframeRenderObject;
+        _transparentWireframePrimitiveRenderer = newTransparentWireframeRenderObject;
 
         return true;
     }
@@ -344,7 +241,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     {
         if (!Enabled || !Visible) return;
 
-        if (wireframePrimitiveRenderer == null)
+        if (_wireframePrimitiveRenderer is null)
         {
             bool created = CreateDebugRenderObjects();
 
@@ -352,27 +249,27 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         }
 
         // TODO: check if i'm doing this correctly..
-        solidPrimitiveRenderer.RenderGroup = RenderGroup;
-        wireframePrimitiveRenderer.RenderGroup = RenderGroup;
-        transparentSolidPrimitiveRenderer.RenderGroup = RenderGroup;
-        transparentWireframePrimitiveRenderer.RenderGroup = RenderGroup;
+        _solidPrimitiveRenderer!.RenderGroup = RenderGroup;
+        _wireframePrimitiveRenderer!.RenderGroup = RenderGroup;
+        _transparentSolidPrimitiveRenderer!.RenderGroup = RenderGroup;
+        _transparentWireframePrimitiveRenderer!.RenderGroup = RenderGroup;
 
-        HandlePrimitives(gameTime, renderMessages);
-        HandlePrimitives(gameTime, renderMessagesWithLifetime);
+        HandlePrimitives(gameTime, _renderMessages);
+        HandlePrimitives(gameTime, _renderMessagesWithLifetime);
 
         float delta = (float)gameTime.Elapsed.TotalSeconds;
 
         /* clear out any messages with no lifetime left */
-        var lifetimeSpan = CollectionsMarshal.AsSpan(renderMessagesWithLifetime);
+        var lifetimeSpan = CollectionsMarshal.AsSpan(_renderMessagesWithLifetime);
         for (int i = 0; i < lifetimeSpan.Length; ++i)
         {
             lifetimeSpan[i].Lifetime -= delta;
         }
 
-        renderMessagesWithLifetime.RemoveAll((msg) => msg.Lifetime <= 0.0f);
+        _renderMessagesWithLifetime.RemoveAll((msg) => msg.Lifetime <= 0.0f);
 
         /* just clear our per-frame array */
-        renderMessages.Clear();
+        _renderMessages.Clear();
     }
 
     private void HandlePrimitives(GameTime gameTime, List<DebugRenderable> messages)
@@ -381,11 +278,11 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         {
             if (alpha < 255)
             {
-                return ((flags & DebugRenderableFlags.Solid) != 0) ? transparentSolidPrimitiveRenderer : transparentWireframePrimitiveRenderer;
+                return ((flags & DebugRenderableFlags.Solid) != 0) ? _transparentSolidPrimitiveRenderer! : _transparentWireframePrimitiveRenderer!;
             }
             else
             {
-                return ((flags & DebugRenderableFlags.Solid) != 0) ? solidPrimitiveRenderer : wireframePrimitiveRenderer;
+                return ((flags & DebugRenderableFlags.Solid) != 0) ? _solidPrimitiveRenderer! : _wireframePrimitiveRenderer!;
             }
         }
 

@@ -26,7 +26,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     internal struct Primitives
     {
-
         public int Quads;
         public int Circles;
         public int Spheres;
@@ -49,18 +48,15 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
             Cones = 0;
             Lines = 0;
         }
-
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     internal struct LineVertex
     {
-
         public static readonly VertexDeclaration Layout = new VertexDeclaration(VertexElement.Position<Vector3>(), VertexElement.Color<Color>());
 
         public Vector3 Position;
         public Color Color;
-
     }
 
     [StructLayout(LayoutKind.Sequential)]
