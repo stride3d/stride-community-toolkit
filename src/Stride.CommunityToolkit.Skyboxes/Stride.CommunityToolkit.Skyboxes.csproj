@@ -8,7 +8,7 @@
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="4.2.0.2381" />
+        <PackageReference Include="Stride.Engine" Version="4.2.1.2442" />
     </ItemGroup>
 
     <ItemGroup>
