@@ -5,6 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <ExampleTitle>Other - Stride + SignalR - Website two way communication</ExampleTitle>
+        <ExampleOrder>20000</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>3 - Other</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

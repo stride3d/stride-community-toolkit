@@ -5,9 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <ExampleTitle>Advance Example - Debug Shapes Usage</ExampleTitle>
-        <ExampleOrder>10000</ExampleOrder>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
+
+        <ExampleTitle>Other - Debug Shapes Usage</ExampleTitle>
+        <ExampleOrder>19000</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>3 - Other</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

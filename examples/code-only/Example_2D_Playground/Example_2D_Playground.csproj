@@ -5,6 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <ExampleTitle>Other - 2D Playground [WIP]</ExampleTitle>
+        <ExampleOrder>30000</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>3 - Other</ExampleCategory>
     </PropertyGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">

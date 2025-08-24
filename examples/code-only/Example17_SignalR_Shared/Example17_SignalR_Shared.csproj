@@ -6,9 +6,9 @@
         <Nullable>enable</Nullable>
 
         <ExampleTitle>Advance Example - SignalR &amp; Blazor Shared</ExampleTitle>
-        <ExampleOrder>1000</ExampleOrder>
+        <ExampleOrder>20000</ExampleOrder>
         <ExampleEnabled>false</ExampleEnabled>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
+        <ExampleCategory>3 - Other</ExampleCategory>
     </PropertyGroup>
 
 </Project>

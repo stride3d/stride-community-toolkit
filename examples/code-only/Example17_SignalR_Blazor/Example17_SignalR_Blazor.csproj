@@ -4,6 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+
+        <ExampleTitle>Other - Blazor + SignalR - Run this from IIS</ExampleTitle>
+        <ExampleOrder>20000</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>3 - Other</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Example17_SignalR_Shared\Example17_SignalR_Shared.csproj" />
+        <ProjectReference Include="..\Example17_SignalR_Shared\Example17_SignalR_Shared.csproj" />
     </ItemGroup>
 
 </Project>
