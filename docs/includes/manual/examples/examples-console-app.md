@@ -9,11 +9,11 @@ Stride Community Toolkit Examples
 [6] Basic Example - Material
 [7] Basic Example - Give me a cube
 [8] Basic Example - Stride UI - Canvas - Capsule with rigid body and Window
-[9] Basic Example - Grid - Save and load game state
+[9] Basic Example - Stride UI Grid - Save and load game state
 [10] Basic Example - Procedural Geometry
 [11] Basic Example - Cylinder Mesh
-[12] Basic Example - Partial Torus
-[13] Basic Example - Partial Torus in F#
+[12] Basic Example - Partial Torus Mesh
+[13] Basic Example - Partial Torus Mesh in F#
 [14] Basic Example - Particles
 [15] Basic Example - Raycast
 [16] Basic Example - CollisionGroup

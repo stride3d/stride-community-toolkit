@@ -7,7 +7,7 @@
 Here is an overview of the available extension methods:
 
 - [`Add2DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add2DCameraController(Stride.Engine.Entity)) - Adds an interactive 2D camera script to the specified entity, enabling camera movement and rotation
-- [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity)) - Adds an interactive 3D camera script to the specified entity, enabling camera movement and rotation
+- [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity,Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition)) - Adds an interactive 3D camera script to the specified entity, enabling camera movement and rotation
 - [`AddGizmo()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.AddGizmo(Stride.Engine.Entity,Stride.Graphics.GraphicsDevice,System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Nullable{Stride.Core.Mathematics.Color},System.Boolean,System.Boolean)) - Adds a TranslationGizmo to the specified entity with optional custom colors
 - [`GetComponent<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)) - Retrieves the first component of the specified type from the entity
 - [`GetComponents<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)) - Retrieves all components of the specified type from the entity

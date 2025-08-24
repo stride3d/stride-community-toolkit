@@ -15,6 +15,6 @@ If you would like your example to be launchable from the console application [St
 1. If you enable your example `<ExampleEnabled>true</ExampleEnabled>`, it will automatically show up in the console application menu.
 1. Run `Stride.CommunityToolkit.Examples`
 1. You should see your example listed in the console application menu.
-   [!INCLUDE [examples-console-app](../../examples-console-app.md)]
+   [!INCLUDE [examples-console-app](../../includes/manual/examples/examples-console-app.md)]
 1. Update the `Stride.CommunityToolkit.Docs/includes/manual/examples/basic-examples-outro.md` file to include the new example.
 1. Update the `Stride.CommunityToolkit.Docs/includes/manual/basic-examples.md`, `advance-examples.md`, or `other-examples.md` file to include the new example.
