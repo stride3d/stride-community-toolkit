@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Pastel" Version="6.0.1" />
+        <PackageReference Include="Pastel" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>

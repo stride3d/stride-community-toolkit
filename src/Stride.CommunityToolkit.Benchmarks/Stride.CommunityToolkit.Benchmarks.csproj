@@ -9,8 +9,8 @@
 
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.15.2" />
-        <PackageReference Include="Stride.Core" Version="4.2.0.2381" />
-        <PackageReference Include="Stride.Core.Mathematics" Version="4.2.0.2381" />
+        <PackageReference Include="Stride.Core" Version="4.2.1.2442" />
+        <PackageReference Include="Stride.Core.Mathematics" Version="4.2.1.2442" />
     </ItemGroup>
 
 </Project>
