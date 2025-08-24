@@ -11,14 +11,14 @@ public partial class ExampleProvider
 
     // Configuration (adjust as desired)
     private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only";
-    private static readonly string[] _projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
     private const string ExampleTitleElement = "ExampleTitle";
     private const string ExampleOrderElement = "ExampleOrder";
+
+    private static readonly string[] _projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
     private static readonly Regex _commentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     // Warning filtering configuration
     private const bool FilterWarnings = true;
-    private const bool FilterOnlyShaderWarnings = true;
     private static readonly Regex _genericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex _shaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -149,6 +149,7 @@ public partial class ExampleProvider
         };
 
         var process = Process.Start(psi);
+
         if (process == null) return;
 
         _ = Task.Run(async () => await StreamProcessOutput(process));
@@ -213,9 +214,6 @@ public partial class ExampleProvider
 
         if (!_genericWarningRegex.IsMatch(line))
             return false; // Not a warning
-
-        if (!FilterOnlyShaderWarnings)
-            return true;
 
         // Only suppress if it looks shader/effect related
         return _shaderWarningRegex.IsMatch(line);
