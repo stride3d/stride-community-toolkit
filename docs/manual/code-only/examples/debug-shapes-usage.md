@@ -1,17 +1,15 @@
 # DebugShapes Usage
 
-This example demonstrates how to use the DebugShapes helpers to draw transient shapes (lines, boxes, spheres, text) in the scene for debugging purposes.
+This simple example demonstrates how to use the DebugShapes helpers to draw debug shapes.
 
 The `Program.cs` file shows how to:
 - Initialize the DebugShapes system and enable it for the scene
-- Draw lines, AABBs, wireframe primitives, arrows, and text annotations
-- Update or clear debug shapes per frame and control lifetimes/colors
-- Toggle debug visualization via input
+- Draw sphere and circle shapes at specific positions
 
 [!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
 
 > [!NOTE]
-> Other required NuGet packages: `Stride.CommunityToolkit.DebugShapes`
+> Other required NuGet package: `Stride.CommunityToolkit.DebugShapes`.
 
 ![DebugShapes Usage Example](media/stride-game-engine-example08-debugshapes-usage.webp)
 

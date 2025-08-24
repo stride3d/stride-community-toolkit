@@ -1,6 +1,6 @@
 # Mesh Outline
 
-This example demonstrates how to render an outline effect around meshes using a custom root render feature or shader pass to highlight selected or interactive objects.
+This example demonstrates how to render an outline effect around meshes using a custom root render feature with a shader pass to highlight entities in the scene.
 
 The `Program.cs` file shows how to:
 - Set up a 3D scene with camera and lighting
@@ -10,7 +10,7 @@ The `Program.cs` file shows how to:
 
 [!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
 
-![Mesh Outline Example](media/stride-game-engine-example13-mesh-outline.webp)
+![Mesh Outline Example](media/stride-game-engine-example-13-mesh-outline.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example13_MeshOutline).
 
