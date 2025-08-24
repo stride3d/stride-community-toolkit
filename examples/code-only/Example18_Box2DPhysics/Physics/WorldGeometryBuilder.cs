@@ -1,5 +1,5 @@
 using Box2D.NET;
-using Example18_Box2DPhysics.Helpers; // GameConfig
+using Example18_Box2DPhysics.Helpers;
 using Stride.Core.Mathematics;
 using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2Geometries;

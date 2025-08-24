@@ -711,14 +711,10 @@ public class PerfMonitor : BaseWindow
 
     }
 
-
-
     readonly record struct EventWrapper(ProfilingEvent Event, bool Begin, TimeSpan Stamp) : System.IComparable<EventWrapper>
     {
         public int CompareTo(EventWrapper other) => Stamp.CompareTo(other.Stamp);
     }
-
-
 
     /// <summary> Object containing a sample's data </summary>
     readonly struct SampleInstance(string id, int depth, TimeSpan start, double duration, long? deltaMemAlloc)
@@ -730,8 +726,6 @@ public class PerfMonitor : BaseWindow
         public readonly long? DeltaMemAlloc = deltaMemAlloc;
     }
 
-
-
     /// <summary> Object to hold Stride's profiler samples until they are marked as done </summary>
     struct TemporaryStrideSample
     {
@@ -740,8 +734,6 @@ public class PerfMonitor : BaseWindow
         public TimeSpan? Duration;
         public int Depth;
     }
-
-
 
     /// <summary>
     /// A collection of <see cref="SampleInstance"/> for a specific thread,
@@ -766,8 +758,6 @@ public class PerfMonitor : BaseWindow
         List<SampleInstance> _buffered = [];
         List<SampleInstance> _displayed = [];
 
-
-
         /// <summary> We received all of the data for this frame, set it has ready </summary>
         public void SetReady()
         {
@@ -778,16 +768,12 @@ public class PerfMonitor : BaseWindow
             }
         }
 
-
-
         /// <summary> The given sample has finished and is ready to be displayed </summary>
         public void Add(SampleInstance sampleInstance)
         {
             lock (_bufferLock)
                 _buffered.Add(sampleInstance);
         }
-
-
 
         /// <summary> Clear any samples buffered </summary>
         public void ClearBuffered()
@@ -797,13 +783,9 @@ public class PerfMonitor : BaseWindow
         }
     }
 
-
-
     class PerfMonitorAutoSampler : GameSystem
     {
         readonly PerfMonitor _monitor;
-
-
 
         public PerfMonitorAutoSampler(PerfMonitor monitor) : base(monitor.Services)
         {
@@ -815,15 +797,11 @@ public class PerfMonitor : BaseWindow
             _monitor = monitor;
         }
 
-
-
         public override bool BeginDraw()
         {
             _monitor._draw = _monitor.Sample(nameof(Draw));
             return base.BeginDraw();
         }
-
-
 
         public override void Update(GameTime gameTime)
         {

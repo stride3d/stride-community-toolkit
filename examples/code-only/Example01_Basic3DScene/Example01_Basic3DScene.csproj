@@ -5,9 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
         <ExampleTitle>Basic Example - Capsule with rigid body</ExampleTitle>
-        <ExampleOrder>10</ExampleOrder>
-        <ExampleCategory>Basic</ExampleCategory>
+        <ExampleOrder>100</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

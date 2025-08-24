@@ -1,6 +1,7 @@
 using Example10_StrideUI_DragAndDrop;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Renderers;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -28,7 +29,7 @@ void Start(Scene scene)
     // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
-        EnableBackground = false
+        EnableBackground = true
     });
 
     game.AddSkybox();

@@ -1,26 +1,24 @@
 # Adding a Texture at Runtime
 
-In this tutorial, we will explore how to dynamically apply a texture to a 3D object in your Stride project. By using the `Texture` class, you can load an image file at runtime and assign it to a 3D entity. We will demonstrate how to do this by applying a texture to a cube.
+This tutorial shows how to dynamically apply a texture to a 3D object in your Stride project. Using the `Texture` class, you'll load an image at runtime and assign it to a 3D entity (a cube).
 
-## What You'll Learn
-- How to load a texture from an image file at runtime.
-- How to create and configure a `MaterialDescriptor` to apply the texture to a 3D object.
-- How to create a 3D primitive (cube) and assign the texture as its material.
+## What you'll learn
+- Load a texture from an image file at runtime.
+- Create and configure a `MaterialDescriptor` to apply the texture.
+- Create a 3D primitive (cube) and assign the material.
 
-## Code Walkthrough
+## Code walkthrough
 
 [!code-csharp[Adding a Texture at Runtime](../../../examples/snippets/TextureMapping_Example01/Program.cs)]
 
-## Running the Code
+## Running the code
 
-When you run this code, the game will display a 3D cube with the specified texture applied to its surface. The texture will be visible, and the cube will be placed 8 units above the ground.
+When you run this code, you'll see a 3D cube with the specified texture applied. The cube is placed 8 units above the ground.
 
 ## Summary
 
-This example demonstrates how to dynamically load and apply a texture to a 3D object at runtime in Stride. The process involves:
+- Load a texture from an image file.
+- Create a material that uses the texture.
+- Apply the material to a 3D primitive and add it to the scene.
 
-- Loading a texture from an image file.
-- Creating a material to define how the texture should be rendered.
-- Applying the material to a 3D primitive and adding it to the scene.
-
-This approach can be extended to various other 3D models and textures, allowing you to dynamically change the appearance of objects in your game.
+You can apply the same approach to other models and textures to change object appearance at runtime.

@@ -6,7 +6,7 @@ This example demonstrates how to implement raycasting and physics interactions i
 - Implementing mouse-based raycasting from the camera
 - Applying physics impulses to objects based on click location
 - Creating interaction between user input and physics objects
-- 
+
 The example features a sphere that responds to physics. When you click on the ground, a ray is cast from the camera to determine the hit point, and the sphere is propelled in that direction with an appropriate impulse. Clicking directly on the sphere stops its movement entirely. A visual line indicator shows the direction of the applied force.
 
 This example demonstrates key concepts for interactive physics-based games, including raycasting for object selection, applying physics forces at specific points, and creating visual feedback for user interactions.

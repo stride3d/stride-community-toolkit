@@ -1,6 +1,9 @@
-- [Simple Constraint](../../manual/code-only/examples/simple-constraint.md): Shows how to create a simple constraint between two entities.
-- [Various Constraints](../../manual/code-only/examples/constraints.md): Shows how to create various constraints between entities, including distance limit, distance servo, ball socket, and point-on-line servo.
-- [Myra UI - Draggable Window, GetService()](../../manual/code-only/examples/myra-ui-draggable-window-and-services.md): Illustrates using Myra UI to create a draggable window, display a health bar, and access registered services.
-- [Stride UI - Draggable Window](../../manual/code-only/examples/stride-ui-draggable-window.md): Illustrates using Stride UI to create a draggable window.
-- [Image Processing](../../manual/code-only/examples/image-processing.md): Shows how to apply image processing effects to a texture.
-- [Root Renderer Shader](../../manual/code-only/examples/root-renderer-shader.md): Shows how to create a custom shader for the root renderer.
+- [Simple Constraint](../../manual/code-only/examples/simple-constraint.md): Demonstrates creating a simple constraint between two entities.
+- [Various Constraints](../../manual/code-only/examples/constraints.md): Demonstrates distance limit, distance servo, ball socket, and point-on-line servo constraints between entities.
+- [Myra UI - Draggable Window, GetService()](../../manual/code-only/examples/myra-ui-draggable-window-and-services.md): Demonstrates using Myra UI to create a draggable window, display a health bar, and access registered services.
+- [Stride UI - Draggable Window](../../manual/code-only/examples/stride-ui-draggable-window.md): Demonstrates using Stride UI to create a draggable window.
+- [ImGui UI](../../manual/code-only/examples/imgui-ui.md): Demonstrates using ImGui to create a simple UI.
+- [Image Processing](../../manual/code-only/examples/image-processing.md): Demonstrates applying image-processing effects to a texture.
+- [Root Renderer Shader](../../manual/code-only/examples/root-renderer-shader.md): Demonstrates creating a custom shader for the root renderer.
+- [Box2D.NET Physics](../../manual/code-only/examples/box2d-physics.md): Demonstrates integrating Box2D.NET physics into a Stride project.
+- [Mesh Outline](../../manual/code-only/examples/mesh-outline.md): Demonstrates creating a mesh-outline effect.

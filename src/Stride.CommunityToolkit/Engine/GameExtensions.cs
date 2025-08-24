@@ -515,33 +515,4 @@ public static class GameExtensions
     {
         game.SceneSystem.GraphicsCompositor.AddParticleStagesAndFeatures();
     }
-
-    /// <summary>
-    /// Adds an <see cref="EntityDebugSceneRenderer"/> to the game's <see cref="GraphicsCompositor"/> for rendering entity debug information.
-    /// </summary>
-    /// <param name="game">The <see cref="Game"/> instance to which the entity debug renderer will be added.</param>
-    /// <param name="options">Optional settings to customize the appearance of the debug renderer. If not provided, default options will be used.</param>
-    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
-    /// <remarks>
-    /// This method adds a custom <see cref="EntityDebugSceneRenderer"/> to the game's graphics compositor, allowing the display of debug information
-    /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
-    /// which allows the user to define font size, color, and other settings.
-    /// </remarks>
-    /// <example>
-    /// The following example demonstrates how to add an entity debug renderer with default settings:
-    /// <code>
-    /// game.EntityDebugSceneRenderer();
-    /// </code>
-    /// You can also specify custom options:
-    /// <code>
-    /// var options = new EntityDebugRendererOptions { FontSize = 16, FontColor = Color.Red };
-    /// game.EntityDebugSceneRenderer(options);
-    /// </code>
-    /// </example>
-    public static void AddEntityDebugSceneRenderer(this Game game, EntityDebugSceneRendererOptions? options = null)
-    {
-        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
-
-        graphicsCompositor.AddEntityDebugRenderer(options);
-    }
 }

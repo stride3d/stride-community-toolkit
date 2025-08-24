@@ -1,6 +1,6 @@
-# Code Only Advance Examples
+# C# Code-Only Advanced Examples
 
-This page provides a brief overview of the advance examples available for code-only projects in Stride. You can explore each example in detail. Each linked example page contains detailed code snippets and explanations.
+This page provides a brief overview of the advanced examples available for code-only projects in Stride. Each linked page contains focused snippets and explanations.
 
 ## Examples Overview
 

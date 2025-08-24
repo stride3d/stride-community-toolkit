@@ -5,6 +5,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <ExampleTitle>Advance Example - Stride UI - Draggable Window</ExampleTitle>
+        <ExampleOrder>10300</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

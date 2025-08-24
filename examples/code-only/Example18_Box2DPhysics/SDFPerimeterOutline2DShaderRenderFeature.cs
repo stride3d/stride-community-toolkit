@@ -35,12 +35,6 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
     [DataMemberRange(0.0f, 0.1f, 0.001f, 0.002f, 4)]
     public float ScaleAdjust = 0.001f;
 
-    /// <summary>
-    /// Specifies which render groups will have outlines applied.
-    /// </summary>
-    [DataMember(5)]
-    public RenderGroupMask RenderGroupMask;
-
     /// <inheritdoc/>
     public override Type SupportedRenderObjectType => typeof(RenderMesh);
 
@@ -60,13 +54,13 @@ public class SDFPerimeterOutline2DShaderRenderFeature : RootRenderFeature
         {
             _shader = new DynamicEffectInstance("SDFPerimeterOutline2DShader");
             _shader.Initialize(Context.Services);
-
             _pipelineState = new MutablePipelineState(Context.GraphicsDevice);
             _pipelineState.State.SetDefaults();
             _pipelineState.State.InputElements = VertexPositionNormalTexture.Layout.CreateInputElements();
             //_pipelineState.State.BlendState = BlendStates.AlphaBlend;
             _pipelineState.State.BlendState = BlendStates.Opaque; // solid crisp border
             _pipelineState.State.RasterizerState.CullMode = CullMode.Back;
+            //_pipelineState.State.RasterizerState.FillMode = FillMode.Wireframe;
         }
         catch (Exception ex)
         {

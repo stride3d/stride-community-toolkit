@@ -1,6 +1,7 @@
 using Example07_CubeClicker.Managers;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -113,7 +114,7 @@ public class ClickHandlerComponent : AsyncScript
 
         Console.WriteLine("Adding new entity");
 
-        CreateCube(new Vector3(_random.Next(-4, 4), 8, _random.Next(-4, 4)), Vector3.Zero);
+        CreateCube(_random.NextPoint(new BoundingBox(Vector3.One * -7, Vector3.One * 7)) + new Vector3(0, 10, 0), Vector3.Zero);
     }
 
     private static void RemoveEntity(Entity entity)

@@ -43,35 +43,6 @@ public static class GraphicsCompositorExtensions
     }
 
     /// <summary>
-    /// Adds an <see cref="EntityDebugSceneRenderer"/> to the <see cref="GraphicsCompositor"/> for rendering entity debug information.
-    /// </summary>
-    /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> to which the entity debug renderer will be added.</param>
-    /// <param name="options">Optional settings to customize the appearance of the debug renderer. If not provided, default options will be used.</param>
-    /// <returns>The modified <see cref="GraphicsCompositor"/> instance with the entity debug renderer added.</returns>
-    /// <remarks>
-    /// This method adds a custom <see cref="EntityDebugSceneRenderer"/> to the graphics compositor, allowing the display of debug information
-    /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
-    /// which allows the user to define font size, color, and other settings.
-    /// </remarks>
-    /// <example>
-    /// The following example demonstrates how to add an entity debug renderer with default settings:
-    /// <code>
-    /// graphicsCompositor.EntityDebugSceneRenderer();
-    /// </code>
-    /// You can also specify custom options:
-    /// <code>
-    /// var options = new EntityDebugRendererOptions { FontSize = 16, FontColor = Color.Red };
-    /// graphicsCompositor.EntityDebugSceneRenderer(options);
-    /// </code>
-    /// </example>
-    public static GraphicsCompositor AddEntityDebugRenderer(this GraphicsCompositor graphicsCompositor, EntityDebugSceneRendererOptions? options = null)
-    {
-        graphicsCompositor.AddSceneRenderer(new EntityDebugSceneRenderer(options));
-
-        return graphicsCompositor;
-    }
-
-    /// <summary>
     /// Adds a new scene renderer to the given GraphicsCompositor's game. If the game is already a collection of scene renderers,
     /// the new scene renderer is added to that collection. Otherwise, a new scene renderer collection is created to house both
     /// the existing game and the new scene renderer.
@@ -145,6 +116,43 @@ public static class GraphicsCompositorExtensions
         return false;
     }
 
+    /// <summary>
+    /// Adds particle rendering stages and features to the specified graphics compositor.
+    /// </summary>
+    /// <remarks>This method configures the graphics compositor to support particle rendering by adding a <see
+    /// cref="ParticleEmitterRenderFeature"/>. It requires the presence of both "Opaque" and "Transparent" render stages
+    /// in the compositor. The method will throw a <see cref="NullReferenceException"/> if either stage is
+    /// missing.</remarks>
+    /// <param name="graphicsCompositor">The graphics compositor to which the particle stages and features will be added.</param>
+    /// <exception cref="NullReferenceException">Thrown if the "Opaque" or "Transparent" render stage is not found in the graphics compositor.</exception>
+    public static void AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
+    {
+        if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
+        {
+            throw new NullReferenceException("Opaque RenderStage not found");
+        }
+
+        if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
+        {
+            throw new NullReferenceException("Transparent RenderStage not found");
+        }
+
+        graphicsCompositor.RenderFeatures.Add(new ParticleEmitterRenderFeature()
+        {
+            Name = "ParticleEmitterRenderFeature",
+            RenderStageSelectors =
+            {
+                new ParticleEmitterTransparentRenderStageSelector()
+                {
+                    EffectName = "ParticleEmitterTransparent",
+                    RenderGroup = RenderGroupMaskAllExcludingGroup31(),
+                    OpaqueRenderStage = opaqueRenderStage,
+                    TransparentRenderStage = transparentRenderStage
+                }
+            }
+        });
+    }
+
     private static void AddPostEffects(GraphicsCompositor graphicsCompositor)
     {
         var forwardRenderer = (ForwardRenderer)graphicsCompositor.SingleView;
@@ -181,43 +189,6 @@ public static class GraphicsCompositorExtensions
         });
 
         UpdateSceneRendererCollection(graphicsCompositor, cameraSlot, uiStage);
-    }
-
-    /// <summary>
-    /// Adds particle rendering stages and features to the specified graphics compositor.
-    /// </summary>
-    /// <remarks>This method configures the graphics compositor to support particle rendering by adding a <see
-    /// cref="ParticleEmitterRenderFeature"/>. It requires the presence of both "Opaque" and "Transparent" render stages
-    /// in the compositor. The method will throw a <see cref="NullReferenceException"/> if either stage is
-    /// missing.</remarks>
-    /// <param name="graphicsCompositor">The graphics compositor to which the particle stages and features will be added.</param>
-    /// <exception cref="NullReferenceException">Thrown if the "Opaque" or "Transparent" render stage is not found in the graphics compositor.</exception>
-    public static void AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
-    {
-        if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
-        {
-            throw new NullReferenceException("Opaque RenderStage not found");
-        }
-
-        if (!graphicsCompositor.TryGetRenderStage("Transparent", out var transparentRenderStage))
-        {
-            throw new NullReferenceException("Transparent RenderStage not found");
-        }
-
-        graphicsCompositor.RenderFeatures.Add(new ParticleEmitterRenderFeature()
-        {
-            Name = "ParticleEmitterRenderFeature",
-            RenderStageSelectors =
-            {
-                new ParticleEmitterTransparentRenderStageSelector()
-                {
-                    EffectName = "ParticleEmitterTransparent",
-                    RenderGroup = RenderGroupMaskAllExcludingGroup31(),
-                    OpaqueRenderStage = opaqueRenderStage,
-                    TransparentRenderStage = transparentRenderStage
-                }
-            }
-        });
     }
 
     private static void UpdateSceneRendererCollection(GraphicsCompositor graphicsCompositor, SceneCameraSlot cameraSlot, RenderStage uiStage)

@@ -2,13 +2,13 @@
 
 [!INCLUDE [global-note](../includes/global-note.md)]
 
-Welcome to the Stride Community Toolkit Manual. This comprehensive guide is designed to help you make the most of the toolkit for [Stride](https://www.stride3d.net/), an open-source C# game engine. Whether you are new to Stride or an experienced developer, these pages offer valuable insights, tips, and detailed instructions to enhance your game development experience.
+Welcome to the Stride Community Toolkit Manual. This guide helps you make the most of the toolkit for [Stride](https://www.stride3d.net/), an open-source C# game engine. Whether you're new to Stride or an experienced developer, you'll find tips, insights, and instructions to enhance your game development.
 
 ## Table of Contents
 
-- [Getting Started](getting-started.md): A guide for newcomers on how to set up and start using the toolkit.
-- [Code-Only Approach](code-only/index.md): Learn how to create and manage Stride projects using only C# code.
-  - [Create Project](code-only/create-project.md): A step-by-step guide on creating a new Stride project using C# console application.
+- [Getting Started](getting-started.md): Set up and start using the toolkit.
+- [Code-Only Approach](code-only/index.md): Create and manage Stride projects using only C#.
+  - [Create Project](code-only/create-project.md): Step-by-step guide to creating a Stride project using a C# console app.
   - [C# Basic Examples](code-only/examples/basic-examples.md)
       [!INCLUDE [basic-examples](../includes/manual/basic-examples.md)] 
   - [C# Advanced Examples](code-only/examples/advance-examples.md)
@@ -22,15 +22,15 @@ Welcome to the Stride Community Toolkit Manual. This comprehensive guide is desi
   - [Extensions](code-only/extensions.md)
 - Extensions
   - [Animation Extensions](animation-extensions/index.md)
-  - [Camera Extensions](camera-extensions/index.md): Powerful and convenient ways to interact with the camera.
-  - [Entity Extensions](entity-extensions/index.md): Enhancements and utilities for working with entities.
-  - [Game Extensions](game-extensions/index.md): Extensions ranging from performance monitoring to material creation and entity manipulation.
+  - [Camera Extensions](camera-extensions/index.md): Convenient ways to work with the camera.
+  - [Entity Extensions](entity-extensions/index.md): Enhancements and utilities for entities.
+  - [Game Extensions](game-extensions/index.md): From performance monitoring to material creation and entity manipulation.
   - [Model Extensions](model-extensions/index.md)
-  - [Script Extensions](script-extensions/index.md): Additional features and tools for game development.
-  - [Script System Extensions](script-system-extensions/index.md): Utilities for writing async methods.
-- Rendering: A guide on rendering techniques.
-  - [MeshBuilder](rendering/mesh-builder.md): A utility class allowing dynamic creation of meshes at runtime.
-  - [TextureCanvas](rendering/texture-canvas.md): A utility class allowing dynamic creation of textures at runtime.
-- [Troubleshooting](troubleshooting.md): Solutions and tips for common issues encountered while using the toolkit.
+  - [Script Extensions](script-extensions/index.md): Additional features and tools for development.
+  - [Script System Extensions](script-system-extensions/index.md): Utilities for async methods.
+- Rendering
+  - [MeshBuilder](rendering/mesh-builder.md): Create meshes dynamically at runtime.
+  - [TextureCanvas](rendering/texture-canvas.md): Create textures dynamically at runtime.
+- [Troubleshooting](troubleshooting.md): Solutions and tips for common issues.
 
 Explore these sections to discover the full potential of the Stride Community Toolkit and enhance your game development skills.

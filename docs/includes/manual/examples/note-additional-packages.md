@@ -1,2 +1,2 @@
 > [!NOTE]
-> This example requires the additional NuGet packages `Stride.CommunityToolkit.Skyboxes` and `Stride.CommunityToolkit.Bepu`. Make sure to install **both** before running the code.
+> This example requires the additional NuGet packages `Stride.CommunityToolkit.Bepu`, `Stride.CommunityToolkit.Skyboxes` and `Stride.CommunityToolkit.Windows`. Make sure to install **all** before running the code.

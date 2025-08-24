@@ -3,8 +3,33 @@ using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
+
+/// <summary>
+/// Provides extension methods for adding and managing debug rendering features in a game.
+/// </summary>
+/// <remarks>This static class includes methods to integrate immediate debug rendering capabilities into a game,
+/// such as adding debug render features to the graphics compositor, registering debug systems, and managing render
+/// stages. These methods are designed to simplify the process of enabling and using debug rendering in a game
+/// development environment.</remarks>
 public static class DebugShapeExtensions
 {
+    /// <summary>
+    /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
+    /// <para>Registers the system to the service registry for easy access.</para>
+    /// </summary>
+    /// <param name="game"></param>
+    /// <param name="debugShapeRenderGroup"></param>
+    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
+    {
+        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
+
+        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
+#if DEBUG
+        debugDraw.Visible = true;
+#endif
+        game.Services.AddService(debugDraw);
+        game.GameSystems.Add(debugDraw);
+    }
 
     /// <summary>
     /// Adds an immediate debug render feature to the specified <see cref="GraphicsCompositor"/>.
@@ -77,23 +102,5 @@ public static class DebugShapeExtensions
         }
 
         return false;
-    }
-
-    /// <summary>
-    /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
-    /// <para>Registers the system to the service registry for easy access.</para>
-    /// </summary>
-    /// <param name="game"></param>
-    /// <param name="debugShapeRenderGroup"></param>
-    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
-    {
-        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
-
-        var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
-#if DEBUG
-        debugDraw.Visible = true;
-#endif
-        game.Services.AddService(debugDraw);
-        game.GameSystems.Add(debugDraw);
     }
 }

@@ -1,4 +1,6 @@
+using Example17_SignalR.Builders;
 using Example17_SignalR.Core;
+using Example17_SignalR.Managers;
 using Example17_SignalR.Services;
 using Example17_SignalR_Shared.Core;
 using Example17_SignalR_Shared.Dtos;
@@ -15,6 +17,7 @@ public class ScreenManagerScript : AsyncScript
     private readonly ConcurrentQueue<CountDto> _primitiveCreationQueue = new();
     private readonly ConcurrentQueue<CountDto> _removeRequestQueue = new();
     private RobotBuilder? _primitiveBuilder;
+    private MaterialManager? _materialManager;
     private MessagePrinter? _messagePrinter;
     private ScreenService? _screenService;
     private bool _isCreatingPrimitives;
@@ -28,15 +31,16 @@ public class ScreenManagerScript : AsyncScript
         try
         {
             await _screenService.Connection.StartAsync();
+
+            Console.WriteLine("Connection started");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error starting connection: {ex.Message}");
         }
 
-        var materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
-        _primitiveBuilder = new RobotBuilder(Game, materialManager);
-
+        _materialManager = new MaterialManager(new MaterialBuilder(Game.GraphicsDevice));
+        _primitiveBuilder = new RobotBuilder(Game);
         _messagePrinter = new MessagePrinter(DebugText);
 
         var countReceiver = new EventReceiver<CountDto>(GlobalEvents.CountReceivedEventKey);
@@ -108,7 +112,10 @@ public class ScreenManagerScript : AsyncScript
 
             _isCreatingPrimitives = true;
 
-            _primitiveBuilder!.CreatePrimitives(nextBatch, Entity.Scene);
+            for (int i = 0; i < nextBatch.Count; i++)
+            {
+                _primitiveBuilder!.CreatePrimitive(i, nextBatch.Type, Entity.Scene, _materialManager!.GetMaterial(nextBatch.Type), new RemoveEntityScript());
+            }
 
             _isCreatingPrimitives = false;
         }

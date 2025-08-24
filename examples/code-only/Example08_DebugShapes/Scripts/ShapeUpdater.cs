@@ -1,385 +1,295 @@
+using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Collections;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.Core;
-using Stride.Core.Collections;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
-using Stride.Physics;
+using System.Runtime.InteropServices;
 
 namespace Example08_DebugShapes.Scripts;
 
 public class ShapeUpdater : SyncScript
 {
-    enum CurRenderMode : byte
-    {
-        All = 0,
-        Quad,
-        Circle,
-        Sphere,
-        HalfSphere,
-        Cube,
-        Capsule,
-        Cylinder,
-        Cone,
-        Ray,
-        Arrow,
-        None
-    }
-
-    const int ChangePerSecond = 8192 + 2048;
-    const int InitialNumPrimitives = 1024;
-    const int AreaSize = 64;
+    private const int ChangePerSecond = 8192 + 2048;
+    private const int InitialNumPrimitives = 1024;
+    private const int AreaSize = 64;
+    private const int TextIncrement = 16;
+    private const int StartTextPositionY = 32;
+    private const int MinNumberOfPrimitives = 0;
+    private const int MaxNumberOfPrimitives = 327680;
 
     [DataMemberIgnore]
-    ImmediateDebugRenderSystem DebugDraw; // this is here to make it look like it should when properly integrated
+    ImmediateDebugRenderSystem? _debugDraw; // Provided by services
 
-    int minNumberOfPrimitives = 0;
-    int maxNumberOfPrimitives = 327680;
-    int currentNumPrimitives = InitialNumPrimitives;
-    CurRenderMode mode = CurRenderMode.All;
-    bool useDepthTesting = true;
-    bool useWireframe = true;
-    bool running = true;
+    private int _currentNumPrimitives = InitialNumPrimitives;
+    private CurrentRenderMode _mode = CurrentRenderMode.All;
+    private bool _useDepthTesting = true;
+    private bool _useWireframe = true;
+    private bool _running = true;
 
-    FastList<Vector3> primitivePositions = new FastList<Vector3>(InitialNumPrimitives);
-    FastList<Quaternion> primitiveRotations = new FastList<Quaternion>(InitialNumPrimitives);
-    FastList<Vector3> primitiveVelocities = new FastList<Vector3>(InitialNumPrimitives);
-    FastList<Vector3> primitiveRotVelocities = new FastList<Vector3>(InitialNumPrimitives);
-    FastList<Color> primitiveColors = new FastList<Color>(InitialNumPrimitives);
+    private readonly List<Vector3> _primitivePositions = new(InitialNumPrimitives);
+    private readonly List<Quaternion> _primitiveRotations = new(InitialNumPrimitives);
+    private readonly List<Vector3> _primitiveVelocities = new(InitialNumPrimitives);
+    private readonly List<Vector3> _primitiveRotVelocities = new(InitialNumPrimitives);
+    private readonly List<Color> _primitiveColors = new(InitialNumPrimitives);
 
-    public CameraComponent? CurrentCamera;
+    private CameraComponent? _currentCamera;
+    private readonly Random _random = new();
 
     private void InitializePrimitives(int from, int to)
     {
-        var random = new Random();
+        _primitivePositions.EnsureSize(to);
+        _primitiveRotations.EnsureSize(to);
+        _primitiveVelocities.EnsureSize(to);
+        _primitiveRotVelocities.EnsureSize(to);
+        _primitiveColors.EnsureSize(to);
 
-        primitivePositions.Resize(to, true);
-        primitiveRotations.Resize(to, true);
-        primitiveVelocities.Resize(to, true);
-        primitiveRotVelocities.Resize(to, true);
-        primitiveColors.Resize(to, true);
+        var posSpan = CollectionsMarshal.AsSpan(_primitivePositions);
+        var rotSpan = CollectionsMarshal.AsSpan(_primitiveRotations);
+        var velSpan = CollectionsMarshal.AsSpan(_primitiveVelocities);
+        var rvelSpan = CollectionsMarshal.AsSpan(_primitiveRotVelocities);
+        var colSpan = CollectionsMarshal.AsSpan(_primitiveColors);
 
         for (int i = from; i < to; ++i)
         {
-            // initialize boxes
+            var randX = _random.Next(-AreaSize, AreaSize);
+            var randY = _random.Next(-AreaSize, AreaSize);
+            var randZ = _random.Next(-AreaSize, AreaSize);
 
-            var randX = random.Next(-AreaSize, AreaSize);
-            var randY = random.Next(-AreaSize, AreaSize);
-            var randZ = random.Next(-AreaSize, AreaSize);
+            var ballVel = new Vector3(
+                (float)(_random.NextDouble() * 4.0),
+                (float)(_random.NextDouble() * 4.0),
+                (float)(_random.NextDouble() * 4.0));
 
-            var velX = random.NextDouble() * 4.0;
-            var velY = random.NextDouble() * 4.0;
-            var velZ = random.NextDouble() * 4.0;
-            var ballVel = new Vector3((float)velX, (float)velY, (float)velZ);
+            var ballRotVel = new Vector3(
+                (float)_random.NextDouble(),
+                (float)_random.NextDouble(),
+                (float)_random.NextDouble());
 
-            var rotVelX = random.NextDouble();
-            var rotVelY = random.NextDouble();
-            var rotVelZ = random.NextDouble();
-            var ballRotVel = new Vector3((float)rotVelX, (float)rotVelY, (float)rotVelZ);
-
-            primitivePositions.Items[i] = new Vector3(randX, randY, randZ);
-            primitiveRotations.Items[i] = Quaternion.Identity;
-            primitiveVelocities.Items[i] = ballVel;
-            primitiveRotVelocities.Items[i] = ballRotVel;
-
-            ref var color = ref primitiveColors.Items[i];
-            color.R = (byte)(((primitivePositions[i].X / AreaSize) + 1f) / 2.0f * 255.0f);
-            color.G = (byte)(((primitivePositions[i].Y / AreaSize) + 1f) / 2.0f * 255.0f);
-            color.B = (byte)(((primitivePositions[i].Z / AreaSize) + 1f) / 2.0f * 255.0f);
-            color.A = 255;
+            posSpan[i] = new Vector3(randX, randY, randZ);
+            rotSpan[i] = Quaternion.Identity;
+            velSpan[i] = ballVel;
+            rvelSpan[i] = ballRotVel;
+            colSpan[i] = ComputeColor(posSpan[i]);
         }
+    }
+
+    private static Color ComputeColor(Vector3 p)
+    {
+        byte r = (byte)(((p.X / AreaSize) + 1f) * 0.5f * 255.0f);
+        byte g = (byte)(((p.Y / AreaSize) + 1f) * 0.5f * 255.0f);
+        byte b = (byte)(((p.Z / AreaSize) + 1f) * 0.5f * 255.0f);
+
+        return new Color(r, g, b, 255);
     }
 
     public override void Start()
     {
-        CurrentCamera = SceneSystem.SceneInstance.RootScene.Entities.First(e => e.Get<CameraComponent>() != null).Get<CameraComponent>();
+        _currentCamera = SceneSystem.SceneInstance.RootScene.Entities.First(e => e.Get<CameraComponent>() != null).Get<CameraComponent>();
+        _debugDraw = Services.GetService<ImmediateDebugRenderSystem>();
 
-        // Gets added in the program.cs class by the AddDebugShapes() extension.
-        DebugDraw = Services.GetService<ImmediateDebugRenderSystem>();
+        if (_debugDraw is null)
+        {
+            throw new InvalidOperationException("ImmediateDebugRenderSystem service is not available. Ensure it is added to the services.");
+        }
 
-        DebugDraw.PrimitiveColor = Color.Green;
-        DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
-        DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
-
-        // keep DebugDraw visible in release builds too
-        DebugDraw.Visible = true;
-
-        // keep DebugText visible in release builds too
+        _debugDraw.PrimitiveColor = Color.Green;
+        ResizeDebugDrawCapacity(_currentNumPrimitives);
+        _debugDraw.Visible = true;
         DebugText.Visible = true;
 
-        InitializePrimitives(0, currentNumPrimitives);
-    }
-
-    private static int Clamp(int v, int min, int max)
-    {
-        if (v < min)
-        {
-            return min;
-        }
-        else if (v > max)
-        {
-            return max;
-        }
-        else
-        {
-            return v;
-        }
+        InitializePrimitives(0, _currentNumPrimitives);
     }
 
     public override void Update()
     {
-
         var dt = (float)Game.UpdateTime.Elapsed.TotalSeconds;
 
-        var speedyDelta = (Input.IsKeyDown(Stride.Input.Keys.LeftShift)) ? 100.0f : 1.0f;
-        var newAmountOfBoxes = Clamp(currentNumPrimitives + (int)(Input.MouseWheelDelta * ChangePerSecond * speedyDelta * dt), minNumberOfPrimitives, maxNumberOfPrimitives);
+        HandleInput(dt, out int newCount);
+        AdjustPrimitiveCount(newCount);
+        DrawUiText();
+        if (_running && _currentNumPrimitives > 0) Simulate(dt);
+        DrawPrimitives();
+        HandleMousePicking();
+        DrawAuxiliaryTestGeometry();
+    }
 
-        if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt))
+    private void HandleInput(float dt, out int newCount)
+    {
+        var speedyDelta = Input.IsKeyDown(Stride.Input.Keys.LeftShift) ? 100.0f : 1.0f;
+
+        newCount = Clamp(_currentNumPrimitives + (int)(Input.MouseWheelDelta * ChangePerSecond * speedyDelta * dt), MinNumberOfPrimitives, MaxNumberOfPrimitives);
+
+        if (Input.IsKeyPressed(Stride.Input.Keys.LeftAlt)) _mode = (CurrentRenderMode)(((int)_mode + 1) % ((int)CurrentRenderMode.None + 1));
+        if (Input.IsKeyPressed(Stride.Input.Keys.LeftCtrl)) _useDepthTesting = !_useDepthTesting;
+        if (Input.IsKeyPressed(Stride.Input.Keys.Tab)) _useWireframe = !_useWireframe;
+        if (Input.IsKeyPressed(Stride.Input.Keys.Space)) _running = !_running;
+    }
+
+    private void AdjustPrimitiveCount(int newAmount)
+    {
+        if (newAmount > _currentNumPrimitives)
         {
-            mode = (CurRenderMode)(((int)mode + 1) % ((int)CurRenderMode.None + 1));
+            InitializePrimitives(_currentNumPrimitives, newAmount);
+            ResizeDebugDrawCapacity(newAmount);
         }
 
-        if (Input.IsKeyPressed(Stride.Input.Keys.LeftCtrl))
+        _currentNumPrimitives = newAmount;
+    }
+
+    private void ResizeDebugDrawCapacity(int primitives)
+    {
+        if (_debugDraw is null) return;
+
+        _debugDraw.MaxPrimitivesWithLifetime = (primitives * 2) + 8;
+        _debugDraw.MaxPrimitives = (primitives * 2) + 8;
+    }
+
+    private void Simulate(float dt)
+    {
+        Dispatcher.For(0, _currentNumPrimitives, i =>
         {
-            useDepthTesting = !useDepthTesting;
-        }
+            var posSpan = CollectionsMarshal.AsSpan(_primitivePositions);
+            var velSpan = CollectionsMarshal.AsSpan(_primitiveVelocities);
+            var rvelSpan = CollectionsMarshal.AsSpan(_primitiveRotVelocities);
+            var rotSpan = CollectionsMarshal.AsSpan(_primitiveRotations);
+            var colSpan = CollectionsMarshal.AsSpan(_primitiveColors);
 
-        if (Input.IsKeyPressed(Stride.Input.Keys.Tab))
-        {
-            useWireframe = !useWireframe;
-        }
+            ref var position = ref posSpan[i];
+            ref var velocity = ref velSpan[i];
+            ref var rotVelocity = ref rvelSpan[i];
+            ref var rotation = ref rotSpan[i];
+            ref var color = ref colSpan[i];
 
-        if (Input.IsKeyPressed(Stride.Input.Keys.Space))
-        {
-            running = !running;
-        }
+            if (position.X > AreaSize || position.X < -AreaSize) velocity.X = -velocity.X;
+            if (position.Y > AreaSize || position.Y < -AreaSize) velocity.Y = -velocity.Y;
+            if (position.Z > AreaSize || position.Z < -AreaSize) velocity.Z = -velocity.Z;
 
-        if (newAmountOfBoxes > currentNumPrimitives)
-        {
-            InitializePrimitives(currentNumPrimitives, newAmountOfBoxes);
-            DebugDraw.MaxPrimitivesWithLifetime = (newAmountOfBoxes * 2) + 8;
-            DebugDraw.MaxPrimitives = (newAmountOfBoxes * 2) + 8;
-            currentNumPrimitives = newAmountOfBoxes;
-        }
-        else
-        {
-            currentNumPrimitives = newAmountOfBoxes;
-        }
+            position += velocity * dt;
 
-        int textPositionX = (int)Input.Mouse.SurfaceSize.X - 384;
-        DebugText.Print($"Primitive Count: {currentNumPrimitives} (scrollwheel to adjust)",
-            new Int2(textPositionX, 32));
+            rotation *=
+                Quaternion.RotationX(rotVelocity.X * dt) *
+                Quaternion.RotationY(rotVelocity.Y * dt) *
+                Quaternion.RotationZ(rotVelocity.Z * dt);
 
-        DebugText.Print($" - Render Mode: {mode} (left alt to switch)",
-            new Int2(textPositionX, 48));
+            color = ComputeColor(position);
+        });
+    }
 
-        DebugText.Print($" - Depth Testing: {(useDepthTesting ? "On " : "Off")} (left ctrl to toggle)",
-            new Int2(textPositionX, 64));
+    private void DrawPrimitives()
+    {
+        if (_debugDraw is null || _currentNumPrimitives <= 0) return;
 
-        DebugText.Print($" - Fillmode: {(useWireframe ? "Wireframe" : "Solid")} (tab to toggle)",
-            new Int2(textPositionX, 80));
-
-        DebugText.Print($" - State: {(running ? "Simulating" : "Paused")} (space to toggle)",
-            new Int2(textPositionX, 96));
-
-        if (running)
-        {
-            Dispatcher.For(0, currentNumPrimitives, i =>
-            {
-
-                ref var position = ref primitivePositions.Items[i];
-                ref var velocity = ref primitiveVelocities.Items[i];
-                ref var rotVelocity = ref primitiveRotVelocities.Items[i];
-                ref var rotation = ref primitiveRotations.Items[i];
-                ref var color = ref primitiveColors.Items[i];
-
-                if (position.X > AreaSize || position.X < -AreaSize)
-                {
-                    velocity.X = -velocity.X;
-                }
-
-                if (position.Y > AreaSize || position.Y < -AreaSize)
-                {
-                    velocity.Y = -velocity.Y;
-                }
-
-                if (position.Z > AreaSize || position.Z < -AreaSize)
-                {
-                    velocity.Z = -velocity.Z;
-                }
-
-                position += velocity * dt;
-
-                rotation *=
-                    Quaternion.RotationX(rotVelocity.X * dt) *
-                    Quaternion.RotationY(rotVelocity.Y * dt) *
-                    Quaternion.RotationZ(rotVelocity.Z * dt);
-
-                color.R = (byte)(((position.X / AreaSize) + 1f) / 2.0f * 255.0f);
-                color.G = (byte)(((position.Y / AreaSize) + 1f) / 2.0f * 255.0f);
-                color.B = (byte)(((position.Z / AreaSize) + 1f) / 2.0f * 255.0f);
-                color.A = 255;
-
-            });
-        }
+        var posSpan = CollectionsMarshal.AsSpan(_primitivePositions);
+        var rotSpan = CollectionsMarshal.AsSpan(_primitiveRotations);
+        var velSpan = CollectionsMarshal.AsSpan(_primitiveVelocities);
+        var rvelSpan = CollectionsMarshal.AsSpan(_primitiveRotVelocities);
+        var colSpan = CollectionsMarshal.AsSpan(_primitiveColors);
 
         int currentShape = 0;
-
-        for (int i = 0; i < currentNumPrimitives; ++i)
+        for (int i = 0; i < _currentNumPrimitives; ++i)
         {
+            ref readonly var position = ref posSpan[i];
+            ref readonly var rotation = ref rotSpan[i];
+            ref readonly var velocity = ref velSpan[i];
+            ref readonly var rotVelocity = ref rvelSpan[i];
+            ref readonly var color = ref colSpan[i];
 
-            ref var position = ref primitivePositions.Items[i];
-            ref var rotation = ref primitiveRotations.Items[i];
-            ref var velocity = ref primitiveVelocities.Items[i];
-            ref var rotVelocity = ref primitiveRotVelocities.Items[i];
-            ref var color = ref primitiveColors.Items[i];
-
-            switch (mode)
+            switch (_mode)
             {
-                case CurRenderMode.All:
+                case CurrentRenderMode.All:
                     switch (currentShape++)
                     {
-                        case 0: // sphere
-                            DebugDraw.DrawSphere(position, 0.5f, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 1: // cube
-                            DebugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 2: // capsule
-                            DebugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 3: // cylinder
-                            DebugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 4: // cone
-                            DebugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 5: // ray
-                            DebugDraw.DrawRay(position, velocity, color, depthTest: useDepthTesting);
-                            break;
-                        case 6: // quad
-                            DebugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 7: // circle
-                            DebugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                            break;
-                        case 8: // half sphere
-                            DebugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: useDepthTesting, solid: !useWireframe);
-                            currentShape = 0;
-                            break;
-                        default:
-                            break;
+                        case 0: _debugDraw.DrawSphere(position, 0.5f, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 1: _debugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 2: _debugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 3: _debugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 4: _debugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 5: _debugDraw.DrawRay(position, velocity, color, depthTest: _useDepthTesting); break;
+                        case 6: _debugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 7: _debugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                        case 8: _debugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: _useDepthTesting, solid: !_useWireframe); currentShape = 0; break;
                     }
                     break;
-                case CurRenderMode.Quad:
-                    DebugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.Circle:
-                    DebugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.Sphere:
-                    DebugDraw.DrawSphere(position, 0.5f, color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.HalfSphere:
-                    DebugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.Cube:
-                    DebugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: useDepthTesting, solid: !useWireframe && i % 2 == 0);
-                    break;
-                case CurRenderMode.Capsule:
-                    DebugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.Cylinder:
-                    DebugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.Cone:
-                    DebugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.Ray:
-                    DebugDraw.DrawRay(position, velocity, color, depthTest: useDepthTesting);
-                    break;
-                case CurRenderMode.Arrow:
-                    DebugDraw.DrawArrow(position, position + velocity, color: color, depthTest: useDepthTesting, solid: !useWireframe);
-                    break;
-                case CurRenderMode.None:
-                    break;
+                case CurrentRenderMode.Quad: _debugDraw.DrawQuad(position, new Vector2(1.0f), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Circle: _debugDraw.DrawCircle(position, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Sphere: _debugDraw.DrawSphere(position, 0.5f, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.HalfSphere: _debugDraw.DrawHalfSphere(position, 0.5f, color, rotation, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Cube: _debugDraw.DrawCube(position, new Vector3(1, 1, 1), rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe && i % 2 == 0); break;
+                case CurrentRenderMode.Capsule: _debugDraw.DrawCapsule(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Cylinder: _debugDraw.DrawCylinder(position, 2.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Cone: _debugDraw.DrawCone(position, 1.0f, 0.5f, rotation, color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.Ray: _debugDraw.DrawRay(position, velocity, color, depthTest: _useDepthTesting); break;
+                case CurrentRenderMode.Arrow: _debugDraw.DrawArrow(position, position + velocity, color: color, depthTest: _useDepthTesting, solid: !_useWireframe); break;
+                case CurrentRenderMode.None: break;
             }
         }
-
-        // CUBE OF ORIGIN!!
-        DebugDraw.DrawCube(new Vector3(0, 0, 0), new Vector3(1.0f, 1.0f, 1.0f), color: Color.White);
-        DebugDraw.DrawBounds(new Vector3(-5, 0, -5), new Vector3(5, 5, 5), color: Color.White);
-        DebugDraw.DrawBounds(new Vector3(-AreaSize), new Vector3(AreaSize), color: Color.HotPink);
-
-        if (Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left) && CurrentCamera != null)
-        {
-            var clickPos = Input.MousePosition;
-            var result = ScreenPositionToWorldPositionRaycast(clickPos, CurrentCamera, this.GetSimulation());
-            if (result.Succeeded)
-            {
-                var cameraWorldPos = CurrentCamera.Entity.Transform.WorldMatrix.TranslationVector;
-                var cameraWorldUp = CurrentCamera.Entity.Transform.WorldMatrix.Up;
-                var cameraWorldNormal = Vector3.Normalize(result.Point - cameraWorldPos);
-                DebugDraw.DrawLine(cameraWorldPos + (cameraWorldNormal * -2.0f) + (cameraWorldUp * (-0.125f / 4.0f)), result.Point, color: Color.HotPink, duration: 5.0f);
-                DebugDraw.DrawArrow(result.Point, result.Point + result.Normal, color: Color.HotPink, duration: 5.0f);
-                DebugDraw.DrawArrow(result.Point, result.Point + Vector3.Reflect(result.Point - cameraWorldPos, result.Normal), color: Color.LimeGreen, duration: 5.0f);
-            }
-        }
-
-        // draw 16 cubes in a line, for testing depth testing disabled stuff
-        var startPos = new Vector3(0, 5, 0);
-        for (int i = -(16 / 2); i < 16 / 2; ++i)
-        {
-            DebugDraw.DrawCube(startPos + new Vector3(i, 0, 0), Vector3.One, depthTest: useDepthTesting, solid: true);
-            DebugDraw.DrawCube(startPos + new Vector3(i, 0, 0), Vector3.One, depthTest: useDepthTesting, solid: false, color: Color.White);
-        }
-
-        // draw every primitive to see where they're put
-        var testPos = new Vector3(0.0f, 0.0f, -5.0f);
-        DebugDraw.PrimitiveColor = Color.Red;
-        DebugDraw.DrawQuad(testPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector2(1.0f), solid: !useWireframe);
-        DebugDraw.DrawCircle(testPos + new Vector3(2.0f, 0.0f, 0.0f), 0.5f, solid: !useWireframe);
-        DebugDraw.DrawSphere(testPos + new Vector3(3.0f, 0.0f, 0.0f), 0.5f, solid: !useWireframe);
-        DebugDraw.DrawCube(testPos + new Vector3(4.0f, 0.0f, 0.0f), new Vector3(1.0f), solid: !useWireframe);
-        DebugDraw.DrawCapsule(testPos + new Vector3(5.0f, 0.0f, 0.0f), 1.0f, 0.5f, solid: !useWireframe);
-        DebugDraw.DrawCylinder(testPos + new Vector3(6.0f, 0.0f, 0.0f), 1.0f, 0.5f, solid: !useWireframe);
-        DebugDraw.DrawCone(testPos + new Vector3(7.0f, 0.0f, 0.0f), 1.0f, 0.5f, solid: !useWireframe);
-        DebugDraw.DrawHalfSphere(testPos + new Vector3(8.0f, 0.0f, 0.0f), 0.5f, solid: !useWireframe);
-        DebugDraw.DrawHalfSphere(testPos + new Vector3(9.0f, 0.0f, 0.0f), 0.5f, rotation: Quaternion.RotationX((float)Math.PI), solid: !useWireframe);
-
-        // center cone thing yes
-        DebugDraw.DrawCone(new Vector3(0, 0.5f, 0), 2.0f, 0.5f, color: Color.HotPink);
-
     }
 
-    // ToDo, this method is already in CameraComponentExtensions?
-    public static HitResult ScreenPositionToWorldPositionRaycast(Vector2 screenPos, CameraComponent camera, Simulation simulation)
+    private void DrawUiText()
     {
-        var invertedViewProjection = Matrix.Invert(camera.ViewProjectionMatrix);
-
-        // Reconstruct the projection-space position in the (-1, +1) range.
-        // Don't forget that Y is down in screen coordinates, but up in projection space
-        Vector3 sPos;
-        sPos.X = screenPos.X * 2f - 1f;
-        sPos.Y = 1f - screenPos.Y * 2f;
-
-        // Compute the near (start) point for the raycast
-        // It's assumed to have the same projection space (x,y) coordinates and z = 0 (lying on the near plane)
-        // We need to unproject it to world space
-        sPos.Z = 0f;
-        var vectorNear = Vector3.Transform(sPos, invertedViewProjection);
-        vectorNear /= vectorNear.W;
-
-        // Compute the far (end) point for the raycast
-        // It's assumed to have the same projection space (x,y) coordinates and z = 1 (lying on the far plane)
-        // We need to unproject it to world space
-        sPos.Z = 1f;
-        var vectorFar = Vector3.Transform(sPos, invertedViewProjection);
-        vectorFar /= vectorFar.W;
-
-        // Raycast from the point on the near plane to the point on the far plane and get the collision result
-        var result = simulation.Raycast(vectorNear.XYZ(), vectorFar.XYZ());
-
-        return result;
+        int textPositionX = (int)Input.Mouse.SurfaceSize.X - 384;
+        DebugText.Print($"Primitive Count: {_currentNumPrimitives} (scroll wheel to adjust)", new Int2(textPositionX, StartTextPositionY));
+        DebugText.Print(" - Hold shift: faster count adjustment", new Int2(textPositionX, StartTextPositionY + TextIncrement));
+        DebugText.Print($" - Render Mode: {_mode} (left alt to switch)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 2)));
+        DebugText.Print($" - Depth Testing: {(_useDepthTesting ? "On " : "Off")} (left ctrl to toggle)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 3)));
+        DebugText.Print($" - Fill mode: {(_useWireframe ? "Wireframe" : "Solid")} (tab to toggle)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 4)));
+        DebugText.Print($" - State: {(_running ? "Simulating" : "Paused")} (space to toggle)", new Int2(textPositionX, StartTextPositionY + (TextIncrement * 5)));
     }
+
+    private void HandleMousePicking()
+    {
+        if (!Input.IsMouseButtonPressed(Stride.Input.MouseButton.Left) || _currentCamera is null || _debugDraw is null)
+        {
+            return;
+        }
+
+        var clickPos = Input.MousePosition;
+        var hit = _currentCamera.Raycast(clickPos, 1000, out var result);
+
+        if (!hit) return;
+
+        var cameraWorldPos = _currentCamera.Entity.Transform.WorldMatrix.TranslationVector;
+        var cameraWorldUp = _currentCamera.Entity.Transform.WorldMatrix.Up;
+        var cameraWorldNormal = Vector3.Normalize(result.Point - cameraWorldPos);
+
+        _debugDraw.DrawLine(cameraWorldPos + (cameraWorldNormal * -2.0f) + (cameraWorldUp * (-0.125f / 4.0f)), result.Point, color: Color.HotPink, duration: 5.0f);
+        _debugDraw.DrawArrow(result.Point, result.Point + result.Normal, color: Color.HotPink, duration: 5.0f);
+        _debugDraw.DrawArrow(result.Point, result.Point + Vector3.Reflect(result.Point - cameraWorldPos, result.Normal), color: Color.LimeGreen, duration: 5.0f);
+    }
+
+    private void DrawAuxiliaryTestGeometry()
+    {
+        if (_debugDraw is null) return;
+
+        _debugDraw.DrawCube(new Vector3(0, 0, 0), new Vector3(1.0f, 1.0f, 1.0f), color: Color.White);
+        _debugDraw.DrawBounds(new Vector3(-5, 0, -5), new Vector3(5, 5, 5), color: Color.White);
+        _debugDraw.DrawBounds(new Vector3(-AreaSize), new Vector3(AreaSize), color: Color.HotPink);
+
+        // Line of cubes for depth test visualization
+        var startPos = new Vector3(0, 5, 0);
+        for (int i = -8; i < 8; ++i)
+        {
+            var p = startPos + new Vector3(i, 0, 0);
+            _debugDraw.DrawCube(p, Vector3.One, depthTest: _useDepthTesting, solid: true);
+            _debugDraw.DrawCube(p, Vector3.One, color: Color.White, depthTest: _useDepthTesting, solid: false);
+        }
+
+        // Show every primitive type in a row
+        var testPos = new Vector3(0.0f, 0.0f, -5.0f);
+        _debugDraw.PrimitiveColor = Color.Red;
+        _debugDraw.DrawQuad(testPos + new Vector3(1.0f, 0.0f, 0.0f), new Vector2(1.0f), solid: !_useWireframe);
+        _debugDraw.DrawCircle(testPos + new Vector3(2.0f, 0.0f, 0.0f), 0.5f, solid: !_useWireframe);
+        _debugDraw.DrawSphere(testPos + new Vector3(3.0f, 0.0f, 0.0f), 0.5f, solid: !_useWireframe);
+        _debugDraw.DrawCube(testPos + new Vector3(4.0f, 0.0f, 0.0f), new Vector3(1.0f), solid: !_useWireframe);
+        _debugDraw.DrawCapsule(testPos + new Vector3(5.0f, 0.0f, 0.0f), 1.0f, 0.5f, solid: !_useWireframe);
+        _debugDraw.DrawCylinder(testPos + new Vector3(6.0f, 0.0f, 0.0f), 1.0f, 0.5f, solid: !_useWireframe);
+        _debugDraw.DrawCone(testPos + new Vector3(7.0f, 0.0f, 0.0f), 1.0f, 0.5f, solid: !_useWireframe);
+        _debugDraw.DrawHalfSphere(testPos + new Vector3(8.0f, 0.0f, 0.0f), 0.5f, solid: !_useWireframe);
+        _debugDraw.DrawHalfSphere(testPos + new Vector3(9.0f, 0.0f, 0.0f), 0.5f, rotation: Quaternion.RotationX((float)Math.PI), solid: !_useWireframe);
+        _debugDraw.DrawCone(new Vector3(0, 0.5f, 0), 2.0f, 0.5f, color: Color.HotPink);
+    }
+
+    private static int Clamp(int v, int min, int max) => v < min ? min : (v > max ? max : v);
 }

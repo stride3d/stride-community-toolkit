@@ -4,6 +4,11 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+        <ExampleTitle>Advance Example - SignalR &amp; Blazor Shared</ExampleTitle>
+        <ExampleOrder>20000</ExampleOrder>
+        <ExampleEnabled>false</ExampleEnabled>
+        <ExampleCategory>3 - Other</ExampleCategory>
     </PropertyGroup>
 
 </Project>

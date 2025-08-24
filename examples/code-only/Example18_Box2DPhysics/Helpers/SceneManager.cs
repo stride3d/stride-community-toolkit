@@ -1,6 +1,7 @@
 using Box2D.NET;
 using Example.Common;
 using Example18_Box2DPhysics.Physics;
+using Example18_Box2DPhysics.Box2DPhysics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
@@ -263,7 +264,8 @@ public class SceneManager
         for (int i = 0; i < count; i++)
         {
             var shapeModel = _shapeFactory.GetRandomShapeModel();
-            if (shapeModel == null) continue;
+
+            if (shapeModel is null) continue;
 
             var entity = _shapeFactory.CreateEntity(shapeModel, overrideColor: GameConfig.ShapeColor);
             var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
@@ -385,7 +387,7 @@ public class SceneManager
 
     private void UpdateUI()
     {
-        _uiHelper.RenderNavigation(ShapeCount, _simulation);
+        _uiHelper.RenderNavigation(ShapeCount, _totalShapesCreated, _simulation);
 
         // Show last action
         if ((DateTime.Now - _lastActionTime).TotalSeconds < 3)

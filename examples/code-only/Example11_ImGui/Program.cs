@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.ImGui;
+using Stride.CommunityToolkit.Renderers;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 
