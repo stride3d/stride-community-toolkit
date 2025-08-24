@@ -5,7 +5,6 @@ using Stride.Core.Mathematics;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
-using Stride.Profiling;
 using Stride.Rendering;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -41,13 +40,12 @@ public class ImGuiSystem : GameSystemBase
     private readonly GraphicsDeviceManager? deviceManager;
     private readonly GraphicsContext? context;
     private readonly EffectSystem? effectSystem;
-    private readonly DebugTextSystem? debug;
     private CommandList? commandList;
 
     // device objects
     private PipelineState? imPipeline;
     private VertexDeclaration? imVertLayout;
-    private VertexBufferBinding? vertexBinding;
+    private VertexBufferBinding vertexBinding;
     private IndexBufferBinding? indexBinding;
     private EffectInstance? imShader;
     private Texture? fontTexture;
