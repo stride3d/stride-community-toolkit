@@ -1,13 +1,13 @@
-- [Capsule with rigid body](../../manual/code-only/examples/capsule-with-rigid-body.md): Shows how to create a 3D capsule entity and position it in a scene.
-- [Mesh line](../../manual/code-only/examples/mesh-line.md): Shows how to create a mesh line.
-- [Material](../../manual/code-only/examples/material.md): Shows how to create a material and apply it to a 3D entity.
-- [Give me a cube](../../manual/code-only/examples/give-me-cube-body.md): Presents a variation of the above example by positioning a 3D cube in a scene.
-- [Stride UI - Capsule with rigid body and Window](../../manual/code-only/examples/stride-ui-capsule-with-rigid-body.md): Shows how to create a 3D capsule entity, position it in a scene, and create a simple window displaying a text message.
-- [Stride UI - Grid - Save and load game state](../../manual/code-only/examples/stride-ui-cube-clicker.md): Shows how to create a simple game where clicking a cube increases the score and manages game state.
-- [Procedural geometry](../../manual/code-only/examples/procedural-geometry.md): Shows how to create procedural geometry meshes—such as a triangle, plane, and circle—and add them to a scene.
-- [Cylinder mesh](../../manual/code-only/examples/cylinder-mesh.md): Shows how to create a cylinder mesh.
-- [Partial torus mesh](../../manual/code-only/examples/partial-torus-mesh.md): Shows how to create a partial torus mesh.
-- [Particles](../../manual/code-only/examples/particles.md): Shows how to create a particle system.
-- [Raycast](../../manual/code-only/examples/raycast.md): Shows how to implement raycasting and physics interactions.
-- [Collision Group](../../manual/code-only/examples/collision-group.md): Shows how to create a scene with two players and an enemy entity and set up collision groups.
-- [Collision Layer](../../manual/code-only/examples/collision-layer.md): Shows how to create a scene with two players and an enemy entity and set up collision layers.
+- [Capsule with rigid body](../../manual/code-only/examples/capsule-with-rigid-body.md): Demonstrates creating and positioning a 3D capsule in a scene.
+- [Mesh line](../../manual/code-only/examples/mesh-line.md): Demonstrates creating a mesh line.
+- [Material](../../manual/code-only/examples/material.md): Demonstrates creating a material and applying it to a 3D entity.
+- [Give me a cube](../../manual/code-only/examples/give-me-cube-body.md): A variant of the above, positioning a 3D cube in a scene.
+- [Stride UI - Capsule with rigid body and Window](../../manual/code-only/examples/stride-ui-capsule-with-rigid-body.md): Demonstrates creating a 3D capsule, positioning it, and showing a simple window with text.
+- [Stride UI - Grid - Save and load game state](../../manual/code-only/examples/stride-ui-cube-clicker.md): Demonstrates a simple game where clicking a cube increases the score and manages game state.
+- [Procedural geometry](../../manual/code-only/examples/procedural-geometry.md): Demonstrates creating procedural meshes (triangle, plane, circle) and adding them to a scene.
+- [Cylinder mesh](../../manual/code-only/examples/cylinder-mesh.md): Demonstrates creating a cylinder mesh.
+- [Partial torus mesh](../../manual/code-only/examples/partial-torus-mesh.md): Demonstrates creating a partial torus mesh.
+- [Particles](../../manual/code-only/examples/particles.md): Demonstrates creating a particle system.
+- [Raycast](../../manual/code-only/examples/raycast.md): Demonstrates raycasting and physics interactions.
+- [Collision Group](../../manual/code-only/examples/collision-group.md): Demonstrates a scene with two players and an enemy using collision groups.
+- [Collision Layer](../../manual/code-only/examples/collision-layer.md): Demonstrates a similar scene using collision layers.

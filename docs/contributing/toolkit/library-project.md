@@ -1,29 +1,29 @@
 # Creating a New Library Project
 
-## Steps to Create a New NuGet Library
+## Steps to create a new NuGet library
 
-1. **Create the Project**:
-   - Add a new project in the `src` folder, following the naming convention: `Stride.CommunityToolkit.<LibraryName>`. 
-   - Refer to the [existing libraries](https://github.com/stride3d/stride-community-toolkit/tree/main/src) to ensure consistency with the folder/subfolder structure.
-2. **Configure the Project File**:
-   - Update the `.csproj` file with the correct package metadata.
-   - Review existing library project files to ensure all necessary properties (e.g., `Title`, `Description`, `Import`) are included.
-3. **Update Documentation**:
-   - Add the new library's name and description to `docs/includes/libraries.md`. This will display the library on:
-     - The home page.
-     - The Getting Started page.
-4. **Generate API Documentation**:
-   - Update `docs/docfx.json` to include the new `.csproj` location, ensuring that the [API documentation](../../api/index.md) is generated for the new library.
-5. **Update CI/CD Workflows**:
-   - Add the new project to:
-     - `.github\workflows\dotnet.yml` (`PROJECTS`).
-     - `.github\workflows\dotnet-nuget.yml` (`env` and `# Stride.CommunityToolkit.<LibraryName>` section).
-6. **Optional: Add Example Projects**:
-   - If adding example projects, follow the existing folder structure pattern in the `examples` directory.
-7. **Optional: Add Guidance Content**:
-   - If you plan to include guidance or tutorials for the new library:
-     - Add new pages to the `docs/manual` folder.
-     - Update the `toc.yml` file to include links to the new content.
+1. Create the project
+   - Add a new project under `src`, following the naming convention `Stride.CommunityToolkit.<LibraryName>`.
+   - Refer to the [existing libraries](https://github.com/stride3d/stride-community-toolkit/tree/main/src) for folder structure consistency.
+2. Configure the project file
+   - Update the `.csproj` with correct package metadata.
+   - Review existing library projects to ensure all necessary properties (e.g., `Title`, `Description`, `PackageTags`) are included.
+3. Update documentation
+   - Add the new library's name and description to `docs/includes/libraries.md`. This displays the library on:
+     - The home page
+     - The Getting Started page
+4. Generate API documentation
+   - Update `docs/docfx.json` to include the new `.csproj` so the [API documentation](../../api/index.md) is generated for the library.
+5. Update CI/CD workflows
+   - Add the project to:
+     - `.github/workflows/dotnet.yml` (`PROJECTS`)
+     - `.github/workflows/dotnet-nuget.yml` (`env` and the `# Stride.CommunityToolkit.<LibraryName>` section)
+6. Optional: add example projects
+   - If adding examples, follow the existing folder structure in `examples`.
+7. Optional: add guidance content
+   - If you plan to include guides or tutorials:
+     - Add new pages to `docs/manual`.
+     - Update the `toc.yml` to link the new content.
 
 > [!TIP]
-> Don't hesitate to reach out to the maintainers for assistance. Whether it's improving the process, code, clarifying steps, or helping with code, we're here to help!
+> Reach out to maintainers anytime, process improvements, clarifications, or code reviews, we're happy to help!

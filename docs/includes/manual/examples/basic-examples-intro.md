@@ -1,1 +1,1 @@
-This page provides a brief overview of the basic examples available for code-only projects in Stride. You can explore each example in detail. Each linked example page contains detailed code snippets and explanations.
+This page briefly overviews the basic examples available for code-only projects in Stride. Each linked page includes focused code snippets and explanations.

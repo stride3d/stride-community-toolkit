@@ -1,36 +1,36 @@
 # Documentation
 
-We use [DocFX](https://github.com/dotnet/docfx) to generate our documentation. Contributing to the documentation is straightforward: explore the existing docs, duplicate relevant pages, and update the content as needed. For more information on DocFX and Markdown syntax, refer to the [official guide](https://dotnet.github.io/docfx/docs/markdown.html). If you're new to the process, we're happy to assist you in getting started.
+We use [DocFX](https://github.com/dotnet/docfx) to generate our documentation. Contributing is straightforward: explore the existing docs, duplicate relevant pages, and update the content as needed. For DocFX and Markdown syntax, see the [official guide](https://dotnet.github.io/docfx/docs/markdown.html). If you're new, we're happy to help you get started.
 
 ## Installing DocFX
 
-To install the latest version of DocFX, use the following command:
+To install the latest DocFX as a global tool:
 
 ```bash
 dotnet tool install -g docfx
 ```
 
-## Building the Documentation
+## Building the documentation
 
-1. Navigate to the docs folder in the project directory:
+1. Navigate to the docs folder:
    ```
    stride-community-toolkit\docs\
    ```
-1. Run the `run.bat`` file to build the documentation:
+2. Run the `run.bat` file to build the docs:
    ```
    run.bat
    ```
-1. Once the process completes, you can access the documentation in your browser at:
+3. When complete, open the site in your browser:
    ```
    http://localhost:8080/
    ```
 
-## Editing the Documentation
+## Editing the documentation
 
-- All documentation files are located in the `docs` folder. You can edit these Markdown files to update or add content.
-- After making changes, re-run the `run.bat` command to rebuild the documentation and preview your updates in your browser.
+- All documentation files are under `docs`. Edit the Markdown files to update or add content.
+- After changes, re-run `run.bat` to rebuild and preview updates in your browser.
 
-## Submitting Changes
+## Submitting changes
 
-- Ensure you’re satisfied with the results.
+- Ensure you're satisfied with the result.
 - Submit a pull request to the `main` branch for review.

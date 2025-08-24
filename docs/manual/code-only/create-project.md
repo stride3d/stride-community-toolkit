@@ -4,7 +4,7 @@
 
 The steps below show how to create a new Stride project using the command line. If you prefer Visual Studio Code, run the same commands from its integrated terminal.
 
-> [!Note]
+> [!NOTE]
 > These instructions target Windows. While code-only projects can be built and run on Linux, the [setup is currently more involved](https://github.com/stride3d/stride/issues/2596). We're working to simplify it and will provide official guidance later.
 
 1. Prerequisites: Make sure all prerequisites are installed. See [Getting started](../getting-started.md) for details.
@@ -41,7 +41,7 @@ The steps below show how to create a new Stride project using the command line. 
 
 ## Example code
 
-The example demonstrates the basic usage of the Stride Game Engine in a code-only app.
+The example demonstrates basic usage of the Stride Game Engine in a code-only app.
 
 ```csharp
 using Stride.CommunityToolkit.Bepu;
@@ -83,7 +83,7 @@ void Start(Scene rootScene)
 
 ## Additional examples
 
-Browse more examples in the navigation on the left, grouped by language and complexity. These examples demonstrate how to build code-only projects in Stride and showcase various features.
+Browse more examples in the navigation on the left, grouped by language and complexity.
 
 - [C# Basic examples](examples/basic-examples.md)
 - [C# Advanced examples](examples/advance-examples.md)
