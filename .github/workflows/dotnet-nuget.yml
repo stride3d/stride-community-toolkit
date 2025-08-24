@@ -10,6 +10,8 @@ env:
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
+  NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
+  NUPKG_ROOT: nupkgs
 
 on:
   workflow_dispatch:
@@ -29,9 +31,9 @@ jobs:
 
     - name: Set Version in csproj
       run: |
-        $settingsContent = Get-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Raw
+        $settingsContent = Get-Content -Path "${{ env.COMMON_SETTINGS_PATH }}" -Raw
         $updatedCsprojContent = $settingsContent -replace '<Version>.*?</Version>', "<Version>${{ env.VERSION }}</Version>"
-        Set-Content -Path ${{ env.COMMON_SETTINGS_PATH }} -Value $updatedCsprojContent
+        Set-Content -Path "${{ env.COMMON_SETTINGS_PATH }}" -Value $updatedCsprojContent
 
     # Not needed as Directory.Build.props added a condition to this target
     # - name: Create .sarif Directory
@@ -42,129 +44,113 @@ jobs:
     - name: Restore dependencies - Stride.CommunityToolkit
       run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore
+    - name: Build - Stride.CommunityToolkit
+      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit
       run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
 
-#    - name: Publish Stride Community Toolkit
-#      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
+    - name: Pack - Stride.CommunityToolkit
+      run: dotnet pack ${{ env.PROJECT_PATH_CORE }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\core"
 
-    - name: Publish Stride Community Toolkit
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_CORE }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Publish - Stride.CommunityToolkit
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\core\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.Windows
     - name: Restore dependencies - Stride.CommunityToolkit.Windows
       run: dotnet restore ${{ env.PROJECT_PATH_WINDOWS }} --runtime win-x64
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_WINDOWS }} --no-restore
+    - name: Build - Stride.CommunityToolkit.Windows
+      run: dotnet build ${{ env.PROJECT_PATH_WINDOWS }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit.Windows
       run: dotnet test ${{ env.PROJECT_PATH_WINDOWS }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - Windows
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_WINDOWS }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        TAG_COMMIT: false
+    - name: Pack - Stride.CommunityToolkit.Windows
+      run: dotnet pack ${{ env.PROJECT_PATH_WINDOWS }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\windows"
+
+    - name: Publish - Stride.CommunityToolkit.Windows
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\windows\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.Skyboxes
     - name: Restore dependencies - Stride.CommunityToolkit.Skyboxes
       run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore
+    - name: Build - Stride.CommunityToolkit.Skyboxes
+      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit.Skyboxes
       run: dotnet test ${{ env.PROJECT_PATH_SKYBOX }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - Skyboxes
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_SKYBOX }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        TAG_COMMIT: false
+    - name: Pack - Stride.CommunityToolkit.Skyboxes
+      run: dotnet pack ${{ env.PROJECT_PATH_SKYBOX }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\skyboxes"
+
+    - name: Publish - Stride.CommunityToolkit.Skyboxes
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\skyboxes\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.Bepu
     - name: Restore dependencies - Stride.CommunityToolkit.Bepu
       run: dotnet restore ${{ env.PROJECT_PATH_BEPU }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_BEPU }} --no-restore
+    - name: Build - Stride.CommunityToolkit.Bepu
+      run: dotnet build ${{ env.PROJECT_PATH_BEPU }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit.Bepu
       run: dotnet test ${{ env.PROJECT_PATH_BEPU }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - Bepu
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_BEPU }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        TAG_COMMIT: false
+    - name: Pack - Stride.CommunityToolkit.Bepu
+      run: dotnet pack ${{ env.PROJECT_PATH_BEPU }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\bepu"
+
+    - name: Publish - Stride.CommunityToolkit.Bepu
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\bepu\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.Bullet
     - name: Restore dependencies - Stride.CommunityToolkit.Bullet
       run: dotnet restore ${{ env.PROJECT_PATH_BULLET }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_BULLET }} --no-restore
+    - name: Build - Stride.CommunityToolkit.Bullet
+      run: dotnet build ${{ env.PROJECT_PATH_BULLET }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit.Bullet
       run: dotnet test ${{ env.PROJECT_PATH_BULLET }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - Bullet
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_BULLET }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        TAG_COMMIT: false
+    - name: Pack - Stride.CommunityToolkit.Bullet
+      run: dotnet pack ${{ env.PROJECT_PATH_BULLET }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\bullet"
+
+    - name: Publish - Stride.CommunityToolkit.Bullet
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\bullet\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.DebugShapes
     - name: Restore dependencies - Stride.CommunityToolkit.DebugShapes
       run: dotnet restore ${{ env.PROJECT_PATH_DEBUG }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_DEBUG }} --no-restore
+    - name: Build - Stride.CommunityToolkit.DebugShapes
+      run: dotnet build ${{ env.PROJECT_PATH_DEBUG }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit.DebugShapes
       run: dotnet test ${{ env.PROJECT_PATH_DEBUG }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - DebugShapes
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_DEBUG }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        TAG_COMMIT: false
+    - name: Pack - Stride.CommunityToolkit.DebugShapes
+      run: dotnet pack ${{ env.PROJECT_PATH_DEBUG }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\debug"
+
+    - name: Publish - Stride.CommunityToolkit.DebugShapes
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\debug\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.ImGui
     - name: Restore dependencies - Stride.CommunityToolkit.ImGui
       run: dotnet restore ${{ env.PROJECT_PATH_IMGUI }}
 
-    - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH_IMGUI }} --no-restore
+    - name: Build - Stride.CommunityToolkit.ImGui
+      run: dotnet build ${{ env.PROJECT_PATH_IMGUI }} --no-restore -c Release
 
-    - name: Test
+    - name: Test - Stride.CommunityToolkit.ImGui
       run: dotnet test ${{ env.PROJECT_PATH_IMGUI }} --no-build --verbosity normal
 
-    - name: Publish Stride Community Toolkit - ImGui
-      uses: alirezanet/publish-nuget@v3.1.0
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH_IMGUI }}
-        VERSION_FILE_PATH: ${{ env.COMMON_SETTINGS_PATH }}
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        TAG_COMMIT: false
+    - name: Pack - Stride.CommunityToolkit.ImGui
+      run: dotnet pack ${{ env.PROJECT_PATH_IMGUI }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\imgui"
+
+    - name: Publish - Stride.CommunityToolkit.ImGui
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\imgui\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Create release
     - name: Create GitHub Release
