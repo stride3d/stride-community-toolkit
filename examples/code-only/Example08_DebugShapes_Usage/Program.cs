@@ -11,7 +11,7 @@ const string SphereEntityName = "Sphere";
 ImmediateDebugRenderSystem? debugDraw = null;
 
 // Cache sphere entities to avoid per-frame scene iteration and string comparisons
-List<Entity> sphereEntities = new(capacity: 8); // capacity >= created count (6) to avoid resize
+List<Entity> sphereEntities = new(capacity: 8);
 
 using var game = new Game();
 
