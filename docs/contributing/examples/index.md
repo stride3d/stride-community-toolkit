@@ -2,9 +2,9 @@
 
 You can see all examples in the [examples](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only) folder.
 
-If you would like your example be launchable from the console application, you can add it to the `Stride.CommunityToolkit.Examples` project which you can find here: [Stride.CommunityToolkit.Examples](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples).
+If you would like your example be launchable from the console application [Stride.CommunityToolkit.Examples](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples) follow these steps:
   
-1. Create a project in the folder `examples/code-only/ExampleXY_YourExampleNamespace` (replace `XY` with the next available number).
+1. Create a project in the folder `examples/code-only/` and name it `ExampleXY_YourExampleNamespace` (replace `XY` with the next available number).
 1. Add your example meta data to the `*.csproj`, these will be used in the console application menu:
     ```xml
     <ExampleTitle>Basic Example - Capsule with rigid body</ExampleTitle>
