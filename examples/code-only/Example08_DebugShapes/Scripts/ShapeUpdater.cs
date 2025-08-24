@@ -1,11 +1,11 @@
 using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Collections;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;
 using Stride.Engine;
 using System.Runtime.InteropServices;
-using Stride.CommunityToolkit.Collections;
 
 namespace Example08_DebugShapes.Scripts;
 

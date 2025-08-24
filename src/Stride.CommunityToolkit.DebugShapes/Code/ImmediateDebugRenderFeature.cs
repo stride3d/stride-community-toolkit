@@ -63,6 +63,15 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct InstanceData
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+        public Color Color;
+    }
+
     // Removed internal RenderableType enum and replaced usages with shared DebugPrimitiveType enum
 
     [StructLayout(LayoutKind.Explicit)]
@@ -151,87 +160,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
 
         [FieldOffset(1)]
         public Line LineData;
-    }
-
-    internal struct Quad
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public Vector2 Size;
-        public Color Color;
-    }
-
-    internal struct Circle
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public float Radius;
-        public Color Color;
-    }
-
-    internal struct Sphere
-    {
-        public Vector3 Position;
-        public float Radius;
-        public Color Color;
-    }
-
-    internal struct HalfSphere
-    {
-        public Vector3 Position;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct Cube
-    {
-        public Vector3 Start;
-        public Vector3 End;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct Capsule
-    {
-        public Vector3 Position;
-        public float Height;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct Cylinder
-    {
-        public Vector3 Position;
-        public float Height;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct Cone
-    {
-        public Vector3 Position;
-        public float Height;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct Line
-    {
-        public Vector3 Start;
-        public Vector3 End;
-        public Color Color;
-    }
-
-    internal struct InstanceData
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public Vector3 Scale;
-        public Color Color;
     }
 
     private const float DefaultCircleRadius = 0.5f;

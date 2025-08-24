@@ -5,11 +5,6 @@ using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering;
 using static Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature;
-using Capsule = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Capsule;
-using Cone = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Cone;
-using Cube = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Cube;
-using Cylinder = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Cylinder;
-using Sphere = Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature.Sphere;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 

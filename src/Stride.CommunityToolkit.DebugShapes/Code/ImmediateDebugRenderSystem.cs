@@ -25,63 +25,63 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     [StructLayout(LayoutKind.Explicit)]
     internal struct DebugRenderable
     {
-        public DebugRenderable(ref DebugDrawQuad q, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Quad q, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Quad;
             Flags = renderFlags;
             QuadData = q;
         }
 
-        public DebugRenderable(ref DebugDrawCircle c, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Circle c, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Circle;
             Flags = renderFlags;
             CircleData = c;
         }
 
-        public DebugRenderable(ref DebugDrawLine l, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Line l, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Line;
             Flags = renderFlags;
             LineData = l;
         }
 
-        public DebugRenderable(ref DebugDrawCube b, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Cube b, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Cube;
             Flags = renderFlags;
             CubeData = b;
         }
 
-        public DebugRenderable(ref DebugDrawSphere s, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Sphere s, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Sphere;
             Flags = renderFlags;
             SphereData = s;
         }
 
-        public DebugRenderable(ref DebugDrawHalfSphere h, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref HalfSphere h, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.HalfSphere;
             Flags = renderFlags;
             HalfSphereData = h;
         }
 
-        public DebugRenderable(ref DebugDrawCapsule c, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Capsule c, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Capsule;
             Flags = renderFlags;
             CapsuleData = c;
         }
 
-        public DebugRenderable(ref DebugDrawCylinder c, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Cylinder c, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Cylinder;
             Flags = renderFlags;
             CylinderData = c;
         }
 
-        public DebugRenderable(ref DebugDrawCone c, DebugRenderableFlags renderFlags) : this()
+        public DebugRenderable(ref Cone c, DebugRenderableFlags renderFlags) : this()
         {
             Type = DebugPrimitiveType.Cone;
             Flags = renderFlags;
@@ -98,104 +98,31 @@ public class ImmediateDebugRenderSystem : GameSystemBase
         public float Lifetime;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawQuad QuadData;
+        public Quad QuadData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawCircle CircleData;
+        public Circle CircleData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawLine LineData;
+        public Line LineData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawCube CubeData;
+        public Cube CubeData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawSphere SphereData;
+        public Sphere SphereData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawHalfSphere HalfSphereData;
+        public HalfSphere HalfSphereData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawCapsule CapsuleData;
+        public Capsule CapsuleData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawCylinder CylinderData;
+        public Cylinder CylinderData;
 
         [FieldOffset((sizeof(byte) * 2) + sizeof(float))]
-        public DebugDrawCone ConeData;
-    }
-
-    internal struct DebugDrawQuad
-    {
-        public Vector3 Position;
-        public Vector2 Size;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct DebugDrawCircle
-    {
-        public Vector3 Position;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct DebugDrawLine
-    {
-        public Vector3 Start;
-        public Vector3 End;
-        public Color Color;
-    }
-
-    internal struct DebugDrawCube
-    {
-        public Vector3 Position;
-        public Vector3 End;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct DebugDrawSphere
-    {
-        public Vector3 Position;
-        public float Radius;
-        public Color Color;
-    }
-
-    internal struct DebugDrawHalfSphere
-    {
-        public Vector3 Position;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct DebugDrawCapsule
-    {
-        public Vector3 Position;
-        public float Height;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct DebugDrawCylinder
-    {
-        public Vector3 Position;
-        public float Height;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
-    }
-
-    internal struct DebugDrawCone
-    {
-        public Vector3 Position;
-        public float Height;
-        public float Radius;
-        public Quaternion Rotation;
-        public Color Color;
+        public Cone ConeData;
     }
 
     private readonly List<DebugRenderable> renderMessages = new List<DebugRenderable>();
@@ -248,7 +175,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawLine(Vector3 start, Vector3 end, Color color = default, float duration = 0.0f, bool depthTest = true)
     {
-        var cmd = new DebugDrawLine { Start = start, End = end, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Line { Start = start, End = end, Color = color == default ? PrimitiveColor : color };
         var msg = new DebugRenderable(ref cmd, depthTest ? DebugRenderableFlags.DepthTest : 0) { Lifetime = duration };
         PushMessage(ref msg);
     }
@@ -277,7 +204,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawSphere(Vector3 position, float radius, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawSphere { Position = position, Radius = radius, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Sphere { Position = position, Radius = radius, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -285,7 +212,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawHalfSphere(Vector3 position, float radius, Color color = default, Quaternion rotation = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawHalfSphere { Position = position, Radius = radius, Rotation = rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new HalfSphere { Position = position, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -293,7 +220,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawBounds(Vector3 start, Vector3 end, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawCube { Position = start + ((end - start) / 2), End = end + ((end - start) / 2), Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Cube { Start = start + ((end - start) / 2), End = end + ((end - start) / 2), Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -317,7 +244,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     /// rendering; otherwise, <see langword="false"/> for wireframe rendering. Defaults to <see langword="false"/>.</param>
     public void DrawCube(Vector3 start, Vector3 size, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawCube { Position = start, End = start + size, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Cube { Start = start, End = start + size, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
 
@@ -327,7 +254,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     public void DrawCapsule(Vector3 position, float height, float radius, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
         // FIXME: height is divided by two here but can probably be solved more elegantly elsewhere yes
-        var cmd = new DebugDrawCapsule { Position = position, Height = height / 2.0f, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Capsule { Position = position, Height = height / 2.0f, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -335,7 +262,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawCylinder(Vector3 position, float height, float radius, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawCylinder { Position = position, Height = height, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Cylinder { Position = position, Height = height, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -343,7 +270,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawCone(Vector3 position, float height, float radius, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawCone { Position = position, Height = height, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Cone { Position = position, Height = height, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -351,7 +278,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawQuad(Vector3 position, Vector2 size, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawQuad { Position = position, Size = size, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Quad { Position = position, Size = size, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -359,7 +286,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
 
     public void DrawCircle(Vector3 position, float radius, Quaternion rotation = default, Color color = default, float duration = 0.0f, bool depthTest = true, bool solid = false)
     {
-        var cmd = new DebugDrawCircle { Position = position, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
+        var cmd = new Circle { Position = position, Radius = radius, Rotation = rotation == default ? Quaternion.Identity : rotation, Color = color == default ? PrimitiveColor : color };
         var renderFlags = (depthTest ? DebugRenderableFlags.DepthTest : 0) | (solid ? DebugRenderableFlags.Solid : DebugRenderableFlags.Wireframe);
         var msg = new DebugRenderable(ref cmd, renderFlags) { Lifetime = duration };
         PushMessage(ref msg);
@@ -482,7 +409,7 @@ public class ImmediateDebugRenderSystem : GameSystemBase
                     ChooseRenderer(msg.Flags, msg.LineData.Color.A).DrawLine(ref msg.LineData.Start, ref msg.LineData.End, ref msg.LineData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Cube:
-                    ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(ref msg.CubeData.Position, ref msg.CubeData.End, ref msg.CubeData.Rotation, ref msg.CubeData.Color, depthTest: useDepthTest);
+                    ChooseRenderer(msg.Flags, msg.CubeData.Color.A).DrawCube(ref msg.CubeData.Start, ref msg.CubeData.End, ref msg.CubeData.Rotation, ref msg.CubeData.Color, depthTest: useDepthTest);
                     break;
                 case DebugPrimitiveType.Sphere:
                     ChooseRenderer(msg.Flags, msg.SphereData.Color.A).DrawSphere(ref msg.SphereData.Position, msg.SphereData.Radius, ref msg.SphereData.Color, depthTest: useDepthTest);
