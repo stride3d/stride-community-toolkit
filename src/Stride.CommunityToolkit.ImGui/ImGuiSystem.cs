@@ -16,7 +16,6 @@ namespace Stride.CommunityToolkit.ImGui;
 
 public class ImGuiSystem : GameSystemBase
 {
-
     public readonly ImGuiContextPtr ImGuiContext;
 
     public float Scale
@@ -37,21 +36,21 @@ public class ImGuiSystem : GameSystemBase
     private ImGuiPlatformIOPtr _platform;
 
     // dependencies
-    readonly InputManager input;
-    readonly GraphicsDevice device;
-    readonly GraphicsDeviceManager deviceManager;
-    readonly GraphicsContext context;
-    readonly EffectSystem effectSystem;
-    readonly DebugTextSystem debug;
-    CommandList commandList;
+    private readonly InputManager? input;
+    private readonly GraphicsDevice? device;
+    private readonly GraphicsDeviceManager? deviceManager;
+    private readonly GraphicsContext? context;
+    private readonly EffectSystem? effectSystem;
+    private readonly DebugTextSystem? debug;
+    private CommandList? commandList;
 
     // device objects
-    PipelineState imPipeline;
-    VertexDeclaration imVertLayout;
-    VertexBufferBinding vertexBinding;
-    IndexBufferBinding indexBinding;
-    EffectInstance imShader;
-    Texture fontTexture;
+    private PipelineState? imPipeline;
+    private VertexDeclaration? imVertLayout;
+    private VertexBufferBinding? vertexBinding;
+    private IndexBufferBinding? indexBinding;
+    private EffectInstance? imShader;
+    private Texture? fontTexture;
 
     private Dictionary<Keys, ImGuiKey> _keys = [];
 
