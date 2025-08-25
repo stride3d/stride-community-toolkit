@@ -1,5 +1,8 @@
 name: .NET Build and Publish Nuget
 
+permissions:
+  contents: write  # required to create releases/tags
+
 env:
   PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
   PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
