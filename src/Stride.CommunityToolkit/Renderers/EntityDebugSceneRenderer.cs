@@ -21,6 +21,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     private Scene? _scene;
     private CameraComponent? _camera;
     private Texture? _backgroundTexture;
+    private readonly StringBuilder _stringBuilder = new();
     private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
     private readonly EntityDebugSceneRendererOptions _options;
 
@@ -45,6 +46,10 @@ public class EntityDebugSceneRenderer : SceneRendererBase
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("StrideDefaultFont");
         _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
+
+        var graphicsCompositor = Context.Tags.Get(GraphicsCompositor.Current);
+        _camera = graphicsCompositor?.Cameras.Count > 0 ? graphicsCompositor.Cameras[0].Camera : null;
+        _scene = SceneInstance.GetCurrent(Context)?.RootScene;
     }
 
     /// <summary>
@@ -54,13 +59,13 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <param name="drawContext">Draw context used to submit draw calls.</param>
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
-        var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
+        //var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
 
-        if (graphicsCompositor is null) return;
+        //if (graphicsCompositor is null) return;
 
-        _camera ??= graphicsCompositor.Cameras[0].Camera;
+        //_camera ??= graphicsCompositor.Cameras[0].Camera;
 
-        _scene ??= SceneInstance.GetCurrent(context).RootScene;
+        //_scene ??= SceneInstance.GetCurrent(context).RootScene;
 
         if (_spriteBatch is null || _camera is null || _scene is null) return;
 
@@ -99,19 +104,21 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <returns>Debug text for the entity, or an empty string if nothing should be displayed.</returns>
     private string GetDisplayText(Entity entity)
     {
-        var stringBuilder = new StringBuilder();
+        _stringBuilder.Clear();
 
         if (_options.ShowEntityName)
-            stringBuilder.Append(entity.Name);
+        {
+            _stringBuilder.Append(entity.Name);
+        }
 
         if (_options.ShowEntityPosition)
         {
-            if (stringBuilder.Length > 0) stringBuilder.Append(": ");
+            if (_stringBuilder.Length > 0) _stringBuilder.Append(": ");
 
-            stringBuilder.AppendFormat("{0:N1}", entity.Transform.Position);
+            _stringBuilder.AppendFormat("{0:N1}", entity.Transform.Position);
         }
 
-        return stringBuilder.ToString();
+        return _stringBuilder.ToString();
     }
 
     /// <summary>
