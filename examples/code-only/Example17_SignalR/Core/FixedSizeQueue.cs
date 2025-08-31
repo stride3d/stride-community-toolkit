@@ -21,7 +21,7 @@ public class FixedSizeQueue
     {
         if (item == null) return;
 
-        if (_queue.Count == _maxSize && _queue.Count > 0)
+        if (_queue.Count == _maxSize && !_queue.IsEmpty)
         {
             _queue.TryDequeue(out _);
         }
