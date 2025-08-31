@@ -24,41 +24,6 @@ public class ImmediateDebugRenderFeature : RootRenderFeature
     /// <inheritdoc/>
     public override Type SupportedRenderObjectType => typeof(ImmediateDebugRenderObject);
 
-    internal struct Primitives
-    {
-        public int Quads;
-        public int Circles;
-        public int Spheres;
-        public int HalfSpheres;
-        public int Cubes;
-        public int Capsules;
-        public int Cylinders;
-        public int Cones;
-        public int Lines;
-
-        public void Clear()
-        {
-            Quads = 0;
-            Circles = 0;
-            Spheres = 0;
-            HalfSpheres = 0;
-            Cubes = 0;
-            Capsules = 0;
-            Cylinders = 0;
-            Cones = 0;
-            Lines = 0;
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal struct LineVertex
-    {
-        public static readonly VertexDeclaration Layout = new VertexDeclaration(VertexElement.Position<Vector3>(), VertexElement.Color<Color>());
-
-        public Vector3 Position;
-        public Color Color;
-    }
-
     [StructLayout(LayoutKind.Sequential)]
     internal struct InstanceData
     {
