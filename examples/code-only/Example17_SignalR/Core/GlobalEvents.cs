@@ -9,7 +9,7 @@ public static class GlobalEvents
 {
     private const string Category = "Global";
 
-    public static EventKey<CountDto> CountReceivedEventKey = new(Category, "CountReceived");
-    public static EventKey<MessageDto> MessageReceivedEventKey = new(Category, "MessageReceived");
-    public static EventKey<CountDto> RemoveRequestEventKey = new(Category, "RemoveRequest");
+    public static readonly EventKey<CountDto> CountReceivedEventKey = new(Category, "CountReceived");
+    public static readonly EventKey<MessageDto> MessageReceivedEventKey = new(Category, "MessageReceived");
+    public static readonly EventKey<CountDto> RemoveRequestEventKey = new(Category, "RemoveRequest");
 }
