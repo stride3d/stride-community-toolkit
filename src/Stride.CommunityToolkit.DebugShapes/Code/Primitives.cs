@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 /// <summary>
 /// Counts of different primitive types.
 /// </summary>
-public struct Primitives
+internal struct Primitives
 {
     public int Quads;
     public int Circles;

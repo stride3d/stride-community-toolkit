@@ -1,12 +1,25 @@
+using Stride.CommunityToolkit.Collections;
+using Stride.Core;
+using Stride.Core.Mathematics;
 using Stride.DebugRendering;
 using Stride.Graphics;
 using Stride.Rendering;
+using System.Runtime.InteropServices;
 using Buffer = Stride.Graphics.Buffer;
 
 namespace Stride.CommunityToolkit.DebugShapes.Code;
 
-public class DebugPrimitiveRenderer
+internal sealed class DebugPrimitiveRenderer
 {
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct InstanceData
+    {
+        public Vector3 Position;
+        public Quaternion Rotation;
+        public Vector3 Scale;
+        public Color Color;
+    }
+
     private const float DefaultCircleRadius = 0.5f;
     private const float DefaultSphereRadius = 0.5f;
     private const float DefaultCubeSize = 1.0f;
@@ -32,10 +45,20 @@ public class DebugPrimitiveRenderer
     private MutablePipelineState? _pipelineState;
     private DynamicEffectInstance? _primitiveEffect;
     private DynamicEffectInstance? _lineEffect;
+
     private Primitives _primitiveVertexOffsets;
     private Primitives _primitiveIndexOffsets;
     private InputElementDescription[] _inputElements = Array.Empty<InputElementDescription>();
     private InputElementDescription[] _lineInputElements = Array.Empty<InputElementDescription>();
+
+    private List<InstanceData> _instances = new(1);
+
+    // data written to buffers in prepare
+    private List<Matrix> _transforms = new(1);
+    private List<Color> _colors = new(1);
+
+    // data only for line rendering
+    private List<LineVertex> _lineVertices = new(1);
 
     /* mesh data we will use when stuffing things in vertex buffers */
     private readonly (VertexPositionTexture[] Vertices, int[] Indices) _circle = ImmediateDebugPrimitives.GenerateCircle(DefaultCircleRadius, CircleTesselation);
@@ -46,23 +69,286 @@ public class DebugPrimitiveRenderer
     private readonly (VertexPositionTexture[] Vertices, int[] Indices) _cylinder = ImmediateDebugPrimitives.GenerateCylinder(DefaultCylinderHeight, DefaultCylinderRadius, CylinderTesselation);
     private readonly (VertexPositionTexture[] Vertices, int[] Indices) _cone = ImmediateDebugPrimitives.GenerateCone(DefaultConeHeight, DefaultConeRadius, ConeTesselation, uvSplits: 8);
 
-    public DebugPrimitiveRenderer(Buffer? vertexBuffer, Buffer? indexBuffer, MutablePipelineState? pipelineState, DynamicEffectInstance? primitiveEffect, DynamicEffectInstance? lineEffect, Buffer? transformBuffer, Buffer? colorBuffer, Buffer? lineVertexBuffer, InputElementDescription[] inputElements, InputElementDescription[] lineInputElements, Primitives primitiveVertexOffsets, Primitives primitiveIndexOffsets)
+    internal void Initialize(GraphicsDevice device, IServiceRegistry services)
     {
-        _vertexBuffer = vertexBuffer;
-        _indexBuffer = indexBuffer;
-        _pipelineState = pipelineState;
-        _primitiveEffect = primitiveEffect;
-        _lineEffect = lineEffect;
-        _transformBuffer = transformBuffer;
-        _colorBuffer = colorBuffer;
-        _lineVertexBuffer = lineVertexBuffer;
-        _inputElements = inputElements;
-        _lineInputElements = lineInputElements;
-        _primitiveVertexOffsets = primitiveVertexOffsets;
-        _primitiveIndexOffsets = primitiveIndexOffsets;
+        _inputElements = VertexPositionTexture.Layout.CreateInputElements();
+        _lineInputElements = LineVertex.Layout.CreateInputElements();
+
+        // create our pipeline state object
+        _pipelineState = new MutablePipelineState(device);
+        _pipelineState.State.SetDefaults();
+
+        // create our associated effects
+        _primitiveEffect = new DynamicEffectInstance("PrimitiveShader");
+        _primitiveEffect.Initialize(services);
+        _primitiveEffect.UpdateEffect(device);
+
+        _lineEffect = new DynamicEffectInstance("LinePrimitiveShader");
+        _lineEffect.Initialize(services);
+        _lineEffect.UpdateEffect(device);
+
+        {
+            // create initial vertex and index buffers
+            var vertexData = new VertexPositionTexture[
+                _circle.Vertices.Length +
+                _plane.Vertices.Length +
+                _sphere.Vertices.Length +
+                _cube.Vertices.Length +
+                _capsule.Vertices.Length +
+                _cylinder.Vertices.Length +
+                _cone.Vertices.Length
+            ];
+
+            /* set up vertex buffer data */
+
+            int vertexBufferOffset = 0;
+
+            Array.Copy(_circle.Vertices, vertexData, _circle.Vertices.Length);
+            _primitiveVertexOffsets.Circles = vertexBufferOffset;
+            vertexBufferOffset += _circle.Vertices.Length;
+
+            Array.Copy(_plane.Vertices, 0, vertexData, vertexBufferOffset, _plane.Vertices.Length);
+            _primitiveVertexOffsets.Quads = vertexBufferOffset;
+            vertexBufferOffset += _plane.Vertices.Length;
+
+            Array.Copy(_sphere.Vertices, 0, vertexData, vertexBufferOffset, _sphere.Vertices.Length);
+            _primitiveVertexOffsets.Spheres = vertexBufferOffset;
+            _primitiveVertexOffsets.HalfSpheres = vertexBufferOffset; // same as spheres
+            vertexBufferOffset += _sphere.Vertices.Length;
+
+            Array.Copy(_cube.Vertices, 0, vertexData, vertexBufferOffset, _cube.Vertices.Length);
+            _primitiveVertexOffsets.Cubes = vertexBufferOffset;
+            vertexBufferOffset += _cube.Vertices.Length;
+
+            Array.Copy(_capsule.Vertices, 0, vertexData, vertexBufferOffset, _capsule.Vertices.Length);
+            _primitiveVertexOffsets.Capsules = vertexBufferOffset;
+            vertexBufferOffset += _capsule.Vertices.Length;
+
+            Array.Copy(_cylinder.Vertices, 0, vertexData, vertexBufferOffset, _cylinder.Vertices.Length);
+            _primitiveVertexOffsets.Cylinders = vertexBufferOffset;
+            vertexBufferOffset += _cylinder.Vertices.Length;
+
+            Array.Copy(_cone.Vertices, 0, vertexData, vertexBufferOffset, _cone.Vertices.Length);
+            _primitiveVertexOffsets.Cones = vertexBufferOffset;
+            vertexBufferOffset += _cone.Vertices.Length;
+
+            _vertexBuffer = Buffer.Vertex.New(device, vertexData);
+        }
+
+        {
+            /* set up index buffer data */
+
+            var indexData = new int[
+                _circle.Indices.Length +
+                _plane.Indices.Length +
+                _sphere.Indices.Length +
+                _cube.Indices.Length +
+                _capsule.Indices.Length +
+                _cylinder.Indices.Length +
+                _cone.Indices.Length
+            ];
+
+            if (indexData.Length >= 0xFFFF && device.Features.CurrentProfile <= GraphicsProfile.Level_9_3)
+                throw new InvalidOperationException("Cannot generate more than 65535 indices on feature level HW <= 9.3");
+
+            // copy all our primitive data into the buffers
+
+            int indexBufferOffset = 0;
+
+            Array.Copy(_circle.Indices, indexData, _circle.Indices.Length);
+            _primitiveIndexOffsets.Circles = indexBufferOffset;
+            indexBufferOffset += _circle.Indices.Length;
+
+            Array.Copy(_plane.Indices, 0, indexData, indexBufferOffset, _plane.Indices.Length);
+            _primitiveIndexOffsets.Quads = indexBufferOffset;
+            indexBufferOffset += _plane.Indices.Length;
+
+            Array.Copy(_sphere.Indices, 0, indexData, indexBufferOffset, _sphere.Indices.Length);
+            _primitiveIndexOffsets.Spheres = indexBufferOffset;
+            _primitiveIndexOffsets.HalfSpheres = indexBufferOffset; // same as spheres
+            indexBufferOffset += _sphere.Indices.Length;
+
+            Array.Copy(_cube.Indices, 0, indexData, indexBufferOffset, _cube.Indices.Length);
+            _primitiveIndexOffsets.Cubes = indexBufferOffset;
+            indexBufferOffset += _cube.Indices.Length;
+
+            Array.Copy(_capsule.Indices, 0, indexData, indexBufferOffset, _capsule.Indices.Length);
+            _primitiveIndexOffsets.Capsules = indexBufferOffset;
+            indexBufferOffset += _capsule.Indices.Length;
+
+            Array.Copy(_cylinder.Indices, 0, indexData, indexBufferOffset, _cylinder.Indices.Length);
+            _primitiveIndexOffsets.Cylinders = indexBufferOffset;
+            indexBufferOffset += _cylinder.Indices.Length;
+
+            Array.Copy(_cone.Indices, 0, indexData, indexBufferOffset, _cone.Indices.Length);
+            _primitiveIndexOffsets.Cones = indexBufferOffset;
+            indexBufferOffset += _cone.Indices.Length;
+
+            var newIndexBuffer = Buffer.Index.New(device, indexData);
+            _indexBuffer = newIndexBuffer;
+        }
+
+        // allocate our buffers with position/colour etc data
+        _transformBuffer = Buffer.Structured.New<Matrix>(device, 1);
+
+        _colorBuffer = Buffer.Structured.New<Color>(device, 1);
+
+        _lineVertexBuffer = Buffer.Vertex.New(device, new LineVertex[1], GraphicsResourceUsage.Dynamic);
     }
 
-    private void DrawPrimitives(RenderDrawContext context, RenderView renderView, ref Primitives offsets, ref Primitives counts, bool depthTest, FillMode fillMode, bool hasTransparency)
+    internal void EnsureCapacity(int additionalInstances, int additionalLineVertices)
+    {
+        _instances.EnsureSize(_instances.Count + additionalInstances);
+        _lineVertices.EnsureSize(_lineVertices.Count + additionalLineVertices);
+    }
+
+    internal static int SumBasicPrimitives(ref Primitives primitives)
+    {
+        return primitives.Quads
+            + primitives.Circles
+            + primitives.Spheres
+            + primitives.HalfSpheres
+            + primitives.Cubes
+            + primitives.Capsules
+            + primitives.Cylinders
+            + primitives.Cones;
+    }
+
+    internal static Primitives SetupPrimitiveOffsets(ref Primitives counts, int offset = 0)
+    {
+        var offsets = new Primitives();
+        offsets.Quads = 0 + offset;
+        offsets.Circles = offsets.Quads + counts.Quads;
+        offsets.Spheres = offsets.Circles + counts.Circles;
+        offsets.HalfSpheres = offsets.Spheres + counts.Spheres;
+        offsets.Cubes = offsets.HalfSpheres + counts.HalfSpheres;
+        offsets.Capsules = offsets.Cubes + counts.Cubes;
+        offsets.Cylinders = offsets.Capsules + counts.Capsules;
+        offsets.Cones = offsets.Cylinders + counts.Cylinders;
+        return offsets;
+    }
+
+    internal void ProcessRenderables(List<Renderable> renderables, ref Primitives offsets)
+    {
+        var span = CollectionsMarshal.AsSpan(renderables);
+        for (int i = 0; i < span.Length; ++i)
+        {
+            ref readonly var cmd = ref span[i];
+            switch (cmd.Type)
+            {
+                case DebugPrimitiveType.Quad:
+                    _instances[offsets.Quads] = new InstanceData
+                    {
+                        Position = cmd.QuadData.Position,
+                        Rotation = cmd.QuadData.Rotation,
+                        Scale = new Vector3(cmd.QuadData.Size.X, 1.0f, cmd.QuadData.Size.Y),
+                        Color = cmd.QuadData.Color
+                    };
+                    offsets.Quads++;
+                    break;
+                case DebugPrimitiveType.Circle:
+                    _instances[offsets.Circles] = new InstanceData
+                    {
+                        Position = cmd.CircleData.Position,
+                        Rotation = cmd.CircleData.Rotation,
+                        Scale = new Vector3(cmd.CircleData.Radius * 2.0f, 0.0f, cmd.CircleData.Radius * 2.0f),
+                        Color = cmd.CircleData.Color
+                    };
+                    offsets.Circles++;
+                    break;
+                case DebugPrimitiveType.Sphere:
+                    _instances[offsets.Spheres] = new InstanceData
+                    {
+                        Position = cmd.SphereData.Position,
+                        Rotation = Quaternion.Identity,
+                        Scale = new Vector3(cmd.SphereData.Radius * 2),
+                        Color = cmd.SphereData.Color
+                    };
+                    offsets.Spheres++;
+                    break;
+                case DebugPrimitiveType.HalfSphere:
+                    _instances[offsets.HalfSpheres] = new InstanceData
+                    {
+                        Position = cmd.HalfSphereData.Position,
+                        Rotation = cmd.HalfSphereData.Rotation,
+                        Scale = new Vector3(cmd.HalfSphereData.Radius * 2),
+                        Color = cmd.HalfSphereData.Color
+                    };
+                    offsets.HalfSpheres++;
+                    break;
+                case DebugPrimitiveType.Cube:
+                    {
+                        ref readonly var start = ref cmd.CubeData.Start;
+                        ref readonly var end = ref cmd.CubeData.End;
+                        _instances[offsets.Cubes] = new InstanceData
+                        {
+                            Position = start,
+                            Rotation = cmd.CubeData.Rotation,
+                            Scale = end - start,
+                            Color = cmd.CubeData.Color
+                        };
+                        offsets.Cubes++;
+                        break;
+                    }
+                case DebugPrimitiveType.Capsule:
+                    _instances[offsets.Capsules] = new InstanceData
+                    {
+                        Position = cmd.CapsuleData.Position,
+                        Rotation = cmd.CapsuleData.Rotation,
+                        Scale = new Vector3(cmd.CapsuleData.Radius * 2.0f, cmd.CapsuleData.Height, cmd.CapsuleData.Radius * 2.0f),
+                        Color = cmd.CapsuleData.Color
+                    };
+                    offsets.Capsules++;
+                    break;
+                case DebugPrimitiveType.Cylinder:
+                    _instances[offsets.Cylinders] = new InstanceData
+                    {
+                        Position = cmd.CylinderData.Position,
+                        Rotation = cmd.CylinderData.Rotation,
+                        Scale = new Vector3(cmd.CylinderData.Radius * 2.0f, cmd.CylinderData.Height, cmd.CylinderData.Radius * 2.0f),
+                        Color = cmd.CylinderData.Color
+                    };
+                    offsets.Cylinders++;
+                    break;
+                case DebugPrimitiveType.Cone:
+                    _instances[offsets.Cones] = new InstanceData
+                    {
+                        Position = cmd.ConeData.Position,
+                        Rotation = cmd.ConeData.Rotation,
+                        Scale = new Vector3(cmd.ConeData.Radius * 2.0f, cmd.ConeData.Height, cmd.ConeData.Radius * 2.0f),
+                        Color = cmd.ConeData.Color
+                    };
+                    offsets.Cones++;
+                    break;
+                case DebugPrimitiveType.Line:
+                    _lineVertices[offsets.Lines++] = new LineVertex { Position = cmd.LineData.Start, Color = cmd.LineData.Color };
+                    _lineVertices[offsets.Lines++] = new LineVertex { Position = cmd.LineData.End, Color = cmd.LineData.Color };
+                    break;
+            }
+        }
+    }
+
+    internal void Prepare(RenderDrawContext context)
+    {
+        int count = _instances.Count;
+        _transforms.SetCount(count);
+        _colors.SetCount(count);
+
+        Core.Threading.Dispatcher.For(0, count, (i) =>
+        {
+            var instance = _instances[i];
+            Matrix.Transformation(ref instance.Scale, ref instance.Rotation, ref instance.Position, out var m);
+            _transforms[i] = m;
+            _colors[i] = instance.Color;
+        });
+
+        CheckBuffers(context);
+
+        _lineVertices.Clear();
+        _instances.Clear();
+    }
+
+    internal void DrawPrimitives(RenderDrawContext context, RenderView renderView, ref Primitives offsets, ref Primitives counts, bool depthTest, FillMode fillMode, bool hasTransparency)
     {
         var commandList = context.CommandList;
 
@@ -183,7 +469,7 @@ public class DebugPrimitiveRenderer
         }
     }
 
-    private void SetPrimitiveRenderingPipelineState(CommandList commandList, bool depthTest, FillMode selectedFillMode, bool isDoubleSided = false, bool hasTransparency = false)
+    internal void SetPrimitiveRenderingPipelineState(CommandList commandList, bool depthTest, FillMode selectedFillMode, bool isDoubleSided = false, bool hasTransparency = false)
     {
         _pipelineState!.State.SetDefaults();
         _pipelineState.State.PrimitiveType = PrimitiveType.TriangleList;
@@ -211,5 +497,55 @@ public class DebugPrimitiveRenderer
         _pipelineState.State.Output.CaptureState(commandList);
         _pipelineState.State.InputElements = _lineInputElements;
         _pipelineState.Update();
+    }
+
+    internal void CheckBuffers(RenderDrawContext context)
+    {
+        var transformsSpan = CollectionsMarshal.AsSpan(_transforms);
+        UpdateBufferIfNecessary<Matrix>(context.GraphicsDevice, context.CommandList, ref _transformBuffer!, transformsSpan);
+
+        var colorsSpan = CollectionsMarshal.AsSpan(_colors);
+        UpdateBufferIfNecessary<Color>(context.GraphicsDevice, context.CommandList, ref _colorBuffer!, colorsSpan);
+
+        var lineVertsSpan = CollectionsMarshal.AsSpan(_lineVertices);
+        UpdateBufferIfNecessary<LineVertex>(context.GraphicsDevice, context.CommandList, ref _lineVertexBuffer!, lineVertsSpan);
+    }
+
+    private static void UpdateBufferIfNecessary<T>(GraphicsDevice device, CommandList commandList, ref Buffer buffer, ReadOnlySpan<T> data) where T : unmanaged
+    {
+        if (data.IsEmpty)
+            return; // nothing to upload, keep previous content
+
+        int neededBufferSize = data.Length;
+        if (neededBufferSize > buffer.ElementCount)
+        {
+            buffer.Dispose();
+            // Recreate buffer preserving flags and usage
+            var newBuffer = Buffer.New(device, data, buffer.Flags, PixelFormat.None, buffer.Usage);
+            buffer = newBuffer;
+        }
+        else
+        {
+            buffer.SetData(commandList, data);
+        }
+    }
+
+    internal void Unload()
+    {
+        _transformBuffer?.Dispose();
+        _colorBuffer?.Dispose();
+        _vertexBuffer?.Dispose();
+        _indexBuffer?.Dispose();
+        _lineVertexBuffer?.Dispose();
+        _primitiveEffect?.Dispose();
+        _lineEffect?.Dispose();
+        _transformBuffer = null;
+        _colorBuffer = null;
+        _vertexBuffer = null;
+        _indexBuffer = null;
+        _lineVertexBuffer = null;
+        _pipelineState = null;
+        _primitiveEffect = null;
+        _lineEffect = null;
     }
 }
