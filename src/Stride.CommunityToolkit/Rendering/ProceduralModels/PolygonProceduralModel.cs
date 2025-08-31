@@ -31,9 +31,9 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         {
             Vertices =
             [
-                new Vector2(0, size.Y / 2),
-                new Vector2(-size.X / 2, -size.Y / 2),
-                new Vector2(size.X / 2, -size.Y / 2)
+                new (0, size.Y / 2),
+                new (-size.X / 2, -size.Y / 2),
+                new (size.X / 2, -size.Y / 2)
             ]
         };
     }
@@ -47,10 +47,10 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         {
             Vertices =
             [
-                new Vector2(-size.X / 2, -size.Y / 2),
-                new Vector2(-size.X / 2, size.Y / 2),
-                new Vector2(size.X / 2, size.Y / 2),
-                new Vector2(size.X / 2, -size.Y / 2)
+                new (-size.X / 2, -size.Y / 2),
+                new (-size.X / 2, size.Y / 2),
+                new (size.X / 2, size.Y / 2),
+                new (size.X / 2, -size.Y / 2)
             ]
         };
     }
@@ -105,7 +105,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
             // Normalize UV coordinates based on position relative to centroid and bounds
             Vector2 relativePos = points[i] - centroid;
 
-            Vector2 uv = new Vector2(
+            Vector2 uv = new(
                 (relativePos.X / points.Max(p => Math.Abs(p.X - centroid.X)) + 1) * 0.5f * uScale,
                 (relativePos.Y / points.Max(p => Math.Abs(p.Y - centroid.Y)) + 1) * 0.5f * vScale
             );

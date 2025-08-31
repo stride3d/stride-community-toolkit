@@ -20,3 +20,10 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND2009:AvoidTypesWithNameTooLong", Target = "Stride.CommunityToolkit.Windows:Stride.Core.DataSerializers", Scope = "deep", Justification = "TODO")]
 [assembly: SuppressMessage("NDepend", "ND2009:AvoidTypesWithNameTooLong", Target = "Stride.CommunityToolkit.ImgGui:Stride.Core.DataSerializers", Scope = "deep", Justification = "TODO")]
 [assembly: SuppressMessage("NDepend", "ND2009:AvoidTypesWithNameTooLong", Target = "Example07_CubeClicker:Stride.Core.DataSerializers", Scope = "deep", Justification = "TODO")]
+
+[assembly: SuppressMessage("NDepend", "ND2103:NamespaceNameShouldCorrespondToFileLocation", Target = "Example13_MeshOutline:Stride.Rendering", Justification = "TODO")]
+[assembly: SuppressMessage("NDepend", "ND2103:NamespaceNameShouldCorrespondToFileLocation", Target = "Stride.CommunityToolkit.ImGui:Stride.Rendering", Justification = "TODO")]
+[assembly: SuppressMessage("NDepend", "ND2103:NamespaceNameShouldCorrespondToFileLocation", Target = "Example13_RootRendererShader:Stride.Rendering", Justification = "TODO")]
+[assembly: SuppressMessage("NDepend", "ND2103:NamespaceNameShouldCorrespondToFileLocation", Target = "Example18_Box2DPhysics:Stride.Rendering", Justification = "TODO")]
+[assembly: SuppressMessage("NDepend", "ND2103:NamespaceNameShouldCorrespondToFileLocation", Target = "Example13_MeshOutline:Stride.Rendering", Justification = "TODO")]
+[assembly: SuppressMessage("NDepend", "ND2103:NamespaceNameShouldCorrespondToFileLocation", Target = "Stride.CommunityToolkit.DebugShapes:Stride.DebugRendering", Justification = "TODO")]

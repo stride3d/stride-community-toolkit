@@ -8,6 +8,10 @@
 
     <Import Project="..\CommonSettings.props" />
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
         <Using Include="Stride.Core" />
         <Using Include="Stride.Core.Mathematics" />
