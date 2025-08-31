@@ -8,6 +8,10 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>$(DefineConstants);CODE_ANALYSIS</DefineConstants>
+    </PropertyGroup>
+
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>

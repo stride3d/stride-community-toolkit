@@ -38,22 +38,22 @@ internal sealed class PrimitiveGeometryCache
     /// <summary>
     /// Vertex offsets into the packed vertex buffer for each primitive type.
     /// </summary>
-    public Primitives VertexOffsets => _vertexOffsets;
+    internal Primitives VertexOffsets => _vertexOffsets;
 
     /// <summary>
     /// Index offsets into the packed index buffer for each primitive type.
     /// </summary>
-    public Primitives IndexOffsets => _indexOffsets;
+    internal Primitives IndexOffsets => _indexOffsets;
 
     /// <summary>
     /// Half-sphere index count (derived from sphere indices).
     /// </summary>
-    public int HalfSphereIndexCount { get; private set; }
+    internal int HalfSphereIndexCount { get; private set; }
 
     /// <summary>
     /// Builds geometry primitives and returns a packed vertex array while computing vertex offsets.
     /// </summary>
-    public VertexPositionTexture[] BuildVertexData()
+    internal VertexPositionTexture[] BuildVertexData()
     {
         _circle = ImmediateDebugPrimitives.GenerateCircle(DefaultCircleRadius, CircleTesselation);
         _plane = ImmediateDebugPrimitives.GenerateQuad(DefaultPlaneSize, DefaultPlaneSize);
@@ -113,7 +113,7 @@ internal sealed class PrimitiveGeometryCache
     /// <summary>
     /// Builds a packed index array and computes index offsets for each primitive.
     /// </summary>
-    public int[] BuildIndexData()
+    internal int[] BuildIndexData()
     {
         var indexData = new int[
             _circle.Indices.Length +
@@ -162,11 +162,11 @@ internal sealed class PrimitiveGeometryCache
     }
 
     // Expose per-primitive index counts for draw calls
-    public int CircleIndexCount => _circle.Indices.Length;
-    public int QuadIndexCount => _plane.Indices.Length;
-    public int SphereIndexCount => _sphere.Indices.Length;
-    public int CubeIndexCount => _cube.Indices.Length;
-    public int CapsuleIndexCount => _capsule.Indices.Length;
-    public int CylinderIndexCount => _cylinder.Indices.Length;
-    public int ConeIndexCount => _cone.Indices.Length;
+    internal int CircleIndexCount => _circle.Indices.Length;
+    internal int QuadIndexCount => _plane.Indices.Length;
+    internal int SphereIndexCount => _sphere.Indices.Length;
+    internal int CubeIndexCount => _cube.Indices.Length;
+    internal int CapsuleIndexCount => _capsule.Indices.Length;
+    internal int CylinderIndexCount => _cylinder.Indices.Length;
+    internal int ConeIndexCount => _cone.Indices.Length;
 }

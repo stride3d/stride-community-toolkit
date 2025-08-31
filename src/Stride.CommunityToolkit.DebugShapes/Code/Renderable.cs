@@ -8,55 +8,55 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 [StructLayout(LayoutKind.Explicit)]
 internal struct Renderable
 {
-    public Renderable(ref Quad q) : this()
+    internal Renderable(ref Quad q) : this()
     {
         Type = DebugPrimitiveType.Quad;
         QuadData = q;
     }
 
-    public Renderable(ref Circle c) : this()
+    internal Renderable(ref Circle c) : this()
     {
         Type = DebugPrimitiveType.Circle;
         CircleData = c;
     }
 
-    public Renderable(ref Sphere s) : this()
+    internal Renderable(ref Sphere s) : this()
     {
         Type = DebugPrimitiveType.Sphere;
         SphereData = s;
     }
 
-    public Renderable(ref HalfSphere h) : this()
+    internal Renderable(ref HalfSphere h) : this()
     {
         Type = DebugPrimitiveType.HalfSphere;
         HalfSphereData = h;
     }
 
-    public Renderable(ref Cube c) : this()
+    internal Renderable(ref Cube c) : this()
     {
         Type = DebugPrimitiveType.Cube;
         CubeData = c;
     }
 
-    public Renderable(ref Capsule c) : this()
+    internal Renderable(ref Capsule c) : this()
     {
         Type = DebugPrimitiveType.Capsule;
         CapsuleData = c;
     }
 
-    public Renderable(ref Cylinder c) : this()
+    internal Renderable(ref Cylinder c) : this()
     {
         Type = DebugPrimitiveType.Cylinder;
         CylinderData = c;
     }
 
-    public Renderable(ref Cone c) : this()
+    internal Renderable(ref Cone c) : this()
     {
         Type = DebugPrimitiveType.Cone;
         ConeData = c;
     }
 
-    public Renderable(ref Line l) : this()
+    internal Renderable(ref Line l) : this()
     {
         Type = DebugPrimitiveType.Line;
         LineData = l;
