@@ -79,6 +79,7 @@ game.Run(start: (Scene rootScene) =>
 - Terminology / capitalization: Use “Bepu” (capital B only) in identifiers and XML docs; never “BEPU” or “bepu”. Use “Bullet” (capital B) for Bullet physics.
 - One public type per file; avoid unrelated multi-class files.
 - No `#region` blocks; rely on clear structure.
+- Avoid partial classes unless auto-generated code is involved.
 - Validation: `ArgumentNullException.ThrowIfNull()`; meaningful exception messages for invalid states.
 - Suggestion preference order:
   1. Existing reviewed toolkit extension/helper
