@@ -127,6 +127,7 @@ public static class GameExtensions
         options ??= new();
 
         var entity = game.Create3DPrimitive(type, (Primitive3DEntityOptions)options);
+        //var entity = Games.GameExtensions.Create3DPrimitive(game, type, options);
 
         entity.AddBullet3DPhysics(type, options);
 
@@ -160,7 +161,8 @@ public static class GameExtensions
             EntityName = entityName,
             Material = material,
             Size = (Vector3)validSize,
-            PhysicsComponent = new StaticColliderComponent()
+            PhysicsComponent = new StaticColliderComponent(),
+            IncludeCollider = includeCollider
         });
 
         // seems doing nothing

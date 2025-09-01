@@ -21,6 +21,13 @@ public static class EntityExtensions
 
         if (options.PhysicsComponent is null) return entity;
 
+        if (!options.IncludeCollider)
+        {
+            entity.Add(options.PhysicsComponent);
+
+            return entity;
+        }
+
         var colliderShape = Get3DColliderShape(type, options.Size);
 
         if (colliderShape is null) return entity;
@@ -51,6 +58,13 @@ public static class EntityExtensions
         }
 
         if (options.PhysicsComponent is null) return entity;
+
+        if (!options.IncludeCollider)
+        {
+            entity.Add(options.PhysicsComponent);
+
+            return entity;
+        }
 
         if (type == Primitive2DModelType.Triangle)
         {
