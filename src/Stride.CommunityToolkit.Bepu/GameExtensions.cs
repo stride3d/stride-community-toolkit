@@ -115,7 +115,8 @@ public static class GameExtensions
             EntityName = entityName,
             Material = material,
             Size = (Vector3)validSize,
-            Component = new StaticComponent() { Collider = new CompoundCollider() }
+            Component = new StaticComponent() { Collider = new CompoundCollider() },
+            IncludeCollider = includeCollider
         });
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
