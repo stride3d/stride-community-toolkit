@@ -77,7 +77,7 @@ void CreateParticleEffect()
         PositionMax = new Vector3(0.03f, 0.03f, 0.03f),
     };
 
-    var velocityInitialzer = new InitialVelocitySeed()
+    var velocityInitializer = new InitialVelocitySeed()
     {
         VelocityMin = new Vector3(0, 3, 0),
         VelocityMax = new Vector3(3, 4, 3),
@@ -85,7 +85,7 @@ void CreateParticleEffect()
 
     emitter.Initializers.Add(sizeInitializer);
     emitter.Initializers.Add(positionInitializer);
-    emitter.Initializers.Add(velocityInitialzer);
+    emitter.Initializers.Add(velocityInitializer);
 
     emitter.Updaters.Add(new UpdaterGravity() { GravitationalAcceleration = new Vector3(0, -9.8f, 0) });
 
