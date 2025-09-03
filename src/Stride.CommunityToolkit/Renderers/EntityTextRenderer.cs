@@ -62,7 +62,18 @@ public class EntityTextRenderer : SceneRendererBase
         _scene ??= SceneInstance.GetCurrent(context).RootScene;
 
         // Ensure all required components are initialized
-        if (_spriteBatch is null || _camera is null || _scene is null) return;
+        if (_spriteBatch is null || _camera is null || _scene is null)
+        {
+            return;
+        }
+
+        var entities = _scene.Entities;
+        var count = entities.Count;
+
+        if (count == 0) return;
+
+        // ViewProjection transforms a world-space position into clip space (pre-perspective divide)
+        var viewProjection = _camera.ViewProjectionMatrix;
 
         // Begin the SpriteBatch for rendering
         _spriteBatch.Begin(drawContext.GraphicsContext,
@@ -71,16 +82,35 @@ public class EntityTextRenderer : SceneRendererBase
             samplerState: null,
             depthStencilState: DepthStencilStates.None);
 
-        foreach (var entity in _scene.Entities)
+        for (int i = 0; i < count; i++)
         {
+            var entity = entities[i];
+            var worldPos = entity.Transform.Position;
             var textDisplay = entity.Get<EntityTextComponent>();
 
             if (textDisplay == null) continue;
 
+            // Transform to clip space
+            var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
+            if (clipPosition.W <= 0f)
+                continue; // behind the camera
+
+            // Perspective divide -> Normalized Device Coordinates (NDC)
+            var inverseW = 1f / clipPosition.W;
+            var normalizedDeviceCoordinatesX = clipPosition.X * inverseW;
+            var normalizedDeviceCoordinatesY = clipPosition.Y * inverseW;
+            var normalizedDeviceCoordinatesZ = clipPosition.Z * inverseW;
+
+            // Clip test in NDC: x and y in [-1,1], z in [0,1]
+            var outsideNdc = normalizedDeviceCoordinatesZ < 0f || normalizedDeviceCoordinatesZ > 1f || normalizedDeviceCoordinatesX < -1f || normalizedDeviceCoordinatesX > 1f || normalizedDeviceCoordinatesY < -1f || normalizedDeviceCoordinatesY > 1f;
+
+            // culled
+            if (outsideNdc) continue;
+
             var screenPosition = textDisplay.Position;
 
             // Convert the entity's world position to screen space if Position is not explicitly provided
-            screenPosition ??= _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            screenPosition ??= _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
 
             var finalPosition = screenPosition.Value + textDisplay.Offset;
 

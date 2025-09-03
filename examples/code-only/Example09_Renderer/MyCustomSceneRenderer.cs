@@ -91,17 +91,38 @@ public class MyCustomSceneRenderer : SceneRendererBase
 
         _spriteBatch.End();
 
+        var viewProjection = _camera.ViewProjectionMatrix;
+
         // Begin a new SpriteBatch for rendering dynamic entity information
         _spriteBatch.Begin(drawContext.GraphicsContext);
 
         foreach (var entity in _scene.Entities)
         {
+            var worldPos = entity.Transform.Position;
+
+            // Transform to clip space
+            var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
+            if (clipPosition.W <= 0f)
+                continue; // behind the camera
+
+            // Perspective divide -> Normalized Device Coordinates (NDC)
+            var inverseW = 1f / clipPosition.W;
+            var normalizedDeviceCoordinatesX = clipPosition.X * inverseW;
+            var normalizedDeviceCoordinatesY = clipPosition.Y * inverseW;
+            var normalizedDeviceCoordinatesZ = clipPosition.Z * inverseW;
+
+            // Clip test in NDC: x and y in [-1,1], z in [0,1]
+            var outsideNdc = normalizedDeviceCoordinatesZ < 0f || normalizedDeviceCoordinatesZ > 1f || normalizedDeviceCoordinatesX < -1f || normalizedDeviceCoordinatesX > 1f || normalizedDeviceCoordinatesY < -1f || normalizedDeviceCoordinatesY > 1f;
+
+            // culled
+            if (outsideNdc) continue;
+
             // Convert the entity's world position to screen space
-            var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var screenPosition = _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
             var finalPosition = screenPosition + _offset;
 
             // Text to display the entity's name and position
-            var text = $"{entity.Name}: {entity.Transform.Position:N1}";
+            var text = $"{entity.Name}: {worldPos:N1}";
 
             // Measure the dimensions of the text to calculate background size
             var textDimensions = _spriteBatch.MeasureString(_font, text, _fontSize);
