@@ -51,6 +51,8 @@ public static class GraphicsCompositorExtensions
     /// This method adds a custom <see cref="EntityDebugSceneRenderer"/> to the game's graphics compositor, allowing the display of debug information
     /// such as entity names and positions in a 3D scene. The renderer can be customized using the <paramref name="options"/> parameter,
     /// which allows the user to define font size, color, and other settings.
+    /// <br/><br/>
+    /// IMPORTANT: This may significantly reduce frame rate. Use only for development or debugging, or in scenes with very few entities.
     /// </remarks>
     /// <example>
     /// The following example demonstrates how to add an entity debug renderer with default settings:
