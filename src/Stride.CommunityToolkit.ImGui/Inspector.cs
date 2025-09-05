@@ -10,6 +10,9 @@ using ImGuiDir = Hexa.NET.ImGui.ImGuiDir;
 
 namespace Stride.CommunityToolkit.ImGui;
 
+/// <summary>
+/// Inspector window for debugging and modifying object properties.
+/// </summary>
 public class Inspector : BaseWindow
 {
     /// <summary> Array of all possible <see cref="Filter"/> values </summary>
@@ -55,7 +58,9 @@ public class Inspector : BaseWindow
             _cachedTypeData.Clear();
         }
     }
+
     Filter _memberFilter = Filter.Public | Filter.Inherited | Filter.Properties | Filter.Fields | Filter.Instance;
+
     /// <summary> The object to inspect </summary>
     public object Target
     {
@@ -100,9 +105,6 @@ public class Inspector : BaseWindow
     {
         _inspectors.Remove(this);
     }
-
-
-
 
     protected override void OnDraw(bool collapsed)
     {
@@ -596,6 +598,7 @@ RECURSE:
         if (valueType == typeof(ushort)) return (ulong)(ushort)enumValue;
         if (valueType == typeof(byte)) return (ulong)(byte)enumValue;
         if (valueType == typeof(sbyte)) return (ulong)(sbyte)enumValue;
+
         throw new ArgumentException(valueType.ToString());
     }
 
@@ -613,6 +616,7 @@ RECURSE:
             if (valueType == typeof(byte)) return (byte)bits;
             if (valueType == typeof(sbyte)) return (sbyte)bits;
         }
+
         throw new ArgumentException(enumType.ToString());
     }
 

@@ -65,8 +65,30 @@ public class SpriteBatchRendererScript : StartupScript
         // Ensure the necessary components (SpriteBatch, font, and camera) are initialized
         if (_spriteBatch == null || _font == null || _camera == null) return;
 
+        // ViewProjection transforms a world-space position into clip space (pre-perspective divide)
+        var viewProjection = _camera.ViewProjectionMatrix;
+
+        var worldPos = Entity.Transform.Position;
+
+        // Transform to clip space
+        var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
+        if (clipPosition.W <= 0f)
+            return; // behind the camera
+
+        // Perspective divide -> Normalized Device Coordinates (NDC)
+        var inverseW = 1f / clipPosition.W;
+        var normalizedDeviceCoordinatesX = clipPosition.X * inverseW;
+        var normalizedDeviceCoordinatesY = clipPosition.Y * inverseW;
+        var normalizedDeviceCoordinatesZ = clipPosition.Z * inverseW;
+
+        // Clip test in NDC: x and y in [-1,1], z in [0,1]
+        var outsideNdc = normalizedDeviceCoordinatesZ < 0f || normalizedDeviceCoordinatesZ > 1f || normalizedDeviceCoordinatesX < -1f || normalizedDeviceCoordinatesX > 1f || normalizedDeviceCoordinatesY < -1f || normalizedDeviceCoordinatesY > 1f;
+
+        // culled
+        if (outsideNdc) return;
+
         // Convert the world position of the entity to screen space coordinates
-        var screen = _camera.WorldToScreenPoint(ref Entity.Transform.Position, GraphicsDevice);
+        var screen = _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
 
         // Begin the 2D rendering process using SpriteBatch
         _spriteBatch.Begin(drawContext.GraphicsContext);

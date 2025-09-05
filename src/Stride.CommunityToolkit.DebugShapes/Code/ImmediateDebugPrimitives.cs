@@ -84,6 +84,7 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 /// </summary>
 public static class ImmediateDebugPrimitives
 {
+    private const string UvSplitDivisorErrorMessage = "expected the desired number of uv splits to be a divisor of the number of tessellations";
     private static readonly Vector2 _noLineUv = new(0.5f);
     private static readonly Vector2 _lineUv = new(1.0f);
 
@@ -162,7 +163,7 @@ public static class ImmediateDebugPrimitives
 
         if (uvSplits != 0 && tessellations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
         {
-            throw new ArgumentException("expected the desired number of uv splits to be a divisor of the number of tessellations");
+            throw new ArgumentException(UvSplitDivisorErrorMessage);
         }
 
         int hasUvSplits = uvSplits > 0 ? 1 : 0;
@@ -276,7 +277,7 @@ public static class ImmediateDebugPrimitives
 
         if (uvSplits != 0 && tessellations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
         {
-            throw new ArgumentException("expected the desired number of uv splits to be a divisor of the number of tessellations");
+            throw new ArgumentException(UvSplitDivisorErrorMessage);
         }
 
         int verticalSegments = tessellations;
@@ -464,7 +465,7 @@ public static class ImmediateDebugPrimitives
 
         if (uvSplits != 0 && tessellations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
         {
-            throw new ArgumentException("expected the desired number of uv splits to be a divisor of the number of tessellations");
+            throw new ArgumentException(UvSplitDivisorErrorMessage);
         }
 
         var hasUvSplit = uvSplits > 0 ? 1 : 0;
@@ -554,7 +555,7 @@ public static class ImmediateDebugPrimitives
 
         if (uvSplits != 0 && tessellations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
         {
-            throw new ArgumentException("expected the desired number of uv splits to be a divisor of the number of tessellations");
+            throw new ArgumentException(UvSplitDivisorErrorMessage);
         }
 
         if (uvSplitsBottom != 0 && tessellations % uvSplitsBottom != 0) // FIXME: this can read a lot nicer i think?
@@ -610,7 +611,7 @@ public static class ImmediateDebugPrimitives
 
         if (uvSplits != 0 && tessellations % uvSplits != 0) // FIXME: this can read a lot nicer i think?
         {
-            throw new ArgumentException("expected the desired number of uv splits to be a divisor of the number of tessellations");
+            throw new ArgumentException(UvSplitDivisorErrorMessage);
         }
 
         int verticalSegments = 2 * tessellations;

@@ -26,6 +26,13 @@ public static class EntityExtensions
 
         options ??= new();
 
+        if (!options.IncludeCollider)
+        {
+            entity.Add(options.Component);
+
+            return entity;
+        }
+
         if (type == PrimitiveModelType.TriangularPrism)
         {
             // This is needed when using ConvexHullCollider
@@ -82,6 +89,13 @@ public static class EntityExtensions
         ArgumentNullException.ThrowIfNull(entity);
 
         options ??= new();
+
+        if (!options.IncludeCollider)
+        {
+            entity.Add(options.Component);
+
+            return entity;
+        }
 
         if (type == Primitive2DModelType.Circle)
         {

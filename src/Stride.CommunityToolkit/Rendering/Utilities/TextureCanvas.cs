@@ -10,7 +10,7 @@ namespace Stride.CommunityToolkit.Rendering.Utilities;
 /// applying filters, transforming colors, and resampling textures. It is designed to work
 /// with the Stride graphics framework and provides methods for loading and storing texture data.
 /// </summary>
-public partial class TextureCanvas : IDisposable
+public class TextureCanvas : IDisposable
 {
     private PixelFormat _pixelFormat;
     private Texture? _primaryBuffer;

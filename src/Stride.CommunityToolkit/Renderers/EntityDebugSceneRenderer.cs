@@ -3,6 +3,7 @@ using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
+using System.Globalization;
 using System.Text;
 
 namespace Stride.CommunityToolkit.Renderers;
@@ -21,6 +22,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     private Scene? _scene;
     private CameraComponent? _camera;
     private Texture? _backgroundTexture;
+    private readonly StringBuilder _stringBuilder = new();
     private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
     private readonly EntityDebugSceneRendererOptions _options;
 
@@ -45,6 +47,10 @@ public class EntityDebugSceneRenderer : SceneRendererBase
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _font = Content.Load<SpriteFont>("StrideDefaultFont");
         _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
+
+        var graphicsCompositor = Context.Tags.Get(GraphicsCompositor.Current);
+        _camera = graphicsCompositor?.Cameras.Count > 0 ? graphicsCompositor.Cameras[0].Camera : null;
+        _scene = SceneInstance.GetCurrent(Context)?.RootScene;
     }
 
     /// <summary>
@@ -54,15 +60,24 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <param name="drawContext">Draw context used to submit draw calls.</param>
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
-        var graphicsCompositor = context.Tags.Get(GraphicsCompositor.Current);
+        // Quick exit if there is nothing to render
+        if (!_options.ShowEntityName && !_options.ShowEntityPosition)
+        {
+            return;
+        }
 
-        if (graphicsCompositor is null) return;
+        if (_spriteBatch is null || _camera is null || _scene is null)
+        {
+            return;
+        }
 
-        _camera ??= graphicsCompositor.Cameras[0].Camera;
+        var entities = _scene.Entities;
+        var count = entities.Count;
 
-        _scene ??= SceneInstance.GetCurrent(context).RootScene;
+        if (count == 0) return;
 
-        if (_spriteBatch is null || _camera is null || _scene is null) return;
+        // ViewProjection transforms a world-space position into clip space (pre-perspective divide)
+        var viewProjection = _camera.ViewProjectionMatrix;
 
         _spriteBatch.Begin(drawContext.GraphicsContext,
             sortMode: SpriteSortMode.Deferred,
@@ -70,9 +85,30 @@ public class EntityDebugSceneRenderer : SceneRendererBase
             samplerState: null,
             depthStencilState: DepthStencilStates.None);
 
-        foreach (var entity in _scene.Entities)
+        for (int i = 0; i < count; i++)
         {
-            var screenPosition = _camera.WorldToScreenPoint(ref entity.Transform.Position, GraphicsDevice);
+            var entity = entities[i];
+            var worldPos = entity.Transform.Position;
+
+            // Transform to clip space
+            var clipPosition = Vector4.Transform(new Vector4(worldPos, 1f), viewProjection);
+            if (clipPosition.W <= 0f)
+                continue; // behind the camera
+
+            // Perspective divide -> Normalized Device Coordinates (NDC)
+            var inverseW = 1f / clipPosition.W;
+            var normalizedDeviceCoordinatesX = clipPosition.X * inverseW;
+            var normalizedDeviceCoordinatesY = clipPosition.Y * inverseW;
+            var normalizedDeviceCoordinatesZ = clipPosition.Z * inverseW;
+
+            // Clip test in NDC: x and y in [-1,1], z in [0,1]
+            var outsideNdc = normalizedDeviceCoordinatesZ < 0f || normalizedDeviceCoordinatesZ > 1f || normalizedDeviceCoordinatesX < -1f || normalizedDeviceCoordinatesX > 1f || normalizedDeviceCoordinatesY < -1f || normalizedDeviceCoordinatesY > 1f;
+
+            // culled
+            if (outsideNdc) continue;
+
+            // Convert to screen-space using engine helper
+            var screenPosition = _camera.WorldToScreenPoint(ref worldPos, GraphicsDevice);
             var finalPosition = screenPosition + _options.Offset;
 
             var textDisplay = GetDisplayText(entity);
@@ -99,19 +135,22 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <returns>Debug text for the entity, or an empty string if nothing should be displayed.</returns>
     private string GetDisplayText(Entity entity)
     {
-        var stringBuilder = new StringBuilder();
+        _stringBuilder.Clear();
 
         if (_options.ShowEntityName)
-            stringBuilder.Append(entity.Name);
+        {
+            _stringBuilder.Append(entity.Name);
+        }
 
         if (_options.ShowEntityPosition)
         {
-            if (stringBuilder.Length > 0) stringBuilder.Append(": ");
+            if (_stringBuilder.Length > 0) _stringBuilder.Append(": ");
 
-            stringBuilder.AppendFormat("{0:N1}", entity.Transform.Position);
+            var p = entity.Transform.Position;
+            _stringBuilder.Append(CultureInfo.InvariantCulture, $"({p.X:F1}, {p.Y:F1}, {p.Z:F1})");
         }
 
-        return stringBuilder.ToString();
+        return _stringBuilder.ToString();
     }
 
     /// <summary>
@@ -121,7 +160,8 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     /// <param name="finalPosition">Screen-space position where the text is drawn.</param>
     private void DrawTextBackground(string text, Vector2 finalPosition)
     {
-        if (!_options.EnableBackground) return;
+        if (!_options.EnableBackground)
+            return;
 
         var textDimensions = _spriteBatch!.MeasureString(_font, text, _options.FontSize);
 
@@ -131,7 +171,11 @@ public class EntityDebugSceneRenderer : SceneRendererBase
             textDimensions.X + _options.Padding * 2,
             textDimensions.Y + _options.Padding * 2);
 
-        _spriteBatch.Draw(_backgroundTexture, backgroundRectangle, _options.BackgroundColor ?? _defaultBackground);
+        var bgColor = _options.BackgroundColor ?? _defaultBackground;
+        if (bgColor.A <= 0f)
+            return; // fully transparent, skip draw
+
+        _spriteBatch.Draw(_backgroundTexture, backgroundRectangle, bgColor);
     }
 
     /// <summary>

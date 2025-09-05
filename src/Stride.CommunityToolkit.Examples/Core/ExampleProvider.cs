@@ -94,7 +94,7 @@ public partial class ExampleProvider
         int? order = int.TryParse(orderRaw, out var o) ? o : null;
 
         string title = explicitTitle
-                       ?? TryParseProgramCommentTitle(projectFile)
+                       ?? GetProgramCommentTitle(projectFile)
                        ?? assemblyName
                        ?? Path.GetFileNameWithoutExtension(projectFile);
 
@@ -109,7 +109,7 @@ public partial class ExampleProvider
                 ?.Value?.Trim();
     }
 
-    private string? TryParseProgramCommentTitle(string projectFile)
+    private static string? GetProgramCommentTitle(string projectFile)
     {
         var dir = Path.GetDirectoryName(projectFile);
         if (dir is null) return null;
@@ -199,7 +199,7 @@ public partial class ExampleProvider
         }
     }
 
-    private bool ShouldSuppress(string line)
+    private static bool ShouldSuppress(string line)
     {
         if (!FilterWarnings || BypassFiltering)
             return false;

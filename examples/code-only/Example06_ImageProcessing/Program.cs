@@ -38,10 +38,10 @@ static void Start(Game game)
 
     for (var a = 0; a < 9; a++)
     {
-        var anchor = (TextureCanvas.Anchor)a;
+        var anchor = (Anchor)a;
         for (var s = 0; s < 4; s++)
         {
-            var stretch = (TextureCanvas.Stretch)s;
+            var stretch = (Stretch)s;
 
             using (var canvas = game.CreateTextureCanvas(new Size2(1024, 1024)))
             {

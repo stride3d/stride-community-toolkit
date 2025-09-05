@@ -43,6 +43,19 @@ public static class GraphicsCompositorExtensions
     }
 
     /// <summary>
+    /// Adds a UI render stage and white/clean text effect to the given <see cref="GraphicsCompositor"/>.
+    /// This alters the GraphicsCompositor's <see cref="PostProcessingEffects"/>, <see cref="RenderStage"/>, and <see cref="RenderFeature"/>.
+    /// </summary>
+    /// <param name="graphicsCompositor">The GraphicsCompositor to modify.</param>
+    /// <returns>Returns the modified GraphicsCompositor instance, allowing for method chaining.</returns>
+    public static GraphicsCompositor AddUIStage(this GraphicsCompositor graphicsCompositor)
+    {
+        AddRenderStagesAndFeatures(graphicsCompositor);
+
+        return graphicsCompositor;
+    }
+
+    /// <summary>
     /// Adds a new scene renderer to the given GraphicsCompositor's game. If the game is already a collection of scene renderers,
     /// the new scene renderer is added to that collection. Otherwise, a new scene renderer collection is created to house both
     /// the existing game and the new scene renderer.

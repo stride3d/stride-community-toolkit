@@ -30,10 +30,10 @@ public static class GameExtensions
     /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
     /// <remarks>
-    /// This method performs the following setup operations in sequence:
-    /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.
-    /// 2. Adds a camera to the game and sets it up with a MouseLookCamera component.
-    /// 3. Adds a directional light to the game scene.
+    /// This method performs the following setup operations in sequence:<br />
+    /// 1. Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.<br />
+    /// 2. Adds a camera to the game and sets it up with a MouseLookCamera component.<br />
+    /// 3. Adds a directional light to the game scene.<br />
     /// 4. Adds ground geometry to the game scene.
     /// </remarks>
     /// <param name="game">The Game instance for which the base 3D scene will be set up.</param>
@@ -115,7 +115,8 @@ public static class GameExtensions
             EntityName = entityName,
             Material = material,
             Size = (Vector3)validSize,
-            Component = new StaticComponent() { Collider = new CompoundCollider() }
+            Component = new StaticComponent() { Collider = new CompoundCollider() },
+            IncludeCollider = includeCollider
         });
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;

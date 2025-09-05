@@ -9,63 +9,63 @@ namespace Stride.CommunityToolkit.DebugShapes.Code;
 [StructLayout(LayoutKind.Explicit)]
 internal struct DebugRenderable
 {
-    public DebugRenderable(ref Quad q, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Quad q, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Quad;
         Flags = renderFlags;
         QuadData = q;
     }
 
-    public DebugRenderable(ref Circle c, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Circle c, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Circle;
         Flags = renderFlags;
         CircleData = c;
     }
 
-    public DebugRenderable(ref Line l, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Line l, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Line;
         Flags = renderFlags;
         LineData = l;
     }
 
-    public DebugRenderable(ref Cube b, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Cube b, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Cube;
         Flags = renderFlags;
         CubeData = b;
     }
 
-    public DebugRenderable(ref Sphere s, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Sphere s, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Sphere;
         Flags = renderFlags;
         SphereData = s;
     }
 
-    public DebugRenderable(ref HalfSphere h, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref HalfSphere h, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.HalfSphere;
         Flags = renderFlags;
         HalfSphereData = h;
     }
 
-    public DebugRenderable(ref Capsule c, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Capsule c, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Capsule;
         Flags = renderFlags;
         CapsuleData = c;
     }
 
-    public DebugRenderable(ref Cylinder c, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Cylinder c, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Cylinder;
         Flags = renderFlags;
         CylinderData = c;
     }
 
-    public DebugRenderable(ref Cone c, DebugRenderableFlags renderFlags) : this()
+    internal DebugRenderable(ref Cone c, DebugRenderableFlags renderFlags) : this()
     {
         Type = DebugPrimitiveType.Cone;
         Flags = renderFlags;

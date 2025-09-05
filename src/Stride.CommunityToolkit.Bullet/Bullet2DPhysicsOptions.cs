@@ -22,4 +22,10 @@ public class Bullet2DPhysicsOptions : Primitive2DEntityOptions
     /// to tailor collision / motion behavior.
     /// </remarks>
     public PhysicsComponent? PhysicsComponent { get; set; } = new RigidbodyComponent();
+
+    /// <summary>
+    /// When true (default), a collider shape matching the primitive type is auto-created and added.
+    /// When false, the <see cref="PhysicsComponent"/> is attached without shapes; you can add shapes later.
+    /// </summary>
+    public bool IncludeCollider { get; set; } = true;
 }
