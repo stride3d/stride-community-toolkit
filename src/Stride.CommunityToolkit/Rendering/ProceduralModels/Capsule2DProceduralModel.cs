@@ -7,7 +7,7 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 /// Procedurally generates a 2D capsule (stadium) mesh composed of two semicircles and a central rectangle.
 /// Mesh instances are cached per dimension/tessellation/UV combination for reuse.
 /// </summary>
-public class CapsuleProceduralModel : PrimitiveProceduralModelBase
+public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
 {
     /// <summary>
     /// Gets or sets the total height of the capsule (including the two semicircles).
@@ -24,7 +24,7 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
     /// </summary>
     public int Tessellation { get; set; } = 16;
 
-    private static readonly Dictionary<(float Height, float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
+    private static readonly Dictionary<(float Height, float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     /// <summary>
     /// Creates mesh data using current property values, honoring UV scale.
@@ -45,10 +45,10 @@ public class CapsuleProceduralModel : PrimitiveProceduralModelBase
     {
         var cacheKey = (height, radius, tessellation, uScale, vScale, toLeftHanded);
 
-        if (!MeshCache.TryGetValue(cacheKey, out var mesh))
+        if (!_meshCache.TryGetValue(cacheKey, out var mesh))
         {
             mesh = CreateMesh(height, radius, tessellation, uScale, vScale, toLeftHanded);
-            MeshCache[cacheKey] = mesh;
+            _meshCache[cacheKey] = mesh;
         }
 
         return mesh;

@@ -18,12 +18,12 @@ public static class GameDefaults
     /// <summary>
     /// The default size of the 3D ground entity.
     /// </summary>
-    public static readonly Vector2 Default3DGroundSize = new(15f);
+    public static readonly Vector2 Default3DGroundSize = new(20f);
 
     /// <summary>
     /// The default size of the 2D ground entity.
     /// </summary>
-    public static readonly Vector3 Default2DGroundSize = new(15, 0.1f, 0);
+    public static readonly Vector3 Default2DGroundSize = new(20, 0.1f, 0);
 
     /// <summary>
     /// The default material color for 3D entities.

@@ -13,8 +13,8 @@ public class RectangleProceduralModel : PrimitiveProceduralModelBase
     /// </summary>
     public Vector2 Size { get; set; } = Vector2.One;
 
-    private static readonly Vector2[] TextureCoordinates = [new(1, 0), new(1, 1), new(0, 1), new(0, 0)];
-    private static readonly Dictionary<Vector2, GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
+    private static readonly Vector2[] _textureCoordinates = [new(1, 0), new(1, 1), new(0, 1), new(0, 0)];
+    private static readonly Dictionary<Vector2, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
@@ -32,11 +32,11 @@ public class RectangleProceduralModel : PrimitiveProceduralModelBase
 
         if (toLeftHanded) key *= -1; // Distinguish handedness in cache
 
-        if (!MeshCache.TryGetValue(key, out var mesh))
+        if (!_meshCache.TryGetValue(key, out var mesh))
         {
             // Create and cache the mesh if not found
             mesh = CreateMesh(size, uScale, vScale, toLeftHanded);
-            MeshCache[key] = mesh;
+            _meshCache[key] = mesh;
         }
 
         return mesh;
@@ -56,7 +56,7 @@ public class RectangleProceduralModel : PrimitiveProceduralModelBase
 
         for (var i = 0; i < 4; i++)
         {
-            textureCoordinates[i] = TextureCoordinates[i] * uvScale;
+            textureCoordinates[i] = _textureCoordinates[i] * uvScale;
         }
 
         // Four vertices

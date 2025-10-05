@@ -16,11 +16,6 @@ public enum Primitive2DModelType
     Circle,
 
     /// <summary>
-    /// A circle shape with a customizable radius.
-    /// </summary>
-    Circle2D,
-
-    /// <summary>
     /// A polygon shape with a customizable number of sides.
     /// </summary>
     Polygon,
@@ -36,27 +31,12 @@ public enum Primitive2DModelType
     Rectangle,
 
     /// <summary>
-    /// A rectangular shape with customizable width and height.
-    /// </summary>
-    Rectangle2D,
-
-    /// <summary>
     /// A square shape with equal width and height.
     /// </summary>
     Square,
 
     /// <summary>
-    /// A square shape with equal width and height.
-    /// </summary>
-    Square2D,
-
-    /// <summary>
     /// A triangular shape with three sides.
     /// </summary>
     Triangle,
-
-    /// <summary>
-    /// A triangular shape with three sides.
-    /// </summary>
-    Triangle2D
 }

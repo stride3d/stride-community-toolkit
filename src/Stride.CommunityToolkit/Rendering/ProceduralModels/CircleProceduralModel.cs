@@ -18,7 +18,7 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
     /// </summary>
     public int Tessellation { get; set; } = 32;
 
-    private static readonly Dictionary<(float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
+    private static readonly Dictionary<(float Radius, int Tessellation, float UScale, float VScale, bool IsLeftHanded), GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     /// <summary>
     /// Creates mesh data for the current radius, tessellation and UV scale settings.
@@ -38,10 +38,10 @@ public class CircleProceduralModel : PrimitiveProceduralModelBase
     {
         var cacheKey = (radius, tessellation, uScale, vScale, toLeftHanded);
 
-        if (!MeshCache.TryGetValue(cacheKey, out var mesh))
+        if (!_meshCache.TryGetValue(cacheKey, out var mesh))
         {
             mesh = CreateMesh(radius, tessellation, uScale, vScale, toLeftHanded);
-            MeshCache[cacheKey] = mesh;
+            _meshCache[cacheKey] = mesh;
         }
 
         return mesh;
