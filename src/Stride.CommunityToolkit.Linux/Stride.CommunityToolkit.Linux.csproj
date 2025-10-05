@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Title>Stride Community Toolkit - Linux</Title>
+        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package, specifying `RuntimeIdentifier` as linux-x64, and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.</Description>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <StrideGraphicsApi>OpenGL</StrideGraphicsApi>
+        <StrideVersion>4.2.1.2442</StrideVersion>
+    </PropertyGroup>
+
+    <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+        <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.Core.Assets.CompilerApp. -->
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+    <Target Name="CopyLinuxNativeLibraries" BeforeTargets="Build" Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+        <PropertyGroup>
+            <!-- First try NUGET_PACKAGES environment variable -->
+            <NuGetPackagesPath Condition="'$(NUGET_PACKAGES)' != ''">$(NUGET_PACKAGES)</NuGetPackagesPath>
+
+            <!-- On Linux, use HOME environment variable -->
+            <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == '' AND '$(OS)' == 'Unix'">$(HOME)/.nuget/packages</NuGetPackagesPath>
+
+            <!-- On Windows, use UserProfile -->
+            <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == '' AND '$(OS)' == 'Windows_NT'">$(UserProfile)\.nuget\packages</NuGetPackagesPath>
+
+            <!-- Fallback to relative path (last resort) -->
+            <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == ''">$(HOME)/.nuget/packages</NuGetPackagesPath>
+
+            <CompilerAppPath>$(NuGetPackagesPath)/stride.core.assets.compilerapp/$(StrideVersion)/lib/net8.0</CompilerAppPath>
+        </PropertyGroup>
+
+        <!-- Debug: Show resolved paths -->
+        <Message Text="=== CopyLinuxNativeLibraries Debug Info ===" Importance="high" />
+        <Message Text="OS: $(OS)" Importance="high" />
+        <Message Text="RuntimeIdentifier: $(RuntimeIdentifier)" Importance="high" />
+        <Message Text="NUGET_PACKAGES env: '$(NUGET_PACKAGES)'" Importance="high" />
+        <Message Text="HOME env: '$(HOME)'" Importance="high" />
+        <Message Text="UserProfile env: '$(UserProfile)'" Importance="high" />
+        <Message Text="Resolved NuGet Packages Path: '$(NuGetPackagesPath)'" Importance="high" />
+        <Message Text="Stride Version: $(StrideVersion)" Importance="high" />
+        <Message Text="Compiler App Path: '$(CompilerAppPath)'" Importance="high" />
+
+        <ItemGroup>
+            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.physics/$(StrideVersion)/runtimes/linux-x64/native/libbulletc.so" />
+            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.assets/$(StrideVersion)/runtimes/linux-x64/native/VHACD.so" />
+            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.textureconverter/$(StrideVersion)/runtimes/linux-x64/native/DxtWrapper.so" />
+            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.textureconverter/$(StrideVersion)/runtimes/linux-x64/native/PVRTexLib.so" />
+        </ItemGroup>
+
+        <!-- Debug: Show each file to be copied and whether it exists -->
+        <Message Text="Files to copy:" Importance="high" />
+        <Message Text="  - '%(NativeLibrariesToCopy.Identity)' [Exists: %(NativeLibrariesToCopy.Exists)]" Importance="high" />
+
+        <!-- Check if destination exists -->
+        <PropertyGroup>
+            <CompilerAppPathExists Condition="Exists('$(CompilerAppPath)')">true</CompilerAppPathExists>
+            <CompilerAppPathExists Condition="!Exists('$(CompilerAppPath)')">false</CompilerAppPathExists>
+        </PropertyGroup>
+
+        <Message Text="Compiler App Path Exists: $(CompilerAppPathExists)" Importance="high" />
+
+        <!-- Warning if destination doesn't exist -->
+        <Warning Text="Destination folder does not exist: '$(CompilerAppPath)'" Condition="!Exists('$(CompilerAppPath)')" />
+
+        <Copy SourceFiles="@(NativeLibrariesToCopy)"
+              DestinationFolder="$(CompilerAppPath)"
+              SkipUnchangedFiles="true"
+              Condition="Exists('$(CompilerAppPath)')">
+            <Output TaskParameter="CopiedFiles" ItemName="SuccessfullyCopiedFiles" />
+        </Copy>
+
+        <!-- Debug: Show what was actually copied -->
+        <Message Text="Successfully copied files:" Importance="high" Condition="'@(SuccessfullyCopiedFiles)' != ''" />
+        <Message Text="  - '%(SuccessfullyCopiedFiles.Filename)%(SuccessfullyCopiedFiles.Extension)'" Importance="high" />
+        <Message Text="No files were copied (already up-to-date or destination missing)" Importance="high" Condition="'@(SuccessfullyCopiedFiles)' == ''" />
+        <Message Text="=======================================" Importance="high" />
+    </Target>
+
+</Project>
