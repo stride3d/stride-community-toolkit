@@ -70,5 +70,8 @@ Thanks to everyone pushing this forward:
 - [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
 - [Johan Gustafsson](https://github.com/johang88): Extensions
+- [juho](https://github.com/juhe1): Example Scripts
+- [Jurgen Coenegrachts](https://github.com/w200338): Fixes
+- [Luca Domenichini](https://github.com/luca-domenichini): Fixes
 - [Martin Blackman](https://github.com/mpblackman): Examples
 - [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs

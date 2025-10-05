@@ -4,15 +4,13 @@ using System.Xml.Linq;
 
 namespace Stride.CommunityToolkit.Examples.Core;
 
-public partial class ExampleProvider
+public class ExampleProvider
 {
     private int _index;
     private readonly string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
     // Configuration (adjust as desired)
     private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only";
-    private const string ExampleTitleElement = "ExampleTitle";
-    private const string ExampleOrderElement = "ExampleOrder";
 
     private static readonly string[] _projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
     private static readonly Regex _commentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -42,7 +40,7 @@ public partial class ExampleProvider
 
         var ordered = exampleProjects
             .OrderBy(m => m.Category)
-            .OrderBy(m => m.Order.HasValue ? 0 : 1)
+            .ThenBy(m => m.Order.HasValue ? 0 : 1)
             .ThenBy(m => m.Order)
             .ThenBy(m => m.Title, StringComparer.OrdinalIgnoreCase)
             .ToList();
@@ -50,19 +48,23 @@ public partial class ExampleProvider
         var list = new List<Example>(ordered.Count + 1);
 
         foreach (var meta in ordered)
-            list.Add(new Example(GetIndex(), meta.Title, () => LaunchWithDotNet(meta.ProjectFile)));
+            list.Add(new Example(GetIndex(), meta.Title, meta.Id, () => LaunchWithDotNet(meta.ProjectFile), meta.Category));
 
-        list.Add(new Example("Q", "Quit", () => Environment.Exit(0)));
+        list.Add(new Example("Q", Constants.Quit, null, () => Environment.Exit(0), null));
+        list.Add(new Example("C", Constants.Clear, null, Console.Clear, null));
 
         return list;
     }
 
     private IEnumerable<ExampleProjectMeta> DiscoverExamples()
     {
-        var root = Path.GetFullPath(Path.Combine(_baseDirectory, ExamplesRootRelative));
+        var root = FindExamplesRoot(_baseDirectory)
+                   ?? Path.GetFullPath(Path.Combine(_baseDirectory, ExamplesRootRelative));
+
         if (!Directory.Exists(root)) yield break;
 
         foreach (var pattern in _projectPatterns)
+        {
             foreach (var project in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
             {
                 ExampleProjectMeta? meta = null;
@@ -70,28 +72,34 @@ public partial class ExampleProvider
                 try { meta = CreateMetaFromProject(project); }
                 catch { /* ignore */ }
 
-                if (meta is not null)
-                    yield return meta;
+                if (meta is null) continue;
+
+                yield return meta;
             }
+        }
+    }
+
+    private static string? FindExamplesRoot(string baseDir)
+    {
+        // Try to locate the examples/code-only folder by walking up
+        var dir = baseDir;
+        for (int i = 0; i < 8 && !string.IsNullOrEmpty(dir); i++)
+        {
+            var candidate = Path.Combine(dir, "examples", "code-only");
+            if (Directory.Exists(candidate))
+                return candidate;
+
+            dir = Path.GetDirectoryName(dir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+        }
+
+        return null;
     }
 
     private ExampleProjectMeta? CreateMetaFromProject(string projectFile)
     {
-        var doc = XDocument.Load(projectFile, LoadOptions.None);
-        var root = doc.Root ?? throw new InvalidOperationException("Invalid project XML.");
-        var ns = root.Name.Namespace;
+        var (explicitTitle, assemblyName, category, order, enabled) = ProjectFileHelper.ReadExampleMetadata(projectFile);
 
-        var explicitTitle = GetProp(ExampleTitleElement) ?? GetProp("Title");
-        var assemblyName = GetProp("AssemblyName");
-        var category = GetProp("ExampleCategory");
-        var orderRaw = GetProp(ExampleOrderElement);
-        var enabledRaw = GetProp("ExampleEnabled");
-
-        bool? enabled = bool.TryParse(enabledRaw, out var e) && e;
-
-        if (enabled == false && enabledRaw != null) return null;
-
-        int? order = int.TryParse(orderRaw, out var o) ? o : null;
+        if (enabled == false) return null;
 
         string title = explicitTitle
                        ?? GetProgramCommentTitle(projectFile)
@@ -101,12 +109,6 @@ public partial class ExampleProvider
         var id = assemblyName ?? Path.GetFileNameWithoutExtension(projectFile);
 
         return new ExampleProjectMeta(id, title, projectFile, order, category);
-
-        string? GetProp(string name) =>
-            root.Elements(ns + "PropertyGroup")
-                .Elements()
-                .FirstOrDefault(e => e.Name.LocalName.Equals(name, StringComparison.OrdinalIgnoreCase))
-                ?.Value?.Trim();
     }
 
     private static string? GetProgramCommentTitle(string projectFile)
@@ -148,6 +150,12 @@ public partial class ExampleProvider
 
         if (process == null) return;
 
+        process.EnableRaisingEvents = true;
+        process.Exited += (_, __) =>
+        {
+            try { process.Dispose(); } catch { /* ignore */ }
+        };
+
         _ = Task.Run(async () => await StreamProcessOutput(process));
     }
 
@@ -185,7 +193,7 @@ public partial class ExampleProvider
                 {
                     if (CollapseConsecutiveBlankLines && _lastPrintedWasBlank)
                         // skip additional blank line
-                        return;
+                        continue;
 
                     Console.WriteLine();
                     _lastPrintedWasBlank = true;
