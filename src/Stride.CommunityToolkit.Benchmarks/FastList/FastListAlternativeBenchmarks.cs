@@ -16,6 +16,7 @@ namespace Stride.CommunityToolkit.Benchmarks.FastList;
 /// NOTE: Only struct element types are used (Vector3, Quaternion, Color) so clearing on shrink is skipped like fastClear=true.
 /// Every benchmark re-initializes its data to isolate container + access cost.
 /// </summary>
+#pragma warning disable CS0618 // Type or member is obsolete
 [MemoryDiagnoser]
 public class FastListAlternativeBenchmarks
 {
@@ -392,3 +393,4 @@ public class FastListAlternativeBenchmarks
         return checksum;
     }
 }
+#pragma warning restore CS0618 // Type or member is obsolete

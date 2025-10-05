@@ -8,6 +8,9 @@ using Guid = System.Guid;
 
 namespace Stride.CommunityToolkit.ImGui;
 
+/// <summary>
+/// A window that shows the hierarchy of scenes and entities in the current scene.
+/// </summary>
 public class HierarchyView : BaseWindow
 {
     /// <summary>
@@ -22,6 +25,7 @@ public class HierarchyView : BaseWindow
 
     public HierarchyView(IServiceRegistry service) : base(service) { }
 
+    ///<inheritdoc />
     protected override void OnDraw(bool collapsed)
     {
         if (collapsed)
@@ -74,6 +78,7 @@ public class HierarchyView : BaseWindow
             result.Add(source);
     }
 
+    ///<inheritdoc />
     protected override void OnDestroy() { }
 
     void RecursiveDrawing(IIdentifiable source)

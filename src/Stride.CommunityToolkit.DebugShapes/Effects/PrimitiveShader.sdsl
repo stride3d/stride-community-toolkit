@@ -1,4 +1,4 @@
-namespace Stride.DebugRendering
+namespace Stride.CommunityToolkit.DebugShapes
 {
     shader PrimitiveShader : ShaderBase, ColorBase
     {
