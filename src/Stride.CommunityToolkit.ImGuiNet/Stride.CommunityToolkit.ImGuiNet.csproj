@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Title>Stride Community Toolkit - ImGui.NET</Title>
+        <Description>
+            A specialized extension of the Stride Community Toolkit, providing ImGui.NET integration for text rendering similar to Box2D.NET's approach. This provides an alternative to the existing Hexa.NET.ImGui implementation.
+        </Description>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+        <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.1.2442" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Effects\ImGuiNetShader.sdsl.cs">
+        <DesignTime>True</DesignTime>
+        <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        <AutoGen>True</AutoGen>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Effects\ImGuiNetShader.sdsl">
+        <LastGenOutput>ImGuiNetShader.sdsl.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+</Project>
