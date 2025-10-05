@@ -1,25 +1,28 @@
-﻿shader ImGuiShader : ShaderBase {
+namespace Stride.CommunityToolkit.ImGui
+{
+    shader ImGuiShader : ShaderBase {
 
-    matrix proj;
-    stage Texture2D tex;
+        matrix proj;
+        stage Texture2D tex;
 
-    SamplerState TexSampler {
-        Filter = ANISOTROPIC;
-        AddressU = Wrap;
-        AddressV = Wrap;
-        MaxAnisotropy = 16;
+        SamplerState TexSampler {
+            Filter = ANISOTROPIC;
+            AddressU = Wrap;
+            AddressV = Wrap;
+            MaxAnisotropy = 16;
+        };
+
+        stream float2 pos : POSITION;
+        stream float2 uv : TEXCOORD0;
+        stream float4 col : COLOR;
+
+        override stage void VSMain() {
+            streams.ShadingPosition = mul(proj, float4(streams.pos, 0.0, 1.0f)) + float4(-1.0f, 1.0f, 0.0f, 0.0f);
+        }
+
+        override stage void PSMain() {
+            streams.ColorTarget = streams.col * tex.Sample(TexSampler, streams.uv);
+        }
+
     };
-
-    stream float2 pos : POSITION;
-    stream float2 uv : TEXCOORD0;
-    stream float4 col : COLOR;
-
-    override stage void VSMain() {
-        streams.ShadingPosition = mul(proj, float4(streams.pos, 0.0, 1.0f)) + float4(-1.0f, 1.0f, 0.0f, 0.0f);
-    }
-
-    override stage void PSMain() {
-        streams.ColorTarget = streams.col * tex.Sample(TexSampler, streams.uv);
-    }
-
-};
+}

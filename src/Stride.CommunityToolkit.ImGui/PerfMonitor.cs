@@ -12,6 +12,9 @@ using TimeSpan = System.TimeSpan;
 
 namespace Stride.CommunityToolkit.ImGui;
 
+/// <summary>
+/// Performance monitor window for Stride Engine
+/// </summary>
 public class PerfMonitor : BaseWindow
 {
     public float GraphHeight = 48;
@@ -29,10 +32,8 @@ public class PerfMonitor : BaseWindow
     /// <summary> Owner of <see cref="_threadStaticCollection"/> </summary>
     static PerfMonitor _threadStaticMonitor;
 
-
     static readonly ProfilingEventType[] PROFILING_EVENT_TYPES = (ProfilingEventType[])System.Enum.GetValues(typeof(ProfilingEventType));
     static readonly ProfilingKey _dummyKey = new("dummy");
-
 
     // Work agnostic data
     readonly Dictionary<Thread, ThreadSampleCollection> _cpuSamples = [];
@@ -65,8 +66,6 @@ public class PerfMonitor : BaseWindow
         [CallerMemberName] string member = null,
         [CallerFilePath] string filePath = null) => Sample($"{filePath} . {member}:{S(line)}", sample);
 
-
-
     /// <summary> Place within a using statement to monitor the code within it </summary>
     public PerfSampler Sample(string id, bool sample = true)
     {
@@ -74,18 +73,17 @@ public class PerfMonitor : BaseWindow
     }
 
 
-
     protected override ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.NoMove |
                                                        ImGuiWindowFlags.NoSavedSettings |
                                                        ImGuiWindowFlags.NoFocusOnAppearing;
 
     protected override Vector2? WindowPos => new Vector2(1f, 1f);
+
     protected override Vector2? WindowSize => _windowSize;
 
     Vector2 GetGraphSize() => new(MaxWidth(), GraphHeight * Scale);
+
     static float MaxWidth() => GetContentRegionAvail().X;
-
-
 
     public void SetGraphSize(int newSize, bool force = false)
     {
@@ -119,8 +117,6 @@ public class PerfMonitor : BaseWindow
             _graphAggregated += _graph[i];
     }
 
-
-
     public PerfMonitor(Stride.Core.IServiceRegistry services) : base(services)
     {
         Visible = true;
@@ -129,8 +125,6 @@ public class PerfMonitor : BaseWindow
         UpdateOrder = int.MaxValue;
         _autoSampler = new PerfMonitorAutoSampler(this);
     }
-
-
 
     protected override void OnDestroy()
     {
@@ -168,8 +162,6 @@ public class PerfMonitor : BaseWindow
         _draw.Dispose();
         EndFrame();
     }
-
-
 
     void ImGuiPass(bool collapsed)
     {
@@ -360,9 +352,7 @@ public class PerfMonitor : BaseWindow
         }
     }
 
-
-
-    static void DrawSample(Vector2 corner, float maxWidth, SampleInstance sample, TimeSpan start, double duration)
+    private static void DrawSample(Vector2 corner, float maxWidth, SampleInstance sample, TimeSpan start, double duration)
     {
         const float MIN_SIZE = 2f;
         float height = GetTextLineHeightWithSpacing();
@@ -393,7 +383,6 @@ public class PerfMonitor : BaseWindow
             }
         }
     }
-
 
     void EndFrame()
     {
@@ -491,37 +480,27 @@ public class PerfMonitor : BaseWindow
         }
     }
 
-
-
-    static string S(float val, string format = null)
+    private static string S(float val, string format = null)
     {
         return val.ToString(format ?? "F2", System.Globalization.CultureInfo.CurrentCulture);
     }
 
-
-
-    static string S(double val, string format = null)
+    private static string S(double val, string format = null)
     {
         return val.ToString(format ?? "F2", System.Globalization.CultureInfo.CurrentCulture);
     }
 
-
-
-    static string Ts<T>(T val)
+    private static string Ts<T>(T val)
     {
         return val.ToString();
     }
 
-
-
-    static bool IsStrideProfilingAll()
+    private static bool IsStrideProfilingAll()
     {
         Profiler.Disable(_dummyKey);
         // With the given disabled key this function will return true if EnableAll is set
         return Profiler.IsEnabled(_dummyKey);
     }
-
-
 
     /// <summary> Guarantees that this key exist and returns at least a default new() value </summary>
     static TValue Guaranteed<TKey, TValue>(IDictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
@@ -534,8 +513,6 @@ public class PerfMonitor : BaseWindow
 
         return value;
     }
-
-
 
     /// <summary>
     /// Put this within a using statement to log performance of the code within it.
@@ -580,8 +557,6 @@ public class PerfMonitor : BaseWindow
             _valid = true;
         }
 
-
-
         /// <summary> Dispose of it to log it to the PerfMonitor </summary>
         public void Dispose()
         {
@@ -600,8 +575,6 @@ public class PerfMonitor : BaseWindow
             _target.Add(sampleInstance);
         }
     }
-
-
 
     /// <summary>
     /// This struct's operation expects it to only contain instance fields of <see cref="float"/> type.

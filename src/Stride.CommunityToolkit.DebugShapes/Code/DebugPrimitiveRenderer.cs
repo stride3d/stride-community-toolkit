@@ -1,7 +1,6 @@
 using Stride.CommunityToolkit.Collections;
 using Stride.Core;
 using Stride.Core.Mathematics;
-using Stride.DebugRendering;
 using Stride.Graphics;
 using Stride.Rendering;
 using System.Runtime.InteropServices;

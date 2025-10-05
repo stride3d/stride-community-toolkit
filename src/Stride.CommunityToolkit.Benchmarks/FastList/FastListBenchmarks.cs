@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Stride.CommunityToolkit.Benchmarks.FastList;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 [MemoryDiagnoser]
 public class FastListBenchmarks
 {
@@ -155,3 +156,4 @@ public class FastListBenchmarks
         return checksum;
     }
 }
+#pragma warning restore CS0618 // Type or member is obsolete
