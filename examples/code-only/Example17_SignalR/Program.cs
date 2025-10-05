@@ -1,29 +1,22 @@
-using Example17_SignalR.Scripts;
+using Example17_SignalR.Builders;
+using Example17_SignalR.Core;
 using Example17_SignalR.Services;
-using Stride.CommunityToolkit.Bepu;
+using Example17_SignalR.SignalR;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Skyboxes;
-using Stride.Core.Mathematics;
+using Stride.Core.Diagnostics;
 using Stride.Engine;
 
 using var game = new Game();
 
-game.Services.AddService(new ScreenService());
+// Create a Stride logger to surface .NET logs into Stride's console
+var strideLogger = GlobalLogger.GetLogger("SignalR");
+var loggerAdapter = new StrideLoggerAdapter<SignalRHubClient>(strideLogger);
+
+var hubUrl = $"{GameSettings.HubBaseUrl}/{GameSettings.HubUrl}";
+
+game.Services.AddService(new ScreenService(hubUrl, loggerAdapter));
 
 game.Run(start: (Scene rootScene) =>
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    var screenManager = new Entity("ScreenManager")
-    {
-        new ScreenManagerScript()
-    };
-    screenManager.Scene = rootScene;
-
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
-    entity.Transform.Position = new Vector3(0, 8, 0);
-    entity.Scene = rootScene;
+    SceneBuilder.Build(game, rootScene);
 });

@@ -12,7 +12,7 @@ using Stride.Rendering.Materials.ComputeColors;
 /*
   Procedural Cylinder Mesh Generation
 
-  This example demonstrates creating a 3D cylinder mesh programmatically by breaking down
+  This example demonstrates creating a 3D cylinder mesh programmatically with MeshBuilder by breaking down
   the process into clear, distinct steps:
 
   1. Setting up a basic 3D scene with a skybox

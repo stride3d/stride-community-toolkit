@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - Stride UI - Grid - Save and load game state</ExampleTitle>
+        <ExampleTitle>Stride UI - Grid - Save and load game state</ExampleTitle>
         <ExampleOrder>900</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>

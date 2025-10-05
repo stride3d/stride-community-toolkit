@@ -3,9 +3,15 @@ using Stride.Core.Mathematics;
 
 namespace Example17_SignalR.Core;
 
-public static class Colours
+/// <summary>
+/// Central color mapping for <see cref="EntityType"/> categories.
+/// </summary>
+public static class Colors
 {
-    public static readonly Dictionary<EntityType, Color> ColourTypes = new()
+    /// <summary>
+    /// Material/display color per <see cref="EntityType"/>.
+    /// </summary>
+    public static readonly Dictionary<EntityType, Color> Map = new()
     {
         { EntityType.Success, new Color(25, 135, 84)},
         { EntityType.Danger, new Color(220, 53, 69) },

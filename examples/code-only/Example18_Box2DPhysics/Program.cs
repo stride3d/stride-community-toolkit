@@ -1,6 +1,6 @@
 using Example18_Box2DPhysics;
-using Example18_Box2DPhysics.Helpers;
 using Example18_Box2DPhysics.Box2DPhysics;
+using Example18_Box2DPhysics.Helpers;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -9,6 +9,8 @@ using Stride.Games;
 // Example 18: Box2D Physics Integration
 // This example demonstrates how to integrate Box2D.NET with Stride game engine
 // for 2D physics simulations with shapes, collisions, and interactive controls
+
+//WindowsDpiManager.EnablePerMonitorV2();
 
 // Global variables for the demo
 Box2DSimulation? simulation = null;
@@ -26,6 +28,7 @@ void Start(Scene scene)
 
     // Setup 2D scene with camera and controls
     game.SetupBase2D(clearColor: new Color(0.2f));
+    game.Add2DCameraController();
     //game.AddGraphicsCompositor();
     //game.AddGraphicsCompositor2();
     //game.Add2DGraphicsCompositor(clearColor);

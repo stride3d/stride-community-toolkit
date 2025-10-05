@@ -5,7 +5,7 @@
     <div class="card-body">
         <p class="card-text"><strong>Total:</strong> @_totalGenerated</p>
         <p class="card-text">@Description</p>
-        <button @onclick="RequestEntitiesAsync" disabled="@(IsDisabled)" class="btn btn-sm btn-@GetEntityType()">Give me @Title</button>
+        <button @onclick="RequestEntitiesAsync" disabled="@(IsDisabled)" class="btn btn-sm btn-@GetEntityType()">Create @Title robots</button>
     </div>
     <div class="card-footer mb-2">
         <div class="mt-1 mb-3">
@@ -20,7 +20,7 @@
     [Parameter]
     public required bool IsDisabled { get; set; }
     [Parameter]
-    public string? Description { get; set; } = $"This will request {Constants.DefaultEntitiesCount} entities in Stride game.";
+    public string? Description { get; set; } = $"Request {Constants.DefaultEntitiesCount} entities in Stride game.";
     [Parameter]
     public EntityType Type { get; set; } = EntityType.Success;
     [Parameter]

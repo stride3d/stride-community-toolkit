@@ -6,14 +6,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Other - Stride + SignalR - Website two way communication</ExampleTitle>
+        <ExampleTitle>Stride + SignalR - Website two way communication</ExampleTitle>
         <ExampleOrder>20000</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>3 - Other</ExampleCategory>
+        <ExampleCategory>3 - Other Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.9" />
     </ItemGroup>
 
     <ItemGroup>

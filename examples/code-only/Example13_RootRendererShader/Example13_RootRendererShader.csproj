@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Advance Example - Root Renderer Shader</ExampleTitle>
+        <ExampleTitle>Root Renderer Shader</ExampleTitle>
         <ExampleOrder>16000</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>

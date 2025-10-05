@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <ExampleTitle>ImGui.NET Text Rendering</ExampleTitle>
+        <ExampleOrder>13600</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>2 - Advance Example</ExampleCategory>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.ImGuiNet\Stride.CommunityToolkit.ImGuiNet.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="data\droid_sans.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

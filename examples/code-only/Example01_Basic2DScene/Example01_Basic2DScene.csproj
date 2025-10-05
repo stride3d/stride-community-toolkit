@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -6,10 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - Basic 2D Scene [WIP]</ExampleTitle>
-        <ExampleOrder>35000</ExampleOrder>
+        <ExampleTitle>Basic 2D Scene</ExampleTitle>
+        <ExampleOrder>50</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>3 - Other</ExampleCategory>
+        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -17,8 +17,10 @@
     </Target>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bullet\Stride.CommunityToolkit.Bullet.csproj" />
-      <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+        <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>
 
 </Project>

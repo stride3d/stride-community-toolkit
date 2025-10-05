@@ -74,7 +74,7 @@ public class SceneManager
         AddGroundAndWalls();
 
         // Create a single shape with zero gravity for demonstration
-        var shape = _shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle2D);
+        var shape = _shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle);
 
         if (shape != null)
         {
@@ -99,7 +99,7 @@ public class SceneManager
 
         var groundShape = new Shape2DModel()
         {
-            Type = Primitive2DModelType.Rectangle2D,
+            Type = Primitive2DModelType.Rectangle,
             Color = GameConfig.GroundColor,
             Size = new Vector2(WallWidth, WallThickness),
         };
@@ -112,7 +112,7 @@ public class SceneManager
 
         var wallShape = new Shape2DModel()
         {
-            Type = Primitive2DModelType.Rectangle2D,
+            Type = Primitive2DModelType.Rectangle,
             Color = GameConfig.GroundColor,
             Size = new Vector2(WallThickness, WallHeight),
         };
@@ -145,7 +145,7 @@ public class SceneManager
     public void AddInitialShapes()
     {
         // Add some demo shapes with different properties
-        AddShapes(Primitive2DModelType.Rectangle2D, 10, Color.Black);
+        AddShapes(Primitive2DModelType.Rectangle, 10, Color.Black);
         LogAction($"Added {10} initial demo shapes");
     }
 
@@ -162,22 +162,22 @@ public class SceneManager
         // Shape creation commands
         if (input.IsKeyPressed(Keys.M))
         {
-            AddShapes(Primitive2DModelType.Square2D, GameConfig.DefaultSpawnCount);
+            AddShapes(Primitive2DModelType.Square, GameConfig.DefaultSpawnCount);
             LogAction("Added squares");
         }
         else if (input.IsKeyPressed(Keys.R))
         {
-            AddShapes(Primitive2DModelType.Rectangle2D, GameConfig.DefaultSpawnCount);
+            AddShapes(Primitive2DModelType.Rectangle, GameConfig.DefaultSpawnCount);
             LogAction("Added rectangles");
         }
         else if (input.IsKeyPressed(Keys.C))
         {
-            AddShapes(Primitive2DModelType.Circle2D, GameConfig.DefaultSpawnCount);
+            AddShapes(Primitive2DModelType.Circle, GameConfig.DefaultSpawnCount);
             LogAction("Added circles");
         }
         else if (input.IsKeyPressed(Keys.T))
         {
-            AddShapes(Primitive2DModelType.Triangle2D, GameConfig.DefaultSpawnCount);
+            AddShapes(Primitive2DModelType.Triangle, GameConfig.DefaultSpawnCount);
             LogAction("Added triangles");
         }
         else if (input.IsKeyPressed(Keys.V))

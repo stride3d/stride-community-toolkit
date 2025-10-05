@@ -29,7 +29,7 @@ void Start(Scene rootScene)
 
     entity1.Scene = rootScene;
     entity2.Scene = rootScene;
-};
+}
 
 static Entity CreateSphereEntity(Game game)
     => game.Create3DPrimitive(PrimitiveModelType.Sphere);

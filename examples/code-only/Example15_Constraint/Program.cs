@@ -114,7 +114,7 @@ void Update(Scene scene, GameTime time)
     // While the mouse button is held down, update the sphere's position
     if (isDraggingSphere && game.Input.IsMouseButtonDown(MouseButton.Left))
     {
-        if (draggableBody == null) return;
+        if (draggableBody is null) return;
 
         // Get the horizontal (XZ) intersection point using the fixed initialDragY
         var horizontalPos = GetNewPosition(game.Input.MousePosition);

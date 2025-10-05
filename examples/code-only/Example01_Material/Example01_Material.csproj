@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - Material</ExampleTitle>
+        <ExampleTitle>Material</ExampleTitle>
         <ExampleOrder>600</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>

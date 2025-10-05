@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Advance Example - Various Constraints</ExampleTitle>
+        <ExampleTitle>Various Constraints</ExampleTitle>
         <ExampleOrder>10100</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>

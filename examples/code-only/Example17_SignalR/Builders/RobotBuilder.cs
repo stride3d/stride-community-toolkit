@@ -10,12 +10,22 @@ using Stride.Rendering;
 
 namespace Example17_SignalR.Builders;
 
+/// <summary>
+/// Factory for creating robot entities with physics and metadata components.
+/// </summary>
 public class RobotBuilder(IGame game)
 {
     private readonly IGame _game = game;
     private readonly ContactTriggerHandler _triggerScript = new();
 
-    public void CreatePrimitive(int id, EntityType entityType, Scene scene, Material material, AsyncScript removeScript)
+    /// <summary>
+    /// Creates a robot entity using provided attributes and adds it to the given scene.
+    /// </summary>
+    /// <param name="id">A local identifier used for the entity name only.</param>
+    /// <param name="entityType">Logical robot type.</param>
+    /// <param name="scene">Target scene to attach the entity to.</param>
+    /// <param name="material">Material to apply to the model.</param>
+    public void CreateRobot(int id, EntityType entityType, Scene scene, Material material)
     {
         var entity = _game.Create3DPrimitive(PrimitiveModelType.Cube,
             new()
@@ -29,7 +39,6 @@ public class RobotBuilder(IGame game)
         {
             Type = entityType,
         });
-        entity.Add(removeScript);
 
         entity.Transform.Position = VectorHelper.RandomVector3([-5, 5], [5, 10], [-5, 5]);
 
@@ -41,6 +50,5 @@ public class RobotBuilder(IGame game)
         }
 
         entity.Scene = scene;
-
     }
 }

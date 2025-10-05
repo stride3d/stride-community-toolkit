@@ -1,3 +1,4 @@
+using Example02_GiveMeACube;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -16,7 +17,12 @@ void Start(Scene rootScene)
 
     var entity = game.Create3DPrimitive(PrimitiveModelType.Cube);
 
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
-
+    entity.Transform.Position = new Vector3(0f, 0.5f, 0);
     entity.Scene = rootScene;
+
+    var orbitingEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, new() { IncludeCollider = false });
+
+    orbitingEntity.Transform.Position = new Vector3(0, 0.5f, 0);
+    orbitingEntity.Add(new RotationComponentScript());
+    orbitingEntity.Scene = rootScene;
 }

@@ -1,11 +1,22 @@
 using Example17_SignalR_Shared.Core;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Contacts;
+using Stride.Engine;
+using System.Collections.Concurrent;
 
 namespace Example17_SignalR.Core;
 
+/// <summary>
+/// Handles contact events between entities and enqueues them for removal when colliding with a Destroyer.
+/// </summary>
 public class ContactTriggerHandler : IContactEventHandler
 {
+    /// <summary>
+    /// Entities pending removal from the scene; drained by <see cref="Scripts.RemovalQueueProcessorScript"/>.
+    /// </summary>
+    public static readonly ConcurrentQueue<Entity> RemovalQueue = new();
+
+    /// <inheritdoc />
     public bool NoContactResponse => false;
 
     void IContactEventHandler.OnStartedTouching<TManifold>(CollidableComponent eventSource, CollidableComponent other,
@@ -28,20 +39,25 @@ public class ContactTriggerHandler : IContactEventHandler
 
         if (sourceRobot.Type == EntityType.Destroyer || otherRobot.Type == EntityType.Destroyer)
         {
-            MarkForRemoval(sourceRobot);
-            MarkForRemoval(otherRobot);
+            QueueForRemoval(sourceRobot);
+            QueueForRemoval(otherRobot);
         }
-
-        //Console.WriteLine($"Started touching: {eventSource.Entity.Name} - {other.Entity.Name}");
     }
 
-    public static void MarkForRemoval(RobotComponent? robotComponent)
+    /// <summary>
+    /// Schedules the entity that owns the given <paramref name="robotComponent"/> for removal.
+    /// </summary>
+    public static void QueueForRemoval(RobotComponent? robotComponent)
     {
-        if (robotComponent == null) return;
-
-        // ToDo: Not working
-        //robotComponent.Entity.Scene = null;
+        if (robotComponent is null) return;
 
         robotComponent.IsDeleted = true;
+
+        var entity = robotComponent.Entity;
+
+        if (entity != null)
+        {
+            RemovalQueue.Enqueue(entity);
+        }
     }
 }

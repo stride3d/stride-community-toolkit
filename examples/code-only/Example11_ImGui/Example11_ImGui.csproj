@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Advance Example - ImGui UI</ExampleTitle>
+        <ExampleTitle>ImGui UI</ExampleTitle>
         <ExampleOrder>13500</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>

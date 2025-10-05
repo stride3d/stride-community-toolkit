@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - Mesh Line</ExampleTitle>
+        <ExampleTitle>Mesh Line</ExampleTitle>
         <ExampleOrder>500</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>

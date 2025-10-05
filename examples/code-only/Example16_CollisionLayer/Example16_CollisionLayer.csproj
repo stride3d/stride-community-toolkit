@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - CollisionLayer</ExampleTitle>
+        <ExampleTitle>CollisionLayer</ExampleTitle>
         <ExampleOrder>1600</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>

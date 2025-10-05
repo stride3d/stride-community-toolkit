@@ -7,24 +7,21 @@ using Stride.Rendering.Materials.ComputeColors;
 
 namespace Example17_SignalR.Builders;
 
+/// <summary>
+/// Small helper for creating basic PBR materials with optional color/specular parameters.
+/// </summary>
 public class MaterialBuilder(GraphicsDevice graphicsDevice)
 {
     private readonly GraphicsDevice _graphicsDevice = graphicsDevice;
 
+    /// <summary>
+    /// Creates a simple material using the specified parameters.
+    /// </summary>
+    /// <param name="color">Albedo color (default: <see cref="GameDefaults.DefaultMaterialColor"/>).</param>
+    /// <param name="specular">Metalness/specular intensity.</param>
+    /// <param name="microSurface">Glossiness/microsurface value.</param>
     public Material CreateMaterial(Color? color = null, float specular = 1.0f, float microSurface = 0.65f)
     {
-        var materialDescription2 = new MaterialDescriptor
-        {
-            Attributes =
-                {
-                    Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
-                    //DiffuseModel = new MaterialLightmapModelFeature(),
-                    Specular =  new MaterialMetalnessMapFeature(new ComputeFloat(specular)),
-                    SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
-                    MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(microSurface))
-                }
-        };
-
         var materialDescription = new MaterialDescriptor
         {
             Attributes =
