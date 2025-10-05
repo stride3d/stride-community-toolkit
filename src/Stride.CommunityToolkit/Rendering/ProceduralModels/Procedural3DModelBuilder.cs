@@ -27,10 +27,11 @@ public static class Procedural3DModelBuilder
     public static PrimitiveProceduralModelBase Build(PrimitiveModelType type, Vector3? size = null)
         => type switch
         {
-            PrimitiveModelType.Capsule => size is null ? new Stride.Rendering.ProceduralModels.CapsuleProceduralModel() : new() { Radius = size.Value.X, Length = size.Value.Y },
+            PrimitiveModelType.Capsule => size is null ? new CapsuleProceduralModel() : new() { Radius = size.Value.X, Length = size.Value.Y },
             PrimitiveModelType.Cone => size is null ? new ConeProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Y },
             PrimitiveModelType.Cube => size is null ? new CubeProceduralModel() : new() { Size = size.Value },
             PrimitiveModelType.Cylinder => size is null ? new CylinderProceduralModel() : new() { Radius = size.Value.X, Height = size.Value.Z },
+
             PrimitiveModelType.InfinitePlane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
             PrimitiveModelType.Plane => size is null ? new PlaneProceduralModel() : new() { Size = size.Value.XY() },
             PrimitiveModelType.RectangularPrism => size is null ? new CubeProceduralModel() : new() { Size = size.Value },

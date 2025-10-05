@@ -13,7 +13,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     /// </summary>
     public Vector2[] Vertices { get; set; } = [];
 
-    private static readonly Dictionary<string, GeometricMeshData<VertexPositionNormalTexture>> MeshCache = [];
+    private static readonly Dictionary<string, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
 
     /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
@@ -69,10 +69,10 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         var hash = string.Join(",", vertices.Select(v => $"{v.X},{v.Y}"));
         var cacheKey = $"{hash}_{uScale}_{vScale}_{toLeftHanded}";
 
-        if (!MeshCache.TryGetValue(cacheKey, out var mesh))
+        if (!_meshCache.TryGetValue(cacheKey, out var mesh))
         {
             mesh = CreateMesh(vertices, uScale, vScale, toLeftHanded);
-            MeshCache[cacheKey] = mesh;
+            _meshCache[cacheKey] = mesh;
         }
 
         return mesh;

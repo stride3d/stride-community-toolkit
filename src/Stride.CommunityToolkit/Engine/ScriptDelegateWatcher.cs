@@ -4,27 +4,23 @@ namespace Stride.CommunityToolkit.Engine;
 
 internal readonly struct ScriptDelegateWatcher
 {
-    private readonly ScriptComponent script;
+    private readonly ScriptComponent? _script;
 
-    public ScriptDelegateWatcher(Delegate @delegate)
+    public ScriptDelegateWatcher(Delegate? @delegate)
     {
-        if (@delegate == null)
-        {
-            throw new ArgumentNullException(nameof(@delegate));
-        }
+        ArgumentNullException.ThrowIfNull(@delegate);
 
         var invocationList = @delegate.GetInvocationList();
 
         if (invocationList.Length == 1 && invocationList[0].Target is ScriptComponent scriptComponent)
         {
-            script = scriptComponent;
+            _script = scriptComponent;
         }
         else
         {
-            script = null;
+            _script = null;
         }
-
     }
 
-    public bool IsActive => script == null || (script.Entity != null && (script.SceneSystem?.SceneInstance?.Contains(script.Entity) == true));
+    public bool IsActive => _script is null || (_script.Entity != null && (_script.SceneSystem?.SceneInstance?.Contains(_script.Entity) == true));
 }
