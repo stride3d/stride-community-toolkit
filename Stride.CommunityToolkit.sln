@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11018.127 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit", "src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj", "{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}"
 EndProject
@@ -125,6 +125,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example08_DebugShapes_Usage", "examples\code-only\Example08_DebugShapes_Usage\Example08_DebugShapes_Usage.csproj", "{777B81CA-7C38-40DB-AD02-66FB1E5B5738}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Linux", "src\Stride.CommunityToolkit.Linux\Stride.CommunityToolkit.Linux.csproj", "{70E3D5B0-4089-F5F3-BCCD-37BE6EE61ADB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.ImGuiNet", "src\Stride.CommunityToolkit.ImGuiNet\Stride.CommunityToolkit.ImGuiNet.csproj", "{241F49F4-4C32-E270-D23C-3AEA8D5E0C0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -343,6 +347,14 @@ Global
 		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777B81CA-7C38-40DB-AD02-66FB1E5B5738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70E3D5B0-4089-F5F3-BCCD-37BE6EE61ADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E3D5B0-4089-F5F3-BCCD-37BE6EE61ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E3D5B0-4089-F5F3-BCCD-37BE6EE61ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E3D5B0-4089-F5F3-BCCD-37BE6EE61ADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{241F49F4-4C32-E270-D23C-3AEA8D5E0C0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{241F49F4-4C32-E270-D23C-3AEA8D5E0C0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{241F49F4-4C32-E270-D23C-3AEA8D5E0C0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{241F49F4-4C32-E270-D23C-3AEA8D5E0C0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
