@@ -11,6 +11,7 @@ env:
   PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
   PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
   PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
+  PROJECT_PATH_LINUX: src/Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
   NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
@@ -25,10 +26,10 @@ jobs:
 
     steps:
     - name: Checkout Stride Community Toolkit
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: .NET Setup
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
 
@@ -74,6 +75,19 @@ jobs:
 
     - name: Publish - Stride.CommunityToolkit.Windows
       run: dotnet nuget push "${{ env.NUPKG_ROOT }}\windows\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+
+    # Stride.CommunityToolkit.Linux
+    - name: Restore dependencies - Stride.CommunityToolkit.Linux
+      run: dotnet restore ${{ env.PROJECT_PATH_LINUX }}
+
+    - name: Build - Stride.CommunityToolkit.Linux
+      run: dotnet build ${{ env.PROJECT_PATH_LINUX }} --no-restore -c Release
+
+    - name: Pack - Stride.CommunityToolkit.Linux
+      run: dotnet pack ${{ env.PROJECT_PATH_LINUX }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\linux"
+
+    - name: Publish - Stride.CommunityToolkit.Linux
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\linux\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Stride.CommunityToolkit.Skyboxes
     - name: Restore dependencies - Stride.CommunityToolkit.Skyboxes
