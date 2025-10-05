@@ -1,6 +1,6 @@
 namespace Stride.CommunityToolkit.Examples.Core;
 
-public sealed record ExampleProjectMeta(
+public record ExampleProjectMeta(
     string Id,
     string Title,
     string ProjectFile,

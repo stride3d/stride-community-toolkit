@@ -13,14 +13,29 @@ while (true)
 
 void DisplayMenu()
 {
-    Console.SetCursorPosition(0, 0);
+    Console.Clear();
 
     Console.WriteLine("Stride Community Toolkit Examples".Pastel(Color.LightBlue));
     Console.WriteLine();
 
+    var maxIdWidth = examples.Max(e => e.Id.Length);
+
     foreach (var example in examples)
     {
-        Console.WriteLine($"{Navigation($"{(example.Id.PadLeft(2, ' ').Contains(' ') ? " " : "")}[{example.Id}]")} {example.Title}");
+        var idPadded = example.Id.PadLeft(maxIdWidth);
+        var left = Navigation($"[{idPadded}]");
+
+        var categoryLabel = example.Category is { Length: > 0 } category
+            ? $" {RemoveFrontNumberAndDashAfter(category)}".Pastel(example.GetColor())
+            : string.Empty;
+
+        var right = example.ProjectName is { Length: > 0 } pn
+            ? (example.Category is { Length: > 0 } cat2
+                ? $" ({pn})".Pastel(ColorHelper.Lighten(example.GetColor(), 0.18f))
+                : $" ({pn})".Pastel(Color.LightGray))
+            : string.Empty;
+
+        Console.WriteLine($"{left}{categoryLabel} {example.Title}{right}");
     }
 
     Console.WriteLine();
@@ -43,11 +58,24 @@ void HandleUserInput()
     else
     {
         example.Action();
+
+        if (example.Title == Constants.Clear)
+        {
+            DisplayMenu();
+        }
+
+        if (example.Title != Constants.Quit && example.Title != Constants.Clear)
+        {
+            Console.WriteLine("It might take a few moments to start the example...");
+        }
     }
 
-    Console.WriteLine("It might take a few moments to start the example...");
     Console.WriteLine();
-
 }
 
 static string Navigation(string text) => text.Pastel(Color.LightGreen);
+
+static string RemoveFrontNumberAndDashAfter(string s) =>
+    s.IndexOf('-') is int idx && idx > 0
+        ? s[(idx + 1)..].Trim()
+        : s.Trim();
