@@ -9,6 +9,7 @@ env:
     src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
     src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
     src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
+    src/Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj
 on:
   workflow_dispatch:
 
@@ -18,10 +19,10 @@ jobs:
 
     steps:
     - name: Checkout Stride Community Toolkit
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: .NET Setup
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
 
