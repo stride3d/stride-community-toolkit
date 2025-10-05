@@ -1,44 +1,49 @@
 ```
 Stride Community Toolkit Examples
 
-[1] Basic Example - Capsule with rigid body
-[2] Basic Example - Capsule with rigid body - Bullet Physics
-[3] Basic Example - Capsule with rigid body - F#
-[4] Basic Example - Capsule with rigid body - Visual Basic
-[5] Basic Example - Mesh Line
-[6] Basic Example - Material
-[7] Basic Example - Give me a cube
-[8] Basic Example - Stride UI - Canvas - Capsule with rigid body and Window
-[9] Basic Example - Stride UI Grid - Save and load game state
-[10] Basic Example - Procedural Geometry
-[11] Basic Example - Cylinder Mesh
-[12] Basic Example - Partial Torus Mesh
-[13] Basic Example - Partial Torus Mesh in F#
-[14] Basic Example - Particles
-[15] Basic Example - Raycast
-[16] Basic Example - CollisionGroup
-[17] Basic Example - CollisionLayer
-[18] Advance Example - Simple Constraint
-[19] Advance Example - Various Constraints
-[20] Advance Example - Myra UI - Draggable Window, GetService()
-[21] Advance Example - Stride UI - Draggable Window
-[22] Advance Example - Stride UI - Draggable Window - Bullet Physics
-[23] Advance Example - ImGui UI
-[24] Advance Example - Image Processing
-[25] Advance Example - Root Renderer Shader
-[26] Advance Example - Box2D.NET Physics
-[27] Advance Example - Mesh Outline
-[28] Other - Debug Shapes
-[29] Other - Debug Shapes Usage
-[30] Other - Renderer
-[31] Other - Blazor + SignalR - Run this from IIS
-[32] Other - Stride + SignalR - Website two way communication
-[33] Other - 2D Playground [WIP]
-[34] Other - Bepu Playground [WIP]
-[35] Other - Game - Cubicle Calamity [WIP]
-[36] Other - Game - Cubicle Calamity [WIP] - Bullet Physics
-[37] Basic Example - Basic 2D Scene [WIP]
-[Q] Quit
+[ 1] Basic Example Capsule with rigid body (Example01_Basic3DScene)
+[ 2] Basic Example Capsule with rigid body - Bullet Physics (Example01_Basic3DScene_BulletPhysics)
+[ 3] Basic Example Capsule with rigid body - F# (Example01_Basic3DScene_FSharp)
+[ 4] Basic Example Capsule with rigid body - Visual Basic (Example01_Basic3DScene_VBasic)
+[ 5] Basic Example Mesh Line (Example01_Basic3DScene_MeshLine)
+[ 6] Basic Example 3D Primitives (Example01_Basic3DScene_Primitives)
+[ 7] Basic Example SyncScript (Example01_Basic3DScene_SyncScript)
+[ 8] Basic Example Material (Example01_Material)
+[ 9] Basic Example Give me a cube (Example02_GiveMeACube)
+[10] Basic Example Stride UI - Canvas - Capsule with rigid body and Window (Example03_StrideUI_CapsuleAndWindow)
+[11] Basic Example Stride UI - Grid - Save and load game state (Example07_CubeClicker)
+[12] Basic Example Procedural Geometry (Example05_ProceduralGeometry)
+[13] Basic Example Cylinder Mesh (Example05_CylinderMesh)
+[14] Basic Example Partial Torus Mesh (Example05_PartialTorus)
+[15] Basic Example Partial Torus Mesh in F# (Example05_PartialTorus_FSharp)
+[16] Basic Example Particles (Example12_Particles)
+[17] Basic Example Raycast (Example14_Raycast)
+[18] Basic Example CollisionGroup (Example16_CollisionGroup)
+[19] Basic Example CollisionLayer (Example16_CollisionLayer)
+[20] Advance Example Simple Constraint (Example15_Constraint_Simple)
+[21] Advance Example Various Constraints (Example15_Constraint)
+[22] Advance Example Myra UI - Draggable Window, GetService() (Example04_MyraUI)
+[23] Advance Example Stride UI - Draggable Window (Example10_StrideUI_DragAndDrop)
+[24] Advance Example Stride UI - Draggable Window - Bullet Physics (Example10_StrideUI_DragAndDrop_BulletPhysics)
+[25] Advance Example ImGui UI (Example11_ImGui)
+[26] Advance Example Image Processing (Example06_ImageProcessing)
+[27] Advance Example Root Renderer Shader (Example13_RootRendererShader)
+[28] Advance Example Box2D.NET Physics (Example18_Box2DPhysics)
+[29] Advance Example Mesh Outline (Example13_MeshOutline)
+[30] Other Example Debug Render Mesh (Example08_DebugRenderComponent)
+[31] Other Example Debug Shapes (Example08_DebugShapes)
+[32] Other Example Debug Shapes Usage (Example08_DebugShapes_Usage)
+[33] Other Example Collidable Gizmo (Example08_CollidableGizmo)
+[34] Other Example Renderer (Example09_Renderer)
+[35] Other Example Blazor + SignalR - Run this from IIS (Example17_SignalR_Blazor)
+[36] Other Example Stride + SignalR - Website two way communication (Example17_SignalR)
+[37] Other Example 2D Playground [WIP] (Example_2D_Playground)
+[38] Other Example Bepu Playground [WIP] (Example_Bepu_Playground)
+[39] Other Example Game - Cubicle Calamity [WIP] (Example_CubicleCalamity)
+[40] Other Example Game - Cubicle Calamity [WIP] - Bullet Physics (Example_CubicleCalamity_BulletPhysics)
+[41] Other Example Basic 2D Scene [WIP] (Example01_Basic2DScene)
+[ Q] Quit
+[ C] Clear
 
 Enter example id and press ENTER to run it.
 (Debug output may appear; you can ignore it and type another id at any time.)

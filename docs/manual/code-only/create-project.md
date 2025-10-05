@@ -9,27 +9,31 @@ The steps below show how to create a new Stride project using the command line. 
 
 1. Prerequisites: Make sure all prerequisites are installed. See [Getting started](../getting-started.md) for details.
 2. Create a console app. You can follow the official [Microsoft tutorial](https://learn.microsoft.com/en-gb/dotnet/core/tutorials/with-visual-studio-code) or run:
-   ```bash
+   ```
    dotnet new console --framework net8.0 --name YourProjectName
    ```
-3. Add the core toolkit package:
-   ```bash
+3. Navigate to the project folder:
+   ```
+   cd YourProjectName
+   ``` 
+4. Add the core toolkit package:
+   ```
    dotnet add package Stride.CommunityToolkit.Windows --prerelease
    ```
-4. Add the Bepu physics package:
-   ```bash
+5. Add the Bepu physics package:
+   ```
    dotnet add package Stride.CommunityToolkit.Bepu --prerelease
    ```
-5. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
-6. Build (optional): `dotnet run` performs an implicit build, but you can build explicitly:
-   ```bash
+6. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
+7. Build (optional): `dotnet run` performs an implicit build, but you can build explicitly:
+   ```
    dotnet build
    ```
-7. Run the project:
-   ```bash
+8. Run the project:
+   ```
    dotnet run
    ```
-8. Enjoy Stride: If everything is set up correctly, your project should run.
+9. Enjoy Stride: If everything is set up correctly, your project should run.
 
 ## Visual Studio 2022 and JetBrains Rider
 
