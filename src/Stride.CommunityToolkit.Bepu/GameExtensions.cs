@@ -2,7 +2,6 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -20,9 +19,9 @@ public static class GameExtensions
     /// </summary>
     public static void SetupBase2DScene(this Game game)
     {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add2DCamera().Add2DCameraController();
-        game.Add3DGround();
+        game.SetupBase2D();
+        game.Add2DCameraController();
+        game.Add2DGround();
     }
 
     // ToDo: Maybe this could be call SetupDemo3DScene and move to a demo namespace?
@@ -39,39 +38,40 @@ public static class GameExtensions
     /// <param name="game">The Game instance for which the base 3D scene will be set up.</param>
     public static void SetupBase3DScene(this Game game)
     {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add3DCamera().Add3DCameraController();
-        game.AddDirectionalLight();
+        game.SetupBase3D();
+        game.Add3DCameraController();
         game.Add3DGround();
     }
 
     /// <summary>
-    /// Adds a 3D ground entity to the game with a default size of 15x15 units. The ground is created as a plane, and a collider can be optionally added.
+    /// Adds a 2D ground entity to the specified game with optional name, size, and collider settings.
     /// </summary>
-    /// <param name="game">
-    /// The <see cref="Game"/> instance to which the ground entity will be added.
-    /// </param>
-    /// <param name="entityName">
-    /// The name to assign to the new ground entity.
-    /// If <c>null</c>, <see cref="GameDefaults.DefaultGroundName"/> is used.
-    /// </param>
-    /// <param name="size">
-    /// The width and length of the ground plane as a <see cref="Vector2"/>.
-    /// If <c>null</c>, <see cref="GameDefaults.Default3DGroundSize"/> is used.
-    /// </param>
-    /// <param name="includeCollider">
-    /// If <c>true</c>, a <see cref="CompoundCollider"/> is added to the entity for physics interactions; otherwise no collider is created.
-    /// </param>
-    /// <returns>The newly created <see cref="Entity"/> representing the 3D ground plane.</returns>
-    /// <example>
-    /// <code>
-    /// // Add a 20×20 ground plane named "MyGround" with a collider
-    /// var ground = game.Add3DGround("MyGround", new Vector2(20, 20), includeCollider: true);
-    /// </code>
-    /// </example>
+    /// <remarks>The ground entity is created using a cube primitive model and is suitable for 2D gameplay
+    /// scenarios. The default size and name are defined by <see cref="GameDefaults.Default2DGroundSize"/> and <see
+    /// cref="GameDefaults.DefaultGroundName"/>, respectively.</remarks>
+    /// <param name="game">The game instance to which the ground entity will be added.</param>
+    /// <param name="entityName">The name to assign to the ground entity. If null, a default name is used.</param>
+    /// <param name="size">The size of the ground entity in world units. If null, a default size is applied.</param>
+    /// <param name="includeCollider">Specifies whether a collider should be included with the ground entity. Set to <see langword="true"/> to add a
+    /// collider; otherwise, <see langword="false"/>.</param>
+    /// <returns>The newly created ground entity added to the game.</returns>
+    public static Entity Add2DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector2? size = null, bool includeCollider = true)
+        => CreateGround(game, entityName, size ?? GameDefaults.Default2DGroundSize.XY(), includeCollider, PrimitiveModelType.Cube);
+
+    /// <summary>
+    /// Adds a 3D ground entity to the game.
+    /// </summary>
+    /// <param name="game">Game instance.</param>
+    /// <param name="entityName">Optional entity name; defaults to <see cref="GameDefaults.DefaultGroundName"/>.</param>
+    /// <param name="size">Optional ground size; defaults to <see cref="GameDefaults.Default3DGroundSize"/>.</param>
+    /// <param name="includeCollider">If true, attaches a <see cref="CompoundCollider"/>.</param>
+    /// <returns>The created ground <see cref="Entity"/>.</returns>
     public static Entity Add3DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector2? size = null, bool includeCollider = true)
         => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
 
+    /// <summary>
+    /// Creates a 2D primitive entity and attaches a Bepu physics component as defined by <paramref name="options"/>.
+    /// </summary>
     public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Bepu2DPhysicsOptions? options = null)
     {
         options ??= new();
@@ -84,7 +84,7 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Creates a 3D primitive (cube, sphere, plane, etc.) and attaches Bepu physics to it.
+    /// Creates a 3D primitive entity and attaches a Bepu physics component as defined by <paramref name="options"/>.
     /// </summary>
     /// <param name="game">The game instance.</param>
     /// <param name="type">Which primitive shape to create.</param>

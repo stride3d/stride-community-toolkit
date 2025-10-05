@@ -1,6 +1,5 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -16,9 +15,8 @@ public static class GameExtensions
 {
     public static void SetupBase2DScene(this Game game)
     {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add2DCamera().Add2DCameraController();
-        //game.AddDirectionalLight();
+        game.SetupBase2D();
+        game.Add2DCameraController();
         game.Add2DGround();
     }
 
@@ -35,9 +33,8 @@ public static class GameExtensions
     /// <param name="game">The Game instance for which the base 3D scene will be set up.</param>
     public static void SetupBase3DScene(this Game game)
     {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add3DCamera().Add3DCameraController();
-        game.AddDirectionalLight();
+        game.SetupBase3D();
+        game.Add3DCameraController();
         game.Add3DGround();
     }
 
