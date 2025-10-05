@@ -6,10 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Other - Renderer</ExampleTitle>
-        <ExampleOrder>19000</ExampleOrder>
+        <ExampleTitle>Renderer</ExampleTitle>
+        <ExampleOrder>19100</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>3 - Other</ExampleCategory>
+        <ExampleCategory>3 - Other Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

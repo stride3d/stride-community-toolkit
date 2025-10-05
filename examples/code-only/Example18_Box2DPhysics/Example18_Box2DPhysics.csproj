@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Advance Example - Box2D.NET Physics</ExampleTitle>
+        <ExampleTitle>Box2D.NET Physics</ExampleTitle>
         <ExampleOrder>17000</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>

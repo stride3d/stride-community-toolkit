@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Advance Example - Stride UI - Draggable Window - Bullet Physics</ExampleTitle>
+        <ExampleTitle>Stride UI - Draggable Window - Bullet Physics</ExampleTitle>
         <ExampleOrder>10400</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>

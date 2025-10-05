@@ -16,11 +16,11 @@ public class ShapeFactory
     private readonly Scene _scene;
     private readonly List<Shape2DModel> _shapes =
     [
-        new() { Type = Primitive2DModelType.Square2D, Color = Color.Green, Size = GameConfig.BoxSize },
-        new() { Type = Primitive2DModelType.Rectangle2D, Color = Color.Orange, Size = GameConfig.RectangleSize },
-        new() { Type = Primitive2DModelType.Circle2D, Color = Color.Red, Size = GameConfig.BoxSize / 2 },
-        new() { Type = Primitive2DModelType.Circle2D, Color = Color.Gold, Size = GameConfig.BoxSize },
-        new() { Type = Primitive2DModelType.Triangle2D, Color = Color.Purple, Size = GameConfig.BoxSize },
+        new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = GameConfig.BoxSize },
+        new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = GameConfig.RectangleSize },
+        new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = GameConfig.BoxSize / 2 },
+        new() { Type = Primitive2DModelType.Circle, Color = Color.Gold, Size = GameConfig.BoxSize },
+        new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = GameConfig.BoxSize },
         new()
         {
             Type = Primitive2DModelType.Capsule, Color = Color.Blue,
@@ -62,14 +62,14 @@ public class ShapeFactory
         // Define polygon vertices based on shape type
         Vector2[] polygonVertices = shape.Type switch
         {
-            Primitive2DModelType.Square2D or Primitive2DModelType.Rectangle2D => new[]
+            Primitive2DModelType.Square or Primitive2DModelType.Rectangle => new[]
             {
             new Vector2(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f), // Bottom-left
             new Vector2(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),  // Bottom-right
             new Vector2(shape.Size.X * 0.5f, shape.Size.Y * 0.5f),   // Top-right
             new Vector2(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f)   // Top-left
         },
-            Primitive2DModelType.Triangle2D => new[]
+            Primitive2DModelType.Triangle => new[]
             {
             new Vector2(0, shape.Size.Y * 0.5f),              // Top
             new Vector2(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f), // Bottom-left
@@ -98,7 +98,7 @@ public class ShapeFactory
 
     private static float GetRadius(Shape2DModel model) => model.Type switch
     {
-        Primitive2DModelType.Circle2D => model.Size.X,
+        Primitive2DModelType.Circle => model.Size.X,
         Primitive2DModelType.Capsule => model.Size.X / 2,
         _ => 0f
     };

@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - Capsule with rigid body - Bullet Physics</ExampleTitle>
+        <ExampleTitle>Capsule with rigid body - Bullet Physics</ExampleTitle>
         <ExampleOrder>200</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>

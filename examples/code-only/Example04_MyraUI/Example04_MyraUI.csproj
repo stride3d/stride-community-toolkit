@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Advance Example - Myra UI - Draggable Window, GetService()</ExampleTitle>
+        <ExampleTitle>Myra UI - Draggable Window, GetService()</ExampleTitle>
         <ExampleOrder>10200</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>

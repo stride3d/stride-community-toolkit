@@ -8,10 +8,9 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
-using Stride.Physics;
 using Stride.Rendering;
 
-const float Depth = 1;
+const float Depth = 1f;
 const string ShapeName = "BepuCube";
 
 var boxSize = new Vector3(0.2f, 0.2f, Depth);
@@ -23,10 +22,10 @@ int debugY = 30;
 var bgImage = "JumpyJetBackground.jpg";
 
 Model? model = null;
-Simulation? _simulation = null;
+//Simulation? _simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
-BepuConfiguration? _bepuConfig = null;
+//BepuConfiguration? _bepuConfig = null;
 int _simulationIndex = 0;
 float _maxDistance = 100;
 
@@ -55,28 +54,30 @@ game.Run(start: (Action<Scene>?)((Scene rootScene) =>
 
     game.SetupBase3DScene();
     game.AddSkybox();
+    game.AddAllDirectionLighting(intensity: 2f);
     //game.SetupBase2DSceneWithBepu();
 
     game.AddProfiler();
-    game.AddAllDirectionLighting(intensity: 5f, true);
+    //game.AddAllDirectionLighting(intensity: 5f, true);
     //game.ShowColliders();
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
-    _simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+    //_simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
     //simulation.FixedTimeStep = 1f / 90;
 
-    _bepuConfig = game.Services.GetService<BepuConfiguration>();
+    //_bepuConfig = game.Services.GetService<BepuConfiguration>();
     //bepuConfig.BepuSimulations[0].SolverSubStep = 5;
     //bepuConfig.BepuSimulations[0].FixedTimeStep = TimeSpan.FromTicks(TimeSpan.TicksPerSecond / 150);
     //bepuConfig.BepuSimulations[0] = new BepuSimulation() { SolverSubStep = 1 };
 
-    var simulation2DEntity = new Entity("Simulation2D")
-    {
-        new Simulation2DComponent()
-    };
-    simulation2DEntity.Scene = rootScene;
-    simulation2DEntity.AddGizmo(game.GraphicsDevice, showAxisName: true);
+    //var simulation2DEntity = new Entity("Simulation2D")
+    //{
+    //    new Simulation2DComponent()
+    //};
+    //var simulation2DEntity = new Entity("Simulation2D");
+    //simulation2DEntity.Scene = rootScene;
+    //simulation2DEntity.AddGizmo(game.GraphicsDevice, showAxisName: true);
 
 }), update: Update);
 
@@ -190,7 +191,7 @@ void RenderNavigation()
 
 void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
 {
-    if (_bepuConfig == null) return;
+    //if (_bepuConfig == null) return;
 
     if (mouseButton == MouseButton.Left)
     {
@@ -211,56 +212,56 @@ void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
 
         Span<HitInfoStack> buffer = stackalloc HitInfoStack[16];
 
-        var hits = _bepuConfig.BepuSimulations[_simulationIndex].RayCastPenetrating(vectorNear.XYZ(), vectorFar.XYZ() - vectorNear.XYZ(), _maxDistance, buffer);
+        //var hits = _bepuConfig.BepuSimulations[_simulationIndex].RayCastPenetrating(vectorNear.XYZ(), vectorFar.XYZ() - vectorNear.XYZ(), _maxDistance, buffer);
 
-        if (hits.Span.Length > 0)
-        {
-            var space = 0;
+        //if (hits.Span.Length > 0)
+        //{
+        //    var space = 0;
 
-            foreach (var hitInfo in hits)
-            {
-                if (hitInfo.Collidable.Entity.Name == ShapeName)
-                {
-                    game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Collidable.Entity}", new Int2(x: debugX, y: 200 + space));
+        //    foreach (var hitInfo in hits)
+        //    {
+        //        if (hitInfo.Collidable.Entity.Name == ShapeName)
+        //        {
+        //            game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Collidable.Entity}", new Int2(x: debugX, y: 200 + space));
 
-                    space += 20;
+        //            space += 20;
 
-                    var body2D = hitInfo.Collidable.Entity.Get<BodyComponent>();
+        //            var body2D = hitInfo.Collidable.Entity.Get<BodyComponent>();
 
-                    if (body2D == null) continue;
+        //            if (body2D == null) continue;
 
-                    var direction = new Vector3(0, 20, 0);
+        //            var direction = new Vector3(0, 20, 0);
 
-                    body2D.ApplyImpulse(direction * 10, new());
-                    body2D.LinearVelocity = direction * 1;
-                }
-            }
+        //            body2D.ApplyImpulse(direction * 10, new());
+        //            body2D.LinearVelocity = direction * 1;
+        //        }
+        //    }
 
-            //for (int j = 0; j < hits.Span.Length; j++)
-            //{
-            //    var hitInfo = hits.Span[j].HitInfo;
+        //    //for (int j = 0; j < hits.Span.Length; j++)
+        //    //{
+        //    //    var hitInfo = hits.Span[j].HitInfo;
 
-            //    if (hitInfo.Collidable.Entity.Name == ShapeName)
-            //    {
-            //        game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
+        //    //    if (hitInfo.Collidable.Entity.Name == ShapeName)
+        //    //    {
+        //    //        game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
 
-            //        space += 20;
+        //    //        space += 20;
 
-            //        var body2D = hitInfo.Container.Entity.Get<BodyComponent>();
+        //    //        var body2D = hitInfo.Container.Entity.Get<BodyComponent>();
 
-            //        if (body2D == null) continue;
+        //    //        if (body2D == null) continue;
 
-            //        var direction = new Vector3(0, 20, 0);
+        //    //        var direction = new Vector3(0, 20, 0);
 
-            //        body2D.ApplyImpulse(direction * 10, new());
-            //        body2D.LinearVelocity = direction * 1;
-            //    }
-            //}
-        }
-        else
-        {
-            game.DebugTextSystem.Print("No raycast hit", new Int2(x: debugX, y: 200));
-        }
+        //    //        body2D.ApplyImpulse(direction * 10, new());
+        //    //        body2D.LinearVelocity = direction * 1;
+        //    //    }
+        //    //}
+        //}
+        //else
+        //{
+        //    game.DebugTextSystem.Print("No raycast hit", new Int2(x: debugX, y: 200));
+        //}
     }
 }
 
@@ -278,7 +279,8 @@ void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
             new()
             {
                 Size = shapeModel.Size,
-                Material = game.CreateMaterial(shapeModel.Color)
+                Depth = Depth,
+                Material = game.CreateFlatMaterial(shapeModel.Color),
             });
 
         //if (type == null || i == 1)

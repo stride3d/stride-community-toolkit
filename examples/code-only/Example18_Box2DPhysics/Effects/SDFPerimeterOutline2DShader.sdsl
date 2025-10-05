@@ -73,7 +73,7 @@ shader SDFPerimeterOutline2DShader : ShaderBase, Transformation, Texturing, Posi
         float outlineWidth = OutlineThickness / PixelScale;
         float aa = AntiAlias / PixelScale;
 
-        if (ShapeType == 2) // Circle
+        if (ShapeType == 1) // Circle
         {
             float dist = length(pos);
             float edge0 = Radius - outlineWidth - aa;

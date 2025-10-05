@@ -12,8 +12,8 @@ game.Run(start: Start);
 
 void Start(Scene rootScene)
 {
-    AddDebugComponent(rootScene);
     SetupBaseScene();
+    AddDebugComponent(rootScene);
 }
 
 void SetupBaseScene()

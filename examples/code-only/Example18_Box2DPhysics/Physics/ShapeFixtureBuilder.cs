@@ -37,14 +37,14 @@ public static class ShapeFixtureBuilder
 
         switch (shapeModel.Type)
         {
-            case Primitive2DModelType.Square2D:
-            case Primitive2DModelType.Rectangle2D:
+            case Primitive2DModelType.Square:
+            case Primitive2DModelType.Rectangle:
                 CreateBox(shapeModel, bodyId, finalShapeDef);
                 break;
-            case Primitive2DModelType.Circle2D:
+            case Primitive2DModelType.Circle:
                 CreateCircle(shapeModel, bodyId, finalShapeDef);
                 break;
-            case Primitive2DModelType.Triangle2D:
+            case Primitive2DModelType.Triangle:
                 CreateTriangle(shapeModel, bodyId, finalShapeDef);
                 break;
             case Primitive2DModelType.Capsule:

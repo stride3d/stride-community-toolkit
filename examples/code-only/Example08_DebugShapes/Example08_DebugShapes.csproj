@@ -6,10 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Other - Debug Shapes</ExampleTitle>
+        <ExampleTitle>Debug Shapes</ExampleTitle>
         <ExampleOrder>17000</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>3 - Other</ExampleCategory>
+        <ExampleCategory>3 - Other Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

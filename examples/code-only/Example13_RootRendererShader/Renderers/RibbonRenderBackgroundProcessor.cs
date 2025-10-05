@@ -5,20 +5,20 @@ namespace Example13_RootRendererShader.Renderers;
 
 public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundComponent, RibbonRenderBackground>, IEntityComponentRenderProcessor
 {
-    public VisibilityGroup VisibilityGroup { get; set; }
+    public VisibilityGroup? VisibilityGroup { get; set; }
 
     /// <summary>
     /// Gets the active background.
     /// </summary>
     /// <value>The active background.</value>
-    public RibbonRenderBackground ActiveBackground { get; private set; }
+    public RibbonRenderBackground? ActiveBackground { get; private set; }
 
     /// <inheritdoc />
     protected override void OnSystemRemove()
     {
         if (ActiveBackground != null)
         {
-            VisibilityGroup.RenderObjects.Remove(ActiveBackground);
+            VisibilityGroup?.RenderObjects.Remove(ActiveBackground);
             ActiveBackground = null;
         }
 
@@ -68,9 +68,9 @@ public class RibbonBackgroundRenderProcessor : EntityProcessor<RibbonBackgroundC
         if (ActiveBackground != previousBackground)
         {
             if (previousBackground != null)
-                VisibilityGroup.RenderObjects.Remove(previousBackground);
+                VisibilityGroup?.RenderObjects.Remove(previousBackground);
             if (ActiveBackground != null)
-                VisibilityGroup.RenderObjects.Add(ActiveBackground);
+                VisibilityGroup?.RenderObjects.Add(ActiveBackground);
         }
     }
 }

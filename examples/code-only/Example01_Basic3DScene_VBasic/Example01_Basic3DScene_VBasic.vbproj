@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
-        <ExampleTitle>Basic Example - Capsule with rigid body - Visual Basic</ExampleTitle>
+        <ExampleTitle>Capsule with rigid body - Visual Basic</ExampleTitle>
         <ExampleOrder>400</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>
