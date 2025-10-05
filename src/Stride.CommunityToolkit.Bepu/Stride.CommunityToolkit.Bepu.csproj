@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Bepu Physics</Title>
         <Description>
-            A specialized extension of the Stride Community Toolkit, providing easy-to-use Bepu Physics utilities for Stride projects. Enhance your Stride scenes with realistic physics simulations without needing additional assets or complex setup.
+            A Bepu Physics integration for the Stride Community Toolkit. Provides high-level utilities, helper components, and debug visualizers to simplify adding realistic physics to Stride scenes. Includes convenient Rigidbody/body helpers, physics-to-entity extensions, debug-shape renderers, and runnable example scenes to accelerate development. Compatible with the Stride.BepuPhysics package.
         </Description>
     </PropertyGroup>
 
@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Stride.BepuPhysics" Version="4.2.1.2442" />
+        <PackageReference Include="Stride.BepuPhysics.Debug" Version="4.2.1.2442" />
     </ItemGroup>
 
     <ItemGroup>

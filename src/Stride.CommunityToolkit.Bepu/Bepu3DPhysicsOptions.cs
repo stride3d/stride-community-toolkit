@@ -1,7 +1,6 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Engine;
-using Stride.Engine;
 
 namespace Stride.CommunityToolkit.Bepu;
 
@@ -23,14 +22,14 @@ public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
     /// Replace with a <see cref="StaticComponent"/> for immovable geometry or preconfigure collider children before
     /// passing the options instance to a creation helper.
     /// </remarks>
-    public CollidableComponent Component { get; set; } = new BodyComponent()
+    public CollidableComponent Component { get; set; } = new BodyComponent
     {
         Collider = new CompoundCollider()
     };
 
     /// <summary>
     /// When true (default), a collider shape matching the primitive type is auto-created and added.
-    /// When false, the <see cref="PhysicsComponent"/> is attached without shapes; you can add shapes later.
+    /// When false, the <see cref="CollidableComponent"/> is attached without shapes; you can add shapes later.
     /// </summary>
     public bool IncludeCollider { get; set; } = true;
 }
