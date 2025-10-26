@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.8" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.8" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.8" />
+    </ItemGroup>
+
+    <!-- Link discovery code from Examples project -->
+    <ItemGroup>
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\Constants.cs" Link="Core\Constants.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleProjectMeta.cs" Link="Core\ExampleProjectMeta.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleProvider.cs" Link="Core\ExampleProvider.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\Example.cs" Link="Core\Example.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ColorHelper.cs" Link="Core\ColorHelper.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ProjectFileHelper.cs" Link="Core\ProjectFileHelper.cs" />
+    </ItemGroup>
+
+</Project>

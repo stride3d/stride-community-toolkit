@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Stride.CommunityToolkit.Examples.Launcher.MainWindow"
+        Width="1200" Height="700"
+        Title="Stride Community Toolkit - Examples Launcher">
+    <Grid ColumnDefinitions="2*,3*" RowDefinitions="Auto,*">
+  <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" Margin="8">
+    <TextBox x:Name="SearchBox" Width="320" Watermark="Search examples..." />
+         <Button x:Name="BtnRun" Content="▶ Run" Margin="8,0,0,0" Background="#28a745" Foreground="White" Padding="12,6" />
+          <Button x:Name="BtnStop" Content="⏹ Stop" Margin="8,0,0,0" Background="#dc3545" Foreground="White" Padding="12,6" />
+<Button x:Name="BtnOpenFolder" Content="📁 Open Folder" Margin="8,0,0,0" Padding="12,6" />
+      <Button x:Name="BtnCopyCmd" Content="📋 Copy Command" Margin="8,0,0,0" Padding="12,6" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Margin="8" BorderBrush="#DDD" BorderThickness="1" CornerRadius="4">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <ListBox x:Name="ExamplesList" SelectionMode="Single" />
+  </ScrollViewer>
+        </Border>
+
+     <Grid Grid.Column="1" Grid.Row="1" Margin="8" RowDefinitions="Auto,*,Auto">
+   <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+ <TextBlock Text="Output Log" FontWeight="Bold" VerticalAlignment="Center" />
+     <Button x:Name="BtnClearLog" Content="Clear" Margin="8,0,0,0" Padding="8,4" />
+            </StackPanel>
+      
+            <Border Grid.Row="1" BorderBrush="#DDD" BorderThickness="1" CornerRadius="4" Padding="6">
+<ScrollViewer VerticalScrollBarVisibility="Auto">
+  <TextBlock x:Name="LogPanel" FontFamily="Consolas,monospace" TextWrapping="Wrap" FontSize="12" />
+      </ScrollViewer>
+</Border>
+         
+      <TextBlock Grid.Row="2" Margin="0,6,0,0" Opacity="0.7" FontSize="11" TextWrapping="Wrap"
+     Text="💡 Tip: Shader/effect warnings are filtered by default. Set SHOW_WARNINGS=1 to see all warnings."/>
+        </Grid>
+    </Grid>
+</Window>
