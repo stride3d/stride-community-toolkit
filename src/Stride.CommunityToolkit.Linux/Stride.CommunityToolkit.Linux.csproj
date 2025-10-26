@@ -2,9 +2,10 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Linux</Title>
-        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package, specifying `RuntimeIdentifier` as linux-x64, and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.</Description>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <StrideGraphicsApi>OpenGL</StrideGraphicsApi>
+        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.</Description>
+        <!-- This should be added in the consuming applications -->
+        <!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <StrideGraphicsApi>OpenGL</StrideGraphicsApi>-->
         <StrideVersion>4.2.1.2442</StrideVersion>
     </PropertyGroup>
 
