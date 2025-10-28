@@ -2,17 +2,18 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Linux</Title>
-        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package, specifying `RuntimeIdentifier` as linux-x64, and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.</Description>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <StrideGraphicsApi>OpenGL</StrideGraphicsApi>
-        <StrideVersion>4.2.1.2442</StrideVersion>
+        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.</Description>
+        <!-- This should be added in the consuming applications -->
+        <!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <StrideGraphicsApi>OpenGL</StrideGraphicsApi>-->
+        <StrideVersion>4.2.1.2485</StrideVersion>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
         <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.Core.Assets.CompilerApp. -->
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.1.2485" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>
@@ -69,10 +70,7 @@
         <!-- Warning if destination doesn't exist -->
         <Warning Text="Destination folder does not exist: '$(CompilerAppPath)'" Condition="!Exists('$(CompilerAppPath)')" />
 
-        <Copy SourceFiles="@(NativeLibrariesToCopy)"
-              DestinationFolder="$(CompilerAppPath)"
-              SkipUnchangedFiles="true"
-              Condition="Exists('$(CompilerAppPath)')">
+        <Copy SourceFiles="@(NativeLibrariesToCopy)" DestinationFolder="$(CompilerAppPath)" SkipUnchangedFiles="true" Condition="Exists('$(CompilerAppPath)')">
             <Output TaskParameter="CopiedFiles" ItemName="SuccessfullyCopiedFiles" />
         </Copy>
 

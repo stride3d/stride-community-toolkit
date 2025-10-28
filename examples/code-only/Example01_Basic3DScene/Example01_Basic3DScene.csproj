@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.BepuPhysics.Debug" Version="4.2.1.2442" />
+        <PackageReference Include="Stride.BepuPhysics.Debug" Version="4.2.1.2485" />
     </ItemGroup>
 
     <ItemGroup>
