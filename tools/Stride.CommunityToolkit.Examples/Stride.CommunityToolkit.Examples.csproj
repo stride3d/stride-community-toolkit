@@ -12,8 +12,4 @@
         <PackageReference Include="Pastel" Version="7.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
-    </ItemGroup>
-
 </Project>

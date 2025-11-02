@@ -1,10 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.11116.177
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit", "src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj", "{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Examples", "src\Stride.CommunityToolkit.Examples\Stride.CommunityToolkit.Examples.csproj", "{1706D82A-02A0-4093-9499-31BFA42FA727}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Docs", "docs\Stride.CommunityToolkit.Docs.csproj", "{A2BA8869-D347-4010-B446-08966F514AEF}"
 EndProject
@@ -144,11 +142,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic3DScene_DPI_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Linux", "src\Stride.CommunityToolkit.Linux\Stride.CommunityToolkit.Linux.csproj", "{AB244060-9A1F-40B1-9043-02FBED6E94E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.Launcher", "src\Stride.CommunityToolkit.Examples.Launcher\Stride.CommunityToolkit.Examples.Launcher.csproj", "{AFB1F085-B907-4C81-8DA3-C039ACC41A34}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Benchmarks", "benchmarks\Stride.CommunityToolkit.Benchmarks\Stride.CommunityToolkit.Benchmarks.csproj", "{4946D990-30E5-0095-C15C-C476A0D173E6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{84A4C740-796B-49B0-A9B9-79F4F438690F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples", "tools\Stride.CommunityToolkit.Examples\Stride.CommunityToolkit.Examples.csproj", "{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.Launcher", "tools\Stride.CommunityToolkit.Examples.Launcher\Stride.CommunityToolkit.Examples.Launcher.csproj", "{4A6A9240-690F-4B2E-A6CB-99140AF39445}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -160,10 +160,6 @@ Global
 		{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2BA8869-D347-4010-B446-08966F514AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2BA8869-D347-4010-B446-08966F514AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2BA8869-D347-4010-B446-08966F514AEF}.Release|Any CPU.Build.0 = Release|Any CPU
@@ -403,14 +399,18 @@ Global
 		{AB244060-9A1F-40B1-9043-02FBED6E94E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB244060-9A1F-40B1-9043-02FBED6E94E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB244060-9A1F-40B1-9043-02FBED6E94E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4946D990-30E5-0095-C15C-C476A0D173E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4946D990-30E5-0095-C15C-C476A0D173E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4946D990-30E5-0095-C15C-C476A0D173E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4946D990-30E5-0095-C15C-C476A0D173E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
