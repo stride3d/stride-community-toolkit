@@ -20,33 +20,41 @@ game.Run(start: (Scene rootScene) =>
 });
 
 /*
-EXAMPLE_META_START
-Title: Basic3D Scene (Capsule)
-Category: Shapes
-Level: Getting Started
-Complexity:1
-Order:1
-Description: |
- Create a minimal 3D scene using toolkit helpers and place a single capsule primitive.
- Demonstrates entity creation, basic positioning, and attaching the entity to the scene.
-Concepts:
- - Creating a 3D primitive (Capsule)
- - Positioning an entity with Transform.Position
- - Adding entities to a Scene (rootScene)
- - Using helpers: SetupBase3DScene and AddSkybox
-Related:
- - Example02_GiveMeACube
- - Example01_Basic3DScene_Primitives
- - Example01_Material
-Tags:
- -3D
- - Shapes
- - Primitive
- - Capsule
- - Scene Setup
- - Skybox
- - Transform
- - Position
- - Getting Started
-EXAMPLE_META_END
+---example-metadata
+title:
+  en: Basic3D Scene (Capsule)
+  cs: Základní 3D scéna (Kapsle)
+level: Getting Started
+category: Shapes
+complexity: 1
+description:
+  en: |
+    Create a minimal 3D scene using toolkit helpers and place a single capsule primitive.
+    Demonstrates entity creation, basic positioning, and attaching the entity to the scene.
+  cs: |
+    Vytvoření minimální 3D scény pomocí nástrojů sady a umístění jediné kapsle jako primitivního tvaru.
+    Ukazuje vytvoření entity, základní umístění a připojení entity k scéně.
+concepts:
+  - Creating a 3D primitive (Capsule)
+  - Positioning an entity with Transform.Position
+  - Adding entities to a Scene (rootScene)
+  - Using helpers: SetupBase3DScene and AddSkybox
+related:
+  - Example02_GiveMeACube
+  - Example01_Basic3DScene_Primitives
+  - Example01_Material
+tags:
+  - 3D
+  - Shapes
+  - Primitive
+  - Capsule
+  - Scene Setup
+  - Skybox
+  - Transform
+  - Position
+  - Getting Started
+order: 1
+enabled: true
+created: 2023-09-11
+---
 */
