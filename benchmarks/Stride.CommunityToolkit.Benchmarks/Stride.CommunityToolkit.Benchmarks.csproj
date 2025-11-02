@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet" Version="0.15.4" />
+        <PackageReference Include="BenchmarkDotNet" Version="0.15.5" />
         <PackageReference Include="Microsoft.VisualStudio.DiagnosticsHub.BenchmarkDotNetDiagnosers" Version="18.0.36525.3" />
         <PackageReference Include="Stride.Core" Version="4.2.1.2485" />
         <PackageReference Include="Stride.Core.Mathematics" Version="4.2.1.2485" />
