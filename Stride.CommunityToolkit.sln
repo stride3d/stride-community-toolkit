@@ -150,7 +150,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Exa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.Launcher", "tools\Stride.CommunityToolkit.Examples.Launcher\Stride.CommunityToolkit.Examples.Launcher.csproj", "{4A6A9240-690F-4B2E-A6CB-99140AF39445}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.ExamplesMetadataGenerator", "tools\Stride.CommunityToolkit.ExamplesMetadataGenerator\Stride.CommunityToolkit.ExamplesMetadataGenerator.csproj", "{0B595C50-2E1C-BEC2-A6AD-C79D8733BC9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.MetadataGenerator", "tools\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj", "{564A9194-68DE-F796-5D4A-537C18B2E2B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -413,10 +413,10 @@ Global
 		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B595C50-2E1C-BEC2-A6AD-C79D8733BC9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B595C50-2E1C-BEC2-A6AD-C79D8733BC9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B595C50-2E1C-BEC2-A6AD-C79D8733BC9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B595C50-2E1C-BEC2-A6AD-C79D8733BC9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

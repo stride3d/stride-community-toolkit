@@ -1,33 +1,29 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Stride.CommunityToolkit.ExamplesMetadataGenerator;
+namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
 
 /// <summary>
 /// Scans Program.cs files in examples/code-only and extracts YAML metadata into JSON manifest.
 /// </summary>
-public partial class MetadataScanner
+public partial class MetadataScanner(string examplesRoot, string outputPath)
 {
-    private readonly string _examplesRoot;
-    private readonly string _outputPath;
+    private readonly string _examplesRoot = examplesRoot;
+    private readonly string _outputPath = outputPath;
 
     [GeneratedRegex(@"/\*\s*---example-metadata\s*(.*?)\s*---\s*\*/", RegexOptions.Singleline | RegexOptions.Compiled)]
     private static partial Regex YamlBlockRegex();
-
-    public MetadataScanner(string examplesRoot, string outputPath)
-    {
-        _examplesRoot = examplesRoot;
-        _outputPath = outputPath;
-    }
 
     public async Task<int> ScanAndGenerateAsync()
     {
         if (!Directory.Exists(_examplesRoot))
         {
             Console.Error.WriteLine($"Examples directory not found: {_examplesRoot}");
+
             return 1;
         }
 
@@ -42,7 +38,7 @@ public partial class MetadataScanner
 
             try
             {
-                var metadata = ExtractMetadata(programFile);
+                var metadata = await ExtractMetadata(programFile);
                 if (metadata != null)
                 {
                     examples.Add(metadata);
@@ -60,6 +56,7 @@ public partial class MetadataScanner
         if (examples.Count > 0)
         {
             await WriteManifestAsync(examples);
+
             Console.WriteLine($"Manifest written to: {_outputPath}");
         }
         else
@@ -70,22 +67,21 @@ public partial class MetadataScanner
         return 0;
     }
 
-    private ExampleMetadata? ExtractMetadata(string programFile)
+    private async Task<ExampleMetadata?> ExtractMetadata(string programFile)
     {
-        var content = File.ReadAllText(programFile);
+        var content = await File.ReadAllTextAsync(programFile);
         var match = YamlBlockRegex().Match(content);
 
-        if (!match.Success)
-            return null;
+        if (!match.Success) return null;
 
         var yamlContent = match.Groups[1].Value.Trim();
 
         try
         {
             var deserializer = new DeserializerBuilder()
-          .WithNamingConvention(CamelCaseNamingConvention.Instance)
-           .IgnoreUnmatchedProperties()
-            .Build();
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .IgnoreUnmatchedProperties()
+                .Build();
 
             var metadata = deserializer.Deserialize<ExampleMetadata>(yamlContent);
 
@@ -98,15 +94,41 @@ public partial class MetadataScanner
 
             return metadata;
         }
+        catch (YamlException ex)
+        {
+            var errorMessage = new StringBuilder();
+            errorMessage.AppendLine($"Failed to parse YAML metadata in {Path.GetFileName(programFile)}");
+            errorMessage.AppendLine($"Error at Line {ex.End.Line}, Column {ex.End.Column}");
+            errorMessage.AppendLine();
+            errorMessage.AppendLine("YAML Content:");
+            errorMessage.AppendLine("---");
+            errorMessage.AppendLine(yamlContent);
+            errorMessage.AppendLine("---");
+            errorMessage.AppendLine();
+            errorMessage.AppendLine($"Error: {ex.Message}");
+
+            throw new InvalidOperationException(errorMessage.ToString(), ex);
+        }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Failed to parse YAML metadata: {ex.Message}", ex);
+            var errorMessage = new StringBuilder();
+            errorMessage.AppendLine($"Unexpected error while processing {Path.GetFileName(programFile)}");
+            errorMessage.AppendLine();
+            errorMessage.AppendLine("YAML Content:");
+            errorMessage.AppendLine("---");
+            errorMessage.AppendLine(yamlContent);
+            errorMessage.AppendLine("---");
+            errorMessage.AppendLine();
+            errorMessage.AppendLine($"Error: {ex.Message}");
+
+            throw new InvalidOperationException(errorMessage.ToString(), ex);
         }
     }
 
     private async Task WriteManifestAsync(List<ExampleMetadata> examples)
     {
         var outputDir = Path.GetDirectoryName(_outputPath);
+
         if (!string.IsNullOrEmpty(outputDir) && !Directory.Exists(outputDir))
         {
             Directory.CreateDirectory(outputDir);
@@ -120,6 +142,7 @@ public partial class MetadataScanner
         };
 
         var json = JsonSerializer.Serialize(examples, options);
+
         await File.WriteAllTextAsync(_outputPath, json, Encoding.UTF8);
     }
 }

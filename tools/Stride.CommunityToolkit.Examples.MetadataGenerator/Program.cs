@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.ExamplesMetadataGenerator;
+using Stride.CommunityToolkit.Examples.MetadataGenerator;
 
 if (args.Length < 2)
 {

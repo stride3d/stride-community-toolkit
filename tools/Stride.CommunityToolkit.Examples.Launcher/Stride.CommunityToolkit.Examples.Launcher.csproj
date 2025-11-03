@@ -29,12 +29,12 @@
         <PropertyGroup>
             <ExamplesRoot>$(MSBuildProjectDirectory)\..\..\examples\code-only</ExamplesRoot>
             <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
-            <GeneratorProject>$(MSBuildProjectDirectory)\..\Stride.CommunityToolkit.ExamplesMetadataGenerator\Stride.CommunityToolkit.ExamplesMetadataGenerator.csproj</GeneratorProject>
+            <GeneratorProject>$(MSBuildProjectDirectory)\..\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
         </PropertyGroup>
 
         <Message Text="Generating examples metadata manifest..." Importance="high" />
+        <Message Text="Executing: dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- &quot;$(ExamplesRoot)&quot; &quot;$(ManifestOutput)&quot;" Importance="high" />
 
-        <!-- Run the generator using dotnet run (handles restore automatically) -->
         <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- &quot;$(ExamplesRoot)&quot; &quot;$(ManifestOutput)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
 
         <!-- Include generated manifest in output -->

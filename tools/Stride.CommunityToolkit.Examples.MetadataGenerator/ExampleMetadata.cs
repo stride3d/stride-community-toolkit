@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.ExamplesMetadataGenerator;
+namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
 
 /// <summary>
 /// Represents the metadata for a single example extracted from YAML frontmatter.
