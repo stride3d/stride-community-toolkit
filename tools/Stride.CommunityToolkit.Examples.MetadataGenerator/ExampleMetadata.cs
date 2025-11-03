@@ -16,6 +16,7 @@ public class ExampleMetadata
     public int? Order { get; set; }
     public bool? Enabled { get; set; }
     public string? Created { get; set; }
+    public bool IsDraft { get; set; }
 
     // Populated during scanning
     public string? ProjectName { get; set; }
