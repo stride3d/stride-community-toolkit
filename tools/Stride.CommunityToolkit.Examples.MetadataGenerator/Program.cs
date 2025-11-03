@@ -1,5 +1,11 @@
 using Stride.CommunityToolkit.Examples.MetadataGenerator;
 
+// ToDo
+// Add serilog
+// Fix builder generation, move to the top so it is used just once
+// Use DI
+// Use new command line
+
 if (args.Length < 2)
 {
     Console.Error.WriteLine("Usage: ExamplesMetadataGenerator <examples-root-path> <output-json-path>");
