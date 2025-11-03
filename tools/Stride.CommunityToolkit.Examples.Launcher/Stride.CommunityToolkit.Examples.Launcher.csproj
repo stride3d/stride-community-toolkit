@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,5 +23,24 @@
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ColorHelper.cs" Link="Core\ColorHelper.cs" />
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ProjectFileHelper.cs" Link="Core\ProjectFileHelper.cs" />
     </ItemGroup>
+
+    <!-- Generate examples metadata manifest before build -->
+    <Target Name="GenerateExamplesManifest" BeforeTargets="BeforeBuild">
+        <PropertyGroup>
+            <ExamplesRoot>$(MSBuildProjectDirectory)\..\..\examples\code-only</ExamplesRoot>
+            <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
+            <GeneratorProject>$(MSBuildProjectDirectory)\..\Stride.CommunityToolkit.ExamplesMetadataGenerator\Stride.CommunityToolkit.ExamplesMetadataGenerator.csproj</GeneratorProject>
+        </PropertyGroup>
+
+        <Message Text="Generating examples metadata manifest..." Importance="high" />
+
+        <!-- Run the generator using dotnet run (handles restore automatically) -->
+        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- &quot;$(ExamplesRoot)&quot; &quot;$(ManifestOutput)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
+
+        <!-- Include generated manifest in output -->
+        <ItemGroup>
+            <None Include="examples-manifest.json" CopyToOutputDirectory="PreserveNewest" />
+        </ItemGroup>
+    </Target>
 
 </Project>

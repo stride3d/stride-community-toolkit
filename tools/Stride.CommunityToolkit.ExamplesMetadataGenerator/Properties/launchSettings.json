@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Stride.CommunityToolkit.ExamplesMetadataGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\..\\examples\\code-only ..\\examples-manifest.json"
+    }
+  }
+}
