@@ -38,7 +38,7 @@ concepts:
   - Creating a 3D primitive (Capsule)
   - Positioning an entity with Transform.Position
   - Adding entities to a Scene (rootScene)
-  - Using helpers: SetupBase3DScene and AddSkybox
+  - "Using helpers: SetupBase3DScene and AddSkybox"
 related:
   - Example02_GiveMeACube
   - Example01_Basic3DScene_Primitives
