@@ -36,6 +36,7 @@
     "order": 1,
     "enabled": true,
     "created": "2023-09-11",
+    "isDraft": false,
     "projectName": "Example01_Basic3DScene",
     "projectPath": "Example01_Basic3DScene\\Program.cs"
   }
