@@ -27,6 +27,24 @@ public partial class MetadataScanner(string examplesRoot, string outputPath)
             return 1;
         }
 
+        var examples = await ScanExamplesAsync();
+
+        if (examples.Count > 0)
+        {
+            await WriteManifestAsync(examples);
+
+            Console.WriteLine($"Manifest written to: {_outputPath}");
+        }
+        else
+        {
+            Console.WriteLine("No manifest written - no examples with metadata found.");
+        }
+
+        return 0;
+    }
+
+    public async Task<List<ExampleMetadata>> ScanExamplesAsync()
+    {
         var examples = new List<ExampleMetadata>();
         var programFiles = Directory.GetFiles(_examplesRoot, "Program.cs", SearchOption.AllDirectories);
 
@@ -39,6 +57,7 @@ public partial class MetadataScanner(string examplesRoot, string outputPath)
             try
             {
                 var metadata = await ExtractMetadata(programFile);
+
                 if (metadata != null)
                 {
                     examples.Add(metadata);
@@ -53,18 +72,7 @@ public partial class MetadataScanner(string examplesRoot, string outputPath)
 
         Console.WriteLine($"\nFound {examples.Count} examples with metadata.");
 
-        if (examples.Count > 0)
-        {
-            await WriteManifestAsync(examples);
-
-            Console.WriteLine($"Manifest written to: {_outputPath}");
-        }
-        else
-        {
-            Console.WriteLine("No manifest written - no examples with metadata found.");
-        }
-
-        return 0;
+        return examples;
     }
 
     private async Task<ExampleMetadata?> ExtractMetadata(string programFile)
