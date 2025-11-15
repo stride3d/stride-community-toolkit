@@ -1,10 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.11116.177 d18.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit", "src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj", "{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Examples", "src\Stride.CommunityToolkit.Examples\Stride.CommunityToolkit.Examples.csproj", "{1706D82A-02A0-4093-9499-31BFA42FA727}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Docs", "docs\Stride.CommunityToolkit.Docs.csproj", "{A2BA8869-D347-4010-B446-08966F514AEF}"
 EndProject
@@ -55,8 +53,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Skyboxes", "src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj", "{423A1266-4A6D-425F-96CE-945A1802F711}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Windows", "src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj", "{E5E01EDB-524C-4FC2-951B-321E5D08C972}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit.Benchmarks", "src\Stride.CommunityToolkit.Benchmarks\Stride.CommunityToolkit.Benchmarks.csproj", "{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextureMapping_Example01", "examples\snippets\TextureMapping_Example01\TextureMapping_Example01.csproj", "{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}"
 EndProject
@@ -146,7 +142,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic3DScene_DPI_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Linux", "src\Stride.CommunityToolkit.Linux\Stride.CommunityToolkit.Linux.csproj", "{AB244060-9A1F-40B1-9043-02FBED6E94E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.Launcher", "src\Stride.CommunityToolkit.Examples.Launcher\Stride.CommunityToolkit.Examples.Launcher.csproj", "{AFB1F085-B907-4C81-8DA3-C039ACC41A34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Benchmarks", "benchmarks\Stride.CommunityToolkit.Benchmarks\Stride.CommunityToolkit.Benchmarks.csproj", "{4946D990-30E5-0095-C15C-C476A0D173E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{84A4C740-796B-49B0-A9B9-79F4F438690F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples", "tools\Stride.CommunityToolkit.Examples\Stride.CommunityToolkit.Examples.csproj", "{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.Launcher", "tools\Stride.CommunityToolkit.Examples.Launcher\Stride.CommunityToolkit.Examples.Launcher.csproj", "{4A6A9240-690F-4B2E-A6CB-99140AF39445}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride.CommunityToolkit.Examples.MetadataGenerator", "tools\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj", "{564A9194-68DE-F796-5D4A-537C18B2E2B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{BAB4C3F1-1593-496C-AACC-A5C8A9E8F145}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,10 +164,6 @@ Global
 		{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1706D82A-02A0-4093-9499-31BFA42FA727}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2BA8869-D347-4010-B446-08966F514AEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2BA8869-D347-4010-B446-08966F514AEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2BA8869-D347-4010-B446-08966F514AEF}.Release|Any CPU.Build.0 = Release|Any CPU
@@ -233,10 +235,6 @@ Global
 		{E5E01EDB-524C-4FC2-951B-321E5D08C972}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5E01EDB-524C-4FC2-951B-321E5D08C972}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5E01EDB-524C-4FC2-951B-321E5D08C972}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42C6F222-9D1E-4B6E-81F9-E3FE504472D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EC38B10-2FCB-48B1-A583-91FDD7C9A104}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -405,10 +403,22 @@ Global
 		{AB244060-9A1F-40B1-9043-02FBED6E94E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB244060-9A1F-40B1-9043-02FBED6E94E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB244060-9A1F-40B1-9043-02FBED6E94E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFB1F085-B907-4C81-8DA3-C039ACC41A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4946D990-30E5-0095-C15C-C476A0D173E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4946D990-30E5-0095-C15C-C476A0D173E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4946D990-30E5-0095-C15C-C476A0D173E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4946D990-30E5-0095-C15C-C476A0D173E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9033C6F-AA62-61FA-B754-8F0B7766A9F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A6A9240-690F-4B2E-A6CB-99140AF39445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -465,6 +475,8 @@ Global
 		{A19D2482-CB51-44FD-B7F9-16E8A7459460} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{F4BCA562-0FB0-82A5-A982-8BD97716C7B5} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{D35DDEAD-4AE7-4979-BFB4-99A2BCF4A235} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{4946D990-30E5-0095-C15C-C476A0D173E6} = {84A4C740-796B-49B0-A9B9-79F4F438690F}
+		{564A9194-68DE-F796-5D4A-537C18B2E2B0} = {BAB4C3F1-1593-496C-AACC-A5C8A9E8F145}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}

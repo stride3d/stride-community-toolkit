@@ -9,11 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Pastel" Version="7.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+        <PackageReference Include="Pastel" Version="7.0.1" />
     </ItemGroup>
 
 </Project>
