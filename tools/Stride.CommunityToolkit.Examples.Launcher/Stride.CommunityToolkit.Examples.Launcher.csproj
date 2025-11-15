@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -35,7 +35,7 @@
         <Message Text="Generating examples metadata manifest..." Importance="high" />
         <Message Text="Executing: dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- &quot;$(ExamplesRoot)&quot; &quot;$(ManifestOutput)&quot;" Importance="high" />
 
-        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- &quot;$(ExamplesRoot)&quot; &quot;$(ManifestOutput)&quot;" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
+        <!-- Temporarily disabled -->
 
         <!-- Include generated manifest in output -->
         <ItemGroup>
