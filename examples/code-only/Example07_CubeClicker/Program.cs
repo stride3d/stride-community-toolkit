@@ -13,7 +13,7 @@ using Stride.Graphics;
 // it automatically loads the click data and cube positions from the previous session.
 // The player interacts with dynamically generated cubes, with the game tracking left
 // and right mouse clicks.
-// In case of a corrupted Yaml file, navigate to the \bin\Debug\net8.0\data\
+// In case of a corrupted Yaml file, navigate to the \bin\Debug\net10.0\data\
 // directory and delete the file manually.
 
 using var game = new Game();

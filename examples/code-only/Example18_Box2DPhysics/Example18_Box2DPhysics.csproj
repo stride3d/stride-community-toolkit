@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -21,29 +21,6 @@
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
         <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Effects\SDFPerimeterOutline2DShader.sdsl.cs">
-        <DesignTime>True</DesignTime>
-        <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>SDFPerimeterOutline2DShader.sdsl</DependentUpon>
-      </Compile>
-      <Compile Update="Effects\OuterOutline2DShader.sdsl.cs">
-        <DesignTime>True</DesignTime>
-        <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        <AutoGen>True</AutoGen>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Effects\OuterOutline2DShader.sdsl">
-        <LastGenOutput>OuterOutline2DShader.sdsl.cs</LastGenOutput>
-      </None>
-      <None Update="Effects\SDFPerimeterOutline2DShader.sdsl">
-        <LastGenOutput>SDFPerimeterOutline2DShader.sdsl.cs</LastGenOutput>
-      </None>
     </ItemGroup>
 
 </Project>

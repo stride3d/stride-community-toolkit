@@ -10,7 +10,7 @@ The steps below show how to create a new Stride project using the command line. 
 1. Prerequisites: Make sure all prerequisites are installed. See [Getting started](../getting-started.md) for details.
 2. Create a console app. You can follow the official [Microsoft tutorial](https://learn.microsoft.com/en-gb/dotnet/core/tutorials/with-visual-studio-code) or run:
    ```
-   dotnet new console --framework net8.0 --name YourProjectName
+   dotnet new console --framework net10.0 --name YourProjectName
    ```
 3. Navigate to the project folder:
    ```
