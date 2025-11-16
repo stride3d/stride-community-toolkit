@@ -10,7 +10,7 @@ _disableToc: false
 
 ## 👋 Introduction
 
-The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a set of C# helpers and [extensions](manual/animation-extensions/index.md) designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and streamlines routine development tasks 🛠️, making it easier to build applications for Stride using .NET 10.
+The [Stride Community Toolkit](https://github.com/stride3d/stride-community-toolkit) is a set of C# helpers and [extensions](manual/animation-extensions/index.md) designed to enhance your experience with the [Stride Game Engine](https://www.stride3d.net/). It simplifies and streamlines routine development tasks 🛠️, making it easier to build applications for Stride using **.NET 10**.
 
 > [!TIP]
 > Experienced developers can dive straight into the source, these helpers are thin wrappers over Stride APIs, meant to accelerate iteration (not hide the engine).

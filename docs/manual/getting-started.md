@@ -9,7 +9,7 @@ Ensure the following are installed. If you're on Stride **4.3+**, these should a
 1. Microsoft Visual C++ v14 Redistributable (x64)
    - [vc_redist.x64.exe](https://aka.ms/vc14/vc_redist.x64.exe) (~19 MB)
    - You may be asked to restart your PC after installation.
-2. .NET 10 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (~200 MB)
+2. .NET 10 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (~216 MB)
    - Verify installation:
         ```
         dotnet --info
