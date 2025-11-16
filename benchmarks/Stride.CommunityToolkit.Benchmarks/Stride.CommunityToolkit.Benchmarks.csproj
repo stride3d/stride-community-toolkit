@@ -11,8 +11,8 @@
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.15.6" />
         <PackageReference Include="Microsoft.VisualStudio.DiagnosticsHub.BenchmarkDotNetDiagnosers" Version="18.3.36714.1" />
-        <PackageReference Include="Stride.Core" Version="4.3.0.2503" />
-        <PackageReference Include="Stride.Core.Mathematics" Version="4.3.0.2503" />
+        <PackageReference Include="Stride.Core" Version="4.3.0.2507" />
+        <PackageReference Include="Stride.Core.Mathematics" Version="4.3.0.2507" />
     </ItemGroup>
 
 </Project>
