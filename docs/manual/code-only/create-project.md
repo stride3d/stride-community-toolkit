@@ -6,6 +6,8 @@ The steps below show how to create a new Stride project using the command line. 
 
 > [!NOTE]
 > These instructions target Windows. While code-only projects can be built and run on Linux, the [setup is currently more involved](https://github.com/stride3d/stride/issues/2596). We're working to simplify it and will provide official guidance later.
+>
+> If you're still on Stride 4.2, use `--version 1.0.0-preview.61` instead of `--prerelease`, which targets Stride 4.3.
 
 1. Prerequisites: Make sure all prerequisites are installed. See [Getting started](../getting-started.md) for details.
 2. Create a console app. You can follow the official [Microsoft tutorial](https://learn.microsoft.com/en-gb/dotnet/core/tutorials/with-visual-studio-code) or run:
@@ -16,7 +18,7 @@ The steps below show how to create a new Stride project using the command line. 
    ```
    cd YourProjectName
    ``` 
-4. Add the core toolkit package:
+4. Add toolkit package:
    ```
    dotnet add package Stride.CommunityToolkit.Windows --prerelease
    ```
@@ -35,9 +37,9 @@ The steps below show how to create a new Stride project using the command line. 
    ```
 9. Enjoy Stride: If everything is set up correctly, your project should run.
 
-## Visual Studio 2022 and JetBrains Rider
+## Visual Studio 2026 and JetBrains Rider
 
-1. Create a C# Console Application targeting .NET 8.
+1. Create a C# Console Application targeting .NET 10.
 2. Add the `Stride.CommunityToolkit.Windows` NuGet package (pre-release). This pulls in the required Stride packages.
 3. Add the `Stride.CommunityToolkit.Bepu` package (pre-release) to include the Bepu physics integration.
 4. Update Program.cs: Paste the example code below.

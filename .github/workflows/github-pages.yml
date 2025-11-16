@@ -23,7 +23,7 @@ permissions:
 jobs:
   build:
     name: Build documentation
-    runs-on: windows-2025
+    runs-on: windows-latest
     steps:
     #- name: Display .NET Core information
     #  run: dotnet --info
@@ -34,7 +34,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 8.x
+        dotnet-version: 10.x
 
     # - name: Configure Pages
     #   id: pages

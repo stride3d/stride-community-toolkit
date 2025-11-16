@@ -4,19 +4,19 @@ This article walks you through the initial steps to use the packages in the Stri
 
 ## 🛠️ Prerequisites
 
-Ensure the following are installed. If you're on Stride **4.2+**, these should already be present.
+Ensure the following are installed. If you're on Stride **4.3+**, these should already be present.
 
-1. Microsoft Visual C++ 2015–2022 Redistributable
-   - [vcredist_x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (~25 MB)
+1. Microsoft Visual C++ v14 Redistributable (x64)
+   - [vc_redist.x64.exe](https://aka.ms/vc14/vc_redist.x64.exe) (~19 MB)
    - You may be asked to restart your PC after installation.
-2. .NET 8 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (~200 MB)
+2. .NET 10 SDK x64: [Download](https://dotnet.microsoft.com/en-us/download) (~200 MB)
    - Verify installation:
         ```
         dotnet --info
         ```
 3. IDE of your choice
-   - Visual Studio 2022
-      - [Visual Studio 2022 Community](https://visualstudio.microsoft.com/vs/) (Free)
+   - Visual Studio 2026
+      - [Visual Studio 2026 Community](https://visualstudio.microsoft.com/vs/) (Free)
    - [Visual Studio Code](https://code.visualstudio.com/) (Free, ~95 MB)
       - Install the C# Dev Kit extension
       - Restart VS Code to ensure the `dotnet` command works
