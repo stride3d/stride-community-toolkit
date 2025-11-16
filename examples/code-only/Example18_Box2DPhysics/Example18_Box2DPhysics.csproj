@@ -23,4 +23,27 @@
         <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Update="Effects\SDFPerimeterOutline2DShader.sdsl.cs">
+            <DesignTime>True</DesignTime>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>SDFPerimeterOutline2DShader.sdsl</DependentUpon>
+        </Compile>
+        <Compile Update="Effects\OuterOutline2DShader.sdsl.cs">
+            <DesignTime>True</DesignTime>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Effects\OuterOutline2DShader.sdsl">
+            <LastGenOutput>OuterOutline2DShader.sdsl.cs</LastGenOutput>
+        </None>
+        <None Update="Effects\SDFPerimeterOutline2DShader.sdsl">
+            <LastGenOutput>SDFPerimeterOutline2DShader.sdsl.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
 </Project>
