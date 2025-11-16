@@ -6,7 +6,7 @@
         <!-- This should be added in the consuming applications -->
         <!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <StrideGraphicsApi>OpenGL</StrideGraphicsApi>-->
-        <StrideVersion>4.2.1.2485</StrideVersion>
+        <StrideVersion>4.3.0.2507</StrideVersion>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
