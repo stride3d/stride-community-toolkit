@@ -10,7 +10,7 @@ using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
 
-const float Depth = 1f;
+const float Depth = 5f;
 const string ShapeName = "BepuCube";
 
 var boxSize = new Vector3(0.2f, 0.2f, Depth);

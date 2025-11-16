@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit</Title>
-        <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET 8.</Description>
+        <Description>Collection of helpers and extensions for Stride Game Engine developers. Simplifies and demonstrates common developer tasks building experiences for Stride with .NET 8.$(StrideVersionNote)</Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
@@ -18,10 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="4.2.1.2485" />
-        <PackageReference Include="Stride.Particles" Version="4.2.1.2485" />
-        <PackageReference Include="Stride.Physics" Version="4.2.1.2485" />
-        <PackageReference Include="Stride.UI" Version="4.2.1.2485" />
+        <PackageReference Include="Stride.Engine" Version="4.3.0.2507" />
+        <PackageReference Include="Stride.Particles" Version="4.3.0.2507" />
+        <PackageReference Include="Stride.Physics" Version="4.3.0.2507" />
+        <PackageReference Include="Stride.UI" Version="4.3.0.2507" />
     </ItemGroup>
 
     <ItemGroup>

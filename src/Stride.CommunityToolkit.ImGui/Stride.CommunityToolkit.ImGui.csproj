@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Title>Stride Community Toolkit - ImgGui</Title>
         <Description>
-            A specialized extension of the Stride Community Toolkit, providing easy-to-use ImGui utilities for Stride projects. Enhance your Stride scenes with dynamic UI without needing additional assets or complex setup.
+            A specialized extension of the Stride Community Toolkit, providing easy-to-use ImGui utilities for Stride projects. Enhance your Stride scenes with dynamic UI without needing additional assets or complex setup.$(StrideVersionNote)
         </Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
@@ -19,7 +19,7 @@
 
     <ItemGroup>
         <PackageReference Include="Hexa.NET.ImGui" Version="2.2.4" />
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.1.2485" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.3.0.2507" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
     </ItemGroup>
 
     <ItemGroup>

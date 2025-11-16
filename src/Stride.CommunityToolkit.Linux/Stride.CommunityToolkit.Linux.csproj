@@ -2,18 +2,18 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Linux</Title>
-        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.</Description>
+        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.Core.Assets.CompilerApp` package and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.$(StrideVersionNote)</Description>
         <!-- This should be added in the consuming applications -->
         <!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <StrideGraphicsApi>OpenGL</StrideGraphicsApi>-->
-        <StrideVersion>4.2.1.2485</StrideVersion>
+        <StrideVersion>4.3.0.2507</StrideVersion>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
         <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.Core.Assets.CompilerApp. -->
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.1.2485" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.3.0.2507" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,7 +34,7 @@
             <!-- Fallback to relative path (last resort) -->
             <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == ''">$(HOME)/.nuget/packages</NuGetPackagesPath>
 
-            <CompilerAppPath>$(NuGetPackagesPath)/stride.core.assets.compilerapp/$(StrideVersion)/lib/net8.0</CompilerAppPath>
+            <CompilerAppPath>$(NuGetPackagesPath)/stride.core.assets.compilerapp/$(StrideVersion)/lib/net10.0</CompilerAppPath>
         </PropertyGroup>
 
         <!-- Debug: Show resolved paths -->

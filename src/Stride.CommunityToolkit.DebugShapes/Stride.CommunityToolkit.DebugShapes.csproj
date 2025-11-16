@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - DebugShapes</Title>
         <Description>
-            A specialized extension of the Stride Community Toolkit, providing easy-to-use Debug shapes to be able to visualize and debug your Stride scenes. Enhance your Stride scenes with dynamic models without needing additional assets or complex setup.
+            A specialized extension of the Stride Community Toolkit, providing easy-to-use Debug shapes to be able to visualize and debug your Stride scenes. Enhance your Stride scenes with dynamic models without needing additional assets or complex setup.$(StrideVersionNote)
         </Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.2.1.2485" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.3.0.2507" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
     </ItemGroup>
 
     <ItemGroup>
