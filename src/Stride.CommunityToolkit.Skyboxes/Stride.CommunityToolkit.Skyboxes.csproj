@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Skybox</Title>
-        <Description>A specialized extension of the Stride Community Toolkit, providing easy-to-use skybox utilities for code-only Stride projects. Enhance your Stride scenes with dynamic skyboxes without needing additional assets or complex setup.</Description>
+        <Description>A specialized extension of the Stride Community Toolkit, providing easy-to-use skybox utilities for code-only Stride projects. Enhance your Stride scenes with dynamic skyboxes without needing additional assets or complex setup.$(StrideVersionNote)</Description>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />

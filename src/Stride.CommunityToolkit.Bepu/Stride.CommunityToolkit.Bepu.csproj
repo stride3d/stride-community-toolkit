@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Title>Stride Community Toolkit - Bepu Physics</Title>
         <Description>
-            A Bepu Physics integration for the Stride Community Toolkit. Provides high-level utilities, helper components, and debug visualizers to simplify adding realistic physics to Stride scenes. Includes convenient Rigidbody/body helpers, physics-to-entity extensions, debug-shape renderers, and runnable example scenes to accelerate development. Compatible with the Stride.BepuPhysics package.
+            A Bepu Physics integration for the Stride Community Toolkit. Provides high-level utilities, helper components, and debug visualizers to simplify adding realistic physics to Stride scenes. Includes convenient Rigidbody/body helpers, physics-to-entity extensions, debug-shape renderers, and runnable example scenes to accelerate development. Compatible with the Stride.BepuPhysics package.$(StrideVersionNote)
         </Description>
     </PropertyGroup>
 

@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Title>Stride Community Toolkit - ImgGui</Title>
         <Description>
-            A specialized extension of the Stride Community Toolkit, providing easy-to-use ImGui utilities for Stride projects. Enhance your Stride scenes with dynamic UI without needing additional assets or complex setup.
+            A specialized extension of the Stride Community Toolkit, providing easy-to-use ImGui utilities for Stride projects. Enhance your Stride scenes with dynamic UI without needing additional assets or complex setup.$(StrideVersionNote)
         </Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
