@@ -20,8 +20,8 @@
 
     <ItemGroup>
         <Compile Update="Effects\MeshOutlineShader.sdsl.cs">
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
             <DesignTime>True</DesignTime>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
             <AutoGen>True</AutoGen>
         </Compile>
     </ItemGroup>

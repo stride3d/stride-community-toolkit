@@ -17,7 +17,7 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     }
 
     stage override void VSMain()
-    { 
+    {
         streams.ShadingPosition = projToWorld(streams.Position, streams.Normal);
     }
 
