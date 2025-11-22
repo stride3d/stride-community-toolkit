@@ -8,7 +8,7 @@
       </RootDirResolvingInfo>
     </IDEFile>
   </IDEFiles>
-  <RuntimeProfileDesc>.NET 8.0</RuntimeProfileDesc>
+  <RuntimeProfileDesc>.NET 10.0</RuntimeProfileDesc>
   <Assemblies />
   <Dirs />
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
