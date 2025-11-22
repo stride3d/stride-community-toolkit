@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NDepend AppName="Stride.CommunityToolkit" Platform="DotNet" FileWrittenByProductVersion="2024.1.0.9730">
+<NDepend AppName="Stride.CommunityToolkit" Platform="DotNet" FileWrittenByProductVersion="2026.1.0.9779">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <IDEFiles>
     <IDEFile FilePath=".\Stride.CommunityToolkit.sln" Filters="-test -Docs -Benchmarks" Configuration="DEBUG|AnyCPU">
@@ -12,8 +12,9 @@
   <Assemblies />
   <Dirs />
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
+  <CompressNDar>True</CompressNDar>
   <ZipSourceFiles>True</ZipSourceFiles>
-  <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="4455424" NbItemsToUnfold="3" NbItemsPerRule="20" MaxNbSourceFiles="2000" />
+  <Report Kind="0" SectionsEnabled="110591" XslPath="" DefaultTheme="dark" Flags="4455424" NbItemsToUnfold="3" NbItemsPerRule="20" MaxNbSourceFiles="2000" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
   <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="30" />
   <CoverageFiles CoverageDir="" CoverageDirFilter="" UncoverableAttribute="" CoverageExclusionFile="" />
@@ -51,7 +52,7 @@
   </TrendMetrics>
   <GitHub Account="" Repo="" />
   <IssueImport ResolveSarifInSolutionDirectories="True" />
-  <HistoricAnalysisResult PersistRecurrence="3" UseCustomDir="False" CustomDir="" />
+  <HistoricAnalysisResult PersistRecurrence="3" UseCustomDir="False" CustomDir="" RetensionNDays="0" />
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
