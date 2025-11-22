@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stride.CommunityToolkit", "src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj", "{BE6D2173-AC41-40BB-9F3C-D0AF85B7FE86}"
 EndProject
@@ -37,8 +37,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example_CubicleCalamity", "examples\code-only\Example_CubicleCalamity\Example_CubicleCalamity.csproj", "{FF85041F-6C26-4B47-BD73-708C869AB857}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example06_ImageProcessing", "examples\code-only\Example06_ImageProcessing\Example06_ImageProcessing.csproj", "{81A9A56B-DF91-4EA0-AFB5-D3D716854051}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example07_CubeClicker", "examples\code-only\Example07_CubeClicker\Example07_CubeClicker.csproj", "{9C625B12-6278-4C89-A153-00F80FCE38EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example01_Basic2DScene", "examples\code-only\Example01_Basic2DScene\Example01_Basic2DScene.csproj", "{5F34BDA3-17D6-4EEF-AE6B-52FAF988D7F7}"
 EndProject
@@ -203,10 +201,6 @@ Global
 		{81A9A56B-DF91-4EA0-AFB5-D3D716854051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81A9A56B-DF91-4EA0-AFB5-D3D716854051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81A9A56B-DF91-4EA0-AFB5-D3D716854051}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C625B12-6278-4C89-A153-00F80FCE38EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C625B12-6278-4C89-A153-00F80FCE38EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C625B12-6278-4C89-A153-00F80FCE38EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C625B12-6278-4C89-A153-00F80FCE38EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F34BDA3-17D6-4EEF-AE6B-52FAF988D7F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F34BDA3-17D6-4EEF-AE6B-52FAF988D7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F34BDA3-17D6-4EEF-AE6B-52FAF988D7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -433,7 +427,6 @@ Global
 		{A690C386-6CCE-40B8-B44B-838DB488ED35} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{FF85041F-6C26-4B47-BD73-708C869AB857} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{81A9A56B-DF91-4EA0-AFB5-D3D716854051} = {30457B66-9E10-4290-9744-D0079DE0448B}
-		{9C625B12-6278-4C89-A153-00F80FCE38EA} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{5F34BDA3-17D6-4EEF-AE6B-52FAF988D7F7} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{50AB85B4-CE39-43EF-87B7-B2E7AF182E8A} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{A2F5DF58-13FB-48D0-BFF1-0FE73D4847A4} = {30457B66-9E10-4290-9744-D0079DE0448B}
