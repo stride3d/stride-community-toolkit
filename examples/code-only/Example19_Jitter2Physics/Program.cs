@@ -34,18 +34,24 @@ void Start(Scene rootScene)
 
     PhysicsWorld.Init();
 
+    const float groundBoxDim = 15.0f;
+
     // ground Entity setup
     groundEntity = game.Create3DPrimitive(PrimitiveModelType.Plane);
     groundEntity.Transform.Position = new Vector3(-10, -10, -10);
-    groundEntity.Transform.Scale = new Vector3(15, 0.5f, 15);
+    groundEntity.Transform.Scale = new Vector3(groundBoxDim, 1, groundBoxDim);
     var groundPosition = groundEntity.Transform.Position;
     groundEntity.Scene = rootScene;
 
     // ground body setup
     groundBody = PhysicsWorld.world.CreateRigidBody();
     groundBody.MotionType = MotionType.Static;
-    groundBody.AddShape(new BoxShape(new JVector(15, .5f, 15)));
-    groundBody.Position = new JVector(groundPosition.X, groundPosition.Y, groundPosition.Z);
+    groundBody.AddShape(new BoxShape(groundBoxDim));
+
+    // Physics box is centered; shift down so its top matches the plane.
+    groundBody.Position = new JVector(groundPosition.X,
+                                      groundPosition.Y - 0.5f * groundBoxDim,
+                                      groundPosition.Z);
 
     // spawning cubes
     for (int i = 0; i <= 150; i++)
@@ -56,14 +62,14 @@ void Start(Scene rootScene)
         });
         var cubePosition = new Vector3(-10, 10 + i * 2, -10);
 
-        ent.Transform.Position = cubePosition; 
-        ent.Transform.Scale = new Vector3(.5f);
+        ent.Transform.Position = cubePosition;
+        ent.Transform.Scale = new Vector3(0.5f);
         ent.Scene = rootScene;
 
         //cube body setup
         var body = PhysicsWorld.world.CreateRigidBody();
-        body.AddShape(new BoxShape(0.25f)); 
-        body.SetMassInertia(1f); 
+        body.AddShape(new BoxShape(0.5f));
+        body.SetMassInertia(1f);
         body.Position = new JVector(cubePosition.X, cubePosition.Y, cubePosition.Z);
 
         cubeEntities.Add(ent);
