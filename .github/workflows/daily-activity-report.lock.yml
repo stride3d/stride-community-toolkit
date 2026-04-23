@@ -21,15 +21,23 @@
 #
 # For more information: https://github.github.com/gh-aw/introduction/overview/
 #
-# Daily report on recent repository activity, delivered as a GitHub issue
+# Activity report on recent repository activity, delivered as a GitHub issue
 #
 # frontmatter-hash: 3d06a88a675ec41075912073f7c734e9e8e972622ef8d1fff6ab45f84827d2de
 
-name: "Daily Activity Report"
+name: "Activity Report"
 "on":
   schedule:
-  - cron: "47 18 * * *"
-    # Friendly format: daily (scattered)
+  # ── CADENCE SWITCH ────────────────────────────────────────────────────────
+  # To switch between daily and weekly reporting (two steps):
+  #  1. Comment/uncomment the cron line below to match the desired cadence.
+  #  2. Set CADENCE in .github/workflows/daily-activity-report.md to match
+  #     (look for "CADENCE: daily" in the Configuration section).
+  # These two settings must stay in sync; the cron controls WHEN the workflow
+  # runs and the CADENCE value controls WHAT the AI agent analyses.
+  # ─────────────────────────────────────────────────────────────────────────
+  - cron: "47 18 * * *"   # daily  (every day at 18:47 UTC)
+  # - cron: "47 18 * * 0" # weekly (every Sunday at 18:47 UTC)
   workflow_dispatch:
 
 permissions: {}
@@ -37,7 +45,7 @@ permissions: {}
 concurrency:
   group: "gh-aw-${{ github.workflow }}"
 
-run-name: "Daily Activity Report"
+run-name: "Activity Report"
 
 jobs:
   activation:
@@ -139,7 +147,7 @@ jobs:
               version: "",
               agent_version: "0.0.410",
               cli_version: "v0.45.0",
-              workflow_name: "Daily Activity Report",
+              workflow_name: "Activity Report",
               experimental: false,
               supports_tools_allowlist: true,
               supports_http_transport: true,
@@ -811,7 +819,7 @@ jobs:
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
           GH_AW_NOOP_MAX: 1
-          GH_AW_WORKFLOW_NAME: "Daily Activity Report"
+          GH_AW_WORKFLOW_NAME: "Activity Report"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -824,7 +832,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Daily Activity Report"
+          GH_AW_WORKFLOW_NAME: "Activity Report"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -837,7 +845,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Daily Activity Report"
+          GH_AW_WORKFLOW_NAME: "Activity Report"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_WORKFLOW_ID: "daily-activity-report"
@@ -855,7 +863,7 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_AGENT_OUTPUT: ${{ env.GH_AW_AGENT_OUTPUT }}
-          GH_AW_WORKFLOW_NAME: "Daily Activity Report"
+          GH_AW_WORKFLOW_NAME: "Activity Report"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_NOOP_MESSAGE: ${{ steps.noop.outputs.noop_message }}
@@ -903,8 +911,8 @@ jobs:
       - name: Setup threat detection
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
-          WORKFLOW_NAME: "Daily Activity Report"
-          WORKFLOW_DESCRIPTION: "Daily report on recent repository activity, delivered as a GitHub issue"
+          WORKFLOW_NAME: "Activity Report"
+          WORKFLOW_DESCRIPTION: "Activity report on recent repository activity, delivered as a GitHub issue"
           HAS_PATCH: ${{ needs.agent.outputs.has_patch }}
         with:
           script: |
@@ -982,7 +990,7 @@ jobs:
     env:
       GH_AW_ENGINE_ID: "copilot"
       GH_AW_WORKFLOW_ID: "daily-activity-report"
-      GH_AW_WORKFLOW_NAME: "Daily Activity Report"
+      GH_AW_WORKFLOW_NAME: "Activity Report"
     outputs:
       create_discussion_error_count: ${{ steps.process_safe_outputs.outputs.create_discussion_error_count }}
       create_discussion_errors: ${{ steps.process_safe_outputs.outputs.create_discussion_errors }}

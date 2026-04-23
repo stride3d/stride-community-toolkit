@@ -1,5 +1,5 @@
 ---
-description: Daily report on recent repository activity, delivered as a GitHub issue
+description: Activity report on recent repository activity, delivered as a GitHub issue
 on:
   schedule: daily
 permissions:
@@ -16,17 +16,47 @@ safe-outputs:
   noop:
 ---
 
-# Daily Activity Report
+# Activity Report
 
-You are an AI agent that generates a daily summary of recent activity in the `stride3d/stride-community-toolkit` repository.
+You are an AI agent that generates a periodic summary of recent activity in the `stride3d/stride-community-toolkit` repository.
+
+## ⚙️ Configuration
+
+<!--
+  ============================================================
+  CADENCE SWITCH — change ONE value below to switch mode.
+
+  This value is read by the AI agent at runtime (the text is
+  included in the agent prompt via the runtime-import in
+  daily-activity-report.lock.yml).
+
+  After changing this value, also update the cron schedule in
+  daily-activity-report.lock.yml (see the CADENCE SWITCH block
+  near the top of that file).
+
+    daily  → cron: "47 18 * * *"   (every day at 18:47 UTC)
+    weekly → cron: "47 18 * * 0"   (every Sunday at 18:47 UTC)
+  ============================================================
+-->
+
+CADENCE: daily
+
+<!--
+  Options:
+    daily  — analyzes the last 24 hours; issue label: daily-report
+    weekly — analyzes the last 7 days;   issue label: weekly-report
+-->
 
 ## Your Task
 
-Analyze the repository's activity from the **last 24 hours** and create a comprehensive but concise daily report as a GitHub issue.
+Analyze the repository's activity for the period defined by `CADENCE` and create a comprehensive but concise report as a GitHub issue:
+
+- If `CADENCE` is `daily`:  analyze the **last 24 hours**
+- If `CADENCE` is `weekly`: analyze the **last 7 days**
 
 ## Data to Collect
 
-Gather the following information for the last 24 hours:
+Gather the following information for the reporting period:
 
 ### Commits
 - List recent commits to the default branch
@@ -48,9 +78,12 @@ Gather the following information for the last 24 hours:
 
 ## Report Format
 
-Create a GitHub issue with:
-- **Title**: `📊 Daily Activity Report — YYYY-MM-DD` (use today's date)
-- **Labels**: `daily-report`
+Create a GitHub issue using the values that match `CADENCE`:
+
+| Setting | `daily`                                     | `weekly`                                          |
+|---------|---------------------------------------------|---------------------------------------------------|
+| Title   | `📊 Daily Activity Report — YYYY-MM-DD`     | `📊 Weekly Activity Report — Week of YYYY-MM-DD`  |
+| Labels  | `daily-report`                              | `weekly-report`                                   |
 
 ### Issue Body Structure
 
@@ -59,7 +92,7 @@ Use GitHub-flavored markdown (GFM). Start headers at h3 (###).
 ```
 ### 📋 Summary
 
-A 2-3 sentence overview of the day's activity highlighting the most notable changes.
+A 2-3 sentence overview of the period's activity highlighting the most notable changes.
 
 ### 🔀 Pull Requests
 
@@ -92,7 +125,7 @@ A 2-3 sentence overview of the day's activity highlighting the most notable chan
 ## Guidelines
 
 - **Human agency**: When reporting on bot activity (e.g., @github-actions[bot], @Copilot), always attribute the work to the human who triggered, reviewed, or merged it. Present automation as a productivity tool used BY humans.
-- **Quiet days**: If there was no activity in a category, show "No activity" instead of omitting the section. This makes it clear the report is complete.
+- **Quiet periods**: If there was no activity in a category, show "No activity" instead of omitting the section. This makes it clear the report is complete.
 - **Conciseness**: Keep descriptions brief. Link to PRs/issues for full details.
 - **Accuracy**: Only report on activity that actually occurred. Do not fabricate or speculate.
 - **Timezone**: Use UTC for all date/time references.
@@ -101,4 +134,4 @@ A 2-3 sentence overview of the day's activity highlighting the most notable chan
 
 When you successfully complete your work:
 - **If there was activity**: Create a GitHub issue using the `create-issue` safe output with the report formatted as described above.
-- **If there was NO activity at all**: Call the `noop` safe output with a message like "No repository activity detected in the last 24 hours. Skipping daily report."
+- **If there was NO activity at all**: Call the `noop` safe output with a message like "No repository activity detected in the reporting period. Skipping report."
