@@ -464,7 +464,6 @@ public static class GameExtensions
         };
 
         return Material.New(game.GraphicsDevice, materialDescription);
-        //options.Size /= 2;
     }
 
     /// <summary>
