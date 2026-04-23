@@ -495,9 +495,9 @@ public static class GameExtensions
     /// <summary>
     /// Saves a screenshot of the current frame to the specified file path.
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="fileName">creates a file with this name</param>
-    /// <param name="fileType"></param>
+    /// <param name="game">The game instance providing the current graphics context and render target.</param>
+    /// <param name="fileName">The file path where the screenshot will be saved.</param>
+    /// <param name="fileType">The image file format to use when saving the screenshot.</param>
     public static void TakeScreenShot(this IGame game, string fileName, ImageFileType fileType = ImageFileType.Png)
     {
         using var stream = File.Create(fileName);
