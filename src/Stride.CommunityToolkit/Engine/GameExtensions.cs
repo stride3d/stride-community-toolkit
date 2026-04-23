@@ -281,7 +281,7 @@ public static class GameExtensions
     /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
     /// </summary>
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="displayPosition"></param>
+    /// <param name="displayPosition">The position where the camera controller information will be displayed on the screen.</param>
     /// <param name="cameraName">The name of the camera entity to attach the 2D camera controller to. If not specified, the main camera name is
     /// used.</param>
     /// <returns>The camera entity to which the 3D camera controller was added.</returns>
