@@ -36,8 +36,8 @@ name: "Activity Report"
   # These two settings must stay in sync; the cron controls WHEN the workflow
   # runs and the CADENCE value controls WHAT the AI agent analyses.
   # ─────────────────────────────────────────────────────────────────────────
-  - cron: "47 18 * * *"   # daily  (every day at 18:47 UTC)
-  # - cron: "47 18 * * 0" # weekly (every Sunday at 18:47 UTC)
+  # - cron: "47 18 * * *"   # daily  (every day at 18:47 UTC)
+  - cron: "47 18 * * 0" # weekly (every Sunday at 18:47 UTC)
   workflow_dispatch:
 
 permissions: {}
