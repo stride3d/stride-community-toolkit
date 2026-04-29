@@ -39,7 +39,7 @@ You are an AI agent that generates a periodic summary of recent activity in the 
   ============================================================
 -->
 
-CADENCE: daily
+CADENCE: weekly
 
 <!--
   Options:
