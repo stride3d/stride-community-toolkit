@@ -3,16 +3,21 @@
 These repository instructions guide GitHub Copilot (and similar AI assistants) to help develop the Stride Community Toolkit solution.
 
 ## Quick editing & display guidance (short)
+
 - When returning an edit to a single paragraph or section, output only that updated selection (do not include the rest of the file). If context is helpful, add a small window (up to ~10 lines before and after). Include the file path and exact line range for the change when known; if not known, ask the reviewer for the specific lines.
 
 ## Status & stability
+
 - The Stride Community Toolkit is currently in **Preview**.
 - Public APIs, namespaces, behaviors, and package layout may change without backward-compatibility guarantees until the first stable release.
+- Breaking-change suggestions are acceptable because the toolkit is in Preview, not beta; prefer cleaner long-term APIs when they improve correctness, naming, maintainability, or usability, and document migration impact.
+- Clearly call out breaking-change suggestions and explain the migration impact.
 - Many extensions and helpers originated from community sources (forum posts, samples, gists, experimental repos). Some code paths have not yet been fully reviewed, optimized, or documented.
 - Treat sparsely documented or unusual APIs as provisional. Prefer improving them (tests, XML docs, consistency) before broad reuse.
 - Prefer well-documented, core, and recently updated toolkit helpers over unverified examples.
 
 ## Project overview
+
 - A collection of C# helpers and extensions for the [Stride Game Engine](https://www.stride3d.net/), primarily targeting **.NET 10** (some projects may also multi-target newer frameworks).
 - Provides library projects, code-only examples, snippet examples, and documentation to simplify Stride game development.
 - F# and VB.NET examples are showcase-only (not the primary focus).
@@ -21,6 +26,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 - Designed to integrate with a regular Stride Game Studio project; code-only examples intentionally avoid relying on editor UI or assets to demonstrate pure programmatic setup.
 
 ## Repository structure (summary)
+
 - `src/`: Core toolkit libraries
   - **Stride.CommunityToolkit**: Core library
     - `Engine/`: Game and Entity extensions
@@ -46,6 +52,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 - `.github/`: GitHub workflows, release metadata, automation, and this instruction file
 
 ## Stride engine context (quick reminders)
+
 - ECS: Entities aggregate Components (Transform, Model, Camera, Rigidbody, Script, etc.).
 - Entities must be added to a Scene graph to be processed.
 - Physics: Prefer Bepu components; keep Bullet only for transition/testing. Avoid mixing both on the same entity.
@@ -53,6 +60,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 
 ## Toolkit patterns
 ### Extension method pattern
+
 ```csharp
 entity.Add3DCameraController()
       .AddGizmo(graphicsDevice)
@@ -64,6 +72,7 @@ Guidelines:
 - Avoid hiding heavy allocations or long-running work behind simple-sounding extension names.
 
 ### Code-only scene creation
+
 ```csharp
 using var game = new Game();
 
@@ -81,6 +90,7 @@ void Start(Scene rootScene)
 ```
 
 ## Coding Style & Conventions
+
 - Use latest C# features (file-scoped namespaces, target-typed `new`, pattern matching, spans where beneficial, primary ctors where suitable).
 - Keep nullable-reference warnings at zero.
 - Public APIs: include complete XML docs (`<summary>`, `<param>`, `<returns>`, `<example>` when useful) including top level classes.
@@ -105,13 +115,25 @@ void Start(Scene rootScene)
 - Experimental / provisional APIs: consider marking with an `[Experimental]` attribute (future) or note in the XML summary.
 - Tests: Use xUnit under `tests/` targeting net10.0; keep deterministic and avoid relying on real-time frame counts.
 
+## Modern C# / .NET guidance
+
+- Prefer modern C# features when they improve clarity: file-scoped namespaces, pattern matching, collection expressions, raw string literals, target-typed `new`, `required`/`init`, and primary constructors where they reduce boilerplate without hiding behavior.
+- Use `var` only when the type is obvious from the right-hand side, required by anonymous types, or improves readability.
+- Keep nullable reference types enabled and avoid the null-forgiving operator (`!`) unless the invariant is obvious or documented. Prefer nullable analysis attributes such as `[NotNullWhen]`, `[MemberNotNull]`, and `[MaybeNull]` for public contracts.
+- Prefer `.editorconfig`, Roslyn analyzers, and project settings to enforce style and quality. Do not suppress analyzer warnings without a clear reason.
+- Use `async`/`await` for I/O-bound work. Avoid sync-over-async. In library code, use `ConfigureAwait(false)` when a synchronization context is not required; in Blazor/UI code, preserve the UI context and use `InvokeAsync` when updating UI state.
+- Use performance-oriented APIs such as `Span<T>`, `Memory<T>`, pooling, or unsafe code only when they clearly improve correctness or measured performance.
+- Prefer specific exception types and meaningful error messages. Do not catch `Exception` broadly unless adding context and rethrowing or handling a known boundary.
+
 ## Documentation guidelines
+
 - Docs are generated with DocFX from `docs/`.
 - Update conceptual docs and XML comments when changing public APIs.
 - New libraries: update navigation, TOC, and contributing guides (`docs/contributing/toolkit/library-project.md`).
 - Provide concise, runnable examples that minimize boilerplate.
 
 ## Verification & provenance
+
 - Imported code from external/community sources must have:
   - A compatible license (or original author permission).
   - Normalized naming/patterns to match toolkit style.
@@ -120,6 +142,7 @@ void Start(Scene rootScene)
 - Mark unclear logic or magic numbers with `// TODO:` plus an issue link.
 
 ## Common code-only example pattern
+
 ```csharp
 using var game = new Game();
 
@@ -136,24 +159,31 @@ game.Run(start: (Scene rootScene) =>
 ```
 
 ## AI assistance guidance
+
+- Inspect the existing implementation before proposing changes; do not invent APIs or patterns that are not present in the repository.
+- Prefer minimal, focused diffs that preserve existing style and project structure.
 - When asked to reword or fix grammar for a highlighted or selected paragraph/section, modify only that selection; do not change other parts of the document.
-- When showing the updated result for a single paragraph or section, display only the updated selection. Do not render unchanged surrounding content in long documents to reduce scrolling and make changes easier to review.
 - Improve or extend existing helpers instead of duplicating similar logic.
 - Do NOT introduce unrelated frameworks or patterns (for example, Unity managers, large DI containers, Rx) unless explicitly requested.
 - Highlight potential breaking changes when modifying public APIs.
+- Because the toolkit is still in Preview, do not avoid breaking-change proposals solely for backward compatibility. Prefer the cleaner long-term API, document the impact, and update examples/docs together with the change.
 - Prefer Bepu examples over Bullet unless addressing migration or legacy parity.
 - Remind contributors to regenerate shader code when shaders are changed.
 - For Blazor content: keep solutions Blazor-appropriate; avoid server-only MVC/Razor patterns unless necessary.
 - Avoid speculative APIs; ground suggestions in existing patterns.
+- When changing public APIs, update XML docs, examples, and conceptual documentation as needed.
+- Validate changes with the most relevant build or tests available.
 - Use descriptive, real-word identifier names. Avoid cryptic abbreviations for variables, parameters, or fields (e.g., prefer `textureCoordinates`, `firstEdge`, `secondEdge`, `faceNormal` over `tex`, `e1`, `e2`, `n`). Single-letter names are acceptable only for short-lived loop indices (`i`, `j`, `k`).
 - Follow C# naming conventions consistently: PascalCase for types, methods, and properties; camelCase for parameters and local variables. Prefer meaningful names that communicate intent.
 
 ## Formatting rules for edits
+
 - Do not add an empty line at the end of a file.
 - When moving or copying code, preserve existing blank lines.
 - When adding new code, separate logical blocks with a single blank line. It is acceptable to group closely related declarations or multiple similar statements without intervening blank lines.
 
 ## Maintenance
+
 > [!IMPORTANT]
 > Keep this document current (architectural shifts, new subsystems, deprecations) so AI assistance remains accurate.
 
@@ -163,6 +193,7 @@ game.Run(start: (Scene rootScene) =>
 - Revisit after introducing new physics systems, rendering pipelines, or scripting paradigms.
 
 ## Quick checklist (before merging)
+
 - [ ] XML docs complete / updated
 - [ ] Nullability warnings resolved
 - [ ] No unnecessary allocations in hot paths
