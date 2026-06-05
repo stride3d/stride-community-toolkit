@@ -17,7 +17,7 @@ public static class EntityExtensions
         /// Adds Bepu 2D physics components to the entity with an appropriate collider shape based on the primitive type.
         /// </summary>
         /// <param name="type">The type of 2D primitive shape for the collider.</param>
-        /// <param name="options">Optional physics configuration including the body component, size, depth, and whether to include a collider. If null, default options are used.</param>
+        /// <param name="options">Optional physics configuration including the body component, size, custom polygon vertices, depth, and whether to include a collider. If null, default options are used.</param>
         /// <returns>The entity with the Bepu 2D physics components added.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when an unsupported <see cref="Primitive2DModelType"/> is specified.</exception>
@@ -34,7 +34,7 @@ public static class EntityExtensions
                 return entity;
             }
 
-            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth);
+            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth, options.Vertices);
 
             //if (colliderShape is null) return entity;
 
@@ -94,9 +94,10 @@ public static class EntityExtensions
     /// <param name="type">The type of 2D primitive shape.</param>
     /// <param name="size">Optional size for the collider. For most shapes, X represents width and Y represents height.</param>
     /// <param name="depth">The depth (Z-axis) of the 2D shape in 3D space.</param>
+    /// <param name="vertices">Optional custom polygon vertices in the XY plane. Used only for <see cref="Primitive2DModelType.Polygon"/>.</param>
     /// <returns>A <see cref="ColliderBase"/> configured for the specified primitive type.</returns>
     /// <exception cref="InvalidOperationException">Thrown when an unsupported <see cref="Primitive2DModelType"/> is specified.</exception>
-    private static ColliderBase Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0)
+    private static ColliderBase Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0, Vector2[]? vertices = null)
     {
         return type switch
         {
@@ -105,7 +106,7 @@ public static class EntityExtensions
             Primitive2DModelType.Square => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.X, depth) },
             Primitive2DModelType.Capsule => size is null ? new CapsuleCollider() : new() { Radius = size.Value.X, Length = size.Value.Y - 2 * size.Value.X },
             Primitive2DModelType.Circle => CreateCircleCollider(depth, size),
-            Primitive2DModelType.Polygon => PolygonCollider.Create(size?.X, size.HasValue ? (int)size.Value.Y : null, depth),
+            Primitive2DModelType.Polygon => PolygonCollider.Create(vertices, size?.X, size.HasValue ? (int)size.Value.Y : null, depth),
             _ => throw new InvalidOperationException($"Unsupported Primitive2DModelType: {type}"),
         };
 

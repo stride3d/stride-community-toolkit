@@ -1,6 +1,5 @@
 using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
-using Stride.CommunityToolkit.Bepu.Extensions;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using static Stride.BepuPhysics.Definitions.DecomposedHulls;
@@ -9,72 +8,69 @@ namespace Stride.CommunityToolkit.Bepu.Colliders;
 
 /// <summary>
 /// Provides helpers to construct Bepu <see cref="ConvexHullCollider"/> instances
-/// from a regular polygon extruded into a prism.
+/// from a regular or custom polygon extruded into a prism.
 /// </summary>
 public static class PolygonCollider
 {
-    public static ConvexHullCollider Create(Vector2[]? size)
+    /// <summary>
+    /// Creates a Bepu <see cref="ConvexHullCollider"/> from a polygon extruded along the Z axis.
+    /// </summary>
+    /// <param name="vertices">
+    /// Optional custom polygon vertices in the XY plane. When provided, these take precedence over <paramref name="radius"/> and <paramref name="sides"/>.
+    /// </param>
+    /// <param name="radius">Optional circumradius for a regular polygon. When <c>null</c>, defaults from <see cref="PolygonProceduralModel"/> are used.</param>
+    /// <param name="sides">Optional side count for a regular polygon. When <c>null</c>, defaults from <see cref="PolygonProceduralModel"/> are used.</param>
+    /// <param name="depth">The prism depth along the Z axis. Must be greater than 0.</param>
+    /// <returns>A <see cref="ConvexHullCollider"/> whose hull is computed from the extruded polygon prism.</returns>
+    public static ConvexHullCollider Create(Vector2[]? vertices = null, float? radius = null, int? sides = null, float depth = 1f)
     {
-        Vector2[] validatedSize;
+        if (depth <= 0)
+            throw new ArgumentOutOfRangeException(nameof(depth), "Depth must be greater than 0.");
 
-        if (size is null)
-        {
-            var prismModel = new PolygonProceduralModel();
-
-            validatedSize = prismModel.Vertices;
-        }
-        else
-        {
-            validatedSize = size;
-        }
-
-        var meshData = PolygonProceduralModel.New(validatedSize);
-
-        return meshData.ToConvexHullCollider();
-    }
-
-    public static ConvexHullCollider Create(float? radius = null, int? sides = null, float depth = 1f)
-    {
-        var defaultModel = new PolygonProceduralModel();
-        var actualRadius = radius ?? defaultModel.Radius;
-        var actualSides = sides ?? defaultModel.Sides;
-
-        var verts2D = PolygonProceduralModel.GenerateRegularPolygonVertices(actualRadius, actualSides);
+        var polygonModel = CreatePolygonModel(vertices, radius, sides);
+        var vertices2D = polygonModel.Vertices.Length > 0
+            ? polygonModel.Vertices
+            : PolygonProceduralModel.GenerateRegularPolygonVertices(polygonModel.Radius, polygonModel.Sides);
+        var vertexCount = vertices2D.Length;
         var halfDepth = depth / 2f;
 
-        var points = new Vector3[actualSides * 2];
-        for (int i = 0; i < actualSides; i++)
+        var points = new Vector3[vertexCount * 2];
+        for (var i = 0; i < vertexCount; i++)
         {
-            points[i] = new Vector3(verts2D[i].X, verts2D[i].Y, +halfDepth);
-            points[i + actualSides] = new Vector3(verts2D[i].X, verts2D[i].Y, -halfDepth);
+            points[i] = new Vector3(vertices2D[i].X, vertices2D[i].Y, halfDepth);
+            points[i + vertexCount] = new Vector3(vertices2D[i].X, vertices2D[i].Y, -halfDepth);
         }
 
         var indexList = new List<uint>();
 
-        for (int i = 1; i < actualSides - 1; i++)
+        for (var i = 1; i < vertexCount - 1; i++)
         {
             indexList.Add(0);
             indexList.Add((uint)i);
             indexList.Add((uint)(i + 1));
         }
 
-        uint backBase = (uint)actualSides;
-        for (int i = 1; i < actualSides - 1; i++)
+        var backBase = (uint)vertexCount;
+        for (var i = 1; i < vertexCount - 1; i++)
         {
             indexList.Add(backBase);
             indexList.Add((uint)(backBase + i + 1));
             indexList.Add((uint)(backBase + i));
         }
 
-        for (int i = 0; i < actualSides; i++)
+        for (var i = 0; i < vertexCount; i++)
         {
-            uint a = (uint)i;
-            uint b = (uint)((i + 1) % actualSides);
-            uint c = (uint)(i + actualSides);
-            uint d = (uint)((i + 1) % actualSides + actualSides);
+            var firstFrontIndex = (uint)i;
+            var secondFrontIndex = (uint)((i + 1) % vertexCount);
+            var firstBackIndex = (uint)(i + vertexCount);
+            var secondBackIndex = (uint)((i + 1) % vertexCount + vertexCount);
 
-            indexList.Add(a); indexList.Add(b); indexList.Add(d);
-            indexList.Add(a); indexList.Add(d); indexList.Add(c);
+            indexList.Add(firstFrontIndex);
+            indexList.Add(secondFrontIndex);
+            indexList.Add(secondBackIndex);
+            indexList.Add(firstFrontIndex);
+            indexList.Add(secondBackIndex);
+            indexList.Add(firstBackIndex);
         }
 
         return new ConvexHullCollider
@@ -87,5 +83,21 @@ public static class PolygonCollider
                 ])
             ])
         };
+    }
+
+    private static PolygonProceduralModel CreatePolygonModel(Vector2[]? vertices, float? radius, int? sides)
+    {
+        if (vertices is { Length: > 0 })
+            return new PolygonProceduralModel { Vertices = vertices };
+
+        var polygonModel = new PolygonProceduralModel();
+
+        if (radius.HasValue)
+            polygonModel.Radius = radius.Value;
+
+        if (sides.HasValue)
+            polygonModel.Sides = sides.Value;
+
+        return polygonModel;
     }
 }

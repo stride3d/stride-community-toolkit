@@ -48,7 +48,7 @@ public static class GameExtensions
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance providing access to game services.</param>
     /// <param name="type">The type of 2D primitive to build.</param>
-    /// <param name="options">Optional creation parameters including size, depth, material, render group, and entity name. If null, default options are used.</param>
+    /// <param name="options">Optional creation parameters including size, custom polygon vertices, depth, material, render group, and entity name. If null, default options are used.</param>
     /// <returns>A new <see cref="Entity"/> containing a configured <see cref="ModelComponent"/> with the generated primitive model.</returns>
     /// <remarks>
     /// <para>The returned entity must be added to a scene to be rendered. The entity can be further customized using fluent extension methods.</para>
@@ -68,7 +68,7 @@ public static class GameExtensions
             _ => options.Size
         };
 
-        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth);
+        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth, options.Vertices);
 
         var model = modelBase.Generate(game.Services);
 
