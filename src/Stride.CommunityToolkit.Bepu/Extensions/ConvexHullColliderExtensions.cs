@@ -17,11 +17,12 @@ public static class ConvexHullColliderExtensions
     public static ConvexHullCollider ToConvexHullCollider(this GeometricMeshData<VertexPositionNormalTexture> meshData)
     {
         ArgumentNullException.ThrowIfNull(meshData);
-        ArgumentNullException.ThrowIfNull(meshData.Vertices);
-        ArgumentNullException.ThrowIfNull(meshData.Indices);
 
         var vertices = meshData.Vertices;
         var indices = meshData.Indices;
+
+        ArgumentNullException.ThrowIfNull(vertices);
+        ArgumentNullException.ThrowIfNull(indices);
 
         var points = new Vector3[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
