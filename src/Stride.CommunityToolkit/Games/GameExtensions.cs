@@ -6,25 +6,25 @@ using Stride.Games;
 namespace Stride.CommunityToolkit.Games;
 
 /// <summary>
-/// Provides extension methods for the <see cref="IGame"/> interface, enhancing game management and performance tuning functionality.
+/// Provides convenience extension methods for <see cref="IGame"/> instances.
 /// </summary>
 /// <remarks>
-/// These methods offer additional control over the game's timing, frame rate, and vertical synchronization, allowing for both performance optimization and flexibility.
+/// Includes helpers for creating primitive entities, reading timing information, adjusting update rates, changing presentation settings, and exiting the game.
 /// </remarks>
 public static class GameExtensions
 {
     /// <summary>
-    /// Creates an entity containing a 3D procedural primitive model of the specified <paramref name="type"/>.
+    /// Creates an entity with a 3D procedural primitive model of the specified <paramref name="type"/>.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance providing access to game services.</param>
-    /// <param name="type">The type of 3D primitive to build.</param>
-    /// <param name="options">Optional creation parameters including size, material, render group, and entity name. If null, default options are used.</param>
-    /// <returns>A new <see cref="Entity"/> containing a configured <see cref="ModelComponent"/> with the generated primitive model.</returns>
+    /// <param name="game">The <see cref="IGame"/> instance used to access game services.</param>
+    /// <param name="type">The 3D primitive type to create.</param>
+    /// <param name="options">Optional creation parameters, including size, material, render group, entity name, and position. If <see langword="null"/>, default options are used.</param>
+    /// <returns>A new <see cref="Entity"/> with a <see cref="ModelComponent"/> containing the generated primitive model.</returns>
     /// <remarks>
-    /// <para>The returned entity must be added to a scene to be rendered. The entity can be further customized using fluent extension methods.</para>
-    /// <para>If a material is provided in <paramref name="options"/>, it will be added to the model's material collection.</para>
+    /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>
+    /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -36,26 +36,34 @@ public static class GameExtensions
         var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
+        {
             model.Materials.Add(options.Material);
+        }
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        if (options.Position is { } position)
+        {
+            entity.Transform.Position = position;
+        }
 
         return entity;
     }
 
     /// <summary>
-    /// Creates an entity containing a 2D (flat) procedural primitive model of the specified <paramref name="type"/>.
+    /// Creates an entity with a 2D procedural primitive model of the specified <paramref name="type"/>.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance providing access to game services.</param>
-    /// <param name="type">The type of 2D primitive to build.</param>
-    /// <param name="options">Optional creation parameters including size, custom polygon vertices, depth, material, render group, and entity name. If null, default options are used.</param>
-    /// <returns>A new <see cref="Entity"/> containing a configured <see cref="ModelComponent"/> with the generated primitive model.</returns>
+    /// <param name="game">The <see cref="IGame"/> instance used to access game services.</param>
+    /// <param name="type">The 2D primitive type to create.</param>
+    /// <param name="options">Optional creation parameters, including size, custom polygon vertices, depth, material, render group, entity name, and position. If <see langword="null"/>, default options are used.</param>
+    /// <returns>A new <see cref="Entity"/> with a <see cref="ModelComponent"/> containing the generated primitive model.</returns>
     /// <remarks>
-    /// <para>The returned entity must be added to a scene to be rendered. The entity can be further customized using fluent extension methods.</para>
-    /// <para>If a material is provided in <paramref name="options"/>, it will be added to the model's material collection.</para>
-    /// <para>The <c>Depth</c> parameter in options controls the Z-axis thickness of the 2D primitive.</para>
+    /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>
+    /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
+    /// <para>If no size is specified for capsules or rectangles, this method applies default dimensions before building the model.</para>
+    /// <para>The <c>Depth</c> option controls the generated mesh thickness along the Z axis.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -73,23 +81,29 @@ public static class GameExtensions
         var model = modelBase.Generate(game.Services);
 
         if (options.Material != null)
+        {
             model.Materials.Add(options.Material);
+        }
 
         var entity = new Entity(options.EntityName) { new ModelComponent(model) { RenderGroup = options.RenderGroup } };
+
+        if (options.Position is { } position)
+        {
+            entity.Transform.Position = position;
+        }
 
         return entity;
     }
 
     /// <summary>
-    /// Gets the time elapsed since the last game update in seconds as a single-precision floating-point number.
+    /// Gets the elapsed update time for the current frame, in seconds.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance providing access to game timing information.</param>
-    /// <returns>The time elapsed since the last game update in seconds.</returns>
+    /// <param name="game">The <see cref="IGame"/> instance that provides timing information.</param>
+    /// <returns>The elapsed update time as a single-precision floating-point value.</returns>
     /// <remarks>
-    /// This value is commonly used to achieve frame-rate independent movement and animations by multiplying it with velocity or rate values.
-    /// For higher precision timing requirements, use <see cref="DeltaTimeAccurate"/> instead.
+    /// Use this value for frame-rate independent movement and animation. For calculations that need more precision, use <see cref="DeltaTimeAccurate"/>.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static float DeltaTime(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -98,15 +112,14 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Gets the time elapsed since the last game update in seconds as a double-precision floating-point number.
+    /// Gets the elapsed update time for the current frame, in seconds, with double precision.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance providing access to game timing information.</param>
-    /// <returns>The time elapsed since the last game update in seconds with double precision.</returns>
+    /// <param name="game">The <see cref="IGame"/> instance that provides timing information.</param>
+    /// <returns>The elapsed update time as a double-precision floating-point value.</returns>
     /// <remarks>
-    /// This method provides higher precision than <see cref="DeltaTime"/> and is suitable for calculations requiring greater accuracy.
-    /// Use this for precise physics simulations or timing-critical operations where floating-point precision loss could accumulate over time.
+    /// This method returns the same elapsed update interval as <see cref="DeltaTime"/>, but avoids conversion to <see cref="float"/>.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static double DeltaTimeAccurate(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -115,15 +128,14 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Retrieves the current frames per second (FPS) rate of the running game.
+    /// Gets the current update frame rate, in frames per second.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance from which to retrieve the FPS rate.</param>
-    /// <returns>The current FPS rate of the game as a floating-point value.</returns>
+    /// <param name="game">The <see cref="IGame"/> instance that provides timing information.</param>
+    /// <returns>The current frame rate as a floating-point value.</returns>
     /// <remarks>
-    /// This value represents the actual frame rate at which the game is currently running and is updated each frame.
-    /// It can be used for performance monitoring, debugging, or displaying FPS information to the user.
+    /// This value is provided by <see cref="IGame.UpdateTime"/> and can be used for diagnostics, performance overlays, or gameplay-independent monitoring.
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static float FPS(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -132,17 +144,17 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets the maximum frames per second (FPS) rate for the game when the window is not in focus or minimized.
+    /// Sets the minimum update interval used while the game window is minimized.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance on which to set the FPS limit.</param>
-    /// <param name="targetFPS">The target FPS rate when the window loses focus. Set to 0 for uncapped FPS.</param>
+    /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
+    /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the minimized update interval. Must be greater than 0.</param>
     /// <remarks>
-    /// <para>This method is useful for reducing resource consumption when the game window is not actively being used.</para>
-    /// <para>Setting <paramref name="targetFPS"/> to 0 removes the FPS cap, allowing the game to run at maximum speed even when not in focus.</para>
-    /// <para>The game instance must be castable to <see cref="GameBase"/> for this method to work properly.</para>
+    /// <para>This method configures <see cref="GameBase.MinimizedMinimumUpdateRate"/> and is useful for reducing resource usage while the game is minimized.</para>
+    /// <para>Setting <paramref name="targetFPS"/> to zero disables throttling.</para>
+    /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
-    /// <exception cref="InvalidCastException">Thrown if <paramref name="game"/> cannot be cast to <see cref="GameBase"/>.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidCastException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
     public static void SetFocusLostFPS(this IGame game, int targetFPS)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -152,17 +164,17 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Sets the maximum frames per second (FPS) rate for the game when the window is in focus.
+    /// Sets the minimum update interval used while the game window is active.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance on which to set the FPS limit.</param>
-    /// <param name="targetFPS">The target FPS rate. Set to 0 for uncapped FPS.</param>
+    /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
+    /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the active-window update interval. Must be greater than 0.</param>
     /// <remarks>
-    /// <para>This method limits the game's frame rate to the specified value when the window is active and in focus.</para>
-    /// <para>Setting <paramref name="targetFPS"/> to 0 removes the FPS cap, allowing the game to run at maximum speed.</para>
-    /// <para>The game instance must be castable to <see cref="GameBase"/> for this method to work properly.</para>
+    /// <para>This method configures <see cref="GameBase.WindowMinimumUpdateRate"/> and can be used to limit the update rate while the game is running normally.</para>
+    /// <para>Setting <paramref name="targetFPS"/> to zero disables throttling.</para>
+    /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
-    /// <exception cref="InvalidCastException">Thrown if <paramref name="game"/> cannot be cast to <see cref="GameBase"/>.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidCastException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
     public static void SetMaxFPS(this IGame game, int targetFPS)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -172,14 +184,14 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Enables vertical synchronization (VSync) to prevent screen tearing by synchronizing the frame rate with the display's refresh rate.
+    /// Sets the presentation interval to wait for every second vertical blank.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance on which to enable VSync.</param>
+    /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
     /// <remarks>
-    /// <para>When VSync is enabled, the frame rate is limited to the display's refresh rate (typically 60Hz, 120Hz, or 144Hz).</para>
-    /// <para>This eliminates screen tearing but may introduce input latency and can reduce the overall frame rate.</para>
+    /// <para>This method sets <see cref="Stride.Graphics.GraphicsPresenter.PresentInterval"/> to <see cref="Stride.Graphics.PresentInterval.Two"/>.</para>
+    /// <para>Waiting for vertical blanks can reduce tearing, but may increase presentation latency and reduce the effective frame rate.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static void EnableVSync(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -188,14 +200,14 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Disables vertical synchronization (VSync) to allow for uncapped frame rates, potentially increasing performance at the cost of possible screen tearing.
+    /// Sets the presentation interval to present frames immediately.
     /// </summary>
-    /// <param name="game">The <see cref="IGame"/> instance on which to disable VSync.</param>
+    /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
     /// <remarks>
-    /// <para>When VSync is disabled, the frame rate is no longer limited by the display's refresh rate, allowing for higher FPS.</para>
-    /// <para>This may improve input responsiveness but can cause visual screen tearing artifacts.</para>
+    /// <para>This method sets <see cref="Stride.Graphics.GraphicsPresenter.PresentInterval"/> to <see cref="Stride.Graphics.PresentInterval.Immediate"/>.</para>
+    /// <para>Immediate presentation can improve responsiveness, but may cause visible tearing.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
     public static void DisableVSync(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -204,11 +216,14 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Exits the game if it inherits from <see cref="GameBase"/>; otherwise, throws an exception.
+    /// Requests the game to exit.
     /// </summary>
-    /// <param name="game">The game to exit.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="game"/> is null.</exception>
-    /// <exception cref="ArgumentException">Thrown if <paramref name="game"/> does not inherit from <see cref="GameBase"/>.</exception>
+    /// <param name="game">The <see cref="IGame"/> instance to exit.</param>
+    /// <remarks>
+    /// The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation because <see cref="GameBase.Exit"/> performs the shutdown request.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="game"/> is not a <see cref="GameBase"/> instance.</exception>
     public static void Exit(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
