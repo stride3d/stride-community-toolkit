@@ -94,7 +94,7 @@
       "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED v\u00EDce r\u016Fzn\u00FDch primitivn\u00EDch tvar\u016F.\nUkazuje vytvo\u0159en\u00ED entity, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entit k sc\u00E9n\u011B.\n"
     },
     "concepts": [
-      "Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Triangle)",
+      "Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)",
       "Positioning entities with Transform.Position",
       "Adding entities to a Scene (rootScene)",
       "Using helpers: SetupBase2DScene"
