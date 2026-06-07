@@ -5,22 +5,20 @@ using Stride.CommunityToolkit.Engine;
 namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
-/// Option set for creating a Bepu-physics enabled 3D primitive entity.
+/// Provides options for creating a 3D primitive entity with Bepu physics.
 /// </summary>
 /// <remarks>
-/// Inherits geometry / rendering options from <see cref="Primitive3DEntityOptions"/> and adds a configurable Bepu
-/// <see cref="CollidableComponent"/>. The default is a dynamic <see cref="BodyComponent"/> with an empty
-/// <see cref="CompoundCollider"/>; shape(s) are typically populated later by helper extensions based on the chosen primitive type.
+/// <para>Extends <see cref="Primitive3DEntityOptions"/> with a configurable Bepu <see cref="CollidableComponent"/>.</para>
+/// <para>The default component is a dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>.</para>
+/// <para>When collider generation is enabled, creation helpers populate the collider with shapes that match the selected primitive type.</para>
 /// </remarks>
 public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
 {
     /// <summary>
-    /// Gets or sets the Bepu collidable component to attach. Defaults to a new dynamic <see cref="BodyComponent"/>
-    /// containing an empty <see cref="CompoundCollider"/>.
+    /// Gets or sets the Bepu collidable component attached to the entity.
     /// </summary>
     /// <remarks>
-    /// Replace with a <see cref="StaticComponent"/> for immovable geometry or preconfigure collider children before
-    /// passing the options instance to a creation helper.
+    /// Defaults to a new dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>. Use a <see cref="StaticComponent"/> for immovable geometry, or preconfigure collider children before passing the options to a creation helper.
     /// </remarks>
     public CollidableComponent Component { get; set; } = new BodyComponent
     {
@@ -28,8 +26,10 @@ public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
     };
 
     /// <summary>
-    /// When true (default), a collider shape matching the primitive type is auto-created and added.
-    /// When false, the <see cref="CollidableComponent"/> is attached without shapes; you can add shapes later.
+    /// Gets or sets a value indicating whether a collider shape matching the primitive type is created automatically.
     /// </summary>
+    /// <remarks>
+    /// Defaults to <see langword="true"/>. When set to <see langword="false"/>, the <see cref="Component"/> is attached without generated collider shapes so they can be added later.
+    /// </remarks>
     public bool IncludeCollider { get; set; } = true;
 }
