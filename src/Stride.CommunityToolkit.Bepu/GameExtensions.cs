@@ -69,6 +69,7 @@ public static class GameExtensions
             EntityName = options?.EntityName ?? GameDefaults.DefaultGroundName,
             Size = size,
             Position = options?.Position ?? GameDefaults.Default2DGroundPosition,
+            Material = game.CreateFlatMaterial(GameDefaults.Default2DGroundMaterialColor),
             Component = options?.Component ?? new StaticComponent() { Collider = new CompoundCollider() }
         };
 
