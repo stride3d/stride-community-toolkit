@@ -8,12 +8,13 @@
     "category": "Shapes",
     "complexity": 1,
     "description": {
-      "en": "Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.\nDemonstrates entity creation, basic positioning, and attaching the entity to the scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle jako primitivn\u00EDho tvaru.\nUkazuje vytvo\u0159en\u00ED entity, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
+      "en": "Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.\nDemonstrates primitive creation, basic positioning, and attaching the entity to the scene.\n",
+      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle s ploch\u00FDm materi\u00E1lem.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDho tvaru, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
     },
     "concepts": [
-      "Creating a 2D primitive (Capsule)",
-      "Positioning an entity with Transform.Position",
+      "Creating a 2D primitive with Create2DPrimitive",
+      "Applying a flat material with CreateFlatMaterial",
+      "Setting an entity position through primitive options",
       "Adding entities to a Scene (rootScene)",
       "Using helpers: SetupBase2DScene"
     ],
@@ -25,6 +26,7 @@
     "tags": [
       "2D",
       "Bepu",
+      "Flat Material",
       "Shapes",
       "Primitive",
       "Capsule",
@@ -129,14 +131,15 @@
     "category": "Shapes",
     "complexity": 1,
     "description": {
-      "en": "Create a minimal 3D scene using toolkit helpers and place a single capsule primitive.\nDemonstrates entity creation, basic positioning, and attaching the entity to the scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 3D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle jako primitivn\u00EDho tvaru.\nUkazuje vytvo\u0159en\u00ED entity, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
+      "en": "Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.\nDemonstrates primitive creation, basic positioning, and attaching the entity to the scene.\n",
+      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 3D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady, p\u0159id\u00E1n\u00ED skyboxu a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle jako primitivn\u00EDho tvaru.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDho tvaru, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
     },
     "concepts": [
-      "Creating a 3D primitive (Capsule)",
+      "Creating a 3D primitive with Create3DPrimitive",
       "Positioning an entity with Transform.Position",
       "Adding entities to a Scene (rootScene)",
-      "Using helpers: SetupBase3DScene and AddSkybox"
+      "Using helpers: SetupBase3DScene",
+      "Using helpers: AddSkybox"
     ],
     "related": [
       "Example02_GiveMeACube",
