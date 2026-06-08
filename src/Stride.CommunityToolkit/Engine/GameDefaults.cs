@@ -48,4 +48,9 @@ public static class GameDefaults
     /// The default material color applied to generated ground entities.
     /// </summary>
     public static readonly Color DefaultGroundMaterialColor = Color.FromBgra(0xFF242424);
+
+    /// <summary>
+    /// The default material color applied to generated 2D ground entities.
+    /// </summary>
+    public static readonly Color Default2DGroundMaterialColor = Color.FromBgra(0xFF848484);
 }
