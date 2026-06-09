@@ -10,7 +10,6 @@ game.Run(start: (Scene rootScene) =>
 {
     game.SetupBase2DScene();
     game.AddProfiler();
-    game.ShowColliders();
 
     //var entity = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
     //{
