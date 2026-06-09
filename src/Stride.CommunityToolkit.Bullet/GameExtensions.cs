@@ -1,7 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Physics;
@@ -52,44 +51,65 @@ public static class GameExtensions
     /// Adds a 2D ground entity to the game with optional name, size, and collider settings.
     /// </summary>
     /// <param name="game">The game instance to which the ground entity will be added.</param>
-    /// <param name="entityName">The name to assign to the ground entity; defaults to <see cref="GameDefaults.DefaultGroundName"/> if null.</param>
-    /// <param name="size">The size of the ground entity in world units; defaults to <see cref="GameDefaults.Default2DGroundSize"/> if null.</param>
-    /// <param name="includeCollider">If <see langword="true"/>, attaches a collider to the ground entity; otherwise, no collider is added.</param>
+    /// <param name="options">Options for both the ground geometry and physics. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
     /// The ground entity is created using a cube primitive model and is suitable for 2D gameplay scenarios.
     /// </remarks>
-    public static Entity Add2DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector3? size = null, bool includeCollider = true)
-        => CreateGround(game, entityName, size ?? GameDefaults.Default2DGroundSize, includeCollider, PrimitiveModelType.Cube);
+    public static Entity Add2DGround(this Game game, Bullet2DPhysicsOptions? options = null)
+    {
+        var size = options?.Size is null ? GameDefaults.Default2DGroundSize : new(options.Size.Value.X, options.Size.Value.Y, GameDefaults.Default2DGroundSize.Z);
+
+        var options3D = new Bullet3DPhysicsOptions
+        {
+            EntityName = options?.EntityName ?? GameDefaults.DefaultGroundName,
+            Size = size,
+            Position = options?.Position ?? GameDefaults.Default2DGroundPosition,
+            Material = game.CreateFlatMaterial(GameDefaults.Default2DGroundMaterialColor),
+            PhysicsComponent = options?.PhysicsComponent ?? new StaticColliderComponent()
+        };
+
+        return CreateGround(game, PrimitiveModelType.Cube, options3D);
+    }
 
     /// <summary>
     /// Adds a 3D ground entity to the game with optional name, size, and collider settings.
     /// </summary>
     /// <param name="game">The game instance to which the ground entity will be added.</param>
-    /// <param name="entityName">The name to assign to the ground entity; defaults to <see cref="GameDefaults.DefaultGroundName"/> if null.</param>
-    /// <param name="size">The size of the ground entity in world units; defaults to <see cref="GameDefaults.Default3DGroundSize"/> if null.</param>
-    /// <param name="includeCollider">If <see langword="true"/>, attaches a collider to the ground entity; otherwise, no collider is added.</param>
+    /// <param name="options">Options for both the ground geometry and physics. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
     /// The ground entity is created using a plane primitive model and is suitable for 3D gameplay scenarios.
     /// </remarks>
-    public static Entity Add3DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector3? size = null, bool includeCollider = true)
-        => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.Plane);
+    public static Entity Add3DGround(this Game game, Bullet3DPhysicsOptions? options = null)
+    {
+        var physicsComponent = new StaticColliderComponent();
+
+        options ??= new Bullet3DPhysicsOptions() { PhysicsComponent = physicsComponent };
+        options.EntityName ??= GameDefaults.DefaultGroundName;
+
+        return CreateGround(game, PrimitiveModelType.Plane, options);
+    }
 
     /// <summary>
     /// Adds an infinite 3D ground entity to the game with optional name, size, and collider settings.
     /// </summary>
     /// <param name="game">The game instance to which the infinite ground entity will be added.</param>
-    /// <param name="entityName">The name to assign to the ground entity; defaults to <see cref="GameDefaults.DefaultGroundName"/> if null.</param>
-    /// <param name="size">The size of the visible ground entity in world units; defaults to <see cref="GameDefaults.Default3DGroundSize"/> if null.</param>
-    /// <param name="includeCollider">If <see langword="true"/>, attaches an infinite collider to the ground entity; otherwise, no collider is added.</param>
+    /// <param name="options">Options for both the ground geometry and physics. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created infinite ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
-    /// The visible part of the ground is defined by the <paramref name="size"/> parameter, while the collider is infinite and extends beyond the visible ground.
+    /// The visible part of the ground is defined by the <paramref name="options"/> parameter, while the collider is infinite and extends beyond the visible ground.
     /// The ground entity is created using an infinite plane primitive model.
     /// </remarks>
-    public static Entity AddInfinite3DGround(this Game game, string? entityName = GameDefaults.DefaultGroundName, Vector3? size = null, bool includeCollider = true)
-        => CreateGround(game, entityName, size, includeCollider, PrimitiveModelType.InfinitePlane);
+    public static Entity AddInfinite3DGround(this Game game, Bullet3DPhysicsOptions? options = null)
+    {
+        var physicsComponent = new StaticColliderComponent();
+
+        options ??= new Bullet3DPhysicsOptions() { PhysicsComponent = physicsComponent };
+        options.EntityName ??= GameDefaults.DefaultGroundName;
+
+        return CreateGround(game, PrimitiveModelType.InfinitePlane, options);
+    }
 
     /// <summary>
     /// Creates a 2D primitive entity and attaches a Bullet physics component as defined by <paramref name="options"/>.
@@ -143,24 +163,12 @@ public static class GameExtensions
         simulation.ColliderShapesRendering = true;
     }
 
-    private static Entity CreateGround(Game game, string? entityName, Vector3? size, bool includeCollider, PrimitiveModelType type)
+    private static Entity CreateGround(Game game, PrimitiveModelType type, Bullet3DPhysicsOptions options)
     {
-        var validSize = size ?? GameDefaults.Default3DGroundSize;
+        options.Size ??= GameDefaults.Default3DGroundSize;
+        options.Material ??= game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var material = game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
-
-        var entity = game.Create3DPrimitive(type, new Bullet3DPhysicsOptions()
-        {
-            EntityName = entityName,
-            Material = material,
-            Size = validSize,
-            PhysicsComponent = new StaticColliderComponent(),
-            IncludeCollider = includeCollider
-        });
-
-        // seems doing nothing
-        //rigidBody.CcdMotionThreshold = 100;
-        //rigidBody.CcdSweptSphereRadius = 100
+        var entity = game.Create3DPrimitive(type, options);
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
