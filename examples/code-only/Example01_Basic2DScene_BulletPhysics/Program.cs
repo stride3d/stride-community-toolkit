@@ -11,22 +11,12 @@ game.Run(start: (Scene rootScene) =>
     game.SetupBase2DScene();
     game.AddProfiler();
 
-    //var entity = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
-    //{
-    //    Material = game.CreateFlatMaterial(Color.Orange),
-    //    Size = new Vector2(0.2f, 0.4f),
-    //    Depth = 1
-    //});
-
-    //entity.Transform.Position = new Vector3(0, 8, 0);
-
-    //entity.Scene = rootScene;
 
     for (int i = 0; i <= 30; i++)
     {
         var primitive = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
         {
-            Material = game.CreateFlatMaterial(Color.Orange),
+            Material = game.CreateFlatMaterial(Color.White),
             //Size = new Vector2(0.2f, 0.7f),
             //Size = new Vector2(0.1f, 1),
             Depth = 1
