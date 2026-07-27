@@ -14,7 +14,7 @@ void Start(Scene rootScene)
 
     var entity = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
     {
-        Material = game.CreateFlatMaterial(Color.Orange)
+        Material = game.CreateFlatMaterial(Color.White)
     });
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;

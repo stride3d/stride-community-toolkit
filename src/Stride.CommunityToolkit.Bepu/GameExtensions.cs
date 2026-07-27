@@ -17,7 +17,7 @@ public static class GameExtensions
     /// <summary>
     /// Sets up a default 2D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
-    /// <param name="game">The game instance to configure with a 2D scene setup.</param>
+    /// <param name="game">The game instance to configure with the base 2D scene setup.</param>
     /// <remarks>
     /// This method performs the following setup operations in sequence:<br />
     /// 1. Configures base 2D scene settings.<br />
@@ -31,11 +31,10 @@ public static class GameExtensions
         game.Add2DGround();
     }
 
-    // ToDo: Maybe this could be call SetupDemo3DScene and move to a demo namespace?
     /// <summary>
     /// Sets up a default 3D scene for the game, similar to creating an empty project through the editor.
     /// </summary>
-    /// <param name="game">The game instance for which the base 3D scene will be set up.</param>
+    /// <param name="game">The game instance to configure with the base 3D scene setup.</param>
     /// <remarks>
     /// This method performs the following setup operations in sequence:<br />
     /// 1. Configures base 3D scene settings.<br />
@@ -80,7 +79,7 @@ public static class GameExtensions
     /// Adds a 3D ground entity to the game using a plane primitive and Bepu static physics.
     /// </summary>
     /// <param name="game">The game instance to which the ground entity will be added.</param>
-    /// <param name="options">Options for both the ground geometry and physics. If <c>null</c>, defaults will be used.</param>
+    /// <param name="options">Optional 3D physics options used to configure the ground. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
     /// When <paramref name="options"/> is <see langword="null"/>, default options are created with a <see cref="StaticComponent"/> and <see cref="CompoundCollider"/>. If <see cref="PrimitiveEntityOptions.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.

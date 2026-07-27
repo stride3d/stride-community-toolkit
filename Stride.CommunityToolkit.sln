@@ -166,6 +166,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic2DScene_Prim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic2DScene_DebugRender", "examples\code-only\Example01_Basic2DScene_DebugRender\Example01_Basic2DScene_DebugRender.csproj", "{35DF7999-AAEC-42C3-9A6B-545F6407B148}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example01_Basic2DScene_FallingShapes", "examples\code-only\Example01_Basic2DScene_FallingShapes\Example01_Basic2DScene_FallingShapes.csproj", "{0D95A917-5BCC-4911-9B62-B5525B232C0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -443,6 +445,10 @@ Global
 		{35DF7999-AAEC-42C3-9A6B-545F6407B148}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35DF7999-AAEC-42C3-9A6B-545F6407B148}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35DF7999-AAEC-42C3-9A6B-545F6407B148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D95A917-5BCC-4911-9B62-B5525B232C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D95A917-5BCC-4911-9B62-B5525B232C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D95A917-5BCC-4911-9B62-B5525B232C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D95A917-5BCC-4911-9B62-B5525B232C0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -504,6 +510,7 @@ Global
 		{74CEB91D-E3DE-4678-8F50-C1A0086C5A3E} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{8EA86428-6399-499E-8F12-02FDC11B6638} = {30457B66-9E10-4290-9744-D0079DE0448B}
 		{35DF7999-AAEC-42C3-9A6B-545F6407B148} = {30457B66-9E10-4290-9744-D0079DE0448B}
+		{0D95A917-5BCC-4911-9B62-B5525B232C0E} = {30457B66-9E10-4290-9744-D0079DE0448B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7A8C18E-C1F5-492F-8173-51EC9495B78C}
