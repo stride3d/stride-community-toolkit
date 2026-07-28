@@ -12,19 +12,11 @@
 
     <ItemGroup>
         <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.3.0.2507" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+        <PackageReference Include="Stride.AssetCompiler" Version="4.4.0-beta4" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Effects\ImGuiNetShader.sdsl.cs">
-        <DesignTime>True</DesignTime>
-        <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        <AutoGen>True</AutoGen>
-      </Compile>
     </ItemGroup>
 
     <ItemGroup>
