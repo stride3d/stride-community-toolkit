@@ -2,14 +2,14 @@
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Windows</Title>
-        <Description>This library serves to simplify the setup for Stride code-only projects by automatically including the `Stride.Core.Assets.CompilerApp` package and specifying `RuntimeIdentifier` in the project file. This eliminates the need for boilerplate code, making it easier to demonstrate and develop simple Stride projects without additional configuration.$(StrideVersionNote)</Description>
+        <Description>This library serves to simplify the setup for Stride code-only projects by automatically including the `Stride.AssetCompiler` package and specifying `RuntimeIdentifier` in the project file. This eliminates the need for boilerplate code, making it easier to demonstrate and develop simple Stride projects without additional configuration.$(StrideVersionNote)</Description>
         <RuntimeIdentifier>AnyCPU</RuntimeIdentifier>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.Core.Assets.CompilerApp. -->
+        <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.AssetCompiler. -->
         <PackageReference Include="Stride.AssetCompiler" Version="4.4.0-beta4" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
