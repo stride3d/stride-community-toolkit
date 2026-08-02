@@ -45,7 +45,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
         base.InitializeCore();
 
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _font = Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
         _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
 
         var graphicsCompositor = Context.Tags.Get(GraphicsCompositor.Current);

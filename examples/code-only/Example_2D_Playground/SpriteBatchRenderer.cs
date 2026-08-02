@@ -19,7 +19,7 @@ public class SpriteBatchRenderer : SyncScript
     public override void Start()
     {
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _font = Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
         _sceneRenderer = new DelegateSceneRenderer(Draw);
         _ctx = new RenderDrawContext(Services, RenderContext.GetShared(Services), Game.GraphicsContext);
 

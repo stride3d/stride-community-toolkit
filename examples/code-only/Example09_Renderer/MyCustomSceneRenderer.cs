@@ -51,7 +51,7 @@ public class MyCustomSceneRenderer : SceneRendererBase
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // Load the default font used for rendering text
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _font = Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
         // Create a small texture (1x1 pixel) for drawing the background behind the text
         _colorTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);

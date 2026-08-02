@@ -39,7 +39,7 @@ void AddCapsule(Scene scene)
 
 void LoadFont()
 {
-    _font = game.Content.Load<SpriteFont>("StrideDefaultFont");
+    _font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 }
 
 void AddWindow(Scene scene)
