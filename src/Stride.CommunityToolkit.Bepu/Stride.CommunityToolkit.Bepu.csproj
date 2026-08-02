@@ -10,8 +10,8 @@
     <Import Project="..\CommonSettings.props" />
 
     <ItemGroup>
-        <PackageReference Include="Stride.BepuPhysics" Version="4.4.0-beta4" />
-        <PackageReference Include="Stride.BepuPhysics.Debug" Version="4.4.0-beta4" />
+        <PackageReference Include="Stride.BepuPhysics" Version="$(StrideVersion)" />
+        <PackageReference Include="Stride.BepuPhysics.Debug" Version="$(StrideVersion)" />
     </ItemGroup>
 
     <ItemGroup>

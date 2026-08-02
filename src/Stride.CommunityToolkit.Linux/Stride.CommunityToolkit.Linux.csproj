@@ -13,7 +13,7 @@
 
     <ItemGroup>
         <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.AssetCompiler. -->
-        <PackageReference Include="Stride.AssetCompiler" Version="4.4.0-beta4" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>

@@ -19,7 +19,7 @@
 
     <ItemGroup>
         <PackageReference Include="Hexa.NET.ImGui" Version="2.2.9" />
-        <PackageReference Include="Stride.AssetCompiler" Version="4.4.0-beta4" IncludeAssets="build;buildTransitive" />
+        <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>

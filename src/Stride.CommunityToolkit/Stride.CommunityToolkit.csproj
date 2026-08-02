@@ -18,10 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Engine" Version="4.4.0-beta4" />
-        <PackageReference Include="Stride.Particles" Version="4.4.0-beta4" />
-        <PackageReference Include="Stride.Physics" Version="4.4.0-beta4" />
-        <PackageReference Include="Stride.UI" Version="4.4.0-beta4" />
+        <PackageReference Include="Stride.Engine" Version="$(StrideVersion)" />
+        <PackageReference Include="Stride.Particles" Version="$(StrideVersion)" />
+        <PackageReference Include="Stride.Physics" Version="$(StrideVersion)" />
+        <PackageReference Include="Stride.UI" Version="$(StrideVersion)" />
     </ItemGroup>
 
     <ItemGroup>
