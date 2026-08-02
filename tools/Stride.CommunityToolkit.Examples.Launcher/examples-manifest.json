@@ -85,6 +85,49 @@
   },
   {
     "title": {
+      "en": "Basic2D Scene (Falling Shapes)",
+      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (Padaj\u00EDc\u00ED tvary)"
+    },
+    "level": "Getting Started",
+    "category": "Shapes",
+    "complexity": 1,
+    "description": {
+      "en": "Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.\nDemonstrates primitive creation, basic positioning, and attaching the entities to the scene.\nThe shapes will fall due to physics, showcasing the integration of Bepu physics in a 2D scene.\n",
+      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED n\u011Bkolika kapsl\u00ED s ploch\u00FDmi materi\u00E1ly.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDch tvar\u016F, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entit k sc\u00E9n\u011B.\nTvary budou padat d\u00EDky fyzice, co\u017E ukazuje integraci Bepu fyziky v 2D sc\u00E9n\u011B.\n"
+    },
+    "concepts": [
+      "Creating a 2D primitive with Create2DPrimitive",
+      "Applying a flat material with CreateFlatMaterial",
+      "Setting an entity position through primitive options",
+      "Adding entities to a Scene (rootScene)",
+      "Using helpers: SetupBase2DScene"
+    ],
+    "related": [
+      "Example02_GiveMeACube",
+      "Example01_Basic2DScene_Primitives",
+      "Example01_Material"
+    ],
+    "tags": [
+      "2D",
+      "Bepu",
+      "Flat Material",
+      "Shapes",
+      "Primitive",
+      "Capsule",
+      "Scene Setup",
+      "Transform",
+      "Position",
+      "Getting Started"
+    ],
+    "order": 2,
+    "enabled": true,
+    "created": "2026-06-11",
+    "isDraft": false,
+    "projectName": "Example01_Basic2DScene_FallingShapes",
+    "projectPath": "Example01_Basic2DScene_FallingShapes\\Program.cs"
+  },
+  {
+    "title": {
       "en": "Basic2D Scene (Multiple Primitives)",
       "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (V\u00EDce primitiv)"
     },

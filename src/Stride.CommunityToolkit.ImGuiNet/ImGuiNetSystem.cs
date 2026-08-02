@@ -270,7 +270,7 @@ public class ImGuiNetSystem : GameSystemBase
             Output = new RenderOutputDescription(PixelFormat.R8G8B8A8_UNorm)
         };
 
-        _pipelineState = PipelineState.New(_graphicsDevice, ref pipelineDesc);
+        _pipelineState = PipelineState.New(_graphicsDevice, pipelineDesc);
 
         // Create initial buffers
         var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice, 1024 * _vertexLayout.CalculateSize(), GraphicsResourceUsage.Dynamic);

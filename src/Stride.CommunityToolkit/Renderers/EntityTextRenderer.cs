@@ -18,6 +18,7 @@ namespace Stride.CommunityToolkit.Renderers;
 /// </remarks>
 public class EntityTextRenderer : SceneRendererBase
 {
+    private const string DefaultFontPath = "/Stride.Engine/StrideDefaultFont";
     private SpriteBatch? _spriteBatch;
     private SpriteFont? _font;
     private Scene? _scene;
@@ -37,7 +38,7 @@ public class EntityTextRenderer : SceneRendererBase
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // Load the default font used for rendering text
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _font = Content.Load<SpriteFont>(DefaultFontPath);
 
         // Create a small texture (1x1 pixel) for drawing the background behind the text
         _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
