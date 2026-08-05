@@ -35,6 +35,7 @@ void Start(Scene rootScene)
     CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Sphere, Color.Red, new Vector3(-1f, 0.5f, 4f));
     CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Capsule, Color.Green, new Vector3(2f, 0.5f, 1f));
     CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Sphere, Color.Magenta, new Vector3(-1f, 0.5f, 1f));
+    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Cube, Color.Orange, new Vector3(2f, 0.5f, 4f));
 }
 
 /// <summary>
