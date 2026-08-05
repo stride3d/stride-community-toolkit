@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -11,6 +11,11 @@
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
+
+    <ItemGroup>
+        <!-- This example requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.AssetCompiler. -->
+        <PackageReference Include="Stride.AssetCompiler" Version="4.4.0-dev" IncludeAssets="build;buildTransitive" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />

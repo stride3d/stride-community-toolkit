@@ -1,43 +1,26 @@
-using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
 namespace Example13_MeshOutline;
 
 /// <summary>
-/// Represents a component that enables an outline effect on a mesh entity.
-/// Attach this component to an entity with a model to render an outline using the MeshOutlineRenderFeature.
+/// Marks an entity as outlined. Add it to any entity that has a <see cref="ModelComponent"/> and
+/// <see cref="MeshOutlineRenderFeature"/> will draw an outline around that entity's mesh.
 /// </summary>
 /// <remarks>
-/// The outline effect is controlled by the <see cref="Enabled"/>, <see cref="Color"/>, and <see cref="Intensity"/> properties.
-/// Ensure that MeshOutlineRenderFeature is enabled in the Graphics Compositor for this effect to be visible.
+/// Set <see cref="ActivableEntityComponent.Enabled"/> to <c>false</c> to hide the outline without
+/// removing the component.
 /// </remarks>
-public class MeshOutlineComponent : EntityComponent
+public class MeshOutlineComponent : ActivableEntityComponent
 {
     /// <summary>
-    /// Gets or sets a value indicating whether the mesh outline effect is enabled for this entity.
+    /// Colour of the outline.
     /// </summary>
-    /// <remarks>
-    /// Set to <c>true</c> to render the outline; <c>false</c> to disable it.
-    /// </remarks>
-    [DataMember(10)]
-    public bool Enabled { get; set; } = true;
+    public Color4 Color { get; set; } = Color4.White;
 
     /// <summary>
-    /// Gets or sets the color of the outline effect.
+    /// Brightness multiplier applied to <see cref="Color"/>. Values above 1 push the outline into
+    /// HDR range, which makes it glow once the bloom post effect is applied.
     /// </summary>
-    /// <remarks>
-    /// The color is applied to the outline rendered around the mesh. Use <see cref="Color4"/> for RGBA values.
-    /// </remarks>
-    [DataMember(30)]
-    public Color4 Color { get; set; } = new Color4();
-
-    /// <summary>
-    /// Gets or sets the intensity of the outline color.
-    /// </summary>
-    /// <remarks>
-    /// Values greater than 1.0 will increase brightness. Typical range is 0.0 (transparent) and above.
-    /// </remarks>
-    [DataMember(40)]
-    public float Intensity { get; set; } = 1.0f;
+    public float Intensity { get; set; } = 1f;
 }

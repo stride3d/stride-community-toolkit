@@ -272,11 +272,16 @@ public class ImGuiNetSystem : GameSystemBase
 
         _pipelineState = PipelineState.New(_graphicsDevice, pipelineDesc);
 
-        // Create initial buffers
-        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice, 1024 * _vertexLayout.CalculateSize(), GraphicsResourceUsage.Dynamic);
+        // Create initial buffers.
+        // Note: the 'bufferSize'/'usage' arguments must be named. Buffer.Vertex.New also exposes a
+        // generic New<T>(device, ref readonly T value, usage) overload, and positional arguments bind
+        // to it (T = int) instead of the size-based overload, producing a 4-byte buffer.
+        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice,
+            bufferSize: 1024 * _vertexLayout.CalculateSize(), usage: GraphicsResourceUsage.Dynamic);
         _vertexBinding = new VertexBufferBinding(vertexBuffer, _vertexLayout, 0);
 
-        var indexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice, 2048 * sizeof(ushort), GraphicsResourceUsage.Dynamic);
+        var indexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice,
+            bufferSize: 2048 * sizeof(ushort), usage: GraphicsResourceUsage.Dynamic);
         _indexBinding = new IndexBufferBinding(indexBuffer, false, 0);
     }
 
@@ -454,11 +459,13 @@ public class ImGuiNetSystem : GameSystemBase
         {
             var cmdList = drawData.CmdLists[n];
 
-            // Update vertex buffer if needed
+            // Update vertex buffer if needed (see CreateRenderingResources for why the arguments are named)
             if (cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>() > _vertexBinding.Buffer.SizeInBytes)
             {
                 var newVertexBuffer = Stride.Graphics.Buffer.Vertex.New(_graphicsDevice,
-                    cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>() * 2, GraphicsResourceUsage.Dynamic);
+                    bufferSize: cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>() * 2,
+                    usage: GraphicsResourceUsage.Dynamic);
+                _vertexBinding.Buffer?.Dispose();
                 _vertexBinding = new VertexBufferBinding(newVertexBuffer, _vertexLayout, 0);
             }
 
@@ -466,7 +473,9 @@ public class ImGuiNetSystem : GameSystemBase
             if (cmdList.IdxBuffer.Size * sizeof(ushort) > _indexBinding!.Buffer.SizeInBytes)
             {
                 var newIndexBuffer = Stride.Graphics.Buffer.Index.New(_graphicsDevice,
-                    cmdList.IdxBuffer.Size * sizeof(ushort) * 2, GraphicsResourceUsage.Dynamic);
+                    bufferSize: cmdList.IdxBuffer.Size * sizeof(ushort) * 2,
+                    usage: GraphicsResourceUsage.Dynamic);
+                _indexBinding.Buffer?.Dispose();
                 _indexBinding = new IndexBufferBinding(newIndexBuffer, false, 0);
             }
 
