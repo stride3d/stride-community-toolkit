@@ -20,15 +20,15 @@ void Start(Scene scene)
     // The visibility group is added when a valid render processor "component" is added to the scene.
     var background = new RibbonBackgroundComponent
     {
-        Intensity = 0.5f,
-        Frequency = 0.5f,
-        Amplitude = 0.5f,
-        Speed = 0.5f,
-        WidthFactor = 0.5f
+        Intensity = 0.9f,
+        Frequency = 0.9f,
+        Amplitude = 0.9f,
+        Speed = 2f,
+        WidthFactor = 0.9f
     };
 
     // Once this gets added to the scene, the render processor will be added to the scene.
-    var entity = new Entity { new RibbonBackgroundComponent() };
+    var entity = new Entity { background };
     scene.Entities.Add(entity);
 
     game.Window.Position = new Stride.Core.Mathematics.Int2(50, 50);
