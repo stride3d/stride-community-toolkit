@@ -78,6 +78,12 @@ public class MeshOutlineRenderFeature : RootRenderFeature
     {
         if (_shader == null || _pipelineState == null) return;
 
+        // Stride calls Draw once per render view and render stage, which includes the shadow map
+        // passes. Those bind a depth buffer only, so drawing outlines there is wasted work and makes
+        // the outline pixel shader write to a render target that is not bound - which the D3D debug
+        // layer reports every frame. Outlines only make sense where colour is being written.
+        if (context.CommandList.RenderTargetCount == 0) return;
+
         _shader.UpdateEffect(context.GraphicsDevice);
 
         // Cache frequently used values outside the loop
