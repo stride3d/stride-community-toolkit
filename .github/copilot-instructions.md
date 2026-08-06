@@ -58,6 +58,16 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 - Physics: Prefer Bepu components; keep Bullet only for transition/testing. Avoid mixing both on the same entity.
 - Core components commonly manipulated: Transform (position, rotation, scale), Camera, Rigidbody, Script logic.
 
+### Bepu transform ownership (frequent source of confusion)
+
+- The transform sync is **one-way: physics → `TransformComponent`**. Assigning `Entity.Transform.Position` on an entity that has an attached body moves the mesh only; the body stays where the simulation put it.
+- To move a body deliberately: `Teleport(...)` jumps it without checking collisions, while scripted motion that should collide belongs on a body with `Kinematic = true`.
+- Prefer setting `LinearVelocity` on a kinematic body over calling `SetTargetPose(...)` from a per-frame `Update`. `SetTargetPose` derives its velocity from `(target - position) / FixedTimeStep`, which assumes exactly one physics tick per call. When the frame rate falls below the physics rate two ticks run on that velocity, the body overshoots the target, the next correction overshoots further, and it diverges to `NaN` within seconds. `SetTargetPose` is safe when the caller runs once per physics tick (`ISimulationUpdate.SimulationUpdate`) or when the frame rate is pinned to the physics rate; otherwise integrate a velocity you compute yourself, and add a small proportional pull towards the ideal position to stop drift.
+- Setting `LinearVelocity` does **not** wake a sleeping body — set `Awake = true` as well, or the motion silently stops once the body sleeps.
+- Only **awake** bodies are synced back to their transform. A dynamic body that settles and falls asleep stops overwriting the transform, so direct transform writes suddenly appear to work while the collider is left behind. A "moving mesh with no collisions" almost always means this.
+- `Bepu3DPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`, but a `CompoundCollider` with no shapes never attaches to the simulation, leaving an inert component. For a purely visual entity use the non-physics `Create3DPrimitive` overload by passing `Primitive3DEntityOptions` instead.
+- `Create3DPrimitive` has both a Bepu overload (`Bepu3DPhysicsOptions`) and a plain one (`Primitive3DEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
+
 ## Toolkit patterns
 ### Extension method pattern
 
@@ -157,6 +167,67 @@ game.Run(start: (Scene rootScene) =>
     entity.Scene = rootScene;
 });
 ```
+
+## Running & debugging examples (AI assistants)
+
+Code-only examples are GUI applications that run until the window is closed, so a plain `dotnet run` cannot be waited on and read back. Use this loop instead: build, launch the built executable with redirected output, wait, terminate, then read the captured log. Verify engine behaviour this way rather than reasoning about it — assumptions about Stride internals are frequently wrong.
+
+### Run an example and capture its console output
+
+```powershell
+$out = "$env:TEMP\example-run.txt"
+dotnet build examples\code-only\Example02_GiveMeACube\Example02_GiveMeACube.csproj -v q --nologo
+$exe = "examples\code-only\Example02_GiveMeACube\bin\Debug\net10.0\Example02_GiveMeACube.exe"
+$process = Start-Process $exe -PassThru -RedirectStandardOutput $out -WorkingDirectory (Split-Path $exe)
+Start-Sleep -Seconds 12
+if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force }
+Get-Content $out | Select-String "DIAG"
+```
+
+### Where temporary diagnostics actually surface
+
+- **Top-level statements and the `game.Run(start:/update:)` callbacks**: `Console.WriteLine` reaches the redirected stream.
+- **Inside a `SyncScript` / `AsyncScript` / `StartupScript`**: `Console.WriteLine` does *not* reach it. Use the script's own logger (`Log.Info`, `Log.Warning`).
+- **Inside a render feature or game system**: use `GlobalLogger.GetLogger("Name")`.
+- Stride writes log lines to both the console and the redirected stream, so captured output shows each line twice. Expect the duplicates or pipe through `Select-Object -Unique`.
+
+### Making per-frame diagnostics readable
+
+Gate on a frame counter to keep the log short, but always include the first few frames:
+
+```csharp
+_frames++;
+if (_frames > 3 && _frames % 120 != 0) return;
+
+Log.Warning($"DIAG position={Entity.Transform.Position}");
+```
+
+Gating on `% N` alone can produce no output at all when the run is short or the frame rate is low, which is easily misread as "the code never ran". Prefix diagnostic lines with a unique token such as `DIAG` so they can be filtered out of Stride's own logging.
+
+### Screenshots
+
+Useful for confirming a visual change, and the resulting PNG can be read back directly.
+
+```powershell
+Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+$bitmap = New-Object System.Drawing.Bitmap 1200, 900
+$graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+$graphics.CopyFromScreen(0, 0, 0, 0, $bitmap.Size)
+$bitmap.Save("$env:TEMP\shot.png", [System.Drawing.Imaging.ImageFormat]::Png)
+$graphics.Dispose(); $bitmap.Dispose()
+```
+
+- Prefer positioning the window from the example itself (`game.Window.Position`, `game.Window.AllowUserResizing`) over forcing it with a `SetWindowPos` P/Invoke. Forcing a resize leaves Stride's `Window.ClientBounds` out of sync with the captured region, which can make correctly rendered UI look as though it is missing.
+- Capture two screenshots a few seconds apart to confirm that animation or physics is actually progressing.
+
+### Build warnings are a debugging tool
+
+- Real defects hide in the warning list. A Stride 4.4 regression that silently broke the ImGui.NET integration was found only through a single `warning CS9193` among 66 warnings.
+- Filter with `Select-String ": error|warning CS"`. Filtering by project path also matches unrelated `NU1903` NuGet advisories.
+
+### Always clean up
+
+- Remove every temporary diagnostic, then confirm with `git status` before reporting the work as complete.
 
 ## AI assistance guidance
 
