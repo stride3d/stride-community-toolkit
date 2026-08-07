@@ -2,17 +2,14 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <DefineConstants>$(DefineConstants);DISABLE_PROFILER_AGENT_CONFIG</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
-        <PackageReference Include="Microsoft.VisualStudio.DiagnosticsHub.BenchmarkDotNetDiagnosers" Version="18.6.37110.2" />
-        <PackageReference Include="Stride.Core" Version="4.4.0-dev" />
-        <PackageReference Include="Stride.Core.Mathematics" Version="4.4.0-dev" />
+        <PackageReference Include="Microsoft.VisualStudio.DiagnosticsHub.BenchmarkDotNetDiagnosers" Version="18.7.37220.1" />
+        <PackageReference Include="Stride.Core" Version="$(StrideVersion)" />
+        <PackageReference Include="Stride.Core.Mathematics" Version="$(StrideVersion)" />
     </ItemGroup>
 
 </Project>

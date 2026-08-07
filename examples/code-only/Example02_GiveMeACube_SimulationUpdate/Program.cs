@@ -1,4 +1,4 @@
-using Example02_GiveMeACube;
+using Example02_GiveMeACube_SimulationUpdate;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
@@ -8,9 +8,12 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-// A cube orbits the scene and knocks a ring of smaller cubes out of its way.
-// The orbit is driven by OrbitScript, a SyncScript attached to the entity, rather than by the update
-// callback of game.Run(...) - that is what this example is really demonstrating.
+// The same scene as Example02_GiveMeACube, with one difference: the orbit is driven from the physics
+// clock instead of the render loop.
+//
+// Example02 sets a velocity every frame, which is safe because the velocity it sets is bounded. This
+// version calls SetTargetPose, which is only correct when exactly one physics step consumes it - so the
+// script implements ISimulationUpdate and is called once per fixed step rather than once per frame.
 
 // Half of a 1x1x1 cube, so it sits exactly on the ground
 const float CubeRestingHeight = 0.5f;
@@ -75,13 +78,11 @@ void CreateLooseCubes(Scene rootScene)
 }
 
 /// <summary>
-/// Creates the cube that <see cref="OrbitScript"/> moves.
+/// Creates the cube that <see cref="OrbitSimulationScript"/> moves.
 /// </summary>
 /// <remarks>
 /// The body is kinematic, so it follows the scripted path without being affected by gravity or by the
-/// cubes it hits, while still pushing them aside. A dynamic body would fall and be knocked off course;
-/// an entity with no body at all could be moved by writing its transform, but would pass straight
-/// through everything.
+/// cubes it hits, while still pushing them aside.
 /// </remarks>
 void CreateOrbitingCube(Scene rootScene)
 {
@@ -95,11 +96,10 @@ void CreateOrbitingCube(Scene rootScene)
     });
 
     // Spawn on the circle, not at its centre: the script steers the body towards the next point on
-    // the orbit, so starting three units away would demand a huge velocity on the very first tick.
+    // the orbit, so starting three units away would demand a huge velocity on the very first step.
     cube.Transform.Position = new Vector3(0, CubeRestingHeight, OrbitRadius);
 
-    // Adding the script is what gives the entity its behaviour
-    cube.Add(new OrbitScript
+    cube.Add(new OrbitSimulationScript
     {
         Centre = new Vector3(0, CubeRestingHeight, 0),
         Radius = OrbitRadius,
@@ -112,52 +112,50 @@ void CreateOrbitingCube(Scene rootScene)
 /*
 ---example-metadata
 title:
-  en: Give Me a Cube
-  cs: Dej mi kostku
-level: Getting Started
-category: Scripts
-complexity: 2
+  en: Give Me a Cube (SimulationUpdate)
+  cs: Dej mi kostku (SimulationUpdate)
+level: Beginners
+category: Physics
+complexity: 3
 description:
   en: |
-    Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
-    The script steers a cube around a circle each frame by setting the linear velocity of a kinematic
-    Bepu body, so it really sweeps through the scene and knocks a ring of smaller dynamic cubes out of
-    the way. Writing Transform.Position instead would move only the mesh and collide with nothing.
+    Drive an entity from the physics clock instead of the render loop. The script is a StartupScript with
+    no per-frame Update at all: it implements ISimulationUpdate, so Bepu calls it once per fixed physics
+    step and Stride registers it automatically. That is what makes SetTargetPose safe, because exactly one
+    step consumes the velocity it sets. Compare with Example02_GiveMeACube, which sets a bounded velocity
+    every frame instead.
   cs: |
-    Přidání chování k entitě pomocí komponenty SyncScript namísto callbacku update v game.Run.
-    Skript každý snímek vede kostku po kruhu nastavením lineární rychlosti kinematického tělesa Bepu,
-    takže skutečně projíždí scénou a odráží kruh menších dynamických kostek. Zápis do Transform.Position
-    by naproti tomu pohnul pouze modelem a s ničím by nekolidoval.
+    Řízení entity podle hodin fyziky namísto vykreslovací smyčky. Skript je StartupScript zcela bez metody
+    Update: implementuje rozhraní ISimulationUpdate, takže jej Bepu volá jednou za pevný fyzikální krok
+    a Stride jej zaregistruje automaticky. Právě díky tomu je metoda SetTargetPose bezpečná, protože
+    nastavenou rychlost spotřebuje přesně jeden krok. Porovnejte s Example02_GiveMeACube, který místo toho
+    nastavuje omezenou rychlost každý snímek.
 concepts:
-  - Adding behaviour with a SyncScript component
-  - The Start and Update lifecycle methods
-  - Configuring a script through public properties
-  - Moving a kinematic body by setting its linear velocity
-  - Waking a body after changing its velocity
-  - Why writing Transform.Position does not move a physics body
-  - Sizing a primitive and its collider together
+  - Implementing ISimulationUpdate to run on the physics clock
+  - The difference between a fixed physics step and a frame delta time
+  - Using SetTargetPose safely, once per physics step
+  - StartupScript as a component with no per-frame Update
+  - Moving a kinematic body so it pushes dynamic bodies
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddSkybox"
-  - "Using helpers: Game.DeltaTime"
 related:
-  - Example01_Basic3DScene
+  - Example02_GiveMeACube
   - Example01_Basic3DScene_SyncScript
-  - Example11_ImGuiNet
+  - Example20_BepuFirstPersonCharacter
 tags:
   - 3D
-  - Script
-  - SyncScript
-  - Component
-  - Update Loop
-  - Transform
-  - Bepu
   - Physics
+  - Bepu
+  - ISimulationUpdate
+  - Fixed Timestep
   - Kinematic Body
   - Collision
+  - Script
+  - StartupScript
   - Cube
-  - Getting Started
+  - Beginners
 order: 2
 enabled: true
-created: 2023-09-11
+created: 2026-08-07
 ---
 */

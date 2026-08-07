@@ -2,9 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
 
         <ExampleTitle>Myra UI - Draggable Window, GetService()</ExampleTitle>
         <ExampleOrder>10200</ExampleOrder>
@@ -19,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Myra.Stride" Version="1.6.3" />
+      <PackageReference Include="Myra.Stride" Version="1.6.4" />
     </ItemGroup>
 
 </Project>

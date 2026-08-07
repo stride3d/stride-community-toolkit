@@ -3,10 +3,10 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
 
-        <ExampleTitle>Various Constraints</ExampleTitle>
-        <ExampleOrder>10100</ExampleOrder>
+        <ExampleTitle>Give me a cube (SimulationUpdate)</ExampleTitle>
+        <ExampleOrder>750</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
+        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

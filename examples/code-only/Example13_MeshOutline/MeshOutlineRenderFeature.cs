@@ -20,7 +20,9 @@ public class MeshOutlineRenderFeature : RootRenderFeature
     private MutablePipelineState? _pipelineState;
 
     /// <summary>
-    /// How far the outline sticks out, as a fraction of the model's size.
+    /// How far the outline sticks out, in the model's own units (the shell is offset along the
+    /// vertex normals before the world matrix, so the entity's scale multiplies this).
+    /// A unit-diameter sphere has a radius of 0.5, so 0.03 gives a rim about 6% of the radius.
     /// </summary>
     public float Thickness = 0.001f;
 

@@ -3,8 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
 
-        <ExampleTitle>Various Constraints</ExampleTitle>
-        <ExampleOrder>10100</ExampleOrder>
+        <ExampleTitle>Instancing with entity transforms</ExampleTitle>
+        <ExampleOrder>2200</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
         <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
