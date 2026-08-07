@@ -3,10 +3,7 @@
     <PropertyGroup>
         <Version>1.0.0.0</Version>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
         <AssemblyName>MetadataGenerator</AssemblyName>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

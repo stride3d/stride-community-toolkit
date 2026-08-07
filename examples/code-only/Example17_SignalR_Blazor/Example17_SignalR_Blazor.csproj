@@ -1,10 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-
         <ExampleTitle>Blazor + SignalR - Run this from IIS</ExampleTitle>
         <ExampleOrder>20000</ExampleOrder>
         <ExampleEnabled>true</ExampleEnabled>
