@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Pastel" Version="7.0.1" />
+        <PackageReference Include="Pastel" Version="8.0.0" />
     </ItemGroup>
 
 </Project>
