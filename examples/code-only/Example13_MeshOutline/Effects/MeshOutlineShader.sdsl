@@ -7,6 +7,10 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
 
     // Push the vertex out along its normal by (WorldScale - 1), then project it. This inflates the
     // mesh just enough for the back faces to show up around the silhouette of the original.
+    // Note: hard-edged meshes with duplicated per-face normals (e.g. a procedural Cube) will show
+    // gaps at edges/corners here, since the duplicated vertices push apart instead of staying
+    // together - the shell separates instead of remaining watertight. Smooth-normal meshes
+    // (Sphere, Capsule) are unaffected.
     float4 inflateAndProject(in float4 pos, in float3 normal)
     {
         float3 offset = normal * (WorldScale - 1);
