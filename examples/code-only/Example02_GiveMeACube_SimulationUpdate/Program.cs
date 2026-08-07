@@ -19,7 +19,7 @@ using Stride.Engine;
 const float CubeRestingHeight = 0.5f;
 
 const float OrbitRadius = 3f;
-const float OrbitSpeed = 100f;
+const float OrbitSpeed = 1f;
 
 const float LooseCubeSize = 0.4f;
 const int LooseCubeCount = 8;
