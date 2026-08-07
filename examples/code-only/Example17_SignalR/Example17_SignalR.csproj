@@ -2,9 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
 
         <ExampleTitle>Stride + SignalR - Website two way communication</ExampleTitle>
         <ExampleOrder>20000</ExampleOrder>
@@ -13,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.10" />
     </ItemGroup>
 
     <ItemGroup>

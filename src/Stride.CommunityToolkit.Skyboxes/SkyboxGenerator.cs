@@ -1,6 +1,5 @@
 using Stride.Core.Mathematics;
 using Stride.Graphics;
-using Stride.Graphics.Data;
 using Stride.Rendering.ComputeEffect.GGXPrefiltering;
 using Stride.Rendering.ComputeEffect.LambertianPrefiltering;
 using Stride.Rendering.Skyboxes;
@@ -55,7 +54,7 @@ public static class SkyboxGenerator
             skybox.DiffuseLightingParameters.Set(SphericalHarmonicsEnvironmentColorKeys.SphericalColors, coefficients);
         }
 
-        var filteringTextureFormat = skyboxTexture.Format.IsHDR() ? skyboxTexture.Format : PixelFormat.R8G8B8A8_UNorm;
+        var filteringTextureFormat = skyboxTexture.Format.IsHDR ? skyboxTexture.Format : PixelFormat.R8G8B8A8_UNorm;
 
         using (var specularRadiancePrefilterGGX = new RadiancePrefilteringGGXNoCompute(context.RenderContext))
         using (var outputTexture = Texture.New2D(context.GraphicsDevice, skyboxTexture.Width, skyboxTexture.Width, true, filteringTextureFormat, TextureFlags.ShaderResource | TextureFlags.RenderTarget, 6))

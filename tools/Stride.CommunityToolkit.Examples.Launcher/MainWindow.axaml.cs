@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using Stride.CommunityToolkit.Examples.Core;
 using System.Collections.ObjectModel;
@@ -269,7 +270,13 @@ public partial class MainWindow : Window
 
         try
         {
-            Clipboard?.SetTextAsync(cmd);
+            var item = new DataTransferItem();
+            item.SetText(cmd);
+
+            var data = new DataTransfer();
+            data.Add(item);
+
+            Clipboard?.SetDataAsync(data);
             AppendLine($"📋 Copied to clipboard: {cmd}");
         }
         catch (Exception ex)

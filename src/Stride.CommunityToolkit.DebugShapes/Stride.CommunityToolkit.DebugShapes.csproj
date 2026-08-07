@@ -22,24 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Stride.Core.Assets.CompilerApp" Version="4.3.0.2507" PrivateAssets="contentfiles; analyzers" IncludeAssets="build; buildtransitive" />
+        <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Effects\LinePrimitiveShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-        </Compile>
-        <Compile Update="Effects\PrimitiveShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>

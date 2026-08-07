@@ -85,6 +85,49 @@
   },
   {
     "title": {
+      "en": "Basic2D Scene (Falling Shapes)",
+      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (Padaj\u00EDc\u00ED tvary)"
+    },
+    "level": "Getting Started",
+    "category": "Shapes",
+    "complexity": 1,
+    "description": {
+      "en": "Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.\nDemonstrates primitive creation, basic positioning, and attaching the entities to the scene.\nThe shapes will fall due to physics, showcasing the integration of Bepu physics in a 2D scene.\n",
+      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED n\u011Bkolika kapsl\u00ED s ploch\u00FDmi materi\u00E1ly.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDch tvar\u016F, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entit k sc\u00E9n\u011B.\nTvary budou padat d\u00EDky fyzice, co\u017E ukazuje integraci Bepu fyziky v 2D sc\u00E9n\u011B.\n"
+    },
+    "concepts": [
+      "Creating a 2D primitive with Create2DPrimitive",
+      "Applying a flat material with CreateFlatMaterial",
+      "Setting an entity position through primitive options",
+      "Adding entities to a Scene (rootScene)",
+      "Using helpers: SetupBase2DScene"
+    ],
+    "related": [
+      "Example02_GiveMeACube",
+      "Example01_Basic2DScene_Primitives",
+      "Example01_Material"
+    ],
+    "tags": [
+      "2D",
+      "Bepu",
+      "Flat Material",
+      "Shapes",
+      "Primitive",
+      "Capsule",
+      "Scene Setup",
+      "Transform",
+      "Position",
+      "Getting Started"
+    ],
+    "order": 2,
+    "enabled": true,
+    "created": "2026-06-11",
+    "isDraft": false,
+    "projectName": "Example01_Basic2DScene_FallingShapes",
+    "projectPath": "Example01_Basic2DScene_FallingShapes\\Program.cs"
+  },
+  {
+    "title": {
       "en": "Basic2D Scene (Multiple Primitives)",
       "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (V\u00EDce primitiv)"
     },
@@ -167,6 +210,198 @@
   },
   {
     "title": {
+      "en": "Give Me a Cube",
+      "cs": "Dej mi kostku"
+    },
+    "level": "Getting Started",
+    "category": "Scripts",
+    "complexity": 2,
+    "description": {
+      "en": "Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.\nThe script steers a cube around a circle each frame by setting the linear velocity of a kinematic\nBepu body, so it really sweeps through the scene and knocks a ring of smaller dynamic cubes out of\nthe way. Writing Transform.Position instead would move only the mesh and collide with nothing.\n",
+      "cs": "P\u0159id\u00E1n\u00ED chov\u00E1n\u00ED k entit\u011B pomoc\u00ED komponenty SyncScript nam\u00EDsto callbacku update v game.Run.\nSkript ka\u017Ed\u00FD sn\u00EDmek vede kostku po kruhu nastaven\u00EDm line\u00E1rn\u00ED rychlosti kinematick\u00E9ho t\u011Blesa Bepu,\ntak\u017Ee skute\u010Dn\u011B proj\u00ED\u017Ed\u00ED sc\u00E9nou a odr\u00E1\u017E\u00ED kruh men\u0161\u00EDch dynamick\u00FDch kostek. Z\u00E1pis do Transform.Position\nby naproti tomu pohnul pouze modelem a s ni\u010D\u00EDm by nekolidoval.\n"
+    },
+    "concepts": [
+      "Adding behaviour with a SyncScript component",
+      "The Start and Update lifecycle methods",
+      "Configuring a script through public properties",
+      "Moving a kinematic body by setting its linear velocity",
+      "Waking a body after changing its velocity",
+      "Why writing Transform.Position does not move a physics body",
+      "Sizing a primitive and its collider together",
+      "Using helpers: SetupBase3DScene",
+      "Using helpers: AddSkybox",
+      "Using helpers: Game.DeltaTime"
+    ],
+    "related": [
+      "Example01_Basic3DScene",
+      "Example01_Basic3DScene_SyncScript",
+      "Example11_ImGuiNet"
+    ],
+    "tags": [
+      "3D",
+      "Script",
+      "SyncScript",
+      "Component",
+      "Update Loop",
+      "Transform",
+      "Bepu",
+      "Physics",
+      "Kinematic Body",
+      "Collision",
+      "Cube",
+      "Getting Started"
+    ],
+    "order": 2,
+    "enabled": true,
+    "created": "2023-09-11",
+    "isDraft": false,
+    "projectName": "Example02_GiveMeACube",
+    "projectPath": "Example02_GiveMeACube\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "Give Me a Cube (SimulationUpdate)",
+      "cs": "Dej mi kostku (SimulationUpdate)"
+    },
+    "level": "Beginners",
+    "category": "Physics",
+    "complexity": 3,
+    "description": {
+      "en": "Drive an entity from the physics clock instead of the render loop. The script is a StartupScript with\nno per-frame Update at all: it implements ISimulationUpdate, so Bepu calls it once per fixed physics\nstep and Stride registers it automatically. That is what makes SetTargetPose safe, because exactly one\nstep consumes the velocity it sets. Compare with Example02_GiveMeACube, which sets a bounded velocity\nevery frame instead.\n",
+      "cs": "\u0158\u00EDzen\u00ED entity podle hodin fyziky nam\u00EDsto vykreslovac\u00ED smy\u010Dky. Skript je StartupScript zcela bez metody\nUpdate: implementuje rozhran\u00ED ISimulationUpdate, tak\u017Ee jej Bepu vol\u00E1 jednou za pevn\u00FD fyzik\u00E1ln\u00ED krok\na Stride jej zaregistruje automaticky. Pr\u00E1v\u011B d\u00EDky tomu je metoda SetTargetPose bezpe\u010Dn\u00E1, proto\u017Ee\nnastavenou rychlost spot\u0159ebuje p\u0159esn\u011B jeden krok. Porovnejte s Example02_GiveMeACube, kter\u00FD m\u00EDsto toho\nnastavuje omezenou rychlost ka\u017Ed\u00FD sn\u00EDmek.\n"
+    },
+    "concepts": [
+      "Implementing ISimulationUpdate to run on the physics clock",
+      "The difference between a fixed physics step and a frame delta time",
+      "Using SetTargetPose safely, once per physics step",
+      "StartupScript as a component with no per-frame Update",
+      "Moving a kinematic body so it pushes dynamic bodies",
+      "Using helpers: SetupBase3DScene",
+      "Using helpers: AddSkybox"
+    ],
+    "related": [
+      "Example02_GiveMeACube",
+      "Example01_Basic3DScene_SyncScript",
+      "Example20_BepuFirstPersonCharacter"
+    ],
+    "tags": [
+      "3D",
+      "Physics",
+      "Bepu",
+      "ISimulationUpdate",
+      "Fixed Timestep",
+      "Kinematic Body",
+      "Collision",
+      "Script",
+      "StartupScript",
+      "Cube",
+      "Beginners"
+    ],
+    "order": 2,
+    "enabled": true,
+    "created": "2026-08-07",
+    "isDraft": false,
+    "projectName": "Example02_GiveMeACube_SimulationUpdate",
+    "projectPath": "Example02_GiveMeACube_SimulationUpdate\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "ImGui.NET Text Rendering",
+      "cs": "Vykreslov\u00E1n\u00ED textu pomoc\u00ED ImGui.NET"
+    },
+    "level": "Advanced",
+    "category": "UI",
+    "complexity": 4,
+    "description": {
+      "en": "Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.\nA kinematic Bepu body follows a circular path and knocks over stacks of dynamic boxes, showing why\nSetTargetPose moves a physics body while writing Transform.Position does not. The ImGui font atlas\nis rebuilt for the monitor\u0027s DPI so the overlay stays crisp on high-DPI displays.\n",
+      "cs": "Vykreslov\u00E1n\u00ED ladic\u00EDho textu pomoc\u00ED ImGui.NET, jak v sou\u0159adnic\u00EDch obrazovky, tak ukotven\u00E9ho\nk pozic\u00EDm ve 3D sc\u00E9n\u011B. Kinematick\u00E9 t\u011Bleso Bepu se pohybuje po kruhov\u00E9 dr\u00E1ze a shazuje stohy\ndynamick\u00FDch kostek, \u010D\u00EDm\u017E ukazuje, pro\u010D SetTargetPose t\u011Blesem pohne, zat\u00EDmco z\u00E1pis do\nTransform.Position nikoli. Atlas p\u00EDsma ImGui se p\u0159estav\u00ED podle DPI monitoru, aby byl text\nostr\u00FD i na displej\u00EDch s vysok\u00FDm rozli\u0161en\u00EDm.\n"
+    },
+    "concepts": [
+      "Drawing screen-space text with DrawText",
+      "Anchoring text to a world-space position",
+      "Driving a kinematic BodyComponent with SetTargetPose",
+      "Why writing Transform.Position does not move a physics body",
+      "Rebuilding the ImGui font atlas for the window DPI",
+      "Using helpers: AddImGuiNet",
+      "Using helpers: SetupBase3DScene",
+      "Using helpers: AddProfiler"
+    ],
+    "related": [
+      "Example11_ImGui",
+      "Example01_Basic3DScene_DPI_Aware",
+      "Example18_Box2DPhysics"
+    ],
+    "tags": [
+      "3D",
+      "UI",
+      "ImGui",
+      "ImGui.NET",
+      "Text Rendering",
+      "Overlay",
+      "Debug UI",
+      "Bepu",
+      "Physics",
+      "Kinematic Body",
+      "DPI",
+      "HiDPI",
+      "Advanced"
+    ],
+    "order": 11,
+    "enabled": true,
+    "created": "2025-10-06",
+    "isDraft": false,
+    "projectName": "Example11_ImGuiNet",
+    "projectPath": "Example11_ImGuiNet\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "Mesh Outline Render Feature",
+      "cs": "Obrysy model\u016F pomoc\u00ED vlastn\u00ED render feature"
+    },
+    "level": "Advanced",
+    "category": "Rendering",
+    "complexity": 4,
+    "description": {
+      "en": "Draw coloured outlines around 3D primitives with a custom RootRenderFeature. Each mesh is drawn a\nsecond time, inflated along its normals with front faces culled, so only a shell remains visible\nbehind the original mesh. Adding a MeshOutlineComponent to an entity is all it takes to outline it,\nand a high intensity pushes the outline into HDR range so bloom makes it glow.\n",
+      "cs": "Vykreslen\u00ED barevn\u00FDch obrys\u016F kolem 3D tvar\u016F pomoc\u00ED vlastn\u00ED RootRenderFeature. Ka\u017Ed\u00FD model se vykresl\u00ED\npodruh\u00E9, nafouknut\u00FD pod\u00E9l norm\u00E1l a s odstran\u011Bn\u00FDmi p\u0159ivr\u00E1cen\u00FDmi st\u011Bnami, tak\u017Ee za p\u016Fvodn\u00EDm modelem\nz\u016Fstane viditeln\u00E1 jen sko\u0159epina. K vytvo\u0159en\u00ED obrysu sta\u010D\u00ED entit\u011B p\u0159idat MeshOutlineComponent\na vysok\u00E1 intenzita posune obrys do HDR rozsahu, tak\u017Ee d\u00EDky bloomu z\u00E1\u0159\u00ED.\n"
+    },
+    "concepts": [
+      "Writing a custom RootRenderFeature",
+      "Registering a render feature with AddRootRenderFeature",
+      "Driving rendering from a custom EntityComponent",
+      "Building a MutablePipelineState and applying a DynamicEffectInstance",
+      "Inflating a mesh along its normals in a shader",
+      "Skipping render stages that bind no render target",
+      "Using helpers: SetupBase3DScene",
+      "Using helpers: AddSkybox"
+    ],
+    "related": [
+      "Example13_RootRendererShader",
+      "Example09_Renderer",
+      "Example01_Basic3DScene"
+    ],
+    "tags": [
+      "3D",
+      "Rendering",
+      "Render Feature",
+      "Outline",
+      "Shader",
+      "SDSL",
+      "Pipeline State",
+      "Entity Component",
+      "HDR",
+      "Bloom",
+      "Advanced"
+    ],
+    "order": 13,
+    "enabled": true,
+    "created": "2025-08-07",
+    "isDraft": false,
+    "projectName": "Example13_MeshOutline",
+    "projectPath": "Example13_MeshOutline\\Program.cs"
+  },
+  {
+    "title": {
       "en": "Jitter2 Physics Integration",
       "cs": "Integrace fyziky Jitter2"
     },
@@ -207,5 +442,95 @@
     "isDraft": false,
     "projectName": "Example19_Jitter2Physics",
     "projectPath": "Example19_Jitter2Physics\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "GPU Instancing",
+      "cs": "GPU instancing"
+    },
+    "level": "Beginners",
+    "category": "Rendering",
+    "complexity": 3,
+    "description": {
+      "en": "Render two identical walls of cubes built two different ways, side by side. The left wall uses one\nentity per cube and costs one draw call each; the right wall uses a single entity with an\nInstancingComponent and an array of world matrices, and costs one draw call in total. Both share the\nsame Model, so the only difference is instancing. Toggle each wall to compare the frame rate, and\nnote that the InstancingRenderFeature has to be added to the compositor by hand in code-only projects.\n",
+      "cs": "Vykreslen\u00ED dvou stejn\u00FDch st\u011Bn z kostek postaven\u00FDch dv\u011Bma zp\u016Fsoby vedle sebe. Lev\u00E1 st\u011Bna pou\u017E\u00EDv\u00E1 jednu\nentitu na kostku a stoj\u00ED jedno vykreslovac\u00ED vol\u00E1n\u00ED za ka\u017Edou z nich; prav\u00E1 st\u011Bna pou\u017E\u00EDv\u00E1 jedinou entitu\ns komponentou InstancingComponent a pole sv\u011Btov\u00FDch matic a stoj\u00ED celkem jedno vol\u00E1n\u00ED. Ob\u011B sd\u00EDlej\u00ED\nstejn\u00FD Model, tak\u017Ee jedin\u00FDm rozd\u00EDlem je instancing. P\u0159ep\u00EDn\u00E1n\u00EDm st\u011Bn porovn\u00E1te sn\u00EDmkovou frekvenci.\nPozor, v projektech psan\u00FDch pouze k\u00F3dem je nutn\u00E9 p\u0159idat InstancingRenderFeature do kompozitoru ru\u010Dn\u011B.\n"
+    },
+    "concepts": [
+      "Reducing draw calls with an InstancingComponent",
+      "Building an InstancingUserArray from world matrices",
+      "Registering InstancingRenderFeature on the MeshRenderFeature",
+      "Sharing one Model between many entities",
+      "Toggling a ModelComponent to compare rendering cost",
+      "Using helpers: SetupBase3D",
+      "Using helpers: Add3DCameraController",
+      "Using helpers: AddProfiler"
+    ],
+    "related": [
+      "Example22_Instancing_EntityTransform",
+      "Example01_Basic3DScene_Primitives",
+      "Example09_Renderer"
+    ],
+    "tags": [
+      "3D",
+      "Rendering",
+      "Instancing",
+      "Draw Calls",
+      "Performance",
+      "GPU",
+      "Model",
+      "Compositor",
+      "Beginners"
+    ],
+    "order": 21,
+    "enabled": true,
+    "created": "2026-08-07",
+    "isDraft": false,
+    "projectName": "Example21_Instancing",
+    "projectPath": "Example21_Instancing\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "Instancing with Entity Transforms",
+      "cs": "Instancing s transformacemi entit"
+    },
+    "level": "Advanced",
+    "category": "Rendering",
+    "complexity": 4,
+    "description": {
+      "en": "Keep every object a real entity - with a transform, a physics body and anything else you need - while\nstill drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an\nInstancingComponent set to InstancingEntityTransform; each member carries an InstanceComponent\npointing at that master and, crucially, no ModelComponent of its own. Bepu drives the transforms and\nthe instancing type reads them back each frame, so the cubes collide and pile up normally. Drop instanced\nand non-instanced cubes side by side to compare: at 20,000 settled cubes the instanced pile runs at\nroughly 130 FPS against 3 FPS without. The example also shows where the real ceiling lies, because\ninstancing removes draw calls and does nothing about simulation cost.\n",
+      "cs": "Zachovejte ka\u017Ed\u00FD objekt jako plnohodnotnou entitu - s transformac\u00ED, fyzik\u00E1ln\u00EDm t\u011Blesem i \u010D\u00EDmkoli dal\u0161\u00EDm -\na p\u0159esto vykreslete cel\u00FD z\u00E1stup jedin\u00FDm vykreslovac\u00EDm vol\u00E1n\u00EDm. Hlavn\u00ED entita nese ModelComponent\na InstancingComponent typu InstancingEntityTransform; ka\u017Ed\u00FD \u010Dlen m\u00E1 InstanceComponent odkazuj\u00EDc\u00ED na tuto\nhlavn\u00ED entitu a hlavn\u011B \u017E\u00E1dn\u00FD vlastn\u00ED ModelComponent. Transformace \u0159\u00EDd\u00ED Bepu a instancing je ka\u017Ed\u00FD sn\u00EDmek\nna\u010D\u00EDt\u00E1, tak\u017Ee kostky norm\u00E1ln\u011B koliduj\u00ED a vr\u0161\u00ED se na sebe. P\u0159\u00EDklad rovn\u011B\u017E ukazuje, kde je skute\u010Dn\u00FD strop:\ninstancing odstra\u0148uje vykreslovac\u00ED vol\u00E1n\u00ED, nikoli n\u00E1klady na simulaci.\n"
+    },
+    "concepts": [
+      "Combining physics bodies with instanced rendering",
+      "Comparing instanced and non-instanced cubes side by side at runtime",
+      "The master and instance split with InstancingEntityTransform",
+      "Why an instance entity must not have its own ModelComponent",
+      "Declaring a Bepu collider without a model to derive it from",
+      "Registering InstancingRenderFeature on the MeshRenderFeature",
+      "Knowing when instancing does not help",
+      "Using helpers: SetupBase3DScene"
+    ],
+    "related": [
+      "Example21_Instancing",
+      "Example02_GiveMeACube",
+      "Example_Bepu_Playground"
+    ],
+    "tags": [
+      "3D",
+      "Rendering",
+      "Instancing",
+      "Bepu",
+      "Physics",
+      "Draw Calls",
+      "Performance",
+      "Entity Component",
+      "Advanced"
+    ],
+    "order": 22,
+    "enabled": true,
+    "created": "2026-08-07",
+    "isDraft": false,
+    "projectName": "Example22_Instancing_EntityTransform",
+    "projectPath": "Example22_Instancing_EntityTransform\\Program.cs"
   }
 ]

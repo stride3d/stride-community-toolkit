@@ -2,9 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
 
         <ExampleTitle>Box2D.NET Physics</ExampleTitle>
         <ExampleOrder>17000</ExampleOrder>
@@ -21,20 +18,6 @@
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
         <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Effects\SDFPerimeterOutline2DShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>SDFPerimeterOutline2DShader.sdsl</DependentUpon>
-        </Compile>
-        <Compile Update="Effects\OuterOutline2DShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>

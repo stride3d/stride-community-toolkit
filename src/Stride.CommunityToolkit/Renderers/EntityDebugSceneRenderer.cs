@@ -23,7 +23,6 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     private CameraComponent? _camera;
     private Texture? _backgroundTexture;
     private readonly StringBuilder _stringBuilder = new();
-    private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
     private readonly EntityDebugSceneRendererOptions _options;
 
     /// <summary>
@@ -45,8 +44,8 @@ public class EntityDebugSceneRenderer : SceneRendererBase
         base.InitializeCore();
 
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
-        _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
+        _font = Content.Load<SpriteFont>(RendererDefaults.DefaultFontPath);
+        _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)RendererDefaults.DefaultBackground]);
 
         var graphicsCompositor = Context.Tags.Get(GraphicsCompositor.Current);
         _camera = graphicsCompositor?.Cameras.Count > 0 ? graphicsCompositor.Cameras[0].Camera : null;
@@ -171,7 +170,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
             textDimensions.X + _options.Padding * 2,
             textDimensions.Y + _options.Padding * 2);
 
-        var bgColor = _options.BackgroundColor ?? _defaultBackground;
+        var bgColor = _options.BackgroundColor ?? RendererDefaults.DefaultBackground;
         if (bgColor.A <= 0f)
             return; // fully transparent, skip draw
 

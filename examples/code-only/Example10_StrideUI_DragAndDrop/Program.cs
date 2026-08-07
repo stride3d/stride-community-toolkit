@@ -36,7 +36,7 @@ void Start(Scene scene)
 
     _shapeGenerator = new PrimitiveGenerator(game, scene);
 
-    var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
+    var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
     // Create and display the UI components on screen
     CreateAndAddUI(scene, font);

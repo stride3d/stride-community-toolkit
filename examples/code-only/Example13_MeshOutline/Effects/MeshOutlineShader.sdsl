@@ -5,20 +5,21 @@ shader MeshOutlineShader : ShaderBase, Transformation, Texturing, PositionStream
     float4 Color;
     float Intensity;
 
-    cbuffer PerView
+    // Push the vertex out along its normal by (WorldScale - 1), then project it. This inflates the
+    // mesh just enough for the back faces to show up around the silhouette of the original.
+    // Note: hard-edged meshes with duplicated per-face normals (e.g. a procedural Cube) will show
+    // gaps at edges/corners here, since the duplicated vertices push apart instead of staying
+    // together - the shell separates instead of remaining watertight. Smooth-normal meshes
+    // (Sphere, Capsule) are unaffected.
+    float4 inflateAndProject(in float4 pos, in float3 normal)
     {
-        stage float4 Viewport;
-    }
-
-    float4 projToWorld(in float4 pos, in float3 normal)
-    {
-        float3 scaling = normal * (WorldScale - 1);
-        return mul(pos + float4(scaling.x, scaling.y, scaling.z, 0), WorldViewProjection);
+        float3 offset = normal * (WorldScale - 1);
+        return mul(pos + float4(offset.x, offset.y, offset.z, 0), WorldViewProjection);
     }
 
     stage override void VSMain()
     {
-        streams.ShadingPosition = projToWorld(streams.Position, streams.Normal);
+        streams.ShadingPosition = inflateAndProject(streams.Position, streams.Normal);
     }
 
     stage override void PSMain()

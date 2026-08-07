@@ -160,11 +160,11 @@ Entity CreateLineEntity(Game game)
     lineVertices[1] = new(-1, 1, 1);
 
     // Create a vertex buffer for the line, with start and end points
-    vertexBuffer = Buffer.New(game.GraphicsDevice, lineVertices, BufferFlags.VertexBuffer);
+    vertexBuffer = Buffer.New(game.GraphicsDevice, lineVertices, BufferFlags.VertexBuffer, GraphicsResourceUsage.Default);
 
     // Create an index buffer defining the line's two endpoints
     var indices = new ushort[] { 0, 1 };
-    var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer);
+    var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer, GraphicsResourceUsage.Default);
 
     // Set up the mesh draw parameters for a line list
     var meshDraw = new MeshDraw

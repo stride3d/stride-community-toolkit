@@ -2,9 +2,6 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
 
         <ExampleTitle>Root Renderer Shader</ExampleTitle>
         <ExampleOrder>16000</ExampleOrder>
@@ -15,14 +12,6 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Effects\RibbonBackgroundShader.sdsl.cs">
-            <DesignTime>True</DesignTime>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-            <AutoGen>True</AutoGen>
-        </Compile>
     </ItemGroup>
 
     <ItemGroup>

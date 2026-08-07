@@ -4,14 +4,18 @@ permissions:
   contents: write  # required to create releases/tags
 
 env:
-  PROJECT_PATH_CORE: src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
-  PROJECT_PATH_BEPU: src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
-  PROJECT_PATH_BULLET: src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
-  PROJECT_PATH_DEBUG: src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
-  PROJECT_PATH_IMGUI: src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
-  PROJECT_PATH_SKYBOX: src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-  PROJECT_PATH_WINDOWS: src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
-  PROJECT_PATH_LINUX: src/Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj
+  # One entry per package, in publish order. Optional "|extra-restore-args" suffix
+  # is appended to the `dotnet restore` call for that project only.
+  PACK_PROJECTS: |
+    src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
+    src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj|--runtime win-x64
+    src/Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj
+    src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
+    src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
+    src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
+    src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
+    src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
+  TEST_PROJECT: tests/Stride.CommunityToolkit.Tests/Stride.CommunityToolkit.Tests.csproj
   COMMON_SETTINGS_PATH: src/CommonSettings.props
   VERSION: "1.0.0.0-preview.${{ github.run_number }}"
   NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
@@ -26,10 +30,10 @@ jobs:
 
     steps:
     - name: Checkout Stride Community Toolkit
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: .NET Setup
-      uses: actions/setup-dotnet@v5
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: 10.0.x
 
@@ -44,130 +48,41 @@ jobs:
     #   run: New-Item -ItemType Directory -Force -Path D:\.sarif
     #   shell: pwsh
 
-    # Stride.CommunityToolkit
-    - name: Restore dependencies - Stride.CommunityToolkit
-      run: dotnet restore ${{ env.PROJECT_PATH_CORE }}
+    # Run the tests before anything is packed, so a failure costs nothing
+    - name: Test
+      run: dotnet test ${{ env.TEST_PROJECT }} -c Release --verbosity normal
 
-    - name: Build - Stride.CommunityToolkit
-      run: dotnet build ${{ env.PROJECT_PATH_CORE }} --no-restore -c Release
+    # Everything is packed first and pushed afterwards: a build failure half-way
+    # through must not leave a partially published version on nuget.org
+    - name: Build and pack all packages
+      shell: bash
+      run: |
+        set -eo pipefail
+        while IFS= read -r entry; do
+          entry="${entry//$'\r'/}"
+          if [ -z "$entry" ]; then
+            continue
+          fi
 
-    - name: Test - Stride.CommunityToolkit
-      run: dotnet test ${{ env.PROJECT_PATH_CORE }} --no-build --verbosity normal
+          project="${entry%%|*}"
+          restore_args=""
+          if [ "$entry" != "$project" ]; then
+            restore_args="${entry#*|}"
+          fi
 
-    - name: Pack - Stride.CommunityToolkit
-      run: dotnet pack ${{ env.PROJECT_PATH_CORE }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\core"
+          echo "::group::$project"
+          dotnet restore "$project" $restore_args
+          dotnet build "$project" --no-restore -c Release
+          dotnet pack "$project" --no-build -c Release -o "$NUPKG_ROOT"
+          echo "::endgroup::"
+        done <<< "$PACK_PROJECTS"
 
-    - name: Publish - Stride.CommunityToolkit
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\core\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+    - name: List packages
+      shell: bash
+      run: ls -l "$NUPKG_ROOT"
 
-    # Stride.CommunityToolkit.Windows
-    - name: Restore dependencies - Stride.CommunityToolkit.Windows
-      run: dotnet restore ${{ env.PROJECT_PATH_WINDOWS }} --runtime win-x64
-
-    - name: Build - Stride.CommunityToolkit.Windows
-      run: dotnet build ${{ env.PROJECT_PATH_WINDOWS }} --no-restore -c Release
-
-    - name: Test - Stride.CommunityToolkit.Windows
-      run: dotnet test ${{ env.PROJECT_PATH_WINDOWS }} --no-build --verbosity normal
-
-    - name: Pack - Stride.CommunityToolkit.Windows
-      run: dotnet pack ${{ env.PROJECT_PATH_WINDOWS }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\windows"
-
-    - name: Publish - Stride.CommunityToolkit.Windows
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\windows\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
-
-    # Stride.CommunityToolkit.Linux
-    - name: Restore dependencies - Stride.CommunityToolkit.Linux
-      run: dotnet restore ${{ env.PROJECT_PATH_LINUX }}
-
-    - name: Build - Stride.CommunityToolkit.Linux
-      run: dotnet build ${{ env.PROJECT_PATH_LINUX }} --no-restore -c Release
-
-    - name: Pack - Stride.CommunityToolkit.Linux
-      run: dotnet pack ${{ env.PROJECT_PATH_LINUX }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\linux"
-
-    - name: Publish - Stride.CommunityToolkit.Linux
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\linux\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
-
-    # Stride.CommunityToolkit.Skyboxes
-    - name: Restore dependencies - Stride.CommunityToolkit.Skyboxes
-      run: dotnet restore ${{ env.PROJECT_PATH_SKYBOX }}
-
-    - name: Build - Stride.CommunityToolkit.Skyboxes
-      run: dotnet build ${{ env.PROJECT_PATH_SKYBOX }} --no-restore -c Release
-
-    - name: Test - Stride.CommunityToolkit.Skyboxes
-      run: dotnet test ${{ env.PROJECT_PATH_SKYBOX }} --no-build --verbosity normal
-
-    - name: Pack - Stride.CommunityToolkit.Skyboxes
-      run: dotnet pack ${{ env.PROJECT_PATH_SKYBOX }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\skyboxes"
-
-    - name: Publish - Stride.CommunityToolkit.Skyboxes
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\skyboxes\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
-
-    # Stride.CommunityToolkit.Bepu
-    - name: Restore dependencies - Stride.CommunityToolkit.Bepu
-      run: dotnet restore ${{ env.PROJECT_PATH_BEPU }}
-
-    - name: Build - Stride.CommunityToolkit.Bepu
-      run: dotnet build ${{ env.PROJECT_PATH_BEPU }} --no-restore -c Release
-
-    - name: Test - Stride.CommunityToolkit.Bepu
-      run: dotnet test ${{ env.PROJECT_PATH_BEPU }} --no-build --verbosity normal
-
-    - name: Pack - Stride.CommunityToolkit.Bepu
-      run: dotnet pack ${{ env.PROJECT_PATH_BEPU }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\bepu"
-
-    - name: Publish - Stride.CommunityToolkit.Bepu
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\bepu\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
-
-    # Stride.CommunityToolkit.Bullet
-    - name: Restore dependencies - Stride.CommunityToolkit.Bullet
-      run: dotnet restore ${{ env.PROJECT_PATH_BULLET }}
-
-    - name: Build - Stride.CommunityToolkit.Bullet
-      run: dotnet build ${{ env.PROJECT_PATH_BULLET }} --no-restore -c Release
-
-    - name: Test - Stride.CommunityToolkit.Bullet
-      run: dotnet test ${{ env.PROJECT_PATH_BULLET }} --no-build --verbosity normal
-
-    - name: Pack - Stride.CommunityToolkit.Bullet
-      run: dotnet pack ${{ env.PROJECT_PATH_BULLET }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\bullet"
-
-    - name: Publish - Stride.CommunityToolkit.Bullet
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\bullet\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
-
-    # Stride.CommunityToolkit.DebugShapes
-    - name: Restore dependencies - Stride.CommunityToolkit.DebugShapes
-      run: dotnet restore ${{ env.PROJECT_PATH_DEBUG }}
-
-    - name: Build - Stride.CommunityToolkit.DebugShapes
-      run: dotnet build ${{ env.PROJECT_PATH_DEBUG }} --no-restore -c Release
-
-    - name: Test - Stride.CommunityToolkit.DebugShapes
-      run: dotnet test ${{ env.PROJECT_PATH_DEBUG }} --no-build --verbosity normal
-
-    - name: Pack - Stride.CommunityToolkit.DebugShapes
-      run: dotnet pack ${{ env.PROJECT_PATH_DEBUG }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\debug"
-
-    - name: Publish - Stride.CommunityToolkit.DebugShapes
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\debug\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
-
-    # Stride.CommunityToolkit.ImGui
-    - name: Restore dependencies - Stride.CommunityToolkit.ImGui
-      run: dotnet restore ${{ env.PROJECT_PATH_IMGUI }}
-
-    - name: Build - Stride.CommunityToolkit.ImGui
-      run: dotnet build ${{ env.PROJECT_PATH_IMGUI }} --no-restore -c Release
-
-    - name: Test - Stride.CommunityToolkit.ImGui
-      run: dotnet test ${{ env.PROJECT_PATH_IMGUI }} --no-build --verbosity normal
-
-    - name: Pack - Stride.CommunityToolkit.ImGui
-      run: dotnet pack ${{ env.PROJECT_PATH_IMGUI }} --no-build -c Release -o "${{ env.NUPKG_ROOT }}\imgui"
-
-    - name: Publish - Stride.CommunityToolkit.ImGui
-      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\imgui\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+    - name: Publish all packages
+      run: dotnet nuget push "${{ env.NUPKG_ROOT }}\*.nupkg" --source "${{ env.NUGET_SOURCE }}" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
     # Create release
     - name: Create GitHub Release

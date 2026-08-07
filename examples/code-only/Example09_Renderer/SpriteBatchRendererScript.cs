@@ -43,7 +43,7 @@ public class SpriteBatchRendererScript : StartupScript
         _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
         // Load the default font used for rendering text
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _font = Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
         // Get the camera from the root scene to calculate world-to-screen coordinates
         _camera = SceneSystem.SceneInstance.RootScene.GetCamera();

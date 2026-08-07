@@ -107,7 +107,7 @@ public class RaycastInteractionScript : AsyncScript
 
         var entity = new Entity("DisplayScore", position)
         {
-            new EntityTextComponent() { Text = $"{score} ({boxes} box{(boxes == 1 ? "" : "es")})", FontSize = fontSize },
+            new EntityTextComponent() { Text = $"{score} ({boxes} box{(boxes == 1 ? "" : "es")})", FontSize = fontSize, TextColor = Color.White },
             new ScoreScript()
         };
 

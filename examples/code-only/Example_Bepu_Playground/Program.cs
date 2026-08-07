@@ -373,45 +373,52 @@ void AddInstancedShapes(Primitive2DModelType type, int count)
 
     if (shapeModel == null) return;
 
-    // BEPU SAMPLE APPROACH: Master-Instance Pattern
-    // This achieves BOTH individual physics AND instanced rendering optimization!
-    //
-    // Step 1: Create a master InstancingComponent entity
-    var masterEntity = new Entity("InstancingMaster");
-    var masterInstancing = masterEntity.GetOrCreate<InstancingComponent>();
-    masterInstancing.Type = new InstancingEntityTransform(); // This tracks all instances
-    masterEntity.Scene = scene;
+    // Master-Instance pattern: individual physics AND a single draw call for the whole group.
+    // See Example22_Instancing_EntityTransform for the same pattern explained in isolation.
 
-    // Step 2: Create a template entity with InstanceComponent
-    var templateEntity = game.Create2DPrimitive(shapeModel.Type,
+    // Step 1: the master. It must carry BOTH a ModelComponent and an InstancingComponent.
+    // InstancingProcessor requires a ModelComponent, so a bare Entity holding only an
+    // InstancingComponent is skipped and no instancing happens at all.
+    var masterEntity = game.Create2DPrimitive(shapeModel.Type,
         new Bepu2DPhysicsOptions()
         {
             Size = shapeModel.Size,
             Depth = Depth,
             Material = game.CreateFlatMaterial(shapeModel.Color),
+            IncludeCollider = false, // the master only supplies the model, it is never simulated
         });
-    templateEntity.Name = "InstancedShapes";
 
-    // Add InstanceComponent that will link to the master
-    var instanceComponent = new InstanceComponent();
-    templateEntity.Add(instanceComponent);
-    instanceComponent.Master = masterInstancing; // Link to master!
+    masterEntity.Name = "InstancingMaster";
+    masterEntity.Add(new InstancingComponent { Type = new InstancingEntityTransform() });
+    masterEntity.Scene = scene;
 
-    // Step 3: Create a prefab from the template
-    var prefab = new Prefab();
-    prefab.Entities.Add(templateEntity);
+    var masterInstancing = masterEntity.Get<InstancingComponent>();
 
-    // Step 4: Instantiate (clone) from the prefab
+    // Step 2: the instances. Each is a normal physics entity contributing only its transform.
+    //
+    // TODO: Create2DPrimitive builds a procedural model (and its GPU buffers) that is thrown away
+    // again by the Remove<ModelComponent> below. It is used here only because it also wires up the
+    // 2D Bepu body; building the BodyComponent and collider directly would avoid the waste.
     for (int i = 0; i < count; i++)
     {
-        var entities = prefab.Instantiate();
-        var entity = entities.First();
+        var entity = game.Create2DPrimitive(shapeModel.Type,
+            new Bepu2DPhysicsOptions()
+            {
+                Size = shapeModel.Size,
+                Depth = Depth,
+                Material = game.CreateFlatMaterial(shapeModel.Color),
+            });
+
+        entity.Name = "InstancedShapes";
+
+        // Drop the per-entity model. The master draws this shape at this entity's transform, so
+        // keeping the ModelComponent would render every shape twice - once on its own and once as
+        // an instance - which is slower than not instancing at all.
+        entity.Remove<ModelComponent>();
+        entity.Add(new InstanceComponent { Master = masterInstancing });
 
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
-
-        // Each cloned entity has its own InstanceComponent that references the master
-        // This allows individual physics while the rendering system batches them!
     }
 }
 

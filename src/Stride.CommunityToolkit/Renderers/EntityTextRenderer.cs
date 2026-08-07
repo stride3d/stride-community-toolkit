@@ -23,7 +23,6 @@ public class EntityTextRenderer : SceneRendererBase
     private Scene? _scene;
     private CameraComponent? _camera;
     private Texture? _backgroundTexture;
-    private readonly Color4 _defaultBackground = new(0.9f, 0.9f, 0.9f, 0.01f);
     private readonly Dictionary<Entity, Vector2> _metricsCache = [];
 
     /// <summary>
@@ -37,10 +36,10 @@ public class EntityTextRenderer : SceneRendererBase
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // Load the default font used for rendering text
-        _font = Content.Load<SpriteFont>("StrideDefaultFont");
+        _font = Content.Load<SpriteFont>(RendererDefaults.DefaultFontPath);
 
         // Create a small texture (1x1 pixel) for drawing the background behind the text
-        _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)_defaultBackground]);
+        _backgroundTexture = Texture.New2D(GraphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [(Color)RendererDefaults.DefaultBackground]);
     }
 
     /// <summary>
@@ -144,7 +143,7 @@ public class EntityTextRenderer : SceneRendererBase
                 textDimensions.X + textDisplay.Padding * 2,
                 textDimensions.Y + textDisplay.Padding * 2);
 
-            _spriteBatch!.Draw(_backgroundTexture, backgroundRectangle, textDisplay.BackgroundColor ?? _defaultBackground);
+            _spriteBatch!.Draw(_backgroundTexture, backgroundRectangle, textDisplay.BackgroundColor ?? RendererDefaults.DefaultBackground);
         }
         else
             _metricsCache[entity] = _spriteBatch!.MeasureString(_font, textDisplay.Text, textDisplay.FontSize);

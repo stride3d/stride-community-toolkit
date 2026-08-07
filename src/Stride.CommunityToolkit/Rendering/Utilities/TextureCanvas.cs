@@ -280,7 +280,6 @@ public class TextureCanvas : IDisposable
             ".jpg" or ".jpeg" => ImageFileType.Jpg,
             ".bmp" => ImageFileType.Bmp,
             ".tiff" => ImageFileType.Tiff,
-            ".wmp" => ImageFileType.Wmp,
             ".tga" => ImageFileType.Tga,
             _ => throw new NotSupportedException()
         };

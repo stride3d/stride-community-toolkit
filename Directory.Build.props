@@ -1,4 +1,16 @@
 <Project>
+  <!--
+    Auto-imported by MSBuild into every project in this repository.
+    Shared settings live here so a Stride upgrade is a one-line change.
+    Projects may override any of these locally (e.g. Stride.CommunityToolkit.Linux pins its own StrideVersion).
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <StrideVersion>4.4.0-dev</StrideVersion>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(SolutionDir)' != ''">
     <ErrorLog>$(SolutionDir)\.sarif\$(MSBuildProjectName).json</ErrorLog>
   </PropertyGroup>
