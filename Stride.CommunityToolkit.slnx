@@ -23,6 +23,7 @@
     <Project Path="examples/code-only/Example02_GiveMeACube_SimulationUpdate/Example02_GiveMeACube_SimulationUpdate.csproj" />
     <Project Path="examples/code-only/Example03_StrideUI_CapsuleAndWindow/Example03_StrideUI_CapsuleAndWindow.csproj" />
     <Project Path="examples/code-only/Example21_Instancing/Example21_Instancing.csproj" />
+    <Project Path="examples/code-only/Example22_Instancing_EntityTransform/Example22_Instancing_EntityTransform.csproj" />
     <Project Path="examples/code-only/Example04_MyraUI/Example04_MyraUI.csproj" />
     <Project Path="examples/code-only/Example05_CylinderMesh/Example05_CylinderMesh.csproj" />
     <Project Path="examples/code-only/Example05_PartialTorus/Example05_PartialTorus.csproj" />
