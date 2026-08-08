@@ -95,6 +95,7 @@ void CreateCubes(Scene rootScene, int count)
         cubeBodies.Add(cubeBody);
     }
 }
+
 void SyncPhysicsToEntities()
 {
     // Copy physics body transforms to visual entities each frame
