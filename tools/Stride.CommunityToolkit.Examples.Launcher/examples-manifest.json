@@ -418,11 +418,12 @@
       "Synchronizing physics bodies with visual entities",
       "Dynamic rigid body simulation",
       "Static vs dynamic physics bodies",
-      "Manual physics update loop"
+      "Fixed-timestep physics update loop, decoupled from the render frame rate"
     ],
     "related": [
       "Example01_Basic3DScene",
       "Example18_Box2DPhysics",
+      "Example19_Jitter2Physics_Constraints",
       "Example_CubicleCalamity"
     ],
     "tags": [
