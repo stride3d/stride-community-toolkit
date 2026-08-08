@@ -65,6 +65,13 @@ void Update(Scene scene, GameTime time)
         steps++;
     }
 
+    // If the frame rate stays below the physics rate for a sustained period rather than a single
+    // hitch, the loop above can never fully drain accumulatedTime and the backlog would otherwise
+    // keep growing forever. Clamping it bounds that backlog to one frame's worth of catch-up,
+    // trading permanently-delayed simulation time for a value that can't grow without bound (which
+    // would eventually lose precision as a float in a long-running session).
+    accumulatedTime = MathF.Min(accumulatedTime, FixedTimeStep * MaxStepsPerFrame);
+
     // Update visual entities to match their physics body positions
     SyncPhysicsToEntities();
 }
@@ -87,7 +94,7 @@ void CreateGround(Scene rootScene)
 
 void CreateCubes(Scene rootScene, int count)
 {
-    for (int i = 0; i <= count; i++)
+    for (int i = 0; i < count; i++)
     {
         var cubePosition = new Vector3(0, 10 + i * VerticalSpacing, 0);
 

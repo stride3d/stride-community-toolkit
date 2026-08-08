@@ -68,6 +68,13 @@ void Update(Scene scene, GameTime time)
         steps++;
     }
 
+    // If the frame rate stays below the physics rate for a sustained period rather than a single
+    // hitch, the loop above can never fully drain accumulatedTime and the backlog would otherwise
+    // keep growing forever. Clamping it bounds that backlog to one frame's worth of catch-up,
+    // trading permanently-delayed simulation time for a value that can't grow without bound (which
+    // would eventually lose precision as a float in a long-running session).
+    accumulatedTime = MathF.Min(accumulatedTime, FixedTimeStep * MaxStepsPerFrame);
+
     // Update visual entities to match their physics body positions
     SyncPhysicsToEntities();
 }
@@ -186,7 +193,7 @@ concepts:
   - Creating and initializing Jitter2 constraints (PointOnPlane, HingeAngle)
   - Locking translation and rotation axes with world.CreateConstraint
   - Synchronizing physics bodies with visual entities
-  - Manual physics update loop
+  - Fixed-timestep physics update loop, decoupled from the render frame rate
 related:
   - Example19_Jitter2Physics
   - Example15_Constraint
