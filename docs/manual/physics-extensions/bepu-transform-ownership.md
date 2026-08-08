@@ -14,7 +14,7 @@ section starts with what you actually observe.
 ## "My mesh moves, but nothing collides with it"
 
 You set `Entity.Transform.Position` each frame, the mesh visibly moves, and collisions happen
-somewhere else entirely — or not at all. The collider was left behind at the body's real position.
+somewhere else entirely - or not at all. The collider was left behind at the body's real position.
 
 This one has a second, more confusing form. Only **awake** bodies are synced back to their transform.
 A dynamic body that settles and falls asleep stops overwriting the transform, so direct transform
@@ -44,8 +44,8 @@ exactly **one physics tick per call**. When the frame rate falls below the physi
 run on that velocity, the body overshoots, the next correction overshoots further, and it diverges to
 `NaN`.
 
-`SetTargetPose` is safe when the caller runs once per physics tick — from
-`ISimulationUpdate.SimulationUpdate` — or when the frame rate is pinned to the physics rate.
+`SetTargetPose` is safe when the caller runs once per physics tick - from
+`ISimulationUpdate.SimulationUpdate` - or when the frame rate is pinned to the physics rate.
 Otherwise, integrate a velocity you compute yourself, and add a small proportional pull towards the
 ideal position to stop drift.
 

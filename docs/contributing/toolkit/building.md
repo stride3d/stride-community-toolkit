@@ -123,7 +123,7 @@ an example against the local packages instead:
 
 1. **Copy `bin/packages/NuGet.config` into that example's folder first**, before touching the project
    file. NuGet discovers configuration by walking up from the project directory, so it applies to
-   that example only. The order matters — see the warning below.
+   that example only. The order matters - see the warning below.
 2. **Replace** the toolkit `ProjectReference` entries with `PackageReference` entries. Keeping both
    pulls the same assemblies in twice, and the `ProjectReference` wins, so the package is never
    actually exercised.
@@ -135,7 +135,7 @@ an example against the local packages instead:
 >
 > A `PackageReference` to `1.0.0-dev` means *at least* `1.0.0-dev`. Prerelease labels are compared
 > alphabetically, and `dev` sorts before `preview`, so `1.0.0-preview.1` satisfies the constraint. If
-> the local feed is not configured yet, NuGet does not fail — it quietly resolves an **older
+> the local feed is not configured yet, NuGet does not fail - it quietly resolves an **older
 > published preview** from nuget.org instead.
 >
 > Worse, adding the `NuGet.config` afterwards does not fix it on its own. The wrong resolution is
@@ -190,7 +190,7 @@ This catches people out, because the wrong choice produces no output at all rath
 | Location | Use |
 |---|---|
 | Top-level statements, `game.Run(start:/update:)` callbacks | `Console.WriteLine` reaches the redirected stream |
-| Inside a `SyncScript` / `AsyncScript` / `StartupScript` | `Console.WriteLine` does **not** reach it — use `Log.Info`, `Log.Warning` |
+| Inside a `SyncScript` / `AsyncScript` / `StartupScript` | `Console.WriteLine` does **not** reach it - use `Log.Info`, `Log.Warning` |
 | Inside a render feature or game system | `GlobalLogger.GetLogger("Name")` |
 
 Stride writes each line to both the console and the redirected stream, so captured output shows

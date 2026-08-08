@@ -12,7 +12,7 @@ using Stride.Games;
 // A code-only first-person character controller on Bepu physics:
 //  • a CharacterComponent capsule built entirely from code (no Game Studio),
 //  • driven by a custom EntityComponent + EntityProcessor pair that auto-registers itself
-//    via [DefaultEntityComponentProcessor] — see FirstPersonControllerComponent.cs.
+//    via [DefaultEntityComponentProcessor] - see FirstPersonControllerComponent.cs.
 
 CharacterComponent? character = null;
 
@@ -52,7 +52,7 @@ void Start(Scene scene)
     body.Scene = scene;
 
     // The controller lives on the CAMERA entity and drives the body. Adding the component is all
-    // it takes — [DefaultEntityComponentProcessor] spins up FirstPersonControllerProcessor
+    // it takes - [DefaultEntityComponentProcessor] spins up FirstPersonControllerProcessor
     // automatically.
     var camera = scene.GetCamera();
     camera?.Entity.Add(new FirstPersonControllerComponent { Character = character });

@@ -8,8 +8,8 @@ every utility component, the harvest list grew — see [Build list](#build-list)
 [Open questions](#open-questions) have `**Your answer:**` placeholders. Answer them, and I move
 them up into Decisions.
 
-**Status:** all questions answered except Q1 (one naming call). Ready to build in the
-[stated order](#build-order) — Q1 only affects example #4, which is not first.
+**Status:** all questions answered. Example 1 of 9 is **done**
+(`Example15_Constraint_Motors`); next is `Example15_Constraint_Rope`.
 
 ---
 
@@ -52,6 +52,18 @@ Settled. No need to re-read unless you want to change one.
     being trimmed to fit a label. Scale from `README.md`: 1-2 Getting Started, 3-5 Beginners,
     6-8 Intermediate, 9-10 Advanced.
 13. **I write the Czech metadata** (`cs` title/description), as in Example19/22.
+14. **Verify by measuring, not by watching.** A build that launches proves nothing; exit code 0 only
+    means the window opened. Log the actual quantity (`AngularVelocity`, position) via a `DIAG`-
+    prefixed line, read it back, then strip the diagnostics. Two of the four bugs in the motors
+    example were invisible on screen and obvious in a one-line log.
+15. **Live values on screen beat static instruction text.** Rebuild the `DebugTextPrinter` list every
+    frame via `Print(IReadOnlyCollection<TextElement>)` rather than indexing into
+    `Instructions[n]` — index bookkeeping drifts out of step with the startup placeholders the
+    moment a line is renamed. Where a toggle has no immediate visual effect, print the number it
+    changes.
+16. **Findings go in the manual, not just in comments.** Non-obvious engine behaviour discovered
+    while building an example belongs in `docs/manual/physics-extensions/`, in the symptom-first
+    style of the existing pages, and linked from the section index.
 14. **Port code, not scenes.** The playground's `.sdscene`/`.sdprefab`/compositor assets are never
     used; code-only examples build everything procedurally (`SetupBase3DScene`, `AddSkybox`,
     `Create3DPrimitive`). This also means the Colliders-scene crash (see
@@ -63,7 +75,32 @@ Settled. No need to re-read unless you want to change one.
 
 ### Tier 1
 
-#### 1. `Example15_Constraint_Motors` · Beginners · complexity 5
+#### 1. `Example15_Constraint_Motors` · Beginners · complexity 5 — **DONE**
+
+Built, verified by measuring angular velocities, and merged into the solution. Findings from building
+it are written up in [`docs/manual/physics-extensions/bepu-constraints.md`](../../docs/manual/physics-extensions/bepu-constraints.md)
+(new), linked from the physics-extensions index.
+
+Deviations from the spec below, all forced by measurement:
+
+- **`BallSocketMotorConstraintComponent` was dropped.** It drives *linear* velocity at the socket
+  point, not rotation, despite the name. Paired with a stiff `BallSocketConstraintComponent` on the
+  same point it is a tug of war the rigid joint always wins, and the driven axis reads exactly zero.
+  The example uses `OneBodyAngularMotorConstraintComponent` for the swept arm and explains why the
+  obvious-looking choice is wrong.
+- **`MotorDamping` / `MotorMaximumForce` are never set.** Setting either — even to the value the
+  component already defaults to — stops the motor producing any force, because the setters call
+  `TryUpdateDescription()` before the constraint is attached and the write never reaches the solver.
+  This looks like a genuine **Stride wrapper bug worth reporting upstream**: a public setter that
+  silently does nothing.
+- **`AngularMotorConstraintComponent` was tried and rejected** for the swept arm: its default force
+  budget of 1,000 (against the one-body motor's 10,000,000) only creeps at ~0.4 rad/s against a
+  target of 2.5, and the bug above means the budget cannot be raised.
+- **The swept arm's cone decays** into a vertical spin, by design rather than by accident: a motor
+  target is a whole vector, so `(0, speed, 0)` also demands zero rotation about X and Z — exactly the
+  rotation needed to stay out at an angle. Documented as a teaching point.
+
+Original spec follows.
 
 The **servo vs. motor vs. limit** distinction, which `Example15_Constraint` never teaches (it shows
 only servos and limits). A *servo* drives toward a target pose and stops; a *motor* drives a target
@@ -78,9 +115,14 @@ only servos and limits). A *servo* drives toward a target pose and stops; a *mot
 *Source:* `Constraint.sdscene`, `Cube Mixer.sdscene`, `ConstraintToggleComponent`,
 `ConstraintEditorComponent`.
 
-#### 2. `Example15_Constraint_Rope` · Intermediate · complexity 7
+#### 2. `Example15_Constraint_Rope` · Intermediate · complexity 7 — *next*
 
 There is no rope type — a rope is a runtime-built chain of small dynamic bodies.
+
+> Carry over from the motors example: a rope is a chain of ball sockets, and **every link can jam the
+> same way** if consecutive segments are pinned so they overlap. Space the segments so each pivot
+> falls between them rather than inside a neighbour, and expect to verify with a logged position
+> rather than by eye.
 
 - Segment count derived from anchor distance ÷ segment length.
 - Each consecutive pair linked by `BallSocketConstraintComponent` (pins the touching ends) **plus**

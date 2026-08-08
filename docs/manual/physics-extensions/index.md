@@ -4,6 +4,10 @@ Physics extensions provide..
 > New to Bepu, or seeing a mesh that moves without colliding? Read
 > [Bepu: Who Owns the Transform?](bepu-transform-ownership.md) first. It covers the one-way
 > physics-to-transform sync and the silent failures that follow from it.
+>
+> Building joints or motors? [Bepu: Why Isn't My Constraint Doing Anything?](bepu-constraints.md)
+> covers the equivalent silent failures on the constraint side - jammed joints, motors that produce
+> no force, and settings that are discarded without warning.
 
 **Bepu Extensions**
 
