@@ -418,11 +418,12 @@
       "Synchronizing physics bodies with visual entities",
       "Dynamic rigid body simulation",
       "Static vs dynamic physics bodies",
-      "Manual physics update loop"
+      "Fixed-timestep physics update loop, decoupled from the render frame rate"
     ],
     "related": [
       "Example01_Basic3DScene",
       "Example18_Box2DPhysics",
+      "Example19_Jitter2Physics_Constraints",
       "Example_CubicleCalamity"
     ],
     "tags": [
@@ -442,6 +443,49 @@
     "isDraft": false,
     "projectName": "Example19_Jitter2Physics",
     "projectPath": "Example19_Jitter2Physics\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "Jitter2 Physics - Constraining to 2D",
+      "cs": "Jitter2 fyzika - omezen\u00ED na 2D"
+    },
+    "level": "Beginners",
+    "category": "Physics",
+    "complexity": 4,
+    "description": {
+      "en": "Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no\ndedicated 2D mode, so each falling cube gets a PointOnPlane constraint locking translation along Z\nand a HingeAngle constraint locking rotation to the Z axis, confining it to the X/Y plane while it\nkeeps running on the same 3D solver. Builds on Example19_Jitter2Physics with the same falling-cubes\nsetup, spread across a grid so they cascade and pile up sideways.\n",
+      "cs": "Ukazuje, jak omezit 3D fyzik\u00E1ln\u00ED simulaci Jitter2 na chov\u00E1n\u00ED podobn\u00E9 2D. Jitter2 nem\u00E1 vyhrazen\u00FD 2D\nre\u017Eim, tak\u017Ee ka\u017Ed\u00E1 padaj\u00EDc\u00ED kostka dostane omezen\u00ED PointOnPlane, kter\u00E9 uzamkne posun pod\u00E9l osy Z,\na omezen\u00ED HingeAngle, kter\u00E9 uzamkne rotaci na osu Z - kostka tak z\u016Fst\u00E1v\u00E1 v rovin\u011B X/Y, p\u0159esto\u017Ee b\u011B\u017E\u00ED\nna stejn\u00E9m 3D \u0159e\u0161i\u010Di. Navazuje na Example19_Jitter2Physics se stejn\u00FDm nastaven\u00EDm padaj\u00EDc\u00EDch kostek,\ntentokr\u00E1t rozm\u00EDst\u011Bn\u00FDch do m\u0159\u00ED\u017Eky, aby se sesyp\u00E1valy do sebe.\n"
+    },
+    "concepts": [
+      "Constraining a 3D physics engine to 2D motion",
+      "Creating and initializing Jitter2 constraints (PointOnPlane, HingeAngle)",
+      "Locking translation and rotation axes with world.CreateConstraint",
+      "Synchronizing physics bodies with visual entities",
+      "Manual physics update loop"
+    ],
+    "related": [
+      "Example19_Jitter2Physics",
+      "Example15_Constraint",
+      "Example18_Box2DPhysics"
+    ],
+    "tags": [
+      "3D",
+      "Physics",
+      "Jitter2",
+      "Rigid Body",
+      "Constraint",
+      "2D",
+      "External Engine",
+      "Simulation",
+      "Cubes",
+      "Beginners"
+    ],
+    "order": 19,
+    "enabled": true,
+    "created": "2026-08-08",
+    "isDraft": false,
+    "projectName": "Example19_Jitter2Physics_Constraints",
+    "projectPath": "Example19_Jitter2Physics_Constraints\\Program.cs"
   },
   {
     "title": {

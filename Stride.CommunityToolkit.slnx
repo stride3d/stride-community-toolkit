@@ -55,6 +55,7 @@
     <Project Path="examples/code-only/Example17_SignalR_Shared/Example17_SignalR_Shared.csproj" />
     <Project Path="examples/code-only/Example18_Box2DPhysics/Example18_Box2DPhysics.csproj" />
     <Project Path="examples/code-only/Example19_Jitter2Physics/Example19_Jitter2Physics.csproj" />
+    <Project Path="examples/code-only/Example19_Jitter2Physics_Constraints/Example19_Jitter2Physics_Constraints.csproj" />
     <Project Path="examples/code-only/Example20_BepuFirstPersonCharacter/Example20_BepuFirstPersonCharacter.csproj" />
     <Project Path="examples/code-only/Example_2D_Playground/Example_2D_Playground.csproj" />
     <Project Path="examples/code-only/Example_Bepu_Playground/Example_Bepu_Playground.csproj" />

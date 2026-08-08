@@ -1,6 +1,7 @@
 using Jitter2;
 using Jitter2.Collision.Shapes;
 using Jitter2.Dynamics;
+using Jitter2.Dynamics.Constraints;
 using Jitter2.LinearMath;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
@@ -11,13 +12,15 @@ using Stride.Engine;
 using Stride.Games;
 
 const float CubeSize = 0.5f;
-const float VerticalSpacing = 2f;
+const float HorizontalSpacing = 0.6f;
+const float VerticalSpacing = 0.6f;
+const int Columns = 10;
 
 // Physics runs at a fixed rate, decoupled from the render frame rate (see Update)
 const float FixedTimeStep = 1f / 100f;
 const int MaxStepsPerFrame = 5;
 
-var groundSize = new Vector3(15f, 1, 15f);
+var groundSize = new Vector3(15f, 1f, 2f);
 
 // Initialize Jitter2 physics world with 4 substeps for better accuracy
 var world = new World()
@@ -37,7 +40,7 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.Title = "Jitter 2 Physics Example - Stride Community Toolkit";
+    game.Window.Title = "Jitter 2 Physics Constraints Example - Stride Community Toolkit";
 
     game.SetupBase3D();
     game.AddSkybox();
@@ -96,7 +99,11 @@ void CreateCubes(Scene rootScene, int count)
 {
     for (int i = 0; i < count; i++)
     {
-        var cubePosition = new Vector3(0, 10 + i * VerticalSpacing, 0);
+        // Spread cubes across a grid of columns instead of a single vertical stack, so they
+        // cascade and pile up sideways - a much better way to see the 2D constraint at work.
+        var column = i % Columns;
+        var row = i / Columns;
+        var cubePosition = new Vector3((column - Columns / 2f) * HorizontalSpacing, 10 + row * VerticalSpacing, 0);
 
         // Create visual cube entity
         var cubeEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
@@ -114,8 +121,32 @@ void CreateCubes(Scene rootScene, int count)
         cubeBody.SetMassInertia(1f);
         cubeBody.Position = new JVector(cubePosition.X, cubePosition.Y, cubePosition.Z);
 
+        ConstrainToPlane(cubeBody);
+
         cubes.Add(new CubeInstance(cubeEntity, cubeBody));
     }
+}
+
+/// <summary>
+/// Restricts a dynamic body to the X/Y plane (Z = 0), giving Jitter2's 3D solver 2D-style behaviour.
+/// </summary>
+/// <remarks>
+/// Jitter2 has no dedicated 2D mode. Locking one translation axis and the two out-of-plane rotation
+/// axes confines a body to a plane while it keeps running on the same 3D solver - the same trick the
+/// toolkit already uses for Bepu in <c>Body2DComponent</c>. See the maintainer's write-up at
+/// https://github.com/notgiven688/jitterphysics2/discussions/232 for the general recipe, including a
+/// cheaper alternative that edits the inverse inertia tensor directly instead of adding constraints.
+/// </remarks>
+void ConstrainToPlane(RigidBody body)
+{
+    // Pins the body's own origin to the world's Z=0 plane, removing translation along Z
+    var positionConstraint = world.CreateConstraint<PointOnPlane>(world.NullBody, body);
+    positionConstraint.Initialize(JVector.UnitZ, JVector.Zero, body.Position);
+
+    // A hinge around Z removes the other two angular degrees of freedom, so the body can only
+    // spin around the axis facing the camera instead of tumbling out of the plane
+    var rotationConstraint = world.CreateConstraint<HingeAngle>(world.NullBody, body);
+    rotationConstraint.Initialize(JVector.UnitZ, AngularLimit.Full);
 }
 
 void SyncPhysicsToEntities()
@@ -139,44 +170,47 @@ record CubeInstance(Entity Entity, RigidBody Body);
 /*
 ---example-metadata
 title:
-  en: Jitter2 Physics Integration
-  cs: Integrace fyziky Jitter2
+  en: Jitter2 Physics - Constraining to 2D
+  cs: Jitter2 fyzika - omezení na 2D
 level: Beginners
 category: Physics
 complexity: 4
 description:
   en: |
-    Demonstrates integrating Jitter2 physics engine with Stride. Shows how to create a physics world,
-    synchronize physics bodies with visual entities, and simulate dynamic rigid body interactions.
-    Features 150 falling cubes with proper collision detection and a static ground plane.
+    Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no
+    dedicated 2D mode, so each falling cube gets a PointOnPlane constraint locking translation along Z
+    and a HingeAngle constraint locking rotation to the Z axis, confining it to the X/Y plane while it
+    keeps running on the same 3D solver. Builds on Example19_Jitter2Physics with the same falling-cubes
+    setup, spread across a grid so they cascade and pile up sideways.
   cs: |
-    Ukazuje integraci fyzikálního enginu Jitter2 se Stride. Jak vytvořit fyzikální svět,
-    synchronizovat fyzikální tělesa s vizuálními entitami a simulovat dynamické interakce pevných těles.
-    Obsahuje 150 padajících kostek s detekcí kolizí a statickou zemní rovinou.
+    Ukazuje, jak omezit 3D fyzikální simulaci Jitter2 na chování podobné 2D. Jitter2 nemá vyhrazený 2D
+    režim, takže každá padající kostka dostane omezení PointOnPlane, které uzamkne posun podél osy Z,
+    a omezení HingeAngle, které uzamkne rotaci na osu Z - kostka tak zůstává v rovině X/Y, přestože běží
+    na stejném 3D řešiči. Navazuje na Example19_Jitter2Physics se stejným nastavením padajících kostek,
+    tentokrát rozmístěných do mřížky, aby se sesypávaly do sebe.
 concepts:
-  - Integrating external physics engine (Jitter2)
-  - Creating and managing physics world
+  - Constraining a 3D physics engine to 2D motion
+  - Creating and initializing Jitter2 constraints (PointOnPlane, HingeAngle)
+  - Locking translation and rotation axes with world.CreateConstraint
   - Synchronizing physics bodies with visual entities
-  - Dynamic rigid body simulation
-  - Static vs dynamic physics bodies
   - Fixed-timestep physics update loop, decoupled from the render frame rate
 related:
-  - Example01_Basic3DScene
+  - Example19_Jitter2Physics
+  - Example15_Constraint
   - Example18_Box2DPhysics
-  - Example19_Jitter2Physics_Constraints
-  - Example_CubicleCalamity
 tags:
   - 3D
   - Physics
   - Jitter2
   - Rigid Body
-  - Collision Detection
+  - Constraint
+  - 2D
   - External Engine
   - Simulation
   - Cubes
   - Beginners
 order: 19
 enabled: true
-created: 2025-12-13
+created: 2026-08-08
 ---
 */
