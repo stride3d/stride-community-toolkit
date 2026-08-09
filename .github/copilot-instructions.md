@@ -55,6 +55,7 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 - `build/`: Repository build scripts (e.g. `pack-local.cs` for local dev NuGet packages)
 - `docs/`: DocFX sources (manuals, API reference, contributing)
 - `.github/`: GitHub workflows, release metadata, automation, and this instruction file
+- `ARCHITECTURE.md` (root): running backlog of API-design observations — see below
 
 Solutions: `Stride.CommunityToolkit.slnx` contains everything; `Stride.CommunityToolkit.Core.slnf`
 is a solution filter loading only libraries, tests and tools, because the 56 example projects slow
@@ -221,6 +222,22 @@ change in Stride to be possible at all.
 - **Mention, do not silently fix.** Unclear or missing XML documentation, typos, and suspicious
   patterns noticed in passing are worth reporting. Fixing them as a side effect of unrelated work
   makes the diff harder to review and is out of scope unless requested.
+
+## Architecture notes (`ARCHITECTURE.md`)
+
+[`ARCHITECTURE.md`](../ARCHITECTURE.md) in the repository root collects API-design observations: the
+places where the *shape* of an API, rather than a bug in it, is what trips people up. It is a backlog
+of observations, not a decision record — nothing in it is agreed or scheduled.
+
+- **Read it before proposing an API change.** The friction may already be recorded, with options and
+  impact weighed up.
+- **Add to it when friction is noticed**, especially while writing examples, which is where API
+  problems surface first. Record the observation even when not acting on it: what was observed, why
+  it matters, and what the options are, including the do-nothing one.
+- **Keep it current.** Remove items once resolved or rejected, and note which. An item that no longer
+  reflects the code is worse than no item.
+- Prefer it over burying the observation in a code comment. A comment explains one call site; this
+  file is where a pattern across the API gets seen.
 
 ## Reference repositories (read them before writing physics code)
 
