@@ -59,20 +59,24 @@ For rotation, use an angular motor:
 | Drive rotation between two bodies | `AngularMotorConstraintComponent` |
 | Drive rotation about a single axis | `AngularAxisMotorConstraintComponent` |
 
-## "My motor worked until I tuned it"
+## "My motor stopped the moment I set MotorDamping"
 
-Setting `MotorDamping` or `MotorMaximumForce` stops a motor working - **even when set to the exact
-value the component already defaults to**.
+`MotorDamping` does **not** read back the number the component was constructed with. The constructors
+pass a damping value to Bepu's `MotorSettings`, which stores its reciprocal, so a component built with
+`0.02` reports a `MotorDamping` of `50`.
+
+Copying the value out of the constructor and "setting it to the default" therefore makes the motor
+2500x softer, and a motor that soft produces no visible force at all:
 
 ```csharp
-// Spins.
+// Spins: leaves the real default of 50 in place.
 new OneBodyAngularMotorConstraintComponent
 {
     A = body,
     TargetVelocity = new Vector3(0, 4, 0),
 };
 
-// Does not spin, despite 0.02 being the default already.
+// Does not spin: 0.02 is the CONSTRUCTOR argument, not the property value.
 new OneBodyAngularMotorConstraintComponent
 {
     A = body,
@@ -81,34 +85,52 @@ new OneBodyAngularMotorConstraintComponent
 };
 ```
 
-The setters write to the description and call `TryUpdateDescription()`, which does not reach the
-solver while the constraint is still unattached, so the write is lost and the motor is left in a
-state that produces no force.
+**Read the property to find the real default** before overriding it. These are the measured values,
+not the constructor arguments:
 
-**Pick a component whose defaults already suit the job** rather than tuning these two properties. The
-defaults vary a lot and are worth knowing:
-
-| Component | Default maximum force | Default damping |
+| Component | Maximum force | `MotorDamping` reads |
 |---|---|---|
-| `OneBodyAngularMotorConstraintComponent` | 10,000,000 | 0.02 |
-| `AngularMotorConstraintComponent` | 1,000 | 10 |
-| `AngularAxisMotorConstraintComponent` | 1,000 | 10 |
-| `BallSocketMotorConstraintComponent` | 1,000 | 10 |
+| `OneBodyAngularMotorConstraintComponent` | 10,000,000 | 50 |
+| `AngularMotorConstraintComponent` | 1,000 | 0.1 |
+| `AngularAxisMotorConstraintComponent` | 1,000 | 0.1 |
+| `BallSocketMotorConstraintComponent` | 1,000 | 0.1 |
 
-The 1,000 default is not enough to swing a modest arm against gravity - it creeps at a fraction of
-the requested speed instead of reaching it. A one-body motor with its far larger budget will drive
-the same arm to its target immediately.
+The two-body motors ship far weaker than the one-body one. A force budget of 1,000 with damping 0.1
+is not enough to swing a modest arm against gravity — it creeps at a fraction of the requested speed.
+Raising both to the one-body figures (10,000,000 and 50) drives the same arm to its target
+immediately. The setters themselves work correctly; only the default is misleading.
 
 ## "My motor drives the right axis but fights me on the others"
 
-A motor target is a **whole vector**. Asking for `(0, speed, 0)` also asks for *zero* rotation about
-X and Z, and the motor will spend its force budget holding those at zero.
+Most motor targets are a **whole vector**. Asking for `(0, speed, 0)` also asks for *zero* rotation
+about X and Z, and the motor will spend its force budget holding those at zero.
 
-A tilted arm driven about Y therefore sweeps a wide cone at first and then slowly collapses into a
-vertical spin: staying out at an angle requires rotation about X and Z, and the motor keeps
-cancelling it. Nothing is broken - the motor is doing exactly what it was told.
+A tilted arm driven about Y therefore sweeps a wide cone at first and then collapses into a vertical
+spin within seconds: staying out at an angle requires rotation about X and Z, and the motor keeps
+cancelling it. Nothing is broken — the motor is doing exactly what it was told.
 
-Use `AngularAxisMotorConstraintComponent` when only one axis should be constrained.
+**Use `AngularAxisMotorConstraintComponent`** when only one axis should be driven. It takes a single
+`LocalAxisA` and a scalar `TargetVelocity`, leaving the other two axes to gravity, so the cone
+survives.
+
+Two things to expect once it does. Drive the arm near its own pendulum frequency, `sqrt(3g/2L)` for a
+rod pivoting at its end, and the two beat against each other — the orbit wanders into shifting
+polygons instead of a circle, so pick a speed well clear of it. And because only the spin is
+controlled, the swing in and out is free motion that nothing damps: the cone breathes about its
+equilibrium angle indefinitely. That is the pendulum nutating, not the motor faltering, and no
+constant will tune it away.
+
+```csharp
+new AngularAxisMotorConstraintComponent
+{
+    A = anchorBody,
+    B = armBody,
+    LocalAxisA = Vector3.UnitY,
+    TargetVelocity = 2.5f,
+    MotorDamping = 50,             // the weak two-body default will only creep
+    MotorMaximumForce = 10_000_000,
+};
+```
 
 ## "Turning the motor off does nothing"
 
@@ -134,8 +156,8 @@ Constraints join **bodies**. Both ends need a `BodyComponent`, so an immovable a
 |---|---|---|
 | Joint completely rigid | Joined parts overlap; a constraint does not disable collision | Put the pivot in clear air, outside both colliders |
 | Motor does nothing, driven axis reads zero | `BallSocketMotor` drives linear velocity, not rotation | Use an angular motor |
-| Motor stopped after setting damping or force | Setters do not reach the solver before attachment | Leave both alone; pick a component whose defaults fit |
-| Motor creeps far below target | Default `MotorMaximumForce` of 1,000 is too small | Use a one-body motor, or reduce the load |
-| Driven axis fine, other axes fought | A motor target constrains all three axes | Use `AngularAxisMotorConstraintComponent` |
+| Motor stopped after setting `MotorDamping` | The property is the reciprocal of the constructor argument | Read the property for the real default; do not copy the constructor value |
+| Motor creeps far below target | Two-body defaults of force 1,000 / damping 0.1 are very soft | Raise both, or use a one-body motor |
+| Driven axis fine, other axes fought | A whole-vector motor target constrains all three axes | Use `AngularAxisMotorConstraintComponent` |
 | Disabling the motor changes nothing | Disabling stops pushing but does not brake | Display the velocity to confirm |
 | Anchor rejects `StaticComponent` | Constraints join bodies only | Kinematic `BodyComponent` |
