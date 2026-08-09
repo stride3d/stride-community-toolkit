@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </summary>
 /// <remarks>
 /// <para>Extends <see cref="Primitive3DEntityOptions"/> with a configurable Bepu <see cref="CollidableComponent"/>.</para>
-/// <para>The default component is a dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>.</para>
+/// <para>When <see cref="Component"/> is left <see langword="null"/>, the creation helper that consumes the options picks a context-appropriate default: a dynamic <see cref="BodyComponent"/> for primitives, a <see cref="StaticComponent"/> for ground helpers.</para>
 /// <para>When collider generation is enabled, creation helpers populate the collider with shapes that match the selected primitive type.</para>
 /// </remarks>
 public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
@@ -18,12 +18,9 @@ public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
     /// Gets or sets the Bepu collidable component attached to the entity.
     /// </summary>
     /// <remarks>
-    /// Defaults to a new dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>. Use a <see cref="StaticComponent"/> for immovable geometry, or preconfigure collider children before passing the options to a creation helper.
+    /// When <see langword="null"/> (the default), the consuming helper chooses: primitive creation attaches a dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>, while ground helpers attach a <see cref="StaticComponent"/>. Set it explicitly to override either default or to preconfigure collider children.
     /// </remarks>
-    public CollidableComponent Component { get; set; } = new BodyComponent
-    {
-        Collider = new CompoundCollider()
-    };
+    public CollidableComponent? Component { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether a collider shape matching the primitive type is created automatically.

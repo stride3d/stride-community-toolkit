@@ -82,14 +82,16 @@ public static class GameExtensions
     /// <param name="options">Optional 3D physics options used to configure the ground. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
-    /// When <paramref name="options"/> is <see langword="null"/>, default options are created with a <see cref="StaticComponent"/> and <see cref="CompoundCollider"/>. If <see cref="PrimitiveEntityOptions.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
+    /// Unless <see cref="Bepu3DPhysicsOptions.Component"/> is set explicitly, the ground gets a <see cref="StaticComponent"/> with a <see cref="CompoundCollider"/> - including when other options such as <see cref="Primitive3DEntityOptions.Size"/> are provided. If <see cref="PrimitiveEntityOptions.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// </remarks>
     public static Entity Add3DGround(this Game game, Bepu3DPhysicsOptions? options = null)
     {
-        var physicsComponent = new StaticComponent() { Collider = new CompoundCollider() };
-
-        options ??= new Bepu3DPhysicsOptions() { Component = physicsComponent };
+        options ??= new();
         options.EntityName ??= GameDefaults.DefaultGroundName;
+
+        // Ground is immovable by default; a null Component would otherwise fall through to the
+        // dynamic BodyComponent that primitive creation defaults to
+        options.Component ??= new StaticComponent() { Collider = new CompoundCollider() };
 
         return CreateGround(game, PrimitiveModelType.Plane, options);
     }

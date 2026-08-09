@@ -1,3 +1,4 @@
+using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu.Colliders;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -27,9 +28,13 @@ public static class EntityExtensions
 
             options ??= new();
 
+            // A fresh component per call when none was supplied, so the same options instance can
+            // be reused across entities
+            var component = options.Component ?? new Body2DComponent { Collider = new CompoundCollider() };
+
             if (!options.IncludeCollider)
             {
-                entity.Add(options.Component);
+                entity.Add(component);
 
                 return entity;
             }
@@ -38,11 +43,11 @@ public static class EntityExtensions
 
             //if (colliderShape is null) return entity;
 
-            var compoundCollider = options.Component.Collider as CompoundCollider;
+            var compoundCollider = component.Collider as CompoundCollider;
 
             compoundCollider?.Colliders.Add(colliderShape);
 
-            entity.Add(options.Component);
+            entity.Add(component);
 
             return entity;
         }
@@ -66,10 +71,14 @@ public static class EntityExtensions
 
             options ??= new();
 
+            // A fresh component per call when none was supplied, so the same options instance can
+            // be reused across entities
+            var component = options.Component ?? new BodyComponent { Collider = new CompoundCollider() };
+
             if (!options.IncludeCollider)
             {
                 // Should we add the CollidableComponent even if no collider is included?
-                entity.Add(options.Component);
+                entity.Add(component);
 
                 return entity;
             }
@@ -78,11 +87,11 @@ public static class EntityExtensions
 
             //if (colliderShape is null) return entity;
 
-            var compoundCollider = options.Component.Collider as CompoundCollider;
+            var compoundCollider = component.Collider as CompoundCollider;
 
             compoundCollider?.Colliders.Add(colliderShape);
 
-            entity.Add(options.Component);
+            entity.Add(component);
 
             return entity;
         }
