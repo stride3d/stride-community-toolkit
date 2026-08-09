@@ -11,7 +11,7 @@ Nothing here is committed to yet — challenge or delete anything that looks wro
 
 | Fact | Detail |
 |---|---|
-| Example projects | **57** (`.csproj`/`.fsproj`/`.vbproj`, excluding bin/obj) |
+| Example projects | **57+** (`.csproj`/`.fsproj`/`.vbproj`, excluding bin/obj) |
 | Examples **with** `---example-metadata` | **14** |
 | Examples **without** frontmatter | **44** |
 | Docs `.md` files | **33** — 29 map to a specific example, 4 are section landing pages |
@@ -21,7 +21,7 @@ Nothing here is committed to yet — challenge or delete anything that looks wro
 > [!NOTE]
 > `Example07_CubeClicker` is not listed in `Stride.CommunityToolkit.slnx` at all, so it escapes every
 > solution-wide build. It does have a doc (`stride-ui-cube-clicker.md`). Probably an oversight worth
-> fixing separately from this plan.
+> fixing separately from this plan. The reason it is excluded because it is on hold, the build fails, maybe we could proceed with this example as well, just make sure it is not build by default and it is excluded from docs and launchers with Enabled: false.
 
 **Two parallel metadata systems exist today:**
 
@@ -47,6 +47,8 @@ Doc filenames are semantic, not derivable from project names:
 
 Confirms your instinct: `slug` goes in the frontmatter, short and shareable.
 
+Question for AI: Could/shall we use also prefix e.g. intro-, beginner-, intermediate-, advanced-. That means generated files would be close together by level.
+
 ### Media filenames are also not derivable
 
 Naming is inconsistent and contains at least one typo:
@@ -56,6 +58,8 @@ Naming is inconsistent and contains at least one typo:
 - `stride-game-engine-example-15-contraints.webp` (**typo**: `contraints`)
 
 So `media` must be an explicit field too.
+
+Note: The default media could follow the slug, and additional would be contributors choice.
 
 ### Docs vary more than the simple ones suggest
 
@@ -67,6 +71,8 @@ Most docs are 7–25 lines and highly formulaic — `concepts:` literally *is* t
 
 That variance is the main argument for the takeover mechanism (§2.4) — generate the formulaic ones,
 hand-own the rich ones.
+
+Question for AI: There could be another frontmatter time, so if the docs exists and specific frontmatter is there, the content could be merged
 
 ---
 
@@ -80,18 +86,18 @@ These are separate concerns and should not be conflated:
 |---|---|---|
 | `enabled` | `true` | Example is **excluded from the manifest entirely** — unfinished/WIP, invisible to every consumer |
 | `docs` | `true` | In the manifest, but **no doc page generated** |
-| `exampleLauncher` | `true` | In the manifest, but **hidden from the console runner and Avalonia launcher** |
+| `launcher` | `true` | In the manifest, but **hidden from the console runner and Avalonia launcher** |
 
 > **Q1** — `enabled: false` currently also exists in the 13 files that have frontmatter (all set
 > `enabled: true`). Confirm the new meaning ("exclude from manifest entirely") is what you want,
 > rather than a softer "exclude from launchers only".
 >
-> **Your answer:**
+> **Your answer:** It should be excluded from the manifest entirely, so `enabled: false` is correct.
 
 > **Q2** — Field naming: `exampleLauncher` is a bit long inside a block already scoped to an example.
 > Prefer `launcher: true`? Or keep `exampleLauncher`?
 >
-> **Your answer:**
+> **Your answer:** `launcher: true` is preferred for brevity and clarity. I already renamed it in the table.
 
 ### 2.2 Proposed frontmatter schema v1
 
@@ -137,7 +143,7 @@ externalLinks:                     # NEW, optional. Becomes an "Other Examples"-
     url: https://github.com/rds1983/Myra/wiki/...
 
 # --- launchers ------------------------------------------------------------
-exampleLauncher: true              # NEW
+launcher: true              # NEW
 
 # --- lifecycle ------------------------------------------------------------
 enabled: true
@@ -153,26 +159,26 @@ created: 2025-08-07
 > equivalent. Options: (a) keep both fields, (b) derive `docGroup` from `level` with an explicit
 > mapping table and drop the field, (c) drop `level` and keep only `docGroup`.
 >
-> **Your answer:**
+> **Your answer:** Keep only level, we can restructure the toc.yml (breaking changes ok in docs) to match the levels, and if we need to have a different grouping we can add a new field later. Shall we have these: Getting Started (or Intro), Beginners, Intermediate, Advanced? Also, even if level "Other" was added or something else in the future it is ok. Basically, Other meant unsorted or WIP and/or unclasified but worth to include.
 
 > **Q4** — `additionalFiles` and `externalLinks` add real schema complexity for what is currently
 > **one** example (Myra). Alternative: don't model them, and just mark Myra's doc as manually owned
 > (§2.4). Model them, or skip for v1?
 >
-> **Your answer:**
+> **Your answer:** Yes, I suggested above frontmatter flag which would mark the docs as mergeable that means existing docs would have additional content and we might not need additionalFiles and externalLinks.
 
 > **Q5** — Localisation: `title`/`description` are `en`/`cs` dictionaries. Do generated docs need a
 > Czech output too (`mesh-outline.cs.md`?), or is `cs` carried in the manifest for later/website use
 > while docs generate English-only for now?
 >
-> **Your answer:**
+> **Your answer:** English-only for now, other languages can be used in the launchers.
 
 > **Q6** — `related:` currently stores **project names** (`Example13_RootRendererShader`). Doc
 > cross-links need **slugs**. Keep project names and have the generator resolve them to slugs (fails
 > the build on an unresolvable name — which would have caught a typo when I edited `related:` earlier
 > this session), or store slugs directly?
 >
-> **Your answer:**
+> **Your answer:** Keep project names (might be easier to maintain) and have the generator resolve them (through Dictionary?) to slugs.
 
 ### 2.3 JSON envelope
 
@@ -194,7 +200,7 @@ Bare array → wrapped object, done now while nothing consumes it:
 > build artifact), (b) omit `generatedAt` so the output is deterministic and diffs stay clean,
 > (c) include it and keep committing. My preference is (a).
 >
-> **Your answer:**
+> **Your answer:** Yes, let's go with (a) — include it and stop committing the manifest, it's a build artifact.
 
 ### 2.4 Doc takeover mechanism
 
@@ -224,12 +230,14 @@ after this change cannot destroy any hand-written prose. Adoption becomes opt-in
 > **Q8** — Is `generated: true/false` the right flag name/shape? Alternatives: `managed: true`,
 > `autoGenerated: true`, or an explicit `owner: tool|human`.
 >
-> **Your answer:**
+> **Your answer:** `generated: true/false` is fine, it is clear and concise.
 
 > **Q9** — What should the generator do when a hand-owned doc's frontmatter has drifted from the
 > example's (e.g. title changed in `Program.cs` but not in the `.md`)? Warn only, or fail the build?
 >
-> **Your answer:**
+> **Your answer:** Warn only, it is a hand-owned doc and the author should be aware of the drift but not block the build.
+
+Question for AI: Should we have a frontmatter flag which would mark the docs as mergeable that means existing docs would have additional content and we might not need additionalFiles and externalLinks. We would need to just figure out where to merge the content, e.g. after the generated content or before it. The generator would need to parse the existing doc and merge the content in the right place. Maybe good for Phase 2 if it is not too complex to implement.
 
 ---
 
@@ -266,7 +274,7 @@ Fail-fast with a useful message, aggregated across all examples rather than dyin
 > malformed block silently yields an incomplete manifest and a green build. I'd make `generate`
 > fail hard and drop `ContinueOnError` — but that means a bad metadata block blocks the Launcher build.
 >
-> **Your answer:**
+> **Your answer:** Fail hard, a malformed block should block the build to ensure metadata integrity. If it becomes annoying I will be in touch.
 
 ### Step 1.3 — Backfill frontmatter (the big one)
 
@@ -282,13 +290,13 @@ rather than writing it directly. You paste/adjust per file.
 > `Program.cs` automatically and let you review the git diff? Auto-write is faster across 29 files but
 > touches source directly.
 >
-> **Your answer:**
+> **Your answer:** The frontmatter content in Program.cs can be written by AI and use the existing docs as a reference/content source, so it can be auto-written and then reviewed (be user) in the git diff. It is faster and less error-prone. 
 
 > **Q12** — What about the ~29 examples with **no** doc and **no** frontmatter? Options: (a) author
 > frontmatter for all of them now (large effort, gets full docs coverage), (b) set `docs: false` and
 > backfill opportunistically, (c) generate a minimal stub doc from what little can be inferred.
 >
-> **Your answer:**
+> **Your answer:** Option (c) is preferred, generate a minimal stub doc from what little can be inferred. It is better to have something than nothing, and it can be improved later.
 
 ### Step 1.4 — `docs` command
 
@@ -305,13 +313,13 @@ Respects the takeover rules in §2.4.
 > (e.g. between `# <examples:begin>` / `# <examples:end>` markers)? I'd strongly prefer the delimited
 > region — much safer.
 >
-> **Your answer:**
+> **Your answer:** We can do better, you can generate only toc.yml for the examples in the examples folder and the reference that file in the main toc.yml See this: https://dotnet.github.io/docfx/docs/table-of-contents.html
 
 > **Q14** — The 4 landing pages (`basic-examples.md`, `advance-examples.md`, `basic-examples-fs.md`,
 > `basic-examples-vb.md`) are index pages listing child examples. Generate those too (they're pure
 > lists), or leave hand-owned?
 >
-> **Your answer:**
+> **Your answer:** Yes, generate those too, they are pure lists and can be generated from the manifest.
 
 ### Step 1.5 — Generator code modernisation
 
@@ -346,7 +354,7 @@ Small, mostly independent of the above:
 > pre-build MSBuild hook (regenerates on every build, slow-ish — it runs `dotnet run` on the
 > generator), or commit the manifest and regenerate deliberately? Note this interacts with **Q7**.
 >
-> **Your answer:**
+> **Your answer:** Keep the pre-build MSBuild hook, it ensures the manifest is always up-to-date with the examples. If it becomes too slow, we can revisit this decision later.
 
 ---
 
@@ -363,7 +371,7 @@ Small, mostly independent of the above:
 > **Q16** — Fix `stride-game-engine-example-15-contraints.webp` → `constraints`, or leave it and just
 > reference the existing filename? Renaming means updating the referencing doc.
 >
-> **Your answer:**
+> **Your answer:** Yes, fix the typo to `constraints` and update the referencing doc accordingly. It is better to have correct naming for clarity and professionalism.
 
 ---
 
@@ -381,7 +389,7 @@ questions the plan did not anticipate.
 > earlier instinct, but means reading many more files; (c) scan `Program.cs` plus any `.cs` whose
 > name matches its folder.
 >
-> **Your answer:**
+> **Your answer:** Option (b) scan every `.cs` and keep those containing a metadata block. It allows for more flexibility in naming and does not restrict the developer to a specific file name. The metadata block will ensure that only relevant files are included.
 
 > **Q18** — Variants: sibling files in one folder, or one folder each? The file-based folder
 > currently holds `Program.cs` (project references) and `ProgramSimple.cs` (NuGet packages). Only
@@ -390,7 +398,7 @@ questions the plan did not anticipate.
 > (`_Primitives`, `_MeshLine`, `_FSharp`), and sibling file-based apps in one folder also share an
 > asset cone and would collide over `obj`/`bin` if either sets those properties.
 >
-> **Your answer:**
+> **Your answer:** We can allow one folder to yield several entries, but we should ensure that each entry has its own unique slug.
 
 > **Q19** — `ProgramSimple.cs` only resolves with a local, machine-specific `NuGet.config` pointing
 > at the dev feed, so committing it as-is would hand other contributors a file that fails to restore.
@@ -398,7 +406,7 @@ questions the plan did not anticipate.
 > no config and becomes a genuinely shareable single-file example), or keep it with a header comment
 > stating the prerequisite?
 >
-> **Your answer:**
+> **Your answer:** Don't worry about ProgramSimple.cs it has no frontmatter and is not part of the docs generation. It can be kept for local development but should not be included in the shared examples until it is fully functional and does not require a local NuGet.config.
 
 ### Automated screenshots
 
@@ -498,7 +506,7 @@ example; output reviewed by a human before committing. Metadata fields would be 
 > as a standalone script under `build/`? Given it cannot run in CI and needs a human to review each
 > image anyway, a standalone script may fit better than growing the metadata generator.
 >
-> **Your answer:**
+> **Your answer:** We might need to elaborate on this later. Basically, it should be something simple and yes a user has to review the screenshots. So a standalone script under build/ might be better than growing the metadata generator. It can be a simple script that launches the examples, captures the screenshots, and saves them to the appropriate location. We can still add some metadata fields to the frontmatter for the examples to specify the frame index / delay for the screenshot, but the actual capture process can be handled by a separate script.
 
 > **Q21** — How should the in-game capture be triggered? Registering an environment-variable-gated
 > screenshot system inside `SetupBase3DScene` / `SetupBase3D` would give most examples the capability
@@ -506,7 +514,7 @@ example; output reviewed by a human before committing. Metadata fields would be 
 > alternative is an explicit `game.AddScreenshotOnDemand()` that each participating example calls,
 > which is honest but has to be added ~57 times and is easy to forget on new examples.
 >
-> **Your answer:**
+> **Your answer:** I wonder if modern C# doesn't have an option to inject something on build or runtime. So we wouldn't change the existing code or in minimum.
 
 > **Q22** — Reuse or reimplement? `Stride.Graphics.Regression` already provides frame-scheduled
 > capture and baseline comparison, but it is a test-harness assembly aimed at xUnit
@@ -516,13 +524,13 @@ example; output reviewed by a human before committing. Metadata fields would be 
 > (c) start with (b), and revisit (a) if visual regression testing of examples ever becomes a goal in
 > its own right.
 >
-> **Your answer:**
+> **Your answer:** The answer might depend on Q20 and Q21.
 
 > **Q23** — Screenshots are currently committed as ordinary files under
 > `docs/manual/code-only/examples/media/`. Stride keeps its baselines in Git LFS. Before adding ~29
 > more images, should the toolkit adopt LFS for them, or keep committing them directly?
 >
-> **Your answer:**
+> **Your answer:** LFS, I will try to sort it out and see if it is possible to use it for the screenshots. It will help with the repo size and make it easier to manage large files.
 
 ### Not part of this plan
 
