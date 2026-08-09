@@ -210,6 +210,51 @@
   },
   {
     "title": {
+      "en": "Basic3D Scene (Capsule) - File-Based App",
+      "cs": "Z\u00E1kladn\u00ED 3D sc\u00E9na (Kapsle) - aplikace bez projektu"
+    },
+    "level": "Getting Started",
+    "category": "Shapes",
+    "complexity": 1,
+    "description": {
+      "en": "The same minimal 3D scene as Example01_Basic3DScene, written as a .NET 10 file-based app: a single\nC# file with no .csproj. NuGet packages, project references and MSBuild properties are declared\ninline with #:package, #:project and #:property directives, so the example runs with\n\u0022dotnet run Program.cs\u0022. Use \u0022dotnet project convert\u0022 to turn it back into a regular project.\n",
+      "cs": "Stejn\u00E1 minim\u00E1ln\u00ED 3D sc\u00E9na jako Example01_Basic3DScene, ale napsan\u00E1 jako aplikace bez projektu\n(.NET 10 file-based app): jedin\u00FD soubor C# bez .csproj. Bal\u00ED\u010Dky NuGet, odkazy na projekty\na vlastnosti MSBuild se deklaruj\u00ED p\u0159\u00EDmo pomoc\u00ED direktiv #:package, #:project a #:property,\ntak\u017Ee p\u0159\u00EDklad se spust\u00ED p\u0159\u00EDkazem \u0022dotnet run Program.cs\u0022. P\u0159\u00EDkazem \u0022dotnet project convert\u0022\njej lze p\u0159ev\u00E9st zp\u011Bt na b\u011B\u017En\u00FD projekt.\n"
+    },
+    "concepts": [
+      "Running a Stride game as a .NET 10 file-based app (no .csproj)",
+      "Declaring NuGet packages inline with #:package",
+      "Referencing projects inline with #:project",
+      "Setting MSBuild properties inline with #:property",
+      "Converting a file-based app to a project with dotnet project convert",
+      "Using helpers: SetupBase3DScene",
+      "Using helpers: AddSkybox"
+    ],
+    "related": [
+      "Example01_Basic3DScene",
+      "Example02_GiveMeACube",
+      "Example01_Basic3DScene_Primitives"
+    ],
+    "tags": [
+      "3D",
+      "Bepu",
+      "Shapes",
+      "Primitive",
+      "Capsule",
+      "Scene Setup",
+      "Skybox",
+      "File-Based App",
+      "dotnet run",
+      "Getting Started"
+    ],
+    "order": 1,
+    "enabled": true,
+    "created": "2026-08-08",
+    "isDraft": false,
+    "projectName": "Example01_Basic3DScene_FileBasedApp",
+    "projectPath": "Example01_Basic3DScene_FileBasedApp\\Program.cs"
+  },
+  {
+    "title": {
       "en": "Give Me a Cube",
       "cs": "Dej mi kostku"
     },

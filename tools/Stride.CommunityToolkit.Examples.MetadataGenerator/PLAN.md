@@ -1,8 +1,7 @@
 # Examples Metadata & Docs Generation — Plan
 
-Working document. Q1–Q23 have been answered and folded into the design below; the decisions are
-recorded in §7 with their rationale. **Only §8 is still open** — answer those inline and this plan is
-ready to implement.
+Working document. **All questions (Q1–Q26) are answered and folded into the design below**; the
+decisions are recorded in §7 with their rationale. This plan is ready to implement.
 
 ---
 
@@ -258,6 +257,124 @@ The ~29 examples with **no** doc and **no** frontmatter get a **minimal stub doc
 whatever can be inferred, at `level: Other`. Something beats nothing, and it can be improved in place
 later. Stub generation respects `docs: true` — an example explicitly marked `docs: false` gets no stub.
 
+**Level reclassification is a review step, not a judgement call made in passing.** Today's toc only
+distinguishes Basic / Advance / Other, so mapping 29 existing docs onto 5 levels needs human sign-off.
+The sequence is: propose a full mapping table (project → current group → proposed `level`, with a
+one-line reason for anything non-obvious) **in this document**, get it corrected, and only then write
+any frontmatter (D27). Nothing in Step 1.3 is written before that table is approved.
+
+### Step 1.3a — Proposed level mapping — **AWAITING REVIEW**
+
+> [!IMPORTANT]
+> This is the D27 gate. Correct anything wrong in the **Proposed** column, then this section becomes
+> the source of truth for the backfill. No frontmatter is written until it is signed off.
+
+**The rubric used.** Level = *conceptual prerequisites*, not line count. A 589-line example that only
+repeats one idea is easier than a 55-line one that requires understanding the render pipeline.
+
+| Level | Admits |
+|---|---|
+| **Getting Started** | The minimum viable Stride app. Reader has never run code-only Stride. Boilerplate + one helper call. |
+| **Beginner** | One new concept on top of the base scene. Toolkit helpers only, no engine extension points. |
+| **Intermediate** | A Stride subsystem used directly (UI, particles, constraints, collision filtering, custom scripts), or several concepts combined. |
+| **Advanced** | Custom engine extension points (render features, shaders, custom renderers), third-party engine integration, or multi-project architecture. |
+| **Other** | Playgrounds, WIP, and demos that are not teaching a specific lesson. Sorts last. |
+
+A `?` in the last column marks a genuinely debatable call — those are where review attention is worth
+spending. Everything unmarked is a straightforward carry-over.
+
+#### Table A — the 29 documented examples
+
+Grouped by **proposed** level so each bucket can be sanity-checked for coherence. **Today** shows the
+current toc group; ↑/↓ marks a move.
+
+| Doc slug | Project | Today | ? |
+|---|---|---|---|
+| **→ Getting Started** ||||
+| `capsule-with-rigid-body` | `Example01_Basic3DScene` | Basic | |
+| `capsule-with-rigid-body-fs` | `Example01_Basic3DScene_FSharp` | Basic (F#) | |
+| `capsule-with-rigid-body-vb` | `Example01_Basic3DScene_VBasic` | Basic (VB) | |
+| **→ Beginner** ||||
+| `mesh-line` | `Example01_Basic3DScene_MeshLine` | Basic | |
+| `material` | `Example01_Material` | Basic | |
+| `give-me-cube-body` | `Example02_GiveMeACube` | Basic | |
+| **→ Intermediate** ||||
+| `stride-ui-capsule-with-rigid-body` | `Example03_StrideUI_CapsuleAndWindow` | Basic | |
+| `procedural-geometry` | `Example05_ProceduralGeometry` | Basic | |
+| `cylinder-mesh` | `Example05_CylinderMesh` | Basic | |
+| `partial-torus-mesh` | `Example05_PartialTorus` | Basic | |
+| `partial-torus-mesh-fs` | `Example05_PartialTorus_FSharp` | Basic (F#) | |
+| `particles` | `Example12_Particles` | Basic | |
+| `raycast` | `Example14_Raycast` | Basic | |
+| `collision-group` | `Example16_CollisionGroup` | Basic | **?** short code, but needs physics filtering concepts |
+| `collision-layer` | `Example16_CollisionLayer` | Basic | **?** same as above |
+| `simple-constraint` | `Example15_Constraint_Simple` | Advance ↓ | 55 lines; it is the gentle intro to constraints |
+| `debug-shapes` | `Example08_DebugShapes` | Other ↑ | |
+| `debug-shapes-usage` | `Example08_DebugShapes_Usage` | Other ↑ | |
+| `imgui-ui` | `Example11_ImGui` | Advance ↓ | **?** only 33 lines because the toolkit wraps ImGui — is it still "integration"? |
+| `stride-ui-cube-clicker` | `Example07_CubeClicker` | Basic ↑ | ⚠ `enabled: false` — level applies only if it builds again |
+| **→ Advanced** ||||
+| `constraints` | `Example15_Constraint` | Advance | 589 lines, the full constraint tour |
+| `myra-ui-draggable-window-and-services` | `Example04_MyraUI` | Advance | ⚠ blocked on Stride 4.4 — likely `enabled: false` |
+| `stride-ui-draggable-window` | `Example10_StrideUI_DragAndDrop` | Advance | |
+| `image-processing` | `Example06_ImageProcessing` | Advance | |
+| `root-renderer-shader` | `Example13_RootRendererShader` | Advance | |
+| `mesh-outline` | `Example13_MeshOutline` | Advance | |
+| `box2d-physics` | `Example18_Box2DPhysics` | Advance | |
+| `renderer` | `Example09_Renderer` | Other ↑ | custom renderer — "Other" was never right |
+| `stride-signalr` | `Example17_SignalR` | Other ↑ | multi-project + external server |
+
+#### Table B — examples with no doc yet
+
+These get stub docs (D12). **Deviation from D12 for your approval:** D12 says stubs land at
+`level: Other`, but since a classification pass is happening anyway, assigning a real level now costs
+nothing and avoids a second pass. `Other` is reserved for things that genuinely are unclassified.
+
+| Project | Proposed | Note |
+|---|---|---|
+| `Example01_Basic2DScene` | Getting Started | the 2D counterpart of the canonical first example |
+| `Example01_Basic3DScene_FileBasedApp` | Getting Started | single-file `dotnet run` — arguably *the* new front door |
+| `Example01_Basic3DScene_Primitives` | Beginner | |
+| `Example01_Basic2DScene_Primitives` | Beginner | |
+| `Example01_Basic2DScene_FallingShapes` | Beginner | no `ExampleCategory`/`ExampleOrder` today |
+| `Example01_Basic2DScene_DebugRender` | Beginner | |
+| `Example01_Basic3DScene_DPI_Aware` | Beginner | |
+| `Example01_Basic3DScene_SyncScript` | Beginner | |
+| `Example05_SimpleGeometry` | Intermediate | groups with the other `Example05_*` mesh examples |
+| `Example02_GiveMeACube_SimulationUpdate` | Intermediate | |
+| `Example20_BepuFirstPersonCharacter` | Intermediate | category is `2 - Physics`, a one-off value |
+| `Example21_Instancing` | Intermediate | **?** currently `1 - Basic`; instancing is an optimisation topic |
+| `Example11_ImGuiNet` | Advanced | |
+| `Example22_Instancing_EntityTransform` | Advanced | |
+| `Example19_Jitter2Physics` | Advanced | no category/order today |
+| `Example19_Jitter2Physics_Constraints` | Advanced | no category/order today |
+| `Example08_CollidableGizmo` | Other | small utility demo, not a lesson |
+| `Example08_DebugRenderComponent` | Other | ditto |
+| `Example_2D_Playground` | Other | playground |
+| `Example_Bepu_Playground` | Other | playground |
+| `Example_CubicleCalamity` | Other | playground / game sketch |
+
+#### Flagged during the pass
+
+1. **Legacy Bullet variants — recommend `docs: false`.** `Example01_Basic3DScene_BulletPhysics`,
+   `Example01_Basic2DScene_BulletPhysics`, `Example10_StrideUI_DragAndDrop_BulletPhysics` and
+   `Example_CubicleCalamity_BulletPhysics` each duplicate a Bepu example using the legacy physics
+   engine. Documenting them puts near-identical entries on every level page for a non-default engine.
+   Suggest keeping them in the manifest and the launchers (`launcher: true`) but out of the docs.
+   **Your call — this is a new question the data raised.**
+2. **Not examples at all.** `Example.Common` and `Example17_SignalR_Shared` are shared libraries with
+   no entry point. Under D17 (scan `.cs` for a metadata block) they are correctly invisible — no action
+   needed, recorded so it is not rediscovered. `Example17_SignalR_Blazor` is the server half of
+   `stride-signalr.md`; it should be `docs: false` rather than get its own page.
+3. **`ExampleCategory` has one-off values** — `3 - Other` (vs `3 - Other Example`) on
+   `Example17_SignalR_Shared`, and `2 - Physics` on `Example20_BepuFirstPersonCharacter`. Both vanish
+   when Phase 2 deletes these properties, so no separate fix is needed.
+4. **Duplicate `ExampleOrder` values** beyond the Jitter2 pair already noted in Step 1.2: `1300`
+   (`Example05_PartialTorus_FSharp`, `Example12_Particles`) and `17000` (`Example08_DebugShapes`,
+   `Example13_MeshOutline`, `Example18_Box2DPhysics`). The Step 1.2 duplicate-`order` check is
+   scoped per `(language, level)` group, so most of these stop colliding after the regrouping —
+   but they need real values assigned during backfill.
+
 ### Step 1.4 — `docs` command
 
 Generates, per example with `docs: true`:
@@ -268,9 +385,38 @@ Generates, per example with `docs: true`:
   grouped by `(language, level)` and ordered by `order`. `docs/manual/toc.yml` references it as a
   nested TOC (`href: code-only/examples/toc.yml`), so the generator never has to touch a
   hand-maintained file. See the [DocFX TOC docs](https://dotnet.github.io/docfx/docs/table-of-contents.html).
-- The 4 landing pages (`basic-examples.md`, `advance-examples.md`, `basic-examples-fs.md`,
-  `basic-examples-vb.md`) — they are pure lists of child examples, so they are generated from the
-  manifest. Their names follow from the level/language restructure (see Q24).
+- **One landing page per `(language, level)` group**, generated from the manifest — they are pure
+  lists of child examples. Chosen for SEO: a dedicated, well-titled page per level competes for its
+  own search terms, which a single combined page cannot (D26).
+
+  | Old | New |
+  |---|---|
+  | `basic-examples.md` | `getting-started-examples.md`, `beginner-examples.md`, `intermediate-examples.md` |
+  | `advance-examples.md` | `advanced-examples.md` |
+  | — | `other-examples.md` |
+  | `basic-examples-fs.md` | `getting-started-examples-fs.md`, … (per level, F# only where examples exist) |
+  | `basic-examples-vb.md` | `getting-started-examples-vb.md`, … (ditto) |
+
+  Only groups that actually contain examples get a page — no empty landing pages.
+
+- **Redirect stubs for the 4 old landing-page URLs.** DocFX supports per-file YAML frontmatter
+  `redirect_url:` accepting any relative or absolute URL, so each old filename stays in the repo as a
+  frontmatter-only stub:
+
+  ```markdown
+  ---
+  redirect_url: beginner-examples.md
+  ---
+  ```
+
+  Notes:
+  - The stub file **must continue to exist** — the redirect is a generated HTML page, not a build-time
+    rewrite. It is excluded from `toc.yml` so nothing links *to* a redirect.
+  - The generator owns these stubs (it knows both the old and new names) and must not delete them.
+  - This is a **meta-refresh, not an HTTP 301**. Search engines treat an instant meta refresh as a
+    redirect and do pass ranking signal, but a 301 is stronger. That is not a trade-off we can avoid:
+    docs deploy to **GitHub Pages** (`.github/workflows/github-pages.yml`), which cannot serve custom
+    301s at all. `redirect_url` is the best available mechanism, not a compromise against a better one.
 
 Respects the ownership rules in §2.4.
 
@@ -453,6 +599,9 @@ substantially.
 | D23 | Git LFS for screenshots | No — repo is 7 MB tracked / 38 MB `.git`; LFS is all cost, no benefit |
 | D24 | Level prefixes on slugs | **No** — see below |
 | D25 | Default `media` | Defaults to `<slug>.webp`; explicit field only for the legacy inconsistent names |
+| D26 | Landing pages | One per `(language, level)` group, for SEO; old URLs kept as `redirect_url` stubs |
+| D27 | Level reclassification | Propose a mapping table in this doc for review; no frontmatter written until approved |
+| D28 | `generated: partial` phasing | **Phase 1**, immediately after the plain `generated: true` path works |
 
 ### D24 — why slugs stay level-free
 
@@ -473,36 +622,7 @@ the right lever — but they carry the identical URL-stability problem, so the a
 
 ---
 
-## 8. Still open
-
-> **Q24** — The 4 landing pages are named `basic-examples.md` / `advance-examples.md` /
-> `basic-examples-fs.md` / `basic-examples-vb.md`, matching the old Basic/Advance/Other grouping. With
-> 5 levels × 3 languages (D3), what should they become? Options: (a) one landing page **per level**
-> (`getting-started-examples.md`, `beginner-examples.md`, …) — most consistent, but renames existing
-> URLs; (b) keep a single C# landing page listing all levels as sections, plus one each for F#/VB —
-> fewer files, fewer URL breaks; (c) keep today's filenames and just re-point them. My preference is
-> (b): the level grouping is already visible in the toc, so multiplying landing pages adds files
-> without adding navigation value.
->
-> **Your answer:** It is about SEO, a dedicated page for each level is better, so I would go with (a) and rename the existing URLs. The old pages can be redirected through `redirect_url: [new URL]` https://dotnet.github.io/docfx/docs/config.html?q=redirect
-
-> **Q25** — Reclassifying the existing 29 docs into the 5 levels needs a human judgement pass
-> (today's toc only says Basic/Advance/Other). Do you want to do that pass yourself, or should I
-> propose a mapping in a table here for you to correct before any frontmatter is written?
->
-> **Your answer:** Once we get here you can propose a mapping and I will review it, but I would not do it myself.
-
-> **Q26** — Phasing of `generated: partial`. It replaces `additionalFiles`/`externalLinks`, and a
-> replace-between-two-delimiters implementation is *cheaper* than the schema + validation +
-> templating those two fields would have needed — so I would build it in **Phase 1**, right after the
-> plain `generated: true` path works. Building it later means Myra needs a temporary hand-owned
-> exemption that gets undone. Agreed, or still prefer Phase 2?
->
-> **Your answer:** Agreed, it should be done in Phase 1.
-
----
-
-## 9. Not part of this plan
+## 8. Not part of this plan
 
 Related work completed alongside it, documented in
 [`docs/contributing/toolkit/building.md`](../../../docs/contributing/toolkit/building.md) rather than
