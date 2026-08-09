@@ -28,6 +28,10 @@ using Stride.Rendering;
 // Note those figures are for a settled pile. While the cubes are still falling and colliding the
 // physics dominates; once Bepu puts the settled bodies to sleep they cost almost nothing and
 // rendering becomes the bottleneck, which is where instancing earns its keep.
+//
+// NEW: key 3 drops cubes onto a second master running FastEntityTransformInstancing, a prototype
+// rewrite of the stock gather/invert path (parallel + SIMD + sleep-skip; see PLAN.md in this
+// folder). The overlay shows the per-frame CPU cost of both masters so they can be compared live.
 
 const int CubesPerDrop = 200;
 const float CubeSize = 0.5f;
@@ -38,9 +42,11 @@ var random = new Random(1);
 
 // Every cube ever spawned, so they can all be removed again
 var instancedCubes = new List<Entity>();
+var fastCubes = new List<Entity>();
 var plainCubes = new List<Entity>();
 
 InstancingComponent? master = null;
+FastEntityTransformInstancing? fastInstancing = null;
 Model? sharedModel = null;
 Scene? scene = null;
 
@@ -53,16 +59,24 @@ void Start(Scene rootScene)
     scene = rootScene;
 
     // Camera, light and a ground plane with a static collider for the cubes to land on
-    game.SetupBase3DScene();
+    game.SetupBase3D();
+    game.Add3DCameraController();
+    // A large ground so big drops cannot spill over the edge into the void; the static collider
+    // comes with it by default
+    game.Add3DGround(new() { Size = new Vector3(300, 1, 300) });
     game.AddSkybox();
     game.AddProfiler();
 
     EnableInstancing();
 
     sharedModel = CreateSharedCubeModel(rootScene);
-    master = CreateMaster(rootScene, sharedModel);
 
-    DropCubes(CubesPerDrop, instanced: true);
+    // Two masters, same shared model: stock instancing (timed) and the fast prototype
+    master = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "InstancingMaster");
+    fastInstancing = new FastEntityTransformInstancing();
+    CreateMaster(rootScene, sharedModel, fastInstancing, "FastInstancingMaster");
+
+    DropCubes(CubesPerDrop, CubeKind.Instanced);
 }
 
 /// <summary>
@@ -97,19 +111,20 @@ Model CreateSharedCubeModel(Scene rootScene)
 }
 
 /// <summary>
-/// Creates the master entity: the one that actually gets drawn, once, for every instance.
+/// Creates a master entity: the one that actually gets drawn, once, for every instance.
 /// </summary>
 /// <remarks>
-/// The master needs both a <see cref="ModelComponent"/> and an <see cref="InstancingComponent"/>.
-/// <see cref="InstancingEntityTransform"/> means "collect the world matrices from my instances every
-/// frame", as opposed to <see cref="InstancingUserArray"/> where you supply the matrices yourself.
+/// A master needs both a <see cref="ModelComponent"/> and an <see cref="InstancingComponent"/>.
+/// The instancing type decides where the matrices come from: <see cref="InstancingEntityTransform"/>
+/// collects them from registered instance entities every frame, <see cref="InstancingUserArray"/>
+/// (which <see cref="FastEntityTransformInstancing"/> builds on) has them supplied in code.
 /// </remarks>
-InstancingComponent CreateMaster(Scene rootScene, Model model)
+InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing instancingType, string name)
 {
-    var entity = new Entity("InstancingMaster")
+    var entity = new Entity(name)
     {
         new ModelComponent(model),
-        new InstancingComponent { Type = new InstancingEntityTransform() }
+        new InstancingComponent { Type = instancingType }
     };
 
     entity.Scene = rootScene;
@@ -118,19 +133,24 @@ InstancingComponent CreateMaster(Scene rootScene, Model model)
 }
 
 /// <summary>
-/// Drops a batch of physics-driven cubes into the scene, instanced or not.
+/// Drops a batch of physics-driven cubes into the scene.
 /// </summary>
 /// <remarks>
-/// Both kinds are identical in every other respect: same shared <see cref="Model"/>, same collider,
-/// same spawn area. The only difference is whether the cube draws itself or is drawn by the master.
+/// All kinds are identical in every other respect: same shared <see cref="Model"/>, same collider,
+/// same spawn area. The only difference is how (or whether) the cube gets instanced.
 /// </remarks>
-void DropCubes(int count, bool instanced)
+void DropCubes(int count, CubeKind kind)
 {
-    if (scene is null || master is null) return;
+    if (scene is null || master is null || fastInstancing is null) return;
 
     for (var i = 0; i < count; i++)
     {
-        var entity = instanced ? CreateInstancedCube(master) : CreatePlainCube();
+        var entity = kind switch
+        {
+            CubeKind.Instanced => CreateInstancedCube(master),
+            CubeKind.FastInstanced => CreatePhysicsCube("FastInstancedCube"),
+            _ => CreatePlainCube()
+        };
 
         entity.Transform.Position = new Vector3(
             (random.NextSingle() - 0.5f) * DropSpread,
@@ -139,7 +159,20 @@ void DropCubes(int count, bool instanced)
 
         entity.Scene = scene;
 
-        (instanced ? instancedCubes : plainCubes).Add(entity);
+        switch (kind)
+        {
+            case CubeKind.Instanced:
+                instancedCubes.Add(entity);
+                break;
+            case CubeKind.FastInstanced:
+                // No InstanceComponent involved: the fast master is told about the entity directly
+                fastInstancing.AddInstance(entity);
+                fastCubes.Add(entity);
+                break;
+            default:
+                plainCubes.Add(entity);
+                break;
+        }
     }
 }
 
@@ -148,17 +181,20 @@ void DropCubes(int count, bool instanced)
 /// </summary>
 /// <remarks>
 /// Taking an entity out of the scene removes its components too, so each
-/// <see cref="InstanceComponent"/> unregisters itself from the master and the instance count drops
-/// back to zero on its own.
+/// <see cref="InstanceComponent"/> unregisters itself from the stock master and the instance count
+/// drops back to zero on its own. The fast master has no such hook - it must be cleared explicitly.
 /// </remarks>
 void ClearCubes()
 {
-    foreach (var entity in instancedCubes.Concat(plainCubes))
+    foreach (var entity in instancedCubes.Concat(fastCubes).Concat(plainCubes))
     {
         entity.Scene = null;
     }
 
+    fastInstancing?.Clear();
+
     instancedCubes.Clear();
+    fastCubes.Clear();
     plainCubes.Clear();
 }
 
@@ -166,20 +202,17 @@ void ClearCubes()
 /// Builds the same physics body as an instanced cube, but with its own <see cref="ModelComponent"/>
 /// so it is drawn on its own. This is the comparison case: one draw call per cube.
 /// </summary>
-Entity CreatePlainCube() => new("PlainCube")
+Entity CreatePlainCube()
 {
-    new ModelComponent(sharedModel),
-    new BodyComponent
-    {
-        Collider = new CompoundCollider
-        {
-            Colliders = { new BoxCollider { Size = new Vector3(CubeSize) } }
-        }
-    }
-};
+    var entity = CreatePhysicsCube("PlainCube");
+
+    entity.Add(new ModelComponent(sharedModel));
+
+    return entity;
+}
 
 /// <summary>
-/// Creates one falling cube: a physics body that renders through the master.
+/// Creates one falling cube: a physics body that renders through the stock master.
 /// </summary>
 /// <remarks>
 /// Note what is NOT here: a <see cref="ModelComponent"/>. It is tempting to build these with
@@ -191,13 +224,22 @@ Entity CreatePlainCube() => new("PlainCube")
 /// <see cref="InstancingEntityTransform"/> reads it back out each frame.
 /// </para>
 /// </remarks>
-Entity CreateInstancedCube(InstancingComponent masterInstancing) => new("InstancedCube")
+Entity CreateInstancedCube(InstancingComponent masterInstancing)
 {
-    // Links this entity's transform into the master's instance list
-    new InstanceComponent { Master = masterInstancing },
+    var entity = CreatePhysicsCube("InstancedCube");
 
-    // A normal dynamic body. The collider is declared by hand because there is no model to
-    // derive it from.
+    // Links this entity's transform into the stock master's instance list
+    entity.Add(new InstanceComponent { Master = masterInstancing });
+
+    return entity;
+}
+
+/// <summary>
+/// The shared core of every cube: a normal dynamic body and nothing else. The collider is declared
+/// by hand because there is no model to derive it from.
+/// </summary>
+Entity CreatePhysicsCube(string name) => new(name)
+{
     new BodyComponent
     {
         Collider = new CompoundCollider
@@ -222,8 +264,9 @@ void HandleInput()
         ? CubesPerDrop * 10
         : CubesPerDrop;
 
-    if (game.Input.IsKeyPressed(Keys.D1)) DropCubes(batch, instanced: true);
-    if (game.Input.IsKeyPressed(Keys.D2)) DropCubes(batch, instanced: false);
+    if (game.Input.IsKeyPressed(Keys.D1)) DropCubes(batch, CubeKind.Instanced);
+    if (game.Input.IsKeyPressed(Keys.D2)) DropCubes(batch, CubeKind.Plain);
+    if (game.Input.IsKeyPressed(Keys.D3)) DropCubes(batch, CubeKind.FastInstanced);
     if (game.Input.IsKeyPressed(Keys.X)) ClearCubes();
 }
 
@@ -234,25 +277,36 @@ void DrawOverlay()
     void Print(string text, Color? color = null)
         => game.DebugTextSystem.Print(text, new Int2(6, 60 + line++ * 18), color ?? Color.White);
 
-    // Read straight from the master: this is the number the renderer will actually draw
-    var liveInstances = (master?.Type as InstancingEntityTransform)?.InstanceCount ?? 0;
+    // Read straight from the masters: these are the numbers the renderer will actually draw
+    var stockType = master?.Type as TimedInstancingEntityTransform;
+    var stockCount = stockType?.InstanceCount ?? 0;
+    var fastCount = fastInstancing?.InstanceCount ?? 0;
 
-    Print($"INSTANCED    {instancedCubes.Count,5} cubes -> 1 draw call (master reports {liveInstances})",
+    var fastStatus = fastInstancing?.SleepSkippedLastFrame == true
+        ? "skipped (all asleep)"
+        : $"{fastInstancing?.LastUpdateMilliseconds:0.00} ms";
+
+    Print($"1 STOCK INSTANCED {instancedCubes.Count,6} cubes -> 1 draw call   update {stockType?.LastUpdateMilliseconds:0.00} ms",
         instancedCubes.Count > 0 ? Color.LightGreen : Color.Gray);
-    Print($"NOT INSTANCED{plainCubes.Count,5} cubes -> {plainCubes.Count} draw calls",
+    Print($"3 FAST INSTANCED  {fastCubes.Count,6} cubes -> 1 draw call   update {fastStatus}",
+        fastCubes.Count > 0 ? Color.Cyan : Color.Gray);
+    Print($"2 NOT INSTANCED   {plainCubes.Count,6} cubes -> {plainCubes.Count} draw calls",
         plainCubes.Count > 0 ? Color.Orange : Color.Gray);
+
+    if (stockCount != instancedCubes.Count || fastCount != fastCubes.Count)
+        Print($"   (masters report {stockCount} stock / {fastCount} fast)", Color.Red);
+
     Print("");
-    Print($"1 - drop {CubesPerDrop} instanced      2 - drop {CubesPerDrop} not instanced      X - remove all");
-    Print($"    hold SHIFT for {CubesPerDrop * 10} at a time", Color.Yellow);
+    Print($"1 - stock    2 - plain    3 - fast    X - remove all    (SHIFT = {CubesPerDrop * 10} per drop)", Color.Yellow);
     Print("");
-    Print("Both kinds share the same model, collider and spawn area, so");
-    Print("instancing is the only difference. Add one kind at a time and");
-    Print("compare; the frame counter is a rolling average, so give it a");
-    Print("second to settle, and let the pile come to rest.");
+    Print("All kinds share the same model, collider and spawn area. Drop one");
+    Print("kind at a time and compare the update cost while cubes fall; the");
+    Print("frame counter is a rolling average, so give it a second to settle.");
     Print("");
-    Print("At 20,000 cubes the gap is roughly 130 FPS against 3 FPS.");
-    Print("While they are still falling, physics dominates instead:");
-    Print("instancing removes draw calls, not simulation cost.");
+    Print("The fast master gathers matrices in parallel, uses a cheap rigid");
+    Print("inverse, and skips its CPU work entirely once Bepu puts every");
+    Print("body to sleep - watch its update cost hit zero as the pile rests.");
+    Print("See PLAN.md in this example's folder for the full optimisation plan.");
 }
 
 /*
