@@ -133,7 +133,24 @@ only servos and limits). A *servo* drives toward a target pose and stops; a *mot
 *Source:* `Constraint.sdscene`, `Cube Mixer.sdscene`, `ConstraintToggleComponent`,
 `ConstraintEditorComponent`.
 
-#### 2. `Example15_Constraint_Rope` · Intermediate · complexity 7 — *next*
+#### 2. `Example15_Constraint_Rope` · Intermediate · complexity 7 — **DONE**
+
+Built to the revised spec below. Measured across three swings: the naive rope stretches from a
+nominal 7.05 to 9.07 (+29%) and keeps hunting, while the stabilised one never exceeds 7.06. Chain
+building lives in `RopeBuilder.cs`; `S` toggles the skip constraints, `P` swings both weights with
+the same impulse.
+
+Two tuning findings worth keeping:
+
+- **The weight must never reach the floor.** Once it lands, the ground carries the load, both ropes
+  go slack, and the stretch the example exists to show disappears. Link count and anchor height have
+  to be raised together.
+- **100:1 is too extreme at Stride's default solver settings.** Bepu's demo uses that ratio, but it
+  also runs `SolveDescription(8, 1)`. Here the naive rope stretched to 2.4x and collapsed onto the
+  floor, which demonstrates nothing. 20:1 gives a clear sag against a rope that does not move.
+  Solver iteration count, not constraint configuration, is what decides which ratios survive — worth
+  remembering for `Example23_CubeFountain`, where stacking has the same dependency.
+
 
 There is no rope type — a rope is a runtime-built chain of small dynamic bodies.
 
