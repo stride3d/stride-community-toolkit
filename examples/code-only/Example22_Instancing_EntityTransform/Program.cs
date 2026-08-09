@@ -1,3 +1,4 @@
+using Example22_Instancing_EntityTransform;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
@@ -10,6 +11,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
+using Stride.Rendering.Compositing;
 
 // Example21 showed instancing at its simplest: one entity, an array of matrices, no behaviour.
 // This one keeps the entities.
@@ -43,10 +45,12 @@ var random = new Random(1);
 // Every cube ever spawned, so they can all be removed again
 var instancedCubes = new List<Entity>();
 var fastCubes = new List<Entity>();
+var bufferedCubes = new List<Entity>();
 var plainCubes = new List<Entity>();
 
 InstancingComponent? master = null;
 FastEntityTransformInstancing? fastInstancing = null;
+FastBufferedEntityTransformInstancing? bufferedInstancing = null;
 Model? sharedModel = null;
 Scene? scene = null;
 
@@ -71,10 +75,15 @@ void Start(Scene rootScene)
 
     sharedModel = CreateSharedCubeModel(rootScene);
 
-    // Two masters, same shared model: stock instancing (timed) and the fast prototype
+    // Three masters, same shared model: stock instancing (timed), the fast prototype, and the
+    // fast prototype with user-managed GPU buffers
     master = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "InstancingMaster");
     fastInstancing = new FastEntityTransformInstancing();
     CreateMaster(rootScene, sharedModel, fastInstancing, "FastInstancingMaster");
+    bufferedInstancing = new FastBufferedEntityTransformInstancing();
+    CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedInstancingMaster");
+
+    AddBufferUploadRenderer(bufferedInstancing);
 
     DropCubes(CubesPerDrop, CubeKind.Instanced);
 }
@@ -91,6 +100,32 @@ void EnableInstancing()
     var meshRenderFeature = game.SceneSystem.GraphicsCompositor.RenderFeatures.OfType<MeshRenderFeature>().First();
 
     meshRenderFeature.RenderFeatures.Add(new InstancingRenderFeature());
+}
+
+/// <summary>
+/// Registers the renderer that manages and uploads the buffered master's GPU buffers.
+/// </summary>
+/// <remarks>
+/// It must run BEFORE the scene camera renderer so the upload lands on the command list ahead of
+/// the frame's draw calls (same-frame data). The toolkit's AddSceneRenderer appends after the scene
+/// renderer, which would add a frame of latency, so this inserts at the front by hand.
+/// </remarks>
+void AddBufferUploadRenderer(FastBufferedEntityTransformInstancing target)
+{
+    var uploader = new InstancingBufferUploadRenderer { Targets = { target } };
+    var compositor = game.SceneSystem.GraphicsCompositor;
+
+    if (compositor.Game is SceneRendererCollection collection)
+    {
+        collection.Children.Insert(0, uploader);
+    }
+    else
+    {
+        var wrapped = new SceneRendererCollection();
+        wrapped.Children.Add(uploader);
+        if (compositor.Game is not null) wrapped.Children.Add(compositor.Game);
+        compositor.Game = wrapped;
+    }
 }
 
 /// <summary>
@@ -141,7 +176,7 @@ InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing insta
 /// </remarks>
 void DropCubes(int count, CubeKind kind)
 {
-    if (scene is null || master is null || fastInstancing is null) return;
+    if (scene is null || master is null || fastInstancing is null || bufferedInstancing is null) return;
 
     for (var i = 0; i < count; i++)
     {
@@ -149,6 +184,7 @@ void DropCubes(int count, CubeKind kind)
         {
             CubeKind.Instanced => CreateInstancedCube(master),
             CubeKind.FastInstanced => CreatePhysicsCube("FastInstancedCube"),
+            CubeKind.FastBuffered => CreatePhysicsCube("BufferedInstancedCube"),
             _ => CreatePlainCube()
         };
 
@@ -169,6 +205,10 @@ void DropCubes(int count, CubeKind kind)
                 fastInstancing.AddInstance(entity);
                 fastCubes.Add(entity);
                 break;
+            case CubeKind.FastBuffered:
+                bufferedInstancing.AddInstance(entity);
+                bufferedCubes.Add(entity);
+                break;
             default:
                 plainCubes.Add(entity);
                 break;
@@ -186,15 +226,17 @@ void DropCubes(int count, CubeKind kind)
 /// </remarks>
 void ClearCubes()
 {
-    foreach (var entity in instancedCubes.Concat(fastCubes).Concat(plainCubes))
+    foreach (var entity in instancedCubes.Concat(fastCubes).Concat(bufferedCubes).Concat(plainCubes))
     {
         entity.Scene = null;
     }
 
     fastInstancing?.Clear();
+    bufferedInstancing?.Clear();
 
     instancedCubes.Clear();
     fastCubes.Clear();
+    bufferedCubes.Clear();
     plainCubes.Clear();
 }
 
@@ -267,6 +309,7 @@ void HandleInput()
     if (game.Input.IsKeyPressed(Keys.D1)) DropCubes(batch, CubeKind.Instanced);
     if (game.Input.IsKeyPressed(Keys.D2)) DropCubes(batch, CubeKind.Plain);
     if (game.Input.IsKeyPressed(Keys.D3)) DropCubes(batch, CubeKind.FastInstanced);
+    if (game.Input.IsKeyPressed(Keys.D4)) DropCubes(batch, CubeKind.FastBuffered);
     if (game.Input.IsKeyPressed(Keys.X)) ClearCubes();
 }
 
@@ -281,31 +324,41 @@ void DrawOverlay()
     var stockType = master?.Type as TimedInstancingEntityTransform;
     var stockCount = stockType?.InstanceCount ?? 0;
     var fastCount = fastInstancing?.InstanceCount ?? 0;
+    var bufferedCount = bufferedInstancing?.RegisteredInstanceCount ?? 0;
 
     var fastStatus = fastInstancing?.SleepSkippedLastFrame == true
         ? "skipped (all asleep)"
         : $"{fastInstancing?.LastUpdateMilliseconds:0.00} ms";
 
-    Print($"1 STOCK INSTANCED {instancedCubes.Count,6} cubes -> 1 draw call   update {stockType?.LastUpdateMilliseconds:0.00} ms",
+    var bufferedStatus = bufferedInstancing?.SleepSkippedLastFrame == true
+        ? "skipped"
+        : $"{bufferedInstancing?.LastUpdateMilliseconds:0.00} ms";
+    var uploadStatus = bufferedInstancing?.UploadSkippedLastFrame == true ? "skipped" : "uploading";
+
+    Print($"1 STOCK INSTANCED {instancedCubes.Count,6} cubes -> 1 draw call   update {stockType?.LastUpdateMilliseconds:0.00} ms (engine uploads every frame)",
         instancedCubes.Count > 0 ? Color.LightGreen : Color.Gray);
-    Print($"3 FAST INSTANCED  {fastCubes.Count,6} cubes -> 1 draw call   update {fastStatus}",
+    Print($"3 FAST INSTANCED  {fastCubes.Count,6} cubes -> 1 draw call   update {fastStatus} (engine uploads every frame)",
         fastCubes.Count > 0 ? Color.Cyan : Color.Gray);
+    Print($"4 FAST + BUFFERS  {bufferedCubes.Count,6} cubes -> 1 draw call   update {bufferedStatus}, upload {uploadStatus}",
+        bufferedCubes.Count > 0 ? Color.Magenta : Color.Gray);
     Print($"2 NOT INSTANCED   {plainCubes.Count,6} cubes -> {plainCubes.Count} draw calls",
         plainCubes.Count > 0 ? Color.Orange : Color.Gray);
 
-    if (stockCount != instancedCubes.Count || fastCount != fastCubes.Count)
-        Print($"   (masters report {stockCount} stock / {fastCount} fast)", Color.Red);
+    if (stockCount != instancedCubes.Count || fastCount != fastCubes.Count || bufferedCount != bufferedCubes.Count)
+        Print($"   (masters report {stockCount} stock / {fastCount} fast / {bufferedCount} buffered)", Color.Red);
 
     Print("");
-    Print($"1 - stock    2 - plain    3 - fast    X - remove all    (SHIFT = {CubesPerDrop * 10} per drop)", Color.Yellow);
+    Print($"1 - stock    2 - plain    3 - fast    4 - fast+buffers    X - remove all    (SHIFT = {CubesPerDrop * 10} per drop)", Color.Yellow);
     Print("");
     Print("All kinds share the same model, collider and spawn area. Drop one");
-    Print("kind at a time and compare the update cost while cubes fall; the");
-    Print("frame counter is a rolling average, so give it a second to settle.");
+    Print("kind at a time and compare the costs while cubes fall; the frame");
+    Print("counter is a rolling average, so give it a second to settle.");
     Print("");
-    Print("The fast master gathers matrices in parallel, uses a cheap rigid");
-    Print("inverse, and skips its CPU work entirely once Bepu puts every");
-    Print("body to sleep - watch its update cost hit zero as the pile rests.");
+    Print("The fast masters gather matrices in parallel, use a cheap rigid");
+    Print("inverse, and skip their CPU work once Bepu puts every body to");
+    Print("sleep. Kind 4 also owns its GPU buffers: when the pile rests it");
+    Print("stops uploading too (kinds 1 and 3 re-send every matrix, every");
+    Print("frame, forever - 2.5 MB per frame at 20,000 cubes).");
     Print("See PLAN.md in this example's folder for the full optimisation plan.");
 }
 

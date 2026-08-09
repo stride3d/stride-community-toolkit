@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NumericsMatrix = System.Numerics.Matrix4x4;
 
+namespace Example22_Instancing_EntityTransform;
+
 /// <summary>
 /// A faster alternative to <see cref="InstancingEntityTransform"/>, prototyped for PLAN.md Phase 1.
 /// </summary>
@@ -239,6 +241,8 @@ public enum CubeKind
     Instanced,
     /// <summary>Fast instancing: registered with the FastEntityTransformInstancing master.</summary>
     FastInstanced,
+    /// <summary>Fast instancing plus user-managed GPU buffers: FastBufferedEntityTransformInstancing.</summary>
+    FastBuffered,
     /// <summary>No instancing: own ModelComponent, one draw call per cube.</summary>
     Plain
 }

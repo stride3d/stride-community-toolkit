@@ -49,18 +49,36 @@ update cost of both masters plus a "skipped (all asleep)" indicator.
 compare the update-ms overlay numbers and FPS. Expect the fast update cost to drop to ~0 ms once
 bodies sleep, and to be several× lower than stock while they fall.
 
-## 3. Phase 2 — user-managed GPU buffers (skip upload when asleep)
+## 3. Phase 2 — user-managed GPU buffers (skip upload when asleep) ✅ implemented
 
-Switch the fast type to the `InstancingUserBuffer` path
-(`engine/Stride.Engine/Engine/InstancingUserBuffer.cs`): the render feature then treats buffers as
-user-managed (`BuffersManagedByUser`, `InstancingRenderFeature.cs:158`) and never uploads.
-We own two `Buffer<Matrix>` (dynamic, structured), upload with `SetData` from the game's
-`GraphicsContext.CommandList` only when something moved. Fixes the F3+F6 upload half:
-settled pile = zero CPU *and* zero PCIe traffic per frame.
+`FastBufferedEntityTransformInstancing : InstancingUserBuffer` in this folder, key **4**. On the
+`InstancingUserBuffer` path the render feature treats buffers as user-managed
+(`BuffersManagedByUser`, `InstancingRenderFeature.cs:158`) and never uploads them itself. Fixes the
+F3+F6 upload half: settled pile = zero CPU *and* zero PCIe traffic per frame.
 
-Open points: where to run the upload (an `ISceneRenderer`/script with access to the command list),
-buffer growth policy, and setting `BoundingBox`/`InstanceCount` ourselves (both are settable on
-`InstancingUserBuffer`).
+Design (the open points, resolved):
+
+- **Reuses Phase 1 by composition**: wraps a `FastEntityTransformInstancing` for registration,
+  parallel gather, rigid inverse and sleep-skip; adds only buffer ownership on top. No duplicated
+  gather code.
+- **Where the upload runs**: a tiny `SceneRendererBase` (`InstancingBufferUploadRenderer`) inserted
+  as the FIRST child of the compositor's `Game` collection. Verified frame order in
+  `engine/Stride.Engine/Rendering/Compositing/GraphicsCompositor.cs:203-243`:
+  processors (gather) → `Game.Collect` → `Extract` → `Prepare` → `Game.Draw` → flush.
+  So `CollectCore` creates/grows buffers on the main thread *before* Extract touches them, and
+  `DrawCore` uploads via `drawContext.CommandList` *before* the camera renderer records the scene,
+  giving same-frame data with no latency. (The toolkit's `AddSceneRenderer` appends after the scene
+  renderer, which would add a frame of latency — hence manual `Children.Insert(0, ...)`.)
+- **Growth policy**: power-of-two capacity; `InstanceCount` is clamped each frame to the capacity of
+  the buffers the processor already handed to the render feature, so a growth frame draws the old
+  capacity once and the full count the next frame — never a null or undersized buffer in Extract
+  (which would throw: `bufferUploaded[null]`).
+- **Buffer retirement**: replaced buffers are disposed two `Collect`s later, because the frame that
+  triggered the growth still has the old buffer bound via `RenderInstancing`/`Prepare`.
+- `BoundingBox` and `InstanceCount` are settable on `InstancingUserBuffer`; set after each gather.
+
+**How to verify visually**: drop with 4, let the pile settle - both the update AND upload lines
+show "skipped"; compare against key 3 where the engine still uploads every frame.
 
 ## 4. Phase 3 — promote to toolkit + tests/benchmarks
 
@@ -70,11 +88,38 @@ buffer growth policy, and setting `BoundingBox`/`InstanceCount` ourselves (both 
   `TransformComponent`, updating only awake bodies.
 - Consider a scene-processor or helper so registration/unregistration is automatic again
   (entity removed from scene must not leave a stale `TransformComponent` in the list).
+- **`game.AddInstancingSupport()` helper**: Example21, Example22 and Example_Bepu_Playground all
+  hand-wire `InstancingRenderFeature` onto the `MeshRenderFeature` with the same three lines and the
+  same "easy to miss, nothing warns you" comment. One helper removes the trap everywhere, and can
+  register the Phase 2 upload renderer too.
 - **Unit tests:** `InvertRigid` vs `Matrix.Invert` equivalence on random rigid transforms;
-  swap-remove bookkeeping; bounding-box correctness vs stock implementation.
+  swap-remove bookkeeping; bounding-box correctness vs stock implementation; and
+  `entity.Get<BodyComponent>()` resolving toolkit's `Body2DComponent` so the sleep-skip works for
+  2D bodies (needed for the playground).
 - **Benchmarks:** small BenchmarkDotNet project (e.g. `benchmarks/`) comparing per-frame update at
   1k/10k/100k instances: stock gather+invert vs fast (rigid, SIMD-general, parallel on/off).
   In-game FPS overlay stays the integration-level check; micro-benchmarks guard regressions.
+
+### 4b. Which existing examples benefit (analysed 2026-08-09)
+
+| Toolkit piece | Example22 | Example_Bepu_Playground | Example21 |
+|---|---|---|---|
+| Phase 1 fast entity-transform type | yes | yes (key I) | no - and don't change it |
+| Phase 2 buffered type / static buffers | yes (settled pile) | yes (key O) | yes |
+| `AddInstancingSupport()` helper | yes | yes | yes |
+
+- **Example_Bepu_Playground** `AddInstancedShapes` (key I) is exactly the Phase 1 pattern:
+  `InstancingEntityTransform` + physics entities. Adopting the fast type also removes the wasteful
+  `Create2DPrimitive` -> `Remove<ModelComponent>` dance its own TODO complains about - with explicit
+  `AddInstance(entity)` the instances can be bare `Entity + Body2DComponent`, no throwaway model.
+  At 100 instances the speed gain is microseconds; the sleep-skip and the cleaner pattern are the
+  real wins. Its instances carry `Body2DComponent`, hence the unit test above.
+- **Example21** uses `InstancingUserArray` with matrices set once; the stock `matricesUpdated` flag
+  already makes its per-frame CPU cost ~zero, so Phase 1 has nothing to offer and the example should
+  stay as the canonical minimal sample. But it pays F3 forever: `bufferUploaded` is cleared every
+  `Extract`, so a perfectly static wall re-uploads 2,000 x 64 B x 2 = 256 KB/frame. A Phase 2/3
+  "static buffer" variant (upload once, done) fixes that, as would upstream dirty-tracking (F3 PR).
+- Adoption itself is deferred to Phase 3 so the prototype API can still change freely.
 
 ## 5. Phase 4 — surgical, non-breaking upstream PRs to Stride
 
@@ -131,12 +176,29 @@ as a like-for-like result — the 0.17 ms vs 1.27 ms update figures are the trus
 Remaining cost after Phase 1: even when the fast master skips, the engine still re-uploads the
 unchanged buffers every frame (F3) — 1.28 MB/frame at 10k, 2.5 MB/frame at 20k. That is Phase 2.
 
+**20,000 cubes, all settled (Phase 2 verification, 2026-08-09) — the full ladder, one variable at
+a time:**
+
+| Kind | Frame | FPS | Status |
+|---|---|---|---|
+| 1 stock | 4.18 ms | 239 | update 1.94 ms + upload, every frame |
+| 3 fast (Phase 1) | 3.19 ms | 313 | update skipped, engine still uploads 2.5 MB/frame |
+| 4 fast+buffers (Phase 2) | 3.04 ms | **329** | update skipped, upload skipped |
+
+Phase 1 (sleep-skip) buys ~1.0 ms/frame at this count; Phase 2 (no redundant upload) buys a further
+~0.15 ms/frame. Total: **+38% FPS over stock** on a settled 20k pile, and the instancing system's
+steady-state cost is now literally zero — the remaining 3 ms frame is rendering and engine overhead
+that instancing cannot touch. The Phase 2 delta also directly measures what the F3 upstream fix
+(dirty-tracking the upload) would be worth to every Stride user: ~0.15 ms/frame per 20k static
+instances, scaling linearly.
+
 ## 7. Status
 
 - [x] Analysis of the Stride instancing hot path
 - [x] Phase 1: `FastEntityTransformInstancing` + timed stock master + key 3 + overlay timings
 - [x] Phase 1: visual verification (see section 6b — sleep-skip confirmed, 7.5× on gather/invert)
-- [ ] Phase 2: user-managed buffers, upload only when dirty
+- [x] Phase 2: `FastBufferedEntityTransformInstancing` + upload renderer + key 4
+- [x] Phase 2: visual verification (see section 6b - update AND upload skipped, 239 -> 329 FPS at 20k)
 - [ ] Phase 3: toolkit promotion, unit tests, BenchmarkDotNet project
 - [ ] Phase 4: upstream PRs (needs discussion with Stride maintainers first)
 - [ ] Phase 5: write up v2 proposals for a Stride discussion/issue
