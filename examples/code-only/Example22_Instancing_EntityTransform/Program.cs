@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
+using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -11,29 +12,38 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
-using Stride.Rendering.Compositing;
 
 // Example21 showed instancing at its simplest: one entity, an array of matrices, no behaviour.
 // This one keeps the entities.
 //
 // Every falling cube here is a real Entity with a real TransformComponent and a real Bepu
 // BodyComponent, so it collides and piles up like any other rigid body. Yet the whole heap is drawn
-// in ONE draw call, because each cube carries an InstanceComponent pointing at a single master
-// entity whose InstancingEntityTransform reads their world matrices every frame.
+// in ONE draw call, because a single master entity holds the model and reads every cube's world
+// matrix each frame.
 //
 // The catch, and the reason this example exists: the instance entities must NOT have a
-// ModelComponent of their own. See CreateInstancedCube below.
+// ModelComponent of their own, or they are drawn twice - once by themselves and once by the master,
+// which is slower than not instancing at all.
 //
-// Measured on a desktop machine with 20,000 cubes settled on the ground:
-//   instanced      ~130 FPS   (1 draw call)
-//   not instanced    ~3 FPS   (20,000 draw calls)
-// Note those figures are for a settled pile. While the cubes are still falling and colliding the
-// physics dominates; once Bepu puts the settled bodies to sleep they cost almost nothing and
-// rendering becomes the bottleneck, which is where instancing earns its keep.
+// Four ways to draw the same pile, so the cost of each can be compared live:
 //
-// NEW: key 3 drops cubes onto a second master running FastEntityTransformInstancing, a prototype
-// rewrite of the stock gather/invert path (parallel + SIMD + sleep-skip; see PLAN.md in this
-// folder). The overlay shows the per-frame CPU cost of both masters so they can be compared live.
+//   1 STOCK      Stride's InstancingEntityTransform. Re-reads and re-inverts every matrix every
+//                frame, forever, even when the pile has been asleep for ten minutes.
+//   2 PLAIN      No instancing: one draw call per cube. The thing instancing exists to avoid.
+//   3 TOOLKIT    BepuEntityInstancing. Same result, but it caches transform references, gathers and
+//                inverts in one parallel pass, and does nothing at all while every body sleeps.
+//   4 BUFFERED   BufferedEntityInstancing wrapping the same. Also owns its GPU buffers, so a
+//                settled pile uploads nothing either - the engine otherwise re-sends every matrix
+//                every frame, 2.5 MB of them at 20,000 cubes.
+//
+// Measured on a desktop machine, 20,000 cubes settled on the ground:
+//   1 STOCK      239 FPS   (update 1.94 ms every frame)
+//   3 TOOLKIT    313 FPS   (update skipped)
+//   4 BUFFERED   329 FPS   (update and upload skipped)
+//   2 PLAIN      ~3 FPS    (20,000 draw calls)
+//
+// Those are settled figures. While the cubes are still falling, physics dominates and the
+// difference shrinks: instancing removes draw calls, not simulation cost.
 
 const int CubesPerDrop = 200;
 const float CubeSize = 0.5f;
@@ -43,14 +53,14 @@ const float DropSpread = 4f;
 var random = new Random(1);
 
 // Every cube ever spawned, so they can all be removed again
-var instancedCubes = new List<Entity>();
-var fastCubes = new List<Entity>();
+var stockCubes = new List<Entity>();
+var toolkitCubes = new List<Entity>();
 var bufferedCubes = new List<Entity>();
 var plainCubes = new List<Entity>();
 
-InstancingComponent? master = null;
-FastEntityTransformInstancing? fastInstancing = null;
-FastBufferedEntityTransformInstancing? bufferedInstancing = null;
+InstancingComponent? stockMaster = null;
+BepuEntityInstancing? toolkitInstancing = null;
+BufferedEntityInstancing? bufferedInstancing = null;
 Model? sharedModel = null;
 Scene? scene = null;
 
@@ -58,81 +68,45 @@ using var game = new Game();
 
 game.Run(start: Start, update: Update);
 
-// The buffered master owns its GPU buffers; the engine never disposes user-owned buffers
+// The buffered instancing owns its GPU buffers, and the engine never releases user-owned buffers
 bufferedInstancing?.Dispose();
 
 void Start(Scene rootScene)
 {
     scene = rootScene;
 
-    // Camera, light and a ground plane with a static collider for the cubes to land on
     game.SetupBase3D();
     game.Add3DCameraController();
-    // A large ground so big drops cannot spill over the edge into the void; the static collider
-    // comes with it by default
+
+    // A large ground so big drops cannot spill over the edge; the static collider comes with it
     game.Add3DGround(new() { Size = new Vector3(300, 1, 300) });
     game.AddSkybox();
     game.AddProfiler();
 
-    EnableInstancing();
+    // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
+    // wires up transform, skinning, material and lighting, but not instancing
+    game.AddInstancingSupport();
 
     sharedModel = CreateSharedCubeModel(rootScene);
 
-    // Three masters, same shared model: stock instancing (timed), the fast prototype, and the
-    // fast prototype with user-managed GPU buffers
-    master = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "InstancingMaster");
-    fastInstancing = new FastEntityTransformInstancing();
-    CreateMaster(rootScene, sharedModel, fastInstancing, "FastInstancingMaster");
-    bufferedInstancing = new FastBufferedEntityTransformInstancing();
-    CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedInstancingMaster");
+    // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
+    stockMaster = CreateMaster(rootScene, sharedModel, new TimedInstancingEntityTransform(), "StockMaster");
 
-    AddBufferUploadRenderer(bufferedInstancing);
+    toolkitInstancing = new BepuEntityInstancing();
+    CreateMaster(rootScene, sharedModel, toolkitInstancing, "ToolkitMaster");
 
-    DropCubes(CubesPerDrop, CubeKind.Instanced);
+    // The buffered one wraps a Bepu gather, so it skips the update AND the upload once bodies sleep
+    bufferedInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
+    CreateMaster(rootScene, sharedModel, bufferedInstancing, "BufferedMaster");
+
+    // Creates and uploads the buffered master's GPU buffers, ahead of the renderer that draws them
+    game.AddInstancingBufferUpload(bufferedInstancing);
+
+    DropCubes(CubesPerDrop, CubeKind.Stock);
 }
 
 /// <summary>
-/// Adds the render feature that performs instanced drawing.
-/// </summary>
-/// <remarks>
-/// The code-built compositor the toolkit uses does not include it, so without this call the whole
-/// heap renders as the single cube belonging to the master entity.
-/// </remarks>
-void EnableInstancing()
-{
-    var meshRenderFeature = game.SceneSystem.GraphicsCompositor.RenderFeatures.OfType<MeshRenderFeature>().First();
-
-    meshRenderFeature.RenderFeatures.Add(new InstancingRenderFeature());
-}
-
-/// <summary>
-/// Registers the renderer that manages and uploads the buffered master's GPU buffers.
-/// </summary>
-/// <remarks>
-/// It must run BEFORE the scene camera renderer so the upload lands on the command list ahead of
-/// the frame's draw calls (same-frame data). The toolkit's AddSceneRenderer appends after the scene
-/// renderer, which would add a frame of latency, so this inserts at the front by hand.
-/// </remarks>
-void AddBufferUploadRenderer(FastBufferedEntityTransformInstancing target)
-{
-    var uploader = new InstancingBufferUploadRenderer { Targets = { target } };
-    var compositor = game.SceneSystem.GraphicsCompositor;
-
-    if (compositor.Game is SceneRendererCollection collection)
-    {
-        collection.Children.Insert(0, uploader);
-    }
-    else
-    {
-        var wrapped = new SceneRendererCollection();
-        wrapped.Children.Add(uploader);
-        if (compositor.Game is not null) wrapped.Children.Add(compositor.Game);
-        compositor.Game = wrapped;
-    }
-}
-
-/// <summary>
-/// Builds the cube mesh once. This is the model every instance is drawn with.
+/// Builds the cube mesh once. This is the model every cube is drawn with, instanced or not.
 /// </summary>
 Model CreateSharedCubeModel(Scene rootScene)
 {
@@ -152,10 +126,9 @@ Model CreateSharedCubeModel(Scene rootScene)
 /// Creates a master entity: the one that actually gets drawn, once, for every instance.
 /// </summary>
 /// <remarks>
-/// A master needs both a <see cref="ModelComponent"/> and an <see cref="InstancingComponent"/>.
-/// The instancing type decides where the matrices come from: <see cref="InstancingEntityTransform"/>
-/// collects them from registered instance entities every frame, <see cref="InstancingUserArray"/>
-/// (which <see cref="FastEntityTransformInstancing"/> builds on) has them supplied in code.
+/// A master needs both a <see cref="ModelComponent"/> and an <see cref="InstancingComponent"/>. The
+/// instancing type decides where the matrices come from - collected from entities in every case
+/// here, but by three different implementations.
 /// </remarks>
 InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing instancingType, string name)
 {
@@ -174,21 +147,20 @@ InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing insta
 /// Drops a batch of physics-driven cubes into the scene.
 /// </summary>
 /// <remarks>
-/// All kinds are identical in every other respect: same shared <see cref="Model"/>, same collider,
-/// same spawn area. The only difference is how (or whether) the cube gets instanced.
+/// Every kind shares the same <see cref="Model"/>, collider and spawn area, so the only difference
+/// is how each one is drawn.
 /// </remarks>
 void DropCubes(int count, CubeKind kind)
 {
-    if (scene is null || master is null || fastInstancing is null || bufferedInstancing is null) return;
+    if (scene is null || stockMaster is null || toolkitInstancing is null || bufferedInstancing is null) return;
 
     for (var i = 0; i < count; i++)
     {
         var entity = kind switch
         {
-            CubeKind.Instanced => CreateInstancedCube(master),
-            CubeKind.FastInstanced => CreatePhysicsCube("FastInstancedCube"),
-            CubeKind.FastBuffered => CreatePhysicsCube("BufferedInstancedCube"),
-            _ => CreatePlainCube()
+            CubeKind.Stock => CreateStockInstancedCube(stockMaster),
+            CubeKind.Plain => CreatePlainCube(),
+            _ => CreatePhysicsCube("InstancedCube")
         };
 
         entity.Transform.Position = new Vector3(
@@ -200,18 +172,21 @@ void DropCubes(int count, CubeKind kind)
 
         switch (kind)
         {
-            case CubeKind.Instanced:
-                instancedCubes.Add(entity);
+            case CubeKind.Stock:
+                stockCubes.Add(entity);
                 break;
-            case CubeKind.FastInstanced:
-                // No InstanceComponent involved: the fast master is told about the entity directly
-                fastInstancing.AddInstance(entity);
-                fastCubes.Add(entity);
+
+            case CubeKind.Toolkit:
+                // No InstanceComponent: the toolkit master is told about the entity directly
+                toolkitInstancing.AddInstance(entity);
+                toolkitCubes.Add(entity);
                 break;
-            case CubeKind.FastBuffered:
+
+            case CubeKind.ToolkitBuffered:
                 bufferedInstancing.AddInstance(entity);
                 bufferedCubes.Add(entity);
                 break;
+
             default:
                 plainCubes.Add(entity);
                 break;
@@ -223,29 +198,28 @@ void DropCubes(int count, CubeKind kind)
 /// Removes every cube from the scene.
 /// </summary>
 /// <remarks>
-/// Taking an entity out of the scene removes its components too, so each
-/// <see cref="InstanceComponent"/> unregisters itself from the stock master and the instance count
-/// drops back to zero on its own. The fast master has no such hook - it must be cleared explicitly.
+/// Taking an entity out of the scene removes its components too, so each <see cref="InstanceComponent"/>
+/// unregisters itself from the stock master on its own. The toolkit types have no such hook - an
+/// entity leaving the scene stays registered until it is removed explicitly.
 /// </remarks>
 void ClearCubes()
 {
-    foreach (var entity in instancedCubes.Concat(fastCubes).Concat(bufferedCubes).Concat(plainCubes))
+    foreach (var entity in stockCubes.Concat(toolkitCubes).Concat(bufferedCubes).Concat(plainCubes))
     {
         entity.Scene = null;
     }
 
-    fastInstancing?.Clear();
+    toolkitInstancing?.Clear();
     bufferedInstancing?.Clear();
 
-    instancedCubes.Clear();
-    fastCubes.Clear();
+    stockCubes.Clear();
+    toolkitCubes.Clear();
     bufferedCubes.Clear();
     plainCubes.Clear();
 }
 
 /// <summary>
-/// Builds the same physics body as an instanced cube, but with its own <see cref="ModelComponent"/>
-/// so it is drawn on its own. This is the comparison case: one draw call per cube.
+/// The comparison case: a cube that draws itself, costing one draw call.
 /// </summary>
 Entity CreatePlainCube()
 {
@@ -257,31 +231,22 @@ Entity CreatePlainCube()
 }
 
 /// <summary>
-/// Creates one falling cube: a physics body that renders through the stock master.
+/// A cube drawn by Stride's own instancing, which registers itself through an
+/// <see cref="InstanceComponent"/> pointing at the master.
 /// </summary>
-/// <remarks>
-/// Note what is NOT here: a <see cref="ModelComponent"/>. It is tempting to build these with
-/// <c>Create3DPrimitive</c> and then bolt an <see cref="InstanceComponent"/> on top, but that entity
-/// would keep its own model and be drawn individually **as well as** being drawn by the master, so
-/// every cube is rendered twice and the result is slower than not instancing at all.
-/// <para>
-/// The instance supplies only a transform. Bepu writes that transform, and
-/// <see cref="InstancingEntityTransform"/> reads it back out each frame.
-/// </para>
-/// </remarks>
-Entity CreateInstancedCube(InstancingComponent masterInstancing)
+Entity CreateStockInstancedCube(InstancingComponent master)
 {
-    var entity = CreatePhysicsCube("InstancedCube");
+    var entity = CreatePhysicsCube("StockInstancedCube");
 
-    // Links this entity's transform into the stock master's instance list
-    entity.Add(new InstanceComponent { Master = masterInstancing });
+    entity.Add(new InstanceComponent { Master = master });
 
     return entity;
 }
 
 /// <summary>
-/// The shared core of every cube: a normal dynamic body and nothing else. The collider is declared
-/// by hand because there is no model to derive it from.
+/// The shared core of every cube: a dynamic body and nothing else. Note what is missing - a
+/// <see cref="ModelComponent"/>. The collider is declared by hand because there is no model to
+/// derive it from.
 /// </summary>
 Entity CreatePhysicsCube(string name) => new(name)
 {
@@ -309,10 +274,10 @@ void HandleInput()
         ? CubesPerDrop * 10
         : CubesPerDrop;
 
-    if (game.Input.IsKeyPressed(Keys.D1)) DropCubes(batch, CubeKind.Instanced);
+    if (game.Input.IsKeyPressed(Keys.D1)) DropCubes(batch, CubeKind.Stock);
     if (game.Input.IsKeyPressed(Keys.D2)) DropCubes(batch, CubeKind.Plain);
-    if (game.Input.IsKeyPressed(Keys.D3)) DropCubes(batch, CubeKind.FastInstanced);
-    if (game.Input.IsKeyPressed(Keys.D4)) DropCubes(batch, CubeKind.FastBuffered);
+    if (game.Input.IsKeyPressed(Keys.D3)) DropCubes(batch, CubeKind.Toolkit);
+    if (game.Input.IsKeyPressed(Keys.D4)) DropCubes(batch, CubeKind.ToolkitBuffered);
     if (game.Input.IsKeyPressed(Keys.X)) ClearCubes();
 }
 
@@ -323,46 +288,42 @@ void DrawOverlay()
     void Print(string text, Color? color = null)
         => game.DebugTextSystem.Print(text, new Int2(6, 60 + line++ * 18), color ?? Color.White);
 
-    // Read straight from the masters: these are the numbers the renderer will actually draw
-    var stockType = master?.Type as TimedInstancingEntityTransform;
-    var stockCount = stockType?.InstanceCount ?? 0;
-    var fastCount = fastInstancing?.InstanceCount ?? 0;
-    var bufferedCount = bufferedInstancing?.RegisteredInstanceCount ?? 0;
+    // Read straight from the masters: these are the numbers the renderer actually uses
+    var stockType = stockMaster?.Type as TimedInstancingEntityTransform;
 
-    var fastStatus = fastInstancing?.SleepSkippedLastFrame == true
-        ? "skipped (all asleep)"
-        : $"{fastInstancing?.LastUpdateMilliseconds:0.00} ms";
+    var toolkitStatus = toolkitInstancing?.UpdateSkippedLastFrame == true
+        ? "skipped (asleep)"
+        : $"{toolkitInstancing?.LastUpdateMilliseconds:0.00} ms";
 
-    var bufferedStatus = bufferedInstancing?.SleepSkippedLastFrame == true
+    var bufferedStatus = bufferedInstancing?.UpdateSkippedLastFrame == true
         ? "skipped"
         : $"{bufferedInstancing?.LastUpdateMilliseconds:0.00} ms";
+
     var uploadStatus = bufferedInstancing?.UploadSkippedLastFrame == true ? "skipped" : "uploading";
 
-    Print($"1 STOCK INSTANCED {instancedCubes.Count,6} cubes -> 1 draw call   update {stockType?.LastUpdateMilliseconds:0.00} ms (engine uploads every frame)",
-        instancedCubes.Count > 0 ? Color.LightGreen : Color.Gray);
-    Print($"3 FAST INSTANCED  {fastCubes.Count,6} cubes -> 1 draw call   update {fastStatus} (engine uploads every frame)",
-        fastCubes.Count > 0 ? Color.Cyan : Color.Gray);
-    Print($"4 FAST + BUFFERS  {bufferedCubes.Count,6} cubes -> 1 draw call   update {bufferedStatus}, upload {uploadStatus}",
+    Print($"1 STOCK    {stockCubes.Count,6} cubes -> 1 draw call   update {stockType?.LastUpdateMilliseconds:0.00} ms, uploads every frame",
+        stockCubes.Count > 0 ? Color.LightGreen : Color.Gray);
+
+    Print($"3 TOOLKIT  {toolkitCubes.Count,6} cubes -> 1 draw call   update {toolkitStatus}, uploads every frame",
+        toolkitCubes.Count > 0 ? Color.Cyan : Color.Gray);
+
+    Print($"4 BUFFERED {bufferedCubes.Count,6} cubes -> 1 draw call   update {bufferedStatus}, upload {uploadStatus}",
         bufferedCubes.Count > 0 ? Color.Magenta : Color.Gray);
-    Print($"2 NOT INSTANCED   {plainCubes.Count,6} cubes -> {plainCubes.Count} draw calls",
+
+    Print($"2 PLAIN    {plainCubes.Count,6} cubes -> {plainCubes.Count} draw calls",
         plainCubes.Count > 0 ? Color.Orange : Color.Gray);
 
-    if (stockCount != instancedCubes.Count || fastCount != fastCubes.Count || bufferedCount != bufferedCubes.Count)
-        Print($"   (masters report {stockCount} stock / {fastCount} fast / {bufferedCount} buffered)", Color.Red);
-
     Print("");
-    Print($"1 - stock    2 - plain    3 - fast    4 - fast+buffers    X - remove all    (SHIFT = {CubesPerDrop * 10} per drop)", Color.Yellow);
+    Print($"1 stock   2 plain   3 toolkit   4 buffered   X remove all   (SHIFT = {CubesPerDrop * 10} per drop)", Color.Yellow);
     Print("");
-    Print("All kinds share the same model, collider and spawn area. Drop one");
-    Print("kind at a time and compare the costs while cubes fall; the frame");
+    Print("Drop one kind at a time and let the pile come to rest. The frame");
     Print("counter is a rolling average, so give it a second to settle.");
     Print("");
-    Print("The fast masters gather matrices in parallel, use a cheap rigid");
-    Print("inverse, and skip their CPU work once Bepu puts every body to");
-    Print("sleep. Kind 4 also owns its GPU buffers: when the pile rests it");
-    Print("stops uploading too (kinds 1 and 3 re-send every matrix, every");
-    Print("frame, forever - 2.5 MB per frame at 20,000 cubes).");
-    Print("See PLAN.md in this example's folder for the full optimisation plan.");
+    Print("Kinds 3 and 4 stop working entirely once Bepu puts every body to");
+    Print("sleep - watch their update cost fall to zero as the pile rests,");
+    Print("while kind 1 keeps paying the same price for a scene that is not");
+    Print("moving. Kind 4 stops uploading to the GPU as well.");
+    Print("See PLAN.md in this example's folder for how far this was taken.");
 }
 
 /*
@@ -377,28 +338,32 @@ description:
   en: |
     Keep every object a real entity - with a transform, a physics body and anything else you need - while
     still drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an
-    InstancingComponent set to InstancingEntityTransform; each member carries an InstanceComponent
-    pointing at that master and, crucially, no ModelComponent of its own. Bepu drives the transforms and
-    the instancing type reads them back each frame, so the cubes collide and pile up normally. Drop instanced
-    and non-instanced cubes side by side to compare: at 20,000 settled cubes the instanced pile runs at
-    roughly 130 FPS against 3 FPS without. The example also shows where the real ceiling lies, because
-    instancing removes draw calls and does nothing about simulation cost.
+    instancing type that reads its members' world matrices each frame, and the members carry no
+    ModelComponent of their own. Bepu drives the transforms, so the cubes collide and pile up normally.
+    Four kinds of cube can be dropped side by side to compare: Stride's own InstancingEntityTransform,
+    no instancing at all, the toolkit's BepuEntityInstancing, and BufferedEntityInstancing. The toolkit
+    types stop working once Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from
+    239 to 329 FPS, and the example also shows where the real ceiling lies, because instancing removes
+    draw calls and does nothing about simulation cost.
   cs: |
     Zachovejte každý objekt jako plnohodnotnou entitu - s transformací, fyzikálním tělesem i čímkoli dalším -
     a přesto vykreslete celý zástup jediným vykreslovacím voláním. Hlavní entita nese ModelComponent
-    a InstancingComponent typu InstancingEntityTransform; každý člen má InstanceComponent odkazující na tuto
-    hlavní entitu a hlavně žádný vlastní ModelComponent. Transformace řídí Bepu a instancing je každý snímek
-    načítá, takže kostky normálně kolidují a vrší se na sebe. Příklad rovněž ukazuje, kde je skutečný strop:
-    instancing odstraňuje vykreslovací volání, nikoli náklady na simulaci.
+    a instancing, který každý snímek načítá světové matice svých členů; členové sami žádný ModelComponent
+    nemají. Transformace řídí Bepu, takže kostky normálně kolidují a vrší se na sebe. Vedle sebe lze
+    porovnat čtyři druhy kostek: vlastní InstancingEntityTransform ze Stride, žádný instancing,
+    BepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu přestanou pracovat, jakmile
+    Bepu uspí tělesa, což u usazené hromady 20 000 kostek zvýší snímkovou frekvenci z 239 na 329.
 concepts:
   - Combining physics bodies with instanced rendering
-  - Comparing instanced and non-instanced cubes side by side at runtime
-  - The master and instance split with InstancingEntityTransform
+  - Comparing four instancing strategies side by side at runtime
+  - The master and instance split for entity-driven instancing
   - Why an instance entity must not have its own ModelComponent
+  - Skipping instancing work entirely while physics bodies sleep
+  - Owning GPU instance buffers to avoid redundant uploads
   - Declaring a Bepu collider without a model to derive it from
-  - Registering InstancingRenderFeature on the MeshRenderFeature
   - Knowing when instancing does not help
-  - "Using helpers: SetupBase3DScene"
+  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload"
+  - "Using helpers: SetupBase3D, Add3DGround"
 related:
   - Example21_Instancing
   - Example02_GiveMeACube

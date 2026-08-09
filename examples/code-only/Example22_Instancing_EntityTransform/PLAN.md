@@ -80,32 +80,74 @@ Design (the open points, resolved):
 **How to verify visually**: drop with 4, let the pile settle - both the update AND upload lines
 show "skipped"; compare against key 3 where the engine still uploads every frame.
 
-## 4. Phase 3 — promote to toolkit + tests/benchmarks
+## 4. Phase 3 — promote to toolkit + tests/benchmarks ✅ implemented
 
-- Move the polished type(s) into `Stride.CommunityToolkit.Bepu` (it needs `BodyComponent` for the
-  sleep check; a Bepu-free variant without sleep-skip could live in `Stride.CommunityToolkit.Engine`).
-- Optional Bepu-native variant: read poses straight from Bepu's active set instead of
-  `TransformComponent`, updating only awake bodies.
-- Consider a scene-processor or helper so registration/unregistration is automatic again
-  (entity removed from scene must not leave a stale `TransformComponent` in the list).
-- **`game.AddInstancingSupport()` helper**: Example21, Example22 and Example_Bepu_Playground all
-  hand-wire `InstancingRenderFeature` onto the `MeshRenderFeature` with the same three lines and the
-  same "easy to miss, nothing warns you" comment. One helper removes the trap everywhere, and can
-  register the Phase 2 upload renderer too.
-- **Unit tests:** `InvertRigid` vs `Matrix.Invert` equivalence on random rigid transforms;
-  swap-remove bookkeeping; bounding-box correctness vs stock implementation; and
-  `entity.Get<BodyComponent>()` resolving toolkit's `Body2DComponent` so the sleep-skip works for
-  2D bodies (needed for the playground).
-- **Benchmarks:** small BenchmarkDotNet project (e.g. `benchmarks/`) comparing per-frame update at
-  1k/10k/100k instances: stock gather+invert vs fast (rigid, SIMD-general, parallel on/off).
-  In-game FPS overlay stays the integration-level check; micro-benchmarks guard regressions.
-  Methodology (from the 2026-08-09 peer review):
-  - Find the sequential/parallel crossover empirically and set `ParallelThreshold`'s default from it
-    (current 2048 is a guess). Include the multi-master case: `InstancingProcessor` already
-    dispatches masters in parallel, so nested forking may shift the crossover up.
-  - Measure steady-state separately from spawn/growth frames (buffer reallocation spikes are
-    expected and amortised); report buffer capacity and resize counts alongside frame metrics.
-  - Measure frame-time variance while bodies are active, not just the settled averages.
+Shipped API (the prototypes in this folder are gone; the example now consumes the toolkit):
+
+| Type / helper | Project | Purpose |
+|---|---|---|
+| `EntityInstancing` | `Stride.CommunityToolkit` (`Rendering.Instancing`) | The fast gather: cached transform refs, fused parallel gather + rigid inverse + bbox, pooled arrays, O(1) swap-remove. No physics dependency. |
+| `BepuEntityInstancing` | `Stride.CommunityToolkit.Bepu` | Adds the sleep skip via `CanSkipUpdate()`. |
+| `BufferedEntityInstancing` | `Stride.CommunityToolkit` | Owns its GPU buffers; wraps any `EntityInstancing`. `IDisposable`. |
+| `InstancingBufferUploadRenderer` | `Stride.CommunityToolkit` | Compositor hook: creates/grows buffers in Collect, uploads in Draw. |
+| `game.AddInstancingSupport()` | `Stride.CommunityToolkit` | Adds `InstancingRenderFeature` to the `MeshRenderFeature`; idempotent. Removes the hand-wiring every example repeated. |
+| `game.AddInstancingBufferUpload(...)` | `Stride.CommunityToolkit` | Inserts the upload renderer ahead of the scene renderer; reuses an existing one. |
+
+**Key design decision.** The sleep skip needs Bepu, but the gather had to stay Bepu-free so it could be
+unit-tested and benchmarked without a simulation (`BodyComponent.Awake` is `false` with no
+`BodyReference`, so a headless harness would report "all asleep" and measure nothing). They are split
+by a small `protected` hook protocol - `CanSkipUpdate`, `OnInstanceAdded`, `OnInstanceRemoved(index,
+lastIndex)`, `OnInstancesCleared` - which lets `BepuEntityInstancing` keep a body list in lockstep
+with the transforms through swap-removes at zero per-frame cost. `InstanceHooks_MirrorSwapRemoveOrdering`
+covers that contract without needing physics.
+
+Adopted by: Example22 (four-way comparison, keys 1-4) and Example_Bepu_Playground (key I). The
+playground's `Create2DPrimitive` -> `Remove<ModelComponent>` waste its own TODO complained about is
+gone: instances are now bare `Entity` + `AddBepu2DPhysics`, no throwaway model or GPU buffers, and
+its master is created once instead of per keypress.
+
+### 4a. Benchmark results (BenchmarkDotNet, short job, 2026-08-09)
+
+`benchmarks/Stride.CommunityToolkit.Benchmarks` -> `InstancingGatherBenchmarks`. Baseline reproduces
+`InstancingEntityTransform.Update` and calls the real `InstancingUserArray.Update` for the inverse and
+bounding-box half, so it is engine code, not an imitation. Ratios are vs stock; lower is better.
+
+| N | Stock | Fast sequential | Fast parallel | Parallel, general inverse |
+|---|---|---|---|---|
+| 256 | 8.5 us | **4.8 us (0.56)** | 29.0 us (3.40) | 35.1 us (4.12) |
+| 1024 | 32.1 us | **26.5 us (0.83)** | 36.1 us (1.12) | 36.6 us (1.14) |
+| 2048 | 69.3 us | 36.9 us (0.53) | **36.5 us (0.53)** | 38.5 us (0.56) |
+| 4096 | 162.2 us | 64.7 us (0.40) | **47.0 us (0.29)** | 48.3 us (0.30) |
+| 8192 | 292.3 us | 133.5 us (0.46) | **50.0 us (0.17)** | 53.4 us (0.18) |
+| 32768 | 1369.1 us | 670.0 us (0.49) | **152.5 us (0.11)** | 218.3 us (0.16) |
+
+- **`ParallelThreshold = 2048` is confirmed, not guessed.** Sequential and parallel are level at 2048
+  (36.9 vs 36.5 us); sequential is 6x better at 256, parallel 2.7x better at 8192. The guessed default
+  landed on the crossover.
+- **Sequential alone is ~2x stock at every size** - that is the cached transform refs plus the rigid
+  inverse, with no threading involved. **Parallel reaches 9x stock at 32768.**
+- **The rigid inverse earns its keep mainly at scale**: level with the SIMD general inverse up to
+  8192, 1.43x faster at 32768.
+- **The parallel path allocates ~7-9 KB per call** (`Parallel.ForEach` + `Partitioner` + closures)
+  against 56 B sequential. At 60 fps that is ~0.5 MB/s of Gen0 churn for one master. Worth replacing
+  with Stride's pooled `Dispatcher.For` - noted as a follow-up, not done.
+- Caveat: short job on a working machine, so the error bars are wide (`Stock` at 4096 has an error as
+  large as its mean). The ordering was stable across two runs; treat the ratios as indicative.
+
+### 4c. Phase 3 leftovers (deliberately not done)
+
+- **Automatic unregistration.** An entity leaving the scene stays registered, unlike the engine's
+  `InstanceComponent`. A scene processor or a component wrapper could restore that; it needs care,
+  because the whole point of explicit registration is avoiding per-instance component overhead.
+- **Bepu-native gather**: read poses straight from Bepu's active set instead of `TransformComponent`,
+  touching only awake bodies. Would beat the sleep skip in the partly-settled case, which is common.
+- **`Dispatcher.For` instead of `Parallel.ForEach`** to kill the ~8 KB/frame parallel allocation
+  (see 4a); Stride's dispatcher pools its state and is already used by `InstancingProcessor`.
+- **Multi-master benchmark.** `InstancingProcessor` dispatches masters in parallel, so several
+  masters each forking again may shift the crossover up. Only the single-master case was measured.
+- **Growth-frame vs steady-state split** for the buffered path (peer-review methodology point):
+  buffer reallocation spikes are expected and amortised, but they were not measured separately.
+- **`Body2DComponent` verification** (see section 8).
 
 ### 4b. Which existing examples benefit (analysed 2026-08-09)
 
@@ -126,7 +168,9 @@ show "skipped"; compare against key 3 where the engine still uploads every frame
   stay as the canonical minimal sample. But it pays F3 forever: `bufferUploaded` is cleared every
   `Extract`, so a perfectly static wall re-uploads 2,000 x 64 B x 2 = 256 KB/frame. A Phase 2/3
   "static buffer" variant (upload once, done) fixes that, as would upstream dirty-tracking (F3 PR).
-- Adoption itself is deferred to Phase 3 so the prototype API can still change freely.
+- Adoption done in Phase 3 for Example22 and the playground. **Example21 was left alone on purpose**:
+  it is the canonical minimal instancing sample and its per-frame CPU cost is already ~zero. Its only
+  remaining waste is the redundant upload (F3), which is an upstream fix, not an example change.
 
 ## 5. Phase 4 — surgical, non-breaking upstream PRs to Stride
 
@@ -211,6 +255,32 @@ instances, scaling linearly.
       buffered type (engine never disposes user-owned buffers), and buffer retirement re-documented
       after verifying Stride fences GPU-side destruction (Vulkan `TemporaryResourceCollector`;
       D3D11 defers natively) - the two-frame delay protects the managed wrapper binding, not the GPU
-- [ ] Phase 3: toolkit promotion, unit tests, BenchmarkDotNet project
+- [x] Peer review round 2 addressed: `ref` instead of `in` for the non-readonly `Matrix` (avoids
+      hidden defensive copies), and `AssumeRigidTransforms` captured once per update so parallel
+      ranges cannot disagree
+- [x] Phase 3: toolkit promotion (`EntityInstancing`, `BepuEntityInstancing`,
+      `BufferedEntityInstancing`, `InstancingBufferUploadRenderer`, `AddInstancingSupport`,
+      `AddInstancingBufferUpload`), 13 unit tests, `InstancingGatherBenchmarks`, Example22 and
+      Example_Bepu_Playground migrated. Prototypes deleted from this folder.
+- [ ] Phase 3: visual re-verification of Example22 and the playground after the migration (user)
 - [ ] Phase 4: upstream PRs (needs discussion with Stride maintainers first)
 - [ ] Phase 5: write up v2 proposals for a Stride discussion/issue
+
+## 8. Follow-up: verifying `Body2DComponent` (separate from this plan)
+
+`Stride.CommunityToolkit.Bepu/Body2DComponent.cs` is WIP and destined for a Stride PR. It is not
+covered by the work above and does not belong in these benchmarks, because what it does cannot be
+measured in isolation:
+
+- **Unit tests are the wrong tool.** Its behaviour lives in `AttachInner` (needs a real shape inertia
+  and a `BodyReference`) and `SimulationUpdate` (needs a running `BepuSimulation`). Constructing one
+  headless is possible but the test would mostly assert against a simulation harness, not the class.
+- **What to test instead**, as integration checks over a fixed number of simulation steps:
+  drift off the Z=0 plane stays under `ZTolerance`; X/Y angular velocity stays zero; **bodies actually
+  fall asleep** (the removed `Awake = true` line is exactly what used to prevent it, and the sleep
+  skip in `BepuEntityInstancing` depends on it); and a pile of convex hulls does not gain energy.
+- **Where to measure**, if a number is wanted: time-to-sleep and steady-state frame cost for N shapes
+  in Example_Bepu_Playground, which is now a fair test bed since key I uses `BepuEntityInstancing`.
+- A cheap first step that needs no harness: assert `entity.Get<BodyComponent>()` resolves a
+  `Body2DComponent`, which is what makes the sleep skip work for 2D bodies. It holds by inheritance
+  today, and a test would keep it that way.
