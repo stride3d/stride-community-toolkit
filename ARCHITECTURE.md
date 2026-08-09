@@ -63,6 +63,43 @@ sources in this repository.)*
 3. **Per-primitive option types** — `SphereOptions { Radius }`, `CubeOptions { Size }`. Impossible to
    misread, but multiplies the options surface and complicates the generic
    `Create3DPrimitive(type, options)` entry point.
+4. **Make the primitive itself a closed set that carries its own dimensions.** Replace the
+   `PrimitiveModelType` enum plus separate `Size` with one argument per shape, each naming exactly
+   the parameters that shape needs. A sphere then cannot be handed a `Vector3` at all, and the entry
+   point stays single and generic.
+
+   ```csharp
+   public abstract record Primitive
+   {
+       private Primitive() { }                                 // closed: no cases from outside
+       public sealed record Sphere(float Radius) : Primitive;
+       public sealed record Cube(Vector3 Size) : Primitive;
+       public sealed record Capsule(float Radius, float Length) : Primitive;
+   }
+
+   game.Create3DPrimitive(new Primitive.Sphere(0.5f), options);
+   ```
+
+   Note this fixes the ambiguity **structurally** rather than by documentation, and it subsumes
+   item 7: the mesh and collider switches both match over the same closed set, so a shape added to
+   one and not the other is caught at the switch rather than by a test.
+
+   Works on C# 14 / net10.0 today. Breaking, and broad — `PrimitiveModelType` appears across nearly
+   every example.
+
+   **C# 15 union types would be the same design, stated more directly**, and would add compiler-
+   enforced exhaustiveness so a missing case is a build error rather than a `_ => throw`:
+
+   ```csharp
+   public union Primitive(Sphere, Cube, Capsule);
+   ```
+
+   Not adoptable yet: unions need .NET 11 Preview 2 and `<LangVersion>preview</LangVersion>`, and are
+   early preview. Requiring a preview language version of every consumer is a high price for a
+   shipped package. The record hierarchy above is the same shape and upgrades to a union later
+   without changing call sites much, so waiting for unions is not a reason to defer the decision.
+   (Union syntax and requirements verified against the C# 15 union types announcement; the toolkit
+   has not been built against .NET 11.)
 
 ---
 
@@ -149,3 +186,6 @@ invisible until something falls through the world.
 
 **Options.** A test that, for each primitive type and a fixed `Size`, asserts the model bounds and the
 collider bounds match. Cheap, and it pins down the convention that item 1 documents.
+
+Superseded if item 1 option 4 is taken: matching both switches over a closed set of primitive records
+moves this from a test to a compile-time check.
