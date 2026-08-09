@@ -1,9 +1,8 @@
 # Examples Metadata & Docs Generation — Plan
 
-Working document. **Answer the `Q?` blocks inline** (edit this file, write your answer under each
-question) and I'll fold the answers into the implementation.
-
-Nothing here is committed to yet — challenge or delete anything that looks wrong.
+Working document. Q1–Q23 have been answered and folded into the design below; the decisions are
+recorded in §7 with their rationale. **Only §8 is still open** — answer those inline and this plan is
+ready to implement.
 
 ---
 
@@ -19,9 +18,11 @@ Nothing here is committed to yet — challenge or delete anything that looks wro
 | Docs that already have YAML frontmatter | **0** |
 
 > [!NOTE]
-> `Example07_CubeClicker` is not listed in `Stride.CommunityToolkit.slnx` at all, so it escapes every
-> solution-wide build. It does have a doc (`stride-ui-cube-clicker.md`). Probably an oversight worth
-> fixing separately from this plan. The reason it is excluded because it is on hold, the build fails, maybe we could proceed with this example as well, just make sure it is not build by default and it is excluded from docs and launchers with Enabled: false.
+> `Example07_CubeClicker` is not listed in `Stride.CommunityToolkit.slnx`, so it escapes every
+> solution-wide build. It is on hold and currently fails to build. **Decision:** bring it into the
+> plan with `enabled: false` — it stays out of the manifest, out of the docs, and out of both
+> launchers, and it stays out of the solution so nothing builds it by default. Its existing doc
+> (`stride-ui-cube-clicker.md`) stays hand-owned until the example builds again.
 
 **Two parallel metadata systems exist today:**
 
@@ -45,9 +46,7 @@ Doc filenames are semantic, not derivable from project names:
 | `Example07_CubeClicker` | `stride-ui-cube-clicker` |
 | `Example13_MeshOutline` | `mesh-outline` |
 
-Confirms your instinct: `slug` goes in the frontmatter, short and shareable.
-
-Question for AI: Could/shall we use also prefix e.g. intro-, beginner-, intermediate-, advanced-. That means generated files would be close together by level.
+So `slug` goes in the frontmatter, short and shareable — and **without a level prefix** (see D24).
 
 ### Media filenames are also not derivable
 
@@ -57,9 +56,8 @@ Naming is inconsistent and contains at least one typo:
 - `stride-game-engine-example04-myra-ui-draggable-window.webp` (**no** dash)
 - `stride-game-engine-example-15-contraints.webp` (**typo**: `contraints`)
 
-So `media` must be an explicit field too.
-
-Note: The default media could follow the slug, and additional would be contributors choice.
+`media` is therefore an explicit field, but it **defaults to `<slug>.webp`** so new examples get it for
+free and only the legacy inconsistent names need to spell it out.
 
 ### Docs vary more than the simple ones suggest
 
@@ -69,10 +67,8 @@ Most docs are 7–25 lines and highly formulaic — `concepts:` literally *is* t
 (`## MyraSceneRenderer.cs`, `## MainView.cs`, `## UIUtils.cs`), each with prose and its own
 `[!code-csharp[]` include, plus an `## Other Examples` section of external links.
 
-That variance is the main argument for the takeover mechanism (§2.4) — generate the formulaic ones,
-hand-own the rich ones.
-
-Question for AI: There could be another frontmatter time, so if the docs exists and specific frontmatter is there, the content could be merged
+That variance drove the three-mode ownership model in §2.4 — generate the formulaic parts, hand-own
+the rich parts, **in the same file**.
 
 ---
 
@@ -80,7 +76,7 @@ Question for AI: There could be another frontmatter time, so if the docs exists 
 
 ### 2.1 Three independent flags
 
-These are separate concerns and should not be conflated:
+These are separate concerns and are not conflated:
 
 | Field | Default | Meaning when `false` |
 |---|---|---|
@@ -88,35 +84,22 @@ These are separate concerns and should not be conflated:
 | `docs` | `true` | In the manifest, but **no doc page generated** |
 | `launcher` | `true` | In the manifest, but **hidden from the console runner and Avalonia launcher** |
 
-> **Q1** — `enabled: false` currently also exists in the 13 files that have frontmatter (all set
-> `enabled: true`). Confirm the new meaning ("exclude from manifest entirely") is what you want,
-> rather than a softer "exclude from launchers only".
->
-> **Your answer:** It should be excluded from the manifest entirely, so `enabled: false` is correct.
-
-> **Q2** — Field naming: `exampleLauncher` is a bit long inside a block already scoped to an example.
-> Prefer `launcher: true`? Or keep `exampleLauncher`?
->
-> **Your answer:** `launcher: true` is preferred for brevity and clarity. I already renamed it in the table.
-
-### 2.2 Proposed frontmatter schema v1
-
-Existing fields kept as-is unless noted.
+### 2.2 Frontmatter schema v1
 
 ```yaml
 ---example-metadata
 # --- identity -------------------------------------------------------------
-slug: mesh-outline                 # NEW, required. Short, shareable, kebab-case. Doc filename + URL.
+slug: mesh-outline                 # REQUIRED. Short, shareable, kebab-case. Doc filename + URL.
 title:
   en: Mesh Outline Render Feature
   cs: Obrysy modelů pomocí vlastní render feature
 
 # --- classification -------------------------------------------------------
-level: Advanced                    # Getting Started | Beginners | Advanced
-category: Rendering
+level: Advanced                    # REQUIRED. Getting Started | Beginner | Intermediate | Advanced | Other
+category: Rendering                # REQUIRED.
 complexity: 4                      # 1-5
 order: 13
-language: csharp                   # NEW. csharp | fsharp | vb. Drives the -fs / -vb doc variants.
+language: csharp                   # csharp | fsharp | vb. Grouping dimension + drives -fs / -vb doc variants.
 
 # --- content --------------------------------------------------------------
 description:
@@ -127,23 +110,17 @@ description:
 concepts:                          # Becomes the "The Program.cs file shows how to:" bullet list
   - Writing a custom RootRenderFeature
 tags: [3D, Rendering, Shader]
-related:                           # Project names today; see Q6
+related:                           # Project names; generator resolves them to slugs
   - Example13_RootRendererShader
 
 # --- docs generation ------------------------------------------------------
-docs: true                         # NEW
-media: stride-game-engine-example-13-mesh-outline.webp   # NEW. Filename only, resolved against media/.
-docGroup: advanced                 # NEW. Which toc.yml section: basic | advanced | other
-tocName: Mesh Outline              # NEW, optional. toc.yml display name; falls back to title.en
-additionalFiles:                   # NEW, optional. For multi-file docs (the Myra case)
-  - file: MyraSceneRenderer.cs
-    description: Renders Myra-based user interfaces in a Stride game.
-externalLinks:                     # NEW, optional. Becomes an "Other Examples"-style section
-  - title: Using Myra in Stride Engine Tutorial
-    url: https://github.com/rds1983/Myra/wiki/...
+docs: true
+media: stride-game-engine-example-13-mesh-outline.webp   # Optional. Filename only, resolved
+                                                         # against media/. Defaults to <slug>.webp
+tocName: Mesh Outline              # Optional. toc.yml display name; falls back to title.en
 
 # --- launchers ------------------------------------------------------------
-launcher: true              # NEW
+launcher: true
 
 # --- lifecycle ------------------------------------------------------------
 enabled: true
@@ -151,34 +128,20 @@ created: 2025-08-07
 ---
 ```
 
-**Dropped:** `IsDraft` — declared on `ExampleMetadata` but never set by anything. Dead.
+**Dropped from the previous draft:**
 
-> **Q3** — `docGroup` duplicates information that `level` almost carries. Today's toc.yml groups are
-> "C# Basic Examples" / "C# Advance Examples" / "C# Other Examples", while `level` is
-> "Getting Started" / "Beginners" / "Advanced" — close but not 1:1, and "Other" has no `level`
-> equivalent. Options: (a) keep both fields, (b) derive `docGroup` from `level` with an explicit
-> mapping table and drop the field, (c) drop `level` and keep only `docGroup`.
->
-> **Your answer:** Keep only level, we can restructure the toc.yml (breaking changes ok in docs) to match the levels, and if we need to have a different grouping we can add a new field later. Shall we have these: Getting Started (or Intro), Beginners, Intermediate, Advanced? Also, even if level "Other" was added or something else in the future it is ok. Basically, Other meant unsorted or WIP and/or unclasified but worth to include.
+- `IsDraft` — declared on `ExampleMetadata`, never set by anything. Dead.
+- `docGroup` — collapsed into `level` (D3).
+- `additionalFiles` / `externalLinks` — superseded by `generated: partial` (D4).
 
-> **Q4** — `additionalFiles` and `externalLinks` add real schema complexity for what is currently
-> **one** example (Myra). Alternative: don't model them, and just mark Myra's doc as manually owned
-> (§2.4). Model them, or skip for v1?
->
-> **Your answer:** Yes, I suggested above frontmatter flag which would mark the docs as mergeable that means existing docs would have additional content and we might not need additionalFiles and externalLinks.
+**Level values.** `Getting Started` · `Beginner` · `Intermediate` · `Advanced` · `Other`.
+Singular `Beginner` for grammatical consistency with `Intermediate`/`Advanced`. `Other` means
+*unclassified but published* — it is where the ~29 backfilled stub docs land until someone
+classifies them, and it sorts last. It is **not** a substitute for `enabled: false` (WIP/broken) or
+`docs: false` (deliberately undocumented). New values are added in one place in the validator.
 
-> **Q5** — Localisation: `title`/`description` are `en`/`cs` dictionaries. Do generated docs need a
-> Czech output too (`mesh-outline.cs.md`?), or is `cs` carried in the manifest for later/website use
-> while docs generate English-only for now?
->
-> **Your answer:** English-only for now, other languages can be used in the launchers.
-
-> **Q6** — `related:` currently stores **project names** (`Example13_RootRendererShader`). Doc
-> cross-links need **slugs**. Keep project names and have the generator resolve them to slugs (fails
-> the build on an unresolvable name — which would have caught a typo when I edited `related:` earlier
-> this session), or store slugs directly?
->
-> **Your answer:** Keep project names (might be easier to maintain) and have the generator resolve them (through Dictionary?) to slugs.
+**toc grouping key is `(language, level)`,** C# first, then F#, then VB. That reproduces today's
+`-fs` / `-vb` sections without needing a separate grouping field.
 
 ### 2.3 JSON envelope
 
@@ -194,50 +157,58 @@ Bare array → wrapped object, done now while nothing consumes it:
 }
 ```
 
-> **Q7** — Include `generatedAt`? It guarantees the file differs on every run, which is noise if the
-> manifest stays committed to git (it's currently tracked and showed up as modified in our diff
-> earlier). Options: (a) include it and **stop committing** the manifest (add to `.gitignore`, it's a
-> build artifact), (b) omit `generatedAt` so the output is deterministic and diffs stay clean,
-> (c) include it and keep committing. My preference is (a).
->
-> **Your answer:** Yes, let's go with (a) — include it and stop committing the manifest, it's a build artifact.
+`examples-manifest.json` is a **build artifact**: `generatedAt` is included, and the file is removed
+from git and added to `.gitignore`.
 
-### 2.4 Doc takeover mechanism
+### 2.4 Doc ownership — three modes
 
-DocFX supports YAML frontmatter at the top of `.md`, so generated docs get a marker:
+DocFX supports YAML frontmatter at the top of `.md`, so every generated doc carries a marker:
+
+| `generated:` | Meaning |
+|---|---|
+| `true` | Whole file is tool-owned and overwritten freely |
+| `partial` | **Only the delimited region** is overwritten; everything outside is preserved verbatim |
+| `false` *or absent* | Hand-owned; never touched. Generator only warns if metadata has drifted |
+
+`partial` is what replaces `additionalFiles`/`externalLinks`. The boundary is explicit rather than
+inferred:
 
 ```markdown
 ---
-generated: true
-slug: mesh-outline
+generated: partial
+slug: myra-ui-draggable-window-and-services
 ---
 
-# Mesh Outline Render Feature
-...
+<!-- #region generated -->
+# Myra UI — Draggable Window and Services
+
+(intro, concepts bullets, media, GitHub link, code include — all tool-owned)
+<!-- #endregion generated -->
+
+## MyraSceneRenderer.cs
+
+Hand-written prose and its own code include. Never touched by the generator.
+
+## Other Examples
+
+- [Using Myra in Stride Engine Tutorial](https://github.com/rds1983/Myra/wiki/...)
 ```
 
-Rules:
+Rules for `partial`:
 
-- `generated: true` → the generator **owns** this file and overwrites it freely.
-- `generated: false` → **hand-owned**; the generator never touches it, only warns if the
-  corresponding frontmatter drifts.
-- **No frontmatter at all** → treated as hand-owned and **never overwritten**.
+- The generator replaces only the bytes **between** the markers, leaving both markers in place.
+- Hand-written content may sit **before or after** the region — the author chooses the order, so the
+  tool never has to guess where merged content belongs.
+- `generated: partial` with **no markers found** → warn and skip the file. Never guess a boundary.
+- HTML comments are invisible in rendered DocFX output.
 
-That last rule matters: all 29 existing per-example docs have no frontmatter today, so a first run
-after this change cannot destroy any hand-written prose. Adoption becomes opt-in per file — you add
-`generated: true` to a doc when you're happy for the tool to take it over.
+This is a string replace between two delimiters, not a three-way merge — deterministic, and a
+contributor editing the file can *see* which part they must not edit.
 
-> **Q8** — Is `generated: true/false` the right flag name/shape? Alternatives: `managed: true`,
-> `autoGenerated: true`, or an explicit `owner: tool|human`.
->
-> **Your answer:** `generated: true/false` is fine, it is clear and concise.
-
-> **Q9** — What should the generator do when a hand-owned doc's frontmatter has drifted from the
-> example's (e.g. title changed in `Program.cs` but not in the `.md`)? Warn only, or fail the build?
->
-> **Your answer:** Warn only, it is a hand-owned doc and the author should be aware of the drift but not block the build.
-
-Question for AI: Should we have a frontmatter flag which would mark the docs as mergeable that means existing docs would have additional content and we might not need additionalFiles and externalLinks. We would need to just figure out where to merge the content, e.g. after the generated content or before it. The generator would need to parse the existing doc and merge the content in the right place. Maybe good for Phase 2 if it is not too complex to implement.
+> [!IMPORTANT]
+> All 29 existing per-example docs have no frontmatter today, so the first run after this change
+> cannot destroy any hand-written prose. Adoption is opt-in per file: you add `generated: true` or
+> `partial` to a doc when you are happy for the tool to take it over.
 
 ---
 
@@ -245,58 +216,47 @@ Question for AI: Should we have a frontmatter flag which would mark the docs as 
 
 ### Step 1.1 — Schema + model
 
-- `ExampleMetadata` class → `record` with `required` members where genuinely required
-  (`slug`, `title`, `level`, `category`).
-- Add the new fields from §2.2; drop `IsDraft`.
+- `ExampleMetadata` class → `record` with `required` members (`slug`, `title`, `level`, `category`).
+- Add the new fields from §2.2; drop `IsDraft` and `docGroup`.
 - Normalise `ProjectPath` to forward slashes (currently emits `Example19_Jitter2Physics\Program.cs`).
 - Envelope type (§2.3).
 
 ### Step 1.2 — Validation (new; there is none today)
 
-Fail-fast with a useful message, aggregated across all examples rather than dying on the first:
+Fail-fast with a useful message, **aggregated across all examples** rather than dying on the first.
+Validation failure **fails the build** — `ContinueOnError="WarnAndContinue"` is dropped from the
+MSBuild hook so a malformed block can no longer yield a silently incomplete manifest and a green build.
+
+Checks:
 
 - Required fields present.
-- `slug` unique, kebab-case, no collisions with existing doc filenames.
-- `level` / `category` / `docGroup` / `language` are known values.
-- `related:` entries resolve to real examples.
+- `slug` unique across **all** examples, kebab-case, no collision with an existing doc filename.
+- `level` / `category` / `language` are known values.
+- `related:` entries resolve to real example project names → slugs (unresolvable name = error; this
+  would have caught a typo introduced while editing `related:` earlier).
 - `media:` file exists in `docs/manual/code-only/examples/media/`.
-- Duplicate `order:` within the same group flagged (currently both Jitter2 examples are `order: 19`).
+- Duplicate `order:` within the same `(language, level)` group flagged (both Jitter2 examples are
+  currently `order: 19`).
 - **Unquoted `#` or `:` in a value.** Found the hard way while authoring
   `Example01_Basic3DScene_FileBasedApp`: `- Declaring NuGet packages inline with #:package` silently
   became `- Declaring NuGet packages inline with`, because `#` starts a YAML comment. No error, no
-  warning — the value was just truncated. Quoting fixes it, and the existing
-  `"Using helpers: SetupBase3DScene"` entries are already quoted for the same class of reason (the
-  colon), so the convention exists but is undocumented. The generator should reject or warn on a
-  value that looks truncated rather than accept it silently.
+  warning — the value was just truncated. The existing `"Using helpers: SetupBase3DScene"` entries are
+  already quoted for the same class of reason, so the convention exists but is undocumented. Reject a
+  value that looks truncated rather than accepting it silently.
 
-> **Q10** — Should a validation failure **fail the build**? Today the MSBuild hook uses
-> `ContinueOnError="WarnAndContinue"` and per-example parse errors are swallowed as warnings, so a
-> malformed block silently yields an incomplete manifest and a green build. I'd make `generate`
-> fail hard and drop `ContinueOnError` — but that means a bad metadata block blocks the Launcher build.
->
-> **Your answer:** Fail hard, a malformed block should block the build to ensure metadata integrity. If it becomes annoying I will be in touch.
+### Step 1.3 — Backfill frontmatter
 
-### Step 1.3 — Backfill frontmatter (the big one)
+44 examples have no frontmatter; 29 of those have an existing doc whose content should be ported
+*into* the entry file rather than retyped.
 
-44 examples have no frontmatter; 29 have an existing doc whose content should be ported *into*
-`Program.cs` rather than retyped.
+**Approach:** the frontmatter blocks are **written directly into the entry files by AI**, using the
+existing `.md` as the content source (H1 → `title.en`, intro paragraph → `description.en`, bullet list
+→ `concepts`, image → `media`, filename → `slug`, `toc.yml` entry → `tocName`). Review happens in the
+git diff — faster and less error-prone than a print-then-paste loop across 29 files.
 
-Proposal: a one-off `import-docs` command that reads each existing `.md`, extracts H1 → `title.en`,
-intro paragraph → `description.en`, the bullet list → `concepts`, image → `media`, filename → `slug`,
-`toc.yml` entry → `tocName`/`docGroup`, and **prints a suggested frontmatter block** for review
-rather than writing it directly. You paste/adjust per file.
-
-> **Q11** — Is a review-then-paste flow right, or would you rather it write the block into
-> `Program.cs` automatically and let you review the git diff? Auto-write is faster across 29 files but
-> touches source directly.
->
-> **Your answer:** The frontmatter content in Program.cs can be written by AI and use the existing docs as a reference/content source, so it can be auto-written and then reviewed (be user) in the git diff. It is faster and less error-prone. 
-
-> **Q12** — What about the ~29 examples with **no** doc and **no** frontmatter? Options: (a) author
-> frontmatter for all of them now (large effort, gets full docs coverage), (b) set `docs: false` and
-> backfill opportunistically, (c) generate a minimal stub doc from what little can be inferred.
->
-> **Your answer:** Option (c) is preferred, generate a minimal stub doc from what little can be inferred. It is better to have something than nothing, and it can be improved later.
+The ~29 examples with **no** doc and **no** frontmatter get a **minimal stub doc** generated from
+whatever can be inferred, at `level: Other`. Something beats nothing, and it can be improved in place
+later. Stub generation respects `docs: true` — an example explicitly marked `docs: false` gets no stub.
 
 ### Step 1.4 — `docs` command
 
@@ -304,22 +264,15 @@ Generates, per example with `docs: true`:
 
 - `docs/manual/code-only/examples/<slug>.md` — matching today's house style (H1, intro,
   "The `Program.cs` file shows how to:" bullets, `[!INCLUDE ...]` note, image, GitHub link, code include).
-- `toc.yml` entries under the right `docGroup`, in `order`.
+- `docs/manual/code-only/examples/toc.yml` — a **dedicated toc for the examples folder only**,
+  grouped by `(language, level)` and ordered by `order`. `docs/manual/toc.yml` references it as a
+  nested TOC (`href: code-only/examples/toc.yml`), so the generator never has to touch a
+  hand-maintained file. See the [DocFX TOC docs](https://dotnet.github.io/docfx/docs/table-of-contents.html).
+- The 4 landing pages (`basic-examples.md`, `advance-examples.md`, `basic-examples-fs.md`,
+  `basic-examples-vb.md`) — they are pure lists of child examples, so they are generated from the
+  manifest. Their names follow from the level/language restructure (see Q24).
 
-Respects the takeover rules in §2.4.
-
-> **Q13** — `toc.yml` is hand-maintained today and contains entries beyond the examples section.
-> Should the generator rewrite the whole file, or edit only a delimited region
-> (e.g. between `# <examples:begin>` / `# <examples:end>` markers)? I'd strongly prefer the delimited
-> region — much safer.
->
-> **Your answer:** We can do better, you can generate only toc.yml for the examples in the examples folder and the reference that file in the main toc.yml See this: https://dotnet.github.io/docfx/docs/table-of-contents.html
-
-> **Q14** — The 4 landing pages (`basic-examples.md`, `advance-examples.md`, `basic-examples-fs.md`,
-> `basic-examples-vb.md`) are index pages listing child examples. Generate those too (they're pure
-> lists), or leave hand-owned?
->
-> **Your answer:** Yes, generate those too, they are pure lists and can be generated from the manifest.
+Respects the ownership rules in §2.4.
 
 ### Step 1.5 — Generator code modernisation
 
@@ -340,132 +293,68 @@ Small, mostly independent of the above:
 - `YamlMetadataExtractor` is a static wrapper returning a `Regex` — could just expose the
   `[GeneratedRegex]` partial method directly.
 
+### Step 1.6 — Discovery
+
+`ExampleScanner.FindProgramFiles` currently searches specifically for `Program.cs`. It instead scans
+**every `.cs` file and keeps those containing a metadata block**. This frees file-based apps from the
+`Program.cs` name (`dotnet run Basic3DScene.cs` is far more self-describing) and makes the metadata
+block itself the marker of what is an example.
+
+Consequence: **one folder may yield several examples.** That is allowed; the unique-`slug` check in
+Step 1.2 is what keeps it honest. `ProgramSimple.cs` in `Example01_Basic3DScene_FileBasedApp` has no
+frontmatter, so it is invisible to the generator and out of scope for this plan — it stays for local
+development until a Stride-4.4 toolkit package is on nuget.org and it no longer needs a
+machine-specific `NuGet.config`.
+
 ---
 
-## 4. Phase 2 — launchers (after Phase 1 settles)
+## 4. Phase 2 — launchers
 
 - Console runner + Avalonia launcher read `examples-manifest.json` instead of csproj properties.
 - Delete `ProjectFileHelper` and the `<ExampleTitle>` / `<ExampleOrder>` / `<ExampleCategory>` /
   `<ExampleEnabled>` properties from every example `.csproj`.
-- Honour `exampleLauncher: false`.
+- Honour `launcher: false`.
+- Localised `title`/`description` (`cs`) are consumed **here** — docs stay English-only.
 - Both launchers are acknowledged test drafts — breaking changes are fine.
 
-> **Q15** — Once the launchers read a generated manifest, they depend on a build artifact. Keep the
-> pre-build MSBuild hook (regenerates on every build, slow-ish — it runs `dotnet run` on the
-> generator), or commit the manifest and regenerate deliberately? Note this interacts with **Q7**.
->
-> **Your answer:** Keep the pre-build MSBuild hook, it ensures the manifest is always up-to-date with the examples. If it becomes too slow, we can revisit this decision later.
+The pre-build MSBuild hook stays, so the manifest is always current with the examples. If it proves
+too slow (it runs `dotnet run` on the generator), revisit then.
 
 ---
 
-## 5. Risks
+## 5. Automated screenshots (deferred — direction set)
 
-| Risk | Mitigation |
-|---|---|
-| Overwriting hand-written docs (Myra et al.) | "No frontmatter = never overwrite" (§2.4) makes first-run destructive changes impossible |
-| Schema churn after consumers bind | Settle schema in Phase 1; `schemaVersion` in the envelope |
-| Backfill is 29+ files of manual work | `import-docs` command to bulk-extract (Step 1.3) |
-| Build hook slowness/failures block Launcher builds | Q10 + Q15 |
-| Media filename typos/inconsistency baked into schema | Explicit `media:` field; validation checks the file exists |
+Motivation: 33 docs need a screenshot, ~29 examples have none, filenames are inconsistent (one has a
+typo), and every Stride upgrade makes existing shots stale.
 
-> **Q16** — Fix `stride-game-engine-example-15-contraints.webp` → `constraints`, or leave it and just
-> reference the existing filename? Renaming means updating the referencing doc.
->
-> **Your answer:** Yes, fix the typo to `constraints` and update the referencing doc accordingly. It is better to have correct naming for clarity and professionalism.
-
----
-
-## 7. Raised after this plan was written
-
-`Example01_Basic3DScene_FileBasedApp` was added since — a .NET 10 file-based app: a folder with a
-single `.cs` file, no `.csproj`, dependencies declared inline with `#:package` / `#:project`. The
-generator picks it up unchanged today because the file is still named `Program.cs`. That raises two
-questions the plan did not anticipate.
-
-> **Q17** — `ExampleScanner.FindProgramFiles` searches specifically for `Program.cs`. A file-based
-> app can be named anything, and `dotnet run Basic3DScene.cs` is far more self-describing than
-> `dotnet run Program.cs`. Options: (a) keep requiring `Program.cs` — zero code change, but forfeits
-> the naming freedom; (b) scan every `.cs` and keep those containing a metadata block — matches your
-> earlier instinct, but means reading many more files; (c) scan `Program.cs` plus any `.cs` whose
-> name matches its folder.
->
-> **Your answer:** Option (b) scan every `.cs` and keep those containing a metadata block. It allows for more flexibility in naming and does not restrict the developer to a specific file name. The metadata block will ensure that only relevant files are included.
-
-> **Q18** — Variants: sibling files in one folder, or one folder each? The file-based folder
-> currently holds `Program.cs` (project references) and `ProgramSimple.cs` (NuGet packages). Only
-> `Program.cs` has metadata, so the generator sees exactly one example — but under Q17 option (b),
-> one folder could yield several entries. Note every existing variant is its own folder
-> (`_Primitives`, `_MeshLine`, `_FSharp`), and sibling file-based apps in one folder also share an
-> asset cone and would collide over `obj`/`bin` if either sets those properties.
->
-> **Your answer:** We can allow one folder to yield several entries, but we should ensure that each entry has its own unique slug.
-
-> **Q19** — `ProgramSimple.cs` only resolves with a local, machine-specific `NuGet.config` pointing
-> at the dev feed, so committing it as-is would hand other contributors a file that fails to restore.
-> Drop it until a Stride-4.4-based toolkit package is published to nuget.org (at which point it needs
-> no config and becomes a genuinely shareable single-file example), or keep it with a header comment
-> stating the prerequisite?
->
-> **Your answer:** Don't worry about ProgramSimple.cs it has no frontmatter and is not part of the docs generation. It can be kept for local development but should not be included in the shared examples until it is fully functional and does not require a local NuGet.config.
-
-### Automated screenshots
-
-Idea: have the tool launch an example, wait a metadata-specified delay, capture **just the game
-window**, and save it as `.webp` under `docs/manual/code-only/examples/media/`. Motivation: 33 docs
-need a screenshot, ~29 examples have none, the filenames are already inconsistent (one has a typo),
-and every Stride upgrade makes existing shots stale.
-
-**The easy two thirds.** The generator already enumerates every example, so launching one and naming
-the output from the `media:` field is trivial. WebP encoding is nearly free: `SixLabors.ImageSharp`
-(3.1.12) is already present transitively via Stride and has a WebP encoder — it would just need a
-direct `PackageReference`. Note its licence is the Six Labors Split License, not Apache; free for
-open source, but worth a conscious decision even for a dev-only tool.
-
-**The capture itself is already solved, in-engine.** The toolkit has
+**Capture is already solved, in-engine.** The toolkit has
 `GameExtensions.TakeScreenShot(this IGame, string fileName, ImageFileType)` in
-`src/Stride.CommunityToolkit/Engine/GameExtensions.cs`, which does:
+`src/Stride.CommunityToolkit/Engine/GameExtensions.cs`, which saves the **GPU render target**, not the
+screen:
 
 ```csharp
 var commandList = game.GraphicsContext.CommandList;
 commandList.RenderTarget.Save(commandList, stream, fileType);
 ```
 
-That saves the **GPU render target**, not the screen. Every hard problem an external screen-capture
-approach would have simply does not arise: no window handle to find, no DPI scaling, no
-`SetForegroundWindow`, no occlusion risk, no P/Invoke, and no desktop chrome in the output. The image
-is exactly the rendered frame at render resolution, and the window may sit behind other windows while
-it happens.
+Every hard problem an external screen-capture approach would have simply does not arise: no window
+handle, no DPI scaling, no `SetForegroundWindow`, no occlusion risk, no P/Invoke, no desktop chrome.
+The image is exactly the rendered frame at render resolution, and the window may sit behind others
+while it happens.
 
-**What is actually left to build.**
+### Prior art in the Stride repository — read before building
 
-1. **A trigger inside the game.** `TakeScreenShot` must be called from within the running game, so the
-   example needs something that waits, captures, and exits. A small opt-in game system in the toolkit
-   — enabled by an environment variable so no example source changes — could be registered from the
-   `SetupBase3DScene` / `SetupBase3D` helpers that most examples already call. Examples not using
-   those helpers would need one line.
-2. **PNG → WebP.** Stride's `ImageFileType` has no WebP member (`Stride`, `Dds`, `Png`, `Gif`, ...),
-   so capture as PNG and convert. `SixLabors.ImageSharp` 3.1.12 is already present transitively via
-   Stride and has a WebP encoder; it would need a direct `PackageReference`. Its licence is the
-   Six Labors Split License, not Apache — free for open source, but a conscious choice.
-3. **Orchestration in the tool.** Launch the example with the environment variable set, wait for it
-   to exit on its own, convert, and name the output from the `media:` field.
+Stride already runs this pipeline for its samples, and it corrects two assumptions:
 
-### Prior art in the Stride repository — read this before designing anything
-
-Stride already runs exactly this pipeline for its samples, and two assumptions above turned out to be
-wrong when checked against it.
-
-**It *can* run in CI.** `.github/workflows/test-enduser.yml` captures sample screenshots on ordinary
-GitHub runners with `STRIDE_GRAPHICS_SOFTWARE_RENDERING: "1"`, across a matrix of platform ×
-graphics API (D3D11 / D3D12 / Vulkan). `build/GameTests-GPU.runsettings` confirms the inverse:
-"Tests default to software rendering (WARP / SwiftShader)", and `STRIDE_TESTS_GPU=1` is the opt-*in*
-for real hardware. So a GPU is not a prerequisite.
-
-**Capture is scheduled by frame, not by elapsed time.**
-`sources/engine/Stride.Graphics.Regression/FrameGameSystem.cs` exposes
-`TakeScreenshot(int? frameIndex = null, string? testName = null)`, alongside `Update(int frameIndex, …)`
-and `Draw(int frameIndex, …)`. Capturing at a frame index rather than after N seconds is what makes a
-capture reproducible, and it means the metadata field should be a **frame number, not a delay**.
+- **It *can* run in CI.** `.github/workflows/test-enduser.yml` captures sample screenshots on ordinary
+  GitHub runners with `STRIDE_GRAPHICS_SOFTWARE_RENDERING: "1"`, across a platform × graphics API
+  matrix. `build/GameTests-GPU.runsettings` confirms the inverse: tests default to software rendering
+  (WARP / SwiftShader), and `STRIDE_TESTS_GPU=1` is the opt-*in* for real hardware. A GPU is not a
+  prerequisite.
+- **Capture is scheduled by frame, not elapsed time.**
+  `sources/engine/Stride.Graphics.Regression/FrameGameSystem.cs` exposes
+  `TakeScreenshot(int? frameIndex = null, string? testName = null)`. So the metadata field is a
+  **frame number, not a delay**.
 
 > [!IMPORTANT]
 > Frame indexing alone is not sufficient for physics-heavy examples. `GameBase` defaults to
@@ -474,98 +363,149 @@ capture reproducible, and it means the metadata field should be a **frame number
 > elapsed by frame N on every run. Capturing a falling-cube example reproducibly needs
 > `IsFixedTimeStep = true` as well.
 
-Worth reading before building anything:
-
-| Path | What it offers |
+| Path (in the Stride repo) | What it offers |
 |---|---|
 | `sources/engine/Stride.Graphics.Regression/FrameGameSystem.cs` | Frame-scheduled `TakeScreenshot` / `Update` / `Draw` |
 | `sources/engine/Stride.Graphics.Regression/GameTestBase.cs` | Harness that runs a game headlessly for tests |
 | `sources/engine/Stride.Graphics.Regression/ImageTester.cs` | Baseline image comparison |
 | `.github/workflows/test-enduser.yml` | Daily capture run; software rendering; crash dumps; per-API matrix |
-| `.github/workflows/test-samples-baselines.yml` | Promotes captures from a run into committed baselines (images in Git LFS, D3D11 only as the gating reference) |
-| `.github/workflows/pr-screenshot-vision-gate.yml` | Re-judges borderline frames, recorded in `vision-deferred.json` |
+| `.github/workflows/test-samples-baselines.yml` | Promotes captures into committed baselines (Git LFS, D3D11 as gating reference) |
+| `.github/workflows/pr-screenshot-vision-gate.yml` | Re-judges borderline frames via `vision-deferred.json` |
 
-**Constraints that genuinely remain.**
+### Shape
 
-- **Some examples cannot be captured meaningfully**: `Example17_SignalR*` needs a running server,
-  `Example04_MyraUI` is currently broken on Stride 4.4, and input-driven examples show nothing
-  interesting without interaction.
-- **Committed images need care.** Stride stores baselines in Git LFS. The toolkit has no LFS setup
-  today, and `.webp` screenshots are already committed normally — worth deciding before adding ~29
-  more.
+Three pieces, split by ownership:
 
-**Effort.** Materially lower than the external-capture approach I first sketched: the risky part is
-already written, tested and running in CI upstream. The remaining work is a frame-scheduled trigger,
-a PNG→WebP step, and a launch loop — with a real reference implementation to copy from.
+1. **Trigger — inside the toolkit.** A small frame-scheduled screenshot `GameSystem`, gated by an
+   environment variable, registered from the toolkit's own
+   `GameExtensions.Run(this Game, GameContext?, ...)`. **Every Stride example entry point already
+   routes through it** — 52 C# files via the named-argument overload, plus `Program.fs` ×2
+   (`game.Run(start = Start)`) and `Program.vb` (`GameExtensions.Run(game, Nothing, AddressOf
+   StartGame)`). The only `Program*.cs` that does not is `Example17_SignalR_Blazor`, whose `app.Run()`
+   is an ASP.NET host, not a game — and that example is on the "cannot be captured" list anyway.
+   So this is a single-place change, in code the toolkit already owns, with no example source edits
+   and nothing to forget on new examples (D21). It is `Run`, not `SetupBase3DScene`, because running
+   is where a run-time concern belongs and `Run` has total coverage where the scene helpers do not.
+2. **PNG → WebP.** Stride's `ImageFileType` has no WebP member (`Stride`, `Dds`, `Png`, `Gif`, …), so
+   capture as PNG and convert. `SixLabors.ImageSharp` 3.1.12 is already present transitively via
+   Stride and has a WebP encoder; it needs a direct `PackageReference`. Its licence is the Six Labors
+   Split License, not Apache — free for open source, but a conscious choice.
+3. **Orchestration — a standalone script under `build/`,** not a command in the metadata generator.
+   Launch each opted-in example with the env var set, wait for it to exit, convert, and name the
+   output from `media:`. A human reviews every image before it is committed.
 
-**Suggested shape.** A separate `screenshot` command rather than part of `generate`; opt-in per
-example; output reviewed by a human before committing. Metadata fields would be `screenshotFrame`
-(frame index at which to capture) and a `screenshot: false` opt-out.
+Metadata fields, reserved but not implemented in Phase 1: `screenshotFrame` (frame index) and
+`screenshot: false` (opt-out).
 
-> **Q20** — Pursue automated screenshots at all, and if so as a `screenshot` command in this tool or
-> as a standalone script under `build/`? Given it cannot run in CI and needs a human to review each
-> image anyway, a standalone script may fit better than growing the metadata generator.
+**Not depending on `Stride.Graphics.Regression`** — it is an xUnit-oriented test harness
+(`GameTestBase`), and adopting it would reshape examples into tests. Borrow the frame-scheduling idea
+only. Revisit if visual regression testing of examples ever becomes a goal in its own right (D22).
+
+**Screenshots stay committed as ordinary files — no Git LFS.** The repo tracks 7 MB across 680 files
+with a 38 MB `.git`; LFS would add contributor friction (pointer files in clones without git-lfs, and
+in GitHub ZIP downloads) for no benefit at this size. Revisit only if image count and churn grow
+substantially.
+
+**Cannot be captured meaningfully:** `Example17_SignalR*` (needs a running server), `Example04_MyraUI`
+(broken on Stride 4.4), and input-driven examples that show nothing without interaction.
+
+---
+
+## 6. Risks
+
+| Risk | Mitigation |
+|---|---|
+| Overwriting hand-written docs (Myra et al.) | "No frontmatter = never overwrite" (§2.4); `partial` mode makes takeover incremental |
+| Schema churn after consumers bind | Settle schema in Phase 1; `schemaVersion` in the envelope |
+| Backfill is 29+ files of manual work | AI-written frontmatter sourced from existing docs, reviewed in the diff (Step 1.3) |
+| Build hook failures block Launcher builds | Accepted deliberately (D10) — integrity over green builds |
+| Media filename typos/inconsistency baked into schema | Explicit `media:` with `<slug>.webp` default; validation checks the file exists |
+| `partial` markers accidentally deleted by a contributor | Generator warns and skips rather than guessing a boundary |
+
+---
+
+## 7. Decisions
+
+| # | Topic | Decision |
+|---|---|---|
+| D1 | `enabled: false` semantics | Excluded from the manifest **entirely** |
+| D2 | Launcher field naming | `launcher`, not `exampleLauncher` |
+| D3 | `docGroup` vs `level` | Drop `docGroup`; restructure toc.yml around `level`; group by `(language, level)` |
+| D4 | `additionalFiles` / `externalLinks` | Dropped — superseded by `generated: partial` region markers |
+| D5 | Localisation | Docs English-only; `cs` carried in the manifest for the launchers |
+| D6 | `related:` | Stores project names; generator resolves to slugs and errors on an unresolvable name |
+| D7 | `generatedAt` | Included; manifest becomes a build artifact, removed from git + `.gitignore`d |
+| D8 | Takeover flag | `generated: true` / `partial` / `false` |
+| D9 | Drift on a hand-owned doc | Warn only; never block the build |
+| D10 | Validation failures | **Fail hard**; drop `ContinueOnError` |
+| D11 | Backfill flow | AI writes frontmatter into the entry files; review via git diff |
+| D12 | ~29 examples with no doc | Generate minimal stub docs at `level: Other` |
+| D13 | `toc.yml` | Generate a dedicated `examples/toc.yml`; reference it as a nested TOC from `manual/toc.yml` |
+| D14 | Landing pages | Generated from the manifest |
+| D15 | Manifest freshness | Keep the pre-build MSBuild hook |
+| D16 | `contraints` typo | Fix to `constraints`; update the referencing doc |
+| D17 | Discovery | Scan every `.cs`, keep those with a metadata block |
+| D18 | Variants | One folder may yield several examples; unique `slug` is the guard |
+| D19 | `ProgramSimple.cs` | Out of scope — no frontmatter, so invisible to the generator |
+| D20 | Screenshots | Standalone script under `build/`; human reviews every image |
+| D21 | Capture trigger | Env-var-gated system registered in `GameExtensions.Run` — every game example already routes through it |
+| D22 | `Stride.Graphics.Regression` | Don't depend on it; borrow frame-scheduling only |
+| D23 | Git LFS for screenshots | No — repo is 7 MB tracked / 38 MB `.git`; LFS is all cost, no benefit |
+| D24 | Level prefixes on slugs | **No** — see below |
+| D25 | Default `media` | Defaults to `<slug>.webp`; explicit field only for the legacy inconsistent names |
+
+### D24 — why slugs stay level-free
+
+Prefixing slugs (`advanced-mesh-outline`, `beginner-give-me-cube-body`) was considered and rejected:
+
+- **Slugs are URLs.** Baking a classification into a permanent public URL means reclassifying an
+  example — likely as the toolkit matures and more advanced material arrives — breaks external links,
+  bookmarks, forum posts, and search rankings. Classification changes; identifiers should not.
+- **The stated benefit is a file-browser concern.** "Files close together by level" is solved for free
+  by sorting on the `level` field, and the toc is already grouped by level (D3), so no reader ever
+  navigates by filename.
+- **It fights the schema's own goal** — §2.2 asks for slugs that are "short, shareable".
+- **It duplicates data.** `level` would live in both the filename and the frontmatter and could drift,
+  forcing a validation rule that exists only to serve the prefix.
+
+If filesystem grouping is ever genuinely wanted, subfolders (`examples/advanced/mesh-outline.md`) are
+the right lever — but they carry the identical URL-stability problem, so the answer is the same.
+
+---
+
+## 8. Still open
+
+> **Q24** — The 4 landing pages are named `basic-examples.md` / `advance-examples.md` /
+> `basic-examples-fs.md` / `basic-examples-vb.md`, matching the old Basic/Advance/Other grouping. With
+> 5 levels × 3 languages (D3), what should they become? Options: (a) one landing page **per level**
+> (`getting-started-examples.md`, `beginner-examples.md`, …) — most consistent, but renames existing
+> URLs; (b) keep a single C# landing page listing all levels as sections, plus one each for F#/VB —
+> fewer files, fewer URL breaks; (c) keep today's filenames and just re-point them. My preference is
+> (b): the level grouping is already visible in the toc, so multiplying landing pages adds files
+> without adding navigation value.
 >
-> **Your answer:** We might need to elaborate on this later. Basically, it should be something simple and yes a user has to review the screenshots. So a standalone script under build/ might be better than growing the metadata generator. It can be a simple script that launches the examples, captures the screenshots, and saves them to the appropriate location. We can still add some metadata fields to the frontmatter for the examples to specify the frame index / delay for the screenshot, but the actual capture process can be handled by a separate script.
+> **Your answer:** It is about SEO, a dedicated page for each level is better, so I would go with (a) and rename the existing URLs. The old pages can be redirected through `redirect_url: [new URL]` https://dotnet.github.io/docfx/docs/config.html?q=redirect
 
-> **Q21** — How should the in-game capture be triggered? Registering an environment-variable-gated
-> screenshot system inside `SetupBase3DScene` / `SetupBase3D` would give most examples the capability
-> with no source changes, but it does put a dev-only concern inside a helper that ships to users. The
-> alternative is an explicit `game.AddScreenshotOnDemand()` that each participating example calls,
-> which is honest but has to be added ~57 times and is easy to forget on new examples.
+> **Q25** — Reclassifying the existing 29 docs into the 5 levels needs a human judgement pass
+> (today's toc only says Basic/Advance/Other). Do you want to do that pass yourself, or should I
+> propose a mapping in a table here for you to correct before any frontmatter is written?
 >
-> **Your answer:** I wonder if modern C# doesn't have an option to inject something on build or runtime. So we wouldn't change the existing code or in minimum.
+> **Your answer:** Once we get here you can propose a mapping and I will review it, but I would not do it myself.
 
-> **Q22** — Reuse or reimplement? `Stride.Graphics.Regression` already provides frame-scheduled
-> capture and baseline comparison, but it is a test-harness assembly aimed at xUnit
-> (`GameTestBase`), not at running a normal example. Options: (a) depend on it and drive examples as
-> tests, which buys the CI story and comparison for free but reshapes examples into tests;
-> (b) write a small screenshot game system for the toolkit, borrowing only the frame-scheduling idea;
-> (c) start with (b), and revisit (a) if visual regression testing of examples ever becomes a goal in
-> its own right.
+> **Q26** — Phasing of `generated: partial`. It replaces `additionalFiles`/`externalLinks`, and a
+> replace-between-two-delimiters implementation is *cheaper* than the schema + validation +
+> templating those two fields would have needed — so I would build it in **Phase 1**, right after the
+> plain `generated: true` path works. Building it later means Myra needs a temporary hand-owned
+> exemption that gets undone. Agreed, or still prefer Phase 2?
 >
-> **Your answer:** The answer might depend on Q20 and Q21.
+> **Your answer:** Agreed, it should be done in Phase 1.
 
-> **Q23** — Screenshots are currently committed as ordinary files under
-> `docs/manual/code-only/examples/media/`. Stride keeps its baselines in Git LFS. Before adding ~29
-> more images, should the toolkit adopt LFS for them, or keep committing them directly?
->
-> **Your answer:** No LFS for now, keep committing them directly. If the number of screenshots grows significantly in the future, we can revisit this decision.
+---
 
-### Not part of this plan
+## 9. Not part of this plan
 
 Related work completed alongside it, documented in
 [`docs/contributing/toolkit/building.md`](../../../docs/contributing/toolkit/building.md) rather than
 here: the examples build I/O fix (476 MB → 90 MB per project), the `Core.slnf` solution filter, and
 `build/pack-local.cs` for local dev NuGet packages. None of it changes the metadata schema; it is
 listed only so the docs-generation work does not rediscover it.
-
----
-
-## 6. Question index
-
-| # | Topic |
-|---|---|
-| Q1 | `enabled: false` semantics |
-| Q2 | `exampleLauncher` vs `launcher` naming |
-| Q3 | `docGroup` vs `level` overlap |
-| Q4 | Model `additionalFiles`/`externalLinks`, or skip for v1 |
-| Q5 | Czech doc output or manifest-only |
-| Q6 | `related:` — project names vs slugs |
-| Q7 | `generatedAt` + whether manifest stays in git |
-| Q8 | Takeover flag naming |
-| Q9 | Drift between hand-owned doc and frontmatter |
-| Q10 | Validation failures fail the build? |
-| Q11 | `import-docs`: print vs auto-write |
-| Q12 | The ~29 examples with no doc and no frontmatter |
-| Q13 | `toc.yml`: full rewrite vs delimited region |
-| Q14 | Generate the 4 landing pages? |
-| Q15 | Build hook vs committed manifest |
-| Q16 | Fix the `contraints` media typo |
-| Q17 | Scan only `Program.cs`, or any `.cs` with metadata |
-| Q18 | Variants: sibling files vs one folder each |
-| Q19 | Keep or drop `ProgramSimple.cs` |
-| Q20 | Automated screenshots — pursue, and where should they live |
-| Q21 | How the in-game capture is triggered (helper-registered vs explicit call) |
-| Q22 | Reuse `Stride.Graphics.Regression` or write a small screenshot system |
-| Q23 | Git LFS for screenshots, or keep committing them directly |
