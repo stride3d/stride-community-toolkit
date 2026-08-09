@@ -12,4 +12,8 @@
         <PackageReference Include="Stride.Core.Mathematics" Version="$(StrideVersion)" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
 </Project>
