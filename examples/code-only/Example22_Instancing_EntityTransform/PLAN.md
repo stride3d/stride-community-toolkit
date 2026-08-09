@@ -266,21 +266,42 @@ instances, scaling linearly.
 - [ ] Phase 4: upstream PRs (needs discussion with Stride maintainers first)
 - [ ] Phase 5: write up v2 proposals for a Stride discussion/issue
 
-## 8. Follow-up: verifying `Body2DComponent` (separate from this plan)
+## 8. Follow-up: `Body2DComponent` (separate from this plan)
 
-`Stride.CommunityToolkit.Bepu/Body2DComponent.cs` is WIP and destined for a Stride PR. It is not
-covered by the work above and does not belong in these benchmarks, because what it does cannot be
-measured in isolation:
+Reviewed and reworked 2026-08-10, ahead of a Stride PR. See the file's own XML docs for the design.
 
-- **Unit tests are the wrong tool.** Its behaviour lives in `AttachInner` (needs a real shape inertia
-  and a `BodyReference`) and `SimulationUpdate` (needs a running `BepuSimulation`). Constructing one
-  headless is possible but the test would mostly assert against a simulation harness, not the class.
-- **What to test instead**, as integration checks over a fixed number of simulation steps:
-  drift off the Z=0 plane stays under `ZTolerance`; X/Y angular velocity stays zero; **bodies actually
-  fall asleep** (the removed `Awake = true` line is exactly what used to prevent it, and the sleep
-  skip in `BepuEntityInstancing` depends on it); and a pile of convex hulls does not gain energy.
-- **Where to measure**, if a number is wanted: time-to-sleep and steady-state frame cost for N shapes
-  in Example_Bepu_Playground, which is now a fair test bed since key I uses `BepuEntityInstancing`.
-- A cheap first step that needs no harness: assert `entity.Get<BodyComponent>()` resolves a
-  `Body2DComponent`, which is what makes the sleep skip work for 2D bodies. It holds by inheritance
-  today, and a test would keep it that way.
+**Stride already has a `Body2DComponent`** at `engine/Stride.BepuPhysics/Stride.BepuPhysics._2D/`
+(namespace `Stride.BepuPhysics`, so the two names collide for anyone importing both). Comparison:
+
+| | Stride's | Toolkit's |
+|---|---|---|
+| Rotation lock | inverse-inertia mask via `RotationLock` | inverse-inertia zeroing, same effect |
+| Plane correction | separate `Simulation2DComponent` **teleports** bodies back (via `[Obsolete]` position setters) | per-body **velocity** correction before the solve |
+| Setup | user must add a second scene component | self-contained |
+| Sleeping bodies | iterates `ActiveSet`, so sleepers cost nothing | dispatched for all bodies, now early-outs on `!Awake` |
+| Kinematic toggle | `#warning`, unhandled - lock is silently lost | detected and reapplied |
+| Hull stability | none | recovery velocity / spring damping / frequency caps |
+
+The toolkit version is better on correction quality, setup and kinematic handling; Stride's is better
+on sleeping-body dispatch cost. A merged version would take the velocity correction and keep an
+`ActiveSet`-driven dispatch.
+
+**Changes made 2026-08-10:** deleted dead `HasConvexHullOld` and the unreachable recursion in
+`HasConvexHull` (a `CompoundCollider` implements `ICollider` but is not a `ColliderBase`, so compounds
+cannot nest); strongly typed it; early-out for sleeping bodies; out-of-plane velocity now cleared even
+inside `ZTolerance`, so slow drift cannot accumulate up to the threshold; rotation lock reapplied after
+a kinematic/dynamic switch; magic numbers named; full XML docs.
+
+**Testing.** `engine/Stride.BepuPhysics/Stride.BepuPhysics.Tests/BepuTests.cs` already runs real
+simulations through `GameTestBase` + `RunGameTest`, building entities with real bodies and colliders.
+Moving the component into Stride makes that harness available, which is the right level for it - unit
+tests are not, since the behaviour only exists inside a stepping simulation. Tests worth writing:
+
+- Z drift stays within `ZTolerance` over N steps, including under a stack of bodies.
+- X/Y angular velocity stays zero; a body given an X/Y spin does not tumble.
+- **Bodies actually fall asleep** - the sleep skip in `BepuEntityInstancing` depends on it, and the
+  commented-out `Awake = true` is exactly what used to prevent it.
+- A convex-hull pile does not gain energy (total kinetic energy trends down once settled).
+- Kinematic -> dynamic keeps the body in the plane (regression for the fix above).
+- Cheap and harness-free: `entity.Get<BodyComponent>()` resolves a `Body2DComponent`, which is what
+  makes the sleep skip work for 2D bodies.
