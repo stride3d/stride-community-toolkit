@@ -2,6 +2,7 @@ using Example.Common;
 using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -25,6 +26,9 @@ Model? model = null;
 //Simulation? _simulation = null;
 CameraComponent? _camera = null;
 Scene scene = new();
+
+// One master for every instanced shape, created on first use by AddInstancedShapes
+BepuEntityInstancing? _instancing = null;
 //BepuConfiguration? _bepuConfig = null;
 int _simulationIndex = 0;
 float _maxDistance = 100;
@@ -61,9 +65,8 @@ game.Run(start: (Action<Scene>?)((Scene rootScene) =>
     //game.AddAllDirectionLighting(intensity: 5f, true);
     //game.ShowColliders();
 
-    // Enable instancing support by adding InstancingRenderFeature to MeshRenderFeature
-    var meshRenderFeature = (MeshRenderFeature)game.SceneSystem.GraphicsCompositor.RenderFeatures.First(f => f is MeshRenderFeature);
-    meshRenderFeature.RenderFeatures.Add(new InstancingRenderFeature());
+    // Without this nothing instanced is drawn: the code-built compositor has no instancing feature
+    game.AddInstancingSupport();
 
     _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
 
@@ -185,6 +188,11 @@ void Update(Scene scene, GameTime time)
         {
             entity.Remove();
         }
+
+        // Leaving the scene does not unregister an instance, and the master entity is gone too,
+        // so drop the instancing and let the next press build a fresh one
+        _instancing?.Clear();
+        _instancing = null;
 
         SetCubeCount(scene);
     }
@@ -376,49 +384,49 @@ void AddInstancedShapes(Primitive2DModelType type, int count)
     // Master-Instance pattern: individual physics AND a single draw call for the whole group.
     // See Example22_Instancing_EntityTransform for the same pattern explained in isolation.
 
-    // Step 1: the master. It must carry BOTH a ModelComponent and an InstancingComponent.
-    // InstancingProcessor requires a ModelComponent, so a bare Entity holding only an
-    // InstancingComponent is skipped and no instancing happens at all.
-    var masterEntity = game.Create2DPrimitive(shapeModel.Type,
-        new Bepu2DPhysicsOptions()
-        {
-            Size = shapeModel.Size,
-            Depth = Depth,
-            Material = game.CreateFlatMaterial(shapeModel.Color),
-            IncludeCollider = false, // the master only supplies the model, it is never simulated
-        });
-
-    masterEntity.Name = "InstancingMaster";
-    masterEntity.Add(new InstancingComponent { Type = new InstancingEntityTransform() });
-    masterEntity.Scene = scene;
-
-    var masterInstancing = masterEntity.Get<InstancingComponent>();
-
-    // Step 2: the instances. Each is a normal physics entity contributing only its transform.
-    //
-    // TODO: Create2DPrimitive builds a procedural model (and its GPU buffers) that is thrown away
-    // again by the Remove<ModelComponent> below. It is used here only because it also wires up the
-    // 2D Bepu body; building the BodyComponent and collider directly would avoid the waste.
-    for (int i = 0; i < count; i++)
+    // Step 1: the master, created once and reused by later presses. It must carry BOTH a
+    // ModelComponent and an InstancingComponent: InstancingProcessor skips a bare Entity holding
+    // only an InstancingComponent, and no instancing happens at all.
+    if (_instancing is null)
     {
-        var entity = game.Create2DPrimitive(shapeModel.Type,
+        var masterEntity = game.Create2DPrimitive(shapeModel.Type,
             new Bepu2DPhysicsOptions()
             {
                 Size = shapeModel.Size,
                 Depth = Depth,
                 Material = game.CreateFlatMaterial(shapeModel.Color),
+                IncludeCollider = false, // the master only supplies the model, it is never simulated
             });
 
-        entity.Name = "InstancedShapes";
+        // BepuEntityInstancing stops gathering entirely once every shape has fallen asleep, unlike
+        // Stride's InstancingEntityTransform which re-reads them forever
+        _instancing = new BepuEntityInstancing();
 
-        // Drop the per-entity model. The master draws this shape at this entity's transform, so
-        // keeping the ModelComponent would render every shape twice - once on its own and once as
-        // an instance - which is slower than not instancing at all.
-        entity.Remove<ModelComponent>();
-        entity.Add(new InstanceComponent { Master = masterInstancing });
+        masterEntity.Name = "InstancingMaster";
+        masterEntity.Add(new InstancingComponent { Type = _instancing });
+        masterEntity.Scene = scene;
+    }
+
+    // Step 2: the instances. Each contributes only a transform, so it needs a body but no model -
+    // keeping a ModelComponent would draw every shape twice, once on its own and once as an
+    // instance, which is slower than not instancing at all.
+    for (int i = 0; i < count; i++)
+    {
+        var entity = new Entity("InstancedShapes");
+
+        // Builds the matching 2D collider without creating a procedural model and its GPU buffers,
+        // which the previous InstanceComponent-based version had to make and immediately throw away
+        entity.AddBepu2DPhysics(shapeModel.Type, new Bepu2DPhysicsOptions()
+        {
+            Size = shapeModel.Size,
+            Depth = Depth
+        });
 
         entity.Transform.Position = GetRandomPosition();
         entity.Scene = scene;
+
+        // Registered directly rather than through an InstanceComponent
+        _instancing.AddInstance(entity);
     }
 }
 
