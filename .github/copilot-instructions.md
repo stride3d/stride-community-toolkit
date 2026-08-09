@@ -101,6 +101,19 @@ Two rules when editing these:
 - `Bepu3DPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`, but a `CompoundCollider` with no shapes never attaches to the simulation, leaving an inert component. For a purely visual entity use the non-physics `Create3DPrimitive` overload by passing `Primitive3DEntityOptions` instead.
 - `Create3DPrimitive` has both a Bepu overload (`Bepu3DPhysicsOptions`) and a plain one (`Primitive3DEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
 
+Full write-up: [Bepu: Who Owns the Transform?](../docs/manual/physics-extensions/bepu-transform-ownership.md).
+
+### Bepu constraints (joints and motors)
+
+- **A constraint does not stop the bodies it joins from colliding.** A joint built so its parts share space jams and never moves, which looks like a frozen scene rather than an error. Ball sockets make this easy to hit, because the joint forces the two anchor points to coincide — pin an arm's top to an anchor's *centre* and the arm is required to end up inside it. Put pivots in clear air.
+- Constraints join **bodies**: both ends need a `BodyComponent`, so an immovable anchor is a kinematic body, never a `StaticComponent`.
+- `MotorDamping` does **not** read back the value passed to the component's constructor — Bepu stores its reciprocal, so a component built with `0.02` reports `50`. Read the property to learn the real default before overriding it; copying the constructor argument makes the motor 2500x softer and it silently stops producing force.
+- Motor names describe the joint they pair with, not what they drive. `BallSocketMotor` drives **linear** velocity at the socket point; for rotation use `OneBodyAngularMotor`, `AngularMotor`, or `AngularAxisMotor`.
+- Most motor targets are a whole vector: `(0, speed, 0)` also demands *zero* rotation about X and Z. Use `AngularAxisMotorConstraintComponent` when only one axis should be driven.
+- Disabling a motor stops it pushing but does not brake anything. Confirm the toggle by displaying the body's velocity, not by watching the object.
+
+Full write-up: [Bepu: Why Isn't My Constraint Doing Anything?](../docs/manual/physics-extensions/bepu-constraints.md).
+
 ## Toolkit patterns
 ### Extension method pattern
 
@@ -209,6 +222,31 @@ change in Stride to be possible at all.
   patterns noticed in passing are worth reporting. Fixing them as a side effect of unrelated work
   makes the diff harder to review and is out of scope unless requested.
 
+## Reference repositories (read them before writing physics code)
+
+Two sibling clones are often available next to this one. Neither is required, but when present they
+answer questions faster and more reliably than reasoning from the API surface.
+
+| Path | What it is | When to read it |
+|---|---|---|
+| `../stride/sources/` | The Stride engine source | Confirming what a wrapper actually does; locating the cause of an engine-level limitation |
+| `../bepuphysics2/Demos/Demos/` | The Bepu author's own demos | Before writing anything non-trivial with Bepu |
+
+Guidance for the Bepu demos specifically:
+
+- **They outrank the Stride Bepu playground** (`../stride/samples/Physics/BepuSample/`) where the two
+  disagree. The playground demonstrates that something is *possible*; the demos show the way the
+  physics author intended, and often explain in comments why the obvious approach misbehaves.
+  Concrete case: the playground builds ropes from rigid ball sockets plus swing limits, while
+  `RopeStabilityDemo` builds them from `DistanceLimit` with zero lever arms and explains that the
+  naive version is exactly what goes unstable.
+- Read the matching demo *first* and note what it warns about, rather than porting a scene and then
+  debugging the physics.
+- Useful map: ropes → `RopeStabilityDemo`, `RopeTwistDemo`; friction and bounce → `FrictionDemo`,
+  `BouncinessDemo`; contacts and triggers → `ContactEventsDemo`, `CollisionTrackingDemo`; queries →
+  `SweepDemo`, `CollisionQueryDemo`, `RayCastingDemo`; stacking → `PyramidDemo`, `ColosseumDemo`;
+  solver stability → `SubsteppingDemo`.
+
 ## Adding a new example
 
 - Create a folder under `examples/code-only/` named `Example<NN>_<Name>`, optionally with a
@@ -279,6 +317,23 @@ app never rendered".
 
 - Prefer positioning the window from the example itself (`game.Window.Position`, `game.Window.AllowUserResizing`) over forcing it with a `SetWindowPos` P/Invoke. Forcing a resize leaves Stride's `Window.ClientBounds` out of sync with the captured region, which can make correctly rendered UI look as though it is missing.
 - Capture two screenshots a few seconds apart to confirm that animation or physics is actually progressing.
+
+### Do not assert a mechanism you have not read
+
+Explaining *why* something misbehaves is not the same as observing *that* it does. Inferring a cause
+from behaviour alone produces confident, wrong explanations that then get written into comments and
+documentation, where they outlive the bug.
+
+From practice: a motor stopped working after a property was set, and this was reported as a Stride
+wrapper bug — the setter "did not reach the solver". Reading the base class disproved it in a minute
+(the field is passed straight to `Solver.Add`), and one line printing the property's real default
+revealed the actual cause: the value is the reciprocal of the constructor argument, so "setting it to
+the default" made it 2500x softer. A rebuild of the engine packages was nearly requested to fix a bug
+that did not exist.
+
+- Before naming a cause, read the code path or measure the value. Both are cheap.
+- Before proposing an engine fix, confirm the engine is actually at fault.
+- When a claim was wrong, correct it everywhere it was written, not just in conversation.
 
 ### Build warnings are a debugging tool
 

@@ -71,6 +71,24 @@ Settled. No need to re-read unless you want to change one.
 
 ---
 
+## Reference: the Bepu demos
+
+`D:\Projects\GitHub\bepuphysics2\Demos\Demos\` — the Bepu author's own demos, and a better authority
+on intended usage than the Stride playground, which in places does things the hard way. Worth reading
+the matching demo *before* writing each example:
+
+| Backlog item | Bepu demo |
+|---|---|
+| `Example15_Constraint_Rope` | `RopeStabilityDemo`, `RopeTwistDemo`, `ChainFountainDemo` |
+| `Example24_PhysicsMaterials` | `BouncinessDemo`, `FrictionDemo` |
+| `Example25_MeshColliders` | `CompoundDemo`, `CustomVoxelCollidableDemo` |
+| `Example14_ShapeQueries` | `SweepDemo`, `CollisionQueryDemo` |
+| `Example16_TriggerZones` | `ContactEventsDemo`, `CollisionTrackingDemo`, `SolverContactEnumerationDemo` |
+| `Example23_CubeFountain` | `PyramidDemo`, `ColosseumDemo` (mass stacking behaviour) |
+
+Also there and not yet on the backlog: `ClothDemo`, `RagdollDemo`, `PlanetDemo` (per-body gravity),
+`ContinuousCollisionDetectionDemo`, `SubsteppingDemo`, `CarsDemo`, `TanksDemo`.
+
 ## Build list
 
 ### Tier 1
@@ -88,17 +106,17 @@ Deviations from the spec below, all forced by measurement:
   same point it is a tug of war the rigid joint always wins, and the driven axis reads exactly zero.
   The example uses `OneBodyAngularMotorConstraintComponent` for the swept arm and explains why the
   obvious-looking choice is wrong.
-- **`MotorDamping` / `MotorMaximumForce` are never set.** Setting either — even to the value the
-  component already defaults to — stops the motor producing any force, because the setters call
-  `TryUpdateDescription()` before the constraint is attached and the write never reaches the solver.
-  This looks like a genuine **Stride wrapper bug worth reporting upstream**: a public setter that
-  silently does nothing.
-- **`AngularMotorConstraintComponent` was tried and rejected** for the swept arm: its default force
-  budget of 1,000 (against the one-body motor's 10,000,000) only creeps at ~0.4 rad/s against a
-  target of 2.5, and the bug above means the budget cannot be raised.
-- **The swept arm's cone decays** into a vertical spin, by design rather than by accident: a motor
-  target is a whole vector, so `(0, speed, 0)` also demands zero rotation about X and Z — exactly the
-  rotation needed to stay out at an angle. Documented as a teaching point.
+- **`MotorDamping` is the reciprocal of the constructor argument.** `OneBodyAngularMotor` is built
+  with `MotorSettings(1e7, 0.02f)` but its `MotorDamping` property reads **50**; the two-body motors
+  are built with `10` and read **0.1**. Copying the constructor value and "setting it to the default"
+  makes the motor 2500x softer and it stops producing visible force. Measured, not inferred.
+  **There is no Stride bug here** — an earlier draft of this plan and of the docs claimed the setters
+  were broken, which was wrong.
+- **The swept arm uses `AngularAxisMotorConstraintComponent`.** Whole-vector motors take a target
+  like `(0, speed, 0)`, which also demands zero rotation about X and Z — the very rotation the arm
+  needs to stay out at an angle — so they flatten the cone into a vertical spin within seconds. The
+  single-axis motor leaves X/Z to gravity and the cone survives. Its weak two-body defaults (force
+  1,000, damping 0.1) must be raised to the one-body figures or it merely creeps.
 
 Original spec follows.
 
@@ -119,19 +137,29 @@ only servos and limits). A *servo* drives toward a target pose and stops; a *mot
 
 There is no rope type — a rope is a runtime-built chain of small dynamic bodies.
 
-> Carry over from the motors example: a rope is a chain of ball sockets, and **every link can jam the
-> same way** if consecutive segments are pinned so they overlap. Space the segments so each pivot
-> falls between them rather than inside a neighbour, and expect to verify with a logged position
-> rather than by eye.
+**Revised after reading `RopeStabilityDemo`,** which is specifically about ropes going unstable and
+disagrees with the playground on almost every point. Follow the demo, not `RopeSpawnerComponent`:
 
-- Segment count derived from anchor distance ÷ segment length.
-- Each consecutive pair linked by `BallSocketConstraintComponent` (pins the touching ends) **plus**
-  `SwingLimitConstraintComponent` (caps bend angle — what stops it folding back on itself).
-- Two end ball-sockets tie the first/last segment to the anchors.
-- One anchor `Kinematic = true` (fixed pivot), the other dynamic, so it visibly sags and swings.
+- **Link with `DistanceLimitConstraintComponent`, not ball sockets.** Minimum ≈ 10% of maximum, so
+  the rope can go slack but never stretch. The playground's `BallSocket` + `SwingLimit` pair is a
+  rigid pin plus an angle clamp, which fights the very motion a rope needs.
+- **Zero lever arm.** Anchor each link constraint at the body centre rather than at its ends; the
+  demo reports this "completely eliminates" angular oscillation. This also sidesteps the jamming
+  trap from the motors example, since a zero-length offset cannot push two links into each other.
+- **The real enemy is the mass ratio** — a heavy weight hanging on light links. The supporting force
+  has to propagate link by link up to the kinematic anchor, which is slow and unstable.
+- **Skip constraints** are the demo's best fix: additionally link `i → i+2, i+3, i+4` so impulses
+  travel along shortcuts instead of crawling the chain. Described as "extremely stable", and it
+  allows a 100:1 mass ratio.
+- Segment count derived from anchor distance ÷ segment length; top anchor kinematic.
 - Chain-building lives in a local `RopeBuilder.cs`.
 
-*Source:* `Ropes.sdscene`, `RopeSpawnerComponent`, `RopePart.sdprefab`.
+**Teaching angle:** build two ropes side by side, naive and stabilised, both carrying the same heavy
+weight — the same comparison structure that worked well for the swing limit in the motors example.
+The lesson is *why* a rope misbehaves, not just how to string bodies together.
+
+*Sources:* `RopeStabilityDemo.cs` (primary), `Ropes.sdscene`, `RopeSpawnerComponent` (for the Stride
+component API only).
 
 #### 3. `Example23_CubeFountain` · Intermediate · complexity 6
 
