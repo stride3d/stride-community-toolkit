@@ -37,13 +37,25 @@ const float MotorSpeed = 4f;
 const int LooseCubeCount = 8;
 
 // Target angular speed for the cone-swept pendulum, in radians per second.
-const float ConeSpeed = 2.5f;
+//
+// Well clear of the arm's own pendulum frequency, sqrt(3g/2L) which is about 2.4 rad/s here. Driving
+// a pendulum at its natural frequency makes the two beat against each other and the orbit wanders
+// into shifting polygons instead of settling into a circle.
+const float ConeSpeed = 5f;
 
-// Both motors below deliberately leave MotorDamping and MotorMaximumForce alone. Setting either one
-// explicitly - even to the exact value the component already defaults to - stops the motor dead,
-// because the Stride wrapper pushes the change through TryUpdateDescription() before the constraint
-// has been attached to the solver, so the write never reaches it. Choose a component whose defaults
-// already suit the job rather than trying to tune these two properties.
+// The arm is a spherical pendulum: the motor fixes how fast it goes round, but its swing in and out
+// is free motion that nothing damps. Expect the cone to breathe by roughly a fifth of its radius
+// rather than tracing a perfect circle, and expect no value here to remove that - it is the pendulum
+// nutating, not the motor faltering. This one keeps the breathing reasonably tight.
+const float MotorArmTilt = 1.3f;
+
+// Motor strength. Beware that MotorDamping does NOT read back the number the component was built
+// with: the constructors pass a damping value to Bepu's MotorSettings, which stores its reciprocal,
+// so a component created with 0.02 reports a MotorDamping of 50. Read the property to learn the real
+// default before overriding it - guessing from the constructor gives a value 2500x too small, and a
+// motor set that soft produces no visible force at all.
+const float MotorDampingValue = 50f;
+const float MotorForceValue = 10_000_000f;
 
 // --- Pendulums (ball socket, motor, swing limit) ------------------------------------------------
 const float AnchorHeight = 5f;
@@ -75,7 +87,7 @@ DebugTextPrinter? instructions = null;
 // Kept so the update loop can switch them off at runtime - the fastest way to feel what a
 // constraint is actually contributing is to remove it while everything is moving.
 OneBodyAngularMotorConstraintComponent? mixerMotor = null;
-OneBodyAngularMotorConstraintComponent? armMotor = null;
+AngularAxisMotorConstraintComponent? armMotor = null;
 SwingLimitConstraintComponent? swingLimit = null;
 
 BodyComponent? limitedArm = null;
@@ -179,6 +191,9 @@ void CreateMixer(Scene scene)
         TargetVelocity = new Vector3(0, MotorSpeed, 0),
     };
 
+    mixerMotor.MotorDamping = MotorDampingValue;
+    mixerMotor.MotorMaximumForce = MotorForceValue;
+
     post.Add(hinge);
     blade.Add(mixerMotor);
 
@@ -212,33 +227,35 @@ void CreateLooseCubes(Scene scene)
 /// </summary>
 void CreateMotorisedPendulum(Scene scene)
 {
-    var (anchor, arm) = CreatePendulum(scene, MotorPendulumX, "Motorised", Color.MediumPurple);
+    var (anchor, arm) = CreatePendulum(scene, MotorPendulumX, "Motorised", Color.MediumPurple, MotorArmTilt);
 
-    // Drive the arm's own angular velocity about Y while the ball socket holds it to the anchor. It
-    // has to start tilted for this to be visible at all - a perfectly vertical arm driven about Y
-    // just spins about its own axis and looks completely still.
+    // Sweep the tilted arm around a cone by driving rotation about ONE axis only. The arm has to
+    // start tilted for this to be visible at all - a perfectly vertical arm driven about Y just
+    // spins about its own axis and looks completely still.
     //
-    // Watch what happens next, because it is the motor obeying orders rather than misbehaving: the
-    // arm sweeps a wide cone at first, then the cone slowly collapses until the arm hangs vertical
-    // and merely spins. TargetVelocity is a whole VECTOR, and asking for (0, speed, 0) also asks for
-    // zero rotation about X and Z - which is exactly the rotation the arm needs to swing back out
-    // against gravity. The motor dutifully cancels it, so the cone decays. A motor target constrains
-    // every axis, not just the one being driven.
+    // Constraining a single axis is what keeps the cone alive. The whole-vector motors take a target
+    // like (0, speed, 0), which also demands ZERO rotation about X and Z - exactly the rotation the
+    // arm needs to swing back out against gravity. They hold the spin but flatten the cone into a
+    // vertical spin within seconds. AngularAxisMotor leaves the other two axes to gravity, so the
+    // arm keeps its angle.
     //
-    // Two constraints were tried here first and are worth knowing about:
+    // Two other constraints were tried here first and are worth knowing about:
     //
     //   BallSocketMotor drives LINEAR velocity at the socket point, despite the name suggesting it
     //   pairs with a ball socket. Pointing it at the very point a stiff BallSocketConstraint is
     //   already pinning gives a tug of war the rigid joint always wins, and the arm never moves.
     //
-    //   AngularMotor is the correct two-body angular motor and does turn the arm, but its default
-    //   force budget of 1000 is far too small to swing an arm against gravity - it creeps. Raising
-    //   MotorMaximumForce does not help, because these setters do not survive to the solver (see
-    //   the note on the mixer motor), so the one-body motor and its far larger default is used.
-    armMotor = new OneBodyAngularMotorConstraintComponent
+    //   AngularMotor is the two-body whole-vector motor. It turns the arm, but ships with a force
+    //   budget of 1000 and a damping of 0.1, which is far too soft to swing an arm against gravity -
+    //   it creeps at a fraction of the requested speed until both are raised.
+    armMotor = new AngularAxisMotorConstraintComponent
     {
-        A = arm.Get<BodyComponent>(),
-        TargetVelocity = new Vector3(0, ConeSpeed, 0),
+        A = anchor.Get<BodyComponent>(),
+        B = arm.Get<BodyComponent>(),
+        LocalAxisA = Vector3.UnitY,
+        TargetVelocity = ConeSpeed,
+        MotorDamping = MotorDampingValue,
+        MotorMaximumForce = MotorForceValue,
     };
 
     anchor.Add(armMotor);
@@ -253,8 +270,8 @@ void CreateMotorisedPendulum(Scene scene)
 /// </remarks>
 void CreateSwingLimitComparison(Scene scene)
 {
-    var (limitedAnchor, limitedArmEntity) = CreatePendulum(scene, LimitedPendulumX, "Limited", Color.LimeGreen);
-    var (_, freeArmEntity) = CreatePendulum(scene, FreePendulumX, "Free", Color.OrangeRed);
+    var (limitedAnchor, limitedArmEntity) = CreatePendulum(scene, LimitedPendulumX, "Limited", Color.LimeGreen, StartTilt);
+    var (_, freeArmEntity) = CreatePendulum(scene, FreePendulumX, "Free", Color.OrangeRed, StartTilt);
 
     limitedArm = limitedArmEntity.Get<BodyComponent>();
     freeArm = freeArmEntity.Get<BodyComponent>();
@@ -284,7 +301,7 @@ void CreateSwingLimitComparison(Scene scene)
 /// than written by hand: the ball socket will drag the arm until the two pivot points coincide, so
 /// placing the arm anywhere else just means it snaps on the first frame.
 /// </remarks>
-(Entity Anchor, Entity Arm) CreatePendulum(Scene scene, float x, string name, Color color)
+(Entity Anchor, Entity Arm) CreatePendulum(Scene scene, float x, string name, Color color, float tilt)
 {
     var anchor = CreateBox($"{name} Anchor", Color.DarkSlateGray,
         new Vector3(x, AnchorHeight, 0),
@@ -297,13 +314,13 @@ void CreateSwingLimitComparison(Scene scene)
     // Rotating the arm about X moves its top away from the pivot, so the centre has to be offset by
     // the rotated half-length to put the top back on the pivot.
     var halfArm = ArmLength / 2;
-    var armCenter = pivot - new Vector3(0, halfArm * MathF.Cos(StartTilt), halfArm * MathF.Sin(StartTilt));
+    var armCenter = pivot - new Vector3(0, halfArm * MathF.Cos(tilt), halfArm * MathF.Sin(tilt));
 
     var arm = CreateBox($"{name} Arm", color,
         armCenter,
         new Vector3(0.25f, ArmLength, 0.25f));
 
-    arm.Transform.Rotation = Quaternion.RotationX(StartTilt);
+    arm.Transform.Rotation = Quaternion.RotationX(tilt);
 
     // Pins the top of the arm to the pivot while leaving rotation completely free - the joint itself
     // imposes no angle limit at all.
@@ -376,7 +393,7 @@ void DisplayInstructions()
         new("SERVO drives to a target and stops. MOTOR drives a velocity forever. LIMIT only clamps."),
         new("Left: hinge + angular motor. Middle: ball socket + angular motor. Right: same pendulum, with and without a swing limit."),
         new($"M - Mixer motor: {OnOff(mixerMotor?.Enabled)}   (blade spin {Spin(mixerMotor?.A)} rad/s)", Color.Yellow),
-        new($"N - Arm motor: {OnOff(armMotor?.Enabled)}   (arm spin {Spin(armMotor?.A)} rad/s)", Color.Yellow),
+        new($"N - Arm motor: {OnOff(armMotor?.Enabled)}   (arm spin {Spin(armMotor?.B)} rad/s)", Color.Yellow),
         new($"G - Swing limit: {OnOff(swingLimit?.Enabled)}", Color.Yellow),
         new("P - Push both right-hand pendulums", Color.Yellow),
     ]);
@@ -435,13 +452,13 @@ concepts:
   - The difference between a servo, a motor and a limit
   - Restricting rotation to one axis with HingeConstraintComponent
   - Driving continuous rotation with OneBodyAngularMotorConstraintComponent
-  - Sweeping a tilted arm with an angular motor, and why its cone decays
-  - A motor target is a whole vector and constrains every axis, not just the driven one
+  - Sweeping a tilted arm with AngularAxisMotorConstraintComponent
+  - Why a whole-vector motor target flattens a cone and a single-axis one does not
   - Clamping swing range with SwingLimitConstraintComponent
   - Why a constraint does not stop the joined bodies colliding
   - Placing a pivot in clear air so the joint does not jam
   - Why BallSocketMotor drives linear, not angular, velocity
-  - Why setting MotorDamping or MotorMaximumForce stops a motor working
+  - Why MotorDamping does not read back the value passed to the constructor
   - Switching a motor off does not brake anything, it only stops pushing
   - Constraint offsets and axes are in each body's local space
   - Enabling and disabling a constraint at runtime
