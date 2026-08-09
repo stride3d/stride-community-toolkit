@@ -530,7 +530,7 @@ example; output reviewed by a human before committing. Metadata fields would be 
 > `docs/manual/code-only/examples/media/`. Stride keeps its baselines in Git LFS. Before adding ~29
 > more images, should the toolkit adopt LFS for them, or keep committing them directly?
 >
-> **Your answer:** LFS, I will try to sort it out and see if it is possible to use it for the screenshots. It will help with the repo size and make it easier to manage large files.
+> **Your answer:** No LFS for now, keep committing them directly. If the number of screenshots grows significantly in the future, we can revisit this decision.
 
 ### Not part of this plan
 
