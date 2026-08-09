@@ -58,6 +58,9 @@ using var game = new Game();
 
 game.Run(start: Start, update: Update);
 
+// The buffered master owns its GPU buffers; the engine never disposes user-owned buffers
+bufferedInstancing?.Dispose();
+
 void Start(Scene rootScene)
 {
     scene = rootScene;

@@ -42,6 +42,7 @@ public class FastEntityTransformInstancing : InstancingUserArray
     private BoundingBox boundingBox = BoundingBox.Empty;
     private bool structureDirty;
     private int instancesWithoutBody;
+    private readonly object mergeLock = new();
 
     // The instances are already in world space, so the master's own transform must not be applied
     public override ModelTransformUsage ModelTransformUsage { get => ModelTransformUsage.Ignore; }
@@ -54,6 +55,14 @@ public class FastEntityTransformInstancing : InstancingUserArray
     /// physics bodies produce. Set to false if instances can be scaled or sheared.
     /// </summary>
     public bool AssumeRigidTransforms { get; set; } = true;
+
+    /// <summary>
+    /// Below this instance count the gather runs sequentially: Update may already be on an engine
+    /// worker thread (the InstancingProcessor dispatches masters in parallel), so forking to the
+    /// thread pool only pays off once there is enough work per instance to amortise the scheduling.
+    /// Default is a guess pending the Phase 3 benchmarks (PLAN.md); tune there, not here.
+    /// </summary>
+    public int ParallelThreshold { get; set; } = 2048;
 
     /// <summary>CPU cost of the last <see cref="Update"/> call, for the overlay.</summary>
     public double LastUpdateMilliseconds { get; private set; }
@@ -138,52 +147,76 @@ public class FastEntityTransformInstancing : InstancingUserArray
             worldInverse = new Matrix[capacity];
         }
 
-        // Gather + invert + bounding box, fused into one parallel pass over index ranges
+        // Gather + invert + bounding box, fused into one pass; parallel only when the count is
+        // high enough to amortise the thread-pool scheduling (see ParallelThreshold).
+        // Captured once so every range of one update uses the same inverse implementation even if
+        // the property is flipped mid-flight
         var rigid = AssumeRigidTransforms;
-        var mergeLock = new object();
-        var min = new Vector3(float.MaxValue);
-        var max = new Vector3(float.MinValue);
+        Vector3 min, max;
 
-        Parallel.ForEach(Partitioner.Create(0, count), range =>
+        if (count < ParallelThreshold)
         {
-            var localTransforms = CollectionsMarshal.AsSpan(transforms);
-            var localMin = new Vector3(float.MaxValue);
-            var localMax = new Vector3(float.MinValue);
+            GatherRange(0, count, rigid, out min, out max);
+        }
+        else
+        {
+            var sharedMin = new Vector3(float.MaxValue);
+            var sharedMax = new Vector3(float.MinValue);
 
-            for (var i = range.Item1; i < range.Item2; i++)
+            Parallel.ForEach(Partitioner.Create(0, count), range =>
             {
-                ref var m = ref world[i];
-                m = localTransforms[i].WorldMatrix;
+                GatherRange(range.Item1, range.Item2, rigid, out var localMin, out var localMax);
 
-                if (rigid)
+                // Once per range (a handful per core), so contention is negligible
+                lock (mergeLock)
                 {
-                    InvertRigid(in m, out worldInverse[i]);
+                    Vector3.Min(ref sharedMin, ref localMin, out sharedMin);
+                    Vector3.Max(ref sharedMax, ref localMax, out sharedMax);
                 }
-                else
-                {
-                    // Stride Matrix and System.Numerics.Matrix4x4 are both 16 sequential floats,
-                    // so reinterpreting gets the hardware-accelerated invert for free
-                    NumericsMatrix.Invert(Unsafe.As<Matrix, NumericsMatrix>(ref m), out var inverted);
-                    worldInverse[i] = Unsafe.As<NumericsMatrix, Matrix>(ref inverted);
-                }
+            });
 
-                var position = m.TranslationVector;
-                Vector3.Min(ref localMin, ref position, out localMin);
-                Vector3.Max(ref localMax, ref position, out localMax);
-            }
-
-            lock (mergeLock)
-            {
-                Vector3.Min(ref min, ref localMin, out min);
-                Vector3.Max(ref max, ref localMax, out max);
-            }
-        });
+            min = sharedMin;
+            max = sharedMax;
+        }
 
         UpdateWorldMatrices(world, count);
         WorldInverseMatrices = worldInverse;
         boundingBox = new BoundingBox(min, max);
         structureDirty = false;
         LastUpdateMilliseconds = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
+    }
+
+    /// <summary>
+    /// Gathers world matrices, inverses and position bounds for one index range. Shared by the
+    /// sequential and parallel paths.
+    /// </summary>
+    private void GatherRange(int from, int to, bool rigid, out Vector3 min, out Vector3 max)
+    {
+        var localTransforms = CollectionsMarshal.AsSpan(transforms);
+        min = new Vector3(float.MaxValue);
+        max = new Vector3(float.MinValue);
+
+        for (var i = from; i < to; i++)
+        {
+            ref var m = ref world[i];
+            m = localTransforms[i].WorldMatrix;
+
+            if (rigid)
+            {
+                InvertRigid(ref m, out worldInverse[i]);
+            }
+            else
+            {
+                // Stride Matrix and System.Numerics.Matrix4x4 are both 16 sequential floats,
+                // so reinterpreting gets the hardware-accelerated invert for free
+                NumericsMatrix.Invert(Unsafe.As<Matrix, NumericsMatrix>(ref m), out var inverted);
+                worldInverse[i] = Unsafe.As<NumericsMatrix, Matrix>(ref inverted);
+            }
+
+            var position = m.TranslationVector;
+            Vector3.Min(ref min, ref position, out min);
+            Vector3.Max(ref max, ref position, out max);
+        }
     }
 
     private bool AllBodiesAsleep()
@@ -201,8 +234,14 @@ public class FastEntityTransformInstancing : InstancingUserArray
     /// and rotate-negate the translation. Roughly an order of magnitude cheaper than a general
     /// 4x4 inverse.
     /// </summary>
+    /// <remarks>
+    /// Takes <c>ref</c> rather than <c>in</c> (and never mutates) because Stride's Matrix is not a
+    /// readonly struct: analyzers flag non-readonly structs passed by <c>in</c>, and Stride's own
+    /// math API (e.g. Matrix.Invert) uses ref for the same reason. Field-only reads make the two
+    /// identical in codegen here.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static void InvertRigid(in Matrix m, out Matrix result)
+    private static void InvertRigid(ref Matrix m, out Matrix result)
     {
         result.M11 = m.M11; result.M12 = m.M21; result.M13 = m.M31; result.M14 = 0f;
         result.M21 = m.M12; result.M22 = m.M22; result.M23 = m.M32; result.M24 = 0f;

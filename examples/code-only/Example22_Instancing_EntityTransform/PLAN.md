@@ -99,6 +99,13 @@ show "skipped"; compare against key 3 where the engine still uploads every frame
 - **Benchmarks:** small BenchmarkDotNet project (e.g. `benchmarks/`) comparing per-frame update at
   1k/10k/100k instances: stock gather+invert vs fast (rigid, SIMD-general, parallel on/off).
   In-game FPS overlay stays the integration-level check; micro-benchmarks guard regressions.
+  Methodology (from the 2026-08-09 peer review):
+  - Find the sequential/parallel crossover empirically and set `ParallelThreshold`'s default from it
+    (current 2048 is a guess). Include the multi-master case: `InstancingProcessor` already
+    dispatches masters in parallel, so nested forking may shift the crossover up.
+  - Measure steady-state separately from spawn/growth frames (buffer reallocation spikes are
+    expected and amortised); report buffer capacity and resize counts alongside frame metrics.
+  - Measure frame-time variance while bodies are active, not just the settled averages.
 
 ### 4b. Which existing examples benefit (analysed 2026-08-09)
 
@@ -199,6 +206,11 @@ instances, scaling linearly.
 - [x] Phase 1: visual verification (see section 6b — sleep-skip confirmed, 7.5× on gather/invert)
 - [x] Phase 2: `FastBufferedEntityTransformInstancing` + upload renderer + key 4
 - [x] Phase 2: visual verification (see section 6b - update AND upload skipped, 239 -> 329 FPS at 20k)
+- [x] Peer review round 1 (2026-08-09) addressed: `ParallelThreshold` sequential path for small
+      counts, hoisted merge lock, `needUpload` cleared when the set empties, `IDisposable` on the
+      buffered type (engine never disposes user-owned buffers), and buffer retirement re-documented
+      after verifying Stride fences GPU-side destruction (Vulkan `TemporaryResourceCollector`;
+      D3D11 defers natively) - the two-frame delay protects the managed wrapper binding, not the GPU
 - [ ] Phase 3: toolkit promotion, unit tests, BenchmarkDotNet project
 - [ ] Phase 4: upstream PRs (needs discussion with Stride maintainers first)
 - [ ] Phase 5: write up v2 proposals for a Stride discussion/issue

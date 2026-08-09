@@ -33,7 +33,7 @@ namespace Example22_Instancing_EntityTransform;
 /// Collects later, because the growth frame still has the old buffer bound for drawing.
 /// </para>
 /// </remarks>
-public class FastBufferedEntityTransformInstancing : InstancingUserBuffer, IInstancing
+public class FastBufferedEntityTransformInstancing : InstancingUserBuffer, IInstancing, IDisposable
 {
     private readonly FastEntityTransformInstancing gather = new();
 
@@ -93,7 +93,11 @@ public class FastBufferedEntityTransformInstancing : InstancingUserBuffer, IInst
     /// </summary>
     internal void EnsureCapacity(GraphicsDevice device)
     {
-        // Buffers retired two frames ago are no longer referenced by any in-flight frame
+        // Retirement protects the MANAGED wrapper, not the GPU: the growth frame's RenderInstancing
+        // still binds the old Buffer object in Prepare, and Dispose zeroes its native handles.
+        // GPU-side lifetime needs no help - Stride's Vulkan backend fences native destruction
+        // (TemporaryResourceCollector in GraphicsDevice.Vulkan.cs) and D3D11 defers it natively,
+        // so disposing one frame after the last bind is enough
         if (retiredLastFrame is not null)
         {
             foreach (var buffer in retiredLastFrame) buffer.Dispose();
@@ -125,6 +129,15 @@ public class FastBufferedEntityTransformInstancing : InstancingUserBuffer, IInst
     /// </summary>
     internal void Upload(CommandList commandList)
     {
+        if (gather.InstanceCount == 0)
+        {
+            // Nothing to upload and nothing pending: don't leave the dirty flag armed while the
+            // scene is empty; the next gather re-arms it when instances come back
+            needUpload = false;
+            UploadSkippedLastFrame = true;
+            return;
+        }
+
         var count = Math.Min(gather.InstanceCount, InstanceWorldBuffer?.ElementCount ?? 0);
 
         if (!needUpload || count <= 0)
@@ -142,6 +155,28 @@ public class FastBufferedEntityTransformInstancing : InstancingUserBuffer, IInst
 
     private static Buffer CreateMatrixBuffer(GraphicsDevice device, int elementCount)
         => Buffer.New<Matrix>(device, elementCount, BufferFlags.ShaderResource | BufferFlags.StructuredBuffer, GraphicsResourceUsage.Dynamic);
+
+    /// <summary>
+    /// Releases the GPU buffers. Unlike the <see cref="InstancingUserArray"/> path, the engine's
+    /// InstancingProcessor never disposes user-owned buffers, so without this a recreated scene
+    /// would leak them until the graphics device goes down. Call it once the master entity is gone
+    /// and no frame is in flight (e.g. after Game.Run returns); at Phase 3 this should be wired to
+    /// component removal instead.
+    /// </summary>
+    public void Dispose()
+    {
+        foreach (var buffer in retiredLastFrame ?? []) buffer.Dispose();
+        foreach (var buffer in retiredThisFrame ?? []) buffer.Dispose();
+        retiredLastFrame = null;
+        retiredThisFrame = null;
+
+        InstanceWorldBuffer?.Dispose();
+        InstanceWorldInverseBuffer?.Dispose();
+        InstanceWorldBuffer = null!;
+        InstanceWorldInverseBuffer = null!;
+        InstanceCount = 0;
+        needUpload = false;
+    }
 }
 
 /// <summary>
