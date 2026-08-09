@@ -26,30 +26,40 @@ using Stride.Input;
 //   Skip constraints  - each segment also tied to several further down, giving impulses shortcuts
 //                       instead of forcing them to crawl one link at a time.
 //
-// Press S to switch the skip constraints off and watch the right-hand rope lose the argument.
+// Watch when the left rope misbehaves, because it is the clearest evidence of the cause: while the
+// chain hangs slack it looks perfectly well behaved, and it only goes wobbly once it is pulled taut.
+// A distance limit does nothing until it reaches its limit, so a slack rope asks nothing of the
+// solver. The instant the weight draws the chain tight, every link has to relay the supporting force
+// to the anchor - and that is the job the naive build cannot finish in the time available.
+//
+// Press Z to switch the right-hand rope to the naive build and watch it join in.
 
 // High enough that even the naive rope at full stretch keeps its weight off the floor. This matters
 // more than it looks: a weight resting on the ground is being held up by the ground, so both ropes go
 // slack, the stretch that the whole example is about disappears, and the length readout stops
 // measuring anything.
-const float AnchorHeight = 12.5f;
+const float AnchorHeight = 14.5f;
 const float NaiveRopeX = -3.5f;
 const float StableRopeX = 3.5f;
 
 // Longer ropes read better and are harder to stabilise, since an impulse has further to travel to
 // reach the anchor. Raise this and the anchor together, or the naive rope's weight will reach the
 // floor at full stretch.
-const int LinkCount = 10;
-const float LinkRadius = 0.25f;
-const float LinkSpacing = 0.15f;
+const int LinkCount = 20;
+const float LinkRadius = 0.125f;
+const float LinkSpacing = 0.075f;
 const float LinkMass = 1f;
 
-// Twenty times the mass of a single link. Bepu's own demo uses 100:1, but it also runs its solver at
-// eight velocity iterations; at Stride's default solver settings a 100:1 rope does not merely sag,
-// it stretches to two and a half times its length and lands on the floor, which demonstrates nothing
-// except that the configuration was hopeless. Raise this to see that for yourself.
+// Ten times the mass of a single link. Bepu's own demo uses 100:1, but it also runs its solver at
+// eight velocity iterations; at Stride's default solver settings the naive rope stops merely sagging
+// and simply comes apart, stretching past twice its length and landing on the floor, which
+// demonstrates nothing except that the configuration was hopeless.
+//
+// The workable ratio also depends on how many links the force has to travel through: 20 links tolerate
+// about half the load that 10 do, because every extra link is another step the solver has to push the
+// supporting force along. Raise either and the left-hand rope will eventually reach the floor.
 const float WeightRadius = 0.8f;
-const float WeightMass = 20f;
+const float WeightMass = 10f;
 
 // How far ahead each segment is also tied. 1 means neighbours only.
 const int SkipSpan = 4;
@@ -57,7 +67,7 @@ const int SkipSpan = 4;
 // Towers for the weights to swing into, so the ropes visibly do work rather than just hang.
 const float TowerZ = 3f;
 const float TowerBoxSize = 0.6f;
-const int TowerRows = 10;
+const int TowerRows = 15;
 const int TowerColumns = 2;
 
 // Sideways speed given to a weight by the swing key, in metres per second. An impulse is mass times
@@ -68,8 +78,6 @@ const float SwingSpeed = 4f;
 var swingImpulse = new Vector3(0, 0, WeightMass * SwingSpeed);
 
 DebugTextPrinter? instructions = null;
-
-var diagFrames = 0;
 
 Rope? naiveRope = null;
 Rope? stableRope = null;
@@ -138,28 +146,7 @@ void CreateTower(Scene scene, float x)
 
 void Update(Scene scene, GameTime time)
 {
-    diagFrames++;
-    if (diagFrames == 240 && stableRope is not null)
-    {
-        Report("link", stableRope.LinkConstraints);
-        Report("weight", [stableRope.WeightConstraint]);
-        Report("skip", stableRope.SkipConstraints);
-
-        static void Report(string label, IReadOnlyList<Stride.BepuPhysics.Constraints.DistanceLimitConstraintComponent> set)
-        {
-            foreach (var c in set)
-            {
-                if (c.A is null || c.B is null) continue;
-                var a = c.A.Position + c.LocalOffsetA;
-                var b = c.B.Position + c.LocalOffsetB;
-                var actual = Vector3.Distance(a, b);
-                var taut = actual > c.MaximumDistance + 0.001f ? "  <== TAUT AT REST" : "";
-                Console.WriteLine($"DIAG {label} actual={actual:0.000} max={c.MaximumDistance:0.000}{taut}");
-            }
-        }
-    }
-
-    if (game.Input.IsKeyPressed(Keys.S) && stableRope is not null)
+    if (game.Input.IsKeyPressed(Keys.Z) && stableRope is not null)
     {
         // Turns the right-hand rope into the left-hand one and back. Both fixes move together on
         // purpose: at this mass ratio the zero lever arm does nearly all the work, and toggling the
@@ -210,7 +197,7 @@ void DisplayInstructions()
         new($"Both ropes are identical: {LinkCount} links, one weight {WeightMass / LinkMass:0}x heavier than a link."),
         new($"Naive  (left):  length {Length(naiveRope)}   lever arm at segment ends, neighbours only", Color.OrangeRed),
         new($"Stable (right): length {Length(stableRope)}   {(stabilised ? $"zero lever arm, {SkipSpan - 1}x skip constraints" : "STABILISATION OFF - now built like the left one")}", Color.LimeGreen),
-        new($"S - Stabilise right rope: {(stabilised ? "ON" : "OFF")}", Color.Yellow),
+        new($"Z - Stabilise right rope: {(stabilised ? "ON" : "OFF")}", Color.Yellow),
         new("P - Swing both weights", Color.Yellow),
     ]);
 }
@@ -265,11 +252,13 @@ concepts:
   - Building a rope as a runtime chain of bodies and constraints
   - Linking segments with DistanceLimitConstraintComponent rather than ball sockets
   - Why a rope needs a minimum distance well below its maximum
+  - Why an unstable rope looks fine while slack and only misbehaves under load
   - How the mass ratio between weight and links drives instability
   - Why solver iteration count decides how extreme a ratio survives
   - Removing angular feedback with a zero lever arm
   - Letting impulses take shortcuts with skip constraints
   - Moving a constraint's anchor points and allowed distance together at runtime
+  - Why a constraint shorter than the distance it spans distorts a rope before anything moves
   - Deriving an impulse from mass so tuning one does not silently change the other
   - Setting collider mass explicitly instead of using the generated collider
   - Size for a sphere primitive is its radius, not its diameter

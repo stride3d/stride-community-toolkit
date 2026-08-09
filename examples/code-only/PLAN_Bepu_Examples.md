@@ -135,10 +135,10 @@ only servos and limits). A *servo* drives toward a target pose and stops; a *mot
 
 #### 2. `Example15_Constraint_Rope` · Intermediate · complexity 7 — **DONE**
 
-Built to the revised spec below. Measured across three swings: the naive rope stretches from a
-nominal 7.05 to 9.07 (+29%) and keeps hunting, while the stabilised one never exceeds 7.06. Chain
-building lives in `RopeBuilder.cs`; `S` toggles the skip constraints, `P` swings both weights with
-the same impulse.
+Built to the revised spec below. 20 links, weight 10x a link. Measured across repeated swings: the
+naive rope swings between 5.57 and 10.57 against a nominal 7.18, while the stabilised one stays
+within 7.07-7.18. Chain building lives in `RopeBuilder.cs`; `S` flips the right-hand rope between the
+stable and naive builds, `P` swings both weights with the same impulse.
 
 Two tuning findings worth keeping:
 
