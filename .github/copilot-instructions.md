@@ -277,6 +277,14 @@ Guidance for the Bepu demos specifically:
     `- Uses #:package` is silently truncated to `- Uses` with no error. This is why entries such as
     `"Using helpers: SetupBase3DScene"` are quoted.
 - Examples reference toolkit libraries by `ProjectReference`, not `PackageReference`.
+- **Do not bind example keys that the camera controller already owns.** `Add3DCameraController`
+  (included in `SetupBase3DScene`) claims `W A S D`, `Q E`, the arrow keys, `NumPad 2/4/6/8`,
+  `LeftShift`/`RightShift`, `H`, `F2` and `F3`. Binding one of those gives a key that appears to work
+  intermittently while also flying the camera — `S` for "stabilise" is a real example of this. Safe
+  single letters include `G J K L M N P R T Z`.
+- **A key binding lives in three places**: the `IsKeyPressed` call, the on-screen label, and any
+  header comment describing the controls. Rename one and the others silently drift, leaving
+  documentation that names a key doing nothing. Grep for the old letter after changing a binding.
 
 ## Running & debugging examples (AI assistants)
 
