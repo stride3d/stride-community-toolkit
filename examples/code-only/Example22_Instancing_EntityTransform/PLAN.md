@@ -292,6 +292,26 @@ cannot nest); strongly typed it; early-out for sleeping bodies; out-of-plane vel
 inside `ZTolerance`, so slow drift cannot accumulate up to the threshold; rotation lock reapplied after
 a kinematic/dynamic switch; magic numbers named; full XML docs.
 
+**The design matches every other engine, which settled two open questions.** Stride's own Bullet
+integration does exactly this for 2D shapes (`Stride.Physics/Elements/RigidbodyComponent.cs:336-339`):
+`LinearFactor = (1,1,0)`, `AngularFactor = (0,0,1)`. Unity, Unreal and Godot all expose the same idea
+as per-axis freeze flags. Zeroing the inverse inertia *is* the angular factor and clearing
+out-of-plane velocity *is* the linear one; the positional correction exists only because Bepu has no
+linear factor to set and the solver can still add Z velocity after the pre-solve hook runs.
+Consequently: (1) a configurable "flatten initial tilt" option was prototyped and **removed** - no
+other engine re-orients an existing tilt, freezing is the standard, and less code won; (2) nothing
+structural was taken from the old Stride version, because its `ActiveSet` iteration only beat a
+*naive* per-body loop - with the `!Awake` early-out, per-body dispatch is cheaper overall, since a
+central walk would cost every all-3D game a per-step iteration for a feature it does not use.
+
+**Moved into Stride** on branch `bepu-2d` (2026-08-10): `sources/engine/Stride.BepuPhysics/
+Stride.BepuPhysics/Body2DComponent.cs`, namespace `Stride.BepuPhysics`. The dead
+`Stride.BepuPhysics._2D/` folder was deleted - a sibling of the project directory, so the SDK glob
+never compiled it, and nothing in any solution or project referenced it. The in-engine copy takes the
+one optimisation only available there: `BodyReference` is `internal`, so inside the assembly the
+per-step work resolves it once instead of through five separate public accessors. The toolkit copy
+stays until the PR lands, since the toolkit builds against the published Stride packages.
+
 **Testing.** `engine/Stride.BepuPhysics/Stride.BepuPhysics.Tests/BepuTests.cs` already runs real
 simulations through `GameTestBase` + `RunGameTest`, building entities with real bodies and colliders.
 Moving the component into Stride makes that harness available, which is the right level for it - unit
