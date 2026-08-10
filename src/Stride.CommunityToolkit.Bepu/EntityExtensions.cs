@@ -30,6 +30,9 @@ public static class EntityExtensions
 
             // A fresh component per call when none was supplied, so the same options instance can
             // be reused across entities
+            // The toolkit's own Body2DComponent, not the engine's of the same name: a type in this
+            // file's own namespace wins over one brought in by a using directive. When the engine's
+            // version ships and this copy is deleted, this line resolves to it instead, unchanged
             var component = options.Component ?? new Body2DComponent { Collider = new CompoundCollider() };
 
             if (!options.IncludeCollider)
