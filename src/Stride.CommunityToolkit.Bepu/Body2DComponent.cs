@@ -41,13 +41,14 @@ namespace Stride.CommunityToolkit.Bepu;
 /// <para>
 /// Locking an axis prevents change; it does not undo what is already there. A body tilted about X or
 /// Y when it attaches keeps that tilt, frozen at that angle, exactly as a frozen rotation behaves in
-/// those other engines. Give instances an identity or Z-only rotation if that is not wanted.
+/// those other engines. Give bodies an identity or Z-only rotation if that is not wanted.
 /// </para>
 /// <para>
-/// Note that Stride ships its own <c>Stride.BepuPhysics.Body2DComponent</c>, which locks rotation the
-/// same way but relies on a separate <c>Simulation2DComponent</c> in the scene to snap positions back
-/// to the plane by teleporting them. This one needs no companion component and does not teleport.
-/// Importing both namespaces makes the name ambiguous; qualify it if you need both.
+/// This design has been upstreamed as <c>Stride.BepuPhysics.Body2DComponent</c>, and this copy keeps
+/// the toolkit working against Stride builds that predate it. The matching name is deliberate: once
+/// that version ships, deleting this one file switches every call site over to the engine's, because
+/// the same code carries on resolving to it. Until then, code importing both
+/// <c>Stride.BepuPhysics</c> and <c>Stride.CommunityToolkit.Bepu</c> must qualify which one it means.
 /// </para>
 /// </remarks>
 [ComponentCategory("Physics - Bepu 2D")]
@@ -63,22 +64,47 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     private const float HullSpringFrequency = 30f;
 
     /// <summary>
+    /// Ceiling on the plane-restoring speed, in world units per second.
+    /// </summary>
+    /// <remarks>
+    /// Normal drift is measured in millimetres and never comes close to this. It exists for the
+    /// pathological cases - a body spawned or teleported far off the plane, or thrown there by a
+    /// numerical blow-up - where an unbounded correction would otherwise fling it back fast enough to
+    /// tunnel through geometry and destabilise the solver.
+    /// </remarks>
+    private const float MaximumCorrectionSpeed = 1f;
+
+    /// <summary>One millimetre at Stride's default scale.</summary>
+    private const float DefaultZTolerance = 0.001f;
+
+    /// <summary>
     /// Tracks the kinematic state the rotation lock was applied for, so it can be restored when the
     /// body switches back to dynamic and Bepu reinstates the full shape inertia.
     /// </summary>
     private bool _lockedWhileKinematic;
+
+    private float _zTolerance = DefaultZTolerance;
 
     /// <summary>
     /// Gets or sets how far the body may drift off the Z = 0 plane before it is pulled back, in world
     /// units. Defaults to 0.001 (one millimetre at Stride's default scale).
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Out-of-plane velocity is always removed; this only governs the positional correction. A larger
-    /// value settles more readily, a smaller one holds the plane more tightly. Zero is not useful: the
-    /// correction would then fire on floating-point noise alone and write a velocity every step, which
-    /// can keep bodies from sleeping.
+    /// value settles more readily, a smaller one holds the plane more tightly.
+    /// </para>
+    /// <para>
+    /// Values that are not finite and positive fall back to the default rather than being stored.
+    /// Zero or negative would make the correction fire on floating-point noise alone and write a
+    /// velocity every step, which can stop bodies sleeping; NaN and infinity would disable it entirely.
+    /// </para>
     /// </remarks>
-    public float ZTolerance { get; set; } = 0.001f;
+    public float ZTolerance
+    {
+        get => _zTolerance;
+        set => _zTolerance = float.IsFinite(value) && value > 0f ? value : DefaultZTolerance;
+    }
 
     /// <summary>
     /// Initializes a new <see cref="Body2DComponent"/> with interpolation enabled, so rendering stays
@@ -111,10 +137,20 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// <param name="sim">The simulation stepping this body.</param>
     /// <param name="simTimeStep">The fixed time step, in seconds.</param>
     /// <remarks>
+    /// <para>
     /// Runs before the solve so the correction is resolved alongside contacts instead of overwriting
     /// their result. Sleeping bodies return immediately: they cannot move, so there is nothing to
     /// correct, and this method is dispatched for every registered body on every step whether it is
     /// awake or not.
+    /// </para>
+    /// <para>
+    /// The correction sets a velocity equal and opposite to the drift, a proportional gain of one per
+    /// second, so an error decays with a time constant of roughly a second, and is capped at
+    /// <see cref="MaximumCorrectionSpeed"/> so a badly placed body cannot be flung back. It is
+    /// deliberately gentle: a stiffer pull would fight contact resolution and reintroduce the jitter
+    /// that teleporting causes. <paramref name="simTimeStep"/> is therefore unused - expressing the
+    /// correction as a velocity already makes that time constant independent of the step size.
+    /// </para>
     /// </remarks>
     public virtual void SimulationUpdate(BepuSimulation sim, float simTimeStep)
     {
@@ -127,7 +163,9 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
         // Out-of-plane velocity is never wanted. Removing it even inside the tolerance band is what
         // stops slow drift accumulating until it crosses the threshold
         var zError = Position.Z;
-        var targetVelocityZ = MathF.Abs(zError) > ZTolerance ? -zError : 0f;
+        var targetVelocityZ = MathF.Abs(zError) > ZTolerance
+            ? Math.Clamp(-zError, -MaximumCorrectionSpeed, MaximumCorrectionSpeed)
+            : 0f;
 
         if (velocity.Z != targetVelocityZ)
         {
@@ -179,8 +217,7 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// </summary>
     /// <remarks>
     /// Turning <see cref="BodyComponent.Kinematic"/> off restores the body's full shape inertia,
-    /// which silently undoes the lock applied at attach time and lets the body tumble out of the
-    /// plane. Stride's own 2D body has the same gap, flagged by a <c>#warning</c> and not handled.
+    /// which silently undoes the lock applied at attach time and lets the body tumble out of the plane.
     /// </remarks>
     private void RestoreRotationLockIfKinematicChanged()
     {
