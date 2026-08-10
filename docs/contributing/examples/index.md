@@ -2,6 +2,8 @@
 
 All examples live in the [examples](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only) folder.
 
+Suggested and in-progress examples are tracked in the [example backlog](https://github.com/stride3d/stride-community-toolkit/blob/main/examples/TODO.md). Check it before you start, and add your idea there if it is not listed.
+
 If you'd like your example to be launchable from the console application [Stride.CommunityToolkit.Examples](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples), follow these steps:
   
 1. Create a project under `examples/code-only/` named `ExampleXY_YourExampleNamespace` (replace `XY` with the next available number).
