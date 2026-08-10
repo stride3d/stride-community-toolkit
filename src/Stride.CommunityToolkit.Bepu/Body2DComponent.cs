@@ -139,9 +139,10 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// <remarks>
     /// <para>
     /// Runs before the solve so the correction is resolved alongside contacts instead of overwriting
-    /// their result. Sleeping bodies return immediately: they cannot move, so there is nothing to
-    /// correct, and this method is dispatched for every registered body on every step whether it is
-    /// awake or not.
+    /// their result. Sleeping bodies return before the correction - they cannot move, so there is
+    /// nothing to correct, and this method is dispatched for every registered body on every step
+    /// whether it is awake or not - but the rotation lock is refreshed first, so it is never stale
+    /// when a body wakes.
     /// </para>
     /// <para>
     /// The correction sets a velocity equal and opposite to the drift, a proportional gain of one per
@@ -154,9 +155,13 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// </remarks>
     public virtual void SimulationUpdate(BepuSimulation sim, float simTimeStep)
     {
-        if (!Awake) return;
-
+        // Deliberately ahead of the sleep check. Turning off Kinematic hands the body its full shape
+        // inertia back, and if that happened while it slept it would be free to tumble during the
+        // first solve after waking - the lock freezes rotation rather than correcting it, so any tilt
+        // picked up in that one step would stay for good
         RestoreRotationLockIfKinematicChanged();
+
+        if (!Awake) return;
 
         var velocity = LinearVelocity;
 
@@ -232,8 +237,11 @@ public class Body2DComponent : BodyComponent, ISimulationUpdate
     /// <param name="collider">The collidable's collider, which may be <see langword="null"/>.</param>
     /// <returns><see langword="true"/> if a convex hull is present.</returns>
     /// <remarks>
-    /// Only <see cref="CompoundCollider"/> holds child shapes, and it is not itself a
-    /// <see cref="ColliderBase"/>, so compounds cannot nest and one pass over the children is enough.
+    /// A hull can only ever be a child of a compound, never the collider itself: the property is typed
+    /// <see cref="ICollider"/>, which <see cref="ColliderBase"/> - and so <see cref="ConvexHullCollider"/>
+    /// - does not implement. Testing <c>collider is ConvexHullCollider</c> here is dead code, and the
+    /// compiler says as much with CS0184. Compounds cannot nest either, for the same reason, so a
+    /// single pass over the children covers every case.
     /// </remarks>
     private static bool HasConvexHull(ICollider? collider)
     {
