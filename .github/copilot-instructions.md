@@ -55,6 +55,34 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 - `build/`: Repository build scripts (e.g. `pack-local.cs` for local dev NuGet packages)
 - `docs/`: DocFX sources (manuals, API reference, contributing)
 - `.github/`: GitHub workflows, release metadata, automation, and this instruction file
+- `ARCHITECTURE.md` (root): running backlog of API-design observations — see below
+
+Solutions: `Stride.CommunityToolkit.slnx` contains everything; `Stride.CommunityToolkit.Core.slnf`
+is a solution filter loading only libraries, tests and tools, because the 56 example projects slow
+IDE load noticeably. See [Building the Toolkit](../docs/contributing/toolkit/building.md).
+
+## Build configuration lives outside the .csproj files
+
+> [!IMPORTANT]
+> Project files are deliberately sparse. If a `.csproj` appears to be missing `TargetFramework`,
+> `Nullable`, `ImplicitUsings`, a Stride version, or package metadata, that is not an oversight —
+> it is supplied by one of the files below. Check these before "fixing" a project file, and prefer
+> changing the shared file over adding a local override.
+
+| File | Applies to | Supplies |
+|---|---|---|
+| `Directory.Build.props` (root) | Every project in the repository | `TargetFramework` (net10.0), `ImplicitUsings`, `Nullable`, `StrideVersion` |
+| `src/CommonSettings.props` | Library projects, imported explicitly | Package metadata: version, licence, authors, icon, readme, SourceLink |
+| `examples/Directory.Build.props` | Example projects only | Host-only `RuntimeIdentifier`, `SelfContained`, output-path settings that keep the example build small |
+| `examples/Directory.Build.targets` | Example projects only | Strips package XML documentation from build output |
+
+Two rules when editing these:
+
+- **MSBuild imports only the *nearest* `Directory.Build.props` / `.targets`.** A nested file must
+  explicitly `Import` the one above it, or the parent's settings are silently lost. The files under
+  `examples/` do this; preserve it.
+- **`StrideVersion` is the single place the Stride version is set.** Reference it as
+  `Version="$(StrideVersion)"` in a `PackageReference` rather than hard-coding a version.
 
 Solutions: `Stride.CommunityToolkit.slnx` contains everything; `Stride.CommunityToolkit.Core.slnf`
 is a solution filter loading only libraries, tests and tools, because the 56 example projects slow
@@ -100,6 +128,19 @@ Two rules when editing these:
 - Only **awake** bodies are synced back to their transform. A dynamic body that settles and falls asleep stops overwriting the transform, so direct transform writes suddenly appear to work while the collider is left behind. A "moving mesh with no collisions" almost always means this.
 - `Bepu3DPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`, but a `CompoundCollider` with no shapes never attaches to the simulation, leaving an inert component. For a purely visual entity use the non-physics `Create3DPrimitive` overload by passing `Primitive3DEntityOptions` instead.
 - `Create3DPrimitive` has both a Bepu overload (`Bepu3DPhysicsOptions`) and a plain one (`Primitive3DEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
+
+Full write-up: [Bepu: Who Owns the Transform?](../docs/manual/physics-extensions/bepu-transform-ownership.md).
+
+### Bepu constraints (joints and motors)
+
+- **A constraint does not stop the bodies it joins from colliding.** A joint built so its parts share space jams and never moves, which looks like a frozen scene rather than an error. Ball sockets make this easy to hit, because the joint forces the two anchor points to coincide — pin an arm's top to an anchor's *centre* and the arm is required to end up inside it. Put pivots in clear air.
+- Constraints join **bodies**: both ends need a `BodyComponent`, so an immovable anchor is a kinematic body, never a `StaticComponent`.
+- `MotorDamping` does **not** read back the value passed to the component's constructor — Bepu stores its reciprocal, so a component built with `0.02` reports `50`. Read the property to learn the real default before overriding it; copying the constructor argument makes the motor 2500x softer and it silently stops producing force.
+- Motor names describe the joint they pair with, not what they drive. `BallSocketMotor` drives **linear** velocity at the socket point; for rotation use `OneBodyAngularMotor`, `AngularMotor`, or `AngularAxisMotor`.
+- Most motor targets are a whole vector: `(0, speed, 0)` also demands *zero* rotation about X and Z. Use `AngularAxisMotorConstraintComponent` when only one axis should be driven.
+- Disabling a motor stops it pushing but does not brake anything. Confirm the toggle by displaying the body's velocity, not by watching the object.
+
+Full write-up: [Bepu: Why Isn't My Constraint Doing Anything?](../docs/manual/physics-extensions/bepu-constraints.md).
 
 ## Toolkit patterns
 ### Extension method pattern
@@ -209,6 +250,47 @@ change in Stride to be possible at all.
   patterns noticed in passing are worth reporting. Fixing them as a side effect of unrelated work
   makes the diff harder to review and is out of scope unless requested.
 
+## Architecture notes (`ARCHITECTURE.md`)
+
+[`ARCHITECTURE.md`](../ARCHITECTURE.md) in the repository root collects API-design observations: the
+places where the *shape* of an API, rather than a bug in it, is what trips people up. It is a backlog
+of observations, not a decision record — nothing in it is agreed or scheduled.
+
+- **Read it before proposing an API change.** The friction may already be recorded, with options and
+  impact weighed up.
+- **Add to it when friction is noticed**, especially while writing examples, which is where API
+  problems surface first. Record the observation even when not acting on it: what was observed, why
+  it matters, and what the options are, including the do-nothing one.
+- **Keep it current.** Remove items once resolved or rejected, and note which. An item that no longer
+  reflects the code is worse than no item.
+- Prefer it over burying the observation in a code comment. A comment explains one call site; this
+  file is where a pattern across the API gets seen.
+
+## Reference repositories (read them before writing physics code)
+
+Two sibling clones are often available next to this one. Neither is required, but when present they
+answer questions faster and more reliably than reasoning from the API surface.
+
+| Path | What it is | When to read it |
+|---|---|---|
+| `../stride/sources/` | The Stride engine source | Confirming what a wrapper actually does; locating the cause of an engine-level limitation |
+| `../bepuphysics2/Demos/Demos/` | The Bepu author's own demos | Before writing anything non-trivial with Bepu |
+
+Guidance for the Bepu demos specifically:
+
+- **They outrank the Stride Bepu playground** (`../stride/samples/Physics/BepuSample/`) where the two
+  disagree. The playground demonstrates that something is *possible*; the demos show the way the
+  physics author intended, and often explain in comments why the obvious approach misbehaves.
+  Concrete case: the playground builds ropes from rigid ball sockets plus swing limits, while
+  `RopeStabilityDemo` builds them from `DistanceLimit` with zero lever arms and explains that the
+  naive version is exactly what goes unstable.
+- Read the matching demo *first* and note what it warns about, rather than porting a scene and then
+  debugging the physics.
+- Useful map: ropes → `RopeStabilityDemo`, `RopeTwistDemo`; friction and bounce → `FrictionDemo`,
+  `BouncinessDemo`; contacts and triggers → `ContactEventsDemo`, `CollisionTrackingDemo`; queries →
+  `SweepDemo`, `CollisionQueryDemo`, `RayCastingDemo`; stacking → `PyramidDemo`, `ColosseumDemo`;
+  solver stability → `SubsteppingDemo`.
+
 ## Adding a new example
 
 - Create a folder under `examples/code-only/` named `Example<NN>_<Name>`, optionally with a
@@ -222,6 +304,14 @@ change in Stride to be possible at all.
     `- Uses #:package` is silently truncated to `- Uses` with no error. This is why entries such as
     `"Using helpers: SetupBase3DScene"` are quoted.
 - Examples reference toolkit libraries by `ProjectReference`, not `PackageReference`.
+- **Do not bind example keys that the camera controller already owns.** `Add3DCameraController`
+  (included in `SetupBase3DScene`) claims `W A S D`, `Q E`, the arrow keys, `NumPad 2/4/6/8`,
+  `LeftShift`/`RightShift`, `H`, `F2` and `F3`. Binding one of those gives a key that appears to work
+  intermittently while also flying the camera — `S` for "stabilise" is a real example of this. Safe
+  single letters include `G J K L M N P R T Z`.
+- **A key binding lives in three places**: the `IsKeyPressed` call, the on-screen label, and any
+  header comment describing the controls. Rename one and the others silently drift, leaving
+  documentation that names a key doing nothing. Grep for the old letter after changing a binding.
 
 ## Running & debugging examples (AI assistants)
 
@@ -279,6 +369,23 @@ app never rendered".
 
 - Prefer positioning the window from the example itself (`game.Window.Position`, `game.Window.AllowUserResizing`) over forcing it with a `SetWindowPos` P/Invoke. Forcing a resize leaves Stride's `Window.ClientBounds` out of sync with the captured region, which can make correctly rendered UI look as though it is missing.
 - Capture two screenshots a few seconds apart to confirm that animation or physics is actually progressing.
+
+### Do not assert a mechanism you have not read
+
+Explaining *why* something misbehaves is not the same as observing *that* it does. Inferring a cause
+from behaviour alone produces confident, wrong explanations that then get written into comments and
+documentation, where they outlive the bug.
+
+From practice: a motor stopped working after a property was set, and this was reported as a Stride
+wrapper bug — the setter "did not reach the solver". Reading the base class disproved it in a minute
+(the field is passed straight to `Solver.Add`), and one line printing the property's real default
+revealed the actual cause: the value is the reciprocal of the constructor argument, so "setting it to
+the default" made it 2500x softer. A rebuild of the engine packages was nearly requested to fix a bug
+that did not exist.
+
+- Before naming a cause, read the code path or measure the value. Both are cheap.
+- Before proposing an engine fix, confirm the engine is actually at fault.
+- When a claim was wrong, correct it everywhere it was written, not just in conversation.
 
 ### Build warnings are a debugging tool
 

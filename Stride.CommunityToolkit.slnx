@@ -47,6 +47,8 @@
     <Project Path="examples/code-only/Example13_RootRendererShader/Example13_RootRendererShader.csproj" />
     <Project Path="examples/code-only/Example14_Raycast/Example14_Raycast.csproj" />
     <Project Path="examples/code-only/Example15_Constraint/Example15_Constraint.csproj" />
+    <Project Path="examples/code-only/Example15_Constraint_Motors/Example15_Constraint_Motors.csproj" />
+    <Project Path="examples/code-only/Example15_Constraint_Rope/Example15_Constraint_Rope.csproj" />
     <Project Path="examples/code-only/Example15_Constraint_Simple/Example15_Constraint_Simple.csproj" />
     <Project Path="examples/code-only/Example16_CollisionGroup/Example16_CollisionGroup.csproj" />
     <Project Path="examples/code-only/Example16_CollisionLayer/Example16_CollisionLayer.csproj" />

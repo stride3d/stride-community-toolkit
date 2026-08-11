@@ -6,9 +6,9 @@ using Stride.Input;
 namespace Example20_BepuFirstPersonCharacter;
 
 // Drives every FirstPersonControllerComponent each frame. Two modes, toggled with V:
-//  • Walk — first-person with gravity; WASD + Space to jump (buffered) + Shift to sprint;
+//  • Walk - first-person with gravity; WASD + Space to jump (buffered) + Shift to sprint;
 //           collides via the Bepu CharacterComponent.
-//  • Fly  — noclip free camera; WASD + mouse, Space/Ctrl up/down, Shift boost; moves the camera
+//  • Fly  - noclip free camera; WASD + mouse, Space/Ctrl up/down, Shift boost; moves the camera
 //           transform directly while the physics body is parked.
 public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControllerComponent>
 {
@@ -88,7 +88,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         if (on)
         {
             // Enter fly from the current eye position; park the body. The motor target set by
-            // Move() PERSISTS — every physics tick re-applies it as the character's target
+            // Move() PERSISTS - every physics tick re-applies it as the character's target
             // velocity, so without clearing it the parked capsule keeps walking on its own.
             c.FlyPosition = c.Character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
             c.Character.Move(Vector3.Zero);
@@ -97,7 +97,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         }
         else
         {
-            // Exit fly: keep the player where the camera is — teleport the body under the camera,
+            // Exit fly: keep the player where the camera is - teleport the body under the camera,
             // then resume gravity. Character.Teleport is the proper API; setting Transform.Position
             // directly is overwritten by the physics sync and flings you elsewhere.
             c.Character.Teleport(c.FlyPosition - new Vector3(0, c.EyeHeight, 0), c.Character.Orientation);
@@ -129,7 +129,7 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         character.Move(move);
 
         // Jump buffering: Bepu consumes-and-clears TryJump every physics tick even when the
-        // attempt fails, and ground support flickers off on slopes and just before landings — so a
+        // attempt fails, and ground support flickers off on slopes and just before landings - so a
         // raw edge-triggered press is often swallowed. Keep re-arming for a short window instead;
         // the first supported tick executes it. Re-arming right after a successful jump is
         // harmless: the character is airborne (unsupported) for far longer than the buffer.

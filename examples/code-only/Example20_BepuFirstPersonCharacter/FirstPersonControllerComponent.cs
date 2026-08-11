@@ -9,7 +9,7 @@ namespace Example20_BepuFirstPersonCharacter;
 // First-person controller state + tunables. All per-frame logic lives in
 // FirstPersonControllerProcessor. The [DefaultEntityComponentProcessor] attribute is the key ECS
 // idiom here: Stride instantiates and registers the processor automatically the first time this
-// component enters a scene — no manual AddProcessor call and no SyncScript needed.
+// component enters a scene - no manual AddProcessor call and no SyncScript needed.
 //
 // The component goes on the CAMERA entity and drives the linked CharacterComponent (walk mode)
 // or the camera transform directly (fly mode).
