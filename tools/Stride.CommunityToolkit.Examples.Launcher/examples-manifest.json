@@ -447,6 +447,115 @@
   },
   {
     "title": {
+      "en": "Constraints - Servo vs Motor vs Limit",
+      "cs": "Vazby - servo, motor a limit"
+    },
+    "level": "Beginners",
+    "category": "Physics",
+    "complexity": 5,
+    "description": {
+      "en": "The three kinds of Bepu constraint, side by side. A servo drives towards a target position or\norientation and then stops; a motor drives towards a target velocity and never stops; a limit\ndrives nothing at all and only clamps a range. A mixer blade shows the motor case - a\nHingeConstraint decides which way it may turn and a OneBodyAngularMotor makes it turn, and\nneither does the job alone. Two identical pendulums show the limit case, where only one carries a\nSwingLimit. Every constraint can be switched off while the scene is running, which is the\nquickest way to see what it was contributing. The example also shows the trap that catches most\nhand-built joints: a constraint does not stop two bodies colliding, so a joint whose parts share\nspace simply jams. Extends Example15_Constraint, which covers servos and limits but never motors.\n",
+      "cs": "T\u0159i druhy vazeb v Bepu vedle sebe. Servo m\u00ED\u0159\u00ED na c\u00EDlovou pozici nebo orientaci a pak se zastav\u00ED,\nmotor \u017Eene c\u00EDlovou rychlost a nezastav\u00ED se nikdy, limit s\u00E1m o sob\u011B nepoh\u00E1n\u00ED nic a pouze omezuje\nrozsah. Motor p\u0159edv\u00E1d\u00ED lopatka mix\u00E9ru - vazba HingeConstraint ur\u010Duje, kter\u00FDm sm\u011Brem se sm\u00ED to\u010Dit,\na OneBodyAngularMotor ji rozt\u00E1\u010D\u00ED, p\u0159i\u010Dem\u017E ani jedna z nich to nezvl\u00E1dne sama. Limit p\u0159edv\u00E1d\u011Bj\u00ED dv\u011B\nshodn\u00E1 kyvadla, z nich\u017E jen jedno m\u00E1 nav\u00EDc SwingLimit. Ka\u017Edou vazbu lze za b\u011Bhu vypnout, co\u017E je\nnejrychlej\u0161\u00ED zp\u016Fsob, jak zjistit, co vlastn\u011B d\u011Blala. P\u0159\u00EDklad tak\u00E9 ukazuje past, na kter\u00E9 ru\u010Dn\u011B\nstav\u011Bn\u00E9 klouby nej\u010Dast\u011Bji ztroskotaj\u00ED: vazba nezabr\u00E1n\u00ED t\u011Bles\u016Fm v kolizi, tak\u017Ee kloub, jeho\u017E \u010D\u00E1sti\nsd\u00EDlej\u00ED prostor, se prost\u011B zasekne. Navazuje na Example15_Constraint, kter\u00FD pokr\u00FDv\u00E1 serva\na limity, ale motory nikoli.\n"
+    },
+    "concepts": [
+      "The difference between a servo, a motor and a limit",
+      "Restricting rotation to one axis with HingeConstraintComponent",
+      "Driving continuous rotation with OneBodyAngularMotorConstraintComponent",
+      "Sweeping a tilted arm with AngularAxisMotorConstraintComponent",
+      "Why a whole-vector motor target flattens a cone and a single-axis one does not",
+      "Clamping swing range with SwingLimitConstraintComponent",
+      "Why a constraint does not stop the joined bodies colliding",
+      "Placing a pivot in clear air so the joint does not jam",
+      "Why BallSocketMotor drives linear, not angular, velocity",
+      "Why MotorDamping does not read back the value passed to the constructor",
+      "Switching a motor off does not brake anything, it only stops pushing",
+      "Constraint offsets and axes are in each body\u0027s local space",
+      "Enabling and disabling a constraint at runtime",
+      "Why a constraint anchor must be a kinematic body, not a static one",
+      "Why a velocity set from the start callback is lost",
+      "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
+    ],
+    "related": [
+      "Example15_Constraint",
+      "Example15_Constraint_Simple",
+      "Example19_Jitter2Physics_Constraints"
+    ],
+    "tags": [
+      "3D",
+      "Physics",
+      "Bepu",
+      "Constraint",
+      "Motor",
+      "Servo",
+      "Limit",
+      "Hinge",
+      "Rigid Body",
+      "Kinematic Body",
+      "Beginners"
+    ],
+    "order": 15,
+    "enabled": true,
+    "created": "2026-08-08",
+    "isDraft": false,
+    "projectName": "Example15_Constraint_Motors",
+    "projectPath": "Example15_Constraint_Motors\\Program.cs"
+  },
+  {
+    "title": {
+      "en": "Rope - building a stable chain of constraints",
+      "cs": "Lano - stabiln\u00ED \u0159et\u011Bz vazeb"
+    },
+    "level": "Intermediate",
+    "category": "Physics",
+    "complexity": 7,
+    "description": {
+      "en": "Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing\nthem together is the easy part; keeping a heavy weight on a light chain from thrashing itself\napart is the real problem, because the force holding that weight up has to travel link by link\nto the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by\nside carrying the same weight: the naive one anchors its constraints at the segment ends and ties\neach segment only to its neighbour, while the stable one anchors at the segment centres and adds\nskip constraints that let impulses take shortcuts along the chain. The skip constraints can be\nswitched off while it hangs, which shows immediately what they were holding together. Follows\nBepu\u0027s own RopeStabilityDemo rather than the more obvious ball-socket construction, which is\nprecisely the one that misbehaves.\n",
+      "cs": "Bepu nem\u00E1 typ pro lano, tak\u017Ee lano je \u0159et\u011Bz mal\u00FDch t\u011Bles sv\u00E1zan\u00FDch za b\u011Bhu. Spojit je dohromady je\nta snadn\u00E1 \u010D\u00E1st; skute\u010Dn\u00FD probl\u00E9m je udr\u017Eet t\u011B\u017Ek\u00E9 z\u00E1va\u017E\u00ED na lehk\u00E9m \u0159et\u011Bzu, aby se neroztrhalo -\ns\u00EDla, kter\u00E1 z\u00E1va\u017E\u00ED dr\u017E\u00ED, mus\u00ED putovat \u010Dl\u00E1nek po \u010Dl\u00E1nku a\u017E k pevn\u00E9mu \u00FAchytu a \u0159e\u0161i\u010D m\u00E1 na to jen\nomezen\u00FD po\u010Det pr\u016Fchod\u016F za sn\u00EDmek. Vedle sebe vis\u00ED dv\u011B lana se stejn\u00FDm z\u00E1va\u017E\u00EDm: naivn\u00ED m\u00E1 vazby\nukotven\u00E9 na konc\u00EDch \u010Dl\u00E1nk\u016F a ka\u017Ed\u00FD \u010Dl\u00E1nek spojen\u00FD jen se sousedem, kde\u017Eto stabiln\u00ED je ukotven\u00E9 ve\nst\u0159edech \u010Dl\u00E1nk\u016F a nav\u00EDc m\u00E1 p\u0159eskakuj\u00EDc\u00ED vazby, kter\u00E9 impulz\u016Fm umo\u017En\u00ED zkratku pod\u00E9l \u0159et\u011Bzu.\nP\u0159eskakuj\u00EDc\u00ED vazby lze za b\u011Bhu vypnout, co\u017E okam\u017Eit\u011B uk\u00E1\u017Ee, co dr\u017Eely pohromad\u011B. Vych\u00E1z\u00ED z\nuk\u00E1zky RopeStabilityDemo p\u0159\u00EDmo od autora Bepu, nikoli z nasnad\u011B le\u017E\u00EDc\u00ED konstrukce s kulov\u00FDmi\nklouby, kter\u00E1 je pr\u00E1v\u011B tou nefunguj\u00EDc\u00ED.\n"
+    },
+    "concepts": [
+      "Building a rope as a runtime chain of bodies and constraints",
+      "Linking segments with DistanceLimitConstraintComponent rather than ball sockets",
+      "Why a rope needs a minimum distance well below its maximum",
+      "Why an unstable rope looks fine while slack and only misbehaves under load",
+      "How the mass ratio between weight and links drives instability",
+      "Why solver iteration count decides how extreme a ratio survives",
+      "Removing angular feedback with a zero lever arm",
+      "Letting impulses take shortcuts with skip constraints",
+      "Moving a constraint\u0027s anchor points and allowed distance together at runtime",
+      "Why a constraint shorter than the distance it spans distorts a rope before anything moves",
+      "Deriving an impulse from mass so tuning one does not silently change the other",
+      "Setting collider mass explicitly instead of using the generated collider",
+      "Size for a sphere primitive is its radius, not its diameter",
+      "Making the topmost segment kinematic to hold the chain up",
+      "Applying an impulse from the update loop rather than a velocity at build time",
+      "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
+    ],
+    "related": [
+      "Example15_Constraint_Motors",
+      "Example15_Constraint",
+      "Example15_Constraint_Simple"
+    ],
+    "tags": [
+      "3D",
+      "Physics",
+      "Bepu",
+      "Constraint",
+      "Rope",
+      "Distance Limit",
+      "Rigid Body",
+      "Kinematic Body",
+      "Stability",
+      "Intermediate"
+    ],
+    "order": 15,
+    "enabled": true,
+    "created": "2026-08-09",
+    "isDraft": false,
+    "projectName": "Example15_Constraint_Rope",
+    "projectPath": "Example15_Constraint_Rope\\Program.cs"
+  },
+  {
+    "title": {
       "en": "Jitter2 Physics Integration",
       "cs": "Integrace fyziky Jitter2"
     },
