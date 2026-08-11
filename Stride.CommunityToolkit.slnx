@@ -78,6 +78,8 @@
     <File Path=".github/workflows/dotnet.yml" />
     <File Path=".github/workflows/github-pages.yml" />
     <File Path="Directory.Build.props" />
+    <File Path="examples/code-only/Example01_Basic3DScene_FileBasedApp/Program.cs" />
+    <File Path="examples/code-only/Example01_Basic3DScene_FileBasedApp/ProgramSimple.cs" />
     <File Path="README.md" />
     <File Path="src/CommonSettings.props" />
   </Folder>
