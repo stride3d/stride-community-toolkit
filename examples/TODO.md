@@ -8,6 +8,14 @@ contribution steps are in [the contributing guide](../docs/contributing/examples
 here duplicates those; this file only tracks what has been suggested, what is being built, and what
 was decided against.
 
+> [!IMPORTANT]
+> **Bepu examples have their own build plan:**
+> [`code-only/PLAN_Bepu_Examples.md`](code-only/PLAN_Bepu_Examples.md). That document owns the
+> committed batch - nine specified examples with settled naming decisions, per-example specs, a build
+> order, and the findings from building them. This file does not duplicate it: Bepu rows below either
+> point at it or are ideas it has not claimed. **Check it before starting any Bepu example**, and
+> retire it into the docs once the batch is finished; this backlog outlives it.
+
 ## Status
 
 | Status | Meaning |
@@ -78,17 +86,17 @@ What has already been mined for ideas, so it is not searched twice.
 | Idea | Target level | Status | Source | Notes |
 |---|---|---|---|---|
 | Box2D contact and sensor events | Beginners | Idea | in-repo | Listed as high priority in [Example18 IMPROVEMENTS.md](code-only/Example18_Box2DPhysics/IMPROVEMENTS.md). Would need the Box2D wrapper extraction below first. |
-| A tour of the collider shapes | Getting Started | Idea | Bepu repo, `Demo/Assets/Scenes/0.Colliders.sdscene` | One of each primitive collider dropped side by side. Natural first physics example. |
-| Convex hull vs mesh collider | Beginners | Idea | Bepu repo, `Demo/Assets/Scenes/1.ConvexAndMeshCollider.sdscene` | When to use which, and why a mesh collider cannot be dynamic. |
-| Material properties: friction, restitution, damping | Beginners | Idea | BepuSample, `Assets/Shared/Scenes/Material Properties.sdscene`; bepuphysics2 `FrictionDemo.cs`, `BouncinessDemo.cs` | Same shape, different settings, dropped together so the difference is visible. Upstream splits friction and bounciness into separate demos if one example turns out to cover too much. |
-| Bepu constraints | Intermediate | Idea | Bepu repo, `4.Constraint.sdscene`, `Components/Utils/ConstraintEditorComponent.cs`, `ConstraintToggleComponent.cs` | **Gap**: Example19 covers constraints in Jitter2, not Bepu, and Stride has a large `Constraints/` component set with no example at all. |
-| A rope from a chain of constraints | Intermediate | Idea | bepuphysics2 `RopeStabilityDemo.cs`, `RopeTwistDemo.cs`; BepuSample `Ropes.sdscene`, `Components/Utils/RopeSpawnerComponent.cs` | Builds on the constraints example. **Read the upstream demo first**: the Stride sample builds ropes from rigid ball sockets plus swing limits, while `RopeStabilityDemo` uses `DistanceLimit` with zero lever arms and explains that the sample's approach is precisely what goes unstable. |
-| Contact events - reacting to collisions | Beginners | Idea | Bepu repo, `Components/Utils/CollisionComponent.cs` | `IContactHandler` / `ContactEventHandler`. Pairs well with triggers below. |
-| Slow motion and time control | Beginners | Idea | Bepu repo, `Components/Utils/TimeControlComponent.cs` | Time scaling and fixed timestep, a small self-contained idea. |
+| A tour of the collider shapes | Getting Started | Idea | BepuSample `Colliders.sdscene` | One of each primitive collider dropped side by side. **Not claimed by the Bepu plan** - its source scene is one of those that crash on launch (see that plan's appendix), so it was never harvested. Building it procedurally sidesteps the crash entirely. Would also be the natural place to demonstrate that `Size` means a full extent for box-like shapes and a *radius* for round ones ([ARCHITECTURE.md](../ARCHITECTURE.md) item 1). |
+| Convex hull vs mesh collider | Beginners | Agreed | BepuSample `Convex And Mesh Collider.sdscene` | Claimed by the Bepu plan as `Example25_MeshColliders` (Tier 2). Its source scene also crashes, so expect to tune by eye. |
+| Material properties: friction, restitution, damping | Beginners | Agreed | BepuSample `Material Properties.sdscene`; bepuphysics2 `FrictionDemo.cs`, `BouncinessDemo.cs` | Claimed by the Bepu plan as `Example24_PhysicsMaterials` (Tier 2), which rates it the highest value-per-line on its list. |
+| Bepu constraints - servo vs motor vs limit | Beginners | **Done** | BepuSample `Constraint.sdscene`, `Cube Mixer.sdscene` | Built as [`Example15_Constraint_Motors`](code-only/Example15_Constraint_Motors). Findings written up in [bepu-constraints.md](../docs/manual/physics-extensions/bepu-constraints.md). |
+| A rope from a chain of constraints | Intermediate | **Done** | bepuphysics2 `RopeStabilityDemo.cs` (primary); BepuSample `Ropes.sdscene` | Built as [`Example15_Constraint_Rope`](code-only/Example15_Constraint_Rope), following the upstream demo rather than the Stride sample - `DistanceLimit` with zero lever arms, not ball sockets plus swing limits. |
+| Contact events - reacting to collisions | Beginners | Agreed | BepuSample `Components/Utils/CollisionComponent.cs`, `TriggerUsageComponent.cs` | Claimed by the Bepu plan as `Example16_TriggerZones` (Tier 2), which merges contact events and sensor volumes into one example - see also the Interaction row. |
+| Slow motion and time control | Beginners | Agreed | BepuSample `Components/Utils/TimeControlComponent.cs` | Claimed by the Bepu plan as `Example26_TimeControl` (Tier 2): `TimeScale`, `Enabled` for pause, and live `PoseGravity` changes. |
 | Soft bodies | Advanced | Idea | Bepu repo, `Stride.BepuPhysics.Soft` project, `S2.Softs.sdscene` | Confirmed ported: `sources/engine/Stride.BepuPhysics/Stride.BepuPhysics.Soft` exists in Stride, and has no example anywhere. Old repo is the only sample source - BepuSample dropped it. |
-| Cube Mixer | Beginners | Idea | BepuSample, `Assets/Shared/Scenes/Cube Mixer.sdscene` | The one scene BepuSample added that the old demo never had, so nobody has looked at it yet. Worth opening before deciding what it teaches. |
+| Cube Mixer | - | Declined | BepuSample, `Assets/Shared/Scenes/Cube Mixer.sdscene` | Not a separate example: the Bepu plan consumed this scene as a source for `Example15_Constraint_Motors` (the mixer blade is the hinge-plus-motor demonstration). |
 | One body, many shapes - compound colliders | Beginners | Idea | bepuphysics2, `CompoundDemo.cs` | `CompoundCollider` is central to Stride's Bepu API - every helper builds one - yet nothing explains why, or how to assemble a multi-shape body deliberately. |
-| Continuous collision detection for fast movers | Intermediate | Idea | bepuphysics2, `ContinuousCollisionDetectionDemo.cs` | The classic bullet-through-thin-wall problem. Confirmed exposed: `BodyComponent.ContinuousDetectionMode` offers Discrete, Passive and Continuous, and the difference is dramatic and easy to show. |
+| Continuous collision detection for fast movers | Intermediate | Idea | bepuphysics2, `ContinuousCollisionDetectionDemo.cs` | The classic bullet-through-thin-wall problem. Confirmed exposed: `BodyComponent.ContinuousDetectionMode` offers Discrete, Passive and Continuous, and the difference is dramatic and easy to show. The Bepu plan lists this demo as noticed but not yet on its backlog. |
 | Solver substeps and stack stability | Intermediate | Idea | bepuphysics2, `SubsteppingDemo.cs`, `PyramidDemo.cs`, `ColosseumDemo.cs` | Why a tall stack wobbles and how substepping firms it up. Confirmed exposed: `BepuSimulation.SolverSubStep`, plus SoftStart settings. Practical for anyone whose piles jitter. |
 | Custom gravity - bodies orbiting a planet | Intermediate | Idea | bepuphysics2, `PlanetDemo.cs`, `PerBodyGravityDemo.cs` | Visually striking and teaches per-frame force application. Confirmed exposed: `BepuSimulation.PoseGravity`, a per-body gravity toggle on `BodyComponent`, and `ApplyImpulse`. |
 | Ragdoll from constraints | Advanced | Idea | bepuphysics2, `RagdollDemo.cs`, `RagdollTubeDemo.cs` | Builds directly on the constraints example, and is the most recognisable payoff for learning joints. |
@@ -114,11 +122,11 @@ What has already been mined for ideas, so it is not searched twice.
 
 | Idea | Target level | Status | Source | Notes |
 |---|---|---|---|---|
-| Throwing objects from the camera | Getting Started | Idea | Bepu repo, `Components/Utils/ThrowerComponent.cs` | Spawn a body and apply an impulse along the view direction. Very small, good early example. |
-| Gravity gun - pick up, hold and release a body | Intermediate | Idea | Bepu repo, `Components/Utils/GravityGunComponent.cs` | Raycast to select, then drive the held body each frame. Builds on Example14's raycast. |
-| Trigger volumes | Beginners | Idea | Bepu repo, `Components/Utils/TriggerUsageComponent.cs` | Contact handler with `NoContactResponse`, which is how Bepu does sensors. |
-| Overlap queries | Beginners | Idea | Bepu repo, `Components/Utils/OverlapTesterComponent.cs` | Complements raycasting: what is inside this shape, rather than what does this ray hit. |
-| Shape sweep queries | Intermediate | Idea | bepuphysics2, `SweepDemo.cs` | "Where would this shape first hit if I moved it along this vector" - the query behind character step-up and projectile checks. Confirmed exposed: `BepuSimulation.SweepCast` and `SweepCastPenetrating`, both taking a `CollisionMask`. Completes the query trio with Example14's raycast and overlap above. |
+| Throwing objects from the camera | - | Declined | BepuSample `Components/Utils/ThrowerComponent.cs` | Not a separate example: the Bepu plan folds click-to-throw into `Example23_CubeFountain`, which drops that example's complexity from 8 to 6. |
+| Gravity gun - pick up, hold and release a body | Intermediate | Agreed | BepuSample `Components/Utils/GravityGunComponent.cs` | Claimed by the Bepu plan as `Example15_Constraint_GravityGun` (Tier 2). Note it is constraint-driven - linear plus angular servo - which is why it joins the constraint family rather than being a raycast example. |
+| Trigger volumes | Beginners | Agreed | BepuSample `Components/Utils/TriggerUsageComponent.cs` | Claimed by the Bepu plan as `Example16_TriggerZones` (Tier 2), together with contact events. The plan notes `Example17_SignalR` already contains a working `IContactEventHandler`, but nobody looking for collision detection would find it inside a networking example. |
+| Overlap queries | Beginners | Agreed | BepuSample `Components/Utils/OverlapTesterComponent.cs` | Claimed by the Bepu plan as `Example14_ShapeQueries` (Tier 2), family-grouped with `Example14_Raycast`. |
+| Shape sweep queries | Intermediate | Agreed | bepuphysics2, `SweepDemo.cs` | Same example as overlap above - `Example14_ShapeQueries`. Confirmed exposed: `BepuSimulation.SweepCast` and `SweepCastPenetrating`, both taking a `CollisionMask`. The plan also adds `RayCastPenetrating` to the existing `Example14_Raycast` alongside it. |
 
 ### Audio
 
@@ -131,14 +139,14 @@ What has already been mined for ideas, so it is not searched twice.
 | Idea | Target level | Status | Source | Notes |
 |---|---|---|---|---|
 | Reset a body that falls out of bounds | Getting Started | Idea | PhysicsSample, `AutoResetRigidBody.cs` | Teleport a body back to its start once it drops below a threshold. Tiny, and a pattern every prototype needs. Bullet code, so port the idea rather than the script. |
-| Character controller | Intermediate | Idea | Bepu repo, `Components/Character/CharacterControllerComponent.cs`, `7.CharacterScene.sdscene` | Stride ships `CharacterComponent`; an example of driving it is missing. Old repo only - BepuSample dropped it. |
+| Character controller | Intermediate | **Done** | in-repo | Already covered by [`Example20_BepuFirstPersonCharacter`](code-only/Example20_BepuFirstPersonCharacter), which drives Stride's `CharacterComponent` from a `FirstPersonControllerComponent` and its processor. The third-person camera row under Input is the remaining gap, not the controller itself. |
 | Vehicle with wheels, engine and gears | Advanced | Idea | Bepu repo, `Components/Car/`, `Car/CarEngine.cs`, `CarEngineGear.cs`, `6.Cars.sdscene` | The largest item here. Good candidate for a composite example that merges constraints, input and camera work. |
 
 ### Performance
 
 | Idea | Target level | Status | Source | Notes |
 |---|---|---|---|---|
-| Spawning many bodies continuously | Intermediate | Idea | Bepu repo, `3.CubeFontainScene.sdscene`, `Components/Utils/SpawnerComponent.cs`, `_Spawner.cs` | A fountain of bodies. Overlaps Example21/22 on instancing, so it should focus on spawn and despawn cost and on letting bodies sleep. |
+| Spawning many bodies continuously | Intermediate | Agreed | BepuSample `Cube Fountain.sdscene`, `Components/Utils/SpawnerComponent.cs` | Claimed by the Bepu plan as `Example23_CubeFountain` (Tier 1, next after the two built). Spawns from the **physics clock** via `ISimulationUpdate` with a fractional accumulator, so the rate holds under variable FPS - and cross-links to Example22 for instancing rather than re-teaching it. |
 
 ### Integration
 
@@ -156,6 +164,12 @@ What has already been mined for ideas, so it is not searched twice.
 Not examples - toolkit API observations that came out of reading the sample projects. Recorded here
 so they are not lost; move them if a toolkit backlog is ever created.
 
+> [!NOTE]
+> A toolkit backlog now exists for one kind of observation: [`ARCHITECTURE.md`](../ARCHITECTURE.md)
+> in the repository root collects **API-design friction** — cases where the shape of an API, rather
+> than a bug in it, is what trips people up. Prefer it for that; the table below remains the home for
+> "this helper is missing" and "this helper is duplicated".
+
 | Item | Verdict | Notes |
 |---|---|---|
 | Gamepad input helpers | **Worth adopting** | BepuSample's `Extensions/InputManagerExtensions.cs` has eleven methods the toolkit has no equivalent for: button state, left/right thumbsticks and left/right triggers, each with a per-pad overload and an `...Any` variant that polls every connected pad, with dead-zone handling. The toolkit has no input extensions at all, and `Scripts/Basic3DCameraController.cs` hand-rolls this against `Input.DefaultGamePad.State` - so adopting them would fill a public gap *and* simplify existing toolkit code. |
@@ -171,6 +185,6 @@ Work on the examples themselves rather than new examples.
 |---|---|---|---|
 | Document the `---example-metadata` block in the contributing guide | Idea | in-repo | [The guide](../docs/contributing/examples/index.md) only describes the `*.csproj` properties the console launcher reads - `ExampleTitle`, `ExampleOrder`, `ExampleEnabled`, `ExampleCategory` - and never mentions the YAML block. Someone following it end to end produces an example with no metadata block at all, which is the likely reason so few have one. |
 | Audit which example folders are missing an `---example-metadata` block, and add it | Idea | in-repo | 14 of 63 `code-only/` folders currently have one; see the snapshot above. Worth doing after the guide is fixed, so the gap stops growing. |
-| Decide whether the two metadata systems should converge | Idea | in-repo | Examples currently carry launcher metadata in the `*.csproj` and richer metadata in the `Program.cs` YAML block, with overlapping fields (title, category, enabled, order). One source of truth would remove the drift risk. |
+| Decide whether the two metadata systems should converge | Agreed | in-repo | **Direction already settled** - Decision 6 of the [Bepu plan](code-only/PLAN_Bepu_Examples.md): new examples drop `ExampleTitle`/`ExampleOrder`/`ExampleEnabled`/`ExampleCategory` from the `.csproj` and treat the `---example-metadata` block as the single source of truth, which `Example19` and `Example21/22` already do. What is left is applying it to existing examples and pointing the launchers at the manifest (Phase 2 of the MetadataGenerator plan). |
 | Reconcile the category list | Idea | in-repo | `Scripts` is used by an example but is not one of the categories listed in `code-only/README.md`. Either document it or re-categorise the example. |
 | Extract the reusable Box2D wrapper into a library | Idea | in-repo | Scaffolding and goals are already written up in [README_PENDING_LIBRARY.md](code-only/Example18_Box2DPhysics/Box2DPhysics/README_PENDING_LIBRARY.md); the files are deliberately kept free of Stride types so the move is mechanical. |

@@ -8,8 +8,21 @@ every utility component, the harvest list grew — see [Build list](#build-list)
 [Open questions](#open-questions) have `**Your answer:**` placeholders. Answer them, and I move
 them up into Decisions.
 
-**Status:** all questions answered. Example 1 of 9 is **done**
-(`Example15_Constraint_Motors`); next is `Example15_Constraint_Rope`.
+**Status:** all questions answered. **2 of 9 built** — `Example15_Constraint_Motors` and
+`Example15_Constraint_Rope`. Next is `Example23_CubeFountain`.
+
+### Where this sits among the other planning documents
+
+| Document | Owns | Lifetime |
+|---|---|---|
+| **This plan** | The committed batch of nine Bepu examples: specs, naming decisions, build order, findings | Temporary — **retire into the docs once the batch is finished** |
+| [`examples/TODO.md`](../TODO.md) | Every example idea across the repository, with status and provenance | Outlives this plan |
+| [`ARCHITECTURE.md`](../../ARCHITECTURE.md) | API-design friction noticed while building | Ongoing |
+| [`docs/manual/physics-extensions/`](../../docs/manual/physics-extensions/) | Engine behaviour worth teaching, symptom-first | Permanent |
+
+The backlog links here for anything Bepu, so keep the two consistent: when an example here is
+finished, mark the matching row there **Done** and link the folder. When something is learned that is
+not specific to one example, it belongs in one of the bottom two rows rather than here.
 
 ---
 
@@ -63,11 +76,21 @@ Settled. No need to re-read unless you want to change one.
     changes.
 16. **Findings go in the manual, not just in comments.** Non-obvious engine behaviour discovered
     while building an example belongs in `docs/manual/physics-extensions/`, in the symptom-first
-    style of the existing pages, and linked from the section index.
-14. **Port code, not scenes.** The playground's `.sdscene`/`.sdprefab`/compositor assets are never
+    style of the existing pages, and linked from the section index. API-shape friction, as opposed to
+    engine behaviour, goes to [`ARCHITECTURE.md`](../../ARCHITECTURE.md) instead.
+17. **Port code, not scenes.** The playground's `.sdscene`/`.sdprefab`/compositor assets are never
     used; code-only examples build everything procedurally (`SetupBase3DScene`, `AddSkybox`,
     `Create3DPrimitive`). This also means the Colliders-scene crash (see
     [Appendix](#appendix-playground-crash)) cannot follow the code across.
+18. **Do not bind keys the camera controller owns.** `Add3DCameraController`, which
+    `SetupBase3DScene` includes, claims `W A S D`, `Q E`, the arrows, `NumPad 2/4/6/8`, `Shift`, `H`,
+    `F2` and `F3`. A binding that collides both fires the action and flies the camera. Safe letters:
+    `G J K L M N P R T Z`. A binding also lives in three places — the `IsKeyPressed` call, the
+    on-screen label and the header comment — so grep for the old letter after changing one.
+19. **`Size` on a primitive is not always a full extent.** Box-like shapes take full extents; round
+    shapes take a *radius*. The generated mesh and generated collider agree, so this only bites when
+    a collider is built by hand — which is exactly what setting mass requires. Recorded as item 1 of
+    [`ARCHITECTURE.md`](../../ARCHITECTURE.md).
 
 ---
 
@@ -135,22 +158,45 @@ only servos and limits). A *servo* drives toward a target pose and stops; a *mot
 
 #### 2. `Example15_Constraint_Rope` · Intermediate · complexity 7 — **DONE**
 
-Built to the revised spec below. 20 links, weight 10x a link. Measured across repeated swings: the
-naive rope swings between 5.57 and 10.57 against a nominal 7.18, while the stabilised one stays
-within 7.07-7.18. Chain building lives in `RopeBuilder.cs`; `S` flips the right-hand rope between the
-stable and naive builds, `P` swings both weights with the same impulse.
+Built to the revised spec below. 20 links, weight 10x a link, a stack of loose boxes beside each rope
+to be swung into. Measured across repeated swings: the naive rope swings between 5.57 and 10.57
+against a nominal 7.18, while the stabilised one stays within 7.07-7.18. Chain building lives in
+`RopeBuilder.cs`; `Z` flips the right-hand rope between the stable and naive builds, `P` swings both
+weights with the same impulse.
+
+Three construction bugs are worth remembering, because none of them produced an error and two were
+found only because they were reported as "it looks slightly off":
+
+- **A hand-built collider must follow the same size convention as the mesh.** `Size` for a sphere is
+  its *radius*; passing a diameter drew every sphere at twice its collider, so the weight sailed
+  through the boxes it should have hit. Confirmed by counting displaced boxes, not by eye.
+- **A constraint shorter than the gap it spans distorts the rig before anything moves.** The
+  skip constraints to the weight anchor at the link *centre*, so the lever arm has no business in
+  their length — reusing the weight constraint's maximum made them one lever arm too short and they
+  hauled the last links out of line. Found by listing every constraint's actual span against its
+  allowed maximum; anything taut at rest is a construction error, not physics.
+- **A runtime toggle has to cover every constraint it claims to.** `SetStabilised` first updated the
+  link-to-link constraints but not the weight's own, leaving one end-anchored joint among
+  centre-anchored ones.
+
+And one thing that looks like a bug but is not: the naive rope is steady while slack and only goes
+wobbly once pulled taut. A distance limit does nothing until it reaches its limit, so a slack rope
+asks nothing of the solver; the trouble starts the instant the chain has to relay load.
 
 Two tuning findings worth keeping:
 
 - **The weight must never reach the floor.** Once it lands, the ground carries the load, both ropes
   go slack, and the stretch the example exists to show disappears. Link count and anchor height have
   to be raised together.
-- **100:1 is too extreme at Stride's default solver settings.** Bepu's demo uses that ratio, but it
-  also runs `SolveDescription(8, 1)`. Here the naive rope stretched to 2.4x and collapsed onto the
-  floor, which demonstrates nothing. 20:1 gives a clear sag against a rope that does not move.
-  Solver iteration count, not constraint configuration, is what decides which ratios survive — worth
-  remembering for `Example23_CubeFountain`, where stacking has the same dependency.
+- **The workable mass ratio depends on link count, and 100:1 is too extreme here.** Bepu's demo uses
+  that ratio, but it also runs `SolveDescription(8, 1)`. At Stride's default solver settings the
+  naive rope stretched to 2.4x and collapsed onto the floor, which demonstrates nothing. Ratio and
+  length trade off against each other: 10 links tolerate 20:1, while 20 links only tolerate 10:1,
+  because every extra link is another step the supporting force has to be pushed along. Solver
+  iteration count, not constraint configuration, is what sets the ceiling — worth remembering for
+  `Example23_CubeFountain`, where stacking has the same dependency.
 
+Original spec follows.
 
 There is no rope type — a rope is a runtime-built chain of small dynamic bodies.
 
@@ -178,7 +224,7 @@ The lesson is *why* a rope misbehaves, not just how to string bodies together.
 *Sources:* `RopeStabilityDemo.cs` (primary), `Ropes.sdscene`, `RopeSpawnerComponent` (for the Stride
 component API only).
 
-#### 3. `Example23_CubeFountain` · Intermediate · complexity 6
+#### 3. `Example23_CubeFountain` · Intermediate · complexity 6 — *next*
 
 Continuous spawner driven by the **physics clock**, not the render loop.
 
