@@ -10,6 +10,7 @@
     <Project Path="examples/code-only/Example01_Basic2DScene_DebugRender/Example01_Basic2DScene_DebugRender.csproj" />
     <Project Path="examples/code-only/Example01_Basic2DScene_FallingShapes/Example01_Basic2DScene_FallingShapes.csproj" />
     <Project Path="examples/code-only/Example01_Basic2DScene_Primitives/Example01_Basic2DScene_Primitives.csproj" />
+    <Project Path="examples/code-only/Example01_Basic2DScene_StressPile/Example01_Basic2DScene_StressPile.csproj" Id="ecd38d72-a517-4abb-a465-e91b7a8d5c6b" />
     <Project Path="examples/code-only/Example01_Basic3DScene/Example01_Basic3DScene.csproj" />
     <Project Path="examples/code-only/Example01_Basic3DScene_BulletPhysics/Example01_Basic3DScene_BulletPhysics.csproj" />
     <Project Path="examples/code-only/Example01_Basic3DScene_DPI_Aware/Example01_Basic3DScene_DPI_Aware.csproj" />
@@ -22,8 +23,6 @@
     <Project Path="examples/code-only/Example02_GiveMeACube/Example02_GiveMeACube.csproj" />
     <Project Path="examples/code-only/Example02_GiveMeACube_SimulationUpdate/Example02_GiveMeACube_SimulationUpdate.csproj" />
     <Project Path="examples/code-only/Example03_StrideUI_CapsuleAndWindow/Example03_StrideUI_CapsuleAndWindow.csproj" />
-    <Project Path="examples/code-only/Example21_Instancing/Example21_Instancing.csproj" />
-    <Project Path="examples/code-only/Example22_Instancing_EntityTransform/Example22_Instancing_EntityTransform.csproj" />
     <Project Path="examples/code-only/Example04_MyraUI/Example04_MyraUI.csproj">
       <Build Solution="Debug|*" Project="false" />
     </Project>
@@ -59,6 +58,8 @@
     <Project Path="examples/code-only/Example19_Jitter2Physics/Example19_Jitter2Physics.csproj" />
     <Project Path="examples/code-only/Example19_Jitter2Physics_Constraints/Example19_Jitter2Physics_Constraints.csproj" />
     <Project Path="examples/code-only/Example20_BepuFirstPersonCharacter/Example20_BepuFirstPersonCharacter.csproj" />
+    <Project Path="examples/code-only/Example21_Instancing/Example21_Instancing.csproj" />
+    <Project Path="examples/code-only/Example22_Instancing_EntityTransform/Example22_Instancing_EntityTransform.csproj" />
     <Project Path="examples/code-only/Example_2D_Playground/Example_2D_Playground.csproj" />
     <Project Path="examples/code-only/Example_Bepu_Playground/Example_Bepu_Playground.csproj" />
     <Project Path="examples/code-only/Example_CubicleCalamity/Example_CubicleCalamity.csproj" />
