@@ -21,8 +21,6 @@ namespace Stride.CommunityToolkit.Scripts;
 /// </remarks>
 public class Basic2DCameraController : SyncScript
 {
-    private static readonly Vector3 _defaultCameraPosition = new(0, 0, 50);
-
     // Movement Properties
     /// <summary>
     /// Gets or sets the base speed of camera movement in units per second.
@@ -172,6 +170,7 @@ public class Basic2DCameraController : SyncScript
     public bool ShowInstructions { get; set; } = true;
 
     private CameraComponent? _camera;
+    private Vector3 _defaultCameraPosition;
     private Vector3 _targetPosition;
     private Vector2? _lastMousePosition;
     private float _defaultZ = 0;
@@ -184,9 +183,12 @@ public class Basic2DCameraController : SyncScript
     /// <remarks>
     /// This method sets the target position to the current camera position and configures the debug text printer
     /// for displaying on-screen instructions. Called once when the script starts.
+    /// The position captured here is the one the 'H' key restores, so a camera created at a custom
+    /// position resets to that position rather than to a fixed default.
     /// </remarks>
     public override void Start()
     {
+        _defaultCameraPosition = Entity.Transform.Position;
         _targetPosition = Entity.Transform.Position;
         _defaultZ = Entity.Transform.Position.Z;
 
