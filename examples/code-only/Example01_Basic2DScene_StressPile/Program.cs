@@ -12,6 +12,7 @@ using Stride.Engine;
 using Stride.Rendering;
 
 Vector3 wallSize = new(1, 50, 1);
+float wallWidth = 70;
 
 BufferedEntityInstancing? bufferedInstancing = null;
 Model? sharedModel = null;
@@ -43,9 +44,9 @@ void Start(Scene rootScene)
     entity.Scene = rootScene;
 
 
-    CreateWall(rootScene, new Vector3(-25, 0, 0), wallSize);
-    CreateWall(rootScene, new Vector3(25, 0, 0), wallSize);
-    CreateWall(rootScene, new Vector3(0, -25, 0), new Vector3(51, 1, 1));
+    CreateWall(rootScene, new Vector3(-wallWidth / 2, 0, 0), wallSize);
+    CreateWall(rootScene, new Vector3(wallWidth / 2, 0, 0), wallSize);
+    CreateWall(rootScene, new Vector3(0, -25, 0), new Vector3(wallWidth, 1, 1));
 
     SetupInstancing(rootScene);
 
