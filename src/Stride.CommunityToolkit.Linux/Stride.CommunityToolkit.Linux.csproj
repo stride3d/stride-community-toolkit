@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Title>Stride Community Toolkit - Linux</Title>
-        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.AssetCompiler` package and copying required native libraries. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.$(StrideVersionNote)</Description>
-        <!-- This should be added in the consuming applications -->
-        <!--<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <StrideGraphicsApi>OpenGL</StrideGraphicsApi>-->
+        <Description>This library serves to simplify the setup for Stride code-only projects on Linux by automatically including the `Stride.AssetCompiler` package and copying the native libraries its asset compilers need. This eliminates the need for manual file copying and boilerplate code, making it easier to demonstrate and develop simple Stride projects on Linux without additional configuration.$(StrideVersionNote)</Description>
+        <!-- Consuming applications need <RuntimeIdentifier>linux-x64</RuntimeIdentifier>; the copy
+             target below keys off it. Stride 4.4 selects Vulkan on Linux by itself, so the
+             StrideGraphicsApi override that used to be needed here is gone. -->
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
@@ -19,65 +19,15 @@
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
-    <Target Name="CopyLinuxNativeLibraries" BeforeTargets="Build" Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
-        <PropertyGroup>
-            <!-- First try NUGET_PACKAGES environment variable -->
-            <NuGetPackagesPath Condition="'$(NUGET_PACKAGES)' != ''">$(NUGET_PACKAGES)</NuGetPackagesPath>
+    <ItemGroup>
+        <!-- Shipped in both folders so the target reaches direct and transitive consumers alike.
+             Packing it is the whole point: as an inline <Target> in this file it only ever ran when
+             building this project, which is not where assets get compiled. -->
+        <None Include="build\Stride.CommunityToolkit.Linux.targets" Pack="true" PackagePath="build\;buildTransitive\" />
+    </ItemGroup>
 
-            <!-- On Linux, use HOME environment variable -->
-            <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == '' AND '$(OS)' == 'Unix'">$(HOME)/.nuget/packages</NuGetPackagesPath>
-
-            <!-- On Windows, use UserProfile -->
-            <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == '' AND '$(OS)' == 'Windows_NT'">$(UserProfile)\.nuget\packages</NuGetPackagesPath>
-
-            <!-- Fallback to relative path (last resort) -->
-            <NuGetPackagesPath Condition="'$(NuGetPackagesPath)' == ''">$(HOME)/.nuget/packages</NuGetPackagesPath>
-
-            <CompilerAppPath>$(NuGetPackagesPath)/stride.assetcompiler/$(StrideVersion)/lib/net10.0</CompilerAppPath>
-        </PropertyGroup>
-
-        <!-- Debug: Show resolved paths -->
-        <Message Text="=== CopyLinuxNativeLibraries Debug Info ===" Importance="high" />
-        <Message Text="OS: $(OS)" Importance="high" />
-        <Message Text="RuntimeIdentifier: $(RuntimeIdentifier)" Importance="high" />
-        <Message Text="NUGET_PACKAGES env: '$(NUGET_PACKAGES)'" Importance="high" />
-        <Message Text="HOME env: '$(HOME)'" Importance="high" />
-        <Message Text="UserProfile env: '$(UserProfile)'" Importance="high" />
-        <Message Text="Resolved NuGet Packages Path: '$(NuGetPackagesPath)'" Importance="high" />
-        <Message Text="Stride Version: $(StrideVersion)" Importance="high" />
-        <Message Text="Compiler App Path: '$(CompilerAppPath)'" Importance="high" />
-
-        <ItemGroup>
-            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.physics/$(StrideVersion)/runtimes/linux-x64/native/libbulletc.so" />
-            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.assets/$(StrideVersion)/runtimes/linux-x64/native/VHACD.so" />
-            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.textureconverter/$(StrideVersion)/runtimes/linux-x64/native/DxtWrapper.so" />
-            <NativeLibrariesToCopy Include="$(NuGetPackagesPath)/stride.textureconverter/$(StrideVersion)/runtimes/linux-x64/native/PVRTexLib.so" />
-        </ItemGroup>
-
-        <!-- Debug: Show each file to be copied and whether it exists -->
-        <Message Text="Files to copy:" Importance="high" />
-        <Message Text="  - '%(NativeLibrariesToCopy.Identity)' [Exists: %(NativeLibrariesToCopy.Exists)]" Importance="high" />
-
-        <!-- Check if destination exists -->
-        <PropertyGroup>
-            <CompilerAppPathExists Condition="Exists('$(CompilerAppPath)')">true</CompilerAppPathExists>
-            <CompilerAppPathExists Condition="!Exists('$(CompilerAppPath)')">false</CompilerAppPathExists>
-        </PropertyGroup>
-
-        <Message Text="Compiler App Path Exists: $(CompilerAppPathExists)" Importance="high" />
-
-        <!-- Warning if destination doesn't exist -->
-        <Warning Text="Destination folder does not exist: '$(CompilerAppPath)'" Condition="!Exists('$(CompilerAppPath)')" />
-
-        <Copy SourceFiles="@(NativeLibrariesToCopy)" DestinationFolder="$(CompilerAppPath)" SkipUnchangedFiles="true" Condition="Exists('$(CompilerAppPath)')">
-            <Output TaskParameter="CopiedFiles" ItemName="SuccessfullyCopiedFiles" />
-        </Copy>
-
-        <!-- Debug: Show what was actually copied -->
-        <Message Text="Successfully copied files:" Importance="high" Condition="'@(SuccessfullyCopiedFiles)' != ''" />
-        <Message Text="  - '%(SuccessfullyCopiedFiles.Filename)%(SuccessfullyCopiedFiles.Extension)'" Importance="high" />
-        <Message Text="No files were copied (already up-to-date or destination missing)" Importance="high" Condition="'@(SuccessfullyCopiedFiles)' == ''" />
-        <Message Text="=======================================" Importance="high" />
-    </Target>
+    <!-- Imported as well as packed, so a malformed targets file breaks this build rather than only
+         breaking consumers. It is a no-op here: the conditions require a linux RID. -->
+    <Import Project="build\Stride.CommunityToolkit.Linux.targets" />
 
 </Project>

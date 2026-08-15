@@ -1,0 +1,80 @@
+<Project>
+
+  <!--
+    Stride's asset compiler P/Invokes into native libraries that NuGet leaves inside each package's
+    runtimes/<rid>/native folder. Nothing puts them beside the compiler, so on a Linux build host the
+    compiler either aborts at startup (Stride.Physics preloads libbulletc from its module initializer)
+    or fails partway through, as the texture, font, hull and collider-shape compilers throw
+    TypeInitializationException.
+
+    Copying into the NuGet cache is unfortunate, because that folder is shared by every project on the
+    machine and clearing the NuGet locals silently undoes it. It is done anyway because the compiler
+    resolves native dependencies relative to its own directory, and that directory lives in the
+    package. The proper home for this is upstream in Stride.AssetCompiler.
+
+    The condition is about the BUILD HOST, not the target platform. The asset compiler always runs on
+    the machine doing the build, so it needs that machine's natives regardless of which RID, if any,
+    the game targets. That matters because Game Studio's generated projects set StridePlatform rather
+    than RuntimeIdentifier, and code-only projects set RuntimeIdentifier rather than StridePlatform -
+    keying off the host covers both without having to guess.
+
+    Sources are globbed rather than named. Stride 4.4 renamed three of the four files the previous
+    version of this logic listed - VHACD to stride_vhacd, DxtWrapper to stride_directxtex and
+    PVRTexLib to libastcenc - so the hard-coded list quietly stopped matching anything.
+
+    The pattern is *.so* rather than *.so because some packages ship only SONAME-versioned files
+    (Ultz.Native.Assimp has libassimp.so.5 and libassimp.so.6, no unversioned name). Stride's
+    NativeLibraryHelper globs those and picks the highest version, so copying them verbatim is correct
+    and no renaming is needed.
+
+    Assimp is globbed across package versions because its version tracks Silk.NET rather than Stride,
+    and the consuming project has no way to know it. Several versions are often cached side by side;
+    copying them all is safe precisely because Stride picks the highest SONAME, so a stale
+    libassimp.so.5 can never win over the current libassimp.so.6.
+
+    Only the packages whose natives the compiler actually needs are globbed. stride.audio,
+    stride.virtualreality, stride.video, Ultz.Native.Sdl and Ultz.Native.Glfw also ship Linux natives,
+    but those are needed at run time, not during asset compilation.
+  -->
+  <Target Name="StrideToolkitCopyLinuxNativeLibraries"
+          AfterTargets="_StridePrepareAssetCompiler"
+          BeforeTargets="StrideCompileAsset"
+          Condition="'$(StrideCompileAssetCommand)' != '' AND $([MSBuild]::IsOSPlatform('Linux'))">
+
+    <PropertyGroup>
+      <!-- .../stride.assetcompiler/<version>/tools/<tfm>/Stride.AssetCompiler.dll is the only
+           reliable handle on both the destination and the Stride version: the consuming project
+           knows neither, and StrideVersion is a toolkit-repo property that does not exist here. -->
+      <_StrideToolkitCompilerDir>$([System.IO.Path]::GetDirectoryName('$(StrideCompileAssetCommand)'))</_StrideToolkitCompilerDir>
+      <_StrideToolkitNativeVersion>$([System.IO.Path]::GetFileName($([System.IO.Path]::GetFullPath('$(_StrideToolkitCompilerDir)/../..'))))</_StrideToolkitNativeVersion>
+
+      <!-- Host RID, not the project's: see the note above. RuntimeIdentifier is preferred only
+           because a project that sets one is normally targeting the machine it builds on. -->
+      <_StrideToolkitHostRid Condition="'$(RuntimeIdentifier)' != '' AND $(RuntimeIdentifier.StartsWith('linux'))">$(RuntimeIdentifier)</_StrideToolkitHostRid>
+      <_StrideToolkitHostRid Condition="'$(_StrideToolkitHostRid)' == '' AND '$(NETCoreSdkPortableRuntimeIdentifier)' != ''">$(NETCoreSdkPortableRuntimeIdentifier)</_StrideToolkitHostRid>
+      <_StrideToolkitHostRid Condition="'$(_StrideToolkitHostRid)' == ''">linux-x64</_StrideToolkitHostRid>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_StrideToolkitLinuxNative Include="$(NuGetPackageRoot)stride.assets/$(_StrideToolkitNativeVersion)/runtimes/$(_StrideToolkitHostRid)/native/*.so*" />
+      <_StrideToolkitLinuxNative Include="$(NuGetPackageRoot)stride.graphics/$(_StrideToolkitNativeVersion)/runtimes/$(_StrideToolkitHostRid)/native/*.so*" />
+      <_StrideToolkitLinuxNative Include="$(NuGetPackageRoot)stride.physics/$(_StrideToolkitNativeVersion)/runtimes/$(_StrideToolkitHostRid)/native/*.so*" />
+      <_StrideToolkitLinuxNative Include="$(NuGetPackageRoot)stride.textureconverter/$(_StrideToolkitNativeVersion)/runtimes/$(_StrideToolkitHostRid)/native/*.so*" />
+      <!-- Model import (.fbx/.obj/.gltf) needs Assimp, which ships outside the stride.* packages. -->
+      <_StrideToolkitLinuxNative Include="$(NuGetPackageRoot)ultz.native.assimp/*/runtimes/$(_StrideToolkitHostRid)/native/*.so*" />
+    </ItemGroup>
+
+    <Warning Condition="'@(_StrideToolkitLinuxNative)' == ''"
+             Text="Stride.CommunityToolkit.Linux found no native libraries for '$(_StrideToolkitHostRid)' under '$(NuGetPackageRoot)' (resolved Stride version '$(_StrideToolkitNativeVersion)'). Asset compilation will very likely fail." />
+
+    <Copy SourceFiles="@(_StrideToolkitLinuxNative)"
+          DestinationFolder="$(_StrideToolkitCompilerDir)"
+          SkipUnchangedFiles="true"
+          Condition="'@(_StrideToolkitLinuxNative)' != ''" />
+
+    <Message Importance="low"
+             Text="Stride.CommunityToolkit.Linux copied to $(_StrideToolkitCompilerDir): @(_StrideToolkitLinuxNative->'%(Filename)%(Extension)', ', ')" />
+
+  </Target>
+
+</Project>
