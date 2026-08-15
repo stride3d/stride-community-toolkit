@@ -13,11 +13,13 @@ using Stride.Engine;
 using Stride.Rendering;
 
 Vector3 wallSize = new(1, 50, 1);
-float wallWidth = 70;
+float wallWidth = 100;
+int itemCount = 15000;
+
 
 BufferedEntityInstancing? bufferedInstancing = null;
 Model? sharedModel = null;
-PrimitiveModelType modelType = PrimitiveModelType.Cube;
+PrimitiveModelType modelType = PrimitiveModelType.TriangularPrism;
 
 using var game = new Game();
 
@@ -52,9 +54,8 @@ void Start(Scene rootScene)
 
     SetupInstancing(rootScene);
 
-    GenerateItems(rootScene, 5000, modelType);
+    GenerateItems(rootScene, itemCount, modelType);
 }
-
 
 void CreateWall(Scene rootScene, Vector3 position, Vector3 size)
 {
@@ -124,7 +125,7 @@ void GenerateItems(Scene rootScene, int count, PrimitiveModelType modelType)
         // collider it derived from the primitive type and size.
         entity.Remove<ModelComponent>();
 
-        entity.Transform.Position = VectorHelper.RandomVector3(xRange: [-20, 20], yRange: [20, 200], zRange: [0, 0]);
+        entity.Transform.Position = VectorHelper.RandomVector3(xRange: [-40, 40], yRange: [20, 400], zRange: [0, 0]);
         entity.Scene = rootScene;
 
         bufferedInstancing?.AddInstance(entity);
