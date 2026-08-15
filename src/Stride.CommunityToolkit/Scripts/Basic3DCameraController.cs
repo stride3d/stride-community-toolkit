@@ -322,7 +322,7 @@ public class Basic3DCameraController : SyncScript
                     var composite = (GestureEventComposite)gestureEvent;
                     _translation.X = -composite.DeltaTranslation.X * TouchMovementSpeed.X;
                     _translation.Y = -composite.DeltaTranslation.Y * TouchMovementSpeed.Y;
-                    _translation.Z = (float)Math.Log(composite.DeltaScale + 1) * TouchMovementSpeed.Z;
+                    _translation.Z = MathF.Log(composite.DeltaScale + 1) * TouchMovementSpeed.Z;
                     break;
             }
         }
@@ -342,7 +342,7 @@ public class Basic3DCameraController : SyncScript
         up.Normalize();
 
         // Adjust pitch. Prevent it from exceeding up and down facing. Stabilize edge cases.
-        var currentPitch = MathUtil.PiOverTwo - (float)Math.Acos(Vector3.Dot(rotation.Forward, _upVector));
+        var currentPitch = MathUtil.PiOverTwo - MathF.Acos(Vector3.Dot(rotation.Forward, _upVector));
         _pitch = MathUtil.Clamp(currentPitch + _pitch, -MaximumPitch, MaximumPitch) - currentPitch;
 
         Vector3 finalTranslation = _translation;
