@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Instancing;
@@ -39,7 +40,8 @@ void Start(Scene rootScene)
     game.Add3DCameraController();
     game.AddSkybox();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    // Options typed explicitly: with both overloads in scope, an argument-less call is ambiguous
+    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule, new Bepu3DPhysicsOptions());
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
 
@@ -68,6 +70,10 @@ void CreateWall(Scene rootScene, Vector3 position, Vector3 size)
 
 void SetupInstancing(Scene rootScene)
 {
+    // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
+    // wires up transform, skinning, material and lighting, but not instancing
+    game.AddInstancingSupport();
+
     sharedModel = CreateSharedModel(rootScene, modelType);
 
     bufferedInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
@@ -79,7 +85,9 @@ void SetupInstancing(Scene rootScene)
 
 Model CreateSharedModel(Scene rootScene, PrimitiveModelType modelType)
 {
-    var prototype = game.Create3DPrimitive(modelType);
+    // Primitive3DEntityOptions, explicitly typed, selects the overload that does NOT attach a body.
+    // Passing new() here would pick the Bepu one instead and leave a dynamic body falling forever.
+    var prototype = game.Create3DPrimitive(modelType, new Primitive3DEntityOptions());
 
     // Parked out of sight; it exists only to own the Model
     prototype.Transform.Position = new Vector3(0, -100, 0);
@@ -109,6 +117,12 @@ void GenerateItems(Scene rootScene, int count, PrimitiveModelType modelType)
         {
             Component = new Body2DComponent() { Collider = new CompoundCollider() }
         });
+
+        // The master draws every instance. Leaving each entity its own ModelComponent would draw the
+        // whole pile twice - once per entity, once instanced - which is slower than not instancing at
+        // all. Create3DPrimitive always adds one, so it has to come back off; what is kept is the
+        // collider it derived from the primitive type and size.
+        entity.Remove<ModelComponent>();
 
         entity.Transform.Position = VectorHelper.RandomVector3(xRange: [-20, 20], yRange: [20, 200], zRange: [0, 0]);
         entity.Scene = rootScene;
