@@ -34,8 +34,9 @@ namespace Stride.CommunityToolkit.Bepu;
 /// <para>
 /// This mirrors how every other engine confines a body to a plane: Stride's own Bullet integration
 /// sets <c>LinearFactor = (1,1,0)</c> and <c>AngularFactor = (0,0,1)</c> for 2D shapes, and Unity,
-/// Unreal and Godot all expose the same idea as per-axis freeze flags. Zeroing the inverse inertia
-/// is the angular factor, and clearing out-of-plane velocity each step is the linear one. Bepu has no
+/// Unreal and Godot all expose the same idea as per-axis freeze flags. Scaling down the inverse
+/// inertia is the angular factor, and clearing out-of-plane velocity each step is the linear one.
+/// Bepu has no
 /// linear factor to set, and the solver can still introduce Z velocity after this runs, which is what
 /// the small positional correction cleans up - the others get it for free inside the integrator.
 /// </para>
@@ -45,9 +46,10 @@ namespace Stride.CommunityToolkit.Bepu;
 /// those other engines. Give bodies an identity or Z-only rotation if that is not wanted.
 /// </para>
 /// <para>
-/// The lock scales the out-of-plane inverse inertia rather than zeroing it, because a zeroed tensor
-/// is singular and can make the contact solver diverge - see <see cref="OutOfPlaneInertiaScale"/>.
-/// The residue this leaves is removed every step by the angular velocity clamp, so it never builds up.
+/// The lock scales the out-of-plane inverse inertia rather than zeroing it, because zeroing only the
+/// X and Y terms and leaving Z responsive makes the contact solver diverge in dense piles - see
+/// <see cref="OutOfPlaneInertiaScale"/>. The residue this leaves is removed every step by the angular
+/// velocity clamp, so it never builds up.
 /// </para>
 /// <para>
 /// One thing to be aware of when using hull colliders: attaching one caps
