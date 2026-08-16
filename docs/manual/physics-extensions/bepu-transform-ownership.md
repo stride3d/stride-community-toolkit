@@ -8,8 +8,9 @@ Once an entity has a body attached, the simulation owns its position and rotatio
 `Entity.Transform.Position` moves the *mesh* only; the body stays exactly where the simulation put
 it, and the next frame usually overwrites your change.
 
-None of the symptoms below produce an error or a warning, which is what makes them cost hours. Each
-section starts with what you actually observe.
+Most of the symptoms below produce no error and no warning at all, and the few that do kill the
+process without saying anything useful. Either way you are left working from behaviour, which is what
+makes them cost hours, so each section starts with what you actually observe.
 
 ## "My mesh moves, but nothing collides with it"
 
@@ -88,6 +89,100 @@ var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule, new Primitive3DE
 });
 ```
 
+## "Bepu crashes with an AccessViolationException"
+
+The stack lands somewhere in the solver — `Contact4.ApplyDescription`, `AddToSimulationSpeculative`
+— on a physics worker thread, after a few seconds of simulation.
+
+**This one is unresolved.** What is known about it:
+
+- It is **intermittent**, on the order of one run in five with the same binary and the same scene.
+  This matters more than it sounds: a change that survives one run has not been shown to fix
+  anything. Any claim about a cause needs a dozen or so runs per variant before it means something.
+- Every case observed so far used a hull-backed shape — `TriangularPrism`, `Cone`, `Teapot` or
+  `Torus` — at a few thousand bodies. It has not been reproduced with cubes or spheres, which is
+  suggestive but not proof, since more bodies and more contacts also make it likelier.
+- Sharing hull data across bodies does **not** stop it, so the finalizer hazard described in the next
+  section, real as it is, is not a sufficient explanation.
+
+Until the cause is found, the practical options are to keep hull-shaped body counts down, or to
+substitute an analytic collider — a box, a cylinder or a capsule — where the shape allows it.
+
+## "One hull per body is slow, and freed from a finalizer"
+
+This is not the crash above; it is a cost and a genuine thread-safety hazard, worth avoiding on its
+own account.
+
+Stride caches the built Bepu hull against the `DecomposedHulls` **instance** it came from, so a fresh
+instance per body means a fresh hull per body: ten thousand identical prisms build, store and
+eventually free ten thousand identical hulls. Those hulls hold unmanaged buffers taken from a
+**static** `BufferPool`, and Stride returns them **from a finalizer** — so the garbage collector can
+hand memory back to that pool while the simulation is allocating from it on its worker threads.
+
+The toolkit shares one hull per distinct shape and size through `SharedHullCache`, so
+`Create3DPrimitive` builds a single hull no matter how many bodies use it, and nothing is ever
+finalized.
+
+**If you build a `ConvexHullCollider` yourself, share the hull data.** Assign the *same*
+`DecomposedHulls` instance to every collider rather than calling `ToConvexHullCollider()` per body;
+`ToDecomposedHulls()` gives you just the data to hold onto.
+
+```csharp
+// Once
+var hull = TriangularPrismProceduralModel.New(size).ToDecomposedHulls();
+
+// Per body
+Collider = new CompoundCollider { Colliders = { new ConvexHullCollider { Hull = hull } } }
+```
+
+## "Spawning bodies in a grid kills the process with a Stack overflow"
+
+The process dies outright — no exception, just `Stack overflow.` and a stack that repeats one frame
+thousands of times:
+
+```text
+Stack overflow.
+Repeated 7990 times:
+   at BepuPhysics.Trees.Tree.Refit2WithCacheOptimization(Int32, Int32, Int32, NodeChild ByRef, ...)
+   at BepuPhysics.Trees.Tree.Refit2WithCacheOptimization(Buffer`1<Node>)
+   at BepuPhysics.CollisionDetection.BroadPhase.Update2(IThreadDispatcher, Boolean)
+```
+
+That function recurses once per level of the broad-phase tree, so its depth *is* the tree's height.
+Over a few thousand bodies a healthy tree is a dozen or so levels deep, not eight thousand: the tree
+has degenerated into something close to a linked list, and the recursion has no depth guard. Bepu
+does refine the tree incrementally every frame, but on a fixed budget, and some scenes degrade it
+faster than that budget repairs it.
+
+The trigger is a **perfectly regular lattice of exactly-touching bodies** — 5,000 spheres one
+diameter apart on a grid, all on the same plane, reproducibly dead within about ten seconds. Unlike
+the `AccessViolationException` above it is deterministic, and it is not a race: it reproduces just as
+readily single-threaded, and with sleeping disabled.
+
+Break the symmetry and it goes away. Any of these survived indefinitely:
+
+- a millimetre or so of random jitter on each spawn position — the bodies are just as close, and some
+  overlap, which is fine;
+- wider spacing, so nothing touches at spawn;
+- random placement.
+
+```csharp
+// Instead of an exact lattice
+entity.Transform.Position = new Vector3(x, y, 0);
+
+// Nudge each one off the grid
+entity.Transform.Position = new Vector3(
+    x + (Random.Shared.NextSingle() - 0.5f) * 0.05f, y, 0);
+```
+
+## "My torus collides as though the hole were filled"
+
+A convex hull is exact for a convex shape, so `TriangularPrism`, `Cone` and `Teapot` collide as they
+look. A torus is not convex, and its hull spans the hole.
+
+There is no single-shape fix: an accurate torus needs a compound built from several shapes, or a
+mesh collider if it can be static.
+
 ## Summary
 
 | Symptom | Cause | Fix |
@@ -99,6 +194,10 @@ var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule, new Primitive3DE
 | Null reference in `SimulationUpdate` | It can run before `Start` | Resolve lazily with `??=` |
 | Inert `BodyComponent` | `IncludeCollider = false` still attaches a body | Use the `Primitive3DEntityOptions` overload |
 | `CS0121` ambiguity | Two `Create3DPrimitive` overloads | Pass an explicitly typed options object |
+| `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known — keep hull body counts down, or use an analytic collider |
+| Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |
+| `Stack overflow` in `Refit2WithCacheOptimization` | A degenerate broad-phase tree from a perfectly regular lattice | Jitter the spawn positions, or space the bodies apart |
+| Torus collides with its hole filled | A convex hull cannot represent a concave shape | Build a compound, or use a mesh collider for statics |
 
 > [!NOTE]
 > Do not combine Bepu and Bullet physics components on the same entity. Bepu is the primary
