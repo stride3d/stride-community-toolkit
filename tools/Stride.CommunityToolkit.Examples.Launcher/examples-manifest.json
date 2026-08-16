@@ -695,8 +695,8 @@
     "category": "Rendering",
     "complexity": 4,
     "description": {
-      "en": "Keep every object a real entity - with a transform, a physics body and anything else you need - while\nstill drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an\ninstancing type that reads its members\u0027 world matrices each frame, and the members carry no\nModelComponent of their own. Bepu drives the transforms, so the cubes collide and pile up normally.\nFour kinds of cube can be dropped side by side to compare: Stride\u0027s own InstancingEntityTransform,\nno instancing at all, the toolkit\u0027s BepuEntityInstancing, and BufferedEntityInstancing. The toolkit\ntypes stop working once Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from\n239 to 329 FPS, and the example also shows where the real ceiling lies, because instancing removes\ndraw calls and does nothing about simulation cost.\n",
-      "cs": "Zachovejte ka\u017Ed\u00FD objekt jako plnohodnotnou entitu - s transformac\u00ED, fyzik\u00E1ln\u00EDm t\u011Blesem i \u010D\u00EDmkoli dal\u0161\u00EDm -\na p\u0159esto vykreslete cel\u00FD z\u00E1stup jedin\u00FDm vykreslovac\u00EDm vol\u00E1n\u00EDm. Hlavn\u00ED entita nese ModelComponent\na instancing, kter\u00FD ka\u017Ed\u00FD sn\u00EDmek na\u010D\u00EDt\u00E1 sv\u011Btov\u00E9 matice sv\u00FDch \u010Dlen\u016F; \u010Dlenov\u00E9 sami \u017E\u00E1dn\u00FD ModelComponent\nnemaj\u00ED. Transformace \u0159\u00EDd\u00ED Bepu, tak\u017Ee kostky norm\u00E1ln\u011B koliduj\u00ED a vr\u0161\u00ED se na sebe. Vedle sebe lze\nporovnat \u010Dty\u0159i druhy kostek: vlastn\u00ED InstancingEntityTransform ze Stride, \u017E\u00E1dn\u00FD instancing,\nBepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu p\u0159estanou pracovat, jakmile\nBepu usp\u00ED t\u011Blesa, co\u017E u usazen\u00E9 hromady 20 000 kostek zv\u00FD\u0161\u00ED sn\u00EDmkovou frekvenci z 239 na 329.\n"
+      "en": "Keep every object a real entity - with a transform, a physics body and anything else you need - while\nstill drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an\ninstancing type that reads its members\u0027 world matrices each frame, and the members carry no\nModelComponent of their own. Bepu drives the transforms, so the bodies collide and pile up normally.\nFour kinds of body can be dropped side by side to compare: Stride\u0027s own InstancingEntityTransform,\nno instancing at all, the toolkit\u0027s BepuEntityInstancing, and BufferedEntityInstancing. The toolkit\ntypes stop working once Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from\n239 to 329 FPS, and the example also shows where the real ceiling lies, because instancing removes\ndraw calls and does nothing about simulation cost. One line at the top switches the whole pile to\nany other primitive, so the same comparison can be run with spheres, cones or hulls.\n",
+      "cs": "Zachovejte ka\u017Ed\u00FD objekt jako plnohodnotnou entitu - s transformac\u00ED, fyzik\u00E1ln\u00EDm t\u011Blesem i \u010D\u00EDmkoli dal\u0161\u00EDm -\na p\u0159esto vykreslete cel\u00FD z\u00E1stup jedin\u00FDm vykreslovac\u00EDm vol\u00E1n\u00EDm. Hlavn\u00ED entita nese ModelComponent\na instancing, kter\u00FD ka\u017Ed\u00FD sn\u00EDmek na\u010D\u00EDt\u00E1 sv\u011Btov\u00E9 matice sv\u00FDch \u010Dlen\u016F; \u010Dlenov\u00E9 sami \u017E\u00E1dn\u00FD ModelComponent\nnemaj\u00ED. Transformace \u0159\u00EDd\u00ED Bepu, tak\u017Ee t\u011Blesa norm\u00E1ln\u011B koliduj\u00ED a vr\u0161\u00ED se na sebe. Vedle sebe lze\nporovnat \u010Dty\u0159i druhy t\u011Bles: vlastn\u00ED InstancingEntityTransform ze Stride, \u017E\u00E1dn\u00FD instancing,\nBepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu p\u0159estanou pracovat, jakmile\nBepu usp\u00ED t\u011Blesa, co\u017E u usazen\u00E9 hromady 20 000 kostek zv\u00FD\u0161\u00ED sn\u00EDmkovou frekvenci z 239 na 329.\nJedin\u00FD \u0159\u00E1dek na za\u010D\u00E1tku p\u0159epne celou hromadu na libovolnou jinou primitivn\u00ED tvar.\n"
     },
     "concepts": [
       "Combining physics bodies with instanced rendering",
@@ -705,10 +705,11 @@
       "Why an instance entity must not have its own ModelComponent",
       "Skipping instancing work entirely while physics bodies sleep",
       "Owning GPU instance buffers to avoid redundant uploads",
-      "Declaring a Bepu collider without a model to derive it from",
+      "Deriving a Bepu collider from a primitive type without building a mesh per body",
+      "Switching the whole scene to a different primitive from one line",
       "Knowing when instancing does not help",
       "Using helpers: AddInstancingSupport, AddInstancingBufferUpload",
-      "Using helpers: SetupBase3D, Add3DGround"
+      "Using helpers: SetupBase3D, Add3DGround, AddBepu3DPhysics"
     ],
     "related": [
       "Example21_Instancing",
