@@ -27,8 +27,8 @@ public class TimedInstancingEntityTransform : InstancingEntityTransform
     }
 }
 
-/// <summary>Which flavour of cube a drop produces. See Program.cs.</summary>
-public enum CubeKind
+/// <summary>Which flavour of body a drop produces. See Program.cs.</summary>
+public enum ItemKind
 {
     /// <summary>Stride's own instancing: InstanceComponent plus an InstancingEntityTransform master.</summary>
     Stock,
@@ -39,6 +39,6 @@ public enum CubeKind
     /// <summary>BepuEntityInstancing wrapped in BufferedEntityInstancing: skips the GPU upload too.</summary>
     ToolkitBuffered,
 
-    /// <summary>No instancing at all: each cube keeps its own ModelComponent and draw call.</summary>
+    /// <summary>No instancing at all: each body keeps its own ModelComponent and draw call.</summary>
     Plain
 }
