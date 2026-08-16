@@ -10,6 +10,7 @@
     <Project Path="examples/code-only/Example01_Basic2DScene_DebugRender/Example01_Basic2DScene_DebugRender.csproj" />
     <Project Path="examples/code-only/Example01_Basic2DScene_FallingShapes/Example01_Basic2DScene_FallingShapes.csproj" />
     <Project Path="examples/code-only/Example01_Basic2DScene_Primitives/Example01_Basic2DScene_Primitives.csproj" />
+    <Project Path="examples/code-only/Example01_Basic2DScene_SpawnMenu/Example01_Basic2DScene_SpawnMenu.csproj" />
     <Project Path="examples/code-only/Example01_Basic2DScene_StressPile/Example01_Basic2DScene_StressPile.csproj" Id="ecd38d72-a517-4abb-a465-e91b7a8d5c6b" />
     <Project Path="examples/code-only/Example01_Basic3DScene/Example01_Basic3DScene.csproj" />
     <Project Path="examples/code-only/Example01_Basic3DScene_BulletPhysics/Example01_Basic3DScene_BulletPhysics.csproj" />

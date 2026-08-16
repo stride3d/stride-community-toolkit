@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+
+        <ExampleTitle>2D Spawn Menu</ExampleTitle>
+        <ExampleOrder>56</ExampleOrder>
+        <ExampleEnabled>true</ExampleEnabled>
+        <ExampleCategory>2 - Advance Example</ExampleCategory>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+    </ItemGroup>
+
+</Project>
