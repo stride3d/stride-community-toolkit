@@ -175,6 +175,30 @@ entity.Transform.Position = new Vector3(
     x + (Random.Shared.NextSingle() - 0.5f) * 0.05f, y, 0);
 ```
 
+## "A 2D pile of prisms eats all my memory"
+
+Thousands of `TriangularPrism` bodies on a `Body2DComponent`, and within seconds the process is
+holding tens of gigabytes and dies. The stack, if you catch one, is in
+`NarrowPhase.ExecutePreflushJob`. The same scene with an ordinary `BodyComponent` is untroubled.
+
+The cause was **not** the hull, the mesh, or contact volume, all of which were measured and cleared.
+It was `Body2DComponent` zeroing the X and Y terms of the inverse inertia tensor to lock rotation.
+That leaves the tensor **singular**, and Bepu's contact solver inverts an effective mass built from
+it. Most shapes tolerate it. A dense pile of triangular prisms does not: the solve diverges, bodies
+are flung far enough to make the broad-phase bounds meaningless, the pair count runs away, and the
+narrow phase allocates until the process dies.
+
+The toolkit now scales those terms by `1e-4` instead of zeroing them, which keeps the tensor
+invertible while leaving the body four orders of magnitude harder to rotate out of plane than within
+it. Anything that leaks through is removed by the angular velocity clamp on the same step. Measured
+across 17 runs at 8,000 and 20,000 bodies: no runaway, no increase in bodies squeezed out of the
+pile, and a pile that settles where the zeroed version kept churning.
+
+**If you write your own axis lock, do not zero an inertia term.** Scale it down instead. This applies
+to any "freeze rotation" built by editing `BodyInertia` rather than by adding a constraint - and a
+one-body constraint, solved alongside the contacts, is the more robust design where the per-body cost
+is acceptable.
+
 ## "My torus collides as though the hole were filled"
 
 A convex hull is exact for a convex shape, so `TriangularPrism`, `Cone` and `Teapot` collide as they
@@ -197,6 +221,7 @@ mesh collider if it can be static.
 | `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known — keep hull body counts down, or use an analytic collider |
 | Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |
 | `Stack overflow` in `Refit2WithCacheOptimization` | A degenerate broad-phase tree from a perfectly regular lattice | Jitter the spawn positions, or space the bodies apart |
+| Runaway memory in a 2D prism pile | A zeroed inertia term leaves the tensor singular | Scale the term instead of zeroing it; fixed in `Body2DComponent` |
 | Torus collides with its hole filled | A convex hull cannot represent a concave shape | Build a compound, or use a mesh collider for statics |
 
 > [!NOTE]
