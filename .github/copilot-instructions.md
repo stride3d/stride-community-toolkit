@@ -128,6 +128,8 @@ Two rules when editing these:
 - Only **awake** bodies are synced back to their transform. A dynamic body that settles and falls asleep stops overwriting the transform, so direct transform writes suddenly appear to work while the collider is left behind. A "moving mesh with no collisions" almost always means this.
 - `Bepu3DPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`, but a `CompoundCollider` with no shapes never attaches to the simulation, leaving an inert component. For a purely visual entity use the non-physics `Create3DPrimitive` overload by passing `Primitive3DEntityOptions` instead.
 - `Create3DPrimitive` has both a Bepu overload (`Bepu3DPhysicsOptions`) and a plain one (`Primitive3DEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
+- Spawning thousands of bodies on a **perfectly regular lattice**, exactly touching, degenerates Bepu's broad-phase tree and kills the process with a `Stack overflow` in `Tree.Refit2WithCacheOptimization` within seconds. It is deterministic and not a threading problem. Jitter the spawn positions by a millimetre or space the bodies apart.
+- Hull-backed shapes (`TriangularPrism`, `Cone`, `Teapot`, `Torus`) at a few thousand bodies can crash with an intermittent `AccessViolationException` inside the solver. The cause is **not known**; it appears in roughly one run in five, so do not treat a single clean run as evidence that anything fixed it.
 
 Full write-up: [Bepu: Who Owns the Transform?](../docs/manual/physics-extensions/bepu-transform-ownership.md).
 
