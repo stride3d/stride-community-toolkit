@@ -130,6 +130,7 @@ Two rules when editing these:
 - `Create3DPrimitive` has both a Bepu overload (`Bepu3DPhysicsOptions`) and a plain one (`Primitive3DEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
 - Spawning thousands of bodies on a **perfectly regular lattice**, exactly touching, degenerates Bepu's broad-phase tree and kills the process with a `Stack overflow` in `Tree.Refit2WithCacheOptimization` within seconds. It is deterministic and not a threading problem. Jitter the spawn positions by a millimetre or space the bodies apart.
 - Hull-backed shapes (`TriangularPrism`, `Cone`, `Teapot`, `Torus`) at a few thousand bodies can crash with an intermittent `AccessViolationException` inside the solver. The cause is **not known**; it appears in roughly one run in five, so do not treat a single clean run as evidence that anything fixed it.
+- **Never zero a term of `BodyInertia.InverseInertiaTensor` to lock an axis** — a singular tensor makes Bepu's contact solver diverge in dense piles, which runs the narrow phase out of memory (tens of GB in seconds). Scale the term down instead, as `Body2DComponent` does, or use a one-body constraint.
 
 Full write-up: [Bepu: Who Owns the Transform?](../docs/manual/physics-extensions/bepu-transform-ownership.md).
 
