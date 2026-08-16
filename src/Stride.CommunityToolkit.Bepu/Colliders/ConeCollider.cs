@@ -52,8 +52,8 @@ public static class ConeCollider
             validatedSize = size.Value;
         }
 
-        var meshData = GeometricPrimitive.Cone.New(radius: validatedSize.X, height: validatedSize.Y);
-
-        return meshData.ToConvexHullCollider();
+        return SharedHullCache.CreateCollider(
+            nameof(ConeCollider), validatedSize.X, validatedSize.Y, 0,
+            () => GeometricPrimitive.Cone.New(radius: validatedSize.X, height: validatedSize.Y).ToDecomposedHulls());
     }
 }

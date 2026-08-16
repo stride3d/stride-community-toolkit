@@ -61,8 +61,8 @@ public static class TorusCollider
             validatedMinorRadius = minorRadius.Value;
         }
 
-        var meshData = GeometricPrimitive.Torus.New(majorRadius: validatedMajorRadius, minorRadius: validatedMinorRadius);
-
-        return meshData.ToConvexHullCollider();
+        return SharedHullCache.CreateCollider(
+            nameof(TorusCollider), validatedMajorRadius, validatedMinorRadius, 0,
+            () => GeometricPrimitive.Torus.New(majorRadius: validatedMajorRadius, minorRadius: validatedMinorRadius).ToDecomposedHulls());
     }
 }

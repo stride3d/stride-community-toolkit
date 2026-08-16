@@ -51,8 +51,8 @@ public static class TriangularPrismCollider
             validatedSize = size.Value;
         }
 
-        var meshData = TriangularPrismProceduralModel.New(validatedSize);
-
-        return meshData.ToConvexHullCollider();
+        return SharedHullCache.CreateCollider(
+            nameof(TriangularPrismCollider), validatedSize.X, validatedSize.Y, validatedSize.Z,
+            () => TriangularPrismProceduralModel.New(validatedSize).ToDecomposedHulls());
     }
 }

@@ -50,8 +50,8 @@ public static class TeapotCollider
             validatedSize = size.Value;
         }
 
-        var meshData = GeometricPrimitive.Teapot.New(size: validatedSize, 16);
-
-        return meshData.ToConvexHullCollider();
+        return SharedHullCache.CreateCollider(
+            nameof(TeapotCollider), validatedSize, 0, 0,
+            () => GeometricPrimitive.Teapot.New(size: validatedSize, 16).ToDecomposedHulls());
     }
 }
