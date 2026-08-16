@@ -20,7 +20,7 @@ public static class ConvexHullColliderExtensions
     /// Each call produces a new <see cref="DecomposedHulls"/>, and Stride keys its cache of built Bepu
     /// hulls on that instance, so calling this once per body builds one Bepu hull per body. Share a
     /// single <see cref="DecomposedHulls"/> instead when many bodies use the same shape - see
-    /// <see cref="SharedHullCache"/>.
+    /// <see cref="Colliders.SharedHullCache"/>.
     /// </remarks>
     public static ConvexHullCollider ToConvexHullCollider(this GeometricMeshData<VertexPositionNormalTexture> meshData)
         => new() { Hull = meshData.ToDecomposedHulls() };
