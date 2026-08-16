@@ -3,7 +3,6 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Games;
-using Stride.CommunityToolkit.Helpers;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -14,7 +13,7 @@ using Stride.Rendering;
 
 Vector3 wallSize = new(1, 50, 1);
 float wallWidth = 100;
-int itemCount = 15000;
+int itemCount = 30000;
 
 
 BufferedEntityInstancing? bufferedInstancing = null;
@@ -112,22 +111,62 @@ InstancingComponent CreateMaster(Scene rootScene, Model model, IInstancing insta
 
 void GenerateItems(Scene rootScene, int count, PrimitiveModelType modelType)
 {
-    for (int i = 0; i < count; i++)
+    var rows = count / wallWidth;
+    var space = 1.2f;
+    var verticalOffset = 1.2f;
+
+    for (int i = 0; i < rows; i++)
     {
-        var entity = game.Create3DPrimitive(modelType, new()
+        for (int j = 0; j < (wallWidth - 30); j++)
         {
-            Component = new Body2DComponent() { Collider = new CompoundCollider() }
-        });
+            var entity = new Entity("InstancedItem") { new ModelComponent(sharedModel) };
 
-        // The master draws every instance. Leaving each entity its own ModelComponent would draw the
-        // whole pile twice - once per entity, once instanced - which is slower than not instancing at
-        // all. Create3DPrimitive always adds one, so it has to come back off; what is kept is the
-        // collider it derived from the primitive type and size.
-        entity.Remove<ModelComponent>();
+            entity.AddBepu3DPhysics(modelType, new Bepu3DPhysicsOptions
+            {
+                Component = new Body2DComponent() { Collider = new CompoundCollider() }
+            });
 
-        entity.Transform.Position = VectorHelper.RandomVector3(xRange: [-40, 40], yRange: [20, 400], zRange: [0, 0]);
-        entity.Scene = rootScene;
-
-        bufferedInstancing?.AddInstance(entity);
+            //var entity = game.Create3DPrimitive(modelType, new()
+            //{
+            //    Component = new Body2DComponent() { Collider = new CompoundCollider() }
+            //});
+            // The master draws every instance. Leaving each entity its own ModelComponent would draw the
+            // whole pile twice - once per entity, once instanced - which is slower than not instancing at
+            // all. Create3DPrimitive always adds one, so it has to come back off; what is kept is the
+            // collider it derived from the primitive type and size.
+            entity.Remove<ModelComponent>();
+            var position = new Vector3((j - (wallWidth - 30) / 2) * space, 5 + i * verticalOffset, 0);
+            //Console.WriteLine(position);
+            entity.Transform.Position = position;
+            bufferedInstancing?.AddInstance(entity);
+            entity.Scene = rootScene;
+        }
     }
+
+    //for (int i = 0; i < count; i++)
+    //{
+    //    var entity = new Entity("InstancedItem") { new ModelComponent(sharedModel) };
+
+    //    entity.AddBepu3DPhysics(modelType, new Bepu3DPhysicsOptions
+    //    {
+    //        Component = new Body2DComponent() { Collider = new CompoundCollider() }
+    //    });
+
+    //    //var entity = game.Create3DPrimitive(modelType, new()
+    //    //{
+    //    //    Component = new Body2DComponent() { Collider = new CompoundCollider() }
+    //    //});
+
+    //    // The master draws every instance. Leaving each entity its own ModelComponent would draw the
+    //    // whole pile twice - once per entity, once instanced - which is slower than not instancing at
+    //    // all. Create3DPrimitive always adds one, so it has to come back off; what is kept is the
+    //    // collider it derived from the primitive type and size.
+    //    entity.Remove<ModelComponent>();
+
+    //    entity.Transform.Position = Stride.CommunityToolkit.Helpers.VectorHelper.RandomVector3(xRange: [-40, 40], yRange: [20, 400], zRange: [0, 0]);
+
+    //    bufferedInstancing?.AddInstance(entity);
+
+    //    entity.Scene = rootScene;
+    //}
 }
