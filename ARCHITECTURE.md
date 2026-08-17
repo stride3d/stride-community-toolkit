@@ -81,7 +81,7 @@ sources in this repository.)*
    ```
 
    Note this fixes the ambiguity **structurally** rather than by documentation, and it subsumes
-   item 7: the mesh and collider switches both match over the same closed set, so a shape added to
+   item 6: the mesh and collider switches both match over the same closed set, so a shape added to
    one and not the other is caught at the switch rather than by a test.
 
    Works on C# 14 / net10.0 today. Breaking, and broad — `PrimitiveModelType` appears across nearly
@@ -159,22 +159,7 @@ return value compiles unchanged.
 
 ---
 
-## 6. `DebugTextPrinter` invites index-based mutation
-
-**Observation.** The type exposes an `Instructions` list plus `Print()`, which encourages writing
-`Instructions[2] = ...` each frame to update a line in place. There is also
-`Print(IReadOnlyCollection<TextElement>)`, which replaces the whole list.
-
-**Impact.** The index form requires startup placeholders and per-frame writes to agree on line
-ordering, and they drift apart the moment a line is renamed or reordered — a live label ends up
-describing the wrong key. Hit while writing `Example15_Constraint_Motors`.
-
-**Options.** Document the collection overload as the preferred usage for anything with live values;
-or make `Instructions` init-only so the collection overload is the only route for dynamic text.
-
----
-
-## 7. No test asserts that generated meshes and colliders agree
+## 6. No test asserts that generated meshes and colliders agree
 
 **Observation.** For every `PrimitiveModelType`, the procedural model and the Bepu collider derive
 their dimensions from the same `Size` in two separate switch statements
@@ -189,3 +174,111 @@ collider bounds match. Cheap, and it pins down the convention that item 1 docume
 
 Superseded if item 1 option 4 is taken: matching both switches over a closed set of primitive records
 moves this from a test to a compile-time check.
+
+---
+
+## 7. `Create3DPrimitive` cannot share a model, and every caller works around it the same way
+
+**Observation.** Each call generates a fresh `Model` and a fresh pair of GPU buffers. There is no
+overload that accepts an existing `Model`, and no cache. Anything drawing many identical objects
+therefore hand-rolls the same trick: create one throwaway primitive, take its model, and discard the
+entity.
+
+```csharp
+var model = game.Create3DPrimitive(type, new Primitive3DEntityOptions()).Get<ModelComponent>().Model;
+```
+
+**Impact.** Measured, not theoretical: 10,000 spheres cost **1.5 GB** created per-body against
+**400 MB** sharing one model — the models are ~95% of the process memory, and it is why the stress
+pile appeared to show "2D physics uses more memory than 3D" when it was really "this example shares a
+model and that one does not". The same workaround appears verbatim in `Example22`,
+`Example01_Basic2DScene_StressPile` and the memory harness.
+
+A second, independent multiplier sits underneath: `PrimitiveProceduralModelBase.NumberOfTextureCoordinates`
+defaults to **10**, so `Generate` expands every vertex from 48 to 84 bytes by duplicating one UV ten
+times. The toolkit never sets it.
+
+**Options.** An overload taking a `Model`; an internal cache keyed by `(type, size)`; or an explicit
+`GetOrCreateSharedModel(type, size)` helper. Additive either way. Setting
+`NumberOfTextureCoordinates = 1` on toolkit-generated primitives is a one-line change with no API
+impact, though it is a behaviour change for anyone relying on ten channels.
+
+---
+
+## 8. Deriving a collider requires an entity and a model it never reads
+
+**Observation.** `Get3DColliderShape(type, size)` is private. The only public route to it is
+`AddBepu3DPhysics`, which throws unless the entity already carries a `ModelComponent` — a guard only,
+since it derives the collider from the primitive type and reads nothing out of the mesh.
+
+**Impact.** Combined with item 7, sharing a model becomes a four-step dance that needs a comment to
+explain itself:
+
+```csharp
+var entity = new Entity("Item") { new ModelComponent(sharedModel) };   // model attached only to satisfy the guard
+entity.AddBepu3DPhysics(type, options);
+entity.Remove<ModelComponent>();                                       // ...and immediately taken off again
+```
+
+The collider for a shape and a size is a pure function of two values. Nothing about it needs an
+entity, a component, or a mesh.
+
+**Options.** Expose it — `public static ColliderBase ColliderFor(PrimitiveModelType, Vector3?)` —
+which is additive and also serves callers who want a collider without any of the helper machinery;
+and/or drop the `ModelComponent` guard from `AddBepu3DPhysics`, which is breaking only for code
+relying on the throw.
+
+---
+
+## 9. Cached mesh data is shared, and the engine mutates it in place
+
+**Observation.** `CircleProceduralModel`, `Capsule2DProceduralModel`, `PolygonProceduralModel`,
+`RectangleProceduralModel` and `TriangleProceduralModel` each keep a static cache and hand the *same*
+`GeometricMeshData` instance to every caller. `PrimitiveProceduralModelBase.Generate` then mutates
+`data.Vertices` in place for `LocalOffset` and `Scale`.
+
+**Impact.** Silent and cumulative. Two models built from the same cached mesh with `Scale = 2` give a
+second model at 4×; with `LocalOffset` the offsets add up. Both properties are inherited public API on
+every one of these types, so nothing marks them as unsafe to use.
+
+**Options.** Cache only when `Scale` and `LocalOffset` are at their defaults; clone the arrays on the
+way out (which discards most of the benefit); or drop these caches entirely in favour of a model-level
+cache under item 7, which is the layer the sharing actually wants to happen at.
+
+---
+
+## 10. Instancing needs three separate registrations and fails silently if one is missed
+
+**Observation.** Drawing an instanced crowd requires, in three different places: an
+`InstancingRenderFeature` in the graphics compositor (`AddInstancingSupport`), a master entity in the
+scene carrying a `ModelComponent` and an `InstancingComponent`, and — for the buffered variant — a
+renderer in the compositor (`AddInstancingBufferUpload`).
+
+**Impact.** Omit the first and nothing is drawn, with no exception, no warning and no log line. The
+code-built compositor wires up transform, skinning, material and lighting but not instancing, so this
+catches everyone who does not start from a Game Studio project. Hit while writing `Example22`.
+
+The split also has a lifetime consequence worth knowing: `AddInstancingBufferUpload` registers with
+the **compositor**, not the scene, so it outlives any scene swap. Creating one instancing object per
+scene leaves every previous one registered and being uploaded every frame.
+
+**Options.** A single helper that sets up the render feature, the master and the upload renderer
+together; and/or have the instancing processor warn once if it finds an `InstancingComponent` in a
+scene whose compositor has no `InstancingRenderFeature`.
+
+---
+
+## 11. Toolkit instancing does not notice entities leaving the scene
+
+**Observation.** Stride's own `InstanceComponent` unregisters itself from its master when its entity
+leaves the scene, because the component goes with it. `EntityInstancing` and `BufferedEntityInstancing`
+keep their own list and have no such hook.
+
+**Impact.** An entity removed from the scene stays registered, so the master keeps reading its
+transform and drawing it — ghosts of objects that are no longer there. The caller has to remember to
+call `Clear()` or remove the instance explicitly, and to do it *before* detaching the entities.
+Encountered while adding runtime shape switching to `Example01_Basic2DScene_StressPile`.
+
+**Options.** Subscribe to the entity's scene changes and unregister automatically, matching
+`InstanceComponent`'s behaviour; or keep the manual model and make the asymmetry loud in the XML docs
+of both types.
