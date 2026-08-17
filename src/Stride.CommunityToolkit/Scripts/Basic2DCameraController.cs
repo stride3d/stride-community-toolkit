@@ -167,7 +167,15 @@ public class Basic2DCameraController : SyncScript
     /// <summary>
     /// Gets or sets whether on-screen camera instructions are displayed.
     /// </summary>
-    public bool ShowInstructions { get; set; } = true;
+    /// <remarks>
+    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
+    /// it, is toggled with <see cref="DebugOverlay.ToggleKey"/>.
+    /// </remarks>
+    public bool ShowInstructions
+    {
+        get => _instructions?.Enabled ?? false;
+        set { if (_instructions is not null) _instructions.Enabled = value; }
+    }
 
     private CameraComponent? _camera;
     private Vector3 _defaultCameraPosition;
@@ -175,7 +183,7 @@ public class Basic2DCameraController : SyncScript
     private Vector2? _lastMousePosition;
     private float _defaultZ = 0;
 
-    private DebugTextPrinter? _instructions;
+    private DebugOverlaySection? _instructions;
 
     /// <summary>
     /// Initializes the camera controller by setting up the instruction overlay and caching the initial state.
@@ -192,27 +200,17 @@ public class Basic2DCameraController : SyncScript
         _targetPosition = Entity.Transform.Position;
         _defaultZ = Entity.Transform.Position.Z;
 
-        _instructions = new DebugTextPrinter()
-        {
-            DebugTextSystem = DebugText,
-            TextSize = new(205, 18 * 7),
-            ScreenSize = GetScreenSize(),
-            Instructions =
-            [
-                new("CONTROL INSTRUCTIONS"),
-                new("F2: Toggle Help", Color.Red),
-                new("F3: Reposition Help", Color.Red),
-                new("Arrow Keys: Move"),
-                new("Hold Shift: Increase speed"),
-                new("Mouse Wheel: Zoom"),
-                new("H: Reset Camera"),
-            ]
-        };
-
-        _instructions.Initialize();
+        _instructions = DebugOverlay.GetOrCreate(Game).AddSection("Camera", static () =>
+        [
+            new("CAMERA CONTROLS"),
+            new("F2: Toggle Help", Color.Red),
+            new("F3: Reposition Help", Color.Red),
+            new("Arrow Keys: Move"),
+            new("Hold Shift: Increase speed"),
+            new("Mouse Wheel: Zoom"),
+            new("H: Reset Camera"),
+        ], order: -100);
     }
-
-    private Int2 GetScreenSize() => new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
 
     /// <summary>
     /// Updates the camera controller state every frame, handling movement, zoom, following, bounds, and instruction display.
@@ -239,7 +237,6 @@ public class Basic2DCameraController : SyncScript
             if (_camera is null) return; // Ensure we have a camera component
         }
 
-        ToggleInstructionKeys();
 
         // Process follow target first (the highest priority)
         if (FollowTarget is null)
@@ -270,11 +267,6 @@ public class Basic2DCameraController : SyncScript
         if (EnableBounds)
             ApplyCameraBounds();
 
-        if (ShowInstructions)
-        {
-            _instructions?.UpdateScreenSize(GetScreenSize());
-            _instructions?.Print();
-        }
     }
 
     /// <summary>
@@ -287,16 +279,6 @@ public class Basic2DCameraController : SyncScript
     /// <item><description>F3: Changes the position of the instruction overlay on screen.</description></item>
     /// </list>
     /// </remarks>
-    private void ToggleInstructionKeys()
-    {
-        if (!Input.HasKeyboard) return;
-
-        if (Input.IsKeyPressed(Keys.F2))
-            ShowInstructions = !ShowInstructions;
-
-        if (Input.IsKeyPressed(Keys.F3))
-            _instructions?.ChangeStartPosition();
-    }
 
     /// <summary>
     /// Processes keyboard-driven camera translation.

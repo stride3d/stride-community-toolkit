@@ -24,8 +24,7 @@ public class Basic3DCameraController : SyncScript
     private float _yaw;
     private float _pitch;
 
-    private DebugTextPrinter? _instructions;
-    private bool _showInstructions = true;
+    private DebugOverlaySection? _instructions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class with the specified display
@@ -85,14 +84,17 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
-        _instructions = new DebugTextPrinter()
+        // DisplayPosition.None means the caller does not want camera help on screen, so no section is
+        // registered - and the shared overlay's position is left for whoever else is using it
+        if (_displayPosition != DisplayPosition.None)
         {
-            DebugTextSystem = DebugText,
-            TextSize = new(205, 17 * 11),
-            ScreenSize = GetScreenSize(),
-            Instructions =
+            var overlay = DebugOverlay.GetOrCreate(Game);
+
+            overlay.Position = _displayPosition;
+
+            _instructions = overlay.AddSection("Camera", static () =>
             [
-                new("CONTROL INSTRUCTIONS"),
+                new("CAMERA CONTROLS"),
                 new("F2: Toggle Help", Color.Red),
                 new("F3: Reposition Help", Color.Red),
                 new("WASD: Move", Color.LightGreen),
@@ -102,10 +104,8 @@ public class Basic3DCameraController : SyncScript
                 new("Numpad 2/4/6/8: Rotation", Color.LightGreen),
                 new("Right Mouse Button: Rotate", Color.LightGreen),
                 new("H: Reset Camera", Color.LightGreen),
-            ]
-        };
-
-        _instructions.Initialize(_displayPosition);
+            ], order: -100);
+        }
 
         // Default up-direction
         _upVector = Vector3.UnitY;
@@ -121,8 +121,6 @@ public class Basic3DCameraController : SyncScript
         }
     }
 
-    private Int2 GetScreenSize() => new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
-
     /// <summary>
     /// Per-frame update: processes input and applies translation/rotation.
     /// </summary>
@@ -130,12 +128,6 @@ public class Basic3DCameraController : SyncScript
     {
         ProcessInput();
         UpdateTransform();
-
-        if (_showInstructions)
-        {
-            _instructions?.UpdateScreenSize(GetScreenSize());
-            _instructions?.Print();
-        }
     }
 
     private void ProcessInput()
@@ -145,7 +137,6 @@ public class Basic3DCameraController : SyncScript
         _yaw = 0f;
         _pitch = 0f;
 
-        ToggleInstructionKeys();
 
         KeyboardAndGamePadBasedMovement(deltaTime);
 
@@ -156,15 +147,17 @@ public class Basic3DCameraController : SyncScript
         ResetCameraToDefault();
     }
 
-    private void ToggleInstructionKeys()
+    /// <summary>
+    /// Gets or sets whether the camera's help section is shown.
+    /// </summary>
+    /// <remarks>
+    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
+    /// it, is toggled with <see cref="DebugOverlay.ToggleKey"/>.
+    /// </remarks>
+    public bool ShowInstructions
     {
-        if (!Input.HasKeyboard) return;
-
-        if (Input.IsKeyPressed(Keys.F2))
-            _showInstructions = !_showInstructions;
-
-        if (Input.IsKeyPressed(Keys.F3))
-            _instructions?.ChangeStartPosition();
+        get => _instructions?.Enabled ?? false;
+        set { if (_instructions is not null) _instructions.Enabled = value; }
     }
 
     private void KeyboardAndGamePadBasedMovement(float deltaTime)
