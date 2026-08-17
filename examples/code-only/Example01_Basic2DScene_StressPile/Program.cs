@@ -21,7 +21,7 @@ using Stride.Rendering;
 // Model - shapes cannot be mixed. Changing shape therefore clears the pile and respawns it, while
 // changing the layout or the batch size only affects what is spawned next.
 
-Vector3 wallSize = new(1, 50, 1);
+Vector3 wallHeight = new(1, 65, 1);
 const float WallWidth = 100;
 const float ColumnWidth = WallWidth - 30;
 
@@ -81,9 +81,10 @@ void Start(Scene rootScene)
     game.Add3DCameraController();
     game.AddSkybox();
 
-    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
-    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);
-    CreateWall(new Vector3(0, -25, 0), new Vector3(WallWidth, 1, 1));
+    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallHeight);
+    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallHeight);
+    CreateWall(new Vector3(-25, -46.6f, 0), new Vector3(58.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(-30)));
+    CreateWall(new Vector3(25, -46.6f, 0), new Vector3(58.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(30)));
 
     SetupInstancing();
     SetupMenus();
@@ -91,7 +92,7 @@ void Start(Scene rootScene)
     SpawnBatch(batchSize);
 }
 
-void CreateWall(Vector3 position, Vector3 size)
+void CreateWall(Vector3 position, Vector3 size, Quaternion? rotation = null)
 {
     var wall = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
     {
@@ -101,6 +102,10 @@ void CreateWall(Vector3 position, Vector3 size)
     });
 
     wall.Transform.Position = position;
+    if (rotation.HasValue)
+    {
+        wall.Transform.Rotation = rotation.Value;
+    }
     wall.Scene = scene;
 }
 
