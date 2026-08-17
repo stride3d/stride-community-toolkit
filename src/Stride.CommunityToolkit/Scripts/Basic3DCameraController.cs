@@ -27,6 +27,24 @@ public class Basic3DCameraController : SyncScript
     private DebugOverlaySection? _instructions;
 
     /// <summary>
+    /// Gets or sets the key that collapses and expands the camera's help. Defaults to
+    /// <see cref="Keys.F2"/>. Must be set before the script starts.
+    /// </summary>
+    public Keys HelpToggleKey { get; set; } = Keys.F2;
+
+    /// <summary>
+    /// Gets or sets whether the camera's help starts collapsed to its title line, leaving a one-line
+    /// reminder of the key rather than the full list. Defaults to <see langword="true"/>, and must be
+    /// set before the script starts.
+    /// </summary>
+    /// <remarks>
+    /// Collapsed by default because these keys are the same in every scene and stop being worth ten
+    /// lines of screen space almost immediately, while whatever the scene itself has to say does not.
+    /// The remaining line names the key, so nothing is hidden without a way back.
+    /// </remarks>
+    public bool HelpCollapsed { get; set; } = true;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class with the specified display
     /// position.
     /// </summary>
@@ -92,10 +110,8 @@ public class Basic3DCameraController : SyncScript
 
             overlay.Position = _displayPosition;
 
-            _instructions = overlay.AddSection("Camera", static () =>
+            _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, static () =>
             [
-                new("CAMERA CONTROLS"),
-                new("F2: Toggle Help", Color.Red),
                 new("F3: Reposition Help", Color.Red),
                 new("WASD: Move", Color.LightGreen),
                 new("Arrow Keys: Move", Color.LightGreen),
@@ -104,7 +120,7 @@ public class Basic3DCameraController : SyncScript
                 new("Numpad 2/4/6/8: Rotation", Color.LightGreen),
                 new("Right Mouse Button: Rotate", Color.LightGreen),
                 new("H: Reset Camera", Color.LightGreen),
-            ], order: -100);
+            ], HelpCollapsed, order: -100);
         }
 
         // Default up-direction

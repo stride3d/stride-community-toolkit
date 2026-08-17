@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
+using Stride.Input;
 using Stride.Graphics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -24,16 +25,33 @@ public static partial class EntityExtensions
     /// or by dragging/scaling using multitouch. Rotation is achieved using the Numpad, the mouse while holding
     /// the right mouse button, a gamepad's right stick, or by dragging using single-touch.
     /// </remarks>
-    public static void Add3DCameraController(this Entity entity, DisplayPosition displayPosition = DisplayPosition.TopRight)
-        => entity.Add(new Basic3DCameraController(displayPosition));
+    /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
+    /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
+    public static void Add3DCameraController(this Entity entity,
+        DisplayPosition displayPosition = DisplayPosition.TopRight,
+        Keys helpToggleKey = Keys.F2,
+        bool helpCollapsed = true)
+        => entity.Add(new Basic3DCameraController(displayPosition)
+        {
+            HelpToggleKey = helpToggleKey,
+            HelpCollapsed = helpCollapsed
+        });
 
     /// <summary>
     /// Adds a <see cref="Basic2DCameraController"/> script to the entity enabling panning and zooming
     /// interactions suitable for orthographic 2D scenes.
     /// </summary>
     /// <param name="entity">The camera entity that will receive the controller script.</param>
-    public static void Add2DCameraController(this Entity entity)
-        => entity.Add(new Basic2DCameraController());
+    /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
+    /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
+    public static void Add2DCameraController(this Entity entity,
+        Keys helpToggleKey = Keys.F2,
+        bool helpCollapsed = true)
+        => entity.Add(new Basic2DCameraController
+        {
+            HelpToggleKey = helpToggleKey,
+            HelpCollapsed = helpCollapsed
+        });
 
     /// <summary>
     /// Adds a TranslationGizmo to the specified entity with optional custom colors.

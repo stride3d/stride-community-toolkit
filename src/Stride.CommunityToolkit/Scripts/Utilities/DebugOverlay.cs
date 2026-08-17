@@ -66,9 +66,15 @@ public sealed class DebugOverlay : GameSystemBase
     public Int2 CustomPosition { get; set; }
 
     /// <summary>
-    /// Gets or sets the key that shows and hides the overlay. Defaults to <see cref="Keys.F2"/>.
+    /// Gets or sets the key that shows and hides the whole overlay. Defaults to <see cref="Keys.F4"/>.
     /// </summary>
-    public Keys ToggleKey { get; set; } = Keys.F2;
+    /// <remarks>
+    /// This is the blunt instrument, for a clean screenshot. Prefer collapsing individual sections -
+    /// a collapsed section leaves a line saying which key brings it back, whereas hiding everything
+    /// leaves no clue that there was anything to see. <see cref="Keys.F2"/> is deliberately left to
+    /// the camera controllers, whose help is what most callers actually want out of the way.
+    /// </remarks>
+    public Keys ToggleKey { get; set; } = Keys.F4;
 
     /// <summary>
     /// Gets or sets the key that moves the overlay to the next corner. Defaults to <see cref="Keys.F3"/>.
@@ -89,6 +95,17 @@ public sealed class DebugOverlay : GameSystemBase
 
     /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in pixels.</summary>
     public Int2 Margin { get; set; } = new(5, 10);
+
+    /// <summary>Gets or sets the marker shown on a collapsed section's title line.</summary>
+    /// <remarks>Printable ASCII only; arrow glyphs such as <c>▼</c> render as blanks.</remarks>
+    public string CollapsedMarker { get; set; } = "[+]";
+
+    /// <summary>Gets or sets the marker shown on an expanded section's title line.</summary>
+    /// <inheritdoc cref="CollapsedMarker" path="/remarks"/>
+    public string ExpandedMarker { get; set; } = "[-]";
+
+    /// <summary>Gets or sets the colour used for section title lines.</summary>
+    public Color? TitleColor { get; set; }
 
     /// <summary>Gets the sections currently registered, in insertion order.</summary>
     public IReadOnlyList<DebugOverlaySection> Sections => _sections;
@@ -131,6 +148,33 @@ public sealed class DebugOverlay : GameSystemBase
         return section;
     }
 
+    /// <summary>
+    /// Adds a section that can be collapsed to a single title line and expanded again with a key.
+    /// </summary>
+    /// <param name="name">A name for the section, used to find it again. Not displayed.</param>
+    /// <param name="title">The heading, shown above the lines and on its own while collapsed.</param>
+    /// <param name="toggleKey">The key that collapses and expands the section.</param>
+    /// <param name="lines">Produces the section's lines. Called every frame it is drawn expanded.</param>
+    /// <param name="collapsed">Whether it starts collapsed.</param>
+    /// <param name="order">Sort order; lower is drawn first.</param>
+    /// <returns>The section, so it can be collapsed, disabled or removed later.</returns>
+    public DebugOverlaySection AddCollapsibleSection(
+        string name,
+        string title,
+        Keys toggleKey,
+        Func<IReadOnlyList<TextElement>> lines,
+        bool collapsed = false,
+        int order = 0)
+    {
+        var section = AddSection(name, lines, order);
+
+        section.Title = title;
+        section.ToggleKey = toggleKey;
+        section.Collapsed = collapsed;
+
+        return section;
+    }
+
     /// <summary>Removes a section previously added with <see cref="AddSection"/>.</summary>
     /// <param name="section">The section to remove.</param>
     /// <returns><see langword="true"/> if it was present.</returns>
@@ -164,6 +208,16 @@ public sealed class DebugOverlay : GameSystemBase
         if (_input.IsKeyPressed(ToggleKey)) Visible = !Visible;
 
         if (_input.IsKeyPressed(RepositionKey) && Position != DisplayPosition.Custom) CyclePosition();
+
+        // Section keys are read even while the overlay is hidden, so a collapse toggle pressed with
+        // everything off still takes effect rather than silently doing nothing
+        foreach (var section in _sections)
+        {
+            if (section.IsCollapsible && _input.IsKeyPressed(section.ToggleKey!.Value))
+            {
+                section.Collapsed = !section.Collapsed;
+            }
+        }
     }
 
     /// <inheritdoc />
@@ -191,6 +245,16 @@ public sealed class DebugOverlay : GameSystemBase
         }
     }
 
+    /// <summary>
+    /// Produces a readable name for a key, so <see cref="Keys.D2"/> shows as "2" rather than "D2".
+    /// </summary>
+    private static string DescribeKey(Keys key) => key switch
+    {
+        >= Keys.D0 and <= Keys.D9 => ((char)('0' + (key - Keys.D0))).ToString(),
+        >= Keys.NumPad0 and <= Keys.NumPad9 => ((char)('0' + (key - Keys.NumPad0))).ToString(),
+        _ => key.ToString()
+    };
+
     private List<TextElement> CollectLines()
     {
         var lines = new List<TextElement>();
@@ -199,11 +263,26 @@ public sealed class DebugOverlay : GameSystemBase
         {
             if (!section.Enabled) continue;
 
-            var sectionLines = section.Lines();
+            var collapsible = section.IsCollapsible;
 
-            if (sectionLines.Count == 0) continue;
+            // A collapsed section still costs its title line. That is the whole point: hiding content
+            // outright leaves no clue it exists, or which key brings it back
+            var sectionLines = collapsible && section.Collapsed ? [] : section.Lines();
+
+            if (sectionLines.Count == 0 && !collapsible) continue;
 
             if (lines.Count > 0) lines.Add(new(string.Empty));
+
+            if (collapsible)
+            {
+                var marker = section.Collapsed ? CollapsedMarker : ExpandedMarker;
+
+                lines.Add(new($"{DescribeKey(section.ToggleKey!.Value)} - {section.Title} {marker}", TitleColor));
+            }
+            else if (!string.IsNullOrEmpty(section.Title))
+            {
+                lines.Add(new(section.Title, TitleColor));
+            }
 
             lines.AddRange(sectionLines);
         }

@@ -192,7 +192,8 @@ IReadOnlyList<TextElement> BuildInstructions()
     // Anchor-to-weight distance is the giveaway. Both ropes are built to the same nominal length, so
     // a number that climbs and wanders is a rope being pulled apart faster than the solver can fix.
     return [
-        new("A rope is a chain of bodies. Keeping a heavy weight on a light chain stable is the hard part."),
+        new("A rope is a chain of bodies. Keeping a heavy weight on"),
+        new("a light chain stable is the hard part."),
         new($"Both ropes are identical: {LinkCount} links, one weight {WeightMass / LinkMass:0}x heavier than a link."),
         new($"Naive  (left):  length {Length(naiveRope)}   lever arm at segment ends, neighbours only", Color.OrangeRed),
         new($"Stable (right): length {Length(stableRope)}   {(stabilised ? $"zero lever arm, {SkipSpan - 1}x skip constraints" : "STABILISATION OFF - now built like the left one")}", Color.LimeGreen),

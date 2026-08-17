@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
+using Stride.Input;
 using Stride.Engine.Processors;
 using Stride.Games;
 using Stride.Graphics;
@@ -268,11 +269,16 @@ public static class GameExtensions
     /// used.</param>
     /// <returns>The camera entity to which the 2D camera controller was added.</returns>
     /// <exception cref="InvalidOperationException">Thrown if no camera entity with the specified name exists in the current scene.</exception>
-    public static Entity Add2DCameraController(this Game game, string? cameraName = CameraDefaults.MainCameraName)
+    /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
+    /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
+    public static Entity Add2DCameraController(this Game game,
+        string? cameraName = CameraDefaults.MainCameraName,
+        Keys helpToggleKey = Keys.F2,
+        bool helpCollapsed = true)
     {
         var cameraEntity = GetCameraEntity(game, cameraName);
 
-        cameraEntity.Add2DCameraController();
+        cameraEntity.Add2DCameraController(helpToggleKey, helpCollapsed);
 
         return cameraEntity;
     }
@@ -286,12 +292,17 @@ public static class GameExtensions
     /// used.</param>
     /// <returns>The camera entity to which the 3D camera controller was added.</returns>
     /// <exception cref="InvalidOperationException">Thrown if no camera entity with the specified name exists in the current scene.</exception>
+    /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
+    /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
     public static Entity Add3DCameraController(this Game game,
-        DisplayPosition displayPosition = DisplayPosition.TopRight, string? cameraName = CameraDefaults.MainCameraName)
+        DisplayPosition displayPosition = DisplayPosition.TopRight,
+        string? cameraName = CameraDefaults.MainCameraName,
+        Keys helpToggleKey = Keys.F2,
+        bool helpCollapsed = true)
     {
         var cameraEntity = GetCameraEntity(game, cameraName);
 
-        cameraEntity.Add3DCameraController(displayPosition);
+        cameraEntity.Add3DCameraController(displayPosition, helpToggleKey, helpCollapsed);
 
         return cameraEntity;
     }

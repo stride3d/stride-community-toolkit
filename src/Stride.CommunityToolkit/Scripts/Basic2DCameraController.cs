@@ -186,6 +186,24 @@ public class Basic2DCameraController : SyncScript
     private DebugOverlaySection? _instructions;
 
     /// <summary>
+    /// Gets or sets the key that collapses and expands the camera's help. Defaults to
+    /// <see cref="Keys.F2"/>. Must be set before the script starts.
+    /// </summary>
+    public Keys HelpToggleKey { get; set; } = Keys.F2;
+
+    /// <summary>
+    /// Gets or sets whether the camera's help starts collapsed to its title line, leaving a one-line
+    /// reminder of the key rather than the full list. Defaults to <see langword="true"/>, and must be
+    /// set before the script starts.
+    /// </summary>
+    /// <remarks>
+    /// Collapsed by default because these keys are the same in every scene and stop being worth
+    /// several lines of screen space almost immediately, while whatever the scene itself has to say
+    /// does not. The remaining line names the key, so nothing is hidden without a way back.
+    /// </remarks>
+    public bool HelpCollapsed { get; set; } = true;
+
+    /// <summary>
     /// Initializes the camera controller by setting up the instruction overlay and caching the initial state.
     /// </summary>
     /// <remarks>
@@ -200,16 +218,15 @@ public class Basic2DCameraController : SyncScript
         _targetPosition = Entity.Transform.Position;
         _defaultZ = Entity.Transform.Position.Z;
 
-        _instructions = DebugOverlay.GetOrCreate(Game).AddSection("Camera", static () =>
-        [
-            new("CAMERA CONTROLS"),
-            new("F2: Toggle Help", Color.Red),
-            new("F3: Reposition Help", Color.Red),
-            new("Arrow Keys: Move"),
-            new("Hold Shift: Increase speed"),
-            new("Mouse Wheel: Zoom"),
-            new("H: Reset Camera"),
-        ], order: -100);
+        _instructions = DebugOverlay.GetOrCreate(Game).AddCollapsibleSection(
+            "Camera", "Camera controls", HelpToggleKey, static () =>
+            [
+                new("F3: Reposition Help", Color.Red),
+                new("Arrow Keys: Move"),
+                new("Hold Shift: Increase speed"),
+                new("Mouse Wheel: Zoom"),
+                new("H: Reset Camera"),
+            ], HelpCollapsed, order: -100);
     }
 
     /// <summary>

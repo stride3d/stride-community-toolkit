@@ -11,9 +11,13 @@ using Stride.Input;
 // A scene with seven shapes to choose from would normally cost seven lines of on-screen instructions,
 // permanently. DebugTextDropdown collapses them into one line until you press its key.
 //
-// The dropdown owns no input of its own: Update() reads the keyboard you give it and Draw() renders
-// at the position you set. Each entry names its own key and carries its own callback, so what a
-// choice does is entirely up to the caller - here, dropping a shape into the scene.
+// The dropdown owns no input of its own: Update() reads the keyboard you give it, and GetLines()
+// hands its current appearance to a DebugOverlay section. That is what puts it in the same block as
+// the camera controller's help, sharing one screen position and one hide key, rather than being a
+// second patch of text somewhere else that F3 could end up drawing on top of.
+//
+// Each entry names its own key and carries its own callback, so what a choice does is entirely up to
+// the caller - here, dropping a shape into the scene.
 //
 // CloseOnSelect = false keeps the list up after a choice, which is what you want for something used
 // repeatedly. Leave it at the default to have the list collapse as soon as a choice is made.
@@ -60,7 +64,6 @@ void Start(Scene rootScene)
     {
         Title = "Spawn",
         ToggleKey = Keys.C,
-        Position = new Int2(6, 60),
         TitleColor = Color.Yellow,
 
         // Stay open so shapes can be dropped one after another
@@ -73,6 +76,9 @@ void Start(Scene rootScene)
             Text: pair.Item.Name ?? pair.Item.Type.ToString(),
             Action: () => Spawn(pair.Item, new Vector3((random.NextSingle() - 0.5f) * 6f, 14, 0))))]
     };
+
+    // No order given, so it lands after the camera controller's help, which registers at -100
+    DebugOverlay.GetOrCreate(game).AddSection("Spawn", () => spawnMenu.GetLines());
 }
 
 void Spawn(ShapeItem shape, Vector3 position)
@@ -89,8 +95,8 @@ void Spawn(ShapeItem shape, Vector3 position)
 
 void Update(Scene rootScene, GameTime time)
 {
+    // Only the input. The overlay draws the menu for us, every frame, from GetLines()
     spawnMenu?.Update(game.Input);
-    spawnMenu?.Draw(game.DebugTextSystem);
 }
 
 /// <summary>One shape the menu can spawn. <paramref name="Name"/> overrides the label, so two
@@ -111,8 +117,9 @@ description:
     shows a single collapsed line until its key is pressed, then expands into a list where every entry
     has its own key, label, colour and callback. Press C to open the menu and 1-7 to drop that shape
     into the 2D scene; the menu is configured to stay open so shapes can be added one after another.
-    The dropdown reads no input by itself - the example passes it the InputManager each frame and
-    chooses where it is drawn - so several menus with different keys can coexist.
+    The dropdown reads no input by itself and does not draw itself either: the example feeds it the
+    InputManager each frame and registers its lines as a DebugOverlay section, so it shares one screen
+    position and one hide key with the camera controller's help instead of being drawn separately.
   cs: |
     Ovládejte scénu z klávesnice, aniž byste zaplnili obrazovku instrukcemi. DebugTextDropdown zobrazuje
     jediný sbalený řádek, dokud nestisknete jeho klávesu; poté se rozbalí do seznamu, kde má každá
@@ -122,6 +129,7 @@ concepts:
     - Building a collapsible keyboard menu with DebugTextDropdown
     - Giving each entry its own key, label, colour and callback
     - Keeping a menu open for repeated use with CloseOnSelect
+    - Sharing one on-screen block with the camera help through a DebugOverlay section
     - Spawning entities at runtime from keyboard input
     - Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
     - "Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial"
