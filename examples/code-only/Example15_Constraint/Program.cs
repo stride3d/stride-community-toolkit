@@ -30,7 +30,7 @@ const float SpringFrequency = 20;         // Reduced from 40
 const float FrictionCoefficient = 0.1f;   // Reduced from 0.5f for smoother sliding
 const float ServoMaxForce = 500;          // Reduced from 1000 for softer constraints
 
-DebugTextPrinter? instructions = null;
+DebugOverlaySection? instructions = null;
 
 // Game entities and components
 CameraComponent? mainCamera = null;
@@ -86,7 +86,7 @@ void Start(Scene scene)
     SetupCollisionMatrix(scene);
     SetupGroundCollisionLayer(scene);
 
-    InitializeDebugTextPrinter();
+    InitializeDebugOverlay();
     InitializeEntities(scene);
 
     // Retrieve the active camera from the scene
@@ -103,7 +103,6 @@ void Update(Scene scene, GameTime time)
     }
 
     // Display on-screen instructions for the user
-    DisplayInstructions();
 
     // On mouse button press, attempt to select the sphere
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))
@@ -511,26 +510,20 @@ void ResetTheScene(Scene scene)
     InitializeEntities(scene);
 }
 
-void DisplayInstructions() => instructions?.Print();
 
-void InitializeDebugTextPrinter()
+void InitializeDebugOverlay()
 {
-    var screenSize = new Int2(game.GraphicsDevice.Presenter.BackBuffer.Width, game.GraphicsDevice.Presenter.BackBuffer.Height);
+    var overlay = DebugOverlay.GetOrCreate(game);
 
-    instructions = new DebugTextPrinter()
-    {
-        DebugTextSystem = game.DebugTextSystem,
-        TextSize = new(205, 17 * 4),
-        ScreenSize = screenSize,
-        Instructions = [
-            new("GAME INSTRUCTIONS"),
-            new("Click the golden sphere and drag to move it (Y-axis locked)"),
-            new("Hold Z to move up, X to move down the golded sphere", Color.Yellow),
-            new("Press R to reset the scene", Color.Yellow),
-        ]
-    };
+    overlay.Position = DisplayPosition.BottomLeft;
 
-    instructions.Initialize(DisplayPosition.BottomLeft);
+    instructions = overlay.AddSection("Game", static () =>
+    [
+        new("GAME INSTRUCTIONS"),
+        new("Click the golden sphere and drag to move it (Y-axis locked)"),
+        new("Hold Z to move up, X to move down the golded sphere", Color.Yellow),
+        new("Press R to reset the scene", Color.Yellow),
+    ]);
 }
 
 Entity CreateCubeEntity(string name, Color color, Vector3 position, Vector3? size = null)

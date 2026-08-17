@@ -12,7 +12,7 @@ using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
 const float IntensityChangeStep = 0.5f;
-DebugTextPrinter? instructions = null;
+DebugOverlaySection? instructions = null;
 LightComponent? skyBoxLightComponent = null;
 float skyBoxLightIntensity = 0;
 
@@ -35,7 +35,7 @@ void Start(Scene scene)
     Create3DPrimitive(scene, new Vector3(1f, 0.5f, -1f), GetMaterial2());
     Create3DPrimitive(scene, new Vector3(0f, 0.5f, 1f), GetMaterial3());
 
-    InitializeDebugTextPrinter();
+    InitializeDebugOverlay();
 }
 
 void Create3DPrimitive(Scene scene, Vector3 position, Material material)
@@ -63,8 +63,6 @@ void Update(Scene scene, GameTime time)
         skyBoxLightComponent.Intensity = skyBoxLightIntensity;
     }
 
-    // Display on-screen instructions for the user
-    DisplayInstructions();
 }
 
 Material GetMaterial1()
@@ -148,24 +146,15 @@ Material GetMaterial3()
     });
 }
 
-void DisplayInstructions()
+void InitializeDebugOverlay()
 {
-    instructions?.Print(GenerateInstructions(skyBoxLightIntensity));
-}
+    var overlay = DebugOverlay.GetOrCreate(game);
 
-void InitializeDebugTextPrinter()
-{
-    var screenSize = new Int2(game.GraphicsDevice.Presenter.BackBuffer.Width, game.GraphicsDevice.Presenter.BackBuffer.Height);
+    overlay.Position = DisplayPosition.BottomLeft;
 
-    instructions = new DebugTextPrinter()
-    {
-        DebugTextSystem = game.DebugTextSystem,
-        TextSize = new(205, 17 * 4),
-        ScreenSize = screenSize,
-        Instructions = GenerateInstructions(skyBoxLightIntensity)
-    };
-
-    instructions.Initialize(DisplayPosition.BottomLeft);
+    // The callback runs every frame the overlay is drawn, so the live light intensity appears without
+    // anything having to push it
+    instructions = overlay.AddSection("Game", () => GenerateInstructions(skyBoxLightIntensity));
 }
 
 static List<TextElement> GenerateInstructions(float skyBoxLightIntensity)

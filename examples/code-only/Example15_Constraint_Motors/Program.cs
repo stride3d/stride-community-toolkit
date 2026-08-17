@@ -82,7 +82,7 @@ const float FreePendulumX = 7.5f;
 // stations never touch each other.
 var pushVelocity = new Vector3(0, 0, 4.5f);
 
-DebugTextPrinter? instructions = null;
+DebugOverlaySection? instructions = null;
 
 // Kept so the update loop can switch them off at runtime - the fastest way to feel what a
 // constraint is actually contributing is to remove it while everything is moving.
@@ -104,7 +104,7 @@ void Start(Scene scene)
     game.AddProfiler();
     game.AddGroundGizmo(new Vector3(-9, 0, -9), showAxisName: true);
 
-    InitializeDebugTextPrinter();
+    InitializeDebugOverlay();
 
     CreateMixer(scene);
     CreateMotorisedPendulum(scene);
@@ -138,7 +138,6 @@ void Update(Scene scene, GameTime time)
         PushPendulums();
     }
 
-    DisplayInstructions();
 }
 
 /// <summary>
@@ -378,9 +377,9 @@ Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool 
     return entity;
 }
 
-void DisplayInstructions()
+IReadOnlyList<TextElement> BuildInstructions()
 {
-    if (instructions is null) return;
+
 
     // Rebuilt every frame rather than patched line by line. Indexing into the existing list means
     // the labels written here and the placeholders written at startup have to be kept in step by
@@ -389,34 +388,29 @@ void DisplayInstructions()
     // The live spin readouts matter: switching a motor off does not brake anything, it just stops
     // pushing. A hinged blade carrying momentum coasts for a very long time, so without a number on
     // screen turning the motor off looks exactly like nothing happening.
-    instructions.Print([
+    return [
         new("SERVO drives to a target and stops. MOTOR drives a velocity forever. LIMIT only clamps."),
         new("Left: hinge + angular motor. Middle: ball socket + angular motor. Right: same pendulum, with and without a swing limit."),
         new($"M - Mixer motor: {OnOff(mixerMotor?.Enabled)}   (blade spin {Spin(mixerMotor?.A)} rad/s)", Color.Yellow),
         new($"N - Arm motor: {OnOff(armMotor?.Enabled)}   (arm spin {Spin(armMotor?.B)} rad/s)", Color.Yellow),
         new($"G - Swing limit: {OnOff(swingLimit?.Enabled)}", Color.Yellow),
         new("P - Push both right-hand pendulums", Color.Yellow),
-    ]);
+    ];
 }
 
 static string OnOff(bool? enabled) => enabled == true ? "ON" : "OFF";
 
 static string Spin(BodyComponent? body) => body is null ? "-" : MathF.Abs(body.AngularVelocity.Y).ToString("0.0");
 
-void InitializeDebugTextPrinter()
+void InitializeDebugOverlay()
 {
-    var screenSize = new Int2(game.GraphicsDevice.Presenter.BackBuffer.Width, game.GraphicsDevice.Presenter.BackBuffer.Height);
+    var overlay = DebugOverlay.GetOrCreate(game);
 
-    // The lines themselves are supplied every frame by DisplayInstructions, since most of them carry
-    // live values. Only the layout is set up here; TextSize reserves room for six lines.
-    instructions = new DebugTextPrinter()
-    {
-        DebugTextSystem = game.DebugTextSystem,
-        TextSize = new(320, 20 * 6),
-        ScreenSize = screenSize,
-    };
+    overlay.Position = DisplayPosition.BottomLeft;
 
-    instructions.Initialize(DisplayPosition.BottomLeft);
+    // BuildInstructions runs every frame the overlay is drawn, which is what puts the live spin
+    // readouts on screen without anything having to push them
+    instructions = overlay.AddSection("Game", BuildInstructions);
 }
 
 /*

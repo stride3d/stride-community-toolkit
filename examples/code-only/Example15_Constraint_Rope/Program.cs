@@ -77,7 +77,7 @@ const float SwingSpeed = 4f;
 
 var swingImpulse = new Vector3(0, 0, WeightMass * SwingSpeed);
 
-DebugTextPrinter? instructions = null;
+DebugOverlaySection? instructions = null;
 
 Rope? naiveRope = null;
 Rope? stableRope = null;
@@ -93,7 +93,7 @@ void Start(Scene scene)
     game.AddSkybox();
     game.AddProfiler();
 
-    InitializeDebugTextPrinter();
+    InitializeDebugOverlay();
 
     // Anchored at the segment ends, neighbours only: the straightforward build, and the unstable one.
     naiveRope = RopeBuilder.Build(game, scene,
@@ -161,7 +161,6 @@ void Update(Scene scene, GameTime time)
         SwingWeights();
     }
 
-    DisplayInstructions();
 }
 
 /// <summary>
@@ -186,36 +185,33 @@ void SwingWeights()
     }
 }
 
-void DisplayInstructions()
+IReadOnlyList<TextElement> BuildInstructions()
 {
-    if (instructions is null) return;
+
 
     // Anchor-to-weight distance is the giveaway. Both ropes are built to the same nominal length, so
     // a number that climbs and wanders is a rope being pulled apart faster than the solver can fix.
-    instructions.Print([
+    return [
         new("A rope is a chain of bodies. Keeping a heavy weight on a light chain stable is the hard part."),
         new($"Both ropes are identical: {LinkCount} links, one weight {WeightMass / LinkMass:0}x heavier than a link."),
         new($"Naive  (left):  length {Length(naiveRope)}   lever arm at segment ends, neighbours only", Color.OrangeRed),
         new($"Stable (right): length {Length(stableRope)}   {(stabilised ? $"zero lever arm, {SkipSpan - 1}x skip constraints" : "STABILISATION OFF - now built like the left one")}", Color.LimeGreen),
         new($"Z - Stabilise right rope: {(stabilised ? "ON" : "OFF")}", Color.Yellow),
         new("P - Swing both weights", Color.Yellow),
-    ]);
+    ];
 }
 
 static string Length(Rope? rope) => rope is null ? "-" : rope.Length.ToString("0.00");
 
-void InitializeDebugTextPrinter()
+void InitializeDebugOverlay()
 {
-    var screenSize = new Int2(game.GraphicsDevice.Presenter.BackBuffer.Width, game.GraphicsDevice.Presenter.BackBuffer.Height);
+    var overlay = DebugOverlay.GetOrCreate(game);
 
-    instructions = new DebugTextPrinter()
-    {
-        DebugTextSystem = game.DebugTextSystem,
-        TextSize = new(340, 20 * 6),
-        ScreenSize = screenSize,
-    };
+    overlay.Position = DisplayPosition.BottomLeft;
 
-    instructions.Initialize(DisplayPosition.BottomLeft);
+    // BuildInstructions runs every frame the overlay is drawn, which is what keeps the measured rope
+    // lengths live
+    instructions = overlay.AddSection("Game", BuildInstructions);
 }
 
 /*

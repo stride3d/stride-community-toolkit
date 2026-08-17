@@ -12,7 +12,7 @@ const string EntityName = "PrimitiveModelGroup";
 
 var size1 = new Vector3(0.5f);
 var size2 = new Vector3(0.25f, 0.5f, 0.25f);
-DebugTextPrinter? instructions = null;
+DebugOverlaySection? instructions = null;
 
 using var game = new Game();
 
@@ -24,7 +24,7 @@ void Start(Scene scene)
     game.AddSkybox();
     game.AddProfiler();
 
-    InitializeDebugTextPrinter();
+    InitializeDebugOverlay();
     Add3DPrimitives(scene);
 }
 
@@ -36,7 +36,6 @@ void Update(Scene scene, GameTime time)
         Add3DPrimitives(scene);
     }
 
-    DisplayInstructions();
 }
 
 void Add3DPrimitives(Scene scene)
@@ -96,25 +95,19 @@ static void ResetTheScene(Scene scene)
         entity.Scene = null;
 }
 
-void DisplayInstructions() => instructions?.Print();
-
-void InitializeDebugTextPrinter()
+void InitializeDebugOverlay()
 {
-    var screenSize = new Int2(game.GraphicsDevice.Presenter.BackBuffer.Width, game.GraphicsDevice.Presenter.BackBuffer.Height);
+    // The overlay draws itself, and is shared with the camera controller's own help, so nothing here
+    // needs to be called every frame
+    var overlay = DebugOverlay.GetOrCreate(game);
 
-    instructions = new DebugTextPrinter()
-    {
-        DebugTextSystem = game.DebugTextSystem,
-        TextSize = new(205, 17 * 4),
-        ScreenSize = screenSize,
-        Instructions =
-        [
-            new("INSTRUCTIONS"),
-            new("Press P to see collidables"),
-            new("Press F11 to see debug meshes"),
-            new("Press R to reset the scene", Color.Yellow),
-        ]
-    };
+    overlay.Position = DisplayPosition.BottomLeft;
 
-    instructions.Initialize(DisplayPosition.BottomLeft);
+    instructions = overlay.AddSection("Game", static () =>
+    [
+        new("INSTRUCTIONS"),
+        new("Press P to see collidables"),
+        new("Press F11 to see debug meshes"),
+        new("Press R to reset the scene", Color.Yellow),
+    ]);
 }

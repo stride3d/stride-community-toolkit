@@ -11,7 +11,7 @@ public class CameraRotationScript : SyncScript
     private const string GroundEntityName = "Ground";
     private float _rotationSpeed = 45f; // degrees per second
     private Vector3 _rotationCentre;
-    DebugTextPrinter? _instructionsPrinter;
+    DebugOverlaySection? _instructionsPrinter;
 
     public override void Start()
     {
@@ -23,12 +23,11 @@ public class CameraRotationScript : SyncScript
 
         _rotationCentre = ground.Transform.Position;
 
-        InitializeDebugTextPrinter();
+        InitializeDebugOverlay();
     }
 
     public override void Update()
     {
-        DisplayInstructions();
 
         // Compute how many degrees we should turn this frame
         var deltaTime = this.DeltaTime();
@@ -66,25 +65,15 @@ public class CameraRotationScript : SyncScript
         Entity.Transform.LookAt(_rotationCentre, Vector3.UnitY);
     }
 
-    void DisplayInstructions()
+    void InitializeDebugOverlay()
     {
-        _instructionsPrinter?.Print(GenerateInstructions(Entity.Transform.Position));
-    }
+        var overlay = DebugOverlay.GetOrCreate(Game);
 
-    void InitializeDebugTextPrinter()
-    {
-        var screenSize = new Int2(Game.GraphicsDevice.Presenter.BackBuffer.Width, Game.GraphicsDevice.Presenter.BackBuffer.Height);
-        var instructions = GenerateInstructions(Entity.Transform.Position);
+        overlay.Position = DisplayPosition.BottomLeft;
 
-        _instructionsPrinter = new DebugTextPrinter()
-        {
-            DebugTextSystem = DebugText,
-            TextSize = new(205, 17 * instructions.Count),
-            ScreenSize = screenSize,
-            Instructions = instructions,
-        };
-
-        _instructionsPrinter.Initialize(DisplayPosition.BottomLeft);
+        // Runs every frame the overlay is drawn, so the camera position readout stays live
+        _instructionsPrinter = overlay.AddSection(
+            "Game", () => GenerateInstructions(Entity.Transform.Position));
     }
 
     static List<TextElement> GenerateInstructions(Vector3 cameraPosition)

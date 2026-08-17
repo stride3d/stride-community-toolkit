@@ -176,6 +176,10 @@ void SetupMenus()
                 (Keys)(Keys.D1 + pair.Index), $"{pair.Item:N0}", () => batchSize = pair.Item))]
         },
     ];
+
+    // Shares one position and one toggle key with the camera controller's help, rather than being a
+    // second block of text drawn somewhere else
+    DebugOverlay.GetOrCreate(game).AddSection("Stress pile", BuildOverlayLines);
 }
 
 /// <summary>
@@ -271,7 +275,6 @@ void Spawn(Vector3 position)
 void Update(Scene rootScene, GameTime time)
 {
     HandleInput();
-    DrawOverlay();
 }
 
 void HandleInput()
@@ -298,34 +301,32 @@ void HandleInput()
     if (game.Input.IsKeyPressed(Keys.X)) Clear();
 }
 
-void DrawOverlay()
+/// <summary>
+/// Contributes this example's lines to the shared overlay, alongside the camera controller's.
+/// </summary>
+/// <remarks>
+/// The overlay calls this every frame it draws, so the body count and the menus stay live without
+/// anything having to push them. Camera keys are not listed: the camera controller contributes its
+/// own section, including the F2 and F3 keys that toggle and move the whole overlay.
+/// </remarks>
+IReadOnlyList<TextElement> BuildOverlayLines()
 {
-    var y = 240;
-
-    void Print(string text, Color? color = null)
-    {
-        game.DebugTextSystem.Print(text, new Int2(6, y), color);
-
-        y += 20;
-    }
-
-    Print($"{bodies.Count:N0} bodies, one draw call", Color.LightGreen);
-    Print("");
+    List<TextElement> lines =
+    [
+        new($"{bodies.Count:N0} bodies, one draw call", Color.LightGreen),
+        new(string.Empty),
+    ];
 
     // Laid out in sequence, so an expanded menu pushes the ones below it down instead of overlapping
     foreach (var menu in menus)
     {
-        foreach (var line in menu.GetLines())
-        {
-            Print(line.Text, line.Color);
-        }
+        lines.AddRange(menu.GetLines());
     }
 
-    Print("");
-    Print($"SPACE - spawn {batchSize:N0} more     X - clear", Color.Yellow);
+    lines.Add(new(string.Empty));
+    lines.Add(new($"SPACE - spawn {batchSize:N0} more     X - clear", Color.Yellow));
 
-    // Camera keys are not listed here: Add3DCameraController prints its own overlay, including the
-    // F2 and F3 keys that toggle and move it
+    return lines;
 }
 
 /// <summary>How a batch is positioned as it spawns.</summary>
