@@ -107,12 +107,14 @@ public class DebugTextDropdown
     /// </summary>
     /// <remarks>
     /// Assigning this does not run the entry's action - it is for making the display agree with state
-    /// you have already set up elsewhere. Out-of-range values are stored as -1.
+    /// you have already set up elsewhere. Out-of-range values read back as -1. The range is checked on
+    /// read rather than on write so that an object initializer can set this before <see cref="Items"/>,
+    /// which it will whenever the members are written in that order.
     /// </remarks>
     public int SelectedIndex
     {
-        get => _selectedIndex;
-        set => _selectedIndex = value >= 0 && value < Items.Count ? value : -1;
+        get => _selectedIndex >= 0 && _selectedIndex < Items.Count ? _selectedIndex : -1;
+        set => _selectedIndex = value;
     }
 
     private int _selectedIndex = -1;
@@ -123,9 +125,13 @@ public class DebugTextDropdown
     public DebugTextDropdownItem? Selected => SelectedIndex < 0 ? null : Items[SelectedIndex];
 
     /// <summary>
-    /// Gets a value indicating whether the list is currently expanded.
+    /// Gets or sets a value indicating whether the list is currently expanded.
     /// </summary>
-    public bool IsOpen { get; private set; }
+    /// <remarks>
+    /// Settable so that several dropdowns can coordinate - close the others when one opens, and their
+    /// entry keys are then free to overlap.
+    /// </remarks>
+    public bool IsOpen { get; set; }
 
     /// <summary>
     /// Reads the keyboard and updates the dropdown, running the selected entry's action if one is chosen.
