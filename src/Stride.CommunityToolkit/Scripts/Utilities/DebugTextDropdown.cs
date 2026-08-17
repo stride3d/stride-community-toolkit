@@ -14,8 +14,9 @@ namespace Stride.CommunityToolkit.Scripts.Utilities;
 /// </para>
 /// <para>
 /// Nothing here reads the keyboard on its own - call <see cref="Update"/> once per frame from your
-/// update loop, and <see cref="Draw"/> to render it. Use <see cref="GetLines"/> instead if you would
-/// rather fold the lines into a <see cref="DebugTextPrinter"/>.
+/// update loop, and <see cref="Draw"/> to render it standalone. Better still, hand <see cref="GetLines"/>
+/// to a <see cref="DebugOverlay"/> section, so the dropdown shares one position and one toggle key
+/// with the camera help and everything else on screen.
 /// </para>
 /// <para>
 /// Keep every title and label to printable ASCII. The debug text renderer replaces anything outside
@@ -209,7 +210,7 @@ public class DebugTextDropdown
     /// </summary>
     /// <returns>The lines, in display order.</returns>
     /// <remarks>
-    /// Use this to hand the dropdown to a <see cref="DebugTextPrinter"/> rather than positioning it
+    /// Use this to hand the dropdown to a <see cref="DebugOverlay"/> section rather than positioning it
     /// yourself.
     /// </remarks>
     public IReadOnlyList<TextElement> GetLines()

@@ -23,5 +23,21 @@ public enum DisplayPosition
     /// <summary>
     /// Displays the element in the bottom-right corner of the screen.
     /// </summary>
-    BottomRight
+    BottomRight,
+
+    /// <summary>
+    /// Does not display the element at all.
+    /// </summary>
+    /// <remarks>
+    /// Lets a caller opt out up front, rather than only being able to hide the element at runtime.
+    /// </remarks>
+    None,
+
+    /// <summary>
+    /// Displays the element at an explicit pixel position rather than snapped to a corner.
+    /// </summary>
+    /// <remarks>
+    /// The position itself is supplied separately - see <see cref="DebugOverlay.CustomPosition"/>.
+    /// </remarks>
+    Custom
 }
