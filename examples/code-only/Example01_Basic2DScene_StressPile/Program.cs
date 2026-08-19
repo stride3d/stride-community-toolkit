@@ -66,6 +66,9 @@ instancing?.Dispose();
 
 void Start(Scene rootScene)
 {
+    game.Window.AllowUserResizing = true;
+    game.Window.Title = "Stress Pile Example - Stride Community Toolkit";
+
     scene = rootScene;
 
     // SetupBase3D() unrolled, so the camera and the light can be aimed for a head-on view of the XY plane
