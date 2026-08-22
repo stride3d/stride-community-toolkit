@@ -357,7 +357,7 @@ title:
 level: Advanced
 category: Performance
 complexity: 4
-order: 20
+order: 60
 description:
   en: |-
     Thousands of 2D physics bodies piling up, drawn in a single draw call through instancing, with the

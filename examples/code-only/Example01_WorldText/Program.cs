@@ -146,7 +146,7 @@ title:
 level: Beginner
 category: Text
 complexity: 1
-order: 50
+order: 70
 description:
   en: |-
     A gallery of everything WorldTextComponent can do, one setting per station: billboarding that

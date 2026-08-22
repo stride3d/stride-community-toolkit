@@ -118,7 +118,7 @@ title:
 level: Beginner
 category: Scripts
 complexity: 2
-order: 10
+order: 40
 description:
   en: |-
     Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.

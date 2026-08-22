@@ -61,3 +61,43 @@ static Entity CreateLineEntity(Game game)
 
     return new Entity { new ModelComponent(model) };
 }
+/*
+---example-metadata
+slug: mesh-line
+title:
+  en: Mesh Line
+level: Beginner
+category: Geometry
+complexity: 2
+order: 30
+description:
+  en: |-
+    A line drawn between two spheres, built as a real mesh rather than a debug primitive. Two vertices,
+    an index buffer, a MeshDraw set to LineList and an emissive material are all it takes, which makes
+    this the smallest useful tour of Stride's low-level geometry API. The line is parented to one of the
+    spheres, so moving that sphere moves the line with it.
+concepts:
+  - Building a mesh from raw vertex and index buffers
+  - Declaring a vertex layout with VertexDeclaration
+  - "Drawing with PrimitiveType.LineList instead of triangles"
+  - Wrapping a MeshDraw in a Mesh, Model and ModelComponent
+  - Making a line visible with an emissive material
+  - Parenting an entity so it follows another
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateMaterial"
+tags:
+  - 3D
+  - Geometry
+  - Mesh
+  - Vertex Buffer
+  - Index Buffer
+  - Line
+  - Emissive
+related:
+  - Example05_ProceduralGeometry
+  - Example05_SimpleGeometry
+  - Example08_DebugShapes
+media: stride-game-engine-example-01-mesh-line.webp
+enabled: true
+created: 2025-02-02
+---
+*/

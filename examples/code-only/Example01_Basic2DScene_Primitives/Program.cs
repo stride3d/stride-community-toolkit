@@ -56,7 +56,7 @@ title:
 level: Beginner
 category: Shapes
 complexity: 1
-order: 20
+order: 80
 description:
   en: |-
     Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.

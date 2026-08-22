@@ -177,7 +177,7 @@ title:
 level: Beginner
 category: Text
 complexity: 1
-order: 40
+order: 60
 description:
   en: |-
     A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows,

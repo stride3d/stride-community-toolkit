@@ -94,7 +94,7 @@ title:
 level: Intermediate
 category: Text
 complexity: 2
-order: 30
+order: 50
 description:
   en: |-
     A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and

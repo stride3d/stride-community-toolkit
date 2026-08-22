@@ -49,7 +49,7 @@ title:
 level: Beginner
 category: Physics
 complexity: 1
-order: 30
+order: 90
 description:
   en: |-
     Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.

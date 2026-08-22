@@ -164,3 +164,45 @@ static List<TextElement> GenerateInstructions(float skyBoxLightIntensity)
             new("Hold Z to decrease, X to increase Skybox light intensity", Color.Yellow),
             new($"Intensity: {skyBoxLightIntensity}", Color.Yellow),
         ];
+
+/*
+---example-metadata
+slug: material
+title:
+  en: Material
+level: Beginner
+category: Rendering
+complexity: 2
+order: 20
+description:
+  en: |-
+    A row of cubes that differ only in their material, so the effect of each property is visible in
+    isolation. Simple colours with varying glossiness and metalness come first, then materials assembled
+    by hand from feature objects - diffuse model, glossiness map, metalness map and a microfacet
+    specular model. Z and X change the skybox light intensity while it runs, which matters because a
+    metallic surface is almost entirely a reflection of its environment and looks wrong in a vacuum.
+concepts:
+  - Creating a simple coloured material with CreateMaterial
+  - Building a material from MaterialDescriptor feature by feature
+  - What glossiness and metalness each change on screen
+  - Combining a diffuse model with a microfacet specular model
+  - Why environment light intensity dominates a metallic surface
+  - Adjusting skybox light at runtime from keyboard input
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateMaterial"
+tags:
+  - 3D
+  - Rendering
+  - Material
+  - Skybox
+  - Lighting
+  - Glossiness
+  - Metalness
+  - Input
+related:
+  - Example01_Basic3DScene
+  - Example05_ProceduralGeometry
+media: stride-game-engine-example-01-material.webp
+enabled: true
+created: 2025-03-09
+---
+*/
