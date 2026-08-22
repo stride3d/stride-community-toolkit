@@ -355,7 +355,7 @@ title:
   en: Basic2D Scene (Stress Pile)
   cs: Základní 2D scéna (Zátěžová hromada)
 level: Advanced
-category: Physics
+category: Performance
 complexity: 4
 order: 20
 description:

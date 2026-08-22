@@ -238,7 +238,7 @@ title:
   en: GPU Instancing
   cs: GPU instancing
 level: Intermediate
-category: Rendering
+category: Performance
 complexity: 3
 order: 40
 description:

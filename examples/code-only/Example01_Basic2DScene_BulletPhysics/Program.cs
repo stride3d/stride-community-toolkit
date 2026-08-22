@@ -78,7 +78,6 @@ related:
   - Example02_GiveMeACube
   - Example01_Basic2DScene_Primitives
   - Example01_Material
-docs: false
 enabled: true
 created: 2025-11-30
 ---

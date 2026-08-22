@@ -385,7 +385,7 @@ title:
   en: Instancing with Entity Transforms
   cs: Instancing s transformacemi entit
 level: Advanced
-category: Rendering
+category: Performance
 complexity: 4
 order: 10
 description:
