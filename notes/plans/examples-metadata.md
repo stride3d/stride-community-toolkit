@@ -1,20 +1,68 @@
 # Examples Metadata & Docs Generation — Plan
 
-Working document. **All questions (Q1–Q26) are answered and folded into the design below**; the
-decisions are recorded in §7 with their rationale. This plan is ready to implement.
+Working document. The design below is settled and recorded as D1–D34 in §7, with **one decision still
+open (D29, the `category` vocabulary)** and one review gate outstanding.
+
+**Status: blocked on that gate — Table 0 / 0b in Step 1.3a.** §8 has the recommended order of work.
+
+No generator code has been written yet (verified against the source, not assumed: `ExampleMetadata`
+still has `IsDraft` and no `slug`, and `ExampleScanner` still hard-codes `Program.cs`). Frontmatter
+authoring, however, has continued in the *pre-schema* shape, so the first job is reconciling the
+two — see §1a.
 
 ---
 
-## 1. Current state (verified, not assumed)
+## 1. Current state (re-verified 2026-08-22)
 
-| Fact | Detail |
-|---|---|
-| Example projects | **57+** (`.csproj`/`.fsproj`/`.vbproj`, excluding bin/obj) |
-| Examples **with** `---example-metadata` | **14** |
-| Examples **without** frontmatter | **44** |
-| Docs `.md` files | **33** — 29 map to a specific example, 4 are section landing pages |
-| Examples with **no doc at all** | **~29** |
-| Docs that already have YAML frontmatter | **0** |
+| Fact | Detail | Was (2026-08) |
+|---|---|---|
+| Example project folders under `examples/code-only` | **64** buildable + 1 file-based app (`Example01_Basic3DScene_FileBasedApp`, no `.csproj`) | 57+ |
+| Of those, **not** examples | `Example.Common`, `Example17_SignalR_Shared` (libraries), `Resources`, `_Temp2DProbe`, `_TempMemProbe` (untracked probes), `Example18_Box2DPhysics2` (**empty leftover — delete**) | — |
+| Examples **with** `---example-metadata` | **22** | 14 |
+| Examples **without** frontmatter | **~39** | 44 |
+| Docs `.md` files | **33** — 29 map to a specific example, 4 are section landing pages | 33 |
+| Examples with **no doc at all** | **~36** | ~29 |
+| Docs that already have YAML frontmatter | **0** | 0 |
+| Frontmatter blocks conforming to schema v1 (§2.2) | **0** — none carry `slug`, `language`, `docs`, `launcher`, `media` or `tocName` | 0 |
+| `examples/snippets` (3 projects) | No frontmatter, not scanned. **Out of scope** — snippets are doc fragments, not examples | — |
+
+### 1a. What changed since the plan was written — **READ FIRST**
+
+Nine examples were added or reworked while the plan sat. They were given frontmatter in the *old*
+shape, which means the plan and the repository have drifted apart in three ways that have to be
+settled before any code is written.
+
+**New since the plan (7 with frontmatter, none with a doc):**
+
+| Project | Authored `level` | `category` | `complexity` |
+|---|---|---|---|
+| `Example01_Basic2DScene_SpawnMenu` | Intermediate | Shapes | 2 |
+| `Example01_Basic2DScene_StressPile` | Advanced | Physics | 4 |
+| `Example01_EntityText` | Getting Started | Text | 1 |
+| `Example01_WorldText` | Getting Started | Text | 1 |
+| `Example01_Letters3D` | Getting Started | Text | 2 |
+| `Example15_Constraint_Motors` | `Beginners` ⚠ | Physics | 5 |
+| `Example15_Constraint_Rope` | Intermediate | Physics | **7** ⚠ |
+
+**Nine examples are invisible to both launchers.** `Example01_Basic2DScene_FallingShapes`,
+`Example01_Basic2DScene_StressPile`, `Example01_EntityText`, `Example01_Letters3D`,
+`Example01_WorldText`, `Example15_Constraint_Motors`, `Example15_Constraint_Rope`,
+`Example19_Jitter2Physics` and `Example19_Jitter2Physics_Constraints` have **no `<ExampleTitle>` in
+their `.csproj`**, so `ProjectFileHelper` never sees them. They *are* in the manifest — which nothing
+reads. This is the concrete cost of running two metadata systems, and it is an argument for pulling
+Phase 2 forward rather than leaving it until after docs generation (see §9).
+
+**Two live silent-data-loss bugs, found by diffing the frontmatter against the manifest** — both are
+the exact failure mode Step 1.2 was written to catch:
+
+1. `Example01_Basic2DScene_Primitives` and `Example01_Basic2DScene_SpawnMenu` write **`Order:`**, not
+   `order:`. `MetadataParser` uses `CamelCaseNamingConvention` **plus `IgnoreUnmatchedProperties()`**,
+   so the key is dropped without a word and both examples reach `examples-manifest.json` with **no
+   order at all**. Verified in the committed manifest.
+2. Every `description` uses `|`, not `|-` (§2.2), so all 22 entries carry a trailing `\n`.
+
+Also drifted: `complexity: 7` on `Example15_Constraint_Rope` is outside the documented 1–5 range, and
+five examples use `level: Beginners` (plural) where the schema says `Beginner`.
 
 > [!NOTE]
 > `Example07_CubeClicker` is not listed in `Stride.CommunityToolkit.slnx`, so it escapes every
@@ -218,26 +266,48 @@ contributor editing the file can *see* which part they must not edit.
 
 ## 3. Phase 1 — docs generation
 
-### Step 1.1 — Schema + model
+### Step 1.1 — Schema + model — **DONE 2026-08-22**
 
-- `ExampleMetadata` class → `record` with `required` members (`slug`, `title`, `level`, `category`).
-- Add the new fields from §2.2; drop `IsDraft` and `docGroup`.
-- Normalise `ProjectPath` to forward slashes (currently emits `Example19_Jitter2Physics\Program.cs`).
-- Envelope type (§2.3).
+- ~~`ExampleMetadata` class → `record` with `required` members~~ — **deviation, deliberate.** It stays a
+  mutable class with nullable members. `required` cannot coexist with aggregated validation: the whole
+  point of Step 1.2 is to report every problem across every example in one pass, and a `required`
+  member instead fails inside the deserializer on the first offending file, with a YamlDotNet message
+  rather than a useful one. Requirements are enforced by `MetadataValidator` instead.
+- Added the fields from §2.2; dropped `IsDraft` and `docGroup`.
+- `ProjectPath` normalised to forward slashes.
+- Envelope type (§2.3), in `ExampleManifest.cs`.
+- Also: `related:` is resolved to `relatedSlugs` in the manifest, and the JSON is written with
+  `UnsafeRelaxedJsonEscaping` so the Czech strings are readable rather than `\uXXXX` escapes.
 
-### Step 1.2 — Validation (new; there is none today)
+### Step 1.2 — Validation — **DONE 2026-08-22**
 
-Fail-fast with a useful message, **aggregated across all examples** rather than dying on the first.
-Validation failure **fails the build** — `ContinueOnError="WarnAndContinue"` is dropped from the
-MSBuild hook so a malformed block can no longer yield a silently incomplete manifest and a green build.
+Aggregated across all examples rather than dying on the first. Implemented in
+`Services/MetadataValidator.cs` and `Core/YamlSourceInspector.cs`.
+
+**Deviation on D10, and it is a transition, not a reversal.** Errors are fatal only under `--strict`.
+Right now the validator reports 34 real errors — 22 of them simply "no `slug` yet" — so making them
+fatal today would break the Launcher build until the backfill is finished. The MSBuild hook keeps
+`ContinueOnError="WarnAndContinue"` and carries a comment saying to add `--strict` and drop the
+attribute once every example has a schema v1 block. D10's intent is preserved; only its timing moves.
 
 Checks:
 
 - Required fields present.
 - `slug` unique across **all** examples, kebab-case, no collision with an existing doc filename.
-- `level` / `category` / `language` are known values.
-- `related:` entries resolve to real example project names → slugs (unresolvable name = error; this
-  would have caught a typo introduced while editing `related:` earlier).
+- `level` / `category` / `language` are known values. `level` is matched **case- and
+  spelling-exactly** — `Beginners` is an error, not a synonym for `Beginner` (five examples currently
+  fail this).
+- **`complexity` is within 1–5.** `Example15_Constraint_Rope` currently declares `7`.
+- **Unknown top-level keys are an error, not silently ignored.** `IgnoreUnmatchedProperties()` plus
+  `CamelCaseNamingConvention` is what let `Order:` vanish from two examples (§1a). Either drop
+  `IgnoreUnmatchedProperties()` or collect the unmatched keys and fail on them — a typo in a key name
+  must never produce a green build and a missing value. This check subsumes the `Order:`/`order:` case
+  and is the single highest-value item in Step 1.2, because it is the only one for which we have
+  proof of an actual loss.
+- `related:` entries resolve to real example project names → slugs. **Two tiers, learned from the first
+  run:** a name matching no project *folder* is an error (a typo), but a name that matches a folder with
+  no slug yet is only a warning. Resolving against parsed examples alone produced 66 false errors on the
+  first run, because most examples are not backfilled — which would have buried the real typos.
 - `media:` file exists in `docs/manual/code-only/examples/media/`.
 - Duplicate `order:` within the same `(language, level)` group flagged (both Jitter2 examples are
   currently `order: 19`).
@@ -272,11 +342,13 @@ The sequence is: propose a full mapping table (project → current group → pro
 one-line reason for anything non-obvious) **in this document**, get it corrected, and only then write
 any frontmatter (D27). Nothing in Step 1.3 is written before that table is approved.
 
-### Step 1.3a — Proposed level mapping — **AWAITING REVIEW**
+### Step 1.3a — Level mapping — **SIGNED OFF 2026-08-22**
 
 > [!IMPORTANT]
-> This is the D27 gate. Correct anything wrong in the **Proposed** column, then this section becomes
-> the source of truth for the backfill. No frontmatter is written until it is signed off.
+> This was the D27 gate. Tables 0 and 0b are settled and are now the source of truth for the backfill.
+> Tables A and B were uncontested. The only classification question still open is **D29, the `category`
+> vocabulary** — the validator ships with the proposed set, so a redline is a one-line change in
+> `Core/MetadataVocabulary.cs`.
 
 **The rubric used.** Level = *conceptual prerequisites*, not line count. A 589-line example that only
 repeats one idea is easier than a 55-line one that requires understanding the render pipeline.
@@ -291,6 +363,46 @@ repeats one idea is easier than a 55-line one that requires understanding the re
 
 A `?` in the last column marks a genuinely debatable call — those are where review attention is worth
 spending. Everything unmarked is a straightforward carry-over.
+
+#### Table 0 — where the authored frontmatter and this plan disagree — **SIGNED OFF 2026-08-22**
+
+The 22 frontmatter blocks written so far already carry a `level`. In **8 cases** it contradicted the
+proposal below. Every recommendation in this table and in Table 0b was accepted, along with the two
+rules underpinning them: **D31** (Getting Started is the first-app examples only) and **`Beginner`
+singular** — the five files saying `Beginners` are wrong and get fixed during the backfill.
+
+| Project | In the file today | Plan proposed | Recommendation | Why |
+|---|---|---|---|---|
+| `Example02_GiveMeACube` | Getting Started | Beginner | **Beginner** | `Example01_Basic3DScene` is the canonical first app; this one adds a script and interaction on top of it. Reserve Getting Started for the three "minimum viable app" examples. |
+| `Example01_Basic2DScene_Primitives` | Getting Started | Beginner | **Beginner** | Same rule — a gallery of primitives is one concept *on top of* the base 2D scene. |
+| `Example01_Basic2DScene_FallingShapes` | Getting Started | Beginner | **Beginner** | Ditto. |
+| `Example02_GiveMeACube_SimulationUpdate` | `Beginners` | Intermediate | **Intermediate** | `ISimulationUpdate` is a Bepu extension point with its own timing model — squarely "a subsystem used directly". |
+| `Example19_Jitter2Physics` | `Beginners` | Advanced | **Advanced** | Third-party engine integration; must match `Example18_Box2DPhysics`, which is Advanced. |
+| `Example19_Jitter2Physics_Constraints` | `Beginners` | Advanced | **Advanced** | Ditto. |
+| `Example21_Instancing` | `Beginners` | Intermediate | **Intermediate** | Instancing is a rendering optimisation with its own setup (`AddInstancingSupport`), not a first lesson. |
+| `Example_CubicleCalamity` | Advanced | Other | **Advanced** — *frontmatter wins* | Reversing the plan here. `Other` is for playgrounds and WIP; this is a complete game and the toolkit's best showcase. It should appear on the Advanced landing page, not in a junk drawer. The two `Example_*_Playground` projects keep `Other`. |
+
+Every "Getting Started → Beginner" row above rests on one rule worth stating explicitly, because it
+decides several others: **Getting Started contains exactly the "your first code-only Stride app"
+examples** — `Example01_Basic3DScene`, `Example01_Basic2DScene`,
+`Example01_Basic3DScene_FileBasedApp`, plus the F#/VB ports of the first. If that rule is wrong, say
+so and all four rows flip together.
+
+#### Table 0b — the seven new examples
+
+| Project | In the file today | Recommendation | Why |
+|---|---|---|---|
+| `Example01_EntityText` | Getting Started | **Beginner** | Same rule as above — registering a renderer and configuring a component is a lesson on top of the base scene, not the first app. |
+| `Example01_WorldText` | Getting Started | **Beginner** | Ditto. |
+| `Example01_Letters3D` | Getting Started | **Intermediate** | Procedural mesh construction plus manual GPU-buffer disposal. The disposal rule is the whole point of the example and it is not a beginner concern. |
+| `Example01_Basic2DScene_SpawnMenu` | Intermediate | **Intermediate** ✓ | Agreed as authored. |
+| `Example01_Basic2DScene_StressPile` | Advanced | **Advanced** ✓ | Instancing + safe teardown + broad-phase behaviour; matches `Example22_Instancing_EntityTransform`. |
+| `Example15_Constraint_Motors` | `Beginners` | **Intermediate** | Invalid value regardless. Sixteen concepts including solver subtleties is not Beginner; it sits with `Example15_Constraint_Simple`. |
+| `Example15_Constraint_Rope` | Intermediate | **Advanced** | It carries the highest `complexity` in the repo (7, itself out of range) and reasons about solver iteration counts and mass ratios. Level and complexity currently contradict each other. |
+
+That leaves the `Example15_*` family ordered coherently — **Simple → Intermediate, Motors →
+Intermediate, Rope → Advanced, Constraint (the 589-line tour) → Advanced** — which is worth checking
+as a group rather than row by row.
 
 #### Table A — the 29 documented examples
 
@@ -339,29 +451,42 @@ These get stub docs (D12). **Deviation from D12 for your approval:** D12 says st
 `level: Other`, but since a classification pass is happening anyway, assigning a real level now costs
 nothing and avoids a second pass. `Other` is reserved for things that genuinely are unclassified.
 
+Rows marked ⚑ are the ones already settled in Table 0/0b — listed here only so the table is complete.
+
 | Project | Proposed | Note |
 |---|---|---|
-| `Example01_Basic2DScene` | Getting Started | the 2D counterpart of the canonical first example |
-| `Example01_Basic3DScene_FileBasedApp` | Getting Started | single-file `dotnet run` — arguably *the* new front door |
+| `Example01_Basic2DScene` | Getting Started | ⚑ the 2D counterpart of the canonical first example |
+| `Example01_Basic3DScene_FileBasedApp` | Getting Started | ⚑ single-file `dotnet run` — arguably *the* new front door |
 | `Example01_Basic3DScene_Primitives` | Beginner | |
-| `Example01_Basic2DScene_Primitives` | Beginner | |
-| `Example01_Basic2DScene_FallingShapes` | Beginner | no `ExampleCategory`/`ExampleOrder` today |
+| `Example01_Basic2DScene_Primitives` | Beginner | ⚑ |
+| `Example01_Basic2DScene_FallingShapes` | Beginner | ⚑ no `ExampleCategory`/`ExampleOrder` today |
 | `Example01_Basic2DScene_DebugRender` | Beginner | |
 | `Example01_Basic3DScene_DPI_Aware` | Beginner | |
 | `Example01_Basic3DScene_SyncScript` | Beginner | |
+| `Example01_EntityText` | Beginner | ⚑ new — screen-space text component gallery |
+| `Example01_WorldText` | Beginner | ⚑ new — in-scene text component gallery |
 | `Example05_SimpleGeometry` | Intermediate | groups with the other `Example05_*` mesh examples |
-| `Example02_GiveMeACube_SimulationUpdate` | Intermediate | |
+| `Example02_GiveMeACube_SimulationUpdate` | Intermediate | ⚑ |
 | `Example20_BepuFirstPersonCharacter` | Intermediate | category is `2 - Physics`, a one-off value |
-| `Example21_Instancing` | Intermediate | **?** currently `1 - Basic`; instancing is an optimisation topic |
-| `Example11_ImGuiNet` | Advanced | |
-| `Example22_Instancing_EntityTransform` | Advanced | |
-| `Example19_Jitter2Physics` | Advanced | no category/order today |
-| `Example19_Jitter2Physics_Constraints` | Advanced | no category/order today |
+| `Example21_Instancing` | Intermediate | ⚑ instancing is an optimisation topic |
+| `Example01_Letters3D` | Intermediate | ⚑ new — extruded glyph meshes + buffer disposal |
+| `Example01_Basic2DScene_SpawnMenu` | Intermediate | ⚑ new — `DebugTextDropdown` keyboard menu |
+| `Example15_Constraint_Motors` | Intermediate | ⚑ new — servo vs motor vs limit |
+| `Example11_ImGuiNet` | Advanced | ⚑ |
+| `Example22_Instancing_EntityTransform` | Advanced | ⚑ |
+| `Example19_Jitter2Physics` | Advanced | ⚑ no category/order today |
+| `Example19_Jitter2Physics_Constraints` | Advanced | ⚑ no category/order today |
+| `Example01_Basic2DScene_StressPile` | Advanced | ⚑ new — instanced 2D physics stress test |
+| `Example15_Constraint_Rope` | Advanced | ⚑ new — rope stability, skip constraints |
+| `Example_CubicleCalamity` | Advanced | ⚑ **changed from `Other`** — a complete game, the best showcase the toolkit has |
 | `Example08_CollidableGizmo` | Other | small utility demo, not a lesson |
 | `Example08_DebugRenderComponent` | Other | ditto |
 | `Example_2D_Playground` | Other | playground |
 | `Example_Bepu_Playground` | Other | playground |
-| `Example_CubicleCalamity` | Other | playground / game sketch |
+
+Not in either table, deliberately: `Example18_Box2DPhysics2` (empty directory — delete it),
+`_Temp2DProbe` / `_TempMemProbe` (untracked local probes), `Resources` (shared asset folder),
+`Example.Common` and `Example17_SignalR_Shared` (libraries, no entry point).
 
 #### Flagged during the pass
 
@@ -383,6 +508,24 @@ nothing and avoids a second pass. `Other` is reserved for things that genuinely 
    `Example13_MeshOutline`, `Example18_Box2DPhysics`). The Step 1.2 duplicate-`order` check is
    scoped per `(language, level)` group, so most of these stop colliding after the regrouping —
    but they need real values assigned during backfill.
+5. **`category` has no vocabulary and one has grown in the wild.** Step 1.2 says "`category` is a
+   known value" but never lists the values. Seven are in use today: `Shapes`, `Physics`, `Rendering`,
+   `Text`, `UI`, `Scripts`, `Game`. Proposed closed set, adding only what the undocumented examples
+   need — **`Getting Started`, `Shapes`, `Geometry`, `Physics`, `Rendering`, `Text`, `UI`, `Input`,
+   `Scripts`, `Integration`, `Debug`, `Game`**. `Integration` covers Box2D / Jitter2 / SignalR / ImGui;
+   `Debug` covers the `Example08_*` family. **New question — needs a yes or a redline (D29).**
+6. **`order` values are on three incompatible scales.** `1`–`57` on the 2D family, `210`/`220`/`230`
+   on the text family, `32000` on Cubicle Calamity (inherited from the old `ExampleOrder`). Since
+   `order` is scoped per `(language, level)` group, it should be renumbered wholesale during the
+   backfill — one small ascending sequence per group, gaps of 10 — rather than carrying three legacy
+   schemes forward. `Example15_Constraint_Motors` and `_Rope` both sit on `15` today.
+7. **`level` is duplicated into `tags`.** Nearly every new block ends its tag list with `Getting
+   Started` / `Beginners` / `Intermediate` / `Advanced`. That is the `level` field spelled a second
+   time, in a place nothing validates — and `Beginners` is already wrong in both. Strip level names
+   from `tags` during the backfill; the generator can add the level to a tag index itself if the docs
+   ever want one (D30).
+8. ~~**`Example18_Box2DPhysics2` is an empty directory**~~ — it showed up once in a directory listing
+   and no longer exists. Nothing to do; recorded so it is not rediscovered as a mystery.
 
 ### Step 1.4 — `docs` command
 
@@ -429,37 +572,41 @@ Generates, per example with `docs: true`:
 
 Respects the ownership rules in §2.4.
 
-### Step 1.5 — Generator code modernisation
+### Step 1.5 — Generator code modernisation — **DONE 2026-08-22**
 
-Small, mostly independent of the above:
+- Exit codes are meaningful and documented: `0` success, `1` cannot run, `2` no examples found at all,
+  `3` validation errors. `scan` now validates and reports too, rather than only listing.
+- `--output` had `Required = true` **and** a `DefaultValueFactory` **and** a third default in the
+  handler. Now one default, one constant.
+- Default path argument reconciled with the README (`../../examples/code-only`).
+- `RegexOptions.Compiled` dropped — redundant with `[GeneratedRegex]`.
+- Fixed the log that passed a `Dictionary` to a `{ProjectName}` placeholder; it now prints the project
+  name and the English title.
+- `CancellationToken` is threaded through the scan, the file reads and the write.
+- README rewritten around what the tool actually does and contains.
+- `YamlMetadataExtractor` is no longer a wrapper returning a `Regex`; it exposes `TryExtract`.
+- Parse failures no longer log a full stack trace twice — the message carries the diagnosis, and the
+  count of unparseable blocks is folded into the error total so a vanished example cannot pass unnoticed.
 
-- `scan` always returns `0` regardless of outcome; `generate` returns `0` even when zero examples are
-  found — both should return meaningful exit codes.
-- `--output` is `Required = true` **and** has a `DefaultValueFactory`, **and** is defaulted a third
-  time in the handler. Pick one.
-- Default path argument is `../../examples/code-only` (relative to CWD, likely wrong); README claims
-  `../../../../../examples/code-only`. Reconcile.
-- `RegexOptions.Compiled` is redundant with `[GeneratedRegex]` — source-generated regexes are already
-  compiled; it just adds startup cost.
-- `ManifestService` logs `{ProjectName}` but passes `metadata.Title`, a `Dictionary` — logs garbage.
-- `CancellationToken` is accepted by both command actions and never used.
-- README is stale: describes a `MetadataScanner.cs` that doesn't exist (it's
-  `Services/ExampleScanner.cs` + `Services/MetadataParser.cs` + `Core/YamlMetadataExtractor.cs`).
-- `YamlMetadataExtractor` is a static wrapper returning a `Regex` — could just expose the
-  `[GeneratedRegex]` partial method directly.
+### Step 1.6 — Discovery — **DONE 2026-08-22**
 
-### Step 1.6 — Discovery
-
-`ExampleScanner.FindProgramFiles` currently searches specifically for `Program.cs`. It instead scans
-**every `.cs` file and keeps those containing a metadata block**. This frees file-based apps from the
-`Program.cs` name (`dotnet run Basic3DScene.cs` is far more self-describing) and makes the metadata
-block itself the marker of what is an example.
+`FindProgramFiles` is now `FindExampleFiles`: it scans **every source file and keeps those containing a
+metadata block**. This frees file-based apps from the `Program.cs` name (`dotnet run Basic3DScene.cs`
+is far more self-describing) and makes the metadata block itself the marker of what is an example.
 
 Consequence: **one folder may yield several examples.** That is allowed; the unique-`slug` check in
 Step 1.2 is what keeps it honest. `ProgramSimple.cs` in `Example01_Basic3DScene_FileBasedApp` has no
 frontmatter, so it is invisible to the generator and out of scope for this plan — it stays for local
 development until a Stride-4.4 toolkit package is on nuget.org and it no longer needs a
 machine-specific `NuGet.config`.
+
+**Extended beyond `.cs` — `.fs` and `.vb` too (D36).** The plan said `.cs` only, but the toc groups on
+`(language, level)` and the F#/VB landing pages are part of Step 1.4, so those examples must be able to
+carry frontmatter at all. Each language uses its own comment syntax — `/* */`, `(* *)`, and for VB, which
+has no block comment, a run of `'` line comments. Verified against a probe of all three.
+
+`bin`, `obj`, `.vs`, `.git` and `node_modules` are excluded explicitly. That did not matter while the
+scan looked for one filename; it matters now, because `obj` is full of generated `.cs`.
 
 ---
 
@@ -611,6 +758,12 @@ substantially.
 | D26 | Landing pages | One per `(language, level)` group, for SEO; old URLs kept as `redirect_url` stubs |
 | D27 | Level reclassification | Propose a mapping table in this doc for review; no frontmatter written until approved |
 | D28 | `generated: partial` phasing | **Phase 1**, immediately after the plain `generated: true` path works |
+| D29 | `category` vocabulary | **OPEN** — closed set proposed in "Flagged during the pass" §5; needs a yes or a redline |
+| D30 | Level in `tags` | Strip it; `level` is a field, not a tag. Generator may synthesise a tag index if the docs need one |
+| D31 | What "Getting Started" admits | Exactly the "your first code-only app" examples — 3D, 2D, file-based, plus the F#/VB ports. Everything else that builds on the base scene is Beginner |
+| D32 | `Example_CubicleCalamity` | **Advanced**, reversing the earlier `Other`. `Other` is for playgrounds and WIP; a complete game belongs on the Advanced page |
+| D33 | Unknown frontmatter keys | **Fail.** Drop `IgnoreUnmatchedProperties()` (or collect and report). Proof it matters: `Order:` silently vanished from two examples |
+| D34 | `order` renumbering | Renumber wholesale per `(language, level)` group during the backfill, gaps of 10. Do not carry the `1`/`210`/`32000` legacy scales forward |
 
 ### D24 — why slugs stay level-free
 
@@ -631,7 +784,50 @@ the right lever — but they carry the identical URL-stability problem, so the a
 
 ---
 
-## 8. Not part of this plan
+## 8. Recommended sequence from here (2026-08-22)
+
+The original plan is Phase 1 = docs, Phase 2 = launchers. **Recommend swapping the two**, and
+inserting a normalisation step in front of both.
+
+| # | Step | Blocked on | Size |
+|---|---|---|---|
+| 0 | ~~Sign off Table 0 / 0b~~ **done**; **D29 still open** | *you* | one review |
+| 1 | ~~Schema + validator + Step 1.5 cleanups + Step 1.6 scanner change~~ **done 2026-08-22** | — | — |
+| 2 | Normalise the **22 existing** frontmatter blocks to schema v1 | D29 | add `slug`/`language`, fix `Beginners`, `Order:`, `\|-`, `complexity: 7`, strip level tags, renumber `order`, apply Tables 0/0b |
+| 3 | Backfill the remaining **~39** examples | 2 | the big one; AI-written from existing docs, reviewed in the diff (D11) |
+| 4 | Flip the hook to `--strict` and drop `ContinueOnError` | 3 | one line; completes D10 |
+| 5 | **Phase 2 — launchers** (§4) | 3 | small; manifest already has the right shape |
+| 6 | Phase 1.4 — docs generation, toc, landing pages | 3 | the other big one |
+| 7 | Screenshots (§5) | 6 | deferred, direction set |
+
+**What step 1 shipped, and what the first run found.** The validator reports **34 errors and 110
+warnings** across the 22 examples. Errors: 22 × missing `slug` (expected — none has been authored),
+5 × `level: Beginners`, 2 × `Order:`, 1 × `complexity: 7`, and 4 duplicate-`order` groups. Warnings:
+44 × `|` instead of `|-`, 44 × a `related:` target with no slug yet, 22 × a level name repeated in
+`tags`. That list is precisely the work-list for step 2, which is what the validator was for.
+
+**Why launchers before docs.** Three reasons, in order of weight:
+
+1. It retires a live bug rather than adding a feature — the nine examples that are currently in no
+   launcher at all (§1a) reappear the moment the launchers read the manifest.
+2. It makes the manifest **load-bearing** with one small consumer *before* sixty doc pages are
+   generated from it. If the schema has a flaw, it surfaces against ~200 lines of launcher code
+   instead of after a full docs generation run.
+3. It deletes System A — `ProjectFileHelper` plus four MSBuild properties across 52 project files — so
+   there is one place to forget to update a new example instead of two. Every new example added since
+   this plan was written forgot exactly that.
+
+The counter-argument is that docs are the visible deliverable and launchers are acknowledged test
+drafts. That is true, but step 3 is the long pole for both, and it is unaffected by the order of 4
+and 5.
+
+**Step 1 is worth starting immediately**, before the sign-off in step 0 — the validator, the scanner
+change and the Step 1.5 cleanups touch no example content and none of them depend on how anything is
+classified.
+
+---
+
+## 9. Not part of this plan
 
 Related work completed alongside it, documented in
 [`docs/contributing/toolkit/building.md`](../../docs/contributing/toolkit/building.md) rather than
