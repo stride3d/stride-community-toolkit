@@ -39,7 +39,9 @@ public static partial class YamlMetadataExtractor
     [GeneratedRegex(@"\(\*\s*---example-metadata\s*(.*?)\s*---\s*\*\)", RegexOptions.Singleline)]
     private static partial Regex FSharpBlockPattern();
 
-    [GeneratedRegex(@"^[ \t]*'[ \t]*---example-metadata[ \t]*\r?$(.*?)^[ \t]*'[ \t]*---[ \t]*$",
+    // Both delimiters tolerate a trailing CR: in multiline mode '$' matches before the LF, so on a
+    // CRLF file the CR is still sitting in front of it and an unguarded '$' silently fails to match.
+    [GeneratedRegex(@"^[ \t]*'[ \t]*---example-metadata[ \t]*\r?$(.*?)^[ \t]*'[ \t]*---[ \t]*\r?$",
         RegexOptions.Singleline | RegexOptions.Multiline)]
     private static partial Regex VisualBasicBlockPattern();
 
