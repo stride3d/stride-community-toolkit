@@ -1,36 +1,31 @@
 # Examples Metadata & Docs Generation — Plan
 
-Working document. The design below is settled and recorded as D1–D34 in §7, with **one decision still
-open (D29, the `category` vocabulary)** and one review gate outstanding.
-
-**Status: blocked on that gate — Table 0 / 0b in Step 1.3a.** §8 has the recommended order of work.
-
-No generator code has been written yet (verified against the source, not assumed: `ExampleMetadata`
-still has `IsDraft` and no `slug`, and `ExampleScanner` still hard-codes `Program.cs`). Frontmatter
-authoring, however, has continued in the *pre-schema* shape, so the first job is reconciling the
-two — see §1a.
+**Status: steps 0-3 done. Every example carries schema v1 metadata** - 59 blocks, 57 published, passing
+`generate --strict` with zero errors. **Next is step 4** (flip the MSBuild hook to `--strict`, one line)
+and then **Phase 2, the launchers**. §8 has the order of work, the assigned slugs and the final category
+set.
 
 ---
 
-## 1. Current state (re-verified 2026-08-22)
+## 1. Current state (re-verified 2026-08-23)
 
 | Fact | Detail | Was (2026-08) |
 |---|---|---|
 | Example project folders under `examples/code-only` | **64** buildable + 1 file-based app (`Example01_Basic3DScene_FileBasedApp`, no `.csproj`) | 57+ |
-| Of those, **not** examples | `Example.Common`, `Example17_SignalR_Shared` (libraries), `Resources`, `_Temp2DProbe`, `_TempMemProbe` (untracked probes), `Example18_Box2DPhysics2` (**empty leftover — delete**) | — |
-| Examples **with** `---example-metadata` | **22** | 14 |
-| Examples **without** frontmatter | **~39** | 44 |
+| Of those, **not** examples | `Example.Common`, `Example17_SignalR_Shared` (libraries), `Resources`, `_Temp2DProbe`, `_TempMemProbe` (untracked probes), `Example18_Box2DPhysics2` (listed once, no longer present) | — |
+| Examples **with** `---example-metadata` | **59** (57 published) | 14 |
+| Examples **without** frontmatter | **0** - only libraries and the two playgrounds, all deliberate | 44 |
 | Docs `.md` files | **33** — 29 map to a specific example, 4 are section landing pages | 33 |
 | Examples with **no doc at all** | **~36** | ~29 |
 | Docs that already have YAML frontmatter | **0** | 0 |
-| Frontmatter blocks conforming to schema v1 (§2.2) | **0** — none carry `slug`, `language`, `docs`, `launcher`, `media` or `tocName` | 0 |
+| Frontmatter blocks conforming to schema v1 (§2.2) | **59 of 59** | 0 |
 | `examples/snippets` (3 projects) | No frontmatter, not scanned. **Out of scope** — snippets are doc fragments, not examples | — |
 
 ### 1a. What changed since the plan was written — **READ FIRST**
 
 Nine examples were added or reworked while the plan sat. They were given frontmatter in the *old*
-shape, which means the plan and the repository have drifted apart in three ways that have to be
-settled before any code is written.
+shape, so the plan and the repository drifted apart in three ways. Both sides are now reconciled: the
+tooling in step 1, these 22 blocks in step 2. This section is kept as the record of what was wrong.
 
 **New since the plan (7 with frontmatter, none with a doc):**
 
@@ -50,7 +45,7 @@ settled before any code is written.
 `Example19_Jitter2Physics` and `Example19_Jitter2Physics_Constraints` have **no `<ExampleTitle>` in
 their `.csproj`**, so `ProjectFileHelper` never sees them. They *are* in the manifest — which nothing
 reads. This is the concrete cost of running two metadata systems, and it is an argument for pulling
-Phase 2 forward rather than leaving it until after docs generation (see §9).
+Phase 2 forward rather than leaving it until after docs generation (see §8).
 
 **Two live silent-data-loss bugs, found by diffing the frontmatter against the manifest** — both are
 the exact failure mode Step 1.2 was written to catch:
@@ -101,7 +96,7 @@ Naming is inconsistent and contains at least one typo:
 
 - `stride-game-engine-example-01-material.webp` (dash after `example`)
 - `stride-game-engine-example04-myra-ui-draggable-window.webp` (**no** dash)
-- `stride-game-engine-example-15-contraints.webp` (**typo**: `contraints`)
+- ~~`stride-game-engine-example-15-contraints.webp`~~ (**typo**, fixed 2026-08-23 along with `simple-contraint`)
 
 `media` is therefore an explicit field, but it **defaults to `<slug>.webp`** so new examples get it for
 free and only the legacy inconsistent names need to spell it out.
@@ -146,7 +141,9 @@ level: Advanced                    # REQUIRED. Getting Started | Beginner | Inte
 category: Rendering                # REQUIRED.
 complexity: 4                      # 1-5
 order: 13
-language: csharp                   # csharp | fsharp | vb. Grouping dimension + drives -fs / -vb doc variants.
+language: csharp                   # csharp | fsharp | vb. Grouping dimension + drives -fs / -vb doc
+                                   # variants. OMIT IT (D38) - the file extension already says it and
+                                   # the parser fills it in. Shown here only to document the field.
 
 # --- content --------------------------------------------------------------
 description:
@@ -174,6 +171,10 @@ enabled: true
 created: 2025-08-07
 ---
 ```
+
+**Czech is optional (D41).** `cs` entries in `title` and `description` are consumed only by the
+launchers, never by the docs, and any missing one falls back to English. Write English first; add `cs`
+by hand when you feel like it.
 
 **`description` uses `|-`, not `|`.** YAML's plain `|` (clip) keeps one newline at the end of a
 block scalar, which reaches the manifest as a literal `\n` at the tail of the JSON string and has to
@@ -380,7 +381,7 @@ singular** — the five files saying `Beginners` are wrong and get fixed during 
 | `Example19_Jitter2Physics` | `Beginners` | Advanced | **Advanced** | Third-party engine integration; must match `Example18_Box2DPhysics`, which is Advanced. |
 | `Example19_Jitter2Physics_Constraints` | `Beginners` | Advanced | **Advanced** | Ditto. |
 | `Example21_Instancing` | `Beginners` | Intermediate | **Intermediate** | Instancing is a rendering optimisation with its own setup (`AddInstancingSupport`), not a first lesson. |
-| `Example_CubicleCalamity` | Advanced | Other | **Advanced** — *frontmatter wins* | Reversing the plan here. `Other` is for playgrounds and WIP; this is a complete game and the toolkit's best showcase. It should appear on the Advanced landing page, not in a junk drawer. The two `Example_*_Playground` projects keep `Other`. |
+| `Example_CubicleCalamity` | Advanced | Other | **Advanced** — *frontmatter wins* | Reversing the plan here. `Other` is for playgrounds and WIP; this is a complete game and the toolkit's best showcase. It should appear on the Advanced landing page, not in a junk drawer. The two `Example_*_Playground` projects get no metadata block at all (D42). |
 
 Every "Getting Started → Beginner" row above rests on one rule worth stating explicitly, because it
 decides several others: **Getting Started contains exactly the "your first code-only Stride app"
@@ -481,21 +482,21 @@ Rows marked ⚑ are the ones already settled in Table 0/0b — listed here only 
 | `Example_CubicleCalamity` | Advanced | ⚑ **changed from `Other`** — a complete game, the best showcase the toolkit has |
 | `Example08_CollidableGizmo` | Other | small utility demo, not a lesson |
 | `Example08_DebugRenderComponent` | Other | ditto |
-| `Example_2D_Playground` | Other | playground |
-| `Example_Bepu_Playground` | Other | playground |
 
-Not in either table, deliberately: `Example18_Box2DPhysics2` (empty directory — delete it),
-`_Temp2DProbe` / `_TempMemProbe` (untracked local probes), `Resources` (shared asset folder),
-`Example.Common` and `Example17_SignalR_Shared` (libraries, no entry point).
+Not in either table, deliberately: `Example_2D_Playground` and `Example_Bepu_Playground` (scratch space
+for experiments — no metadata block, so invisible to everything: D42), `_Temp2DProbe` / `_TempMemProbe`
+(untracked local probes), `Resources` (shared asset folder), `Example.Common` and
+`Example17_SignalR_Shared` (libraries, no entry point), and `Example_CubicleCalamity_BulletPhysics`
+(deleted in `16f7484e`; only stale `bin`/`obj` remain on disk).
 
 #### Flagged during the pass
 
-1. **Legacy Bullet variants — recommend `docs: false`.** `Example01_Basic3DScene_BulletPhysics`,
-   `Example01_Basic2DScene_BulletPhysics`, `Example10_StrideUI_DragAndDrop_BulletPhysics` and
-   `Example_CubicleCalamity_BulletPhysics` each duplicate a Bepu example using the legacy physics
-   engine. Documenting them puts near-identical entries on every level page for a non-default engine.
-   Suggest keeping them in the manifest and the launchers (`launcher: true`) but out of the docs.
-   **Your call — this is a new question the data raised.**
+1. ~~**Legacy Bullet variants — recommend `docs: false`.**~~ **Rejected 2026-08-23 — they keep their
+   docs (D43).** `Example01_Basic3DScene_BulletPhysics`, `Example01_Basic2DScene_BulletPhysics` and
+   `Example10_StrideUI_DragAndDrop_BulletPhysics` are documented like any other example. The
+   `docs: false` briefly applied to the 2D one during step 2 has been reverted.
+   `Example_CubicleCalamity_BulletPhysics` was deleted in `16f7484e`; only stale `bin`/`obj` remain on
+   disk, which the scanner excludes anyway — the folder can be removed at any time.
 2. **Not examples at all.** `Example.Common` and `Example17_SignalR_Shared` are shared libraries with
    no entry point. Under D17 (scan `.cs` for a metadata block) they are correctly invisible — no action
    needed, recorded so it is not rediscovered. `Example17_SignalR_Blazor` is the server half of
@@ -734,7 +735,7 @@ substantially.
 | D2 | Launcher field naming | `launcher`, not `exampleLauncher` |
 | D3 | `docGroup` vs `level` | Drop `docGroup`; restructure toc.yml around `level`; group by `(language, level)` |
 | D4 | `additionalFiles` / `externalLinks` | Dropped — superseded by `generated: partial` region markers |
-| D5 | Localisation | Docs English-only; `cs` carried in the manifest for the launchers |
+| D5 | Localisation | Docs English-only; `cs` carried in the manifest for the launchers, optional and partial, falling back to English (D41) |
 | D6 | `related:` | Stores project names; generator resolves to slugs and errors on an unresolvable name |
 | D7 | `generatedAt` | Included; manifest becomes a build artifact, removed from git + `.gitignore`d |
 | D8 | Takeover flag | `generated: true` / `partial` / `false` |
@@ -758,12 +759,23 @@ substantially.
 | D26 | Landing pages | One per `(language, level)` group, for SEO; old URLs kept as `redirect_url` stubs |
 | D27 | Level reclassification | Propose a mapping table in this doc for review; no frontmatter written until approved |
 | D28 | `generated: partial` phasing | **Phase 1**, immediately after the plain `generated: true` path works |
-| D29 | `category` vocabulary | **OPEN** — closed set proposed in "Flagged during the pass" §5; needs a yes or a redline |
+| D29 | `category` vocabulary | **Settled 2026-08-23.** Twelve values, listed in §8. A category names the lesson, not the scenery |
 | D30 | Level in `tags` | Strip it; `level` is a field, not a tag. Generator may synthesise a tag index if the docs need one |
 | D31 | What "Getting Started" admits | Exactly the "your first code-only app" examples — 3D, 2D, file-based, plus the F#/VB ports. Everything else that builds on the base scene is Beginner |
 | D32 | `Example_CubicleCalamity` | **Advanced**, reversing the earlier `Other`. `Other` is for playgrounds and WIP; a complete game belongs on the Advanced page |
 | D33 | Unknown frontmatter keys | **Fail.** Drop `IgnoreUnmatchedProperties()` (or collect and report). Proof it matters: `Order:` silently vanished from two examples |
 | D34 | `order` renumbering | Renumber wholesale per `(language, level)` group during the backfill, gaps of 10. Do not carry the `1`/`210`/`32000` legacy scales forward |
+| D35 | D10 timing | Validation errors are fatal only under `--strict`. The hook keeps `ContinueOnError` until the backfill lands, then both flip together. D10's intent stands; only its timing moves |
+| D36 | Scanned extensions | `.cs`, `.fs` **and** `.vb`, each with its own comment syntax. The `(language, level)` toc needs F#/VB examples to be able to carry frontmatter at all |
+| D37 | `required` members on the model | **No.** They fail inside the deserializer on the first bad file, which defeats aggregated validation. Requirements live in `MetadataValidator` |
+| D38 | Explicit `language:` | **Omit it** where the file extension already says it — which is always. The parser fills it in from the extension and the validator errors on a declared value that disagrees. Writing it out in 22 C# files would be the `tags`-duplicating-`level` mistake again (D30) |
+| D39 | Field order within a block | Canonical, matching §2.2: identity, classification, content, docs, launchers, lifecycle. Applied to all 22 so the next 39 are copy-pasteable |
+| D40 | Computed members in the manifest | `effectiveLanguage` / `effectiveMedia` are `[JsonIgnore]`. The first duplicates `language`; the second would assert a screenshot that, for most examples, does not exist |
+| D41 | Czech in the backfill | **English only.** `cs` is a launcher concern, never a docs one (D5), and is optional and partial by design. **Any missing `cs` value falls back to English** — encoded as `TitleFor` / `DescriptionFor` on `ExampleMetadata` so no consumer can forget it. Czech is added per-example later, by hand |
+| D42 | Playgrounds | `Example_2D_Playground` and `Example_Bepu_Playground` get **no metadata block at all** — they are scratch space for experiments, not examples. No manifest entry, no doc, and no launcher entry once Phase 2 lands |
+| D43 | Legacy Bullet variants | **They keep their docs**, reversing the suggestion in "Flagged during the pass" §1. They are documented like any other example |
+| D44 | `Example04_MyraUI` | `enabled: false` while it does not build on Stride 4.4, matching `Example07_CubeClicker`. Its hand-written doc has no frontmatter, so the generator never touches it and the page stays live |
+| D45 | `Example17_SignalR_Blazor` | `docs: false`. It is the server half of `stride-signalr.md`, which documents both sides; it stays in the launchers so it can be started when someone wants to try the pair |
 
 ### D24 — why slugs stay level-free
 
@@ -791,20 +803,116 @@ inserting a normalisation step in front of both.
 
 | # | Step | Blocked on | Size |
 |---|---|---|---|
-| 0 | ~~Sign off Table 0 / 0b~~ **done**; **D29 still open** | *you* | one review |
+| 0 | ~~Sign off Table 0 / 0b and D29~~ **done** | — | — |
 | 1 | ~~Schema + validator + Step 1.5 cleanups + Step 1.6 scanner change~~ **done 2026-08-22** | — | — |
-| 2 | Normalise the **22 existing** frontmatter blocks to schema v1 | D29 | add `slug`/`language`, fix `Beginners`, `Order:`, `\|-`, `complexity: 7`, strip level tags, renumber `order`, apply Tables 0/0b |
-| 3 | Backfill the remaining **~39** examples | 2 | the big one; AI-written from existing docs, reviewed in the diff (D11) |
-| 4 | Flip the hook to `--strict` and drop `ContinueOnError` | 3 | one line; completes D10 |
-| 5 | **Phase 2 — launchers** (§4) | 3 | small; manifest already has the right shape |
-| 6 | Phase 1.4 — docs generation, toc, landing pages | 3 | the other big one |
+| 2 | ~~Normalise the **22 existing** frontmatter blocks to schema v1~~ **done 2026-08-22** | — | — |
+| 3 | ~~Backfill the remaining examples~~ **done 2026-08-23** — 37 in four batches by level | — | — |
+| 4 | Flip the hook to `--strict` and drop `ContinueOnError` | — | one line; completes D10. **Ready now** |
+| 5 | **Phase 2 — launchers** (§4) | — | small; manifest already has the right shape |
+| 6 | Phase 1.4 — docs generation, toc, landing pages | — | the other big one |
 | 7 | Screenshots (§5) | 6 | deferred, direction set |
 
-**What step 1 shipped, and what the first run found.** The validator reports **34 errors and 110
-warnings** across the 22 examples. Errors: 22 × missing `slug` (expected — none has been authored),
-5 × `level: Beginners`, 2 × `Order:`, 1 × `complexity: 7`, and 4 duplicate-`order` groups. Warnings:
-44 × `|` instead of `|-`, 44 × a `related:` target with no slug yet, 22 × a level name repeated in
-`tags`. That list is precisely the work-list for step 2, which is what the validator was for.
+**Step 3 outcome.** Every example now carries a schema v1 block: **59 with metadata, 57 published**
+(`Example07_CubeClicker` and `Example04_MyraUI` are `enabled: false`), passing `generate --strict` with
+**0 errors and 2 warnings** — both of them `related:` pointers at the disabled CubeClicker, which are
+correct and will clear if it is ever re-enabled.
+
+Written in four batches by level so each could be reviewed against a coherent bucket: Getting Started
+and Beginner (9), Intermediate (16), Advanced (10), Other (2). English only, per D41. `created:` was
+taken from each project's first commit rather than invented. Builds were verified across all three
+languages and on the ASP.NET half of the SignalR pair.
+
+Deliberately left without metadata, and therefore invisible to every consumer: `Example.Common` and
+`Example17_SignalR_Shared` (libraries), the two playgrounds (D42), and
+`Example_CubicleCalamity_BulletPhysics` (deleted in `16f7484e`; only stale `bin`/`obj` on disk).
+
+Two things fixed along the way:
+
+- **The `contraints` media typo (D16) — and a second one nobody had noticed.**
+  `stride-game-engine-example-15-contraints.webp` and
+  `stride-game-engine-example-15-simple-contraint.webp` are now spelled correctly, with `constraints.md`
+  and `simple-constraint.md` updated to match.
+- **A CRLF bug in the Visual Basic extractor.** Its closing delimiter was anchored with `$` but the
+  opening one allowed `\r?`, so on a CRLF file — which is every file in a Windows working copy — the
+  block was silently not found. `Example01_Basic3DScene_VBasic` was skipped on the first run of batch 1;
+  both delimiters now tolerate the CR. This was invisible until the first real VB block existed, which
+  is a fair argument for the F#/VB support having been worth adding in step 1 (D36) rather than later.
+
+**What step 1 shipped, and what the first run found.** The validator reported **34 errors and 110
+warnings** across the 22 examples. Errors: 22 × missing `slug`, 5 × `level: Beginners`, 2 × `Order:`,
+1 × `complexity: 7`, and 4 duplicate-`order` groups. Warnings: 44 × `|` instead of `|-`, 44 × a
+`related:` target with no slug yet, 22 × a level name repeated in `tags`. That list was precisely the
+work-list for step 2, which is what the validator was for.
+
+**Step 2 outcome.** All 22 blocks now pass `generate --strict` with **0 errors**. The 32 remaining
+warnings are all "`related:` target has no slug yet" and will clear as step 3 proceeds. Applied:
+Tables 0/0b levels, the assigned slugs below, `order` renumbered per group in tens, `|-` everywhere,
+`complexity: 7` → `5`, level names stripped from `tags`, `Order:` → `order:`, and the canonical field
+order from §2.2 (D39). `docs: false` on the Bullet variant, per the "Flagged during the pass"
+recommendation. `media:` and `tocName:` preserved for the three examples that already have docs.
+
+| Level | Order | Slug | Project |
+|---|---|---|---|
+| Getting Started | 10 | `capsule-with-rigid-body` | `Example01_Basic3DScene` |
+| | 20 | `file-based-app` | `Example01_Basic3DScene_FileBasedApp` |
+| | 30 | `basic-2d-scene` | `Example01_Basic2DScene` |
+| | 40 | `basic-2d-scene-bullet` | `Example01_Basic2DScene_BulletPhysics` (`docs: false`) |
+| Beginner | 10 | `give-me-cube-body` | `Example02_GiveMeACube` |
+| | 20 | `primitives-2d` | `Example01_Basic2DScene_Primitives` |
+| | 30 | `falling-shapes-2d` | `Example01_Basic2DScene_FallingShapes` |
+| | 40 | `entity-text` | `Example01_EntityText` |
+| | 50 | `world-text` | `Example01_WorldText` |
+| Intermediate | 10 | `simulation-update` | `Example02_GiveMeACube_SimulationUpdate` |
+| | 20 | `spawn-menu-2d` | `Example01_Basic2DScene_SpawnMenu` |
+| | 30 | `letters-3d` | `Example01_Letters3D` |
+| | 40 | `instancing` | `Example21_Instancing` |
+| | 50 | `constraint-motors` | `Example15_Constraint_Motors` |
+| Advanced | 10 | `instancing-entity-transform` | `Example22_Instancing_EntityTransform` |
+| | 20 | `stress-pile-2d` | `Example01_Basic2DScene_StressPile` |
+| | 30 | `mesh-outline` | `Example13_MeshOutline` |
+| | 40 | `imgui-net` | `Example11_ImGuiNet` |
+| | 50 | `constraint-rope` | `Example15_Constraint_Rope` |
+| | 60 | `jitter2-physics` | `Example19_Jitter2Physics` |
+| | 70 | `jitter2-constraints` | `Example19_Jitter2Physics_Constraints` |
+| | 80 | `cubicle-calamity` | `Example_CubicleCalamity` |
+
+The three slugs that already exist as docs — `capsule-with-rigid-body`, `give-me-cube-body`,
+`mesh-outline` — are kept exactly as they are. Renaming them would break live URLs for no gain (D24).
+
+### What normalising taught us about `category` — **all four applied 2026-08-23**
+
+The approved vocabulary held up, but using it on 22 real examples surfaced four changes, all of which
+were accepted and are now in `Core/MetadataVocabulary.cs`. The final set is:
+
+**`Shapes` · `Geometry` · `Physics` · `Rendering` · `Performance` · `Text` · `UI` · `Input` ·
+`Scripts` · `Networking` · `Debug` · `Game`**
+
+Three already-normalised examples moved to `Performance`: `instancing` and
+`instancing-entity-transform` (from `Rendering`) and `stress-pile-2d` (from `Physics`). The other three
+changes touched no example, because nothing had used `Getting Started` or `Integration`.
+
+The reasoning, kept because it is the rule for categorising the remaining ~39:
+
+1. **Drop `Getting Started` as a *category*.** It collides with the level of the same name, and nothing
+   needed it: `Example01_Basic3DScene_FileBasedApp` is literally the capsule scene in single-file form,
+   so `Shapes` is right and the actual lesson lives in the title, description and tags. A value that is
+   both a level and a category invites exactly the confusion the two fields exist to separate.
+2. **Rename `Integration` → `Networking`.** `Integration` was meant to cover Box2D, Jitter2, SignalR and
+   ImGui, but on inspection the first two read better as `Physics` (someone browsing physics wants to
+   find them) and ImGui as `UI`. That leaves SignalR alone in the bucket — and `Networking` says what it
+   is, where `Integration` describes *how it was built* rather than *what it teaches*.
+3. **Add `Performance`.** Three examples are optimisation lessons — `instancing`,
+   `instancing-entity-transform` and `stress-pile-2d` — currently split between `Rendering` and
+   `Physics` on the basis of what they happen to draw. Their real shared subject is draw calls and
+   throughput. This is the strongest of the four.
+4. **`Input` earned its place immediately.** `spawn-menu-2d` was filed under `Shapes`, which hid that it
+   is a keyboard-menu lesson that merely spawns shapes to have something to do. It is now the first user
+   of `Input`, and it is the clearest case that `category` should name the lesson, not the scenery.
+
+Not suggested: `Camera` and `Audio`. Both are plausible, but adding vocabulary with no members is how
+`Integration` ended up mis-scoped. The validator makes adding one a one-line change when a real example
+turns up. `Geometry` and `Debug` stay unused for now but are clearly earmarked (`Example05_*` and
+`Example08_*` respectively).
 
 **Why launchers before docs.** Three reasons, in order of weight:
 
