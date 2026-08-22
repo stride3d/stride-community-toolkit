@@ -429,8 +429,8 @@
     "category": "Text",
     "complexity": 2,
     "description": {
-      "en": "A gallery of every glyph LetterMeshFactory can build - digits, letters and the dash - as solid\nextruded meshes that catch the light like any other geometry, plus a frame counter whose digits\nare rebuilt as a new mesh every frame. The counter demonstrates the one rule of dynamic mesh\ntext: dispose the old GPU buffers before swapping in the new mesh, or leak a buffer pair per\nrebuild.\n",
-      "cs": "Galerie všech znaků, které LetterMeshFactory umí postavit - číslice, písmena a pomlčka - jako\nplné vytlačené meshe, které chytají světlo jako jakákoli jiná geometrie, plus počítadlo snímků,\njehož číslice se každý snímek staví znovu jako nový mesh. Počítadlo ukazuje jediné pravidlo\ndynamického textu z meshů: před výměnou meshe uvolnit staré GPU buffery, jinak každá přestavba\nuteče o pár bufferů.\n"
+      "en": "A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and\nthe dash - as solid extruded meshes that catch the light like any other geometry, plus a frame\ncounter whose digits are rebuilt as a new mesh every frame. The counter demonstrates the one\nrule of dynamic mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak\na buffer pair per rebuild.\n",
+      "cs": "Galerie všech znaků, které LetterMeshFactory umí postavit - číslice, celá abeceda A-Z a pomlčka\n- jako plné vytlačené meshe, které chytají světlo jako jakákoli jiná geometrie, plus počítadlo\nsnímků, jehož číslice se každý snímek staví znovu jako nový mesh. Počítadlo ukazuje jediné\npravidlo dynamického textu z meshů: před výměnou meshe uvolnit staré GPU buffery, jinak každá\npřestavba uteče o pár bufferů.\n"
     },
     "concepts": [
       "Solid 3D lettering from code: LetterMeshFactory.CreateTextMeshDraw",
