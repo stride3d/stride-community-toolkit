@@ -224,14 +224,44 @@ Everything shipped is committed or in the working tree; only what is still open 
   about where the origin is), or pinned to a screen corner the way editor viewports do it. The last
   one generalises to every code-only example — "where the hell is X" is not a Cubicle Calamity
   problem — so it is really a toolkit-feature question and belongs in `ARCHITECTURE.md` if pursued.
-- **Review `MeshBuilder`** before building on it: correctness, modern C#, efficiency. Agreed as the
-  step before mesh letters.
-- **Hand-authored 3D letter meshes** — X, Y, Z first, digits later, each glyph a 2D polygon outline
-  defined in code and extruded through `MeshBuilder`. Cross-platform is the constraint that shapes
-  this: `VL.Stride.Text3d` was evaluated and declined because its glyph outlines come from
-  DirectWrite (Windows-only) and it is a vvvv package besides — reopen only if a cross-platform C#
-  glyph-outline library appears. Intended showcase: decorative lettering ("GAME OVER") in Cubicle
-  Calamity; axis labels are already better served by `WorldTextComponent`.
+- ~~**Review `MeshBuilder`**~~ — done (Aug 2026). Six defects found and fixed with 15 pinning tests:
+  all seven `With*` wrappers dropped their `pixelFormat`; off-by-one bounds let callers silently
+  write one vertex past the mesh; `ToMeshDraw` uploaded the whole pooled array (garbage tail
+  included) and passed `VertexCount` as `VertexDeclaration`'s `instanceCount`, poisoning declaration
+  hashing; `IndexingType.None` threw `E_INVALIDARG` at buffer creation despite being documented;
+  pooled-array padding bytes reached the GPU unzeroed. `Example05_ProceduralGeometry` also leaked a
+  buffer pair and a material per frame rebuilding its animated circle — fixed, and it now
+  demonstrates the disposal pattern plus a non-indexed mesh. Clear for the mesh-letters work.
+- **Hand-authored 3D letter meshes** — **done** (Aug 2026): `EarClipping` (public triangulator),
+  `MeshBuilderExtensions.AddExtrudedPolygon` (caps + flat-shaded walls, either winding, concave
+  fine) and `LetterMeshFactory` under `Rendering/Utilities/`. Glyph set is `0123456789AEGMORVXYZ`
+  plus space; holes (0, 6, 8, 9, A, O, R) are handled by authoring each glyph as multiple
+  edge-abutting simple polygons on a shared segment grid rather than bridge cuts, so every piece
+  stays hole-free and the area-invariant test validates all of them. Cubicle Calamity's game over
+  now drops "GAME OVER" and the final score as tumbling physics letters (`Setup/FallingLetters.cs`)
+  - box colliders on purpose, because letter-shaped convex hulls jostling each other is the
+  documented Bepu NaN configuration. Front-face winding is clockwise (D3D convention); this was
+  learned the hard way and is pinned by a per-triangle winding test and a note in the contributor
+  instructions. The full alphabet A-Z, all digits and the dash are authored (Aug 2026); B shares 8's
+  glyph the way O shares 0's, and `Example01_Letters3D` is the gallery that shows every glyph plus
+  the rebuild-with-disposal pattern. Cross-platform constraint stands: `VL.Stride.Text3d` declined
+  (DirectWrite, Windows-only, vvvv package).
+- **`LetterMeshFactory` style parameters** — stroke width, glyph width, spacing and depth are
+  constants today, and the stroke is woven into the shared segment grid (`TopY`, `MiddleY`, ... all
+  derive from it), so making it configurable means passing a metrics/style object down into every
+  glyph builder rather than exposing one number. The bar-built glyphs would follow automatically;
+  the hand-sketched polygons (V, X, Y, Z, K, the R leg, the Q tail, D's chamfers) have tuned
+  constants that need to scale with the stroke or be re-authored. The existing area-invariant tests
+  generalise: run them per style over a few stroke values. Worth doing once a second real consumer
+  besides Cubicle Calamity and the gallery appears.
+- **Lighting for solid lettering / model showcases** — `AddAllDirectionLighting` (six directionals
+  down the world axes) turned out to be the difference between black-faced letters and a readable
+  gallery in `Example01_Letters3D`, same as in Cubicle Calamity. `AddStudioLighting` (key/fill/rim,
+  yaw-steerable, key-only shadows) now exists in `GameExtensions` next to it — verified against the
+  letters gallery, where it models shape visibly better than uniform light. Still open: (a) the
+  cheaper all-direction equivalent — three lights plus an ambient term instead of six directionals —
+  and (b) sweeping the examples to see which ones read better under the studio rig and swapping
+  them over.
 - **`TextPositionMode` cannot centre on screen** — corners and explicit pixels only, so Cubicle
   Calamity's game-over banner needs a four-line `ScreenCentreTextScript` recomputing its position
   every frame. A centre option belongs in the component.
