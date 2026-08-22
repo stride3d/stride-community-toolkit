@@ -239,19 +239,21 @@ readonly record struct WorldLabel(Vector3 Position, string Text, byte Red, byte 
 
 /*
 ---example-metadata
+slug: imgui-net
 title:
   en: ImGui.NET Text Rendering
   cs: Vykreslování textu pomocí ImGui.NET
 level: Advanced
 category: UI
 complexity: 4
+order: 40
 description:
-  en: |
+  en: |-
     Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.
     A kinematic Bepu body follows a circular path and knocks over stacks of dynamic boxes, showing why
     SetTargetPose moves a physics body while writing Transform.Position does not. The ImGui font atlas
     is rebuilt for the monitor's DPI so the overlay stays crisp on high-DPI displays.
-  cs: |
+  cs: |-
     Vykreslování ladicího textu pomocí ImGui.NET, jak v souřadnicích obrazovky, tak ukotveného
     k pozicím ve 3D scéně. Kinematické těleso Bepu se pohybuje po kruhové dráze a shazuje stohy
     dynamických kostek, čímž ukazuje, proč SetTargetPose tělesem pohne, zatímco zápis do
@@ -266,10 +268,6 @@ concepts:
   - "Using helpers: AddImGuiNet"
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddProfiler"
-related:
-  - Example11_ImGui
-  - Example01_Basic3DScene_DPI_Aware
-  - Example18_Box2DPhysics
 tags:
   - 3D
   - UI
@@ -283,8 +281,10 @@ tags:
   - Kinematic Body
   - DPI
   - HiDPI
-  - Advanced
-order: 11
+related:
+  - Example11_ImGui
+  - Example01_Basic3DScene_DPI_Aware
+  - Example18_Box2DPhysics
 enabled: true
 created: 2025-10-06
 ---

@@ -42,18 +42,20 @@ void Start(Scene rootScene)
 
 /*
 ---example-metadata
+slug: falling-shapes-2d
 title:
   en: Basic2D Scene (Falling Shapes)
   cs: Základní 2D scéna (Padající tvary)
-level: Getting Started
-category: Shapes
+level: Beginner
+category: Physics
 complexity: 1
+order: 30
 description:
-  en: |
+  en: |-
     Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.
     Demonstrates primitive creation, basic positioning, and attaching the entities to the scene.
     The shapes will fall due to physics, showcasing the integration of Bepu physics in a 2D scene.
-  cs: |
+  cs: |-
     Vytvoření minimální 2D scény pomocí nástrojů sady a umístění několika kapslí s plochými materiály.
     Ukazuje vytvoření primitivních tvarů, základní umístění a připojení entit k scéně.
     Tvary budou padat díky fyzice, což ukazuje integraci Bepu fyziky v 2D scéně.
@@ -63,10 +65,6 @@ concepts:
   - Setting an entity position through primitive options
   - Adding entities to a Scene (rootScene)
   - "Using helpers: SetupBase2DScene"
-related:
-  - Example02_GiveMeACube
-  - Example01_Basic2DScene_Primitives
-  - Example01_Material
 tags:
   - 2D
   - Bepu
@@ -77,8 +75,10 @@ tags:
   - Scene Setup
   - Transform
   - Position
-  - Getting Started
-order: 2
+related:
+  - Example02_GiveMeACube
+  - Example01_Basic2DScene_Primitives
+  - Example01_Material
 enabled: true
 created: 2026-06-11
 ---

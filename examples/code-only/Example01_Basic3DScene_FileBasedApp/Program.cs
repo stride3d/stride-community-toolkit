@@ -50,19 +50,21 @@ void Start(Scene rootScene)
 
 /*
 ---example-metadata
+slug: file-based-app
 title:
   en: Basic3D Scene (Capsule) - File-Based App
   cs: Základní 3D scéna (Kapsle) - aplikace bez projektu
 level: Getting Started
 category: Shapes
 complexity: 1
+order: 20
 description:
-  en: |
+  en: |-
     The same minimal 3D scene as Example01_Basic3DScene, written as a .NET 10 file-based app: a single
     C# file with no .csproj. NuGet packages, project references and MSBuild properties are declared
     inline with #:package, #:project and #:property directives, so the example runs with
     "dotnet run Program.cs". Use "dotnet project convert" to turn it back into a regular project.
-  cs: |
+  cs: |-
     Stejná minimální 3D scéna jako Example01_Basic3DScene, ale napsaná jako aplikace bez projektu
     (.NET 10 file-based app): jediný soubor C# bez .csproj. Balíčky NuGet, odkazy na projekty
     a vlastnosti MSBuild se deklarují přímo pomocí direktiv #:package, #:project a #:property,
@@ -76,10 +78,6 @@ concepts:
   - Converting a file-based app to a project with dotnet project convert
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddSkybox"
-related:
-  - Example01_Basic3DScene
-  - Example02_GiveMeACube
-  - Example01_Basic3DScene_Primitives
 tags:
   - 3D
   - Bepu
@@ -90,8 +88,10 @@ tags:
   - Skybox
   - File-Based App
   - dotnet run
-  - Getting Started
-order: 1
+related:
+  - Example01_Basic3DScene
+  - Example02_GiveMeACube
+  - Example01_Basic3DScene_Primitives
 enabled: true
 created: 2026-08-08
 ---

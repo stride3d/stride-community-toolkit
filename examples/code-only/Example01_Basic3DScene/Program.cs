@@ -21,17 +21,19 @@ void Start(Scene rootScene)
 
 /*
 ---example-metadata
+slug: capsule-with-rigid-body
 title:
   en: Basic3D Scene (Capsule)
   cs: Základní 3D scéna (Kapsle)
 level: Getting Started
 category: Shapes
 complexity: 1
+order: 10
 description:
-  en: |
+  en: |-
     Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.
     Demonstrates primitive creation, basic positioning, and attaching the entity to the scene.
-  cs: |
+  cs: |-
     Vytvoření minimální 3D scény pomocí nástrojů sady, přidání skyboxu a umístění jediné kapsle jako primitivního tvaru.
     Ukazuje vytvoření primitivního tvaru, základní umístění a připojení entity k scéně.
 concepts:
@@ -40,10 +42,6 @@ concepts:
   - Adding entities to a Scene (rootScene)
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddSkybox"
-related:
-  - Example02_GiveMeACube
-  - Example01_Basic3DScene_Primitives
-  - Example01_Material
 tags:
   - 3D
   - Bepu
@@ -54,8 +52,11 @@ tags:
   - Skybox
   - Transform
   - Position
-  - Getting Started
-order: 1
+related:
+  - Example02_GiveMeACube
+  - Example01_Basic3DScene_Primitives
+  - Example01_Material
+tocName: Capsule with rigid body
 enabled: true
 created: 2023-09-11
 ---

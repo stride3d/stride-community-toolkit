@@ -138,18 +138,20 @@ record CubeInstance(Entity Entity, RigidBody Body);
 
 /*
 ---example-metadata
+slug: jitter2-physics
 title:
   en: Jitter2 Physics Integration
   cs: Integrace fyziky Jitter2
-level: Beginners
+level: Advanced
 category: Physics
 complexity: 4
+order: 60
 description:
-  en: |
+  en: |-
     Demonstrates integrating Jitter2 physics engine with Stride. Shows how to create a physics world,
     synchronize physics bodies with visual entities, and simulate dynamic rigid body interactions.
     Features 150 falling cubes with proper collision detection and a static ground plane.
-  cs: |
+  cs: |-
     Ukazuje integraci fyzikálního enginu Jitter2 se Stride. Jak vytvořit fyzikální svět,
     synchronizovat fyzikální tělesa s vizuálními entitami a simulovat dynamické interakce pevných těles.
     Obsahuje 150 padajících kostek s detekcí kolizí a statickou zemní rovinou.
@@ -160,11 +162,6 @@ concepts:
   - Dynamic rigid body simulation
   - Static vs dynamic physics bodies
   - Fixed-timestep physics update loop, decoupled from the render frame rate
-related:
-  - Example01_Basic3DScene
-  - Example18_Box2DPhysics
-  - Example19_Jitter2Physics_Constraints
-  - Example_CubicleCalamity
 tags:
   - 3D
   - Physics
@@ -174,8 +171,11 @@ tags:
   - External Engine
   - Simulation
   - Cubes
-  - Beginners
-order: 19
+related:
+  - Example01_Basic3DScene
+  - Example18_Box2DPhysics
+  - Example19_Jitter2Physics_Constraints
+  - Example_CubicleCalamity
 enabled: true
 created: 2025-12-13
 ---

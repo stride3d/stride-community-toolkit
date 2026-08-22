@@ -111,19 +111,21 @@ void CreateOrbitingCube(Scene rootScene)
 
 /*
 ---example-metadata
+slug: give-me-cube-body
 title:
   en: Give Me a Cube
   cs: Dej mi kostku
-level: Getting Started
+level: Beginner
 category: Scripts
 complexity: 2
+order: 10
 description:
-  en: |
+  en: |-
     Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
     The script steers a cube around a circle each frame by setting the linear velocity of a kinematic
     Bepu body, so it really sweeps through the scene and knocks a ring of smaller dynamic cubes out of
     the way. Writing Transform.Position instead would move only the mesh and collide with nothing.
-  cs: |
+  cs: |-
     Přidání chování k entitě pomocí komponenty SyncScript namísto callbacku update v game.Run.
     Skript každý snímek vede kostku po kruhu nastavením lineární rychlosti kinematického tělesa Bepu,
     takže skutečně projíždí scénou a odráží kruh menších dynamických kostek. Zápis do Transform.Position
@@ -139,10 +141,6 @@ concepts:
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddSkybox"
   - "Using helpers: Game.DeltaTime"
-related:
-  - Example01_Basic3DScene
-  - Example01_Basic3DScene_SyncScript
-  - Example11_ImGuiNet
 tags:
   - 3D
   - Script
@@ -155,8 +153,12 @@ tags:
   - Kinematic Body
   - Collision
   - Cube
-  - Getting Started
-order: 2
+related:
+  - Example01_Basic3DScene
+  - Example01_Basic3DScene_SyncScript
+  - Example11_ImGuiNet
+media: stride-game-engine-example02-give-me-cube.webp
+tocName: Give me a cube
 enabled: true
 created: 2023-09-11
 ---

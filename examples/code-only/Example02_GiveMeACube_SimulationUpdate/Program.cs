@@ -111,20 +111,22 @@ void CreateOrbitingCube(Scene rootScene)
 
 /*
 ---example-metadata
+slug: simulation-update
 title:
   en: Give Me a Cube (SimulationUpdate)
   cs: Dej mi kostku (SimulationUpdate)
-level: Beginners
+level: Intermediate
 category: Physics
 complexity: 3
+order: 10
 description:
-  en: |
+  en: |-
     Drive an entity from the physics clock instead of the render loop. The script is a StartupScript with
     no per-frame Update at all: it implements ISimulationUpdate, so Bepu calls it once per fixed physics
     step and Stride registers it automatically. That is what makes SetTargetPose safe, because exactly one
     step consumes the velocity it sets. Compare with Example02_GiveMeACube, which sets a bounded velocity
     every frame instead.
-  cs: |
+  cs: |-
     Řízení entity podle hodin fyziky namísto vykreslovací smyčky. Skript je StartupScript zcela bez metody
     Update: implementuje rozhraní ISimulationUpdate, takže jej Bepu volá jednou za pevný fyzikální krok
     a Stride jej zaregistruje automaticky. Právě díky tomu je metoda SetTargetPose bezpečná, protože
@@ -138,10 +140,6 @@ concepts:
   - Moving a kinematic body so it pushes dynamic bodies
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddSkybox"
-related:
-  - Example02_GiveMeACube
-  - Example01_Basic3DScene_SyncScript
-  - Example20_BepuFirstPersonCharacter
 tags:
   - 3D
   - Physics
@@ -153,8 +151,10 @@ tags:
   - Script
   - StartupScript
   - Cube
-  - Beginners
-order: 2
+related:
+  - Example02_GiveMeACube
+  - Example01_Basic3DScene_SyncScript
+  - Example20_BepuFirstPersonCharacter
 enabled: true
 created: 2026-08-07
 ---

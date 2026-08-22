@@ -169,20 +169,22 @@ record CubeInstance(Entity Entity, RigidBody Body);
 
 /*
 ---example-metadata
+slug: jitter2-constraints
 title:
   en: Jitter2 Physics - Constraining to 2D
   cs: Jitter2 fyzika - omezení na 2D
-level: Beginners
+level: Advanced
 category: Physics
 complexity: 4
+order: 70
 description:
-  en: |
+  en: |-
     Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no
     dedicated 2D mode, so each falling cube gets a PointOnPlane constraint locking translation along Z
     and a HingeAngle constraint locking rotation to the Z axis, confining it to the X/Y plane while it
     keeps running on the same 3D solver. Builds on Example19_Jitter2Physics with the same falling-cubes
     setup, spread across a grid so they cascade and pile up sideways.
-  cs: |
+  cs: |-
     Ukazuje, jak omezit 3D fyzikální simulaci Jitter2 na chování podobné 2D. Jitter2 nemá vyhrazený 2D
     režim, takže každá padající kostka dostane omezení PointOnPlane, které uzamkne posun podél osy Z,
     a omezení HingeAngle, které uzamkne rotaci na osu Z - kostka tak zůstává v rovině X/Y, přestože běží
@@ -194,10 +196,6 @@ concepts:
   - Locking translation and rotation axes with world.CreateConstraint
   - Synchronizing physics bodies with visual entities
   - Fixed-timestep physics update loop, decoupled from the render frame rate
-related:
-  - Example19_Jitter2Physics
-  - Example15_Constraint
-  - Example18_Box2DPhysics
 tags:
   - 3D
   - Physics
@@ -208,8 +206,10 @@ tags:
   - External Engine
   - Simulation
   - Cubes
-  - Beginners
-order: 19
+related:
+  - Example19_Jitter2Physics
+  - Example15_Constraint
+  - Example18_Box2DPhysics
 enabled: true
 created: 2026-08-08
 ---

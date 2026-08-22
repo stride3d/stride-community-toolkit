@@ -170,19 +170,21 @@ Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextC
 
 /*
 ---example-metadata
+slug: entity-text
 title:
   en: Entity Text (Screen-Space)
   cs: Text entity (v prostoru obrazovky)
-level: Getting Started
+level: Beginner
 category: Text
 complexity: 1
+order: 40
 description:
-  en: |
+  en: |-
     A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows,
     backgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and
     HUD text pinned to window corners that survives resizing.
     Screen-space text keeps its pixel size at any distance and is never hidden by geometry.
-  cs: |
+  cs: |-
     Galerie všeho, co EntityTextComponent umí, jedna vlastnost na sloupek: ukotvení, stíny, pozadí,
     škálování, rotace, průhlednost, mizení s vzdáleností, více textů na jedné entitě a HUD text
     přichycený k rohům okna, který přežije změnu velikosti.
@@ -195,10 +197,6 @@ concepts:
   - Distance fading with FadeStartDistance and MaxDistance
   - Several EntityTextComponents on one entity
   - "HUD text that survives window resizing: TextPositionMode.Anchored"
-related:
-  - Example01_WorldText
-  - Example05_SimpleGeometry
-  - Example09_Renderer
 tags:
   - 3D
   - Text
@@ -206,8 +204,10 @@ tags:
   - HUD
   - Screen Space
   - Labels
-  - Getting Started
-order: 210
+related:
+  - Example01_WorldText
+  - Example05_SimpleGeometry
+  - Example09_Renderer
 enabled: true
 created: 2026-08-22
 ---

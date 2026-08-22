@@ -415,14 +415,16 @@ void InitializeDebugOverlay()
 
 /*
 ---example-metadata
+slug: constraint-motors
 title:
   en: Constraints - Servo vs Motor vs Limit
   cs: Vazby - servo, motor a limit
-level: Beginners
+level: Intermediate
 category: Physics
 complexity: 5
+order: 50
 description:
-  en: |
+  en: |-
     The three kinds of Bepu constraint, side by side. A servo drives towards a target position or
     orientation and then stops; a motor drives towards a target velocity and never stops; a limit
     drives nothing at all and only clamps a range. A mixer blade shows the motor case - a
@@ -432,7 +434,7 @@ description:
     quickest way to see what it was contributing. The example also shows the trap that catches most
     hand-built joints: a constraint does not stop two bodies colliding, so a joint whose parts share
     space simply jams. Extends Example15_Constraint, which covers servos and limits but never motors.
-  cs: |
+  cs: |-
     Tři druhy vazeb v Bepu vedle sebe. Servo míří na cílovou pozici nebo orientaci a pak se zastaví,
     motor žene cílovou rychlost a nezastaví se nikdy, limit sám o sobě nepohání nic a pouze omezuje
     rozsah. Motor předvádí lopatka mixéru - vazba HingeConstraint určuje, kterým směrem se smí točit,
@@ -459,10 +461,6 @@ concepts:
   - Why a constraint anchor must be a kinematic body, not a static one
   - Why a velocity set from the start callback is lost
   - "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
-related:
-  - Example15_Constraint
-  - Example15_Constraint_Simple
-  - Example19_Jitter2Physics_Constraints
 tags:
   - 3D
   - Physics
@@ -474,8 +472,10 @@ tags:
   - Hinge
   - Rigid Body
   - Kinematic Body
-  - Beginners
-order: 15
+related:
+  - Example15_Constraint
+  - Example15_Constraint_Simple
+  - Example19_Jitter2Physics_Constraints
 enabled: true
 created: 2026-08-08
 ---

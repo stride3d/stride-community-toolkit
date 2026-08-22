@@ -350,14 +350,16 @@ public enum SpawnLayout
 
 /*
 ---example-metadata
+slug: stress-pile-2d
 title:
   en: Basic2D Scene (Stress Pile)
   cs: Základní 2D scéna (Zátěžová hromada)
 level: Advanced
 category: Physics
 complexity: 4
+order: 20
 description:
-  en: |
+  en: |-
     Thousands of 2D physics bodies piling up, drawn in a single draw call through instancing, with the
     shape, batch size and spawn layout switchable while it runs. Because one master entity draws every
     body, all of them share a single Model and shapes cannot be mixed - changing shape clears and
@@ -365,7 +367,7 @@ description:
     per shape and the instancing object is reused rather than recreated, so switching costs nothing.
     Grid spawns are deliberately jittered: a perfectly regular lattice of touching bodies degenerates
     Bepu's broad-phase tree.
-  cs: |
+  cs: |-
     Tisíce 2D fyzikálních těles se vrší na sebe a vykreslují se jediným voláním díky instancingu.
     Za běhu lze měnit tvar, velikost dávky i způsob rozmístění. Protože vše vykresluje jedna hlavní
     entita, sdílejí všechna tělesa jeden model a tvary nelze míchat - změna tvaru proto hromadu smaže
@@ -378,10 +380,6 @@ concepts:
   - Switching shape, batch size and layout at runtime with DebugTextDropdown
   - Why a perfectly regular spawn lattice must be jittered
   - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics"
-related:
-  - Example22_Instancing_EntityTransform
-  - Example01_Basic2DScene_SpawnMenu
-  - Example01_Basic2DScene_FallingShapes
 tags:
   - 2D
   - Bepu
@@ -390,8 +388,10 @@ tags:
   - Performance
   - Draw Calls
   - Stress Test
-  - Advanced
-order: 57
+related:
+  - Example22_Instancing_EntityTransform
+  - Example01_Basic2DScene_SpawnMenu
+  - Example01_Basic2DScene_FallingShapes
 enabled: true
 created: 2026-08-16
 ---

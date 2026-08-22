@@ -10,21 +10,23 @@ game.Run(start: cubicleCalamity.Start, update: cubicleCalamity.Update);
 
 /*
 ---example-metadata
+slug: cubicle-calamity
 title:
   en: Game - Cubicle Calamity
   cs: Hra - Cubicle Calamity
 level: Advanced
 category: Game
 complexity: 5
+order: 80
 description:
-  en: |
+  en: |-
     A colour-match collapse puzzle built entirely from code. A 10x10x10 platform of cubes builds
     itself one layer at a time, clicking a cube clears every same-coloured cube connected to it, and
     what is left above drops into the gap.
     Shows how to structure a whole game without the editor: scene setup split from gameplay, a custom
     Bepu body that constrains cubes to their own column, screen-space text drawn without the UI
     system, and mouse picking through a physics raycast.
-  cs: |
+  cs: |-
     Logická hra na skládání barev postavená výhradně v kódu. Platforma 10x10x10 z kostek se staví
     po vrstvách, kliknutí na kostku odstraní všechny propojené kostky stejné barvy a to, co zůstane
     nad nimi, spadne do vzniklé mezery.
@@ -40,9 +42,6 @@ concepts:
   - "Drawing screen-space text without the UI system: EntityTextComponent"
   - Flood filling a grid to find connected same-coloured neighbours
   - "Using helpers: Add3DCamera, Add3DGround, AddGizmo, Create3DPrimitive"
-related:
-  - Example09_Renderer
-  - Example05_SimpleGeometry
 tags:
   - 3D
   - Bepu
@@ -55,8 +54,9 @@ tags:
   - Text Rendering
   - Materials
   - Lighting
-  - Advanced
-order: 32000
+related:
+  - Example09_Renderer
+  - Example05_SimpleGeometry
 enabled: true
 created: 2025-04-20
 ---

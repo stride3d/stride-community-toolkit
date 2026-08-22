@@ -67,19 +67,21 @@ void CreateOutlinedPrimitive(Scene rootScene, PrimitiveModelType modelType, Colo
 
 /*
 ---example-metadata
+slug: mesh-outline
 title:
   en: Mesh Outline Render Feature
   cs: Obrysy modelů pomocí vlastní render feature
 level: Advanced
 category: Rendering
 complexity: 4
+order: 30
 description:
-  en: |
+  en: |-
     Draw coloured outlines around 3D primitives with a custom RootRenderFeature. Each mesh is drawn a
     second time, inflated along its normals with front faces culled, so only a shell remains visible
     behind the original mesh. Adding a MeshOutlineComponent to an entity is all it takes to outline it,
     and a high intensity pushes the outline into HDR range so bloom makes it glow.
-  cs: |
+  cs: |-
     Vykreslení barevných obrysů kolem 3D tvarů pomocí vlastní RootRenderFeature. Každý model se vykreslí
     podruhé, nafouknutý podél normál a s odstraněnými přivrácenými stěnami, takže za původním modelem
     zůstane viditelná jen skořepina. K vytvoření obrysu stačí entitě přidat MeshOutlineComponent
@@ -93,10 +95,6 @@ concepts:
   - Skipping render stages that bind no render target
   - "Using helpers: SetupBase3DScene"
   - "Using helpers: AddSkybox"
-related:
-  - Example13_RootRendererShader
-  - Example09_Renderer
-  - Example01_Basic3DScene
 tags:
   - 3D
   - Rendering
@@ -108,8 +106,12 @@ tags:
   - Entity Component
   - HDR
   - Bloom
-  - Advanced
-order: 13
+related:
+  - Example13_RootRendererShader
+  - Example09_Renderer
+  - Example01_Basic3DScene
+media: stride-game-engine-example-13-mesh-outline.webp
+tocName: Mesh Outline
 enabled: true
 created: 2025-08-07
 ---

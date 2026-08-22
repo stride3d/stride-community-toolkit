@@ -233,20 +233,22 @@ void DrawOverlay()
 
 /*
 ---example-metadata
+slug: instancing
 title:
   en: GPU Instancing
   cs: GPU instancing
-level: Beginners
+level: Intermediate
 category: Rendering
 complexity: 3
+order: 40
 description:
-  en: |
+  en: |-
     Render two identical walls of cubes built two different ways, side by side. The left wall uses one
     entity per cube and costs one draw call each; the right wall uses a single entity with an
     InstancingComponent and an array of world matrices, and costs one draw call in total. Both share the
     same Model, so the only difference is instancing. Toggle each wall to compare the frame rate, and
     note that the InstancingRenderFeature has to be added to the compositor by hand in code-only projects.
-  cs: |
+  cs: |-
     Vykreslení dvou stejných stěn z kostek postavených dvěma způsoby vedle sebe. Levá stěna používá jednu
     entitu na kostku a stojí jedno vykreslovací volání za každou z nich; pravá stěna používá jedinou entitu
     s komponentou InstancingComponent a pole světových matic a stojí celkem jedno volání. Obě sdílejí
@@ -261,10 +263,6 @@ concepts:
   - "Using helpers: SetupBase3D"
   - "Using helpers: Add3DCameraController"
   - "Using helpers: AddProfiler"
-related:
-  - Example22_Instancing_EntityTransform
-  - Example01_Basic3DScene_Primitives
-  - Example09_Renderer
 tags:
   - 3D
   - Rendering
@@ -274,8 +272,10 @@ tags:
   - GPU
   - Model
   - Compositor
-  - Beginners
-order: 21
+related:
+  - Example22_Instancing_EntityTransform
+  - Example01_Basic3DScene_Primitives
+  - Example09_Renderer
 enabled: true
 created: 2026-08-07
 ---

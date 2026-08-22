@@ -49,38 +49,38 @@ public record ShapeItem(Primitive2DModelType Type, Vector2[]? Vertices = null);
 
 /*
 ---example-metadata
+slug: primitives-2d
 title:
   en: Basic2D Scene (Multiple Primitives)
   cs: Základní 2D scéna (Více primitiv)
-level: Getting Started
+level: Beginner
 category: Shapes
 complexity: 1
+order: 20
 description:
-  en: |
+  en: |-
     Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.
     Demonstrates entity creation, basic positioning, and attaching the entities to the scene.
-  cs: |
+  cs: |-
     Vytvoření minimální 2D scény pomocí nástrojů sady a umístění více různých primitivních tvarů.
     Ukazuje vytvoření entity, základní umístění a připojení entit k scéně.
 concepts:
-    - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
-    - Positioning entities with Transform.Position
-    - Adding entities to a Scene (rootScene)
-    - "Using helpers: SetupBase2DScene"
-related:
-    - Example01_Basic2DScene_DebugRender
-    - Example01_Basic2DScene_BulletPhysics
-    - Example01_Basic2DScene
+  - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
+  - Positioning entities with Transform.Position
+  - Adding entities to a Scene (rootScene)
+  - "Using helpers: SetupBase2DScene"
 tags:
-    - 2D
-    - Bepu
-    - Shapes
-    - Primitives
-    - Scene Setup
-    - Transform
-    - Position
-    - Getting Started
-Order: 2
+  - 2D
+  - Bepu
+  - Shapes
+  - Primitives
+  - Scene Setup
+  - Transform
+  - Position
+related:
+  - Example01_Basic2DScene_DebugRender
+  - Example01_Basic2DScene_BulletPhysics
+  - Example01_Basic2DScene
 enabled: true
 created: 2025-11-30
 ---

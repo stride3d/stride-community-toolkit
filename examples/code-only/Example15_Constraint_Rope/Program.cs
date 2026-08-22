@@ -217,14 +217,16 @@ void InitializeDebugOverlay()
 
 /*
 ---example-metadata
+slug: constraint-rope
 title:
   en: Rope - building a stable chain of constraints
   cs: Lano - stabilní řetěz vazeb
-level: Intermediate
+level: Advanced
 category: Physics
-complexity: 7
+complexity: 5
+order: 50
 description:
-  en: |
+  en: |-
     Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing
     them together is the easy part; keeping a heavy weight on a light chain from thrashing itself
     apart is the real problem, because the force holding that weight up has to travel link by link
@@ -235,7 +237,7 @@ description:
     switched off while it hangs, which shows immediately what they were holding together. Follows
     Bepu's own RopeStabilityDemo rather than the more obvious ball-socket construction, which is
     precisely the one that misbehaves.
-  cs: |
+  cs: |-
     Bepu nemá typ pro lano, takže lano je řetěz malých těles svázaných za běhu. Spojit je dohromady je
     ta snadná část; skutečný problém je udržet těžké závaží na lehkém řetězu, aby se neroztrhalo -
     síla, která závaží drží, musí putovat článek po článku až k pevnému úchytu a řešič má na to jen
@@ -262,10 +264,6 @@ concepts:
   - Making the topmost segment kinematic to hold the chain up
   - Applying an impulse from the update loop rather than a velocity at build time
   - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
-related:
-  - Example15_Constraint_Motors
-  - Example15_Constraint
-  - Example15_Constraint_Simple
 tags:
   - 3D
   - Physics
@@ -276,8 +274,10 @@ tags:
   - Rigid Body
   - Kinematic Body
   - Stability
-  - Intermediate
-order: 15
+related:
+  - Example15_Constraint_Motors
+  - Example15_Constraint
+  - Example15_Constraint_Simple
 enabled: true
 created: 2026-08-09
 ---

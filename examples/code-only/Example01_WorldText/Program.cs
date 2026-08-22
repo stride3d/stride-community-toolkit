@@ -139,19 +139,21 @@ Entity AddText(Scene scene, Vector3 position, Action<WorldTextComponent> configu
 
 /*
 ---example-metadata
+slug: world-text
 title:
   en: World Text (In-Scene)
   cs: Text ve světě (ve scéně)
-level: Getting Started
+level: Beginner
 category: Text
 complexity: 1
+order: 50
 description:
-  en: |
+  en: |-
     A gallery of everything WorldTextComponent can do, one setting per station: billboarding that
     stays upright, free billboarding, text fixed in place, text lying flat on the ground, world-unit
     sizing, depth-tested text hidden behind a wall next to text drawn through it, and distance fading.
     World text lives inside the scene - it shrinks with distance and geometry can hide it.
-  cs: |
+  cs: |-
     Galerie všeho, co WorldTextComponent umí, jedno nastavení na stanoviště: billboard držící se
     vzpřímeně, volný billboard, pevně umístěný text, text ležící na zemi, velikost ve světových
     jednotkách, text skrytý za zdí vedle textu kresleného skrz ni a mizení s vzdáleností.
@@ -163,9 +165,6 @@ concepts:
   - "Height in world units versus FontSize as sharpness"
   - Depth-tested text hidden by geometry, and DepthTest = false to draw through
   - Distance fading with FadeStartDistance and MaxDistance
-related:
-  - Example01_EntityText
-  - Example05_SimpleGeometry
 tags:
   - 3D
   - Text
@@ -173,8 +172,9 @@ tags:
   - World Space
   - Billboard
   - Labels
-  - Getting Started
-order: 220
+related:
+  - Example01_EntityText
+  - Example05_SimpleGeometry
 enabled: true
 created: 2026-08-22
 ---

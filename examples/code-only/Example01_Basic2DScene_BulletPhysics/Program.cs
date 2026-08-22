@@ -45,39 +45,40 @@ game.Run(start: (Scene rootScene) =>
 
 /*
 ---example-metadata
+slug: basic-2d-scene-bullet
 title:
   en: Basic2D Scene (Capsule) - Bullet Physics
   cs: Základní 2D scéna (Kapsle) - Bullet Physics
 level: Getting Started
 category: Shapes
 complexity: 1
+order: 40
 description:
-  en: |
+  en: |-
     Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.
     Demonstrates entity creation, basic positioning, and attaching the entity to the scene.
-  cs: |
+  cs: |-
     Vytvoření minimální 2D scény pomocí nástrojů sady a umístění jediné kapsle jako primitivního tvaru.
     Ukazuje vytvoření entity, základní umístění a připojení entity k scéně.
 concepts:
-    - Creating a 2D primitive (Capsule)
-    - Positioning an entity with Transform.Position
-    - Adding entities to a Scene (rootScene)
-    - "Using helpers: SetupBase2DScene"
-related:
-    - Example02_GiveMeACube
-    - Example01_Basic2DScene_Primitives
-    - Example01_Material
+  - Creating a 2D primitive (Capsule)
+  - Positioning an entity with Transform.Position
+  - Adding entities to a Scene (rootScene)
+  - "Using helpers: SetupBase2DScene"
 tags:
-    - 2D
-    - Bullet
-    - Shapes
-    - Primitive
-    - Capsule
-    - Scene Setup
-    - Transform
-    - Position
-    - Getting Started
-order: 1
+  - 2D
+  - Bullet
+  - Shapes
+  - Primitive
+  - Capsule
+  - Scene Setup
+  - Transform
+  - Position
+related:
+  - Example02_GiveMeACube
+  - Example01_Basic2DScene_Primitives
+  - Example01_Material
+docs: false
 enabled: true
 created: 2025-11-30
 ---

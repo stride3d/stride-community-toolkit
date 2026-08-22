@@ -87,20 +87,22 @@ void AddLine(Scene scene, string text, Vector3 position, Material material, Quat
 
 /*
 ---example-metadata
+slug: letters-3d
 title:
   en: 3D Letters (Mesh Text)
   cs: 3D písmena (text jako mesh)
-level: Getting Started
+level: Intermediate
 category: Text
 complexity: 2
+order: 30
 description:
-  en: |
+  en: |-
     A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and
     the dash - as solid extruded meshes that catch the light like any other geometry, plus a frame
     counter whose digits are rebuilt as a new mesh every frame. The counter demonstrates the one
     rule of dynamic mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak
     a buffer pair per rebuild.
-  cs: |
+  cs: |-
     Galerie všech znaků, které LetterMeshFactory umí postavit - číslice, celá abeceda A-Z a pomlčka
     - jako plné vytlačené meshe, které chytají světlo jako jakákoli jiná geometrie, plus počítadlo
     snímků, jehož číslice se každý snímek staví znovu jako nový mesh. Počítadlo ukazuje jediné
@@ -113,19 +115,17 @@ concepts:
   - "Rebuilding a mesh safely: dispose the old buffers first"
   - centerOrigin for strings centred on their entity
   - When to use EntityTextComponent or WorldTextComponent instead
-related:
-  - Example01_EntityText
-  - Example01_WorldText
-  - Example05_ProceduralGeometry
-  - Example_CubicleCalamity
 tags:
   - 3D
   - Text
   - Mesh
   - Procedural Geometry
   - Letters
-  - Getting Started
-order: 230
+related:
+  - Example01_EntityText
+  - Example01_WorldText
+  - Example05_ProceduralGeometry
+  - Example_CubicleCalamity
 enabled: true
 created: 2026-08-22
 ---
