@@ -1,992 +1,1042 @@
-﻿[
-  {
-    "title": {
-      "en": "Basic2D Scene (Capsule)",
-      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (Kapsle)"
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-22T22:36:10.6307027Z",
+  "toolVersion": "1.0.0.0",
+  "count": 22,
+  "examples": [
+    {
+      "title": {
+        "en": "Basic2D Scene (Capsule)",
+        "cs": "Základní 2D scéna (Kapsle)"
+      },
+      "level": "Getting Started",
+      "category": "Shapes",
+      "complexity": 1,
+      "order": 1,
+      "language": "csharp",
+      "description": {
+        "en": "Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.\nDemonstrates primitive creation, basic positioning, and attaching the entity to the scene.",
+        "cs": "Vytvoření minimální 2D scény pomocí nástrojů sady a umístění jediné kapsle s plochým materiálem.\nUkazuje vytvoření primitivního tvaru, základní umístění a připojení entity k scéně."
+      },
+      "concepts": [
+        "Creating a 2D primitive with Create2DPrimitive",
+        "Applying a flat material with CreateFlatMaterial",
+        "Setting an entity position through primitive options",
+        "Adding entities to a Scene (rootScene)",
+        "Using helpers: SetupBase2DScene"
+      ],
+      "tags": [
+        "2D",
+        "Bepu",
+        "Flat Material",
+        "Shapes",
+        "Primitive",
+        "Capsule",
+        "Scene Setup",
+        "Transform",
+        "Position",
+        "Getting Started"
+      ],
+      "related": [
+        "Example02_GiveMeACube",
+        "Example01_Basic2DScene_Primitives",
+        "Example01_Material"
+      ],
+      "enabled": true,
+      "created": "2025-11-30",
+      "projectName": "Example01_Basic2DScene",
+      "projectPath": "Example01_Basic2DScene/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Shapes",
-    "complexity": 1,
-    "description": {
-      "en": "Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.\nDemonstrates primitive creation, basic positioning, and attaching the entity to the scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle s ploch\u00FDm materi\u00E1lem.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDho tvaru, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
+    {
+      "title": {
+        "en": "Basic2D Scene (Capsule) - Bullet Physics",
+        "cs": "Základní 2D scéna (Kapsle) - Bullet Physics"
+      },
+      "level": "Getting Started",
+      "category": "Shapes",
+      "complexity": 1,
+      "order": 1,
+      "language": "csharp",
+      "description": {
+        "en": "Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.\nDemonstrates entity creation, basic positioning, and attaching the entity to the scene.",
+        "cs": "Vytvoření minimální 2D scény pomocí nástrojů sady a umístění jediné kapsle jako primitivního tvaru.\nUkazuje vytvoření entity, základní umístění a připojení entity k scéně."
+      },
+      "concepts": [
+        "Creating a 2D primitive (Capsule)",
+        "Positioning an entity with Transform.Position",
+        "Adding entities to a Scene (rootScene)",
+        "Using helpers: SetupBase2DScene"
+      ],
+      "tags": [
+        "2D",
+        "Bullet",
+        "Shapes",
+        "Primitive",
+        "Capsule",
+        "Scene Setup",
+        "Transform",
+        "Position",
+        "Getting Started"
+      ],
+      "related": [
+        "Example02_GiveMeACube",
+        "Example01_Basic2DScene_Primitives",
+        "Example01_Material"
+      ],
+      "enabled": true,
+      "created": "2025-11-30",
+      "projectName": "Example01_Basic2DScene_BulletPhysics",
+      "projectPath": "Example01_Basic2DScene_BulletPhysics/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Creating a 2D primitive with Create2DPrimitive",
-      "Applying a flat material with CreateFlatMaterial",
-      "Setting an entity position through primitive options",
-      "Adding entities to a Scene (rootScene)",
-      "Using helpers: SetupBase2DScene"
-    ],
-    "related": [
-      "Example02_GiveMeACube",
-      "Example01_Basic2DScene_Primitives",
-      "Example01_Material"
-    ],
-    "tags": [
-      "2D",
-      "Bepu",
-      "Flat Material",
-      "Shapes",
-      "Primitive",
-      "Capsule",
-      "Scene Setup",
-      "Transform",
-      "Position",
-      "Getting Started"
-    ],
-    "order": 1,
-    "enabled": true,
-    "created": "2025-11-30",
-    "isDraft": false,
-    "projectName": "Example01_Basic2DScene",
-    "projectPath": "Example01_Basic2DScene\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Basic2D Scene (Capsule) - Bullet Physics",
-      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (Kapsle) - Bullet Physics"
+    {
+      "title": {
+        "en": "Basic3D Scene (Capsule)",
+        "cs": "Základní 3D scéna (Kapsle)"
+      },
+      "level": "Getting Started",
+      "category": "Shapes",
+      "complexity": 1,
+      "order": 1,
+      "language": "csharp",
+      "description": {
+        "en": "Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.\nDemonstrates primitive creation, basic positioning, and attaching the entity to the scene.",
+        "cs": "Vytvoření minimální 3D scény pomocí nástrojů sady, přidání skyboxu a umístění jediné kapsle jako primitivního tvaru.\nUkazuje vytvoření primitivního tvaru, základní umístění a připojení entity k scéně."
+      },
+      "concepts": [
+        "Creating a 3D primitive with Create3DPrimitive",
+        "Positioning an entity with Transform.Position",
+        "Adding entities to a Scene (rootScene)",
+        "Using helpers: SetupBase3DScene",
+        "Using helpers: AddSkybox"
+      ],
+      "tags": [
+        "3D",
+        "Bepu",
+        "Shapes",
+        "Primitive",
+        "Capsule",
+        "Scene Setup",
+        "Skybox",
+        "Transform",
+        "Position",
+        "Getting Started"
+      ],
+      "related": [
+        "Example02_GiveMeACube",
+        "Example01_Basic3DScene_Primitives",
+        "Example01_Material"
+      ],
+      "enabled": true,
+      "created": "2023-09-11",
+      "projectName": "Example01_Basic3DScene",
+      "projectPath": "Example01_Basic3DScene/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Shapes",
-    "complexity": 1,
-    "description": {
-      "en": "Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.\nDemonstrates entity creation, basic positioning, and attaching the entity to the scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle jako primitivn\u00EDho tvaru.\nUkazuje vytvo\u0159en\u00ED entity, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
+    {
+      "title": {
+        "en": "Basic3D Scene (Capsule) - File-Based App",
+        "cs": "Základní 3D scéna (Kapsle) - aplikace bez projektu"
+      },
+      "level": "Getting Started",
+      "category": "Shapes",
+      "complexity": 1,
+      "order": 1,
+      "language": "csharp",
+      "description": {
+        "en": "The same minimal 3D scene as Example01_Basic3DScene, written as a .NET 10 file-based app: a single\nC# file with no .csproj. NuGet packages, project references and MSBuild properties are declared\ninline with #:package, #:project and #:property directives, so the example runs with\n\"dotnet run Program.cs\". Use \"dotnet project convert\" to turn it back into a regular project.",
+        "cs": "Stejná minimální 3D scéna jako Example01_Basic3DScene, ale napsaná jako aplikace bez projektu\n(.NET 10 file-based app): jediný soubor C# bez .csproj. Balíčky NuGet, odkazy na projekty\na vlastnosti MSBuild se deklarují přímo pomocí direktiv #:package, #:project a #:property,\ntakže příklad se spustí příkazem \"dotnet run Program.cs\". Příkazem \"dotnet project convert\"\njej lze převést zpět na běžný projekt."
+      },
+      "concepts": [
+        "Running a Stride game as a .NET 10 file-based app (no .csproj)",
+        "Declaring NuGet packages inline with #:package",
+        "Referencing projects inline with #:project",
+        "Setting MSBuild properties inline with #:property",
+        "Converting a file-based app to a project with dotnet project convert",
+        "Using helpers: SetupBase3DScene",
+        "Using helpers: AddSkybox"
+      ],
+      "tags": [
+        "3D",
+        "Bepu",
+        "Shapes",
+        "Primitive",
+        "Capsule",
+        "Scene Setup",
+        "Skybox",
+        "File-Based App",
+        "dotnet run",
+        "Getting Started"
+      ],
+      "related": [
+        "Example01_Basic3DScene",
+        "Example02_GiveMeACube",
+        "Example01_Basic3DScene_Primitives"
+      ],
+      "enabled": true,
+      "created": "2026-08-08",
+      "projectName": "Example01_Basic3DScene_FileBasedApp",
+      "projectPath": "Example01_Basic3DScene_FileBasedApp/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Creating a 2D primitive (Capsule)",
-      "Positioning an entity with Transform.Position",
-      "Adding entities to a Scene (rootScene)",
-      "Using helpers: SetupBase2DScene"
-    ],
-    "related": [
-      "Example02_GiveMeACube",
-      "Example01_Basic2DScene_Primitives",
-      "Example01_Material"
-    ],
-    "tags": [
-      "2D",
-      "Bullet",
-      "Shapes",
-      "Primitive",
-      "Capsule",
-      "Scene Setup",
-      "Transform",
-      "Position",
-      "Getting Started"
-    ],
-    "order": 1,
-    "enabled": true,
-    "created": "2025-11-30",
-    "isDraft": false,
-    "projectName": "Example01_Basic2DScene_BulletPhysics",
-    "projectPath": "Example01_Basic2DScene_BulletPhysics\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Basic2D Scene (Falling Shapes)",
-      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (Padaj\u00EDc\u00ED tvary)"
+    {
+      "title": {
+        "en": "Basic2D Scene (Falling Shapes)",
+        "cs": "Základní 2D scéna (Padající tvary)"
+      },
+      "level": "Getting Started",
+      "category": "Shapes",
+      "complexity": 1,
+      "order": 2,
+      "language": "csharp",
+      "description": {
+        "en": "Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.\nDemonstrates primitive creation, basic positioning, and attaching the entities to the scene.\nThe shapes will fall due to physics, showcasing the integration of Bepu physics in a 2D scene.",
+        "cs": "Vytvoření minimální 2D scény pomocí nástrojů sady a umístění několika kapslí s plochými materiály.\nUkazuje vytvoření primitivních tvarů, základní umístění a připojení entit k scéně.\nTvary budou padat díky fyzice, což ukazuje integraci Bepu fyziky v 2D scéně."
+      },
+      "concepts": [
+        "Creating a 2D primitive with Create2DPrimitive",
+        "Applying a flat material with CreateFlatMaterial",
+        "Setting an entity position through primitive options",
+        "Adding entities to a Scene (rootScene)",
+        "Using helpers: SetupBase2DScene"
+      ],
+      "tags": [
+        "2D",
+        "Bepu",
+        "Flat Material",
+        "Shapes",
+        "Primitive",
+        "Capsule",
+        "Scene Setup",
+        "Transform",
+        "Position",
+        "Getting Started"
+      ],
+      "related": [
+        "Example02_GiveMeACube",
+        "Example01_Basic2DScene_Primitives",
+        "Example01_Material"
+      ],
+      "enabled": true,
+      "created": "2026-06-11",
+      "projectName": "Example01_Basic2DScene_FallingShapes",
+      "projectPath": "Example01_Basic2DScene_FallingShapes/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Shapes",
-    "complexity": 1,
-    "description": {
-      "en": "Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.\nDemonstrates primitive creation, basic positioning, and attaching the entities to the scene.\nThe shapes will fall due to physics, showcasing the integration of Bepu physics in a 2D scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED n\u011Bkolika kapsl\u00ED s ploch\u00FDmi materi\u00E1ly.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDch tvar\u016F, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entit k sc\u00E9n\u011B.\nTvary budou padat d\u00EDky fyzice, co\u017E ukazuje integraci Bepu fyziky v 2D sc\u00E9n\u011B.\n"
+    {
+      "title": {
+        "en": "Give Me a Cube",
+        "cs": "Dej mi kostku"
+      },
+      "level": "Getting Started",
+      "category": "Scripts",
+      "complexity": 2,
+      "order": 2,
+      "language": "csharp",
+      "description": {
+        "en": "Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.\nThe script steers a cube around a circle each frame by setting the linear velocity of a kinematic\nBepu body, so it really sweeps through the scene and knocks a ring of smaller dynamic cubes out of\nthe way. Writing Transform.Position instead would move only the mesh and collide with nothing.",
+        "cs": "Přidání chování k entitě pomocí komponenty SyncScript namísto callbacku update v game.Run.\nSkript každý snímek vede kostku po kruhu nastavením lineární rychlosti kinematického tělesa Bepu,\ntakže skutečně projíždí scénou a odráží kruh menších dynamických kostek. Zápis do Transform.Position\nby naproti tomu pohnul pouze modelem a s ničím by nekolidoval."
+      },
+      "concepts": [
+        "Adding behaviour with a SyncScript component",
+        "The Start and Update lifecycle methods",
+        "Configuring a script through public properties",
+        "Moving a kinematic body by setting its linear velocity",
+        "Waking a body after changing its velocity",
+        "Why writing Transform.Position does not move a physics body",
+        "Sizing a primitive and its collider together",
+        "Using helpers: SetupBase3DScene",
+        "Using helpers: AddSkybox",
+        "Using helpers: Game.DeltaTime"
+      ],
+      "tags": [
+        "3D",
+        "Script",
+        "SyncScript",
+        "Component",
+        "Update Loop",
+        "Transform",
+        "Bepu",
+        "Physics",
+        "Kinematic Body",
+        "Collision",
+        "Cube",
+        "Getting Started"
+      ],
+      "related": [
+        "Example01_Basic3DScene",
+        "Example01_Basic3DScene_SyncScript",
+        "Example11_ImGuiNet"
+      ],
+      "enabled": true,
+      "created": "2023-09-11",
+      "projectName": "Example02_GiveMeACube",
+      "projectPath": "Example02_GiveMeACube/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Creating a 2D primitive with Create2DPrimitive",
-      "Applying a flat material with CreateFlatMaterial",
-      "Setting an entity position through primitive options",
-      "Adding entities to a Scene (rootScene)",
-      "Using helpers: SetupBase2DScene"
-    ],
-    "related": [
-      "Example02_GiveMeACube",
-      "Example01_Basic2DScene_Primitives",
-      "Example01_Material"
-    ],
-    "tags": [
-      "2D",
-      "Bepu",
-      "Flat Material",
-      "Shapes",
-      "Primitive",
-      "Capsule",
-      "Scene Setup",
-      "Transform",
-      "Position",
-      "Getting Started"
-    ],
-    "order": 2,
-    "enabled": true,
-    "created": "2026-06-11",
-    "isDraft": false,
-    "projectName": "Example01_Basic2DScene_FallingShapes",
-    "projectPath": "Example01_Basic2DScene_FallingShapes\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Basic2D Scene (Multiple Primitives)",
-      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (V\u00EDce primitiv)"
+    {
+      "title": {
+        "en": "Entity Text (Screen-Space)",
+        "cs": "Text entity (v prostoru obrazovky)"
+      },
+      "level": "Getting Started",
+      "category": "Text",
+      "complexity": 1,
+      "order": 210,
+      "language": "csharp",
+      "description": {
+        "en": "A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows,\nbackgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and\nHUD text pinned to window corners that survives resizing.\nScreen-space text keeps its pixel size at any distance and is never hidden by geometry.",
+        "cs": "Galerie všeho, co EntityTextComponent umí, jedna vlastnost na sloupek: ukotvení, stíny, pozadí,\nškálování, rotace, průhlednost, mizení s vzdáleností, více textů na jedné entitě a HUD text\npřichycený k rohům okna, který přežije změnu velikosti.\nText v prostoru obrazovky si drží velikost v pixelech na jakoukoli vzdálenost a geometrie ho nikdy nezakryje."
+      },
+      "concepts": [
+        "Registering the text renderer once: AddEntityTextRenderer",
+        "Centring a label over an object with TextAnchor, not TextAlignment",
+        "Shadow and background for readability over a 3D scene",
+        "Animating Scale instead of FontSize",
+        "Distance fading with FadeStartDistance and MaxDistance",
+        "Several EntityTextComponents on one entity",
+        "HUD text that survives window resizing: TextPositionMode.Anchored"
+      ],
+      "tags": [
+        "3D",
+        "Text",
+        "Text Rendering",
+        "HUD",
+        "Screen Space",
+        "Labels",
+        "Getting Started"
+      ],
+      "related": [
+        "Example01_WorldText",
+        "Example05_SimpleGeometry",
+        "Example09_Renderer"
+      ],
+      "enabled": true,
+      "created": "2026-08-22",
+      "projectName": "Example01_EntityText",
+      "projectPath": "Example01_EntityText/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Shapes",
-    "complexity": 1,
-    "description": {
-      "en": "Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.\nDemonstrates entity creation, basic positioning, and attaching the entities to the scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 2D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady a um\u00EDst\u011Bn\u00ED v\u00EDce r\u016Fzn\u00FDch primitivn\u00EDch tvar\u016F.\nUkazuje vytvo\u0159en\u00ED entity, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entit k sc\u00E9n\u011B.\n"
+    {
+      "title": {
+        "en": "World Text (In-Scene)",
+        "cs": "Text ve světě (ve scéně)"
+      },
+      "level": "Getting Started",
+      "category": "Text",
+      "complexity": 1,
+      "order": 220,
+      "language": "csharp",
+      "description": {
+        "en": "A gallery of everything WorldTextComponent can do, one setting per station: billboarding that\nstays upright, free billboarding, text fixed in place, text lying flat on the ground, world-unit\nsizing, depth-tested text hidden behind a wall next to text drawn through it, and distance fading.\nWorld text lives inside the scene - it shrinks with distance and geometry can hide it.",
+        "cs": "Galerie všeho, co WorldTextComponent umí, jedno nastavení na stanoviště: billboard držící se\nvzpřímeně, volný billboard, pevně umístěný text, text ležící na zemi, velikost ve světových\njednotkách, text skrytý za zdí vedle textu kresleného skrz ni a mizení s vzdáleností.\nText ve světě žije uvnitř scény - zmenšuje se s vzdáleností a geometrie ho může zakrýt."
+      },
+      "concepts": [
+        "Registering the text renderer once: AddWorldTextRenderer",
+        "Billboarding: KeepUpright versus facing the camera freely",
+        "Text fixed to a surface or lying flat with Billboard = false",
+        "Height in world units versus FontSize as sharpness",
+        "Depth-tested text hidden by geometry, and DepthTest = false to draw through",
+        "Distance fading with FadeStartDistance and MaxDistance"
+      ],
+      "tags": [
+        "3D",
+        "Text",
+        "Text Rendering",
+        "World Space",
+        "Billboard",
+        "Labels",
+        "Getting Started"
+      ],
+      "related": [
+        "Example01_EntityText",
+        "Example05_SimpleGeometry"
+      ],
+      "enabled": true,
+      "created": "2026-08-22",
+      "projectName": "Example01_WorldText",
+      "projectPath": "Example01_WorldText/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)",
-      "Positioning entities with Transform.Position",
-      "Adding entities to a Scene (rootScene)",
-      "Using helpers: SetupBase2DScene"
-    ],
-    "related": [
-      "Example01_Basic2DScene_DebugRender",
-      "Example01_Basic2DScene_BulletPhysics",
-      "Example01_Basic2DScene"
-    ],
-    "tags": [
-      "2D",
-      "Bepu",
-      "Shapes",
-      "Primitives",
-      "Scene Setup",
-      "Transform",
-      "Position",
-      "Getting Started"
-    ],
-    "enabled": true,
-    "created": "2025-11-30",
-    "isDraft": false,
-    "projectName": "Example01_Basic2DScene_Primitives",
-    "projectPath": "Example01_Basic2DScene_Primitives\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "2D Spawn Menu",
-      "cs": "2D nab\u00EDdka pro p\u0159id\u00E1v\u00E1n\u00ED tvar\u016F"
+    {
+      "title": {
+        "en": "3D Letters (Mesh Text)",
+        "cs": "3D písmena (text jako mesh)"
+      },
+      "level": "Getting Started",
+      "category": "Text",
+      "complexity": 2,
+      "order": 230,
+      "language": "csharp",
+      "description": {
+        "en": "A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and\nthe dash - as solid extruded meshes that catch the light like any other geometry, plus a frame\ncounter whose digits are rebuilt as a new mesh every frame. The counter demonstrates the one\nrule of dynamic mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak\na buffer pair per rebuild.",
+        "cs": "Galerie všech znaků, které LetterMeshFactory umí postavit - číslice, celá abeceda A-Z a pomlčka\n- jako plné vytlačené meshe, které chytají světlo jako jakákoli jiná geometrie, plus počítadlo\nsnímků, jehož číslice se každý snímek staví znovu jako nový mesh. Počítadlo ukazuje jediné\npravidlo dynamického textu z meshů: před výměnou meshe uvolnit staré GPU buffery, jinak každá\npřestavba uteče o pár bufferů."
+      },
+      "concepts": [
+        "Solid 3D lettering from code: LetterMeshFactory.CreateTextMeshDraw",
+        "Which characters exist - SupportedCharacters - and why fonts are not involved",
+        "Static lettering built once versus text that changes",
+        "Rebuilding a mesh safely: dispose the old buffers first",
+        "centerOrigin for strings centred on their entity",
+        "When to use EntityTextComponent or WorldTextComponent instead"
+      ],
+      "tags": [
+        "3D",
+        "Text",
+        "Mesh",
+        "Procedural Geometry",
+        "Letters",
+        "Getting Started"
+      ],
+      "related": [
+        "Example01_EntityText",
+        "Example01_WorldText",
+        "Example05_ProceduralGeometry",
+        "Example_CubicleCalamity"
+      ],
+      "enabled": true,
+      "created": "2026-08-22",
+      "projectName": "Example01_Letters3D",
+      "projectPath": "Example01_Letters3D/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Intermediate",
-    "category": "Shapes",
-    "complexity": 2,
-    "description": {
-      "en": "Drive a scene from the keyboard without filling the screen with instructions. DebugTextDropdown\nshows a single collapsed line until its key is pressed, then expands into a list where every entry\nhas its own key, label, colour and callback. Press C to open the menu and 1-7 to drop that shape\ninto the 2D scene; the menu is configured to stay open so shapes can be added one after another.\nThe dropdown reads no input by itself and does not draw itself either: the example feeds it the\nInputManager each frame and registers its lines as a DebugOverlay section, so it shares one screen\nposition and one hide key with the camera controller\u0027s help instead of being drawn separately.\n",
-      "cs": "Ovl\u00E1dejte sc\u00E9nu z kl\u00E1vesnice, ani\u017E byste zaplnili obrazovku instrukcemi. DebugTextDropdown zobrazuje\njedin\u00FD sbalen\u00FD \u0159\u00E1dek, dokud nestisknete jeho kl\u00E1vesu; pot\u00E9 se rozbal\u00ED do seznamu, kde m\u00E1 ka\u017Ed\u00E1\npolo\u017Eka vlastn\u00ED kl\u00E1vesu, popisek, barvu a akci. Kl\u00E1vesou C otev\u0159ete nab\u00EDdku a kl\u00E1vesami 1-7 p\u0159id\u00E1te\ndan\u00FD tvar do 2D sc\u00E9ny. Nab\u00EDdka z\u016Fst\u00E1v\u00E1 otev\u0159en\u00E1, tak\u017Ee lze tvary p\u0159id\u00E1vat jeden po druh\u00E9m.\n"
+    {
+      "title": {
+        "en": "Basic2D Scene (Multiple Primitives)",
+        "cs": "Základní 2D scéna (Více primitiv)"
+      },
+      "level": "Getting Started",
+      "category": "Shapes",
+      "complexity": 1,
+      "language": "csharp",
+      "description": {
+        "en": "Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.\nDemonstrates entity creation, basic positioning, and attaching the entities to the scene.",
+        "cs": "Vytvoření minimální 2D scény pomocí nástrojů sady a umístění více různých primitivních tvarů.\nUkazuje vytvoření entity, základní umístění a připojení entit k scéně."
+      },
+      "concepts": [
+        "Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)",
+        "Positioning entities with Transform.Position",
+        "Adding entities to a Scene (rootScene)",
+        "Using helpers: SetupBase2DScene"
+      ],
+      "tags": [
+        "2D",
+        "Bepu",
+        "Shapes",
+        "Primitives",
+        "Scene Setup",
+        "Transform",
+        "Position",
+        "Getting Started"
+      ],
+      "related": [
+        "Example01_Basic2DScene_DebugRender",
+        "Example01_Basic2DScene_BulletPhysics",
+        "Example01_Basic2DScene"
+      ],
+      "enabled": true,
+      "created": "2025-11-30",
+      "projectName": "Example01_Basic2DScene_Primitives",
+      "projectPath": "Example01_Basic2DScene_Primitives/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Building a collapsible keyboard menu with DebugTextDropdown",
-      "Giving each entry its own key, label, colour and callback",
-      "Keeping a menu open for repeated use with CloseOnSelect",
-      "Sharing one on-screen block with the camera help through a DebugOverlay section",
-      "Spawning entities at runtime from keyboard input",
-      "Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)",
-      "Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial"
-    ],
-    "related": [
-      "Example01_Basic2DScene_Primitives",
-      "Example01_Basic2DScene_FallingShapes",
-      "Example08_DebugShapes_Usage"
-    ],
-    "tags": [
-      "2D",
-      "Bepu",
-      "Shapes",
-      "Primitives",
-      "Debug Text",
-      "Input",
-      "Keyboard",
-      "Intermediate"
-    ],
-    "enabled": true,
-    "created": "2026-08-17",
-    "isDraft": false,
-    "projectName": "Example01_Basic2DScene_SpawnMenu",
-    "projectPath": "Example01_Basic2DScene_SpawnMenu\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Basic2D Scene (Stress Pile)",
-      "cs": "Z\u00E1kladn\u00ED 2D sc\u00E9na (Z\u00E1t\u011B\u017Eov\u00E1 hromada)"
+    {
+      "title": {
+        "en": "Rope - building a stable chain of constraints",
+        "cs": "Lano - stabilní řetěz vazeb"
+      },
+      "level": "Intermediate",
+      "category": "Physics",
+      "complexity": 7,
+      "order": 15,
+      "language": "csharp",
+      "description": {
+        "en": "Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing\nthem together is the easy part; keeping a heavy weight on a light chain from thrashing itself\napart is the real problem, because the force holding that weight up has to travel link by link\nto the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by\nside carrying the same weight: the naive one anchors its constraints at the segment ends and ties\neach segment only to its neighbour, while the stable one anchors at the segment centres and adds\nskip constraints that let impulses take shortcuts along the chain. The skip constraints can be\nswitched off while it hangs, which shows immediately what they were holding together. Follows\nBepu's own RopeStabilityDemo rather than the more obvious ball-socket construction, which is\nprecisely the one that misbehaves.",
+        "cs": "Bepu nemá typ pro lano, takže lano je řetěz malých těles svázaných za běhu. Spojit je dohromady je\nta snadná část; skutečný problém je udržet těžké závaží na lehkém řetězu, aby se neroztrhalo -\nsíla, která závaží drží, musí putovat článek po článku až k pevnému úchytu a řešič má na to jen\nomezený počet průchodů za snímek. Vedle sebe visí dvě lana se stejným závažím: naivní má vazby\nukotvené na koncích článků a každý článek spojený jen se sousedem, kdežto stabilní je ukotvené ve\nstředech článků a navíc má přeskakující vazby, které impulzům umožní zkratku podél řetězu.\nPřeskakující vazby lze za běhu vypnout, což okamžitě ukáže, co držely pohromadě. Vychází z\nukázky RopeStabilityDemo přímo od autora Bepu, nikoli z nasnadě ležící konstrukce s kulovými\nklouby, která je právě tou nefungující."
+      },
+      "concepts": [
+        "Building a rope as a runtime chain of bodies and constraints",
+        "Linking segments with DistanceLimitConstraintComponent rather than ball sockets",
+        "Why a rope needs a minimum distance well below its maximum",
+        "Why an unstable rope looks fine while slack and only misbehaves under load",
+        "How the mass ratio between weight and links drives instability",
+        "Why solver iteration count decides how extreme a ratio survives",
+        "Removing angular feedback with a zero lever arm",
+        "Letting impulses take shortcuts with skip constraints",
+        "Moving a constraint's anchor points and allowed distance together at runtime",
+        "Why a constraint shorter than the distance it spans distorts a rope before anything moves",
+        "Deriving an impulse from mass so tuning one does not silently change the other",
+        "Setting collider mass explicitly instead of using the generated collider",
+        "Size for a sphere primitive is its radius, not its diameter",
+        "Making the topmost segment kinematic to hold the chain up",
+        "Applying an impulse from the update loop rather than a velocity at build time",
+        "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
+      ],
+      "tags": [
+        "3D",
+        "Physics",
+        "Bepu",
+        "Constraint",
+        "Rope",
+        "Distance Limit",
+        "Rigid Body",
+        "Kinematic Body",
+        "Stability",
+        "Intermediate"
+      ],
+      "related": [
+        "Example15_Constraint_Motors",
+        "Example15_Constraint",
+        "Example15_Constraint_Simple"
+      ],
+      "enabled": true,
+      "created": "2026-08-09",
+      "projectName": "Example15_Constraint_Rope",
+      "projectPath": "Example15_Constraint_Rope/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Advanced",
-    "category": "Physics",
-    "complexity": 4,
-    "description": {
-      "en": "Thousands of 2D physics bodies piling up, drawn in a single draw call through instancing, with the\nshape, batch size and spawn layout switchable while it runs. Because one master entity draws every\nbody, all of them share a single Model and shapes cannot be mixed - changing shape clears and\nrespawns the pile, which the example uses to show how to tear a pile down safely. Models are cached\nper shape and the instancing object is reused rather than recreated, so switching costs nothing.\nGrid spawns are deliberately jittered: a perfectly regular lattice of touching bodies degenerates\nBepu\u0027s broad-phase tree.\n",
-      "cs": "Tis\u00EDce 2D fyzik\u00E1ln\u00EDch t\u011Bles se vr\u0161\u00ED na sebe a vykresluj\u00ED se jedin\u00FDm vol\u00E1n\u00EDm d\u00EDky instancingu.\nZa b\u011Bhu lze m\u011Bnit tvar, velikost d\u00E1vky i zp\u016Fsob rozm\u00EDst\u011Bn\u00ED. Proto\u017Ee v\u0161e vykresluje jedna hlavn\u00ED\nentita, sd\u00EDlej\u00ED v\u0161echna t\u011Blesa jeden model a tvary nelze m\u00EDchat - zm\u011Bna tvaru proto hromadu sma\u017Ee\na vytvo\u0159\u00ED znovu. Modely se ukl\u00E1daj\u00ED do mezipam\u011Bti podle tvaru a instancing se pou\u017E\u00EDv\u00E1 opakovan\u011B.\n"
+    {
+      "title": {
+        "en": "2D Spawn Menu",
+        "cs": "2D nabídka pro přidávání tvarů"
+      },
+      "level": "Intermediate",
+      "category": "Shapes",
+      "complexity": 2,
+      "language": "csharp",
+      "description": {
+        "en": "Drive a scene from the keyboard without filling the screen with instructions. DebugTextDropdown\nshows a single collapsed line until its key is pressed, then expands into a list where every entry\nhas its own key, label, colour and callback. Press C to open the menu and 1-7 to drop that shape\ninto the 2D scene; the menu is configured to stay open so shapes can be added one after another.\nThe dropdown reads no input by itself and does not draw itself either: the example feeds it the\nInputManager each frame and registers its lines as a DebugOverlay section, so it shares one screen\nposition and one hide key with the camera controller's help instead of being drawn separately.",
+        "cs": "Ovládejte scénu z klávesnice, aniž byste zaplnili obrazovku instrukcemi. DebugTextDropdown zobrazuje\njediný sbalený řádek, dokud nestisknete jeho klávesu; poté se rozbalí do seznamu, kde má každá\npoložka vlastní klávesu, popisek, barvu a akci. Klávesou C otevřete nabídku a klávesami 1-7 přidáte\ndaný tvar do 2D scény. Nabídka zůstává otevřená, takže lze tvary přidávat jeden po druhém."
+      },
+      "concepts": [
+        "Building a collapsible keyboard menu with DebugTextDropdown",
+        "Giving each entry its own key, label, colour and callback",
+        "Keeping a menu open for repeated use with CloseOnSelect",
+        "Sharing one on-screen block with the camera help through a DebugOverlay section",
+        "Spawning entities at runtime from keyboard input",
+        "Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)",
+        "Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial"
+      ],
+      "tags": [
+        "2D",
+        "Bepu",
+        "Shapes",
+        "Primitives",
+        "Debug Text",
+        "Input",
+        "Keyboard",
+        "Intermediate"
+      ],
+      "related": [
+        "Example01_Basic2DScene_Primitives",
+        "Example01_Basic2DScene_FallingShapes",
+        "Example08_DebugShapes_Usage"
+      ],
+      "enabled": true,
+      "created": "2026-08-17",
+      "projectName": "Example01_Basic2DScene_SpawnMenu",
+      "projectPath": "Example01_Basic2DScene_SpawnMenu/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Drawing thousands of physics bodies in a single draw call",
-      "Confining bodies to the XY plane with Body2DComponent",
-      "Sharing one Model across every body instead of generating one each",
-      "Tearing down an instanced pile safely, clearing the instancing before the entities",
-      "Switching shape, batch size and layout at runtime with DebugTextDropdown",
-      "Why a perfectly regular spawn lattice must be jittered",
-      "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics"
-    ],
-    "related": [
-      "Example22_Instancing_EntityTransform",
-      "Example01_Basic2DScene_SpawnMenu",
-      "Example01_Basic2DScene_FallingShapes"
-    ],
-    "tags": [
-      "2D",
-      "Bepu",
-      "Physics",
-      "Instancing",
-      "Performance",
-      "Draw Calls",
-      "Stress Test",
-      "Advanced"
-    ],
-    "order": 57,
-    "enabled": true,
-    "created": "2026-08-16",
-    "isDraft": false,
-    "projectName": "Example01_Basic2DScene_StressPile",
-    "projectPath": "Example01_Basic2DScene_StressPile\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Basic3D Scene (Capsule)",
-      "cs": "Z\u00E1kladn\u00ED 3D sc\u00E9na (Kapsle)"
+    {
+      "title": {
+        "en": "ImGui.NET Text Rendering",
+        "cs": "Vykreslování textu pomocí ImGui.NET"
+      },
+      "level": "Advanced",
+      "category": "UI",
+      "complexity": 4,
+      "order": 11,
+      "language": "csharp",
+      "description": {
+        "en": "Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.\nA kinematic Bepu body follows a circular path and knocks over stacks of dynamic boxes, showing why\nSetTargetPose moves a physics body while writing Transform.Position does not. The ImGui font atlas\nis rebuilt for the monitor's DPI so the overlay stays crisp on high-DPI displays.",
+        "cs": "Vykreslování ladicího textu pomocí ImGui.NET, jak v souřadnicích obrazovky, tak ukotveného\nk pozicím ve 3D scéně. Kinematické těleso Bepu se pohybuje po kruhové dráze a shazuje stohy\ndynamických kostek, čímž ukazuje, proč SetTargetPose tělesem pohne, zatímco zápis do\nTransform.Position nikoli. Atlas písma ImGui se přestaví podle DPI monitoru, aby byl text\nostrý i na displejích s vysokým rozlišením."
+      },
+      "concepts": [
+        "Drawing screen-space text with DrawText",
+        "Anchoring text to a world-space position",
+        "Driving a kinematic BodyComponent with SetTargetPose",
+        "Why writing Transform.Position does not move a physics body",
+        "Rebuilding the ImGui font atlas for the window DPI",
+        "Using helpers: AddImGuiNet",
+        "Using helpers: SetupBase3DScene",
+        "Using helpers: AddProfiler"
+      ],
+      "tags": [
+        "3D",
+        "UI",
+        "ImGui",
+        "ImGui.NET",
+        "Text Rendering",
+        "Overlay",
+        "Debug UI",
+        "Bepu",
+        "Physics",
+        "Kinematic Body",
+        "DPI",
+        "HiDPI",
+        "Advanced"
+      ],
+      "related": [
+        "Example11_ImGui",
+        "Example01_Basic3DScene_DPI_Aware",
+        "Example18_Box2DPhysics"
+      ],
+      "enabled": true,
+      "created": "2025-10-06",
+      "projectName": "Example11_ImGuiNet",
+      "projectPath": "Example11_ImGuiNet/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Shapes",
-    "complexity": 1,
-    "description": {
-      "en": "Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.\nDemonstrates primitive creation, basic positioning, and attaching the entity to the scene.\n",
-      "cs": "Vytvo\u0159en\u00ED minim\u00E1ln\u00ED 3D sc\u00E9ny pomoc\u00ED n\u00E1stroj\u016F sady, p\u0159id\u00E1n\u00ED skyboxu a um\u00EDst\u011Bn\u00ED jedin\u00E9 kapsle jako primitivn\u00EDho tvaru.\nUkazuje vytvo\u0159en\u00ED primitivn\u00EDho tvaru, z\u00E1kladn\u00ED um\u00EDst\u011Bn\u00ED a p\u0159ipojen\u00ED entity k sc\u00E9n\u011B.\n"
+    {
+      "title": {
+        "en": "Mesh Outline Render Feature",
+        "cs": "Obrysy modelů pomocí vlastní render feature"
+      },
+      "level": "Advanced",
+      "category": "Rendering",
+      "complexity": 4,
+      "order": 13,
+      "language": "csharp",
+      "description": {
+        "en": "Draw coloured outlines around 3D primitives with a custom RootRenderFeature. Each mesh is drawn a\nsecond time, inflated along its normals with front faces culled, so only a shell remains visible\nbehind the original mesh. Adding a MeshOutlineComponent to an entity is all it takes to outline it,\nand a high intensity pushes the outline into HDR range so bloom makes it glow.",
+        "cs": "Vykreslení barevných obrysů kolem 3D tvarů pomocí vlastní RootRenderFeature. Každý model se vykreslí\npodruhé, nafouknutý podél normál a s odstraněnými přivrácenými stěnami, takže za původním modelem\nzůstane viditelná jen skořepina. K vytvoření obrysu stačí entitě přidat MeshOutlineComponent\na vysoká intenzita posune obrys do HDR rozsahu, takže díky bloomu září."
+      },
+      "concepts": [
+        "Writing a custom RootRenderFeature",
+        "Registering a render feature with AddRootRenderFeature",
+        "Driving rendering from a custom EntityComponent",
+        "Building a MutablePipelineState and applying a DynamicEffectInstance",
+        "Inflating a mesh along its normals in a shader",
+        "Skipping render stages that bind no render target",
+        "Using helpers: SetupBase3DScene",
+        "Using helpers: AddSkybox"
+      ],
+      "tags": [
+        "3D",
+        "Rendering",
+        "Render Feature",
+        "Outline",
+        "Shader",
+        "SDSL",
+        "Pipeline State",
+        "Entity Component",
+        "HDR",
+        "Bloom",
+        "Advanced"
+      ],
+      "related": [
+        "Example13_RootRendererShader",
+        "Example09_Renderer",
+        "Example01_Basic3DScene"
+      ],
+      "enabled": true,
+      "created": "2025-08-07",
+      "projectName": "Example13_MeshOutline",
+      "projectPath": "Example13_MeshOutline/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Creating a 3D primitive with Create3DPrimitive",
-      "Positioning an entity with Transform.Position",
-      "Adding entities to a Scene (rootScene)",
-      "Using helpers: SetupBase3DScene",
-      "Using helpers: AddSkybox"
-    ],
-    "related": [
-      "Example02_GiveMeACube",
-      "Example01_Basic3DScene_Primitives",
-      "Example01_Material"
-    ],
-    "tags": [
-      "3D",
-      "Bepu",
-      "Shapes",
-      "Primitive",
-      "Capsule",
-      "Scene Setup",
-      "Skybox",
-      "Transform",
-      "Position",
-      "Getting Started"
-    ],
-    "order": 1,
-    "enabled": true,
-    "created": "2023-09-11",
-    "isDraft": false,
-    "projectName": "Example01_Basic3DScene",
-    "projectPath": "Example01_Basic3DScene\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Basic3D Scene (Capsule) - File-Based App",
-      "cs": "Z\u00E1kladn\u00ED 3D sc\u00E9na (Kapsle) - aplikace bez projektu"
+    {
+      "title": {
+        "en": "Instancing with Entity Transforms",
+        "cs": "Instancing s transformacemi entit"
+      },
+      "level": "Advanced",
+      "category": "Rendering",
+      "complexity": 4,
+      "order": 22,
+      "language": "csharp",
+      "description": {
+        "en": "Keep every object a real entity - with a transform, a physics body and anything else you need - while\nstill drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an\ninstancing type that reads its members' world matrices each frame, and the members carry no\nModelComponent of their own. Bepu drives the transforms, so the bodies collide and pile up normally.\nFour kinds of body can be dropped side by side to compare: Stride's own InstancingEntityTransform,\nno instancing at all, the toolkit's BepuEntityInstancing, and BufferedEntityInstancing. The toolkit\ntypes stop working once Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from\n239 to 329 FPS, and the example also shows where the real ceiling lies, because instancing removes\ndraw calls and does nothing about simulation cost. One line at the top switches the whole pile to\nany other primitive, so the same comparison can be run with spheres, cones or hulls.",
+        "cs": "Zachovejte každý objekt jako plnohodnotnou entitu - s transformací, fyzikálním tělesem i čímkoli dalším -\na přesto vykreslete celý zástup jediným vykreslovacím voláním. Hlavní entita nese ModelComponent\na instancing, který každý snímek načítá světové matice svých členů; členové sami žádný ModelComponent\nnemají. Transformace řídí Bepu, takže tělesa normálně kolidují a vrší se na sebe. Vedle sebe lze\nporovnat čtyři druhy těles: vlastní InstancingEntityTransform ze Stride, žádný instancing,\nBepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu přestanou pracovat, jakmile\nBepu uspí tělesa, což u usazené hromady 20 000 kostek zvýší snímkovou frekvenci z 239 na 329.\nJediný řádek na začátku přepne celou hromadu na libovolnou jinou primitivní tvar."
+      },
+      "concepts": [
+        "Combining physics bodies with instanced rendering",
+        "Comparing four instancing strategies side by side at runtime",
+        "The master and instance split for entity-driven instancing",
+        "Why an instance entity must not have its own ModelComponent",
+        "Skipping instancing work entirely while physics bodies sleep",
+        "Owning GPU instance buffers to avoid redundant uploads",
+        "Deriving a Bepu collider from a primitive type without building a mesh per body",
+        "Switching the whole scene to a different primitive from one line",
+        "Knowing when instancing does not help",
+        "Using helpers: AddInstancingSupport, AddInstancingBufferUpload",
+        "Using helpers: SetupBase3D, Add3DGround, AddBepu3DPhysics"
+      ],
+      "tags": [
+        "3D",
+        "Rendering",
+        "Instancing",
+        "Bepu",
+        "Physics",
+        "Draw Calls",
+        "Performance",
+        "Entity Component",
+        "Advanced"
+      ],
+      "related": [
+        "Example21_Instancing",
+        "Example02_GiveMeACube",
+        "Example_Bepu_Playground"
+      ],
+      "enabled": true,
+      "created": "2026-08-07",
+      "projectName": "Example22_Instancing_EntityTransform",
+      "projectPath": "Example22_Instancing_EntityTransform/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Shapes",
-    "complexity": 1,
-    "description": {
-      "en": "The same minimal 3D scene as Example01_Basic3DScene, written as a .NET 10 file-based app: a single\nC# file with no .csproj. NuGet packages, project references and MSBuild properties are declared\ninline with #:package, #:project and #:property directives, so the example runs with\n\u0022dotnet run Program.cs\u0022. Use \u0022dotnet project convert\u0022 to turn it back into a regular project.\n",
-      "cs": "Stejn\u00E1 minim\u00E1ln\u00ED 3D sc\u00E9na jako Example01_Basic3DScene, ale napsan\u00E1 jako aplikace bez projektu\n(.NET 10 file-based app): jedin\u00FD soubor C# bez .csproj. Bal\u00ED\u010Dky NuGet, odkazy na projekty\na vlastnosti MSBuild se deklaruj\u00ED p\u0159\u00EDmo pomoc\u00ED direktiv #:package, #:project a #:property,\ntak\u017Ee p\u0159\u00EDklad se spust\u00ED p\u0159\u00EDkazem \u0022dotnet run Program.cs\u0022. P\u0159\u00EDkazem \u0022dotnet project convert\u0022\njej lze p\u0159ev\u00E9st zp\u011Bt na b\u011B\u017En\u00FD projekt.\n"
+    {
+      "title": {
+        "en": "Basic2D Scene (Stress Pile)",
+        "cs": "Základní 2D scéna (Zátěžová hromada)"
+      },
+      "level": "Advanced",
+      "category": "Physics",
+      "complexity": 4,
+      "order": 57,
+      "language": "csharp",
+      "description": {
+        "en": "Thousands of 2D physics bodies piling up, drawn in a single draw call through instancing, with the\nshape, batch size and spawn layout switchable while it runs. Because one master entity draws every\nbody, all of them share a single Model and shapes cannot be mixed - changing shape clears and\nrespawns the pile, which the example uses to show how to tear a pile down safely. Models are cached\nper shape and the instancing object is reused rather than recreated, so switching costs nothing.\nGrid spawns are deliberately jittered: a perfectly regular lattice of touching bodies degenerates\nBepu's broad-phase tree.",
+        "cs": "Tisíce 2D fyzikálních těles se vrší na sebe a vykreslují se jediným voláním díky instancingu.\nZa běhu lze měnit tvar, velikost dávky i způsob rozmístění. Protože vše vykresluje jedna hlavní\nentita, sdílejí všechna tělesa jeden model a tvary nelze míchat - změna tvaru proto hromadu smaže\na vytvoří znovu. Modely se ukládají do mezipaměti podle tvaru a instancing se používá opakovaně."
+      },
+      "concepts": [
+        "Drawing thousands of physics bodies in a single draw call",
+        "Confining bodies to the XY plane with Body2DComponent",
+        "Sharing one Model across every body instead of generating one each",
+        "Tearing down an instanced pile safely, clearing the instancing before the entities",
+        "Switching shape, batch size and layout at runtime with DebugTextDropdown",
+        "Why a perfectly regular spawn lattice must be jittered",
+        "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics"
+      ],
+      "tags": [
+        "2D",
+        "Bepu",
+        "Physics",
+        "Instancing",
+        "Performance",
+        "Draw Calls",
+        "Stress Test",
+        "Advanced"
+      ],
+      "related": [
+        "Example22_Instancing_EntityTransform",
+        "Example01_Basic2DScene_SpawnMenu",
+        "Example01_Basic2DScene_FallingShapes"
+      ],
+      "enabled": true,
+      "created": "2026-08-16",
+      "projectName": "Example01_Basic2DScene_StressPile",
+      "projectPath": "Example01_Basic2DScene_StressPile/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Running a Stride game as a .NET 10 file-based app (no .csproj)",
-      "Declaring NuGet packages inline with #:package",
-      "Referencing projects inline with #:project",
-      "Setting MSBuild properties inline with #:property",
-      "Converting a file-based app to a project with dotnet project convert",
-      "Using helpers: SetupBase3DScene",
-      "Using helpers: AddSkybox"
-    ],
-    "related": [
-      "Example01_Basic3DScene",
-      "Example02_GiveMeACube",
-      "Example01_Basic3DScene_Primitives"
-    ],
-    "tags": [
-      "3D",
-      "Bepu",
-      "Shapes",
-      "Primitive",
-      "Capsule",
-      "Scene Setup",
-      "Skybox",
-      "File-Based App",
-      "dotnet run",
-      "Getting Started"
-    ],
-    "order": 1,
-    "enabled": true,
-    "created": "2026-08-08",
-    "isDraft": false,
-    "projectName": "Example01_Basic3DScene_FileBasedApp",
-    "projectPath": "Example01_Basic3DScene_FileBasedApp\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Entity Text (Screen-Space)",
-      "cs": "Text entity (v prostoru obrazovky)"
+    {
+      "title": {
+        "en": "Game - Cubicle Calamity",
+        "cs": "Hra - Cubicle Calamity"
+      },
+      "level": "Advanced",
+      "category": "Game",
+      "complexity": 5,
+      "order": 32000,
+      "language": "csharp",
+      "description": {
+        "en": "A colour-match collapse puzzle built entirely from code. A 10x10x10 platform of cubes builds\nitself one layer at a time, clicking a cube clears every same-coloured cube connected to it, and\nwhat is left above drops into the gap.\nShows how to structure a whole game without the editor: scene setup split from gameplay, a custom\nBepu body that constrains cubes to their own column, screen-space text drawn without the UI\nsystem, and mouse picking through a physics raycast.",
+        "cs": "Logická hra na skládání barev postavená výhradně v kódu. Platforma 10x10x10 z kostek se staví\npo vrstvách, kliknutí na kostku odstraní všechny propojené kostky stejné barvy a to, co zůstane\nnad nimi, spadne do vzniklé mezery.\nUkazuje, jak strukturovat celou hru bez editoru: oddělení stavby scény od herní logiky, vlastní\nBepu těleso držící kostku v jejím sloupci, text v prostoru obrazovky bez UI systému a výběr\nmyší pomocí fyzikálního raycastu."
+      },
+      "concepts": [
+        "Structuring a code-only game into setup, components and scripts",
+        "Constraining a Bepu body to one axis with a custom BodyComponent",
+        "Locking rotation by zeroing the whole inverse inertia tensor",
+        "Raising the solver substep count to settle a rotation-locked stack",
+        "Picking entities with a camera raycast from the mouse",
+        "Drawing screen-space text without the UI system: EntityTextComponent",
+        "Flood filling a grid to find connected same-coloured neighbours",
+        "Using helpers: Add3DCamera, Add3DGround, AddGizmo, Create3DPrimitive"
+      ],
+      "tags": [
+        "3D",
+        "Bepu",
+        "Game",
+        "Physics",
+        "Raycast",
+        "Mouse Picking",
+        "Rigid Body",
+        "Inertia",
+        "Text Rendering",
+        "Materials",
+        "Lighting",
+        "Advanced"
+      ],
+      "related": [
+        "Example09_Renderer",
+        "Example05_SimpleGeometry"
+      ],
+      "enabled": true,
+      "created": "2025-04-20",
+      "projectName": "Example_CubicleCalamity",
+      "projectPath": "Example_CubicleCalamity/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Text",
-    "complexity": 1,
-    "description": {
-      "en": "A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows,\nbackgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and\nHUD text pinned to window corners that survives resizing.\nScreen-space text keeps its pixel size at any distance and is never hidden by geometry.\n",
-      "cs": "Galerie v\u0161eho, co EntityTextComponent um\u00ED, jedna vlastnost na sloupek: ukotven\u00ED, st\u00EDny, pozad\u00ED,\n\u0161k\u00E1lov\u00E1n\u00ED, rotace, pr\u016Fhlednost, mizen\u00ED s vzd\u00E1lenost\u00ED, v\u00EDce text\u016F na jedn\u00E9 entit\u011B a HUD text\np\u0159ichycen\u00FD k roh\u016Fm okna, kter\u00FD p\u0159e\u017Eije zm\u011Bnu velikosti.\nText v prostoru obrazovky si dr\u017E\u00ED velikost v pixelech na jakoukoli vzd\u00E1lenost a geometrie ho nikdy nezakryje.\n"
+    {
+      "title": {
+        "en": "Give Me a Cube (SimulationUpdate)",
+        "cs": "Dej mi kostku (SimulationUpdate)"
+      },
+      "level": "Beginners",
+      "category": "Physics",
+      "complexity": 3,
+      "order": 2,
+      "language": "csharp",
+      "description": {
+        "en": "Drive an entity from the physics clock instead of the render loop. The script is a StartupScript with\nno per-frame Update at all: it implements ISimulationUpdate, so Bepu calls it once per fixed physics\nstep and Stride registers it automatically. That is what makes SetTargetPose safe, because exactly one\nstep consumes the velocity it sets. Compare with Example02_GiveMeACube, which sets a bounded velocity\nevery frame instead.",
+        "cs": "Řízení entity podle hodin fyziky namísto vykreslovací smyčky. Skript je StartupScript zcela bez metody\nUpdate: implementuje rozhraní ISimulationUpdate, takže jej Bepu volá jednou za pevný fyzikální krok\na Stride jej zaregistruje automaticky. Právě díky tomu je metoda SetTargetPose bezpečná, protože\nnastavenou rychlost spotřebuje přesně jeden krok. Porovnejte s Example02_GiveMeACube, který místo toho\nnastavuje omezenou rychlost každý snímek."
+      },
+      "concepts": [
+        "Implementing ISimulationUpdate to run on the physics clock",
+        "The difference between a fixed physics step and a frame delta time",
+        "Using SetTargetPose safely, once per physics step",
+        "StartupScript as a component with no per-frame Update",
+        "Moving a kinematic body so it pushes dynamic bodies",
+        "Using helpers: SetupBase3DScene",
+        "Using helpers: AddSkybox"
+      ],
+      "tags": [
+        "3D",
+        "Physics",
+        "Bepu",
+        "ISimulationUpdate",
+        "Fixed Timestep",
+        "Kinematic Body",
+        "Collision",
+        "Script",
+        "StartupScript",
+        "Cube",
+        "Beginners"
+      ],
+      "related": [
+        "Example02_GiveMeACube",
+        "Example01_Basic3DScene_SyncScript",
+        "Example20_BepuFirstPersonCharacter"
+      ],
+      "enabled": true,
+      "created": "2026-08-07",
+      "projectName": "Example02_GiveMeACube_SimulationUpdate",
+      "projectPath": "Example02_GiveMeACube_SimulationUpdate/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Registering the text renderer once: AddEntityTextRenderer",
-      "Centring a label over an object with TextAnchor, not TextAlignment",
-      "Shadow and background for readability over a 3D scene",
-      "Animating Scale instead of FontSize",
-      "Distance fading with FadeStartDistance and MaxDistance",
-      "Several EntityTextComponents on one entity",
-      "HUD text that survives window resizing: TextPositionMode.Anchored"
-    ],
-    "related": [
-      "Example01_WorldText",
-      "Example05_SimpleGeometry",
-      "Example09_Renderer"
-    ],
-    "tags": [
-      "3D",
-      "Text",
-      "Text Rendering",
-      "HUD",
-      "Screen Space",
-      "Labels",
-      "Getting Started"
-    ],
-    "order": 210,
-    "enabled": true,
-    "created": "2026-08-22",
-    "isDraft": false,
-    "projectName": "Example01_EntityText",
-    "projectPath": "Example01_EntityText\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "World Text (In-Scene)",
-      "cs": "Text ve sv\u011Bt\u011B (ve sc\u00E9n\u011B)"
+    {
+      "title": {
+        "en": "Constraints - Servo vs Motor vs Limit",
+        "cs": "Vazby - servo, motor a limit"
+      },
+      "level": "Beginners",
+      "category": "Physics",
+      "complexity": 5,
+      "order": 15,
+      "language": "csharp",
+      "description": {
+        "en": "The three kinds of Bepu constraint, side by side. A servo drives towards a target position or\norientation and then stops; a motor drives towards a target velocity and never stops; a limit\ndrives nothing at all and only clamps a range. A mixer blade shows the motor case - a\nHingeConstraint decides which way it may turn and a OneBodyAngularMotor makes it turn, and\nneither does the job alone. Two identical pendulums show the limit case, where only one carries a\nSwingLimit. Every constraint can be switched off while the scene is running, which is the\nquickest way to see what it was contributing. The example also shows the trap that catches most\nhand-built joints: a constraint does not stop two bodies colliding, so a joint whose parts share\nspace simply jams. Extends Example15_Constraint, which covers servos and limits but never motors.",
+        "cs": "Tři druhy vazeb v Bepu vedle sebe. Servo míří na cílovou pozici nebo orientaci a pak se zastaví,\nmotor žene cílovou rychlost a nezastaví se nikdy, limit sám o sobě nepohání nic a pouze omezuje\nrozsah. Motor předvádí lopatka mixéru - vazba HingeConstraint určuje, kterým směrem se smí točit,\na OneBodyAngularMotor ji roztáčí, přičemž ani jedna z nich to nezvládne sama. Limit předvádějí dvě\nshodná kyvadla, z nichž jen jedno má navíc SwingLimit. Každou vazbu lze za běhu vypnout, což je\nnejrychlejší způsob, jak zjistit, co vlastně dělala. Příklad také ukazuje past, na které ručně\nstavěné klouby nejčastěji ztroskotají: vazba nezabrání tělesům v kolizi, takže kloub, jehož části\nsdílejí prostor, se prostě zasekne. Navazuje na Example15_Constraint, který pokrývá serva\na limity, ale motory nikoli."
+      },
+      "concepts": [
+        "The difference between a servo, a motor and a limit",
+        "Restricting rotation to one axis with HingeConstraintComponent",
+        "Driving continuous rotation with OneBodyAngularMotorConstraintComponent",
+        "Sweeping a tilted arm with AngularAxisMotorConstraintComponent",
+        "Why a whole-vector motor target flattens a cone and a single-axis one does not",
+        "Clamping swing range with SwingLimitConstraintComponent",
+        "Why a constraint does not stop the joined bodies colliding",
+        "Placing a pivot in clear air so the joint does not jam",
+        "Why BallSocketMotor drives linear, not angular, velocity",
+        "Why MotorDamping does not read back the value passed to the constructor",
+        "Switching a motor off does not brake anything, it only stops pushing",
+        "Constraint offsets and axes are in each body's local space",
+        "Enabling and disabling a constraint at runtime",
+        "Why a constraint anchor must be a kinematic body, not a static one",
+        "Why a velocity set from the start callback is lost",
+        "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
+      ],
+      "tags": [
+        "3D",
+        "Physics",
+        "Bepu",
+        "Constraint",
+        "Motor",
+        "Servo",
+        "Limit",
+        "Hinge",
+        "Rigid Body",
+        "Kinematic Body",
+        "Beginners"
+      ],
+      "related": [
+        "Example15_Constraint",
+        "Example15_Constraint_Simple",
+        "Example19_Jitter2Physics_Constraints"
+      ],
+      "enabled": true,
+      "created": "2026-08-08",
+      "projectName": "Example15_Constraint_Motors",
+      "projectPath": "Example15_Constraint_Motors/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Text",
-    "complexity": 1,
-    "description": {
-      "en": "A gallery of everything WorldTextComponent can do, one setting per station: billboarding that\nstays upright, free billboarding, text fixed in place, text lying flat on the ground, world-unit\nsizing, depth-tested text hidden behind a wall next to text drawn through it, and distance fading.\nWorld text lives inside the scene - it shrinks with distance and geometry can hide it.\n",
-      "cs": "Galerie v\u0161eho, co WorldTextComponent um\u00ED, jedno nastaven\u00ED na stanovi\u0161t\u011B: billboard dr\u017E\u00EDc\u00ED se\nvzp\u0159\u00EDmen\u011B, voln\u00FD billboard, pevn\u011B um\u00EDst\u011Bn\u00FD text, text le\u017E\u00EDc\u00ED na zemi, velikost ve sv\u011Btov\u00FDch\njednotk\u00E1ch, text skryt\u00FD za zd\u00ED vedle textu kreslen\u00E9ho skrz ni a mizen\u00ED s vzd\u00E1lenost\u00ED.\nText ve sv\u011Bt\u011B \u017Eije uvnit\u0159 sc\u00E9ny - zmen\u0161uje se s vzd\u00E1lenost\u00ED a geometrie ho m\u016F\u017Ee zakr\u00FDt.\n"
+    {
+      "title": {
+        "en": "Jitter2 Physics Integration",
+        "cs": "Integrace fyziky Jitter2"
+      },
+      "level": "Beginners",
+      "category": "Physics",
+      "complexity": 4,
+      "order": 19,
+      "language": "csharp",
+      "description": {
+        "en": "Demonstrates integrating Jitter2 physics engine with Stride. Shows how to create a physics world,\nsynchronize physics bodies with visual entities, and simulate dynamic rigid body interactions.\nFeatures 150 falling cubes with proper collision detection and a static ground plane.",
+        "cs": "Ukazuje integraci fyzikálního enginu Jitter2 se Stride. Jak vytvořit fyzikální svět,\nsynchronizovat fyzikální tělesa s vizuálními entitami a simulovat dynamické interakce pevných těles.\nObsahuje 150 padajících kostek s detekcí kolizí a statickou zemní rovinou."
+      },
+      "concepts": [
+        "Integrating external physics engine (Jitter2)",
+        "Creating and managing physics world",
+        "Synchronizing physics bodies with visual entities",
+        "Dynamic rigid body simulation",
+        "Static vs dynamic physics bodies",
+        "Fixed-timestep physics update loop, decoupled from the render frame rate"
+      ],
+      "tags": [
+        "3D",
+        "Physics",
+        "Jitter2",
+        "Rigid Body",
+        "Collision Detection",
+        "External Engine",
+        "Simulation",
+        "Cubes",
+        "Beginners"
+      ],
+      "related": [
+        "Example01_Basic3DScene",
+        "Example18_Box2DPhysics",
+        "Example19_Jitter2Physics_Constraints",
+        "Example_CubicleCalamity"
+      ],
+      "enabled": true,
+      "created": "2025-12-13",
+      "projectName": "Example19_Jitter2Physics",
+      "projectPath": "Example19_Jitter2Physics/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "concepts": [
-      "Registering the text renderer once: AddWorldTextRenderer",
-      "Billboarding: KeepUpright versus facing the camera freely",
-      "Text fixed to a surface or lying flat with Billboard = false",
-      "Height in world units versus FontSize as sharpness",
-      "Depth-tested text hidden by geometry, and DepthTest = false to draw through",
-      "Distance fading with FadeStartDistance and MaxDistance"
-    ],
-    "related": [
-      "Example01_EntityText",
-      "Example05_SimpleGeometry"
-    ],
-    "tags": [
-      "3D",
-      "Text",
-      "Text Rendering",
-      "World Space",
-      "Billboard",
-      "Labels",
-      "Getting Started"
-    ],
-    "order": 220,
-    "enabled": true,
-    "created": "2026-08-22",
-    "isDraft": false,
-    "projectName": "Example01_WorldText",
-    "projectPath": "Example01_WorldText\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "3D Letters (Mesh Text)",
-      "cs": "3D písmena (text jako mesh)"
+    {
+      "title": {
+        "en": "Jitter2 Physics - Constraining to 2D",
+        "cs": "Jitter2 fyzika - omezení na 2D"
+      },
+      "level": "Beginners",
+      "category": "Physics",
+      "complexity": 4,
+      "order": 19,
+      "language": "csharp",
+      "description": {
+        "en": "Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no\ndedicated 2D mode, so each falling cube gets a PointOnPlane constraint locking translation along Z\nand a HingeAngle constraint locking rotation to the Z axis, confining it to the X/Y plane while it\nkeeps running on the same 3D solver. Builds on Example19_Jitter2Physics with the same falling-cubes\nsetup, spread across a grid so they cascade and pile up sideways.",
+        "cs": "Ukazuje, jak omezit 3D fyzikální simulaci Jitter2 na chování podobné 2D. Jitter2 nemá vyhrazený 2D\nrežim, takže každá padající kostka dostane omezení PointOnPlane, které uzamkne posun podél osy Z,\na omezení HingeAngle, které uzamkne rotaci na osu Z - kostka tak zůstává v rovině X/Y, přestože běží\nna stejném 3D řešiči. Navazuje na Example19_Jitter2Physics se stejným nastavením padajících kostek,\ntentokrát rozmístěných do mřížky, aby se sesypávaly do sebe."
+      },
+      "concepts": [
+        "Constraining a 3D physics engine to 2D motion",
+        "Creating and initializing Jitter2 constraints (PointOnPlane, HingeAngle)",
+        "Locking translation and rotation axes with world.CreateConstraint",
+        "Synchronizing physics bodies with visual entities",
+        "Fixed-timestep physics update loop, decoupled from the render frame rate"
+      ],
+      "tags": [
+        "3D",
+        "Physics",
+        "Jitter2",
+        "Rigid Body",
+        "Constraint",
+        "2D",
+        "External Engine",
+        "Simulation",
+        "Cubes",
+        "Beginners"
+      ],
+      "related": [
+        "Example19_Jitter2Physics",
+        "Example15_Constraint",
+        "Example18_Box2DPhysics"
+      ],
+      "enabled": true,
+      "created": "2026-08-08",
+      "projectName": "Example19_Jitter2Physics_Constraints",
+      "projectPath": "Example19_Jitter2Physics_Constraints/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
     },
-    "level": "Getting Started",
-    "category": "Text",
-    "complexity": 2,
-    "description": {
-      "en": "A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and\nthe dash - as solid extruded meshes that catch the light like any other geometry, plus a frame\ncounter whose digits are rebuilt as a new mesh every frame. The counter demonstrates the one\nrule of dynamic mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak\na buffer pair per rebuild.\n",
-      "cs": "Galerie všech znaků, které LetterMeshFactory umí postavit - číslice, celá abeceda A-Z a pomlčka\n- jako plné vytlačené meshe, které chytají světlo jako jakákoli jiná geometrie, plus počítadlo\nsnímků, jehož číslice se každý snímek staví znovu jako nový mesh. Počítadlo ukazuje jediné\npravidlo dynamického textu z meshů: před výměnou meshe uvolnit staré GPU buffery, jinak každá\npřestavba uteče o pár bufferů.\n"
-    },
-    "concepts": [
-      "Solid 3D lettering from code: LetterMeshFactory.CreateTextMeshDraw",
-      "Which characters exist - SupportedCharacters - and why fonts are not involved",
-      "Static lettering built once versus text that changes",
-      "Rebuilding a mesh safely: dispose the old buffers first",
-      "centerOrigin for strings centred on their entity",
-      "When to use EntityTextComponent or WorldTextComponent instead"
-    ],
-    "related": [
-      "Example01_EntityText",
-      "Example01_WorldText",
-      "Example05_ProceduralGeometry",
-      "Example_CubicleCalamity"
-    ],
-    "tags": [
-      "3D",
-      "Text",
-      "Mesh",
-      "Procedural Geometry",
-      "Letters",
-      "Getting Started"
-    ],
-    "order": 230,
-    "enabled": true,
-    "created": "2026-08-22",
-    "isDraft": false,
-    "projectName": "Example01_Letters3D",
-    "projectPath": "Example01_Letters3D\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Give Me a Cube",
-      "cs": "Dej mi kostku"
-    },
-    "level": "Getting Started",
-    "category": "Scripts",
-    "complexity": 2,
-    "description": {
-      "en": "Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.\nThe script steers a cube around a circle each frame by setting the linear velocity of a kinematic\nBepu body, so it really sweeps through the scene and knocks a ring of smaller dynamic cubes out of\nthe way. Writing Transform.Position instead would move only the mesh and collide with nothing.\n",
-      "cs": "P\u0159id\u00E1n\u00ED chov\u00E1n\u00ED k entit\u011B pomoc\u00ED komponenty SyncScript nam\u00EDsto callbacku update v game.Run.\nSkript ka\u017Ed\u00FD sn\u00EDmek vede kostku po kruhu nastaven\u00EDm line\u00E1rn\u00ED rychlosti kinematick\u00E9ho t\u011Blesa Bepu,\ntak\u017Ee skute\u010Dn\u011B proj\u00ED\u017Ed\u00ED sc\u00E9nou a odr\u00E1\u017E\u00ED kruh men\u0161\u00EDch dynamick\u00FDch kostek. Z\u00E1pis do Transform.Position\nby naproti tomu pohnul pouze modelem a s ni\u010D\u00EDm by nekolidoval.\n"
-    },
-    "concepts": [
-      "Adding behaviour with a SyncScript component",
-      "The Start and Update lifecycle methods",
-      "Configuring a script through public properties",
-      "Moving a kinematic body by setting its linear velocity",
-      "Waking a body after changing its velocity",
-      "Why writing Transform.Position does not move a physics body",
-      "Sizing a primitive and its collider together",
-      "Using helpers: SetupBase3DScene",
-      "Using helpers: AddSkybox",
-      "Using helpers: Game.DeltaTime"
-    ],
-    "related": [
-      "Example01_Basic3DScene",
-      "Example01_Basic3DScene_SyncScript",
-      "Example11_ImGuiNet"
-    ],
-    "tags": [
-      "3D",
-      "Script",
-      "SyncScript",
-      "Component",
-      "Update Loop",
-      "Transform",
-      "Bepu",
-      "Physics",
-      "Kinematic Body",
-      "Collision",
-      "Cube",
-      "Getting Started"
-    ],
-    "order": 2,
-    "enabled": true,
-    "created": "2023-09-11",
-    "isDraft": false,
-    "projectName": "Example02_GiveMeACube",
-    "projectPath": "Example02_GiveMeACube\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Give Me a Cube (SimulationUpdate)",
-      "cs": "Dej mi kostku (SimulationUpdate)"
-    },
-    "level": "Beginners",
-    "category": "Physics",
-    "complexity": 3,
-    "description": {
-      "en": "Drive an entity from the physics clock instead of the render loop. The script is a StartupScript with\nno per-frame Update at all: it implements ISimulationUpdate, so Bepu calls it once per fixed physics\nstep and Stride registers it automatically. That is what makes SetTargetPose safe, because exactly one\nstep consumes the velocity it sets. Compare with Example02_GiveMeACube, which sets a bounded velocity\nevery frame instead.\n",
-      "cs": "\u0158\u00EDzen\u00ED entity podle hodin fyziky nam\u00EDsto vykreslovac\u00ED smy\u010Dky. Skript je StartupScript zcela bez metody\nUpdate: implementuje rozhran\u00ED ISimulationUpdate, tak\u017Ee jej Bepu vol\u00E1 jednou za pevn\u00FD fyzik\u00E1ln\u00ED krok\na Stride jej zaregistruje automaticky. Pr\u00E1v\u011B d\u00EDky tomu je metoda SetTargetPose bezpe\u010Dn\u00E1, proto\u017Ee\nnastavenou rychlost spot\u0159ebuje p\u0159esn\u011B jeden krok. Porovnejte s Example02_GiveMeACube, kter\u00FD m\u00EDsto toho\nnastavuje omezenou rychlost ka\u017Ed\u00FD sn\u00EDmek.\n"
-    },
-    "concepts": [
-      "Implementing ISimulationUpdate to run on the physics clock",
-      "The difference between a fixed physics step and a frame delta time",
-      "Using SetTargetPose safely, once per physics step",
-      "StartupScript as a component with no per-frame Update",
-      "Moving a kinematic body so it pushes dynamic bodies",
-      "Using helpers: SetupBase3DScene",
-      "Using helpers: AddSkybox"
-    ],
-    "related": [
-      "Example02_GiveMeACube",
-      "Example01_Basic3DScene_SyncScript",
-      "Example20_BepuFirstPersonCharacter"
-    ],
-    "tags": [
-      "3D",
-      "Physics",
-      "Bepu",
-      "ISimulationUpdate",
-      "Fixed Timestep",
-      "Kinematic Body",
-      "Collision",
-      "Script",
-      "StartupScript",
-      "Cube",
-      "Beginners"
-    ],
-    "order": 2,
-    "enabled": true,
-    "created": "2026-08-07",
-    "isDraft": false,
-    "projectName": "Example02_GiveMeACube_SimulationUpdate",
-    "projectPath": "Example02_GiveMeACube_SimulationUpdate\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "ImGui.NET Text Rendering",
-      "cs": "Vykreslov\u00E1n\u00ED textu pomoc\u00ED ImGui.NET"
-    },
-    "level": "Advanced",
-    "category": "UI",
-    "complexity": 4,
-    "description": {
-      "en": "Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.\nA kinematic Bepu body follows a circular path and knocks over stacks of dynamic boxes, showing why\nSetTargetPose moves a physics body while writing Transform.Position does not. The ImGui font atlas\nis rebuilt for the monitor\u0027s DPI so the overlay stays crisp on high-DPI displays.\n",
-      "cs": "Vykreslov\u00E1n\u00ED ladic\u00EDho textu pomoc\u00ED ImGui.NET, jak v sou\u0159adnic\u00EDch obrazovky, tak ukotven\u00E9ho\nk pozic\u00EDm ve 3D sc\u00E9n\u011B. Kinematick\u00E9 t\u011Bleso Bepu se pohybuje po kruhov\u00E9 dr\u00E1ze a shazuje stohy\ndynamick\u00FDch kostek, \u010D\u00EDm\u017E ukazuje, pro\u010D SetTargetPose t\u011Blesem pohne, zat\u00EDmco z\u00E1pis do\nTransform.Position nikoli. Atlas p\u00EDsma ImGui se p\u0159estav\u00ED podle DPI monitoru, aby byl text\nostr\u00FD i na displej\u00EDch s vysok\u00FDm rozli\u0161en\u00EDm.\n"
-    },
-    "concepts": [
-      "Drawing screen-space text with DrawText",
-      "Anchoring text to a world-space position",
-      "Driving a kinematic BodyComponent with SetTargetPose",
-      "Why writing Transform.Position does not move a physics body",
-      "Rebuilding the ImGui font atlas for the window DPI",
-      "Using helpers: AddImGuiNet",
-      "Using helpers: SetupBase3DScene",
-      "Using helpers: AddProfiler"
-    ],
-    "related": [
-      "Example11_ImGui",
-      "Example01_Basic3DScene_DPI_Aware",
-      "Example18_Box2DPhysics"
-    ],
-    "tags": [
-      "3D",
-      "UI",
-      "ImGui",
-      "ImGui.NET",
-      "Text Rendering",
-      "Overlay",
-      "Debug UI",
-      "Bepu",
-      "Physics",
-      "Kinematic Body",
-      "DPI",
-      "HiDPI",
-      "Advanced"
-    ],
-    "order": 11,
-    "enabled": true,
-    "created": "2025-10-06",
-    "isDraft": false,
-    "projectName": "Example11_ImGuiNet",
-    "projectPath": "Example11_ImGuiNet\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Mesh Outline Render Feature",
-      "cs": "Obrysy model\u016F pomoc\u00ED vlastn\u00ED render feature"
-    },
-    "level": "Advanced",
-    "category": "Rendering",
-    "complexity": 4,
-    "description": {
-      "en": "Draw coloured outlines around 3D primitives with a custom RootRenderFeature. Each mesh is drawn a\nsecond time, inflated along its normals with front faces culled, so only a shell remains visible\nbehind the original mesh. Adding a MeshOutlineComponent to an entity is all it takes to outline it,\nand a high intensity pushes the outline into HDR range so bloom makes it glow.\n",
-      "cs": "Vykreslen\u00ED barevn\u00FDch obrys\u016F kolem 3D tvar\u016F pomoc\u00ED vlastn\u00ED RootRenderFeature. Ka\u017Ed\u00FD model se vykresl\u00ED\npodruh\u00E9, nafouknut\u00FD pod\u00E9l norm\u00E1l a s odstran\u011Bn\u00FDmi p\u0159ivr\u00E1cen\u00FDmi st\u011Bnami, tak\u017Ee za p\u016Fvodn\u00EDm modelem\nz\u016Fstane viditeln\u00E1 jen sko\u0159epina. K vytvo\u0159en\u00ED obrysu sta\u010D\u00ED entit\u011B p\u0159idat MeshOutlineComponent\na vysok\u00E1 intenzita posune obrys do HDR rozsahu, tak\u017Ee d\u00EDky bloomu z\u00E1\u0159\u00ED.\n"
-    },
-    "concepts": [
-      "Writing a custom RootRenderFeature",
-      "Registering a render feature with AddRootRenderFeature",
-      "Driving rendering from a custom EntityComponent",
-      "Building a MutablePipelineState and applying a DynamicEffectInstance",
-      "Inflating a mesh along its normals in a shader",
-      "Skipping render stages that bind no render target",
-      "Using helpers: SetupBase3DScene",
-      "Using helpers: AddSkybox"
-    ],
-    "related": [
-      "Example13_RootRendererShader",
-      "Example09_Renderer",
-      "Example01_Basic3DScene"
-    ],
-    "tags": [
-      "3D",
-      "Rendering",
-      "Render Feature",
-      "Outline",
-      "Shader",
-      "SDSL",
-      "Pipeline State",
-      "Entity Component",
-      "HDR",
-      "Bloom",
-      "Advanced"
-    ],
-    "order": 13,
-    "enabled": true,
-    "created": "2025-08-07",
-    "isDraft": false,
-    "projectName": "Example13_MeshOutline",
-    "projectPath": "Example13_MeshOutline\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Constraints - Servo vs Motor vs Limit",
-      "cs": "Vazby - servo, motor a limit"
-    },
-    "level": "Beginners",
-    "category": "Physics",
-    "complexity": 5,
-    "description": {
-      "en": "The three kinds of Bepu constraint, side by side. A servo drives towards a target position or\norientation and then stops; a motor drives towards a target velocity and never stops; a limit\ndrives nothing at all and only clamps a range. A mixer blade shows the motor case - a\nHingeConstraint decides which way it may turn and a OneBodyAngularMotor makes it turn, and\nneither does the job alone. Two identical pendulums show the limit case, where only one carries a\nSwingLimit. Every constraint can be switched off while the scene is running, which is the\nquickest way to see what it was contributing. The example also shows the trap that catches most\nhand-built joints: a constraint does not stop two bodies colliding, so a joint whose parts share\nspace simply jams. Extends Example15_Constraint, which covers servos and limits but never motors.\n",
-      "cs": "T\u0159i druhy vazeb v Bepu vedle sebe. Servo m\u00ED\u0159\u00ED na c\u00EDlovou pozici nebo orientaci a pak se zastav\u00ED,\nmotor \u017Eene c\u00EDlovou rychlost a nezastav\u00ED se nikdy, limit s\u00E1m o sob\u011B nepoh\u00E1n\u00ED nic a pouze omezuje\nrozsah. Motor p\u0159edv\u00E1d\u00ED lopatka mix\u00E9ru - vazba HingeConstraint ur\u010Duje, kter\u00FDm sm\u011Brem se sm\u00ED to\u010Dit,\na OneBodyAngularMotor ji rozt\u00E1\u010D\u00ED, p\u0159i\u010Dem\u017E ani jedna z nich to nezvl\u00E1dne sama. Limit p\u0159edv\u00E1d\u011Bj\u00ED dv\u011B\nshodn\u00E1 kyvadla, z nich\u017E jen jedno m\u00E1 nav\u00EDc SwingLimit. Ka\u017Edou vazbu lze za b\u011Bhu vypnout, co\u017E je\nnejrychlej\u0161\u00ED zp\u016Fsob, jak zjistit, co vlastn\u011B d\u011Blala. P\u0159\u00EDklad tak\u00E9 ukazuje past, na kter\u00E9 ru\u010Dn\u011B\nstav\u011Bn\u00E9 klouby nej\u010Dast\u011Bji ztroskotaj\u00ED: vazba nezabr\u00E1n\u00ED t\u011Bles\u016Fm v kolizi, tak\u017Ee kloub, jeho\u017E \u010D\u00E1sti\nsd\u00EDlej\u00ED prostor, se prost\u011B zasekne. Navazuje na Example15_Constraint, kter\u00FD pokr\u00FDv\u00E1 serva\na limity, ale motory nikoli.\n"
-    },
-    "concepts": [
-      "The difference between a servo, a motor and a limit",
-      "Restricting rotation to one axis with HingeConstraintComponent",
-      "Driving continuous rotation with OneBodyAngularMotorConstraintComponent",
-      "Sweeping a tilted arm with AngularAxisMotorConstraintComponent",
-      "Why a whole-vector motor target flattens a cone and a single-axis one does not",
-      "Clamping swing range with SwingLimitConstraintComponent",
-      "Why a constraint does not stop the joined bodies colliding",
-      "Placing a pivot in clear air so the joint does not jam",
-      "Why BallSocketMotor drives linear, not angular, velocity",
-      "Why MotorDamping does not read back the value passed to the constructor",
-      "Switching a motor off does not brake anything, it only stops pushing",
-      "Constraint offsets and axes are in each body\u0027s local space",
-      "Enabling and disabling a constraint at runtime",
-      "Why a constraint anchor must be a kinematic body, not a static one",
-      "Why a velocity set from the start callback is lost",
-      "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
-    ],
-    "related": [
-      "Example15_Constraint",
-      "Example15_Constraint_Simple",
-      "Example19_Jitter2Physics_Constraints"
-    ],
-    "tags": [
-      "3D",
-      "Physics",
-      "Bepu",
-      "Constraint",
-      "Motor",
-      "Servo",
-      "Limit",
-      "Hinge",
-      "Rigid Body",
-      "Kinematic Body",
-      "Beginners"
-    ],
-    "order": 15,
-    "enabled": true,
-    "created": "2026-08-08",
-    "isDraft": false,
-    "projectName": "Example15_Constraint_Motors",
-    "projectPath": "Example15_Constraint_Motors\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Rope - building a stable chain of constraints",
-      "cs": "Lano - stabiln\u00ED \u0159et\u011Bz vazeb"
-    },
-    "level": "Intermediate",
-    "category": "Physics",
-    "complexity": 7,
-    "description": {
-      "en": "Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing\nthem together is the easy part; keeping a heavy weight on a light chain from thrashing itself\napart is the real problem, because the force holding that weight up has to travel link by link\nto the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by\nside carrying the same weight: the naive one anchors its constraints at the segment ends and ties\neach segment only to its neighbour, while the stable one anchors at the segment centres and adds\nskip constraints that let impulses take shortcuts along the chain. The skip constraints can be\nswitched off while it hangs, which shows immediately what they were holding together. Follows\nBepu\u0027s own RopeStabilityDemo rather than the more obvious ball-socket construction, which is\nprecisely the one that misbehaves.\n",
-      "cs": "Bepu nem\u00E1 typ pro lano, tak\u017Ee lano je \u0159et\u011Bz mal\u00FDch t\u011Bles sv\u00E1zan\u00FDch za b\u011Bhu. Spojit je dohromady je\nta snadn\u00E1 \u010D\u00E1st; skute\u010Dn\u00FD probl\u00E9m je udr\u017Eet t\u011B\u017Ek\u00E9 z\u00E1va\u017E\u00ED na lehk\u00E9m \u0159et\u011Bzu, aby se neroztrhalo -\ns\u00EDla, kter\u00E1 z\u00E1va\u017E\u00ED dr\u017E\u00ED, mus\u00ED putovat \u010Dl\u00E1nek po \u010Dl\u00E1nku a\u017E k pevn\u00E9mu \u00FAchytu a \u0159e\u0161i\u010D m\u00E1 na to jen\nomezen\u00FD po\u010Det pr\u016Fchod\u016F za sn\u00EDmek. Vedle sebe vis\u00ED dv\u011B lana se stejn\u00FDm z\u00E1va\u017E\u00EDm: naivn\u00ED m\u00E1 vazby\nukotven\u00E9 na konc\u00EDch \u010Dl\u00E1nk\u016F a ka\u017Ed\u00FD \u010Dl\u00E1nek spojen\u00FD jen se sousedem, kde\u017Eto stabiln\u00ED je ukotven\u00E9 ve\nst\u0159edech \u010Dl\u00E1nk\u016F a nav\u00EDc m\u00E1 p\u0159eskakuj\u00EDc\u00ED vazby, kter\u00E9 impulz\u016Fm umo\u017En\u00ED zkratku pod\u00E9l \u0159et\u011Bzu.\nP\u0159eskakuj\u00EDc\u00ED vazby lze za b\u011Bhu vypnout, co\u017E okam\u017Eit\u011B uk\u00E1\u017Ee, co dr\u017Eely pohromad\u011B. Vych\u00E1z\u00ED z\nuk\u00E1zky RopeStabilityDemo p\u0159\u00EDmo od autora Bepu, nikoli z nasnad\u011B le\u017E\u00EDc\u00ED konstrukce s kulov\u00FDmi\nklouby, kter\u00E1 je pr\u00E1v\u011B tou nefunguj\u00EDc\u00ED.\n"
-    },
-    "concepts": [
-      "Building a rope as a runtime chain of bodies and constraints",
-      "Linking segments with DistanceLimitConstraintComponent rather than ball sockets",
-      "Why a rope needs a minimum distance well below its maximum",
-      "Why an unstable rope looks fine while slack and only misbehaves under load",
-      "How the mass ratio between weight and links drives instability",
-      "Why solver iteration count decides how extreme a ratio survives",
-      "Removing angular feedback with a zero lever arm",
-      "Letting impulses take shortcuts with skip constraints",
-      "Moving a constraint\u0027s anchor points and allowed distance together at runtime",
-      "Why a constraint shorter than the distance it spans distorts a rope before anything moves",
-      "Deriving an impulse from mass so tuning one does not silently change the other",
-      "Setting collider mass explicitly instead of using the generated collider",
-      "Size for a sphere primitive is its radius, not its diameter",
-      "Making the topmost segment kinematic to hold the chain up",
-      "Applying an impulse from the update loop rather than a velocity at build time",
-      "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
-    ],
-    "related": [
-      "Example15_Constraint_Motors",
-      "Example15_Constraint",
-      "Example15_Constraint_Simple"
-    ],
-    "tags": [
-      "3D",
-      "Physics",
-      "Bepu",
-      "Constraint",
-      "Rope",
-      "Distance Limit",
-      "Rigid Body",
-      "Kinematic Body",
-      "Stability",
-      "Intermediate"
-    ],
-    "order": 15,
-    "enabled": true,
-    "created": "2026-08-09",
-    "isDraft": false,
-    "projectName": "Example15_Constraint_Rope",
-    "projectPath": "Example15_Constraint_Rope\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Jitter2 Physics Integration",
-      "cs": "Integrace fyziky Jitter2"
-    },
-    "level": "Beginners",
-    "category": "Physics",
-    "complexity": 4,
-    "description": {
-      "en": "Demonstrates integrating Jitter2 physics engine with Stride. Shows how to create a physics world,\nsynchronize physics bodies with visual entities, and simulate dynamic rigid body interactions.\nFeatures 150 falling cubes with proper collision detection and a static ground plane.\n",
-      "cs": "Ukazuje integraci fyzik\u00E1ln\u00EDho enginu Jitter2 se Stride. Jak vytvo\u0159it fyzik\u00E1ln\u00ED sv\u011Bt,\nsynchronizovat fyzik\u00E1ln\u00ED t\u011Blesa s vizu\u00E1ln\u00EDmi entitami a simulovat dynamick\u00E9 interakce pevn\u00FDch t\u011Bles.\nObsahuje 150 padaj\u00EDc\u00EDch kostek s detekc\u00ED koliz\u00ED a statickou zemn\u00ED rovinou.\n"
-    },
-    "concepts": [
-      "Integrating external physics engine (Jitter2)",
-      "Creating and managing physics world",
-      "Synchronizing physics bodies with visual entities",
-      "Dynamic rigid body simulation",
-      "Static vs dynamic physics bodies",
-      "Fixed-timestep physics update loop, decoupled from the render frame rate"
-    ],
-    "related": [
-      "Example01_Basic3DScene",
-      "Example18_Box2DPhysics",
-      "Example19_Jitter2Physics_Constraints",
-      "Example_CubicleCalamity"
-    ],
-    "tags": [
-      "3D",
-      "Physics",
-      "Jitter2",
-      "Rigid Body",
-      "Collision Detection",
-      "External Engine",
-      "Simulation",
-      "Cubes",
-      "Beginners"
-    ],
-    "order": 19,
-    "enabled": true,
-    "created": "2025-12-13",
-    "isDraft": false,
-    "projectName": "Example19_Jitter2Physics",
-    "projectPath": "Example19_Jitter2Physics\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Jitter2 Physics - Constraining to 2D",
-      "cs": "Jitter2 fyzika - omezen\u00ED na 2D"
-    },
-    "level": "Beginners",
-    "category": "Physics",
-    "complexity": 4,
-    "description": {
-      "en": "Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no\ndedicated 2D mode, so each falling cube gets a PointOnPlane constraint locking translation along Z\nand a HingeAngle constraint locking rotation to the Z axis, confining it to the X/Y plane while it\nkeeps running on the same 3D solver. Builds on Example19_Jitter2Physics with the same falling-cubes\nsetup, spread across a grid so they cascade and pile up sideways.\n",
-      "cs": "Ukazuje, jak omezit 3D fyzik\u00E1ln\u00ED simulaci Jitter2 na chov\u00E1n\u00ED podobn\u00E9 2D. Jitter2 nem\u00E1 vyhrazen\u00FD 2D\nre\u017Eim, tak\u017Ee ka\u017Ed\u00E1 padaj\u00EDc\u00ED kostka dostane omezen\u00ED PointOnPlane, kter\u00E9 uzamkne posun pod\u00E9l osy Z,\na omezen\u00ED HingeAngle, kter\u00E9 uzamkne rotaci na osu Z - kostka tak z\u016Fst\u00E1v\u00E1 v rovin\u011B X/Y, p\u0159esto\u017Ee b\u011B\u017E\u00ED\nna stejn\u00E9m 3D \u0159e\u0161i\u010Di. Navazuje na Example19_Jitter2Physics se stejn\u00FDm nastaven\u00EDm padaj\u00EDc\u00EDch kostek,\ntentokr\u00E1t rozm\u00EDst\u011Bn\u00FDch do m\u0159\u00ED\u017Eky, aby se sesyp\u00E1valy do sebe.\n"
-    },
-    "concepts": [
-      "Constraining a 3D physics engine to 2D motion",
-      "Creating and initializing Jitter2 constraints (PointOnPlane, HingeAngle)",
-      "Locking translation and rotation axes with world.CreateConstraint",
-      "Synchronizing physics bodies with visual entities",
-      "Fixed-timestep physics update loop, decoupled from the render frame rate"
-    ],
-    "related": [
-      "Example19_Jitter2Physics",
-      "Example15_Constraint",
-      "Example18_Box2DPhysics"
-    ],
-    "tags": [
-      "3D",
-      "Physics",
-      "Jitter2",
-      "Rigid Body",
-      "Constraint",
-      "2D",
-      "External Engine",
-      "Simulation",
-      "Cubes",
-      "Beginners"
-    ],
-    "order": 19,
-    "enabled": true,
-    "created": "2026-08-08",
-    "isDraft": false,
-    "projectName": "Example19_Jitter2Physics_Constraints",
-    "projectPath": "Example19_Jitter2Physics_Constraints\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "GPU Instancing",
-      "cs": "GPU instancing"
-    },
-    "level": "Beginners",
-    "category": "Rendering",
-    "complexity": 3,
-    "description": {
-      "en": "Render two identical walls of cubes built two different ways, side by side. The left wall uses one\nentity per cube and costs one draw call each; the right wall uses a single entity with an\nInstancingComponent and an array of world matrices, and costs one draw call in total. Both share the\nsame Model, so the only difference is instancing. Toggle each wall to compare the frame rate, and\nnote that the InstancingRenderFeature has to be added to the compositor by hand in code-only projects.\n",
-      "cs": "Vykreslen\u00ED dvou stejn\u00FDch st\u011Bn z kostek postaven\u00FDch dv\u011Bma zp\u016Fsoby vedle sebe. Lev\u00E1 st\u011Bna pou\u017E\u00EDv\u00E1 jednu\nentitu na kostku a stoj\u00ED jedno vykreslovac\u00ED vol\u00E1n\u00ED za ka\u017Edou z nich; prav\u00E1 st\u011Bna pou\u017E\u00EDv\u00E1 jedinou entitu\ns komponentou InstancingComponent a pole sv\u011Btov\u00FDch matic a stoj\u00ED celkem jedno vol\u00E1n\u00ED. Ob\u011B sd\u00EDlej\u00ED\nstejn\u00FD Model, tak\u017Ee jedin\u00FDm rozd\u00EDlem je instancing. P\u0159ep\u00EDn\u00E1n\u00EDm st\u011Bn porovn\u00E1te sn\u00EDmkovou frekvenci.\nPozor, v projektech psan\u00FDch pouze k\u00F3dem je nutn\u00E9 p\u0159idat InstancingRenderFeature do kompozitoru ru\u010Dn\u011B.\n"
-    },
-    "concepts": [
-      "Reducing draw calls with an InstancingComponent",
-      "Building an InstancingUserArray from world matrices",
-      "Registering InstancingRenderFeature on the MeshRenderFeature",
-      "Sharing one Model between many entities",
-      "Toggling a ModelComponent to compare rendering cost",
-      "Using helpers: SetupBase3D",
-      "Using helpers: Add3DCameraController",
-      "Using helpers: AddProfiler"
-    ],
-    "related": [
-      "Example22_Instancing_EntityTransform",
-      "Example01_Basic3DScene_Primitives",
-      "Example09_Renderer"
-    ],
-    "tags": [
-      "3D",
-      "Rendering",
-      "Instancing",
-      "Draw Calls",
-      "Performance",
-      "GPU",
-      "Model",
-      "Compositor",
-      "Beginners"
-    ],
-    "order": 21,
-    "enabled": true,
-    "created": "2026-08-07",
-    "isDraft": false,
-    "projectName": "Example21_Instancing",
-    "projectPath": "Example21_Instancing\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Instancing with Entity Transforms",
-      "cs": "Instancing s transformacemi entit"
-    },
-    "level": "Advanced",
-    "category": "Rendering",
-    "complexity": 4,
-    "description": {
-      "en": "Keep every object a real entity - with a transform, a physics body and anything else you need - while\nstill drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an\ninstancing type that reads its members\u0027 world matrices each frame, and the members carry no\nModelComponent of their own. Bepu drives the transforms, so the bodies collide and pile up normally.\nFour kinds of body can be dropped side by side to compare: Stride\u0027s own InstancingEntityTransform,\nno instancing at all, the toolkit\u0027s BepuEntityInstancing, and BufferedEntityInstancing. The toolkit\ntypes stop working once Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from\n239 to 329 FPS, and the example also shows where the real ceiling lies, because instancing removes\ndraw calls and does nothing about simulation cost. One line at the top switches the whole pile to\nany other primitive, so the same comparison can be run with spheres, cones or hulls.\n",
-      "cs": "Zachovejte ka\u017Ed\u00FD objekt jako plnohodnotnou entitu - s transformac\u00ED, fyzik\u00E1ln\u00EDm t\u011Blesem i \u010D\u00EDmkoli dal\u0161\u00EDm -\na p\u0159esto vykreslete cel\u00FD z\u00E1stup jedin\u00FDm vykreslovac\u00EDm vol\u00E1n\u00EDm. Hlavn\u00ED entita nese ModelComponent\na instancing, kter\u00FD ka\u017Ed\u00FD sn\u00EDmek na\u010D\u00EDt\u00E1 sv\u011Btov\u00E9 matice sv\u00FDch \u010Dlen\u016F; \u010Dlenov\u00E9 sami \u017E\u00E1dn\u00FD ModelComponent\nnemaj\u00ED. Transformace \u0159\u00EDd\u00ED Bepu, tak\u017Ee t\u011Blesa norm\u00E1ln\u011B koliduj\u00ED a vr\u0161\u00ED se na sebe. Vedle sebe lze\nporovnat \u010Dty\u0159i druhy t\u011Bles: vlastn\u00ED InstancingEntityTransform ze Stride, \u017E\u00E1dn\u00FD instancing,\nBepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu p\u0159estanou pracovat, jakmile\nBepu usp\u00ED t\u011Blesa, co\u017E u usazen\u00E9 hromady 20 000 kostek zv\u00FD\u0161\u00ED sn\u00EDmkovou frekvenci z 239 na 329.\nJedin\u00FD \u0159\u00E1dek na za\u010D\u00E1tku p\u0159epne celou hromadu na libovolnou jinou primitivn\u00ED tvar.\n"
-    },
-    "concepts": [
-      "Combining physics bodies with instanced rendering",
-      "Comparing four instancing strategies side by side at runtime",
-      "The master and instance split for entity-driven instancing",
-      "Why an instance entity must not have its own ModelComponent",
-      "Skipping instancing work entirely while physics bodies sleep",
-      "Owning GPU instance buffers to avoid redundant uploads",
-      "Deriving a Bepu collider from a primitive type without building a mesh per body",
-      "Switching the whole scene to a different primitive from one line",
-      "Knowing when instancing does not help",
-      "Using helpers: AddInstancingSupport, AddInstancingBufferUpload",
-      "Using helpers: SetupBase3D, Add3DGround, AddBepu3DPhysics"
-    ],
-    "related": [
-      "Example21_Instancing",
-      "Example02_GiveMeACube",
-      "Example_Bepu_Playground"
-    ],
-    "tags": [
-      "3D",
-      "Rendering",
-      "Instancing",
-      "Bepu",
-      "Physics",
-      "Draw Calls",
-      "Performance",
-      "Entity Component",
-      "Advanced"
-    ],
-    "order": 22,
-    "enabled": true,
-    "created": "2026-08-07",
-    "isDraft": false,
-    "projectName": "Example22_Instancing_EntityTransform",
-    "projectPath": "Example22_Instancing_EntityTransform\\Program.cs"
-  },
-  {
-    "title": {
-      "en": "Game - Cubicle Calamity",
-      "cs": "Hra - Cubicle Calamity"
-    },
-    "level": "Advanced",
-    "category": "Game",
-    "complexity": 5,
-    "description": {
-      "en": "A colour-match collapse puzzle built entirely from code. A 10x10x10 platform of cubes builds\nitself one layer at a time, clicking a cube clears every same-coloured cube connected to it, and\nwhat is left above drops into the gap.\nShows how to structure a whole game without the editor: scene setup split from gameplay, a custom\nBepu body that constrains cubes to their own column, screen-space text drawn without the UI\nsystem, and mouse picking through a physics raycast.\n",
-      "cs": "Logick\u00E1 hra na skl\u00E1d\u00E1n\u00ED barev postaven\u00E1 v\u00FDhradn\u011B v k\u00F3du. Platforma 10x10x10 z kostek se stav\u00ED\npo vrstv\u00E1ch, kliknut\u00ED na kostku odstran\u00ED v\u0161echny propojen\u00E9 kostky stejn\u00E9 barvy a to, co z\u016Fstane\nnad nimi, spadne do vznikl\u00E9 mezery.\nUkazuje, jak strukturovat celou hru bez editoru: odd\u011Blen\u00ED stavby sc\u00E9ny od hern\u00ED logiky, vlastn\u00ED\nBepu t\u011Bleso dr\u017E\u00EDc\u00ED kostku v jej\u00EDm sloupci, text v prostoru obrazovky bez UI syst\u00E9mu a v\u00FDb\u011Br\nmy\u0161\u00ED pomoc\u00ED fyzik\u00E1ln\u00EDho raycastu.\n"
-    },
-    "concepts": [
-      "Structuring a code-only game into setup, components and scripts",
-      "Constraining a Bepu body to one axis with a custom BodyComponent",
-      "Locking rotation by zeroing the whole inverse inertia tensor",
-      "Raising the solver substep count to settle a rotation-locked stack",
-      "Picking entities with a camera raycast from the mouse",
-      "Drawing screen-space text without the UI system: EntityTextComponent",
-      "Flood filling a grid to find connected same-coloured neighbours",
-      "Using helpers: Add3DCamera, Add3DGround, AddGizmo, Create3DPrimitive"
-    ],
-    "related": [
-      "Example09_Renderer",
-      "Example05_SimpleGeometry"
-    ],
-    "tags": [
-      "3D",
-      "Bepu",
-      "Game",
-      "Physics",
-      "Raycast",
-      "Mouse Picking",
-      "Rigid Body",
-      "Inertia",
-      "Text Rendering",
-      "Materials",
-      "Lighting",
-      "Advanced"
-    ],
-    "order": 32000,
-    "enabled": true,
-    "created": "2025-04-20",
-    "isDraft": false,
-    "projectName": "Example_CubicleCalamity",
-    "projectPath": "Example_CubicleCalamity\\Program.cs"
-  }
-]
+    {
+      "title": {
+        "en": "GPU Instancing",
+        "cs": "GPU instancing"
+      },
+      "level": "Beginners",
+      "category": "Rendering",
+      "complexity": 3,
+      "order": 21,
+      "language": "csharp",
+      "description": {
+        "en": "Render two identical walls of cubes built two different ways, side by side. The left wall uses one\nentity per cube and costs one draw call each; the right wall uses a single entity with an\nInstancingComponent and an array of world matrices, and costs one draw call in total. Both share the\nsame Model, so the only difference is instancing. Toggle each wall to compare the frame rate, and\nnote that the InstancingRenderFeature has to be added to the compositor by hand in code-only projects.",
+        "cs": "Vykreslení dvou stejných stěn z kostek postavených dvěma způsoby vedle sebe. Levá stěna používá jednu\nentitu na kostku a stojí jedno vykreslovací volání za každou z nich; pravá stěna používá jedinou entitu\ns komponentou InstancingComponent a pole světových matic a stojí celkem jedno volání. Obě sdílejí\nstejný Model, takže jediným rozdílem je instancing. Přepínáním stěn porovnáte snímkovou frekvenci.\nPozor, v projektech psaných pouze kódem je nutné přidat InstancingRenderFeature do kompozitoru ručně."
+      },
+      "concepts": [
+        "Reducing draw calls with an InstancingComponent",
+        "Building an InstancingUserArray from world matrices",
+        "Registering InstancingRenderFeature on the MeshRenderFeature",
+        "Sharing one Model between many entities",
+        "Toggling a ModelComponent to compare rendering cost",
+        "Using helpers: SetupBase3D",
+        "Using helpers: Add3DCameraController",
+        "Using helpers: AddProfiler"
+      ],
+      "tags": [
+        "3D",
+        "Rendering",
+        "Instancing",
+        "Draw Calls",
+        "Performance",
+        "GPU",
+        "Model",
+        "Compositor",
+        "Beginners"
+      ],
+      "related": [
+        "Example22_Instancing_EntityTransform",
+        "Example01_Basic3DScene_Primitives",
+        "Example09_Renderer"
+      ],
+      "enabled": true,
+      "created": "2026-08-07",
+      "projectName": "Example21_Instancing",
+      "projectPath": "Example21_Instancing/Program.cs",
+      "relatedSlugs": [],
+      "effectiveLanguage": "csharp"
+    }
+  ]
+}

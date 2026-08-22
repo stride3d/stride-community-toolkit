@@ -26,13 +26,20 @@
         <PropertyGroup>
             <ExamplesRoot>$(MSBuildProjectDirectory)\..\..\examples\code-only</ExamplesRoot>
             <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
+            <MediaPath>$(MSBuildProjectDirectory)\..\..\docs\manual\code-only\examples\media</MediaPath>
             <GeneratorProject>$(MSBuildProjectDirectory)\..\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
+            <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot;</GeneratorArgs>
         </PropertyGroup>
 
         <Message Text="Generating examples metadata manifest..." Importance="high" />
-        <Message Text="Executing: dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot;" Importance="high" />
+        <Message Text="Executing: dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" Importance="high" />
 
-        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot;" ContinueOnError="WarnAndContinue" />
+        <!--
+            ContinueOnError stays until the frontmatter backfill lands. Once every example carries a
+            schema v1 block, add the strict switch to GeneratorArgs and drop this attribute, so a
+            malformed block fails the build instead of yielding a quietly incomplete manifest (plan D10).
+        -->
+        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" ContinueOnError="WarnAndContinue" />
 
         <!-- Include generated manifest in output -->
         <ItemGroup>
