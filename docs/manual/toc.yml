@@ -2,6 +2,8 @@
   href: index.md
 - name: Getting Started
   href: getting-started.md
+- name: Components and Scripts
+  href: components-and-scripts.md
 # - name: What's new in docs
 #   href: whats-new.md
 - name: Code-Only
