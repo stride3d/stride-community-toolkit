@@ -422,6 +422,47 @@
   },
   {
     "title": {
+      "en": "3D Letters (Mesh Text)",
+      "cs": "3D písmena (text jako mesh)"
+    },
+    "level": "Getting Started",
+    "category": "Text",
+    "complexity": 2,
+    "description": {
+      "en": "A gallery of every glyph LetterMeshFactory can build - digits, letters and the dash - as solid\nextruded meshes that catch the light like any other geometry, plus a frame counter whose digits\nare rebuilt as a new mesh every frame. The counter demonstrates the one rule of dynamic mesh\ntext: dispose the old GPU buffers before swapping in the new mesh, or leak a buffer pair per\nrebuild.\n",
+      "cs": "Galerie všech znaků, které LetterMeshFactory umí postavit - číslice, písmena a pomlčka - jako\nplné vytlačené meshe, které chytají světlo jako jakákoli jiná geometrie, plus počítadlo snímků,\njehož číslice se každý snímek staví znovu jako nový mesh. Počítadlo ukazuje jediné pravidlo\ndynamického textu z meshů: před výměnou meshe uvolnit staré GPU buffery, jinak každá přestavba\nuteče o pár bufferů.\n"
+    },
+    "concepts": [
+      "Solid 3D lettering from code: LetterMeshFactory.CreateTextMeshDraw",
+      "Which characters exist - SupportedCharacters - and why fonts are not involved",
+      "Static lettering built once versus text that changes",
+      "Rebuilding a mesh safely: dispose the old buffers first",
+      "centerOrigin for strings centred on their entity",
+      "When to use EntityTextComponent or WorldTextComponent instead"
+    ],
+    "related": [
+      "Example01_EntityText",
+      "Example01_WorldText",
+      "Example05_ProceduralGeometry",
+      "Example_CubicleCalamity"
+    ],
+    "tags": [
+      "3D",
+      "Text",
+      "Mesh",
+      "Procedural Geometry",
+      "Letters",
+      "Getting Started"
+    ],
+    "order": 230,
+    "enabled": true,
+    "created": "2026-08-22",
+    "isDraft": false,
+    "projectName": "Example01_Letters3D",
+    "projectPath": "Example01_Letters3D\\Program.cs"
+  },
+  {
+    "title": {
       "en": "Give Me a Cube",
       "cs": "Dej mi kostku"
     },
