@@ -48,7 +48,7 @@ public static class LetterMeshFactory
     /// Gets the characters that have an authored glyph. Space is also accepted and advances without
     /// drawing; lookups are case-insensitive.
     /// </summary>
-    public static string SupportedCharacters => "0123456789-AEGIMOQRSTUVXYZ";
+    public static string SupportedCharacters => "0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     /// <summary>
     /// Builds one mesh containing the given text as solid extruded glyphs.
@@ -146,14 +146,25 @@ public static class LetterMeshFactory
             '5' => [Top(), LeftBar(MiddleTopY, TopY), Middle(), RightBar(BottomY, MiddleY), Bottom()],
             '6' => [Top(), LeftBar(MiddleTopY, TopY), Middle(), LeftBar(BottomY, MiddleY), RightBar(BottomY, MiddleY), Bottom()],
             '7' => [Top(), RightBar(0, TopY)],
-            '8' => [Top(), Middle(), Bottom(), LeftBar(MiddleTopY, TopY), LeftBar(BottomY, MiddleY), RightBar(MiddleTopY, TopY), RightBar(BottomY, MiddleY)],
+            // B shares 8's glyph, as O shares 0's - the classic segment-display compromise
+            '8' or 'B' => [Top(), Middle(), Bottom(), LeftBar(MiddleTopY, TopY), LeftBar(BottomY, MiddleY), RightBar(MiddleTopY, TopY), RightBar(BottomY, MiddleY)],
             '9' => [Top(), LeftBar(MiddleTopY, TopY), Middle(), RightBar(MiddleTopY, TopY), RightBar(BottomY, MiddleY), Bottom()],
             '-' => [Rect(0.08f, MiddleY, Width - 0.08f, MiddleTopY)],
             'A' => [Top(), Middle(), LeftBar(MiddleTopY, TopY), LeftBar(0, MiddleY), RightBar(MiddleTopY, TopY), RightBar(0, MiddleY)],
+            'C' => [Top(), Bottom(), LeftBar(BottomY, TopY)],
+            // D is an O with its right corners cut at 45 degrees, which is what tells them apart
+            'D' => [Rect(0, 0, Stroke, 1), Rect(Stroke, TopY, 0.5f, 1), Rect(Stroke, 0, 0.5f, BottomY), RightBar(0.3f, 0.7f), CreateDTopCorner(), CreateDBottomCorner()],
             'E' => [Top(), Middle(), Bottom(), LeftBar(MiddleTopY, TopY), LeftBar(BottomY, MiddleY)],
-            'I' => [Top(), Bottom(), Rect(0.24f, BottomY, 0.46f, TopY)],
+            'F' => [Top(), Middle(), LeftBar(MiddleTopY, TopY), LeftBar(0, MiddleY)],
             'G' => [Top(), Bottom(), LeftBar(BottomY, TopY), RightBar(BottomY, MiddleY), Rect(0.35f, MiddleY, Width, MiddleTopY)],
+            'H' => [Rect(0, 0, Stroke, 1), Rect(RightX, 0, Width, 1), Rect(Stroke, MiddleY, RightX, MiddleTopY)],
+            'I' => [Top(), Bottom(), Rect(0.24f, BottomY, 0.46f, TopY)],
+            'J' => [Bottom(), RightBar(BottomY, 1), LeftBar(BottomY, 0.45f)],
+            'K' => [Rect(0, 0, Stroke, 1), CreateKUpperArm(), CreateKLowerArm()],
+            'L' => [Bottom(), LeftBar(BottomY, 1)],
             'M' => [Rect(0, 0, Stroke, 1), Rect(RightX, 0, Width, 1), Rect(Stroke, 0.6f, RightX, 1)],
+            'N' => [Rect(0, 0, Stroke, 1), Rect(RightX, 0, Width, 1), CreateNDiagonal()],
+            'P' => [Rect(0, 0, Stroke, 1), Rect(Stroke, TopY, Width, 1), RightBar(MiddleTopY, TopY), Rect(Stroke, MiddleY, Width, MiddleTopY)],
             // Q is an O with a tail tucked inside the counter: a triangle abutting the bottom bar's
             // top edge and the right bar's left edge, so nothing overlaps
             'Q' => [Top(), Bottom(), LeftBar(BottomY, TopY), RightBar(BottomY, TopY), CreateQTail()],
@@ -162,6 +173,9 @@ public static class LetterMeshFactory
             'T' => [Top(), Rect(0.24f, 0, 0.46f, TopY)],
             'U' => [Bottom(), LeftBar(BottomY, 1), RightBar(BottomY, 1)],
             'V' => [CreateV()],
+            // W is a U with a centre stem rising from the bottom bar - a solid bottom block, like
+            // M's top one, made it indistinguishable from U
+            'W' => [Bottom(), LeftBar(BottomY, 1), RightBar(BottomY, 1), Rect(0.24f, BottomY, 0.46f, 0.65f)],
             'X' => [CreateX()],
             'Y' => [CreateY()],
             'Z' => [CreateZ()],
@@ -199,6 +213,33 @@ public static class LetterMeshFactory
     /// </summary>
     private static Vector2[] CreateQTail() =>
         [new(0.28f, BottomY), new(RightX, 0.42f), new(RightX, BottomY)];
+
+    /// <summary>
+    /// D's angled top-right corner: a band joining the shortened top bar to the shortened right bar.
+    /// </summary>
+    private static Vector2[] CreateDTopCorner() =>
+        [new(0.5f, TopY), new(0.5f, 1), new(Width, 0.7f), new(RightX, 0.7f)];
+
+    /// <summary>D's angled bottom-right corner, mirroring the top one.</summary>
+    private static Vector2[] CreateDBottomCorner() =>
+        [new(0.5f, BottomY), new(RightX, 0.3f), new(Width, 0.3f), new(0.5f, 0)];
+
+    /// <summary>
+    /// K's upper arm: from the spine's midpoint up to the top-right. Both arms leave the spine at
+    /// the same point, so they touch without overlapping.
+    /// </summary>
+    private static Vector2[] CreateKUpperArm() =>
+        [new(Stroke, 0.5f), new(Stroke, 0.66f), new(Width - 0.28f, 1), new(Width, 1)];
+
+    /// <summary>K's lower arm: from the spine's midpoint down to the bottom-right.</summary>
+    private static Vector2[] CreateKLowerArm() =>
+        [new(Stroke, 0.34f), new(Stroke, 0.5f), new(Width, 0), new(Width - 0.28f, 0)];
+
+    /// <summary>
+    /// N's diagonal: a band from the top of the left spine to the bottom of the right one.
+    /// </summary>
+    private static Vector2[] CreateNDiagonal() =>
+        [new(Stroke, 0.6f), new(Stroke, 1), new(RightX, 0.4f), new(RightX, 0)];
 
     private static Vector2[] CreateV() =>
         [new(0.22f, 0), new(0.48f, 0), new(Width, 1), new(0.46f, 1), new(0.35f, 0.40f), new(0.24f, 1), new(0, 1)];
