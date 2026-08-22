@@ -32,21 +32,23 @@ public static class MetadataVocabulary
     ];
 
     /// <summary>
-    /// Topic categories. Provisional pending D29 in <c>notes/plans/examples-metadata.md</c> — the first
-    /// seven are already in use in the repository, the rest cover the examples still to be backfilled.
+    /// Topic categories. A category names the *lesson*, not the scenery: a keyboard-menu example that
+    /// happens to spawn shapes is <c>Input</c>, and an instancing example is <c>Performance</c> whether it
+    /// draws cubes or physics bodies. <c>Geometry</c> and <c>Debug</c> have no members yet but are
+    /// earmarked for the <c>Example05_*</c> and <c>Example08_*</c> families.
     /// </summary>
     public static readonly string[] Categories =
     [
-        "Getting Started",
         "Shapes",
         "Geometry",
         "Physics",
         "Rendering",
+        "Performance",
         "Text",
         "UI",
         "Input",
         "Scripts",
-        "Integration",
+        "Networking",
         "Debug",
         "Game"
     ];

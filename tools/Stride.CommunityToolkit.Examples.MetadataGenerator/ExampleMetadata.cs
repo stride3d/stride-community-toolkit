@@ -125,4 +125,43 @@ public class ExampleMetadata
     [YamlIgnore]
     [JsonIgnore]
     public string? EffectiveMedia => Media ?? (Slug is null ? null : $"{Slug}.webp");
+
+    /// <summary>The language every localised value falls back to.</summary>
+    public const string FallbackLanguage = "en";
+
+    /// <summary>Gets the title in the requested language, falling back to English.</summary>
+    /// <param name="language">The language code, for example <c>cs</c>.</param>
+    /// <returns>The best available title, or <see langword="null"/> if there is none at all.</returns>
+    public string? TitleFor(string language) => Localised(Title, language);
+
+    /// <summary>Gets the description in the requested language, falling back to English.</summary>
+    /// <param name="language">The language code, for example <c>cs</c>.</param>
+    /// <returns>The best available description, or <see langword="null"/> if there is none at all.</returns>
+    public string? DescriptionFor(string language) => Localised(Description, language);
+
+    /// <summary>
+    /// Picks a localised value, falling back to English when the requested language is absent.
+    /// </summary>
+    /// <remarks>
+    /// Translations are optional and partial by design: <c>cs</c> is consumed only by the launchers,
+    /// never by the docs (D5), and most examples will carry English alone. A missing translation must
+    /// therefore read as "not translated yet" and show the English, never as a blank label. Putting the
+    /// rule here rather than in each consumer is what stops one of them forgetting it.
+    /// </remarks>
+    private static string? Localised(Dictionary<string, string>? values, string language)
+    {
+        if (values is null)
+        {
+            return null;
+        }
+
+        if (values.TryGetValue(language, out var value) && !string.IsNullOrWhiteSpace(value))
+        {
+            return value;
+        }
+
+        return values.TryGetValue(FallbackLanguage, out var fallback) && !string.IsNullOrWhiteSpace(fallback)
+            ? fallback
+            : null;
+    }
 }
