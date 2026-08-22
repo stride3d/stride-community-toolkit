@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using YamlDotNet.Serialization;
 
 namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
@@ -112,10 +113,16 @@ public class ExampleMetadata
     public List<string>? RelatedSlugs { get; set; }
 
     /// <summary>Gets the effective language, applying the <c>csharp</c> default.</summary>
+    /// <remarks>A convenience for the generator only. It is kept out of the manifest because it would
+    /// duplicate <see cref="Language"/>, which the parser already fills in from the file extension.</remarks>
     [YamlIgnore]
+    [JsonIgnore]
     public string EffectiveLanguage => Language ?? Core.MetadataVocabulary.DefaultLanguage;
 
     /// <summary>Gets the effective media filename, applying the <c>&lt;slug&gt;.webp</c> default.</summary>
+    /// <remarks>A convenience for the docs generator only. It is kept out of the manifest because a
+    /// defaulted name would assert a screenshot that, for most examples, does not exist yet.</remarks>
     [YamlIgnore]
+    [JsonIgnore]
     public string? EffectiveMedia => Media ?? (Slug is null ? null : $"{Slug}.webp");
 }
