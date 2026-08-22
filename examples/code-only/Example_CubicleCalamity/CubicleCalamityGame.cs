@@ -76,7 +76,7 @@ public class CubicleCalamityGame(Game game)
 
         // The toolkit rig, rather than a local copy of it: six lights down the six world axes. It is
         // dim because the cubes supply most of their own colour - this is only here for edge definition.
-        game.AddAllDirectionLighting(intensity: 5, showLightGizmo: false);
+        game.AddStudioLighting();
 
         _spawner.SpawnLayer(0);
 
