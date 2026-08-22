@@ -16,6 +16,7 @@ builder.Services.AddSerilog((services, configuration) =>
 
 builder.Services.AddScoped<ExampleScanner>();
 builder.Services.AddScoped<MetadataParser>();
+builder.Services.AddScoped<MetadataValidator>();
 builder.Services.AddScoped<ManifestWriter>();
 builder.Services.AddScoped<ManifestService>();
 

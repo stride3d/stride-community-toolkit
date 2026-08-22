@@ -1,27 +1,39 @@
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 
 /// <summary>
-/// Writes example metadata collections to JSON manifest files.
+/// Writes the example manifest to disk.
 /// </summary>
 public class ManifestWriter(ILogger<ManifestWriter> logger)
 {
-    private readonly JsonSerializerOptions _jsonOptions = new()
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        // Without this, every non-ASCII character in the Czech titles is written as a \uXXXX escape,
+        // which makes the manifest unreadable in review for no gain.
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     /// <summary>
-    /// Writes the collection of example metadata to a JSON file.
+    /// Serializes the examples into the versioned envelope and writes it to
+    /// <paramref name="outputPath"/>.
     /// </summary>
-    /// <param name="examples">The collection of example metadata to serialize.</param>
-    /// <param name="outputPath">The full path where the JSON file should be written.</param>
-    public async Task WriteManifestAsync(IEnumerable<ExampleMetadata> examples, string outputPath)
+    /// <param name="examples">The examples to include, already validated and sorted.</param>
+    /// <param name="outputPath">The full path of the manifest file to write.</param>
+    /// <param name="generatedAtUtc">The timestamp to stamp into the envelope.</param>
+    /// <param name="cancellationToken">Cancels the write.</param>
+    public async Task WriteManifestAsync(
+        IReadOnlyList<ExampleMetadata> examples,
+        string outputPath,
+        DateTimeOffset generatedAtUtc,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(examples);
         ArgumentException.ThrowIfNullOrWhiteSpace(outputPath);
@@ -30,28 +42,35 @@ public class ManifestWriter(ILogger<ManifestWriter> logger)
 
         EnsureOutputDirectoryExists(outputPath);
 
-        var examplesList = examples.ToList();
-        var json = JsonSerializer.Serialize(examplesList, _jsonOptions);
+        var manifest = new ExampleManifest
+        {
+            GeneratedAt = generatedAtUtc.UtcDateTime.ToString("O"),
+            ToolVersion = GetToolVersion(),
+            Examples = examples
+        };
 
-        await File.WriteAllTextAsync(outputPath, json, Encoding.UTF8);
+        var json = JsonSerializer.Serialize(manifest, JsonOptions);
 
-        logger.LogInformation("Successfully wrote manifest with {Count} examples", examplesList.Count);
+        await File.WriteAllTextAsync(outputPath, json, new UTF8Encoding(false), cancellationToken);
+
+        logger.LogInformation("Wrote manifest schema v{SchemaVersion} with {Count} example(s)",
+            manifest.SchemaVersion, manifest.Count);
     }
+
+    private static string GetToolVersion()
+        => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.0.0.0";
 
     private void EnsureOutputDirectoryExists(string outputPath)
     {
         var outputDirectory = Path.GetDirectoryName(outputPath);
 
-        if (string.IsNullOrEmpty(outputDirectory))
+        if (string.IsNullOrEmpty(outputDirectory) || Directory.Exists(outputDirectory))
         {
             return;
         }
 
-        if (!Directory.Exists(outputDirectory))
-        {
-            logger.LogInformation("Creating output directory: {Directory}", outputDirectory);
+        logger.LogInformation("Creating output directory: {Directory}", outputDirectory);
 
-            Directory.CreateDirectory(outputDirectory);
-        }
+        Directory.CreateDirectory(outputDirectory);
     }
 }

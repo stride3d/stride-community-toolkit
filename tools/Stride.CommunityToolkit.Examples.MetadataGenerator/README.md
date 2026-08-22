@@ -1,100 +1,148 @@
-# Stride Community Toolkit - Examples Metadata Generator
+# Stride Community Toolkit — Examples Metadata Generator
 
-A command-line tool that scans Stride example projects and generates metadata JSON files for documentation and tooling purposes.
+Scans the code-only example projects, validates the `---example-metadata` block each one carries, and
+writes `examples-manifest.json`.
 
-## Architecture
-
-This project follows a modern C# 14/.NET 10 console application pattern that integrates:
-- **System.CommandLine 2.0** for CLI parsing
-- **Microsoft.Extensions.Hosting** for dependency injection
-- **Clean separation of concerns** with command handlers as services
-- **Constructor injection** throughout for testability
-
-### Pattern: DI-Integrated Command Handlers
-
-Since `System.CommandLine.Hosting` was deprecated, we use a custom integration pattern:
-
-1. **Build the DI container once** at application startup
-2. **Register command handlers as scoped services**
-3. **Instantiate CLI configuration** with injected `IServiceProvider`
-4. **Each command creates a DI scope** per invocation
-5. **Handlers receive parsed arguments** and return exit codes
-
-```csharp
-// Program.cs - Clean and minimal
-var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddScoped<ManifestService>();
-using var host = builder.Build();
-
-// Constructor injection for CLI configuration
-var cliConfiguration = new CommandLineConfiguration(host.Services);
-var rootCommand = cliConfiguration.CreateRootCommand();
-
-var parseResult = rootCommand.Parse(args);
-return parseResult.Invoke();
-```
-
-### Project Structure
-
-```
-Services/
-  └─ ManifestService.cs             # Business logic for manifest generation
-CommandLineConfiguration.cs         # CLI structure and command setup (instance-based)
-MetadataScanner.cs                  # Core scanning logic
-Program.cs                          # Entry point (DI setup + execution)
-```
+The manifest is the single source of truth the docs generator and both example launchers are moving
+onto. The schema, and the plan for getting there, live in
+[`notes/plans/examples-metadata.md`](../../notes/plans/examples-metadata.md).
 
 ## Commands
 
-### `scan <examples-root-path>`
-Scans example directories and lists discovered metadata.
+### `scan <examples-root-path> [--media-path <dir>]`
+
+Finds every metadata block, validates it, and prints the findings. Writes nothing.
 
 ```bash
-MetadataGenerator scan "../../examples/code-only"
-# or
 dotnet run -- scan "../../examples/code-only"
 ```
 
-### `generate <examples-root-path>`
-Generates a JSON manifest file from example metadata.
+### `generate <examples-root-path> [--output <file>] [--media-path <dir>] [--strict]`
+
+The same scan, then writes the manifest.
 
 ```bash
-MetadataGenerator generate "../../examples/code-only"
-# or
-dotnet run -- generate "../../examples/code-only"
+dotnet run -- generate "../../examples/code-only" --output examples-manifest.json
 ```
 
-### Default Path
-If no path is provided, defaults to `../../../../../examples/code-only` relative to the tool's location.
+| Option | Meaning |
+|---|---|
+| `--output`, `-o` | Manifest path. Defaults to `examples-manifest.json` in the current directory. |
+| `--media-path` | Docs media folder. When given, every explicit `media:` filename is checked to exist. Skipped when omitted. |
+| `--strict` | Treat validation errors as fatal: report them, write no manifest, exit non-zero. |
 
-## Build Output
+The examples root defaults to `../../examples/code-only`, relative to the current directory.
 
-The project compiles to `MetadataGenerator.exe` (set via `<AssemblyName>` in the `.csproj`), keeping the namespace as `Stride.CommunityToolkit.Examples.MetadataGenerator`.
+### Exit codes
 
-## Key Benefits of This Pattern
+| Code | Meaning |
+|---|---|
+| `0` | Success. |
+| `1` | Could not run — missing directory, failed write. |
+| `2` | Scan found no metadata blocks at all, which almost always means the wrong path. |
+| `3` | Validation errors, with `--strict` in force (`generate`) or always (`scan`). |
 
-1. **Testable**: All classes use constructor injection and can be unit tested
-2. **Type-safe**: Strong typing throughout with C# 14 primary constructors
-3. **Clean**: Program.cs is minimal (~20 lines); configuration is separate
-4. **Maintainable**: Clear separation between CLI setup, DI, and business logic
-5. **Modern**: Leverages latest C# and .NET patterns
-6. **Extensible**: Easy to add new commands or dependencies
-7. **Consistent**: Uses constructor injection everywhere (no static utility classes)
+## Discovery
 
-## Design Decisions
+Every `.cs`, `.fs` and `.vb` file under the examples root is examined, excluding `bin` and `obj`. The
+**metadata block itself** marks a file as an example — there is no `Program.cs` convention — which lets
+file-based apps use a self-describing filename and lets one folder hold several examples. A unique
+`slug` is what keeps that honest.
 
-### Why Instance-Based `CommandLineConfiguration`?
+The block is a comment, so its delimiters follow the language:
 
-Instead of a static class, we use constructor injection because:
-- **Testability**: Can mock `IServiceProvider` in unit tests
-- **Consistency**: Matches the pattern used by command handlers
-- **Flexibility**: Easy to inject additional dependencies if needed
-- **Best Practice**: Follows SOLID principles and DI conventions
+```csharp
+/* ---example-metadata
+slug: mesh-outline
+...
+--- */
+```
 
-## System.CommandLine 2.0 Notes
+```fsharp
+(* ---example-metadata
+slug: mesh-outline-fs
+...
+--- *)
+```
 
-- Uses `SetAction` (not deprecated `SetHandler`)
-- `Argument<T>` requires explicit name parameter
-- `ParseResult.GetValue()` for type-safe value extraction
-- `ParseResult.Invoke()` for synchronous command execution
-- DI scope created per command invocation for proper resource management
+```vb
+' ---example-metadata
+' slug: mesh-outline-vb
+' ...
+' ---
+```
+
+## Validation
+
+Findings are aggregated: one run reports every problem across every example, rather than stopping at
+the first. Errors are fatal only under `--strict`, so the checks can be introduced before the
+frontmatter backfill is finished.
+
+Checked: required fields (`slug`, `title.en`, `level`, `category`); kebab-case and globally unique
+`slug`; `level` / `category` / `language` against the closed sets in `Core/MetadataVocabulary.cs`;
+`complexity` within 1–5; `order` unique within each `(language, level)` group; `related:` names
+resolving to real project folders; explicit `media:` files existing; `language:` agreeing with the file
+extension; and `level` names not duplicated into `tags`.
+
+Two checks run against the **source text** rather than the parsed object, because they are invisible
+afterwards — see `Core/YamlSourceInspector.cs`:
+
+- **An unquoted `#`** starts a YAML comment and silently truncates its value. `- Declaring NuGet
+  packages inline with #:package` becomes `- Declaring NuGet packages inline with`, with no error.
+- **An unquoted `": "` inside a sequence item** turns the item into a mapping and aborts parsing deep
+  inside YamlDotNet with "Uninitialized Strings cannot be created" — a message that names neither the
+  line nor the cause. The inspector's diagnosis is attached to the failure, ahead of the deserializer's
+  own message.
+
+**Unknown keys are reported, with a suggestion.** `IgnoreUnmatchedProperties` is still enabled on the
+deserializer, so a stray key does not abort the file; instead the literal key list is captured and
+diffed against the schema. This is the check that catches `Order:` — which, under the camelCase naming
+convention, was silently discarded from two examples.
+
+## Output
+
+A versioned envelope, not a bare array:
+
+```json
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-22T22:28:23.1257046Z",
+  "toolVersion": "1.0.0.0",
+  "count": 22,
+  "examples": [ { "slug": "mesh-outline", "...": "..." } ]
+}
+```
+
+Examples are sorted by language, then level, then `order`. `projectPath` uses forward slashes so the
+file is identical whichever platform generated it, and non-ASCII characters are written literally so
+the Czech titles stay readable in review.
+
+`examples-manifest.json` is a **build artifact** — `generatedAt` changes on every run — so it is
+gitignored and regenerated by the pre-build hook in the Launcher `.csproj`.
+
+## Architecture
+
+```
+Core/
+  MetadataVocabulary.cs      # The closed sets: levels, categories, languages. Add new values here.
+  ParsedExample.cs           # A parsed block plus the raw text and literal keys it came from
+  ValidationMessage.cs       # Severity + attribution for a single finding
+  YamlMetadataExtractor.cs   # Pulls the block out of C# / F# / VB comment syntax
+  YamlSourceInspector.cs     # Source-text checks that survive a failed parse
+Services/
+  ExampleScanner.cs          # Finds candidate files and project folders
+  MetadataParser.cs          # Deserializes one block; normalises paths and trailing newlines
+  MetadataValidator.cs       # Aggregated schema validation; resolves related: to slugs
+  ManifestService.cs         # Orchestration, reporting, exit codes
+  ManifestWriter.cs          # Serializes the envelope
+CommandLineConfiguration.cs  # CLI structure (instance-based, takes IServiceProvider)
+ExampleMetadata.cs           # Schema v1 model
+ExampleManifest.cs           # The envelope
+Program.cs                   # Host + DI setup
+```
+
+`System.CommandLine.Hosting` is deprecated, so DI is wired by hand: the host is built once, handlers
+are registered as scoped services, `CommandLineConfiguration` takes the `IServiceProvider`, and each
+command opens its own scope.
+
+The build output is `MetadataGenerator.exe` (`<AssemblyName>`), with the namespace unchanged.
