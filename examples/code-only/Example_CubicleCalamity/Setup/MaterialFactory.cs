@@ -64,4 +64,45 @@ public static class MaterialFactory
 
         return materials;
     }
+
+    /// <summary>
+    /// Creates the normal cube materials plus the two hover variants: brightened for a clearable
+    /// group under the mouse, dimmed for a lone cube that can never be cleared.
+    /// </summary>
+    /// <param name="game">The running game, which owns the graphics device the materials are created on.</param>
+    /// <returns>All three material sets, each keyed by the cube's base colour.</returns>
+    /// <remarks>
+    /// The variants are built once here, not on hover: a material is a GPU resource, and hovering
+    /// happens every frame. The tinting uses <see cref="Color.Lerp"/> rather than
+    /// <c>Color * float</c>, which scales the alpha along with the RGB - the exact trap described on
+    /// <see cref="CreateCubeMaterials"/>.
+    /// </remarks>
+    public static CubeMaterialSet CreateCubeMaterialSet(Game game)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+
+        var brightened = new Dictionary<Color, Material>();
+        var dimmed = new Dictionary<Color, Material>();
+
+        foreach (var colour in GameSettings.Colours)
+        {
+            // Lifted toward white it reads as "lit up"; sunk toward black it reads as "switched
+            // off" - both keep enough hue that the cube's colour identity survives the hover
+            brightened.Add(colour, game.CreateFlatMaterial(Color.Lerp(colour, Color.White, 0.45f)));
+            dimmed.Add(colour, game.CreateFlatMaterial(Color.Lerp(colour, Color.Black, 0.65f)));
+        }
+
+        return new CubeMaterialSet(CreateCubeMaterials(game), brightened, dimmed);
+    }
 }
+
+/// <summary>
+/// The cube materials in all three hover states, each keyed by the cube's base colour.
+/// </summary>
+/// <param name="Normal">What every cube wears when the mouse is elsewhere.</param>
+/// <param name="Brightened">Worn by every member of a clearable group under the mouse.</param>
+/// <param name="Dimmed">Worn by a hovered lone cube, to say "this one is dead" without a click.</param>
+public sealed record CubeMaterialSet(
+    IReadOnlyDictionary<Color, Material> Normal,
+    IReadOnlyDictionary<Color, Material> Brightened,
+    IReadOnlyDictionary<Color, Material> Dimmed);

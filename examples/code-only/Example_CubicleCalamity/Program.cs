@@ -17,7 +17,7 @@ title:
 level: Advanced
 category: Game
 complexity: 5
-order: 80
+order: 180
 description:
   en: |-
     A colour-match collapse puzzle built entirely from code. A 10x10x10 platform of cubes builds

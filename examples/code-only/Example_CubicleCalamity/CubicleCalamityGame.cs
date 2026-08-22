@@ -12,7 +12,6 @@ using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using Stride.Rendering;
 
 namespace Example_CubicleCalamity;
 
@@ -36,7 +35,7 @@ public class CubicleCalamityGame(Game game)
     private readonly CubeGrid _grid = new();
     private readonly ScoreKeeper _keeper = new();
 
-    private Dictionary<Color, Material> _materials = [];
+    private CubeMaterialSet? _materials;
     private CubeSpawner? _spawner;
     private GameAudio? _audio;
     private ScoreboardScript? _scoreboard;
@@ -68,14 +67,15 @@ public class CubicleCalamityGame(Game game)
         game.Add3DGround();
         game.AddProfiler();
 
-        _materials = MaterialFactory.CreateCubeMaterials(game);
-        _spawner = new CubeSpawner(game, scene, _grid, _materials, Seed);
+        // Normal materials plus the hover variants - all built once, because materials are GPU resources
+        _materials = MaterialFactory.CreateCubeMaterialSet(game);
+        _spawner = new CubeSpawner(game, scene, _grid, _materials.Normal, Seed);
         _audio = new GameAudio(game);
 
         AddOrientationGizmo();
 
-        // The toolkit rig, rather than a local copy of it: six lights down the six world axes. It is
-        // dim because the cubes supply most of their own colour - this is only here for edge definition.
+        // The toolkit's studio rig: key, fill and rim. The cubes supply most of their own colour, so
+        // this is here for edge definition and to model the game-over letters.
         game.AddStudioLighting();
 
         _spawner.SpawnLayer(0);
@@ -254,6 +254,14 @@ public class CubicleCalamityGame(Game game)
 
         _clickScript = entity.Get<CubeClickScript>();
         _clickScript!.RestartRequested = Restart;
+
+        // The hover preview rides on the same entity: it reads the grid the click writes
+        entity.Add(new HoverHighlightScript
+        {
+            Grid = _grid,
+            Materials = _materials!,
+            Click = _clickScript,
+        });
 
         entity.Scene = _scene;
     }
