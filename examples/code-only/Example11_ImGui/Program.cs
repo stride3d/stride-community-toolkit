@@ -64,6 +64,7 @@ related:
   - Example11_ImGuiNet
   - Example03_StrideUI_CapsuleAndWindow
 media: stride-game-engine-example-11-imgui-ui.webp
+screenshot: false
 enabled: true
 created: 2024-10-26
 ---
