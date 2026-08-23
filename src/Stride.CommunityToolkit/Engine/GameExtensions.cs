@@ -43,6 +43,11 @@ public static class GameExtensions
         ArgumentNullException.ThrowIfNull(game);
 
         game.Script.Scheduler.Add(RootScript);
+
+        // Opt-in, environment-driven, and a no-op unless a capture was asked for. Every example reaches
+        // the loop through Run, which is what makes this one place instead of sixty.
+        ScreenshotCapture.TrySchedule(game);
+
         game.Run(context);
 
         async Task RootScript()
@@ -80,6 +85,11 @@ public static class GameExtensions
         ArgumentNullException.ThrowIfNull(game);
 
         game.Script.Scheduler.Add(RootScript);
+
+        // Opt-in, environment-driven, and a no-op unless a capture was asked for. Every example reaches
+        // the loop through Run, which is what makes this one place instead of sixty.
+        ScreenshotCapture.TrySchedule(game);
+
         game.Run(context);
 
         async Task RootScript()

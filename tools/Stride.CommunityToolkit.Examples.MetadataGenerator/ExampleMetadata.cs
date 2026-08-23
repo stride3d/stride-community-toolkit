@@ -79,6 +79,26 @@ public class ExampleMetadata
     /// <summary>Gets or sets the display name used in <c>toc.yml</c>. Falls back to the English title.</summary>
     public string? TocName { get; set; }
 
+    /// <summary>
+    /// Gets or sets whether the automated screenshot run captures this example.
+    /// Defaults to <see langword="true"/>.
+    /// </summary>
+    /// <remarks>
+    /// Set to <see langword="false"/> for anything that cannot produce a meaningful frame on its own:
+    /// the SignalR pair needs a running server, and an input-driven example shows an empty scene until
+    /// someone presses a key.
+    /// </remarks>
+    public bool? Screenshot { get; set; }
+
+    /// <summary>
+    /// Gets or sets which frame the screenshot run captures. Defaults to the capture system's own value.
+    /// </summary>
+    /// <remarks>
+    /// A frame index, not a delay. Raise it for a scene that needs longer to settle, lower it for one
+    /// that has already scattered by the default.
+    /// </remarks>
+    public int? ScreenshotFrame { get; set; }
+
     // --- launchers --------------------------------------------------------
 
     /// <summary>Gets or sets whether the example appears in the launchers. Defaults to <see langword="true"/>.</summary>
