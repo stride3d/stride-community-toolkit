@@ -27,6 +27,7 @@ builder.Services.AddScoped<ExampleScanner>();
 builder.Services.AddScoped<MetadataParser>();
 builder.Services.AddScoped<MetadataValidator>();
 builder.Services.AddScoped<ManifestWriter>();
+builder.Services.AddScoped<DocsGenerator>();
 builder.Services.AddScoped<ManifestService>();
 
 using var host = builder.Build();

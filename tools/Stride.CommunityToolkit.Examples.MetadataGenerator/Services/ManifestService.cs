@@ -11,7 +11,8 @@ public class ManifestService(
     ExampleScanner exampleScanner,
     MetadataParser metadataParser,
     MetadataValidator metadataValidator,
-    ManifestWriter manifestWriter)
+    ManifestWriter manifestWriter,
+    DocsGenerator docsGenerator)
 {
     /// <summary>Everything worked.</summary>
     public const int ExitSuccess = 0;
@@ -149,6 +150,62 @@ public class ManifestService(
         await manifestWriter.WriteManifestAsync(ordered, outputPath, DateTimeOffset.UtcNow, cancellationToken);
 
         logger.LogInformation("Manifest generation completed");
+
+        return ExitSuccess;
+    }
+
+    /// <summary>
+    /// Scans, validates, and writes the example documentation.
+    /// </summary>
+    /// <param name="examplesRootPath">The root directory containing example projects.</param>
+    /// <param name="docsDirectory">The <c>docs/manual/code-only/examples</c> folder.</param>
+    /// <param name="mediaDirectory">The screenshot folder, or <see langword="null"/> to skip image links.</param>
+    /// <param name="dryRun">When <see langword="true"/>, report what would change and write nothing.</param>
+    /// <param name="cancellationToken">Cancels the run.</param>
+    /// <returns>One of the <c>Exit*</c> codes on this class.</returns>
+    /// <remarks>
+    /// Documentation is always generated from validated metadata: a page built from a block with a
+    /// missing slug or an unknown level would be wrong in ways that are tedious to spot by reading it,
+    /// so validation errors stop the run whether or not strict mode was asked for.
+    /// </remarks>
+    public async Task<int> GenerateDocsAsync(
+        DirectoryInfo? examplesRootPath,
+        DirectoryInfo? docsDirectory,
+        DirectoryInfo? mediaDirectory,
+        bool dryRun,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(examplesRootPath);
+        ArgumentNullException.ThrowIfNull(docsDirectory);
+
+        if (!docsDirectory.Exists)
+        {
+            logger.LogError("Docs directory does not exist: {Path}", docsDirectory.FullName);
+
+            return ExitFailure;
+        }
+
+        var scan = await ScanExamplesAsync(examplesRootPath, cancellationToken);
+
+        if (scan.Examples.Count == 0)
+        {
+            logger.LogError("No examples with metadata found under {Path}. Nothing to document", examplesRootPath.FullName);
+
+            return ExitNoExamplesFound;
+        }
+
+        var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
+        var messages = metadataValidator.Validate(published, mediaDirectory, exampleScanner.FindProjectNames(examplesRootPath));
+        var errorCount = ReportValidation(messages) + scan.Failures;
+
+        if (errorCount > 0)
+        {
+            logger.LogError("Validation failed with {Count} error(s). No documentation written", errorCount);
+
+            return ExitValidationFailed;
+        }
+
+        docsGenerator.Generate(Sort(published), docsDirectory, mediaDirectory, dryRun);
 
         return ExitSuccess;
     }

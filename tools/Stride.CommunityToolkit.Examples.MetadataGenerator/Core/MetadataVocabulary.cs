@@ -18,18 +18,26 @@ public static class MetadataVocabulary
     /// <summary>The language assumed when <c>language:</c> is omitted.</summary>
     public const string DefaultLanguage = "csharp";
 
+    /// <summary>Your first code-only Stride app.</summary>
+    public const string GettingStarted = "Getting Started";
+
+    /// <summary>One new concept on top of the base scene.</summary>
+    public const string Beginner = "Beginner";
+
+    /// <summary>A Stride subsystem used directly, or several concepts combined.</summary>
+    public const string Intermediate = "Intermediate";
+
+    /// <summary>Engine extension points, third-party integration, or multi-project work.</summary>
+    public const string Advanced = "Advanced";
+
+    /// <summary>Published but unclassified. Sorts last.</summary>
+    public const string Other = "Other";
+
     /// <summary>
     /// Teaching levels, in presentation order. <c>Other</c> means "published but unclassified" and
     /// sorts last; it is not a substitute for <c>enabled: false</c> or <c>docs: false</c>.
     /// </summary>
-    public static readonly string[] Levels =
-    [
-        "Getting Started",
-        "Beginner",
-        "Intermediate",
-        "Advanced",
-        "Other"
-    ];
+    public static readonly string[] Levels = [GettingStarted, Beginner, Intermediate, Advanced, Other];
 
     /// <summary>
     /// Topic categories. A category names the *lesson*, not the scenery: a keyboard-menu example that

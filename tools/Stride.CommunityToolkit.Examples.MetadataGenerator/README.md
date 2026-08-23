@@ -31,6 +31,36 @@ dotnet run -- generate "../../examples/code-only" --output examples-manifest.jso
 | `--media-path` | Docs media folder. When given, every explicit `media:` filename is checked to exist. Skipped when omitted. |
 | `--strict` | Treat validation errors as fatal: report them, write no manifest, exit non-zero. |
 
+### `docs <examples-root-path> [--docs-path <dir>] [--media-path <dir>] [--dry-run]`
+
+Generates the documentation: one page per example, a landing page per language and level group, the
+examples folder's own `toc.yml`, and redirect stubs for the URLs that levels replaced.
+
+```bash
+dotnet run -- docs "../../examples/code-only" --dry-run
+```
+
+| Option | Meaning |
+|---|---|
+| `--docs-path` | The examples documentation folder. Defaults to `../../docs/manual/code-only/examples`. |
+| `--media-path` | Screenshot folder. An image is linked only when the file actually exists. |
+| `--dry-run` | List the files that would change and write nothing. |
+
+Validation errors always stop this command, with or without `--strict`: a page built from a bad block
+is wrong in ways that are tedious to spot by reading it. Files whose content would not change are left
+untouched, so the git diff shows only real changes.
+
+**Ownership is opt-in per file.** A page is rewritten only if its own frontmatter says so:
+
+| `generated:` | Effect |
+|---|---|
+| `true` | The whole file is tool-owned and overwritten |
+| `partial` | Only the text between `<!-- #region generated -->` and `<!-- #endregion generated -->` is replaced. A missing marker is a warning, never a guess |
+| absent or `false` | Hand-owned. Never touched |
+
+That is what made adoption safe: none of the documentation written by hand carried frontmatter, so the
+first run could not have overwritten any of it.
+
 The examples root defaults to `../../examples/code-only`, relative to the current directory.
 
 ### Exit codes

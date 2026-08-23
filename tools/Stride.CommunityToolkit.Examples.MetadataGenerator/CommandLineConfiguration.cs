@@ -18,6 +18,8 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
 
     private const string DefaultOutputPath = "examples-manifest.json";
 
+    private const string DefaultDocsPath = "../../docs/manual/code-only/examples";
+
     /// <summary>
     /// Creates and configures the root command with all subcommands.
     /// </summary>
@@ -29,7 +31,8 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         return new RootCommand("Stride examples metadata parser")
         {
             CreateScanCommand(pathArgument),
-            CreateGenerateCommand(pathArgument)
+            CreateGenerateCommand(pathArgument),
+            CreateDocsCommand(pathArgument)
         };
     }
 
@@ -84,6 +87,45 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         });
 
         return scanCommand;
+    }
+
+    private Command CreateDocsCommand(Argument<DirectoryInfo> pathArgument)
+    {
+        var docsOption = new Option<DirectoryInfo>("--docs-path")
+        {
+            Description = $"The examples documentation folder. Defaults to {DefaultDocsPath}, relative to the current directory.",
+            DefaultValueFactory = _ => new DirectoryInfo(Path.Combine("..", "..", "docs", "manual", "code-only", "examples"))
+        };
+
+        var mediaOption = CreateMediaOption();
+
+        var dryRunOption = new Option<bool>("--dry-run")
+        {
+            Description = "Report which files would be written, and write nothing."
+        };
+
+        var docsCommand = new Command("docs", "Generates the example documentation pages, landing pages and toc.");
+
+        docsCommand.Arguments.Add(pathArgument);
+        docsCommand.Options.Add(docsOption);
+        docsCommand.Options.Add(mediaOption);
+        docsCommand.Options.Add(dryRunOption);
+
+        docsCommand.SetAction(async (parseResult, cancellationToken) =>
+        {
+            using var scope = serviceProvider.CreateScope();
+
+            var service = scope.ServiceProvider.GetRequiredService<ManifestService>();
+
+            return await service.GenerateDocsAsync(
+                parseResult.GetValue(pathArgument),
+                parseResult.GetValue(docsOption),
+                parseResult.GetValue(mediaOption),
+                parseResult.GetValue(dryRunOption),
+                cancellationToken);
+        });
+
+        return docsCommand;
     }
 
     private Command CreateGenerateCommand(Argument<DirectoryInfo> pathArgument)
