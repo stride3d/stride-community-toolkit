@@ -49,6 +49,25 @@ public class ImGuiSystem : GameSystemBase
     private Dictionary<Keys, ImGuiKey> _keys = [];
     private bool _isFirstFrame = true;
 
+    /// <summary>
+    /// Whether <see cref="Hexa.NET.ImGui.ImGui.NewFrame"/> has been called without a matching
+    /// <see cref="Hexa.NET.ImGui.ImGui.Render"/> yet.
+    /// </summary>
+    /// <remarks>
+    /// Dear ImGui requires exactly one <c>NewFrame</c> per <c>Render</c>, and this system splits the pair
+    /// across <see cref="Update"/> and <see cref="EndDraw"/>. That holds only while the host runs one
+    /// update per draw, which is true of Stride's default variable timestep and <em>not</em> true when
+    /// <see cref="GameBase.IsFixedTimeStep"/> is set: the game then runs extra updates to catch up
+    /// whenever a frame overruns, which the startup shader compile reliably causes. Two <c>NewFrame</c>
+    /// calls in a row abort the process with "Forgot to call Render() or EndFrame() at the end of the
+    /// previous frame?".
+    ///
+    /// The pair cannot simply be moved into the draw phase: windows build their UI from
+    /// <see cref="BaseWindow.Update"/>, which runs after this system's update, so <c>NewFrame</c> has to
+    /// have happened by then.
+    /// </remarks>
+    private bool _frameBegun;
+
     public ImGuiSystem([NotNull] IServiceRegistry registry, [NotNull] GraphicsDeviceManager graphicsDeviceManager, InputManager inputManager = null) : base(registry)
     {
         input = inputManager ?? Services.GetService<InputManager>();
@@ -342,12 +361,29 @@ public class ImGuiSystem : GameSystemBase
             _io.AddKeyEvent(ImGuiKey.ModCtrl, input.IsKeyDown(Keys.LeftCtrl) || input.IsKeyDown(Keys.RightCtrl));
             _io.AddKeyEvent(ImGuiKey.ModSuper, input.IsKeyDown(Keys.LeftWin) || input.IsKeyDown(Keys.RightWin));
         }
+        // An update that never reached a draw left a frame open. Close it before starting the next one,
+        // discarding its draw data - the frame it belonged to is not being presented anyway.
+        if (_frameBegun)
+        {
+            Hexa.NET.ImGui.ImGui.EndFrame();
+        }
+
         Hexa.NET.ImGui.ImGui.NewFrame();
+        _frameBegun = true;
     }
 
     public override void EndDraw()
     {
+        // Nothing to present when the draw is not paired with an update - Render() without a preceding
+        // NewFrame() asserts just as loudly as the reverse.
+        if (!_frameBegun)
+        {
+            return;
+        }
+
         Hexa.NET.ImGui.ImGui.Render();
+        _frameBegun = false;
+
         var drawData = Hexa.NET.ImGui.ImGui.GetDrawData();
         ProcessTextureUpdates(drawData);
         RenderDrawLists(drawData);
