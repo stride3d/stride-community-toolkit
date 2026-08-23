@@ -400,5 +400,6 @@ FodyWeavers.xsd
 .sarif/*.json
 /.idea/*
 
-# Generated examples manifest (build artifact - see notes/plans/examples-metadata.md D7)
-tools/Stride.CommunityToolkit.Examples.Launcher/examples-manifest.json
+# Generated examples manifest (build artifact - see notes/plans/examples-metadata.md D7).
+# Written next to each launcher by tools/ExamplesManifest.targets.
+tools/**/examples-manifest.json
