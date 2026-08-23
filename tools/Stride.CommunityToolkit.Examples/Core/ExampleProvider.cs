@@ -1,25 +1,23 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace Stride.CommunityToolkit.Examples.Core;
 
-public class ExampleProvider
+/// <summary>
+/// Builds the console menu from the manifest and runs the selected example.
+/// </summary>
+public partial class ExampleProvider
 {
     private int _index;
-    private readonly string _baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-    // Configuration (adjust as desired)
-    private const string ExamplesRootRelative = "..\\..\\..\\..\\..\\examples\\code-only";
-
-    private static readonly string[] _projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
-    private static readonly Regex _commentTitleRegex = new("//\\s*ExampleTitle\\s*:\\s*(.+)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     // Warning filtering configuration
     private const bool FilterWarnings = true;
-    private static readonly Regex _genericWarningRegex = new(@"\bwarning\b", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-    private static readonly Regex _shaderWarningRegex = new(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b",
-        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    [GeneratedRegex(@"\bwarning\b", RegexOptions.IgnoreCase)]
+    private static partial Regex GenericWarningPattern();
+
+    [GeneratedRegex(@"\b(effect|shader|hlsl|fx|mixin|compiler)\b.*\bwarning\b|\bwarning\b.*\b(effect|shader|hlsl|fx|mixin|compiler)\b", RegexOptions.IgnoreCase)]
+    private static partial Regex ShaderWarningPattern();
 
     // Blank line handling
     private const bool CollapseConsecutiveBlankLines = true;
@@ -30,116 +28,47 @@ public class ExampleProvider
         (v.Equals("1") || v.Equals("true", StringComparison.OrdinalIgnoreCase));
 
     // Console state
-    private readonly object _consoleLock = new();
+    private readonly Lock _consoleLock = new();
     private bool _lastPrintedWasBlank;
     private bool _justSuppressed; // set when we suppressed at least one line since last printed real line
 
+    /// <summary>
+    /// Gets the menu: every launcher-visible example, then Quit and Clear.
+    /// </summary>
+    /// <returns>The menu entries, in manifest order.</returns>
     public List<Example> GetExamples()
     {
-        var exampleProjects = DiscoverExamples();
+        var entries = ManifestLoader.Load();
+        var list = new List<Example>(entries.Count + 2);
 
-        var ordered = exampleProjects
-            .OrderBy(m => m.Category)
-            .ThenBy(m => m.Order.HasValue ? 0 : 1)
-            .ThenBy(m => m.Order)
-            .ThenBy(m => m.Title, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        foreach (var entry in entries)
+        {
+            list.Add(new Example(GetIndex(), entry.Title, entry, () => Launch(entry)));
+        }
 
-        var list = new List<Example>(ordered.Count + 1);
-
-        foreach (var meta in ordered)
-            list.Add(new Example(GetIndex(), meta.Title, meta.Id, () => LaunchWithDotNet(meta.ProjectFile), meta.Category));
-
-        list.Add(new Example("Q", Constants.Quit, null, () => Environment.Exit(0), null));
-        list.Add(new Example("C", Constants.Clear, null, Console.Clear, null));
+        list.Add(new Example("Q", Constants.Quit, null, () => Environment.Exit(0)));
+        list.Add(new Example("C", Constants.Clear, null, Constants.SafeClear));
 
         return list;
     }
 
-    private IEnumerable<ExampleProjectMeta> DiscoverExamples()
+    /// <summary>
+    /// Starts an example and streams its output into this console.
+    /// </summary>
+    private void Launch(ExampleEntry entry)
     {
-        var root = FindExamplesRoot(_baseDirectory)
-                   ?? Path.GetFullPath(Path.Combine(_baseDirectory, ExamplesRootRelative));
-
-        if (!Directory.Exists(root)) yield break;
-
-        foreach (var pattern in _projectPatterns)
+        if (!entry.IsRunnable)
         {
-            foreach (var project in Directory.EnumerateFiles(root, pattern, SearchOption.AllDirectories))
-            {
-                ExampleProjectMeta? meta = null;
+            Console.WriteLine($"Cannot run {entry.ProjectName}: no project or source file found on disk.");
 
-                try { meta = CreateMetaFromProject(project); }
-                catch { /* ignore */ }
-
-                if (meta is null) continue;
-
-                yield return meta;
-            }
-        }
-    }
-
-    private static string? FindExamplesRoot(string baseDir)
-    {
-        // Try to locate the examples/code-only folder by walking up
-        var dir = baseDir;
-        for (int i = 0; i < 8 && !string.IsNullOrEmpty(dir); i++)
-        {
-            var candidate = Path.Combine(dir, "examples", "code-only");
-            if (Directory.Exists(candidate))
-                return candidate;
-
-            dir = Path.GetDirectoryName(dir.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            return;
         }
 
-        return null;
-    }
-
-    private ExampleProjectMeta? CreateMetaFromProject(string projectFile)
-    {
-        var (explicitTitle, assemblyName, category, order, enabled) = ProjectFileHelper.ReadExampleMetadata(projectFile);
-
-        if (enabled == false) return null;
-
-        string title = explicitTitle
-                       ?? GetProgramCommentTitle(projectFile)
-                       ?? assemblyName
-                       ?? Path.GetFileNameWithoutExtension(projectFile);
-
-        var id = assemblyName ?? Path.GetFileNameWithoutExtension(projectFile);
-
-        return new ExampleProjectMeta(id, title, projectFile, order, category);
-    }
-
-    private static string? GetProgramCommentTitle(string projectFile)
-    {
-        var dir = Path.GetDirectoryName(projectFile);
-        if (dir is null) return null;
-
-        var programFile = Directory.EnumerateFiles(dir, "Program.*", SearchOption.TopDirectoryOnly).FirstOrDefault();
-        if (programFile is null) return null;
-
-        try
-        {
-            foreach (var line in File.ReadLines(programFile))
-            {
-                var m = _commentTitleRegex.Match(line);
-                if (m.Success)
-                    return m.Groups[1].Value.Trim();
-            }
-        }
-        catch { /* ignore */ }
-
-        return null;
-    }
-
-    private void LaunchWithDotNet(string projectFile)
-    {
         var psi = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"run --project \"{projectFile}\"",
-            WorkingDirectory = Path.GetDirectoryName(projectFile) ?? Environment.CurrentDirectory,
+            Arguments = entry.ProcessArguments,
+            WorkingDirectory = entry.Directory ?? Environment.CurrentDirectory,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -148,7 +77,7 @@ public class ExampleProvider
 
         var process = Process.Start(psi);
 
-        if (process == null) return;
+        if (process is null) return;
 
         process.EnableRaisingEvents = true;
         process.Exited += (_, __) =>
@@ -212,11 +141,11 @@ public class ExampleProvider
         if (!FilterWarnings || BypassFiltering)
             return false;
 
-        if (!_genericWarningRegex.IsMatch(line))
+        if (!GenericWarningPattern().IsMatch(line))
             return false; // Not a warning
 
         // Only suppress if it looks shader/effect related
-        return _shaderWarningRegex.IsMatch(line);
+        return ShaderWarningPattern().IsMatch(line);
     }
 
     private void WriteLine(string line, bool isError)
@@ -226,7 +155,7 @@ public class ExampleProvider
             _lastPrintedWasBlank = false;
             _justSuppressed = false;
 
-            if (_genericWarningRegex.IsMatch(line))
+            if (GenericWarningPattern().IsMatch(line))
             {
                 var prev = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Yellow;

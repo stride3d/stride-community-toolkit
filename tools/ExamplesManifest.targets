@@ -1,0 +1,44 @@
+<Project>
+
+    <!--
+        Generates examples-manifest.json before the build and copies it next to the executable.
+
+        Imported by both example launchers. It lives here rather than being repeated in each .csproj so
+        the two cannot drift apart - they are consumers of the same contract and must run the generator
+        the same way.
+
+        Paths are resolved from this file's own location, so the importing project can sit anywhere
+        under tools/.
+    -->
+
+    <Target Name="GenerateExamplesManifest" BeforeTargets="BeforeBuild">
+        <PropertyGroup>
+            <ExamplesRoot>$(MSBuildThisFileDirectory)..\examples\code-only</ExamplesRoot>
+            <MediaPath>$(MSBuildThisFileDirectory)..\docs\manual\code-only\examples\media</MediaPath>
+            <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
+            <GeneratorProject>$(MSBuildThisFileDirectory)Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
+            <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot; --strict</GeneratorArgs>
+        </PropertyGroup>
+
+        <Message Text="Generating examples metadata manifest..." Importance="high" />
+
+        <!--
+            Deliberately fails the build on a validation error (plan D10). A malformed metadata block
+            would otherwise produce a quietly incomplete manifest and a green build, which is how two
+            examples lost their order without anyone noticing.
+
+            The generator logs validation errors to stderr and everything else to stdout, so raising
+            only StandardErrorImportance keeps a successful build quiet while a failure still prints
+            every finding. Leave StandardOutputImportance alone: at high it adds a line per example,
+            which is around sixty lines of noise on every build.
+        -->
+        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)"
+              StandardErrorImportance="high"
+              StdErrEncoding="utf-8" />
+
+        <ItemGroup>
+            <None Include="$(ManifestOutput)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+        </ItemGroup>
+    </Target>
+
+</Project>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -8,5 +8,8 @@
     <ItemGroup>
         <PackageReference Include="Pastel" Version="8.0.0" />
     </ItemGroup>
+
+    <!-- Generates examples-manifest.json before the build and copies it to the output. -->
+    <Import Project="..\ExamplesManifest.targets" />
 
 </Project>

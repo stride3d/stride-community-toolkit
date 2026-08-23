@@ -11,45 +11,19 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
     </ItemGroup>
 
-    <!-- Link discovery code from Examples project -->
+    <!--
+        Manifest reading is shared with the console runner. The files are linked rather than split into
+        a library because both launchers are single-project tools and a third project to hold four types
+        would cost more than it saves.
+    -->
     <ItemGroup>
         <Compile Include="..\Stride.CommunityToolkit.Examples\Core\Constants.cs" Link="Core\Constants.cs" />
-        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleProjectMeta.cs" Link="Core\ExampleProjectMeta.cs" />
-        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleProvider.cs" Link="Core\ExampleProvider.cs" />
-        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\Example.cs" Link="Core\Example.cs" />
-        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ColorHelper.cs" Link="Core\ColorHelper.cs" />
-        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ProjectFileHelper.cs" Link="Core\ProjectFileHelper.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleManifest.cs" Link="Core\ExampleManifest.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ExampleEntry.cs" Link="Core\ExampleEntry.cs" />
+        <Compile Include="..\Stride.CommunityToolkit.Examples\Core\ManifestLoader.cs" Link="Core\ManifestLoader.cs" />
     </ItemGroup>
 
-    <!-- Generate examples metadata manifest before build -->
-    <Target Name="GenerateExamplesManifest" BeforeTargets="BeforeBuild">
-        <PropertyGroup>
-            <ExamplesRoot>$(MSBuildProjectDirectory)\..\..\examples\code-only</ExamplesRoot>
-            <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
-            <MediaPath>$(MSBuildProjectDirectory)\..\..\docs\manual\code-only\examples\media</MediaPath>
-            <GeneratorProject>$(MSBuildProjectDirectory)\..\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
-            <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot; --strict</GeneratorArgs>
-        </PropertyGroup>
-
-        <Message Text="Generating examples metadata manifest..." Importance="high" />
-        <Message Text="Executing: dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" Importance="high" />
-
-        <!--
-            Deliberately fails the build on a validation error (plan D10). A malformed metadata block
-            would otherwise produce a quietly incomplete manifest and a green build, which is how two
-            examples lost their order without anyone noticing.
-
-            The generator logs validation errors to stderr and everything else to stdout, so raising
-            only StandardErrorImportance keeps a successful build quiet while a failure still prints
-            every finding. Leave StandardOutputImportance alone: at high it adds a line per example,
-            which is around sixty lines of noise on every build.
-        -->
-        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" StandardErrorImportance="high" StdErrEncoding="utf-8" />
-
-        <!-- Include generated manifest in output -->
-        <ItemGroup>
-            <None Include="examples-manifest.json" CopyToOutputDirectory="PreserveNewest" />
-        </ItemGroup>
-    </Target>
+    <!-- Generates examples-manifest.json before the build and copies it to the output. -->
+    <Import Project="..\ExamplesManifest.targets" />
 
 </Project>

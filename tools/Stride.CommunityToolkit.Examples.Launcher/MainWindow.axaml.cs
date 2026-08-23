@@ -11,8 +11,8 @@ namespace Stride.CommunityToolkit.Examples.Launcher;
 
 public partial class MainWindow : Window
 {
-    private readonly ObservableCollection<ExampleListItem> _examples = [];
-    private readonly List<ExampleProjectMeta> _all = [];
+    private readonly ObservableCollection<ExampleListItem> _visible = [];
+    private readonly List<ExampleEntry> _all = [];
     private Process? _running;
     private CancellationTokenSource? _cts;
 
@@ -24,7 +24,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        ExamplesList.ItemsSource = _examples;
+        ExamplesList.ItemsSource = _visible;
 
         LoadExamples();
 
@@ -34,6 +34,8 @@ public partial class MainWindow : Window
                 Filter(SearchBox.Text);
         };
 
+        ExamplesList.SelectionChanged += (_, __) => ShowDetails(Current);
+
         BtnRun.Click += async (_, __) => await RunSelectedAsync();
         BtnStop.Click += (_, __) => StopRunning();
         BtnOpenFolder.Click += (_, __) => OpenFolder();
@@ -41,107 +43,110 @@ public partial class MainWindow : Window
         BtnClearLog.Click += (_, __) => LogPanel.Text = string.Empty;
     }
 
+    /// <summary>
+    /// Fills the list from the generated manifest.
+    /// </summary>
+    /// <remarks>
+    /// The manifest arrives already ordered by language, level and order, and already filtered by the
+    /// generator to published examples, so nothing here re-sorts or re-filters it. A missing manifest is
+    /// reported in the log rather than thrown, so the window still opens and says what is wrong.
+    /// </remarks>
     private void LoadExamples()
     {
-        var provider = new ExampleProvider();
-        var examples = provider.GetExamples()
-      .Where(e => e.Title != Constants.Quit && e.Title != Constants.Clear)
-       .Select(e => new ExampleProjectMeta(e.Id, e.Title, GetProjectPath(e), GetOrder(e), e.Category))
- .ToList();
-
-        _all.AddRange(examples);
-        foreach (var e in _all)
-            _examples.Add(new ExampleListItem(e));
-    }
-
-    private static string GetProjectPath(Example example)
-    {
-        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var examplesRoot = FindExamplesRoot(baseDir) ?? Path.GetFullPath(Path.Combine(baseDir, "..", "..", "..", "..", "..", "examples", "code-only"));
-
-        var projectName = example.ProjectName ?? example.Title.Replace(" ", "_");
-        var patterns = new[] { "*.csproj", "*.fsproj", "*.vbproj" };
-
-        foreach (var pattern in patterns)
+        try
         {
-            var files = Directory.EnumerateFiles(examplesRoot, pattern, SearchOption.AllDirectories)
-                  .Where(f => Path.GetFileNameWithoutExtension(f).Contains(projectName, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            _all.AddRange(ManifestLoader.Load());
+        }
+        catch (InvalidOperationException ex)
+        {
+            AppendLine($"❌ Could not load the examples manifest: {ex.Message}");
 
-            if (files.Count > 0) return files[0];
+            return;
         }
 
-        return string.Empty;
-    }
-
-    private static string? FindExamplesRoot(string baseDir)
-    {
-        var dir = baseDir;
-        for (int i = 0; i < 8 && !string.IsNullOrEmpty(dir); i++)
-        {
-            var candidate = Path.Combine(dir, "examples", "code-only");
-            if (Directory.Exists(candidate))
-                return candidate;
-
-            dir = Path.GetDirectoryName(dir?.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-        }
-        return null;
-    }
-
-    private static int? GetOrder(Example example)
-    {
-        if (example.Category == Constants.BasicExample) return 1;
-        if (example.Category == Constants.AdvanceExample) return 2;
-        return 3;
+        Filter(null);
     }
 
     private void Filter(string? text)
     {
-        text ??= string.Empty;
-        text = text.Trim();
+        text = text?.Trim() ?? string.Empty;
 
-        _examples.Clear();
-        foreach (var e in _all)
+        _visible.Clear();
+
+        foreach (var entry in _all.Where(entry => Matches(entry, text)))
         {
-            if (text.Length == 0 ||
-          e.Title.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-          e.Id.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-              (e.Category?.Contains(text, StringComparison.OrdinalIgnoreCase) ?? false))
-            {
-                _examples.Add(new ExampleListItem(e));
-            }
+            _visible.Add(new ExampleListItem(entry));
         }
+
+        var notRunnable = _all.Count(entry => !entry.IsRunnable);
+
+        CountLabel.Text = notRunnable > 0
+            ? $"{_visible.Count} of {_all.Count} examples · {notRunnable} not found on disk"
+            : $"{_visible.Count} of {_all.Count} examples";
     }
 
-    private ExampleProjectMeta? Current
+    private static bool Matches(ExampleEntry entry, string text)
     {
-        get
+        if (text.Length == 0) return true;
+
+        return entry.Title.Contains(text, StringComparison.OrdinalIgnoreCase)
+            || entry.Slug.Contains(text, StringComparison.OrdinalIgnoreCase)
+            || entry.ProjectName.Contains(text, StringComparison.OrdinalIgnoreCase)
+            || entry.Level.Contains(text, StringComparison.OrdinalIgnoreCase)
+            || (entry.Category?.Contains(text, StringComparison.OrdinalIgnoreCase) ?? false)
+            || entry.Tags.Any(tag => tag.Contains(text, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private ExampleEntry? Current => (ExamplesList.SelectedItem as ExampleListItem)?.Entry;
+
+    private void ShowDetails(ExampleEntry? entry)
+    {
+        if (entry is null)
         {
-            var item = ExamplesList.SelectedItem as ExampleListItem;
-            return item?.Meta;
+            DetailTitle.Text = "Select an example";
+            DetailMeta.Text = string.Empty;
+            DetailDescription.Text = string.Empty;
+            DetailTags.Text = string.Empty;
+
+            return;
         }
+
+        var meta = new List<string> { entry.Level };
+
+        if (entry.Category is { Length: > 0 } category) meta.Add(category);
+        if (entry.Complexity is { } complexity) meta.Add($"complexity {complexity}/5");
+        if (entry.LanguageLabel.Length > 0) meta.Add(entry.LanguageLabel);
+        if (entry.IsFileBased) meta.Add("file-based app");
+
+        meta.Add(entry.ProjectName);
+
+        DetailTitle.Text = entry.Title;
+        DetailMeta.Text = string.Join("  ·  ", meta);
+        DetailDescription.Text = entry.Description ?? string.Empty;
+        DetailTags.Text = entry.Tags.Count > 0 ? string.Join("  ", entry.Tags.Select(tag => $"#{tag}")) : string.Empty;
     }
 
     private async Task RunSelectedAsync()
     {
-        var meta = Current;
-        if (meta is null)
+        var entry = Current;
+
+        if (entry is null)
         {
             AppendLine("⚠️ Please select an example to run.");
             return;
         }
 
-        if (string.IsNullOrEmpty(meta.ProjectFile) || !File.Exists(meta.ProjectFile))
+        if (!entry.IsRunnable)
         {
-            AppendLine($"❌ Project file not found: {meta.ProjectFile}");
+            AppendLine($"❌ Nothing to run for {entry.ProjectName}: no project or source file found on disk.");
             return;
         }
 
         StopRunning();
 
         LogPanel.Text = string.Empty;
-        AppendLine($"▶️ Starting: {meta.Title}");
-        AppendLine($"📁 Project: {meta.ProjectFile}");
+        AppendLine($"▶️ Starting: {entry.Title}");
+        AppendLine($"📁 {entry.RunTarget}");
         AppendLine(new string('-', 80));
 
         _cts = new CancellationTokenSource();
@@ -149,8 +154,8 @@ public partial class MainWindow : Window
         var psi = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"run --project \"{meta.ProjectFile}\"",
-            WorkingDirectory = Path.GetDirectoryName(meta.ProjectFile) ?? Environment.CurrentDirectory,
+            Arguments = entry.ProcessArguments,
+            WorkingDirectory = entry.Directory ?? Environment.CurrentDirectory,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -209,7 +214,7 @@ public partial class MainWindow : Window
         while (!ct.IsCancellationRequested)
         {
             string? line;
-            try { line = await reader.ReadLineAsync(); }
+            try { line = await reader.ReadLineAsync(ct); }
             catch { break; }
             if (line is null) break;
 
@@ -243,9 +248,11 @@ public partial class MainWindow : Window
 
     private void OpenFolder()
     {
-        var meta = Current;
-        if (meta is null) return;
-        var dir = Path.GetDirectoryName(meta.ProjectFile);
+        var entry = Current;
+        if (entry is null) return;
+
+        var dir = entry.Directory;
+
         if (dir is null || !Directory.Exists(dir))
         {
             AppendLine("⚠️ Folder not found.");
@@ -264,9 +271,10 @@ public partial class MainWindow : Window
 
     private void CopyCommand()
     {
-        var meta = Current;
-        if (meta is null) return;
-        var cmd = $"dotnet run --project \"{meta.ProjectFile}\"";
+        var entry = Current;
+        if (entry is null) return;
+
+        var cmd = entry.CommandLine;
 
         try
         {
@@ -285,14 +293,23 @@ public partial class MainWindow : Window
         }
     }
 
-    private class ExampleListItem(ExampleProjectMeta meta)
+    /// <summary>
+    /// One row in the list.
+    /// </summary>
+    /// <remarks>
+    /// The entry is stored in a property rather than captured from the primary constructor parameter,
+    /// which is what the previous version did and what CS9124 warned about.
+    /// </remarks>
+    private sealed class ExampleListItem(ExampleEntry entry)
     {
-        public ExampleProjectMeta Meta { get; } = meta;
+        public ExampleEntry Entry { get; } = entry;
 
         public override string ToString()
         {
-            var cat = !string.IsNullOrEmpty(meta.Category) ? $"[{meta.Category}] " : "";
-            return $"{cat}{meta.Title} ({meta.Id})";
+            var language = Entry.LanguageLabel.Length > 0 ? $" [{Entry.LanguageLabel}]" : string.Empty;
+            var warning = Entry.IsRunnable ? string.Empty : "  ⚠ not found";
+
+            return $"{Entry.Level,-16}{Entry.Title}{language}  ({Entry.ProjectName}){warning}";
         }
     }
 }

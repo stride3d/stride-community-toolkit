@@ -2,7 +2,19 @@ using Pastel;
 using Stride.CommunityToolkit.Examples.Core;
 using System.Drawing;
 
-var examples = new ExampleProvider().GetExamples();
+List<Example> examples;
+
+try
+{
+    examples = new ExampleProvider().GetExamples();
+}
+catch (InvalidOperationException ex)
+{
+    Console.WriteLine("Could not load the examples manifest.".Pastel(Color.Red));
+    Console.WriteLine(ex.Message);
+
+    return 1;
+}
 
 DisplayMenu();
 
@@ -13,32 +25,50 @@ while (true)
 
 void DisplayMenu()
 {
-    Console.Clear();
+    Constants.SafeClear();
 
     Console.WriteLine("Stride Community Toolkit Examples".Pastel(Color.LightBlue));
     Console.WriteLine();
 
     var maxIdWidth = examples.Max(e => e.Id.Length);
+    string? currentGroup = null;
 
     foreach (var example in examples)
     {
+        // The manifest is ordered by (language, level), so a change of either starts a new group. The
+        // language has to be part of the heading or the F# and VB sections repeat a level name that has
+        // already been used, with no indication of why.
+        if (example.Entry is { } entry && GroupHeading(entry) != currentGroup)
+        {
+            currentGroup = GroupHeading(entry);
+
+            Console.WriteLine();
+            Console.WriteLine($"  {currentGroup}".Pastel(entry.GetColor()));
+        }
+
         var idPadded = example.Id.PadLeft(maxIdWidth);
         var left = Navigation($"[{idPadded}]");
 
-        var categoryLabel = example.Category is { Length: > 0 } category
-            ? $" {RemoveFrontNumberAndDashAfter(category)}".Pastel(example.GetColor())
-            : string.Empty;
-
-        var right = example.ProjectName is { Length: > 0 } pn
-            ? (example.Category is { Length: > 0 } cat2
-                ? $" ({pn})".Pastel(ColorHelper.Lighten(example.GetColor(), 0.18f))
-                : $" ({pn})".Pastel(Color.LightGray))
-            : string.Empty;
-
-        Console.WriteLine($"{left}{categoryLabel} {example.Title}{right}");
+        Console.WriteLine($"{left} {example.Title}{Suffix(example)}");
     }
 
     Console.WriteLine();
+}
+
+string GroupHeading(ExampleEntry entry) => entry.LanguageLabel.Length > 0
+    ? $"{entry.Level.ToUpperInvariant()} — {entry.LanguageLabel}"
+    : entry.Level.ToUpperInvariant();
+
+string Suffix(Example example)
+{
+    if (example.Entry is not { } entry) return string.Empty;
+
+    // The language is already in the group heading, so it is not repeated per line.
+    var detail = entry.Category is { Length: > 0 } category ? category : string.Empty;
+
+    var tail = detail.Length > 0 ? $" ({entry.ProjectName} · {detail})" : $" ({entry.ProjectName})";
+
+    return tail.Pastel(ColorHelper.Lighten(entry.GetColor(), 0.18f));
 }
 
 void HandleUserInput()
@@ -74,8 +104,3 @@ void HandleUserInput()
 }
 
 static string Navigation(string text) => text.Pastel(Color.LightGreen);
-
-static string RemoveFrontNumberAndDashAfter(string s) =>
-    s.IndexOf('-') is int idx && idx > 0
-        ? s[(idx + 1)..].Trim()
-        : s.Trim();
