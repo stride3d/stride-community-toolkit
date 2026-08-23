@@ -210,20 +210,21 @@ Small, found while auditing every 2D example. All nine build clean.
 - **`Example_2D_Playground` is a scratch file, not an example** — commented-out blocks throughout,
   unused usings (`System.Xml.Linq`, `System.Reflection`), and it calls `Add3DGround` and
   `Add3DCameraController` in a 2D playground. Either finish it or drop it.
+- **Two example folders break the `Example<NN>_<Name>` convention** — the `Example_`-prefixed demo
+  games. Renaming touches the `.slnx`, `.sdpkg`, `.csproj` and namespace. Decide rather than drift.
 
-## 7. Text, gizmos and Cubicle Calamity follow-ups
+## 7. Text, letters and lighting follow-ups
 
 Distilled from `notes/plans/cubicle-calamity-scoring.md` when that plan was retired (Aug 2026).
-Everything shipped is committed or in the working tree; only what is still open lives here.
+Only toolkit-level work lives here; game-specific features and decisions are tracked in
+`examples/code-only/Example_CubicleCalamity/README.md` under "Future improvements".
 
-- **Orientation aids need a decision** (was "commit 4"). Two entities in Cubicle Calamity are
-  deliberate developer-orientation markers, kept but unplaced: `OrientationGizmo` sits at
-  `(-7.5, 1, -7.5)` from before the platform was centred on the origin, and the colliderless
-  `ReferenceCube` at `(-4, 1, -4)` has no stated purpose. The options weighed: world-space at the
-  origin (honest, but buried inside the stack), offset clear of the board (today's state, misleading
-  about where the origin is), or pinned to a screen corner the way editor viewports do it. The last
-  one generalises to every code-only example — "where the hell is X" is not a Cubicle Calamity
-  problem — so it is really a toolkit-feature question and belongs in `ARCHITECTURE.md` if pursued.
+- **Screen-corner orientation gizmo, as a toolkit feature.** Every code-only example faces "where
+  the hell is X" with no editor viewport to answer it; a world-space gizmo either buries itself in
+  the scene's content or sits at a misleading offset. An axis widget pinned to a screen corner the
+  way editor viewports do it generalises to every example, and belongs in `ARCHITECTURE.md` if
+  pursued. (The interim placement of the demo game's two markers is that game's own decision,
+  tracked in its README.)
 - ~~**Review `MeshBuilder`**~~ — done (Aug 2026). Six defects found and fixed with 15 pinning tests:
   all seven `With*` wrappers dropped their `pixelFormat`; off-by-one bounds let callers silently
   write one vertex past the mesh; `ToMeshDraw` uploaded the whole pooled array (garbage tail
@@ -270,19 +271,6 @@ Everything shipped is committed or in the working tree; only what is still open 
   noisiest path. Hypothesis, not measured: shipping a mipped DDS (or generating mips at load) should
   improve reflection quality and prefilter speed more than any size change. Needs a before/after
   comparison; do not change the texture without one.
-- **`Example_CubicleCalamity` breaks the `Example<NN>_<Name>` folder convention** — renaming touches
-  the `.slnx`, `.sdpkg`, `.csproj` and namespace. Decide rather than drift.
-- ~~**Combo window as a visible draining bar**~~ — done (Aug 2026), as a shrinking run of `=`
-  characters under the combo line via a third `EntityTextComponent`; no real UI needed yet. Done
-  together with the combo balance fix: `ComboWindowSeconds` 2.5 → 7, after a headless simulation
-  with the real gameplay classes showed the short window inverted the incentive (blind spam ~1.7M
-  vs deliberate play ~0.7M; at 7 s deliberate play wins ~3.6M to ~1.7M because both keep the
-  streak and the quadratic group bonus decides). The measurement is summarised on the constant's
-  doc comment in `GameSettings.cs`.
-- **`CubeGrid.RemoveAndCollapse` returns drop distances nothing consumes** since the physics-driven
-  collapse replaced the teleport; only the tests read it, and they are what pin the collapse rule.
-  Either keep it as a tested contract or make it `void` and assert grid state instead.
-
 ## 8. Revisit only if Bepu fixes the rank-1 tensor
 
 Do not act on this speculatively — it is here so the question is not re-derived later.
