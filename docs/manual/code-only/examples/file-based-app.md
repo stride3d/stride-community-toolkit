@@ -20,8 +20,6 @@ The `Program.cs` file shows how to:
 - Using helpers: SetupBase3DScene
 - Using helpers: AddSkybox
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_FileBasedApp).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_FileBasedApp/Program.cs?start=1&end=49)]

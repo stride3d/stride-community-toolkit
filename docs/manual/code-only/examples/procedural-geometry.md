@@ -12,8 +12,6 @@ For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rende
 
 [!INCLUDE [back-culling](../../../includes/manual/examples/back-culling.md)]
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_ProceduralGeometry).
 
 [!code-csharp[](../../../../examples/code-only/Example05_ProceduralGeometry/Program.cs?start=1&end=241)]

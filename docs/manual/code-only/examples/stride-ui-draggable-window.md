@@ -23,8 +23,6 @@ This example implements the functionality through several key classes:
 
 The project also includes cleanup functionality to remove objects that fall below a threshold, updating the counter accordingly. This demonstrates a complete UI workflow from user interaction to scene manipulation.
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 ![Stride UI Example](media/stride-game-engine-example-10-draggable-window.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example10_StrideUI_DragAndDrop).

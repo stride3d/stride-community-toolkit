@@ -18,8 +18,6 @@ The `Program.cs` file shows how to:
 - Static vs dynamic physics bodies
 - Fixed-timestep physics update loop, decoupled from the render frame rate
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example19_Jitter2Physics).
 
 [!code-csharp[](../../../../examples/code-only/Example19_Jitter2Physics/Program.cs?start=1&end=137)]

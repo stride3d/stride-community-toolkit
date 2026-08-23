@@ -19,8 +19,6 @@ The `Program.cs` file shows how to:
 - Depth-tested text hidden by geometry, and DepthTest = false to draw through
 - Distance fading with FadeStartDistance and MaxDistance
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_WorldText).
 
 [!code-csharp[](../../../../examples/code-only/Example01_WorldText/Program.cs?start=1&end=138)]

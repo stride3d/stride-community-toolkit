@@ -28,4 +28,9 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [ImGui UI](imgui-ui.md): An ImGui overlay for in-game tools, debug panels and live tweaking.
 - [2D Spawn Menu](spawn-menu-2d.md): Drive a scene from the keyboard without filling the screen with instructions.
 
+> [!NOTE]
+> Each example references a handful of toolkit packages. The `using` directives at the top of
+> every listing name them, and the linked project file on GitHub is authoritative. A few examples
+> also need a third-party package - Box2D.NET, Jitter2, Myra or ImGui - which their page calls out.
+
 [!INCLUDE [basic-examples-outro](../../../includes/manual/examples/basic-examples-outro.md)]

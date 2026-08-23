@@ -13,8 +13,6 @@ The particles are spawned at a rate of 50 per second from a small area and shoot
 
 This example demonstrates fundamental concepts of particle systems in Stride, showing how to create dynamic visual effects through code.
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 ![Stride UI Example](media/stride-game-engine-example-12-particles.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example12_Particles).

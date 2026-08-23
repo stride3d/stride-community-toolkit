@@ -23,8 +23,6 @@ The `Program.cs` file shows how to:
 - Why a perfectly regular spawn lattice must be jittered
 - Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic2DScene_StressPile).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic2DScene_StressPile/Program.cs?start=1&end=349)]

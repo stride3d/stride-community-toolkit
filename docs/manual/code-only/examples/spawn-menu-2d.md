@@ -23,8 +23,6 @@ The `Program.cs` file shows how to:
 - Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
 - Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic2DScene_SpawnMenu).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic2DScene_SpawnMenu/Program.cs?start=1&end=112)]

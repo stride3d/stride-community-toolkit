@@ -22,8 +22,6 @@ The `Program.cs` file shows how to:
 - Driving a physics body from the camera entity
 - Using helpers: SetupBase3D, Add3DGround, AddSkybox, Create3DPrimitive
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example20_BepuFirstPersonCharacter).
 
 [!code-csharp[](../../../../examples/code-only/Example20_BepuFirstPersonCharacter/Program.cs?start=1&end=68)]

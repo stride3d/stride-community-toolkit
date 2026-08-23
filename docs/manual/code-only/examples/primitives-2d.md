@@ -15,8 +15,6 @@ The `Program.cs` file shows how to:
 - Adding entities to a Scene (rootScene)
 - Using helpers: SetupBase2DScene
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic2DScene_Primitives).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic2DScene_Primitives/Program.cs?start=1&end=48)]

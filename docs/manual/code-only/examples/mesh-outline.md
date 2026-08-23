@@ -8,8 +8,6 @@ The `Program.cs` file shows how to:
 - Configure outline width/color and enable/disable per entity
 - Render a few sample meshes with and without outlines
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 ![Mesh Outline Example](media/stride-game-engine-example-13-mesh-outline.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example13_MeshOutline).

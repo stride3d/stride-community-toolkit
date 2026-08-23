@@ -19,8 +19,6 @@ The `Program.cs` file shows how to:
 - Referencing Stride.CommunityToolkit.Windows for Windows-only concerns
 - Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_DPI_Aware).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_DPI_Aware/Program.cs?start=1&end=20)]

@@ -15,8 +15,6 @@ The `Program.cs` file shows how to:
 - Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu
 - Why the UI layer is unaffected by the physics engine underneath
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example10_StrideUI_DragAndDrop_BulletPhysics).
 
 [!code-csharp[](../../../../examples/code-only/Example10_StrideUI_DragAndDrop_BulletPhysics/Program.cs?start=1&end=125)]

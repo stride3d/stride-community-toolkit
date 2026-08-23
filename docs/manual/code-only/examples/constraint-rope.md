@@ -35,8 +35,6 @@ The `Program.cs` file shows how to:
 - Applying an impulse from the update loop rather than a velocity at build time
 - Using helpers: SetupBase3DScene, AddSkybox, AddProfiler
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example15_Constraint_Rope).
 
 [!code-csharp[](../../../../examples/code-only/Example15_Constraint_Rope/Program.cs?start=1&end=216)]

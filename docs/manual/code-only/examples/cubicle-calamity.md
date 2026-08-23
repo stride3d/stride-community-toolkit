@@ -23,8 +23,6 @@ The `Program.cs` file shows how to:
 - Flood filling a grid to find connected same-coloured neighbours
 - Using helpers: Add3DCamera, Add3DGround, AddGizmo, Create3DPrimitive
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example_CubicleCalamity).
 
 [!code-csharp[](../../../../examples/code-only/Example_CubicleCalamity/Program.cs?start=1&end=9)]

@@ -21,8 +21,6 @@ The `Program.cs` file shows how to:
 - Framerate independence with Game.UpdateTime.Elapsed
 - Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_SyncScript).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_SyncScript/Program.cs?start=1&end=27)]

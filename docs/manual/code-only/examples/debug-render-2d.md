@@ -20,8 +20,6 @@ The `Program.cs` file shows how to:
 - Giving each shape its own colour with a flat material
 - Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, Create2DPrimitive
 
-[!INCLUDE [note-additional-packages](../../../includes/manual/examples/note-additional-packages.md)]
-
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic2DScene_DebugRender).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic2DScene_DebugRender/Program.cs?start=1&end=91)]

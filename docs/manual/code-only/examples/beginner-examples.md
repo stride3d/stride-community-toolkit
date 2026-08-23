@@ -20,4 +20,9 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [Basic2D Scene (Debug Rendering)](debug-render-2d.md): A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is actually solving can be seen rather than inferred.
 - [DPI-Aware Window](dpi-aware.md): The capsule scene again, with one difference that is not in the C# at all: an app.manifest declaring the process per-monitor DPI aware, referenced from the csproj.
 
+> [!NOTE]
+> Each example references a handful of toolkit packages. The `using` directives at the top of
+> every listing name them, and the linked project file on GitHub is authoritative. A few examples
+> also need a third-party package - Box2D.NET, Jitter2, Myra or ImGui - which their page calls out.
+
 [!INCLUDE [basic-examples-outro](../../../includes/manual/examples/basic-examples-outro.md)]
