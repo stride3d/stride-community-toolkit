@@ -53,6 +53,7 @@ related:
   - Example17_SignalR_Blazor
 media: stride-game-engine-example17-signalr.webp
 tocName: Stride + SignalR
+screenshot: false
 enabled: true
 created: 2025-05-04
 ---

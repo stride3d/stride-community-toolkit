@@ -151,7 +151,6 @@ tags:
 related:
   - Example05_PartialTorus
   - Example01_Basic3DScene_FSharp
-media: stride-game-engine-example-05-partial-torus-mesh.webp
 tocName: Partial Torus Mesh
 enabled: true
 created: 2025-03-18

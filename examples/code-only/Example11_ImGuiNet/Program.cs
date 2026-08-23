@@ -285,6 +285,7 @@ related:
   - Example11_ImGui
   - Example01_Basic3DScene_DPI_Aware
   - Example18_Box2DPhysics
+screenshot: false
 enabled: true
 created: 2025-10-06
 ---

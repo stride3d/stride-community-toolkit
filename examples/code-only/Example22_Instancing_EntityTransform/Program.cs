@@ -46,7 +46,7 @@ using Stride.Rendering;
 // The shape every body uses. Change this one line to drop something else: spheres roll, cones tip
 // over, and Cone, Teapot, Torus and TriangularPrism come out as convex hulls, which are far more
 // expensive to simulate than a box or a sphere. Everything below is shape-agnostic.
-var modelType = PrimitiveModelType.Cone;
+var modelType = PrimitiveModelType.Cube;
 
 const int ItemsPerDrop = 200;
 const float ItemScale = 0.5f;

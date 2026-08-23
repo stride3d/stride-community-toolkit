@@ -69,6 +69,7 @@ tags:
 related:
   - Example17_SignalR
 docs: false
+screenshot: false
 enabled: true
 created: 2025-05-04
 ---
