@@ -166,6 +166,15 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         {
             messages.Add(ValidationMessage.Warning(projectName, "created", $"'{created}' is not a yyyy-MM-dd date."));
         }
+
+        // The documentation includes the source with a line range that stops before the block, which
+        // only works if the block is the last thing in the file. Otherwise the whole file is embedded
+        // and the reader sees the metadata restated as YAML under the prose it was rendered from.
+        if (!metadata.BlockLocation.IsLastInFile)
+        {
+            messages.Add(ValidationMessage.Warning(projectName, "(metadata block)",
+                "The block is not the last thing in the file, so the documentation cannot trim it out of the code listing and will embed it. Move it to the end."));
+        }
     }
 
     private static void ValidateMedia(ParsedExample example, DirectoryInfo? mediaDirectory, List<ValidationMessage> messages)

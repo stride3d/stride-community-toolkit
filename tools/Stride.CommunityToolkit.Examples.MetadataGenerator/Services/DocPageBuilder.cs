@@ -82,7 +82,7 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
 
         body.AppendLine($"View on [GitHub]({DocPaths.GitHubExamplesUrl}/{example.ProjectName}).");
         body.AppendLine();
-        body.AppendLine($"[!{DocPaths.CodeTag(example.EffectiveLanguage)}[]({DocPaths.ExamplesFolder}/{example.ProjectPath})]");
+        body.AppendLine(CodeInclude(example));
 
         return body.ToString();
     }
@@ -190,6 +190,28 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
         var stop = text.IndexOf(". ", StringComparison.Ordinal);
 
         return stop > 0 ? text[..(stop + 1)] : text;
+    }
+
+    /// <summary>
+    /// Builds the DocFX code include for an example's source.
+    /// </summary>
+    /// <remarks>
+    /// The include stops before the <c>---example-metadata</c> block. Rendering it would show the
+    /// reader a wall of YAML restating the description and concepts that are already on the page as
+    /// prose, directly above the listing. DocFX accepts a line range on a code include, so the block is
+    /// simply left outside it - no post-processing pass, and it behaves the same in <c>docfx serve</c>.
+    ///
+    /// When the block is not the last thing in the file the range cannot express "everything but the
+    /// block", so the whole file is included instead. <see cref="MetadataValidator"/> warns in that case.
+    /// </remarks>
+    private static string CodeInclude(ExampleMetadata example)
+    {
+        var tag = DocPaths.CodeTag(example.EffectiveLanguage);
+        var path = $"{DocPaths.ExamplesFolder}/{example.ProjectPath}";
+
+        return example.BlockLocation.CanTrimBlock
+            ? $"[!{tag}[]({path}?start=1&end={example.BlockLocation.CodeLineCount})]"
+            : $"[!{tag}[]({path})]";
     }
 
     /// <summary>

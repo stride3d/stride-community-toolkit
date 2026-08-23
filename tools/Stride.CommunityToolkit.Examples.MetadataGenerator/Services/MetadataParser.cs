@@ -46,7 +46,7 @@ public class MetadataParser(ILogger<MetadataParser> logger)
 
         var content = await File.ReadAllTextAsync(exampleFilePath, cancellationToken);
 
-        if (!YamlMetadataExtractor.TryExtract(exampleFilePath, content, out var yamlContent))
+        if (!YamlMetadataExtractor.TryExtract(exampleFilePath, content, out var yamlContent, out var blockLocation))
         {
             return null;
         }
@@ -60,6 +60,7 @@ public class MetadataParser(ILogger<MetadataParser> logger)
             metadata.ProjectName = projectName;
             metadata.ProjectPath = ToRelativePosixPath(exampleFilePath, examplesRootPath);
             metadata.Language ??= YamlMetadataExtractor.GetLanguage(exampleFilePath);
+            metadata.BlockLocation = blockLocation;
 
             NormaliseTrailingNewlines(metadata.Title);
             NormaliseTrailingNewlines(metadata.Description);

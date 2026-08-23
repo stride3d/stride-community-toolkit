@@ -570,6 +570,49 @@ like that). Four now-orphaned list includes were deleted.
 `myra-ui-draggable-window-and-services.md`. Both examples are `enabled: false`, so they are absent from
 the manifest; their pages stay in the repository and remain reachable by URL.
 
+#### Keeping the metadata block out of the rendered code (D48)
+
+A code include renders the whole file, metadata block and all — so every page ended with a wall of YAML
+restating the description and concepts printed as prose immediately above it.
+
+DocFX takes a **line range** on a code include, and the generator already knows where the block starts,
+because the extractor found it. So the fix costs nothing at build time:
+
+```markdown
+[!code-csharp[](../../../../examples/code-only/Example01_Letters3D/Program.cs?start=1&end=86)]
+```
+
+Chosen over the two obvious alternatives: a DocFX post-processing plugin (a build-time dependency to
+maintain against DocFX versions) and a script rewriting generated HTML (fragile, and skipped by anyone
+who rebuilds the site by hand). A line range needs neither and behaves identically under `docfx serve`.
+
+`MetadataBlockLocation` measures the block while parsing: how many lines of real code precede it,
+trailing blank lines excluded, and whether anything follows it. **A single leading range can only
+express "everything but the block" when the block is last in the file** — which all 59 are. When one is
+not, the whole file is included and the validator warns, rather than emitting a range that would silently
+cut real code.
+
+The 29 hand-owned pages needed the same treatment, and the generator must never edit them. Done once by
+hand with a migration script, exactly as the legacy landing pages were. Verified afterwards: **0 of 70
+rendered pages contain the block**, and the trim lands on the last real code line in every language —
+`}` for C#, `End Module` for VB.
+
+#### If the toc nesting is revisited (D49)
+
+One finding is worth keeping, because it rules out the obvious approach: **a nested toc file always
+produces a node.** A nameless `- href: code-only/examples/toc.yml` does not inline — DocFX invents a
+node named `code only/examples` from the folder path, which is worse than `Examples`. The four levels
+are inherent to referencing a toc, not an accident of how it was wired.
+
+The options, if the depth turns out to bother people:
+
+- **Move the nested toc up** to `manual/code-only/toc.yml`, owning the whole Code-Only subtree. Gets back
+  to three levels. Costs a region-marker mechanism for YAML, since that file also holds hand-maintained
+  entries.
+- **Write example entries straight into `manual/toc.yml`.** Three levels, no new file, but the generator
+  starts editing a hand-maintained file — which D13 exists to avoid.
+- **Keep four levels.** Current choice.
+
 #### Original specification
 
 Generates, per example with `docs: true`:
@@ -849,6 +892,9 @@ substantially.
 | D45 | `Example17_SignalR_Blazor` | `docs: false`. It is the server half of `stride-signalr.md`, which documents both sides; it stays in the launchers so it can be started when someone wants to try the pair |
 | D46 | Duplicate `order` | **Warning, not an error.** A tie is broken by `slug`, which is required and unique, so the order is still stable and reproducible — the author has just not chosen between the two. Not worth failing a build over |
 | D47 | Where validation errors are written | **stderr**, everything else stdout. The pre-build hook raises only `StandardErrorImportance`, so a passing build stays quiet and a failing one prints every finding |
+| D48 | Metadata block in the rendered code listing | Excluded with a DocFX **line range** on the code include, computed at generation time. Not a DocFX plugin and not a post-processing pass over generated HTML — see below |
+| D49 | Toc nesting depth | **Keep the four levels for now** (`Code-Only › Examples › C# Getting Started › page`). The structure is logical; gathering community feedback before changing it. §Options recorded below if it is revisited |
+| D50 | `C#` prefix on toc group names | **Deliberate, keep it.** It reads as redundant next to the F#/VB groups, but it is there so C# developers searching for "C# <topic>" find these pages. Do not "simplify" it away |
 
 ### D24 — why slugs stay level-free
 

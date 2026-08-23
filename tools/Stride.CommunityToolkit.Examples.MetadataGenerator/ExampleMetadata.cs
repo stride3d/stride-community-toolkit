@@ -112,6 +112,14 @@ public class ExampleMetadata
     [YamlIgnore]
     public List<string>? RelatedSlugs { get; set; }
 
+    /// <summary>
+    /// Gets or sets where the metadata block sits in the source file, so the documentation can include
+    /// the code without it.
+    /// </summary>
+    [YamlIgnore]
+    [JsonIgnore]
+    public Core.MetadataBlockLocation BlockLocation { get; set; }
+
     /// <summary>Gets the effective language, applying the <c>csharp</c> default.</summary>
     /// <remarks>A convenience for the generator only. It is kept out of the manifest because it would
     /// duplicate <see cref="Language"/>, which the parser already fills in from the file extension.</remarks>

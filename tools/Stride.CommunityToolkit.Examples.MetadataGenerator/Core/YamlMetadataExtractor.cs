@@ -53,11 +53,23 @@ public static partial class YamlMetadataExtractor
     /// <param name="yaml">The raw YAML between the delimiters, comment prefixes removed.</param>
     /// <returns><see langword="true"/> if a block was found.</returns>
     public static bool TryExtract(string filePath, string content, out string yaml)
+        => TryExtract(filePath, content, out yaml, out _);
+
+    /// <summary>
+    /// Attempts to extract the metadata block, also reporting where it sits in the file.
+    /// </summary>
+    /// <param name="filePath">The source file path; its extension selects the comment syntax.</param>
+    /// <param name="content">The full contents of the file.</param>
+    /// <param name="yaml">The raw YAML between the delimiters, comment prefixes removed.</param>
+    /// <param name="location">Where the block starts and ends, for excluding it from a docs code include.</param>
+    /// <returns><see langword="true"/> if a block was found.</returns>
+    public static bool TryExtract(string filePath, string content, out string yaml, out MetadataBlockLocation location)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         ArgumentNullException.ThrowIfNull(content);
 
         yaml = string.Empty;
+        location = default;
 
         var extension = Path.GetExtension(filePath);
 
@@ -81,6 +93,8 @@ public static partial class YamlMetadataExtractor
         yaml = language == "vb"
             ? StripLineCommentPrefixes(match.Groups[1].Value)
             : match.Groups[1].Value.Trim();
+
+        location = MetadataBlockLocation.Measure(content, match.Index, match.Index + match.Length);
 
         return yaml.Length > 0;
     }

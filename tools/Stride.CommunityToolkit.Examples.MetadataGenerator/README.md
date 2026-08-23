@@ -46,6 +46,11 @@ dotnet run -- docs "../../examples/code-only" --dry-run
 | `--media-path` | Screenshot folder. An image is linked only when the file actually exists. |
 | `--dry-run` | List the files that would change and write nothing. |
 
+The source listing on each page stops before the `---example-metadata` block, using a DocFX line range
+computed while parsing. That keeps the fix at generation time - no DocFX plugin and no post-processing
+pass over generated HTML. It only works when the block is the last thing in its file; otherwise the
+whole file is included and validation warns.
+
 Validation errors always stop this command, with or without `--strict`: a page built from a bad block
 is wrong in ways that are tedious to spot by reading it. Files whose content would not change are left
 untouched, so the git diff shows only real changes.
@@ -170,16 +175,21 @@ should not drag in a generic host, Serilog and YamlDotNet to read a JSON file. T
 ```
 Core/
   MetadataVocabulary.cs      # The closed sets: levels, categories, languages. Add new values here.
+  MetadataBlockLocation.cs   # Where the block sits, so docs can include the code without it
   ParsedExample.cs           # A parsed block plus the raw text and literal keys it came from
   ValidationMessage.cs       # Severity + attribution for a single finding
   YamlMetadataExtractor.cs   # Pulls the block out of C# / F# / VB comment syntax
   YamlSourceInspector.cs     # Source-text checks that survive a failed parse
+  DocOwnership.cs            # Reads the generated:/partial marker out of an existing page
+  DocPaths.cs                # Doc-site paths, filenames and language labels
 Services/
   ExampleScanner.cs          # Finds candidate files and project folders
   MetadataParser.cs          # Deserializes one block; normalises paths and trailing newlines
   MetadataValidator.cs       # Aggregated schema validation; resolves related: to slugs
   ManifestService.cs         # Orchestration, reporting, exit codes
   ManifestWriter.cs          # Serializes the envelope
+  DocPageBuilder.cs          # Renders example pages, landing pages and redirect stubs
+  DocsGenerator.cs           # Applies file ownership and writes the docs
 CommandLineConfiguration.cs  # CLI structure (instance-based, takes IServiceProvider)
 ExampleMetadata.cs           # Schema v1 model
 ExampleManifest.cs           # The envelope
