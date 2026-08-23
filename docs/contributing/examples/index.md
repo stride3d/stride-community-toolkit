@@ -4,19 +4,87 @@ All examples live in the [examples](https://github.com/stride3d/stride-community
 
 Suggested and in-progress examples are tracked in the [example backlog](https://github.com/stride3d/stride-community-toolkit/blob/main/notes/example-backlog.md). Check it before you start, and add your idea there if it is not listed.
 
-If you'd like your example to be launchable from the console application [Stride.CommunityToolkit.Examples](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Examples), follow these steps:
-  
-1. Create a project under `examples/code-only/` named `ExampleXY_YourExampleNamespace` (replace `XY` with the next available number).
-2. Add example metadata to the `*.csproj` (used in the console app menu):
-    ```xml
-    <ExampleTitle>Basic Example - Capsule with rigid body</ExampleTitle>
-    <ExampleOrder>100</ExampleOrder>
-    <ExampleEnabled>true</ExampleEnabled>
-    <ExampleCategory>1 - Basic Example</ExampleCategory>
+## How an example is registered
+
+One metadata block, in the example's own entry file. There is nothing else to update: the console runner, the [Avalonia launcher](https://github.com/stride3d/stride-community-toolkit/tree/main/tools/Stride.CommunityToolkit.Examples.Launcher), the documentation page, the level landing pages and the table of contents are all generated from it.
+
+1. Create a project under `examples/code-only/` named `ExampleXY_YourExampleName` (replace `XY` with the next available number).
+
+2. Add an `---example-metadata` block to the bottom of the entry file, inside a comment:
+
+    ```csharp
+    /*
+    ---example-metadata
+    slug: my-example                 # REQUIRED. Short, kebab-case. Becomes the doc filename and URL.
+    title:
+      en: My Example
+    level: Beginner                  # Getting Started | Beginner | Intermediate | Advanced | Other
+    category: Physics                # See Core/MetadataVocabulary.cs for the full list
+    complexity: 2                    # 1-5
+    order: 40                        # Position within its (language, level) group
+    description:
+      en: |-
+        What the example shows, and why it is worth reading. A few sentences.
+    concepts:
+      - One thing the reader will learn
+      - "Quote any value containing a colon: like this one"
+    tags:
+      - 3D
+      - Physics
+    related:
+      - Example01_Basic3DScene
+    enabled: true
+    created: 2026-08-23
+    ---
+    */
     ```
-3. If `<ExampleEnabled>true</ExampleEnabled>`, it will automatically appear in the console menu.
-4. Run `Stride.CommunityToolkit.Examples`.
-5. You should see your example listed in the console application menu.
-   [!INCLUDE [examples-console-app](../../includes/manual/examples/examples-console-app.md)]
-6. Update `Stride.CommunityToolkit.Docs/includes/manual/examples/basic-examples-outro.md` to include the new example.
-7. Update `Stride.CommunityToolkit.Docs/includes/manual/basic-examples.md`, `advance-examples.md`, or `other-examples.md` to include the new example.
+
+    F# uses `(* ... *)` and Visual Basic prefixes every line with `'`. Both are picked up automatically.
+
+3. Check it:
+
+    ```bash
+    dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- scan examples/code-only
+    ```
+
+    Validation reports every problem in one pass. Two mistakes are worth knowing about in advance, because YAML makes both of them silently: an **unquoted `#`** truncates its value, and an **unquoted `: `** inside a list item turns the item into a mapping. Quote any value containing either.
+
+4. Run the console app or the launcher. Your example appears in its level group, with no further registration.
+
+5. Generate its documentation page:
+
+    ```bash
+    dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- docs examples/code-only
+    ```
+
+## Three flags worth knowing
+
+| Field | Default | Effect when `false` |
+|---|---|---|
+| `enabled` | `true` | Excluded everywhere — use while an example does not build |
+| `docs` | `true` | In the launchers, but no documentation page |
+| `launcher` | `true` | Documented, but hidden from both launchers |
+
+## Editing a generated page
+
+A documentation page carrying `generated: true` is overwritten on every run — change the metadata block, not the page.
+
+To add hand-written prose to a generated page, change its frontmatter to `generated: partial` and wrap the tool-owned part in markers:
+
+```markdown
+---
+generated: partial
+---
+
+<!-- #region generated -->
+(everything here is regenerated)
+<!-- #endregion generated -->
+
+## My own section
+
+Never touched by the generator.
+```
+
+A page with no `generated:` frontmatter at all is yours entirely, and the generator leaves it alone. That is how the older, hand-written example pages are treated.
+
+The full schema and the reasoning behind it are in [notes/plans/examples-metadata.md](https://github.com/stride3d/stride-community-toolkit/blob/main/notes/plans/examples-metadata.md).
