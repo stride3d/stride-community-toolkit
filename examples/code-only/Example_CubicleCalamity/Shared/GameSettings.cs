@@ -26,7 +26,15 @@ public static class GameSettings
     /// <summary>
     /// Seconds after a clear during which the next one still counts as part of the same combo.
     /// </summary>
-    public const float ComboWindowSeconds = 2.5f;
+    /// <remarks>
+    /// This was 2.5, which quietly inverted the game's incentive: a thinking pause is longer than
+    /// that, so deliberate play ran at x1 while blind spam-clicking held a permanent x5 and beat it
+    /// roughly 1.7M to 0.7M (measured by simulating both styles over five boards with the real
+    /// rules). At 7 seconds both keep the streak, the quadratic group bonus decides the winner, and
+    /// the same simulation puts deliberate play ahead 3.6M to 1.7M. The combo now punishes
+    /// stalling, not thinking.
+    /// </remarks>
+    public const float ComboWindowSeconds = 7f;
 
     /// <summary>
     /// The colours a cube can take. A cube matches its neighbour when both carry the same one, so

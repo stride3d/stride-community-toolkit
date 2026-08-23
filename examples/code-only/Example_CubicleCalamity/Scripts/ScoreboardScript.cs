@@ -20,6 +20,9 @@ public class ScoreboardScript : SyncScript
     private const float PunchDuration = 0.2f;
     private const float PunchScale = 1.25f;
 
+    /// <summary>How many bar segments a full combo window shows.</summary>
+    private const int ComboBarSegments = 20;
+
     private float _displayedScore;
     private float _punchRemaining;
 
@@ -47,6 +50,17 @@ public class ScoreboardScript : SyncScript
     /// reorder away from silently swapping the two labels.
     /// </remarks>
     public EntityTextComponent? ComboText { get; set; }
+
+    /// <summary>
+    /// Gets or sets the draining bar under the combo, showing how much of the window is left.
+    /// </summary>
+    /// <remarks>
+    /// The bar is a run of characters whose length follows <see cref="ScoreKeeper.ComboFraction"/> -
+    /// no UI framework, no textures, just the same text renderer the rest of the HUD already uses.
+    /// Chunky, but it makes the window something the player can race instead of something they
+    /// discover when the multiplier vanishes.
+    /// </remarks>
+    public EntityTextComponent? ComboBarText { get; set; }
 
     /// <inheritdoc />
     public override void Start() => _displayedScore = Keeper.TotalScore;
@@ -109,6 +123,11 @@ public class ScoreboardScript : SyncScript
         {
             ComboText.IsVisible = false;
 
+            if (ComboBarText is not null)
+            {
+                ComboBarText.IsVisible = false;
+            }
+
             return;
         }
 
@@ -119,6 +138,14 @@ public class ScoreboardScript : SyncScript
 
         // Fades as the window runs out, so the streak is visibly expiring rather than just vanishing
         ComboText.Opacity = Math.Clamp(Keeper.ComboFraction * 1.5f, 0f, 1f);
+
+        if (ComboBarText is null) return;
+
+        // Ceiling, not rounding: the bar only reaches zero segments at the moment the combo lapses
+        var segments = (int)MathF.Ceiling(Keeper.ComboFraction * ComboBarSegments);
+
+        ComboBarText.IsVisible = true;
+        ComboBarText.Text = new string('=', segments);
     }
 
     /// <summary>

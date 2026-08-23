@@ -332,9 +332,22 @@ public class CubicleCalamityGame(Game game)
             IsVisible = false,
         };
 
-        _scoreboard = new ScoreboardScript { Keeper = _keeper, TotalText = total, ComboText = combo };
+        // The combo window as a draining bar of characters, directly under the combo line
+        var comboBar = new EntityTextComponent()
+        {
+            Text = string.Empty,
+            FontSize = 14,
+            PositionMode = TextPositionMode.Anchored,
+            ScreenAnchor = DisplayPosition.TopLeft,
+            Offset = new Vector2(16, 66),
+            TextColor = new Color(255, 210, 70),
+            EnableShadow = true,
+            IsVisible = false,
+        };
 
-        var entity = new Entity(EntityNames.Scoreboard) { total, combo, _scoreboard };
+        _scoreboard = new ScoreboardScript { Keeper = _keeper, TotalText = total, ComboText = combo, ComboBarText = comboBar };
+
+        var entity = new Entity(EntityNames.Scoreboard) { total, combo, comboBar, _scoreboard };
 
         entity.Scene = _scene;
     }
