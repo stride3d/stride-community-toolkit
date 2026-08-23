@@ -11,7 +11,6 @@ game.Run(start: (Scene rootScene) =>
     game.SetupBase2DScene();
     game.AddProfiler();
 
-
     for (int i = 0; i <= 30; i++)
     {
         var primitive = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
