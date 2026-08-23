@@ -38,7 +38,7 @@ using Stride.Input;
 // more than it looks: a weight resting on the ground is being held up by the ground, so both ropes go
 // slack, the stretch that the whole example is about disappears, and the length readout stops
 // measuring anything.
-const float AnchorHeight = 14.5f;
+const float AnchorHeight = 9f;
 const float NaiveRopeX = -3.5f;
 const float StableRopeX = 3.5f;
 
@@ -92,6 +92,9 @@ void Start(Scene scene)
     game.SetupBase3DScene();
     game.AddSkybox();
     game.AddProfiler();
+    game.AddStudioLighting();
+    game.SetCameraPosition(new Vector3(13, 12, 12));
+    game.SetCameraRotation(new Vector3(40, -24, 0));
 
     InitializeDebugOverlay();
 
