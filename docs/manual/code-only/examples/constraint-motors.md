@@ -34,6 +34,8 @@ The `Program.cs` file shows how to:
 - Why a velocity set from the start callback is lost
 - Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler
 
+![Constraints - Servo vs Motor vs Limit](media/constraint-motors.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example15_Constraint_Motors).
 
 [!code-csharp[](../../../../examples/code-only/Example15_Constraint_Motors/Program.cs?start=1&end=414)]

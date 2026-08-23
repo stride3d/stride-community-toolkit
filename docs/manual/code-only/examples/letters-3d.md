@@ -20,6 +20,8 @@ The `Program.cs` file shows how to:
 - centerOrigin for strings centred on their entity
 - When to use EntityTextComponent or WorldTextComponent instead
 
+![3D Letters (Mesh Text)](media/letters-3d.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Letters3D).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Letters3D/Program.cs?start=1&end=86)]

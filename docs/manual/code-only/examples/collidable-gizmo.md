@@ -18,6 +18,8 @@ The `Program.cs` file shows how to:
 - Diagnosing a body that does not collide as expected
 - Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
 
+![Collidable Gizmo](media/collidable-gizmo.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example08_CollidableGizmo).
 
 [!code-csharp[](../../../../examples/code-only/Example08_CollidableGizmo/Program.cs?start=1&end=45)]

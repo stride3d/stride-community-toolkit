@@ -18,6 +18,8 @@ The `Program.cs` file shows how to:
 - Comparing mesh against collider when a body misbehaves
 - Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
 
+![Debug Render Component](media/debug-render-component.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example08_DebugRenderComponent).
 
 [!code-csharp[](../../../../examples/code-only/Example08_DebugRenderComponent/Program.cs?start=1&end=38)]

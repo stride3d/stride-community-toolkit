@@ -20,6 +20,8 @@ The `Program.cs` file shows how to:
 - Several EntityTextComponents on one entity
 - HUD text that survives window resizing: TextPositionMode.Anchored
 
+![Entity Text (Screen-Space)](media/entity-text.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_EntityText).
 
 [!code-csharp[](../../../../examples/code-only/Example01_EntityText/Program.cs?start=1&end=169)]

@@ -21,6 +21,8 @@ The `Program.cs` file shows how to:
 - Using helpers: SetupBase3DScene
 - Using helpers: AddSkybox
 
+![Give Me a Cube (SimulationUpdate)](media/simulation-update.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example02_GiveMeACube_SimulationUpdate).
 
 [!code-csharp[](../../../../examples/code-only/Example02_GiveMeACube_SimulationUpdate/Program.cs?start=1&end=110)]

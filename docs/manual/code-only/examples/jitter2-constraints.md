@@ -19,6 +19,8 @@ The `Program.cs` file shows how to:
 - Synchronizing physics bodies with visual entities
 - Fixed-timestep physics update loop, decoupled from the render frame rate
 
+![Jitter2 Physics - Constraining to 2D](media/jitter2-constraints.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example19_Jitter2Physics_Constraints).
 
 [!code-csharp[](../../../../examples/code-only/Example19_Jitter2Physics_Constraints/Program.cs?start=1&end=168)]

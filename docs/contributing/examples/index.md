@@ -65,6 +65,29 @@ One metadata block, in the example's own entry file. There is nothing else to up
 | `docs` | `true` | In the launchers, but no documentation page |
 | `launcher` | `true` | Documented, but hidden from both launchers |
 
+## Screenshots
+
+Example screenshots are produced by running the examples, not by taking them by hand:
+
+```bash
+dotnet run --file build/capture-screenshots.cs -- --review
+```
+
+Each example runs once with capture enabled, saves its **GPU render target** at a fixed frame and exits. Nothing is scraped off the screen, so there is no window to keep in the foreground and the run can happen behind whatever you are doing.
+
+`--review` writes every image to `screenshots-review/` at the repository root, together with an `index.html` contact sheet for looking at all of them in one pass. Run the command without `--review` to write them into the documentation media folder for real; an image already there is never replaced without `--force`.
+
+Add `--only <slug>` to redo a single example, and `--frame <n>` to try a different moment without editing the metadata first.
+
+Two metadata fields control capture:
+
+| Field | Default | Effect |
+|---|---|---|
+| `screenshot` | `true` | `false` excludes the example — for anything that cannot produce a meaningful frame on its own, such as the SignalR pair, which needs a running server |
+| `screenshotFrame` | `240` | Which frame to keep. Raise it for a scene that needs longer to settle, lower it for one that has already scattered |
+
+Every image is looked at by a person before it is committed. A capture that renders black, catches a scene mid-explosion or frames nothing but sky looks like a complete success to the script.
+
 ## Editing a generated page
 
 A documentation page carrying `generated: true` is overwritten on every run — change the metadata block, not the page.

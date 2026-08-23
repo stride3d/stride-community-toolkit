@@ -21,6 +21,8 @@ The `Program.cs` file shows how to:
 - Adding keyboard instructions as a DebugOverlay section
 - Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
 
+![Basic3D Scene (Every Primitive)](media/primitives-3d.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_Primitives).
 
 [!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_Primitives/Program.cs?start=1&end=113)]

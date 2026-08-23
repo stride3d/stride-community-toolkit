@@ -20,6 +20,8 @@ The `Program.cs` file shows how to:
 - Orienting yourself with a named-axis ground gizmo
 - Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler, CreateFlatMaterial
 
+![Simple Geometry (Labelled Triangle)](media/simple-geometry.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_SimpleGeometry).
 
 [!code-csharp[](../../../../examples/code-only/Example05_SimpleGeometry/Program.cs?start=1&end=161)]

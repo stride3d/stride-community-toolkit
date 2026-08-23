@@ -14,7 +14,7 @@ The example showcases important 3D graphics concepts including:
 - Triangle winding order for proper face orientation
 - Vertex indexing to efficiently reuse vertices between adjacent triangles
 
-![Stride UI Example](media/stride-game-engine-example-05-partial-torus-mesh.webp)
+![Partial torus mesh](media/partial-torus-mesh-fs.webp)
 
 For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
 
