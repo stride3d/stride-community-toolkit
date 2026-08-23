@@ -74,4 +74,7 @@ Thanks to everyone pushing this forward:
 - [Jurgen Coenegrachts](https://github.com/w200338): Fixes
 - [Luca Domenichini](https://github.com/luca-domenichini): Fixes
 - [Martin Blackman](https://github.com/mpblackman): Examples
+- [Fera](https://github.com/ferafiks): Extensions
+- [Hatim Ourahou](https://github.com/ourabigdev): Extensions
+- [Nenad Spasojevic](https://github.com/Spajker7): Examples
 - [Vaclav Elias](https://github.com/VaclavElias): Code-only approach implementation, toolkit docs
