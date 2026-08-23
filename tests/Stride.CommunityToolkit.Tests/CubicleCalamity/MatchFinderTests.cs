@@ -182,6 +182,52 @@ public class MatchFinderTests
     }
 
     [Fact]
+    public void EmptyBoardHasZeroMovesToCount()
+        => Assert.Equal(0, MatchFinder.CountClearableGroups(new CubeGrid()));
+
+    [Fact]
+    public void MoveCountIgnoresStrandedSingles()
+    {
+        // Two clearable pairs and two stranded singles: two moves, not four groups
+        var grid = new CubeGrid();
+
+        Place(grid, new Int3(0, 0, 0), Color.Red);
+        Place(grid, new Int3(1, 0, 0), Color.Red);
+        Place(grid, new Int3(5, 0, 0), Color.Blue);
+        Place(grid, new Int3(5, 1, 0), Color.Blue);
+        Place(grid, new Int3(3, 0, 0), Color.Green);
+        Place(grid, new Int3(8, 0, 8), Color.Red);
+
+        Assert.Equal(2, MatchFinder.CountClearableGroups(grid));
+    }
+
+    [Fact]
+    public void OneConnectedBoardIsOneMove()
+    {
+        var grid = new CubeGrid();
+
+        for (var x = 0; x < 4; x++)
+        {
+            Place(grid, new Int3(x, 0, 0), Color.Red);
+        }
+
+        Assert.Equal(1, MatchFinder.CountClearableGroups(grid));
+    }
+
+    [Fact]
+    public void TouchingGroupsOfDifferentColoursCountSeparately()
+    {
+        var grid = new CubeGrid();
+
+        Place(grid, new Int3(0, 0, 0), Color.Red);
+        Place(grid, new Int3(1, 0, 0), Color.Red);
+        Place(grid, new Int3(2, 0, 0), Color.Green);
+        Place(grid, new Int3(3, 0, 0), Color.Green);
+
+        Assert.Equal(2, MatchFinder.CountClearableGroups(grid));
+    }
+
+    [Fact]
     public void EveryCubeIsVisitedOnlyOnceAcrossGroups()
     {
         // A large single-colour board must still terminate and report a move; this would spin or
