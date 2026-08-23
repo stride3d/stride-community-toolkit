@@ -1,8 +1,8 @@
 # Examples Metadata & Docs Generation — Plan
 
-**Status: steps 0-3 done. Every example carries schema v1 metadata** - 59 blocks, 57 published, passing
-`generate --strict` with zero errors. **Next is step 4** (flip the MSBuild hook to `--strict`, one line)
-and then **Phase 2, the launchers**. §8 has the order of work, the assigned slugs and the final category
+**Status: steps 0-4 done.** Every example carries schema v1 metadata - 59 blocks, 57 published - and the
+Launcher pre-build hook now validates in `--strict` mode, so a malformed block fails the build.
+**Next is Phase 2, the launchers.** §8 has the order of work, the assigned slugs and the final category
 set.
 
 ---
@@ -285,11 +285,11 @@ contributor editing the file can *see* which part they must not edit.
 Aggregated across all examples rather than dying on the first. Implemented in
 `Services/MetadataValidator.cs` and `Core/YamlSourceInspector.cs`.
 
-**Deviation on D10, and it is a transition, not a reversal.** Errors are fatal only under `--strict`.
-Right now the validator reports 34 real errors — 22 of them simply "no `slug` yet" — so making them
-fatal today would break the Launcher build until the backfill is finished. The MSBuild hook keeps
-`ContinueOnError="WarnAndContinue"` and carries a comment saying to add `--strict` and drop the
-attribute once every example has a schema v1 block. D10's intent is preserved; only its timing moves.
+**D10 is now in force (2026-08-23).** Errors are fatal under `--strict`, which the Launcher pre-build
+hook passes, and `ContinueOnError` is gone — a malformed block fails the build. This was deliberately
+staged: while the backfill was outstanding the validator reported 34 real errors, so turning it on
+earlier would have broken every Launcher build. Verified by breaking a block on purpose: the build
+fails with exit code 3 and prints each finding.
 
 Checks:
 
@@ -310,8 +310,9 @@ Checks:
   no slug yet is only a warning. Resolving against parsed examples alone produced 66 false errors on the
   first run, because most examples are not backfilled — which would have buried the real typos.
 - `media:` file exists in `docs/manual/code-only/examples/media/`.
-- Duplicate `order:` within the same `(language, level)` group flagged (both Jitter2 examples are
-  currently `order: 19`).
+- Duplicate `order:` within the same `(language, level)` group flagged as a **warning**, not an error
+  (D46): the tie is broken by `slug`, which is required and unique, so the sequence stays stable - the
+  author has simply not said which of the two comes first.
 - **Unquoted `#` or `:` in a value.** Found the hard way while authoring
   `Example01_Basic3DScene_FileBasedApp`: `- Declaring NuGet packages inline with #:package` silently
   became `- Declaring NuGet packages inline with`, because `#` starts a YAML comment. No error, no
@@ -740,7 +741,7 @@ substantially.
 | D7 | `generatedAt` | Included; manifest becomes a build artifact, removed from git + `.gitignore`d |
 | D8 | Takeover flag | `generated: true` / `partial` / `false` |
 | D9 | Drift on a hand-owned doc | Warn only; never block the build |
-| D10 | Validation failures | **Fail hard**; drop `ContinueOnError` |
+| D10 | Validation failures | **Fail hard**; drop `ContinueOnError`. In force since 2026-08-23 (see D35 for why it was staged) |
 | D11 | Backfill flow | AI writes frontmatter into the entry files; review via git diff |
 | D12 | ~29 examples with no doc | Generate minimal stub docs at `level: Other` |
 | D13 | `toc.yml` | Generate a dedicated `examples/toc.yml`; reference it as a nested TOC from `manual/toc.yml` |
@@ -776,6 +777,8 @@ substantially.
 | D43 | Legacy Bullet variants | **They keep their docs**, reversing the suggestion in "Flagged during the pass" §1. They are documented like any other example |
 | D44 | `Example04_MyraUI` | `enabled: false` while it does not build on Stride 4.4, matching `Example07_CubeClicker`. Its hand-written doc has no frontmatter, so the generator never touches it and the page stays live |
 | D45 | `Example17_SignalR_Blazor` | `docs: false`. It is the server half of `stride-signalr.md`, which documents both sides; it stays in the launchers so it can be started when someone wants to try the pair |
+| D46 | Duplicate `order` | **Warning, not an error.** A tie is broken by `slug`, which is required and unique, so the order is still stable and reproducible — the author has just not chosen between the two. Not worth failing a build over |
+| D47 | Where validation errors are written | **stderr**, everything else stdout. The pre-build hook raises only `StandardErrorImportance`, so a passing build stays quiet and a failing one prints every finding |
 
 ### D24 — why slugs stay level-free
 
@@ -807,7 +810,7 @@ inserting a normalisation step in front of both.
 | 1 | ~~Schema + validator + Step 1.5 cleanups + Step 1.6 scanner change~~ **done 2026-08-22** | — | — |
 | 2 | ~~Normalise the **22 existing** frontmatter blocks to schema v1~~ **done 2026-08-22** | — | — |
 | 3 | ~~Backfill the remaining examples~~ **done 2026-08-23** — 37 in four batches by level | — | — |
-| 4 | Flip the hook to `--strict` and drop `ContinueOnError` | — | one line; completes D10. **Ready now** |
+| 4 | ~~Flip the hook to `--strict` and drop `ContinueOnError`~~ **done 2026-08-23** | — | — |
 | 5 | **Phase 2 — launchers** (§4) | — | small; manifest already has the right shape |
 | 6 | Phase 1.4 — docs generation, toc, landing pages | — | the other big one |
 | 7 | Screenshots (§5) | 6 | deferred, direction set |

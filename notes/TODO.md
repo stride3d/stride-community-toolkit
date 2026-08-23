@@ -272,8 +272,13 @@ Everything shipped is committed or in the working tree; only what is still open 
   comparison; do not change the texture without one.
 - **`Example_CubicleCalamity` breaks the `Example<NN>_<Name>` folder convention** — renaming touches
   the `.slnx`, `.sdpkg`, `.csproj` and namespace. Decide rather than drift.
-- **Combo window as a visible draining bar** — the clearest way to make combos something to play
-  toward, and the first thing in the example that starts to want real UI. Optional polish.
+- ~~**Combo window as a visible draining bar**~~ — done (Aug 2026), as a shrinking run of `=`
+  characters under the combo line via a third `EntityTextComponent`; no real UI needed yet. Done
+  together with the combo balance fix: `ComboWindowSeconds` 2.5 → 7, after a headless simulation
+  with the real gameplay classes showed the short window inverted the incentive (blind spam ~1.7M
+  vs deliberate play ~0.7M; at 7 s deliberate play wins ~3.6M to ~1.7M because both keep the
+  streak and the quadratic group bonus decides). The measurement is summarised on the constant's
+  doc comment in `GameSettings.cs`.
 - **`CubeGrid.RemoveAndCollapse` returns drop distances nothing consumes** since the physics-driven
   collapse replaced the teleport; only the tests read it, and they are what pin the collapse rule.
   Either keep it as a tested contract or make it `void` and assert grid state instead.
