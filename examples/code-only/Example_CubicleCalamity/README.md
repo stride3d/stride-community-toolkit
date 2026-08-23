@@ -114,3 +114,55 @@ game in `tests/Stride.CommunityToolkit.Tests`:
 Everything else - input, physics, sound, popups, the 3D letters - is presentation around that
 core, and the project's structure is walked through in
 [components-and-scripts.md](../../../docs/manual/components-and-scripts.md).
+
+## Future improvements
+
+Ideas agreed worth doing, roughly by payoff per effort. Game-specific work is tracked here, not in
+the repository's `notes/TODO.md` - only toolkit-level features live there.
+
+### Quick wins
+
+- **Perfect-clear bonus** - the classic SameGame rule this game is missing: clear *every* cube and
+  a large bonus lands with "PERFECT" raining down in gold instead of "GAME OVER". Gives the
+  save-one-colour strategy a true summit. A few lines in `CheckForGameOver` (`Grid.Count == 0`);
+  the letters already exist.
+- **Level intro drop** - "LEVEL 2" falls as slow-fall 3D letters when a level starts. Reuses
+  `FallingLetters.SpawnWord` verbatim.
+- **Best score + "NEW RECORD"** - add `BestScore` to `GameProgress`, show "Best:" on the HUD, drop
+  NEW RECORD letters when beaten. The natural moment to wire in the ready `JsonProgressStore`,
+  since a best score is the thing genuinely worth persisting.
+- **Camera auto-framing** - the 5x5x5 board looks small from the distance tuned for the full one;
+  pull the camera in proportional to `level.Rows` on level start.
+
+### Gameplay
+
+- **Level goals** - today a level cannot be failed: every dead board offers Next Level, so levels
+  are only sizes. A target score (or a max-stranded threshold) per level turns the ladder into a
+  run with stakes: reach it and "LEVEL CLEAR" unlocks N; miss it and the run ends for real. Pure
+  `Gameplay/` logic, testable like the rest. Pairs naturally with the perfect-clear bonus - those
+  two together complete the game loop.
+- **Special cubes** - a rare bomb cube (clears a sphere around it), a stone cube (colourless,
+  unclearable, must be undermined so it falls away), a rainbow cube (matches anything). Spawn rates
+  per level become the difficulty curve. Also the best teaching extension in the game: identity via
+  component data, exactly the components-and-scripts manual's lesson, and it forces `MatchFinder`
+  to grow cleanly.
+
+### Later
+
+- **Juice pass** - cleared cubes burst into small physics debris, combo sounds rise in pitch with
+  the streak (the audio hooks exist), a camera punch on CALAMITY.
+- **Undo (U key)** - snapshot the grid before each clear. Good command-pattern teaching material,
+  but needs a scoring-fairness decision first (does undo cost points? allowed after game over?).
+- **Game modes** - timed or limited-moves, offered through the same dropdown pattern as the
+  palettes.
+
+### Housekeeping
+
+- **`CubeGrid.RemoveAndCollapse` returns drop distances nothing consumes** since the physics-driven
+  collapse replaced the teleport; only the tests read it, and they are what pin the collapse rule.
+  Either keep it as a tested contract or make it `void` and assert grid state instead.
+- **The orientation markers are unplaced** - `OrientationGizmo` sits where it did before the
+  platform was centred on the origin, and the colliderless `ReferenceCube` has no stated purpose.
+  The real fix - a screen-corner axis widget the way editor viewports do it - is a toolkit feature
+  and is tracked in `notes/TODO.md`; what this game owes is a decision about the two markers in the
+  meantime.
