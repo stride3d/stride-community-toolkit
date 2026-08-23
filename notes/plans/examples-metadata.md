@@ -1,8 +1,9 @@
 # Examples Metadata & Docs Generation — Plan
 
-**Status: steps 0-5 done - Phase 2 is complete.** Every example carries schema v1 metadata (59 blocks,
-57 published), the pre-build hook validates in `--strict` mode, and **both launchers now read the
-manifest**. The duplicate csproj metadata system is deleted. **Next is Phase 1.4, docs generation.**
+**Status: steps 0-6 done. Phase 1 and Phase 2 are both complete.** Every example carries schema v1
+metadata (59 blocks, 57 published); the pre-build hook validates in `--strict` mode; both launchers
+read the manifest; and the documentation - pages, landing pages, toc and redirects - is generated from
+it. **The only step left is §5, automated screenshots**, which is deferred with its direction set.
 
 ---
 
@@ -528,7 +529,48 @@ for experiments — no metadata block, so invisible to everything: D42), `_Temp2
 8. ~~**`Example18_Box2DPhysics2` is an empty directory**~~ — it showed up once in a directory listing
    and no longer exists. Nothing to do; recorded so it is not rediscovered as a mystery.
 
-### Step 1.4 — `docs` command
+### Step 1.4 — `docs` command — **DONE 2026-08-23**
+
+Run as `dotnet run --project tools/…MetadataGenerator -- docs examples/code-only`, with `--docs-path`,
+`--media-path` and `--dry-run`. Validation errors stop it unconditionally — a page built from a bad
+block is wrong in ways that are tedious to spot by reading it, so `--strict` is not optional here.
+
+**First run: 38 files written, 27 hand-owned pages left alone.** 29 new example pages, 8 landing pages
+(5 C#, 2 F#, 1 VB), 4 redirect stubs and the toc. DocFX builds it with 0 errors; the 2 remaining
+warnings are pre-existing API xrefs in hand-written pages.
+
+The ownership model worked exactly as §2.4 intended: none of the 27 existing pages has frontmatter, so
+the first run could not have damaged any of them, and each has to be opted in individually.
+
+Five things settled while implementing it:
+
+1. **The legacy landing pages had to be converted by hand, once.** They held real prose, so
+   "hand-owned = never touch" correctly refused to overwrite them — the generator reported all four as
+   skipped. Turning them into stubs is a migration, not something the tool should special-case, so it
+   was done deliberately and they now carry `generated: true`.
+2. **`redirect_url` must name the rendered `.html`.** DocFX copies the value into a meta-refresh
+   verbatim; a `.md` target produces a redirect to a page that does not exist on the deployed site.
+   Caught by reading the generated HTML rather than trusting the frontmatter.
+3. **`basic-examples.md` redirects to `getting-started-examples.md`**, not `beginner-examples.md` as
+   the §Step 1.4 sketch suggested. Someone arriving at "basic examples" wants the start of the
+   sequence, and Getting Started is now that.
+4. **Unchanged files are not rewritten.** Without comparing first, every run would touch sixty pages
+   and the diff would be worthless for review. The second run reported "4 written, 38 already current".
+5. **An image is linked only if the file exists.** Most examples have no screenshot yet (§5), and a
+   broken image is worse than none.
+
+Three hand-owned pages went stale the moment the structure changed, and were updated separately:
+`contributing/examples/index.md` (still told contributors to add `<ExampleTitle>` csproj properties
+that no longer exist — now documents the metadata block, the three flags and the `partial` mode),
+`manual/index.md` (duplicated every example list inline), and
+`includes/manual/examples/examples-console-app.md` (a snapshot of a console menu that no longer looks
+like that). Four now-orphaned list includes were deleted.
+
+**Not linked from the toc, deliberately:** `stride-ui-cube-clicker.md` and
+`myra-ui-draggable-window-and-services.md`. Both examples are `enabled: false`, so they are absent from
+the manifest; their pages stay in the repository and remain reachable by URL.
+
+#### Original specification
 
 Generates, per example with `docs: true`:
 
@@ -840,8 +882,8 @@ inserting a normalisation step in front of both.
 | 3 | ~~Backfill the remaining examples~~ **done 2026-08-23** — 37 in four batches by level | — | — |
 | 4 | ~~Flip the hook to `--strict` and drop `ContinueOnError`~~ **done 2026-08-23** | — | — |
 | 5 | ~~**Phase 2 - launchers** (§4)~~ **done 2026-08-23** | — | — |
-| 6 | Phase 1.4 — docs generation, toc, landing pages | — | the other big one |
-| 7 | Screenshots (§5) | 6 | deferred, direction set |
+| 6 | ~~Phase 1.4 - docs generation, toc, landing pages~~ **done 2026-08-23** | — | — |
+| 7 | Screenshots (§5) | — | deferred, direction set. **The only step left** |
 
 **Step 3 outcome.** Every example now carries a schema v1 block: **59 with metadata, 57 published**
 (`Example07_CubeClicker` and `Example04_MyraUI` are `enabled: false`), passing `generate --strict` with
