@@ -170,6 +170,27 @@ It is a deliberate second copy of the shape written here, not a reference to thi
 should not drag in a generic host, Serilog and YamlDotNet to read a JSON file. The two are coupled by
 `schemaVersion`, which the loader refuses if it is newer than it understands.
 
+### Screenshot capture
+
+`build/capture-screenshots.cs` is the third consumer. It runs each example once with
+`STRIDE_TOOLKIT_CAPTURE` set — which is what makes the toolkit's own `ScreenshotCapture` save a frame
+and exit — then converts the PNG to WebP. From the manifest it reads `slug`, `projectPath`, `media`,
+`screenshot` and `screenshotFrame`: what to run, whether to run it, which frame to keep and what to
+call the result.
+
+```bash
+dotnet run --file build/capture-screenshots.cs -- --review
+```
+
+`--review` writes every image to `screenshots-review/` at the repository root, named by slug, with an
+`index.html` contact sheet beside them — all of them on one page with their title, category, tags and
+capture frame, plus per-image verdict buttons that copy out as markdown. Nothing reaches the docs media
+folder until the command runs *without* `--review`, and an image already there is never replaced
+without `--force`.
+
+It reads the JSON directly rather than linking the model, for the same reason the launchers keep their
+own copy: a file-based script should not have to build a project to look at a handful of fields.
+
 ## Architecture
 
 ```

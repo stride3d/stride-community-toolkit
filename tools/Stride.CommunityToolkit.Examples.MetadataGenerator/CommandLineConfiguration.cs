@@ -20,6 +20,8 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
 
     private const string DefaultDocsPath = "../../docs/manual/code-only/examples";
 
+    private const string DefaultMediaPath = "../../docs/manual/code-only/examples/media";
+
     /// <summary>
     /// Creates and configures the root command with all subcommands.
     /// </summary>
@@ -97,7 +99,16 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
             DefaultValueFactory = _ => new DirectoryInfo(Path.Combine("..", "..", "docs", "manual", "code-only", "examples"))
         };
 
-        var mediaOption = CreateMediaOption();
+        // Unlike scan and generate, this one defaults. There the folder is only used to confirm that an
+        // explicit media: file exists, and omitting it skips a check. Here it decides whether a page gets
+        // a screenshot at all, so omitting it silently published 41 pages with no image - including 25
+        // whose image had been sitting in the media folder the whole time. A default that matches
+        // --docs-path is the difference between forgetting a flag and losing every screenshot.
+        var mediaOption = new Option<DirectoryInfo?>("--media-path")
+        {
+            Description = $"The docs media folder. An image is linked only when the file exists. Defaults to {DefaultMediaPath}, relative to the current directory.",
+            DefaultValueFactory = _ => new DirectoryInfo(Path.Combine("..", "..", "docs", "manual", "code-only", "examples", "media"))
+        };
 
         var dryRunOption = new Option<bool>("--dry-run")
         {

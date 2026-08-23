@@ -55,6 +55,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         }
 
         ValidateSlugUniqueness(examples, messages);
+        ValidateMediaUniqueness(examples, messages);
         ValidateOrderUniqueness(examples, messages);
         ResolveRelated(examples, knownProjects, messages);
 
@@ -237,6 +238,43 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 
             messages.Add(ValidationMessage.Error(owners, "slug",
                 $"'{group.Key}' is used by more than one example. A slug is a doc filename, so it must be unique."));
+        }
+    }
+
+    /// <summary>
+    /// Rejects two examples that declare the same <c>media:</c> filename.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// An error, not a warning, because it silently destroys work. The screenshot run captures each
+    /// example in manifest order and writes to the declared filename, so a shared name means the second
+    /// capture overwrites the first and one example's page ends up showing another example's scene. It
+    /// was found by counting: 49 captures produced 48 files, because
+    /// <c>Example05_PartialTorus</c> and <c>Example05_PartialTorus_FSharp</c> both claimed
+    /// <c>stride-game-engine-example-05-partial-torus-mesh.webp</c>.
+    /// </para>
+    /// <para>
+    /// Only explicit values are compared. A defaulted <c>&lt;slug&gt;.webp</c> cannot collide, because
+    /// <see cref="ValidateSlugUniqueness"/> has already established that slugs are unique. The comparison
+    /// ignores case: these are filenames on a case-insensitive filesystem, so two spellings that differ
+    /// only in case are the same file and would collide just as destructively.
+    /// </para>
+    /// </remarks>
+    private static void ValidateMediaUniqueness(IReadOnlyList<ParsedExample> examples, List<ValidationMessage> messages)
+    {
+        var duplicates = examples
+            .Where(example => !string.IsNullOrWhiteSpace(example.Metadata.Media))
+            .GroupBy(example => example.Metadata.Media!.Trim(), StringComparer.OrdinalIgnoreCase)
+            .Where(group => group.Count() > 1);
+
+        foreach (var group in duplicates)
+        {
+            var owners = string.Join(", ", group.Select(ProjectNameOf));
+
+            messages.Add(ValidationMessage.Error(owners, "media",
+                $"'{group.Key}' is declared by more than one example. The screenshot run writes to that " +
+                "filename, so one capture would overwrite the other. Give each example its own image, or " +
+                "omit 'media' to default to '<slug>.webp'."));
         }
     }
 
