@@ -403,3 +403,6 @@ FodyWeavers.xsd
 # Generated examples manifest (build artifact - see notes/plans/examples-metadata.md D7).
 # Written next to each launcher by tools/ExamplesManifest.targets.
 tools/**/examples-manifest.json
+
+# Bulk screenshot output for review (build/capture-screenshots.cs --output)
+screenshots-review/
