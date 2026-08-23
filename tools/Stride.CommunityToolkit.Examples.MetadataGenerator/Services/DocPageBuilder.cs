@@ -69,8 +69,9 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
             body.AppendLine();
         }
 
-        body.AppendLine($"[!INCLUDE [note-additional-packages]({DocPaths.IncludesFolder}/note-additional-packages.md)]");
-        body.AppendLine();
+        // No per-example package note. The old shared one named a fixed three packages and was wrong for
+        // 19 of 62 projects, and generating an accurate one per page would restate what the `using`
+        // directives at the top of the listing below already say. The landing pages explain it once.
 
         // Only link a screenshot that exists. Most examples have none yet (see plan §5), and a broken
         // image is worse than no image.
@@ -122,6 +123,11 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
                 : $"- [{title}]({example.Slug}.md): {summary}");
         }
 
+        page.AppendLine();
+        page.AppendLine("> [!NOTE]");
+        page.AppendLine("> Each example references a handful of toolkit packages. The `using` directives at the top of");
+        page.AppendLine("> every listing name them, and the linked project file on GitHub is authoritative. A few examples");
+        page.AppendLine("> also need a third-party package - Box2D.NET, Jitter2, Myra or ImGui - which their page calls out.");
         page.AppendLine();
         page.AppendLine($"[!INCLUDE [basic-examples-outro]({DocPaths.IncludesFolder}/basic-examples-outro.md)]");
 
