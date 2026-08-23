@@ -29,6 +29,7 @@
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.PixelFormats;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -93,6 +94,35 @@ var examples = document.RootElement.GetProperty("examples").EnumerateArray().ToL
 // any of it goes near the docs. Without it, each image lands on its real media filename.
 var reviewing = outputDirectory is not null;
 var reviewDirectory = reviewing ? Path.GetFullPath(Path.Combine(root, outputDirectory!)) : null;
+
+// Refuses to start if two examples would write to the same file.
+//
+// MetadataValidator rejects a duplicate media: name, but only fails the build under --strict, and a
+// plain 'generate' still writes the manifest. Checking here too costs nothing and closes the gap,
+// because the symptom is silent: the run reports every capture as a success and simply leaves one
+// fewer file than it claims. That is how the PartialTorus C#/F# pair went unnoticed - 49 captures,
+// 48 files.
+if (!reviewing)
+{
+    var collisions = examples
+        .Where(e => Text(e, "slug") is not null && Bool(e, "screenshot") != false)
+        .Where(e => only.Count == 0 || only.Contains(Text(e, "slug")!, StringComparer.OrdinalIgnoreCase))
+        .GroupBy(e => Text(e, "media") ?? $"{Text(e, "slug")}.webp", StringComparer.OrdinalIgnoreCase)
+        .Where(group => group.Count() > 1)
+        .ToList();
+
+    foreach (var collision in collisions)
+    {
+        Console.Error.WriteLine(
+            $"✖ {collision.Key} is claimed by {string.Join(", ", collision.Select(e => Text(e, "slug")))}. " +
+            "One capture would overwrite the other.");
+    }
+
+    if (collisions.Count > 0)
+    {
+        return 1;
+    }
+}
 
 var captured = 0;
 var skipped = 0;
@@ -244,12 +274,39 @@ static void ToWebp(string pngPath, string webpPath)
 {
     Directory.CreateDirectory(Path.GetDirectoryName(webpPath)!);
 
-    using var image = Image.Load(pngPath);
+    using var image = Image.Load<Rgba32>(pngPath);
+
+    Opaque(image);
 
     // FileFormat must be set explicitly: the encoder defaults to lossless, where Quality is ignored and
     // a 1280x720 frame lands around 200 KB instead of 40 KB.
     image.Save(webpPath, new WebpEncoder { FileFormat = WebpFileFormatType.Lossy, Quality = 85 });
 }
+
+// Forces every pixel opaque.
+//
+// The saved render target carries the alpha the renderer happened to leave behind, and for the 3D
+// examples that is nearly nothing: a sky pixel comes out rgba(80,86,93,24). Against a white page it
+// washes out, against a dark one it turns murky, and the 2D examples - which end up fully opaque - hid
+// the problem by looking fine.
+//
+// The alpha is straight, not premultiplied: 80 at alpha 24 would imply a true value near 850 if it
+// were. So the colour underneath is already correct and only the channel is wrong, which is why this
+// overwrites alpha rather than compositing onto a background colour. Compositing would multiply the
+// colour by 24/255 and render the scene almost black.
+static void Opaque(Image<Rgba32> image)
+    => image.ProcessPixelRows(accessor =>
+    {
+        for (var y = 0; y < accessor.Height; y++)
+        {
+            var row = accessor.GetRowSpan(y);
+
+            for (var x = 0; x < row.Length; x++)
+            {
+                row[x].A = byte.MaxValue;
+            }
+        }
+    });
 
 // Builds the contact sheet: every example in the manifest, its image if one is on disk, and enough
 // metadata to judge whether the image suits the example without opening anything else.
