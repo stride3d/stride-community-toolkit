@@ -110,17 +110,32 @@ public class Basic3DCameraController : SyncScript
 
             overlay.Position = _displayPosition;
 
-            _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, static () =>
-            [
-                new("F3: Reposition Help", Color.Red),
-                new("WASD: Move", Color.LightGreen),
-                new("Arrow Keys: Move", Color.LightGreen),
-                new("Q/E: Ascend/Descend", Color.LightGreen),
-                new("Hold Shift: Increase speed", Color.LightGreen),
-                new("Numpad 2/4/6/8: Rotation", Color.LightGreen),
-                new("Right Mouse Button: Rotate", Color.LightGreen),
-                new("H: Reset Camera", Color.LightGreen),
-            ], HelpCollapsed, order: -100);
+            // Not static: the last two lines read the live transform. The factory runs every frame the
+            // section is drawn expanded, so the numbers track the camera as it is flown around.
+            _instructions = overlay.AddCollapsibleSection("Camera", "Camera controls", HelpToggleKey, () =>
+            {
+                var position = Entity.Transform.Position;
+
+                // Printed as yaw/pitch/roll in degrees, which is what Add3DCamera's initialRotation and
+                // SetCameraRotation both take - X is Yaw, Y is Pitch, Z is Roll. Printing plain XYZ Euler
+                // here would give numbers that look right, paste cleanly, and aim the camera somewhere
+                // else entirely.
+                var rotation = Entity.Transform.Rotation.YawPitchRoll;
+
+                return
+                [
+                    new("F3: Reposition Help", Color.Red),
+                    new("WASD: Move", Color.LightGreen),
+                    new("Arrow Keys: Move", Color.LightGreen),
+                    new("Q/E: Ascend/Descend", Color.LightGreen),
+                    new("Hold Shift: Increase speed", Color.LightGreen),
+                    new("Numpad 2/4/6/8: Rotation", Color.LightGreen),
+                    new("Right Mouse Button: Rotate", Color.LightGreen),
+                    new("H: Reset Camera", Color.LightGreen),
+                    new($"Position: {position.X:0.##}, {position.Y:0.##}, {position.Z:0.##}", Color.Yellow),
+                    new($"Rotation (YPR): {MathUtil.RadiansToDegrees(rotation.X):0.##}, {MathUtil.RadiansToDegrees(rotation.Y):0.##}, {MathUtil.RadiansToDegrees(rotation.Z):0.##}", Color.Yellow),
+                ];
+            }, HelpCollapsed, order: -100);
         }
 
         // Default up-direction
