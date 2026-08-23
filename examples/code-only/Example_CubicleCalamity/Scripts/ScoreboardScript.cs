@@ -68,6 +68,11 @@ public class ScoreboardScript : SyncScript
     public CubeGrid? Grid { get; set; }
 
     /// <summary>
+    /// Gets or sets the current level, shown ahead of the remaining count.
+    /// </summary>
+    public LevelState? Levels { get; set; }
+
+    /// <summary>
     /// Gets or sets the draining bar under the combo, showing how much of the window is left.
     /// </summary>
     /// <remarks>
@@ -104,8 +109,9 @@ public class ScoreboardScript : SyncScript
         _countedAtCubes = Grid.Count;
 
         var moves = MatchFinder.CountClearableGroups(Grid);
+        var level = Levels is null ? string.Empty : $"Level {Levels.Current.Number}  -  ";
 
-        RemainingText.Text = $"{Grid.Count} cubes, {moves} {(moves == 1 ? "move" : "moves")}";
+        RemainingText.Text = $"{level}{Grid.Count} cubes, {moves} {(moves == 1 ? "move" : "moves")}";
     }
 
     private void UpdateTotal(float deltaTime)

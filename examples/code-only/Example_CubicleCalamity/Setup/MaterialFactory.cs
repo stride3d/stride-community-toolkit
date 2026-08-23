@@ -1,4 +1,3 @@
-using Example_CubicleCalamity.Shared;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -28,10 +27,11 @@ namespace Example_CubicleCalamity.Setup;
 public static class MaterialFactory
 {
     /// <summary>
-    /// Creates one material per colour in <see cref="GameSettings.Colours"/>, keyed by colour so a
-    /// cube can look up the material for the colour it was given.
+    /// Creates one material per colour, keyed by colour so a cube can look up the material for the
+    /// colour it was given.
     /// </summary>
     /// <param name="game">The running game, which owns the graphics device the materials are created on.</param>
+    /// <param name="colours">The palette to build for.</param>
     /// <returns>A material for every colour a cube can take.</returns>
     /// <remarks>
     /// <para>
@@ -51,13 +51,14 @@ public static class MaterialFactory
     /// light at all. Balance belongs on the light intensities, not on the albedo.
     /// </para>
     /// </remarks>
-    public static Dictionary<Color, Material> CreateCubeMaterials(Game game)
+    public static Dictionary<Color, Material> CreateCubeMaterials(Game game, IReadOnlyList<Color> colours)
     {
         ArgumentNullException.ThrowIfNull(game);
+        ArgumentNullException.ThrowIfNull(colours);
 
         var materials = new Dictionary<Color, Material>();
 
-        foreach (var colour in GameSettings.Colours)
+        foreach (var colour in colours)
         {
             materials.Add(colour, game.CreateFlatMaterial(colour));
         }
@@ -70,6 +71,7 @@ public static class MaterialFactory
     /// group under the mouse, dimmed for a lone cube that can never be cleared.
     /// </summary>
     /// <param name="game">The running game, which owns the graphics device the materials are created on.</param>
+    /// <param name="colours">The palette to build for.</param>
     /// <returns>All three material sets, each keyed by the cube's base colour.</returns>
     /// <remarks>
     /// The variants are built once here, not on hover: a material is a GPU resource, and hovering
@@ -77,14 +79,15 @@ public static class MaterialFactory
     /// <c>Color * float</c>, which scales the alpha along with the RGB - the exact trap described on
     /// <see cref="CreateCubeMaterials"/>.
     /// </remarks>
-    public static CubeMaterialSet CreateCubeMaterialSet(Game game)
+    public static CubeMaterialSet CreateCubeMaterialSet(Game game, IReadOnlyList<Color> colours)
     {
         ArgumentNullException.ThrowIfNull(game);
+        ArgumentNullException.ThrowIfNull(colours);
 
         var brightened = new Dictionary<Color, Material>();
         var dimmed = new Dictionary<Color, Material>();
 
-        foreach (var colour in GameSettings.Colours)
+        foreach (var colour in colours)
         {
             // Lifted toward white it reads as "lit up"; sunk toward black it reads as "switched
             // off" - both keep enough hue that the cube's colour identity survives the hover
@@ -92,7 +95,7 @@ public static class MaterialFactory
             dimmed.Add(colour, game.CreateFlatMaterial(Color.Lerp(colour, Color.Black, 0.65f)));
         }
 
-        return new CubeMaterialSet(CreateCubeMaterials(game), brightened, dimmed);
+        return new CubeMaterialSet(CreateCubeMaterials(game, colours), brightened, dimmed);
     }
 }
 

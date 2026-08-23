@@ -64,10 +64,22 @@ public class CubeClickScript : AsyncScript
     public bool IsGameOver { get; private set; }
 
     /// <summary>
+    /// Gets the current level, which knows where the platform's centre is - the game-over letters
+    /// spawn relative to it.
+    /// </summary>
+    public required LevelState Levels { get; init; }
+
+    /// <summary>
     /// Gets or sets what a restart actually does - rebuilding the board is the game controller's
     /// job, so this script only detects the request.
     /// </summary>
     public Action? RestartRequested { get; set; }
+
+    /// <summary>
+    /// Gets or sets what advancing to the next level does. Like <see cref="RestartRequested"/>,
+    /// this script only detects the key.
+    /// </summary>
+    public Action? NextLevelRequested { get; set; }
 
     /// <inheritdoc />
     public override async Task Execute()
@@ -89,6 +101,7 @@ public class CubeClickScript : AsyncScript
             if (IsGameOver)
             {
                 if (Input.IsKeyPressed(Keys.R)) RestartRequested?.Invoke();
+                if (Input.IsKeyPressed(Keys.N)) NextLevelRequested?.Invoke();
                 if (Input.IsKeyPressed(Keys.Q)) ((Game)Game).Exit();
             }
 
@@ -218,7 +231,7 @@ public class CubeClickScript : AsyncScript
 
         if (cameraEntity is not null)
         {
-            var direction = cameraEntity.Transform.Position - GameSettings.PlatformCentre;
+            var direction = cameraEntity.Transform.Position - Levels.Current.PlatformCentre;
 
             direction.Y = 0;
 
@@ -238,8 +251,9 @@ public class CubeClickScript : AsyncScript
 
         // The menu is static 3D lettering that keeps facing the camera - unlike the words above it
         // never falls, because a menu the player has to chase defeats its purpose
-        FallingLetters.SpawnMenuLine(game, scene, "R - RESTART", new Vector3(0, 5.4f, 0), menuMaterial);
-        FallingLetters.SpawnMenuLine(game, scene, "Q - QUIT", new Vector3(0, 4.6f, 0), menuMaterial);
+        FallingLetters.SpawnMenuLine(game, scene, "N - NEXT LEVEL", new Vector3(0, 5.8f, 0), menuMaterial);
+        FallingLetters.SpawnMenuLine(game, scene, "R - RESTART", new Vector3(0, 5.0f, 0), menuMaterial);
+        FallingLetters.SpawnMenuLine(game, scene, "Q - QUIT", new Vector3(0, 4.2f, 0), menuMaterial);
     }
 
     /// <summary>

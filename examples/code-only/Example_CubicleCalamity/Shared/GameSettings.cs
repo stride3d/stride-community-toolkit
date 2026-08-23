@@ -8,10 +8,16 @@ namespace Example_CubicleCalamity.Shared;
 /// </summary>
 public static class GameSettings
 {
-    /// <summary>Cubes along each side of a layer, so a layer holds <c>Rows * Rows</c> cubes.</summary>
+    /// <summary>
+    /// The largest board: cubes along each side of a layer at the size cap. The board actually
+    /// played comes from <c>LevelRules</c> and grows level by level up to this.
+    /// </summary>
     public const int Rows = 10;
 
-    /// <summary>How many layers the platform grows to.</summary>
+    /// <summary>
+    /// The most layers any board grows to. Also the height <c>CubeGrid</c> scans when collapsing a
+    /// column, which is why it is a hard cap rather than a default.
+    /// </summary>
     public const int MaxLayers = 10;
 
     /// <summary>Seconds between one layer spawning and the next.</summary>
@@ -37,27 +43,12 @@ public static class GameSettings
     public const float ComboWindowSeconds = 7f;
 
     /// <summary>
-    /// The colours a cube can take. A cube matches its neighbour when both carry the same one, so
-    /// fewer colours here means larger groups and an easier board.
+    /// The colours the game starts with. A cube matches its neighbour when both carry the same one,
+    /// so fewer colours means larger groups and an easier board. The player can switch to any set in
+    /// <see cref="ColourPalettes"/> at runtime from the in-game dropdown.
     /// </summary>
-    public static readonly List<Color> Colours = [Color.Red, Color.Green, Color.Blue, Color.DarkGoldenrod];
+    public static readonly IReadOnlyList<Color> Colours = ColourPalettes.Classic.Colours;
 
     /// <summary>Width, height and depth of one cube. The grid spacing follows from it.</summary>
     public static readonly Vector3 CubeSize = new(0.5f);
-
-    /// <summary>
-    /// Offset applied to the X and Z of every cube so the platform is centred on the ground's origin
-    /// rather than growing out of one corner, whatever <see cref="Rows"/> is set to.
-    /// </summary>
-    /// <remarks>
-    /// Cube centres sit at <c>GridOrigin + i * CubeSize</c> for <c>i</c> in <c>[0, Rows)</c>, so the
-    /// footprint spans <c>(Rows - 1) * CubeSize</c> and pulling it back by half of that puts its
-    /// middle on zero. At 10 rows of 0.5 that is -2.25, at 5 rows it is -1.
-    /// </remarks>
-    public static readonly float GridOrigin = -(Rows - 1) * CubeSize.X * 0.5f;
-
-    /// <summary>
-    /// Middle of the finished platform, which is what the camera orbits and looks at.
-    /// </summary>
-    public static readonly Vector3 PlatformCentre = new(0, MaxLayers * CubeSize.Y * 0.5f, 0);
 }

@@ -1,8 +1,9 @@
 # Cubicle Calamity
 
 A small collapse game (in the SameGame family) built entirely in code with the Stride Community
-Toolkit: a 10 × 10 × 10 platform of coloured cubes stacks itself up, and you take it apart by
-clicking groups of matching colours. It doubles as the toolkit's most complete worked example - the
+Toolkit: a platform of coloured cubes stacks itself up, and you take it apart by clicking groups
+of matching colours. Levels grow the board - 5 × 5 × 5 to begin with, one cube larger per side
+each level, up to the full 10 × 10 × 10. It doubles as the toolkit's most complete worked example - the
 same project appears throughout
 [docs/manual/components-and-scripts.md](../../../docs/manual/components-and-scripts.md) as the
 living illustration of when to use components, scripts and physics-derived components.
@@ -28,7 +29,11 @@ The platform builds itself layer by layer, then drops onto the physics. From the
 - Everything above a cleared group falls to fill the gap, which merges and splits the remaining
   groups - the board you are reading is always one clear away from a different one.
 - The game ends when no clearable group remains. The final score rains down in solid 3D letters,
-  then a menu offers **R** - restart and **Q** - quit.
+  then a menu offers **N** - next level, **R** - restart, and **Q** - quit.
+- **N** moves to a larger board and your score carries over - climbing levels is how big totals are
+  made. **R** replays the current level from zero. Progress is fresh each launch for now; the code
+  has a ready `JsonProgressStore` (see `Gameplay/GameProgress.cs`) that makes the next launch
+  resume where you left off, one line to wire in.
 
 ### Reading the board
 
@@ -47,7 +52,9 @@ Hover before you click - the board answers:
 | Z / C | Orbit the camera around the platform (hold Shift to sprint) |
 | WASD, Q / E, right-drag | Free camera movement and look (F2 shows the full overlay) |
 | H | Reset the camera to its starting view |
-| R (after game over) | Restart with a fresh board |
+| P, then 1 / 2 / 3 | Switch the colour palette - Classic, Soft, or High visibility (colour-blind friendly). Repaints the standing board in place |
+| N (after game over) | Advance to the next, larger level - score carries over |
+| R (after game over) | Restart the current level from zero |
 | Q (after game over) | Quit |
 
 ## Scoring
@@ -100,7 +107,9 @@ game in `tests/Stride.CommunityToolkit.Tests`:
 | The board | `Gameplay/CubeGrid.cs` | Who is where, and how columns collapse |
 | Matching | `Gameplay/MatchFinder.cs` | Flood-fill groups, the minimum-size rule, game over |
 | Scoring | `Gameplay/ScoreRules.cs`, `Gameplay/ScoreKeeper.cs` | Points, tiers, the combo streak |
-| Tunables | `Shared/GameSettings.cs` | Board size, colours, pace, scoring constants |
+| Levels | `Gameplay/LevelRules.cs` | How the board grows, and where each board's centre is |
+| Progress | `Gameplay/GameProgress.cs` | The persistence seam: fresh each launch now, JSON-ready |
+| Tunables | `Shared/GameSettings.cs`, `Shared/ColourPalettes.cs` | Size caps, pace, scoring constants, palettes |
 
 Everything else - input, physics, sound, popups, the 3D letters - is presentation around that
 core, and the project's structure is walked through in

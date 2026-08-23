@@ -48,9 +48,10 @@ public class HoverHighlightScript : SyncScript
     public required CubeGrid Grid { get; init; }
 
     /// <summary>
-    /// Gets the cube materials in all three hover states.
+    /// Gets or sets the cube materials in all three hover states. Settable, because a palette
+    /// switch swaps in the new palette's set.
     /// </summary>
-    public required CubeMaterialSet Materials { get; init; }
+    public required CubeMaterialSet Materials { get; set; }
 
     /// <summary>
     /// Gets the click script, consulted so the hover goes quiet once the game is over.

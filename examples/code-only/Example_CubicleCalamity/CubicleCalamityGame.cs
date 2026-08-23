@@ -12,6 +12,8 @@ using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
+using Stride.Input;
+using Stride.Rendering;
 
 namespace Example_CubicleCalamity;
 
@@ -34,12 +36,26 @@ public class CubicleCalamityGame(Game game)
 
     private readonly CubeGrid _grid = new();
     private readonly ScoreKeeper _keeper = new();
+    private readonly LevelState _levels = new();
+
+    // The seam persistence slots into: swap for a JsonProgressStore (see its docs) and a new launch
+    // resumes at the level the last game over reached. The rest of the game only sees the interface.
+    private readonly IProgressStore _progressStore = new FreshProgressStore();
+    private GameProgress _progress = new();
+
+    // One full material set per palette, all built at startup: materials are GPU resources, and a
+    // palette switch should be a repaint, not an allocation
+    private CubeMaterialSet[] _materialSets = [];
+    private int _paletteIndex;
+    private DebugTextDropdown? _paletteDropdown;
 
     private CubeMaterialSet? _materials;
     private CubeSpawner? _spawner;
     private GameAudio? _audio;
     private ScoreboardScript? _scoreboard;
     private CubeClickScript? _clickScript;
+    private HoverHighlightScript? _hover;
+    private CameraRotationScript? _cameraRotation;
     private BepuSimulation? _simulation;
     private Scene? _scene;
 
@@ -55,6 +71,11 @@ public class CubicleCalamityGame(Game game)
     {
         _scene = scene;
 
+        // With the FreshProgressStore this is always level 1; with a JSON store it is wherever the
+        // last session got to
+        _progress = _progressStore.Load();
+        _levels.Current = LevelRules.ForNumber(_progress.Level);
+
         game.Window.AllowUserResizing = true;
         game.AddGraphicsCompositor().AddCleanUIStage();
 
@@ -67,12 +88,18 @@ public class CubicleCalamityGame(Game game)
         game.Add3DGround();
         game.AddProfiler();
 
-        // Normal materials plus the hover variants - all built once, because materials are GPU resources
-        _materials = MaterialFactory.CreateCubeMaterialSet(game);
-        _spawner = new CubeSpawner(game, scene, _grid, _materials.Normal, Seed);
+        // Every palette's materials, built once up front - a palette switch is then a repaint,
+        // never an allocation
+        _materialSets = [.. ColourPalettes.All.Select(palette => MaterialFactory.CreateCubeMaterialSet(game, palette.Colours))];
+        _materials = _materialSets[_paletteIndex];
+
+        _spawner = new CubeSpawner(game, scene, _grid, _levels, Seed);
+        _spawner.UsePalette(ColourPalettes.All[_paletteIndex].Colours, _materials.Normal);
+
         _audio = new GameAudio(game);
 
         AddOrientationGizmo();
+        AddPaletteDropdown();
 
         // The toolkit's studio rig: key, fill and rim. The cubes supply most of their own colour, so
         // this is here for edge definition and to model the game-over letters.
@@ -85,7 +112,8 @@ public class CubicleCalamityGame(Game game)
 
         var camera = scene.GetCamera();
 
-        camera?.Entity.Add(new CameraRotationScript { RotationCentre = GameSettings.PlatformCentre });
+        _cameraRotation = new CameraRotationScript { RotationCentre = _levels.Current.PlatformCentre };
+        camera?.Entity.Add(_cameraRotation);
 
         _simulation = camera?.Entity.GetSimulation();
 
@@ -99,9 +127,13 @@ public class CubicleCalamityGame(Game game)
     /// <param name="time">Timing for the current frame.</param>
     public void Update(Scene scene, GameTime time)
     {
+        _paletteDropdown?.Update(game.Input);
+
         _elapsedTime += time.Elapsed.TotalSeconds;
 
-        if (_elapsedTime >= GameSettings.Interval && _layer <= GameSettings.MaxLayers - 1)
+        var layers = _levels.Current.Layers;
+
+        if (_elapsedTime >= GameSettings.Interval && _layer <= layers - 1)
         {
             _elapsedTime = 0;
 
@@ -110,7 +142,7 @@ public class CubicleCalamityGame(Game game)
             _layer++;
         }
 
-        if (!_platformComplete && _layer == GameSettings.MaxLayers)
+        if (!_platformComplete && _layer == layers)
         {
             _platformComplete = true;
 
@@ -195,7 +227,7 @@ public class CubicleCalamityGame(Game game)
         var camera = game.Add3DCamera();
 
         camera.Transform.UpdateWorldMatrix();
-        camera.Transform.LookAt(GameSettings.PlatformCentre, Vector3.UnitY);
+        camera.Transform.LookAt(_levels.Current.PlatformCentre, Vector3.UnitY);
 
         camera.Add3DCameraController();
     }
@@ -245,6 +277,7 @@ public class CubicleCalamityGame(Game game)
             {
                 Grid = _grid,
                 Keeper = _keeper,
+                Levels = _levels,
                 Sounds = _audio!,
                 Scoreboard = _scoreboard,
                 GameOverText = gameOver,
@@ -254,30 +287,149 @@ public class CubicleCalamityGame(Game game)
 
         _clickScript = entity.Get<CubeClickScript>();
         _clickScript!.RestartRequested = Restart;
+        _clickScript.NextLevelRequested = NextLevel;
 
         // The hover preview rides on the same entity: it reads the grid the click writes
-        entity.Add(new HoverHighlightScript
+        _hover = new HoverHighlightScript
         {
             Grid = _grid,
             Materials = _materials!,
             Click = _clickScript,
-        });
+        };
+
+        entity.Add(_hover);
 
         entity.Scene = _scene;
     }
 
     /// <summary>
-    /// Tears the finished game down and starts a fresh one, keeping the scene's fixtures - camera,
-    /// lights, ground, gizmo - in place.
+    /// Adds the keyboard dropdown that switches the board between the palettes in
+    /// <see cref="ColourPalettes"/>, live.
     /// </summary>
     /// <remarks>
-    /// Restarting means undoing everything a playthrough created: cubes and score popups are plain
+    /// The dropdown renders through the same debug overlay as the game instructions, so it costs one
+    /// line of screen until it is opened. Choosing an entry repaints the standing board in place -
+    /// see <see cref="ApplyPalette"/>.
+    /// </remarks>
+    private void AddPaletteDropdown()
+    {
+        _paletteDropdown = new DebugTextDropdown
+        {
+            Title = "Colours",
+            ToggleKey = Keys.P,
+            SelectedIndex = _paletteIndex,
+            Items = [.. ColourPalettes.All.Select((palette, index) =>
+                new DebugTextDropdownItem(Keys.D1 + index, palette.Name, () => ApplyPalette(index)))],
+        };
+
+        var overlay = DebugOverlay.GetOrCreate(game);
+
+        overlay.AddSection("Palette", () => _paletteDropdown.GetLines());
+    }
+
+    /// <summary>
+    /// Switches the whole game to another palette: cubes yet to spawn, the hover variants, and every
+    /// cube already standing.
+    /// </summary>
+    /// <param name="index">Index into <see cref="ColourPalettes.All"/>.</param>
+    /// <remarks>
+    /// The standing board is repainted by <em>index</em>: a cube wearing the old palette's third
+    /// colour takes the new palette's third. Identity is preserved exactly, so groups, moves and the
+    /// hover preview agree before and after - only the paint changes. This is why every palette must
+    /// hold the same number of colours.
+    /// </remarks>
+    private void ApplyPalette(int index)
+    {
+        if (index == _paletteIndex || _spawner is null) return;
+
+        var oldColours = ColourPalettes.All[_paletteIndex].Colours;
+        var newColours = ColourPalettes.All[index].Colours;
+
+        _paletteIndex = index;
+        _materials = _materialSets[index];
+
+        _spawner.UsePalette(newColours, _materials.Normal);
+
+        if (_hover is not null)
+        {
+            _hover.Materials = _materials;
+        }
+
+        foreach (var cube in _grid.Cubes.Values)
+        {
+            var component = cube.Get<CubeComponent>();
+            var model = cube.Get<ModelComponent>()?.Model;
+
+            if (component is null || model is null) continue;
+
+            var colourIndex = IndexOf(oldColours, component.Color);
+
+            if (colourIndex < 0) continue;
+
+            component.Color = newColours[colourIndex];
+
+            // The model is per cube (Create3DPrimitive builds one each), so repainting its slot
+            // touches no other cube. The hover override sits above this and is per component anyway.
+            model.Materials[0] = new MaterialInstance { Material = _materials.Normal[component.Color] };
+        }
+    }
+
+    private static int IndexOf(IReadOnlyList<Color> colours, Color colour)
+    {
+        for (var i = 0; i < colours.Count; i++)
+        {
+            if (colours[i] == colour) return i;
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// Replays the current level from scratch, score included.
+    /// </summary>
+    private void Restart()
+    {
+        _keeper.Reset();
+
+        RebuildBoard();
+    }
+
+    /// <summary>
+    /// Advances to the next level's larger board. The score carries over - climbing is the reward,
+    /// and starting every board from zero would price the climb at nothing.
+    /// </summary>
+    /// <remarks>
+    /// Progress is saved through <see cref="IProgressStore"/> at the moment of advancing. With the
+    /// default fresh store that is a no-op; with a JSON store, the next launch starts here.
+    /// </remarks>
+    private void NextLevel()
+    {
+        _progress.Level++;
+        _progressStore.Save(_progress);
+
+        _levels.Current = LevelRules.ForNumber(_progress.Level);
+
+        // The platform grows, so its middle rises - re-aim the orbit at the new board's centre
+        if (_cameraRotation is not null)
+        {
+            _cameraRotation.RotationCentre = _levels.Current.PlatformCentre;
+        }
+
+        RebuildBoard();
+    }
+
+    /// <summary>
+    /// Tears the finished game down and lets the ordinary <see cref="Update"/> loop grow whatever
+    /// <see cref="LevelState.Current"/> now says, keeping the scene's fixtures - camera, lights,
+    /// ground, gizmo - in place.
+    /// </summary>
+    /// <remarks>
+    /// Undoing a playthrough means removing everything it created: cubes and score popups are plain
     /// removals, but the fallen 3D letters own their GPU mesh buffers, so they go through
     /// <see cref="FallingLetters.ReleaseAndRemove"/> - removing them alone would leak a buffer pair
-    /// per letter, every game. With the state reset, the ordinary <see cref="Update"/> loop rebuilds
-    /// the platform exactly as it did at startup.
+    /// per letter, every game.
     /// </remarks>
-    private void Restart()
+    private void RebuildBoard()
     {
         if (_scene is null) return;
 
@@ -294,11 +446,13 @@ public class CubicleCalamityGame(Game game)
         }
 
         _grid.Clear();
-        _keeper.Reset();
         _clickScript?.ResetForRestart();
 
         _elapsedTime = 0;
-        _layer = 1;
+
+        // Zero, not one: Start spawns layer 0 itself before handing over to Update, but here the
+        // loop must build the whole board - starting at 1 left every rebuilt board one layer short
+        _layer = 0;
         _platformComplete = false;
     }
 
@@ -361,6 +515,7 @@ public class CubicleCalamityGame(Game game)
         {
             Keeper = _keeper,
             Grid = _grid,
+            Levels = _levels,
             TotalText = total,
             ComboText = combo,
             ComboBarText = comboBar,

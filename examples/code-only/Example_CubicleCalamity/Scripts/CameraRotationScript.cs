@@ -52,6 +52,13 @@ public class CameraRotationScript : SyncScript
     /// <inheritdoc />
     public override void Update()
     {
+        // The property wins whenever it is set, so the centre can follow the platform as levels
+        // change its height - Start's fallback only covers the case where it never is
+        if (RotationCentre is { } centre)
+        {
+            _rotationCentre = centre;
+        }
+
         var deltaTime = this.DeltaTime();
 
         // Shift speeds the orbit up, matching what it already does for the free-look controller's
