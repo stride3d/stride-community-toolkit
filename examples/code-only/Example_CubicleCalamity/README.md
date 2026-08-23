@@ -85,7 +85,10 @@ reopens for the next one.
 
 The running total in the corner counts up toward the real score. While a streak is alive, the
 combo line under it shows the current multiplier, and the bar beneath that drains as the window
-runs out - clear again before it empties to keep the streak.
+runs out - clear again before it empties to keep the streak. Below all of that, a quiet line
+counts what is left: how many cubes still stand, and how many **moves** - clearable groups - are
+hidden among them. When it says a few moves remain and you cannot see one, orbit: they are on the
+far side.
 
 ## Where the rules live
 

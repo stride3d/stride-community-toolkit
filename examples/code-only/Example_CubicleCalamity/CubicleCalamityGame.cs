@@ -345,9 +345,29 @@ public class CubicleCalamityGame(Game game)
             IsVisible = false,
         };
 
-        _scoreboard = new ScoreboardScript { Keeper = _keeper, TotalText = total, ComboText = combo, ComboBarText = comboBar };
+        // How much board is left: cubes standing, and the moves still hidden among them
+        var remaining = new EntityTextComponent()
+        {
+            Text = string.Empty,
+            FontSize = 14,
+            PositionMode = TextPositionMode.Anchored,
+            ScreenAnchor = DisplayPosition.TopLeft,
+            Offset = new Vector2(16, 88),
+            TextColor = new Color(200, 205, 215),
+            EnableShadow = true,
+        };
 
-        var entity = new Entity(EntityNames.Scoreboard) { total, combo, comboBar, _scoreboard };
+        _scoreboard = new ScoreboardScript
+        {
+            Keeper = _keeper,
+            Grid = _grid,
+            TotalText = total,
+            ComboText = combo,
+            ComboBarText = comboBar,
+            RemainingText = remaining,
+        };
+
+        var entity = new Entity(EntityNames.Scoreboard) { total, combo, comboBar, remaining, _scoreboard };
 
         entity.Scene = _scene;
     }

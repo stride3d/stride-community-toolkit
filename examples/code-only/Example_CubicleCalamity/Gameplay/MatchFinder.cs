@@ -130,6 +130,40 @@ public static class MatchFinder
     }
 
     /// <summary>
+    /// Counts how many clearable groups the board still holds - the player's remaining moves.
+    /// </summary>
+    /// <param name="grid">The grid to count.</param>
+    /// <returns>The number of distinct groups large enough to clear.</returns>
+    /// <remarks>
+    /// The same single pass as <see cref="HasClearableGroup"/>, minus the early exit: every cube is
+    /// visited once whatever the answer is. Shown on the HUD so the endgame becomes a hunt for the
+    /// last few moves rather than a guess about whether any remain.
+    /// </remarks>
+    public static int CountClearableGroups(CubeGrid grid)
+    {
+        ArgumentNullException.ThrowIfNull(grid);
+
+        var visited = new HashSet<Int3>();
+        var moves = 0;
+
+        foreach (var (coordinate, cube) in grid.Cubes)
+        {
+            if (visited.Contains(coordinate)) continue;
+
+            var colour = cube.Get<CubeComponent>()?.Color;
+
+            if (colour is null) continue;
+
+            if (IsClearable(MeasureGroup(grid, coordinate, colour.Value, visited)))
+            {
+                moves++;
+            }
+        }
+
+        return moves;
+    }
+
+    /// <summary>
     /// Counts the connected same-coloured group containing a coordinate, marking each cell visited.
     /// </summary>
     private static int MeasureGroup(CubeGrid grid, Int3 start, Color colour, HashSet<Int3> visited)

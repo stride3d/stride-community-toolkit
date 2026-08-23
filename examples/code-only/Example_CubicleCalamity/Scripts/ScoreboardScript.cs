@@ -25,6 +25,7 @@ public class ScoreboardScript : SyncScript
 
     private float _displayedScore;
     private float _punchRemaining;
+    private int _countedAtCubes = -1;
 
     /// <summary>
     /// Gets the score keeper this reads from.
@@ -52,6 +53,21 @@ public class ScoreboardScript : SyncScript
     public EntityTextComponent? ComboText { get; set; }
 
     /// <summary>
+    /// Gets or sets the text showing how much board is left: cubes standing, and how many clearable
+    /// groups - moves - remain among them.
+    /// </summary>
+    /// <remarks>
+    /// The moves number is what turns the endgame around: with a handful left, the player knows to
+    /// orbit and hunt for them rather than wonder whether the board has quietly run out.
+    /// </remarks>
+    public EntityTextComponent? RemainingText { get; set; }
+
+    /// <summary>
+    /// Gets or sets the grid the remaining count is read from.
+    /// </summary>
+    public CubeGrid? Grid { get; set; }
+
+    /// <summary>
     /// Gets or sets the draining bar under the combo, showing how much of the window is left.
     /// </summary>
     /// <remarks>
@@ -74,6 +90,22 @@ public class ScoreboardScript : SyncScript
 
         UpdateTotal(deltaTime);
         UpdateCombo();
+        UpdateRemaining();
+    }
+
+    private void UpdateRemaining()
+    {
+        if (RemainingText is null || Grid is null) return;
+
+        // Counting moves walks the whole board, so only recount when the board has changed - and
+        // every change to it (spawning, clearing, collapsing) moves the cube count
+        if (Grid.Count == _countedAtCubes) return;
+
+        _countedAtCubes = Grid.Count;
+
+        var moves = MatchFinder.CountClearableGroups(Grid);
+
+        RemainingText.Text = $"{Grid.Count} cubes, {moves} {(moves == 1 ? "move" : "moves")}";
     }
 
     private void UpdateTotal(float deltaTime)
