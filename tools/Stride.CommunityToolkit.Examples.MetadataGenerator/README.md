@@ -75,14 +75,18 @@ slug: mesh-outline-fs
 ## Validation
 
 Findings are aggregated: one run reports every problem across every example, rather than stopping at
-the first. Errors are fatal only under `--strict`, so the checks can be introduced before the
-frontmatter backfill is finished.
+the first. Errors are fatal only under `--strict`, which the Launcher pre-build hook passes. Errors go
+to **stderr** and everything else to stdout, so a failing build prints every finding while a passing
+one stays quiet.
+
+A duplicate `order` within a group is a **warning**, not an error: the tie is broken by `slug`, which is
+required and unique, so the sequence stays stable - the author has just not said which of the two comes
+first.
 
 Checked: required fields (`slug`, `title.en`, `level`, `category`); kebab-case and globally unique
 `slug`; `level` / `category` / `language` against the closed sets in `Core/MetadataVocabulary.cs`;
-`complexity` within 1–5; `order` unique within each `(language, level)` group; `related:` names
-resolving to real project folders; explicit `media:` files existing; `language:` agreeing with the file
-extension; and `level` names not duplicated into `tags`.
+`complexity` within 1-5; `related:` names resolving to real project folders; explicit `media:` files
+existing; `language:` agreeing with the file extension; and `level` names not duplicated into `tags`.
 
 Two checks run against the **source text** rather than the parsed object, because they are invisible
 afterwards — see `Core/YamlSourceInspector.cs`:
@@ -108,7 +112,7 @@ A versioned envelope, not a bare array:
   "schemaVersion": 1,
   "generatedAt": "2026-08-22T22:28:23.1257046Z",
   "toolVersion": "1.0.0.0",
-  "count": 22,
+  "count": 57,
   "examples": [ { "slug": "mesh-outline", "...": "..." } ]
 }
 ```
@@ -144,5 +148,9 @@ Program.cs                   # Host + DI setup
 `System.CommandLine.Hosting` is deprecated, so DI is wired by hand: the host is built once, handlers
 are registered as scoped services, `CommandLineConfiguration` takes the `IServiceProvider`, and each
 command opens its own scope.
+
+The content root is pinned to `AppContext.BaseDirectory` rather than the working directory. Without
+that, running the tool from anywhere else - which the pre-build hook does - finds no `appsettings.json`,
+configures no Serilog sinks, and produces no output at all.
 
 The build output is `MetadataGenerator.exe` (`<AssemblyName>`), with the namespace unchanged.

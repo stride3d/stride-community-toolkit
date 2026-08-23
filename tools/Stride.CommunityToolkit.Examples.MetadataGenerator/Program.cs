@@ -4,7 +4,16 @@ using Serilog;
 using Stride.CommunityToolkit.Examples.MetadataGenerator;
 using Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 
-var builder = Host.CreateApplicationBuilder(args);
+// The content root must be the tool's own folder, not the caller's working directory. Configuration
+// is resolved against the content root, so with the default the MSBuild pre-build hook - which runs
+// the generator from the Launcher directory - silently found no appsettings.json, configured no
+// Serilog sinks, and produced no output whatsoever: a failed validation reported nothing but an exit
+// code. appsettings.json is copied next to the assembly, so BaseDirectory always finds it.
+var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
+{
+    Args = args,
+    ContentRootPath = AppContext.BaseDirectory
+});
 
 builder.Services.AddSerilog((services, configuration) =>
 {

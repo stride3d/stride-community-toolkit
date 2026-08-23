@@ -28,18 +28,23 @@
             <ManifestOutput>$(MSBuildProjectDirectory)\examples-manifest.json</ManifestOutput>
             <MediaPath>$(MSBuildProjectDirectory)\..\..\docs\manual\code-only\examples\media</MediaPath>
             <GeneratorProject>$(MSBuildProjectDirectory)\..\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj</GeneratorProject>
-            <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot;</GeneratorArgs>
+            <GeneratorArgs>generate &quot;$(ExamplesRoot)&quot; --output &quot;$(ManifestOutput)&quot; --media-path &quot;$(MediaPath)&quot; --strict</GeneratorArgs>
         </PropertyGroup>
 
         <Message Text="Generating examples metadata manifest..." Importance="high" />
         <Message Text="Executing: dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" Importance="high" />
 
         <!--
-            ContinueOnError stays until the frontmatter backfill lands. Once every example carries a
-            schema v1 block, add the strict switch to GeneratorArgs and drop this attribute, so a
-            malformed block fails the build instead of yielding a quietly incomplete manifest (plan D10).
+            Deliberately fails the build on a validation error (plan D10). A malformed metadata block
+            would otherwise produce a quietly incomplete manifest and a green build, which is how two
+            examples lost their order without anyone noticing.
+
+            The generator logs validation errors to stderr and everything else to stdout, so raising
+            only StandardErrorImportance keeps a successful build quiet while a failure still prints
+            every finding. Leave StandardOutputImportance alone: at high it adds a line per example,
+            which is around sixty lines of noise on every build.
         -->
-        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" ContinueOnError="WarnAndContinue" />
+        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)" StandardErrorImportance="high" StdErrEncoding="utf-8" />
 
         <!-- Include generated manifest in output -->
         <ItemGroup>

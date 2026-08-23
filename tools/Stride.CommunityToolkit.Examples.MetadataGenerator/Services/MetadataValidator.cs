@@ -231,6 +231,15 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         }
     }
 
+    /// <summary>
+    /// Notes examples that share an <c>order</c> within the same group.
+    /// </summary>
+    /// <remarks>
+    /// A warning rather than an error: a tie is broken by <c>slug</c>, which is required and unique, so
+    /// the resulting sequence is still stable and reproducible - the author simply has not said which of
+    /// the two comes first. That is a reasonable thing to leave unsaid, and not worth failing a build
+    /// over.
+    /// </remarks>
     private static void ValidateOrderUniqueness(IReadOnlyList<ParsedExample> examples, List<ValidationMessage> messages)
     {
         var collisions = examples
@@ -242,8 +251,8 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         {
             var owners = string.Join(", ", group.Select(ProjectNameOf));
 
-            messages.Add(ValidationMessage.Error(owners, "order",
-                $"order {group.Key.Order} is used more than once within ({group.Key.EffectiveLanguage}, {group.Key.Level}), so the toc order is undefined."));
+            messages.Add(ValidationMessage.Warning(owners, "order",
+                $"order {group.Key.Order} is shared within ({group.Key.EffectiveLanguage}, {group.Key.Level}); the tie is broken by slug, so the sequence is stable but not author-chosen."));
         }
     }
 
