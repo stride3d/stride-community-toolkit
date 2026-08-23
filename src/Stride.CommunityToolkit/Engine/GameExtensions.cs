@@ -3,10 +3,10 @@ using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
-using Stride.Input;
 using Stride.Engine.Processors;
 using Stride.Games;
 using Stride.Graphics;
+using Stride.Input;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
@@ -319,6 +319,66 @@ public static class GameExtensions
     }
 
     /// <summary>
+    /// Moves the existing camera to a new position, leaving its rotation alone.
+    /// </summary>
+    /// <param name="game">The game whose camera is moved.</param>
+    /// <param name="position">The new world position.</param>
+    /// <param name="cameraName">The camera entity's name. Defaults to the main camera name.</param>
+    /// <returns>The camera entity, so calls can be chained.</returns>
+    /// <exception cref="InvalidOperationException">No camera entity with that name exists in the root scene.</exception>
+    /// <remarks>
+    /// <para>
+    /// For adjusting the camera that <c>SetupBase3DScene</c> has already created. Calling
+    /// <see cref="Add3DCamera"/> a second time is not the way to do it: that method builds a
+    /// <em>new</em> entity, binds it to camera slot 0 and adds it to the root scene, leaving two camera
+    /// entities competing for one slot.
+    /// </para>
+    /// <para>
+    /// Paired with <see cref="SetCameraRotation"/> rather than folded into one call, so that each line
+    /// of an example says exactly what it does.
+    /// </para>
+    /// </remarks>
+    public static Entity SetCameraPosition(this Game game, Vector3 position,
+        string? cameraName = CameraDefaults.MainCameraName)
+    {
+        var cameraEntity = game.GetCameraEntity(cameraName);
+
+        cameraEntity.Transform.Position = position;
+
+        return cameraEntity;
+    }
+
+    /// <summary>
+    /// Rotates the existing camera, leaving its position alone.
+    /// </summary>
+    /// <param name="game">The game whose camera is rotated.</param>
+    /// <param name="rotation">
+    /// The rotation in degrees, packed as <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c> - the same
+    /// convention <see cref="Add3DCamera"/> uses for its <c>initialRotation</c>, and the order the
+    /// camera controller's F2 panel prints.
+    /// </param>
+    /// <param name="cameraName">The camera entity's name. Defaults to the main camera name.</param>
+    /// <returns>The camera entity, so calls can be chained.</returns>
+    /// <exception cref="InvalidOperationException">No camera entity with that name exists in the root scene.</exception>
+    /// <remarks>
+    /// Yaw/pitch/roll rather than a quaternion because these numbers are meant to be read off the screen
+    /// and typed back in. See <see cref="SetCameraPosition"/> for why this is not
+    /// <see cref="Add3DCamera"/>.
+    /// </remarks>
+    public static Entity SetCameraRotation(this Game game, Vector3 rotation,
+        string? cameraName = CameraDefaults.MainCameraName)
+    {
+        var cameraEntity = game.GetCameraEntity(cameraName);
+
+        cameraEntity.Transform.Rotation = Quaternion.RotationYawPitchRoll(
+            MathUtil.DegreesToRadians(rotation.X),
+            MathUtil.DegreesToRadians(rotation.Y),
+            MathUtil.DegreesToRadians(rotation.Z));
+
+        return cameraEntity;
+    }
+
+    /// <summary>
     /// Adds a directional light entity to the game's root scene with optional customization.
     /// </summary>
     /// <param name="game">The Game instance to which the directional light will be added.</param>
@@ -462,7 +522,7 @@ public static class GameExtensions
     /// set anyway so the gizmos hover where each light conceptually sits.
     /// </para>
     /// </remarks>
-    public static (Entity Key, Entity Fill, Entity Rim) AddStudioLighting(this Game game, float intensity = 15f, float yawDegrees = 45f, bool enableShadows = true, bool showLightGizmo = true)
+    public static (Entity Key, Entity Fill, Entity Rim) AddStudioLighting(this Game game, float intensity = 15f, float yawDegrees = 45f, bool enableShadows = true, bool showLightGizmo = false)
     {
         // Azimuth is measured about Y: a light at azimuth a sits on the (sin a, _, cos a) side of the
         // scene and shines toward the centre. Elevation tilts it down from the horizon.
@@ -726,14 +786,25 @@ public static class GameExtensions
         game.SceneSystem.GraphicsCompositor.AddParticleStagesAndFeatures();
     }
 
-    private static Entity GetCameraEntity(Game game, string? cameraName)
+    /// <summary>
+    /// Gets the camera entity by name from the game's root scene.
+    /// </summary>
+    /// <param name="game">The game whose root scene is searched.</param>
+    /// <param name="cameraName">The camera entity's name. Defaults to the main camera name.</param>
+    /// <returns>The camera entity.</returns>
+    /// <exception cref="InvalidOperationException">No entity with that name exists in the root scene.</exception>
+    /// <remarks>
+    /// The escape hatch for anything <see cref="SetCameraPosition"/> and <see cref="SetCameraRotation"/>
+    /// do not cover - reading the transform, attaching a component, or replacing the camera outright.
+    /// </remarks>
+    public static Entity GetCameraEntity(this Game game, string? cameraName = CameraDefaults.MainCameraName)
     {
         var cameraEntity = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == cameraName);
 
         if (cameraEntity is null)
         {
             throw new InvalidOperationException(
-                $"Cannot add camera controller: No camera entity found with the name '{cameraName}'.");
+                $"No camera entity found with the name '{cameraName}' in the root scene.");
         }
 
         return cameraEntity;
