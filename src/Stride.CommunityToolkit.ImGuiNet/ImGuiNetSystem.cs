@@ -25,6 +25,21 @@ public class ImGuiNetSystem : GameSystemBase
     private bool _showUI = true;
     private bool _initialized = false;
 
+    /// <summary>
+    /// Whether <c>NewFrame</c> has been called without a matching <c>Render</c> yet.
+    /// </summary>
+    /// <remarks>
+    /// Dear ImGui requires exactly one <c>NewFrame</c> per <c>Render</c>, and this system splits the pair
+    /// across <see cref="Update"/> and <see cref="EndDraw"/>. That holds only while the host runs one
+    /// update per draw - true of Stride's default variable timestep, and not true once
+    /// <c>IsFixedTimeStep</c> is set, because the game then runs extra updates to catch up whenever a
+    /// frame overruns. The startup shader compile causes exactly that, and two <c>NewFrame</c> calls in a
+    /// row abort the process from native code with "Forgot to call Render() or EndFrame() at the end of
+    /// the previous frame?" - an abort, so neither the <see cref="_initialized"/> guard nor the
+    /// try/catch in <see cref="EndDraw"/> can intercept it.
+    /// </remarks>
+    private bool _frameBegun;
+
     private InputManager? _inputManager;
     private GraphicsDevice? _graphicsDevice;
     private CommandList? _commandList;
@@ -403,8 +418,16 @@ public class ImGuiNetSystem : GameSystemBase
             UpdateInput();
         }
 
+        // An update that never reached a draw left a frame open. Close it before starting the next one,
+        // discarding its draw data - the frame it belonged to is not being presented anyway.
+        if (_frameBegun)
+        {
+            ImGui.EndFrame();
+        }
+
         // Start new ImGui frame
         ImGui.NewFrame();
+        _frameBegun = true;
 
         // Process draw commands
         ProcessDrawCommands();
@@ -415,9 +438,15 @@ public class ImGuiNetSystem : GameSystemBase
     {
         if (!_initialized) return;
 
+        // Nothing to present when the draw is not paired with an update - Render() without a preceding
+        // NewFrame() asserts just as loudly as the reverse.
+        if (!_frameBegun) return;
+
         try
         {
             ImGui.Render();
+            _frameBegun = false;
+
             RenderImGuiDrawData();
         }
         catch (Exception ex)
