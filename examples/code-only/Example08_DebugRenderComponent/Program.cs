@@ -36,3 +36,39 @@ void CreateSpheres(Scene rootScene, int count)
         entity.Scene = rootScene;
     }
 }
+/*
+---example-metadata
+slug: debug-render-component
+title:
+  en: Debug Render Component
+level: Other
+category: Debug
+complexity: 2
+order: 20
+description:
+  en: |-
+    The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of an entity's
+    own mesh rather than its collider. Having both on the same scene is how you tell the two apart -
+    when a body behaves oddly, the question is usually whether the mesh and the collider agree, and each
+    script answers one half of that.
+concepts:
+  - Drawing an entity's mesh as a wireframe overlay
+  - "How this differs from CollidableGizmoScript, which draws the collider"
+  - Toggling the overlay with its Visible property
+  - Comparing mesh against collider when a body misbehaves
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+tags:
+  - 3D
+  - Bepu
+  - Debug
+  - Wireframe
+  - Mesh
+  - Visualisation
+related:
+  - Example08_CollidableGizmo
+  - Example01_Basic2DScene_DebugRender
+  - Example08_DebugShapes
+enabled: true
+created: 2025-10-06
+---
+*/

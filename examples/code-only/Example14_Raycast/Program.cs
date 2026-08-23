@@ -191,3 +191,43 @@ static void DisplayInstructions(Game game)
     game.DebugTextSystem.Print("Click the ground to apply a direction impulse", new(5, 30));
     game.DebugTextSystem.Print("Click the sphere to stop moving", new(5, 50));
 }
+/*
+---example-metadata
+slug: raycast
+title:
+  en: Raycast
+level: Intermediate
+category: Physics
+complexity: 3
+order: 70
+description:
+  en: |-
+    Click the ground and a sphere is kicked towards where you clicked; click the sphere and it stops
+    dead. Turning a mouse position into a world direction is the whole trick - the camera unprojects the
+    screen point into a ray, physics reports what that ray hit and where, and the impulse is derived
+    from the hit point. A line is drawn along the ray so an unexpected result can be seen rather than
+    guessed at.
+concepts:
+  - Turning a screen position into a world ray from the camera
+  - Querying the physics world with a raycast
+  - Reading the hit point and the entity that was hit
+  - Applying an impulse towards a point
+  - Stopping a body by zeroing its velocity
+  - Drawing the ray so a miss is visible
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+tags:
+  - 3D
+  - Bepu
+  - Physics
+  - Raycast
+  - Input
+  - Mouse
+  - Impulse
+related:
+  - Example16_CollisionGroup
+  - Example02_GiveMeACube_SimulationUpdate
+media: stride-game-engine-example-14-raycast.webp
+enabled: true
+created: 2025-01-26
+---
+*/

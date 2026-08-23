@@ -176,7 +176,7 @@ title:
 level: Advanced
 category: Physics
 complexity: 4
-order: 70
+order: 110
 description:
   en: |-
     Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no

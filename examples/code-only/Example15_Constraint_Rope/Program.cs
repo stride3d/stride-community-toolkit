@@ -224,7 +224,7 @@ title:
 level: Advanced
 category: Physics
 complexity: 5
-order: 50
+order: 80
 description:
   en: |-
     Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing

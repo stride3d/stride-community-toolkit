@@ -20,3 +20,40 @@ game.Run(start: (Scene rootScene) =>
 {
     SceneBuilder.Build(game, rootScene);
 });
+/*
+---example-metadata
+slug: stride-signalr
+title:
+  en: Stride + SignalR
+level: Advanced
+category: Networking
+complexity: 4
+order: 160
+description:
+  en: |-
+    A Stride game and a Blazor web page talking to each other in real time over a SignalR hub, so a
+    button in a browser can spawn an entity in the running game and the game can report back. Two
+    processes and a server make this the most involved example in the toolkit to run: start the Blazor
+    app first so the hub exists, then start the game, which connects to it.
+concepts:
+  - Connecting a Stride app to a SignalR hub
+  - Registering handlers for incoming messages
+  - Sending events from the game to a web client
+  - Driving scene changes from a remote command
+  - "Marshalling hub callbacks onto the game loop before touching the scene"
+  - Sharing message contracts through a common project
+tags:
+  - 3D
+  - Networking
+  - SignalR
+  - Blazor
+  - Real Time
+  - Multi Project
+related:
+  - Example17_SignalR_Blazor
+media: stride-game-engine-example17-signalr.webp
+tocName: Stride + SignalR
+enabled: true
+created: 2025-05-04
+---
+*/

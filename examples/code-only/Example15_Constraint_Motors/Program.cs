@@ -422,7 +422,7 @@ title:
 level: Intermediate
 category: Physics
 complexity: 5
-order: 50
+order: 110
 description:
   en: |-
     The three kinds of Bepu constraint, side by side. A servo drives towards a target position or

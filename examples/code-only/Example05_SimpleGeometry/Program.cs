@@ -159,3 +159,42 @@ public class QuadPrimitiveModel : PrimitiveProceduralModelBase
         return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, isLeftHanded: false) { Name = "MyModel" };
     }
 }
+/*
+---example-metadata
+slug: simple-geometry
+title:
+  en: Simple Geometry (Labelled Triangle)
+level: Intermediate
+category: Geometry
+complexity: 3
+order: 20
+description:
+  en: |-
+    The smallest possible custom mesh - one triangle from three vertices - with each vertex labelled on
+    screen so the relationship between the numbers in the code and the shape on screen is visible. The
+    labels come from EntityTextComponent, which needs its renderer registered once, and the ground gizmo
+    shows which way the axes point. Useful as a scratchpad when a mesh comes out inside out or facing
+    the wrong way.
+concepts:
+  - Building a single triangle from a vertex and index buffer
+  - "Choosing a vertex format: VertexPositionTexture and its Layout"
+  - Labelling vertices on screen to debug a mesh
+  - "Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())"
+  - Orienting yourself with a named-axis ground gizmo
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler, CreateFlatMaterial"
+tags:
+  - 3D
+  - Geometry
+  - Mesh
+  - Vertex Buffer
+  - Debug
+  - Labels
+  - Gizmo
+related:
+  - Example05_ProceduralGeometry
+  - Example01_Basic3DScene_MeshLine
+  - Example01_EntityText
+enabled: true
+created: 2025-10-06
+---
+*/

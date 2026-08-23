@@ -118,7 +118,7 @@ title:
 level: Intermediate
 category: Physics
 complexity: 3
-order: 10
+order: 60
 description:
   en: |-
     Drive an entity from the physics clock instead of the render loop. The script is a StartupScript with

@@ -98,3 +98,44 @@ void Update(Scene scene, GameTime time)
 
     impulseApplied = true;
 }
+/*
+---example-metadata
+slug: renderer
+title:
+  en: Custom Scene Renderers
+level: Advanced
+category: Rendering
+complexity: 4
+order: 10
+description:
+  en: |-
+    Two ways to draw your own 2D content over a 3D scene, side by side. A SceneRendererBase subclass
+    covers the whole scene and is the right shape for HUDs and debug overlays; a DelegateSceneRenderer
+    created from a StartupScript belongs to one entity and is the right shape for labels attached to a
+    thing. Both project world positions into screen space and draw through a SpriteBatch, so the example
+    also covers where those resources are created and when they must be released.
+concepts:
+  - "Hooking the pipeline by subclassing SceneRendererBase"
+  - "Attaching a renderer to one entity with DelegateSceneRenderer"
+  - Converting a world position into screen coordinates
+  - Drawing text and backgrounds with SpriteBatch
+  - Deciding between a scene-wide and an entity-scoped renderer
+  - Initialising and releasing renderer resources at the right time
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+tags:
+  - 3D
+  - Rendering
+  - Scene Renderer
+  - SpriteBatch
+  - HUD
+  - Text
+  - Screen Space
+related:
+  - Example01_EntityText
+  - Example13_RootRendererShader
+  - Example01_Basic3DScene_MeshLine
+media: stride-game-engine-example09-renderer.webp
+enabled: true
+created: 2024-09-24
+---
+*/

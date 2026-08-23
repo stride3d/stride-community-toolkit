@@ -59,3 +59,39 @@ Entity CreateEntity(string name, Color color, Vector3 position)
 
     return entity;
 }
+/*
+---example-metadata
+slug: collision-group
+title:
+  en: Collision Group
+level: Intermediate
+category: Physics
+complexity: 3
+order: 80
+description:
+  en: |-
+    Two players and an enemy, where the players collide with each other but the enemy passes through
+    both. Bepu collision groups decide this arithmetically rather than by a table: bodies in the same
+    group collide only when their index values differ by more than a set amount. Here the players sit at
+    0 and 2 and the enemy at 1, so the players interact and the enemy is transparent to them.
+concepts:
+  - Assigning bodies to a collision group
+  - "How the IndexA difference rule decides whether two bodies collide"
+  - Choosing index values so one entity phases through others
+  - When an arithmetic rule beats a full collision matrix
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateFlatMaterial"
+tags:
+  - 3D
+  - Bepu
+  - Physics
+  - Collision
+  - Collision Group
+  - Filtering
+related:
+  - Example16_CollisionLayer
+  - Example14_Raycast
+media: stride-game-engine-example16-collision-group.webp
+enabled: true
+created: 2025-03-08
+---
+*/

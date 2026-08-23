@@ -145,7 +145,7 @@ title:
 level: Advanced
 category: Physics
 complexity: 4
-order: 60
+order: 100
 description:
   en: |-
     Demonstrates integrating Jitter2 physics engine with Stride. Shows how to create a physics world,

@@ -61,3 +61,35 @@ void Update(Scene scene, GameTime gameTime)
         debugDraw.DrawCircle(position, 0.55f, rotation: entity.Transform.Rotation, color: Color.Orange, solid: false);
     }
 }
+/*
+---example-metadata
+slug: debug-shapes-usage
+title:
+  en: Debug Shapes Usage
+level: Intermediate
+category: Debug
+complexity: 2
+order: 160
+description:
+  en: |-
+    The short version of the debug shapes example: turn the system on, draw a sphere and a circle, done.
+    If the full tour is a reference, this is the copy-paste starting point - the minimum needed to get a
+    shape on screen while debugging something else.
+concepts:
+  - Initialising the debug shape system and enabling it for a scene
+  - Drawing a sphere and a circle at given positions
+  - "Requires the Stride.CommunityToolkit.DebugShapes package"
+tags:
+  - 3D
+  - Debug
+  - Debug Shapes
+  - Immediate Mode
+  - Visualisation
+related:
+  - Example08_DebugShapes
+  - Example08_CollidableGizmo
+media: stride-game-engine-example08-debugshapes-usage.webp
+enabled: true
+created: 2025-08-24
+---
+*/

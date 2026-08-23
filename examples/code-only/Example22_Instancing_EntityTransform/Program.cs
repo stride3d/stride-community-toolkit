@@ -387,7 +387,7 @@ title:
 level: Advanced
 category: Performance
 complexity: 4
-order: 10
+order: 50
 description:
   en: |-
     Keep every object a real entity - with a transform, a physics body and anything else you need - while
@@ -433,7 +433,6 @@ tags:
 related:
   - Example21_Instancing
   - Example02_GiveMeACube
-  - Example_Bepu_Playground
 enabled: true
 created: 2026-08-07
 ---

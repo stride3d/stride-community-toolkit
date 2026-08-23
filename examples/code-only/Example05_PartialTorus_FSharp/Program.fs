@@ -119,3 +119,41 @@ let Start rootScene =
 let main argv =
     game.Run(start = Start)
     0
+(*
+---example-metadata
+slug: partial-torus-mesh-fs
+title:
+  en: Partial Torus Mesh in F#
+level: Intermediate
+category: Geometry
+complexity: 3
+order: 10
+description:
+  en: |-
+    The parametric partial torus, written in F#. The geometry is identical to the C# version; what
+    differs is the shape of the code - the vertex generation reads naturally as comprehensions and
+    folds, and mutable engine state has to be assigned with the left arrow rather than plain equals.
+concepts:
+  - Generating parametric geometry in F#
+  - Expressing vertex generation with comprehensions
+  - "Assigning to engine properties with the <- operator"
+  - Computing correct normals for smooth shading
+  - Interoperating with the C# MeshBuilder API from F#
+  - "Using helpers: SetupBase3DScene, AddSkybox"
+tags:
+  - 3D
+  - F#
+  - Geometry
+  - Mesh
+  - MeshBuilder
+  - Procedural
+  - Torus
+related:
+  - Example05_PartialTorus
+  - Example01_Basic3DScene_FSharp
+media: stride-game-engine-example-05-partial-torus-mesh.webp
+tocName: Partial Torus Mesh
+enabled: true
+created: 2025-03-18
+---
+*)

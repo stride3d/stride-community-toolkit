@@ -240,7 +240,7 @@ title:
 level: Intermediate
 category: Performance
 complexity: 3
-order: 40
+order: 130
 description:
   en: |-
     Render two identical walls of cubes built two different ways, side by side. The left wall uses one

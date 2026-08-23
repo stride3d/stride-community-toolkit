@@ -54,3 +54,40 @@ void Start(Scene scene)
     sphere.Scene = scene;
     connectedSphere.Scene = scene;
 }
+/*
+---example-metadata
+slug: simple-constraint
+title:
+  en: Simple Constraint
+level: Intermediate
+category: Physics
+complexity: 3
+order: 100
+description:
+  en: |-
+    One constraint, doing one thing: a distance servo holding two spheres three units apart, pulling
+    them together or pushing them apart until they settle there. It is the gentlest possible
+    introduction to Bepu constraints, and the shortest - everything else in the constraint family builds
+    on the same pattern of naming two bodies and describing the relationship you want between them.
+concepts:
+  - Connecting two bodies with DistanceServoConstraintComponent
+  - Setting a target distance and watching the solver reach it
+  - How a constraint component attaches to an entity
+  - Reading the result against a ground reference grid
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
+tags:
+  - 3D
+  - Bepu
+  - Physics
+  - Constraint
+  - Servo
+  - Distance
+related:
+  - Example15_Constraint
+  - Example15_Constraint_Motors
+  - Example15_Constraint_Rope
+media: stride-game-engine-example-15-simple-constraint.webp
+enabled: true
+created: 2025-03-09
+---
+*/

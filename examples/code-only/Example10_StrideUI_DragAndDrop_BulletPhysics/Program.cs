@@ -123,3 +123,36 @@ static void MoveToAnotherProjectOrSnippetExample(Scene scene, Game game)
 
     entity.Scene = scene;
 }
+/*
+---example-metadata
+slug: stride-ui-draggable-window-bullet
+title:
+  en: Stride UI - Draggable Window - Bullet Physics
+level: Advanced
+category: UI
+complexity: 4
+order: 130
+description:
+  en: |-
+    The draggable window example running on the legacy Bullet physics engine. The UI code is unchanged -
+    only the spheres the windows spawn are simulated differently. Useful as a direct comparison if you
+    are maintaining a project that has not moved to Bepu yet.
+concepts:
+  - Running the draggable window scene on the legacy Bullet engine
+  - "Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu"
+  - Why the UI layer is unaffected by the physics engine underneath
+tags:
+  - 3D
+  - UI
+  - Stride UI
+  - Drag and Drop
+  - Bullet
+  - Physics
+  - Legacy
+related:
+  - Example10_StrideUI_DragAndDrop
+  - Example01_Basic3DScene_BulletPhysics
+enabled: true
+created: 2025-01-26
+---
+*/

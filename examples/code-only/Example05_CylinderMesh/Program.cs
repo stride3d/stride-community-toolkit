@@ -177,3 +177,41 @@ static void CreateCircularEndCap(MeshBuilder meshBuilder, int segments, int posi
         }
     }
 }
+/*
+---example-metadata
+slug: cylinder-mesh
+title:
+  en: Cylinder Mesh
+level: Intermediate
+category: Geometry
+complexity: 3
+order: 30
+description:
+  en: |-
+    A cylinder generated with MeshBuilder, split into the three jobs any surface of revolution needs:
+    place a ring of vertices, join consecutive rings into side walls, then close both ends with caps.
+    Separating them is what keeps the index arithmetic followable - the caps in particular wind the
+    opposite way to each other, which is easy to get wrong and instantly visible when you do.
+concepts:
+  - Generating a ring of vertices from an angle sweep
+  - Stitching consecutive rings into a quad strip of triangles
+  - Closing the ends with fan-triangulated caps
+  - Why the two caps must wind in opposite directions
+  - Keeping index arithmetic readable by splitting the build into stages
+  - "Using helpers: SetupBase3DScene, AddSkybox"
+tags:
+  - 3D
+  - Geometry
+  - Mesh
+  - MeshBuilder
+  - Procedural
+  - Cylinder
+  - Winding
+related:
+  - Example05_PartialTorus
+  - Example05_ProceduralGeometry
+media: stride-game-engine-example-05-cylinder-mesh.webp
+enabled: true
+created: 2025-03-15
+---
+*/

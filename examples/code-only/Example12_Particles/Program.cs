@@ -110,3 +110,40 @@ void CreateParticleEffect()
     entity.Name = "Particles";
     entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 }
+/*
+---example-metadata
+slug: particles
+title:
+  en: Particles
+level: Intermediate
+category: Rendering
+complexity: 3
+order: 140
+description:
+  en: |-
+    A blue fountain: fifty particles a second launched upward from a small area, pulled back down by
+    gravity, each rendered as a camera-facing billboard. Built entirely from code, so every part of the
+    system is visible - the emitter and its spawn rate, the initializers that randomise starting
+    position and velocity, and the gravity updater that acts on them afterwards.
+concepts:
+  - Creating a ParticleSystemComponent from code
+  - Setting lifetime, size range and spawn rate on an emitter
+  - Randomising start position and velocity with initializers
+  - Applying gravity with an updater
+  - Rendering particles as billboards
+  - "Using helpers: SetupBase3DScene, Add3DGround"
+tags:
+  - 3D
+  - Rendering
+  - Particles
+  - Emitter
+  - Billboard
+  - Effects
+related:
+  - Example01_Material
+  - Example09_Renderer
+media: stride-game-engine-example-12-particles.webp
+enabled: true
+created: 2024-11-08
+---
+*/

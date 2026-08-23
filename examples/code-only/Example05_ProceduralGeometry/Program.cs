@@ -239,3 +239,43 @@ static Material CreateMaterial(GraphicsDevice graphicsDevice) => Material.New(gr
         },
     }
 });
+/*
+---example-metadata
+slug: procedural-geometry
+title:
+  en: Procedural Geometry
+level: Intermediate
+category: Geometry
+complexity: 3
+order: 10
+description:
+  en: |-
+    A triangle, a plane and a circle built at runtime with MeshBuilder, which handles the vertex layout
+    and buffer bookkeeping that raw buffers make you do by hand. The circle is rebuilt every frame with
+    a changing segment count, which is where the one rule of dynamic geometry shows up: dispose the old
+    buffers before swapping in the new mesh, or leak a buffer pair per frame.
+concepts:
+  - Declaring a vertex layout and filling it with MeshBuilder
+  - Building a triangle, a plane and a circle from first principles
+  - Rebuilding a mesh every frame as a parameter changes
+  - "Disposing the previous mesh and material before replacing them"
+  - Why clockwise winding matters for which face you see
+  - Creating a non-indexed mesh when index reuse buys nothing
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreateFlatMaterial"
+tags:
+  - 3D
+  - Geometry
+  - Mesh
+  - MeshBuilder
+  - Procedural
+  - Winding
+  - Disposal
+related:
+  - Example05_SimpleGeometry
+  - Example05_CylinderMesh
+  - Example01_Letters3D
+media: stride-game-engine-procedural-geometry.webp
+enabled: true
+created: 2023-10-15
+---
+*/

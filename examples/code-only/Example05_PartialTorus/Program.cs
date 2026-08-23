@@ -158,3 +158,42 @@ static Material CreateMaterial(Game game)
         }
     });
 }
+/*
+---example-metadata
+slug: partial-torus-mesh
+title:
+  en: Partial Torus Mesh
+level: Intermediate
+category: Geometry
+complexity: 3
+order: 40
+description:
+  en: |-
+    A torus defined parametrically from two angles - one around the tube, one around the ring - and cut
+    short by limiting the second, which turns the same code into an arc, a horseshoe or a full ring
+    without special cases. Normals are computed rather than guessed, because a parametric surface lit
+    with wrong normals looks subtly faceted in a way that is hard to trace back.
+concepts:
+  - Defining a surface from two angle parameters
+  - Making the shape partial by constraining the bend angle
+  - Computing correct normals for smooth shading
+  - Reusing vertices between adjacent triangles through indexing
+  - Getting triangle winding right so faces are not culled
+  - "Using helpers: SetupBase3DScene, AddSkybox"
+tags:
+  - 3D
+  - Geometry
+  - Mesh
+  - MeshBuilder
+  - Procedural
+  - Torus
+  - Normals
+related:
+  - Example05_CylinderMesh
+  - Example05_PartialTorus_FSharp
+  - Example05_ProceduralGeometry
+media: stride-game-engine-example-05-partial-torus-mesh.webp
+enabled: true
+created: 2025-03-18
+---
+*/

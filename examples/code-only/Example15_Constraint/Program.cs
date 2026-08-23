@@ -581,3 +581,48 @@ static OneBodyAngularServoConstraintComponent CreateOneBodyAngularServoConstrain
     };
     return angularServoSetA;
 }
+/*
+---example-metadata
+slug: constraints
+title:
+  en: Various Constraints
+level: Advanced
+category: Physics
+complexity: 5
+order: 70
+description:
+  en: |-
+    The full tour of Bepu constraints in one interactive scene: a distance limit holding two spheres
+    within a range, a distance servo actively driving a separation with spring settings, a ball socket
+    pivoting a platform on a static foundation, and point-on-line servos confining cubes to vertical
+    tracks. It is meant to be played with - drag the golden sphere, Z and X raise and lower it, clicking
+    a cube removes it so the stack above collapses, R resets everything.
+concepts:
+  - "Limiting a range with DistanceLimitConstraintComponent"
+  - "Driving a target separation with DistanceServoConstraintComponent"
+  - "Pivoting a body with BallSocketConstraintComponent"
+  - "Confining motion to an axis with PointOnLineServoConstraintComponent"
+  - Tuning a servo with spring frequency and damping
+  - Anchoring a constraint to a static foundation
+  - Filtering collisions between the connected parts
+  - Removing constrained bodies at runtime and resetting the scene
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
+tags:
+  - 3D
+  - Bepu
+  - Physics
+  - Constraint
+  - Servo
+  - Ball Socket
+  - Spring
+  - Input
+related:
+  - Example15_Constraint_Simple
+  - Example15_Constraint_Motors
+  - Example15_Constraint_Rope
+media: stride-game-engine-example-15-constraints.webp
+tocName: Various Constraints
+enabled: true
+created: 2025-02-02
+---
+*/

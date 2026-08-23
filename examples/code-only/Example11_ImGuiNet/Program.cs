@@ -246,7 +246,7 @@ title:
 level: Advanced
 category: UI
 complexity: 4
-order: 40
+order: 150
 description:
   en: |-
     Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.

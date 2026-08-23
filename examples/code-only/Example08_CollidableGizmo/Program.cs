@@ -43,3 +43,39 @@ void CreateSpheres(Scene rootScene, int count)
         entity.Scene = rootScene;
     }
 }
+/*
+---example-metadata
+slug: collidable-gizmo
+title:
+  en: Collidable Gizmo
+level: Other
+category: Debug
+complexity: 2
+order: 10
+description:
+  en: |-
+    A single-purpose demo of CollidableGizmoScript, which draws the collider Bepu is actually using so
+    it can be compared against the model you think you gave it. The cube here is created with
+    IncludeCollider set to false and the gizmo left visible, which makes the point directly: the gizmo
+    reports what physics knows about, and if nothing is drawn, nothing is there.
+concepts:
+  - Drawing the collider a body is really using
+  - "Suppressing the generated collider with IncludeCollider = false"
+  - Showing or hiding the gizmo with its Visible property
+  - Diagnosing a body that does not collide as expected
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+tags:
+  - 3D
+  - Bepu
+  - Debug
+  - Gizmo
+  - Collider
+  - Physics
+related:
+  - Example08_DebugRenderComponent
+  - Example01_Basic2DScene_DebugRender
+  - Example08_DebugShapes
+enabled: true
+created: 2025-10-06
+---
+*/
