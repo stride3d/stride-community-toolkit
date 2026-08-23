@@ -739,7 +739,85 @@ If the pre-build hook proves too slow (it runs `dotnet run` on the generator), r
 
 ---
 
-## 5. Automated screenshots (deferred — direction set)
+## 5. Automated screenshots — **IMPLEMENTED 2026-08-23, images under review**
+
+The pipeline is built and verified end to end. What follows the original direction, and what running it
+actually taught us:
+
+**In-engine capture was chosen over external tooling, deliberately.** The alternative considered was
+screen-scraping the window with `ffmpeg -f gdigrab`, PowerShell `CopyFromScreen`, `PrintWindow` or
+Windows.Graphics.Capture — attractive because it needs no toolkit change at all. It was rejected on
+four counts: timing (a fixed delay photographs a different moment every run, and most of these examples
+are things falling or settling), DPI and window scaling, the window needing to be visible and
+unoccluded for the length of a 57-example run, and the classic failure where GDI capture of a Direct3D
+swapchain returns a black rectangle. Against that, the in-engine hook turned out to be ~100 lines in
+one new class plus two lines in `Run`.
+
+`ScreenshotCapture` (`src/Stride.CommunityToolkit/Engine`) is opt-in through `STRIDE_TOOLKIT_CAPTURE`
+and does nothing unless it is set — a game shipping against the toolkit pays one environment-variable
+read per `Run`. It waits a fixed number of frames, saves the render target, and exits.
+
+**Reproducibility, measured rather than assumed.** Two identical runs produce *the same picture* — same
+settled position, same shadow, same framing — but **not the same bytes**, differing about 0.8% from
+sub-pixel rendering noise. Forcing `IsFixedTimeStep = true` is what achieves the first part, and that is
+the part that matters: without it, frame N is a different instant on every machine. Byte-identity would
+need TAA disabled and a deterministic ambient probe, which is only worth chasing for visual regression
+baselines — explicitly not a goal (D22).
+
+`build/capture-screenshots.cs` orchestrates, following the `pack-local.cs` file-based-app convention.
+Two defects in it were found by running it, not by reading it:
+
+- **It silently overwrote an existing screenshot.** A bulk run would have replaced all 25 reviewed,
+  hand-taken images without asking. It now refuses to touch an existing file without `--force`.
+- **WebP came out lossless**, 195 KB for one 1280×720 frame. ImageSharp's encoder ignores `Quality`
+  unless `FileFormat = WebpFileFormatType.Lossy` is set explicitly. 95 KB after.
+
+Reserved fields are now real: **`screenshot: false`** and **`screenshotFrame`**. The SignalR pair carries
+`screenshot: false` — one needs a running server, and the Blazor half is an ASP.NET host with no scene,
+which would simply hang until the timeout.
+
+**Debug overlays stay in the frame (decided).** The profiler and the camera-controls hint are switched
+on deliberately by the examples themselves, and both are suppressible if maintainers later object — the
+profiler is a `GameProfiler` component on a known entity and `DebugOverlaySection` has an `Enabled`
+flag. Regenerating the images is cheap, so the decision is reversible at any time.
+
+**Every image is reviewed before it is committed**, and the very first real capture justified the rule:
+`letters-3d` rendered its alphabet rows washed out to near-invisibility against the light background.
+Nothing capture can fix — the example's own lighting — and no script would ever have noticed.
+
+**The saved frame is not opaque, and the 2D examples hid it.** The first review pass came back with
+"there is a problem with transparency" against every 3D example. Measured: 44 of 53 images had alpha
+below 255 across essentially the whole frame — a sky pixel reads `rgba(80,86,93,24)`. The render target
+carries whatever alpha the renderer left behind, and `RenderTarget.Save` writes it out faithfully. The
+six images that looked right were all 2D, which end up fully opaque, so the sample everyone eyeballs
+first was the one sample that could not show the bug.
+
+The alpha is **straight, not premultiplied** — 80 at alpha 24 would imply a true value near 850 if it
+were — so the colour underneath is already correct and only the channel is wrong. The conversion step
+therefore *overwrites* alpha with 255. Compositing onto a background colour, the obvious reflex, would
+have multiplied every pixel by 24/255 and rendered the scene almost black.
+
+Asked whether to save JPEG before WebP instead, since JPEG has no alpha channel. It would work, and it
+was rejected: two lossy generations in a row, and JPEG's chroma subsampling lands hardest on thin
+coloured text and single-pixel debug lines, which is most of what these examples draw. Forcing the
+channel costs one pass over the pixels and nothing in quality.
+
+**Review is a mode of the command, not a separate step.** `--review` writes every image to
+`screenshots-review/` at the repository root — gitignored, named by slug — and, next to them, an
+`index.html` contact sheet built from the manifest. One page, one scroll: each image with its title,
+category, complexity, tags, capture frame and the first line of its description, so judging a frame
+never means alt-tabbing to remember what the example was supposed to show. It carries a search box, a
+level filter, four verdict buttons per card (`ok` / wrong moment / bad framing / drop) persisted in
+`localStorage`, and a *Copy feedback* button that puts the verdicts on the clipboard as markdown.
+
+The sheet lists **every** example in the manifest and shows an image wherever the file exists, rather
+than only the ones this run touched. That is what makes `--review --only <slug>` useful for iterating
+on a single stubborn capture: the page is rebuilt complete each time instead of shrinking to the one
+example. Where there is no image it says why — `screenshot: false`, a timeout, or a run that exited
+without writing one. Regenerating the sheet alone, without re-running anything, is
+`--review --only <a slug that matches nothing>`.
+
+### Original direction (kept for context)
 
 Motivation: 33 docs need a screenshot, ~29 examples have none, filenames are inconsistent (one has a
 typo), and every Stride upgrade makes existing shots stale.
