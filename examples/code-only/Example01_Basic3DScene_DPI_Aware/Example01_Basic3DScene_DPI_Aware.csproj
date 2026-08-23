@@ -4,11 +4,6 @@
         <OutputType>Exe</OutputType>
         <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-
-        <ExampleTitle>Capsule with rigid body - DPI-Aware</ExampleTitle>
-        <ExampleOrder>160</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

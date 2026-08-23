@@ -1,10 +1,3 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <ExampleTitle>SignalR &amp; Blazor Shared</ExampleTitle>
-        <ExampleOrder>20000</ExampleOrder>
-        <ExampleEnabled>false</ExampleEnabled>
-        <ExampleCategory>3 - Other</ExampleCategory>
-    </PropertyGroup>
-
 </Project>

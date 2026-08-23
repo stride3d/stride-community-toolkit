@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-
-        <ExampleTitle>Stride UI - Draggable Window</ExampleTitle>
-        <ExampleOrder>10300</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

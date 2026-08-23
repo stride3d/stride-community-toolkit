@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-
-        <ExampleTitle>Box2D.NET Physics</ExampleTitle>
-        <ExampleOrder>17000</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

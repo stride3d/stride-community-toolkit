@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-
-        <ExampleTitle>Cylinder Mesh</ExampleTitle>
-        <ExampleOrder>1100</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

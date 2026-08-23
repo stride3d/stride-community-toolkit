@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-
-        <ExampleTitle>CollisionGroup</ExampleTitle>
-        <ExampleOrder>1500</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

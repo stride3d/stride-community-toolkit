@@ -2,10 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <ExampleTitle>First-person character controller (Bepu)</ExampleTitle>
-    <ExampleOrder>2000</ExampleOrder>
-    <ExampleEnabled>true</ExampleEnabled>
-    <ExampleCategory>2 - Physics</ExampleCategory>
   </PropertyGroup>
 
   <ItemGroup>

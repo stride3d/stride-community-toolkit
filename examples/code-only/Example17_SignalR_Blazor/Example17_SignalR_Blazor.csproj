@@ -1,12 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-    <PropertyGroup>
-        <ExampleTitle>Blazor + SignalR - Run this from IIS</ExampleTitle>
-        <ExampleOrder>20000</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>3 - Other Example</ExampleCategory>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.10" />
     </ItemGroup>

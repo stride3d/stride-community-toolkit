@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-
-        <ExampleTitle>Particles</ExampleTitle>
-        <ExampleOrder>1300</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>1 - Basic Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

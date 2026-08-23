@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <ExampleEnabled>false</ExampleEnabled>
-    </PropertyGroup>
-
     <ItemGroup>
         <Using Include="Stride.Core" />
         <Using Include="Stride.Core.Mathematics" />

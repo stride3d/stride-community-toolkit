@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-
-        <ExampleTitle>Renderer</ExampleTitle>
-        <ExampleOrder>19100</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>3 - Other Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>

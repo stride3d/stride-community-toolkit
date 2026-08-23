@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-
-        <ExampleTitle>Mesh Outline</ExampleTitle>
-        <ExampleOrder>17000</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +15,5 @@
         <LastGenOutput>MeshOutlineShader.sdsl.cs</LastGenOutput>
       </None>
     </ItemGroup>
-
 
 </Project>

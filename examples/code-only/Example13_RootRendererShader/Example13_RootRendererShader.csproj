@@ -2,11 +2,6 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-
-        <ExampleTitle>Root Renderer Shader</ExampleTitle>
-        <ExampleOrder>16000</ExampleOrder>
-        <ExampleEnabled>true</ExampleEnabled>
-        <ExampleCategory>2 - Advance Example</ExampleCategory>
     </PropertyGroup>
 
     <ItemGroup>
