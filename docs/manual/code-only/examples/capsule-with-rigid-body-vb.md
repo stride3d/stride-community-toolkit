@@ -4,7 +4,7 @@
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_VBasic).
 
-[!code-vb[](../../../../examples/code-only/Example01_Basic3DScene_VBasic/Program.vb)]
+[!code-vb[](../../../../examples/code-only/Example01_Basic3DScene_VBasic/Program.vb?start=1&end=25)]
 
 - `Private game As New Game()` This line of code creates a new instance of the `Game` class. The Game class is central to the Stride engine, managing the overall game loop, scenes, and updates to the entities.
 - `GameExtensions.Run(game, Nothing, AddressOf StartGame)` This line initiates the game loop. The `Run` method, from `GameExtensions`, is responsible for starting the game and it takes a reference to the `StartGame` method as a parameter. This method is called once when the game starts. The `Nothing` argument here is for an optional parameter that is not being used in this case.

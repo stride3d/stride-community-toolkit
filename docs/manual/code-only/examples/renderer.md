@@ -27,4 +27,4 @@ Both techniques utilize SpriteBatch for efficient 2D rendering within a 3D scene
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example09_Renderer).
 
-[!code-csharp[](../../../../examples/code-only/Example09_Renderer/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example09_Renderer/Program.cs?start=1&end=100)]

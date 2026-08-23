@@ -29,4 +29,4 @@ The project also includes cleanup functionality to remove objects that fall belo
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example10_StrideUI_DragAndDrop).
 
-[!code-csharp[](../../../../examples/code-only/Example10_StrideUI_DragAndDrop/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example10_StrideUI_DragAndDrop/Program.cs?start=1&end=84)]

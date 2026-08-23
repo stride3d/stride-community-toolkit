@@ -1,2 +1,0 @@
-- [Capsule with rigid body](../../manual/code-only/examples/capsule-with-rigid-body-fs.md): Demonstrates creating and positioning a 3D capsule in a scene.
-- [Partial torus mesh](../../manual/code-only/examples/partial-torus-mesh-fs.md): Demonstrates creating a partial torus mesh.

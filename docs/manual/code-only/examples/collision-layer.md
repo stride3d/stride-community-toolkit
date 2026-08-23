@@ -14,4 +14,4 @@ The example creates a scene with two player cubes (green and purple) that can in
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example16_CollisionLayer).
 
-[!code-csharp[](../../../../examples/code-only/Example16_CollisionLayer/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example16_CollisionLayer/Program.cs?start=1&end=89)]

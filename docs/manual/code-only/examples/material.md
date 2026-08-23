@@ -14,4 +14,4 @@ The example also includes an interactive environment where users can adjust the 
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Material).
 
-[!code-csharp[](../../../../examples/code-only/Example01_Material/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example01_Material/Program.cs?start=1&end=166)]

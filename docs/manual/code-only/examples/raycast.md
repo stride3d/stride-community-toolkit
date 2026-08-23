@@ -17,4 +17,4 @@ This example demonstrates key concepts for interactive physics-based games, incl
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example14_Raycast).
 
-[!code-csharp[](../../../../examples/code-only/Example14_Raycast/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example14_Raycast/Program.cs?start=1&end=193)]

@@ -4,7 +4,7 @@
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene).
 
-[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene/Program.cs?start=1&end=20)]
 
 - `using var game = new Game();` This line of code creates a new instance of the [`Game`](https://doc.stride3d.net/latest/en/api/Stride.Engine.Game.html) class. The `Game` class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The `using` keyword ensures that the `Dispose()` method is called on the `game` object when it goes out of scope, ensuring that any resources it uses are properly cleaned up
 - `game.Run(start: (Scene rootScene) =>` This line initiates the game loop. The `Run` method is responsible for starting the game, and it takes a delegate as a parameter. This delegate is a function that is called once when the game starts. The `rootScene` parameter represents the main scene of your game.

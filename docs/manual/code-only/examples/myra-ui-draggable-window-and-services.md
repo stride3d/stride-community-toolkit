@@ -18,7 +18,7 @@ By following this example, you will gain insights into how to extend your game's
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example04_MyraUI).
 
-[!code-csharp[](../../../../examples/code-only/Example04_MyraUI/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example04_MyraUI/Program.cs?start=1&end=51)]
 
 ## MyraSceneRenderer.cs
 

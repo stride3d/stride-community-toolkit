@@ -22,4 +22,4 @@ This configuration ensures that:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example16_CollisionGroup).
 
-[!code-csharp[](../../../../examples/code-only/Example16_CollisionGroup/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example16_CollisionGroup/Program.cs?start=1&end=61)]

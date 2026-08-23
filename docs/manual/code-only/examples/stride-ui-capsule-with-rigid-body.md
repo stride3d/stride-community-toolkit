@@ -20,4 +20,4 @@ This modular approach makes the code easier to understand and maintain. Each met
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example03_StrideUI_CapsuleAndWindow).
 
-[!code-csharp[](../../../../examples/code-only/Example03_StrideUI_CapsuleAndWindow/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example03_StrideUI_CapsuleAndWindow/Program.cs?start=1&end=88)]

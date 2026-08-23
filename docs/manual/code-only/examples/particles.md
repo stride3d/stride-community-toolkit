@@ -19,4 +19,4 @@ This example demonstrates fundamental concepts of particle systems in Stride, sh
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example12_Particles).
 
-[!code-csharp[](../../../../examples/code-only/Example12_Particles/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example12_Particles/Program.cs?start=1&end=112)]

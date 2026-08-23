@@ -21,4 +21,4 @@ This demonstrates how constraints can be used to create complex physical behavio
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example15_Constraint).
 
-[!code-csharp[](../../../../examples/code-only/Example15_Constraint/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example15_Constraint/Program.cs?start=1&end=583)]

@@ -18,4 +18,4 @@ The line is attached as a child to one of the spheres, creating a visual connect
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_MeshLine).
 
-[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_MeshLine/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_MeshLine/Program.cs?start=1&end=63)]

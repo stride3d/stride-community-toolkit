@@ -14,4 +14,4 @@ This project will show how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example11_ImGui).
 
-[!code-csharp[](../../../../examples/code-only/Example11_ImGui/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example11_ImGui/Program.cs?start=1&end=34)]

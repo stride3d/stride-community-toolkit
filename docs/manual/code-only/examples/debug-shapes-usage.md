@@ -15,4 +15,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example08_DebugShapes_Usage).
 
-[!code-csharp[](../../../../examples/code-only/Example08_DebugShapes_Usage/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example08_DebugShapes_Usage/Program.cs?start=1&end=63)]

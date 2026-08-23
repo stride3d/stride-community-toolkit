@@ -9,16 +9,13 @@ Welcome to the Stride Community Toolkit Manual. This guide helps you make the mo
 - [Getting Started](getting-started.md): Set up and start using the toolkit.
 - [Code-Only Approach](code-only/index.md): Create and manage Stride projects using only C#.
   - [Create Project](code-only/create-project.md): Step-by-step guide to creating a Stride project using a C# console app.
-  - [C# Basic Examples](code-only/examples/basic-examples.md)
-      [!INCLUDE [basic-examples](../includes/manual/basic-examples.md)] 
-  - [C# Advanced Examples](code-only/examples/advance-examples.md)
-      [!INCLUDE [basic-examples](../includes/manual/advance-examples.md)]
-  - Other Examples
-      [!INCLUDE [other-examples](../includes/manual/other-examples.md)]  
-  - [F# Basic Examples](code-only/examples/basic-examples-fs.md)
-      [!INCLUDE [basic-examples-fs](../includes/manual/basic-examples-fs.md)]
-  - [VB Basic Examples](code-only/examples/basic-examples-vb.md)
-    - [Capsule with Rigid Body (VB)](code-only/examples/capsule-with-rigid-body-vb.md)
+  - Examples, by level:
+    - [Getting Started](code-only/examples/getting-started-examples.md): your first code-only app.
+    - [Beginner](code-only/examples/beginner-examples.md): one new idea at a time.
+    - [Intermediate](code-only/examples/intermediate-examples.md): a Stride subsystem used directly.
+    - [Advanced](code-only/examples/advanced-examples.md): engine extension points and integrations.
+    - [Other](code-only/examples/other-examples.md): playgrounds and demonstrations.
+    - Also in [F#](code-only/examples/getting-started-examples-fs.md) and [Visual Basic](code-only/examples/getting-started-examples-vb.md).
   - [Extensions](code-only/extensions.md)
 - Extensions
   - [Animation Extensions](animation-extensions/index.md)

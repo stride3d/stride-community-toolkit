@@ -17,4 +17,4 @@ For the full solution, including both the Stride project and the minimal Blazor 
 
 View the Stride example on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example17_SignalR), and the minimal Blazor server app with SignalR hub [here](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example17_SignalR_Blazor).
 
-[!code-csharp[](../../../../examples/code-only/Example17_SignalR/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example17_SignalR/Program.cs?start=1&end=22)]

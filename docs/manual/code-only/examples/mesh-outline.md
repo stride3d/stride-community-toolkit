@@ -14,4 +14,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example13_MeshOutline).
 
-[!code-csharp[](../../../../examples/code-only/Example13_MeshOutline/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example13_MeshOutline/Program.cs?start=1&end=66)]

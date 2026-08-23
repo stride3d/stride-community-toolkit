@@ -10,4 +10,4 @@ The cube is positioned at `(1f, 0.5f, 3f)` in the 3D world space. This example i
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example02_GiveMeACube).
 
-[!code-csharp[](../../../../examples/code-only/Example02_GiveMeACube/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example02_GiveMeACube/Program.cs?start=1&end=110)]

@@ -4,7 +4,7 @@
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_FSharp).
 
-[!code-fsharp[](../../../../examples/code-only/Example01_Basic3DScene_FSharp/Program.fs)]
+[!code-fsharp[](../../../../examples/code-only/Example01_Basic3DScene_FSharp/Program.fs?start=1&end=22)]
 
 - `let game = new Game()` Creates a new instance of the `Game` class, serving as the central part of the Stride engine for managing game loop, scenes, and entities.
 - `let Start rootScene =` Defines a function named `Start` that takes a `Scene` object named `rootScene` as an argument.

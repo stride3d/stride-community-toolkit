@@ -13,4 +13,4 @@ View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/
 
 To explore the entire project, follow the link above. Below is the `Program.cs` file from the project for a quick overview.
 
-[!code-csharp[](../../../../examples/code-only/Example07_CubeClicker/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example07_CubeClicker/Program.cs?start=1&end=47)]

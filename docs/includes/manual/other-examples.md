@@ -1,4 +1,0 @@
-- [Debug Shapes](../../manual/code-only/examples/debug-shapes.md): Sets up a basic 3D scene and adds debug visuals.
-- [Debug Shapes Usage](../../manual/code-only/examples/debug-shapes-usage.md): Shows practical usage patterns for debug shapes in a 3D scene.
-- [Renderer](../../manual/code-only/examples/renderer.md): Compares two approaches to implementing custom rendering in Stride.
-- [Stride + SignalR](../../manual/code-only/examples/stride-signalr.md): Integrates SignalR with Stride for real-time communication.

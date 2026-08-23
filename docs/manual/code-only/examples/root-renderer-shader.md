@@ -30,4 +30,4 @@ This approach to custom rendering is particularly useful for creating background
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example13_RootRendererShader).
 
-[!code-csharp[](../../../../examples/code-only/Example13_RootRendererShader/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example13_RootRendererShader/Program.cs?start=1&end=57)]

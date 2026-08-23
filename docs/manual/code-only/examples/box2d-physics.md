@@ -17,4 +17,4 @@ This example shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example18_Box2DPhysics).
 
-[!code-csharp[](../../../../examples/code-only/Example18_Box2DPhysics/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example18_Box2DPhysics/Program.cs?start=1&end=72)]

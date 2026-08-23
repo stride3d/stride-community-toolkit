@@ -19,4 +19,4 @@ For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rende
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_CylinderMesh).
 
-[!code-csharp[](../../../../examples/code-only/Example05_CylinderMesh/Program.cs)]
+[!code-csharp[](../../../../examples/code-only/Example05_CylinderMesh/Program.cs?start=1&end=179)]
