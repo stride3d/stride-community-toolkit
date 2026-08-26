@@ -308,3 +308,136 @@ both to the top-left, which is a silent fallback for values that should not have
 toolkit is in Preview and breaking changes are acceptable; and/or split the four real corners into a
 `ScreenCorner` enum, leaving `DisplayPosition` as `DebugOverlay`'s own type with its `None` and
 `Custom` extras. The second is more churn but stops components offering values they cannot honour.
+
+---
+
+# Upstream (engine) observations
+
+The items above are about the toolkit's own API. The ones below are about what the **engine** makes
+the toolkit do for code-only projects. They are recorded here because they decide how much of the
+toolkit's code-only layer could ever move into Stride, and which toolkit packages exist only to work
+around an engine gap. Each one is something a maintainer could take upstream; none is scheduled.
+
+Context: [Stride issue #1295](https://github.com/stride3d/stride/issues/1295) and
+[discussion #1253](https://github.com/stride3d/stride/discussions/1253), which is where the code-only
+approach was first proposed and where the toolkit came from.
+
+---
+
+## 13. The asset compiler is required only to copy engine shader sources into `data/db`
+
+**Observation.** A code-only project has no assets of its own, yet it cannot run without the
+`Stride.AssetCompiler` build step. The `default.bundle` that step emits (~2.4 MB per project) contains
+every engine `.sdsl` file as `/shaders/<Name>.sdsl` plus `StrideDefaultFont`, `StrideDebugSpriteFont`
+and the splash screen from `Stride.Engine.sdpkg` - nothing project-specific. At runtime
+`ShaderSourceManager` (`Stride.Shaders.Compilers`) resolves shader sources only through the
+`IVirtualFileProvider` backed by that database; there is no embedded-resource fallback.
+
+Verified on 4.4.0-beta5 by renaming `data/` under a built `Example01_Basic3DScene` and running it:
+
+```
+[EffectCompilerCache]: Warning: Failed to load effect bytecode from application cache: Unable to find shader [LambertianPrefilteringSHNoComputePass1]
+[Scheduler]: Error: Unexpected exception while executing a micro-thread.. System.InvalidOperationException: Shader LambertianPrefilteringSHNoComputePass1 could not be found
+   at Stride.Shaders.Compilers.ShaderLoaderBase.LoadExternalBuffer(...)
+   at Stride.Shaders.Compilers.SDSL.ShaderMixer.MergeSDSL(...)
+```
+
+The window opens and stays blank. Note the stack: 4.4's SDSL-to-SPIR-V compiler (`ShaderMixer`,
+`SpirvBuilder`) is doing the runtime compilation, so runtime shader compilation is already
+cross-platform. The build-time step is not compiling shaders; it is copying their source text.
+
+**Impact.** This single dependency is the reason `Stride.CommunityToolkit.Windows` and
+`Stride.CommunityToolkit.Linux` exist - their `.csproj` descriptions say so - and why
+`create-project.md` needs two packages instead of one. It also brings the per-project asset build,
+the `_StrideCheckVisualCRuntime` registry check, the `obj/` path assumptions that bit the file-based
+app example, and a platform-specific package name (`.Windows`) for something that is not about
+Windows.
+
+**Options.**
+
+1. Embed the engine `.sdsl` files as assembly resources (or ship a prebuilt `db` as NuGet content in
+   `Stride.Rendering` / `Stride.Engine`) and let `ShaderSourceManager` fall back to them when the
+   database has no `/shaders/<Name>.sdsl`. The existing `/path` hot-reload lookup keeps working when
+   a database is present. Cost is ~2 MB of resources in the engine assemblies. This removes
+   `Stride.AssetCompiler` from every code-only project and lets both toolkit platform packages be
+   retired. Same treatment for `StrideDefaultFont`, which is the other root asset the bundle carries.
+2. Until then, in the toolkit: move the `Stride.AssetCompiler` reference
+   (`IncludeAssets="build;buildTransitive"`) into the core package, or rename the platform packages
+   to something that says what they do. Editor projects already reference the asset compiler, so a
+   duplicate reference unifies rather than conflicts. Breaking for anyone who references `.Windows`
+   by name; mechanical.
+
+---
+
+## 14. `SceneSystem` defaults to an empty `GraphicsCompositor` that draws nothing
+
+**Observation.** `SceneSystem`'s constructor sets `GraphicsCompositor = new GraphicsCompositor()`
+(`SceneSystem.cs:40`) and `LoadContent` only replaces it when `InitialGraphicsCompositorUrl` points
+at an existing asset. With no `GameSettings` asset - the code-only case - the empty compositor stays,
+so `new Game().Run()` opens a window and renders nothing, with no warning. The engine already has
+`GraphicsCompositorHelper.CreateDefault(...)` in `Stride.Rendering.Compositing`; the toolkit's
+`AddGraphicsCompositor()` is a one-line call to it.
+
+**Impact.** The first thing every code-only program has to know is that the compositor exists and
+must be set, which is exactly the kind of engine internals code-only is meant to defer. The empty
+root `Scene` is already created for this case (issue #1290 was resolved), so the compositor is the one
+remaining piece that does not get a usable default.
+
+**Options.** In `SceneSystem.LoadContent`, when `InitialGraphicsCompositorUrl` is null and the
+compositor is still the empty default, assign `GraphicsCompositorHelper.CreateDefault(enablePostEffects: false)`.
+Editor-created projects always set the URL through `GameSettings`, so they are unaffected. The
+toolkit's `AddGraphicsCompositor` would remain as the opt-in for post effects and a clear colour.
+
+---
+
+## 15. There is no post-load hook on `Game`, so `Run(start:)` has to schedule a script
+
+**Observation.** The root scene exists only after `Run()` -> `PrepareContext()` -> `LoadContent()`.
+The one instance-level signal the engine offers, `Game.GameStarted`, fires at the end of
+`Initialize()` (`Game.cs:403`), *before* `LoadContent`, so the scene is not there yet. The toolkit's
+`GameExtensions.Run(start, update)` works around this by adding a microthread to
+`game.Script.Scheduler` before calling the engine's `Run`; the microthread runs `start` on the first
+frame and loops `update` on `NextFrame()`. It is ~20 lines and uses only public API.
+
+**Impact.** Two things worth knowing, one reassuring and one a gap:
+
+- Running `start` inside a microthread does **not** hide its exceptions. `Scheduler.PropagateExceptions`
+  defaults to `true`; a faulting microthread that nothing awaits is rethrown with
+  `ExceptionDispatchInfo` from `ScriptSystem.Update`, `GameBase` logs it as
+  `[Game]: Error: Unexpected exception` and rethrows, and it escapes `game.Run(...)`. Verified on
+  4.4.0-beta5 with a probe that throws from `Start` and, separately, from `Update`: both runs exited
+  with a non-zero code and the exception was catchable around `game.Run`. So a typo in `Start` fails
+  `dotnet run` loudly, as it should; the message is just logged three times on the way out
+  (scheduler, script system, game). The one exception is the live-scripting debugger:
+  `GameDebuggerTarget` sets `PropagateExceptions = false`, so under it a faulting `Start` is logged
+  and the game keeps running.
+- The callback is the only shape on offer. Across the examples, `Run(start: Start)` appears 27 times
+  and `Run(start: Start, update: Update)` 23 times; the `Action<Game>` overload is used by 2. Since
+  `start` already runs in a microthread, an async form (`Func<Scene, Task>`) would let `Start`
+  `await game.Script.NextFrame()` or `Delay(...)`, which is currently impossible.
+
+**Options.** Upstream, either move `Run(start, update)` into `Game` as instance overloads - it
+transplants as-is - or add an instance event raised after `LoadContent` (the composable form
+suggested in discussion #1253) and make `Run(start:)` sugar over it. In the toolkit, regardless of
+upstream: collapse to one `Run` overload with `Action<Scene>` / `Action<Scene, GameTime>`, and add a
+`Func<Scene, Task>` start. The overload collapse is breaking for 2 examples; the async form is
+additive.
+
+---
+
+## 16. A consumer-facing MSBuild SDK would hide the package list, but matters less if 13 lands
+
+**Observation.** The engine repository has `sources/sdk/Stride.Build.Sdk`, but its README says it is
+consumed by direct `Import` from the source tree and the `Sdk="Stride.Build.Sdk"` NuGet mode is not
+used. There is no `Stride.Sdk` a code-only project could name in `<Project Sdk="...">` or, in a
+file-based app, `#:sdk Stride.Sdk`; the file-based example instead carries four `#:` lines and a
+commented-out `obj/` workaround.
+
+**Impact.** Low on its own. The `#:` lines are short, and most of what an SDK would hide is the
+asset-compiler wiring from item 13. If that lands, the remaining boilerplate is one or two package
+references, which is not worth an SDK.
+
+**Options.** Defer until item 13 is decided. If the asset compiler stays required, a thin
+`Stride.Sdk` that composes `Microsoft.NET.Sdk`, references the engine packages and the asset
+compiler, and sets the host RID (what `examples/Directory.Build.props` does by hand) would make the
+code-only front door `#:sdk Stride.Sdk` followed by `using var game = new Game();`.
