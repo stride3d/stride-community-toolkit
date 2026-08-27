@@ -10,7 +10,7 @@ Module Program
     Private ReadOnly game As New Game()
 
     Sub Main()
-        GameExtensions.Run(game, Nothing, AddressOf StartGame)
+        GameExtensions.Run(game, AddressOf StartGame)
     End Sub
 
     Private Sub StartGame(rootScene As Scene)
@@ -39,7 +39,7 @@ End Module
 ' concepts:
 '   - Writing a code-only Stride app in Visual Basic
 '   - "Hosting the app in a Module with a Sub Main"
-'   - "Calling an extension method as a static: GameExtensions.Run(game, Nothing, ...)"
+'   - "Calling an extension method as a static: GameExtensions.Run(game, ...)"
 '   - "Passing a callback with AddressOf"
 '   - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
 ' tags:

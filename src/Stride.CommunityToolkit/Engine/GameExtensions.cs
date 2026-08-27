@@ -26,61 +26,103 @@ public static class GameExtensions
     private const string NoCameraSlotMessage = "Cannot add camera: The GraphicsCompositor does not have any camera slots defined.";
 
     /// <summary>
-    /// Initializes the game, starts the game loop, and handles game events.
+    /// Starts the game loop, calling <paramref name="start"/> once the root scene exists and
+    /// <paramref name="update"/> on every frame after that.
     /// </summary>
     /// <remarks>
-    /// This method performs the following actions:
-    /// 1. Schedules the root script for execution.
-    /// 2. Initiates the game loop by calling <see cref="GameBase.Run(GameContext)"/>.
-    /// 3. Invokes the provided <paramref name="start"/> and <paramref name="update"/> delegates.
+    /// <para>
+    /// The engine creates the root scene only inside <see cref="GameBase.Run(GameContext)"/>, so
+    /// scene setup cannot happen before this call. <c>Run</c> schedules a script that invokes
+    /// <paramref name="start"/> on the first frame, then loops <paramref name="update"/> once per frame
+    /// until the game exits. Both callbacks run on the game thread, inside the script system, with
+    /// the same timing and exception behaviour as a <see cref="StartupScript"/> or <see cref="SyncScript"/>:
+    /// an exception thrown by either one propagates out of this method.
+    /// </para>
+    /// <para>
+    /// <paramref name="start"/> may be asynchronous - see the <see cref="Run(Game, Func{Scene, Task}, Action{Scene, GameTime}, GameContext)"/>
+    /// overload. <paramref name="update"/> is deliberately synchronous: it is the per-frame callback, and
+    /// anything that needs to await across frames belongs in an async <paramref name="start"/> that runs
+    /// its own loop.
+    /// </para>
     /// </remarks>
-    /// <param name="game">The Game instance to initialize and run.</param>
-    /// <param name="context">Optional GameContext to be used. Defaults to null.</param>
-    /// <param name="start">Optional action to execute at the start of the game. Takes the root scene as a parameter.</param>
-    /// <param name="update">Optional action to execute during each game loop iteration. Takes the root scene and game time as parameters.</param>
-    public static void Run(this Game game, GameContext? context = null, Action<Scene>? start = null, Action<Scene, GameTime>? update = null)
+    /// <param name="game">The game to run.</param>
+    /// <param name="start">Called once, with the root scene, before the first <paramref name="update"/>. Optional.</param>
+    /// <param name="update">
+    /// Called every frame with the current root scene and the current <see cref="GameBase.UpdateTime"/>.
+    /// The scene is read fresh each frame, so after a scene switch it is the new root scene. Optional.
+    /// </param>
+    /// <param name="context">
+    /// The windowing context to run in - a host control to render into, a fixed initial size, an SDL or
+    /// headless backend. Leave <see langword="null"/> to let the engine pick the platform default.
+    /// </param>
+    /// <exception cref="ArgumentNullException"><paramref name="game"/> is <see langword="null"/>.</exception>
+    /// <example>
+    /// <code>
+    /// using var game = new Game();
+    ///
+    /// game.Run(start: Start, update: Update);
+    ///
+    /// void Start(Scene rootScene) => game.SetupBase3DScene();
+    ///
+    /// void Update(Scene rootScene, GameTime time) { /* per frame */ }
+    /// </code>
+    /// </example>
+    public static void Run(this Game game, Action<Scene>? start = null, Action<Scene, GameTime>? update = null, GameContext? context = null)
     {
-        ArgumentNullException.ThrowIfNull(game);
-
-        game.Script.Scheduler.Add(RootScript);
-
-        // Opt-in, environment-driven, and a no-op unless a capture was asked for. Every example reaches
-        // the loop through Run, which is what makes this one place instead of sixty.
-        ScreenshotCapture.TrySchedule(game);
-
-        game.Run(context);
-
-        async Task RootScript()
-        {
-            start?.Invoke(GetRootScene());
-
-            if (update is null) return;
-
-            while (true)
-            {
-                update.Invoke(GetRootScene(), game.UpdateTime);
-
-                await game.Script.NextFrame();
-            }
-        }
-
-        Scene GetRootScene() => game.SceneSystem.SceneInstance.RootScene;
+        RunCore(game, start is null ? null : scene => { start(scene); return Task.CompletedTask; }, update, context);
     }
 
     /// <summary>
-    /// Initializes the game, starts the game loop, and handles game events.
+    /// Starts the game loop with an asynchronous <paramref name="start"/>: the update loop begins only
+    /// after the returned task completes.
     /// </summary>
     /// <remarks>
-    /// This method performs the following actions:
-    /// 1. Schedules the root script for execution.
-    /// 2. Initiates the game loop by calling <see cref="GameBase.Run(GameContext)"/>.
-    /// 3. Invokes the provided <paramref name="start"/> and <paramref name="update"/> delegates.
+    /// <para>
+    /// <paramref name="start"/> runs as a script, so it can wait on the script system between steps -
+    /// <c>await game.Script.NextFrame()</c> to let physics attach, or
+    /// <see cref="ScriptSystemExtensions.Delay(ScriptSystem, float)"/> for a countdown - without writing
+    /// a <see cref="StartupScript"/> or <see cref="AsyncScript"/> class. A <paramref name="start"/> that never
+    /// completes is valid, and is how to write a per-frame loop that also awaits: the same idiom as
+    /// <see cref="AsyncScript.Execute"/>.
+    /// </para>
+    /// <para>
+    /// C# binds an <c>async</c> lambda or a <see cref="Task"/>-returning method group to this overload
+    /// and a synchronous one to <see cref="Run(Game, Action{Scene}, Action{Scene, GameTime}, GameContext)"/>,
+    /// so an <c>async</c> start is never silently compiled as <c>async void</c>.
+    /// </para>
     /// </remarks>
-    /// <param name="game">The Game instance to initialize and run.</param>
-    /// <param name="context">Optional GameContext to be used. Defaults to null.</param>
-    /// <param name="start">Optional action to execute at the start of the game. Takes the game as a parameter.</param>
-    /// <param name="update">Optional action to execute during each game loop iteration. Takes the game as a parameter.</param>
-    public static void Run(this Game game, GameContext? context = null, Action<Game>? start = null, Action<Game>? update = null)
+    /// <param name="game">The game to run.</param>
+    /// <param name="start">Called once with the root scene; the update loop starts when its task completes.</param>
+    /// <param name="update">
+    /// Called every frame with the current root scene and the current <see cref="GameBase.UpdateTime"/>.
+    /// The scene is read fresh each frame, so after a scene switch it is the new root scene. Optional.
+    /// </param>
+    /// <param name="context">
+    /// The windowing context to run in. Leave <see langword="null"/> to let the engine pick the platform default.
+    /// </param>
+    /// <exception cref="ArgumentNullException"><paramref name="game"/> or <paramref name="start"/> is <see langword="null"/>.</exception>
+    /// <example>
+    /// <code>
+    /// using var game = new Game();
+    ///
+    /// game.Run(start: async rootScene =>
+    /// {
+    ///     game.SetupBase3DScene();
+    ///
+    ///     await game.Script.Delay(3);   // countdown, splash, loading...
+    ///
+    ///     SpawnPlayer(rootScene);
+    /// }, update: Update);
+    /// </code>
+    /// </example>
+    public static void Run(this Game game, Func<Scene, Task> start, Action<Scene, GameTime>? update = null, GameContext? context = null)
+    {
+        ArgumentNullException.ThrowIfNull(start);
+
+        RunCore(game, start, update, context);
+    }
+
+    private static void RunCore(Game game, Func<Scene, Task>? start, Action<Scene, GameTime>? update, GameContext? context)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -94,17 +136,23 @@ public static class GameExtensions
 
         async Task RootScript()
         {
-            start?.Invoke(game);
+            if (start is not null)
+                await start(RootScene());
 
             if (update is null) return;
 
             while (true)
             {
-                update.Invoke(game);
+                update(RootScene(), game.UpdateTime);
 
                 await game.Script.NextFrame();
             }
         }
+
+        // Re-read every frame on purpose. Both SceneSystem.SceneInstance and SceneInstance.RootScene
+        // have public setters and replacing them is how a game switches scenes; a scene captured once
+        // here would keep handing update the detached one.
+        Scene RootScene() => game.SceneSystem.SceneInstance.RootScene;
     }
 
     /// <summary>

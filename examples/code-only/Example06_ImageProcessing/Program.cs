@@ -15,7 +15,7 @@ using var game = new Game();
 
 game.Run(start: Start);
 
-static void Start(Game game)
+void Start(Scene rootScene)
 {
     game.Window.SetSize(new Int2(1000, 1080));
     game.SetupBase3D();
@@ -64,7 +64,7 @@ static void Start(Game game)
         }
     }
 
-    var entity = new Entity { Scene = game.SceneSystem.SceneInstance.RootScene };
+    var entity = new Entity { Scene = rootScene };
     entity.Add(new UIComponent { Page = new UIPage { RootElement = grid } });
 }
 

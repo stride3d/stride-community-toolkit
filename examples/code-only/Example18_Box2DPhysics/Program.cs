@@ -4,6 +4,7 @@ using Example18_Box2DPhysics.Helpers;
 using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 
 // Example 18: Box2D Physics Integration
 // This example demonstrates how to integrate Box2D.NET with Stride game engine
@@ -15,11 +16,11 @@ using Stride.Engine;
 Box2DSimulation? simulation = null;
 SceneManager? sceneManager = null;
 
-using var app = new Game();
+using var game = new Game();
 
-app.Run(start: Start, update: Update);
+game.Run(start: Start, update: Update);
 
-void Start(Game game)
+void Start(Scene rootScene)
 {
     // Configure the game window
     game.Window.AllowUserResizing = true;
@@ -42,14 +43,12 @@ void Start(Game game)
     ConfigurePhysicsWorld();
 
     // Initialize the demo manager to handle all demo logic
-    sceneManager = new SceneManager(game, game.SceneSystem.SceneInstance.RootScene, simulation);
+    sceneManager = new SceneManager(game, rootScene, simulation);
     sceneManager.Initialize();
 }
 
-void Update(Game game)
+void Update(Scene rootScene, GameTime time)
 {
-    var time = game.UpdateTime;
-
     // Update physics simulation
     simulation?.Update(time.Elapsed);
 
