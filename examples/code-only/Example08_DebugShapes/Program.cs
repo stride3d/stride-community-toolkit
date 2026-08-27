@@ -25,6 +25,8 @@ void SetupBaseScene()
     game.Add3DGround();
     game.AddDebugShapes();
     game.AddProfiler();
+    game.SetCameraPosition(new(13, 15, 27));
+    game.SetCameraRotation(new(17, -17, 0));
 }
 
 void AddDebugComponent(Scene scene)
