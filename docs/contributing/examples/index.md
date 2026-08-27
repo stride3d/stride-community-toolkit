@@ -61,7 +61,7 @@ One metadata block, in the example's own entry file. There is nothing else to up
 
 | Field | Default | Effect when `false` |
 |---|---|---|
-| `enabled` | `true` | Excluded everywhere — use while an example does not build |
+| `enabled` | `true` | Excluded everywhere - use while an example does not build |
 | `docs` | `true` | In the launchers, but no documentation page |
 | `launcher` | `true` | Documented, but hidden from both launchers |
 
@@ -83,14 +83,14 @@ Two metadata fields control capture:
 
 | Field | Default | Effect |
 |---|---|---|
-| `screenshot` | `true` | `false` excludes the example — for anything that cannot produce a meaningful frame on its own, such as the SignalR pair, which needs a running server |
+| `screenshot` | `true` | `false` excludes the example - for anything that cannot produce a meaningful frame on its own, such as the SignalR pair, which needs a running server |
 | `screenshotFrame` | `240` | Which frame to keep. Raise it for a scene that needs longer to settle, lower it for one that has already scattered |
 
 Every image is looked at by a person before it is committed. A capture that renders black, catches a scene mid-explosion or frames nothing but sky looks like a complete success to the script.
 
 ## Editing a generated page
 
-A documentation page carrying `generated: true` is overwritten on every run — change the metadata block, not the page.
+A documentation page carrying `generated: true` is overwritten on every run - change the metadata block, not the page.
 
 To add hand-written prose to a generated page, change its frontmatter to `generated: partial` and wrap the tool-owned part in markers:
 

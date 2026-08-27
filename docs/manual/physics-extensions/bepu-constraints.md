@@ -96,7 +96,7 @@ not the constructor arguments:
 | `BallSocketMotorConstraintComponent` | 1,000 | 0.1 |
 
 The two-body motors ship far weaker than the one-body one. A force budget of 1,000 with damping 0.1
-is not enough to swing a modest arm against gravity — it creeps at a fraction of the requested speed.
+is not enough to swing a modest arm against gravity - it creeps at a fraction of the requested speed.
 Raising both to the one-body figures (10,000,000 and 50) drives the same arm to its target
 immediately. The setters themselves work correctly; only the default is misleading.
 
@@ -107,14 +107,14 @@ about X and Z, and the motor will spend its force budget holding those at zero.
 
 A tilted arm driven about Y therefore sweeps a wide cone at first and then collapses into a vertical
 spin within seconds: staying out at an angle requires rotation about X and Z, and the motor keeps
-cancelling it. Nothing is broken — the motor is doing exactly what it was told.
+cancelling it. Nothing is broken - the motor is doing exactly what it was told.
 
 **Use `AngularAxisMotorConstraintComponent`** when only one axis should be driven. It takes a single
 `LocalAxisA` and a scalar `TargetVelocity`, leaving the other two axes to gravity, so the cone
 survives.
 
 Two things to expect once it does. Drive the arm near its own pendulum frequency, `sqrt(3g/2L)` for a
-rod pivoting at its end, and the two beat against each other — the orbit wanders into shifting
+rod pivoting at its end, and the two beat against each other - the orbit wanders into shifting
 polygons instead of a circle, so pick a speed well clear of it. And because only the spin is
 controlled, the swing in and out is free motion that nothing damps: the cone breathes about its
 equilibrium angle indefinitely. That is the pendulum nutating, not the motor faltering, and no

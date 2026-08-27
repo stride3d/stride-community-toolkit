@@ -6,7 +6,7 @@ code-only projects, where bringing up a UI page for one line of text is more mac
 needs.
 
 This is *screen-space* text: always the same pixel size, always on top of the scene. For text that
-lives inside the scene — scaled by perspective and hidden by geometry in front of it — see
+lives inside the scene - scaled by perspective and hidden by geometry in front of it - see
 [World Text](world-text.md).
 
 Two pieces are involved:
@@ -124,14 +124,14 @@ game.AddEntityDebugSceneRenderer(new()
 ```
 
 It is a debugging overlay you switch on, not authored content, which is why it stays a separate
-renderer. Both share their drawing — projection, anchoring, background, shadow — so those behave
+renderer. Both share their drawing - projection, anchoring, background, shadow - so those behave
 identically in each.
 
 Options worth knowing:
 
 - **`IncludeChildEntities`** is off by default. A scene built from composed entities can hold far more
   children than top-level entities, and labelling all of them at once is usually unreadable.
-- **`EntityFilter`** is the cheapest way to make a busy scene legible — narrow to one name or one
+- **`EntityFilter`** is the cheapest way to make a busy scene legible - narrow to one name or one
   component type instead of reading every label on screen.
 - **`PositionColor`** gives the coordinates their own colour, and moves them onto a line beneath the
   name. Two colours on one line means measuring and chaining the parts, and a stack reads better.
