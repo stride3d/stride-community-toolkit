@@ -411,17 +411,30 @@ frame and loops `update` on `NextFrame()`. It is ~20 lines and uses only public 
   (scheduler, script system, game). The one exception is the live-scripting debugger:
   `GameDebuggerTarget` sets `PropagateExceptions = false`, so under it a faulting `Start` is logged
   and the game keeps running.
-- The callback is the only shape on offer. Across the examples, `Run(start: Start)` appears 27 times
-  and `Run(start: Start, update: Update)` 23 times; the `Action<Game>` overload is used by 2. Since
-  `start` already runs in a microthread, an async form (`Func<Scene, Task>`) would let `Start`
-  `await game.Script.NextFrame()` or `Delay(...)`, which is currently impossible.
+- The toolkit side of this has been reshaped (August 2026). `Run` used to offer two overloads told
+  apart only by delegate parameter type, `Action<Scene>` versus `Action<Game>`, with `GameContext`
+  as the first parameter. Verified against those signatures: an untyped lambda
+  `game.Run(start: s => { })` failed with **CS0121** (ambiguous), and an `async` lambda passed to
+  the `Action<Scene>` overload compiled silently as `async void`, so the update loop started before
+  `start` finished and any exception inside it bypassed the game. The `Action<Game>` overload also
+  handed back nothing the caller did not already hold (they call `game.Run` on it) and its `update`
+  dropped `GameTime`. The current shape keys everything on `Scene` and pairs sync/async by return
+  type, which C# resolves cleanly for method groups and lambdas alike:
+
+  ```csharp
+  Run(this Game game, Action<Scene>? start = null, Action<Scene, GameTime>? update = null, GameContext? context = null)
+  Run(this Game game, Func<Scene, Task> start,     Action<Scene, GameTime>? update = null, GameContext? context = null)
+  ```
+
+  `update` is deliberately synchronous: an async `start` that runs its own
+  `while (true) { ...; await game.Script.NextFrame(); }` already *is* an async update loop (the
+  `AsyncScript.Execute` idiom), so an async `update` would double the overloads for nothing.
+  `context` moved last because nobody passes it positionally and it is the least-used parameter -
+  it exists for embedding in a host control, a fixed initial size, or the SDL/headless backends.
 
 **Options.** Upstream, either move `Run(start, update)` into `Game` as instance overloads - it
 transplants as-is - or add an instance event raised after `LoadContent` (the composable form
-suggested in discussion #1253) and make `Run(start:)` sugar over it. In the toolkit, regardless of
-upstream: collapse to one `Run` overload with `Action<Scene>` / `Action<Scene, GameTime>`, and add a
-`Func<Scene, Task>` start. The overload collapse is breaking for 2 examples; the async form is
-additive.
+suggested in discussion #1253) and make `Run(start:)` sugar over it.
 
 ---
 
