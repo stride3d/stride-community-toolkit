@@ -79,6 +79,16 @@ Each example runs once with capture enabled, saves its **GPU render target** at 
 
 Add `--only <slug>` to redo a single example, and `--frame <n>` to try a different moment without editing the metadata first.
 
+### Edited the metadata? Rebuild the manifest
+
+The capture script does not read the metadata blocks. It reads `examples-manifest.json`, which is generated *from* them - so a `screenshot` or `screenshotFrame` you have just edited has no effect until the manifest is rebuilt:
+
+```bash
+dotnet build tools/Stride.CommunityToolkit.Examples.Launcher
+```
+
+Building either launcher regenerates it, through `tools/ExamplesManifest.targets`. The script reports a manifest that is missing, but it cannot tell that one is stale - it will capture at the old frame and call it a success. This is what `--frame <n>` is for while you are still deciding: it overrides the manifest, so you can find the right moment first and write it into the metadata once.
+
 Two metadata fields control capture:
 
 | Field | Default | Effect |

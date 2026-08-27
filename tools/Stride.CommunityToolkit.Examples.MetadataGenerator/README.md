@@ -191,6 +191,12 @@ without `--force`.
 It reads the JSON directly rather than linking the model, for the same reason the launchers keep their
 own copy: a file-based script should not have to build a project to look at a handful of fields.
 
+The cost of that is a staleness trap, worth knowing before it bites: because the script reads the
+manifest and never the metadata blocks, an edited `screenshotFrame` does nothing until the manifest is
+regenerated - `dotnet build tools/Stride.CommunityToolkit.Examples.Launcher`. A missing manifest is
+reported; a stale one is not, and captures at the old frame while reporting success. Use `--frame <n>`
+to search for the right moment, then write it into the metadata and rebuild once.
+
 ## Architecture
 
 ```
