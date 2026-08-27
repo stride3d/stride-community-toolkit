@@ -25,10 +25,10 @@ using Stride.Rendering;
 const int GridWidth = 20;
 const int GridHeight = 20;
 const int GridDepth = 5;
-const float Spacing = 1.2f;
+const float Spacing = 2.2f;
 
 // How far each wall sits from the middle of the scene
-const float WallOffset = 16f;
+const float WallOffset = 25f;
 
 var cubeCount = GridWidth * GridHeight * GridDepth;
 
@@ -51,30 +51,13 @@ void Start(Scene rootScene)
     game.Add3DCameraController();
     game.AddSkybox();
     game.AddProfiler();
-
-    FrameBothWalls(rootScene);
+    game.SetCameraPosition(new(33, 65, -90));
+    game.SetCameraRotation(new(161, -22, 0));
 
     EnableInstancing();
 
-    // Build the cube once. Every cube on screen, on both sides, renders this same Model.
-    var sharedModel = CreateSharedCubeModel(rootScene);
-
-    CreateIndividualCubes(rootScene, sharedModel);
-    CreateInstancedCubes(rootScene, sharedModel);
-}
-
-/// <summary>
-/// Pulls the camera back far enough to see both walls at once. The default camera sits close to the
-/// origin, which would put it inside the left wall.
-/// </summary>
-void FrameBothWalls(Scene rootScene)
-{
-    var camera = rootScene.GetCamera()?.Entity;
-
-    if (camera is null) return;
-
-    camera.Transform.Position = new Vector3(0, 13, 115);
-    camera.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-4));
+    CreateIndividualCubes(rootScene, CreateSharedCubeModel(rootScene, Color.Orange));
+    CreateInstancedCubes(rootScene, CreateSharedCubeModel(rootScene, Color.LightGreen));
 }
 
 /// <summary>
@@ -101,9 +84,12 @@ void EnableInstancing()
 /// separate vertex and index buffer per cube, so the slow side would be losing on memory as well as
 /// on draw calls, and the measurement would not be about instancing any more.
 /// </remarks>
-Model CreateSharedCubeModel(Scene rootScene)
+Model CreateSharedCubeModel(Scene rootScene, Color color)
 {
-    var prototype = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions());
+    var prototype = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions()
+    {
+        Material = game.CreateMaterial(color)
+    });
 
     // Park it out of sight; it exists only to own the Model
     prototype.Transform.Position = new Vector3(0, -100, 0);
@@ -192,7 +178,7 @@ void HandleInput()
 {
     if (!game.Input.HasKeyboard) return;
 
-    if (game.Input.IsKeyPressed(Keys.D1))
+    if (game.Input.IsKeyPressed(Keys.D2))
     {
         showIndividual = !showIndividual;
 
@@ -202,7 +188,7 @@ void HandleInput()
         }
     }
 
-    if (game.Input.IsKeyPressed(Keys.D2))
+    if (game.Input.IsKeyPressed(Keys.D1))
     {
         showInstanced = !showInstanced;
 
@@ -217,10 +203,10 @@ void DrawOverlay()
     void Print(string text, Color? color = null)
         => game.DebugTextSystem.Print(text, new Int2(6, 60 + line++ * 18), color ?? Color.White);
 
-    Print($"LEFT  wall: {cubeCount} entities, {cubeCount} draw calls   [1] {(showIndividual ? "shown" : "hidden")}",
-        showIndividual ? Color.Orange : Color.Gray);
-    Print($"RIGHT wall: 1 entity, 1 draw call, {cubeCount} instances   [2] {(showInstanced ? "shown" : "hidden")}",
+    Print($"LEFT wall: 1 entity, 1 draw call, {cubeCount} instances: Press [1] {(showInstanced ? "shown" : "hidden")}",
         showInstanced ? Color.LightGreen : Color.Gray);
+    Print($"RIGHT wall: {cubeCount} entities, {cubeCount} draw calls: Press [2] {(showIndividual ? "shown" : "hidden")}",
+        showIndividual ? Color.Orange : Color.Gray);
     Print("");
     Print($"ONLY VISIBLE: {(showIndividual && showInstanced ? "BOTH walls" : showIndividual ? "INDIVIDUAL (2000 draws)" : showInstanced ? "INSTANCED (1 draw)" : "nothing")}",
         Color.Yellow);
@@ -228,7 +214,6 @@ void DrawOverlay()
     Print("Both walls draw the same Model and look identical.");
     Print("Toggle each one and compare the frame rate above.");
     Print("The counter is a rolling average, so give it a second to settle.");
-    Print("Move with W A S D, hold right mouse button to look around.");
 }
 
 /*
