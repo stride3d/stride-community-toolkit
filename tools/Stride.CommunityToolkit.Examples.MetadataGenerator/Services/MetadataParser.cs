@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 /// <remarks>
 /// <c>IgnoreUnmatchedProperties</c> is deliberately still enabled. On its own it is what let
 /// <c>Order:</c> disappear from two examples without a word, but the fix is not to throw on the first
-/// stray key — it is to report every one of them, which
+/// stray key - it is to report every one of them, which
 /// <see cref="MetadataValidator"/> does using the literal key list captured here. Failing inside the
 /// deserializer would give one file, one message, and no aggregation.
 /// </remarks>
@@ -151,7 +151,7 @@ public class MetadataParser(ILogger<MetadataParser> logger)
     /// Adds the source-level diagnosis to a parse-failure message.
     /// </summary>
     /// <remarks>
-    /// A YamlDotNet failure is usually a symptom rather than the cause — the classic one is
+    /// A YamlDotNet failure is usually a symptom rather than the cause - the classic one is
     /// "Uninitialized Strings cannot be created", which really means an unquoted <c>": "</c> turned a
     /// sequence item into a mapping. <see cref="YamlSourceInspector"/> can see that in the source text,
     /// so its findings go first and the deserializer's own message goes last.

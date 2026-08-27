@@ -16,7 +16,7 @@ public class Primitive3DEntityOptions : PrimitiveEntityOptions
     /// <remarks>
     /// <para>
     /// <strong>How this value is read depends on the primitive, and the conventions differ.</strong> Box-like
-    /// shapes take full extents, while round shapes take a <em>radius</em> — that is, a half extent. Passing a
+    /// shapes take full extents, while round shapes take a <em>radius</em> - that is, a half extent. Passing a
     /// diameter to a sphere therefore produces a model twice the intended size.
     /// </para>
     /// <list type="table">

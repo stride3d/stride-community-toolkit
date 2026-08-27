@@ -56,7 +56,7 @@ void DisplayMenu()
 }
 
 string GroupHeading(ExampleEntry entry) => entry.LanguageLabel.Length > 0
-    ? $"{entry.Level.ToUpperInvariant()} — {entry.LanguageLabel}"
+    ? $"{entry.Level.ToUpperInvariant()} - {entry.LanguageLabel}"
     : entry.Level.ToUpperInvariant();
 
 string Suffix(Example example)

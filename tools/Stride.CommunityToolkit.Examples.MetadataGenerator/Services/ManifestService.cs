@@ -17,7 +17,7 @@ public class ManifestService(
     /// <summary>Everything worked.</summary>
     public const int ExitSuccess = 0;
 
-    /// <summary>The run could not proceed — a missing directory, an unreadable file, a failed write.</summary>
+    /// <summary>The run could not proceed - a missing directory, an unreadable file, a failed write.</summary>
     public const int ExitFailure = 1;
 
     /// <summary>The scan completed but found no examples at all, which is almost always a wrong path.</summary>
@@ -67,12 +67,12 @@ public class ManifestService(
 
                 examples.Add(parsed);
 
-                logger.LogInformation("  ✅ {ProjectName} — {Title}", parsed.Metadata.ProjectName, EnglishTitleOf(parsed));
+                logger.LogInformation("  ✅ {ProjectName} - {Title}", parsed.Metadata.ProjectName, EnglishTitleOf(parsed));
             }
             catch (Exception ex)
             {
                 // The message already carries the diagnosis and the file; the stack trace is noise.
-                logger.LogError("  ✖ {ProjectName} — {Message}", projectName, ex.Message);
+                logger.LogError("  ✖ {ProjectName} - {Message}", projectName, ex.Message);
 
                 failures++;
             }

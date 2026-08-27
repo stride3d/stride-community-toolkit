@@ -9,8 +9,8 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 /// <remarks>
 /// <para>
 /// Every source file is considered, not just <c>Program.cs</c>. The metadata block itself is what marks
-/// a file as an example, which frees file-based apps from the <c>Program.cs</c> name — <c>dotnet run
-/// Basic3DScene.cs</c> says far more than <c>dotnet run Program.cs</c> — and allows one folder to hold
+/// a file as an example, which frees file-based apps from the <c>Program.cs</c> name - <c>dotnet run
+/// Basic3DScene.cs</c> says far more than <c>dotnet run Program.cs</c> - and allows one folder to hold
 /// several examples. Uniqueness of <c>slug</c> is what keeps that honest.
 /// </para>
 /// <para>
@@ -81,7 +81,7 @@ public class ExampleScanner(ILogger<ExampleScanner> logger)
     }
 
     /// <summary>
-    /// Gets the project name for an example source file — the name of the folder that contains it.
+    /// Gets the project name for an example source file - the name of the folder that contains it.
     /// </summary>
     /// <param name="exampleFilePath">The full path to the source file.</param>
     /// <returns>The project directory name.</returns>

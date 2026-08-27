@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 /// </summary>
 /// <remarks>
 /// Aggregation is the point: an author fixing frontmatter wants the whole list, not the first failure.
-/// Nothing here throws — the caller decides whether errors are fatal (see <c>--strict</c>).
+/// Nothing here throws - the caller decides whether errors are fatal (see <c>--strict</c>).
 /// </remarks>
 public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 {
@@ -86,7 +86,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
             var suggestion = MetadataVocabulary.SuggestKey(key);
             var hint = suggestion is null
                 ? $"'{key}' is not part of the schema."
-                : $"'{key}' is not a schema key — did you mean '{suggestion}'? Keys are case-sensitive, and an unrecognised one is discarded silently.";
+                : $"'{key}' is not a schema key - did you mean '{suggestion}'? Keys are case-sensitive, and an unrecognised one is discarded silently.";
 
             messages.Add(ValidationMessage.Error(projectName, key, hint));
         }
@@ -188,7 +188,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         var metadata = example.Metadata;
 
         // Only an explicit media: entry is an error when missing. A defaulted <slug>.webp that does not
-        // exist yet is expected — most examples have no screenshot at all (see plan §5).
+        // exist yet is expected - most examples have no screenshot at all (see plan §5).
         if (metadata.Media is not { Length: > 0 } media)
         {
             return;
@@ -203,7 +203,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
 
 
     /// <summary>
-    /// Warns when a level name is repeated as a tag — the same fact in a place nothing validates.
+    /// Warns when a level name is repeated as a tag - the same fact in a place nothing validates.
     /// </summary>
     private static void ValidateTags(ParsedExample example, List<ValidationMessage> messages)
     {
@@ -330,7 +330,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
                 if (!knownProjects.Contains(name))
                 {
                     messages.Add(ValidationMessage.Error(ProjectNameOf(example), "related",
-                        $"'{name}' does not match any example project folder — check the spelling."));
+                        $"'{name}' does not match any example project folder - check the spelling."));
 
                     continue;
                 }

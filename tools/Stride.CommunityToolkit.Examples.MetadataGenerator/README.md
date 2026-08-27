@@ -1,4 +1,4 @@
-# Stride Community Toolkit — Examples Metadata Generator
+# Stride Community Toolkit - Examples Metadata Generator
 
 Scans the code-only example projects, validates the `---example-metadata` block each one carries, and
 writes `examples-manifest.json`.
@@ -73,14 +73,14 @@ The examples root defaults to `../../examples/code-only`, relative to the curren
 | Code | Meaning |
 |---|---|
 | `0` | Success. |
-| `1` | Could not run — missing directory, failed write. |
+| `1` | Could not run - missing directory, failed write. |
 | `2` | Scan found no metadata blocks at all, which almost always means the wrong path. |
 | `3` | Validation errors, with `--strict` in force (`generate`) or always (`scan`). |
 
 ## Discovery
 
 Every `.cs`, `.fs` and `.vb` file under the examples root is examined, excluding `bin` and `obj`. The
-**metadata block itself** marks a file as an example — there is no `Program.cs` convention — which lets
+**metadata block itself** marks a file as an example - there is no `Program.cs` convention - which lets
 file-based apps use a self-describing filename and lets one folder hold several examples. A unique
 `slug` is what keeps that honest.
 
@@ -124,18 +124,18 @@ Checked: required fields (`slug`, `title.en`, `level`, `category`); kebab-case a
 existing; `language:` agreeing with the file extension; and `level` names not duplicated into `tags`.
 
 Two checks run against the **source text** rather than the parsed object, because they are invisible
-afterwards — see `Core/YamlSourceInspector.cs`:
+afterwards - see `Core/YamlSourceInspector.cs`:
 
 - **An unquoted `#`** starts a YAML comment and silently truncates its value. `- Declaring NuGet
   packages inline with #:package` becomes `- Declaring NuGet packages inline with`, with no error.
 - **An unquoted `": "` inside a sequence item** turns the item into a mapping and aborts parsing deep
-  inside YamlDotNet with "Uninitialized Strings cannot be created" — a message that names neither the
+  inside YamlDotNet with "Uninitialized Strings cannot be created" - a message that names neither the
   line nor the cause. The inspector's diagnosis is attached to the failure, ahead of the deserializer's
   own message.
 
 **Unknown keys are reported, with a suggestion.** `IgnoreUnmatchedProperties` is still enabled on the
 deserializer, so a stray key does not abort the file; instead the literal key list is captured and
-diffed against the schema. This is the check that catches `Order:` — which, under the camelCase naming
+diffed against the schema. This is the check that catches `Order:` - which, under the camelCase naming
 convention, was silently discarded from two examples.
 
 ## Output
@@ -173,8 +173,8 @@ should not drag in a generic host, Serilog and YamlDotNet to read a JSON file. T
 ### Screenshot capture
 
 `build/capture-screenshots.cs` is the third consumer. It runs each example once with
-`STRIDE_TOOLKIT_CAPTURE` set — which is what makes the toolkit's own `ScreenshotCapture` save a frame
-and exit — then converts the PNG to WebP. From the manifest it reads `slug`, `projectPath`, `media`,
+`STRIDE_TOOLKIT_CAPTURE` set - which is what makes the toolkit's own `ScreenshotCapture` save a frame
+and exit - then converts the PNG to WebP. From the manifest it reads `slug`, `projectPath`, `media`,
 `screenshot` and `screenshotFrame`: what to run, whether to run it, which frame to keep and what to
 call the result.
 
@@ -183,7 +183,7 @@ dotnet run --file build/capture-screenshots.cs -- --review
 ```
 
 `--review` writes every image to `screenshots-review/` at the repository root, named by slug, with an
-`index.html` contact sheet beside them — all of them on one page with their title, category, tags and
+`index.html` contact sheet beside them - all of them on one page with their title, category, tags and
 capture frame, plus per-image verdict buttons that copy out as markdown. Nothing reaches the docs media
 folder until the command runs *without* `--review`, and an image already there is never replaced
 without `--force`.

@@ -10,7 +10,7 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 /// Two authoring mistakes account for most lost metadata, and neither can be diagnosed from the parsed
 /// object. An unquoted <c>#</c> silently truncates its value, so the object simply holds a shorter
 /// string than the author wrote. An unquoted <c>": "</c> inside a sequence item turns the item into a
-/// mapping, which does not truncate anything — it makes deserialization fail several frames deep in
+/// mapping, which does not truncate anything - it makes deserialization fail several frames deep in
 /// YamlDotNet with "Uninitialized Strings cannot be created", a message that names neither the line nor
 /// the cause.
 /// </para>

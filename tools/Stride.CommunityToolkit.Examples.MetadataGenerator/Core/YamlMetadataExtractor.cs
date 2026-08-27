@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 /// <remarks>
 /// <para>
 /// The block is written as a comment, so its delimiters depend on the language: C# and F# use their
-/// block-comment forms, and Visual Basic — which has no block comment — uses a run of line comments.
+/// block-comment forms, and Visual Basic - which has no block comment - uses a run of line comments.
 /// </para>
 /// <code>
 /// C#            F#            Visual Basic
