@@ -22,6 +22,8 @@ The `Program.cs` file shows how to:
 - Using helpers: Add3DCameraController
 - Using helpers: AddProfiler
 
+![GPU Instancing](media/instancing.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example21_Instancing).
 
-[!code-csharp[](../../../../examples/code-only/Example21_Instancing/Program.cs?start=1&end=232)]
+[!code-csharp[](../../../../examples/code-only/Example21_Instancing/Program.cs?start=1&end=217)]
