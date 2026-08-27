@@ -393,6 +393,7 @@ related:
   - Example01_Basic2DScene_SpawnMenu
   - Example01_Basic2DScene_FallingShapes
 enabled: true
+screenshotFrame: 380
 created: 2026-08-16
 ---
 */
