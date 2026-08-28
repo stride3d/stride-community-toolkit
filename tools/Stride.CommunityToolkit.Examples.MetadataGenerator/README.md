@@ -9,20 +9,24 @@ onto. The schema, and the plan for getting there, live in
 
 ## Commands
 
-### `scan <examples-root-path> [--media-path <dir>]`
+All three take the examples root as an optional positional argument. It defaults to
+`../../examples/code-only` **relative to the current directory**, so these commands are meant to be run
+from this folder and the examples below leave it out.
+
+### `scan [examples-root-path] [--media-path <dir>]`
 
 Finds every metadata block, validates it, and prints the findings. Writes nothing.
 
 ```bash
-dotnet run -- scan "../../examples/code-only"
+dotnet run -- scan
 ```
 
-### `generate <examples-root-path> [--output <file>] [--media-path <dir>] [--strict]`
+### `generate [examples-root-path] [--output <file>] [--media-path <dir>] [--strict]`
 
 The same scan, then writes the manifest.
 
 ```bash
-dotnet run -- generate "../../examples/code-only" --output examples-manifest.json
+dotnet run -- generate --output examples-manifest.json
 ```
 
 | Option | Meaning |
@@ -31,13 +35,13 @@ dotnet run -- generate "../../examples/code-only" --output examples-manifest.jso
 | `--media-path` | Docs media folder. When given, every explicit `media:` filename is checked to exist. Skipped when omitted. |
 | `--strict` | Treat validation errors as fatal: report them, write no manifest, exit non-zero. |
 
-### `docs <examples-root-path> [--docs-path <dir>] [--media-path <dir>] [--dry-run]`
+### `docs [examples-root-path] [--docs-path <dir>] [--media-path <dir>] [--dry-run]`
 
 Generates the documentation: one page per example, a landing page per language and level group, the
 examples folder's own `toc.yml`, and redirect stubs for the URLs that levels replaced.
 
 ```bash
-dotnet run -- docs "../../examples/code-only" --dry-run
+dotnet run -- docs --dry-run
 ```
 
 | Option | Meaning |
@@ -65,8 +69,6 @@ untouched, so the git diff shows only real changes.
 
 That is what made adoption safe: none of the documentation written by hand carried frontmatter, so the
 first run could not have overwritten any of it.
-
-The examples root defaults to `../../examples/code-only`, relative to the current directory.
 
 ### Exit codes
 

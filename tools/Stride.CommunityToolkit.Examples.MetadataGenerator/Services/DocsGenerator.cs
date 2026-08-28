@@ -159,7 +159,10 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
 
         foreach (var group in GroupByLanguageAndLevel(examples))
         {
-            toc.AppendLine($"- name: {DocPaths.LanguageName(group.Language)} {group.Level}");
+            // The count is appended rather than left to the reader to work out by expanding the node.
+            // It is written for every group including the single-example ones: an inconsistent "(11)"
+            // here and nothing there reads as a badge on the big groups rather than as a count.
+            toc.AppendLine($"- name: {DocPaths.LanguageName(group.Language)} {group.Level} ({group.Examples.Count})");
             toc.AppendLine($"  href: {DocPaths.LandingPage(group.Language, group.Level)}");
             toc.AppendLine("  items:");
 
