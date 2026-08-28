@@ -12,7 +12,10 @@
   - name: Create Project
     href: code-only/create-project.md
   - name: Examples (56)
+    # href supplies the children (the generated per-level toc); topicHref makes the node itself
+    # clickable, landing on the visual gallery.
     href: code-only/examples/toc.yml
+    topicHref: code-only/examples/index.md
   - name: Extensions
     href: code-only/extensions.md
 - name: Extensions
