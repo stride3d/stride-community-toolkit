@@ -11,7 +11,7 @@
   items:
   - name: Create Project
     href: code-only/create-project.md
-  - name: Examples
+  - name: Examples (56)
     href: code-only/examples/toc.yml
   - name: Extensions
     href: code-only/extensions.md
