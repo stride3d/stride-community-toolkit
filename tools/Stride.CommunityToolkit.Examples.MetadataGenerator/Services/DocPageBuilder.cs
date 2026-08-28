@@ -14,6 +14,20 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
 public class DocPageBuilder(DirectoryInfo? mediaDirectory)
 {
     /// <summary>
+    /// Bootstrap grid classes for one gallery card: three across on a wide screen, two on a tablet.
+    /// </summary>
+    /// <remarks>
+    /// Three, not four. The docs content column is narrow enough that a fourth card breaks titles
+    /// mid-word - which is why the gallery also turns the affix off.
+    /// </remarks>
+    private const string GalleryColumnClasses = "col-xxl-4 col-md-6";
+
+    /// <summary>
+    /// How much of a description a card shows before it is cut.
+    /// </summary>
+    private const int GallerySummaryLength = 150;
+
+    /// <summary>
     /// Renders a complete example page, frontmatter included.
     /// </summary>
     /// <param name="example">The example to document.</param>
@@ -87,6 +101,146 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
 
         return body.ToString();
     }
+
+    /// <summary>
+    /// Renders the visual gallery - every example as a Bootstrap card, grouped as the toc groups them.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Bootstrap 5 ships with the DocFX template, so the markup needs no extra CSS. Only stock classes
+    /// are used; anything bespoke here would have to be maintained against future template upgrades.
+    /// </para>
+    /// <para>
+    /// Every part of a card is emitted by its own <c>AppendCard*</c> method, so dropping the badge, the
+    /// summary or the link is a matter of commenting out one line in <see cref="AppendCard"/>.
+    /// </para>
+    /// <para>
+    /// An example without an image is left out entirely rather than shown with a placeholder: the point
+    /// of this page is to be looked at, and a card with nothing to look at is worse than one less card.
+    /// </para>
+    /// </remarks>
+    /// <param name="groups">The example groups, in toc order.</param>
+    /// <returns>The full file content.</returns>
+    public string BuildGallery(IReadOnlyList<(string Language, string Level, IReadOnlyList<ExampleMetadata> Examples)> groups)
+    {
+        ArgumentNullException.ThrowIfNull(groups);
+
+        var page = new StringBuilder();
+
+        page.AppendLine("---");
+        page.AppendLine("generated: true");
+
+        // The right-hand "In this article" strip would list all 56 card titles, which is noise rather
+        // than an outline - and switching it off widens the content column enough for three cards.
+        page.AppendLine("_disableAffix: true");
+        page.AppendLine("---");
+        page.AppendLine();
+        page.AppendLine("# Code-Only Examples");
+        page.AppendLine();
+        page.AppendLine("Every code-only example, with a screenshot of what it actually renders. Each one is a complete, self-contained program you can copy and run.");
+        page.AppendLine();
+        page.AppendLine("Prefer a list? Each level has its own page, linked from the table of contents.");
+
+        foreach (var group in groups)
+        {
+            var cards = group.Examples.Where(example => ExistingMedia(example) is not null).ToList();
+
+            if (cards.Count == 0)
+            {
+                continue;
+            }
+
+            page.AppendLine();
+            page.AppendLine($"## {DocPaths.LanguageName(group.Language)} {group.Level}");
+            page.AppendLine();
+            page.AppendLine("<div class=\"row g-4 mb-4\">");
+
+            foreach (var example in cards)
+            {
+                AppendCard(page, example);
+            }
+
+            page.AppendLine("</div>");
+        }
+
+        return page.ToString();
+    }
+
+    /// <summary>
+    /// Emits one card. Comment out a line to drop that part from every card.
+    /// </summary>
+    private void AppendCard(StringBuilder page, ExampleMetadata example)
+    {
+        page.AppendLine($"    <div class=\"{GalleryColumnClasses}\">");
+        page.AppendLine("        <div class=\"card h-100\">");
+
+        AppendCardImage(page, example);
+
+        page.AppendLine("            <div class=\"card-body\">");
+
+        AppendCardTitle(page, example);
+        //AppendCardBadge(page, example);
+        //AppendCardText(page, example);
+
+        page.AppendLine("            </div>");
+
+        AppendCardLink(page, example);
+
+        page.AppendLine("        </div>");
+        page.AppendLine("    </div>");
+    }
+
+    /// <summary>
+    /// The screenshot. Sized and lazy-loaded because this page carries every example's image at once.
+    /// </summary>
+    /// <remarks>
+    /// The explicit width and height are the capture resolution. They are not there to size the image -
+    /// Bootstrap does that - but to reserve its aspect ratio so the page does not reflow as fifty-odd
+    /// lazy images arrive.
+    /// </remarks>
+    private void AppendCardImage(StringBuilder page, ExampleMetadata example)
+        => page.AppendLine(
+            $"            <img src=\"{DocPaths.MediaFolder}/{ExistingMedia(example)}\" class=\"card-img-top\" " +
+            $"alt=\"Screenshot of the {Escape(TitleOf(example))} example\" width=\"1280\" height=\"720\" loading=\"lazy\">");
+
+    /// <summary>
+    /// The title, as a real heading so the page keeps a usable document outline for search engines.
+    /// </summary>
+    private static void AppendCardTitle(StringBuilder page, ExampleMetadata example)
+        => page.AppendLine($"                <h3 class=\"card-title h6\">{Escape(TitleOf(example))}</h3>");
+
+    /// <summary>
+    /// The category badge. Not the level - that is already the section heading above the card.
+    /// </summary>
+    private static void AppendCardBadge(StringBuilder page, ExampleMetadata example)
+    {
+        if (example.Category is not { Length: > 0 } category)
+        {
+            return;
+        }
+
+        page.AppendLine($"                <p><span class=\"badge text-bg-secondary\">{Escape(category)}</span></p>");
+    }
+
+    /// <summary>
+    /// The one-line summary.
+    /// </summary>
+    private static void AppendCardText(StringBuilder page, ExampleMetadata example)
+    {
+        if (Summarise(example.Description?.GetValueOrDefault("en")) is not { Length: > 0 } summary)
+        {
+            return;
+        }
+
+        page.AppendLine($"                <p class=\"card-text\">{Escape(summary)}</p>");
+    }
+
+    /// <summary>
+    /// The link. <c>stretched-link</c> makes the whole card clickable, so the text stays short.
+    /// </summary>
+    private static void AppendCardLink(StringBuilder page, ExampleMetadata example)
+        => page.AppendLine(
+            $"            <p class=\"px-3 mb-3\"><a class=\"stretched-link\" href=\"{example.Slug}.md\">Open example</a></p>");
 
     /// <summary>
     /// Renders a landing page listing every example in one language and level.
@@ -184,6 +338,39 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// <summary>
     /// Takes the first sentence of a description, for a one-line list entry.
     /// </summary>
+    /// <summary>
+    /// The English title, falling back the same way the landing pages and the toc do.
+    /// </summary>
+    private static string TitleOf(ExampleMetadata example)
+        => example.Title?.GetValueOrDefault("en") ?? example.ProjectName ?? example.Slug ?? string.Empty;
+
+    /// <summary>
+    /// <see cref="FirstSentence"/>, capped to what fits on a card.
+    /// </summary>
+    /// <remarks>
+    /// A few descriptions open with a sentence long enough to unbalance the row, so a hard cap is
+    /// needed on top of the sentence split. The cut lands on a word boundary.
+    /// </remarks>
+    private static string? Summarise(string? description)
+    {
+        if (FirstSentence(description) is not { Length: > 0 } text || text.Length <= GallerySummaryLength)
+        {
+            return FirstSentence(description);
+        }
+
+        var cut = text.LastIndexOf(' ', GallerySummaryLength);
+
+        return string.Concat(text.AsSpan(0, cut > 0 ? cut : GallerySummaryLength), "...");
+    }
+
+    /// <summary>
+    /// Escapes the characters that would otherwise break out of the card markup.
+    /// </summary>
+    private static string Escape(string value)
+        => value.Replace("&", "&amp;", StringComparison.Ordinal)
+                .Replace("<", "&lt;", StringComparison.Ordinal)
+                .Replace(">", "&gt;", StringComparison.Ordinal);
+
     private static string? FirstSentence(string? description)
     {
         if (description is not { Length: > 0 })

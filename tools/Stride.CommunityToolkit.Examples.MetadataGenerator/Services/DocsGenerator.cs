@@ -48,6 +48,7 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
             WriteExamplePage(builder, example, docsDirectory, dryRun);
         }
 
+        WriteGallery(builder, documented, docsDirectory, dryRun);
         WriteLandingPages(documented, docsDirectory, dryRun);
         WriteRedirectStubs(docsDirectory, dryRun);
         WriteTableOfContents(documented, docsDirectory, dryRun);
@@ -113,6 +114,21 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     /// <summary>
     /// Writes one landing page per language and level group that actually has examples.
     /// </summary>
+    /// <summary>
+    /// Writes the visual gallery, which is the landing page for the whole examples section.
+    /// </summary>
+    /// <remarks>
+    /// Reached through <c>topicHref</c> on the Examples node in the hand-maintained
+    /// <c>manual/toc.yml</c>, so it does not appear as a child in the generated toc.
+    /// </remarks>
+    private void WriteGallery(DocPageBuilder builder, IReadOnlyList<ExampleMetadata> examples, DirectoryInfo docsDirectory, bool dryRun)
+    {
+        var groups = GroupByLanguageAndLevel(examples).ToList();
+        var path = Path.Combine(docsDirectory.FullName, "index.md");
+
+        WriteIfOwned(path, () => builder.BuildGallery(groups), dryRun);
+    }
+
     private void WriteLandingPages(IReadOnlyList<ExampleMetadata> examples, DirectoryInfo docsDirectory, bool dryRun)
     {
         foreach (var group in GroupByLanguageAndLevel(examples))
@@ -157,6 +173,9 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
         toc.AppendLine("# Run: dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- docs");
         toc.AppendLine();
 
+        // No entry for index.md. The gallery is the landing page of the "Examples" node itself, wired
+        // up with topicHref in the hand-maintained manual/toc.yml - listing it here as well would show
+        // the same page twice in the sidebar.
         foreach (var group in GroupByLanguageAndLevel(examples))
         {
             // The count is appended rather than left to the reader to work out by expanding the node.
