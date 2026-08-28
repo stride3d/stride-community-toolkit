@@ -68,7 +68,7 @@ public class ImGuiSystem : GameSystemBase
     /// </remarks>
     private bool _frameBegun;
 
-    public ImGuiSystem([NotNull] IServiceRegistry registry, [NotNull] GraphicsDeviceManager graphicsDeviceManager, InputManager inputManager = null) : base(registry)
+    public ImGuiSystem([NotNull] IServiceRegistry registry, [NotNull] GraphicsDeviceManager graphicsDeviceManager, InputManager? inputManager = null) : base(registry)
     {
         input = inputManager ?? Services.GetService<InputManager>();
         Debug.Assert(input != null, "ImGuiSystem: InputManager must be available!");

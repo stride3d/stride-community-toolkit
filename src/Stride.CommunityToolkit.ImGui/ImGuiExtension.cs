@@ -73,7 +73,7 @@ public class ImGuiExtension
         return new DisposableImGui(true, DisposableTypes.Tooltip);
     }
     public static DisposableImGuiIndent UIndent(float size = 0f) => new DisposableImGuiIndent(size);
-    public static DisposableImGui UColumns(int count, string id = null, bool border = false)
+    public static DisposableImGui UColumns(int count, string? id = null, bool border = false)
     {
         Columns(count, id, border);
         return new DisposableImGui(true, DisposableTypes.Columns);
@@ -217,7 +217,7 @@ public class ImGuiExtension
         ref float values,
         int count,
         int offset = 0,
-        string overlay = null,
+        string? overlay = null,
         float valueMin = float.MaxValue,
         float valueMax = float.MaxValue,
         Vector2 size = default,

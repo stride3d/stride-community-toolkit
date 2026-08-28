@@ -63,8 +63,8 @@ public class PerfMonitor : BaseWindow
     public PerfSampler Sample(
         bool sample = true,
         [CallerLineNumber] int line = 0,
-        [CallerMemberName] string member = null,
-        [CallerFilePath] string filePath = null) => Sample($"{filePath} . {member}:{S(line)}", sample);
+        [CallerMemberName] string? member = null,
+        [CallerFilePath] string? filePath = null) => Sample($"{filePath} . {member}:{S(line)}", sample);
 
     /// <summary> Place within a using statement to monitor the code within it </summary>
     public PerfSampler Sample(string id, bool sample = true)
@@ -480,12 +480,12 @@ public class PerfMonitor : BaseWindow
         }
     }
 
-    private static string S(float val, string format = null)
+    private static string S(float val, string? format = null)
     {
         return val.ToString(format ?? "F2", System.Globalization.CultureInfo.CurrentCulture);
     }
 
-    private static string S(double val, string format = null)
+    private static string S(double val, string? format = null)
     {
         return val.ToString(format ?? "F2", System.Globalization.CultureInfo.CurrentCulture);
     }
