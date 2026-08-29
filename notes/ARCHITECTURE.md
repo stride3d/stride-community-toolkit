@@ -177,42 +177,14 @@ moves this from a test to a compile-time check.
 
 ---
 
-## 7. `Create3DPrimitive` cannot share a model, and every caller works around it the same way
-
-**Observation.** Each call generates a fresh `Model` and a fresh pair of GPU buffers. There is no
-overload that accepts an existing `Model`, and no cache. Anything drawing many identical objects
-therefore hand-rolls the same trick: create one throwaway primitive, take its model, and discard the
-entity.
-
-```csharp
-var model = game.Create3DPrimitive(type, new Primitive3DEntityOptions()).Get<ModelComponent>().Model;
-```
-
-**Impact.** Measured, not theoretical: 10,000 spheres cost **1.5 GB** created per-body against
-**400 MB** sharing one model — the models are ~95% of the process memory, and it is why the stress
-pile appeared to show "2D physics uses more memory than 3D" when it was really "this example shares a
-model and that one does not". The same workaround appears verbatim in `Example22`,
-`Example01_Basic2DScene_StressPile` and the memory harness.
-
-A second, independent multiplier sits underneath: `PrimitiveProceduralModelBase.NumberOfTextureCoordinates`
-defaults to **10**, so `Generate` expands every vertex from 48 to 84 bytes by duplicating one UV ten
-times. The toolkit never sets it.
-
-**Options.** An overload taking a `Model`; an internal cache keyed by `(type, size)`; or an explicit
-`GetOrCreateSharedModel(type, size)` helper. Additive either way. Setting
-`NumberOfTextureCoordinates = 1` on toolkit-generated primitives is a one-line change with no API
-impact, though it is a behaviour change for anyone relying on ten channels.
-
----
-
-## 8. Deriving a collider requires an entity and a model it never reads
+## 7. Deriving a collider requires an entity and a model it never reads
 
 **Observation.** `Get3DColliderShape(type, size)` is private. The only public route to it is
 `AddBepu3DPhysics`, which throws unless the entity already carries a `ModelComponent` — a guard only,
 since it derives the collider from the primitive type and reads nothing out of the mesh.
 
-**Impact.** Combined with item 7, sharing a model becomes a four-step dance that needs a comment to
-explain itself:
+**Impact.** Combined with the shared-model gap (now agreed work - `TODO.md` §3), sharing a model
+becomes a four-step dance that needs a comment to explain itself:
 
 ```csharp
 var entity = new Entity("Item") { new ModelComponent(sharedModel) };   // model attached only to satisfy the guard
@@ -230,24 +202,7 @@ relying on the throw.
 
 ---
 
-## 9. Cached mesh data is shared, and the engine mutates it in place
-
-**Observation.** `CircleProceduralModel`, `Capsule2DProceduralModel`, `PolygonProceduralModel`,
-`RectangleProceduralModel` and `TriangleProceduralModel` each keep a static cache and hand the *same*
-`GeometricMeshData` instance to every caller. `PrimitiveProceduralModelBase.Generate` then mutates
-`data.Vertices` in place for `LocalOffset` and `Scale`.
-
-**Impact.** Silent and cumulative. Two models built from the same cached mesh with `Scale = 2` give a
-second model at 4×; with `LocalOffset` the offsets add up. Both properties are inherited public API on
-every one of these types, so nothing marks them as unsafe to use.
-
-**Options.** Cache only when `Scale` and `LocalOffset` are at their defaults; clone the arrays on the
-way out (which discards most of the benefit); or drop these caches entirely in favour of a model-level
-cache under item 7, which is the layer the sharing actually wants to happen at.
-
----
-
-## 10. Instancing needs three separate registrations and fails silently if one is missed
+## 8. Instancing needs three separate registrations and fails silently if one is missed
 
 **Observation.** Drawing an instanced crowd requires, in three different places: an
 `InstancingRenderFeature` in the graphics compositor (`AddInstancingSupport`), a master entity in the
@@ -268,7 +223,7 @@ scene whose compositor has no `InstancingRenderFeature`.
 
 ---
 
-## 11. Toolkit instancing does not notice entities leaving the scene
+## 9. Toolkit instancing does not notice entities leaving the scene
 
 **Observation.** Stride's own `InstanceComponent` unregisters itself from its master when its entity
 leaves the scene, because the component goes with it. `EntityInstancing` and `BufferedEntityInstancing`
@@ -285,7 +240,7 @@ of both types.
 
 ---
 
-## 12. `DisplayPosition` is a general screen-corner concept living in `Scripts.Utilities`
+## 10. `DisplayPosition` is a general screen-corner concept living in `Scripts.Utilities`
 
 **Observation.** `DisplayPosition` names the four window corners plus `None` and `Custom`. It began as
 an implementation detail of `DebugOverlay`, which is why it sits in
@@ -309,6 +264,69 @@ toolkit is in Preview and breaking changes are acceptable; and/or split the four
 `ScreenCorner` enum, leaving `DisplayPosition` as `DebugOverlay`'s own type with its `None` and
 `Custom` extras. The second is more churn but stops components offering values they cannot honour.
 
+**The same enum cannot say "centre", either.** `TextPositionMode` offers corners and explicit pixels
+and nothing else, so Cubicle Calamity's game-over banner needs a four-line `ScreenCentreTextScript`
+that recomputes its position every frame. Centring on screen is not an exotic request for a HUD, and
+a component that can anchor to four corners but not the middle will be asked for it again. Whatever
+shape the corner enum settles into should carry it.
+
+---
+
+## 11. There is no screen-anchored orientation gizmo
+
+**Observation.** Every code-only example eventually faces "where the hell is X" with no editor
+viewport to answer it. `AddGroundGizmo` draws the world axes at the origin, which is a world-space
+answer to a screen-space question: it either buries itself in the scene's content or sits at a
+misleading offset once the camera moves.
+
+**Impact.** Low individually, constant in aggregate. It is the reason the demo game places two
+world-space markers by hand, and the reason several examples start with the camera pointed somewhere
+arbitrary until someone tunes it.
+
+**Options.** An axis widget pinned to a screen corner, the way editor viewports do it - a small
+overlay renderer reading the camera's rotation, drawn last, ignoring depth. Additive, and it
+generalises to every example rather than being tuned per scene. It wants whatever the corner-anchor
+enum in item 10 becomes.
+
+---
+
+## 12. `LetterMeshFactory` bakes its style into a shared segment grid
+
+**Observation.** Stroke width, glyph width, spacing and depth are constants. The stroke in particular
+is woven into the shared segment grid - `TopY`, `MiddleY` and the rest all derive from it - so making
+it configurable is not a matter of exposing one number. It means passing a metrics or style object
+down into every glyph builder.
+
+**Impact.** None today; there are two consumers and both want the current look. It is recorded
+because the shape of the fix is decided by how the type is written now, not later: the bar-built
+glyphs would follow a style object automatically, but the hand-sketched polygons - V, X, Y, Z, K, the
+R leg, the Q tail, D's chamfers - carry tuned constants that must either scale with the stroke or be
+re-authored.
+
+**Options.** A `LetterStyle` record threaded through the factory, with the existing area-invariant
+tests generalised to run per style over a few stroke values. Additive. Worth doing once a third
+consumer appears and actually wants a different weight - not before, since the re-authoring cost is
+real and speculative styling would fix the wrong constants.
+
+---
+
+## 13. `DebugTextDropdown` offers two rendering paths and only one respects the overlay
+
+**Observation.** The type can be rendered two ways: `Draw(debugTextSystem)` at its own `Position`, or
+`GetLines()` handed to a `DebugOverlay` section. Both are public and neither is marked as the
+default.
+
+**Impact.** The standalone path silently ignores the overlay's reposition and hide keys, so a
+dropdown drawn that way stays put and stays visible while everything else on screen moves or
+disappears. The spawn-menu example fell into exactly this before being switched to `GetLines()`. The
+two paths also disagree about who owns layout - `Position` is meaningful in one and dead in the
+other.
+
+**Options.** Keep both but make the asymmetry loud in the XML docs of `Draw` and `Position`, naming
+`GetLines()` as the path that participates in the overlay; or have `Draw` register with the overlay
+when one exists. Both additive. Deleting `Draw` was considered and rejected - standalone rendering is
+wanted for cases where no overlay is in play.
+
 ---
 
 # Upstream (engine) observations
@@ -324,7 +342,7 @@ approach was first proposed and where the toolkit came from.
 
 ---
 
-## 13. The asset compiler is required only to copy engine shader sources into `data/db`
+## 14. The asset compiler is required only to copy engine shader sources into `data/db`
 
 **Observation.** A code-only project has no assets of its own, yet it cannot run without the
 `Stride.AssetCompiler` build step. The `default.bundle` that step emits (~2.4 MB per project) contains
@@ -369,7 +387,7 @@ Windows.
 
 ---
 
-## 14. `SceneSystem` defaults to an empty `GraphicsCompositor` that draws nothing
+## 15. `SceneSystem` defaults to an empty `GraphicsCompositor` that draws nothing
 
 **Observation.** `SceneSystem`'s constructor sets `GraphicsCompositor = new GraphicsCompositor()`
 (`SceneSystem.cs:40`) and `LoadContent` only replaces it when `InitialGraphicsCompositorUrl` points
@@ -390,7 +408,7 @@ toolkit's `AddGraphicsCompositor` would remain as the opt-in for post effects an
 
 ---
 
-## 15. There is no post-load hook on `Game`, so `Run(start:)` has to schedule a script
+## 16. There is no post-load hook on `Game`, so `Run(start:)` has to schedule a script
 
 **Observation.** The root scene exists only after `Run()` -> `PrepareContext()` -> `LoadContent()`.
 The one instance-level signal the engine offers, `Game.GameStarted`, fires at the end of
@@ -438,7 +456,7 @@ suggested in discussion #1253) and make `Run(start:)` sugar over it.
 
 ---
 
-## 16. A consumer-facing MSBuild SDK would hide the package list, but matters less if 13 lands
+## 17. A consumer-facing MSBuild SDK would hide the package list, but matters less if 14 lands
 
 **Observation.** The engine repository has `sources/sdk/Stride.Build.Sdk`, but its README says it is
 consumed by direct `Import` from the source tree and the `Sdk="Stride.Build.Sdk"` NuGet mode is not
@@ -447,10 +465,10 @@ file-based app, `#:sdk Stride.Sdk`; the file-based example instead carries four 
 commented-out `obj/` workaround.
 
 **Impact.** Low on its own. The `#:` lines are short, and most of what an SDK would hide is the
-asset-compiler wiring from item 13. If that lands, the remaining boilerplate is one or two package
+asset-compiler wiring from item 14. If that lands, the remaining boilerplate is one or two package
 references, which is not worth an SDK.
 
-**Options.** Defer until item 13 is decided. If the asset compiler stays required, a thin
+**Options.** Defer until item 14 is decided. If the asset compiler stays required, a thin
 `Stride.Sdk` that composes `Microsoft.NET.Sdk`, references the engine packages and the asset
 compiler, and sets the host RID (what `examples/Directory.Build.props` does by hand) would make the
 code-only front door `#:sdk Stride.Sdk` followed by `using var game = new Game();`.

@@ -90,8 +90,14 @@ repro in `examples/code-only/_Temp2DProbe`. Only what is left to *do* is repeate
   (`src/Stride.CommunityToolkit/Games/GameExtensions.cs:72`). Reusing one options instance across
   shapes silently carries the size over; measured: a capsule then a circle from the same instance
   gives a circle of radius 0.25 instead of 0.5. `AddBepu2DPhysics` explicitly encourages that reuse
-  in its own comment. Fix is a local variable instead of a write-back; the mutation buys nothing,
-  since the class defaults already agree with the collider defaults.
+  in its own comment. **The mutation is load-bearing, contrary to what this entry said before** (Aug
+  2026): `Stride.CommunityToolkit.Bepu`'s `Create2DPrimitive` passes the *same* options object to
+  `AddBepu2DPhysics` on the next line, so the collider is built from the `Size` the write-back just
+  filled in. Drop it alone and Capsule falls back to `new CapsuleCollider()` instead of
+  `Radius = 0.25, Length = 0.5`, and Rectangle to a default `BoxCollider` instead of
+  `(0.5, 1, depth)` - a silent physics change. This has to be fixed together with the null-size
+  branches of `Get2DColliderShape`, i.e. with the next two items; it is one piece of work on one
+  method, not three.
 - **`Depth` is ignored unless `Size` is also set** — for Square, Circle and Triangle the null-size
   branch of `Get2DColliderShape` returns a collider with its own default Z (1), so
   `new() { Depth = 0.2f }` alone silently keeps a collider 1 unit deep. Rectangle, Capsule and
@@ -116,13 +122,32 @@ repro in `examples/code-only/_Temp2DProbe`. Only what is left to *do* is repeate
 ## 3. Toolkit memory work — measured payoff
 
 - **Shared-model helper** — `Create3DPrimitive` builds a mesh and a pair of GPU buffers per call, so
-  10,000 spheres cost 1.5 GB against 400 MB when the model is shared. Retires a workaround that
-  Example01, Example22 and the stress pile all hand-roll.
-- **`NumberOfTextureCoordinates = 1`** — the default of 10 inflates every vertex from 48 to 84 bytes
-  by duplicating one UV ten times. One line, 43% off every mesh the toolkit generates.
-- **Cached mesh mutation bug** — `PrimitiveProceduralModelBase.Generate` mutates `data.Vertices` in
-  place for `LocalOffset` and `Scale`, and five 2D procedural models hand out *shared* cached
-  instances. Silent and cumulative: the second model built with a `Scale` comes out wrong.
+  10,000 spheres cost 1.5 GB against 400 MB when the model is shared — the models are ~95% of process
+  memory. It is why the stress pile appeared to show "2D physics uses more memory than 3D" when it was
+  really "this example shares a model and that one does not". Retires a workaround that `Example01`,
+  `Example22` and the memory harness all hand-roll verbatim:
+
+  ```csharp
+  var model = game.Create3DPrimitive(type, new Primitive3DEntityOptions()).Get<ModelComponent>().Model;
+  ```
+
+  Three shapes, all additive: an overload taking a `Model`; an internal cache keyed by `(type, size)`;
+  or an explicit `GetOrCreateSharedModel(type, size)`. A model-level cache is also the right home for
+  the per-model caches in the mutation item below, which is the layer the sharing actually wants to
+  happen at.
+- **`NumberOfTextureCoordinates = 1`** — the default of 10 makes `Generate` expand every vertex from
+  48 to 84 bytes by duplicating one UV ten times, and the toolkit never sets it. One line, 43% off
+  every mesh the toolkit generates, no API impact — but a behaviour change for anyone relying on ten
+  channels.
+- **Cached mesh mutation bug** — `CircleProceduralModel`, `Capsule2DProceduralModel`,
+  `PolygonProceduralModel`, `RectangleProceduralModel` and `TriangleProceduralModel` each keep a static
+  cache and hand the *same* `GeometricMeshData` instance to every caller.
+  `PrimitiveProceduralModelBase.Generate` then mutates `data.Vertices` in place for `LocalOffset` and
+  `Scale`. Silent and cumulative: two models from the same cached mesh with `Scale = 2` give a second
+  at 4×, and `LocalOffset` values add up. Both properties are inherited public API on every one of
+  these types, so nothing marks them as unsafe. Options: cache only when `Scale` and `LocalOffset` are
+  at their defaults; clone the arrays on the way out, which discards most of the benefit; or drop these
+  caches for the model-level cache above.
 
 ## 4. Toolkit correctness and tidy-up
 
@@ -197,26 +222,13 @@ Small, found while auditing every 2D example. All nine build clean.
 - **Two example folders break the `Example<NN>_<Name>` convention** — the `Example_`-prefixed demo
   games. Renaming touches the `.slnx`, `.sdpkg`, `.csproj` and namespace. Decide rather than drift.
 
-## 7. Text, letters and lighting follow-ups
+## 7. Lighting and skybox follow-ups
 
-Distilled from `notes/plans/cubicle-calamity-scoring.md` when that plan was retired (Aug 2026).
+Distilled from `notes/plans/cubicle-calamity-scoring.md` when that plan was retired (Aug 2026). The
+API-shape items that came with it moved to [ARCHITECTURE.md](ARCHITECTURE.md) 11-13.
 Only toolkit-level work lives here; game-specific features and decisions are tracked in
 `examples/code-only/Example_CubicleCalamity/README.md` under "Future improvements".
 
-- **Screen-corner orientation gizmo, as a toolkit feature.** Every code-only example faces "where
-  the hell is X" with no editor viewport to answer it; a world-space gizmo either buries itself in
-  the scene's content or sits at a misleading offset. An axis widget pinned to a screen corner the
-  way editor viewports do it generalises to every example, and belongs in `ARCHITECTURE.md` if
-  pursued. (The interim placement of the demo game's two markers is that game's own decision,
-  tracked in its README.)
-- **`LetterMeshFactory` style parameters** — stroke width, glyph width, spacing and depth are
-  constants today, and the stroke is woven into the shared segment grid (`TopY`, `MiddleY`, ... all
-  derive from it), so making it configurable means passing a metrics/style object down into every
-  glyph builder rather than exposing one number. The bar-built glyphs would follow automatically;
-  the hand-sketched polygons (V, X, Y, Z, K, the R leg, the Q tail, D's chamfers) have tuned
-  constants that need to scale with the stroke or be re-authored. The existing area-invariant tests
-  generalise: run them per style over a few stroke values. Worth doing once a second real consumer
-  besides Cubicle Calamity and the gallery appears.
 - **Lighting for solid lettering / model showcases** — `AddAllDirectionLighting` (six directionals
   down the world axes) turned out to be the difference between black-faced letters and a readable
   gallery in `Example01_Letters3D`, same as in Cubicle Calamity. `AddStudioLighting` (key/fill/rim,
@@ -225,9 +237,6 @@ Only toolkit-level work lives here; game-specific features and decisions are tra
   cheaper all-direction equivalent — three lights plus an ambient term instead of six directionals —
   and (b) sweeping the examples to see which ones read better under the studio rig and swapping
   them over.
-- **`TextPositionMode` cannot centre on screen** — corners and explicit pixels only, so Cubicle
-  Calamity's game-over banner needs a four-line `ScreenCentreTextScript` recomputing its position
-  every frame. A centre option belongs in the component.
 - **Skybox source cubemap has no mip chain** — `skybox_texture_hdr.dds` ships `dwMipMapCount = 1`,
   so the GGX prefilter's importance sampling reads mip 0 for all 1024 samples: the slowest and
   noisiest path. Hypothesis, not measured: shipping a mipped DDS (or generating mips at load) should
