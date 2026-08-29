@@ -18,7 +18,11 @@ namespace Stride.CommunityToolkit.Scripts.Utilities;
 ///
 /// <para>Contributors add a <see cref="DebugOverlaySection"/> whose callback runs each frame, so content that changes needs no pushing. Sections are separated by a blank line and sorted by <see cref="DebugOverlaySection.Order"/>. </para>
 ///
-/// <para>Keep text to printable ASCII: the debug text renderer replaces anything outside the range 32 to 126 with a space. </para>
+/// <para>
+/// Text is drawn with an installed font chosen by <see cref="FontFamily"/> - monospace by default, like
+/// Stride's own debug text - rasterised at <see cref="FontSize"/> times <see cref="Scale"/>, so it stays
+/// sharp on high-DPI displays. Each line gets a <see cref="BackgroundColor"/> strip behind it.
+/// </para>
 /// </remarks>
 /// <example>
 /// <code>
