@@ -60,46 +60,26 @@ Still open:
 
 ## 2. 2D shapes — found by auditing the 2D examples
 
-The first three are the same investigation: the 2D spawn menu froze whenever several default
-Polygons landed on each other. Full write-up in
-`notes/upstream/bepu-hull-contact-nan.md`, runnable repro in `examples/code-only/_Temp2DProbe`.
+The first three items below are one investigation: the 2D spawn menu froze whenever several default
+Polygons landed on each other. The evidence — incidence tables, side-count sweeps, the traced chain
+from NaN contact depth to the hang — is in `notes/upstream/bepu-hull-contact-nan.md`, with a runnable
+repro in `examples/code-only/_Temp2DProbe`. Only what is left to *do* is repeated here.
 
-- **Bepu: hull-vs-hull contact depth is `NaN` for overlapping extruded polygons** — two
-  regular-polygon hulls overlapping get a manifold with `depth = NaN` on the first timestep; normal
-  and offsets are fine. Reproduces in bare Bepu with no Stride, no `Compound` and no
-  `Body2DComponent`, so nothing in the toolkit causes it. Originally this looked like sides 6 and 32
-  at one fixed offset; a Monte Carlo sweep (`SWEEP=1` in the probe, 200 random placements per side
-  count, box-shape control) shows it is far broader: **every side count from 3 up fails at 15–40% of
-  random overlapping poses** once the bodies carry a rotation about Z, triangles and squares
-  included, and axis-aligned (freshly spawned) bodies fail at ~40% for 5, 7 and 8 sides at
-  circumradius 1. Every failure is on the first step — never a gradual blow-up — and the identical
-  placements with an analytic `Box` never fail, so the hull pair handler owns it outright. Confirmed
-  in-engine by the spawn menu crashing with 5- and 7-sided polygons spawned overlapping (20 Aug),
-  which matches the axis-aligned column, including "3 and 4 seem fine". **Report upstream** — the
-  write-up has a verified one-file repro plus the incidence tables and failing triangle/square
-  manifold logs. The bepuphysics2 clone now carries a three-file branch payload, all verified:
-  `DemoTests/HullPairContactTests.cs` (47 ms, drives `CollisionBatcher` directly, box control
-  passes), `Demos/Demos/HullContactNaNDemo.cs` plus its one-line `DemoSet` registration (5/6/7
-  side-count pairs in the standard demo bootstrap; Release shows `sides=6: POSES ARE NaN` on
-  screen, Debug breaks on the `CHECKMATH` assert on the first timestep — verified). Both are
-  expected-to-fail, so they attach to the issue and become the fix PR's regression material.
-  Verified unfixed on master `16ecf9cf`; no existing issue covers it (tracker searched 20 Aug).
-  Paste-ready title and body: `notes/upstream/bepu-hull-contact-nan-issue.md` — push the branch,
-  swap in the compare URL, file it.
-- **Bepu: `Tree.Add` never returns once a pose is `NaN`** — the freeze users actually see. The
-  application stops responding with one core pegged; sampled twice, 100 s of CPU apart, always
-  inside `Tree.Add` with about ten bodies in the tree. Worth reporting separately: it turns a
-  recoverable `NaN` into a hard hang with no diagnostic, and it is the same unguarded-recursion
-  family as the `Tree.Refit2WithCacheOptimization` item below.
-- **A Bepu fix would close the spawn-menu freeze outright** — the chain is fully traced: NaN contact
-  depth, then NaN poses in the same step, then `Tree.Add` never returning. Nothing else in the
-  toolkit contributes, so fixing contact generation removes the freeze without any change here. Two
-  caveats: the `Tree.Add` hang would still turn *any* future `NaN` into a freeze rather than an
-  error, which is why it is worth reporting separately; and while the *practical* trigger is narrow
-  — bodies spawned overlapping; the example's normal seven-shape mix (about 57 hexagons among 400
-  bodies in one column) was clean over 2 runs — the *shape* exposure is not: the incidence sweep
-  shows every hull polygon from the triangle up can produce the NaN once rotated, so Triangle and
-  Parallelogram are exposed too, not just the regular Polygon.
+- **File the Bepu hull-contact `NaN` issue** — verified unfixed on master `16ecf9cf`, and no existing
+  issue covers it (tracker searched 20 Aug). The bepuphysics2 clone carries a three-file branch
+  payload, all verified: a direct `CollisionBatcher` test, a demo, and its one-line `DemoSet`
+  registration. Both are expected-to-fail, so they attach to the issue and become the fix PR's
+  regression material. Paste-ready title and body in
+  `notes/upstream/bepu-hull-contact-nan-issue.md` — push the branch, swap in the compare URL, file it.
+- **File `Tree.Add` never returning once a pose is `NaN`, separately** — it turns a recoverable `NaN`
+  into a hard hang with no diagnostic, and it is the same unguarded-recursion family as the
+  `Tree.Refit2WithCacheOptimization` item in §5. Worth its own report because it would still bite on
+  any *future* `NaN` long after the contact bug is fixed.
+- **Nothing in the toolkit contributes to the freeze** — the chain is traced end to end, so the
+  upstream fix closes it here with no change on our side. Recorded so it is not re-investigated.
+- **Letter meshes use box colliders on purpose** — letter-shaped convex hulls jostling each other is
+  exactly the configuration above. Do not "improve" `Example_CubicleCalamity/Setup/FallingLetters.cs`
+  into hull colliders.
 - **Decide what the toolkit does in the meantime** — the incidence sweep closed the question of
   dodging by side count: there is no safe `Sides` value. 5 is the *worst* axis-aligned (~40% per
   overlapping pair — and it is what the spawn menu example currently ships, `Size = new Vector2(1, 5)`),
@@ -164,6 +144,14 @@ Polygons landed on each other. Full write-up in
 - **Delete `DebugTextDropdown.Draw()` and `Position`** — unused by anything now that both examples
   register overlay sections, and it is exactly the trap the spawn-menu example fell into: a dropdown
   drawn standalone ignores the overlay's reposition and hide keys.
+- **DocFX metadata silently fails for four projects, and a clean checkout would notice** — found
+  Aug 2026 while auditing the manual. `Stride.CommunityToolkit.DebugShapes`, `.ImGui`, `.ImGuiNet`
+  and `.Linux` (plus `.Windows`) reference `Stride.AssetCompiler`, which pulls SSH.NET 2023.0.1 and
+  trips **NU1903**. DocFX reports it as `[Failure] Msbuild failed when processing …` and then
+  **exits 0**, so nothing fails. Because `docs/api/*.yml` is gitignored, the local build only passes
+  on stale yml already on disk: on a fresh clone those namespaces produce no API pages at all, and
+  every `xref` into them breaks — `manual/rendering/debug-shapes.md` links into one. Confirm against
+  a real CI log before changing anything; the fix is upstream, in the §5 package cleanup.
 
 ## 5. Upstream reports and PRs
 
@@ -187,9 +175,10 @@ Polygons landed on each other. Full write-up in
   threads and as a deterministic `IndexOutOfRangeException` in `NarrowPhase.UpdateConstraint` with
   one. `Stack overflow`, `Internal CLR error (0x80131506)` and silent process death are the same
   corruption surfacing elsewhere. Fold into the report rather than filing separately.
-- **`Directory.Packages.props` cleanup** — four dead `PackageVersion` entries, the
+- **Stride: `sources/Directory.Packages.props` cleanup** — four dead `PackageVersion` entries, the
   `ServiceWire` → `System.IO.Pipes 4.3.0` chain behind most of the legacy packages, and the SSH.NET
-  advisory.
+  advisory. The toolkit has no central package file of its own, so this is entirely an upstream
+  change — but the advisory reaches us anyway, see the docs-build item in §4.
 - **Stride docs: instancing manual page** — the manual has no page on instancing at all
   (`grep -ri instancing en/manual` returns nothing). A full draft exists: title, issue body, proposed
   location and page content.
@@ -221,28 +210,6 @@ Only toolkit-level work lives here; game-specific features and decisions are tra
   way editor viewports do it generalises to every example, and belongs in `ARCHITECTURE.md` if
   pursued. (The interim placement of the demo game's two markers is that game's own decision,
   tracked in its README.)
-- ~~**Review `MeshBuilder`**~~ — done (Aug 2026). Six defects found and fixed with 15 pinning tests:
-  all seven `With*` wrappers dropped their `pixelFormat`; off-by-one bounds let callers silently
-  write one vertex past the mesh; `ToMeshDraw` uploaded the whole pooled array (garbage tail
-  included) and passed `VertexCount` as `VertexDeclaration`'s `instanceCount`, poisoning declaration
-  hashing; `IndexingType.None` threw `E_INVALIDARG` at buffer creation despite being documented;
-  pooled-array padding bytes reached the GPU unzeroed. `Example05_ProceduralGeometry` also leaked a
-  buffer pair and a material per frame rebuilding its animated circle — fixed, and it now
-  demonstrates the disposal pattern plus a non-indexed mesh. Clear for the mesh-letters work.
-- **Hand-authored 3D letter meshes** — **done** (Aug 2026): `EarClipping` (public triangulator),
-  `MeshBuilderExtensions.AddExtrudedPolygon` (caps + flat-shaded walls, either winding, concave
-  fine) and `LetterMeshFactory` under `Rendering/Utilities/`. Glyph set is `0123456789AEGMORVXYZ`
-  plus space; holes (0, 6, 8, 9, A, O, R) are handled by authoring each glyph as multiple
-  edge-abutting simple polygons on a shared segment grid rather than bridge cuts, so every piece
-  stays hole-free and the area-invariant test validates all of them. Cubicle Calamity's game over
-  now drops "GAME OVER" and the final score as tumbling physics letters (`Setup/FallingLetters.cs`)
-  - box colliders on purpose, because letter-shaped convex hulls jostling each other is the
-  documented Bepu NaN configuration. Front-face winding is clockwise (D3D convention); this was
-  learned the hard way and is pinned by a per-triangle winding test and a note in the contributor
-  instructions. The full alphabet A-Z, all digits and the dash are authored (Aug 2026); B shares 8's
-  glyph the way O shares 0's, and `Example01_Letters3D` is the gallery that shows every glyph plus
-  the rebuild-with-disposal pattern. Cross-platform constraint stands: `VL.Stride.Text3d` declined
-  (DirectWrite, Windows-only, vvvv package).
 - **`LetterMeshFactory` style parameters** — stroke width, glyph width, spacing and depth are
   constants today, and the stroke is woven into the shared segment grid (`TopY`, `MiddleY`, ... all
   derive from it), so making it configurable means passing a metrics/style object down into every
@@ -267,27 +234,15 @@ Only toolkit-level work lives here; game-specific features and decisions are tra
   noisiest path. Hypothesis, not measured: shipping a mipped DDS (or generating mips at load) should
   improve reflection quality and prefilter speed more than any size change. Needs a before/after
   comparison; do not change the texture without one.
-## 8. Revisit only if Bepu fixes the rank-1 tensor
 
-Do not act on this speculatively — it is here so the question is not re-derived later.
-
-- **`OutOfPlaneInertiaScale` could go back to `= 0`, but probably should not.** If Bepu makes a
-  rank-1 inverse inertia tensor safe, zeroing becomes viable again and is marginally more exact:
-  truly infinite out-of-plane inertia rather than 10,000× stiff. Against that: it would require a
-  minimum Bepu version the toolkit cannot enforce (Bepu comes in through whatever Stride resolves),
-  and the measured behaviour is indistinguishable — every scale from 1e-1 to 1e-12 is stable, so the
-  constant is not load-bearing for the crash. Reverting trades a version dependency for no
-  observable gain.
-- **Watch which way the fix goes.** If Bepu instead decides a rank-1 tensor is unsupported and adds
-  validation, scaling becomes the only option and this item is closed.
-
-## 9. Later
+## 8. Later
 
 - **Custom one-body 2D constraint** — only once Eideren has picked a direction. Prototype in the
   toolkit first, where nothing needs review, score it against the current approach with the harness,
   then a follow-up PR. Stride's own `CharacterMotionConstraint` is a complete worked template, and
   `Solver.Register<T>()` is public, so no engine change is needed.
-- **`related:` metadata sweep** — cross-link the two new examples across all example metadata.
+- **`related:` on `Example01_Basic3DScene_VBasic`** — the last of the 59 examples without one. The
+  rest of the cross-linking sweep is done.
 - **Keep `examples/code-only/_TempMemProbe`** — the memory measurement rig, and no longer a deletion
   candidate. It is the only thing that can say whether the constraint work above is actually an
   improvement, and it stays useful for any future allocation question.
@@ -298,7 +253,7 @@ Do not act on this speculatively — it is here so the question is not re-derive
 
 ---
 
-## Two things to watch, not tasks
+## Four things to watch, not tasks
 
 **Do not tune friction yet.** Bepu's August fix removes a `1/N` contact-count divisor, making friction
 2–4× stronger and, more importantly, consistent regardless of how many contacts a manifold has. Ross
@@ -320,3 +275,11 @@ interpenetrating bodies over many steps is distinct from a single overlapping *p
 sweep's box control shows an overlapping pair of analytic boxes is always clean over 8 steps, at any
 offset and rotation tried — for a pair, only the hull path produces non-finite state, and it does so
 on step one.
+
+**Do not revisit `OutOfPlaneInertiaScale` speculatively.** If Bepu makes a rank-1 inverse inertia
+tensor safe, going back to `= 0` becomes viable and is marginally more exact — truly infinite
+out-of-plane inertia rather than 10,000× stiff. It is still not worth it: it would require a minimum
+Bepu version the toolkit cannot enforce, since Bepu arrives through whatever Stride resolves, and the
+measured behaviour is indistinguishable — every scale from 1e-1 to 1e-12 is stable, so the constant is
+not load-bearing for the crash. If Bepu instead rules a rank-1 tensor unsupported and adds validation,
+scaling is the only option and the question is closed for good.
