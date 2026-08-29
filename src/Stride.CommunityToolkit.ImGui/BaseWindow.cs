@@ -13,14 +13,39 @@ namespace Stride.CommunityToolkit.ImGui;
 /// </summary>
 public abstract class BaseWindow : GameSystem
 {
+    /// <summary>
+    /// The UI scale of the owning <see cref="ImGuiSystem"/>, or <c>1</c> while no system is registered yet.
+    /// Multiply pixel sizes by it so windows look the same at every DPI.
+    /// </summary>
     public float Scale => _imGui?.Scale ?? 1f;
 
     private static Dictionary<string, uint> _windowId = new Dictionary<string, uint>();
 
+    /// <summary>
+    /// Bound to the window's close button. Set it to <see langword="false"/> to close the window; once closed the
+    /// system is disabled and disposed.
+    /// </summary>
     protected bool Open = true;
+
+    /// <summary>
+    /// A number distinguishing this instance from other windows of the same type: <c>1</c> for the first, then counting
+    /// up. It is appended to the window title so ImGui treats each instance as a separate window.
+    /// </summary>
     protected uint Id;
+
+    /// <summary>
+    /// The flags passed to ImGui when the window is begun. Override to change borders, movement, saved settings and so on.
+    /// </summary>
     protected virtual ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.None;
+
+    /// <summary>
+    /// The position applied before the window is begun each frame, or <see langword="null"/> to let ImGui place it.
+    /// </summary>
     protected virtual Vector2? WindowPos => null;
+
+    /// <summary>
+    /// The size applied before the window is begun each frame, or <see langword="null"/> to let ImGui size it.
+    /// </summary>
     protected virtual Vector2? WindowSize => null;
     private readonly string _uniqueName;
     private ImGuiSystem? _imGui;

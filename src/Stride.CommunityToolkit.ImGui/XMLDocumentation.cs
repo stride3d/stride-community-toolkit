@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.ImGui;
 /// <summary>
 /// Utility class to provide documentation for various types where available with the assembly
 /// </summary>
-public static class XMLDocumentation
+internal static class XMLDocumentation
 {
     static readonly ConcurrentDictionary<Assembly, XmlDocument?> _documents = new();
     static readonly ConcurrentDictionary<MemberInfo, CachedDocumentation?> _documentation = new();

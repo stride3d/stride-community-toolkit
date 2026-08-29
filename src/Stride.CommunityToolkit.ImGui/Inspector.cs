@@ -77,11 +77,21 @@ public class Inspector : BaseWindow
     WeakReference<object?> _dicAddCommandTarget = new(null);
     (object? key, object? value) _dicAddCommandData;
 
+    /// <summary>
+    /// Creates a new inspector window and registers it with the game's systems. Prefer
+    /// <see cref="FindFreeInspector"/> to reuse an open window that is not <see cref="Locked"/>.
+    /// </summary>
+    /// <param name="services">The game's service registry, which must already contain an <see cref="ImGuiSystem"/>.</param>
     public Inspector(IServiceRegistry services) : base(services)
     {
         _inspectors.Add(this);
     }
 
+    /// <summary>
+    /// Returns the first live inspector that is not <see cref="Locked"/>, creating one if none is free.
+    /// </summary>
+    /// <param name="services">The game's service registry, used when a new inspector has to be created.</param>
+    /// <returns>An inspector whose <see cref="Target"/> can be set.</returns>
     public static Inspector FindFreeInspector(IServiceRegistry services)
     {
         foreach (Inspector inspector in _inspectors)
@@ -93,11 +103,13 @@ public class Inspector : BaseWindow
         return new Inspector(services);
     }
 
+    /// <inheritdoc />
     protected override void OnDestroy()
     {
         _inspectors.Remove(this);
     }
 
+    /// <inheritdoc />
     protected override void OnDraw(bool collapsed)
     {
         if (collapsed)
@@ -621,16 +633,28 @@ RECURSE:
         return finalSpeed < 0.001f ? 0.001f : finalSpeed;
     }
 
+    /// <summary>
+    /// Which members of the inspected object are listed. A member is shown only when every category it belongs to
+    /// is included, so <c>Public | Fields | Instance</c> shows public instance fields and nothing else.
+    /// </summary>
     [Flags]
     public enum Filter : uint
     {
+        /// <summary>Fields.</summary>
         Fields = 1,
+        /// <summary>Readable properties without index parameters.</summary>
         Properties = Fields << 1,
+        /// <summary>Nested types.</summary>
         SubTypes = Properties << 1,
+        /// <summary>Members with public accessibility.</summary>
         Public = SubTypes << 1,
+        /// <summary>Members with any accessibility other than public.</summary>
         NonPublic = Public << 1,
+        /// <summary>Static members.</summary>
         Static = NonPublic << 1,
+        /// <summary>Instance members.</summary>
         Instance = Static << 1,
+        /// <summary>Members declared on a base type rather than on the inspected type itself.</summary>
         Inherited = Instance << 1,
     }
 

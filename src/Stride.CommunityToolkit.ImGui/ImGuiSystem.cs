@@ -12,10 +12,27 @@ using static Hexa.NET.ImGui.ImGui;
 
 namespace Stride.CommunityToolkit.ImGui;
 
+/// <summary>
+/// The Dear ImGui backend for Stride: feeds input to ImGui, begins a frame every update and renders the draw lists
+/// at the end of every draw. Create one after the game's graphics device exists and every <see cref="BaseWindow"/>
+/// created afterwards is drawn through it.
+/// </summary>
+/// <remarks>
+/// The constructor registers the instance as a service and as a game system, so keeping the returned reference is
+/// optional; <see cref="BaseWindow"/> finds it through <see cref="IServiceRegistry"/>.
+/// </remarks>
 public class ImGuiSystem : GameSystemBase
 {
+    /// <summary>
+    /// The ImGui context this system created and renders. Pass it to add-on libraries (ImNodes, ImPlot) that need to
+    /// share the context.
+    /// </summary>
     public readonly ImGuiContextPtr ImGuiContext;
 
+    /// <summary>
+    /// A UI scale factor windows can read through <see cref="BaseWindow.Scale"/> to size themselves for the display's DPI.
+    /// Defaults to <c>1</c>; it is not applied automatically.
+    /// </summary>
     public float Scale
     {
         get => _scale;
@@ -68,6 +85,15 @@ public class ImGuiSystem : GameSystemBase
     /// </remarks>
     private bool _frameBegun;
 
+    /// <summary>
+    /// Creates the ImGui context, compiles the ImGui shader, allocates the vertex and index buffers, and registers the
+    /// system with the game's services and systems.
+    /// </summary>
+    /// <param name="registry">The game's service registry; must provide <see cref="IGame"/>, <see cref="GraphicsContext"/> and <see cref="EffectSystem"/>.</param>
+    /// <param name="graphicsDeviceManager">The device manager whose <see cref="GraphicsDeviceManager.GraphicsDevice"/> is rendered to.</param>
+    /// <param name="inputManager">The input manager to read from, or <see langword="null"/> to resolve it from <paramref name="registry"/>.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="registry"/> or <paramref name="graphicsDeviceManager"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If a required service or the graphics device is not available yet.</exception>
     public ImGuiSystem(IServiceRegistry registry, GraphicsDeviceManager graphicsDeviceManager, InputManager? inputManager = null) : base(registry)
     {
         ArgumentNullException.ThrowIfNull(registry);
@@ -107,6 +133,7 @@ public class ImGuiSystem : GameSystemBase
         _game.GameSystems.Add(this);
     }
 
+    /// <inheritdoc />
     protected override void Destroy()
     {
         foreach (var texture in _managedTextures.Values)
@@ -303,6 +330,11 @@ public class ImGuiSystem : GameSystemBase
         textureData.SetStatus(ImTextureStatus.Ok);
     }
 
+    /// <summary>
+    /// Forwards this frame's input and display size to ImGui and begins a new ImGui frame. Windows build their UI in
+    /// their own <c>Update</c>, which runs after this one.
+    /// </summary>
+    /// <inheritdoc />
     public override void Update(GameTime gameTime)
     {
         var deltaTime = (float)gameTime.Elapsed.TotalSeconds;
@@ -368,6 +400,10 @@ public class ImGuiSystem : GameSystemBase
         _frameBegun = true;
     }
 
+    /// <summary>
+    /// Ends the ImGui frame begun in <see cref="Update"/>, uploads any textures ImGui requested and renders the draw
+    /// lists on top of everything else drawn this frame.
+    /// </summary>
     public override void EndDraw()
     {
         // Nothing to present when the draw is not paired with an update - Render() without a preceding

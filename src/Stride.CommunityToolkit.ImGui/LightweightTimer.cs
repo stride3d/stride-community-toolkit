@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.ImGui;
 /// scenarios where performance is critical, such as in tight loops or high-frequency operations. Use <see
 /// cref="StartNew"/> to create and start a new timer, <see cref="Start"/> to reset and start the timer, and <see
 /// cref="Elapsed"/> to retrieve the elapsed time since the timer was started.</remarks>
-public struct LightweightTimer
+internal struct LightweightTimer
 {
     private long _ts;
 

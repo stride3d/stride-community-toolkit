@@ -17,10 +17,28 @@ namespace Stride.CommunityToolkit.ImGui;
 /// </summary>
 public class PerfMonitor : BaseWindow
 {
+    /// <summary>The height in pixels (before <see cref="BaseWindow.Scale"/>) of each history graph.</summary>
     public float GraphHeight = 48;
+
+    /// <summary>The height in pixels of each per-thread, GPU and Stride-systems sample strip in the Frame section.</summary>
     public float FrameHeight = 128;
+
+    /// <summary>
+    /// When <see langword="true"/>, the graphs and sample strips stop updating and keep showing the last frame,
+    /// so a spike can be examined. Toggled by the "Pause" checkbox.
+    /// </summary>
     public bool PauseEval;
+
+    /// <summary>
+    /// When <see langword="true"/>, <see cref="PauseEval"/> is set automatically as soon as a frame takes less than
+    /// half or more than one and a half times the average frame time.
+    /// </summary>
     public bool PauseOnLargeDelta;
+
+    /// <summary>
+    /// When <see langword="true"/>, every <see cref="PerfSampler"/> also records the bytes allocated on its thread
+    /// while it was open, shown in the sample's tooltip. Costs a little per sample.
+    /// </summary>
     public bool MonitorSampleAlloc;
 
     /// <summary>
@@ -73,18 +91,26 @@ public class PerfMonitor : BaseWindow
     }
 
 
+    /// <inheritdoc />
     protected override ImGuiWindowFlags WindowFlags => ImGuiWindowFlags.NoMove |
                                                        ImGuiWindowFlags.NoSavedSettings |
                                                        ImGuiWindowFlags.NoFocusOnAppearing;
 
+    /// <inheritdoc />
     protected override Vector2? WindowPos => new Vector2(1f, 1f);
 
+    /// <inheritdoc />
     protected override Vector2? WindowSize => _windowSize;
 
     Vector2 GetGraphSize() => new(MaxWidth(), GraphHeight * Scale);
 
     static float MaxWidth() => GetContentRegionAvail().X;
 
+    /// <summary>
+    /// Changes how many frames the history graphs keep, preserving the most recent samples.
+    /// </summary>
+    /// <param name="newSize">The number of frames to keep.</param>
+    /// <param name="force">When <see langword="false"/>, <paramref name="newSize"/> is clamped to 10..2048.</param>
     public void SetGraphSize(int newSize, bool force = false)
     {
         if (force == false)
@@ -117,6 +143,11 @@ public class PerfMonitor : BaseWindow
             _graphAggregated += _graph[i];
     }
 
+    /// <summary>
+    /// Creates the window, registers it with the game's systems and starts sampling the game's update and draw
+    /// phases automatically.
+    /// </summary>
+    /// <param name="services">The game's service registry, which must already contain an <see cref="ImGuiSystem"/>.</param>
     public PerfMonitor(Stride.Core.IServiceRegistry services) : base(services)
     {
         Visible = true;
@@ -126,6 +157,7 @@ public class PerfMonitor : BaseWindow
         _autoSampler = new PerfMonitorAutoSampler(this);
     }
 
+    /// <inheritdoc />
     protected override void OnDestroy()
     {
         if (IsStrideProfilingAll())
@@ -138,6 +170,7 @@ public class PerfMonitor : BaseWindow
 
 
 
+    /// <inheritdoc />
     protected override void OnDraw(bool collapsed)
     {
         using (Sample($"{nameof(PerfSampler)}:{nameof(ImGuiPass)}"))
@@ -148,6 +181,10 @@ public class PerfMonitor : BaseWindow
 
 
 
+    /// <summary>
+    /// Draws the window, then closes the sample that was opened at the start of this update.
+    /// </summary>
+    /// <inheritdoc />
     public override void Update(GameTime gameTime)
     {
         base.Update(gameTime);
@@ -156,6 +193,10 @@ public class PerfMonitor : BaseWindow
 
 
 
+    /// <summary>
+    /// Closes the sample opened at the start of this draw and finalises the frame: collects every thread's samples,
+    /// parses Stride's profiler events and pushes a new point onto the history graphs.
+    /// </summary>
     public override void EndDraw()
     {
         base.EndDraw();
@@ -530,6 +571,12 @@ public class PerfMonitor : BaseWindow
         readonly ThreadSampleCollection _target;
         readonly bool _customDepth;
 
+        /// <summary>
+        /// Starts a sample. Prefer <see cref="PerfMonitor.Sample(string, bool)"/>, which also lets sampling be switched off.
+        /// </summary>
+        /// <param name="id">The label shown for the sample in the Frame section.</param>
+        /// <param name="monitor">The monitor that receives the sample when it is disposed.</param>
+        /// <param name="customDepthParam">The row to draw the sample on, or <c>-1</c> to nest it under the sample currently open on this thread.</param>
         public PerfSampler(string id, PerfMonitor monitor, int customDepthParam = -1)
         {
             _id = id;

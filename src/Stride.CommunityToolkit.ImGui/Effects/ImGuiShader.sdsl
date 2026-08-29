@@ -1,6 +1,6 @@
 namespace Stride.CommunityToolkit.ImGui
 {
-    shader ImGuiShader : ShaderBase {
+    internal shader ImGuiShader : ShaderBase {
 
         matrix proj;
         stage Texture2D tex;

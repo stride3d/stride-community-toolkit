@@ -23,6 +23,10 @@ public class HierarchyView : BaseWindow
     const float DUMMY_WIDTH = 19;
     const float INDENTATION2 = DUMMY_WIDTH + 8;
 
+    /// <summary>
+    /// Creates the window and registers it with the game's systems; it draws from the next frame on.
+    /// </summary>
+    /// <param name="service">The game's service registry, which must already contain an <see cref="ImGuiSystem"/>.</param>
     public HierarchyView(IServiceRegistry service) : base(service) { }
 
     ///<inheritdoc />
