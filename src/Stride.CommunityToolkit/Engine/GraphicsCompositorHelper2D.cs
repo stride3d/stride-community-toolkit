@@ -1,4 +1,5 @@
 using Stride.Engine;
+using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Background;
 using Stride.Rendering.Compositing;
@@ -26,9 +27,13 @@ public static class GraphicsCompositorHelper2D
     /// to a camera slot.</param>
     /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
     /// <param name="groupMask">Specifies the render group mask to be used for rendering. Defaults to <see cref="RenderGroupMask.All"/>.</param>
+    /// <param name="msaa">Multisample anti-aliasing level for the forward renderer. Defaults to <see cref="MultisampleCount.None"/>.
+    /// Thin geometry - lines drawn as narrow quads, small sprites - flickers as it moves without it, because a
+    /// shape narrower than a pixel is only drawn when it happens to cover the pixel's centre. The level is clamped
+    /// to what the graphics device supports.</param>
     /// <returns>A <see cref="GraphicsCompositor"/> instance configured with the specified options, including render stages and
     /// features for opaque and transparent objects.</returns>
-    public static GraphicsCompositor CreateDefault(bool enablePostEffects = false, string modelEffectName = "StrideForwardShadingEffect", CameraComponent? camera = null, Color4? clearColor = null, RenderGroupMask groupMask = RenderGroupMask.All)
+    public static GraphicsCompositor CreateDefault(bool enablePostEffects = false, string modelEffectName = "StrideForwardShadingEffect", CameraComponent? camera = null, Color4? clearColor = null, RenderGroupMask groupMask = RenderGroupMask.All, MultisampleCount msaa = MultisampleCount.None)
     {
         var opaqueRenderStage = new RenderStage("Opaque", "Main") { SortMode = new StateChangeSortMode() };
         var transparentRenderStage = new RenderStage("Transparent", "Main") { SortMode = new BackToFrontSortMode() };
@@ -52,6 +57,7 @@ public static class GraphicsCompositorHelper2D
             OpaqueRenderStage = opaqueRenderStage,
             TransparentRenderStage = transparentRenderStage,
             PostEffects = postProcessingEffects,
+            MSAALevel = msaa,
         };
 
         var forwardLighting = new ForwardLightingRenderFeature

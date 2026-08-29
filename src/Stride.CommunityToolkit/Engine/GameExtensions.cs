@@ -191,10 +191,17 @@ public static class GameExtensions
     /// </summary>
     /// <param name="game">The game to which the graphics compositor will be added. Cannot be null.</param>
     /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
+    /// <param name="msaa">Multisample anti-aliasing level. Defaults to <see cref="MultisampleCount.None"/>; use <see cref="MultisampleCount.X4"/>
+    /// when the scene draws thin geometry such as line meshes, which otherwise flickers as it moves. Clamped to what the device supports.</param>
     /// <returns>The newly created <see cref="GraphicsCompositor"/> with post-processing effects enabled.</returns>
-    public static GraphicsCompositor AddGraphicsCompositor(this Game game, Color? clearColor = null)
+    public static GraphicsCompositor AddGraphicsCompositor(this Game game, Color? clearColor = null, MultisampleCount msaa = MultisampleCount.None)
     {
         var graphicsCompositor = GraphicsCompositorHelper.CreateDefault(enablePostEffects: true, clearColor: clearColor);
+
+        if (graphicsCompositor.SingleView is ForwardRenderer forwardRenderer)
+        {
+            forwardRenderer.MSAALevel = msaa;
+        }
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
@@ -209,10 +216,12 @@ public static class GameExtensions
     /// color of the rendered scene.</remarks>
     /// <param name="game">The game to which the 2D graphics compositor will be added. Cannot be null.</param>
     /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
+    /// <param name="msaa">Multisample anti-aliasing level. Defaults to <see cref="MultisampleCount.None"/>; use <see cref="MultisampleCount.X4"/>
+    /// when the scene draws thin geometry such as line meshes, which otherwise flickers as it moves. Clamped to what the device supports.</param>
     /// <returns>The newly created 2D graphics compositor.</returns>
-    public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null)
+    public static GraphicsCompositor Add2DGraphicsCompositor(this Game game, Color? clearColor = null, MultisampleCount msaa = MultisampleCount.None)
     {
-        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: false, clearColor: clearColor);
+        var graphicsCompositor = GraphicsCompositorHelper2D.CreateDefault(enablePostEffects: false, clearColor: clearColor, msaa: msaa);
 
         game.SceneSystem.GraphicsCompositor = graphicsCompositor;
 
