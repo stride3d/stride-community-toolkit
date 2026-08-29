@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 /// </summary>
 /// <remarks>
 /// This is the single place new levels, categories or languages are added, as promised by
-/// <c>notes/plans/examples-metadata.md</c> §2.2. Matching is case- and spelling-exact: <c>Beginners</c>
+/// <c>docs/contributing/examples/metadata-schema.md</c>. Matching is case- and spelling-exact: <c>Beginners</c>
 /// is an error rather than a synonym for <c>Beginner</c>, because a silently accepted variant produces
 /// a second landing page that nobody notices.
 /// </remarks>

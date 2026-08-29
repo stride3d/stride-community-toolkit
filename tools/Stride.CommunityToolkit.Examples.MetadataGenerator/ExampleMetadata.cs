@@ -8,7 +8,7 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is schema v1 (see <c>notes/plans/examples-metadata.md</c> §2.2). Every YAML-facing member is
+/// This is schema v1 (see <c>docs/contributing/examples/metadata-schema.md</c>). Every YAML-facing member is
 /// nullable and settable on purpose: the type is a permissive parse target, and requirements are
 /// enforced afterwards by <see cref="Services.MetadataValidator"/> so that every problem across every
 /// example is reported in one pass. Using <c>required</c> members here would instead fail on the first

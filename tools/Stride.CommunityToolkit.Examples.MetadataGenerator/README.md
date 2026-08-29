@@ -3,9 +3,11 @@
 Scans the code-only example projects, validates the `---example-metadata` block each one carries, and
 writes `examples-manifest.json`.
 
-The manifest is the single source of truth the docs generator and both example launchers are moving
-onto. The schema, and the plan for getting there, live in
-[`notes/plans/examples-metadata.md`](../../notes/plans/examples-metadata.md).
+The manifest is the single source of truth for the docs generator and both example launchers. The
+schema is documented in
+[`docs/contributing/examples/metadata-schema.md`](../../docs/contributing/examples/metadata-schema.md),
+and the reasoning behind it in
+[`docs/contributing/examples/decisions.md`](../../docs/contributing/examples/decisions.md).
 
 ## Commands
 
