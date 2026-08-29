@@ -199,17 +199,13 @@ Polygons landed on each other. Full write-up in
 
 Small, found while auditing every 2D example. All nine build clean.
 
-- **Three 2D examples have no `---example-metadata` block at all** —
-  `Example01_Basic2DScene_DebugRender`, `Example18_Box2DPhysics` and `Example_2D_Playground`. The
-  first two are legitimate examples that simply never got one.
-- **`Example18_Box2DPhysics2` is an empty directory** — delete it, or say what it was meant to be.
-- **Metadata key casing and duplicate orders** — `Order:` in Primitives and SpawnMenu against
-  `order:` everywhere else; order `1` is used by both `Example01_Basic2DScene` and
-  `Example01_Basic2DScene_BulletPhysics`, and `2` by both FallingShapes and Primitives. Low priority,
-  since the ordering scheme is expected to change anyway.
-- **`Example_2D_Playground` is a scratch file, not an example** — commented-out blocks throughout,
+- **`Example_2D_Playground` needs finishing or dropping** — commented-out blocks throughout,
   unused usings (`System.Xml.Linq`, `System.Reflection`), and it calls `Add3DGround` and
-  `Add3DCameraController` in a 2D playground. Either finish it or drop it.
+  `Add3DCameraController` in a 2D playground. It deliberately carries no metadata block (D42), so it
+  is invisible to the docs and both launchers either way — this is only about whether it stays.
+- **Two examples are `enabled: false` until they build again** — `Example04_MyraUI` (blocked on the
+  Stride 4.4 package split) and `Example07_CubeClicker` (not in the `.slnx`, so nothing builds it).
+  Both keep their hand-written doc pages, which the generator never touches.
 - **Two example folders break the `Example<NN>_<Name>` convention** — the `Example_`-prefixed demo
   games. Renaming touches the `.slnx`, `.sdpkg`, `.csproj` and namespace. Decide rather than drift.
 
