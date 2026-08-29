@@ -21,6 +21,9 @@ public class ImGuiNetSystem : GameSystemBase
 {
     private static readonly Logger Logger = GlobalLogger.GetLogger("ImGuiNet");
 
+    // GameSystemBase.Game is nullable; resolve it once so every later access is a plain dereference.
+    private readonly IGame _game;
+
     private readonly List<DrawCommand> _drawCommands = [];
     private bool _showUI = true;
     private bool _initialized = false;
@@ -99,12 +102,14 @@ public class ImGuiNetSystem : GameSystemBase
     /// <param name="registry">The service registry.</param>
     public ImGuiNetSystem(IServiceRegistry registry) : base(registry)
     {
+        _game = Game ?? throw new InvalidOperationException("ImGuiNetSystem: IGame must be available in the service registry.");
+
         Enabled = true;
         Visible = true;
         UpdateOrder = 1;
 
         Services.AddService(this);
-        Game.GameSystems.Add(this);
+        _game.GameSystems.Add(this);
     }
 
     /// <summary>
@@ -181,9 +186,9 @@ public class ImGuiNetSystem : GameSystemBase
         base.Initialize();
 
         _inputManager = Services.GetService<InputManager>();
-        _graphicsDevice = Game.GraphicsDevice;
-        _graphicsContext = Game.GraphicsContext;
-        var sceneSystem = Game.Services.GetService<SceneSystem>();
+        _graphicsDevice = _game.GraphicsDevice;
+        _graphicsContext = _game.GraphicsContext;
+        var sceneSystem = _game.Services.GetService<SceneSystem>();
         _commandList = _graphicsContext?.CommandList;
 
         if (_graphicsDevice == null)
@@ -201,7 +206,7 @@ public class ImGuiNetSystem : GameSystemBase
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
 
             // Compute initial DPI / framebuffer scale using Stride backbuffer vs client bounds
-            var clientBounds = Game.Window.ClientBounds;
+            var clientBounds = _game.Window.ClientBounds;
             var back = _graphicsDevice.Presenter?.BackBuffer;
             float initialScale = 1.0f;
             if (back != null && clientBounds.Width > 0 && clientBounds.Height > 0)
@@ -371,7 +376,7 @@ public class ImGuiNetSystem : GameSystemBase
         var io = ImGui.GetIO();
 
         // Update display size
-        var clientBounds = Game.Window.ClientBounds;
+        var clientBounds = _game.Window.ClientBounds;
         io.DisplaySize = new Vector2(clientBounds.Width, clientBounds.Height);
 
         // HiDPI/backbuffer scaling (matches Box2D.NET pattern)
@@ -462,7 +467,7 @@ public class ImGuiNetSystem : GameSystemBase
             return;
 
         // Set up projection matrix
-        var clientBounds = Game.Window.ClientBounds;
+        var clientBounds = _game.Window.ClientBounds;
         var projMatrix = Matrix.OrthoRH(clientBounds.Width, -clientBounds.Height, -1, 1);
 
         // Set pipeline state
