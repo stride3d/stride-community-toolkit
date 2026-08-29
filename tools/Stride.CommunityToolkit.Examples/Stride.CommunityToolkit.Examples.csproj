@@ -9,6 +9,17 @@
         <PackageReference Include="Pastel" Version="8.0.0" />
     </ItemGroup>
 
+    <!--
+        A build-order dependency, not a code one: ReferenceOutputAssembly="false" keeps the generator's
+        assembly out of this project entirely. It is here so MSBuild builds the generator once, before
+        this project, rather than leaving the pre-build hook to build it - see ExamplesManifest.targets.
+    -->
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit.Examples.MetadataGenerator\Stride.CommunityToolkit.Examples.MetadataGenerator.csproj"
+                          ReferenceOutputAssembly="false"
+                          Private="false" />
+    </ItemGroup>
+
     <!-- Generates examples-manifest.json before the build and copies it to the output. -->
     <Import Project="..\ExamplesManifest.targets" />
 

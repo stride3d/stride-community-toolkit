@@ -11,7 +11,14 @@
         under tools/.
     -->
 
-    <Target Name="GenerateExamplesManifest" BeforeTargets="BeforeBuild">
+    <!--
+        DependsOnTargets is required, not decoration. BeforeBuild runs *before* ResolveReferences in
+        CoreBuild's dependency chain, so the ProjectReference alone does not get the generator built in
+        time - the hook fired first and failed with "cannot find MetadataGenerator.exe". Naming
+        ResolveProjectReferences here pulls the project-to-project build in front of this target while
+        leaving the hook point unchanged, so the None item below is still picked up for the copy.
+    -->
+    <Target Name="GenerateExamplesManifest" BeforeTargets="BeforeBuild" DependsOnTargets="ResolveProjectReferences">
         <PropertyGroup>
             <ExamplesRoot>$(MSBuildThisFileDirectory)..\examples\code-only</ExamplesRoot>
             <MediaPath>$(MSBuildThisFileDirectory)..\docs\manual\code-only\examples\media</MediaPath>
@@ -43,7 +50,21 @@
             through the console's OEM code page, one stream getting the encoding it was promised and the
             other falling back to the default.
         -->
-        <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)"
+        <!--
+            The no-build flag is load-bearing. Without it `dotnet run` builds the generator, and both
+            importing projects run this target while the solution also builds the generator itself,
+            one solution build could have three builds of the same project in flight and two live
+            MetadataGenerator.exe processes. The result was an intermittent
+            "cannot access MetadataGenerator.exe because it is being used by another process" as one
+            build tried to copy apphost.exe over an exe another had already started.
+
+            It is safe only because both importing projects carry a ProjectReference to the generator
+            with ReferenceOutputAssembly="false", which makes MSBuild build it once, first. Remove that
+            reference and this fails on a clean tree. The target still runs once per importing project,
+            which is harmless: each writes its own manifest, and running one exe twice was never the
+            problem - overwriting it was.
+        -->
+        <Exec Command="dotnet run --no-build --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)"
               StandardErrorImportance="high"
               StandardOutputImportance="low"
               StdErrEncoding="utf-8"
