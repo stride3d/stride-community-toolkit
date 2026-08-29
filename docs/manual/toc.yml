@@ -55,6 +55,8 @@
     href: rendering/entity-text.md
   - name: World Text
     href: rendering/world-text.md
+  - name: Debug Overlay
+    href: rendering/debug-overlay.md
   - name: Debug Shapes
     href: rendering/debug-shapes.md
   - name: MeshBuilder

@@ -123,7 +123,8 @@ Two details worth knowing before you try to fight them:
 
 The overlay corner is chosen with the `displayPosition` parameter of `Add3DCameraController()`. The
 2D controller has no such parameter because the overlay belongs to the whole scene, not to the
-camera; move it with <kbd>F3</kbd> or set `DebugOverlay.GetOrCreate(game).Position`.
+camera; move it with <kbd>F3</kbd> or set `DebugOverlay.GetOrCreate(game).Position`. Size, font and
+background of that block are the overlay's own settings - see [Debug Overlay](../rendering/debug-overlay.md).
 
 ## When the defaults are wrong
 
