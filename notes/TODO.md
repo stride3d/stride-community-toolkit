@@ -80,14 +80,11 @@ repro in `examples/code-only/_Temp2DProbe`. Only what is left to *do* is repeate
 - **Letter meshes use box colliders on purpose** — letter-shaped convex hulls jostling each other is
   exactly the configuration above. Do not "improve" `Example_CubicleCalamity/Setup/FallingLetters.cs`
   into hull colliders.
-- **Decide what the toolkit does in the meantime** — the incidence sweep closed the question of
-  dodging by side count: there is no safe `Sides` value. 5 is the *worst* axis-aligned (~40% per
-  overlapping pair — and it is what the spawn menu example currently ships, `Size = new Vector2(1, 5)`),
-  7 fails at 37%, and even 3 and 4, clean when axis-aligned, fail at 17% once the bodies have
-  rotated. Preference stands: leave the default, document the hazard next to
-  `PolygonProceduralModel.Sides` (now covering Triangle and custom-vertex polygons too), and let the
-  upstream fix land. The only real mitigation available today is not spawning hull shapes
-  overlapping each other.
+- ~~**Decide what the toolkit does in the meantime**~~ — settled and **done** (Aug 2026). There is no
+  safe `Sides` value to dodge it, so the default stays and the hazard is documented instead: the
+  `PolygonProceduralModel` class remarks now carry the failure mode, the incidence figures and the one
+  real mitigation — do not spawn hull-collider bodies overlapping — with a pointer from `Sides`. Left
+  here until the upstream fix lands, because the note comes back out again when it does.
 - **`Create2DPrimitive` writes back into the caller's options** — `options.Size ??= ...` for Capsule
   and Rectangle mutates the object the caller passed in
   (`src/Stride.CommunityToolkit/Games/GameExtensions.cs:72`). Reusing one options instance across
@@ -137,13 +134,15 @@ repro in `examples/code-only/_Temp2DProbe`. Only what is left to *do* is repeate
   `Span`, then copy it into a second array. Matches Stride's own direction in #2368 / #2369.
 - **Cache hygiene** — the procedural model caches are plain `Dictionary` mutated without
   synchronisation, unbounded, and `PolygonProceduralModel` builds a string key per vertex per lookup.
-- **Four small ones** — `Get3DColliderShape` throws a message-less `InvalidOperationException` for
+- **Three small ones** — `Get3DColliderShape` throws a message-less `InvalidOperationException` for
   `InfinitePlane`; `Procedural2DModelBuilder` ignores its `depth` argument for the mesh while the XML
-  doc claims it makes the shape 3D; `Capsule2DProceduralModel` has a branch that is always taken and
-  four lines of commented-out code; `PolygonProceduralModel` validates its points twice.
-- **Delete `DebugTextDropdown.Draw()` and `Position`** — unused by anything now that both examples
-  register overlay sections, and it is exactly the trap the spawn-menu example fell into: a dropdown
-  drawn standalone ignores the overlay's reposition and hide keys.
+  doc claims it makes the shape 3D; `PolygonProceduralModel` validates its points twice, but in two
+  separate public entry points, so removing either changes a public contract rather than deleting a
+  redundancy.
+- **`Capsule2DProceduralModel`'s always-taken branch** — `rectHeight` is `Math.Max(0.01f, ...)`, so
+  the three `if (rectHeight > 0)` guards can never be false. Removing them means de-indenting three
+  blocks of mesh-generation code, which is why it was left when the commented-out fragments beside it
+  were deleted (Aug 2026).
 - **DocFX metadata silently fails for four projects, and a clean checkout would notice** — found
   Aug 2026 while auditing the manual. `Stride.CommunityToolkit.DebugShapes`, `.ImGui`, `.ImGuiNet`
   and `.Linux` (plus `.Windows`) reference `Stride.AssetCompiler`, which pulls SSH.NET 2023.0.1 and
@@ -241,8 +240,6 @@ Only toolkit-level work lives here; game-specific features and decisions are tra
   toolkit first, where nothing needs review, score it against the current approach with the harness,
   then a follow-up PR. Stride's own `CharacterMotionConstraint` is a complete worked template, and
   `Solver.Register<T>()` is public, so no engine change is needed.
-- **`related:` on `Example01_Basic3DScene_VBasic`** — the last of the 59 examples without one. The
-  rest of the cross-linking sweep is done.
 - **Keep `examples/code-only/_TempMemProbe`** — the memory measurement rig, and no longer a deletion
   candidate. It is the only thing that can say whether the constraint work above is actually an
   improvement, and it stays useful for any future allocation question.
