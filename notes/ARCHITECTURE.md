@@ -4,8 +4,8 @@ A running list of API-design observations for the Stride Community Toolkit: plac
 the API, rather than a bug in it, is what trips people up.
 
 This is a **backlog of observations, not a decision record.** Nothing here is agreed or scheduled.
-Items get added when something is noticed in passing — usually while writing an example, which is
-where API friction shows up first — and removed when they are resolved or rejected.
+Items get added when something is noticed in passing - usually while writing an example, which is
+where API friction shows up first - and removed when they are resolved or rejected.
 
 The toolkit is in Preview, so breaking changes are on the table where they buy a cleaner long-term
 API. Each item below states the impact if changed.
@@ -29,7 +29,7 @@ game.Create3DPrimitive(PrimitiveModelType.Sphere, new() { Size = new Vector3(1f)
 
 **Impact.** Silent and visual-only. Passing a diameter to a sphere produces a model at twice the
 intended size with no error. It is worst when a collider is supplied by hand, because the mesh and
-collider then disagree and objects appear to pass through one another — encountered while writing
+collider then disagree and objects appear to pass through one another - encountered while writing
 `Example15_Constraint_Rope`.
 
 The generated mesh and generated collider *do* read the value identically, so the toolkit is
@@ -45,7 +45,7 @@ reason.
 | Godot 4 | `BoxShape3D.size` (full) | `SphereShape3D.radius` | `radius` + `height` |
 | Unreal | `UBoxComponent::BoxExtent` (**half**) | `USphereComponent::SphereRadius` | `CapsuleRadius` + `CapsuleHalfHeight` |
 
-Two things worth copying. First, **the name carries the semantics** — Unreal says `Extent` and
+Two things worth copying. First, **the name carries the semantics** - Unreal says `Extent` and
 `HalfHeight` precisely because they are halves. Second, Godot 3 called the box field `extents` and
 meant half-extents; Godot 4 renamed it to `size` meaning full extents, a deliberate breaking change
 to remove this ambiguity. That is the same choice facing this API.
@@ -55,12 +55,12 @@ sources in this repository.)*
 
 **Options.**
 
-1. **Document only** — done for now: the XML docs on `Size` list every primitive's convention.
+1. **Document only** - done for now: the XML docs on `Size` list every primitive's convention.
    Zero impact, but the trap remains.
 2. **Normalise to bounding-box semantics.** `Size` always means the axis-aligned box the shape fits
    in, so a sphere of `Size = (1,1,1)` is one unit across. Intuitive and matches Unity's unit
    primitives. Breaking: every call site passing a radius silently halves. Loud but mechanical.
-3. **Per-primitive option types** — `SphereOptions { Radius }`, `CubeOptions { Size }`. Impossible to
+3. **Per-primitive option types** - `SphereOptions { Radius }`, `CubeOptions { Size }`. Impossible to
    misread, but multiplies the options surface and complicates the generic
    `Create3DPrimitive(type, options)` entry point.
 4. **Make the primitive itself a closed set that carries its own dimensions.** Replace the
@@ -84,7 +84,7 @@ sources in this repository.)*
    item 6: the mesh and collider switches both match over the same closed set, so a shape added to
    one and not the other is caught at the switch rather than by a test.
 
-   Works on C# 14 / net10.0 today. Breaking, and broad — `PrimitiveModelType` appears across nearly
+   Works on C# 14 / net10.0 today. Breaking, and broad - `PrimitiveModelType` appears across nearly
    every example.
 
    **C# 15 union types would be the same design, stated more directly**, and would add compiler-
@@ -136,7 +136,7 @@ Both are breaking, both are mechanical.
 
 **Observation.** Mass lives on the collider shape (`ColliderBase.Mass`), not on the body or on the
 options. To set it, a caller must switch off `IncludeCollider` and build the whole
-`CompoundCollider` by hand — which re-exposes item 1, since the hand-built collider must match the
+`CompoundCollider` by hand - which re-exposes item 1, since the hand-built collider must match the
 mesh convention.
 
 **Impact.** Setting one common property costs the entire convenience of the helper.
@@ -150,7 +150,7 @@ shapes. Additive, not breaking.
 ## 5. Fluent return values are inconsistent
 
 **Observation.** The contributor guidance asks extensions to return the modified instance where
-natural, but several do not — `SetupBase3DScene` returns `void`, while `AddSkybox` returns an entity.
+natural, but several do not - `SetupBase3DScene` returns `void`, while `AddSkybox` returns an entity.
 
 **Impact.** Small, but it makes chaining unpredictable, so callers stop trying.
 
@@ -166,7 +166,7 @@ their dimensions from the same `Size` in two separate switch statements
 (`Procedural3DModelBuilder` and `EntityExtensions`). Nothing enforces that they stay in step.
 
 **Impact.** They currently agree. A future primitive added to one switch but not the other, or with a
-different convention, would produce a mesh that does not match its collider — a defect that is
+different convention, would produce a mesh that does not match its collider - a defect that is
 invisible until something falls through the world.
 
 **Options.** A test that, for each primitive type and a fixed `Size`, asserts the model bounds and the
@@ -180,7 +180,7 @@ moves this from a test to a compile-time check.
 ## 7. Deriving a collider requires an entity and a model it never reads
 
 **Observation.** `Get3DColliderShape(type, size)` is private. The only public route to it is
-`AddBepu3DPhysics`, which throws unless the entity already carries a `ModelComponent` — a guard only,
+`AddBepu3DPhysics`, which throws unless the entity already carries a `ModelComponent` - a guard only,
 since it derives the collider from the primitive type and reads nothing out of the mesh.
 
 **Impact.** Combined with the shared-model gap (now agreed work - `TODO.md` §3), sharing a model
@@ -195,7 +195,7 @@ entity.Remove<ModelComponent>();                                       // ...and
 The collider for a shape and a size is a pure function of two values. Nothing about it needs an
 entity, a component, or a mesh.
 
-**Options.** Expose it — `public static ColliderBase ColliderFor(PrimitiveModelType, Vector3?)` —
+**Options.** Expose it - `public static ColliderBase ColliderFor(PrimitiveModelType, Vector3?)` —
 which is additive and also serves callers who want a collider without any of the helper machinery;
 and/or drop the `ModelComponent` guard from `AddBepu3DPhysics`, which is breaking only for code
 relying on the throw.
@@ -206,7 +206,7 @@ relying on the throw.
 
 **Observation.** Drawing an instanced crowd requires, in three different places: an
 `InstancingRenderFeature` in the graphics compositor (`AddInstancingSupport`), a master entity in the
-scene carrying a `ModelComponent` and an `InstancingComponent`, and — for the buffered variant — a
+scene carrying a `ModelComponent` and an `InstancingComponent`, and - for the buffered variant - a
 renderer in the compositor (`AddInstancingBufferUpload`).
 
 **Impact.** Omit the first and nothing is drawn, with no exception, no warning and no log line. The
@@ -230,7 +230,7 @@ leaves the scene, because the component goes with it. `EntityInstancing` and `Bu
 keep their own list and have no such hook.
 
 **Impact.** An entity removed from the scene stays registered, so the master keeps reading its
-transform and drawing it — ghosts of objects that are no longer there. The caller has to remember to
+transform and drawing it - ghosts of objects that are no longer there. The caller has to remember to
 call `Clear()` or remove the instance explicitly, and to do it *before* detaching the entities.
 Encountered while adding runtime shape switching to `Example01_Basic2DScene_StressPile`.
 
@@ -333,7 +333,7 @@ wanted for cases where no overlay is in play.
 
 **Observation.** Two extension methods share the name and differ in what they search:
 
-- `EntityExtensions.GetComponentInChildren<T>(this Entity)` — a recursive depth-first search that
+- `EntityExtensions.GetComponentInChildren<T>(this Entity)` - a recursive depth-first search that
   **checks the entity itself first** (`entity.OfType<T>()`), despite the name and despite the
   toolkit's own `…AndSelf` convention for that.
 - `EntitySearchExtensions.GetComponentInChildren<T>(this Entity, bool includeDisabled = false)` —
@@ -350,18 +350,18 @@ entity.GetComponentInChildren<Foo>(false);  // BFS, children only, enabled only
 ```
 
 Same name, same intent at the call site, different traversal, different scope and different
-filtering — decided by whether a literal `false` was typed. Noticed while auditing the StrideToolkit
+filtering - decided by whether a literal `false` was typed. Noticed while auditing the StrideToolkit
 port (August 2026); the two methods have coexisted since the merge.
 
 **Impact.** Silent. Neither call errors, and in a shallow hierarchy with no disabled components both
-return the same thing, so the divergence only shows up later — usually as "why did it find the
+return the same thing, so the divergence only shows up later - usually as "why did it find the
 component on the parent" or "why did it find a disabled one". The `BFS` suffix also leaks an
 implementation detail into a name whose sibling carries no `DFS`.
 
 **Options.**
 
-1. Rename the `EntityExtensions` method to say what it does — `GetComponentInDescendantsAndSelf<T>()`
-   or similar — and give the `BFS` method its original name back. Breaking, mechanical, and the
+1. Rename the `EntityExtensions` method to say what it does - `GetComponentInDescendantsAndSelf<T>()`
+   or similar - and give the `BFS` method its original name back. Breaking, mechanical, and the
    names then match the `Descendants` / `AndSelf` vocabulary the search class already uses.
 2. Keep the names and make the DFS variant children-only (drop the self check), so at least the
    scope agrees; the traversal-order and `Enabled` differences remain.
