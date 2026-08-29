@@ -1,0 +1,46 @@
+<Project>
+  <!--
+    Overrides Stride's StrideCompileAsset target (Stride.AssetCompiler.targets, 4.4.0-beta5) for the
+    example projects. The body is a verbatim copy; the only change is on the Exec task.
+
+    Why: the asset compiler prints
+        warning 0.543s: [AssetCompiler] Could not find game settings asset at location [GameSettings]. Use a Default One
+    for every code-only project, because code-only projects have no GameSettings asset by design - the
+    defaults are exactly what they want. MSBuild's Exec task parses that line in its canonical
+    "warning <code>:" form, and the "code" is the elapsed time, so NoWarn/MSBuildWarningsAsMessages can
+    never match it. The Exec below therefore stops using the canonical parser and classifies lines by
+    the compiler's own log prefix instead: "error"/"fatal" lines are still MSBuild errors, "warning"
+    lines are still warnings - except this one message. A failing compiler still fails the build through
+    its exit code regardless of any regex.
+
+    This file is imported from Directory.Build.targets only while StrideVersion matches the version the
+    body was copied from. After a Stride bump, diff the StrideCompileAsset target in
+        %USERPROFILE%\.nuget\packages\stride.assetcompiler\<version>\buildTransitive\Stride.AssetCompiler.targets
+    against this file, update it, and move the version guard - until then the override is simply off and
+    the warning comes back, which is the safe failure.
+  -->
+  <Target Name="StrideCompileAsset" Condition="'$(StrideIsExecutable)' == 'true' And '$(StrideCompilerSkipBuild)' != 'true'" AfterTargets="CopyFilesToOutputDirectory" DependsOnTargets="_StrideCollectUpToDateCheckInputDesignTime;_StrideCollectUpToDateCheckOutputDesignTime;_StridePrepareAssetCompiler" Inputs="@(StrideAssetInput)" Outputs="@(StrideAssetOutput)">
+    <PropertyGroup>
+      <StrideCompileAssetCommandProxy>dotnet &quot;$(StrideCompileAssetCommand)&quot; build</StrideCompileAssetCommandProxy>
+
+      <StrideCompileAssetCommandProxy>$(StrideCompileAssetCommandProxy) $(StrideCompileAssetOptions) --disable-auto-compile --project-configuration &quot;$(Configuration)&quot; --platform=$(StridePlatform) --project-configuration=$(Configuration) --compile-property:StrideGraphicsApi=$(StrideHostGraphicsApi) --output-path=&quot;$(StrideCompileAssetOutputPath)&quot; --build-path=&quot;$(StrideCompileAssetBuildPath)&quot; --msbuild-uptodatecheck-filebase=&quot;$(StrideCompileAssetUpToDateCheckFileBase)&quot;</StrideCompileAssetCommandProxy>
+      <!-- Load the session from the .sdbuild manifest chain (positional input). -->
+      <StrideCompileAssetCommandProxy>$(StrideCompileAssetCommandProxy) &quot;$(StrideAssetBuildManifestPath)&quot;</StrideCompileAssetCommandProxy>
+      <StrideCompileAssetCommandProxy Condition="'$(StrideBuildEngineLogVerbose)' != ''">$(StrideCompileAssetCommandProxy) --verbose</StrideCompileAssetCommandProxy>
+      <StrideCompileAssetCommandProxy Condition="'$(StrideBuildEngineLogDebug)' != ''">$(StrideCompileAssetCommandProxy) --debug</StrideCompileAssetCommandProxy>
+    </PropertyGroup>
+
+    <Error Condition="!Exists('$(StrideAssetBuildManifestPath)')"
+           Text="Asset build manifest not found: $(StrideAssetBuildManifestPath). Manifest generation (StrideAssetBuildManifest) must run before asset compilation." />
+
+    <!-- Ensure the output directory exists -->
+    <MakeDir Directories="$(TargetDir)"/>
+
+    <!-- Compile assets. See the comment at the top of this file for the three Exec attributes. -->
+    <Exec WorkingDirectory="$(TargetDir)"
+          Command="$(StrideCompileAssetCommandProxy)"
+          IgnoreStandardErrorWarningFormat="true"
+          CustomErrorRegularExpression="^\s*(error|fatal)\b"
+          CustomWarningRegularExpression="^\s*warning\b(?!.*Could not find game settings asset)" />
+  </Target>
+</Project>

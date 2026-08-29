@@ -1,17 +1,17 @@
 <Project>
-  <!--
+    <!--
     MSBuild imports only the NEAREST Directory.Build.targets. There is no repository-root one today,
     but import it if one is ever added so this file does not silently shadow it.
   -->
-  <PropertyGroup>
-    <!-- Hoisted into a property first: MSBuild's Condition parser cannot handle the nested quotes
+    <PropertyGroup>
+        <!-- Hoisted into a property first: MSBuild's Condition parser cannot handle the nested quotes
          of a property-function call written inline. -->
-    <_ParentDirectoryBuildTargets>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))</_ParentDirectoryBuildTargets>
-  </PropertyGroup>
+        <_ParentDirectoryBuildTargets>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))</_ParentDirectoryBuildTargets>
+    </PropertyGroup>
 
-  <Import Project="$(_ParentDirectoryBuildTargets)" Condition="'$(_ParentDirectoryBuildTargets)' != ''" />
+    <Import Project="$(_ParentDirectoryBuildTargets)" Condition="'$(_ParentDirectoryBuildTargets)' != ''" />
 
-  <!--
+    <!--
     Referenced packages ship ~53 MB of XML documentation per example project (Silk.NET.Direct3D11.xml
     alone is 22 MB). These are never read at runtime, and IntelliSense resolves documentation from the
     package/ref path rather than from bin, so dropping them from the output costs nothing.
@@ -20,9 +20,15 @@
     files sitting beside a directly referenced assembly, whereas these arrive as package assets via
     ReferenceCopyLocalPaths, so they have to be removed from that item group explicitly.
   -->
-  <Target Name="RemovePackageXmlDocsFromOutput" AfterTargets="ResolveReferences">
-    <ItemGroup>
-      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(Extension)' == '.xml'" />
-    </ItemGroup>
-  </Target>
+    <Target Name="RemovePackageXmlDocsFromOutput" AfterTargets="ResolveReferences">
+        <ItemGroup>
+            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(Extension)' == '.xml'" />
+        </ItemGroup>
+    </Target>
+
+    <!--
+    Silences the asset compiler's "Could not find game settings asset" warning, which every code-only
+    project produces by design. Version-guarded: see the comment in the imported file.
+  -->
+    <Import Project="Stride.AssetCompiler.Overrides.targets" Condition="'$(StrideVersion)' == '4.4.0-beta5'" />
 </Project>
