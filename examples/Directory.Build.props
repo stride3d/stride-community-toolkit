@@ -31,6 +31,12 @@
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' AND $([MSBuild]::IsOSPlatform('OSX'))">osx-$(_HostArchitecture)</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <!--
+      The RID above would otherwise make the SDK infer PlatformTarget=x64 and stamp the assemblies AMD64. They
+      contain no native code, and the RID-specific apphost already decides the process architecture, so keep
+      them AnyCPU - this also stops MSB3270 in AnyCPU projects that reference an example (the test project).
+    -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
 
     <!--
       Referenced packages ship ~54 MB of XML documentation per example project. IntelliSense reads
