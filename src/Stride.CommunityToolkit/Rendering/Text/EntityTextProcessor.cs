@@ -1,6 +1,6 @@
 using Stride.Engine;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Keeps track of every <see cref="EntityTextComponent"/> in the scene for the text renderer to draw.

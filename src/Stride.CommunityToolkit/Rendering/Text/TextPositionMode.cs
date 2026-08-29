@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// How an <see cref="EntityTextComponent"/> decides where on the screen to draw.

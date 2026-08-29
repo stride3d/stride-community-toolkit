@@ -15,6 +15,10 @@ Two pieces are involved:
 - **`EntityTextRenderer`** is a scene renderer that draws it. Nothing appears until one is added to
   the graphics compositor.
 
+`EntityTextComponent`, `TextAnchor` and `TextPositionMode` live in the `Stride.CommunityToolkit.Rendering.Text`
+namespace; the renderer is in `Stride.CommunityToolkit.Renderers` and the `AddEntityTextRenderer()`
+extension in `Stride.CommunityToolkit.Engine`.
+
 ```csharp
 game.AddEntityTextRenderer();
 

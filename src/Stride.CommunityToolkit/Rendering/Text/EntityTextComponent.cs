@@ -2,7 +2,7 @@ using Stride.Engine;
 using Stride.Engine.Design;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Draws a line of screen-space text for the entity it is attached to, without using Stride's UI

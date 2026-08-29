@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Which point of a block of text is placed on the position it is drawn at.

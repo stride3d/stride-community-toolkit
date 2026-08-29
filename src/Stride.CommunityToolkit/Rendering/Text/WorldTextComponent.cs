@@ -2,7 +2,7 @@ using Stride.Engine;
 using Stride.Engine.Design;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Draws text that lives in the scene: positioned by the entity's transform, scaled by perspective,

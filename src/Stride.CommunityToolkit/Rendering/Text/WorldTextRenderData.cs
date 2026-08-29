@@ -1,7 +1,7 @@
 using Stride.Engine;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Engine;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Per-component state the world text renderer keeps between frames.

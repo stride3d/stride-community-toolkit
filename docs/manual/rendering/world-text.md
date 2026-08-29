@@ -12,6 +12,10 @@ Two pieces are involved:
 - **`WorldTextComponent`** records what to draw and how.
 - **`WorldTextRenderer`** draws it. Register it once with `game.AddWorldTextRenderer()`.
 
+`WorldTextComponent` and `TextAnchor` live in the `Stride.CommunityToolkit.Rendering.Text` namespace; the
+renderer is in `Stride.CommunityToolkit.Renderers` and the `AddWorldTextRenderer()` extension in
+`Stride.CommunityToolkit.Engine`.
+
 ```csharp
 game.AddWorldTextRenderer();
 
