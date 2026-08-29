@@ -1,12 +1,11 @@
 using Hexa.NET.ImGui;
 using Stride.Core;
-using Stride.Core.Annotations;
 using Stride.Core.Mathematics;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
 using Stride.Rendering;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Hexa.NET.ImGui.ImGui;
@@ -31,19 +30,20 @@ public class ImGuiSystem : GameSystemBase
     private ImGuiPlatformIOPtr _platform;
 
     // dependencies
-    private readonly InputManager? input;
-    private readonly GraphicsDevice? device;
-    private readonly GraphicsDeviceManager? deviceManager;
-    private readonly GraphicsContext? context;
-    private readonly EffectSystem? effectSystem;
-    private CommandList? commandList;
+    private readonly IGame _game;
+    private readonly InputManager input;
+    private readonly GraphicsDevice device;
+    private readonly GraphicsDeviceManager deviceManager;
+    private readonly GraphicsContext context;
+    private readonly EffectSystem effectSystem;
+    private readonly CommandList commandList;
 
     // device objects
-    private PipelineState? imPipeline;
-    private VertexDeclaration? imVertLayout;
+    private PipelineState imPipeline;
+    private VertexDeclaration imVertLayout;
     private VertexBufferBinding vertexBinding;
-    private IndexBufferBinding? indexBinding;
-    private EffectInstance? imShader;
+    private IndexBufferBinding indexBinding;
+    private EffectInstance imShader;
     private readonly Dictionary<ImTextureID, Texture> _managedTextures = new();
 
     private Dictionary<Keys, ImGuiKey> _keys = [];
@@ -68,22 +68,18 @@ public class ImGuiSystem : GameSystemBase
     /// </remarks>
     private bool _frameBegun;
 
-    public ImGuiSystem([NotNull] IServiceRegistry registry, [NotNull] GraphicsDeviceManager graphicsDeviceManager, InputManager? inputManager = null) : base(registry)
+    public ImGuiSystem(IServiceRegistry registry, GraphicsDeviceManager graphicsDeviceManager, InputManager? inputManager = null) : base(registry)
     {
-        input = inputManager ?? Services.GetService<InputManager>();
-        Debug.Assert(input != null, "ImGuiSystem: InputManager must be available!");
+        ArgumentNullException.ThrowIfNull(registry);
+        ArgumentNullException.ThrowIfNull(graphicsDeviceManager);
 
+        _game = Game ?? throw new InvalidOperationException("ImGuiSystem: IGame must be available!");
+        input = inputManager ?? Services.GetService<InputManager>() ?? throw new InvalidOperationException("ImGuiSystem: InputManager must be available!");
         deviceManager = graphicsDeviceManager;
-        Debug.Assert(deviceManager != null, "ImGuiSystem: GraphicsDeviceManager must be available!");
-
-        device = deviceManager.GraphicsDevice;
-        Debug.Assert(device != null, "ImGuiSystem: GraphicsDevice must be available!");
-
-        context = Services.GetService<GraphicsContext>();
-        Debug.Assert(context != null, "ImGuiSystem: GraphicsContext must be available!");
-
-        effectSystem = Services.GetService<EffectSystem>();
-        Debug.Assert(effectSystem != null, "ImGuiSystem: EffectSystem must be available!");
+        device = deviceManager.GraphicsDevice ?? throw new InvalidOperationException("ImGuiSystem: GraphicsDevice must be available!");
+        context = Services.GetService<GraphicsContext>() ?? throw new InvalidOperationException("ImGuiSystem: GraphicsContext must be available!");
+        effectSystem = Services.GetService<EffectSystem>() ?? throw new InvalidOperationException("ImGuiSystem: EffectSystem must be available!");
+        commandList = context.CommandList;
 
         ImGuiContext = CreateContext();
         SetCurrentContext(ImGuiContext);
@@ -108,7 +104,7 @@ public class ImGuiSystem : GameSystemBase
 
         // Include this new instance into our services and systems so that stride fires our functions automatically
         Services.AddService(this);
-        Game.GameSystems.Add(this);
+        _game.GameSystems.Add(this);
     }
 
     protected override void Destroy()
@@ -158,10 +154,10 @@ public class ImGuiSystem : GameSystemBase
     }
 
     [FixedAddressValueType]
-    static SetClipboardDelegate setClipboardFn;
+    static SetClipboardDelegate? setClipboardFn;
 
     [FixedAddressValueType]
-    static GetClipboardDelegate getClipboardFn;
+    static GetClipboardDelegate? getClipboardFn;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     unsafe delegate void SetClipboardDelegate(ImGuiContextPtr ctx, byte* text);
@@ -178,11 +174,9 @@ public class ImGuiSystem : GameSystemBase
         return (byte*)_platform.PlatformClipboardUserData;
     }
 
+    [MemberNotNull(nameof(imShader), nameof(imVertLayout), nameof(imPipeline), nameof(indexBinding))]
     void CreateDeviceObjects()
     {
-        // set up a commandlist
-        commandList = context.CommandList;
-
         // compile de shader
         imShader = new EffectInstance(effectSystem.LoadEffect("ImGuiShader").WaitForResult());
         imShader.UpdateEffect(device);
@@ -229,7 +223,9 @@ public class ImGuiSystem : GameSystemBase
         var indexBufferBinding = new IndexBufferBinding(indexBuffer, is32Bits, 0);
         indexBinding = indexBufferBinding;
 
-        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(device, INITIAL_VERTEX_BUFFER_SIZE * imVertLayout.CalculateSize(), GraphicsResourceUsage.Dynamic);
+        // BufferFlags is passed explicitly: without it, C# picks the generic New<T>(device, ref readonly T value, usage)
+        // overload with T = int (it needs no default argument) and creates a 4-byte buffer holding the size value.
+        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(device, INITIAL_VERTEX_BUFFER_SIZE * imVertLayout.CalculateSize(), GraphicsResourceUsage.Dynamic, BufferFlags.None);
         var vertexBufferBinding = new VertexBufferBinding(vertexBuffer, layout, 0);
         vertexBinding = vertexBufferBinding;
     }
@@ -264,7 +260,7 @@ public class ImGuiSystem : GameSystemBase
             ? PixelFormat.R8G8B8A8_UNorm
             : PixelFormat.R8_UNorm;
         var newTexture = Texture.New2D(device, textureData.Width, textureData.Height, pixelFormat, TextureFlags.ShaderResource);
-        newTexture.SetData(commandList, new DataPointer((nint)textureData.Pixels, textureData.GetSizeInBytes()));
+        newTexture.SetData(commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
 
         // Use high-bit sentinel to distinguish ImGui-managed IDs from ImGuiExtension user-texture IDs (which start from 1)
         var managedId = (ImTextureID)(nint)(0x80000000u | (uint)textureData.UniqueID);
@@ -285,12 +281,12 @@ public class ImGuiSystem : GameSystemBase
             {
                 existing.Dispose();
                 var newTexture = Texture.New2D(device, textureData.Width, textureData.Height, pixelFormat, TextureFlags.ShaderResource);
-                newTexture.SetData(commandList, new DataPointer((nint)textureData.Pixels, textureData.GetSizeInBytes()));
+                newTexture.SetData(commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
                 _managedTextures[texId] = newTexture;
             }
             else
             {
-                existing.SetData(commandList, new DataPointer((nint)textureData.Pixels, textureData.GetSizeInBytes()));
+                existing.SetData(commandList, new ReadOnlySpan<byte>(textureData.Pixels, textureData.GetSizeInBytes()));
             }
         }
         textureData.SetStatus(ImTextureStatus.Ok);
@@ -315,7 +311,7 @@ public class ImGuiSystem : GameSystemBase
             _isFirstFrame = false;
             deltaTime = 1 / 60f;
         }
-        var surfaceSize = Game.Window.ClientBounds;
+        var surfaceSize = _game.Window.ClientBounds;
         _io.DisplaySize = new System.Numerics.Vector2(surfaceSize.Width, surfaceSize.Height);
         _io.DeltaTime = deltaTime;
 
@@ -419,8 +415,8 @@ public class ImGuiSystem : GameSystemBase
         for (int n = 0; n < drawData.CmdListsCount; n++)
         {
             ImDrawListPtr cmdList = drawData.CmdLists[n];
-            vertexBinding.Buffer.SetData(commandList, new DataPointer(cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>()), vtxOffsetBytes);
-            indexBinding.Buffer.SetData(commandList, new DataPointer(cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size * sizeof(ushort)), idxOffsetBytes);
+            vertexBinding.Buffer.SetData(commandList, new ReadOnlySpan<ImDrawVert>(cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size), vtxOffsetBytes);
+            indexBinding.Buffer.SetData(commandList, new ReadOnlySpan<ushort>(cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size), idxOffsetBytes);
             vtxOffsetBytes += cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
             idxOffsetBytes += cmdList.IdxBuffer.Size * sizeof(ushort);
         }
@@ -429,7 +425,7 @@ public class ImGuiSystem : GameSystemBase
     void RenderDrawLists(ImDrawDataPtr drawData)
     {
         // view proj
-        var surfaceSize = Game.Window.ClientBounds;
+        var surfaceSize = _game.Window.ClientBounds;
         var projMatrix = Matrix.OrthoRH(surfaceSize.Width, -surfaceSize.Height, -1, 1);
 
         CheckBuffers(drawData); // potentially resize buffers first if needed

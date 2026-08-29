@@ -1,5 +1,6 @@
 using Hexa.NET.ImGui;
 using Stride.Graphics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using static Hexa.NET.ImGui.ImGui;
@@ -32,7 +33,7 @@ public class ImGuiExtension
     /// <param name="key"></param>
     /// <param name="texture"></param>
     /// <returns></returns>
-    internal static bool TryGetTexture(ulong key, out Texture texture)
+    internal static bool TryGetTexture(ulong key, [NotNullWhen(true)] out Texture? texture)
     {
         int index = (int)key - 1;
         if (index >= 0 && index < _textureRegistry.Count)
@@ -45,8 +46,7 @@ public class ImGuiExtension
     }
 
     /// <summary>
-    /// Clears the dictionaries that contain the mappings between textures and their reference ids:
-    /// <see cref="_textureRegistry"/> <see cref="_pointerRegistry"/>
+    /// Clears the <see cref="_textureRegistry"/> that maps textures to their reference ids.
     /// </summary>
     internal static void ClearTextures()
     {

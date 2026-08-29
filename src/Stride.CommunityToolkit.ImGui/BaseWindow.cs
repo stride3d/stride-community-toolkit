@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.ImGui;
 /// </summary>
 public abstract class BaseWindow : GameSystem
 {
-    public float Scale => _imGui.Scale;
+    public float Scale => _imGui?.Scale ?? 1f;
 
     private static Dictionary<string, uint> _windowId = new Dictionary<string, uint>();
 

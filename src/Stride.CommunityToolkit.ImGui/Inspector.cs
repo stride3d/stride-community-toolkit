@@ -33,7 +33,7 @@ public class Inspector : BaseWindow
     /// <summary> Opened sub object of the inspected object in the tree view </summary>
     HashSet<int> _openedId = new HashSet<int>();
     /// <summary> Lets not keep references from being GCed </summary>
-    WeakReference<object> _target = new WeakReference<object>(null);
+    WeakReference<object?> _target = new(null);
 
 
     // Settings
@@ -62,19 +62,11 @@ public class Inspector : BaseWindow
     Filter _memberFilter = Filter.Public | Filter.Inherited | Filter.Properties | Filter.Fields | Filter.Instance;
 
     /// <summary> The object to inspect </summary>
-    public object Target
+    public object? Target
     {
-        get
-        {
-            if (_target.TryGetTarget(out object target))
-                return target;
-            return null;
-        }
+        get => _target.TryGetTarget(out var target) ? target : null;
         set
         {
-            if (_target == value)
-                return;
-
             _target.SetTarget(value);
             _openedId.Clear();
         }
@@ -82,8 +74,8 @@ public class Inspector : BaseWindow
 
 
     // Cache to handle dictionary add() commands
-    WeakReference<object> _dicAddCommandTarget = new WeakReference<object>(null);
-    (object key, object value) _dicAddCommandData;
+    WeakReference<object?> _dicAddCommandTarget = new(null);
+    (object? key, object? value) _dicAddCommandData;
 
     public Inspector(IServiceRegistry services) : base(services)
     {
@@ -140,8 +132,8 @@ public class Inspector : BaseWindow
 
         using (Child())
         {
-            if (Target != null)
-                DrawMembers(Target, Target.GetType().GetHashCode());
+            if (Target is { } target)
+                DrawMembers(target, target.GetType().GetHashCode());
         }
     }
 
@@ -158,7 +150,7 @@ public class Inspector : BaseWindow
         {
             foreach (var member in members)
             {
-                object value;
+                object? value;
                 bool readOnly;
                 { // Get value
                     try
@@ -188,7 +180,7 @@ public class Inspector : BaseWindow
                     }
                 }
 
-                if (XMLDocumentation.TryGetSummary(member, out string summary))
+                if (XMLDocumentation.TryGetSummary(member, out var summary))
                 {
                     SetCursorPosX(-0.5f);
                     Button("?");
@@ -226,7 +218,7 @@ public class Inspector : BaseWindow
         return hasChanged && target.GetType().IsValueType;
     }
 
-    bool DrawValue(string constantName, ref object value, bool readOnly, int hashcodeSource)
+    bool DrawValue(string constantName, ref object? value, bool readOnly, int hashcodeSource)
     {
         // Deterministic way to provide a hashcode in a hierarchic/recursive manner
         // The hashcode created here, properly create one specific code for this object at this place in the hierarchy
@@ -252,7 +244,10 @@ public class Inspector : BaseWindow
             bool valueChanged = false;
             if (ValueDrawingHandlers.TryGetValue(type, out var handler))
             {
-                valueChanged = handler(constantName, ref value);
+                // The public handler contract takes a non-null value; it is only reached past the null check above
+                object handled = value;
+                valueChanged = handler(constantName, ref handled);
+                value = handled;
                 return valueChanged;
             }
 
@@ -312,7 +307,7 @@ public class Inspector : BaseWindow
                 if (typeData.asEnum != null)
                 {
                     (bool flags, Array values) = typeData.asEnum.Value;
-                    using (UCombo("", value.ToString(), out bool open))
+                    using (UCombo("", value.ToString() ?? string.Empty, out bool open))
                     {
                         if (open)
                         {
@@ -372,9 +367,9 @@ RECURSE:
             int index = 0;
             try
             {
-                foreach (object o in ienum)
+                foreach (object? o in ienum)
                 {
-                    object o2 = o;
+                    object? o2 = o;
                     using (UIndent())
                         DrawValue("-", ref o2, true, (hashcodeSource, index).GetHashCode());
                     index++;
@@ -382,7 +377,7 @@ RECURSE:
             }
             catch (Exception e)
             {
-                var str = (object)$"x Exception: {e.Message}";
+                object? str = $"x Exception: {e.Message}";
                 using (UIndent())
                     DrawValue("-", ref str, true, (hashcodeSource, index).GetHashCode());
             }
@@ -411,11 +406,11 @@ RECURSE:
                     return false;
 
                 bool removeKey = false;
-                object keyToRemove = null;
+                object? keyToRemove = null;
 
                 bool changeKey = false;
-                object keyToChange = null;
-                object valueOfKeyToChange = null;
+                object? keyToChange = null;
+                object? valueOfKeyToChange = null;
 
                 int index = 0;
                 while (keys.MoveNext() && values.MoveNext())
@@ -455,14 +450,14 @@ RECURSE:
                     // IDictionary[ keyToChange ] = valueOfKeyToChange
                     var parameters = new[] { keyToChange, valueOfKeyToChange };
                     target.GetType().GetProperty("Item", data.value, new[] { data.key })?
-                        .SetMethod.Invoke(target, parameters);
+                        .SetMethod?.Invoke(target, parameters);
                 }
             }
 
             // Show upcoming key and value
             if (_dicAddCommandTarget.TryGetTarget(out var addActionTarget) && addActionTarget == target)
             {
-                (object key, object value) = _dicAddCommandData;
+                (object? key, object? value) = _dicAddCommandData;
                 DrawValue("Upcoming Key:", ref key, false, hashcodeSource);
                 DrawValue("Upcoming Value:", ref value, false, hashcodeSource);
                 _dicAddCommandData = (key, value);
@@ -507,10 +502,10 @@ RECURSE:
             int i = 0;
             int? indexToRemove = null;
             int? indexToChange = null;
-            object objectToAssign = null;
-            foreach (object o in target as IEnumerable)
+            object? objectToAssign = null;
+            foreach (object? o in (IEnumerable)target)
             {
-                object o2 = o;
+                object? o2 = o;
                 using (ID($"{o}{i.ToString()}"))
                 {
                     SetCursorPosX(GetCursorPosX() - DUMMY_WIDTH);
@@ -530,7 +525,7 @@ RECURSE:
             // Calling 'this[int indexToChange] = objectToAssign'
             if (indexToChange != null)
             {
-                MethodInfo listAccessor;
+                MethodInfo? listAccessor;
                 if (target.GetType().IsArray)
                 {
                     listAccessor = target.GetType().GetMethod("SetValue", new[] { typeof(object), typeof(int) });
@@ -564,8 +559,7 @@ RECURSE:
 
     TypeCache GetTypeData(Type t)
     {
-        TypeCache output;
-        if (_cachedTypeData.TryGetValue(t, out output))
+        if (_cachedTypeData.TryGetValue(t, out var output))
             return output;
 
         output = new TypeCache(t, MemberFilter);
@@ -643,8 +637,8 @@ RECURSE:
     class TypeCache
     {
         public readonly MemberInfo[] FilteredMembers;
-        public readonly (Type key, Type value, MethodInfo getKey, MethodInfo getValue)? AsDictionary;
-        public readonly Type AsList;
+        public readonly (Type key, Type value, MethodInfo? getKey, MethodInfo? getValue)? AsDictionary;
+        public readonly Type? AsList;
         public readonly (bool flags, Array values)? asEnum;
         readonly Type _type;
         readonly Filter _filter;
@@ -683,15 +677,15 @@ RECURSE:
             }
         }
 
-        static Type[] GetGenericsFromBaseType(Type impl, Type type)
+        static Type[]? GetGenericsFromBaseType(Type impl, Type type)
         {
-            Type t = impl.GetInterfaces()
+            Type? t = impl.GetInterfaces()
                 .Where(i => i.IsGenericType)
                 .FirstOrDefault(i => i.GetGenericTypeDefinition() == type);
             return t?.GenericTypeArguments;
         }
 
-        public object NewObject()
+        public object? NewObject()
         {
             if (_type == typeof(string))
                 return string.Empty;
@@ -778,14 +772,12 @@ RECURSE:
             {
                 yield return member;
             }
-            while (t != null)
+            for (Type? current = t; current != null; current = current.BaseType)
             {
-                foreach (MemberInfo member in t.GetMembers(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
+                foreach (MemberInfo member in current.GetMembers(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly))
                 {
                     yield return member;
                 }
-
-                t = t.BaseType;
             }
         }
     }

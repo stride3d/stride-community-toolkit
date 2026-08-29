@@ -27,10 +27,10 @@ public class PerfMonitor : BaseWindow
     /// Circumvent <see cref="_cpuSamples"/> dictionary access access but
     /// only works for <see cref="_threadStaticMonitor"/>
     /// </summary>
-    [System.ThreadStatic] static ThreadSampleCollection _threadStaticCollection;
+    [System.ThreadStatic] static ThreadSampleCollection? _threadStaticCollection;
 
     /// <summary> Owner of <see cref="_threadStaticCollection"/> </summary>
-    static PerfMonitor _threadStaticMonitor;
+    static PerfMonitor? _threadStaticMonitor;
 
     static readonly ProfilingEventType[] PROFILING_EVENT_TYPES = (ProfilingEventType[])System.Enum.GetValues(typeof(ProfilingEventType));
     static readonly ProfilingKey _dummyKey = new("dummy");
@@ -42,7 +42,7 @@ public class PerfMonitor : BaseWindow
 
     // Stride-specific data
     readonly List<EventWrapper> _sorter = [];
-    CancellationTokenSource _stopProfiling;
+    CancellationTokenSource? _stopProfiling;
     (List<SampleInstance> samples, TimeSpan start, double duration, int depth) _gpu = ([], default, default, default), _stride = ([], default, default, default);
 
     GraphPoint _graphAggregated;
@@ -52,7 +52,7 @@ public class PerfMonitor : BaseWindow
     Vector2? _windowSize = new Vector2(420f, 240f);
     PerfSampler? _frame;
 
-    PerfMonitorAutoSampler _autoSampler;
+    PerfMonitorAutoSampler? _autoSampler;
     PerfSampler _update, _draw;
 
     /// <summary>
@@ -281,7 +281,7 @@ public class PerfMonitor : BaseWindow
                 {
                     if (profiling)
                     {
-                        _stopProfiling.Cancel();
+                        _stopProfiling?.Cancel();
                         Profiler.DisableAll();
                     }
                     else
@@ -492,7 +492,7 @@ public class PerfMonitor : BaseWindow
 
     private static string Ts<T>(T val)
     {
-        return val.ToString();
+        return val?.ToString() ?? string.Empty;
     }
 
     private static bool IsStrideProfilingAll()
@@ -505,7 +505,7 @@ public class PerfMonitor : BaseWindow
     /// <summary> Guarantees that this key exist and returns at least a default new() value </summary>
     static TValue Guaranteed<TKey, TValue>(IDictionary<TKey, TValue> dictionary, TKey key) where TValue : new()
     {
-        if (dictionary.TryGetValue(key, out TValue value) == false)
+        if (dictionary.TryGetValue(key, out var value) == false)
         {
             value = new TValue();
             dictionary.Add(key, value);
@@ -697,15 +697,6 @@ public class PerfMonitor : BaseWindow
         public readonly TimeSpan Start = start;
         public readonly double Duration = duration;
         public readonly long? DeltaMemAlloc = deltaMemAlloc;
-    }
-
-    /// <summary> Object to hold Stride's profiler samples until they are marked as done </summary>
-    struct TemporaryStrideSample
-    {
-        public ProfilingEventType Type;
-        public TimeSpan? Start;
-        public TimeSpan? Duration;
-        public int Depth;
     }
 
     /// <summary>

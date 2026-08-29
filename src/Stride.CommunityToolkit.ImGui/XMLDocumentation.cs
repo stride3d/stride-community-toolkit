@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml;
 using WebUtility = System.Net.WebUtility;
@@ -10,20 +11,16 @@ namespace Stride.CommunityToolkit.ImGui;
 /// </summary>
 public static class XMLDocumentation
 {
-    static ConcurrentDictionary<Assembly, XmlDocument> _documents = new ConcurrentDictionary<Assembly, XmlDocument>();
-    static ConcurrentDictionary<MemberInfo, CachedDocumentation> _documentation = new ConcurrentDictionary<MemberInfo, CachedDocumentation>();
+    static readonly ConcurrentDictionary<Assembly, XmlDocument?> _documents = new();
+    static readonly ConcurrentDictionary<MemberInfo, CachedDocumentation?> _documentation = new();
 
-    static bool TryGetDocumentation(MemberInfo member, out CachedDocumentation documentation)
+    static bool TryGetDocumentation(MemberInfo member, [NotNullWhen(true)] out CachedDocumentation? documentation)
     {
         if (_documentation.TryGetValue(member, out documentation) == false)
         {
-            Assembly assembly;
-            if (member is Type t)
-                assembly = t.Assembly;
-            else
-                assembly = member.DeclaringType.Assembly;
+            var assembly = member.Module.Assembly;
 
-            if (_documents.TryGetValue(assembly, out XmlDocument document) == false)
+            if (_documents.TryGetValue(assembly, out XmlDocument? document) == false)
             {
                 var filepath = assembly.Location;
 
@@ -32,7 +29,7 @@ public static class XMLDocumentation
                 {
                     filepath = filepath.Substring(LOCAL_PREFIX.Length);
                     filepath = Path.ChangeExtension(filepath, ".xml");
-                    TextReader streamReader;
+                    TextReader? streamReader;
                     try
                     {
                         streamReader = new StreamReader(filepath);
@@ -79,7 +76,7 @@ public static class XMLDocumentation
                         if (parameters.Length > 0)
                             parameters = $"({parameters})";
 
-                        fullName = $"M:{methodInfo.DeclaringType.FullName}.{methodInfo.Name}{parameters}";
+                        fullName = $"M:{methodInfo.DeclaringType?.FullName}.{methodInfo.Name}{parameters}";
                         break;
                     case Type type:
                         fullName = $"T:{type.FullName}";
@@ -102,9 +99,9 @@ public static class XMLDocumentation
     }
 
     /// <summary> Returns false if the documentation file wasn't found </summary>
-    public static bool TryGetDocumentation(MemberInfo member, out XmlElement elementOut)
+    public static bool TryGetDocumentation(MemberInfo member, [NotNullWhen(true)] out XmlElement? elementOut)
     {
-        if (TryGetDocumentation(member, out CachedDocumentation docu))
+        if (TryGetDocumentation(member, out CachedDocumentation? docu))
         {
             elementOut = docu.Element;
             return true;
@@ -115,9 +112,9 @@ public static class XMLDocumentation
     }
 
     /// <summary> Returns false if the documentation file wasn't found </summary>
-    public static bool TryGetSummary(MemberInfo member, out string summary)
+    public static bool TryGetSummary(MemberInfo member, [NotNullWhen(true)] out string? summary)
     {
-        if (TryGetDocumentation(member, out CachedDocumentation doc))
+        if (TryGetDocumentation(member, out CachedDocumentation? doc))
         {
             summary = doc.CleanSummary;
             return true;
@@ -137,14 +134,14 @@ public static class XMLDocumentation
             {
                 lock (_lock)
                 {
-                    return _cleanSummary ?? (_cleanSummary = GetCleanSummary());
+                    return _cleanSummary ??= GetCleanSummary();
                 }
             }
         }
 
-        string _cleanSummary;
+        string? _cleanSummary;
 
-        object _lock = new object();
+        readonly object _lock = new();
 
         public CachedDocumentation(XmlElement elem)
         {
@@ -153,7 +150,7 @@ public static class XMLDocumentation
 
         string GetCleanSummary()
         {
-            string rawString = Element?.SelectSingleNode("summary")?.InnerXml;
+            string? rawString = Element.SelectSingleNode("summary")?.InnerXml;
             if (rawString is null)
                 return "";
 
