@@ -1,5 +1,10 @@
+using Stride.CommunityToolkit.Renderers;
+using Stride.CommunityToolkit.Rendering.Text;
+using Stride.Core.Diagnostics;
+using Stride.Core.Serialization.Contents;
 using Stride.Games;
 using Stride.Graphics;
+using Stride.Graphics.Font;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Scripts.Utilities;
@@ -40,14 +45,86 @@ public sealed class DebugOverlay : GameSystemBase
 {
     private readonly List<DebugOverlaySection> _sections = [];
 
-    private Profiling.DebugTextSystem? _debugText;
+    private static readonly Logger Log = GlobalLogger.GetLogger(nameof(DebugOverlay));
+
+    private SpriteBatch? _spriteBatch;
+    private SpriteFont? _defaultFont;
+    private SpriteFont? _systemFont;
+    private string? _systemFontKey;
+    private bool _systemFontFailed;
+    private Texture? _background;
     private InputManager? _input;
     private IGraphicsDeviceService? _graphicsDeviceService;
 
     /// <summary>
+    /// Gets or sets a font to draw with, overriding <see cref="FontName"/>. <see langword="null"/>, the default,
+    /// uses the system font named by <see cref="FontName"/>.
+    /// </summary>
+    public SpriteFont? Font { get; set; }
+
+    /// <summary>
+    /// Gets or sets the family name of the installed font to draw with. Defaults to <c>"Arial"</c>, which
+    /// is also tried as Liberation Sans and DejaVu Sans on systems without it. <see langword="null"/>, or a
+    /// font that cannot be found, falls back to Stride's default font - which is bold.
+    /// </summary>
+    /// <remarks>
+    /// The font file is located in the system font folders and rasterised at the size asked for, so it
+    /// stays sharp at any <see cref="FontSize"/> and <see cref="Scale"/>. Set <see cref="FontFile"/> to
+    /// point at a specific file instead of searching.
+    /// </remarks>
+    public string? FontName { get; set; } = "Arial";
+
+    /// <summary>
+    /// Gets or sets the weight and slant of <see cref="FontName"/>. Defaults to <see cref="FontStyle.Regular"/>.
+    /// </summary>
+    public FontStyle FontStyle { get; set; } = FontStyle.Regular;
+
+    /// <summary>
+    /// Gets or sets the path of the TrueType file for <see cref="FontName"/>, for fonts that are not in the
+    /// system font folders. <see langword="null"/>, the default, searches those folders.
+    /// </summary>
+    public string? FontFile { get; set; }
+
+    /// <summary>
+    /// Gets or sets the text height in unscaled pixels. Defaults to 16, the size of Stride's debug text.
+    /// </summary>
+    public float FontSize { get; set; } = 14f;
+
+    /// <summary>
+    /// Gets or sets the colour of the strip drawn behind each line of text, exactly as wide as the text.
+    /// Defaults to black at 49% alpha, which is the look Stride's own debug text has;
+    /// <see cref="Color.Transparent"/> draws no strips.
+    /// </summary>
+    public Color BackgroundColor { get; set; } = new(0, 0, 0, 125);
+
+    /// <summary>
+    /// Gets or sets how far each background strip extends beyond its text, in unscaled pixels. Defaults to 3 by 1.
+    /// </summary>
+    public Vector2 BackgroundPadding { get; set; } = new(3f, 1f);
+
+    /// <summary>
+    /// Gets or sets how much the whole overlay is enlarged: text, line spacing, margins and padding.
+    /// <c>1</c> is the size of Stride's debug text, which is small on a high-DPI display; <c>2</c> doubles
+    /// everything. Any positive value works, since the font is rasterised at the resulting size rather than
+    /// stretched. Values below a small minimum are treated as that minimum.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="FontSize"/>, <see cref="LineHeight"/>, <see cref="Margin"/>, <see cref="CustomPosition"/> and
+    /// <see cref="BackgroundPadding"/> are in unscaled pixels and are multiplied by this, so the block keeps
+    /// its corner and its layout at any scale.
+    /// </remarks>
+    public float Scale { get; set; } = 1f;
+
+    /// <summary>
+    /// Gets or sets the colour of lines that do not specify one. Defaults to <see cref="Color.LightGreen"/>,
+    /// the same as Stride's own debug text.
+    /// </summary>
+    public Color DefaultTextColor { get; set; } = Color.LightGreen;
+
+    /// <summary>
     /// Initializes a new overlay. Prefer <see cref="GetOrCreate(IGame)"/>, which shares one instance.
     /// </summary>
-    /// <param name="registry">The service registry to resolve the debug text system and input from.</param>
+    /// <param name="registry">The service registry to resolve input and the graphics device from.</param>
     public DebugOverlay(IServiceRegistry registry) : base(registry)
     {
         Enabled = true;
@@ -85,12 +162,23 @@ public sealed class DebugOverlay : GameSystemBase
     /// </remarks>
     public Keys RepositionKey { get; set; } = Keys.F3;
 
-    /// <summary>Gets or sets the vertical distance between lines, in pixels.</summary>
-    public int LineHeight { get; set; } = 20;
+    /// <summary>
+    /// Gets or sets a fixed vertical distance between lines, in unscaled pixels. <see langword="null"/>, the
+    /// default, derives it from the font: the text height plus the background padding plus
+    /// <see cref="LineSpacing"/>, so lines neither overlap nor drift apart when <see cref="FontSize"/> changes.
+    /// </summary>
+    public int? LineHeight { get; set; }
+
+    /// <summary>
+    /// Gets or sets the gap between one line's background strip and the next, in unscaled pixels, when
+    /// <see cref="LineHeight"/> is not set. Defaults to 2; <c>0</c> makes the strips touch.
+    /// </summary>
+    public float LineSpacing { get; set; } = 2f;
 
     /// <summary>
     /// Gets or sets the assumed width of one character, in pixels, used to right-align the overlay.
     /// </summary>
+    [Obsolete("Text is measured with the font since the overlay draws with a SpriteFont; this value is no longer used.")]
     public int CharacterWidth { get; set; } = 8;
 
     /// <summary>Gets or sets the gap kept between the overlay and the edge of the screen, in pixels.</summary>
@@ -225,23 +313,274 @@ public sealed class DebugOverlay : GameSystemBase
     {
         if (Position == DisplayPosition.None || _sections.Count == 0) return;
 
-        _debugText ??= Services.GetService<Profiling.DebugTextSystem>();
+        var graphicsContext = Game?.GraphicsContext;
+        var backBuffer = Game?.GraphicsDevice?.Presenter?.BackBuffer;
+        var content = Content;
 
-        if (_debugText is null) return;
+        if (graphicsContext is null || backBuffer is null || content is null) return;
 
         var lines = CollectLines();
 
         if (lines.Count == 0) return;
 
-        var origin = GetOrigin(lines);
+        var device = graphicsContext.CommandList.GraphicsDevice;
+
+        // Stride's DebugTextSystem draws an 8 by 16 pixel bitmap font at a fixed size with a grey strip
+        // baked into every glyph. Drawing with a real font through the sprite batch instead is what makes
+        // Scale, FontSize and BackgroundColor possible, and keeps the text sharp at any size.
+        var font = ResolveFont(content);
+        _spriteBatch ??= new SpriteBatch(device);
+        _background ??= ScreenTextDrawer.CreateBackgroundTexture(device);
+
+        var scale = EffectiveScale;
+        var fontSize = FontSize * scale;
+
+        // Measured rather than declared, so a section appearing or a dropdown expanding keeps the block
+        // anchored to its corner instead of running off the edge
+        var sizes = new Vector2[lines.Count];
+        var blockWidth = 0f;
+
+        for (var i = 0; i < lines.Count; i++)
+        {
+            if (lines[i].Text.Length == 0) continue;
+
+            sizes[i] = font.MeasureString(lines[i].Text, fontSize);
+            blockWidth = Math.Max(blockWidth, sizes[i].X);
+        }
+
+        var padding = BackgroundPadding * scale;
+
+        // Line pitch in screen pixels: fixed if asked for, otherwise what the font and strips need
+        var textHeight = 0f;
+
+        for (var i = 0; i < lines.Count; i++)
+            textHeight = Math.Max(textHeight, sizes[i].Y);
+
+        var linePitch = LineHeight is { } fixedHeight
+            ? fixedHeight * scale
+            : textHeight + padding.Y * 2f + LineSpacing * scale;
+
+        var origin = GetOrigin(lines.Count * linePitch / scale, blockWidth / scale);
+        var backgroundColor = BackgroundColor.ToColor4();
+        var drawBackground = BackgroundColor.A > 0;
+
+        graphicsContext.CommandList.SetRenderTargetAndViewport(null, backBuffer);
+
+        _spriteBatch.Begin(graphicsContext,
+            sortMode: SpriteSortMode.Deferred,
+            blendState: BlendStates.AlphaBlend,
+            samplerState: null,
+            depthStencilState: DepthStencilStates.None);
+
         var y = origin.Y;
 
-        foreach (var line in lines)
+        for (var i = 0; i < lines.Count; i++)
         {
-            // Blank entries exist to space sections apart; printing them would be wasted work
-            if (line.Text.Length > 0) _debugText.Print(line.Text, new Int2(origin.X, y), line.Color);
+            var line = lines[i];
+
+            // Blank entries exist to space sections apart; drawing them would be wasted work
+            if (line.Text.Length > 0)
+            {
+                var style = new ScreenTextStyle
+                {
+                    Font = font,
+                    FontSize = fontSize,
+                    Color = line.Color ?? DefaultTextColor,
+                    Anchor = TextAnchor.TopLeft,
+                    Scale = 1f,
+                    Opacity = 1f,
+                    EnableBackground = drawBackground,
+                    BackgroundColor = backgroundColor,
+                    Padding = padding,
+                };
+
+                ScreenTextDrawer.Draw(_spriteBatch, _background, line.Text, new Vector2(origin.X * scale, y * scale), sizes[i], style);
+            }
 
             y += LineHeight;
+        }
+
+        _spriteBatch.End();
+    }
+
+    /// <inheritdoc />
+    protected override void Destroy()
+    {
+        _spriteBatch?.Dispose();
+        _spriteBatch = null;
+        _background?.Dispose();
+        _background = null;
+        _systemFont?.Dispose();
+        _systemFont = null;
+
+        base.Destroy();
+    }
+
+    /// <summary><see cref="Scale"/> with nonsense values clamped away.</summary>
+    private float EffectiveScale => Math.Max(0.25f, Scale);
+
+    /// <summary>
+    /// <see cref="Font"/> if set; otherwise the system font named by <see cref="FontName"/>, registered with
+    /// Stride's font system from its file the first time it is needed; otherwise Stride's default font.
+    /// </summary>
+    private SpriteFont ResolveFont(IContentManager content)
+    {
+        if (Font != null) return Font;
+
+        var key = FontName is null ? null : $"{FontName}|{FontStyle}|{FontFile}";
+
+        if (key != _systemFontKey)
+        {
+            _systemFont?.Dispose();
+            _systemFont = null;
+            _systemFontKey = key;
+            _systemFontFailed = false;
+        }
+
+        if (key != null && _systemFont is null && !_systemFontFailed)
+        {
+            _systemFont = TryLoadSystemFont(FontName!, FontStyle, FontFile);
+            _systemFontFailed = _systemFont is null;
+        }
+
+        return _systemFont ?? (_defaultFont ??= content.Load<SpriteFont>(RendererDefaults.DefaultFontPath));
+    }
+
+    private SpriteFont? TryLoadSystemFont(string fontName, FontStyle style, string? fontFile)
+    {
+        var fontSystem = Services.GetService<FontSystem>();
+
+        if (fontSystem is null)
+        {
+            Log.Warning($"No FontSystem service; drawing with Stride's default font instead of '{fontName}'.");
+            return null;
+        }
+
+        try
+        {
+            var runtimeFonts = fontSystem.RuntimeFonts;
+
+            if (!runtimeFonts.IsRegistered(fontName, style))
+            {
+                var path = fontFile ?? FindSystemFontFile(fontName, style);
+
+                if (path is null)
+                {
+                    Log.Warning($"Font '{fontName}' ({style}) was not found in the system font folders; drawing with Stride's default font instead.");
+                    return null;
+                }
+
+                runtimeFonts.RegisterFont(fontName, path, style);
+            }
+
+            return fontSystem.LoadRuntimeFont(fontName, FontSize, style);
+        }
+        catch (Exception exception)
+        {
+            Log.Warning($"Font '{fontName}' ({style}) could not be loaded; drawing with Stride's default font instead. {exception.Message}");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Looks for the TrueType file of a font family in the operating system's font folders, trying the
+    /// common file-naming conventions and the metric-compatible families Stride itself falls back to.
+    /// </summary>
+    private static string? FindSystemFontFile(string fontName, FontStyle style)
+    {
+        var directories = SystemFontDirectories().Where(Directory.Exists).ToList();
+
+        if (directories.Count == 0) return null;
+
+        foreach (var family in FamilyCandidates(fontName))
+        {
+            var wanted = new HashSet<string>(FileNameCandidates(family, style), StringComparer.OrdinalIgnoreCase);
+
+            foreach (var directory in directories)
+            {
+                IEnumerable<string> files;
+
+                try
+                {
+                    files = Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                foreach (var file in files)
+                {
+                    var extension = Path.GetExtension(file);
+
+                    if (!extension.Equals(".ttf", StringComparison.OrdinalIgnoreCase) && !extension.Equals(".otf", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    if (wanted.Contains(Path.GetFileNameWithoutExtension(file)))
+                        return file;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<string> SystemFontDirectories()
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts");
+            yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Microsoft", "Windows", "Fonts");
+        }
+        else if (OperatingSystem.IsMacOS())
+        {
+            yield return "/System/Library/Fonts";
+            yield return "/Library/Fonts";
+            yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Fonts");
+        }
+        else
+        {
+            yield return "/usr/share/fonts";
+            yield return "/usr/local/share/fonts";
+            yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".fonts");
+            yield return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "fonts");
+        }
+    }
+
+    /// <summary>The requested family first, then the sans-serif families Stride treats as interchangeable.</summary>
+    private static IEnumerable<string> FamilyCandidates(string fontName)
+    {
+        yield return fontName;
+
+        foreach (var fallback in new[] { "Arial", "Liberation Sans", "DejaVu Sans" })
+        {
+            if (!fallback.Equals(fontName, StringComparison.OrdinalIgnoreCase))
+                yield return fallback;
+        }
+    }
+
+    /// <summary>
+    /// File names (without extension) a family and style are commonly stored under: "arial" / "arialbd",
+    /// "LiberationSans-Regular" / "LiberationSans-Bold", "DejaVuSans" / "DejaVuSans-Bold", and so on.
+    /// </summary>
+    private static IEnumerable<string> FileNameCandidates(string family, FontStyle style)
+    {
+        var compact = family.Replace(" ", string.Empty);
+        var bold = (style & FontStyle.Bold) == FontStyle.Bold;
+        var italic = (style & FontStyle.Italic) == FontStyle.Italic;
+
+        var suffixes = (bold, italic) switch
+        {
+            (true, true) => new[] { "bi", "z", "-BoldItalic", "BoldItalic", " Bold Italic" },
+            (true, false) => new[] { "bd", "b", "-Bold", "Bold", " Bold" },
+            (false, true) => new[] { "i", "-Italic", "Italic", " Italic" },
+            _ => new[] { string.Empty, "-Regular", "Regular", " Regular" },
+        };
+
+        foreach (var suffix in suffixes)
+        {
+            yield return compact + suffix;
+            yield return family + suffix;
         }
     }
 
@@ -290,7 +629,7 @@ public sealed class DebugOverlay : GameSystemBase
         return lines;
     }
 
-    private Int2 GetOrigin(List<TextElement> lines)
+    private Int2 GetOrigin(int lineCount, float blockWidth)
     {
         if (Position == DisplayPosition.Custom) return CustomPosition;
 
@@ -298,24 +637,30 @@ public sealed class DebugOverlay : GameSystemBase
 
         var backBuffer = _graphicsDeviceService?.GraphicsDevice?.Presenter?.BackBuffer;
 
+        // In unscaled pixels: everything here is multiplied by Scale when drawn
+        var scale = EffectiveScale;
         var screen = backBuffer is null
-            ? new Int2(1280, 720)
-            : new Int2(backBuffer.Width, backBuffer.Height);
+            ? new Int2((int)(1280 / scale), (int)(720 / scale))
+            : new Int2((int)(backBuffer.Width / scale), (int)(backBuffer.Height / scale));
 
         // Measured rather than declared, so a section appearing or a dropdown expanding keeps the
         // block anchored to its corner instead of running off the edge
-        var width = lines.Max(line => line.Text.Length) * CharacterWidth;
-        var height = lines.Count * LineHeight;
+        var width = (int)MathF.Ceiling(blockWidth);
+        var height = lineCount * LineHeight;
 
-        var right = Math.Max(Margin.X, screen.X - width - Margin.X);
-        var bottom = Math.Max(Margin.Y, screen.Y - height - Margin.Y);
+        // The margin applies to the background box, so the text sits a padding further in
+        var padding = BackgroundColor.A > 0 ? BackgroundPadding : Vector2.Zero;
+        var left = Margin.X + (int)MathF.Ceiling(padding.X);
+        var top = Margin.Y + (int)MathF.Ceiling(padding.Y);
+        var right = Math.Max(left, screen.X - width - left);
+        var bottom = Math.Max(top, screen.Y - height - top);
 
         return Position switch
         {
-            DisplayPosition.TopLeft => new(Margin.X, Margin.Y),
-            DisplayPosition.BottomLeft => new(Margin.X, bottom),
+            DisplayPosition.TopLeft => new(left, top),
+            DisplayPosition.BottomLeft => new(left, bottom),
             DisplayPosition.BottomRight => new(right, bottom),
-            _ => new(right, Margin.Y),
+            _ => new(right, top),
         };
     }
 }
