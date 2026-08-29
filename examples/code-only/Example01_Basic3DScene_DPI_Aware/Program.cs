@@ -9,6 +9,9 @@ using var game = new Game();
 
 game.Run(start: (Scene rootScene) =>
 {
+    game.Window.AllowUserResizing = true;
+    game.Window.Title = "DPI-Aware Window";
+
     game.SetupBase3DScene();
     game.AddSkybox();
 
