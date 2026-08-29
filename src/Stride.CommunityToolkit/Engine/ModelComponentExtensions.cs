@@ -340,7 +340,7 @@ public static class ModelComponentExtensions
 
     private class ModelComponentMaterialCopy : Material
     {
-        public ModelComponent ModelComponent { get; set; }
+        public required ModelComponent ModelComponent { get; init; }
     }
 
     private static unsafe (List<Vector3> vertices, List<int> indices) GetMeshData(Model model, IGame game)

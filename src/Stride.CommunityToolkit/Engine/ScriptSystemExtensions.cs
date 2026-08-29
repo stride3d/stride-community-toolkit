@@ -2,6 +2,7 @@ using Stride.Core.MicroThreading;
 using Stride.Engine;
 using Stride.Engine.Events;
 using Stride.Engine.Processors;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -45,10 +46,13 @@ public static class ScriptSystemExtensions
     /// <remarks>This delay takes into account the game's time warp factor, using the <c>WarpElapsed</c> property of <c>UpdateTime</c>.</remarks>
     public static async Task DelayWarped(this ScriptSystem script, float seconds)
     {
+        ArgumentNullException.ThrowIfNull(script);
+
+        var game = GetGame(script);
         float t = 0f;
-        while (script.Game.IsRunning && t < seconds)
+        while (game.IsRunning && t < seconds)
         {
-            t += (float)script.Game.UpdateTime.WarpElapsed.TotalSeconds;
+            t += (float)game.UpdateTime.WarpElapsed.TotalSeconds;
             await script.NextFrame();
         }
     }
@@ -73,10 +77,13 @@ public static class ScriptSystemExtensions
     /// <remarks>This method accounts for the game's <c>WarpElapsed</c> time factor during execution.</remarks>
     public static async Task ExecuteInWarpedTime(this ScriptSystem script, float seconds, Action<float> action)
     {
+        ArgumentNullException.ThrowIfNull(script);
+
+        var game = GetGame(script);
         float t = 0f;
-        while (script.Game.IsRunning && t < seconds)
+        while (game.IsRunning && t < seconds)
         {
-            t += (float)script.Game.UpdateTime.WarpElapsed.TotalSeconds;
+            t += (float)game.UpdateTime.WarpElapsed.TotalSeconds;
             action?.Invoke(t);
             await script.NextFrame();
         }
@@ -92,10 +99,13 @@ public static class ScriptSystemExtensions
     /// <remarks>This method operates in real time, without considering the game's time warp.</remarks>
     public static async Task ExecuteInTime(this ScriptSystem script, float seconds, Action<float> action)
     {
+        ArgumentNullException.ThrowIfNull(script);
+
+        var game = GetGame(script);
         float t = 0f;
-        while (script.Game.IsRunning && t < seconds)
+        while (game.IsRunning && t < seconds)
         {
-            t += (float)script.Game.UpdateTime.Elapsed.TotalSeconds;
+            t += (float)game.UpdateTime.Elapsed.TotalSeconds;
             action?.Invoke(t);
             await script.NextFrame();
         }
@@ -116,9 +126,11 @@ public static class ScriptSystemExtensions
             throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
         }
 
-        while (scriptSystem.Game.IsRunning && delay >= TimeSpan.Zero)
+        var game = GetGame(scriptSystem);
+
+        while (game.IsRunning && delay >= TimeSpan.Zero)
         {
-            delay -= scriptSystem.Game.UpdateTime.Elapsed;
+            delay -= game.UpdateTime.Elapsed;
             await scriptSystem.NextFrame();
         }
 
@@ -140,9 +152,11 @@ public static class ScriptSystemExtensions
             throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
         }
 
-        while (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive && delay >= TimeSpan.Zero)
+        var game = GetGame(scriptSystem);
+
+        while (game.IsRunning && scriptDelegateWatcher.IsActive && delay >= TimeSpan.Zero)
         {
-            delay -= scriptSystem.Game.UpdateTime.Elapsed;
+            delay -= game.UpdateTime.Elapsed;
             await scriptSystem.NextFrame();
         }
 
@@ -196,6 +210,8 @@ public static class ScriptSystemExtensions
         ArgumentNullException.ThrowIfNull(receiver);
         ArgumentNullException.ThrowIfNull(action);
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoEvent, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -203,7 +219,7 @@ public static class ScriptSystemExtensions
         {
             var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
 
-            while (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            while (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
                 if (receiver.TryReceive(out var data))
                 {
@@ -263,6 +279,8 @@ public static class ScriptSystemExtensions
         ArgumentNullException.ThrowIfNull(receiver);
         ArgumentNullException.ThrowIfNull(action);
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoEvent, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -270,7 +288,7 @@ public static class ScriptSystemExtensions
         {
             var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
 
-            while (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            while (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
                 if (receiver.TryReceive(out var data))
                 {
@@ -304,6 +322,8 @@ public static class ScriptSystemExtensions
         ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(action);
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoTask, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -313,7 +333,7 @@ public static class ScriptSystemExtensions
 
             await scriptSystem.WaitFor(delay, scriptDelegateWatcher);
 
-            if (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            if (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
                 await action();
             }
@@ -347,6 +367,8 @@ public static class ScriptSystemExtensions
             throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
         }
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoTask, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -356,7 +378,7 @@ public static class ScriptSystemExtensions
 
             await scriptSystem.WaitFor(delay, scriptDelegateWatcher);
 
-            if (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            if (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
                 action();
             }
@@ -392,6 +414,8 @@ public static class ScriptSystemExtensions
             throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
         }
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoTask, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -401,9 +425,9 @@ public static class ScriptSystemExtensions
 
             var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
 
-            while (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            while (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
-                elapsedTime += scriptSystem.Game.UpdateTime.Elapsed;
+                elapsedTime += game.UpdateTime.Elapsed;
 
                 if (elapsedTime >= delay)
                 {
@@ -450,6 +474,8 @@ public static class ScriptSystemExtensions
             throw new ArgumentOutOfRangeException(nameof(repeatEvery), "Must be greater than zero.");
         }
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoTask, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -459,9 +485,9 @@ public static class ScriptSystemExtensions
 
             var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
 
-            while (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            while (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
-                elapsedTime += scriptSystem.Game.UpdateTime.Elapsed;
+                elapsedTime += game.UpdateTime.Elapsed;
 
                 if (elapsedTime >= delay)
                 {
@@ -501,6 +527,8 @@ public static class ScriptSystemExtensions
             throw new ArgumentOutOfRangeException(nameof(duration), "Must be greater than zero.");
         }
 
+        var game = GetGame(scriptSystem);
+
         return scriptSystem.AddTask(DoTask, priority);
 
         //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
@@ -510,9 +538,9 @@ public static class ScriptSystemExtensions
 
             var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
 
-            while (scriptSystem.Game.IsRunning && scriptDelegateWatcher.IsActive)
+            while (game.IsRunning && scriptDelegateWatcher.IsActive)
             {
-                elapsedTime += scriptSystem.Game.UpdateTime.Elapsed;
+                elapsedTime += game.UpdateTime.Elapsed;
 
                 if (elapsedTime >= duration)
                 {
@@ -546,4 +574,13 @@ public static class ScriptSystemExtensions
 
         microThreads.Clear();
     }
+
+    /// <summary>
+    /// Returns the <see cref="IGame"/> the <paramref name="scriptSystem"/> belongs to.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// If the <paramref name="scriptSystem"/> has no game, which Stride only allows in a mock environment.
+    /// </exception>
+    private static IGame GetGame(ScriptSystem scriptSystem) =>
+        scriptSystem.Game ?? throw new InvalidOperationException($"The {nameof(ScriptSystem)} is not attached to a game.");
 }
