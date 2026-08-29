@@ -9,9 +9,14 @@ namespace Stride.CommunityToolkit.Engine;
 public static class TransformExtensions
 {
     /// <summary>
-    /// The default world up vector. The default is <see cref="Vector3.UnitY"/>.
+    /// The world up vector used by the <c>LookAt</c> overloads that do not take an explicit up vector.
+    /// The default is <see cref="Vector3.UnitY"/>; set it once at start-up for projects that use a different up axis (for example Z-up).
     /// </summary>
-    private static Vector3 _worldUp = Vector3.UnitY;
+    /// <remarks>
+    /// Not synchronised. Set it during start-up, before the game loop runs; like the transform APIs it feeds,
+    /// it is intended for the update thread. Overloads that take an explicit up vector ignore this value.
+    /// </remarks>
+    public static Vector3 WorldUp { get; set; } = Vector3.UnitY;
 
     /// <summary>
     /// Updates the <see cref="TransformComponent.Position"/>, <see cref="TransformComponent.Rotation"/> and <see cref="TransformComponent.Scale"/> members of the given <see cref="TransformComponent"/>.
@@ -517,7 +522,7 @@ public static class TransformExtensions
 
     /// <summary>
     /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
-    /// The world up vector use is defined by <see cref="_worldUp"/>.
+    /// The world up vector used is defined by <see cref="WorldUp"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
@@ -529,7 +534,8 @@ public static class TransformExtensions
     /// </remarks>
     public static void LookAt(this TransformComponent transform, TransformComponent target, float smooth = 1.0f)
     {
-        transform.LookAt(target, ref _worldUp, smooth);
+        var worldUp = WorldUp;
+        transform.LookAt(target, ref worldUp, smooth);
     }
 
     /// <summary>
@@ -615,7 +621,7 @@ public static class TransformExtensions
 
     /// <summary>
     /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
-    /// The world up vector use is defined by <see cref="_worldUp"/>.
+    /// The world up vector use is defined by <see cref="WorldUp"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
@@ -627,12 +633,13 @@ public static class TransformExtensions
     /// </remarks>
     public static void LookAt(this TransformComponent transform, ref Vector3 target, float smooth = 1.0f)
     {
-        transform.LookAt(ref target, ref _worldUp, smooth);
+        var worldUp = WorldUp;
+        transform.LookAt(ref target, ref worldUp, smooth);
     }
 
     /// <summary>
     /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
-    /// The world up vector use is defined by <see cref="_worldUp"/>.
+    /// The world up vector use is defined by <see cref="WorldUp"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
@@ -644,7 +651,8 @@ public static class TransformExtensions
     /// </remarks>
     public static void LookAt(this TransformComponent transform, Vector3 target, float smooth = 1.0f)
     {
-        transform.LookAt(ref target, ref _worldUp, smooth);
+        var worldUp = WorldUp;
+        transform.LookAt(ref target, ref worldUp, smooth);
     }
 
     /// <summary>
