@@ -23,6 +23,11 @@ items:
 - name: 💡Contribute to the examples
   expanded: false
   href: examples/index.md
+  items:
+  - name: Metadata schema
+    href: examples/metadata-schema.md
+  - name: Design decisions
+    href: examples/decisions.md
 - name: 📖 Contribute to the documentation
   expanded: false
   href: documentation/index.md
