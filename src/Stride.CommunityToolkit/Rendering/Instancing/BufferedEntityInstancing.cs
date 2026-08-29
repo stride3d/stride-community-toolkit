@@ -23,7 +23,7 @@ namespace Stride.CommunityToolkit.Rendering.Instancing;
 /// <para>
 /// Pass the gather to the constructor to choose its behaviour - most usefully
 /// <c>BepuEntityInstancing</c>, which adds the sleep skip that makes the saving worthwhile.
-/// The buffers are released by <see cref="Dispose"/>; the engine never releases user-owned buffers.
+/// The buffers are released by <see cref="Dispose()"/>; the engine never releases user-owned buffers.
 /// </para>
 /// </remarks>
 public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisposable
