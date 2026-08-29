@@ -2,32 +2,30 @@
 
 [!INCLUDE [global-note](../includes/global-note.md)]
 
-Welcome to the Stride Community Toolkit Manual. This guide helps you make the most of the toolkit for [Stride](https://www.stride3d.net/), an open-source C# game engine. Whether you're new to Stride or an experienced developer, you'll find tips, insights, and instructions to enhance your game development.
+The toolkit is a set of extensions and helpers for [Stride](https://www.stride3d.net/), an open-source C# game engine. Its largest piece is the **code-only** approach: building a Stride game from a plain C# project, with no editor and no asset pipeline.
 
-## Table of Contents
+Nothing here is required to use Stride. Everything is an extension method or a small component you can read, copy and change.
 
-- [Getting Started](getting-started.md): Set up and start using the toolkit.
-- [Code-Only Approach](code-only/index.md): Create and manage Stride projects using only C#.
-  - [Create Project](code-only/create-project.md): Step-by-step guide to creating a Stride project using a C# console app.
-  - Examples, by level:
-    - [Getting Started](code-only/examples/getting-started-examples.md): your first code-only app.
-    - [Beginner](code-only/examples/beginner-examples.md): one new idea at a time.
-    - [Intermediate](code-only/examples/intermediate-examples.md): a Stride subsystem used directly.
-    - [Advanced](code-only/examples/advanced-examples.md): engine extension points and integrations.
-    - [Other](code-only/examples/other-examples.md): playgrounds and demonstrations.
-    - Also in [F#](code-only/examples/getting-started-examples-fs.md) and [Visual Basic](code-only/examples/getting-started-examples-vb.md).
-  - [Extensions](code-only/extensions.md)
-- Extensions
-  - [Animation Extensions](animation-extensions/index.md)
-  - [Camera Extensions](camera-extensions/index.md): Convenient ways to work with the camera.
-  - [Entity Extensions](entity-extensions/index.md): Enhancements and utilities for entities.
-  - [Game Extensions](game-extensions/index.md): From performance monitoring to material creation and entity manipulation.
-  - [Model Extensions](model-extensions/index.md)
-  - [Script Extensions](script-extensions/index.md): Additional features and tools for development.
-  - [Script System Extensions](script-system-extensions/index.md): Utilities for async methods.
-- Rendering
-  - [MeshBuilder](rendering/mesh-builder.md): Create meshes dynamically at runtime.
-  - [TextureCanvas](rendering/texture-canvas.md): Create textures dynamically at runtime.
-- [Troubleshooting](troubleshooting.md): Solutions and tips for common issues.
+## Start here
 
-Explore these sections to discover the full potential of the Stride Community Toolkit and enhance your game development skills.
+- **New to the toolkit?** [Getting Started](getting-started.md) gets the package installed and a window on screen.
+- **New to Stride itself?** [Components and Scripts](components-and-scripts.md) explains the entity-component model the rest of the manual assumes.
+- **Want to see it running first?** The [examples gallery](code-only/examples/index.md) is every code-only example with a screenshot. Each one is a complete program you can copy and run.
+
+## What is in here
+
+**[Code-Only](code-only/index.md)** - why you might work without the editor, how to [create a project](code-only/create-project.md), and the [curated extension list](code-only/extensions.md) for doing it.
+
+**Extensions** - the full reference, one page per type being extended: [Game](game-extensions/index.md), [Entity](entity-extensions/index.md), [Camera](camera-extensions/index.md), [Model](model-extensions/index.md), [Animation](animation-extensions/index.md), [Script](script-extensions/index.md) and [Script System](script-system-extensions/index.md).
+
+**[Physics](physics-extensions/index.md)** - the Bepu and Bullet helpers, plus two long-form pages on the failures that produce no error message at all: [who owns the transform](physics-extensions/bepu-transform-ownership.md) and [why a constraint does nothing](physics-extensions/bepu-constraints.md). Both are worth reading before you spend an afternoon on either problem.
+
+**Rendering** - drawing things the engine has no built-in component for: [Entity Text](rendering/entity-text.md) and [World Text](rendering/world-text.md) for labels, [Debug Shapes](rendering/debug-shapes.md) for immediate-mode wireframes, [MeshBuilder](rendering/mesh-builder.md) and [TextureCanvas](rendering/texture-canvas.md) for building meshes and textures at runtime.
+
+**[Troubleshooting](troubleshooting.md)** - the errors people actually hit.
+
+For the generated API reference, see the [API](../api/index.md) section.
+
+## The toolkit is in preview
+
+Names and signatures still change between releases. If something in this manual does not match the package you have installed, the [API reference](../api/index.md) is generated from the source and is the authority. Corrections and additions are welcome - see [Contributing](../contributing/index.md).

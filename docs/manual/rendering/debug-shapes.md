@@ -1,114 +1,61 @@
 # Debug Shapes
 
-## Available Shapes
+Immediate-mode wireframe and solid shapes for debugging: colliders, ray hits, spawn points, the direction something is facing. They ship in the `Stride.CommunityToolkit.DebugShapes` package.
 
-### Sphere
-DrawSphere
-- position - where the Sphere is located
-- radius - the radius of the Sphere
-- color - the color of the Sphere *optional
-- duration - how long the Sphere will be visible *optional
-- depthTest - if the Sphere should be visible through other objects *optional
-- solid - if the Sphere should be solid or wireframe *optional
+## Getting the system
 
-### Cube
-DrawCube
-- position - where the Box is located
-- size - the size of the Box
-- rotation - the rotation of the Box *optional
-- color - the color of the Sphere *optional
-- duration - how long the Sphere will be visible *optional
-- depthTest - if the Sphere should be visible through other objects *optional
-- solid - if the Sphere should be solid or wireframe *optional
+Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.AddDebugShapes(Stride.Engine.Game,Stride.Rendering.RenderGroup)), then resolve `ImmediateDebugRenderSystem` from the game's services. It is registered as a service and as a game system, so you get it the same way from a script or from a code-only `Start` callback.
 
-### Line
-DrawLine
-- start - the start position of the Line
-- end - the end position of the Line
-- color - the color of the line *optional
-- duration - how long the line will be visible *optional
-- depthTest - if the line should be visible through other objects *optional
+```csharp
+game.AddDebugShapes();
 
-### Arrow
-DrawArrow
-- start - the start position of the Arrow
-- end - the end position of the Arrow
-- coneHeight - the height of the Arrow cone *optional
-- coneRadius - the radius of the Arrow cone *optional
-- color - the color of the arrow *optional
-- duration - how long the arrow will be visible *optional
-- depthTest - if the arrow should be visible through other objects *optional
-- solid - if the arrow cone should be solid or wireframe *optional
+var debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
+```
 
-### Half Sphere
-DrawHalfSphere
-- position - where the Half Sphere is located
-- radius - the radius of the Half Sphere
-- rotation - the rotation of the Half Sphere *optional
-- color - the color of the Half Sphere *optional
-- duration - how long the Half Sphere will be visible *optional
-- depthTest - if the Half Sphere should be visible through other objects *optional
-- solid - if the Half Sphere should be solid or wireframe *optional
+> [!IMPORTANT]
+> This is **immediate mode**: a shape is drawn for the frame you asked for it and then forgotten. Call
+> the `Draw*` methods from your update loop, not once at startup. `duration` is how many extra seconds
+> the shape survives without being re-issued; leave it at `0` for the once-per-frame case.
+>
+> `AddDebugShapes()` sets `Visible = true` only in `DEBUG` builds. In a Release build you have to set
+> it yourself, or nothing appears.
 
-### Cylinder
-DrawCylinder
-- position - where the Cylinder is located
-- radius - the radius of the Cylinder
-- height - the height of the Cylinder
-- rotation - the rotation of the Cylinder *optional
-- color - the color of the Cylinder *optional
-- duration - how long the Cylinder will be visible *optional
-- depthTest - if the Cylinder should be visible through other objects *optional
-- solid - if the Cylinder should be solid or wireframe *optional
+## Shared parameters
 
-### Cone
-DrawCone
-- position - where the Cone is located
-- radius - the radius of the Cone
-- height - the height of the Cone
-- rotation - the rotation of the Cone *optional
-- color - the color of the Cone *optional
-- duration - how long the Cone will be visible *optional
-- depthTest - if the Cone should be visible through other objects *optional
-- solid - if the Cone should be solid or wireframe *optional
+Every method below ends with the same optional parameters, so they are listed once here rather than repeated:
 
-### Capsule
-DrawCapsule
-- position - where the Capsule is located
-- radius - the radius of the Capsule
-- height - the height of the Capsule
-- rotation - the rotation of the Capsule *optional
-- color - the color of the Capsule *optional
-- duration - how long the Capsule will be visible *optional
-- depthTest - if the Capsule should be visible through other objects *optional
-- solid - if the Capsule should be solid or wireframe *optional
+| Parameter | Default | Meaning |
+|---|---|---|
+| `color` | `default` | The shape's colour. |
+| `duration` | `0.0f` | Seconds the shape stays visible without being re-issued. `0` means this frame only. |
+| `depthTest` | `true` | When `false`, the shape draws through geometry in front of it. |
+| `solid` | `false` | Filled instead of wireframe. Not available on the line methods. |
 
-### Quad
-DrawQuad
-- position - where the Quad is located
-- size - the size of the Quad
-- rotation - the rotation of the Quad *optional
-- color - the color of the Quad *optional
-- duration - how long the Quad will be visible *optional
-- depthTest - if the Quad should be visible through other objects *optional
-- solid - if the Quad should be solid or wireframe *optional
+## Shapes
 
-### Circle
-DrawCircle
-- position - where the Circle is located
-- radius - the radius of the Circle
-- rotation - the rotation of the Circle *optional
-- color - the color of the Circle *optional
-- duration - how long the Circle will be visible *optional
-- depthTest - if the Circle should be visible through other objects *optional
-- solid - if the Circle should be solid or wireframe *optional
+| Method | Shape-specific parameters |
+|---|---|
+| [`DrawLine`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawLine*) | `start`, `end` - no `solid` |
+| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - an array drawn as a connected run. No `solid` |
+| [`DrawRay`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawRay*) | `start`, `dir` - a direction rather than an end point. No `solid` |
+| [`DrawArrow`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawArrow*) | `from`, `to`, `coneHeight`, `coneRadius` |
+| [`DrawSphere`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawSphere*) | `position`, `radius` - no `rotation` |
+| [`DrawHalfSphere`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawHalfSphere*) | `position`, `radius`, `rotation` |
+| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCube*) | `start`, `size`, `rotation` |
+| [`DrawBounds`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawBounds*) | `start`, `end`, `rotation` - a box given by two opposite corners |
+| [`DrawCapsule`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCapsule*) | `position`, `height`, `radius`, `rotation` |
+| [`DrawCylinder`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCylinder*) | `position`, `height`, `radius`, `rotation` |
+| [`DrawCone`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCone*) | `position`, `height`, `radius`, `rotation` |
+| [`DrawQuad`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawQuad*) | `position`, `size` - a `Vector2` - and `rotation` |
+| [`DrawCircle`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCircle*) | `position`, `radius`, `rotation` |
 
-## Boundsing Box
-DrawBounds
-- start - the start position of the Bounds
-- end - the end position of the Bounds
-- rotation - the rotation of the Bounds *optional
-- color - the color of the bounds *optional
-- duration - how long the bounds will be visible *optional
-- depthTest - if the bounds should be visible through other objects *optional
-- solid - if the bounds should be solid or wireframe *optional
+> [!NOTE]
+> `DrawCapsule`, `DrawCylinder` and `DrawCone` take **`height` before `radius`**, which is the opposite
+> way round from how most people write it. `DrawHalfSphere` takes `color` **before** `rotation`, unlike
+> every other rotatable shape. Use named arguments and neither can bite you.
+
+## Where to see it working
+
+[Debug Shapes](../code-only/examples/debug-shapes.md) draws every shape at once, and
+[Debug Shapes Usage](../code-only/examples/debug-shapes-usage.md) is the smaller version showing just
+the setup.

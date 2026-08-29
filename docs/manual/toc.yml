@@ -31,15 +31,20 @@
       href: game-extensions/index.md
     - name: Model
       href: model-extensions/index.md
-    - name: Physics
-      href: physics-extensions/index.md
-      items:
-      - name: Bepu - Who owns the transform?
-        href: physics-extensions/bepu-transform-ownership.md
     - name: Script
       href: script-extensions/index.md
     - name: Script System
       href: script-system-extensions/index.md
+- name: Physics
+  # topicHref makes the section header itself clickable, landing on the Bepu/Bullet extension list,
+  # so the sidebar does not need a third node called "Extensions".
+  topicHref: physics-extensions/index.md
+  expanded: true
+  items:
+  - name: Bepu - Who owns the transform?
+    href: physics-extensions/bepu-transform-ownership.md
+  - name: Bepu - Why isn't my constraint doing anything?
+    href: physics-extensions/bepu-constraints.md
 - name: Rendering
   expanded: true
   items:
@@ -47,6 +52,8 @@
     href: rendering/entity-text.md
   - name: World Text
     href: rendering/world-text.md
+  - name: Debug Shapes
+    href: rendering/debug-shapes.md
   - name: MeshBuilder
     href: rendering/mesh-builder.md
   - name: TextureCanvas

@@ -1,5 +1,5 @@
-# AnimationComponentExtensions.cs
+# Animation Extensions
 
-![Done](https://img.shields.io/badge/status-done-green)
+Extension methods for `AnimationComponent`, in the `Stride.CommunityToolkit.Engine` namespace.
 
-- [`PlayAnimation()`](xref:Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)) - Plays the specified animation on the animation component if it is not already playing
+- [`PlayAnimation()`](xref:Stride.CommunityToolkit.Engine.AnimationComponentExtensions.PlayAnimation(Stride.Engine.AnimationComponent,System.String)) - Plays the named animation clip. Does nothing if that clip is already playing, so it is safe to call every frame from an input handler.
