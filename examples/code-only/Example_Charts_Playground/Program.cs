@@ -79,7 +79,22 @@ void Start(Scene rootScene)
 
     // The overlay draws itself and is shared with the camera controller's help; the lambda is read
     // every frame, so the grid state it shows is always current
-    DebugOverlay.GetOrCreate(game).AddSection("Chart", () =>
+    var overlay = DebugOverlay.GetOrCreate(game);
+
+    // Debug text is 16 pixels tall at scale 1, which is tiny on a high-DPI display. Scale the whole
+    // overlay by the monitor's DPI factor (2 on a 4K screen at 200%); the font is rasterised at the
+    // resulting size, so any factor stays sharp
+    overlay.Scale = MathF.Max(1f, WindowsDpiManager.GetPrimaryScale() ?? 1f);
+
+    // The default box is Stride's 49% black, tuned for dark scenes; on paper white it needs to be darker
+    if (!use3DScene)
+    {
+        overlay.BackgroundColor = new Color(0, 0, 0, 200);
+        overlay.FontSize = 16;
+        overlay.LineSpacing = 1;
+    }
+
+    overlay.AddSection("Chart", () =>
     [
         new("CHART"),
         new($"Press G to toggle the grid ({(chart.GridVisible ? "on" : "off")})", Color.Yellow),
