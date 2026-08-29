@@ -24,7 +24,10 @@
     - name: Animation
       href: animation-extensions/index.md
     - name: Camera
-      href: camera-extensions/index.md
+      topicHref: camera-extensions/index.md
+      items:
+      - name: Camera Controllers
+        href: camera-extensions/camera-controllers.md
     - name: Entity
       href: entity-extensions/index.md
     - name: Game
