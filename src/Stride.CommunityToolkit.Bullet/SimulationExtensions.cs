@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Scripts;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
