@@ -329,6 +329,46 @@ wanted for cases where no overlay is in play.
 
 ---
 
+## 18. `GetComponentInChildren<T>()` resolves to two different searches depending on an optional argument
+
+**Observation.** Two extension methods share the name and differ in what they search:
+
+- `EntityExtensions.GetComponentInChildren<T>(this Entity)` — a recursive depth-first search that
+  **checks the entity itself first** (`entity.OfType<T>()`), despite the name and despite the
+  toolkit's own `…AndSelf` convention for that.
+- `EntitySearchExtensions.GetComponentInChildren<T>(this Entity, bool includeDisabled = false)` —
+  the breadth-first, children-only search inherited from the original StrideToolkit, constrained to
+  `ActivableEntityComponent` and skipping disabled components. Its parameterless sibling from upstream
+  was renamed `GetComponentInChildrenBFS` to avoid clashing with the first method.
+
+C# prefers the applicable candidate that needs no default-argument substitution, so for any
+`T : ActivableEntityComponent`:
+
+```csharp
+entity.GetComponentInChildren<Foo>();       // DFS, includes self, ignores Enabled
+entity.GetComponentInChildren<Foo>(false);  // BFS, children only, enabled only
+```
+
+Same name, same intent at the call site, different traversal, different scope and different
+filtering — decided by whether a literal `false` was typed. Noticed while auditing the StrideToolkit
+port (August 2026); the two methods have coexisted since the merge.
+
+**Impact.** Silent. Neither call errors, and in a shallow hierarchy with no disabled components both
+return the same thing, so the divergence only shows up later — usually as "why did it find the
+component on the parent" or "why did it find a disabled one". The `BFS` suffix also leaks an
+implementation detail into a name whose sibling carries no `DFS`.
+
+**Options.**
+
+1. Rename the `EntityExtensions` method to say what it does — `GetComponentInDescendantsAndSelf<T>()`
+   or similar — and give the `BFS` method its original name back. Breaking, mechanical, and the
+   names then match the `Descendants` / `AndSelf` vocabulary the search class already uses.
+2. Keep the names and make the DFS variant children-only (drop the self check), so at least the
+   scope agrees; the traversal-order and `Enabled` differences remain.
+3. Document only: an XML `<remarks>` on each pointing at the other. Zero impact, trap remains.
+
+---
+
 # Upstream (engine) observations
 
 The items above are about the toolkit's own API. The ones below are about what the **engine** makes
