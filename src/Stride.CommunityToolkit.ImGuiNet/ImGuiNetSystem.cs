@@ -349,7 +349,7 @@ public class ImGuiNetSystem : GameSystemBase
 
             if (_commandList != null)
             {
-                _fontTexture.SetData(_commandList, new DataPointer(pixels, width * height * bytesPerPixel));
+                _fontTexture.SetData(_commandList, new ReadOnlySpan<byte>(pixels, width * height * bytesPerPixel));
             }
 
             // Set a simple texture ID for ImGui (using texture hashcode as a simple identifier)
@@ -515,9 +515,9 @@ public class ImGuiNetSystem : GameSystemBase
 
             // Upload vertex and index data
             _vertexBinding.Buffer.SetData(_commandList,
-                new DataPointer(cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>()));
+                new ReadOnlySpan<ImDrawVert>((void*)cmdList.VtxBuffer.Data, cmdList.VtxBuffer.Size));
             _indexBinding.Buffer.SetData(_commandList,
-                new DataPointer(cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size * sizeof(ushort)));
+                new ReadOnlySpan<ushort>((void*)cmdList.IdxBuffer.Data, cmdList.IdxBuffer.Size));
 
             // Set buffers
             _commandList.SetVertexBuffer(0, _vertexBinding.Buffer, 0, Unsafe.SizeOf<ImDrawVert>());
