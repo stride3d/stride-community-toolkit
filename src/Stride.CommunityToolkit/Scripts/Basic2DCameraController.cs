@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Games;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
 using Stride.Input;
@@ -7,14 +6,14 @@ namespace Stride.CommunityToolkit.Scripts;
 
 /// <summary>
 /// Provides an interactive 2D camera controller for navigating 2D scenes in Stride.
-/// This controller supports movement in the XY-plane using keyboard inputs (arrow keys),
-/// zooming in and out with the mouse wheel, optional screen edge panning, mouse drag panning,
+/// This controller supports movement in the XY-plane using the arrow keys (optionally WASD),
+/// zooming in and out with the mouse wheel, middle-mouse drag panning, optional screen edge panning,
 /// camera following, and smooth movement. Additional features include a speed boost when holding shift
 /// and the ability to reset the camera to a default position and zoom level using the 'H' key.
 /// </summary>
 /// <remarks>
 /// - The camera moves at a configurable speed which can be increased with shift keys.
-/// - Zooming is performed by changing the OrthographicSize of the camera.
+/// - Zooming scales the camera's OrthographicSize by a fixed fraction per mouse-wheel notch; shift zooms faster too.
 /// - Optional features: screen edge movement, camera bounds, follow target, smooth movement, mouse drag panning.
 /// - The 'H' key resets the camera to its default position and orthographic size.
 /// - Default settings: FarClipPlane=1000, NearClipPlane=0.1f, OrthographicSize=10.
@@ -31,10 +30,20 @@ public class Basic2DCameraController : SyncScript
     public float CameraMoveSpeed { get; set; } = 5.0f;
 
     /// <summary>
+    /// Gets or sets whether W, A, S and D move the camera in addition to the arrow keys. Defaults to <see langword="false"/>.
+    /// </summary>
+    /// <remarks>
+    /// Off by default so that a game built on top of the toolkit keeps WASD for itself; the arrow keys
+    /// are always active. Turn it on for tools and playgrounds where nothing else wants those keys.
+    /// </remarks>
+    public bool EnableWasdMovement { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets the speed multiplier applied when holding shift keys.
     /// </summary>
     /// <remarks>
-    /// The effective movement speed becomes <see cref="CameraMoveSpeed"/> * <see cref="SpeedFactor"/> when either shift key is pressed.
+    /// The effective movement speed becomes <see cref="CameraMoveSpeed"/> * <see cref="SpeedFactor"/> when either shift key is pressed,
+    /// and each mouse-wheel notch counts as <see cref="SpeedFactor"/> notches of <see cref="ZoomStep"/>.
     /// </remarks>
     public float SpeedFactor { get; set; } = 5.0f;
 
@@ -45,12 +54,14 @@ public class Basic2DCameraController : SyncScript
     public float OrthographicSizeDefault { get; set; } = 10.0f;
 
     /// <summary>
-    /// Gets or sets the speed of zooming operations when using the mouse wheel.
+    /// Gets or sets the fraction by which the visible area scales per mouse-wheel notch. Defaults to 0.1 (10 %).
     /// </summary>
     /// <remarks>
-    /// Higher values result in faster zoom changes. The value is multiplied by delta time for frame-rate independence.
+    /// Zoom is multiplicative, so every notch changes the view by the same proportion whether the camera is
+    /// zoomed far in or far out. Wheel input is an impulse rather than a held key, so it is not scaled by
+    /// delta time. Holding shift multiplies the notch count by <see cref="SpeedFactor"/>.
     /// </remarks>
-    public float ZoomSpeed { get; set; } = 50.0f;
+    public float ZoomStep { get; set; } = 0.1f;
 
     /// <summary>
     /// Gets or sets the minimum orthographic size, representing maximum zoom in.
@@ -149,12 +160,13 @@ public class Basic2DCameraController : SyncScript
 
     // Mouse Drag Panning Properties
     /// <summary>
-    /// Gets or sets whether mouse drag panning is enabled.
+    /// Gets or sets whether mouse drag panning is enabled. Defaults to <see langword="true"/>.
     /// </summary>
     /// <remarks>
-    /// When enabled, holding the specified <see cref="MouseDragButton"/> and moving the mouse will pan the camera.
+    /// When enabled, holding <see cref="MouseDragButton"/> and moving the mouse drags the world with the
+    /// cursor: the point under the cursor stays under the cursor.
     /// </remarks>
-    public bool EnableMouseDragPan { get; set; } = false;
+    public bool EnableMouseDragPan { get; set; } = true;
 
     /// <summary>
     /// Gets or sets the mouse button used for drag panning.
@@ -180,10 +192,16 @@ public class Basic2DCameraController : SyncScript
     private CameraComponent? _camera;
     private Vector3 _defaultCameraPosition;
     private Vector3 _targetPosition;
+    private float _targetOrthographicSize;
     private Vector2? _lastMousePosition;
     private float _defaultZ = 0;
 
     private DebugOverlaySection? _instructions;
+
+    /// <summary>
+    /// Seconds elapsed since the previous update, for frame-rate independent movement.
+    /// </summary>
+    private float DeltaTime => (float)Game.UpdateTime.Elapsed.TotalSeconds;
 
     /// <summary>
     /// Gets or sets the key that collapses and expands the camera's help. Defaults to
@@ -219,14 +237,23 @@ public class Basic2DCameraController : SyncScript
         _defaultZ = Entity.Transform.Position.Z;
 
         _instructions = DebugOverlay.GetOrCreate(Game).AddCollapsibleSection(
-            "Camera", "Camera controls", HelpToggleKey, static () =>
-            [
-                new("F3: Reposition Help", Color.Red),
-                new("Arrow Keys: Move"),
-                new("Hold Shift: Increase speed"),
-                new("Mouse Wheel: Zoom"),
-                new("H: Reset Camera"),
-            ], HelpCollapsed, order: -100);
+            "Camera", "Camera controls", HelpToggleKey, () =>
+            {
+                var lines = new List<TextElement>
+                {
+                    new("F3: Reposition Help", Color.Red),
+                    new(EnableWasdMovement ? "WASD / Arrow Keys: Move" : "Arrow Keys: Move"),
+                    new("Hold Shift: Increase speed"),
+                    new("Mouse Wheel: Zoom"),
+                };
+
+                if (EnableMouseDragPan)
+                    lines.Add(new($"{MouseDragButton} Mouse Drag: Pan"));
+
+                lines.Add(new("H: Reset Camera"));
+
+                return lines;
+            }, HelpCollapsed, order: -100);
     }
 
     /// <summary>
@@ -252,6 +279,8 @@ public class Basic2DCameraController : SyncScript
             _camera = Entity.Get<CameraComponent>();
 
             if (_camera is null) return; // Ensure we have a camera component
+
+            _targetOrthographicSize = _camera.OrthographicSize;
         }
 
 
@@ -305,13 +334,13 @@ public class Basic2DCameraController : SyncScript
         var moveDirection = Vector3.Zero;
 
         // Update moveDirection based on key input
-        if (Input.IsKeyDown(Keys.Up))
+        if (Input.IsKeyDown(Keys.Up) || (EnableWasdMovement && Input.IsKeyDown(Keys.W)))
             moveDirection.Y++;
-        if (Input.IsKeyDown(Keys.Down))
+        if (Input.IsKeyDown(Keys.Down) || (EnableWasdMovement && Input.IsKeyDown(Keys.S)))
             moveDirection.Y--;
-        if (Input.IsKeyDown(Keys.Left))
+        if (Input.IsKeyDown(Keys.Left) || (EnableWasdMovement && Input.IsKeyDown(Keys.A)))
             moveDirection.X--;
-        if (Input.IsKeyDown(Keys.Right))
+        if (Input.IsKeyDown(Keys.Right) || (EnableWasdMovement && Input.IsKeyDown(Keys.D)))
             moveDirection.X++;
 
         // Normalize the moveDirection to ensure consistent movement speed, for example, when moving diagonally
@@ -323,7 +352,7 @@ public class Basic2DCameraController : SyncScript
             moveDirection *= SpeedFactor;
 
         // Apply movement to the target position or directly to the camera
-        var movement = moveDirection * CameraMoveSpeed * Game.DeltaTime();
+        var movement = moveDirection * CameraMoveSpeed * DeltaTime;
         if (EnableSmoothing)
         {
             _targetPosition += movement;
@@ -368,7 +397,7 @@ public class Basic2DCameraController : SyncScript
             moveDirection.Normalize();
 
         // Apply movement to the target position or directly to the camera
-        var movement = moveDirection * CameraMoveSpeed * Game.DeltaTime();
+        var movement = moveDirection * CameraMoveSpeed * DeltaTime;
         if (EnableSmoothing)
         {
             _targetPosition += movement;
@@ -384,9 +413,9 @@ public class Basic2DCameraController : SyncScript
     /// </summary>
     /// <remarks>
     /// <para>Scrolling the mouse wheel up decreases the orthographic size (zooms in), while scrolling down increases it (zooms out).
-    /// The zoom rate is determined by <see cref="ZoomSpeed"/> and is frame-rate independent (multiplied by delta time).</para>
+    /// Each notch scales the size by <see cref="ZoomStep"/>; holding shift multiplies the notch count by <see cref="SpeedFactor"/>.</para>
     /// <para>The orthographic size is clamped between <see cref="MinOrthographicSize"/> and <see cref="MaxOrthographicSize"/>
-    /// to prevent excessive zoom levels.</para>
+    /// to prevent excessive zoom levels. With <see cref="EnableSmoothing"/> the size eases towards the target, otherwise it is applied at once.</para>
     /// </remarks>
     private void ProcessCameraZoom()
     {
@@ -394,9 +423,21 @@ public class Basic2DCameraController : SyncScript
 
         if (zoomDelta == 0) return;
 
-        var newSize = _camera!.OrthographicSize - zoomDelta * ZoomSpeed * Game.DeltaTime() * SpeedFactor;
+        // A wheel notch is an impulse - it arrives on one frame and is gone the next - so it is scaled
+        // per notch, not per second. Multiplying by delta time would only make each notch depend on
+        // the frame rate, which is what made zooming feel jumpy.
+        if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+            zoomDelta *= SpeedFactor;
 
-        _camera.OrthographicSize = Math.Clamp(newSize, MinOrthographicSize, MaxOrthographicSize);
+        // Multiplicative, so every notch changes the visible area by the same fraction whether the
+        // camera is zoomed far in or far out. Subtracting a constant is a nudge at size 100 and a wall
+        // at size 1.
+        var newSize = _targetOrthographicSize * MathF.Pow(1f + ZoomStep, -zoomDelta);
+
+        _targetOrthographicSize = Math.Clamp(newSize, MinOrthographicSize, MaxOrthographicSize);
+
+        if (!EnableSmoothing)
+            _camera!.OrthographicSize = _targetOrthographicSize;
     }
 
     /// <summary>
@@ -413,6 +454,7 @@ public class Basic2DCameraController : SyncScript
         _targetPosition = _defaultCameraPosition;
         Entity.Transform.Position = _defaultCameraPosition;
 
+        _targetOrthographicSize = OrthographicSizeDefault;
         _camera!.OrthographicSize = OrthographicSizeDefault;
     }
 
@@ -434,7 +476,7 @@ public class Basic2DCameraController : SyncScript
         if (FollowSmoothing > 0)
         {
             // Smooth follow using lerp
-            var smoothFactor = Math.Clamp(FollowSmoothing * Game.DeltaTime(), 0, 1);
+            var smoothFactor = Math.Clamp(FollowSmoothing * DeltaTime, 0, 1);
             _targetPosition = Vector3.Lerp(Entity.Transform.Position, targetPos, smoothFactor);
             _targetPosition.Z = _defaultZ;
             Entity.Transform.Position = _targetPosition;
@@ -452,15 +494,16 @@ public class Basic2DCameraController : SyncScript
     /// Applies smooth linear interpolation to gradually move the camera towards the target position.
     /// </summary>
     /// <remarks>
-    /// <para>Uses <see cref="SmoothingSpeed"/> to control interpolation rate. The interpolation factor is clamped
+    /// <para>Eases both the position and the orthographic size. Uses <see cref="SmoothingSpeed"/> to control interpolation rate. The interpolation factor is clamped
     /// between 0 and 1 to ensure stable movement. Higher <see cref="SmoothingSpeed"/> values result in faster
     /// convergence to the target position.</para>
     /// <para>This method should only be called when <see cref="EnableSmoothing"/> is true.</para>
     /// </remarks>
     private void ApplySmoothMovement()
     {
-        var smoothFactor = Math.Clamp(SmoothingSpeed * Game.DeltaTime(), 0, 1);
+        var smoothFactor = Math.Clamp(SmoothingSpeed * DeltaTime, 0, 1);
         Entity.Transform.Position = Vector3.Lerp(Entity.Transform.Position, _targetPosition, smoothFactor);
+        _camera!.OrthographicSize = MathUtil.Lerp(_camera.OrthographicSize, _targetOrthographicSize, smoothFactor);
     }
 
     /// <summary>
@@ -493,8 +536,8 @@ public class Basic2DCameraController : SyncScript
     /// <remarks>
     /// <para>When <see cref="MouseDragButton"/> is held down and the mouse moves, the camera pans in the opposite
     /// direction to create a natural drag feel (the world moves with the mouse). The Y-axis is inverted for natural panning.</para>
-    /// <para>The movement is scaled by the current orthographic size to maintain consistent drag speed across zoom levels.
-    /// Larger orthographic sizes (zoomed out) result in proportionally larger camera movements per mouse pixel.</para>
+    /// <para>The movement is exactly the cursor's movement in world units: <see cref="CameraComponent.OrthographicSize"/> is
+    /// the visible height, so the point under the cursor stays under the cursor at any zoom level.</para>
     /// <para>If <see cref="EnableSmoothing"/> is enabled, movement is applied to the target position for interpolation.
     /// Otherwise, movement is applied directly to the camera's transform position.</para>
     /// <para>This method should only be called when <see cref="EnableMouseDragPan"/> is true.</para>
@@ -519,13 +562,15 @@ public class Basic2DCameraController : SyncScript
                 // Calculate mouse delta in screen space
                 var mouseDelta = currentMousePos - _lastMousePosition.Value;
 
-                // Convert to world space movement (invert Y for natural drag feel)
-                // Scale by orthographic size to match zoom level
-                var worldDelta = new Vector3(
-                    -mouseDelta.X * _camera!.OrthographicSize * 2.0f,
-                    mouseDelta.Y * _camera.OrthographicSize * 2.0f,
-                    0
-                );
+                // Mouse position is normalised (0..1 across the window) and OrthographicSize is the
+                // visible height, so a cursor move of mouseDelta covers mouseDelta * size world units
+                // vertically and mouseDelta * size * aspect horizontally. Invert X so the world follows
+                // the cursor; Y is already flipped between screen space (down) and world space (up).
+                var backBuffer = Game.GraphicsDevice.Presenter.BackBuffer;
+                var aspect = (float)backBuffer.Width / backBuffer.Height;
+                var height = _camera!.OrthographicSize;
+
+                var worldDelta = new Vector3(-mouseDelta.X * height * aspect, mouseDelta.Y * height, 0);
 
                 // Apply movement to the target position or directly to the camera
                 if (EnableSmoothing)
