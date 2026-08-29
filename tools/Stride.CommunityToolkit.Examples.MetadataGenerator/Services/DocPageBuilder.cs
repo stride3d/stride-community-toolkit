@@ -178,13 +178,14 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
 
         page.AppendLine("            <div class=\"card-body\">");
 
-        AppendCardTitle(page, example);
-        //AppendCardBadge(page, example);
-        //AppendCardText(page, example);
+        //AppendCardTitle(page, example);
+        AppendCardLinkTitle(page, example);
+        AppendCardBadge(page, example);
+        AppendCardText(page, example);
 
         page.AppendLine("            </div>");
 
-        AppendCardLink(page, example);
+        //AppendCardLink(page, example);
 
         page.AppendLine("        </div>");
         page.AppendLine("    </div>");
@@ -208,6 +209,9 @@ public class DocPageBuilder(DirectoryInfo? mediaDirectory)
     /// </summary>
     private static void AppendCardTitle(StringBuilder page, ExampleMetadata example)
         => page.AppendLine($"                <h3 class=\"card-title h6\">{Escape(TitleOf(example))}</h3>");
+
+    private static void AppendCardLinkTitle(StringBuilder page, ExampleMetadata example)
+        => page.AppendLine($"                <h3 class=\"card-title h6\"><a class=\"stretched-link text-decoration-none text-body\" href=\"{example.Slug}.md\">{Escape(TitleOf(example))}</a></h3>");
 
     /// <summary>
     /// The category badge. Not the level - that is already the section heading above the card.
