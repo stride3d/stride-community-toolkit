@@ -2,7 +2,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Example_CubicleCalamity.Scripts;
+namespace Example_CubicleCalamity.Components;
 
 /// <summary>
 /// Turns its entity about the Y axis to face the camera every frame.

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;

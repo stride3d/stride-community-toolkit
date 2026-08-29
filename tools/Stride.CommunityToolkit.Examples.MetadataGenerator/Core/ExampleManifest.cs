@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
+namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 
 /// <summary>
 /// The generated <c>examples-manifest.json</c> document.

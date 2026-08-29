@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using YamlDotNet.Serialization;
 
-namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
+namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 
 /// <summary>
 /// Represents the metadata for a single example, extracted from its <c>---example-metadata</c> block.

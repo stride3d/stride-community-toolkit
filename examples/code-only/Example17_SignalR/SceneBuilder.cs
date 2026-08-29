@@ -6,7 +6,7 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Example17_SignalR.Builders;
+namespace Example17_SignalR;
 
 /// <summary>
 /// Composes the scene for Example17 (SignalR) and attaches game scripts.

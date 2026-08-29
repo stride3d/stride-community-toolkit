@@ -39,12 +39,12 @@ public static class WorldGeometryBuilder
         var walls = new List<B2BodyId>();
         var halfWidth = width / 2f;
         var halfHeight = height / 2f;
-        var configs = new[]
+        var configs = new WallSpec[]
         {
-            new { Position = new Vector2(-halfWidth, 0), Size = new Vector2(wallThickness, height) },
-            new { Position = new Vector2(halfWidth, 0), Size = new Vector2(wallThickness, height) },
-            new { Position = new Vector2(0, halfHeight), Size = new Vector2(width, wallThickness) },
-            new { Position = new Vector2(0, -halfHeight), Size = new Vector2(width, wallThickness) }
+            new(new Vector2(-halfWidth, 0), new Vector2(wallThickness, height)),
+            new(new Vector2(halfWidth, 0), new Vector2(wallThickness, height)),
+            new(new Vector2(0, halfHeight), new Vector2(width, wallThickness)),
+            new(new Vector2(0, -halfHeight), new Vector2(width, wallThickness))
         };
 
         foreach (var c in configs)
@@ -62,4 +62,6 @@ public static class WorldGeometryBuilder
 
         return walls;
     }
+
+    private readonly record struct WallSpec(Vector2 Position, Vector2 Size);
 }

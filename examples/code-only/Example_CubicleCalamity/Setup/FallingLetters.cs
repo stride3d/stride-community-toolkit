@@ -151,7 +151,7 @@ public static class FallingLetters
                     }
                 }
             },
-            new Scripts.FaceCameraScript()
+            new FaceCameraScript()
         };
 
         entity.Transform.Position = position;
