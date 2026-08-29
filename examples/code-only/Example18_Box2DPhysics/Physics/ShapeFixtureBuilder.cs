@@ -107,14 +107,14 @@ public static class ShapeFixtureBuilder
     {
         var box = b2MakeBox(shapeModel.Size.X / 2, shapeModel.Size.Y / 2);
 
-        b2CreatePolygonShape(bodyId, ref shapeDef, ref box);
+        b2CreatePolygonShape(bodyId, in shapeDef, in box);
     }
 
     private static void CreateCircle(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef shapeDef)
     {
         var circle = new B2Circle(new B2Vec2(0.0f, 0.0f), shapeModel.Size.X);
 
-        b2CreateCircleShape(bodyId, ref shapeDef, ref circle);
+        b2CreateCircleShape(bodyId, in shapeDef, in circle);
     }
 
     private static void CreateTriangle(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef shapeDef)
@@ -127,9 +127,9 @@ public static class ShapeFixtureBuilder
         if (points.Length < 3) throw new InvalidOperationException("Triangle must have at least 3 vertices");
 
         var hull = b2ComputeHull(points, 3);
-        var triangle = b2MakePolygon(ref hull, 0.0f);
+        var triangle = b2MakePolygon(in hull, 0.0f);
 
-        b2CreatePolygonShape(bodyId, ref shapeDef, ref triangle);
+        b2CreatePolygonShape(bodyId, in shapeDef, in triangle);
     }
 
     private static void CreateCapsule(Shape2DModel shapeModel, B2BodyId bodyId, B2ShapeDef shapeDef)
@@ -140,6 +140,6 @@ public static class ShapeFixtureBuilder
 
         var capsule = new B2Capsule(new B2Vec2(0, -capsuleHeight), new B2Vec2(0, capsuleHeight), radius);
 
-        b2CreateCapsuleShape(bodyId, ref shapeDef, ref capsule);
+        b2CreateCapsuleShape(bodyId, in shapeDef, in capsule);
     }
 }

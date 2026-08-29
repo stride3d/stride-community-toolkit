@@ -50,7 +50,7 @@ public class PhysicsWorld2D : IDisposable
         _settings = settings ?? new PhysicsStepSettings();
         var def = b2DefaultWorldDef();
         def.gravity = new Box2D.NET.B2Vec2(0f, -10f);
-        _worldId = b2CreateWorld(ref def);
+        _worldId = b2CreateWorld(in def);
     }
 
     /// <summary>

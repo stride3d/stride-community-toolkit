@@ -329,7 +329,7 @@ public class SceneManager
         jointDef.@base.localFrameA.p = new B2Vec2(0, 0);
         jointDef.@base.localFrameB.p = new B2Vec2(0, 0);
 
-        b2CreateDistanceJoint(_worldId, ref jointDef);
+        b2CreateDistanceJoint(_worldId, in jointDef);
     }
 
     private void CreateShapeAtPosition(Vector2 position)

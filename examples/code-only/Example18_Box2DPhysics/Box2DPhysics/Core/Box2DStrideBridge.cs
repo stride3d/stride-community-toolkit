@@ -27,7 +27,7 @@ public class Box2DStrideBridge
         bodyDef.type = type;
         bodyDef.position = new B2Vec2(position.X, position.Y);
 
-        var bodyId = b2CreateBody(_world.WorldId, ref bodyDef);
+        var bodyId = b2CreateBody(_world.WorldId, in bodyDef);
 
         return bodyId;
     }
@@ -38,7 +38,7 @@ public class Box2DStrideBridge
         bodyDef.type = type;
         bodyDef.position = new B2Vec2(position.X, position.Y);
 
-        var bodyId = b2CreateBody(_world.WorldId, ref bodyDef);
+        var bodyId = b2CreateBody(_world.WorldId, in bodyDef);
 
         _bodyToEntity[bodyId] = entity;
         _entityToBody[entity] = bodyId;
