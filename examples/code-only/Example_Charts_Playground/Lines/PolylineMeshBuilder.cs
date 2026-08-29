@@ -6,7 +6,7 @@ using Buffer = Stride.Graphics.Buffer;
 namespace Stride.CommunityToolkit.Rendering.Lines;
 
 /// <summary>
-/// Builds a ribbon <see cref="Mesh"/> from a list of points, so a line can have real thickness.
+/// Builds ribbon <see cref="Mesh"/>es from points, so a line can have real thickness.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -25,7 +25,7 @@ namespace Stride.CommunityToolkit.Rendering.Lines;
 public static class PolylineMeshBuilder
 {
     /// <summary>
-    /// Builds the ribbon mesh.
+    /// Builds one continuous ribbon through <paramref name="points"/>.
     /// </summary>
     /// <param name="device">The device to create the vertex and index buffers on.</param>
     /// <param name="points">The line's points, in order. At least two are required.</param>
@@ -44,6 +44,54 @@ public static class PolylineMeshBuilder
             throw new ArgumentException("A polyline needs at least two points.", nameof(points));
         }
 
+        var normal = NormalOf(options);
+        var vertices = new List<VertexPositionNormalTexture>(points.Count * 2);
+        var indices = new List<int>(points.Count * 6);
+
+        AppendRibbon(vertices, indices, points, normal, options.Width * 0.5f, options.Closed);
+
+        return ToMesh(device, vertices, indices);
+    }
+
+    /// <summary>
+    /// Builds many separate two-point ribbons as a single mesh - for tick marks, grids and anything else
+    /// made of disconnected straight segments, where one mesh is far cheaper than one entity per segment.
+    /// </summary>
+    /// <param name="device">The device to create the vertex and index buffers on.</param>
+    /// <param name="segments">The segments, each a start and an end point. At least one is required.</param>
+    /// <param name="options">Width and plane of the ribbons. <see cref="PolylineOptions.Closed"/> is ignored.</param>
+    /// <returns>A mesh whose bounds are set, ready to be put in a <see cref="Model"/>.</returns>
+    /// <exception cref="ArgumentNullException">If any argument is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If there are no segments, or <see cref="PolylineOptions.Normal"/> has no length.</exception>
+    public static Mesh BuildSegments(GraphicsDevice device, IReadOnlyList<(Vector3 Start, Vector3 End)> segments, PolylineOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(device);
+        ArgumentNullException.ThrowIfNull(segments);
+        ArgumentNullException.ThrowIfNull(options);
+
+        if (segments.Count == 0)
+        {
+            throw new ArgumentException("At least one segment is required.", nameof(segments));
+        }
+
+        var normal = NormalOf(options);
+        var halfWidth = options.Width * 0.5f;
+        var vertices = new List<VertexPositionNormalTexture>(segments.Count * 4);
+        var indices = new List<int>(segments.Count * 6);
+        var pair = new Vector3[2];
+
+        foreach (var (start, end) in segments)
+        {
+            pair[0] = start;
+            pair[1] = end;
+            AppendRibbon(vertices, indices, pair, normal, halfWidth, closed: false);
+        }
+
+        return ToMesh(device, vertices, indices);
+    }
+
+    private static Vector3 NormalOf(PolylineOptions options)
+    {
         var normal = options.Normal;
 
         if (normal.LengthSquared() <= MathUtil.ZeroTolerance)
@@ -53,9 +101,17 @@ public static class PolylineMeshBuilder
 
         normal.Normalize();
 
+        return normal;
+    }
+
+    /// <summary>
+    /// Appends the ribbon for one polyline to the shared vertex and index lists.
+    /// </summary>
+    private static void AppendRibbon(List<VertexPositionNormalTexture> vertices, List<int> indices, IReadOnlyList<Vector3> points, Vector3 normal, float halfWidth, bool closed)
+    {
         var count = points.Count;
-        var segmentCount = options.Closed ? count : count - 1;
-        var halfWidth = options.Width * 0.5f;
+        var segmentCount = closed ? count : count - 1;
+        var baseIndex = vertices.Count;
 
         // Distance along the line at each point, for the U texture coordinate
         var distances = new float[count];
@@ -66,41 +122,42 @@ public static class PolylineMeshBuilder
 
         var totalLength = distances[count - 1];
 
-        if (options.Closed)
+        if (closed)
         {
             totalLength += Vector3.Distance(points[count - 1], points[0]);
         }
 
-        var vertices = new VertexPositionNormalTexture[count * 2];
-
         for (var i = 0; i < count; i++)
         {
-            var tangent = TangentAt(points, i, options.Closed);
+            var tangent = TangentAt(points, i, closed);
             var side = Vector3.Cross(normal, tangent);
             side.Normalize();
             side *= halfWidth;
 
             var u = totalLength > 0 ? distances[i] / totalLength : 0f;
 
-            vertices[i * 2] = new VertexPositionNormalTexture(points[i] - side, normal, new Vector2(u, 0f));
-            vertices[i * 2 + 1] = new VertexPositionNormalTexture(points[i] + side, normal, new Vector2(u, 1f));
+            vertices.Add(new VertexPositionNormalTexture(points[i] - side, normal, new Vector2(u, 0f)));
+            vertices.Add(new VertexPositionNormalTexture(points[i] + side, normal, new Vector2(u, 1f)));
         }
-
-        var indices = new int[segmentCount * 6];
 
         for (var s = 0; s < segmentCount; s++)
         {
-            var a = s * 2;
-            var b = ((s + 1) % count) * 2;
-            var o = s * 6;
+            var a = baseIndex + s * 2;
+            var b = baseIndex + ((s + 1) % count) * 2;
 
-            indices[o] = a;
-            indices[o + 1] = a + 1;
-            indices[o + 2] = b;
-            indices[o + 3] = a + 1;
-            indices[o + 4] = b + 1;
-            indices[o + 5] = b;
+            indices.Add(a);
+            indices.Add(a + 1);
+            indices.Add(b);
+            indices.Add(a + 1);
+            indices.Add(b + 1);
+            indices.Add(b);
         }
+    }
+
+    private static Mesh ToMesh(GraphicsDevice device, List<VertexPositionNormalTexture> vertexList, List<int> indexList)
+    {
+        var vertices = vertexList.ToArray();
+        var indices = indexList.ToArray();
 
         var vertexBuffer = Buffer.New(device, vertices, BufferFlags.VertexBuffer, GraphicsResourceUsage.Default);
         var indexBuffer = Buffer.New(device, indices, BufferFlags.IndexBuffer, GraphicsResourceUsage.Default);

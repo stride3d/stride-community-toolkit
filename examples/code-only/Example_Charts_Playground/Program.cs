@@ -1,59 +1,77 @@
 using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Lines;
-using Stride.CommunityToolkit.Skyboxes;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
+using Stride.Input;
 
 // Playground for the chart helpers that are being grown here before moving into the toolkit.
-// The Lines/ folder is already in its final namespace (Stride.CommunityToolkit.Rendering.Lines),
-// so extracting it later is a move, not a rewrite.
+// Lines/ and Charts/ are already in their final namespaces (Stride.CommunityToolkit.Rendering.Lines
+// and Stride.CommunityToolkit.Charts), so extracting them later is a move, not a rewrite.
 //
-// What this shows: lines with real thickness and glow. Hardware lines are always one pixel wide,
-// so every line here is a ribbon mesh built by PolylineMeshBuilder; the glow comes from an emissive
-// intensity above 1 hitting the bloom that SetupBase3DScene's compositor already has enabled.
+// What this shows: a chart with axes, ticks, labels and a grid, and curves drawn as lines with real
+// thickness and glow. Hardware lines are always one pixel wide, so every line here is a ribbon mesh
+// built by PolylineMeshBuilder; the glow comes from an emissive intensity above 1 hitting the bloom
+// that SetupBase3DScene's compositor already has enabled.
+//
+// Controls: G toggles the grid. The key is listed in the DebugOverlay section so it shares one
+// screen block with the camera help (F2 collapses it, F3 moves it, F4 hides it).
 
 using var game = new Game();
 
-game.Run(start: Start);
+Chart? chart = null;
+
+game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
+    game.SetupBase2DScene();
+    //game.SetupBase3DScene();
+    //game.AddSkybox();
 
-    // The chart is drawn in the XY plane, 3 units up so it stands clear of the ground
-    var chart = new Entity("Chart") { Transform = { Position = new Vector3(0, 3, 0) } };
-    chart.Scene = rootScene;
+    chart = Chart.Create(game, new ChartOptions
+    {
+        XMin = -5f,
+        XMax = 5f,
+        YMin = -4f,
+        YMax = 4f,
+        TickStep = 1f,
+    });
 
-    const float extent = 5f;
+    // The chart is drawn in the XY plane, lifted so most of it stands clear of the ground
+    chart.Root.Transform.Position = new Vector3(0, 3f, 0);
+    chart.Root.Scene = rootScene;
 
-    // Axes: thin, no glow
-    chart.AddChild(game.CreatePolyline(
-        [new Vector3(-extent, 0, 0), new Vector3(extent, 0, 0)],
-        new PolylineOptions { Width = 0.03f, Color = Color.Red },
-        name: "X axis"));
+    // Explicit options: pick the width, colour and glow strength yourself
+    chart.Plot(x => 2f * MathF.Sin(x), new PolylineOptions { Width = 0.08f, Color = Color.Cyan, EmissiveIntensity = 3f }, name: "sin");
 
-    chart.AddChild(game.CreatePolyline(
-        [new Vector3(0, -extent, 0), new Vector3(0, extent, 0)],
-        new PolylineOptions { Width = 0.03f, Color = Color.LimeGreen },
-        name: "Y axis"));
+    // No options: the chart picks the next palette colour with a medium glow
+    chart.Plot(x => 0.15f * x * x - 3f, name: "parabola");
 
-    // Three curves with different widths and glow strengths
-    chart.AddChild(game.CreatePolyline(
-        PolylineSampling.Function(x => 2f * MathF.Sin(x), -extent, extent),
-        new PolylineOptions { Width = 0.08f, Color = Color.Cyan, EmissiveIntensity = 3f },
-        name: "sin"));
-
-    chart.AddChild(game.CreatePolyline(
-        PolylineSampling.Function(x => 0.15f * x * x - 3f, -extent, extent),
-        new PolylineOptions { Width = 0.06f, Color = Color.Orange, EmissiveIntensity = 2f },
-        name: "parabola"));
-
-    chart.AddChild(game.CreatePolyline(
-        PolylineSampling.Parametric(t => new Vector3(1.5f * MathF.Cos(t), 1.5f * MathF.Sin(t), 0f), 0f, MathUtil.TwoPi, 96),
+    chart.PlotParametric(
+        t => new Vector3(1.5f * MathF.Cos(t), 1.5f * MathF.Sin(t), 0f), 0f, MathUtil.TwoPi,
         new PolylineOptions { Width = 0.05f, Color = Color.Magenta, EmissiveIntensity = 4f, Closed = true },
-        name: "circle"));
+        samples: 96,
+        name: "circle");
+
+    // The overlay draws itself and is shared with the camera controller's help; the lambda is read
+    // every frame, so the grid state it shows is always current
+    DebugOverlay.GetOrCreate(game).AddSection("Chart", () =>
+    [
+        new("CHART"),
+        new($"Press G to toggle the grid ({(chart.GridVisible ? "on" : "off")})", Color.Yellow),
+    ]);
+}
+
+void Update(Scene scene, GameTime time)
+{
+    if (chart != null && game.Input.IsKeyPressed(Keys.G))
+    {
+        chart.GridVisible = !chart.GridVisible;
+    }
 }
 
 /*
@@ -67,18 +85,20 @@ complexity: 3
 order: 35
 description:
   en: |-
-    A sandbox for chart and plotting helpers: axes and function curves drawn as glowing lines with
-    real thickness. Hardware lines are one pixel wide, so each line is a ribbon mesh built by
-    PolylineMeshBuilder from sampled points, given an emissive material that the default compositor's
-    bloom turns into a glow. The helpers live in their final toolkit namespace and will move into the
-    library once their shape settles.
+    A sandbox for chart and plotting helpers: a chart with axes, tick marks, labels and a toggleable
+    grid, and function curves drawn as glowing lines with real thickness. Hardware lines are one pixel
+    wide, so each line is a ribbon mesh built by PolylineMeshBuilder from sampled points, given an
+    emissive material that the default compositor's bloom turns into a glow. Tick labels are
+    WorldTextComponents, so they face the camera. The helpers live in their final toolkit namespaces
+    and will move into the library once their shape settles.
 concepts:
-  - Building a ribbon mesh from a list of points
+  - Building a ribbon mesh from a list of points, and one mesh from many segments
   - Sampling y = f(x) and parametric curves into points
   - "Emissive intensity above 1 plus bloom: glowing lines"
-  - Double-sided materials with CullMode.None
+  - Tick labels with WorldTextComponent
   - Grouping entities under a parent so a chart moves as one
-  - "Using helpers: SetupBase3DScene, AddSkybox"
+  - Toggling a ModelComponent with a key listed in a DebugOverlay section
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddWorldTextRenderer, DebugOverlay"
 tags:
   - 3D
   - Geometry
@@ -87,4 +107,5 @@ tags:
   - Chart
   - Emissive
   - Bloom
+  - World Text
 */
