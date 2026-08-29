@@ -1,6 +1,6 @@
 namespace Stride.CommunityToolkit.ImGuiNet
 {
-    shader ImGuiNetShader : ShaderBase {
+    internal shader ImGuiNetShader : ShaderBase {
 
         matrix proj;
         stage Texture2D tex;
