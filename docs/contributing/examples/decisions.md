@@ -49,7 +49,7 @@ This is the rationale; the rules themselves are in [Example Metadata Schema](met
 | D43 | Legacy Bullet variants | **They keep their docs.** Documented like any other example |
 | D45 | `Example17_SignalR_Blazor` | `docs: false`. It is the server half of a pair that one page documents, and it stays in the launchers so the pair can be started |
 | D46 | Duplicate `order` | **Warning, not an error.** The tie breaks on `slug`, which is required and unique, so the order stays stable and reproducible - the author has just not chosen between the two |
-| D47 | Where validation errors are written | **stderr**, everything else stdout. The pre-build hook raises only `StandardErrorImportance`, so a passing build stays quiet and a failing one prints every finding |
+| D47 | Where findings are written | Warnings and errors to **stderr**, everything else to stdout. The pre-build hook raises `StandardErrorImportance` and lowers `StandardOutputImportance`, so a clean build prints one line and a build with something to say prints every finding |
 | D48 | Metadata block in the rendered code listing | Excluded with a DocFX **line range**, computed at generation time - see below |
 | D49 | Toc nesting depth | **Keep the four levels for now.** Options recorded below if it is revisited |
 | D50 | `C#` prefix on toc group names | **Deliberate, keep it.** It reads as redundant next to the F#/VB groups, but it is there so C# developers searching for "C# *topic*" find these pages. Do not "simplify" it away |
@@ -57,6 +57,7 @@ This is the rationale; the rules themselves are in [Example Metadata Schema](met
 | D52 | `--media-path` default | **Required on `docs`, optional on `scan`/`generate`.** For scan and generate the path only enables an extra check, so absent means "skip a check". For docs it decides whether a page gets an image at all, and absent silently produced 41 image-less pages |
 | D53 | ImGui frame pairing | Guard with a `_frameBegun` flag rather than reordering game systems. The problem was never draw ordering - a fixed timestep can issue several `Update`s per `Draw`, so `NewFrame` must close any frame it finds already open |
 | D54 | Camera aiming API | Separate **read** (the F2 overlay prints live position and YPR) from **write** (`SetCameraPosition` / `SetCameraRotation`). Not a new `Add3DCamera` overload - that creates a second entity contending for camera slot 0 |
+| D55 | A deliberate outcome is not a warning | Third severity, `Info`, kept out of the warning count. A `related:` link dropped because its target is `enabled: false` is the pipeline working, not an authoring mistake - see below |
 
 ## D24 - why slugs stay level-free
 
@@ -120,3 +121,34 @@ If the depth ever does bother people, the options are:
 - **Move the nested toc up** to `manual/code-only/toc.yml`, owning the whole Code-Only subtree. Back to three levels, at the cost of a region-marker mechanism for YAML, since that file also holds hand-maintained entries.
 - **Write example entries straight into `manual/toc.yml`.** Three levels, no new file, but the generator starts editing a hand-maintained file - which D13 exists to avoid.
 - **Keep four levels.** The current choice, pending community feedback.
+
+## D55 - a deliberate outcome is not a warning
+
+Two examples list `Example07_CubeClicker` in their `related:`. It is `enabled: false`, so it never reaches the manifest and the link is dropped - and the validator warned about that on **every build**, twice, once per launcher project.
+
+The warning was accurate and completely unactionable. Nothing is wrong: the link is meant to come back when the example does. Its old wording conflated two genuinely different situations - "this project has no metadata block yet" (an authoring gap worth fixing) and "this project is deliberately unpublished" (working as designed) - under one severity, so the only way to silence it was to delete information that should be kept.
+
+The fix is a third severity. `Info` records what the generator decided without counting as a finding, so a deliberate outcome stays visible in the log without being indistinguishable from a problem. The rule it encodes: **a warning nobody can act on is noise on every build, and noise that appears on every build stops being read.**
+
+### The Visual Studio Error List parses your output
+
+Chasing the above turned up something worth recording, because it is invisible unless you build in the IDE.
+
+The validator's summary line read:
+
+```
+[17:02:19 INF] Validation finished: 0 error(s), 2 warning(s) across 57 example(s)
+```
+
+In Visual Studio that produced a **red error row in the Error List**, on a build where every project succeeded. The row's text was `0 error(s), 2 warning(s) across 57 example(s)` - the line from the colon onwards.
+
+MSBuild itself never classified it. A diagnostic-verbosity log shows it logged as a plain message, and the CLI reported `0 Warning(s) 0 Error(s)` throughout. Visual Studio runs its own error-format parser over task output, and `<something>: … error …` was enough to match it: origin, colon, the word `error`.
+
+Two changes together:
+
+- **The summary no longer puts the word `error` after a colon.** It now reads `Validation finished - 57 example(s) checked, 0 failed, 0 flagged`.
+- **`StandardOutputImportance="low"` on the `Exec`.** This had to be set explicitly - `Exec` defaults it to **high**, not low, so all sixty-odd per-example lines were reaching every build. Warnings and errors moved to stderr, which the hook still raises at high importance, so nothing worth reading was lost.
+
+A clean build now prints one line: `Generating examples metadata manifest...`. A build with a warning prints the warning. A build with an error prints every finding and then fails, exactly as before.
+
+If you add output to this tool, keep the pattern in mind: **never write a line where `error` or `warning` follows a colon**, or the IDE will invent a diagnostic out of it.

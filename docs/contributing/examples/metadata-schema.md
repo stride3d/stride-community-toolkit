@@ -82,7 +82,7 @@ Fields are written in that order - identity, classification, content, docs, laun
 | `description.en` | | Rendered as the page intro and the gallery card. |
 | `concepts` | | The "The `Program.cs` file shows how to:" bullet list. |
 | `tags` | | Free-form topics. **Never repeat the `level` here** - it is a field, not a tag, and the validator rejects it. |
-| `related` | | Project folder names, not slugs. A name matching no folder is an error; a folder with no metadata block yet is only a warning. |
+| `related` | | Project folder names, not slugs. A name matching no folder is an **error** - it is a typo. A folder that exists but carries no metadata block yet is a **warning**. A folder that is `enabled: false` is neither: the link is dropped deliberately and comes back when the example does. |
 
 ### Documentation
 
