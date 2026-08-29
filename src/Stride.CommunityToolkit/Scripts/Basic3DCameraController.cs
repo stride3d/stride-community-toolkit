@@ -124,7 +124,7 @@ public class Basic3DCameraController : SyncScript
 
                 return
                 [
-                    new("F3: Reposition Help", Color.Red),
+                    new("F3: Reposition Help", Color.LightGoldenrodYellow),
                     new("WASD: Move", Color.LightGreen),
                     new("Arrow Keys: Move", Color.LightGreen),
                     new("Q/E: Ascend/Descend", Color.LightGreen),

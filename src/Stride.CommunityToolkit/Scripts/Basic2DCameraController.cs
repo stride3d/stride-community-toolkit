@@ -241,7 +241,7 @@ public class Basic2DCameraController : SyncScript
             {
                 var lines = new List<TextElement>
                 {
-                    new("F3: Reposition Help", Color.Red),
+                    new("F3: Reposition Help", Color.LightGoldenrodYellow),
                     new(EnableWasdMovement ? "WASD / Arrow Keys: Move" : "Arrow Keys: Move"),
                     new("Hold Shift: Increase speed"),
                     new("Mouse Wheel: Zoom"),
