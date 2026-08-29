@@ -5,6 +5,17 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
 /// </summary>
 public enum ValidationSeverity
 {
+    /// <summary>
+    /// Nothing is wrong. The finding records something the generator decided, so that a deliberate
+    /// outcome is not indistinguishable from a silent one - a <c>related:</c> link dropped because its
+    /// target is <c>enabled: false</c>, for instance.
+    /// </summary>
+    /// <remarks>
+    /// Kept out of the warning count on purpose. A warning that nobody can act on is noise on every
+    /// build, and noise that appears on every build stops being read.
+    /// </remarks>
+    Info,
+
     /// <summary>Worth fixing, but the manifest is still usable.</summary>
     Warning,
 
@@ -32,6 +43,10 @@ public sealed record ValidationMessage(
     /// <summary>Creates a warning-severity message.</summary>
     public static ValidationMessage Warning(string projectName, string field, string message)
         => new(ValidationSeverity.Warning, projectName, field, message);
+
+    /// <summary>Creates an informational message, which is not counted as a warning.</summary>
+    public static ValidationMessage Info(string projectName, string field, string message)
+        => new(ValidationSeverity.Info, projectName, field, message);
 
     /// <inheritdoc />
     public override string ToString() => $"{ProjectName} [{Field}]: {Message}";

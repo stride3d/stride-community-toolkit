@@ -114,9 +114,18 @@ slug: mesh-outline-fs
 ## Validation
 
 Findings are aggregated: one run reports every problem across every example, rather than stopping at
-the first. Errors are fatal only under `--strict`, which the Launcher pre-build hook passes. Errors go
-to **stderr** and everything else to stdout, so a failing build prints every finding while a passing
-one stays quiet.
+the first. Errors are fatal only under `--strict`, which the Launcher pre-build hook passes.
+
+Findings come in three severities. **Errors and warnings go to stderr**, everything else to stdout, and
+the pre-build hook raises stderr at high importance while lowering stdout - so a clean build prints one
+line, a build with a warning prints the warning, and a failing one prints every finding. `Info` is the
+third: it records something the generator *decided*, such as a `related:` link dropped because its
+target is `enabled: false`, and is deliberately kept out of the warning count. A warning nobody can act
+on appears on every build and stops being read.
+
+When adding output here, never write a line where the word `error` or `warning` follows a colon.
+Visual Studio runs its own error-format parser over task output and will turn it into a red row in the
+Error List, on a build that MSBuild considers clean.
 
 A duplicate `order` within a group is a **warning**, not an error: the tie is broken by `slug`, which is
 required and unique, so the sequence stays stable - the author has just not said which of the two comes

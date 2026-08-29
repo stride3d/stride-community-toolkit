@@ -27,10 +27,15 @@
             would otherwise produce a quietly incomplete manifest and a green build, which is how two
             examples lost their order without anyone noticing.
 
-            The generator logs validation errors to stderr and everything else to stdout, so raising
-            only StandardErrorImportance keeps a successful build quiet while a failure still prints
-            every finding. Leave StandardOutputImportance alone: at high it adds a line per example,
-            which is around sixty lines of noise on every build.
+            The generator logs warnings and errors to stderr and everything else to stdout, so raising
+            StandardErrorImportance while lowering StandardOutputImportance keeps a successful build
+            quiet and still prints every finding on a failure.
+
+            StandardOutputImportance must be set explicitly. Exec defaults it to high, so leaving it
+            alone put all sixty-odd per-example lines into every build - and one of them, the
+            "Validation finished: 0 error(s)..." summary, matched Visual Studio's own error-format
+            parser and produced a red row in the Error List on a build with no errors at all. MSBuild
+            never classified it, so the CLI reported 0/0 and the problem was invisible outside the IDE.
 
             Both streams must declare utf-8. Only StdErrEncoding was set at first, and the result was
             legible but absurd: the error line rendered its ✖ correctly while every stdout line above it
@@ -40,6 +45,7 @@
         -->
         <Exec Command="dotnet run --project &quot;$(GeneratorProject)&quot; --configuration $(Configuration) -- $(GeneratorArgs)"
               StandardErrorImportance="high"
+              StandardOutputImportance="low"
               StdErrEncoding="utf-8"
               StdOutEncoding="utf-8" />
 

@@ -16,6 +16,8 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
     [GeneratedRegex(@"^[a-z0-9]+(-[a-z0-9]+)*$")]
     private static partial Regex SlugPattern();
 
+    private static readonly IReadOnlySet<string> EmptyProjects = new HashSet<string>(StringComparer.Ordinal);
+
 
     /// <summary>
     /// Validates a set of parsed examples.
@@ -29,11 +31,17 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
     /// Every example project folder name, used to resolve <c>related:</c>. Pass <see langword="null"/>
     /// to resolve against the parsed examples alone.
     /// </param>
+    /// <param name="disabledProjects">
+    /// Project folder names excluded by <c>enabled: false</c>. A <c>related:</c> link pointing at one of
+    /// these is dropped deliberately rather than through an authoring mistake, so it is reported as
+    /// information instead of a warning.
+    /// </param>
     /// <returns>Every finding, in no particular order.</returns>
     public IReadOnlyList<ValidationMessage> Validate(
         IReadOnlyList<ParsedExample> examples,
         DirectoryInfo? mediaDirectory,
-        IReadOnlySet<string>? knownProjects = null)
+        IReadOnlySet<string>? knownProjects = null,
+        IReadOnlySet<string>? disabledProjects = null)
     {
         ArgumentNullException.ThrowIfNull(examples);
 
@@ -57,13 +65,18 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
         ValidateSlugUniqueness(examples, messages);
         ValidateMediaUniqueness(examples, messages);
         ValidateOrderUniqueness(examples, messages);
-        ResolveRelated(examples, knownProjects, messages);
+        ResolveRelated(examples, knownProjects, disabledProjects ?? EmptyProjects, messages);
 
         var errors = messages.Count(message => message.Severity == ValidationSeverity.Error);
-        var warnings = messages.Count - errors;
+        var warnings = messages.Count(message => message.Severity == ValidationSeverity.Warning);
 
-        logger.LogInformation("Validation finished: {Errors} error(s), {Warnings} warning(s) across {Count} example(s)",
-            errors, warnings, examples.Count);
+        // Deliberately phrased without a colon in front of the word "error". Visual Studio runs its own
+        // error-format parser over task output, and "<origin>: 0 error(s)..." was matching it: every
+        // build grew a red row in the Error List reading "0 error(s), 2 warning(s)", on a build that had
+        // neither. MSBuild itself never classified the line - the CLI reported 0/0 throughout - so this
+        // was invisible to anyone not building in the IDE.
+        logger.LogInformation("Validation finished - {Count} example(s) checked, {Errors} failed, {Warnings} flagged",
+            examples.Count, errors, warnings);
 
         return messages;
     }
@@ -309,6 +322,7 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
     private static void ResolveRelated(
         IReadOnlyList<ParsedExample> examples,
         IReadOnlySet<string> knownProjects,
+        IReadOnlySet<string> disabledProjects,
         List<ValidationMessage> messages)
     {
         var slugByProject = examples
@@ -342,10 +356,19 @@ public partial class MetadataValidator(ILogger<MetadataValidator> logger)
                     continue;
                 }
 
-                // The project exists but has no slug to link to: either it has not been backfilled yet,
-                // or it is disabled and therefore absent from the manifest.
+                // Two different situations reach here, and conflating them produced a warning nobody
+                // could act on. A link to a disabled example is working as designed: the target is
+                // deliberately absent from the manifest, and the link is meant to come back with it.
+                if (disabledProjects.Contains(name))
+                {
+                    messages.Add(ValidationMessage.Info(ProjectNameOf(example), "related",
+                        $"'{name}' is enabled: false, so the link is dropped until it is published again."));
+
+                    continue;
+                }
+
                 messages.Add(ValidationMessage.Warning(ProjectNameOf(example), "related",
-                    $"'{name}' has no slug yet, so the link is dropped from the manifest. It is either not backfilled or not published."));
+                    $"'{name}' has no metadata block yet, so the link is dropped from the manifest."));
             }
 
             example.Metadata.RelatedSlugs = resolved;

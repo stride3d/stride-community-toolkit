@@ -128,14 +128,18 @@ public class ManifestService(
         // enabled: false means excluded from the manifest entirely, so a disabled example is invisible
         // to every consumer and takes no part in the uniqueness checks.
         var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
-        var excluded = scan.Examples.Count - published.Count;
+        var disabled = scan.Examples
+            .Where(example => example.Metadata.Enabled == false)
+            .Select(example => example.Metadata.ProjectName)
+            .OfType<string>()
+            .ToHashSet(StringComparer.Ordinal);
 
-        if (excluded > 0)
+        if (disabled.Count > 0)
         {
-            logger.LogInformation("Excluded {Count} example(s) marked enabled: false", excluded);
+            logger.LogInformation("Excluded {Count} example(s) marked enabled: false", disabled.Count);
         }
 
-        var messages = metadataValidator.Validate(published, mediaDirectory, exampleScanner.FindProjectNames(examplesRootPath));
+        var messages = metadataValidator.Validate(published, mediaDirectory, exampleScanner.FindProjectNames(examplesRootPath), disabled);
         var errorCount = ReportValidation(messages) + scan.Failures;
 
         if (errorCount > 0 && strict)
@@ -195,7 +199,13 @@ public class ManifestService(
         }
 
         var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
-        var messages = metadataValidator.Validate(published, mediaDirectory, exampleScanner.FindProjectNames(examplesRootPath));
+        var disabled = scan.Examples
+            .Where(example => example.Metadata.Enabled == false)
+            .Select(example => example.Metadata.ProjectName)
+            .OfType<string>()
+            .ToHashSet(StringComparer.Ordinal);
+
+        var messages = metadataValidator.Validate(published, mediaDirectory, exampleScanner.FindProjectNames(examplesRootPath), disabled);
         var errorCount = ReportValidation(messages) + scan.Failures;
 
         if (errorCount > 0)
@@ -227,9 +237,13 @@ public class ManifestService(
 
                 logger.LogError("  ✖ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
             }
-            else
+            else if (message.Severity == ValidationSeverity.Warning)
             {
                 logger.LogWarning("  ⚠ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
+            }
+            else
+            {
+                logger.LogInformation("  ℹ {ProjectName} [{Field}] {Message}", message.ProjectName, message.Field, message.Message);
             }
         }
 
