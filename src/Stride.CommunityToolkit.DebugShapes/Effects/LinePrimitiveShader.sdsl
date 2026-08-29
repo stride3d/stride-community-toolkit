@@ -1,6 +1,6 @@
 namespace Stride.CommunityToolkit.DebugShapes
 {
-    shader LinePrimitiveShader : ShaderBase, ColorBase {
+    internal shader LinePrimitiveShader : ShaderBase, ColorBase {
 
         float4x4 ViewProjection;
         stream float3 Position : POSITION;

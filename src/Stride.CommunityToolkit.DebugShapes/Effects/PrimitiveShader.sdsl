@@ -1,6 +1,6 @@
 namespace Stride.CommunityToolkit.DebugShapes
 {
-    shader PrimitiveShader : ShaderBase, ColorBase
+    internal shader PrimitiveShader : ShaderBase, ColorBase
     {
         struct TransformData {
             float4x4 Matrix;
