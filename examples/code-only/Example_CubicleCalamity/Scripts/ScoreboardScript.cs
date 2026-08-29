@@ -1,5 +1,5 @@
 using Example_CubicleCalamity.Gameplay;
-using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
 
 namespace Example_CubicleCalamity.Scripts;

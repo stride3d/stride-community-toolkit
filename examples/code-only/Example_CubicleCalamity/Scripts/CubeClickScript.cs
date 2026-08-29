@@ -3,6 +3,7 @@ using Example_CubicleCalamity.Setup;
 using Example_CubicleCalamity.Shared;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;

@@ -8,6 +8,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Renderers;
 using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
