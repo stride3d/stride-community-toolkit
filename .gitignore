@@ -400,7 +400,7 @@ FodyWeavers.xsd
 .sarif/*.json
 /.idea/*
 
-# Generated examples manifest (build artifact - see notes/plans/examples-metadata.md D7).
+# Generated examples manifest (build artifact - see docs/contributing/examples/decisions.md D7).
 # Written next to each launcher by tools/ExamplesManifest.targets.
 tools/**/examples-manifest.json
 
