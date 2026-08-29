@@ -8,7 +8,7 @@ namespace Stride.CommunityToolkit.Mathematics;
 /// </summary>
 [DataContract]
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
-public struct RaySegment : IEquatable<RaySegment>, IFormattable
+public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
 {
     private const string ToStringFormat = "Start:{0} End:{1}";
 
