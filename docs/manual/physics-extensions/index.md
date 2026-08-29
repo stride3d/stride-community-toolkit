@@ -31,6 +31,8 @@ Bepu is the newer engine and the toolkit's default; the examples and the `SetupB
 
 - [`Raycast()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Core.Mathematics.Vector2,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - Casts from the camera through a screen position and reports the first hit.
 - [`RaycastMouse()`](xref:Stride.CommunityToolkit.Bepu.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,System.Single,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - The same, reading the mouse position for you.
+- [`BepuSimulation.RayCast()`](xref:Stride.CommunityToolkit.Bepu.SimulationExtensions.RayCast(Stride.BepuPhysics.BepuSimulation,Stride.CommunityToolkit.Mathematics.RaySegment@,Stride.BepuPhysics.HitInfo@,Stride.BepuPhysics.CollisionMask)) - Casts a `RaySegment` directly, with no camera and no maximum distance to choose: the segment's own length is the limit. Pairs with `ScreenToWorldRaySegment()`.
+- [`RayCastPenetrating()`](xref:Stride.CommunityToolkit.Bepu.SimulationExtensions.RayCastPenetrating(Stride.BepuPhysics.BepuSimulation,Stride.CommunityToolkit.Mathematics.RaySegment@,System.Collections.Generic.ICollection{Stride.BepuPhysics.HitInfo},Stride.BepuPhysics.CollisionMask)) - Returns every hit along the segment rather than stopping at the first. An overload fills a collection you supply, to avoid allocating.
 
 ### Convex hulls
 
@@ -60,8 +62,8 @@ In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitr
 
 - [`Raycast()`](xref:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.Raycast(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Core.Mathematics.Vector2,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)) - Casts from the camera through a screen position. Takes either a `ScriptComponent` or a `Simulation`.
 - [`RaycastMouse()`](xref:Stride.CommunityToolkit.Bullet.CameraComponentExtensions.RaycastMouse(Stride.Engine.CameraComponent,Stride.Engine.ScriptComponent,Stride.Physics.CollisionFilterGroups,Stride.Physics.CollisionFilterGroupFlags)) - The same, reading the mouse position for you.
-- [`Simulation.Raycast()`](xref:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)) - Casts a `RaySegment` directly, with no camera involved. Overloads also cast from an entity along a direction.
-- [`RaycastPenetrating()`](xref:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Scripts.RaySegment)) - Returns every hit along the ray rather than stopping at the first. An overload fills a list you supply, to avoid allocating.
+- [`Simulation.Raycast()`](xref:Stride.CommunityToolkit.Bullet.SimulationExtensions.Raycast(Stride.Physics.Simulation,Stride.CommunityToolkit.Mathematics.RaySegment)) - Casts a `RaySegment` directly, with no camera involved. Overloads also cast from an entity along a direction.
+- [`RaycastPenetrating()`](xref:Stride.CommunityToolkit.Bullet.SimulationExtensions.RaycastPenetrating(Stride.Physics.Simulation,Stride.CommunityToolkit.Mathematics.RaySegment)) - Returns every hit along the ray rather than stopping at the first. An overload fills a list you supply, to avoid allocating.
 
 ### Debugging
 
