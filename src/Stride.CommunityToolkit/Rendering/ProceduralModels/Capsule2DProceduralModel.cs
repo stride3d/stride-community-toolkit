@@ -63,11 +63,6 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
         if (radius <= 0)
             throw new ArgumentOutOfRangeException(nameof(radius), "Radius must be greater than zero.");
 
-        //if (radius * 2 > height)
-        //    throw new ArgumentOutOfRangeException(nameof(height), "Height (Y) must be greater or equal to diameter (X).");
-
-        //radius = radius / 2;
-
         // UV coordinate constants for consistent texture mapping
         const float uvCenterX = 0.5f;
         const float uvTopY = 0.75f;
@@ -82,7 +77,6 @@ public class Capsule2DProceduralModel : PrimitiveProceduralModelBase
 
         // Calculate the rectangular part height
         var rectHeight = Math.Max(0.01f, totalHeight - 2 * radius);
-        //var rectHeight = Math.Max(0.01f, totalHeight - radius);
 
         // Calculate the total number of vertices and indices
         var vertexCount = (tessellation + 1) * 2 + 2; // Two semicircles plus two center points

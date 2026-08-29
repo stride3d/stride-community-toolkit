@@ -6,6 +6,26 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 /// <summary>
 /// Generates a planar polygon mesh (convex fan triangulation) from an arbitrary set of 2D vertices.
 /// </summary>
+/// <remarks>
+/// <para>
+/// <b>Do not spawn these overlapping each other while they carry a physics collider.</b> A polygon
+/// gets a convex-hull collider, and Bepu's hull-versus-hull contact generation returns
+/// <c>depth = NaN</c> for two overlapping extruded polygons. The <c>NaN</c> reaches the body poses on
+/// the same timestep, and <c>Tree.Add</c> then never returns - the application hangs with one core
+/// pegged and no exception to catch.
+/// </para>
+/// <para>
+/// There is no safe <see cref="Sides"/> value to dodge it. A Monte Carlo sweep over random
+/// overlapping poses fails for every side count from 3 upwards, at 15-40% of placements once the
+/// bodies have rotated about Z; freshly spawned axis-aligned bodies fail at roughly 40% for 5, 7 and
+/// 8 sides. Triangles and custom-vertex polygons are exposed for the same reason. The identical
+/// placements with an analytic box collider never fail, so this is the hull path alone.
+/// </para>
+/// <para>
+/// The only mitigation available today is to space spawns so hull-collider bodies do not start
+/// interpenetrating. A fix belongs upstream in Bepu; until it lands, treat overlap as unsupported.
+/// </para>
+/// </remarks>
 public class PolygonProceduralModel : PrimitiveProceduralModelBase
 {
     private Vector2[] _vertices = [];
@@ -31,7 +51,11 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     /// <summary>
     /// Gets or sets the number of sides of the regular polygon used when <see cref="Vertices"/> is empty.
     /// </summary>
-    /// <remarks>The value must be greater than or equal to 3.</remarks>
+    /// <remarks>
+    /// The value must be greater than or equal to 3. No value is safer than any other where physics
+    /// is concerned - see the remarks on <see cref="PolygonProceduralModel"/> before spawning these
+    /// overlapping.
+    /// </remarks>
     public int Sides { get; set; } = 6;
 
     private static readonly Dictionary<string, GeometricMeshData<VertexPositionNormalTexture>> _meshCache = [];
