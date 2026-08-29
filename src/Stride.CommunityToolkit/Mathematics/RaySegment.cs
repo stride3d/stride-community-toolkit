@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.Scripts;
+namespace Stride.CommunityToolkit.Mathematics;
 
 /// <summary>
 /// Represents a three dimensional line based on a 2 points in space.
