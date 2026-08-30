@@ -9,6 +9,8 @@ Cube Clicker is an instructive example using the Stride game engine, showcasing 
 
 When the game starts, it automatically loads the click data and cube positions from the previous session. The player interacts with dynamically generated cubes, with the game tracking left and right mouse clicks.
 
+![Stride UI Example](media/stride-ui-cube-clicker.webp)
+
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example07_CubeClicker).
 
 To explore the entire project, follow the link above. Below is the `Program.cs` file from the project for a quick overview.
