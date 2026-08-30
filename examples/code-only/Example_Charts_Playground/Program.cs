@@ -29,7 +29,9 @@ using Stride.Input;
 // Without this a scaled-up 4K desktop hands the game a scaled, blurred window. A no-op off Windows.
 WindowsDpiManager.EnablePerMonitorV2();
 
-const bool use3DScene = false;
+// Run with "--3d" for the glowing 3D look; a runtime switch rather than a const so neither branch is
+// dead code to the compiler
+var use3DScene = args.Any(a => a.Equals("--3d", StringComparison.OrdinalIgnoreCase));
 
 using var game = new Game();
 
