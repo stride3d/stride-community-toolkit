@@ -1,3 +1,6 @@
+using NexVYaml;
+using Stride.Core.IO;
+
 namespace Example07_CubeClicker.Core;
 
 public class DataSaver<TData>
@@ -14,11 +17,11 @@ public class DataSaver<TData>
         // Create a new file per default
         var fileMode = VirtualFileMode.CreateNew;
 
-        // if it exists allready, empty the file to write the new content to it
+        // if it exists already, empty the file to write the new content to it
         if (VirtualFileSystem.ApplicationData.FileExists(FileName))
             fileMode = VirtualFileMode.Truncate;
 
-        // open a virtual filestream to the target path
+        // open a virtual file stream to the target path
         // data are saved in this location: \bin\Debug\net10.0\data\
         await using var fileStream = VirtualFileSystem.ApplicationData.OpenStream(FileName, fileMode, VirtualFileAccess.Write);
 

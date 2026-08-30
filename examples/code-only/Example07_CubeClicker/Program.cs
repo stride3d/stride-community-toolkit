@@ -4,7 +4,7 @@ using NexVYaml;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Graphics;
@@ -37,7 +37,7 @@ void Start(Scene rootScene)
 
 void CreateAndRegisterGameManagerUI(Scene rootScene)
 {
-    var font = game.Content.Load<SpriteFont>("StrideDefaultFont");
+    var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
     var gameManager = new GameManager(font);
     game.Services.AddService(gameManager);
 
@@ -77,7 +77,7 @@ tags:
 related:
   - Example03_StrideUI_CapsuleAndWindow
   - Example10_StrideUI_DragAndDrop
-enabled: false
+enabled: true
 created: 2023-12-27
 ---
 */

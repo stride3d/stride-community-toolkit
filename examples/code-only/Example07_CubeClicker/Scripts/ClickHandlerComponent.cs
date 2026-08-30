@@ -119,6 +119,15 @@ public class ClickHandlerComponent : AsyncScript
 
     private static void RemoveEntity(Entity entity)
     {
+        var cubeVanisher = entity.Get<CubeVanisher>();
+
+        if (cubeVanisher is not null)
+        {
+            Console.WriteLine("Entity is vanishing, cannot remove entity");
+
+            return;
+        }
+
         Console.WriteLine("Removing entity");
 
         entity.Add(new CubeVanisher());
