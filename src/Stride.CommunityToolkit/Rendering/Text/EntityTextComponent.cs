@@ -116,12 +116,12 @@ public class EntityTextComponent : EntityComponent
     /// <see cref="TextPositionMode.Anchored"/>. Defaults to the top-left.
     /// </summary>
     /// <remarks>
-    /// <see cref="Scripts.Utilities.DisplayPosition.Custom"/> and
-    /// <see cref="Scripts.Utilities.DisplayPosition.None"/> are treated as the top-left; use
+    /// <see cref="DisplayPosition.Custom"/> and
+    /// <see cref="DisplayPosition.None"/> are treated as the top-left; use
     /// <see cref="TextPositionMode.Screen"/> for an explicit position and <see cref="IsVisible"/> to
     /// hide the text.
     /// </remarks>
-    public Scripts.Utilities.DisplayPosition ScreenAnchor { get; set; } = Scripts.Utilities.DisplayPosition.TopLeft;
+    public DisplayPosition ScreenAnchor { get; set; } = DisplayPosition.TopLeft;
 
     /// <summary>
     /// Gets or sets a pixel offset applied after the position is resolved, in every position mode.

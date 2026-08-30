@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Represents the possible positions on the screen where text or other UI elements can be displayed.
@@ -37,7 +37,7 @@ public enum DisplayPosition
     /// Displays the element at an explicit pixel position rather than snapped to a corner.
     /// </summary>
     /// <remarks>
-    /// The position itself is supplied separately - see <see cref="DebugOverlay.CustomPosition"/>.
+    /// The position itself is supplied separately - see <see cref="Scripts.Utilities.DebugOverlay.CustomPosition"/>.
     /// </remarks>
     Custom
 }
