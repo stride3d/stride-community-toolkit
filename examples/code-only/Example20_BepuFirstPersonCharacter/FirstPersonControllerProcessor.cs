@@ -87,11 +87,11 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
         if (c.Character == null) return;
         if (on)
         {
-            // Enter fly from the current eye position; park the body. The motor target set by
-            // Move() PERSISTS - every physics tick re-applies it as the character's target
-            // velocity, so without clearing it the parked capsule keeps walking on its own.
+            // Enter fly from the current eye position; park the body. MoveVector PERSISTS - every
+            // physics tick re-applies it as the character's target velocity, so without clearing it
+            // the parked capsule keeps walking on its own.
             c.FlyPosition = c.Character.Entity.Transform.Position + new Vector3(0, c.EyeHeight, 0);
-            c.Character.Move(Vector3.Zero);
+            c.Character.MoveVector = Vector2.Zero;
             c.Character.Gravity = false;
             c.Character.LinearVelocity = Vector3.Zero;
         }
@@ -123,10 +123,12 @@ public class FirstPersonControllerProcessor : EntityProcessor<FirstPersonControl
 
         var character = c.Character!;
 
-        // Sprint: Shift scales the move vector (Character.Move treats vector length as a speed factor).
+        // Sprint: Shift scales the move vector (MoveVector treats vector length as a speed factor).
         if (input.IsKeyDown(Keys.LeftShift) && move.LengthSquared() > 0)
             move *= c.SprintMultiplier;
-        character.Move(move);
+
+        // MoveVector is the XZ plane of the old Move(Vector3): X stays X, world Z becomes its Y
+        character.MoveVector = new Vector2(move.X, move.Z);
 
         // Jump buffering: Bepu consumes-and-clears TryJump every physics tick even when the
         // attempt fails, and ground support flickers off on slopes and just before landings - so a

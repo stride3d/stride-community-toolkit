@@ -23,7 +23,7 @@ public class FirstPersonControllerComponent : EntityComponent
     // Tunables.
     public float MouseSensitivity = 1.5f;
     public float EyeHeight = 0.7f;        // camera height above the capsule entity's origin
-    public float SprintMultiplier = 1.7f; // Shift speed factor (Move() treats vector length as a speed factor)
+    public float SprintMultiplier = 1.7f; // Shift speed factor (MoveVector treats vector length as a speed factor)
     public float FlySpeed = 15f;          // metres/sec in fly mode
     public float FlyBoost = 5f;           // Shift multiplier in fly mode
 
