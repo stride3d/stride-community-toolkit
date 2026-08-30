@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace Stride.CommunityToolkit.Windows;
 
@@ -9,31 +8,6 @@ namespace Stride.CommunityToolkit.Windows;
 public static class WindowsDpiManager
 {
     private static readonly IntPtr DpiAwarenessContextPerMonitorAwareV2 = new(-4);
-
-    [DllImport("User32.dll", ExactSpelling = true, SetLastError = false)]
-    private static extern bool SetProcessDpiAwarenessContext(IntPtr dpiContext);
-
-    [DllImport("Shcore.dll")]
-    private static extern int SetProcessDpiAwareness(int value); // 2 = PerMonitor
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr MonitorFromPoint(POINT pt, uint dwFlags);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
-
-    [DllImport("shcore.dll")]
-    private static extern int GetDpiForMonitor(IntPtr hmonitor, int dpiType, out uint dpiX, out uint dpiY);
-
-    [DllImport("shcore.dll")]
-    private static extern int GetProcessDpiAwareness(IntPtr hprocess, out NativeProcessDpiAwareness awareness);
-
-    private enum NativeProcessDpiAwareness
-    {
-        Process_DPI_Unaware = 0,
-        Process_System_DPI_Aware = 1,
-        Process_Per_Monitor_DPI_Aware = 2
-    }
 
     /// <summary>
     /// Public representation of process DPI awareness values.
@@ -58,14 +32,6 @@ public static class WindowsDpiManager
 
     private const int MDT_EFFECTIVE_DPI = 0;
 
-    [StructLayout(LayoutKind.Sequential)]
-    private readonly struct POINT
-    {
-        public readonly int X;
-        public readonly int Y;
-        public POINT(int x, int y) { X = x; Y = y; }
-    }
-
     /// <summary>
     /// Enables Per-Monitor-V2 DPI awareness for the current process (Windows 10+). Falls back to Per-Monitor if V2 is unavailable.
     /// This method is a best-effort call and does not throw on unsupported platforms or failures.
@@ -75,7 +41,7 @@ public static class WindowsDpiManager
         if (!OperatingSystem.IsWindows()) return;
         try
         {
-            if (SetProcessDpiAwarenessContext(DpiAwarenessContextPerMonitorAwareV2))
+            if (NativeMethods.SetProcessDpiAwarenessContext(DpiAwarenessContextPerMonitorAwareV2))
                 return;
         }
         catch (Exception ex)
@@ -88,7 +54,7 @@ public static class WindowsDpiManager
         try
         {
             // 0=Unaware, 1=System, 2=PerMonitor
-            SetProcessDpiAwareness(2);
+            NativeMethods.SetProcessDpiAwareness(2);
         }
         catch (Exception ex)
         {
@@ -154,13 +120,13 @@ public static class WindowsDpiManager
         try
         {
             var proc = Process.GetCurrentProcess().Handle;
-            if (GetProcessDpiAwareness(proc, out var awareness) == 0)
+            if (NativeMethods.GetProcessDpiAwareness(proc, out var awareness) == 0)
             {
                 return awareness switch
                 {
-                    NativeProcessDpiAwareness.Process_DPI_Unaware => ProcessDpiAwareness.Unaware,
-                    NativeProcessDpiAwareness.Process_System_DPI_Aware => ProcessDpiAwareness.System,
-                    NativeProcessDpiAwareness.Process_Per_Monitor_DPI_Aware => ProcessDpiAwareness.PerMonitor,
+                    NativeMethods.NativeProcessDpiAwareness.Process_DPI_Unaware => ProcessDpiAwareness.Unaware,
+                    NativeMethods.NativeProcessDpiAwareness.Process_System_DPI_Aware => ProcessDpiAwareness.System,
+                    NativeMethods.NativeProcessDpiAwareness.Process_Per_Monitor_DPI_Aware => ProcessDpiAwareness.PerMonitor,
                     _ => null
                 };
             }
@@ -215,9 +181,9 @@ public static class WindowsDpiManager
     {
         try
         {
-            var hMon = MonitorFromPoint(new POINT(0, 0), 2 /*MONITOR_DEFAULTTOPRIMARY*/);
+            var hMon = NativeMethods.MonitorFromPoint(new NativeMethods.POINT(0, 0), 2 /*MONITOR_DEFAULTTOPRIMARY*/);
             if (hMon == IntPtr.Zero) return null;
-            if (GetDpiForMonitor(hMon, MDT_EFFECTIVE_DPI, out uint dx, out uint dy) == 0)
+            if (NativeMethods.GetDpiForMonitor(hMon, MDT_EFFECTIVE_DPI, out uint dx, out uint dy) == 0)
                 return new DpiInfo(dx, dy, false);
         }
         catch (Exception ex)
@@ -235,9 +201,9 @@ public static class WindowsDpiManager
     {
         try
         {
-            var hMon = MonitorFromWindow(windowHandle, 2 /*MONITOR_DEFAULTTONEAREST*/);
+            var hMon = NativeMethods.MonitorFromWindow(windowHandle, 2 /*MONITOR_DEFAULTTONEAREST*/);
             if (hMon == IntPtr.Zero) return null;
-            if (GetDpiForMonitor(hMon, MDT_EFFECTIVE_DPI, out uint dx, out uint dy) == 0)
+            if (NativeMethods.GetDpiForMonitor(hMon, MDT_EFFECTIVE_DPI, out uint dx, out uint dy) == 0)
                 return new DpiInfo(dx, dy, false);
         }
         catch (Exception ex)

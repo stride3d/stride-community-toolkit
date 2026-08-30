@@ -3,6 +3,8 @@
     <PropertyGroup>
         <Title>Stride Community Toolkit - Windows</Title>
         <Description>This library serves to simplify the setup for Stride code-only projects by automatically including the `Stride.AssetCompiler` package. This eliminates the need for boilerplate code, making it easier to demonstrate and develop simple Stride projects without additional configuration.$(StrideVersionNote)</Description>
+        <!-- LibraryImport (NativeMethods.cs) generates marshalling code that uses pointers. -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
