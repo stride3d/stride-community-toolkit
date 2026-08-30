@@ -2,7 +2,6 @@ using Stride.CommunityToolkit.Renderers;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
-using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
 using Stride.Engine.Processors;
 using Stride.Games;
@@ -356,7 +355,8 @@ public static class GameExtensions
     /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
     /// </summary>
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="displayPosition">The position where the camera controller information will be displayed on the screen.</param>
+    /// <param name="displayPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// leaves the overlay's own position alone; <see cref="DisplayPosition.None"/> registers no camera help at all.</param>
     /// <param name="cameraName">The name of the camera entity to attach the 2D camera controller to. If not specified, the main camera name is
     /// used.</param>
     /// <returns>The camera entity to which the 3D camera controller was added.</returns>
@@ -364,7 +364,7 @@ public static class GameExtensions
     /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
     public static Entity Add3DCameraController(this Game game,
-        DisplayPosition displayPosition = DisplayPosition.TopRight,
+        DisplayPosition? displayPosition = null,
         string? cameraName = CameraDefaults.MainCameraName,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true)

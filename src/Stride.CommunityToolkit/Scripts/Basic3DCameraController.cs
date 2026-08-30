@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
 using Stride.Input;
@@ -16,7 +17,7 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
-    private readonly DisplayPosition _displayPosition = DisplayPosition.TopRight;
+    private readonly DisplayPosition? _displayPosition;
     private Vector3 _upVector;
     private Vector3 _translation;
     private Vector3 _defaultCameraPosition;
@@ -45,12 +46,15 @@ public class Basic3DCameraController : SyncScript
     public bool HelpCollapsed { get; set; } = true;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class with the specified display
-    /// position.
+    /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
+    /// shared overlay to a corner.
     /// </summary>
-    /// <param name="displayPosition">The position on the screen where the camera controls will be displayed. Defaults to <see cref="DisplayPosition.TopRight"/>.
+    /// <param name="displayPosition">Where the shared <see cref="DebugOverlay"/> - and so the camera help - is
+    /// drawn. <see langword="null"/>, the default, leaves the overlay where it is, so a position set elsewhere
+    /// (for example before the controller starts) is kept; <see cref="DisplayPosition.None"/> registers no
+    /// help at all.
     /// </param>
-    public Basic3DCameraController(DisplayPosition displayPosition = DisplayPosition.TopRight)
+    public Basic3DCameraController(DisplayPosition? displayPosition = null)
     {
         _displayPosition = displayPosition;
     }
@@ -103,12 +107,17 @@ public class Basic3DCameraController : SyncScript
         base.Start();
 
         // DisplayPosition.None means the caller does not want camera help on screen, so no section is
-        // registered - and the shared overlay's position is left for whoever else is using it
+        // registered. The overlay is shared, and this Start runs a frame after the game's own start
+        // callback, so its position is only touched when a corner was asked for explicitly - otherwise
+        // a position set by the example before the controller started would be silently overwritten
         if (_displayPosition != DisplayPosition.None)
         {
             var overlay = DebugOverlay.GetOrCreate(Game);
 
-            overlay.Position = _displayPosition;
+            if (_displayPosition is { } position)
+            {
+                overlay.Position = position;
+            }
 
             // Not static: the last two lines read the live transform. The factory runs every frame the
             // section is drawn expanded, so the numbers track the camera as it is flown around.

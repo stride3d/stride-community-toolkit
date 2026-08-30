@@ -1,9 +1,9 @@
 using Stride.CommunityToolkit.Rendering.Gizmos;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
-using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
-using Stride.Input;
 using Stride.Graphics;
+using Stride.Input;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Stride.CommunityToolkit.Engine;
@@ -19,7 +19,8 @@ public static partial class EntityExtensions
     /// enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
-    /// <param name="displayPosition">The position on the screen where the camera controls will be displayed. Defaults to <see cref="DisplayPosition.TopRight"/>.</param>
+    /// <param name="displayPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// leaves the overlay's own position alone; <see cref="DisplayPosition.None"/> registers no camera help at all.</param>
     /// <remarks>
     /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick
     /// or by dragging/scaling using multitouch. Rotation is achieved using the Numpad, the mouse while holding
@@ -28,7 +29,7 @@ public static partial class EntityExtensions
     /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
     public static void Add3DCameraController(this Entity entity,
-        DisplayPosition displayPosition = DisplayPosition.TopRight,
+        DisplayPosition? displayPosition = null,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true)
         => entity.Add(new Basic3DCameraController(displayPosition)
