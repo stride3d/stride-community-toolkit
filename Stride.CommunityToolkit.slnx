@@ -36,6 +36,7 @@
     <Project Path="examples/code-only/Example05_ProceduralGeometry/Example05_ProceduralGeometry.csproj" />
     <Project Path="examples/code-only/Example05_SimpleGeometry/Example05_SimpleGeometry.csproj" />
     <Project Path="examples/code-only/Example06_ImageProcessing/Example06_ImageProcessing.csproj" />
+    <Project Path="examples/code-only/Example07_CubeClicker/Example07_CubeClicker.csproj" />
     <Project Path="examples/code-only/Example08_CollidableGizmo/Example08_CollidableGizmo.csproj" />
     <Project Path="examples/code-only/Example08_DebugRenderComponent/Example08_DebugRenderComponent.csproj" />
     <Project Path="examples/code-only/Example08_DebugShapes/Example08_DebugShapes.csproj" />
