@@ -2,7 +2,7 @@ using Example08_DebugShapes.Scripts;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes.Code;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 
