@@ -1,0 +1,38 @@
+<Project>
+  <!--
+    Repository-wide MSBuild fixes. Directories with their own Directory.Build.targets (examples/) import
+    this one explicitly, so anything here applies everywhere.
+
+    Overrides Stride's StrideSortItems inline task from Stride.AssetCompiler.targets (4.4.0-beta5). The
+    original fragment ends with an explicit "return true;", but RoslynCodeTaskFactory appends its own
+    return after a Fragment, so every project that compiles the task - anything referencing
+    Stride.AssetCompiler: all examples, the Windows/Linux/DebugShapes/ImGui packages - logs
+        warning CS0162: Unreachable code detected
+    from a temp file under %TEMP%\MSBuildTemp..., once per project. It cannot be silenced with NoWarn
+    because the inline compiler does not read the project's settings. MSBuild keeps the FIRST
+    registration of a task name unless a later one says Override="true", which this copy, minus the
+    return, does. (The warning only shows when the task is compiled, so with MSBuild node reuse it
+    appears on the first build per node and then hides for a while; test with -nr:false.)
+
+    Version-guarded: after a Stride bump, diff the task against
+        %USERPROFILE%\.nuget\packages\stride.assetcompiler\<version>\buildTransitive\Stride.AssetCompiler.targets
+    and move the guard, or delete this block once upstream has dropped the line from
+        sources/assets/Stride.AssetCompiler/build/Stride.AssetCompiler.targets
+  -->
+  <UsingTask TaskName="StrideSortItems"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll"
+             Override="true"
+             Condition="'$(StrideVersion)' == '4.4.0-beta5'">
+    <ParameterGroup>
+      <InputItems  ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <OutputItems ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        OutputItems = InputItems.OrderBy(x => x.ItemSpec, System.StringComparer.Ordinal).ToArray();
+      ]]></Code>
+    </Task>
+  </UsingTask>
+</Project>
