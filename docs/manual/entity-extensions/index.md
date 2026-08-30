@@ -26,7 +26,7 @@ var (model, light) = entity.Get<ModelComponent, LightComponent>();
 These are the entity-level counterparts of the `Game` extensions; use them when you already hold the camera entity.
 
 - [`Add2DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add2DCameraController(Stride.Engine.Entity,Stride.Input.Keys,System.Boolean)) - Attaches the interactive 2D camera script, giving pan and zoom.
-- [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity,Stride.CommunityToolkit.Scripts.Utilities.DisplayPosition,Stride.Input.Keys,System.Boolean)) - Attaches the interactive 3D camera script, giving free-look movement and an on-screen key reminder.
+- [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.Text.DisplayPosition,Stride.Input.Keys,System.Boolean)) - Attaches the interactive 3D camera script, giving free-look movement and an on-screen key reminder.
 
 See [Camera Controllers](../camera-extensions/camera-controllers.md) for the keys, the on-screen help and every option on both scripts.
 

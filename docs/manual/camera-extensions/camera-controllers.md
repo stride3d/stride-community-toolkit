@@ -33,7 +33,8 @@ cameraEntity.Add2DCameraController();
 ```
 
 Both helpers accept the help overlay's toggle key and whether it starts collapsed; the 3D one also
-takes a `DisplayPosition` for the overlay corner (`DisplayPosition.None` registers no help at all).
+takes an optional `DisplayPosition` for the overlay corner - leave it out and the overlay keeps
+whatever position it already has (`DisplayPosition.None` registers no help at all).
 These must be decided up front - the overlay section is created in `Start()` - which is why they are
 parameters rather than properties you set later.
 
@@ -121,9 +122,11 @@ Two details worth knowing before you try to fight them:
   paste straight into the setup code. Plain XYZ Euler angles would look just as plausible and aim the
   camera somewhere else entirely, which is why they are not the ones printed.
 
-The overlay corner is chosen with the `displayPosition` parameter of `Add3DCameraController()`. The
-2D controller has no such parameter because the overlay belongs to the whole scene, not to the
-camera; move it with <kbd>F3</kbd> or set `DebugOverlay.GetOrCreate(game).Position`. Size, font and
+The overlay corner can be chosen with the `displayPosition` parameter of `Add3DCameraController()`;
+without it the controller leaves the corner alone, so `DebugOverlay.GetOrCreate(game).Position` set
+anywhere - even before the controller has started - is respected. The 2D controller has no such
+parameter because the overlay belongs to the whole scene, not to the camera; move it with
+<kbd>F3</kbd> or set the position directly. Size, font and
 background of that block are the overlay's own settings - see [Debug Overlay](../rendering/debug-overlay.md).
 
 ## When the defaults are wrong
