@@ -1,5 +1,6 @@
 using Stride.Core;
 using Stride.Input;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Example07_CubeClicker.Core;
 
@@ -13,8 +14,10 @@ public sealed class LeftMouseButtonCounter : IClickable
     /// get and init/set is required for the serializer
     /// this can be made internal, but it would require a [DataMember] Attribute then
     /// We can adjust that string in the yaml, so the application loads the new Prefix instead of this one.
+    /// A missing key deserialises as null; [AllowNull] and the coalescing init keep the default instead.
     /// </summary>
-    public string Prefix { get; init; } = "Left Mouse Button";
+    [AllowNull]
+    public string Prefix { get => field; init => field = value ?? "Left Mouse Button"; } = "Left Mouse Button";
 
     /// <summary>
     /// The click count
