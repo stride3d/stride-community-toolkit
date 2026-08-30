@@ -227,36 +227,6 @@ public static class GameExtensions
         return graphicsCompositor;
     }
 
-    // Helper method to remove lighting features from a GraphicsCompositor
-    private static void RemoveLightingFeatures(GraphicsCompositor compositor)
-    {
-        // Find and remove all lighting-related render features
-        foreach (var renderFeature in compositor.RenderFeatures)
-        {
-            if (renderFeature is MeshRenderFeature meshRenderFeature)
-            {
-                // We need to store features to remove in a separate list to avoid collection modification during enumeration
-                var featuresToRemove = new List<SubRenderFeature>();
-
-                // Use the correct type for the collection
-                foreach (var feature in meshRenderFeature.RenderFeatures)
-                {
-                    // Check if this is a lighting-related feature
-                    if (feature is ForwardLightingRenderFeature ||
-                        feature.GetType().Name.Contains("Shadow"))
-                    {
-                        // Cast is safe since all items in meshRenderFeature.RenderFeatures are SubRenderFeature
-                        featuresToRemove.Add(feature);
-                    }
-                }
-
-                // Remove all identified features
-                foreach (var feature in featuresToRemove)
-                    meshRenderFeature.RenderFeatures.Remove(feature);
-            }
-        }
-    }
-
     /// <summary>
     /// Adds a 2D camera entity to the game's root scene with customizable position and rotation, defaulting to orthographic projection.
     /// </summary>

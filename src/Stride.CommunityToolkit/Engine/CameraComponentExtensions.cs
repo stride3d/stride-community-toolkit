@@ -441,11 +441,4 @@ public static class CameraComponentExtensions
             Z = 0f
         };
     }
-
-    private static Vector3 ScreenToClipSpace(Vector2 position)
-    {
-        ScreenToClipSpace(ref position, out var result);
-
-        return result;
-    }
 }

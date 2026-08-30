@@ -226,7 +226,7 @@ public static class EntitySearchExtensions
         var queue = new Queue<Entity>();
         queue.EnqueueRange(entity.GetChildren());
 
-        return GetComponentsInChildrenCore<T>(queue);
+        return GetComponentsInChildrenCore<T>(queue, includeDisabled);
     }
 
     /// <summary>
@@ -247,7 +247,7 @@ public static class EntitySearchExtensions
         queue.Enqueue(entity);
         queue.EnqueueRange(entity.GetChildren());
 
-        return GetComponentsInChildrenCore<T>(queue);
+        return GetComponentsInChildrenCore<T>(queue, includeDisabled);
     }
 
     private static IEnumerable<T> GetComponentsInChildrenCore<T>(Queue<Entity> queue, bool includeDisabled)
