@@ -1,5 +1,4 @@
 using Stride.CommunityToolkit.Rendering.Text;
-using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
