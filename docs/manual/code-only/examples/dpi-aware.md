@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_DPI_Aware).
 
-[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_DPI_Aware/Program.cs?start=1&end=20)]
+[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_DPI_Aware/Program.cs?start=1&end=23)]

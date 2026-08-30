@@ -39,7 +39,7 @@
     href: debug-render-2d.md
   - name: DPI-Aware Window
     href: dpi-aware.md
-- name: C# Intermediate (19)
+- name: C# Intermediate (20)
   href: intermediate-examples.md
   items:
   - name: Procedural Geometry
@@ -80,6 +80,8 @@
     href: imgui-ui.md
   - name: 2D Spawn Menu
     href: spawn-menu-2d.md
+  - name: Cube Clicker
+    href: stride-ui-cube-clicker.md
 - name: C# Advanced (16)
   href: advanced-examples.md
   items:

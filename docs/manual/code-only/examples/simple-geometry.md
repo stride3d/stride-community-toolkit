@@ -24,4 +24,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example05_SimpleGeometry).
 
-[!code-csharp[](../../../../examples/code-only/Example05_SimpleGeometry/Program.cs?start=1&end=161)]
+[!code-csharp[](../../../../examples/code-only/Example05_SimpleGeometry/Program.cs?start=1&end=162)]

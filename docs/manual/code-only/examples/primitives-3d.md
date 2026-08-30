@@ -25,4 +25,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_Basic3DScene_Primitives).
 
-[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_Primitives/Program.cs?start=1&end=113)]
+[!code-csharp[](../../../../examples/code-only/Example01_Basic3DScene_Primitives/Program.cs?start=1&end=114)]

@@ -372,6 +372,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             </div>
         </div>
     </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/stride-ui-cube-clicker.webp" class="card-img-top" alt="Screenshot of the Cube Clicker example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="stride-ui-cube-clicker.md">Cube Clicker</a></h3>
+                <p><span class="badge text-bg-secondary">UI</span></p>
+                <p class="card-text">A small clicker game: cubes appear, left and right clicks are counted, and both the score and the cube positions are written to disk so the next run...</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 ## C# Advanced

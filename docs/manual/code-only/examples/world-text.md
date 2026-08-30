@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/Example01_WorldText).
 
-[!code-csharp[](../../../../examples/code-only/Example01_WorldText/Program.cs?start=1&end=138)]
+[!code-csharp[](../../../../examples/code-only/Example01_WorldText/Program.cs?start=1&end=139)]
