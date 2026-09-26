@@ -1,0 +1,27 @@
+namespace Stride.CommunityToolkit.Effects.Picking
+{
+    /// <summary>
+    /// The pixel stage of the picking pass: instead of a colour, every fragment writes who it
+    /// belongs to. The vertex side is the forward effect's own, so skinning, instancing and
+    /// material displacement place the ids exactly where the visible pixels are.
+    /// </summary>
+    /// <remarks>
+    /// Ids travel as floats, which hold integers exactly up to 16 777 216 - far beyond any runtime
+    /// id, instance count or mesh index. The target is R32G32B32A32_Float, one pixel of which is
+    /// read back: x the model component's runtime id, y the instance index, z the mesh index times
+    /// 4096 plus the material index, w the fragment's depth so the hit point can be rebuilt.
+    /// </remarks>
+    internal shader GpuPickingShader : ShaderBase
+    {
+        cbuffer PerDraw
+        {
+            // x: the model component's runtime id, y: the mesh index, z: the material index
+            stage float4 PickingId;
+        }
+
+        stage override void PSMain()
+        {
+            streams.ColorTarget = float4(PickingId.x, streams.InstanceID, PickingId.y * 4096.0 + PickingId.z, streams.ShadingPosition.z);
+        }
+    };
+}

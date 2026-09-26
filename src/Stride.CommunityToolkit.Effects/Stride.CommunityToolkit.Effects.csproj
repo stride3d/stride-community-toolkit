@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Title>Stride Community Toolkit - Effects</Title>
+        <Description>Toolkit pieces that come with a shader of their own: post-processing colour transforms and GPU picking.
+
+What's inside:
+- PostProcessing.NightVision: luminance amplified into a green image with a soft white bloom, film grain, scanlines and a vignette
+- PostProcessing.Thermal: luminance mapped onto a false-colour ramp from cold blue through red to white-hot
+- Picking.GpuPicker: what is under a screen point, read from an id pass over the rendered meshes - no colliders needed; entity, mesh, material, instance index and hit point
+
+Each colour transform is a ColorTransform with one small shader; add it to a PostProcessingEffects' ColorTransforms the way the engine's own Vignetting or FilmGrain are added.$(StrideVersionNote)</Description>
+    </PropertyGroup>
+
+    <Import Project="..\CommonSettings.props" />
+
+    <ItemGroup>
+        <!-- This library ships shaders. Shaders are assets compiled by the asset compiler according
+             to the Graphics API target, so the package that owns the shader owns the dependency.
+             Its targets also stage Effects/ into the package as stride/Assets/Effects and generate
+             the matching .sdpkg manifest - do not hand-write either. -->
+        <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+</Project>

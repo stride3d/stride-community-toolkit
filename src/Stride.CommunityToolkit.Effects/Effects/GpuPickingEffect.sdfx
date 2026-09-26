@@ -1,0 +1,18 @@
+namespace Stride.CommunityToolkit.Effects.Picking
+{
+    // The forward shading effect with a child that swaps the pixel stage for the id writer.
+    // Meshes are routed to the picking stage under the name "GpuPickingEffect.GpuPickingIds", so
+    // the whole vertex pipeline of the real frame - skinning, instancing, displacement - is reused
+    // and only the pixel output differs. The engine's own forward effect declares no such child;
+    // Game Studio adds one in its editor effect, and this is the runtime counterpart.
+    effect GpuPickingEffect
+    {
+        mixin StrideForwardShadingEffect;
+        mixin child GpuPickingIds;
+    };
+
+    effect GpuPickingIds
+    {
+        mixin GpuPickingShader;
+    };
+}

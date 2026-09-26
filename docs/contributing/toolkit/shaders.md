@@ -161,4 +161,4 @@ in `tests/Stride.CommunityToolkit.GoldScenes`, small and named for what it pins.
 When a picture is wrong and the reason is not obvious, do not reason from the C#: read a pixel
 back with `GetData`, or dump the whole target to an image, and look. The picking pass's instancing
 bug, where every instance was drawn through its inverse matrix, was found in one dump after an
-hour of theories.
+hour of theories; the story is on the [GPU picking](../../manual/rendering/gpu-picking.md) page.

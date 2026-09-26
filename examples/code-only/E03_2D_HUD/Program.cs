@@ -1036,7 +1036,7 @@ tags:
 related:
   - E03_2D_Panels
   - E03_3D_WorldText
-  - E11_3D_ShapeBatch_Gallery
+  - E11_3D_ShapeBatch
 enabled: true
 created: 2026-09-06
 ---

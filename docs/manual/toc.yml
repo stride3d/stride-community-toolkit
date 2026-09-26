@@ -25,7 +25,7 @@
       href: code-only/create-file-based-app-engine-only.md
   - name: Extensions
     href: code-only/extensions.md
-- name: Code-Only Examples (83)
+- name: Code-Only Examples (87)
   # href supplies the children (the generated per-level toc); topicHref makes the node itself
   # clickable, landing on the visual gallery.
   href: code-only/examples/toc.yml
@@ -75,6 +75,10 @@
     href: rendering/debug-shapes.md
   - name: ShapeBatch
     href: rendering/shape-batch.md
+  - name: Render to Texture
+    href: rendering/render-to-texture.md
+  - name: GPU Picking
+    href: rendering/gpu-picking.md
   - name: Charts
     href: rendering/charts.md
   - name: MeshBuilder

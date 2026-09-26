@@ -1,0 +1,49 @@
+namespace Stride.CommunityToolkit.Effects.PostProcessing
+{
+    // Night vision: the image's luminance, amplified, drawn in one colour. Bright sources bloom
+    // towards white the way an image intensifier saturates, grain crawls over it, faint scanlines
+    // give away the tube, and the corners fall off. Runs on HDR colour before any tone map, so the
+    // amplification is real and the main view's tone map handles what comes out.
+    internal shader NightVisionShader : ColorTransformShader, Texturing
+    {
+        // How much the luminance is amplified before it is shown
+        float Gain;
+
+        // The phosphor's colour
+        [Color]
+        float3 Tint;
+
+        // Strength of the grain, 0 for none
+        float NoiseAmount;
+
+        // Where the vignette begins, 0 at the centre to 1 at the corners
+        float VignetteRadius;
+
+        // Elapsed seconds, so the grain moves
+        float Time;
+
+        override float4 Compute(float4 color)
+        {
+            float2 uv = streams.TexCoord;
+
+            // Amplified luminance with a soft knee: a light source goes to 1 and stays there
+            float luminance = dot(color.rgb, float3(0.299, 0.587, 0.114)) * Gain;
+            float value = 1.0 - exp(-luminance);
+
+            // Grain: a hash of the pixel and the time, centred on zero
+            float grain = frac(sin(dot(uv * 1000.0 + Time * 37.0, float2(12.9898, 78.233))) * 43758.5453) - 0.5;
+
+            value = saturate(value + grain * NoiseAmount);
+
+            // The tube's lines, and the corners falling off
+            float scanline = 0.94 + 0.06 * step(0.5, frac(uv.y * 240.0));
+            float2 fromCentre = uv - float2(0.5, 0.5);
+            float vignette = 1.0 - smoothstep(VignetteRadius, 1.0, length(fromCentre) / 0.7071);
+
+            // The brightest parts bleach past the tint towards white
+            float3 rgb = lerp(Tint * value, float3(1.0, 1.0, 1.0), pow(value, 8.0)) * scanline * vignette;
+
+            return float4(rgb, color.a);
+        }
+    };
+}

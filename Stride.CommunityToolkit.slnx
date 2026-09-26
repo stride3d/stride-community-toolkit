@@ -69,9 +69,11 @@
     <Project Path="examples/code-only/E08_3D_DebugShapes_QuickStart/E08_3D_DebugShapes_QuickStart.csproj" />
     <Project Path="examples/code-only/E08_DpiAware/E08_DpiAware.csproj" />
     <Project Path="examples/code-only/E09_2D_ImageProcessing/E09_2D_ImageProcessing.csproj" />
+    <Project Path="examples/code-only/E09_3D_GpuPicking/E09_3D_GpuPicking.csproj" />
     <Project Path="examples/code-only/E09_3D_MeshOutline/E09_3D_MeshOutline.csproj" />
     <Project Path="examples/code-only/E09_3D_Particles/E09_3D_Particles.csproj" />
     <Project Path="examples/code-only/E09_3D_PostEffects/E09_3D_PostEffects.csproj" />
+    <Project Path="examples/code-only/E09_3D_RenderToTexture/E09_3D_RenderToTexture.csproj" />
     <Project Path="examples/code-only/E09_3D_RootRendererShader/E09_3D_RootRendererShader.csproj" />
     <Project Path="examples/code-only/E09_3D_SceneRenderer/E09_3D_SceneRenderer.csproj" />
     <Project Path="examples/code-only/E10_2D_StressPile/E10_2D_StressPile.csproj" Id="ecd38d72-a517-4abb-a465-e91b7a8d5c6b" />
@@ -132,6 +134,7 @@
   <Project Path="src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj" />
   <Project Path="src/Stride.CommunityToolkit.Charts/Stride.CommunityToolkit.Charts.csproj" />
   <Project Path="src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj" />
+  <Project Path="src/Stride.CommunityToolkit.Effects/Stride.CommunityToolkit.Effects.csproj" />
   <Project Path="src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj" />
   <Project Path="src/Stride.CommunityToolkit.ImGuiNet/Stride.CommunityToolkit.ImGuiNet.csproj" />
   <Project Path="src/Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj" />

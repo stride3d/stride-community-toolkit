@@ -692,7 +692,7 @@ tags:
   - Themes
 related:
   - E03_3D_WorldText
-  - E11_3D_ShapeBatch_Gallery
+  - E11_3D_ShapeBatch
   - E03_3D_EntityText
   - E03_2D_HUD
 enabled: true

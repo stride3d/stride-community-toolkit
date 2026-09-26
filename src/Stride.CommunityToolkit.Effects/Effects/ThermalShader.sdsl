@@ -1,0 +1,46 @@
+namespace Stride.CommunityToolkit.Effects.PostProcessing
+{
+    // Thermal camera: luminance stands in for temperature and is painted onto a false-colour
+    // ramp - the dark blue of cold, through violet and red, to the orange, yellow and white of
+    // hot. Runs on HDR colour before any tone map; Exposure decides how bright "white-hot" is.
+    internal shader ThermalShader : ColorTransformShader
+    {
+        // Scales the luminance before it is mapped; higher makes more of the scene read as hot
+        float Exposure;
+
+        override float4 Compute(float4 color)
+        {
+            float luminance = dot(color.rgb, float3(0.299, 0.587, 0.114)) * Exposure;
+
+            // Soft knee into 0..1, so a bright light is white-hot rather than clipped
+            float t = 1.0 - exp(-luminance);
+
+            float3 cold = float3(0.02, 0.0, 0.15);
+            float3 cool = float3(0.15, 0.0, 0.65);
+            float3 warm = float3(0.85, 0.0, 0.35);
+            float3 hot = float3(1.0, 0.55, 0.0);
+            float3 white = float3(1.0, 1.0, 1.0);
+
+            float3 rgb;
+
+            if (t < 0.25)
+            {
+                rgb = lerp(cold, cool, t / 0.25);
+            }
+            else if (t < 0.5)
+            {
+                rgb = lerp(cool, warm, (t - 0.25) / 0.25);
+            }
+            else if (t < 0.75)
+            {
+                rgb = lerp(warm, hot, (t - 0.5) / 0.25);
+            }
+            else
+            {
+                rgb = lerp(hot, white, (t - 0.75) / 0.25);
+            }
+
+            return float4(rgb, color.a);
+        }
+    };
+}
