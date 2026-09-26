@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E09_3D_PostEffects).
 
-[!code-csharp[](../../../../examples/code-only/E09_3D_PostEffects/Program.cs?start=1&end=201)]
+[!code-csharp[](../../../../examples/code-only/E09_3D_PostEffects/Program.cs?start=1&end=193)]
