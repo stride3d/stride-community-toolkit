@@ -55,7 +55,7 @@ public class DebugRenderComponentScript : SyncScript
 
         var visibilityGroups = SceneSystem.SceneInstance.VisibilityGroups.Count;
 
-        if (visibilityGroups > 0 && !_debugAdded)
+        if (visibilityGroups > 0)
         {
             Entity.Add(new DebugRenderComponent() { Visible = Visible });
 

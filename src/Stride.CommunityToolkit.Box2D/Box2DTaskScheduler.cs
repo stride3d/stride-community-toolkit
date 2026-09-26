@@ -24,6 +24,7 @@ internal sealed class Box2DTaskScheduler : IDisposable
     /// <summary>One Enqueue call's worth of jobs; Finish blocks on it until the count drains.</summary>
     private sealed class Batch
     {
+        private readonly object _gate = new();
         private int _remaining;
 
         internal Batch(int jobs) => _remaining = jobs;
@@ -32,17 +33,17 @@ internal sealed class Box2DTaskScheduler : IDisposable
         {
             if (Interlocked.Decrement(ref _remaining) == 0)
             {
-                lock (this) Monitor.PulseAll(this);
+                lock (_gate) Monitor.PulseAll(_gate);
             }
         }
 
         internal void Wait()
         {
-            lock (this)
+            lock (_gate)
             {
                 while (Volatile.Read(ref _remaining) > 0)
                 {
-                    Monitor.Wait(this);
+                    Monitor.Wait(_gate);
                 }
             }
         }

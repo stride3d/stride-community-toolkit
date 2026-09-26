@@ -37,9 +37,13 @@ public sealed class Tween
     /// <param name="duration">How long one run takes, in seconds. Must be positive.</param>
     /// <param name="function">The curve the value follows.</param>
     /// <param name="loop">What happens at the end of a run.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="duration"/> is not positive.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="duration"/> is not a finite positive number.</exception>
     public Tween(float duration, EasingFunction function = EasingFunction.Linear, TweenLoop loop = TweenLoop.None)
     {
+        // NaN passes ThrowIfNegativeOrZero (every comparison with it is false) and would make a tween
+        // whose progress and value are NaN for as long as it runs
+        if (!float.IsFinite(duration)) throw new ArgumentOutOfRangeException(nameof(duration), duration, "The duration must be a finite positive number.");
+
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(duration);
 
         Duration = duration;

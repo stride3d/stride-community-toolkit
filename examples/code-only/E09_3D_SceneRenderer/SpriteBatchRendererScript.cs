@@ -25,7 +25,7 @@ public class SpriteBatchRendererScript : StartupScript
     private SpriteFont? _font;
 
     // Font size for the text
-    private float _fontSize = 12;
+    private readonly float _fontSize = 12;
 
     // Reference to the camera component used for world-to-screen transformation
     private CameraComponent? _camera;

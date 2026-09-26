@@ -17,7 +17,7 @@ internal sealed class InspectorCollectionsView
     private readonly Inspector _inspector;
 
     // Cache to handle dictionary add() commands
-    private WeakReference<object?> _dicAddCommandTarget = new(null);
+    private readonly WeakReference<object?> _dicAddCommandTarget = new(null);
     private (object? key, object? value) _dicAddCommandData;
 
     internal InspectorCollectionsView(Inspector inspector)

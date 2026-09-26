@@ -345,9 +345,10 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     /// <summary>
     /// Runs a station's own code with the ring standing by: an exhibit that throws - a feature the
     /// GPU or the engine refuses - leaves its pad empty with the message on the station, and the
-    /// other stations stand. Once a station has failed its update is not run again.
+    /// other stations stand. Once a station has failed its update is not run again. A gallery that
+    /// rebuilds a station itself - a variation on V - runs the rebuild through here for the same reason.
     /// </summary>
-    private static void Guarded(TStation station, Action action)
+    public static void Guarded(TStation station, Action action)
     {
         if (station.Error is not null) return;
 
