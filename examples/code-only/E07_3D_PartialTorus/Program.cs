@@ -134,7 +134,7 @@ void BuildPartialTorusMesh(MeshBuilder meshBuilder, float cylinderRadius, float 
 
 static Material CreateMaterial(Game game)
 {
-    return Material.New(game.GraphicsDevice, new MaterialDescriptor
+    return Material.New(game.GraphicsDevice, content: game.Content, descriptor: new MaterialDescriptor
     {
         Attributes = new MaterialAttributes
         {
@@ -151,10 +151,7 @@ static Material CreateMaterial(Game game)
             {
                 MetalnessMap = new ComputeFloat(0.0f)
             },
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature
-            {
-                Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()
-            }
+            SpecularModel = new MaterialSpecularMicrofacetModelFeature()
         }
     });
 }

@@ -111,8 +111,7 @@ public static class SurfaceStations
     /// soft edges (see <see cref="HairCards"/>). The hair moves: the heads turn slowly, and a
     /// feature of the gallery's own in the material's displacement slot - the vertex-stage hook -
     /// sways the cards by a wind set every frame (<see cref="HairSwayFeature"/>), so the anisotropic
-    /// highlight slides along the strands as they move. The environment term is the polynomial fit
-    /// for the same reason as everywhere in this gallery. V cycles the three shading models.
+    /// highlight slides along the strands as they move. V cycles the three shading models.
     /// </summary>
     /// <remarks>
     /// On 4.4 this needs a small engine fix, reported upstream:
@@ -231,8 +230,8 @@ public static class SurfaceStations
     }
 
     /// <summary>
-    /// The hair material: both hair models on one shading model, attenuation off, the polynomial
-    /// environment, and by default flat noise, shadow-map shadowing, the strand in the tangent.
+    /// The hair material: both hair models on one shading model, attenuation off, and by default
+    /// flat noise, shadow-map shadowing, the strand in the tangent.
     /// </summary>
     /// <param name="sway">The vertex-stage sway, on two-sided cards.</param>
     /// <param name="debugPasses">Paint the opaque, back and front passes red, green and blue.</param>
@@ -272,7 +271,6 @@ public static class SurfaceStations
                 // Flat noise unless given some: no shift jitter, full glints. The defaults are texture lookups with no texture
                 HairSpecularHighlightsShiftNoise = noise ?? new ComputeFloat(0.5f),
                 HairSecondarySpecularGlintsNoise = noise ?? new ComputeFloat(1f),
-                Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial(),
             },
             // The vertex-stage hook: the sway, on the cards only
             Displacement = twoSided && sway ? new HairSwayFeature() : null,

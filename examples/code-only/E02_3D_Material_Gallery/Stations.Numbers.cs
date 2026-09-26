@@ -117,7 +117,7 @@ public static class NumberStations
     /// mirror; V switches. There is no Fresnel variation because there would be nothing to see:
     /// the Fresnel function shapes the highlights of lights, pinpoints at this glossiness, while the
     /// reflection of the sky - all of what a mirror shows - is the environment term's business, and
-    /// that is the same polynomial whichever Fresnel is chosen. On a white metal even the highlights
+    /// that is the same lookup table whichever Fresnel is chosen. On a white metal even the highlights
     /// agree, since a reflectance of one has nowhere to rise to.
     /// </summary>
     public static void Mirror(MaterialStation s)
@@ -139,8 +139,6 @@ public static class NumberStations
                     Fresnel = new MaterialSpecularMicrofacetFresnelNone(),
                     Visibility = new MaterialSpecularMicrofacetVisibilityImplicit(),
                     NormalDistribution = new MaterialSpecularMicrofacetNormalDistributionBlinnPhong(),
-                    // The polynomial term, as everywhere here: the LUT one needs a texture a code-only game never loads
-                    Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial(),
                 },
             },
         });

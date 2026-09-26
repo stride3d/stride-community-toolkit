@@ -30,9 +30,10 @@ public static class MaterialDescriptors
     /// <param name="metalness">0 for a dielectric, which keeps its colour as diffuse and reflects a colourless 4 percent; 1 for a metal, which has no diffuse and reflects in its own colour.</param>
     /// <param name="glossiness">0 for rough, where the highlight is a haze; 1 for a mirror.</param>
     /// <remarks>
-    /// The specular model's environment term is the polynomial fit rather than the engine's default
-    /// lookup texture: the default resolves that texture through an attached reference a code-only
-    /// game never loads, and every metal then renders black.
+    /// The specular model is the engine's default, whose environment term is a lookup texture the engine
+    /// ships as an asset. Compile the descriptor with <c>game.CreateMaterial(descriptor)</c> or
+    /// <c>Material.New(device, descriptor, game.Content)</c> so that texture resolves; <c>Material.New</c>
+    /// without the content manager leaves it empty and every metal renders black.
     /// </remarks>
     public static MaterialDescriptor Pbr(Color colour, float metalness = 0f, float glossiness = DefaultGlossiness) => new()
     {
@@ -119,11 +120,11 @@ public static class MaterialDescriptors
     };
 
     /// <summary>
-    /// The microfacet specular model with the GGX distribution and the polynomial environment term,
-    /// the one term a code-only game can always resolve.
+    /// The engine's microfacet specular model at its defaults: Schlick Fresnel, Smith-Schlick-GGX visibility,
+    /// the GGX distribution and the GGX lookup-table environment term. One method so every descriptor here
+    /// shares one choice; the lookup table needs the content manager at compile time (see <see cref="Pbr"/>).
+    /// When there is no content manager to give - a tool, a test - set
+    /// <c>Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()</c>, a fit that needs no asset.
     /// </summary>
-    public static MaterialSpecularMicrofacetModelFeature Microfacet() => new()
-    {
-        Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial(),
-    };
+    public static MaterialSpecularMicrofacetModelFeature Microfacet() => new();
 }
