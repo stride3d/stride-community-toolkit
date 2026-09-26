@@ -40,24 +40,16 @@ public static class SvgPath2D
         var command = '\0';
         var index = 0;
 
-        while (index < path.Length)
+        while (SkipSeparators(path, ref index))
         {
             var c = path[index];
 
-            if (char.IsWhiteSpace(c) || c == ',')
-            {
-                index++;
-                continue;
-            }
-
+            // A letter is the next command; z closes the path and ends the read
             if (char.IsLetter(c))
             {
                 if (c is 'z' or 'Z') break;
 
-                if (c is not ('M' or 'L' or 'H' or 'V' or 'm' or 'l' or 'h' or 'v'))
-                    throw new FormatException($"SVG path command '{c}' is not supported: only the straight-line commands M, L, H, V and their relative forms are read.");
-
-                command = c;
+                command = ReadCommand(c);
                 index++;
                 continue;
             }
@@ -65,35 +57,10 @@ public static class SvgPath2D
             if (command == '\0')
                 throw new FormatException("An SVG path must start with a command.");
 
-            switch (command)
-            {
-                case 'M':
-                    current = new Vector2(ReadNumber(path, ref index), ReadNumber(path, ref index));
-                    command = 'L';          // further pairs after a move-to are line-tos
-                    break;
-                case 'm':
-                    current += new Vector2(ReadNumber(path, ref index), ReadNumber(path, ref index));
-                    command = 'l';
-                    break;
-                case 'L':
-                    current = new Vector2(ReadNumber(path, ref index), ReadNumber(path, ref index));
-                    break;
-                case 'l':
-                    current += new Vector2(ReadNumber(path, ref index), ReadNumber(path, ref index));
-                    break;
-                case 'H':
-                    current.X = ReadNumber(path, ref index);
-                    break;
-                case 'h':
-                    current.X += ReadNumber(path, ref index);
-                    break;
-                case 'V':
-                    current.Y = ReadNumber(path, ref index);
-                    break;
-                case 'v':
-                    current.Y += ReadNumber(path, ref index);
-                    break;
-            }
+            // Anything else is a coordinate for the current command. Further pairs after a move-to
+            // are line-tos, in the same absolute or relative form.
+            current = Apply(command, current, path, ref index);
+            command = command switch { 'M' => 'L', 'm' => 'l', _ => command };
 
             points.Add(new Vector2(scale * (current.X + offset.X), -scale * (current.Y + offset.Y)));
         }
@@ -103,17 +70,51 @@ public static class SvgPath2D
         return [.. points];
     }
 
-    // One number: an optional sign, digits with a decimal point, an optional exponent. A sign that
-    // follows a digit starts the next number, as SVG allows "10-5".
+    // The straight-line commands; anything else - curves, arcs - is refused rather than skipped.
+    private static char ReadCommand(char c)
+        => c is 'M' or 'L' or 'H' or 'V' or 'm' or 'l' or 'h' or 'v'
+            ? c
+            : throw new FormatException($"SVG path command '{c}' is not supported: only the straight-line commands M, L, H, V and their relative forms are read.");
+
+    // One command's coordinates applied to the current point: an absolute command replaces the
+    // coordinate it names, a relative one adds to it.
+    private static Vector2 Apply(char command, Vector2 current, string path, ref int index) => command switch
+    {
+        'M' or 'L' => new Vector2(ReadNumber(path, ref index), ReadNumber(path, ref index)),
+        'm' or 'l' => current + new Vector2(ReadNumber(path, ref index), ReadNumber(path, ref index)),
+        'H' => current with { X = ReadNumber(path, ref index) },
+        'h' => current with { X = current.X + ReadNumber(path, ref index) },
+        'V' => current with { Y = ReadNumber(path, ref index) },
+        'v' => current with { Y = current.Y + ReadNumber(path, ref index) },
+        _ => throw new ArgumentOutOfRangeException(nameof(command), command, "Not a straight-line SVG command."),
+    };
+
+    // One number: an optional sign, digits with a decimal point, an optional exponent.
     private static float ReadNumber(string path, ref int index)
     {
-        while (index < path.Length && (char.IsWhiteSpace(path[index]) || path[index] == ','))
-            index++;
+        SkipSeparators(path, ref index);
 
         var start = index;
 
-        if (index < path.Length && path[index] is '-' or '+')
-            index++;
+        ScanNumber(path, ref index);
+
+        var token = path.AsSpan(start, index - start);
+
+        if (token.IsEmpty || !float.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+        {
+            var found = token.IsEmpty && start < path.Length ? path[start].ToString() : token.ToString();
+
+            throw new FormatException($"Expected a number at position {start} of the SVG path, found '{found}'.");
+        }
+
+        return value;
+    }
+
+    // Advances over the characters of one number. A sign that follows a digit starts the next
+    // number, as SVG allows "10-5"; a sign after an exponent marker belongs to the exponent.
+    private static void ScanNumber(string path, ref int index)
+    {
+        SkipSign(path, ref index);
 
         while (index < path.Length)
         {
@@ -126,21 +127,25 @@ public static class SvgPath2D
             else if (c is 'e' or 'E')
             {
                 index++;
-
-                if (index < path.Length && path[index] is '-' or '+')
-                    index++;
+                SkipSign(path, ref index);
             }
             else
             {
                 break;
             }
         }
+    }
 
-        var token = path.AsSpan(start, index - start);
+    private static void SkipSign(string path, ref int index)
+    {
+        if (index < path.Length && path[index] is '-' or '+') index++;
+    }
 
-        if (token.IsEmpty || !float.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
-            throw new FormatException($"Expected a number at position {start} of the SVG path, found '{(token.IsEmpty && start < path.Length ? path[start].ToString() : token.ToString())}'.");
+    // Advances past whitespace and commas; false once the path is used up.
+    private static bool SkipSeparators(string path, ref int index)
+    {
+        while (index < path.Length && (path[index] == ',' || char.IsWhiteSpace(path[index]))) index++;
 
-        return value;
+        return index < path.Length;
     }
 }

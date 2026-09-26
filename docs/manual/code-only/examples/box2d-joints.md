@@ -28,4 +28,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Box2D_Joints).
 
-[!code-csharp[](../../../../examples/code-only/E06_Box2D_Joints/Program.cs?start=1&end=318)]
+[!code-csharp[](../../../../examples/code-only/E06_Box2D_Joints/Program.cs?start=1&end=322)]

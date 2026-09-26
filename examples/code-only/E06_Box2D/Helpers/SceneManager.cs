@@ -156,7 +156,7 @@ public class SceneManager
     public void AddInitialShapes()
     {
         // Add some demo shapes with different properties
-        _shapeSpawner.Add(Primitive2DModelType.Rectangle, 10, Color.Black);
+        _shapeSpawner.Add(Primitive2DModelType.Rectangle, 10, GameConfig.ShapeColor);
         LogAction($"Added {10} initial demo shapes");
     }
 

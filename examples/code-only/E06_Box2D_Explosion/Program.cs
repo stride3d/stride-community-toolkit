@@ -1,7 +1,6 @@
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -207,14 +206,16 @@ void AddInstructions()
 {
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    overlay.Position = DisplayPosition.BottomLeft;
-
     overlay.AddSection("Explosion", () =>
     [
-        new("Space  detonate at the cursor", Color.Yellow),
-        new($"J / K  impulse per metre of perimeter  {impulse,5:0.0}    radius {Radius} m, falloff {Falloff} m"),
-        new("Left mouse  pick a body up and throw it     R  rebuild"),
-        new($"blasts {blasts}   gold slab and ball on the right: same mass, same distance - the slab flies harder", Color.Gray),
+        new("Space", "Detonate at the cursor", Color.Yellow),
+        new(["J", "K"], $"Impulse per metre of perimeter, {impulse:0.0}", Color.Yellow),
+        new("R", "Rebuild", Color.Yellow),
+        new("Left mouse", "Pick a body up and throw it", Color.Yellow),
+        new(""),
+        new($"Radius {Radius} m, falloff {Falloff} m, blasts {blasts}"),
+        new("Gold slab and ball on the right: same mass, same", Color.Gray),
+        new("distance, and the slab flies harder", Color.Gray),
     ]);
 }
 

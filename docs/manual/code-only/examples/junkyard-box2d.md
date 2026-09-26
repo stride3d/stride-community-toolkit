@@ -31,4 +31,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Box2D_Junkyard).
 
-[!code-csharp[](../../../../examples/code-only/E06_Box2D_Junkyard/Program.cs?start=1&end=307)]
+[!code-csharp[](../../../../examples/code-only/E06_Box2D_Junkyard/Program.cs?start=1&end=312)]

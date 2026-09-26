@@ -51,16 +51,16 @@ namespace Stride.CommunityToolkit.Box2D;
 public sealed class CharacterMover2D : IBox2DSimulationUpdate
 {
     /// <summary>Category bit for the level: chains, floors, walls.</summary>
-    public const ulong StaticCategory = 0x0001;
+    public static readonly ulong StaticCategory = 0x0001;
 
     /// <summary>Category bit for movers; a mover overlaps others but does not sweep against them, which is what makes the push soft.</summary>
-    public const ulong MoverCategory = 0x0002;
+    public static readonly ulong MoverCategory = 0x0002;
 
     /// <summary>Category bit for moving obstacles the mover collides with and stands on: elevators, bridges.</summary>
-    public const ulong DynamicCategory = 0x0004;
+    public static readonly ulong DynamicCategory = 0x0004;
 
     /// <summary>Category bit for loose things the mover passes through and can kick.</summary>
-    public const ulong DebrisCategory = 0x0008;
+    public static readonly ulong DebrisCategory = 0x0008;
 
     private const int PlaneCapacity = 8;
     private const int MaxIterations = 5;

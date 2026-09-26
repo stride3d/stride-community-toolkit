@@ -1,156 +1,91 @@
 using Stride.CommunityToolkit.Box2D;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Input;
 
 namespace E06_Box2D.Helpers;
 
 /// <summary>
-/// Handles UI display and navigation instructions for the Box2D physics example
+/// The on-screen help and physics readout for the Box2D physics example, drawn by the shared
+/// <see cref="DebugOverlay"/>: the keys first, the live numbers under them, and the rarer keys in a
+/// collapsible section behind Z.
 /// </summary>
 public class UiHelper
 {
-    private readonly Game _game;
-    private readonly NavigationCommand[] _commands;
-    private readonly PhysicsInfo _physicsInfo;
+    private int? _shapeCount;
+    private int _totalCreated;
+    private Box2DSimulation? _simulation;
+    private string? _status;
+    private Color _statusColor = Color.White;
 
     public UiHelper(Game game)
     {
-        _game = game;
-        _commands = GetNavigationCommands();
-        _physicsInfo = new PhysicsInfo();
+        var overlay = DebugOverlay.GetOrCreate(game);
+
+        // The callbacks run every frame the overlay is drawn, so the numbers stay live without
+        // anything having to push them
+        overlay.AddSection("Box2D", BuildLines);
+        overlay.AddCollapsibleSection("Advanced", "More shapes", Keys.Z, AdvancedLines, collapsed: true);
     }
 
     /// <summary>
-    /// Renders the main navigation UI and physics information
+    /// Records what the overlay shows this frame. Call it every update; a status message set with
+    /// <see cref="RenderStatusMessage"/> lasts until the next call.
     /// </summary>
     /// <param name="cubeCount">Current number of physics objects</param>
+    /// <param name="totalShapesCreated">How many shapes have been spawned since the start</param>
     /// <param name="simulation">The physics simulation for additional stats</param>
     public void RenderNavigation(int? cubeCount = 0, int totalShapesCreated = 0, Box2DSimulation? simulation = null)
     {
-        var yOffset = GameConfig.DefaultDebugY;
-
-        // Display title
-        _game.DebugTextSystem.Print("Box2D Physics Example",
-            new Int2(GameConfig.DefaultDebugX, yOffset), Color.Yellow);
-        yOffset += GameConfig.HeaderSpacing;
-
-        // Display physics stats
-        RenderPhysicsStats(yOffset, cubeCount, totalShapesCreated, simulation);
-        yOffset += GameConfig.HeaderSpacing + (4 * GameConfig.DefaultSpacing);
-
-        // Display controls
-        RenderControls(yOffset + 10);
+        _shapeCount = cubeCount;
+        _totalCreated = totalShapesCreated;
+        _simulation = simulation;
+        _status = null;
     }
 
     /// <summary>
-    /// Renders physics-related statistics
-    /// </summary>
-    private void RenderPhysicsStats(int yOffset, int? cubeCount, int totalShapesCreated, Box2DSimulation? simulation)
-    {
-        _game.DebugTextSystem.Print("Physics Stats:",
-            new Int2(GameConfig.DefaultDebugX, yOffset), Color.Cyan);
-        yOffset += GameConfig.DefaultSpacing;
-
-        _game.DebugTextSystem.Print($"Objects: {cubeCount}",
-            new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
-        yOffset += GameConfig.DefaultSpacing;
-
-        _game.DebugTextSystem.Print($"Total Created: {totalShapesCreated}",
-            new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
-        yOffset += GameConfig.DefaultSpacing;
-
-        if (simulation != null)
-        {
-            _game.DebugTextSystem.Print($"Gravity: {simulation.Gravity}",
-                new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
-            yOffset += GameConfig.DefaultSpacing;
-
-            _game.DebugTextSystem.Print($"Time Scale: {simulation.TimeScale:F2}",
-                new Int2(GameConfig.DefaultDebugX, yOffset), Color.White);
-            yOffset += GameConfig.DefaultSpacing;
-
-            var enabledText = simulation.Enabled ? "Enabled" : "Disabled";
-            var enabledColor = simulation.Enabled ? Color.Green : Color.Red;
-            _game.DebugTextSystem.Print($"Simulation: {enabledText}",
-                new Int2(GameConfig.DefaultDebugX, yOffset), enabledColor);
-        }
-    }
-
-    /// <summary>
-    /// Renders the control instructions
-    /// </summary>
-    private void RenderControls(int yOffset)
-    {
-        _game.DebugTextSystem.Print("Controls:",
-            new Int2(GameConfig.DefaultDebugX, yOffset), Color.Cyan);
-        yOffset += GameConfig.DefaultSpacing;
-
-        foreach (var command in _commands)
-        {
-            _game.DebugTextSystem.Print(command.Text,
-                new Int2(GameConfig.DefaultDebugX, yOffset), command.Color);
-            yOffset += GameConfig.DefaultSpacing;
-        }
-    }
-
-    /// <summary>
-    /// Renders temporary status messages
+    /// Shows a temporary status message under the readout, for the frame it is called in.
     /// </summary>
     /// <param name="message">The message to display</param>
     /// <param name="color">Color of the message</param>
     public void RenderStatusMessage(string message, Color color = default)
     {
-        if (color == default) color = Color.White;
-
-        _game.DebugTextSystem.Print(message,
-            new Int2(GameConfig.DefaultDebugX, GameConfig.DefaultDebugY - 50), color);
+        _status = message;
+        _statusColor = color == default ? Color.White : color;
     }
 
-    /// <summary>
-    /// Renders physics debugging information at a specific position
-    /// </summary>
-    /// <param name="position">Screen position</param>
-    /// <param name="info">Information to display</param>
-    public void RenderDebugInfo(Int2 position, string info)
+    private IReadOnlyList<TextElement> BuildLines()
     {
-        _game.DebugTextSystem.Print(info, position, Color.Yellow);
-    }
+        List<TextElement> lines =
+        [
+            new("Left mouse", "Pick up and throw; empty space spawns", Color.Gold),
+            new("X", "Delete all objects", Color.Gold),
+            new("M", "Generate squares", Color.Gold),
+            new("R", "Generate rectangles", Color.Gold),
+            new("C", "Generate circles", Color.Gold),
+            new("T", "Generate triangles", Color.Gold),
+            new("V", "Generate capsules", Color.Gold),
+            new("P", "Generate random shapes with mass", Color.Gold),
+            new(""),
+            new($"Objects {_shapeCount}, total created {_totalCreated}", Color.LightGreen),
+        ];
 
-    private static NavigationCommand[] GetNavigationCommands()
-    {
-        return new NavigationCommand[]
+        if (_simulation is { } simulation)
         {
-            new("Left Click - Pick a shape up and throw it; click empty space to spawn", Color.LightGreen),
-            new("X - Delete all objects", Color.Red),
-            new("", Color.Transparent), // Spacer
-            new("Shape Generation:", Color.Yellow),
-            new("M - Generate squares", Color.White),
-            new("R - Generate rectangles", Color.White),
-            new("C - Generate circles", Color.White),
-            new("T - Generate triangles", Color.White),
-            new("V - Generate capsules", Color.White),
-            new("P - Generate random shapes (mass)", Color.White),
-            new("", Color.Transparent), // Spacer
-            new("Advanced:", Color.Yellow),
-            new("J - Generate shapes with joints", Color.White),
-            new("G - Generate demo shapes", Color.White),
-            new("Space - Toggle physics simulation", Color.White)
-        };
+            lines.Add(new($"Gravity {simulation.Gravity.Y:0.0}, time scale {simulation.TimeScale:0.00}", Color.LightGreen));
+            lines.Add(new(simulation.Enabled ? "Simulation enabled" : "Simulation disabled", simulation.Enabled ? Color.LightGreen : Color.OrangeRed));
+        }
+
+        if (_status is not null) lines.Add(new(_status, _statusColor));
+
+        return lines;
     }
 
-    /// <summary>
-    /// Represents a navigation command with text and color
-    /// </summary>
-    private sealed record NavigationCommand(string Text, Color Color);
-
-    /// <summary>
-    /// Tracks physics-related information for display
-    /// </summary>
-    private sealed class PhysicsInfo
-    {
-        public DateTime LastUpdate { get; set; } = DateTime.Now;
-        public string LastAction { get; set; } = "None";
-        public int TotalObjectsCreated { get; set; } = 0;
-        public int TotalObjectsDestroyed { get; set; } = 0;
-    }
+    private static IReadOnlyList<TextElement> AdvancedLines() =>
+    [
+        new("J", "Generate shapes with joints", Color.Gold),
+        new("G", "Generate demo shapes", Color.Gold),
+        new("Space", "Toggle the physics simulation", Color.Gold),
+    ];
 }

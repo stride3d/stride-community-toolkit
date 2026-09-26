@@ -249,7 +249,7 @@ public static class Joints2D
         def.localFrameB = JointFrames2D.LocalFrame(b, worldAnchorB, worldAngle);
     }
 
-    private static void Apply(ref B2JointDef def, JointOptions2D? options)
+    private static void Apply(ref B2JointDef def, JointOptionsBase? options)
     {
         if (options is null)
             return;

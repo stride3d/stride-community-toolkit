@@ -19,7 +19,7 @@ internal static class JointFrames2D
     /// own, gives <paramref name="worldAngle"/>. Two frames built from the same pivot and angle on
     /// two bodies coincide in world space, which is what makes the current pose the joint's zero.
     /// </summary>
-    public static B2Transform LocalFrame(in B2Transform body, Vector2 worldPivot, float worldAngle = 0f)
+    internal static B2Transform LocalFrame(in B2Transform body, Vector2 worldPivot, float worldAngle = 0f)
     {
         var pivot = new B2Vec2(worldPivot.X, worldPivot.Y);
         var frameRotation = b2MakeRot(worldAngle);
@@ -28,7 +28,7 @@ internal static class JointFrames2D
     }
 
     /// <summary>Same, read straight off a live body.</summary>
-    public static B2Transform LocalFrame(B2BodyId body, Vector2 worldPivot, float worldAngle = 0f)
+    internal static B2Transform LocalFrame(B2BodyId body, Vector2 worldPivot, float worldAngle = 0f)
         => LocalFrame(b2Body_GetTransform(body), worldPivot, worldAngle);
 
     /// <summary>
@@ -36,7 +36,7 @@ internal static class JointFrames2D
     /// need not be normalised.
     /// </summary>
     /// <exception cref="ArgumentException">The axis has no length.</exception>
-    public static float AxisAngle(Vector2 worldAxis)
+    internal static float AxisAngle(Vector2 worldAxis)
     {
         if (worldAxis.LengthSquared() <= 0)
             throw new ArgumentException("The joint axis must have a direction.", nameof(worldAxis));
@@ -45,7 +45,7 @@ internal static class JointFrames2D
     }
 
     /// <summary>A local frame back in world space, for drawing anchors.</summary>
-    public static Vector2 WorldPoint(in B2Transform body, in B2Transform localFrame)
+    internal static Vector2 WorldPoint(in B2Transform body, in B2Transform localFrame)
     {
         var point = b2TransformPoint(body, localFrame.p);
 

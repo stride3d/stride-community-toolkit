@@ -197,15 +197,3 @@ public sealed class Box2DDebugDraw
     private void DrawText(in B2Vec2 p, string s, B2HexColor color, object context)
         => DrawString?.Invoke(new Vector2(p.X, p.Y), s, DebugDrawColors.ToColor(color));
 }
-
-/// <summary>Box2D's hex colours as Stride colours.</summary>
-internal static class DebugDrawColors
-{
-    /// <summary>A <c>0xRRGGBB</c> value, opaque.</summary>
-    public static Color ToColor(B2HexColor color)
-    {
-        var value = (int)color;
-
-        return new Color((byte)(value >> 16), (byte)(value >> 8), (byte)value);
-    }
-}

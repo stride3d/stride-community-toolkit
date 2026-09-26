@@ -2,7 +2,6 @@ using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -298,14 +297,19 @@ void AddInstructions()
 {
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    overlay.Position = DisplayPosition.BottomLeft;
-
     overlay.AddSection("Joints", () =>
     [
-        new("Left to right: hinge, slider, wheel, rope, weld, motor joint. Left mouse pulls on anything."),
-        new($"M  hinge motor {(pendulumMotor ? "ON " : "off")}   L  hinge limit {(pendulumLimit ? "ON " : "off")}   J  wheel motor {(wheelMotor ? "ON " : "off")}", Color.Yellow),
-        new($"Box2D debug draw:  N  contacts {(debugDraw?.DrawContactPoints == true ? "ON " : "off")}   G  bounds {(debugDraw?.DrawBounds == true ? "ON " : "off")}   T  mass {(debugDraw?.DrawMass == true ? "ON " : "off")}"),
-        new("R  rebuild the rigs"),
+        new("M", $"Hinge motor {(pendulumMotor ? "on" : "off")}", Color.Yellow),
+        new("L", $"Hinge limit {(pendulumLimit ? "on" : "off")}", Color.Yellow),
+        new("J", $"Wheel motor {(wheelMotor ? "on" : "off")}", Color.Yellow),
+        new("N", $"Draw contacts {(debugDraw?.DrawContactPoints == true ? "on" : "off")}", Color.Yellow),
+        new("G", $"Draw bounds {(debugDraw?.DrawBounds == true ? "on" : "off")}", Color.Yellow),
+        new("T", $"Draw mass {(debugDraw?.DrawMass == true ? "on" : "off")}", Color.Yellow),
+        new("R", "Rebuild the rigs", Color.Yellow),
+        new("Left mouse", "Pull on anything", Color.Yellow),
+        new(""),
+        new("Left to right: hinge, slider, wheel, rope, weld,", Color.LightGray),
+        new("motor joint", Color.LightGray),
     ]);
 }
 

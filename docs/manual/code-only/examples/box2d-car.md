@@ -28,4 +28,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Box2D_Car).
 
-[!code-csharp[](../../../../examples/code-only/E06_Box2D_Car/Program.cs?start=1&end=276)]
+[!code-csharp[](../../../../examples/code-only/E06_Box2D_Car/Program.cs?start=1&end=277)]

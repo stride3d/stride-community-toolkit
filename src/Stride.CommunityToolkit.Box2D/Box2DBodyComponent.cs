@@ -1,4 +1,5 @@
 using Box2D.NET;
+using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Bodies;
@@ -10,9 +11,15 @@ namespace Stride.CommunityToolkit.Box2D;
 /// Component that ties a Stride entity to a Box2D body: creation-time configuration plus live
 /// velocity, force and impulse access once <see cref="BodyId"/> refers to a created body.
 /// </summary>
+// DataContract is what makes the component usable from Game Studio at all; the body itself is
+// created by the simulation from code, so in the editor this is the authoring data only.
+[DataContract("Box2DBodyComponent")]
+[Display("Box2D Body")]
+[ComponentCategory("Physics")]
 public class Box2DBodyComponent : EntityComponent
 {
     /// <summary>The Box2D body backing this component. Default (invalid) until the body is created.</summary>
+    [DataMemberIgnore]
     public B2BodyId BodyId { get; set; }
 
     /// <summary>The body type used when the body is created.</summary>
@@ -46,6 +53,7 @@ public class Box2DBodyComponent : EntityComponent
     /// The body's linear velocity. Reads return zero and writes are ignored while <see cref="BodyId"/>
     /// is not a valid body.
     /// </summary>
+    [DataMemberIgnore]
     public Vector2 LinearVelocity
     {
         get
@@ -67,6 +75,7 @@ public class Box2DBodyComponent : EntityComponent
     /// The body's angular velocity in radians per second. Reads return zero and writes are ignored
     /// while <see cref="BodyId"/> is not a valid body.
     /// </summary>
+    [DataMemberIgnore]
     public float AngularVelocity
     {
         get => b2Body_IsValid(BodyId) ? b2Body_GetAngularVelocity(BodyId) : 0f;

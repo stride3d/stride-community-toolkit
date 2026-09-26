@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Box2D_Explosion).
 
-[!code-csharp[](../../../../examples/code-only/E06_Box2D_Explosion/Program.cs?start=1&end=227)]
+[!code-csharp[](../../../../examples/code-only/E06_Box2D_Explosion/Program.cs?start=1&end=228)]

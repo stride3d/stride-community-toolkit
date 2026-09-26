@@ -160,6 +160,14 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND1001:AvoidTypesWithTooManyMethods", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DSimulation", Justification = "The public facade over world, bridge, queries and events - the Box2D counterpart of BepuSimulation; its methods are one-line delegations to those parts.")]
 [assembly: SuppressMessage("NDepend", "ND1207:NonStaticClassesShouldBeInstantiatedOrTurnedToStatic", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DCollisionMatrix", Justification = "Library API instantiated by consumers; nothing in the toolkit itself needs one yet.")]
 [assembly: SuppressMessage("NDepend", "ND2500:DontCreateThreadsExplicitly", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.Box2DTaskScheduler..ctor(Int32)", Justification = "Deliberate: Box2D requires each concurrently running task callback to hold a distinct worker index, which dedicated threads guarantee structurally; the workers also park in a blocking dequeue for the world lifetime, which thread-pool threads must never do.")]
+// SimulationJoints2D is the simulation.Joints facade: the factories fill in the world id, and Destroy,
+// IsValid and GetAnchors need none, so the rule is right that they could be static. They stay instance
+// members so a caller reaches every joint operation through one object; the Roslyn twin (CA1822) is
+// suppressed on the members themselves.
+[assembly: SuppressMessage("NDepend", "ND1208:MethodsShouldBeDeclaredStaticIfPossible", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.SimulationJoints2D", Scope = "deep", Justification = "Facade: Destroy, IsValid and GetAnchors stay beside the Create* methods on simulation.Joints rather than sending the caller to Joints2D.")]
+// The transform overload is the one JointFrames2DTests exercises on a bare transform; the analysis does
+// not include the test project, so within it the body overload is the only caller.
+[assembly: SuppressMessage("NDepend", "ND1800:MethodsThatCouldHaveALowerVisibility", Target = "Stride.CommunityToolkit.Box2D:Stride.CommunityToolkit.Box2D.JointFrames2D.LocalFrame(B2Transform&,Vector2,Single)", Justification = "Called by the unit tests, which the analysis does not cover.")]
 [assembly: SuppressMessage("NDepend", "ND2300:CollectionPropertiesShouldBeReadOnly", Target = "Stride.CommunityToolkit.Shapes:Stride.CommunityToolkit.Shapes.ShapeComponent.Vertices", Justification = "A runtime-swappable shape outline is the point of the component; the next frame draws whatever list is assigned or edited.")]
 // ShapeInstance is a wire format: the shader's ShapeData struct field for field, 160 bytes, uploaded
 // as-is through a structured buffer. Grouping the fields into smaller types would be a layout change,

@@ -2,6 +2,7 @@ using E06_Box2D.Helpers;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Shapes;
+using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -10,7 +11,9 @@ using Stride.Games;
 // This example demonstrates how to integrate Box2D.NET with Stride game engine
 // for 2D physics simulations with shapes, collisions, and interactive controls
 
-//WindowsDpiManager.EnablePerMonitorV2();
+// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
+// it has to happen before the window exists
+WindowsDpiManager.EnablePerMonitorV2();
 
 // Global variables for the demo
 Box2DSimulation? simulation = null;
@@ -38,8 +41,14 @@ void Start(Scene rootScene)
     // Shapes render through the toolkit's Box2D debug draw - testbed-style fill and pixel-constant
     // borders from an SDF shader, replacing the old per-mesh outline render features
     var shapeBatch = game.AddShapeBatch();
-    shapeBatch.BorderWidth = 1f;
+    shapeBatch.BorderWidth = 1.5f;
     shapeBatch.Fill.Alpha = 0.4f;
+    // Neon tubes: a bloom outside every border in the border's own colour, adding light rather than
+    // covering. A third of the strength at the edge is what reads as light around the stroke; full
+    // strength would just look like a fatter border
+    shapeBatch.Glow.Set(10f);
+    shapeBatch.Glow.Strength = 0.35f;
+    shapeBatch.Glow.Additive = true;
 
     // Initialize the Box2D physics simulation
     simulation = new Box2DSimulation();

@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
+using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -61,6 +62,10 @@ var wallSquare = RectangleVertices(0.5f * GridSize, 0.55f * GridSize);
 // The pusher plow: a 4 x 8 box whose shape sits 4 units above the body origin
 Vector2[] pusherBoxVertices = [new(-2, 0), new(2, 0), new(2, 8), new(-2, 8)];
 
+// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
+// it has to happen before the window exists
+WindowsDpiManager.EnablePerMonitorV2();
+
 using var game = new Game();
 
 game.Run(start: Start, update: Update);
@@ -99,7 +104,7 @@ void Start(Scene rootScene)
 
     DebugOverlay.GetOrCreate(game).AddSection("Junkyard", static () =>
     [
-        new("Left mouse - pick a rock up, carry it, throw it", Color.Yellow),
+        new("Left mouse", "Pick a rock up, carry it, throw it", Color.Yellow),
     ]);
 
     CreateGround();

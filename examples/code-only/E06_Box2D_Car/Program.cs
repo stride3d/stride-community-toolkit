@@ -2,7 +2,6 @@ using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
@@ -260,17 +259,19 @@ void AddInstructions()
 {
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    overlay.Position = DisplayPosition.BottomLeft;
-
     overlay.AddSection("Car", () =>
     {
         var speed = simulation is not null && b2Body_IsValid(chassisBody) ? b2Body_GetLinearVelocity(chassisBody).X : 0;
 
         return
         [
-            new($"A / D  drive      throttle {throttle,2:+0;-0; 0}   speed {speed,6:0.0} m/s", Color.Yellow),
-            new($"J / K  suspension  {hertz:0.0} Hz"),
-            new("R      new car        Left mouse  pick the car up"),
+            new(["A", "D"], "Drive", Color.Yellow),
+            new(["J", "K"], "Suspension stiffness", Color.Yellow),
+            new("R", "New car", Color.Yellow),
+            new("Left mouse", "Pick the car up", Color.Yellow),
+            new(""),
+            new($"Throttle {throttle:+0;-0;0}, speed {speed:0.0} m/s"),
+            new($"Suspension {hertz:0.0} Hz"),
         ];
     });
 }

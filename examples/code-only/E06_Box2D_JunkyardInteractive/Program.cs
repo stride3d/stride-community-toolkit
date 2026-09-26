@@ -6,6 +6,7 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
+using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -70,6 +71,10 @@ var catalogue = new ShapeDefinition[]
     new("Box", RectangleVertices(0.35f, 0.35f), 0f),
 };
 var currentShape = 0;
+
+// Per-monitor DPI awareness, so a 150% display gets a sharp window rather than a stretched one;
+// it has to happen before the window exists
+WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
@@ -376,9 +381,12 @@ IReadOnlyList<TextElement> BuildOverlayLines()
 
     List<TextElement> lines =
     [
-        new($"{shapes.Count:N0} shapes as entities, one shader batch", Color.LightGreen),
-        new($"{shapes.Count - asleep:N0} awake / {asleep:N0} asleep / {sensorWatcher.Count} in the gate", Color.MediumSeaGreen),
-        new(string.Empty),
+        new("Left mouse", "Pick a shape up, carry it, throw it", Color.Yellow),
+        new("Middle click", "Follow a shape", Color.Yellow),
+        new("Escape", "Stop following", Color.Yellow),
+        new("N", "Drop a new one at the cursor", Color.Yellow),
+        new("Space", $"Spawn {InitialCount / 2} more", Color.Yellow),
+        new("X", "Clear", Color.Yellow),
     ];
 
     foreach (var menu in menus)
@@ -387,9 +395,8 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     }
 
     lines.Add(new(string.Empty));
-    lines.Add(new("Left mouse - pick a shape up, carry it, throw it     N - drop a new one at the cursor", Color.Yellow));
-    lines.Add(new("Middle Click - follow a shape     ESC - stop following", Color.Yellow));
-    lines.Add(new($"SPACE - spawn {InitialCount / 2} more     X - clear", Color.Yellow));
+    lines.Add(new($"{shapes.Count:N0} shapes as entities, one shader batch", Color.LightGreen));
+    lines.Add(new($"{shapes.Count - asleep:N0} awake, {asleep:N0} asleep, {sensorWatcher.Count} in the gate", Color.MediumSeaGreen));
 
     return lines;
 }
