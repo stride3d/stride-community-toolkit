@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -13,7 +14,6 @@ using Stride.Rendering.Colors;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -728,7 +728,7 @@ public static partial class GameExtensions
 
 
     /// <summary>
-    /// Creates a material from the four numbers of a PBR material: a colour, a metalness and a glossiness,
+    /// Creates a material from the four numbers of a PBR (physically based rendering) material: a colour, a metalness and a glossiness,
     /// under the Lambert diffuse and microfacet specular models.
     /// </summary>
     /// <param name="game">The game instance used to access the graphics device.</param>
@@ -737,26 +737,67 @@ public static partial class GameExtensions
     /// <param name="glossiness">0 for rough, where the highlight is a haze; 1 for a mirror. Defaults to 0.65f.</param>
     /// <returns>A new material instance with the specified or default attributes.</returns>
     /// <remarks>
-    /// The specular model's environment term is the polynomial fit rather than the engine's default lookup
-    /// texture: the default resolves that texture through an attached reference a code-only game never loads,
-    /// and every metal then renders black. A colour alone gives a dielectric; ask for a metal explicitly. See the manual page on materials for what the numbers claim.
+    /// Compiles <see cref="MaterialDescriptors.Pbr"/>: the specular model's environment term is the polynomial fit
+    /// rather than the engine's default lookup texture, which a code-only game never loads (every metal would
+    /// render black). A colour alone gives a dielectric; ask for a metal explicitly. When the material is nearly
+    /// right but needs one more feature, take the descriptor from <see cref="MaterialDescriptors"/>, add to it,
+    /// and compile it with <see cref="CreateMaterial(IGame, MaterialDescriptor)"/>. The manual page on materials
+    /// explains what the numbers claim.
     /// </remarks>
-    public static Material CreateMaterial(this IGame game, Color? color = null, float metalness = 0f, float glossiness = 0.65f)
-    {
-        var materialDescription = new MaterialDescriptor
-        {
-            Attributes =
-            {
-                Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color ?? GameDefaults.DefaultMaterialColor)),
-                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
-                SpecularModel = new MaterialSpecularMicrofacetModelFeature { Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial() },
-                MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness))
-            }
-        };
+    public static Material CreateMaterial(this IGame game, Color? color = null, float metalness = 0f, float glossiness = MaterialDescriptors.DefaultGlossiness)
+        => Material.New(game.GraphicsDevice, MaterialDescriptors.Pbr(color ?? GameDefaults.DefaultMaterialColor, metalness, glossiness));
 
-        return Material.New(game.GraphicsDevice, materialDescription);
+    /// <summary>
+    /// Compiles a descriptor into a material and keeps the descriptor on it, so the material can be used as a
+    /// <see cref="MaterialBlendLayer"/> later: <c>Material.New</c> leaves
+    /// <see cref="Material.Descriptor"/> null, and the generator composes a layer from its features.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="descriptor">The bag of features: one from <see cref="MaterialDescriptors"/> with something added, or your own.</param>
+    /// <returns>The compiled material, its descriptor attached.</returns>
+    public static Material CreateMaterial(this IGame game, MaterialDescriptor descriptor)
+    {
+        var material = Material.New(game.GraphicsDevice, descriptor);
+
+        material.Descriptor = descriptor;
+
+        return material;
     }
+
+    /// <summary>
+    /// Creates a material with a texture where the colour would be, tiled <paramref name="tiling"/> times, with
+    /// the same metalness and glossiness as <see cref="CreateMaterial(IGame, Color?, float, float)"/>.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="texture">The albedo, loaded as a colour (sRGB) texture.</param>
+    /// <param name="metalness">0 for a dielectric, 1 for a metal.</param>
+    /// <param name="glossiness">0 for rough, 1 for a mirror.</param>
+    /// <param name="tiling">How many times the texture repeats across the UV range.</param>
+    /// <returns>A new material instance.</returns>
+    public static Material CreateTexturedMaterial(this IGame game, Texture texture, float metalness = 0f, float glossiness = MaterialDescriptors.DefaultGlossiness, float tiling = 1f)
+        => Material.New(game.GraphicsDevice, MaterialDescriptors.Textured(texture, metalness, glossiness, tiling));
+
+    /// <summary>
+    /// Creates a material that gives off its own light: a lamp, a sign, a glowing edge. Above an intensity of 1 the
+    /// colour overshoots the display range, which is what a bloom post effect picks out of the frame.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="color">The colour, lit and emitted.</param>
+    /// <param name="intensity">The emissive strength; 1 is the colour as given, 5 or more blooms under post effects.</param>
+    /// <returns>A new material instance.</returns>
+    public static Material CreateEmissiveMaterial(this IGame game, Color color, float intensity = 1f)
+        => Material.New(game.GraphicsDevice, MaterialDescriptors.Emissive(color, intensity));
+
+    /// <summary>
+    /// Creates the material for a screen showing a texture, such as a monitor showing a render-texture camera's
+    /// feed or a poster: unlit and clamped at the edges, so the picture reads as given whichever way the surface faces.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="texture">What the screen shows; a render target works as well as a loaded image.</param>
+    /// <param name="intensity">The emissive strength; 1 shows the texture's own colours.</param>
+    /// <returns>A new material instance.</returns>
+    public static Material CreateScreenMaterial(this IGame game, Texture texture, float intensity = 1f)
+        => Material.New(game.GraphicsDevice, MaterialDescriptors.Screen(texture, intensity));
 
     /// <summary>
     /// Creates a material with flat colors ideal for 2D rendering, using emissive color unaffected by lighting.
@@ -765,23 +806,7 @@ public static partial class GameExtensions
     /// <param name="color">The color of the material, including alpha. Uses white if not specified.</param>
     /// <returns>A new material instance with flat coloring.</returns>
     public static Material CreateFlatMaterial(this IGame game, Color? color = null)
-    {
-        var materialColor = color ?? Color.White;
-
-        var materialDescription = new MaterialDescriptor
-        {
-            Attributes =
-            {
-                Emissive = new MaterialEmissiveMapFeature(new ComputeColor(materialColor)),
-                Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(materialColor)),
-                DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-                Specular = null,
-                SpecularModel = null
-            }
-        };
-
-        return Material.New(game.GraphicsDevice, materialDescription);
-    }
+        => Material.New(game.GraphicsDevice, MaterialDescriptors.Flat(color ?? Color.White));
 
     /// <summary>
     /// Saves a screenshot of the current frame to the specified file path.

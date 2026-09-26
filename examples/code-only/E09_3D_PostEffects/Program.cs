@@ -188,16 +188,8 @@ void BuildScene(Scene scene)
 Material Emissive(Color color)
 {
     // Diffuse for the shaded look plus an emissive term far above 1: the HDR overshoot is what the
-    // bloom, streak and flare passes pick out of the frame.
-    return Material.New(game.GraphicsDevice, new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(color)),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Emissive = new MaterialEmissiveMapFeature(new ComputeColor(color)) { Intensity = new ComputeFloat(LampIntensity) },
-        },
-    });
+    // bloom, streak and flare passes pick out of the frame. MaterialDescriptors.Emissive is the bag behind it.
+    return game.CreateEmissiveMaterial(color, LampIntensity);
 }
 
 /*

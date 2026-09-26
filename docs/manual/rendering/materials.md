@@ -67,12 +67,15 @@ Two consequences follow, and both matter more than any single feature:
 
 ## The four numbers
 
-The material most games are made of is the **metalness workflow**: a colour, a glossiness, a metalness,
-and the microfacet specular model. The gallery keeps it as a recipe, because thirty stations start from it:
+The material most games are made of is a **PBR** material, physically based rendering: the surface is
+described by what it is made of - a colour, how metallic it is, how rough - and the light is computed
+from those claims, instead of from highlight settings tuned by eye. In Stride's **metalness workflow**
+that is a colour, a glossiness, a metalness and the microfacet specular model. The toolkit keeps it as
+a descriptor, because every helper and thirty gallery stations start from it:
 
 ```csharp
-// examples/code-only/E02_3D_Material_Gallery/Recipes.cs
-public static MaterialDescriptor Pbr(Color colour, float glossiness, float metalness, IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null) => new()
+// src/Stride.CommunityToolkit/Rendering/MaterialDescriptors.cs
+public static MaterialDescriptor Pbr(Color colour, float metalness = 0f, float glossiness = DefaultGlossiness) => new()
 {
     Attributes =
     {
@@ -80,7 +83,7 @@ public static MaterialDescriptor Pbr(Color colour, float glossiness, float metal
         DiffuseModel = new MaterialDiffuseLambertModelFeature(),
         MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness)),
         Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
-        SpecularModel = Microfacet(distribution),
+        SpecularModel = Microfacet(),
     },
 };
 ```
@@ -110,10 +113,9 @@ texture, resolved through an attached reference that a code-only game never load
 metal simply renders black. The polynomial fit needs nothing:
 
 ```csharp
-// examples/code-only/E02_3D_Material_Gallery/Recipes.cs
-public static MaterialSpecularMicrofacetModelFeature Microfacet(IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null) => new()
+// src/Stride.CommunityToolkit/Rendering/MaterialDescriptors.cs
+public static MaterialSpecularMicrofacetModelFeature Microfacet() => new()
 {
-    NormalDistribution = distribution ?? new MaterialSpecularMicrofacetNormalDistributionGGX(),
     Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial(),
 };
 ```
@@ -127,6 +129,36 @@ The same model has two more functions worth knowing: the **normal distribution**
 tail every modern renderer uses; Beckmann falls off sharply; Blinn-Phong is the classic) and the
 **Fresnel** term. Glossiness 1, metalness 1 and `MaterialSpecularMicrofacetFresnelNone` is a mirror,
 which is the community's recipe for checking a cubemap.
+
+## Three tiers: a colour, a twist, the bag
+
+The toolkit's helpers are meant to be outgrown, and the way out is built in.
+
+**A colour.** `game.CreateMaterial(Color.Green)` is a matte cube of that colour; add a metalness and a
+glossiness when you know what they claim. `game.CreateFlatMaterial(colour)` is the unlit version for 2D
+shapes and HUD elements.
+
+**A twist.** Three more helpers cover what the examples reached for most often when a colour was not
+enough: `CreateEmissiveMaterial(colour, intensity)` for a lamp or a glowing edge (above 1 it blooms under
+post effects), `CreateTexturedMaterial(texture, metalness, glossiness, tiling)` for a texture where the
+colour would be, and `CreateScreenMaterial(texture)` for a monitor showing a render-texture camera's feed,
+unlit and clamped at the edges.
+
+**The bag.** Every helper compiles a descriptor from `MaterialDescriptors`, and the descriptors are yours
+to take. When a helper's material is nearly right, start from its descriptor, add or swap a feature, and
+compile it; the overload that takes a descriptor also keeps it on the material, which is what a
+material needs to be used as a layer later:
+
+```csharp
+var descriptor = MaterialDescriptors.Textured(brick, glossiness: 0.4f);
+
+descriptor.Attributes.Surface = new MaterialNormalMapFeature(new ComputeTextureColor(brickNormal)) { ScaleAndBias = true, IsXYNormal = true };
+
+var material = game.CreateMaterial(descriptor);
+```
+
+That is the whole path from the one-liner to the material system: the same bag, with one more thing
+in it, and the rest of this page is about what else can go in.
 
 ## Every slot is a node
 
@@ -333,7 +365,7 @@ surfaces and the models. `V` cycles a station's variations; `--station N --varia
 | Vertex colours · Node arithmetic · Custom shader node · Runtime textures | Every slot is a node |
 | Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
 | Displacement · Tessellation · Overrides · Layers | The vertices, the whole-material settings, composition |
-| The Material Package, in code · The lot | Equivalence with the editor; a full PBR material as a page of features |
+| The Material Package, in code · The lot | Equivalence with the editor; a full physically based material as a page of features |
 
 The beginner example, [Material](../code-only/examples/material.md) (`E02_3D_Material`), stays the
 first stop: a row of cubes that differ in one number each, with the skybox light on a key so the
