@@ -1,0 +1,18 @@
+// The scenes build/gold-images.cs photographs, all in tests/Stride.CommunityToolkit.GoldScenes and
+// selected by name with --scene. The frame is the capture frame on the fixed timestep: late enough
+// for the first shaders to have compiled, early enough to keep a capture short. A scene added to
+// the project is added here, then given a golden with --only <name> --update.
+[
+  { "name": "shapes-2d", "frame": 60 },
+  { "name": "shapes-3d", "frame": 60 },
+  { "name": "text", "frame": 60 },
+  { "name": "debug-shapes", "frame": 60 },
+  { "name": "imgui", "frame": 60 },
+  { "name": "shapes-textured", "frame": 60 },
+  { "name": "render-texture", "frame": 60 },
+  { "name": "shapes-screen", "frame": 60 },
+  { "name": "picking", "frame": 60 },
+  { "name": "particles", "frame": 60 },
+  { "name": "easing", "frame": 60 },
+  { "name": "easing-basics", "frame": 45 }
+]

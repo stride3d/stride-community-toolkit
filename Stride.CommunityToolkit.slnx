@@ -124,6 +124,7 @@
     <File Path="examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramSimple.cs" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Stride.CommunityToolkit.GoldScenes/Stride.CommunityToolkit.GoldScenes.csproj" />
     <Project Path="tests/Stride.CommunityToolkit.Tests/Stride.CommunityToolkit.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">

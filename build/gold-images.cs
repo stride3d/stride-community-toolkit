@@ -1,36 +1,38 @@
 #:package SixLabors.ImageSharp@3.1.12
 
-// Gold-image regression for the code-only examples.
+// Gold-image regression for the toolkit's renderers.
 //
-//   dotnet run --file build/gold-images.cs                                   compare every golden in tests/gold
-//   dotnet run --file build/gold-images.cs -- --only shape-batch             compare one
-//   dotnet run --file build/gold-images.cs -- --only shape-batch --update    capture and make it the golden
-//   dotnet run --file build/gold-images.cs -- --only shape-batch --noise     capture twice, report run-to-run drift
-//   dotnet run --file build/gold-images.cs -- --only junkyard-box2d --frame 300 --update
+//   dotnet run --file build/gold-images.cs                                 compare every scene in tests/gold/scenes.jsonc
+//   dotnet run --file build/gold-images.cs -- --only shapes-2d             compare one
+//   dotnet run --file build/gold-images.cs -- --only shapes-2d --update    capture and make it the golden
+//   dotnet run --file build/gold-images.cs -- --only shapes-2d --noise     capture twice, report run-to-run drift
+//   dotnet run --file build/gold-images.cs -- --gpu                        the real GPU: faster, for looking, never for a golden
 //
 // The --file switch is required: the repository root contains Stride.CommunityToolkit.ndproj, and
 // without it the SDK runs that project and passes this script to it as an argument.
 //
 // WHAT IT IS FOR. A shader or renderer change that is meant to be invisible (a refactor) or meant
 // to be visible in a known way (an anti-aliasing profile, a colour curve) needs more than a pair
-// of screenshots and a squint. This captures the example the same way the documentation
-// screenshots are taken - in-engine, at a fixed frame, on a fixed timestep (see ScreenshotCapture
-// in src/Stride.CommunityToolkit/Engine) - and compares the pixels against a golden PNG committed
+// of screenshots and a squint. This runs the scenes in tests/Stride.CommunityToolkit.GoldScenes -
+// one per feature area, with a fixed layout and nothing random, changed only to pin something new
+// - captures each in-engine at a fixed frame on a fixed timestep (see ScreenshotCapture in
+// src/Stride.CommunityToolkit/Engine), and compares the pixels against a golden PNG committed
 // under tests/gold, the way Stride's own graphics tests do: the per-pixel maximum channel
-// difference goes into a histogram and a rule says how many pixels may land in each bucket.
-// The default rule is Stride's - any pixel differing by 3 or more fails - and
-// tests/gold/thresholds.jsonc relaxes it per image where a scene cannot be made deterministic.
+// difference goes into a histogram and a rule says how many pixels may land in each bucket. The
+// default rule is Stride's - any pixel differing by 3 or more fails - and tests/gold/thresholds.jsonc
+// relaxes it per image, which the scenes are built not to need.
 //
 // WHAT IT WRITES. Every run leaves the new capture, a diff mask and a side-by-side contact sheet
 // under screenshots-review/gold (gitignored). --update copies the capture over the golden;
-// nothing is committed by this script.
+// nothing is committed by this script. The workflow .github/workflows/gold-images.yml runs the
+// same comparison on every pull request that touches a renderer and uploads that folder.
 //
 // DETERMINISM. Frame N on a fixed timestep with one update per draw is the same simulated instant
-// every run; the remaining sources of drift are physics engines stepping on worker threads, GPU
-// driver differences between machines, and the window size, which is checked and reported.
-// STRIDE_GRAPHICS_SOFTWARE_RENDERING=1 (--warp) selects the WARP software adapter, the way
-// Stride's own graphics tests run, for goldens that must match across machines; without it the
-// real GPU is used, which is deterministic on one machine and much faster.
+// every run, and the scenes pin the display scale to 100%, so what is left is the renderer. The
+// goldens are captured on WARP, Direct3D's software adapter (STRIDE_GRAPHICS_SOFTWARE_RENDERING=1),
+// the way Stride's own graphics tests run, because it is the one renderer every machine shares:
+// a real GPU lands within a dozen levels of it, which is close, but over the rule. --gpu is for
+// looking at a scene quickly, and its captures must not become goldens.
 
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -44,7 +46,7 @@ using System.Text.RegularExpressions;
 var only = new List<string>();
 var update = false;
 var noise = false;
-var warp = false;
+var warp = true;
 int? frameOverride = null;
 var timeout = TimeSpan.FromMinutes(5);
 
@@ -64,6 +66,9 @@ for (var i = 0; i < args.Length; i++)
         case "--warp":
             warp = true;
             break;
+        case "--gpu":
+            warp = false;
+            break;
         case "--frame" when i + 1 < args.Length && int.TryParse(args[i + 1], out var f):
             frameOverride = f;
             i++;
@@ -80,105 +85,113 @@ for (var i = 0; i < args.Length; i++)
 
 if (update && only.Count == 0)
 {
-    Console.Error.WriteLine("--update needs --only <slug>: rewriting every golden in one unattended run is not something to do by accident.");
+    Console.Error.WriteLine("--update needs --only <scene>: rewriting every golden in one unattended run is not something to do by accident.");
+    return 1;
+}
+
+if (update && !warp)
+{
+    Console.Error.WriteLine("--update with --gpu would make a golden no other machine can match; capture goldens on WARP.");
     return 1;
 }
 
 var root = RepositoryRoot();
-var manifestPath = Path.Combine(root, "tools", "Stride.CommunityToolkit.Examples.Launcher", "examples-manifest.json");
 var goldDirectory = Path.Combine(root, "tests", "gold");
 var reviewDirectory = Path.Combine(root, "screenshots-review", "gold");
-var stagingDirectory = Path.Combine(root, "bin", "screenshots");
+var project = Path.Combine(root, "tests", "Stride.CommunityToolkit.GoldScenes", "Stride.CommunityToolkit.GoldScenes.csproj");
+var scenesPath = Path.Combine(goldDirectory, "scenes.jsonc");
 
-if (!File.Exists(manifestPath))
+if (!File.Exists(scenesPath))
 {
-    Console.Error.WriteLine($"No manifest at {manifestPath}. Build the launcher first, or run the generator's 'generate' command.");
+    Console.Error.WriteLine($"No scene list at {scenesPath}.");
     return 1;
 }
 
-Directory.CreateDirectory(goldDirectory);
 Directory.CreateDirectory(reviewDirectory);
-Directory.CreateDirectory(stagingDirectory);
 
-using var document = JsonDocument.Parse(File.ReadAllText(manifestPath));
-var examples = document.RootElement.GetProperty("examples").EnumerateArray()
-    .Where(e => Text(e, "slug") is not null && Text(e, "projectPath") is not null)
-    .ToDictionary(e => Text(e, "slug")!, StringComparer.OrdinalIgnoreCase);
+var scenes = LoadScenes(scenesPath);
 
-// Without --only the suite is whatever has a golden: the goldens define what is under test.
-var slugs = only.Count > 0
-    ? only
-    : Directory.EnumerateFiles(goldDirectory, "*.png").Select(Path.GetFileNameWithoutExtension).Select(s => s!).OrderBy(s => s).ToList();
+// Without --only the suite is the whole list: the list defines what is under test.
+var names = only.Count > 0 ? only : scenes.Select(s => s.Name).ToList();
 
-if (slugs.Count == 0)
+foreach (var name in names.Where(n => scenes.All(s => !string.Equals(s.Name, n, StringComparison.OrdinalIgnoreCase))))
 {
-    Console.WriteLine($"No goldens in {goldDirectory}. Make one with --only <slug> --update.");
-    return 0;
+    Console.Error.WriteLine($"  ✖ {name}: not in tests/gold/scenes.jsonc");
+}
+
+// One build for every capture, rather than an msbuild evaluation per run.
+Console.WriteLine($"Building the gold scenes on {(warp ? "WARP" : "the GPU")}...");
+
+if (!Build(project, out var buildFailure))
+{
+    Console.Error.WriteLine(buildFailure);
+    return 1;
 }
 
 var rules = LoadRules(Path.Combine(goldDirectory, "thresholds.jsonc"));
 var results = new List<Result>();
 
-foreach (var slug in slugs)
+foreach (var name in names)
 {
-    if (!examples.TryGetValue(slug, out var example))
+    var scene = scenes.FirstOrDefault(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase));
+
+    if (scene is null)
     {
-        Console.Error.WriteLine($"  ✖ {slug}: not in the manifest");
-        results.Add(new Result(slug, Outcome.Error, "not in the manifest"));
+        results.Add(new Result(name, Outcome.Error, "not in tests/gold/scenes.jsonc"));
         continue;
     }
 
-    var frame = frameOverride ?? Int(example, "screenshotFrame");
-    var capturePath = Path.Combine(reviewDirectory, $"{slug}.png");
-    var goldPath = Path.Combine(goldDirectory, $"{slug}.png");
+    var frame = frameOverride ?? scene.Frame;
+    var capturePath = Path.Combine(reviewDirectory, $"{scene.Name}.png");
+    var goldPath = Path.Combine(goldDirectory, $"{scene.Name}.png");
 
-    Console.WriteLine($"  · {slug} ({Text(example, "projectName")}, frame {frame?.ToString() ?? "default"})");
+    Console.WriteLine($"  · {scene.Name} (frame {frame?.ToString() ?? "default"})");
 
-    if (!Capture(root, Text(example, "projectPath")!, capturePath, frame, warp, timeout, out var failure))
+    if (!Capture(project, scene.Name, capturePath, frame, warp, timeout, out var failure))
     {
         Console.Error.WriteLine($"    ✖ {failure}");
-        results.Add(new Result(slug, Outcome.Error, failure));
+        results.Add(new Result(scene.Name, Outcome.Error, failure));
         continue;
     }
 
     if (noise)
     {
         // A second capture of the same thing: what the harness would see with no change at all.
-        var secondPath = Path.Combine(reviewDirectory, $"{slug}-second.png");
+        var secondPath = Path.Combine(reviewDirectory, $"{scene.Name}-second.png");
 
-        if (!Capture(root, Text(example, "projectPath")!, secondPath, frame, warp, timeout, out failure))
+        if (!Capture(project, scene.Name, secondPath, frame, warp, timeout, out failure))
         {
             Console.Error.WriteLine($"    ✖ {failure}");
-            results.Add(new Result(slug, Outcome.Error, failure));
+            results.Add(new Result(scene.Name, Outcome.Error, failure));
             continue;
         }
 
-        var drift = Compare(capturePath, secondPath, Resolve(rules, slug), Path.Combine(reviewDirectory, $"{slug}-noise.png"));
+        var drift = Compare(capturePath, secondPath, Resolve(rules, scene.Name), Path.Combine(reviewDirectory, $"{scene.Name}-noise.png"));
 
         Console.WriteLine($"    run-to-run: {drift.Describe()}");
-        results.Add(new Result(slug, drift.Passed ? Outcome.Pass : Outcome.Fail, drift.Describe(), drift));
+        results.Add(new Result(scene.Name, drift.Passed ? Outcome.Pass : Outcome.Fail, drift.Describe(), drift));
         continue;
     }
 
     if (update)
     {
         File.Copy(capturePath, goldPath, overwrite: true);
-        Console.WriteLine($"    ✅ golden written: tests/gold/{slug}.png");
-        results.Add(new Result(slug, Outcome.Updated, "golden written"));
+        Console.WriteLine($"    ✅ golden written: tests/gold/{scene.Name}.png");
+        results.Add(new Result(scene.Name, Outcome.Updated, "golden written"));
         continue;
     }
 
     if (!File.Exists(goldPath))
     {
-        Console.Error.WriteLine($"    ✖ no golden at tests/gold/{slug}.png - run with --update to make one");
-        results.Add(new Result(slug, Outcome.Error, "no golden"));
+        Console.Error.WriteLine($"    ✖ no golden at tests/gold/{scene.Name}.png - run with --update to make one");
+        results.Add(new Result(scene.Name, Outcome.Error, "no golden"));
         continue;
     }
 
-    var stats = Compare(capturePath, goldPath, Resolve(rules, slug), Path.Combine(reviewDirectory, $"{slug}-diff.png"));
+    var stats = Compare(capturePath, goldPath, Resolve(rules, scene.Name), Path.Combine(reviewDirectory, $"{scene.Name}-diff.png"));
 
     Console.WriteLine($"    {(stats.Passed ? "✅" : "✖")} {stats.Describe()}");
-    results.Add(new Result(slug, stats.Passed ? Outcome.Pass : Outcome.Fail, stats.Describe(), stats));
+    results.Add(new Result(scene.Name, stats.Passed ? Outcome.Pass : Outcome.Fail, stats.Describe(), stats));
 }
 
 Console.WriteLine();
@@ -195,24 +208,47 @@ if (!update)
 
 return results.Any(r => r.Outcome is Outcome.Fail or Outcome.Error) ? 1 : 0;
 
-// Runs one example with capture enabled and waits for it to exit on its own.
-static bool Capture(string root, string projectPath, string pngPath, int? frame, bool warp, TimeSpan timeout, out string failure)
+// Builds the scene project once; the captures then run it with --no-build.
+static bool Build(string project, out string failure)
+{
+    failure = string.Empty;
+
+    var startInfo = new ProcessStartInfo("dotnet", $"build \"{project}\" --nologo -v q")
+    {
+        UseShellExecute = false,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true
+    };
+
+    using var process = Process.Start(startInfo);
+
+    if (process is null)
+    {
+        failure = "could not start dotnet";
+        return false;
+    }
+
+    var output = process.StandardOutput.ReadToEndAsync();
+    var error = process.StandardError.ReadToEndAsync();
+
+    process.WaitForExit();
+
+    if (process.ExitCode == 0) return true;
+
+    failure = $"the gold scenes did not build:{Environment.NewLine}{output.Result}{error.Result}";
+    return false;
+}
+
+// Runs one scene with capture enabled and waits for it to exit on its own.
+static bool Capture(string project, string scene, string pngPath, int? frame, bool warp, TimeSpan timeout, out string failure)
 {
     failure = string.Empty;
 
     File.Delete(pngPath);
 
-    var exampleDirectory = Path.GetDirectoryName(Path.Combine(root, "examples", "code-only", projectPath.Replace('/', Path.DirectorySeparatorChar)))!;
-    var project = Directory.EnumerateFiles(exampleDirectory, "*.*proj").FirstOrDefault();
-
-    // A file-based app has no project file and is run by naming its source directly.
-    var arguments = project is not null
-        ? $"run --project \"{project}\""
-        : $"run \"{Path.Combine(root, "examples", "code-only", projectPath.Replace('/', Path.DirectorySeparatorChar))}\"";
-
-    var startInfo = new ProcessStartInfo("dotnet", arguments)
+    var startInfo = new ProcessStartInfo("dotnet", $"run --project \"{project}\" --no-build -- --scene {scene}")
     {
-        WorkingDirectory = exampleDirectory,
+        WorkingDirectory = Path.GetDirectoryName(project),
         UseShellExecute = false,
         RedirectStandardOutput = true,
         RedirectStandardError = true
@@ -252,7 +288,7 @@ static bool Capture(string root, string projectPath, string pngPath, int? frame,
 
     if (!File.Exists(pngPath))
     {
-        failure = "the example exited without writing a screenshot";
+        failure = "the scene exited without writing a screenshot";
         return false;
     }
 
@@ -348,7 +384,20 @@ static Stats Compare(string actualPath, string expectedPath, AllowBucket[] bucke
     }
 }
 
-// thresholds.jsonc: [{ "image": "junkyard-box2d", "allow": { "3-5": 2000, "6-15": 300, "16+": 50 } }]
+// scenes.jsonc: [{ "name": "shapes-2d", "frame": 60 }]. Comments with // are stripped before parsing.
+static Scene[] LoadScenes(string path)
+{
+    var json = Regex.Replace(File.ReadAllText(path), @"//.*?$", "", RegexOptions.Multiline);
+
+    // Read by hand: file-based apps run with reflection serialisation disabled.
+    using var document = JsonDocument.Parse(json);
+
+    return document.RootElement.EnumerateArray()
+        .Select(element => new Scene(Text(element, "name") ?? throw new InvalidOperationException("A scene in scenes.jsonc has no name."), Int(element, "frame")))
+        .ToArray();
+}
+
+// thresholds.jsonc: [{ "image": "shapes-3d", "allow": { "3-5": 2000, "6-15": 300, "16+": 50 } }]
 // A bucket not listed for a matching rule is unlimited; an image with no rule gets the default,
 // which allows nothing at 3 or above. Comments with // are stripped before parsing.
 static Rule[] LoadRules(string path)
@@ -357,7 +406,6 @@ static Rule[] LoadRules(string path)
 
     var json = Regex.Replace(File.ReadAllText(path), @"//.*?$", "", RegexOptions.Multiline);
 
-    // Read by hand: file-based apps run with reflection serialisation disabled.
     using var document = JsonDocument.Parse(json);
     var rules = new List<Rule>();
 
@@ -379,9 +427,9 @@ static Rule[] LoadRules(string path)
     return rules.ToArray();
 }
 
-static AllowBucket[] Resolve(Rule[] rules, string slug)
+static AllowBucket[] Resolve(Rule[] rules, string name)
 {
-    var rule = rules.FirstOrDefault(r => string.Equals(r.Image, slug, StringComparison.OrdinalIgnoreCase));
+    var rule = rules.FirstOrDefault(r => string.Equals(r.Image, name, StringComparison.OrdinalIgnoreCase));
 
     if (rule?.Allow is null || rule.Allow.Count == 0)
     {
@@ -391,7 +439,7 @@ static AllowBucket[] Resolve(Rule[] rules, string slug)
     return rule.Allow.Select(pair => AllowBucket.Parse(pair.Key, pair.Value)).ToArray();
 }
 
-// One row per example: golden, new capture and the diff mask side by side, with the numbers.
+// One row per scene: golden, new capture and the diff mask side by side, with the numbers.
 static string BuildIndex(List<Result> results, string goldDirectory, bool noise)
 {
     var html = new StringBuilder();
@@ -406,13 +454,13 @@ static string BuildIndex(List<Result> results, string goldDirectory, bool noise)
     {
         var cls = result.Outcome switch { Outcome.Pass => "pass", Outcome.Fail => "fail", _ => "err" };
 
-        html.Append($"<h2>{result.Slug} <span class=\"{cls}\">{result.Outcome}</span></h2><div class=\"cap\">{Escape(result.Message)}</div>");
+        html.Append($"<h2>{result.Name} <span class=\"{cls}\">{result.Outcome}</span></h2><div class=\"cap\">{Escape(result.Message)}</div>");
 
         if (result.Outcome is Outcome.Pass or Outcome.Fail)
         {
-            var left = noise ? $"{result.Slug}.png" : Path.Combine(goldDirectory, $"{result.Slug}.png");
-            var middle = noise ? $"{result.Slug}-second.png" : $"{result.Slug}.png";
-            var right = noise ? $"{result.Slug}-noise.png" : $"{result.Slug}-diff.png";
+            var left = noise ? $"{result.Name}.png" : Path.Combine(goldDirectory, $"{result.Name}.png");
+            var middle = noise ? $"{result.Name}-second.png" : $"{result.Name}.png";
+            var right = noise ? $"{result.Name}-noise.png" : $"{result.Name}-diff.png";
 
             html.Append("<div class=\"row\">");
             html.Append($"<div><div class=\"cap\">{(noise ? "first run" : "golden")}</div><img src=\"{Uri(left)}\"></div>");
@@ -439,7 +487,9 @@ static string RepositoryRoot([CallerFilePath] string scriptPath = "")
 
 enum Outcome { Pass, Fail, Updated, Error }
 
-record Result(string Slug, Outcome Outcome, string Message, Stats? Stats = null);
+record Scene(string Name, int? Frame);
+
+record Result(string Name, Outcome Outcome, string Message, Stats? Stats = null);
 
 record Rule(string? Image, Dictionary<string, int>? Allow);
 

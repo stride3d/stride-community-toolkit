@@ -2,10 +2,7 @@
 // no pixel may differ from its golden by 3 or more (the maximum channel difference, alpha ignored).
 // A bucket left out of a rule is unlimited. Buckets: "1-2", "3-5", "6-15", "16+".
 //
-// Relax an image only when its scene cannot be made deterministic, and say why.
+// Relax an image only when its scene cannot be made deterministic, and say why. The gold scenes
+// are built to need none of this; a rule here is a debt to pay back in the scene.
 [
-  // The flock itself is bit-identical run to run (a chaotic system, so any drift would show as the
-  // whole flock moving); one pixel at a shadow edge on the ground still flips by ~45 between runs,
-  // a rasterisation tie in the shadow map. A handful of stray pixels is allowed for that.
-  { "image": "compute-boids", "allow": { "3-5": 20, "6-15": 20, "16+": 20 } }
 ]

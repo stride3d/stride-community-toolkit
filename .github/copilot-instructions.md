@@ -307,7 +307,7 @@ Guidance for the Bepu demos specifically:
 ## Adding a new example
 
 - Create a folder under `examples/code-only/` named `E<NN>_<Dimension>_<Subject>`, optionally with
-  a `_<Qualifier>` suffix: `E10_3D_Instancing_EntityTransform`, `E06_Box2D_Junkyard`, `E01_3D_BasicScene_FSharp`.
+  a `_<Qualifier>` suffix: `E11_3D_ShapeBatch_Gallery`, `E06_Box2D_Junkyard`, `E01_3D_BasicScene_FSharp`.
   The dimension is `2D` or `3D`, or the library when that is the point (`Box2D`, `Jitter2`,
   `Audio`); the number groups examples by topic, not by order of creation. Each variant gets its
   own folder, not sibling files in a shared one.

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <IsPackable>false</IsPackable>
+        <!-- The scenes build/gold-images.cs photographs. Not an example: nothing here is meant to be
+             read for how to use the toolkit, and a scene changes only when the feature it pins does. -->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit.DebugShapes\Stride.CommunityToolkit.DebugShapes.csproj" />
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit.ImGui\Stride.CommunityToolkit.ImGui.csproj" />
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit.Effects\Stride.CommunityToolkit.Effects.csproj" />
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit.Shapes\Stride.CommunityToolkit.Shapes.csproj" />
+        <ProjectReference Include="..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+    </ItemGroup>
+
+</Project>

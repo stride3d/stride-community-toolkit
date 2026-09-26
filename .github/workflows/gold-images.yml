@@ -1,0 +1,45 @@
+name: Gold images
+
+# Photographs the scenes in tests/Stride.CommunityToolkit.GoldScenes on the WARP software renderer
+# and compares them pixel for pixel with tests/gold. A pull request that changes a renderer changes
+# its golden in the same pull request (build/gold-images.cs -- --only <scene> --update), so the
+# reviewer sees the new image next to the code; a mismatch without that is a regression.
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/gold/**'
+      - 'tests/Stride.CommunityToolkit.GoldScenes/**'
+      - 'build/gold-images.cs'
+      - '.github/workflows/gold-images.yml'
+  workflow_dispatch:
+
+jobs:
+  gold:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Stride Community Toolkit
+      uses: actions/checkout@v7
+
+    - name: .NET Setup
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Build the gold scenes
+      run: dotnet build tests/Stride.CommunityToolkit.GoldScenes
+
+    # The runner compiles every shader from cold, so each scene gets a generous timeout; WARP
+    # itself takes fifteen to twenty seconds a capture here.
+    - name: Compare against the goldens
+      run: dotnet run --file build/gold-images.cs -- --timeout 15
+
+    - name: Upload the contact sheet, captures and diffs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: gold-images
+        path: screenshots-review/gold
+        if-no-files-found: ignore
