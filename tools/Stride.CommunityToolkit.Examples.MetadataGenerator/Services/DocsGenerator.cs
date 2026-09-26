@@ -229,13 +229,17 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     /// </summary>
     /// <remarks>
     /// Comparing first keeps the git diff limited to pages that actually changed. Without it every run
-    /// would rewrite sixty files and the review would be worthless.
+    /// would rewrite sixty files and the review would be worthless. The content is held to the
+    /// repository's convention before both the comparison and the write - CRLF line endings, no final
+    /// newline - so a page the generator wrote is byte for byte the page git holds, whichever platform
+    /// ran the generator. Comparing on the platform's own newline and writing a trailing one used to
+    /// leave every generated page "modified" by one byte after a fresh checkout.
     /// </remarks>
     private void Write(string path, string content, bool dryRun)
     {
-        var normalised = content.ReplaceLineEndings();
+        var normalised = Normalise(content);
 
-        if (File.Exists(path) && File.ReadAllText(path).ReplaceLineEndings() == normalised)
+        if (File.Exists(path) && Normalise(File.ReadAllText(path)) == normalised)
         {
             _unchanged++;
 
@@ -251,6 +255,9 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
 
         _written++;
     }
+
+    /// <summary>The repository's file convention: CRLF line endings and no newline after the last line.</summary>
+    private static string Normalise(string content) => content.ReplaceLineEndings("\r\n").TrimEnd('\r', '\n');
 
     /// <summary>
     /// Quotes a toc entry name when YAML would otherwise misread it.
