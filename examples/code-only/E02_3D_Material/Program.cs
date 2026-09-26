@@ -94,7 +94,8 @@ void Cube(Scene scene, Vector3 position, Material material, string label)
 // can be swapped for another - which is how the material gallery gets to glass, cel shading and hair.
 Material FromDescriptor(Color colour, float glossiness, float metalness)
 {
-    return Material.New(game.GraphicsDevice, new MaterialDescriptor
+    // The content manager resolves the lookup texture; without it nothing throws and every metal renders black
+    return Material.New(game.GraphicsDevice, content: game.Content, descriptor: new MaterialDescriptor
     {
         Attributes =
         {
@@ -102,9 +103,9 @@ Material FromDescriptor(Color colour, float glossiness, float metalness)
             DiffuseModel = new MaterialDiffuseLambertModelFeature(),
             MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness)),
             Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
-            // The polynomial environment term: the engine's default reads a lookup texture from the
-            // content database, which a code-only game does not have, and metals render black
-            SpecularModel = new MaterialSpecularMicrofacetModelFeature { Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial() },
+            // The engine's microfacet model at its defaults; its environment term is a lookup texture the
+            // engine ships as an asset, which is why Material.New below is given the content manager
+            SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
         },
     });
 }

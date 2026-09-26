@@ -109,21 +109,34 @@ workflow, so if you transcribe a `.sdmat` you will meet it.
 
 The microfacet model needs an **environment term** - what the surface reflects when no light hits it
 directly, which for a metal is nearly everything it shows. The engine's default is a GGX lookup
-texture, resolved through an attached reference that a code-only game never loads. Nothing throws; every
-metal simply renders black. The polynomial fit needs nothing:
+texture, and the texture is an asset the engine ships (`/Stride.Engine/StrideEnvironmentLightingDFGLUT16`)
+that the material holds as an *attached reference*. `Material.New(device, descriptor)` leaves that
+reference unresolved: nothing throws, and every metal simply renders black. That is how the gallery met
+it, and for a while the toolkit sidestepped it with the polynomial fit, a formula that needs no asset.
+
+The real answer is one argument. Since 4.4 beta 6, `Material.New` takes the content manager and resolves
+the reference:
 
 ```csharp
-// src/Stride.CommunityToolkit/Rendering/MaterialDescriptors.cs
-public static MaterialSpecularMicrofacetModelFeature Microfacet() => new()
+// src/Stride.CommunityToolkit/Engine/GameExtensions.cs
+public static Material CreateMaterial(this IGame game, MaterialDescriptor descriptor)
 {
-    Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial(),
-};
+    var material = Material.New(game.GraphicsDevice, descriptor, game.Content);
+
+    material.Descriptor = descriptor;
+
+    return material;
+}
 ```
 
-Every material in the gallery sets this, and so does the toolkit's `CreateMaterial` now. Before it did,
-its default metalness was 1, so every cube built from a colour alone was a metal with no environment to
-reflect: near-black, in every code-only example, for as long as the helper existed. The default is a
-dielectric now, and a colour alone is a matte cube of that colour. If your metals are black, this is the first thing to check.
+Every toolkit helper and every gallery material compiles this way now, with the engine's exact term.
+The polynomial fit remains the right choice where there is no content manager to give, a tool or a test:
+`Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()`.
+
+There was a second reason the helper's cubes were black: its default metalness was 1, so every cube
+built from a colour alone was a metal with nothing to reflect. The default is a dielectric now, and a
+colour alone is a matte cube of that colour. If your metals are black, these two are the first things to
+check: the content manager at compile time, and whether you asked for a metal.
 
 The same model has two more functions worth knowing: the **normal distribution** (GGX has the long
 tail every modern renderer uses; Beckmann falls off sharply; Blinn-Phong is the classic) and the

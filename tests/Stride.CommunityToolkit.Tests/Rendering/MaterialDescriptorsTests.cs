@@ -8,8 +8,8 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 
 /// <summary>
 /// The descriptors are plain objects, so what a helper puts in the bag is checked without a device:
-/// which slots are filled, which are left empty, and that every lit one carries the environment term
-/// a code-only game can resolve.
+/// which slots are filled, which are left empty, and that every lit one carries the engine's default
+/// lookup-table environment term, which the helpers resolve by compiling with the content manager.
 /// </summary>
 public class MaterialDescriptorsTests
 {
@@ -23,7 +23,7 @@ public class MaterialDescriptorsTests
         Assert.IsType<MaterialDiffuseLambertModelFeature>(a.DiffuseModel);
         Assert.Equal(0.8f, Assert.IsType<ComputeFloat>(Assert.IsType<MaterialGlossinessMapFeature>(a.MicroSurface).GlossinessMap).Value);
         Assert.Equal(0.25f, Assert.IsType<ComputeFloat>(Assert.IsType<MaterialMetalnessMapFeature>(a.Specular).MetalnessMap).Value);
-        Assert.IsType<MaterialSpecularMicrofacetEnvironmentGGXPolynomial>(Assert.IsType<MaterialSpecularMicrofacetModelFeature>(a.SpecularModel).Environment);
+        Assert.IsType<MaterialSpecularMicrofacetEnvironmentGGXLUT>(Assert.IsType<MaterialSpecularMicrofacetModelFeature>(a.SpecularModel).Environment);
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class MaterialDescriptorsTests
 
         Assert.Equal(new Vector2(4f), node.Scale);
         Assert.Equal(Vector2.Zero, node.Offset);
-        Assert.IsType<MaterialSpecularMicrofacetEnvironmentGGXPolynomial>(Assert.IsType<MaterialSpecularMicrofacetModelFeature>(a.SpecularModel).Environment);
+        Assert.IsType<MaterialSpecularMicrofacetEnvironmentGGXLUT>(Assert.IsType<MaterialSpecularMicrofacetModelFeature>(a.SpecularModel).Environment);
     }
 
     [Fact]

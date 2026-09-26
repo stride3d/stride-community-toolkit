@@ -87,7 +87,7 @@ void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, floa
     CreateCircularEndCap(meshBuilder, segments, position, normal, length, true);
 }
 
-static Material CreateMaterial(Game game) => Material.New(game.GraphicsDevice, new()
+static Material CreateMaterial(Game game) => Material.New(game.GraphicsDevice, content: game.Content, descriptor: new()
 {
     Attributes = new()
     {
@@ -104,10 +104,7 @@ static Material CreateMaterial(Game game) => Material.New(game.GraphicsDevice, n
         {
             MetalnessMap = new ComputeFloat(0.0f)
         },
-        SpecularModel = new MaterialSpecularMicrofacetModelFeature
-        {
-            Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()
-        },
+        SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
     }
 });
 

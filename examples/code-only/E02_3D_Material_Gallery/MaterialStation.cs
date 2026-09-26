@@ -50,13 +50,14 @@ public sealed class MaterialStation : GalleryStation
     }
 
     /// <summary>
-    /// A material from a descriptor, compiled for this game's device. The descriptor stays on the
-    /// material: <c>Material.New</c> leaves it null, and a material used as a layer needs it, since
-    /// the generator composes the layer from its features.
+    /// A material from a descriptor, compiled for this game's device with its content manager, so the
+    /// engine's lookup-table environment term resolves. The descriptor stays on the material:
+    /// <c>Material.New</c> leaves it null, and a material used as a layer needs it, since the generator
+    /// composes the layer from its features.
     /// </summary>
     public Material Material(MaterialDescriptor descriptor)
     {
-        var material = Stride.Rendering.Material.New(Game.GraphicsDevice, descriptor);
+        var material = Stride.Rendering.Material.New(Game.GraphicsDevice, descriptor, Game.Content);
 
         material.Descriptor = descriptor;
 

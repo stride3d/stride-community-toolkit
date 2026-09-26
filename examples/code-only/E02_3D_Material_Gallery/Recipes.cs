@@ -13,14 +13,14 @@ namespace E02_3D_Material_Gallery;
 public static class Recipes
 {
     /// <summary>
-    /// The environment term is what a metal is made of - the sky in its reflection. The default
-    /// GGX LUT variant reads a lookup texture from the content database, which a code-only game
-    /// does not have, so metals come out black; the polynomial fit needs nothing.
+    /// The microfacet model with a distribution of the station's choosing. The environment term - what
+    /// a metal is made of, the sky in its reflection - stays the engine's lookup texture, which resolves
+    /// because <see cref="MaterialStation.Material"/> compiles with the game's content manager; without
+    /// it the table is empty and metals come out black, which is how this gallery first met it.
     /// </summary>
     public static MaterialSpecularMicrofacetModelFeature Microfacet(IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null) => new()
     {
         NormalDistribution = distribution ?? new MaterialSpecularMicrofacetNormalDistributionGGX(),
-        Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial(),
     };
 
     /// <summary>
