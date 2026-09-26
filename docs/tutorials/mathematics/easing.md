@@ -25,3 +25,10 @@ When you run the code, you'll see a 3D sphere smoothly moving from the starting 
 ## Summary
 
 In this tutorial, you learned how to animate both the position and material color of a 3D object using easing functions. This technique allows you to create smooth and visually appealing transitions, which are essential for creating polished game experiences.
+
+## Going further
+
+- New to easing? Start with the [Easing Basics](../../manual/code-only/examples/easing-basics.md) example: the same motion written four ways, from plain maths to a `Tween`, with each lane's code on screen.
+- The same call reads more naturally from the curve itself: `EasingFunction.QuinticEaseOut.Interpolate(startPosition, bottom, progress)`, and `EasingFunction.QuinticEaseOut.Ease(progress)` gives the bare 0 to 1 value. Both clamp `progress` to [0, 1], so the `if (progress > 1)` guard above is a habit, not a need.
+- To see every curve at once, with its graph and the motion it produces side by side, run the [Easing Cheat Sheet](../../manual/code-only/examples/easing.md) example and press 1, 2 and 3 to compare the ease-in, ease-out and in-out families.
+- The curves are the classic set from Robert Penner's easing functions plus `SmoothStep` and `SmootherStep`; each `Easing` method documents the equation it is modeled after.

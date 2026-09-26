@@ -20,7 +20,8 @@ namespace CubeCollapse.Setup;
 /// <para>
 /// The collider is a plain box around the glyph. A box is deliberate: a letter-shaped collider means
 /// convex hulls, and extruded-polygon hulls colliding with each other are exactly the shape class
-/// behind two documented Bepu failures (`notes/upstream/bepu-hull-contact-nan.md`). A pile of
+/// behind two Bepu failures seen in this repository (a NaN contact between extruded hulls, and a
+/// hull pair that never separates). A pile of
 /// letters jostling one another is the risky configuration, so they collide as boxes and nobody can
 /// tell once they are lying in a heap.
 /// </para>

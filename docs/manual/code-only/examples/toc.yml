@@ -16,7 +16,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (18)
+- name: C# Beginner (22)
   href: beginner-examples.md
   items:
   - name: Basic3D Scene (Every Primitive)
@@ -41,6 +41,14 @@
     href: sync-script.md
   - name: Entity Text (Screen-Space)
     href: entity-text.md
+  - name: Easing Basics
+    href: easing-basics.md
+  - name: Easing Cheat Sheet
+    href: easing.md
+  - name: Easing in a 3D Game
+    href: easing-3d-game.md
+  - name: Easing in a 2D Game
+    href: easing-2d-game.md
   - name: World Text (In-Scene)
     href: world-text.md
   - name: 2D Panels and Text

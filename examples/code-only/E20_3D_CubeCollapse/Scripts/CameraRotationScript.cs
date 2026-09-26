@@ -1,6 +1,5 @@
 using CubeCollapse.Shared;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -116,8 +115,6 @@ public class CameraRotationScript : SyncScript
     {
         var overlay = DebugOverlay.GetOrCreate(Game);
 
-        overlay.Position = DisplayPosition.BottomLeft;
-
         // Runs every frame the overlay is drawn, so the camera position readout stays live
         _instructions = overlay.AddSection(
             "Game", () => GenerateInstructions(Entity.Transform.Position));
@@ -125,11 +122,10 @@ public class CameraRotationScript : SyncScript
 
     static List<TextElement> GenerateInstructions(Vector3 cameraPosition)
      => [
-            new("GAME INSTRUCTIONS"),
-            //new("Click the golden sphere and drag to move it (Y-axis locked)"),
-            new("Click a cube", Color.Yellow),
-            new("Hold Shift: Left mouse button down", Color.Yellow),
-            new("Z/C orbit around the platform (Shift: faster)", Color.Yellow),
-            new($"Camera Position: {cameraPosition}", Color.Yellow),
+            new("Left mouse", "Click a cube", Color.Yellow),
+            new("Shift", "Hold with the left mouse button down", Color.Yellow),
+            new(["Z", "C"], "Orbit around the platform, Shift for faster", Color.Yellow),
+            new(""),
+            new($"Camera position {cameraPosition.X:0.00}, {cameraPosition.Y:0.00}, {cameraPosition.Z:0.00}", Color.Yellow),
         ];
 }

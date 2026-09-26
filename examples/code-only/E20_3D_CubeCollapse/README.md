@@ -117,8 +117,8 @@ core, and the project's structure is walked through in
 
 ## Future improvements
 
-Ideas agreed worth doing, roughly by payoff per effort. Game-specific work is tracked here, not in
-the repository's `notes/TODO.md` - only toolkit-level features live there.
+Ideas agreed worth doing, roughly by payoff per effort. Game-specific work is tracked here;
+toolkit-level features belong in the repository's issues.
 
 ### Quick wins
 
@@ -164,5 +164,4 @@ the repository's `notes/TODO.md` - only toolkit-level features live there.
 - **The orientation markers are unplaced** - `OrientationGizmo` sits where it did before the
   platform was centred on the origin, and the colliderless `ReferenceCube` has no stated purpose.
   The real fix - a screen-corner axis widget the way editor viewports do it - is a toolkit feature
-  and is tracked in `notes/TODO.md`; what this game owes is a decision about the two markers in the
-  meantime.
+  for its own issue; what this game owes is a decision about the two markers in the meantime.

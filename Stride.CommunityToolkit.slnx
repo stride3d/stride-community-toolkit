@@ -11,7 +11,11 @@
     <Project Path="examples/code-only/E01_3D_BasicScene_EngineOnly/E01_3D_BasicScene_EngineOnly.csproj" />
     <Project Path="examples/code-only/E01_3D_BasicScene_FSharp/E01_3D_BasicScene_FSharp.fsproj" />
     <Project Path="examples/code-only/E01_3D_BasicScene_VisualBasic/E01_3D_BasicScene_VisualBasic.vbproj" />
+    <Project Path="examples/code-only/E02_2D_Easing/E02_2D_Easing.csproj" />
+    <Project Path="examples/code-only/E02_2D_EasingBasics/E02_2D_EasingBasics.csproj" />
+    <Project Path="examples/code-only/E02_2D_EasingInGame/E02_2D_EasingInGame.csproj" />
     <Project Path="examples/code-only/E02_2D_Primitives/E02_2D_Primitives.csproj" />
+    <Project Path="examples/code-only/E02_3D_EasingInGame/E02_3D_EasingInGame.csproj" />
     <Project Path="examples/code-only/E02_3D_GiveMeACube/E02_3D_GiveMeACube.csproj" />
     <Project Path="examples/code-only/E02_3D_GiveMeACube_SimulationUpdate/E02_3D_GiveMeACube_SimulationUpdate.csproj" />
     <Project Path="examples/code-only/E02_3D_Material/E02_3D_Material.csproj" />
