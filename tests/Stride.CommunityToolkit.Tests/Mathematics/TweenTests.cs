@@ -124,4 +124,12 @@ public class TweenTests
     [Fact]
     public void RejectsANonPositiveDuration()
         => Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(0f));
+
+    [Fact]
+    public void RejectsANonFiniteDuration()
+    {
+        // NaN passes every comparison, so it would slip past a sign check and make a tween whose progress is NaN
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(float.NaN));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Tween(float.PositiveInfinity));
+    }
 }

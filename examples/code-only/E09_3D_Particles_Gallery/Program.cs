@@ -102,7 +102,7 @@ void HandleInput(Gallery<ParticleStation> gallery)
     if (game.Input.IsKeyPressed(Keys.V) && station.VariationNames.Count > 1)
     {
         station.Variation++;
-        Stations.All[gallery.Current].Setup?.Invoke(station);
+        Gallery<ParticleStation>.Guarded(station, () => Stations.All[gallery.Current].Setup?.Invoke(station));
     }
 
     if (game.Input.IsKeyPressed(Keys.Space)) station.Restart();

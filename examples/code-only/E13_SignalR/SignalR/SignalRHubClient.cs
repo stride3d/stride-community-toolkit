@@ -28,8 +28,8 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// <summary>The background loop started by <see cref="BeginConnect"/>, awaited on shutdown.</summary>
     private Task? _connectLoop;
 
-    private TimeSpan _minBackoff;
-    private TimeSpan _maxBackoff;
+    private readonly TimeSpan _minBackoff;
+    private readonly TimeSpan _maxBackoff;
 
     private readonly List<IDisposable> _subscriptions = [];
     private readonly List<IStoppable> _sendQueues = [];

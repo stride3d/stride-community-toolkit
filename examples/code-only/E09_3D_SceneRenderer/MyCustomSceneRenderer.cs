@@ -24,7 +24,7 @@ public class MyCustomSceneRenderer : SceneRendererBase
     private SpriteFont? _font;
 
     // Font size for the text rendered on the screen
-    private float _fontSize = 12;
+    private readonly float _fontSize = 12;
 
     // The current scene being rendered
     private Scene? _scene;

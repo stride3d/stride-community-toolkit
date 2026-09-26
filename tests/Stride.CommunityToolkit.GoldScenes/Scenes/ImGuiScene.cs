@@ -12,7 +12,9 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// <summary>
 /// One ImGui window with fixed content at a fixed place: text in several colours, a button, a
 /// checkbox, a progress bar, a plot and a colour swatch, so the integration's colour path and the
-/// font atlas are pinned without any live number in the frame.
+/// font atlas are pinned without any live number in the frame. ImGui ignores the mouse here: wherever
+/// the machine's cursor happens to be, a hovered widget would draw its highlight and a tooltip, which
+/// is how the first CI run differed from the golden - the runner's cursor sat over the plot.
 /// </summary>
 internal sealed class ImGuiScene : IGoldScene
 {
@@ -27,6 +29,9 @@ internal sealed class ImGuiScene : IGoldScene
 
     public void Update(Game game, Scene scene, GameTime time)
     {
+        // Every frame, since the system may reset the flags with the context; the flag makes ImGui
+        // ignore the mouse position entirely, so no widget is ever hovered
+        GetIO().ConfigFlags |= ImGuiConfigFlags.NoMouse;
     }
 
     private sealed class GoldWindow : BaseWindow

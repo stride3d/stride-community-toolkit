@@ -29,11 +29,11 @@ public class Inspector : BaseWindow
     static readonly List<Inspector> _inspectors = [];
 
 
-    Dictionary<Type, TypeCache> _cachedTypeData = [];
+    readonly Dictionary<Type, TypeCache> _cachedTypeData = [];
     /// <summary>Opened sub object of the inspected object in the tree view</summary>
-    HashSet<int> _openedId = [];
+    readonly HashSet<int> _openedId = [];
     /// <summary>Lets not keep references from being GCed</summary>
-    WeakReference<object?> _target = new(null);
+    readonly WeakReference<object?> _target = new(null);
 
 
     // Settings
@@ -229,7 +229,7 @@ public class Inspector : BaseWindow
             if (member is FieldInfo fi)
                 fi.SetValue(target, value);
             else if (member is PropertyInfo pi)
-                pi?.SetValue(target, value);
+                pi.SetValue(target, value);
             else
                 throw new NotSupportedException();
         }
