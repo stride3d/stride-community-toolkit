@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
@@ -27,17 +28,15 @@ public static class Recipes
     /// microfacet specular model - the four numbers of a PBR material, and what
     /// <c>game.CreateMaterial</c> builds.
     /// </summary>
-    public static MaterialDescriptor Pbr(Color colour, float glossiness, float metalness, IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null) => new()
+    public static MaterialDescriptor Pbr(Color colour, float glossiness, float metalness, IMaterialSpecularMicrofacetNormalDistributionFunction? distribution = null)
     {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(colour)),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness)),
-            Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
-            SpecularModel = Microfacet(distribution),
-        },
-    };
+        // The toolkit's own bag, with the distribution swapped when a station asks for one
+        var descriptor = MaterialDescriptors.Pbr(colour, metalness, glossiness);
+
+        if (distribution is not null) descriptor.Attributes.SpecularModel = Microfacet(distribution);
+
+        return descriptor;
+    }
 
     /// <summary>The specular workflow: a diffuse colour and a specular colour, no metalness.</summary>
     public static MaterialDescriptor SpecularWorkflow(Color diffuse, Color specular, float glossiness) => new()

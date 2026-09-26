@@ -145,15 +145,7 @@ void BuildScene(Scene scene)
 
     ball.Scene = scene;
 
-    Material EmissiveMaterial(Color colour, float intensity) => Material.New(game.GraphicsDevice, new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Diffuse = new MaterialDiffuseMapFeature(new ComputeColor(colour)),
-            DiffuseModel = new MaterialDiffuseLambertModelFeature(),
-            Emissive = new MaterialEmissiveMapFeature(new ComputeColor(colour)) { Intensity = new ComputeFloat(intensity) },
-        },
-    });
+    Material EmissiveMaterial(Color colour, float intensity) => game.CreateEmissiveMaterial(colour, intensity);
 }
 
 void MoveScene(float seconds)
@@ -293,20 +285,8 @@ void BuildMonitors(Scene scene)
         return monitor;
     }
 
-    Material MonitorMaterial(Texture texture) => Material.New(game.GraphicsDevice, new MaterialDescriptor
-    {
-        Attributes =
-        {
-            Emissive = new MaterialEmissiveMapFeature(new ComputeTextureColor(texture)
-            {
-                AddressModeU = TextureAddressMode.Clamp,
-                AddressModeV = TextureAddressMode.Clamp,
-            })
-            {
-                Intensity = new ComputeFloat(1f),
-            },
-        },
-    });
+    // A screen: the feed as an unlit, clamped emissive texture - the toolkit's CreateScreenMaterial is that bag
+    Material MonitorMaterial(Texture texture) => game.CreateScreenMaterial(texture);
 }
 
 void HandleInput()
