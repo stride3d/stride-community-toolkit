@@ -129,7 +129,7 @@ public sealed class StationScene(Game game)
         AddStatic(scene, "Crane arm", hullMaterial, new Vector3(10.8f, 0.6f, 0.6f), new Vector3(5.4f, armHeight, 0));
         AddStatic(scene, "Hoist", hullMaterial, new Vector3(0.25f, armHeight - Deck.HatchHeight - 1.1f, 0.25f), new Vector3(0, (armHeight + Deck.HatchHeight + 0.8f) / 2f, 0));
 
-        labels.Add("edge", 0.42f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 210), console);
+        labels.Add("edge", 0.42f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 210));
     }
 
     /// <summary>Lights the hatch ring for a moment. Called on every release.</summary>
@@ -258,7 +258,7 @@ public sealed class StationScene(Game game)
         return stars;
     }
 
-    private void AddAmbient(Scene scene)
+    private static void AddAmbient(Scene scene)
     {
         var entity = new Entity("Ambient")
         {

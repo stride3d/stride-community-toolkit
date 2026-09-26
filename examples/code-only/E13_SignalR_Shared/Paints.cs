@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+
 namespace E13_SignalR_Shared;
 
 /// <summary>The paint colours as hex, so the web page can show the same rust the game renders.</summary>
@@ -14,7 +16,7 @@ public static class Paints
     ];
 
     /// <summary>Every paint, in enum order.</summary>
-    public static readonly ContainerPaint[] All = Enum.GetValues<ContainerPaint>();
+    public static ImmutableArray<ContainerPaint> All { get; } = [.. Enum.GetValues<ContainerPaint>()];
 
     /// <summary>The hex colour of a paint, <c>#RRGGBB</c>.</summary>
     public static string Hex(ContainerPaint paint) => _hex[(int)paint];

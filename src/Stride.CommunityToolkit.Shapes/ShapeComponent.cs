@@ -8,7 +8,9 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <summary>
 /// Draws a flat shape at this entity's world transform through a <see cref="ShapeBatch"/>, so shapes
 /// take part in Stride's component system - scripts, hierarchy, enable and disable - without needing
-/// a model or a material. Requires <c>game.AddShapeBatch()</c> to have been called.
+/// a model or a material. Nothing else is required: where the game called <c>AddShapeBatch()</c> the
+/// shape draws through that batch, and otherwise through a depth-tested one the processor registers
+/// for itself, which is also how the shape shows in Game Studio's scene editor.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -21,13 +23,13 @@ namespace Stride.CommunityToolkit.Shapes;
 /// same frame.
 /// </para>
 /// </remarks>
-// Runtime only, matching the toolkit's text components: the processor draws through a ShapeBatch
-// that the running game registers, and the editor never has one, so running it there is wasted work.
-[DefaultEntityComponentProcessor(typeof(ShapeProcessor), ExecutionMode = ExecutionMode.Runtime)]
+// Editor as well as runtime: the scene editor is a running game with the project's compositor, and
+// the processor registers its own batch there, so a shape placed in Game Studio is drawn in it.
+[DefaultEntityComponentProcessor(typeof(ShapeProcessor), ExecutionMode = ExecutionMode.All)]
 // DataContract is what makes the component usable from Game Studio at all: without it the editor
 // cannot clone the component to the game side and reports "No serializer available for type".
 [DataContract("ShapeComponent")]
-[Display("Shape (call AddShapeBatch)", Expand = ExpandRule.Once)]
+[Display("Shape", Expand = ExpandRule.Once)]
 [ComponentCategory("Rendering")]
 public sealed class ShapeComponent : ActivableEntityComponent
 {
@@ -40,11 +42,16 @@ public sealed class ShapeComponent : ActivableEntityComponent
     public static readonly float Inherit = -1f;
 
     /// <summary>
-    /// The shape outline in local space, counter-clockwise, at most 8 corners. May be swapped at
-    /// runtime; the next frame draws the new outline. A single vertex with <see cref="Radius"/> set
-    /// draws a circle; two vertices with a radius draw a capsule.
+    /// The shape outline in local space, counter-clockwise, at most 8 corners. May be swapped or
+    /// edited at runtime; the next frame draws the new outline. A single vertex with
+    /// <see cref="Radius"/> set draws a circle; two vertices with a radius draw a capsule.
     /// </summary>
-    public Vector2[] Vertices { get; set; } = [];
+    /// <remarks>
+    /// A list rather than an array on purpose: Game Studio's property grid can add to and remove
+    /// from a list, and the asset serializer can load one of any length, whereas an array is shown
+    /// read-only and loads only into an instance of exactly its size.
+    /// </remarks>
+    public List<Vector2> Vertices { get; set; } = [];
 
     /// <summary>The outline colour; the fill derives from it unless <see cref="FillColor"/> is set.</summary>
     public Color Color { get; set; } = Color.White;
@@ -57,6 +64,13 @@ public sealed class ShapeComponent : ActivableEntityComponent
     /// rotation and scale are ignored when this is set; only its position is used.
     /// </summary>
     public bool Billboard { get; set; }
+
+    /// <summary>
+    /// Whether the shape answers <see cref="ShapeBatch.TryPick(Vector2, out ShapeHit, float)"/>: the
+    /// hit's <see cref="ShapeHit.Tag"/> is then this component, and its entity one step away. Off
+    /// by default.
+    /// </summary>
+    public bool Pickable { get; set; }
 
     /// <summary>
     /// The batch this shape draws through, or <c>null</c> to use the game's default - the first one

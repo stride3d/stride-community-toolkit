@@ -13,7 +13,9 @@ namespace Stride.CommunityToolkit.Shapes
     // record in the pixel stage: the record is one buffer read per fragment, coherent across the
     // quad, where fifteen interpolated registers used to carry the same values and left no room
     // for another. The points sit in a second buffer, so a shape has as many as it needs.
-    internal shader ShapeShader : ShaderBase, ShapeDistance, ShapeColor
+    // DepthBase brings the depth buffer the forward renderer resolves before the transparent stage,
+    // and the camera factors that turn a depth value back into a distance, for the soft depth fade.
+    internal shader ShapeShader : ShaderBase, ShapeDistance, ShapeColor, DepthBase
     {
         struct ShapeData
         {
@@ -41,6 +43,9 @@ namespace Stride.CommunityToolkit.Shapes
             // 8:  PixelRadius - Radius, Slice.x and LocalScale are pixels on screen, converted at the shape's depth
             // 16: Polyline - the points are a run to stroke, not a convex polygon
             // 32: AdditiveGlow - the glow adds light to what is behind it instead of covering it
+            // 64: SpacePolyline - the points are 3D, in SpacePoints, and the run is stroked on screen
+            // 128: Textured - the fill is multiplied by the batch's fill source, sampled at TexCoord
+            // 256: Screen - Position.xy and the points are pixels from the top left of the viewport; no plane, no projection
             int Flags;
             // Colours as uint, not float: colour bytes with alpha 255 and blue >= 128 form a NaN bit
             // pattern, and GPUs canonicalize NaNs on float reads, destroying the red channel.
@@ -62,6 +67,8 @@ namespace Stride.CommunityToolkit.Shapes
             float4 Dash;
             // xy: the direction the fill's gradient runs in, in the plane's local axes
             // z: opacity, a multiplier on every alpha the shape produces
+            // w: soft depth fade - the distance in world units over which the shape fades out as it
+            //    approaches scene geometry, 0 for a hard cut at the depth test
             float4 Gradient;
         };
 
@@ -82,6 +89,15 @@ namespace Stride.CommunityToolkit.Shapes
             // on the way out - so the sRGB palette has to be decoded here; 0 for a gamma pipeline,
             // where the bytes pass straight through
             stage uint LinearOutput;
+
+            // The target's size in pixels, and the display scale a pixel width is multiplied by;
+            // the pixel stage of a space run works in pixels and needs both spelled out
+            stage float2 ViewSize;
+            stage float ScreenScale;
+
+            // 1 when the renderer bound the scene's depth for this view, so a soft depth fade can
+            // read it; 0 leaves every shape at its hard depth test
+            stage uint DepthAvailable;
         }
 
         cbuffer PerDraw
@@ -90,6 +106,7 @@ namespace Stride.CommunityToolkit.Shapes
             // records and points start. The instance id counts from 0 for every draw.
             stage uint InstanceBase;
             stage uint PointBase;
+            stage uint SpacePointBase;
         }
 
         rgroup PerDraw.Shapes
@@ -111,12 +128,65 @@ namespace Stride.CommunityToolkit.Shapes
         // Which record the fragment belongs to. Integer streams are flat, so it arrives exact.
         stream uint ShapeIndex;
 
+        // The clip w of the shape's centre: one depth for the whole shape, for the figures that must
+        // agree between its fragments - how many dashes a ring holds
+        stream float CentreW;
+
         override stage void VSMain()
         {
             uint index = InstanceBase + streams.InstanceID;
             ShapeData data = Shapes[index];
 
+            // A space run is not a flat shape. Its quad is the screen bounding box of its projected
+            // points, padded for the widest stroke, the border and the glow, placed at the depth of
+            // the nearest point so that a run entirely behind the near plane is clipped; the pixel
+            // stage measures the run in pixels, so the perspective term and the local-to-pixel ratio
+            // it is handed are both 1, and writes each fragment's own depth.
+            if ((data.Flags & 64) != 0)
+            {
+                uint spaceOffset = SpacePointBase + data.PointOffset;
+                float pixelsPerUnit = PixelScale * ScreenScale;
+                float2 low = float2(1e9, 1e9);
+                float2 high = float2(-1e9, -1e9);
+                float nearestW = 1e9;
+                float nearestDepth = 1.0;
+                float widest = 0.0;
+
+                for (int k = 0; k < data.Count; ++k)
+                {
+                    float4 spacePoint = SpacePoints[spaceOffset + k];
+                    float4 pointClip = mul(float4(spacePoint.xyz, 1.0), ViewProjection);
+                    float w = max(pointClip.w, 0.0001);
+                    float2 ndc = pointClip.xy / w;
+
+                    low = min(low, ndc);
+                    high = max(high, ndc);
+                    widest = max(widest, spacePoint.w * pixelsPerUnit / w);
+
+                    if (w < nearestW)
+                    {
+                        nearestW = w;
+                        nearestDepth = pointClip.z / w;
+                    }
+                }
+
+                float thicknessPx = data.AxisX.w * ScreenScale;
+                float glowPx = data.Slice.w * ScreenScale;
+                float2 pad = (widest + 0.5 * thicknessPx + glowPx + 1.5) * 2.0 / ViewSize;
+                float2 corner = 0.5 * (low + high) + (0.5 * (high - low) + pad) * streams.LocalPosition;
+
+                streams.ShadingPosition = float4(corner, nearestDepth, 1.0);
+                streams.TexCoord = float2(0.5 + 0.5 * streams.LocalPosition.x, 0.5 - 0.5 * streams.LocalPosition.y);
+                streams.FragPosition = float4(0.0, 0.0, 1.0, 1.0);
+                streams.CentreW = 1.0;
+                streams.FragScale = float4(0.0, 0.0, thicknessPx, glowPx);
+                streams.ShapeIndex = index;
+
+                return;
+            }
+
             bool polyline = (data.Flags & 16) != 0;
+            bool screen = (data.Flags & 256) != 0;
 
             float radius = data.Radius;
             float localScale = data.LocalScale;
@@ -129,8 +199,9 @@ namespace Stride.CommunityToolkit.Shapes
             // border uses. Such a shape is a single point, so its scale is the radius alone.
             if ((data.Flags & 8) != 0)
             {
-                float originW = mul(float4(data.Position.xyz, 1.0), ViewProjection).w;
-                float pixelToWorld = max(originW, 0.0001) / PixelScale;
+                // On the screen a pixel already is the unit
+                float originW = screen ? 1.0 : mul(float4(data.Position.xyz, 1.0), ViewProjection).w;
+                float pixelToWorld = screen ? 1.0 : max(originW, 0.0001) / PixelScale;
 
                 radius *= pixelToWorld;
                 band *= pixelToWorld;
@@ -146,7 +217,8 @@ namespace Stride.CommunityToolkit.Shapes
 
             // Border and glow widths in the normalized local space, before the perspective term.
             // Under an orthographic projection the pixel shader's w is 1 and these are already final.
-            float pixelToLocal = 1.0 / (PixelScale * worldScale);
+            // On the screen one local unit is one of the display's scaled pixels, so the pixel scale is 1
+            float pixelToLocal = 1.0 / ((screen ? 1.0 : PixelScale) * worldScale);
             float thickness = data.AxisX.w * pixelToLocal;
             float glow = data.Slice.w * pixelToLocal;
 
@@ -158,7 +230,21 @@ namespace Stride.CommunityToolkit.Shapes
             float3 axisX = data.AxisX.xyz;
             float3 axisY = data.AxisY.xyz;
 
-            if (mode > 1.5)
+            if (screen)
+            {
+                // The plane's own axes, in pixels with Y down like a sprite. A thick line lies flat on
+                // the screen, its width the in-plane perpendicular; a billboard is just axis-aligned.
+                if (mode > 1.5)
+                {
+                    axisY = normalize(cross(float3(0.0, 0.0, 1.0), axisX));
+                }
+                else if (mode > 0.5)
+                {
+                    axisX = float3(1.0, 0.0, 0.0);
+                    axisY = float3(0.0, 1.0, 0.0);
+                }
+            }
+            else if (mode > 1.5)
             {
                 // Axial billboard: AxisX stays put and the plane swings about it to face the eye.
                 // This is what turns a two-point capsule into a thick, round-capped 3D line.
@@ -186,21 +272,64 @@ namespace Stride.CommunityToolkit.Shapes
             // The border straddles the outline, so half its thickness has to fit outside, and the
             // glow sits entirely outside it.
             float3 centerWorld = origin + worldCenter.x * axisX + worldCenter.y * axisY;
-            float centerW = mul(float4(centerWorld, 1.0), ViewProjection).w;
+            float centerW = screen ? 1.0 : mul(float4(centerWorld, 1.0), ViewProjection).w;
             float margin = 1.0 + max(0.1, (thickness + glow) * max(centerW, 0.0001));
 
             float2 local = margin * streams.LocalPosition;
 
+            // Texture coordinates span the shape's bounding box in its own space, (0,0) at the top
+            // left, so an image fills a rectangle edge to edge and a disc gets its inscribed square.
+            // The quad's margin runs a little past 0..1, where the fill source's address mode decides
+            // what shows. Only a textured fill reads them; the loop is at most 64 points, per vertex.
+            float2 boxLow = float2(1e9, 1e9);
+            float2 boxHigh = float2(-1e9, -1e9);
+
+            for (int k = 0; k < data.Count; ++k)
+            {
+                float2 shapePoint = Points[PointBase + data.PointOffset + k];
+                boxLow = min(boxLow, shapePoint);
+                boxHigh = max(boxHigh, shapePoint);
+            }
+
+            float boxPad = invScale * radius;
+            boxLow -= boxPad;
+            boxHigh += boxPad;
+
+            float2 texCoord = (local - boxLow) / max(boxHigh - boxLow, 0.000001);
+            // On the screen local Y already runs down, so the picture is upright as it is
+            streams.TexCoord = float2(texCoord.x, screen ? texCoord.y : 1.0 - texCoord.y);
+
             float2 q = worldScale * local + worldCenter;
             float3 worldPosition = origin + q.x * axisX + q.y * axisY;
 
-            float4 clip = mul(float4(worldPosition, 1.0), ViewProjection);
+            float4 clip;
+
+            if (screen)
+            {
+                // Scaled pixels to physical ones, then straight to clip space at the near plane, so a
+                // screen shape sits over everything in its batch whatever the depth test says
+                float2 pixel = worldPosition.xy * ScreenScale;
+
+                clip = float4(pixel.x / ViewSize.x * 2.0 - 1.0, 1.0 - pixel.y / ViewSize.y * 2.0, 0.0, 1.0);
+            }
+            else
+            {
+                clip = mul(float4(worldPosition, 1.0), ViewProjection);
+            }
 
             // A varying carrying w interpolates perspective-correctly to exactly the fragment's w,
             // which is what makes the border a constant pixel width at any depth
             streams.FragPosition = float4(local, clip.w, pixelToLocal);
+            streams.CentreW = max(centerW, 0.0001);
             streams.ShapeIndex = index;
             streams.ShadingPosition = clip;
+        }
+
+        // What a textured fill multiplies in. The plain shader has none; ShapeShaderTextured
+        // overrides this with the fill source composed in by ShapeEffect.
+        float4 FillSample()
+        {
+            return float4(1.0, 1.0, 1.0, 1.0);
         }
 
         override stage void PSMain()
@@ -225,6 +354,8 @@ namespace Stride.CommunityToolkit.Shapes
             bool gradient = (flags & 4) != 0;
             bool polyline = (flags & 16) != 0;
             bool additiveGlow = (flags & 32) != 0;
+            bool space = (flags & 64) != 0;
+            bool textured = (flags & 128) != 0;
             bool cut = sweep > 0.0;
             bool linearTarget = LinearOutput != 0;
 
@@ -237,7 +368,7 @@ namespace Stride.CommunityToolkit.Shapes
             // The fill's gradient: where this fragment sits between the shape's two extremes along
             // the direction, then the near colour blended toward the far one. Straight alpha, so a
             // far colour at alpha 0 is a fade to nothing rather than to black.
-            if (gradient)
+            if (gradient && !space)
             {
                 float2 direction = data.Gradient.xy;
                 float directionLength = length(direction);
@@ -290,11 +421,21 @@ namespace Stride.CommunityToolkit.Shapes
             // The testbed's fill: the fill alpha scales the colour's brightness as well as its
             // opacity, in the sRGB values the caller gave. Decoded to the target's light after.
             fillColor = ToTarget(fillColor * fillAlpha, linearTarget);
+
+            // A textured fill: the batch's fill source, sampled at this fragment's texture coordinate,
+            // tints the fill - white shows the image as it is, and the fill alpha, the gradient and
+            // the opacity above and below still apply. Sampled after the colour space conversion,
+            // because a texture sample already arrives in the target's space.
+            if (textured)
+            {
+                fillColor *= FillSample();
+            }
             borderColor = ToTarget(borderColor, linearTarget);
 
             // Perspective term: near shapes have a large w, far ones a small one, so the same pixel
             // width maps to more or fewer world units with distance
             float localPerPixel = streams.FragPosition.w * clipW;
+            float localPerPixelCentre = streams.FragPosition.w * streams.CentreW;
             float thickness = streams.FragScale.z * clipW;
             float glowWidth = streams.FragScale.w * clipW;
 
@@ -302,7 +443,30 @@ namespace Stride.CommunityToolkit.Shapes
             // border, glow - is a function of this one number.
             float s;
 
-            if (roundCaps && count == 1)
+            // What the fragment writes to the depth buffer: the rasterized depth for a flat shape, which
+            // is what it would have been anyway, and for a space run the depth of the nearest point of
+            // the run, so a stroke threads behind and in front of geometry per fragment rather than
+            // testing as one quad at its nearest point
+            float depth = streams.ShadingPosition.z;
+
+            if (space)
+            {
+                // Measured on screen: every point projected with the matrix the vertex stage used,
+                // and the run's field in pixels - the same field the planar stroke uses, in
+                // different units. Dashes run along the projected arc length.
+                uint spaceOffset = SpacePointBase + data.PointOffset;
+                float2 pixel = streams.ShadingPosition.xy;
+
+                s = SdSpacePolyline(pixel, spaceOffset, count, ViewProjection, ViewSize, PixelScale * ScreenScale, depth);
+
+                if (data.Dash.x > 0.0)
+                {
+                    float along = SpacePolylineAlong(pixel, spaceOffset, count, ViewProjection, ViewSize);
+
+                    s = max(s, SdDashAlong(along, data.Dash.x, data.Dash.x + data.Dash.y, 1.0, data.Dash.z));
+                }
+            }
+            else if (roundCaps && count == 1)
             {
                 // A round-capped arc is its own distance field: the band's centreline is an arc
                 // and the shape is everything within half the band width of it, which is what
@@ -350,9 +514,11 @@ namespace Stride.CommunityToolkit.Shapes
             // Dashes: the gaps are cuts through the shape along its outline, folded into the same
             // distance field, so fill, border and glow all stop at a dash end and the ends are
             // anti-aliased by the same smoothstep as every other edge
-            if (data.Dash.x > 0.0 && (count <= 2 || polyline))
+            bool dashed = data.Dash.x > 0.0 && (count <= 2 || polyline);
+
+            if (dashed && !space)
             {
-                s = max(s, SdDashes(p, offset, count, hollow, cut, radius, ringWidth, sweep, localPerPixel, data.Dash.xyz, wedge.xy, polyline, ringWidth));
+                s = max(s, SdDashes(p, offset, count, hollow, cut, radius, ringWidth, sweep, localPerPixel, localPerPixelCentre, data.Dash.xyz, wedge.xy, polyline, ringWidth));
             }
 
             // The anti-aliasing ramp: half a pixel either side of an edge. Half a pixel of local
@@ -402,9 +568,26 @@ namespace Stride.CommunityToolkit.Shapes
             // glow dims as one thing rather than as three overlapping ones
             blended *= saturate(opacity);
 
+            // Soft depth fade: how far in front of the scene's surface this fragment sits, in world
+            // units, against the distance the shape asked for. A disc on an uneven floor fades where
+            // the floor rises through it instead of cutting off; a marker crossing a wall dissolves
+            // into it. Both depths go through the same reconstruction, so their difference is a
+            // distance whatever the projection. A fragment behind the surface fades to nothing, which
+            // on an overlay batch is a soft depth test of its own.
+            float depthFade = data.Gradient.w;
+
+            if (depthFade > 0.0 && DepthAvailable != 0)
+            {
+                float sceneDistance = abs(ComputeDepthFromScreenPosition(int2(streams.ShadingPosition.xy)));
+                float ownDistance = abs(ComputeDepthFromZProj(depth));
+
+                blended *= smoothstep(0.0, 1.0, (sceneDistance - ownDistance) / depthFade);
+            }
+
             blended.rgb = Dither(blended.rgb, Bayer(streams.ShadingPosition.xy), linearTarget);
 
             streams.ColorTarget = blended;
+            streams.Depth = depth;
         }
     };
-}
+}

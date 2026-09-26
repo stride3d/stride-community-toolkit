@@ -1,0 +1,19 @@
+namespace Stride.CommunityToolkit.Shapes
+{
+    // The effect every shape batch draws with. A batch without a fill source gets ShapeShader
+    // alone, the same mixin it always had; a batch with one gets the textured shader with the
+    // batch's fill source composed in as its Fill. The source generator turns this file into the
+    // registered mixin builder at build time - there is nothing to hand-write.
+    partial effect ShapeEffect
+    {
+        using params ShapeEffectKeys;
+
+        mixin ShapeShader;
+
+        if (ShapeEffectKeys.FillSource != null)
+        {
+            mixin ShapeShaderTextured;
+            mixin compose Fill = ShapeEffectKeys.FillSource;
+        }
+    };
+}

@@ -1,0 +1,16 @@
+namespace Stride.CommunityToolkit.Shapes
+{
+    // ShapeShader with a fill source composed in: one of Stride's material nodes - a texture with
+    // its scale, offset and address modes, a blend of two nodes, a custom shader class - plugged
+    // in by ShapeEffect when a batch has one. A shape flagged Textured multiplies its fill by the
+    // sample; the rest of the batch draws exactly as the plain shader would.
+    internal shader ShapeShaderTextured : ShapeShader
+    {
+        compose ComputeColor Fill;
+
+        override float4 FillSample()
+        {
+            return Fill.Compute();
+        }
+    };
+}

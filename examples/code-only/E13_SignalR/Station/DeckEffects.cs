@@ -35,12 +35,12 @@ public sealed class DeckEffects
     {
         _labels = labels;
 
-        labels.Add("hail-caption", 0.4f, labels.Bold, (t, c) => t.TextColor = c.Accent, console, glow: 3f, billboard: true, depthTest: false);
-        labels.Add("hail-text", 0.8f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, console, glow: 6f, billboard: true, depthTest: false);
+        labels.Add("hail-caption", 0.4f, labels.Bold, (t, c) => t.TextColor = c.Accent, glow: 3f, overlay: true);
+        labels.Add("hail-text", 0.8f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, glow: 6f, overlay: true);
 
         for (var i = 0; i < DriftPool; i++)
         {
-            labels.Add($"lost-{i}", 0.5f, labels.Bold, (t, _) => { t.TextColor = LostColor; t.GlowColor = Hex.WithAlpha(LostColor, 200); }, console, glow: 4f, billboard: true, depthTest: false);
+            labels.Add($"lost-{i}", 0.5f, labels.Bold, (t, _) => { t.TextColor = LostColor; t.GlowColor = Hex.WithAlpha(LostColor, 200); }, glow: 4f, overlay: true);
         }
     }
 
@@ -103,13 +103,16 @@ public sealed class DeckEffects
     {
         _time = time;
 
+        // The flash decays over two-thirds of a second, whatever the frame rate
         HazardFlash = MathF.Max(0f, HazardFlash - deltaSeconds * 1.5f);
 
+        // Everything short-lived ages by the frame; what has outlived its span is dropped below
         foreach (var ring in _rings) ring.Age += deltaSeconds;
         foreach (var drift in _drifts) drift.Age += deltaSeconds;
 
         _rings.RemoveAll(ring => ring.Age >= ring.Life);
 
+        // A drift borrows a pooled label, so it is hidden rather than removed
         foreach (var drift in _drifts.Where(drift => drift.Age >= LostSeconds))
         {
             _labels.Hide(drift.Key);
@@ -208,40 +211,65 @@ public sealed class DeckEffects
         return string.Join('\n', lines);
     }
 
-    private sealed class Ring(Vector3 center, float from, float to, float life, Color color)
+    // Explicit constructors rather than primary ones: a primary constructor is public, and these
+    // types are private.
+    private sealed class Ring
     {
-        public Vector3 Center { get; } = center;
+        internal Ring(Vector3 center, float from, float to, float life, Color color)
+        {
+            Center = center;
+            From = from;
+            To = to;
+            Life = life;
+            Color = color;
+        }
 
-        public float From { get; } = from;
+        internal Vector3 Center { get; }
 
-        public float To { get; } = to;
+        internal float From { get; }
 
-        public float Life { get; } = life;
+        internal float To { get; }
 
-        public Color Color { get; } = color;
+        internal float Life { get; }
 
-        public float Age { get; set; }
+        internal Color Color { get; }
+
+        internal float Age { get; set; }
     }
 
-    private sealed class Tag(int id, Entity entity, EntityTextComponent text)
+    private sealed class Tag
     {
-        public int Id { get; } = id;
+        internal Tag(int id, Entity entity, EntityTextComponent text)
+        {
+            Id = id;
+            Entity = entity;
+            Text = text;
+        }
 
-        public Entity Entity { get; } = entity;
+        internal int Id { get; }
 
-        public EntityTextComponent Text { get; } = text;
+        internal Entity Entity { get; }
 
-        public float Until { get; set; }
+        internal EntityTextComponent Text { get; }
+
+        internal float Until { get; set; }
     }
 
-    private sealed class Drift(string key, string text, Vector3 start)
+    private sealed class Drift
     {
-        public string Key { get; } = key;
+        internal Drift(string key, string text, Vector3 start)
+        {
+            Key = key;
+            Text = text;
+            Start = start;
+        }
 
-        public string Text { get; } = text;
+        internal string Key { get; }
 
-        public Vector3 Start { get; } = start;
+        internal string Text { get; }
 
-        public float Age { get; set; }
+        internal Vector3 Start { get; }
+
+        internal float Age { get; set; }
     }
 }

@@ -16,12 +16,14 @@ namespace E13_SignalR.Station;
 public sealed class Labels
 {
     private readonly Scene _scene;
+    private readonly StationConsole _console;
     private readonly Dictionary<string, Label> _labels = [];
     private readonly List<(WorldTextComponent Text, Action<WorldTextComponent, StationConsole> Restyle)> _styled = [];
 
-    public Labels(Scene scene, Game game)
+    public Labels(Scene scene, Game game, StationConsole console)
     {
         _scene = scene;
+        _console = console;
 
         // System fonts where there are any - the default Stride font is a fallback, not a look
         Sans = SystemFonts.LoadFirst(game.Services, SystemFonts.SansSerifCandidates, 48);
@@ -37,10 +39,11 @@ public sealed class Labels
 
     /// <summary>
     /// Creates a hidden label. <paramref name="restyle"/> is how the scheme colours it; it runs now
-    /// and again on every scheme change.
+    /// and again on every scheme change. An overlay label faces the camera and draws over
+    /// everything, for tags and banners that float in the scene rather than lie on a board.
     /// </summary>
-    public WorldTextComponent Add(string key, float lineHeight, SpriteFont? font, Action<WorldTextComponent, StationConsole> restyle, StationConsole console,
-        TextAnchor anchor = TextAnchor.MiddleCenter, float glow = 0f, bool billboard = false, bool depthTest = true)
+    public WorldTextComponent Add(string key, float lineHeight, SpriteFont? font, Action<WorldTextComponent, StationConsole> restyle,
+        TextAnchor anchor = TextAnchor.MiddleCenter, float glow = 0f, bool overlay = false)
     {
         var text = new WorldTextComponent
         {
@@ -51,12 +54,12 @@ public sealed class Labels
             Anchor = anchor,
             Alignment = TextAlignment.Center,
             GlowSize = glow,
-            Billboard = billboard,
-            DepthTest = depthTest,
+            Billboard = overlay,
+            DepthTest = !overlay,
             IsVisible = false,
         };
 
-        restyle(text, console);
+        restyle(text, _console);
 
         var entity = new Entity($"Label {key}") { text };
 
@@ -100,11 +103,11 @@ public sealed class Labels
     public void Hide(string key) => _labels[key].Text.IsVisible = false;
 
     /// <summary>Recolours every label for the current scheme.</summary>
-    public void Restyle(StationConsole console)
+    public void Restyle()
     {
         foreach (var (text, restyle) in _styled)
         {
-            restyle(text, console);
+            restyle(text, _console);
         }
     }
 

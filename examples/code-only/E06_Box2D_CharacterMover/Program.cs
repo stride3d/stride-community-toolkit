@@ -135,7 +135,7 @@ void BuildBridge(Scene scene, B2BodyId ground1, B2BodyId ground2)
     for (var i = 0; i < PlankCount; i++)
     {
         var centre = new Vector2(BridgeStart + 0.5f + i, BridgeHeight);
-        var entity = new Entity("Plank") { new ShapeComponent { Vertices = plank, Color = royalBlue } };
+        var entity = new Entity("Plank") { new ShapeComponent { Vertices = [.. plank], Color = royalBlue } };
         entity.Transform.Position = new Vector3(centre, 0);
         entity.Scene = scene;
 
@@ -191,7 +191,7 @@ void BuildElevator(Scene scene)
 {
     var start = elevatorBase - new Vector2(0, ElevatorAmplitude);
     Vector2[] slab = [new(-2, -0.1f), new(2, -0.1f), new(2, 0.1f), new(-2, 0.1f)];
-    var entity = new Entity("Elevator") { new ShapeComponent { Vertices = slab, Color = plum } };
+    var entity = new Entity("Elevator") { new ShapeComponent { Vertices = [.. slab], Color = plum } };
     entity.Transform.Position = new Vector3(start, 0);
     entity.Scene = scene;
 

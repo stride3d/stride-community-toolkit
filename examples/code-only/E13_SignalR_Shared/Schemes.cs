@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+
 namespace E13_SignalR_Shared;
 
 /// <summary>
@@ -13,7 +15,7 @@ public sealed record Scheme(string Name, string Accent, string Fill, string Text
 /// </summary>
 public static class Schemes
 {
-    public static readonly Scheme[] All =
+    public static ImmutableArray<Scheme> All { get; } =
     [
         new("Blue", "#5ABEFF", "#081628", "#CDEEFF", "#008CFF"),
         new("Red", "#FF5F5A", "#240A0C", "#FFD2CD", "#FF2828"),

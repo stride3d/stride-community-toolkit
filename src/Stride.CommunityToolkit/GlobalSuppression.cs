@@ -210,6 +210,11 @@ using System.Diagnostics.CodeAnalysis;
 // --- E13 SignalR: the orbital cargo deck ---
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E13_SignalR:E13_SignalR.SignalR.SignalRHubClient", Scope = "deep", Justification = "Jitter on the reconnect backoff delay, so a room full of clients does not retry in lockstep after a server restart; nothing security-related.")]
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E13_SignalR:E13_SignalR.Station.Deck", Scope = "deep", Justification = "Which size and paint a random release gets, the scatter under the hatch, and the direction of a shake; gameplay randomness, nothing security-related.")]
+[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E13_SignalR:E13_SignalR.Station.StationScene", Scope = "deep", Justification = "Seeded star field: direction, size, tint and twinkle of each star; the seed is what keeps the sky the same between runs and captures.")]
+// Board is immutable and all value-type fields, which is the rule's picture of a lightweight value; it is
+// also seventy-two bytes of vectors and a quaternion, handed to every Labels.Set and Place call. Copying
+// that per call is the cost a struct would add, and the boards are three shared objects, not values.
+[assembly: SuppressMessage("NDepend", "ND1304:ClassesThatAreCandidateToBeTurnedIntoStructures", Target = "E13_SignalR:E13_SignalR.Station.Board", Justification = "72-byte immutable object shared by reference between the boards and the labels; a struct would copy it on every call.")]
 // --- Cube Collapse: a game example ---
 // Colours for the board, positions for the falling game-over letters, and the shuffle behind a
 // spawn. Gameplay randomness, same as Helpers.VectorHelper above; a seedable System.Random is the

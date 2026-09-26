@@ -80,7 +80,7 @@ public sealed class StationConsole
 
         Apply(scheme);
 
-        _menu.SelectedIndex = Array.IndexOf(Schemes.All, scheme);
+        _menu.SelectedIndex = Schemes.All.IndexOf(scheme);
 
         SchemeChanged?.Invoke(scheme);
     }

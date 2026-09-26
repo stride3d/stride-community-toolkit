@@ -55,6 +55,10 @@ var time = 0f;
 List<(WorldTextComponent Text, Action<WorldTextComponent, Theme> Restyle)> themedText = [];
 DebugTextDropdown? themeMenu = null;
 
+// The panel under the mouse, as the batch last drew it: every panel is drawn with its station as
+// the tag, and the batch answers from the frame on screen
+GalleryStation? hoveredPanel = null;
+
 // Dark grounds throughout: a glow is light added to what is behind it, so it only reads as a glow
 // against something dark. That is why every HUD in every spaceship is dark.
 Theme[] themes =
@@ -68,7 +72,7 @@ Theme[] themes =
 
 // One entry per station: how the panel is painted, and how the text on the copy below it is styled.
 // Panel settings are ShapeBatch state; text settings are WorldTextComponent properties.
-Station[] stations =
+GalleryStation[] stations =
 [
     new(1, "Fill only\nBorderWidth 0", "Default text",
         (text, theme) => text.TextColor = theme.Text,
@@ -256,7 +260,9 @@ void Start(Scene scene)
             (Keys)(Keys.D1 + pair.Index), pair.Item.Name, () => ApplyTheme(pair.Index)))],
     };
 
-    DebugOverlay.GetOrCreate(game).AddSection("Panels", OverlayLines);
+    var overlay = DebugOverlay.GetOrCreate(game);
+    overlay.SectionGap = 0;
+    overlay.AddSection("Panels", OverlayLines);
 }
 
 void Update(Scene scene, GameTime gameTime)
@@ -264,6 +270,8 @@ void Update(Scene scene, GameTime gameTime)
     if (shapes is null) return;
 
     themeMenu?.Update(game.Input);
+
+    hoveredPanel = shapes.TryPick(game.Input.MousePosition, out var hit) ? hit.Tag as GalleryStation : null;
 
     time += (float)gameTime.Elapsed.TotalSeconds;
 
@@ -279,7 +287,7 @@ void Update(Scene scene, GameTime gameTime)
 }
 
 /// <summary>Paints one panel: the stripe behind it, the panel itself, and any ornaments.</summary>
-void DrawPanel(Station station, Vector3 center, Theme theme)
+void DrawPanel(GalleryStation station, Vector3 center, Theme theme)
 {
     // The stripe is what makes transparency visible. Drawn first: shapes blend in submission order
     // and never write depth, so within a batch "behind" simply means "earlier".
@@ -289,7 +297,10 @@ void DrawPanel(Station station, Vector3 center, Theme theme)
     // for part of the panel
     shapes!.DrawRectangle(center, stripeAxisX, stripeAxisY, new Vector2(PanelWidth * 0.85f, 0.5f), new Color(118, 130, 150));
 
-    shapes.BorderWidth = station.BorderWidth;
+    // Tagged with its station, so a pick hands the station back; the one under the mouse gets a
+    // heavier border
+    shapes.Tag = station;
+    shapes.BorderWidth = station == hoveredPanel ? station.BorderWidth + 1.5f : station.BorderWidth;
 
     // null fills with the outline colour, which is the Box2D testbed's behaviour; a colour of its own
     // is what makes a dark panel behind a bright border
@@ -506,6 +517,7 @@ void Reset()
     shapes.Dash.Clear();
     shapes.Gradient.Clear();
     shapes.Opacity = 1f;
+    shapes.Tag = null;
 }
 
 /// <summary>Creates one text entity, styled through the same delegate a theme change re-runs.</summary>
@@ -564,19 +576,24 @@ Vector3 CellCenter(int station, bool withText)
 
 IReadOnlyList<TextElement> OverlayLines()
 {
-    List<TextElement> lines =
-    [
-        new("Panels: ShapeBatch, one draw call for all 48", Color.LightGreen),
-        new("Upper row of each pair is the panel alone", Color.LightGray),
-        new("Corner numbers match the stations array in Program.cs", Color.LightGray),
-        new("Wheel zooms - borders, glows and dashes keep their pixel size", Color.LightGray),
-        new(string.Empty),
-    ];
+    List<TextElement> lines = [];
 
     if (themeMenu is not null)
     {
         lines.AddRange(themeMenu.GetLines());
+        lines.Add(new(string.Empty));
     }
+
+    lines.AddRange(
+    [
+        new("Mouse wheel", "Zoom", Color.Gold),
+        new(string.Empty),
+        new(hoveredPanel is { } hovered ? $"Under the mouse: panel {hovered.Number}" : "Under the mouse: nothing", Color.LightGray),
+        new("Panels: ShapeBatch, one draw call for all 48", Color.LightGreen),
+        new("Upper row of each pair is the panel alone", Color.LightGray),
+        new("Corner numbers match the stations array in Program.cs", Color.LightGray),
+        new("Borders, glows and dashes keep their pixel size", Color.LightGray),
+    ]);
 
     return lines;
 }
@@ -594,7 +611,7 @@ enum GradientTarget { None, Text, Transparent }
 /// One station of the gallery: a panel recipe, the caption naming it, and the text drawn on the
 /// second copy of the panel with the styling that names itself.
 /// </summary>
-sealed record Station(
+sealed record GalleryStation(
     int Number,
     string Caption,
     string Label,
@@ -675,7 +692,7 @@ tags:
   - Themes
 related:
   - E03_3D_WorldText
-  - E11_3D_ShapeBatch
+  - E11_3D_ShapeBatch_Gallery
   - E03_3D_EntityText
   - E03_2D_HUD
 enabled: true

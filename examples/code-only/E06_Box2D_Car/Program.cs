@@ -142,7 +142,7 @@ void SpawnCar(Scene scene, Vector2 position)
     var chassisDef = ShapeFixtureBuilder.CreateCustomShapeDef(1f / Scale, 0.2f, 0f);
 
     var chassisPosition = position + new Vector2(0, 1f * Scale);
-    chassis = new Entity("Chassis") { new ShapeComponent { Vertices = outline, Radius = 0.15f * Scale, Color = royalBlue } };
+    chassis = new Entity("Chassis") { new ShapeComponent { Vertices = [.. outline], Radius = 0.15f * Scale, Color = royalBlue } };
     chassis.Transform.Position = new Vector3(chassisPosition, 0);
     chassis.Scene = scene;
     spawned.Add(chassis);

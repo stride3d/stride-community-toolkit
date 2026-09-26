@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
+using System.Globalization;
 
 namespace E13_SignalR.Station;
 
@@ -51,61 +52,49 @@ public sealed class StationBoard
         _board = new Board(center, facing, new Vector2(Width, Height));
         _labels = labels;
 
-        labels.Add("title", 0.66f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, console, TextAnchor.MiddleLeft, glow: 4f);
-        labels.Add("subtitle", 0.36f, labels.Sans, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 190), console, TextAnchor.MiddleLeft);
+        labels.Add("title", 0.66f, labels.Bold, (t, c) => { t.TextColor = c.Text; t.GlowColor = c.Glow; }, TextAnchor.MiddleLeft, glow: 4f);
+        labels.Add("subtitle", 0.36f, labels.Sans, (t, c) => t.TextColor = Hex.WithAlpha(c.Accent, 190), TextAnchor.MiddleLeft);
 
         // Coloured per frame by the scheme each button stands for, not by the current one
         for (var i = 0; i < Schemes.All.Length; i++)
         {
-            labels.Add($"scheme-{i}", 0.36f, labels.Bold, (_, _) => { }, console);
+            labels.Add($"scheme-{i}", 0.36f, labels.Bold, (_, _) => { });
         }
 
-        labels.Add("link", 0.42f, labels.Sans, (_, _) => { }, console, TextAnchor.MiddleLeft);
-        labels.Add("uptime", 0.42f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 170), console, TextAnchor.MiddleRight);
+        labels.Add("link", 0.42f, labels.Sans, (_, _) => { }, TextAnchor.MiddleLeft);
+        labels.Add("uptime", 0.42f, labels.Mono, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 170), TextAnchor.MiddleRight);
 
         foreach (var counter in Counters)
         {
-            labels.Add($"{counter}-value", 1.25f, labels.Mono, (t, c) => { t.TextColor = c.Accent; t.GlowColor = c.Glow; }, console, glow: 3f);
-            labels.Add($"{counter}-caption", 0.36f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150), console);
+            labels.Add($"{counter}-value", 1.25f, labels.Mono, (t, c) => { t.TextColor = c.Accent; t.GlowColor = c.Glow; }, glow: 3f);
+            labels.Add($"{counter}-caption", 0.36f, labels.Bold, (t, c) => t.TextColor = Hex.WithAlpha(c.Text, 150));
         }
 
-        labels.Add("by-size", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, console, TextAnchor.MiddleLeft);
-        labels.Add("by-paint", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, console, TextAnchor.MiddleLeft);
-        labels.Add("dropping", 0.38f, labels.Sans, (t, c) => t.TextColor = c.Accent, console, TextAnchor.MiddleLeft);
+        labels.Add("by-size", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
+        labels.Add("by-paint", 0.36f, labels.Bold, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
+        labels.Add("dropping", 0.38f, labels.Sans, (t, c) => t.TextColor = c.Accent, TextAnchor.MiddleLeft);
 
         for (var i = 0; i < SizeNames.Length; i++)
         {
-            labels.Add($"size-{i}", 0.42f, labels.Sans, (t, c) => t.TextColor = c.Text, console, TextAnchor.MiddleLeft);
-            labels.Add($"size-{i}-count", 0.42f, labels.Mono, (t, c) => t.TextColor = c.Text, console, TextAnchor.MiddleRight);
+            labels.Add($"size-{i}", 0.42f, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
+            labels.Add($"size-{i}-count", 0.42f, labels.Mono, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleRight);
         }
 
         for (var i = 0; i < Paints.All.Length; i++)
         {
-            labels.Add($"paint-{i}", 0.4f, labels.Sans, (t, c) => t.TextColor = c.Text, console, TextAnchor.MiddleLeft);
-            labels.Add($"paint-{i}-count", 0.4f, labels.Mono, (t, c) => t.TextColor = c.Text, console, TextAnchor.MiddleRight);
+            labels.Add($"paint-{i}", 0.4f, labels.Sans, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleLeft);
+            labels.Add($"paint-{i}-count", 0.4f, labels.Mono, (t, c) => t.TextColor = c.Text, TextAnchor.MiddleRight);
         }
     }
 
     /// <summary>
     /// Tracks the mouse over the scheme buttons and returns the scheme clicked this frame, if any.
-    /// Call before <see cref="Draw"/>, which highlights the hovered button.
+    /// Call before <see cref="Draw"/>, which highlights the hovered button. The buttons are drawn
+    /// with their index as the tag, so the batch says which one the mouse is over.
     /// </summary>
-    public string? Pick(InputManager input, CameraComponent camera)
+    public string? Pick(ShapeBatch shapes, InputManager input)
     {
-        _hovered = -1;
-
-        if (_board.TryPick(camera.GetPickRay(input.MousePosition), out var local))
-        {
-            for (var i = 0; i < Schemes.All.Length; i++)
-            {
-                var center = ButtonCenter(i);
-
-                if (MathF.Abs(local.X - center.X) <= ButtonSize.X / 2f && MathF.Abs(local.Y - center.Y) <= ButtonSize.Y / 2f)
-                {
-                    _hovered = i;
-                }
-            }
-        }
+        _hovered = shapes.TryPick(input.MousePosition, out var hit) && hit.Tag is int index ? index : -1;
 
         return _hovered >= 0 && input.IsMouseButtonPressed(MouseButton.Left) ? Schemes.All[_hovered].Name : null;
     }
@@ -165,7 +154,9 @@ public sealed class StationBoard
                 shapes.Glow.Additive = true;
             }
 
+            shapes.Tag = i;
             shapes.DrawRectangle(_board.Place(center), _board.AxisX, _board.AxisY, ButtonSize, selected ? accent : Hex.WithAlpha(accent, 210), 0.12f);
+            shapes.Tag = null;
             shapes.Glow.Clear();
 
             _labels.Set($"scheme-{i}", scheme.Name, _board, center.X, center.Y, selected ? fill : accent);
@@ -195,7 +186,7 @@ public sealed class StationBoard
 
     private void DrawCounters(DeckSnapshot snapshot)
     {
-        string[] values = [snapshot.OnDeck.ToString(), snapshot.Released.ToString(), snapshot.Lost.ToString(), snapshot.TotalMass.ToString("0.0")];
+        string[] values = [snapshot.OnDeck.ToString(CultureInfo.InvariantCulture), snapshot.Released.ToString(CultureInfo.InvariantCulture), snapshot.Lost.ToString(CultureInfo.InvariantCulture), snapshot.TotalMass.ToString("0.0", CultureInfo.InvariantCulture)];
 
         for (var i = 0; i < Counters.Length; i++)
         {

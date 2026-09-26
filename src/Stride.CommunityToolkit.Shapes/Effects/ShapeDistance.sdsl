@@ -12,6 +12,10 @@ namespace Stride.CommunityToolkit.Shapes
         {
             // Every shape's points, already shifted and scaled into its own normalized space
             stage StructuredBuffer<float2> Points;
+
+            // The points of every space run: xyz a world position, w the stroke radius there in
+            // world units, 0 for a stroke measured in pixels
+            stage StructuredBuffer<float4> SpacePoints;
         }
 
         float Cross2d(float2 v1, float2 v2)
@@ -25,39 +29,47 @@ namespace Stride.CommunityToolkit.Shapes
         // it is the projection onto the segment. The pattern is fitted so a whole number of periods
         // fills a circle or arc, so a tick ring never ends in a stub.
         //
-        // localPerPixel: local units per screen pixel at this fragment; pattern: dash and gap
-        // lengths and the phase, all in pixels; startDirection: the cut's first edge direction, or
-        // +X when there is no cut. Along a polyline the coordinate is the arc length to the nearest
-        // point of the run, plus runOffset - where this run starts along a longer one - so the
-        // pattern continues across the pieces of a very long run.
-        float SdDashes(float2 p, uint offset, int count, bool hollow, bool cut, float radius, float ringWidth, float sweep, float localPerPixel, float3 pattern, float2 startDirection, bool polyline, float runOffset)
+        // localPerPixelCentre: local units per screen pixel at the shape's centre - one figure for
+        // the whole shape, so every fragment of a ring agrees on how many dashes it holds; measured
+        // per fragment, the near and far sides of a ring seen in perspective disagreed and the
+        // pattern fell apart. A ring's dashes are therefore sized in its own units and foreshorten
+        // with it, like marks painted on the ground. Along a line the coordinate's own screen
+        // derivative gives the local units per pixel in the outline's direction, which holds under
+        // any foreshortening where a figure from depth alone holds only facing the camera.
+        // pattern: dash and gap lengths and the phase, all in pixels; startDirection: the cut's
+        // first edge direction, or +X when there is no cut. Along a polyline the coordinate is the
+        // arc length to the nearest point of the run, plus runOffset - where this run starts along
+        // a longer one - so the pattern continues across the pieces of a very long run.
+        float SdDashes(float2 p, uint offset, int count, bool hollow, bool cut, float radius, float ringWidth, float sweep, float localPerPixel, float localPerPixelCentre, float3 pattern, float2 startDirection, bool polyline, float runOffset)
         {
             float dash = pattern.x;
             float gap = pattern.y;
             float period = dash + gap;
+            float phase = pattern.z;
 
-            float along;
-
-            if (polyline)
-            {
-                along = PolylineAlong(p, offset, count) + runOffset;
-            }
-            else if (count == 1)
+            if (count == 1 && !polyline)
             {
                 float centreline = hollow ? radius - 0.5 * ringWidth : radius;
                 float startAngle = atan2(startDirection.y, startDirection.x);
                 float angle = atan2(p.y, p.x) - startAngle;
 
                 angle -= 2.0 * PI * floor(angle / (2.0 * PI));
-                along = angle * centreline;
 
-                // Fit: stretch or squeeze the period so the turn holds a whole number of them
-                float turnPixels = (cut ? sweep : 2.0 * PI) * centreline / localPerPixel;
-                float periods = max(1.0, round(turnPixels / period));
-                float fitted = turnPixels / periods;
+                // Fit: stretch or squeeze the period so the turn holds a whole number of them,
+                // the pattern then held in local units for the whole ring
+                float turn = (cut ? sweep : 2.0 * PI) * centreline;
+                float periods = max(1.0, round(turn / (period * localPerPixelCentre)));
+                float periodLocal = turn / periods;
+                float dashLocal = periodLocal * dash / period;
 
-                dash *= fitted / period;
-                period = fitted;
+                return SdDashAlong(angle * centreline + phase * localPerPixelCentre, dashLocal, periodLocal, 1.0, 0.0);
+            }
+
+            float along;
+
+            if (polyline)
+            {
+                along = PolylineAlong(p, offset, count) + runOffset;
             }
             else
             {
@@ -67,14 +79,104 @@ namespace Stride.CommunityToolkit.Shapes
                 along = segment > 0.0 ? dot(p - Points[offset], direction / segment) : 0.0;
             }
 
-            float u = along / localPerPixel + pattern.z;
+            // Capped either side of the depth figure: at a crease between two segments the
+            // derivative has nothing to say
+            float alongPerPixel = clamp(length(float2(ddx(along), ddy(along))), 0.25 * localPerPixel, 4.0 * localPerPixel);
+
+            return SdDashAlong(along, dash, period, alongPerPixel, phase);
+        }
+
+        // The dash pattern at a coordinate along the outline: the coordinate in pixels, folded
+        // into one period, and the signed distance to the nearest dash edge - inside a dash the
+        // closer of its two ends, in a gap likewise - returned in local units, negative in a dash.
+        float SdDashAlong(float along, float dash, float period, float localPerPixel, float phase)
+        {
+            float u = along / localPerPixel + phase;
 
             u -= period * floor(u / period);
 
-            // Inside a dash the nearest edge is the closer of its two ends; in a gap likewise
             float d = u < dash ? min(u, dash - u) : -min(u - dash, period - u);
 
             return -d * localPerPixel;
+        }
+
+        // A space point on screen: xy in pixels, y down, from the same projection the vertex stage
+        // uses; z the stroke radius there in pixels; w the depth the rasterizer would give it. A
+        // point behind the camera has its w clamped, which keeps the arithmetic finite; a run that
+        // crosses the near plane is not supported.
+        float4 ProjectSpacePoint(float4 spacePoint, float4x4 viewProjection, float2 viewSize, float pixelsPerUnit)
+        {
+            float4 clip = mul(float4(spacePoint.xyz, 1.0), viewProjection);
+            float w = max(clip.w, 0.0001);
+            float2 ndc = clip.xy / w;
+
+            return float4((ndc.x * 0.5 + 0.5) * viewSize.x, (0.5 - ndc.y * 0.5) * viewSize.y, spacePoint.w * pixelsPerUnit / w, clip.z / w);
+        }
+
+        // Signed distance in pixels from a screen position to a space run: the nearest of its
+        // segments, each one's radius interpolated between its ends, so a world-width stroke
+        // narrows with distance the way a rope does. Negative inside the stroke. Also the depth of
+        // the nearest point of the run, for the fragment to write: depth is affine along a
+        // projected segment, so the screen-space parameter interpolates it exactly.
+        float SdSpacePolyline(float2 pixel, uint offset, int count, float4x4 viewProjection, float2 viewSize, float pixelsPerUnit, out float depth)
+        {
+            float4 previous = ProjectSpacePoint(SpacePoints[offset], viewProjection, viewSize, pixelsPerUnit);
+            float d = length(pixel - previous.xy) - previous.z;
+
+            depth = previous.w;
+
+            for (int i = 1; i < count; ++i)
+            {
+                float4 current = ProjectSpacePoint(SpacePoints[offset + i], viewProjection, viewSize, pixelsPerUnit);
+                float2 e = current.xy - previous.xy;
+                float2 toPixel = pixel - previous.xy;
+                float t = clamp(dot(toPixel, e) / max(dot(e, e), 0.000001), 0.0, 1.0);
+                float2 b = toPixel - e * t;
+                float segment = length(b) - lerp(previous.z, current.z, t);
+
+                if (segment < d)
+                {
+                    d = segment;
+                    depth = lerp(previous.w, current.w, t);
+                }
+
+                previous = current;
+            }
+
+            return d;
+        }
+
+        // Arc length in pixels along a space run's projection to the point of it nearest the
+        // screen position, for a dash pattern: PolylineAlong over the projected points.
+        float SpacePolylineAlong(float2 pixel, uint offset, int count, float4x4 viewProjection, float2 viewSize)
+        {
+            float best = 1e30;
+            float along = 0.0;
+            float travelled = 0.0;
+            float2 previous = ProjectSpacePoint(SpacePoints[offset], viewProjection, viewSize, 0.0).xy;
+
+            for (int i = 1; i < count; ++i)
+            {
+                float2 current = ProjectSpacePoint(SpacePoints[offset + i], viewProjection, viewSize, 0.0).xy;
+                float2 e = current - previous;
+                float2 w = pixel - previous;
+                float ee = max(dot(e, e), 0.000001);
+                float t = clamp(dot(w, e) / ee, 0.0, 1.0);
+                float2 b = w - e * t;
+                float bb = dot(b, b);
+                float segment = sqrt(ee);
+
+                if (bb < best)
+                {
+                    best = bb;
+                    along = travelled + t * segment;
+                }
+
+                travelled += segment;
+                previous = current;
+            }
+
+            return along;
         }
 
         // Distance to a run of points - the nearest of its segments. A stroke of some radius around

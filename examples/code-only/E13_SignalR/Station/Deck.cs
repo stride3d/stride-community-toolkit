@@ -54,7 +54,7 @@ public sealed class Deck(ContainerFactory factory)
     public Container Release(ReleaseRequest request, CommandOrigin origin)
     {
         var size = request.Size ?? _random.GetItems(Enum.GetValues<ContainerSize>(), 1)[0];
-        var paint = request.Paint ?? _random.GetItems(Paints.All, 1)[0];
+        var paint = request.Paint ?? _random.GetItems(Paints.All.AsSpan(), 1)[0];
 
         // A little scatter under the hatch and a random tilt, so no two drops are the same and stacks
         // form by accident rather than by alignment

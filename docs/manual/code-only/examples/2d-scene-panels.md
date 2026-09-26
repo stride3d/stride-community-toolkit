@@ -36,4 +36,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_2D_Panels).
 
-[!code-csharp[](../../../../examples/code-only/E03_2D_Panels/Program.cs?start=1&end=618)]
+[!code-csharp[](../../../../examples/code-only/E03_2D_Panels/Program.cs?start=1&end=635)]

@@ -152,7 +152,7 @@ void AddStaticSquare(Scene scene, Vector2[] vertices, float x, float y)
 {
     var entity = new Entity("StaticSquare")
     {
-        new ShapeComponent { Vertices = vertices, Color = paleGreen }
+        new ShapeComponent { Vertices = [.. vertices], Color = paleGreen }
     };
     entity.Transform.Position = new Vector3(x, y, 0);
     entity.Scene = scene;
@@ -168,7 +168,7 @@ void CreateSensorGate(Scene scene)
 
     var entity = new Entity("SensorGate")
     {
-        new ShapeComponent { Vertices = gateVertices, Color = wheat }
+        new ShapeComponent { Vertices = [.. gateVertices], Color = wheat }
     };
     entity.Transform.Position = new Vector3(0, 22, 0);
     entity.Scene = scene;
@@ -245,7 +245,7 @@ void SpawnBatch(Scene scene, int count)
 /// </summary>
 void Spawn(Scene scene, ShapeDefinition definition, Vector2 position)
 {
-    var component = new ShapeComponent { Vertices = definition.Vertices, Radius = definition.Radius, Color = pink };
+    var component = new ShapeComponent { Vertices = [.. definition.Vertices], Radius = definition.Radius, Color = pink };
     var entity = new Entity("Shape") { component };
 
     var bodyId = simulation!.CreateDynamicBody(entity, new Vector3(position.X, position.Y, 0));

@@ -49,8 +49,8 @@ a border that had to be rebuilt per zoom bucket to look pixel-constant; a fill a
 whose draw order flipped at random between runs (opaque-stage sorting is draw-order dependent per
 material pair); a rewrite of the border as a non-overlapping ring so order could not matter; and
 then the discovery that a transparent material on an *instanced* mesh renders at full opacity in
-Stride 4.4. Days of work for a rectangle with a border. The record is in the example's history and in
-`notes/upstream/`; the lesson is that this path fights the engine at every step because the
+Stride 4.4. Days of work for a rectangle with a border. The record is in the example's history; the
+lesson is that this path fights the engine at every step because the
 engine's mesh pipeline was built for lit, opaque, textured objects, and a debug rectangle is none
 of those.
 
@@ -87,7 +87,7 @@ without copying them.
 ```mermaid
 flowchart LR
     A["Your update loop<br/><i>shapes.DrawRing(...)</i>"] --> B["ShapeBatch<br/>one record per shape:<br/>plane, colours, style<br/>plus its points, any number"]
-    B --> C["Two structured buffers<br/>records and points,<br/>uploaded once per frame"]
+    B --> C["Three structured buffers<br/>records, points and space points,<br/>uploaded once per frame"]
     C --> D["Vertex shader<br/>one quad per instance,<br/>grown to fit the border and glow"]
     D --> E["Fragment shader<br/>reads the record and its points,<br/>signed distance per pixel:<br/>fill, border, glow, dash, cut"]
     E --> F["One instanced draw call<br/>however many shapes"]
@@ -129,8 +129,11 @@ that must always show ([the playground](../code-only/examples/shape-batch.md) ru
 One number decides what a glow reads as, and it is not the width: the glow colour's **alpha**. At
 full alpha the halo is solid colour where it meets the edge and only then falls off, so a thin
 stroke with a six-pixel glow looks like a stroke three times fatter. At 30 to 40 percent it reads
-as light around the stroke, which is the neon look. `Glow.Additive` then makes that light add to
-the scene rather than cover it, which is what a lit thing over a dark ground wants.
+as light around the stroke, which is the neon look. For a glow in each shape's own colour, where there
+is no colour of your own to give an alpha to, `Glow.Strength` is that number: `Glow.Set(10f);
+Glow.Strength = 0.35f;` glows everything the batch draws in its own colour, at a third. `Glow.Additive`
+then makes that light add to the scene rather than cover it, which is what a lit thing over a dark
+ground wants.
 
 ## Flat shapes, anywhere in 3D
 
@@ -147,6 +150,215 @@ Perspective came almost free. The vertex shader passes the clip-space `w` as a v
 interpolates to exactly the fragment's `w`, so a pixel-measured border is scaled correctly under a
 perspective camera; under an orthographic 2D camera `w` is 1 and the 2D path is bit-identical to
 the testbed's, which is how the Box2D examples were verified against it.
+
+One kind of shape is not flat at all. A **space stroke** - `DrawPolyline` or `DrawPixelPolyline`
+handed `Vector3` points - has no plane. The vertex stage projects its points, takes their bounding
+box on screen and hands the pixel stage a screen-aligned quad; the pixel stage measures the run in
+pixels, each segment's radius converted at its own depth. A rope narrows with distance and a trail
+stays the same width, and both face the camera from every angle with no geometry behind them. Each
+fragment writes the depth of the nearest point of the run, so a stroke threads behind and in front
+of geometry the way a mesh does - the cost being that the shape shader writes depth, which gives up
+the early depth rejection every shape used to get for free. Shapes are alpha blended and rarely
+large on screen, so that has not shown in a frame time yet.
+
+That depth buffer works the other way too. The forward renderer resolves the opaque pass's depth
+as a texture before it draws the transparent stage, and offers it to every render feature; the
+shape feature takes it, so a shape can compare its own distance from the camera with the
+scene's at the same pixel. `DepthFade` is that comparison turned into a fade: over the distance
+you give, in world units, a fragment fades out as it approaches whatever is behind it. A marker
+sunk in the floor melts into it instead of ending in a hard line, and a ring standing a hand in
+front of a wall dims over the wall and stays bright where the ground is far behind. It is the soft
+particles trick, and it has the same limit: the depth test still removes what is behind the
+surface, so the fade only softens the approach. On an overlay batch, where nothing is removed, a
+fragment behind the surface fades to nothing instead, which makes the fade a soft depth test of
+its own. A compositor that turns the resolved depth off leaves every shape at its hard cut.
+
+## A picture in a shape
+
+A fill was a flat colour or a two-colour gradient, and every image in a HUD was somebody else's
+problem: a sprite under a frame, aligned by hand, clipped by nothing. Stride's material system had
+the answer already. Any of its `IComputeColor` nodes - a texture with scale, offset and address
+modes, a blend of two nodes, a custom shader class - can be composed into a shader with one
+`compose` line, and the shape shader takes that plug for its fill. `ShapeBatch.FillSource` holds
+the node; `FillWith(texture)` installs the common one. Every shape drawn while `Textured` is on
+multiplies its fill by the sample, so a white fill shows the picture as it is, a tint darkens it,
+the fill alpha fades it and a gradient still runs over it, while the border and the glow are
+exactly what they were. The picture spans the shape's bounding box with `(0,0)` at the top left,
+the sprite convention: a rounded panel shows it edge to edge, a disc shows the inscribed square,
+and a thick line stretches it along its own box. What lies past the box, under a thick border, is
+the node's address mode to decide - clamp repeats the edge, wrap tiles.
+
+The composition is resolved when the effect is built, which makes it one fill source per batch,
+the way a sprite batch is one texture per `Begin`. That is less of a constraint than it sounds:
+`Textured` is per draw call, so one batch holds the picture panel and the plain outlines around it,
+which matters because two batches do not order deterministically. A batch with a fill source gets
+its own effect, with the batch's own parameters carrying the node's textures and values; the node
+is re-read every frame, so a scrolling stripe is one assignment to the node's `Offset` in update,
+and only a different composition reloads the effect. A plain batch keeps the shader it always had,
+which the gold scenes confirm.
+
+What it opens is what a picture inside an anti-aliased, outlined, glowing shape opens: a portrait
+in a circular frame, a minimap in a rounded rectangle, a second camera's render target in a
+cockpit mirror, hazard stripes that move, a noise texture behind a shield ring.
+
+## A second camera in a panel
+
+The textured fill's best customer is a picture that changes every frame: another camera's view.
+A rear-view mirror, a security monitor, a picture-in-picture map. `game.AddRenderTextureCamera`
+gives back the texture, and the shape gallery's last station is that call plus a batch with
+`FillWith(feed.Texture)` and a rectangle drawn through it. What the call builds, and the two
+things about it that are not obvious, are on the [render to texture](render-to-texture.md) page.
+
+Every station's shapes appear in the mirror, because a batch is drawn once per view and emptied
+only after the last one - the design decision from the render-feature hygiene pass, now doing the
+job it was made for. The panel appears in its own mirror when the two cameras face each other.
+
+One trap that is nothing to do with rendering, kept here because it cost an evening: `Textured`
+is per-draw state like every other, so a method that turns it off to draw plain brackets over
+the picture has turned it off for every draw that follows, in every later frame, until something
+turns it back on. A blank panel with a perfectly good texture behind it is that.
+
+## On the screen, from the same batch
+
+A 3D game wants a crosshair, a health arc in a corner, a compass strip, a target box - shapes
+that live on the screen, not in the world. Until now the answer was a second, orthographic camera
+and world units that happened to look like pixels, which works when the whole game is 2D and falls
+apart the moment the game is 3D. Now the batch has a switch:
+
+```csharp
+shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed); // in the world
+
+shapes.Screen = true;                                                    // and now in pixels
+var centre = shapes.ScreenSize * 0.5f;
+shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
+shapes.DrawArc(shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(100f, -90f), 50f, -MathF.PI * 0.5f, MathF.Tau * health, Color.LimeGreen, width: 14f);
+shapes.Screen = false;
+```
+
+`Screen` is per-draw state like every other, captured as each call is made, so a HUD and the
+world it sits over come from one batch in submission order - no second camera, no second batch,
+no sort question. Coordinates are pixels from the top left with Y down, like a sprite, so a
+positive angle turns clockwise on screen and the gauge above starts at twelve o'clock. `Corner()`
+places a widget as a corner plus an offset rather than by a hardcoded resolution, and
+`ScreenSize` is the window in the same units.
+
+Those units are the display's *scaled* pixels when `AutoScale` is on, which is the default: a
+layout is the same size to the eye on a 4K laptop and a 1080p monitor, and a pixel-measured width,
+dash or glow means exactly what it means in the world. The shader treats a screen shape as one
+whose world-to-pixel scale is 1, so every feature - the outline band, the anti-aliasing ramp, the
+dash fit, the glow, the textured fill - runs unchanged.
+
+A `Viewport` rectangle offsets everything drawn while it is set, and sizes `Corner()` to it, so a
+chart or a panel draws in its own coordinates and lands where the rectangle is; nothing is clipped
+to it. A screen shape is written at the near plane, so the depth test keeps it over any geometry
+even in a depth-tested batch. The `Screen` switch on the batch and the `Screen` plane mode are
+different things: the mode is a billboard in the world, the switch is a sprite on the glass.
+
+The screen HUD station in the shape gallery draws only while you stand at it, because a HUD is
+on the screen, not on the ring. Gold scene `shapes-screen` pins the pixel mapping, the Y-down
+convention, the viewport offset and the near-plane depth over a depth-tested world disc.
+
+## Why a white HUD came out grey
+
+The shape gallery's frame draws a dotted line from each exhibit up to its label, in `Color.White`,
+and next to the label - which is white - it read as grey. Every variant did: solid, dashed, thin,
+thick, and a line in world units. Measured in a capture, every one of them peaked at 127 out of
+255. Exactly half, and the same half whatever the width, which rules out anti-aliasing and the dash
+ends and points at something that happens to the whole batch.
+
+It is the tone mapper. The batch draws in the scene's transparent stage, into the HDR buffer, and
+the post-processing chain then treats its pixels as scene light: auto exposure scales the frame to
+the lit surfaces, which sit at several times one, and the tone map curve compresses what is left.
+A shape's white is a unit colour, so it lands wherever the exposure puts one - about half, in a
+scene lit for the material gallery - and it moves as the exposure adapts. The text renderers never
+have this problem because they draw after the post effects, in the compositor's UI stage, which is
+why the label beside the line was truly white.
+
+```csharp
+var world = game.AddShapeBatch(depthTest: true);          // a decal: lit, exposed and tone-mapped with the scene
+var hud = game.AddShapeBatch(afterPostEffects: true);     // a HUD: a colour comes out as given
+```
+
+`afterPostEffects` puts the batch in the UI stage, after the chain, where a colour is written as it
+was given. The batch is in the toolkit's UI render group, which the main view leaves out and a second
+camera renderer draws last, so nothing there is depth-tested - that is the trade, and for a HUD it
+is the right one. A compositor without the toolkit's UI stage has no such place, and the batch then
+draws in the transparent stage like any other. Which to use is what the shape *is*: a marker on the
+ground is part of the scene and should be exposed with it; a crosshair, a gauge, a leader line to a
+label, is on the glass and should not.
+
+## Which shape is under the mouse
+
+Sooner or later something drawn wants to be clicked: a HUD button, a chart's hover, a station's
+pad, a tile in a sheet. The obvious tools are the wrong ones. GPU picking reads mesh IDs back from
+a render target, and a shape is not a mesh, so it is invisible to it; a physics collider is a body,
+not a drawing. Four places in this repository once answered the question by hand - a ray against
+a plane, then a rectangle or a disc test in that plane's coordinates - each re-deriving geometry
+the batch already held. The batch is the one thing that knows the exact outline it painted, and
+the functions it painted it with are the distance functions above. So it answers itself, with the
+same functions on the CPU:
+
+```csharp
+shapes.Tag = station;                                    // state, like Fill or Glow
+shapes.DrawRing(station.Origin, Vector3.UnitY, 5.8f, Color.White);
+shapes.Tag = null;
+
+// Next frame, in Update
+if (shapes.TryPick(Input.MousePosition, out var hit) && hit.Tag is Station picked)
+{
+    GoTo(picked);
+}
+```
+
+`Tag` is per-draw state captured as each call is made, like every other property: set it, draw,
+clear it. A shape drawn with no tag can never be picked and costs nothing - the batch records only
+tagged shapes, and only what a distance test needs. The answer comes from the frame last drawn,
+which is the frame on the screen: a script asks between one draw and the next, and "what is under
+the mouse right now" is exactly what the user is looking at.
+
+`TryPick` returns the topmost shape - the nearest to the camera, and at equal depth the one drawn
+last, so a HUD's top layer wins; a screen shape is over everything. `PickAll` returns every hit
+front to back. A hit is a `ShapeHit`: the tag, the world point where the pick lands (pixels for a
+screen shape), the same point in the shape's own plane coordinates - relative to the position it
+was drawn at, in the units its vertices were given in, which is what a board turns into a button
+index or a chart into a value - the signed distance to the outline, and the depth.
+
+Every kind of shape is tested the way the shader draws it. A flat shape in the world is a ray
+against its plane and then the plane's field: the polygon with its rounding radius, the band of a
+ring or an annulus, the wedge of a sector, the run of a polyline with its width. A screen shape is
+pixels straight from the mouse. A billboard and a pixel-measured marker are placed from the view
+the batch was last drawn in, the same right, up and depth the vertex stage used. A space stroke is
+measured on its projection, in pixels, like the pixels themselves. The border counts as part of the
+shape - it straddles the outline, and it is what you see - and `slackPixels` adds a few more, which
+is what makes a one-pixel line or a hairline ring clickable:
+
+```csharp
+shapes.TryPick(Input.MousePosition, out var hit, slackPixels: 4f);
+```
+
+A ring, an arc or a polyline picks on its stroke, because that is the shape; a pad or a button that
+should take a click anywhere inside is a disc or a rectangle with a transparent fill
+(`Fill.Set(null, 0f)`), which paints the same outline and picks as the whole area.
+
+A `ShapeComponent` has a `Pickable` switch, since Game Studio cannot store an object as a tag; a
+pickable component is its own tag, and its entity is one step away.
+
+What a pick cannot see, so you reach for the right tool:
+
+- **Occlusion by the scene.** The batch has no depth buffer on the CPU, so a depth-tested shape
+  behind a wall still picks. GPU picking is the other way round: it sees exactly what is on screen,
+  but only meshes. A game that needs both runs both.
+- **Dashes.** A dashed outline picks as if solid. The gaps are visual.
+- **More than one view.** The batch remembers the last view that drew it; a batch drawn by a
+  render-texture camera and the main camera in the same frame answers for whichever came last.
+- **The first frame.** Nothing has been drawn yet; `CanPick` says so.
+
+The **Picking** station in the shape gallery draws one of everything with a tag and lights up
+whatever the mouse is over, printing the tag, the local coordinates and the distance. The 2D
+panels example highlights the panel under the mouse; the easing sheet's tiles, the galleries' pads
+and the SignalR board's scheme buttons all pick this way now, where each used to carry its own
+ray-and-rectangle maths. `ShapePickTests` holds every kind to a round trip: a known world point
+projected to the screen and picked back.
 
 ## Where it came from, and where it went
 
@@ -166,6 +378,11 @@ would have cost that property for every consumer. It now lives in its own packag
 
 `ShapeComponent` is the small bridge into the entity system: a shape drawn from an entity's
 transform, so a thing can be a shape without a model, and it appears in Game Studio's property grid.
+It needs no `AddShapeBatch` call: where a game made one, the component draws through it and inherits
+its state; otherwise the processor registers a depth-tested batch of its own, which is also what
+draws the shape in the scene editor, where the processor runs and nothing else does.
+
+Writing a shader of your own for a package - where it goes, what the engine already gives you, the dither and the timing scope - is on the contributing page [Shaders in a toolkit package](../../contributing/toolkit/shaders.md).
 
 ## Two scars worth knowing about
 
@@ -200,17 +417,25 @@ Honest limits, so you reach for the right tool:
   pieces that share a point, because every fragment of a stroke tests every segment of its run;
   where two pieces meet the round cap is drawn twice, and under `Opacity` below one that is a
   faintly brighter dot. The playground's line demo draws a 48-point run at half opacity, which is
-  one piece, so nothing shows there.
-- **Flat.** A sphere outline is a billboard disc; a wireframe of an arbitrary mesh needs a
+  one piece, so nothing shows there. A space stroke also restarts its dash pattern at each piece,
+  since a piece cannot know the on-screen length of the pieces before it.
+- **Flat, except for strokes.** A space stroke is the one shape drawn through 3D points. A
+  sphere outline is still a billboard disc; a wireframe of an arbitrary mesh needs a
   different shader (barycentric, `fwidth()`-based) that does not exist yet.
-- **No text, no images.** Pair with World Text; a texture on a shape is a separate project.
-- **No layout, no input.** It draws. If you want a clickable button in the world, you pick it
-  yourself - the SignalR example's `Board` class does it with one ray-plane intersection in board
-  coordinates, and that is about fifteen lines.
+- **Screen shapes are not clipped.** A `Viewport` rectangle places and sizes; a shape that
+  overhangs it is drawn whole. Space strokes are never screen shapes.
+- **No text.** Pair with World Text, or render text to a texture and fill a shape with it.
+- **One fill source per batch.** A composition is resolved when the effect is built, so a batch
+  with two pictures is two batches, or one atlas and a node that selects from it.
+- **No layout.** It draws, and it can say which shape is under a point (above), but it has no
+  buttons, focus or events: a hover and a click are two lines in your `Update`, and anything with
+  layout is Stride UI's job.
 - **One sort decision per batch.** A batch is a single render object with a meaningless bounding
   box, so how it sorts against *transparent meshes* is one decision for all its shapes. Use an
   overlay batch (`depthTest: false`) for things that must never be covered rather than trusting
-  the sort.
+  the sort. The same goes for two batches with shapes in the same frame: the stage orders them, and
+  with meaningless bounds that order can differ from one run to the next, so anything that has to
+  layer deterministically goes through one batch.
 
 ## Which tool, then?
 
@@ -239,6 +464,7 @@ The SignalR example's in-scene console (`E13_SignalR/Station/`) uses every idea 
 | `Labels` | World text entities placed with the board's rotation | Text pairs with shapes, it is not one of them |
 | `DeckEffects` rings | `DrawRing` with `Opacity` fading and radius growing | Opacity multiplies the final alpha |
 | Starfield | 400 `DrawBillboardCircle`s at 380 m in the same batch | `Screen` plane; thousands of shapes, one draw |
+| Screen HUD (shape gallery) | Crosshair, gauge, panel, viewport bar - `Screen = true` in the same batch | Pixels from the top left; `Corner()`; `Viewport` |
 
 Everything above is a few hundred lines of ordinary C# calling a handful of draw methods, which is
 the actual answer to "why wasn't it always done this way": it could have been. The technique is

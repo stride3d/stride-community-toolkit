@@ -52,34 +52,6 @@ public sealed class Board
 
     public Vector3 Place(Vector2 local, float lift = 0.03f) => Place(local.X, local.Y, lift);
 
-    /// <summary>Where a pick ray hits the board, in board coordinates, if it hits the panel at all.</summary>
-    /// <remarks>
-    /// The intersection is done by hand rather than through <c>Ray.Intersects(ref Plane, ...)</c>.
-    /// Stride's <c>Plane(point, normal)</c> stores <c>D = dot(normal, point)</c> while its
-    /// intersection code expects <c>-dot</c>, so the plane it builds is the mirror of the board
-    /// through the origin and the hit lands metres away (see notes/upstream/plane-point-normal-ctor.md).
-    /// A plane through <see cref="Center"/> is one dot product anyway.
-    /// </remarks>
-    public bool TryPick(Ray ray, out Vector2 local)
-    {
-        local = default;
-
-        var facing = Vector3.Dot(Normal, ray.Direction);
-
-        // Parallel to the board, or the board is behind the ray
-        if (MathF.Abs(facing) < 1e-6f) return false;
-
-        var distance = Vector3.Dot(Normal, Center - ray.Position) / facing;
-
-        if (distance < 0f) return false;
-
-        var offset = ray.Position + ray.Direction * distance - Center;
-
-        local = new Vector2(Vector3.Dot(offset, AxisX), Vector3.Dot(offset, AxisY));
-
-        return MathF.Abs(local.X) <= Half.X && MathF.Abs(local.Y) <= Half.Y;
-    }
-
     /// <summary>
     /// The rotation that maps local X, Y and Z onto the given world axes - the form the world-text
     /// renderer reads an entity's orientation in, so text faces along <paramref name="forward"/>.

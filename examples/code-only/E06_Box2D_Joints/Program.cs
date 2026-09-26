@@ -244,7 +244,7 @@ void Reset(Scene scene)
 
 void Ground(Scene scene)
 {
-    var entity = new Entity("Ground") { new ShapeComponent { Vertices = Rectangle(24, 0.5f), Color = paleGreen } };
+    var entity = new Entity("Ground") { new ShapeComponent { Vertices = [.. Rectangle(24, 0.5f)], Color = paleGreen } };
     entity.Transform.Position = new Vector3(0, -0.5f, 0);
     entity.Scene = scene;
     spawned.Add(entity);
@@ -255,7 +255,7 @@ void Ground(Scene scene)
 
 Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 {
-    var entity = new Entity("Static") { new ShapeComponent { Vertices = Rectangle(size.X / 2, size.Y / 2), Color = paleGreen } };
+    var entity = new Entity("Static") { new ShapeComponent { Vertices = [.. Rectangle(size.X / 2, size.Y / 2)], Color = paleGreen } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);
@@ -268,7 +268,7 @@ Entity StaticBox(Scene scene, Vector2 centre, Vector2 size)
 
 Entity DynamicBox(Scene scene, Vector2 centre, Vector2 size, Color color)
 {
-    var entity = new Entity("Box") { new ShapeComponent { Vertices = Rectangle(size.X / 2, size.Y / 2), Color = color } };
+    var entity = new Entity("Box") { new ShapeComponent { Vertices = [.. Rectangle(size.X / 2, size.Y / 2)], Color = color } };
     entity.Transform.Position = new Vector3(centre, 0);
     entity.Scene = scene;
     spawned.Add(entity);

@@ -3,7 +3,6 @@ using E13_SignalR.SignalR;
 using E13_SignalR.Station;
 using E13_SignalR_Shared;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Windows;
 using Stride.Core.Diagnostics;
@@ -46,7 +45,6 @@ var commands = new StationCommands(deck, console);
 StationBoard? board = null;
 FeedBoard? feed = null;
 DeckEffects? effects = null;
-CameraComponent? camera = null;
 
 var uptime = 0f;
 var untilHeartbeat = HeartbeatSeconds;
@@ -70,11 +68,9 @@ void Start(Scene scene)
     game.Window.Title = $"{Constants.StationName} - Stride + SignalR";
     game.Window.AllowUserResizing = true;
 
-    var labels = new Labels(scene, game);
+    var labels = new Labels(scene, game, console);
 
     station.Build(scene, labels, console);
-
-    camera = scene.GetCamera();
 
     // The boards face the camera's starting point, so they are read square-on from there
     board = new StationBoard(labels, console, StationScene.BoardCenter, StationScene.CameraPosition - StationScene.BoardCenter);
@@ -117,7 +113,7 @@ void Start(Scene scene)
     // keeps every open browser tab in the same scheme as the game
     console.SchemeChanged += scheme =>
     {
-        labels.Restyle(console);
+        labels.Restyle();
         console.Note($"Scheme {scheme.Name}");
         link.ReportScheme(scheme.Name);
     };
@@ -131,8 +127,7 @@ void Start(Scene scene)
     // The overlay keeps only what is genuinely keyboard help; everything else is on the boards.
     // Bottom-left is the one corner with nothing behind it.
     var overlay = DebugOverlay.GetOrCreate(game);
-
-    overlay.Position = DisplayPosition.BottomLeft;
+    overlay.SectionGap = 0;
     overlay.AddSection("Station", OverlayLines);
 
     // A screenshot of an empty deck shows nothing. When the capture harness is driving, drop a
@@ -158,7 +153,7 @@ void Update(Scene scene, GameTime time)
 
     HandleKeys();
 
-    if (camera is not null && board!.Pick(game.Input, camera) is { } clicked)
+    if (station.Shapes is { } picking && board!.Pick(picking, game.Input) is { } clicked)
     {
         console.Select(clicked);
     }
@@ -207,14 +202,17 @@ void HandleKeys()
 
 IReadOnlyList<TextElement> OverlayLines()
 {
-    List<TextElement> lines =
-    [
-        new("1 2 3 sizes   SPACE random   B batch", Color.LightGray),
-        new("C clear   X shake   click a scheme", Color.LightGray),
-        new(string.Empty),
-    ];
-
+    List<TextElement> lines = [];
     lines.AddRange(console.MenuLines());
+    lines.AddRange(
+    [
+        new(["1 - 3"], "Drop a container of that size", Color.Gold),
+        new("Space", "Drop a random one", Color.Gold),
+        new("B", "Drop a batch", Color.Gold),
+        new("C", "Clear the deck", Color.Gold),
+        new("X", "Shake", Color.Gold),
+        new("Click", "Pick a scheme", Color.Gold),
+    ]);
 
     return lines;
 }

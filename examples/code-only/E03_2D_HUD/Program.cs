@@ -114,6 +114,7 @@ void Start(Scene scene)
 
     // The top-left of the HUD is left clear for this
     overlay.Position = DisplayPosition.TopLeft;
+    overlay.SectionGap = 0;
     overlay.AddSection("HUD", OverlayLines);
 }
 
@@ -173,8 +174,7 @@ void Update(Scene scene, GameTime gameTime)
 // --- Widgets ---------------------------------------------------------------------------------
 
 /// <summary>
-/// Four L-brackets in the corners: the edge of the canopy glass, the frame of the whole thing.
-/// Each one is a three-point stroke, so the corner is one round join rather than two lines meeting.
+/// Four L-brackets in the corners: the edge of the canopy glass, the frame of the whole thing. Each one is a three-point stroke, so the corner is one round join rather than two lines meeting.
 /// </summary>
 void DrawFrame(Scheme theme)
 {
@@ -193,9 +193,7 @@ void DrawFrame(Scheme theme)
 }
 
 /// <summary>
-/// The compass strip: a window onto a 360-degree ruler that scrolls as the heading changes, with
-/// the current heading boxed under a centre marker. The tick labels are ten text components reused
-/// for whichever multiples of ten are in the window this frame.
+/// The compass strip: a window onto a 360-degree ruler that scrolls as the heading changes, with the current heading boxed under a centre marker. The tick labels are ten text components reused for whichever multiples of ten are in the window this frame.
 /// </summary>
 void DrawHeadingTape(Vector2 center, float width, Scheme theme)
 {
@@ -262,8 +260,7 @@ void DrawHeadingTape(Vector2 center, float width, Scheme theme)
 }
 
 /// <summary>
-/// The gun-sight: two rings, four gaps, a dot. The sight is projected light on the canopy, so it
-/// carries a small additive glow - light added to the dark behind it, never a shadow.
+/// The gun-sight: two rings, four gaps, a dot. The sight is projected light on the canopy, so it carries a small additive glow - light added to the dark behind it, never a shadow.
 /// </summary>
 void DrawReticle(Vector2 center, Scheme theme)
 {
@@ -292,8 +289,7 @@ void DrawReticle(Vector2 center, Scheme theme)
 }
 
 /// <summary>
-/// Pitch lines every ten degrees, sliding vertically with the ship's pitch. Positive lines are
-/// solid and negative ones broken, the convention every aircraft HUD shares.
+/// Pitch lines every ten degrees, sliding vertically with the ship's pitch. Positive lines are solid and negative ones broken, the convention every aircraft HUD shares.
 /// </summary>
 void DrawPitchLadder(Vector2 center, Scheme theme)
 {
@@ -324,8 +320,7 @@ void DrawPitchLadder(Vector2 center, Scheme theme)
 }
 
 /// <summary>
-/// A vertical tape with a moving fill, a threshold mark and the value boxed beside it - the VEL
-/// and ALT tapes either side of the sight.
+/// A vertical tape with a moving fill, a threshold mark and the value boxed beside it - the VEL and ALT tapes either side of the sight.
 /// </summary>
 void DrawVerticalGauge(Vector2 center, float height, float value, string key, Scheme theme)
 {
@@ -378,9 +373,7 @@ void DrawVerticalGauge(Vector2 center, float height, float value, string key, Sc
 }
 
 /// <summary>
-/// Range rings, a cross-hair, a sweep that leaves a fading wedge behind it, and the contacts it
-/// finds. The range rings are dashed rings, one shape each; the sweep's leading edge is the one
-/// bright thing on the scope, and adds its light.
+/// Range rings, a cross-hair, a sweep that leaves a fading wedge behind it, and the contacts it finds. The range rings are dashed rings, one shape each; the sweep's leading edge is the one bright thing on the scope, and adds its light.
 /// </summary>
 void DrawRadar(Vector2 center, float radius, Scheme theme)
 {
@@ -439,8 +432,7 @@ void DrawRadar(Vector2 center, float radius, Scheme theme)
 }
 
 /// <summary>
-/// The chat-style log in the corner: a framed panel with a header strip and six lines that scroll
-/// as messages arrive. A panel inside a panel, which is how a real HUD groups things.
+/// The chat-style log in the corner: a framed panel with a header strip and six lines that scroll as messages arrive. A panel inside a panel, which is how a real HUD groups things.
 /// </summary>
 void DrawCommsPanel(Vector2 center, Vector2 size, Scheme theme)
 {
@@ -468,8 +460,7 @@ void DrawCommsPanel(Vector2 center, Vector2 size, Scheme theme)
 }
 
 /// <summary>
-/// A ring gauge: a dim track, a bright arc that grows clockwise from the top, a tick ring outside
-/// it and the figure in the middle. Three of them along the bottom, one of which turns amber.
+/// A ring gauge: a dim track, a bright arc that grows clockwise from the top, a tick ring outside it and the figure in the middle. Three of them along the bottom, one of which turns amber.
 /// </summary>
 void DrawRingGauge(Vector2 center, float radius, float value, string key, Color colour, Scheme theme)
 {
@@ -494,8 +485,7 @@ void DrawRingGauge(Vector2 center, float radius, float value, string key, Color 
 }
 
 /// <summary>
-/// A framed trace of the last few seconds of a signal: sixty-four samples as one stroke with round
-/// joins, glowing like a phosphor trace.
+/// A framed trace of the last few seconds of a signal: sixty-four samples as one stroke with round joins, glowing like a phosphor trace.
 /// </summary>
 void DrawSparkline(Vector2 center, Vector2 size, Scheme theme)
 {
@@ -551,8 +541,7 @@ void DrawBarChart(Vector2 center, Vector2 size, Scheme theme)
 }
 
 /// <summary>
-/// The panel with a header and three labelled bars. Hull, shield and fuel: the shield is the one
-/// that moves, and the one whose colour is not the theme's when it is low.
+/// The panel with a header and three labelled bars. Hull, shield and fuel: the shield is the one that moves, and the one whose colour is not the theme's when it is low.
 /// </summary>
 void DrawSystemsPanel(Vector2 center, Vector2 size, Scheme theme)
 {
@@ -581,8 +570,7 @@ void DrawSystemsPanel(Vector2 center, Vector2 size, Scheme theme)
 }
 
 /// <summary>
-/// Amber when something needs attention, red when it needs it now, and quietly nominal the rest of
-/// the time. The one panel whose colour the theme never decides.
+/// Amber when something needs attention, red when it needs it now, and quietly nominal the rest of the time. The one panel whose colour the theme never decides.
 /// </summary>
 void DrawWarningStrip(Vector2 center, Scheme theme)
 {
@@ -608,8 +596,7 @@ void DrawWarningStrip(Vector2 center, Scheme theme)
 }
 
 /// <summary>
-/// The bracket that follows a target: four corners with a gap between them, breathing on a sine,
-/// and the range under it. The one widget that moves across the whole sight.
+/// The bracket that follows a target: four corners with a gap between them, breathing on a sine, and the range under it. The one widget that moves across the whole sight.
 /// </summary>
 void DrawTargetBox(Scheme theme)
 {
@@ -632,9 +619,7 @@ void DrawTargetBox(Scheme theme)
 }
 
 /// <summary>
-/// One of four status tiles on the right: a name, a count and a segmented bar. The selected one is
-/// bright and glows; the idle ones are dim. Selected against idle is the pair every UI needs, and it
-/// is all in three numbers - border width, fill alpha and glow.
+/// One of four status tiles on the right: a name, a count and a segmented bar. The selected one is bright and glows; the idle ones are dim. Selected against idle is the pair every UI needs, and it is all in three numbers - border width, fill alpha and glow.
 /// </summary>
 void DrawStatusTile(Vector2 center, Vector2 size, int index, Scheme theme)
 {
@@ -662,8 +647,7 @@ void DrawStatusTile(Vector2 center, Vector2 size, int index, Scheme theme)
 }
 
 /// <summary>
-/// The buttons along the bottom right: one active, one disabled at 35%, the rest idle. Disabled is
-/// every colour at a fraction of its alpha, which is the case that argues for an opacity on the batch.
+/// The buttons along the bottom right: one active, one disabled at 35%, the rest idle. Disabled is every colour at a fraction of its alpha, which is the case that argues for an opacity on the batch.
 /// </summary>
 void DrawModeButton(Vector2 center, Vector2 size, int index, Scheme theme)
 {
@@ -701,9 +685,7 @@ void ChamferedPanel(Vector2 center, Vector2 size, float cut, Color colour)
 }
 
 /// <summary>
-/// A dashed ring - a tick ring, a range ring, a dial's scale - as one shape. The dash and gap are
-/// pixels, the same at any zoom; the batch fits a whole number of them round the turn, so it never
-/// ends in a stub. The phase is pixels too: advance it and the ring turns.
+/// A dashed ring - a tick ring, a range ring, a dial's scale - as one shape. The dash and gap are pixels, the same at any zoom; the batch fits a whole number of them round the turn, so it never ends in a stub. The phase is pixels too: advance it and the ring turns.
 /// </summary>
 void DashedRing(Vector2 center, float radius, float dashPixels, float gapPixels, Color colour, float phasePixels)
 {
@@ -746,9 +728,7 @@ void Style(float border, float fillAlpha, Color? fill = null, float glow = 0f, C
 // --- Text ------------------------------------------------------------------------------------
 
 /// <summary>
-/// Every text component, created once with its font and size, so each frame only moves it and
-/// sets its string. Anything a theme decides is set through the restyle delegate that
-/// <see cref="ApplyTheme"/> re-runs.
+/// Every text component, created once with its font and size, so each frame only moves it and sets its string. Anything a theme decides is set through the restyle delegate that <see cref="ApplyTheme"/> re-runs.
 /// </summary>
 void CreateLabels(Scene scene)
 {
@@ -871,15 +851,22 @@ void ApplyTheme(int index)
 
 IReadOnlyList<TextElement> OverlayLines()
 {
-    List<TextElement> lines =
-    [
-        new($"{lastShapeCount} shapes in one draw call, {labels.Count} labels", Color.LightGreen),
-        new(paused ? "SPACE - resume" : "SPACE - freeze the ship", Color.Yellow),
-        new("TAB - select the next status tile", Color.Yellow),
-        new(string.Empty),
-    ];
+    List<TextElement> lines = [];
 
-    if (themeMenu is not null) lines.AddRange(themeMenu.GetLines());
+    if (themeMenu is not null)
+    {
+        lines.AddRange(themeMenu.GetLines());
+        lines.Add(new(string.Empty));
+    }
+
+    lines.AddRange(
+    [
+        new("Space", paused ? "Resume" : "Freeze the ship", Color.Yellow),
+        new("Tab", "Select the next status tile", Color.Yellow),
+    ]);
+
+    lines.Add(new(string.Empty));
+    lines.Add(new($"{lastShapeCount} shapes in one draw call, {labels.Count} labels", Color.LightGreen));
 
     return lines;
 }
@@ -903,9 +890,7 @@ sealed record Label(Entity Entity, WorldTextComponent Text, float LineHeight);
 readonly record struct Contact(float Angle, float Distance, bool Hostile);
 
 /// <summary>
-/// The ship that flies itself: every figure is a function of time, which is what lets SPACE freeze
-/// it by freezing the clock. Nothing here is physics; it is whatever makes each widget move
-/// through its whole range within a minute.
+/// The ship that flies itself: every figure is a function of time, which is what lets SPACE freeze it by freezing the clock. Nothing here is physics; it is whatever makes each widget move through its whole range within a minute.
 /// </summary>
 sealed class ShipState
 {
@@ -1051,7 +1036,7 @@ tags:
 related:
   - E03_2D_Panels
   - E03_3D_WorldText
-  - E11_3D_ShapeBatch
+  - E11_3D_ShapeBatch_Gallery
 enabled: true
 created: 2026-09-06
 ---

@@ -31,6 +31,12 @@ internal readonly struct ShapeInstance
     /// <summary>Bit 5 of the GPU flags: the glow adds light rather than covering what is behind it.</summary>
     internal const int AdditiveGlowFlag = 32;
 
+    /// <summary>The fill is multiplied by the batch's fill source.</summary>
+    internal const int TexturedFlag = 128;
+
+    /// <summary>Position and points are pixels from the top left of the viewport, not a plane in the world.</summary>
+    internal const int ScreenFlag = 256;
+
     /// <summary>xyz: world position of the local origin; w: plane mode.</summary>
     public readonly Vector4 Position;
 
@@ -72,25 +78,25 @@ internal readonly struct ShapeInstance
     private readonly DashData _dash;
     private readonly GradientData _gradient;
 
-    internal ShapeInstance(in ShapePlane plane, in ShapeStyle style, in ShapeSlice slice, Vector2 center, float localScale, int pointOffset, int count, float radius, float scale)
+    internal ShapeInstance(in ShapePlane plane, in ShapeStyle style, in ShapeSlice slice, in ShapePointRun run, float radius, float scale)
     {
         Position = new Vector4(plane.Origin, (float)plane.Mode);
         AxisX = new Vector4(plane.AxisX, style.BorderWidth);
         AxisY = new Vector4(plane.AxisY, style.FillAlpha);
-        Center = center;
-        LocalScale = localScale;
+        Center = run.Center;
+        LocalScale = run.LocalScale;
         Scale = scale;
-        PointOffset = pointOffset;
-        Count = count;
+        PointOffset = run.Offset;
+        Count = run.Count;
         Radius = radius;
-        Flags = slice.Flags | (style.Gradient.Enabled ? GradientFlag : 0) | (style.GlowAdditive ? AdditiveGlowFlag : 0);
+        Flags = slice.Flags | (style.Gradient.Enabled ? GradientFlag : 0) | (style.Glow.Additive ? AdditiveGlowFlag : 0) | (style.Textured ? TexturedFlag : 0) | (style.Screen ? ScreenFlag : 0);
         Color = style.Color;
         FillColor = style.FillColor;
-        GlowColor = style.GlowColor;
+        GlowColor = style.Glow.Color;
         GradientColor = style.Gradient.Color;
-        _slice = new SliceData(slice.RingWidth, slice.StartAngle, slice.SweepAngle, style.GlowWidth);
+        _slice = new SliceData(slice.RingWidth, slice.StartAngle, slice.SweepAngle, style.Glow.Width);
         _dash = new DashData(style.Dash.Length, style.Dash.Gap, style.Dash.Phase, slice.RunOffset);
-        _gradient = new GradientData(style.Gradient.Direction, style.Opacity);
+        _gradient = new GradientData(style.Gradient.Direction, style.Opacity, style.DepthFade);
     }
 
     /// <summary>Which part of the shape is kept, plus the glow width in the spare slot.</summary>
@@ -143,7 +149,7 @@ internal readonly struct ShapeInstance
         }
     }
 
-    /// <summary>The fill gradient's direction, plus the opacity in the spare slot.</summary>
+    /// <summary>The fill gradient's direction, plus the opacity and the soft depth fade in the spare slots.</summary>
     [StructLayout(LayoutKind.Sequential)]
     private readonly struct GradientData
     {
@@ -153,13 +159,14 @@ internal readonly struct ShapeInstance
         /// <summary>A multiplier on every alpha the shape produces.</summary>
         public readonly float Opacity;
 
-        private readonly float _pad;
+        /// <summary>Distance in world units over which the shape fades out as it nears scene geometry; 0 for a hard cut.</summary>
+        public readonly float DepthFade;
 
-        internal GradientData(Vector2 direction, float opacity)
+        internal GradientData(Vector2 direction, float opacity, float depthFade)
         {
             Direction = direction;
             Opacity = opacity;
-            _pad = 0f;
+            DepthFade = depthFade;
         }
     }
 }

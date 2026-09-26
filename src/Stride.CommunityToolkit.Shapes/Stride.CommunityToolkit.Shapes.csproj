@@ -29,4 +29,8 @@ Ported from the Box2D testbed's solid_polygon shader (Erin Catto, MIT) and exten
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
-</Project>
+    <ItemGroup>
+        <InternalsVisibleTo Include="Stride.CommunityToolkit.Tests" />
+    </ItemGroup>
+
+</Project>
