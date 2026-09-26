@@ -143,6 +143,40 @@ Both are more specific than the `Stride.*` mapped to the Stride dev feed. NuGet 
 matching prefix, so the toolkit packages come from the local feed without disturbing how Stride
 packages resolve.
 
+### Testing the packages on Linux from WSL
+
+The same feed serves a project built inside WSL, since WSL mounts the Windows drives under `/mnt`.
+On Windows the pack script also writes `bin/packages/NuGet.wsl.config`: the feed by its `/mnt` path,
+plus nuget.org and the Stride dev feed, because a Linux NuGet has no machine-wide configuration
+mapping them and a source that is not mapped is never consulted. Copy it next to the project under
+WSL as `NuGet.config`, and reference the exact versions the feeds hold: the toolkit at `99.0.0-dev`,
+Stride at the version in the dev feed.
+
+Four things that cost a day each the first time:
+
+1. **A same-version repack is invisible to NuGet under WSL too.** After every pack, delete the
+   extractions and the resolver's cache in the distribution, then restore again:
+   `rm -rf ~/.nuget/packages/stride.communitytoolkit*/99.0.0-dev ~/.nuget/packages/stride.*/<version> /tmp/StrideNugetResolver-*`.
+   To make the asset steps rerun as well, delete the game's `obj/stride`, the `*.Linux/obj/Debug/stride`
+   folder and `Bin/Linux/Debug/data`.
+2. **A self-built Stride dev feed must include Vulkan.** The engine's `build/Stride.Local.props`
+   defaults `StrideGraphicsApis` to Direct3D11 only, and a Direct3D11-only `Stride.Graphics` on
+   Linux fails inside the skybox compile with a null reference in `Silk.NET.DXGI.GetApi`. Pack the
+   engine with `StrideGraphicsApiDependentBuildAll=true`, which is what its CI passes.
+3. **Use Microsoft's .NET build, not the distribution's package.** Ubuntu's apt `dotnet` reports a
+   distribution-specific runtime identifier and ships only the 1xx SDK band, whose Roslyn is older
+   than the one Stride's analyzers target, so the engine's source generators are silently skipped
+   (`CS9057`) and serializer registration never happens. Install the matching band with
+   `dotnet-install.sh --channel 10.0.4xx`.
+4. **The asset compiler under WSL needs `libgomp1`** (the texture compressor links it) and, on a
+   build where the SDK has switched NuGet signature verification on for its child processes,
+   `DOTNET_NUGET_SIGNATURE_VERIFICATION=false dotnet build` until the compiler learns the SDK's
+   trust store. Rerun with `-tl:off` to see the errors the terminal logger hides.
+
+A game that shows no window but burns several cores is WSLg's RDP client not running; `wsl --shutdown`
+and reopen. Rendering goes through Mesa's software Vulkan, so it is CPU-bound, and SDL there is X11
+only.
+
 ## Testing local packages inside this repository
 
 The examples reference the libraries by `ProjectReference`, which always wins over a package. To test
