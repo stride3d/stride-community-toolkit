@@ -59,6 +59,9 @@ public sealed class HudCanvas
 
     public HudTheme Theme { get; private set; }
 
+    /// <summary>The pattern of the panels' glass.</summary>
+    public GlassPattern Glass { get; set; }
+
     /// <summary>The ship's clock in seconds. It stops when the ship is frozen.</summary>
     public float Time { get; private set; }
 

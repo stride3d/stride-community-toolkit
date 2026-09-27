@@ -22,9 +22,11 @@ using Stride.Rendering.Materials.ComputeColors;
 //   *Widget.cs      one widget each
 //
 // T opens the colour schemes and 1 to 9 and 0 pick one. Click a contact, a wing tile, a mode button
-// or a corner of the power triangle. TAB selects the next wing tile and SPACE freezes the ship.
+// or a corner of the power triangle. TAB selects the next wing tile, G changes the panels' glass
+// and SPACE freezes the ship.
 //
-// "--scheme 0" starts in a scheme by its key. "--pointer 0.5,0.5" holds the pointer at a position,
+// "--scheme 0" starts in a scheme by its key and "--glass squares" in a glass pattern.
+// "--pointer 0.5,0.5" holds the pointer at a position,
 // from 0,0 top left to 1,1 bottom right, and clicks there once: what a screenshot needs to show a
 // hover.
 
@@ -32,11 +34,12 @@ const float ViewHeight = 19f;
 
 var ship = new ShipState();
 var hud = new Hud(ship);
-var clock = new ComputeFloat4();
+var glassSettings = new ComputeFloat4();
 var paused = false;
 var time = 0f;
 var shapeCount = 0;
 var themeIndex = SchemeFromArguments(args);
+var glassPattern = GlassFromArguments(args);
 var heldPointer = PointerFromArguments(args);
 var heldPointerClicked = false;
 
@@ -63,7 +66,7 @@ void Start(Scene scene)
 
     // One batch for everything. Its fill source is the panels' glass, a shader class of the
     // example's own, which only the shapes drawn as textured sample.
-    var glass = new ComputeShaderClassColor { MixinReference = "HudGlass", CompositionNodes = { ["Clock"] = clock } };
+    var glass = new ComputeShaderClassColor { MixinReference = "HudGlass", CompositionNodes = { ["Settings"] = glassSettings } };
     var shapes = game.AddShapeBatch(fill: glass);
 
     canvas = new HudCanvas(game, scene, shapes, HudTheme.All[themeIndex]);
@@ -94,6 +97,7 @@ void Update(Scene scene, GameTime gameTime)
 
     if (game.Input.IsKeyPressed(Keys.Space)) paused = !paused;
     if (game.Input.IsKeyPressed(Keys.Tab)) ship.SelectedWing = (ship.SelectedWing + 1) % ship.Wing.Length;
+    if (game.Input.IsKeyPressed(Keys.G)) glassPattern = glassPattern == GlassPattern.Lines ? GlassPattern.Squares : GlassPattern.Lines;
 
     if (!paused)
     {
@@ -104,7 +108,9 @@ void Update(Scene scene, GameTime gameTime)
     // The power setting follows the pointer, so it moves while the ship is frozen too
     ship.Power.Advance(elapsed);
 
-    clock.Value = new Vector4(time, 0f, 0f, 0f);
+    // What the glass shader reads: x is the clock, y the pattern
+    glassSettings.Value = new Vector4(time, (float)glassPattern, 0f, 0f);
+    canvas.Glass = glassPattern;
 
     var pointer = heldPointer ?? game.Input.MousePosition;
     var clicked = heldPointer is null ? game.Input.IsMouseButtonPressed(MouseButton.Left) : !heldPointerClicked && canvas.Shapes.CanPick;
@@ -133,6 +139,7 @@ IReadOnlyList<TextElement> OverlayLines()
     [
         new("Click", "Contact, wing tile, mode, power corner", Color.Yellow),
         new("Tab", "Select the next wing tile", Color.Yellow),
+        new("G", $"Glass: {glassPattern}", Color.Yellow),
         new("Space", paused ? "Resume" : "Freeze the ship", Color.Yellow),
         new(string.Empty),
         new($"{shapeCount} shapes in one draw call, {canvas?.LabelCount ?? 0} labels", Color.LightGreen),
@@ -151,6 +158,13 @@ static int SchemeFromArguments(string[] args)
     if (at < 0 || at + 1 >= args.Length || !int.TryParse(args[at + 1], out var key) || key is < 0 or > 9) return 0;
 
     return key == 0 ? 9 : key - 1;
+}
+
+static GlassPattern GlassFromArguments(string[] args)
+{
+    var at = Array.IndexOf(args, "--glass");
+
+    return at >= 0 && at + 1 < args.Length && Enum.TryParse<GlassPattern>(args[at + 1], ignoreCase: true, out var pattern) ? pattern : GlassPattern.Lines;
 }
 
 static Vector2? PointerFromArguments(string[] args)
@@ -181,22 +195,22 @@ order: 76
 description:
   en: |-
     A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file. A
-    rounded frame holds three columns of panels: a radar, a contacts table and a comms log on the
+    frame with cut corners holds three columns of panels: a radar, a contacts table and a comms log on the
     left, the heading tape, the sight with its pitch ladder, the speed and altitude tapes, two
     traces, a spectrum, ring gauges and the systems bars in the middle, and the target, the wing,
     the power triangle and the mode buttons on the right. Panels are interactive: click a contact
     to target it, a wing tile to select it, a mode button to switch it, a corner of the triangle to
-    move power there. The panels' glass is a shader fill. Ten colour schemes switch live, nine in
-    one colour and one that colours by function. Every shape is in one draw call and the ship flies
+    move power there. The panels' glass is a shader fill with two patterns, lines and squares. Ten
+    colour schemes switch live, nine in one colour and one that colours by function. Every shape is in one draw call and the ship flies
     itself.
   cs: |-
-    HUD kokpitu složený z tvarů a textu ve světě, jeden widget v jednom souboru. Zaoblený rám drží
+    HUD kokpitu složený z tvarů a textu ve světě, jeden widget v jednom souboru. Rám se zkosenými rohy drží
     tři sloupce panelů: vlevo radar, tabulku kontaktů a komunikační log, uprostřed pásku kurzu,
     zaměřovač se žebříkem sklonu, pásky rychlosti a výšky, dvě křivky signálu, spektrum, kruhové
     ukazatele a pruhy systémů, vpravo cíl, letku, trojúhelník rozdělení energie a tlačítka režimů.
     Panely jsou interaktivní: kliknutím na kontakt se z něj stane cíl, kliknutím na dlaždici letky
     se vybere, tlačítko režimu se přepne a roh trojúhelníku přesune energii. Sklo panelů je výplň
-    shaderem. Deset barevných schémat lze přepínat za běhu, devět jednobarevných a jedno, které
+    shaderem se dvěma vzory, linkami a čtverci. Deset barevných schémat lze přepínat za běhu, devět jednobarevných a jedno, které
     barví podle funkce. Všechny tvary jsou v jednom volání a loď letí sama.
 concepts:
   - Splitting a HUD into one widget per file, each drawing inside the rectangle it is given
@@ -205,6 +219,7 @@ concepts:
   - Hover and click through ShapeBatch picking - tag a shape, ask the batch what is under the pointer
   - Invisible tagged discs as hit areas for small things
   - A shader class as the batch's fill source, sampled only by the shapes drawn as textured
+  - One shader with two patterns, chosen by a value composed in from C#
   - A theme that answers roles, so one scheme can colour by function
   - Values that ease towards their target for hover, selection and a fade-in on a scheme change
   - A trace sampled as a function of time, so it scrolls every frame

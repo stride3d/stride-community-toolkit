@@ -41,7 +41,7 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
         canvas.Style(0f, 1f, colour.WithAlpha(0.45f), gradientTo: colour.WithAlpha(0f), gradientAlong: new Vector2(-MathF.Sin(middle), MathF.Cos(middle)));
         canvas.Shapes.DrawSector(center, radius - 0.03f, sweep, Trail, colour);
 
-        canvas.Style(HudCanvas.Thin, 0f, glow: 6f, glowColour: glow, additive: true);
+        canvas.Style(HudCanvas.Thin, 0f, glow: 1.5f, glowColour: glow, additive: true);
         canvas.Line(center, center + Direction(sweep) * radius, HudCanvas.Thick, colour);
 
         for (var i = 0; i < ship.Contacts.Length; i++)

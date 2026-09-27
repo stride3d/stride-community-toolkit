@@ -2,6 +2,16 @@ using Stride.Core.Mathematics;
 
 namespace E03_2D_HUD;
 
+/// <summary>The pattern of a panel's glass. The values are what the shader reads.</summary>
+public enum GlassPattern
+{
+    /// <summary>A dark scanline every four pixels.</summary>
+    Lines,
+
+    /// <summary>Five-pixel squares, each at one of five opacities.</summary>
+    Squares,
+}
+
 /// <summary>
 /// The frame every panel shares: a chamfered outline over the ground colour, the glass shader over
 /// that, and an optional header with a title. The frame brightens while the pointer is over the
@@ -37,8 +47,9 @@ public static class HudPanel
         canvas.ChamferedPanel(bounds.Center, bounds.Size, Cut, accent.WithAlpha(0.55f + 0.45f * hover));
         canvas.Shapes.Tag = null;
 
-        // The glass over it: the batch's fill source, tinted by the accent
-        canvas.Style(0f, 0.16f, accent, textured: true);
+        // The glass over it: the batch's fill source, tinted by the accent. Squares cover less of
+        // the panel than lines, so they are drawn stronger.
+        canvas.Style(0f, canvas.Glass == GlassPattern.Squares ? 0.3f : 0.16f, accent, textured: true);
         canvas.ChamferedPanel(bounds.Center, bounds.Size - new Vector2(0.08f), Cut, accent);
 
         if (title is null) return bounds.Inset(Margin);

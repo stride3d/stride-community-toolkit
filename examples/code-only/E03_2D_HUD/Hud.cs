@@ -3,7 +3,7 @@ using Stride.Core.Mathematics;
 namespace E03_2D_HUD;
 
 /// <summary>
-/// The layout: a rounded frame and three columns of widgets inside it, stacked top down. One
+/// The layout: a frame with cut corners and three columns of widgets inside it, stacked top down. One
 /// padding separates the frame from the columns, the columns from each other and the widgets in a
 /// column. A widget draws inside the rectangle it is given, so moving one is moving a line here.
 /// </summary>
@@ -13,7 +13,8 @@ public sealed class Hud
     public const float Height = 18f;
     public const float Padding = 0.4f;
 
-    private const float Corner = 0.8f;
+    // The frame's corners are cut as much as a panel's
+    private const float Cut = HudPanel.Cut;
     private const float SideColumn = 8f;
     private const float Tape = 2.6f;
 
@@ -58,8 +59,8 @@ public sealed class Hud
     }
 
     /// <summary>
-    /// The edge of the canopy glass: a rounded outline, with each corner drawn again brighter as an
-    /// arc and two short arms.
+    /// The edge of the canopy glass: an outline with its corners cut at 45 degrees, like the
+    /// panels, and each corner drawn again brighter as one stroke with two short arms.
     /// </summary>
     private static void DrawFrame(HudCanvas canvas, HudRect frame)
     {
@@ -67,24 +68,33 @@ public sealed class Hud
 
         var theme = canvas.Theme;
         var accent = theme.For(HudRole.Frame);
+        var half = frame.Size / 2f;
+
+        ReadOnlySpan<Vector2> outline =
+        [
+            new(-half.X + Cut, -half.Y), new(half.X - Cut, -half.Y), new(half.X, -half.Y + Cut), new(half.X, half.Y - Cut),
+            new(half.X - Cut, half.Y), new(-half.X + Cut, half.Y), new(-half.X, half.Y - Cut), new(-half.X, -half.Y + Cut),
+        ];
 
         canvas.Style(HudCanvas.Thin, 0f);
-        canvas.Shapes.DrawRectangle(new Vector3(frame.Center, 0f), Vector3.UnitX, Vector3.UnitY, frame.Size, theme.Dim(HudRole.Frame), Corner);
+        canvas.Shapes.DrawPixelPolyline(outline, new Vector3(frame.Center, 0f), Vector3.UnitX, Vector3.UnitY, HudCanvas.Thin, theme.Dim(HudRole.Frame), closed: true);
 
         canvas.Style(HudCanvas.Thick, 0f, glow: 4f, glowColour: theme.Glow, additive: true);
 
-        // Counter-clockwise from the top right, a quarter turn each
-        ReadOnlySpan<Vector2> sides = [new(1f, 1f), new(-1f, 1f), new(-1f, -1f), new(1f, -1f)];
-
-        for (var i = 0; i < sides.Length; i++)
+        foreach (var side in (ReadOnlySpan<Vector2>)[new(1f, 1f), new(-1f, 1f), new(-1f, -1f), new(1f, -1f)])
         {
-            var side = sides[i];
-            var corner = frame.Center + side * (frame.Size / 2f);
-            var center = corner - side * Corner;
+            var corner = frame.Center + side * half;
 
-            canvas.Shapes.DrawArc(center, Corner, i * MathF.PI / 2f, MathF.PI / 2f, accent);
-            canvas.Line(new Vector2(center.X, corner.Y), new Vector2(center.X - side.X * Arm, corner.Y), HudCanvas.Thick, accent);
-            canvas.Line(new Vector2(corner.X, center.Y), new Vector2(corner.X, center.Y - side.Y * Arm), HudCanvas.Thick, accent);
+            // Along the top or bottom edge, down the cut, along the left or right edge
+            ReadOnlySpan<Vector2> stroke =
+            [
+                corner - new Vector2(side.X * (Cut + Arm), 0f),
+                corner - new Vector2(side.X * Cut, 0f),
+                corner - new Vector2(0f, side.Y * Cut),
+                corner - new Vector2(0f, side.Y * (Cut + Arm)),
+            ];
+
+            canvas.Shapes.DrawPixelPolyline(stroke, HudCanvas.Thick, accent);
         }
     }
 }
