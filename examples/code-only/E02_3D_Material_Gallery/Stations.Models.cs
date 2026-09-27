@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
+using Stride.Rendering;
 using Stride.Graphics.GeometricPrimitives;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
@@ -162,4 +163,106 @@ public static class ModelStations
     }
 
     private sealed record ShellState(HighlightShell Shell, IReadOnlyList<ModelComponent> Targets);
+
+    /// <summary>
+    /// What changing a material at runtime reaches, on three teapots that share one model: an override on
+    /// one entity's component, the shared model's material, which every entity follows, an override over
+    /// that, one slot's shadow, the culling of a pass, and a material rebuilt from its kept descriptor.
+    /// Each variation flips its one change every second and a half while you watch; the engine picks it
+    /// up on the next frame, and only the rebuild compiles anything. V cycles them.
+    /// </summary>
+    public static void AtRuntime(MaterialStation s)
+    {
+        s.Clear();
+
+        var variation = s.Pick(
+            "one entity overridden, on and off",
+            "the shared model's material, on and off",
+            "an override over a shared change",
+            "a slot's shadow, on and off",
+            "culling flipped live",
+            "rebuilt from the kept descriptor");
+
+        var descriptor = Recipes.Pbr(new Color(150, 150, 155), glossiness: 0.5f, metalness: 0f);
+        var grey = s.Material(descriptor);
+
+        // One model, three entities: the teapot primitive's model, placed twice more
+        var left = s.Place(PrimitiveModelType.Teapot, grey, new Vector3(-3f, 0.4f, 0f), new Vector3(2.4f));
+        var model = left.Get<ModelComponent>()!.Model;
+        var middle = s.PlaceModel(model, grey, new Vector3(0f, 0.4f, 0f));
+
+        s.PlaceModel(model, grey, new Vector3(3f, 0.4f, 0f));
+
+        // There is no regenerating a material in place: change the descriptor it was built from and
+        // build it again. Same features, different constants, so the effect it needs is compiled already
+        Material? rebuilt = null;
+
+        if (variation == 5)
+        {
+            descriptor.Attributes.MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(0.9f));
+            descriptor.Attributes.Specular = new MaterialMetalnessMapFeature(new ComputeFloat(1f));
+            rebuilt = s.Material(descriptor);
+        }
+
+        s.State = new RuntimeState(
+            variation,
+            model,
+            middle.Get<ModelComponent>()!,
+            grey,
+            s.Material(Recipes.Pbr(new Color(200, 60, 50), glossiness: 0.5f, metalness: 0f)),
+            s.Material(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f)),
+            rebuilt);
+    }
+
+    /// <summary>The one change of the variation, on for a second and a half, off for as long.</summary>
+    public static void AtRuntimeUpdate(MaterialStation s)
+    {
+        if (s.State is not RuntimeState state) return;
+
+        var on = (int)(s.Seconds / 1.5f) % 2 == 1;
+        var slot = state.Model.Materials[0];
+
+        switch (state.Variation)
+        {
+            case 0:
+                // The component's override wins over the model's material; removing it gives the model's back
+                SetOverride(state.Middle, on ? state.Red : null);
+                break;
+
+            case 1:
+                // The model's material is shared: every entity drawing the model follows
+                slot.Material = on ? state.Blue : state.Grey;
+                break;
+
+            case 2:
+                slot.Material = state.Blue;
+                SetOverride(state.Middle, on ? state.Red : null);
+                break;
+
+            case 3:
+                // A slot casts only when both its component and the model's material instance say so,
+                // and only the model has a flag per slot: shared, so all three lose the shadow together
+                slot.IsShadowCaster = !on;
+                break;
+
+            case 4:
+                // A pass's culling is pipeline state, not shader: flipped here, drawn so next frame, and
+                // every entity using the material flips with it
+                state.Grey.Passes[0].CullMode = on ? CullMode.Front : null;
+                break;
+
+            default:
+                slot.Material = on ? state.Rebuilt : state.Grey;
+                break;
+        }
+    }
+
+    // An override is an entry in the component's material dictionary; no entry means the model's material
+    private static void SetOverride(ModelComponent component, Material? material)
+    {
+        if (material is null) component.Materials.Remove(0);
+        else component.Materials[0] = material;
+    }
+
+    private sealed record RuntimeState(int Variation, Model Model, ModelComponent Middle, Material Grey, Material Red, Material Blue, Material? Rebuilt);
 }
