@@ -30,11 +30,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- `E02_3D_Material_Gallery`: the hair and subsurface scattering stations are always on and require a Stride build newer than 4.4.0-beta8. The `--engine-fix` switch is removed.
 - `E11_3D_ShapeBatch_Gallery`: new station **Shader fill**, a fill computed by a shader class instead of a texture. The gallery picture has mipmaps.
 - `E09_3D_Particles_Gallery`: new station **Shader node**, particles drawn by a shader class instead of a texture. `--station N --variation M` starts at a variation.
 
 ### 🔧 Engineering
 
+- Removed the repository's `Directory.Build.targets`, which replaced Stride's `StrideSortItems` task to silence CS0162. Stride builds newer than 4.4.0-beta8 do not raise the warning.
 - `Directory.Build.local.props`: an optional, git-ignored file that overrides build properties locally, such as `StrideVersion` for a Stride build from source. See the contributing build page.
 
 ### 💪 Other Changes

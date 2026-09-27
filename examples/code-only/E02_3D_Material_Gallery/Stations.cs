@@ -16,22 +16,6 @@ namespace E02_3D_Material_Gallery;
 /// </summary>
 public static class Stations
 {
-    /// <summary>
-    /// Whether the Stride package in use carries the engine fix the hair and subsurface-scattering stations
-    /// need: their function shaders implement abstract methods without <c>override</c>, which the SPIR-V
-    /// mixer rejects (written up for upstream). Off, those three stations stand as empty pads carrying this
-    /// message and the rest of the ring runs; on a package without the fix they would fail to compile at the
-    /// first draw and take the game with them, since that failure is thrown from the renderer. Set it here
-    /// once the fix ships, or start the gallery with <c>--engine-fix</c> to try it on the package you have.
-    /// </summary>
-    public static bool EngineHasOverrideFix { get; set; }
-
-    /// <summary>Fails the station with the message above unless <see cref="EngineHasOverrideFix"/> is set.</summary>
-    public static void RequireEngineFix()
-    {
-        if (!EngineHasOverrideFix) throw new NotSupportedException("Needs a Stride package with the hair and subsurface override fix: set Stations.EngineHasOverrideFix, or start with --engine-fix");
-    }
-
     public static IReadOnlyList<Exhibit<MaterialStation>> All { get; } =
     [
         new("Diffuse colour", "Lambert and one colour: the baseline everything else adds to", nameof(MaterialDiffuseLambertModelFeature), Setup: NumberStations.DiffuseColour, Anchor: new Vector3(0f, 1.8f, 0f)),
