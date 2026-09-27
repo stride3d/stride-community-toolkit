@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 
@@ -11,7 +12,7 @@ public static class GalleryPicture
     /// dark lines, a white square in the top-left corner and a black one at the bottom right.
     /// </summary>
     /// <param name="device">The device to make the texture on.</param>
-    /// <returns>The texture, sRGB, owned by the caller.</returns>
+    /// <returns>The texture, sRGB with its mipmaps, owned by the caller.</returns>
     public static Texture Create(GraphicsDevice device)
     {
         const int size = 128;
@@ -42,6 +43,8 @@ public static class GalleryPicture
             }
         }
 
-        return Texture.New2D(device, size, size, PixelFormat.R8G8B8A8_UNorm_SRgb, pixels);
+        // Through the toolkit's loader rather than Texture.New2D, for the mipmap chain: tiled and seen at
+        // a grazing angle, a picture with one level shimmers
+        return TextureLoader.FromPixels(device, pixels, size, size, new TextureLoadOptions(TextureRole.Color));
     }
 }

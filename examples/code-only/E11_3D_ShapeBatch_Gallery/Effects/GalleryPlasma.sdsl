@@ -1,0 +1,26 @@
+namespace E11_3D_ShapeBatch_Gallery
+{
+    // A fill computed per pixel, no texture: four sine waves over the shape's own coordinates, coloured
+    // by a cosine palette. The texture coordinate runs 0 to 1 across the shape's bounding box, the same
+    // one a textured fill samples with. The clock is a node composed in from C#, because the engine's
+    // Global.Time is written by the mesh renderer and never reaches a shape batch's effect.
+    shader GalleryPlasma : ComputeColor, Texturing
+    {
+        compose ComputeColor Clock;
+
+        override float4 Compute()
+        {
+            float t = Clock.Compute().x;
+            float2 p = streams.TexCoord * 7.0;
+
+            float v = sin(p.x + t)
+                    + sin(p.y * 1.3 - t * 0.7)
+                    + sin((p.x + p.y) * 0.7 + t * 0.5)
+                    + sin(length(p - 3.5) * 1.5 - t);
+
+            float3 colour = 0.5 + 0.5 * cos(v * 1.4 + float3(0.0, 2.1, 4.2));
+
+            return float4(colour, 1.0);
+        }
+    };
+}

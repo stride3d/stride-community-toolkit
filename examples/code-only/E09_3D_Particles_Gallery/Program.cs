@@ -24,9 +24,11 @@ using Stride.Input;
 //
 // Keys: N and P fly to the next and previous station, Home flies home to the index board, Tab
 // shows one station at a time, L widens the labels, V cycles the current station's variation,
-// Space restarts the current station's simulation. "--station 25" starts at a station.
+// Space restarts the current station's simulation. "--station 25" starts at a station;
+// "--station 25 --variation 2" at its third variation - handy for screenshots.
 
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
+var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryParse(args[3], out var variation) ? variation : 0;
 
 Gallery<ParticleStation>? gallery = null;
 ParticleTextures? textures = null;
@@ -57,7 +59,11 @@ void Start(Scene rootScene)
     // The frame comes from Example.Common; what a particle station needs on top of it is the textures
     var loaded = textures;
 
-    gallery = new Gallery<ParticleStation>(game, rootScene, Stations.All, configure: station => station.Textures = loaded);
+    gallery = new Gallery<ParticleStation>(game, rootScene, Stations.All, configure: station =>
+    {
+        station.Textures = loaded;
+        if (station.Number == startStation) station.Variation = startVariation;
+    });
     gallery.UpdateLabels();
 
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);

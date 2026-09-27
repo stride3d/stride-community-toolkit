@@ -232,6 +232,34 @@ public static class EffectStations
     }
 
     /// <summary>
+    /// A fill from a shader class instead of a texture: <c>Effects/GalleryPlasma.sdsl</c>, twenty lines
+    /// that derive from <c>ComputeColor</c>, named by a <c>ComputeShaderClassColor</c> as the batch's
+    /// fill source. The shader sees the same coordinates a texture is sampled with, 0 to 1 across the
+    /// shape's bounding box, so each shape gets the whole pattern; the outline, the glow and the rounded
+    /// corners are still the batch's. The clock is a node composed into the shader and set here every
+    /// frame, since a shape batch's effect has no clock of its own.
+    /// </summary>
+    public static void ShaderFill(ShapeStation s)
+    {
+        var shapes = s.Batches.Shaded;
+
+        s.Batches.Clock.Value = new Vector4(s.Seconds, 0f, 0f, 0f);
+
+        shapes.Fill.Set(Color.White, 1f);
+        shapes.Glow.Set(7f, HudGlow);
+        shapes.DrawRectangle(s.At(-2.5f, 2.4f, 0f), s.Right, s.Up, new Vector2(5f, 3.5f), HudBlue, cornerRadius: 0.5f);
+        shapes.Glow.Clear();
+
+        shapes.DrawDisc(s.At(2.2f, 2.1f, 0f), s.Forward, 1.5f, Color.White);
+
+        // The sample multiplies the fill colour, so a shader fill tints like a texture does
+        shapes.Fill.Set(new Color(255, 160, 60), 1f);
+        shapes.DrawDisc(s.At(4.6f, 1.2f, 1f), s.Up, 1.1f, Color.White);
+
+        s.ResetStyle(shapes);
+    }
+
+    /// <summary>
     /// Builds the second camera and the texture it draws into, with one toolkit call. Behind it: a
     /// texture that is both a render target and a shader resource, in HDR; a camera slot of its
     /// own; a camera renderer wrapping a render-texture renderer wrapping a second forward renderer

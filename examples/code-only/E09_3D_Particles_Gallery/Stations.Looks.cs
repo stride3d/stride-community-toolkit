@@ -227,4 +227,45 @@ public static class LookStations
 
         s.Place(new Vector3(0f, 0.4f, 0f), 1f, emitter);
     }
+
+    /// <summary>
+    /// A particle drawn by a shader class instead of a texture: the material's colour node is a
+    /// <c>ComputeShaderClassColor</c> naming a class from this example's <c>Effects</c> folder, which
+    /// derives from <c>ComputeColor</c> and computes the quad's pixel from its texture coordinate. No
+    /// image file, sharp at any size, and a generic turns one class into several looks. V switches
+    /// between a star, a single ring and a target of rings.
+    /// </summary>
+    public static void ShaderNode(ParticleStation s)
+    {
+        var v = s.Pick("a star", "a ring", "a target of rings");
+
+        IComputeColor shape = v switch
+        {
+            0 => new ComputeShaderClassColor { MixinReference = "GalleryParticleStar" },
+            1 => new ComputeShaderClassColor { MixinReference = "GalleryParticleRings", Generics = { ["TRings"] = new ComputeColorParameterFloat { Value = 1f } } },
+            _ => new ComputeShaderClassColor { MixinReference = "GalleryParticleRings", Generics = { ["TRings"] = new ComputeColorParameterFloat { Value = 4f } } },
+        };
+
+        var tint = v == 0 ? new Color4(1f, 0.85f, 0.4f, 1f) : new Color4(0.4f, 0.9f, 1f, 1f);
+
+        var emitter = new ParticleEmitter
+        {
+            ParticleLifetime = new Vector2(2f, 3f),
+            SimulationSpace = EmitterSimulationSpace.World,
+            ShapeBuilder = new ShapeBuilderBillboard(),
+            Material = new ParticleMaterialComputeColor
+            {
+                ComputeColor = new ComputeBinaryColor(shape, new ComputeColor(tint), BinaryOperator.Multiply),
+                AlphaAdditive = 1f,
+            },
+        };
+
+        emitter.Spawners.Add(new SpawnerPerSecond { SpawnCount = 10 });
+        emitter.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.9f, 1.6f) });
+        emitter.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-1.5f, 0f, -0.5f), PositionMax = new Vector3(1.5f, 0.3f, 0.5f) });
+        emitter.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-0.2f, 0.6f, -0.2f), VelocityMax = new Vector3(0.2f, 1.2f, 0.2f) });
+        emitter.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, new Color4(1f, 1f, 1f, 0f)), (0.2f, Color4.White), (1f, new Color4(1f, 1f, 1f, 0f))) });
+
+        s.Place(new Vector3(0f, 0.4f, 0f), 1f, emitter);
+    }
 }

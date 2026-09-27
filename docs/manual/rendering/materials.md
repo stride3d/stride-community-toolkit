@@ -1,43 +1,19 @@
-# Materials from code - a bag of features, not a shader
+# Materials from code
 
-When a cube needs to look like something, the first thing you reach for is `game.CreateMaterial(Color.Green)`,
-and the second is its two numbers. That works, right up to the point where you want glass, or brick with
-mortar lines the light falls into, or a coat of paint peeling off iron - and then it looks as if the next
-step is writing a shader. It is not. Every material in Stride, the ones Game Studio saves as assets and
-the ones the toolkit builds in one line, is the same thing: a **descriptor**, a bag of small feature
-objects, that the engine turns into a shader for you. This page is about that bag - what goes in it,
-what each piece changes on screen, and the handful of things that go wrong when you build one from code.
-Every rule is illustrated by real code in this repository, most of it in the
-[Material Gallery](../code-only/examples/material-gallery.md) (`E02_3D_Material_Gallery`), a ring of
-thirty-three stations you can walk through and compare.
+A material in Stride is a `MaterialDescriptor`: a set of feature objects that the engine compiles into a
+shader. Game Studio saves descriptors as assets. In a code-only project you build them in C#. This article
+describes the descriptor, the toolkit helpers that create common materials, and how to change materials at
+runtime.
 
-## The wrong path: turn the numbers up
+The code samples come from this repository. Most are from the
+[Material Gallery](../code-only/examples/material-gallery.md) example (`E02_3D_Material_Gallery`), which shows
+each feature on its own station.
 
-The toolkit's helper is honest about what it is:
+## How a material is built
 
-```csharp
-// src/Stride.CommunityToolkit/Engine/GameExtensions.cs
-public static Material CreateMaterial(this IGame game, Color? color = null, float metalness = 0f, float glossiness = 0.65f)
-```
-
-Two fractions, and the shader clamps both. Until the day this page was written the parameters were
-called `specular` and `microSurface`, and the beginner example asked one of them for a value of 4:
-
-```csharp
-// examples/code-only/E02_3D_Material/Program.cs, as it was
-Create3DPrimitive(scene, new Vector3(-5f, 0.5f, -5f), game.CreateMaterial(Color.Green, 4f, 0.75f));
-```
-
-That is a metalness of 4, clamped to 1: a metal, whose green is mostly thrown away. And the cube did not
-even look like a metal; it looked black, for a reason that is the first story below. The numbers are not
-knobs to turn; each is a physical claim about the surface, and the claims only make sense once you know
-what the bag holds.
-
-## One material, many features
-
-A `MaterialDescriptor` has an `Attributes` object with one slot per *aspect* of a surface, and a
-`Layers` list. Each slot takes a small class - a **feature** - and the material generator composes the
-features into one shader when `Material.New` runs:
+A `MaterialDescriptor` has an `Attributes` object with one slot per aspect of a surface, and a `Layers` list.
+Each slot takes a feature. `Material.New` runs the material generator, which composes the features into one
+shader.
 
 ```mermaid
 flowchart LR
@@ -55,23 +31,58 @@ flowchart LR
     G --> SH["one shader, one parameter set<br/><i>Material.Passes</i>"]
 ```
 
-Two consequences follow, and both matter more than any single feature:
+- A slot you leave empty adds no code to the shader. A material without a `Surface` feature does no
+  tangent-space work. A material without a `Specular` feature has no highlight and no reflection.
+- A slot and its model are separate choices. `Diffuse` sets the colour and `DiffuseModel` sets how light
+  spreads (Lambert, cel shading, hair). `Specular` sets how reflective the surface is and `SpecularModel` sets
+  the shape of the reflection (microfacet, thin glass, cel shading, hair).
 
-- **What you leave out is left out of the shader.** No `Surface` feature means no tangent-space work at
-  all; no `Specular` means no highlight and no reflection. The baseline station of the gallery is a
-  diffuse colour under Lambert and nothing else, and it is the cheapest material the engine can make.
-- **A model is a choice, not a default.** `Diffuse` says *what colour*; `DiffuseModel` says *how light
-  spreads* (Lambert, cel-shaded, hair). `Specular` says *how reflective*; `SpecularModel` says *what shape
-  the reflection has* (microfacet, thin glass, cel, hair). Every "how does the engine do glass" question
-  is answered by swapping a model, not by writing one.
+## Create a material
 
-## The four numbers
+### Helper methods
 
-The material most games are made of is a **PBR** material, physically based rendering: the surface is
-described by what it is made of - a colour, how metallic it is, how rough - and the light is computed
-from those claims, instead of from highlight settings tuned by eye. In Stride's **metalness workflow**
-that is a colour, a glossiness, a metalness and the microfacet specular model. The toolkit keeps it as
-a descriptor, because every helper and thirty gallery stations start from it:
+The helpers are extension methods on `Game`.
+
+| Method | Result |
+|---|---|
+| `CreateMaterial(color, metalness, glossiness)` | A lit PBR material. Defaults: metalness 0, glossiness 0.65 |
+| `CreateFlatMaterial(color)` | An unlit colour, for 2D shapes and HUD elements |
+| `CreateEmissiveMaterial(color, intensity)` | A lit colour that also emits light. An intensity above 1 blooms under post effects |
+| `CreateTexturedMaterial(texture, metalness, glossiness, tiling)` | A PBR material with a texture as its colour |
+| `CreateScreenMaterial(texture)` | An unlit, clamped texture, for a monitor that shows a render-texture feed |
+| `CreateMaterial(descriptor)` | Compiles any descriptor and keeps it on `Material.Descriptor` |
+
+### Descriptors
+
+`MaterialDescriptors` in `Stride.CommunityToolkit.Rendering` returns the descriptor behind each helper: `Pbr`,
+`Textured`, `Emissive`, `Screen`, `Flat` and `Highlight`. To extend a helper's material, take its descriptor,
+add or replace a feature, and compile it.
+
+```csharp
+var descriptor = MaterialDescriptors.Textured(brick, glossiness: 0.4f);
+
+descriptor.Attributes.Surface = new MaterialNormalMapFeature(new ComputeTextureColor(brickNormal)) { ScaleAndBias = true, IsXYNormal = true };
+
+var material = game.CreateMaterial(descriptor);
+```
+
+> [!IMPORTANT]
+> Compile descriptors with `game.CreateMaterial(descriptor)` or `Material.New(device, descriptor, game.Content)`.
+> The microfacet specular model reads an environment lookup texture that ships with the engine as an asset.
+> Without the content manager the texture is not resolved and metals render black. No exception is thrown.
+
+When no content manager is available, such as in a tool or a test, use the polynomial environment term, which
+needs no asset:
+
+```csharp
+new MaterialSpecularMicrofacetModelFeature { Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial() }
+```
+
+## PBR parameters
+
+A physically based (PBR) material describes what a surface is made of, and the lighting is computed from that.
+In Stride's metalness workflow the description is a colour, a glossiness and a metalness, under the microfacet
+specular model.
 
 ```csharp
 // src/Stride.CommunityToolkit/Rendering/MaterialDescriptors.cs
@@ -88,106 +99,38 @@ public static MaterialDescriptor Pbr(Color colour, float metalness = 0f, float g
 };
 ```
 
-What the numbers claim, as the gallery's sweep stations show them side by side:
-
-| Number | 0 | 1 | What a value in between means |
+| Parameter | 0 | 1 | Values in between |
 |---|---|---|---|
-| **Glossiness** | Rough: the highlight is a haze, the sky is a blur | Mirror: a point highlight, the sky in focus | Most real surfaces; a **glossiness map** paints it per texel (varnish on wood, dull patches on iron) |
-| **Metalness** | Dielectric: keeps its colour as diffuse, reflects a colourless 4 % | Metal: **no diffuse at all**; its colour is the colour of its reflection | Only where paint meets bare metal - a **metalness map** with mostly 0 and 1 |
+| Glossiness | Rough. The highlight is a haze and reflections are blurred | Mirror. The highlight is a point and reflections are sharp | Most real surfaces. A glossiness map sets it per texel |
+| Metalness | Dielectric. Keeps its colour as diffuse and reflects about 2 % without tint | Metal. Has no diffuse colour. Its colour tints the reflection | Transitions only, such as paint over bare metal |
 
-The metalness row is the one that surprises people. A metal has no diffuse colour: the green in
-`CreateMaterial(Color.Green, metalness: 0.75f)` is mostly thrown away, and what is left is a green tint
-on a reflection of the sky. If the sky is dark, the cube is dark. That is not a bug; it is what a metal
-is, and it is why the beginner example lets you brighten the skybox light with a key.
+Both values are clamped to the range 0 to 1.
 
-There is a second way to say the same thing, the **specular workflow**: give the reflection colour
-directly (`MaterialSpecularMapFeature`) instead of deriving it from a metalness. Plastic reflects a grey
-4 %; gold reflects gold and has a black diffuse. Game Studio's Material Package textures use this
-workflow, so if you transcribe a `.sdmat` you will meet it.
+> [!NOTE]
+> A metal has no diffuse colour. It shows a tinted reflection of its environment, so it is dark when the scene
+> has no skybox or the skybox light is dim.
 
-### The scar tissue: black metals
+The specular workflow is the alternative to metalness. `MaterialSpecularMapFeature` sets the reflection colour
+directly. Game Studio's Material Package uses this workflow.
 
-The microfacet model needs an **environment term** - what the surface reflects when no light hits it
-directly, which for a metal is nearly everything it shows. The engine's default is a GGX lookup
-texture, and the texture is an asset the engine ships (`/Stride.Engine/StrideEnvironmentLightingDFGLUT16`)
-that the material holds as an *attached reference*. `Material.New(device, descriptor)` leaves that
-reference unresolved: nothing throws, and every metal simply renders black. That is how the gallery met
-it, and for a while the toolkit sidestepped it with the polynomial fit, a formula that needs no asset.
+The microfacet model also has a normal distribution function (GGX, Beckmann or Blinn-Phong) and a Fresnel
+term. Glossiness 1, metalness 1 and `MaterialSpecularMicrofacetFresnelNone` give a mirror.
 
-The real answer is one argument. Since 4.4 beta 6, `Material.New` takes the content manager and resolves
-the reference:
+## Material nodes
 
-```csharp
-// src/Stride.CommunityToolkit/Engine/GameExtensions.cs
-public static Material CreateMaterial(this IGame game, MaterialDescriptor descriptor)
-{
-    var material = Material.New(game.GraphicsDevice, descriptor, game.Content);
+Every slot takes a node. A constant is the simplest node.
 
-    material.Descriptor = descriptor;
-
-    return material;
-}
-```
-
-Every toolkit helper and every gallery material compiles this way now, with the engine's exact term.
-The polynomial fit remains the right choice where there is no content manager to give, a tool or a test:
-`Environment = new MaterialSpecularMicrofacetEnvironmentGGXPolynomial()`.
-
-There was a second reason the helper's cubes were black: its default metalness was 1, so every cube
-built from a colour alone was a metal with nothing to reflect. The default is a dielectric now, and a
-colour alone is a matte cube of that colour. If your metals are black, these two are the first things to
-check: the content manager at compile time, and whether you asked for a metal.
-
-The same model has two more functions worth knowing: the **normal distribution** (GGX has the long
-tail every modern renderer uses; Beckmann falls off sharply; Blinn-Phong is the classic) and the
-**Fresnel** term. Glossiness 1, metalness 1 and `MaterialSpecularMicrofacetFresnelNone` is a mirror,
-which is the community's recipe for checking a cubemap.
-
-## Three tiers: a colour, a twist, the bag
-
-The toolkit's helpers are meant to be outgrown, and the way out is built in.
-
-**A colour.** `game.CreateMaterial(Color.Green)` is a matte cube of that colour; add a metalness and a
-glossiness when you know what they claim. `game.CreateFlatMaterial(colour)` is the unlit version for 2D
-shapes and HUD elements.
-
-**A twist.** Three more helpers cover what the examples reached for most often when a colour was not
-enough: `CreateEmissiveMaterial(colour, intensity)` for a lamp or a glowing edge (above 1 it blooms under
-post effects), `CreateTexturedMaterial(texture, metalness, glossiness, tiling)` for a texture where the
-colour would be, and `CreateScreenMaterial(texture)` for a monitor showing a render-texture camera's feed,
-unlit and clamped at the edges.
-
-**The bag.** Every helper compiles a descriptor from `MaterialDescriptors`, and the descriptors are yours
-to take. When a helper's material is nearly right, start from its descriptor, add or swap a feature, and
-compile it; the overload that takes a descriptor also keeps it on the material, which is what a
-material needs to be used as a layer later:
-
-```csharp
-var descriptor = MaterialDescriptors.Textured(brick, glossiness: 0.4f);
-
-descriptor.Attributes.Surface = new MaterialNormalMapFeature(new ComputeTextureColor(brickNormal)) { ScaleAndBias = true, IsXYNormal = true };
-
-var material = game.CreateMaterial(descriptor);
-```
-
-That is the whole path from the one-liner to the material system: the same bag, with one more thing
-in it, and the rest of this page is about what else can go in.
-
-## Every slot is a node
-
-The features above took a `ComputeColor` or a `ComputeFloat`. The slot's real type is a **node**, and a
-number is just the simplest node. The others, all shown on their own stations:
-
-| Node | What it puts in the slot | Station |
+| Node | Input | Gallery station |
 |---|---|---|
-| `ComputeColor`, `ComputeFloat` | A constant | the sweeps |
-| `ComputeTextureColor`, `ComputeTextureScalar` | A texture, with a scale that tiles it and an offset | Albedo texture, Gloss and metal maps |
-| `ComputeVertexStreamColor` | A per-vertex colour from the mesh, no UVs, no texture | Vertex colours |
-| `ComputeBinaryColor` | Two child nodes combined by an operator - a tint, a mask, a whole tree | Node arithmetic |
-| `ComputeShaderClassColor` | A shader class of your own, by name | Custom shader node |
+| `ComputeColor`, `ComputeFloat` | A constant | Glossiness sweep, Metalness sweep |
+| `ComputeTextureColor`, `ComputeTextureScalar` | A texture, with scale and offset | Albedo texture, Gloss and metal maps |
+| `ComputeVertexStreamColor` | A colour per vertex, from the mesh | Vertex colours |
+| `ComputeBinaryColor` | Two child nodes combined by an operator | Node arithmetic |
+| `ComputeShaderClassColor` | A shader class, referenced by name | Custom shader node |
 
-The last one is the extension point. A class that derives from `ComputeColor` and overrides `Compute()`
-sits in any slot, and the whole of it is this:
+### Custom shader node
+
+A shader class that derives from `ComputeColor` and overrides `Compute()` can fill any slot.
 
 ```hlsl
 // examples/code-only/E02_3D_Material_Gallery/Effects/GalleryChecker.sdsl
@@ -208,83 +151,98 @@ shader GalleryChecker : ComputeColor, Texturing
 s.PlaceTrio(s.Material(Recipes.Mapped(new ComputeShaderClassColor { MixinReference = "GalleryChecker" }, glossiness: new ComputeFloat(0.45f))));
 ```
 
-The file lives in the example's `Effects` folder and the asset compiler builds it like any shader (see
-[Shaders in a toolkit package](../../contributing/toolkit/shaders.md) for the build reference that makes
-that happen). Twenty lines, and the material generator does not know or care that the diffuse slot is
-procedural.
+Place the `.sdsl` file in the project's `Effects` folder. The asset compiler builds it with the project. For
+shaders in a library, see [Shaders in a toolkit package](../../contributing/toolkit/shaders.md).
 
-### Textures: five ways to load them wrong
+## Load textures
 
-A texture is pixels plus a promise about what they mean, and Game Studio's content pipeline keeps that
-promise at import: a colour texture is made sRGB and premultiplied, a normal map linear, and every
-texture gets its mipmaps. `Texture.Load(device, stream)` with its defaults does none of it - every file
-linear, straight alpha, one mip - and nothing fails; the picture is just wrong. The toolkit's
-`TextureLoader` does the pipeline's work at runtime, by role:
+Game Studio's content pipeline prepares a texture at import according to its type. `Texture.Load(device, stream)`
+with its default arguments does not: it loads every file as linear, with straight alpha and one mip level.
+`TextureLoader` prepares a texture at runtime according to its role.
 
 ```csharp
 var textures = new TextureLoader(game.GraphicsDevice, "Resources/materials");
 
-var albedo = textures.Color("brick/brick_dif.png");      // sRGB, premultiplied, mipmapped
-var gloss = textures.Data("brick/brick_gls.png");        // linear
-var normal = textures.NormalMap("brick/brick_nml.png");  // linear, unit normals in every mip
+var albedo = textures.Color("brick/brick_dif.png");
+var gloss = textures.Data("brick/brick_gls.png");
+var normal = textures.NormalMap("brick/brick_nml.png");
 ```
 
-The gallery's **Texture loading** station puts each mistake beside its fix, wrong on the left, and V
-walks through them:
+| Method | Colour space | Alpha | Mipmaps |
+|---|---|---|---|
+| `Color(path)` | sRGB | Premultiplied in linear light | Averaged in linear light |
+| `Data(path)` | Linear | Unchanged | Averaged |
+| `NormalMap(path, invertY)` | Linear | Unchanged | Averaged and renormalised |
 
-1. **A colour loaded as data.** The sRGB bytes skip the gamma decode, so every mid-tone comes out
-   brighter: a byte of 128 means a fifth of full light, not half. The bricks go pale.
-2. **A normal map loaded as a colour.** Now the decode runs on data, and every tilt is squashed towards
-   flat. The Normal (tangent) view under M shows it.
-3. **The green channel the wrong way.** There are two conventions for a normal map's Y. The engine's
-   tangent space has green pointing down the texture, the DirectX convention, which is how the Material
-   Package's maps are stored; Blender, Unity and glTF store it pointing up. The wrong one lights every
-   bump as a dent. `NormalMap(path, invertY: true)` flips a green-up map.
-4. **Straight alpha.** The engine's blend states expect colour premultiplied by alpha. A PNG stores it
-   straight, and paint programs leave any colour, often white, under the fully transparent part; loaded
-   as it is, that colour is added to whatever is behind. Premultiplied, it is black and adds nothing.
-5. **No mipmaps.** A PNG carries one level and the engine builds none at runtime, so a surface seen small
-   or at a grazing angle samples one texel of dozens per pixel and turns to crawling noise. The loader
-   builds the chain on the CPU, averaging in linear light for a colour (averaging sRGB bytes darkens
-   every mip) and renormalising a normal map's vectors.
+A loader keeps each texture per path and disposes them when it is disposed. The static methods return a
+texture that the caller owns.
 
-The third one comes with a warning. Game Studio's normal-map import inverts green by default, which is
-right for a green-up map, and the Material Package's texture assets keep that default although their
-maps are green-down. The toolkit worked this out by measuring the brick map's green on either side of a
-mortar groove and rendering both ways in the world-normal view: loaded as stored, the wall above each
-groove faces down and the one below faces up, as a recess should. So the gallery loads the pack's maps
-as stored, and it is worth checking a pack's bricks in the editor's normal view before trusting either
-default.
+| Method | Use |
+|---|---|
+| `Load(path, options)` | A file, with every option set through `TextureLoadOptions` |
+| `TextureLoader.Load(device, stream, options)` | A stream |
+| `TextureLoader.FromImage(device, image, options)` | A decoded `Image`, after you edit its pixels |
+| `TextureLoader.FromPixels(device, pixels, width, height, options)` | Pixels computed in code |
 
-Two things the loader leaves alone. **Channel order** is handled for you: `Image.Load` decodes a PNG as
-BGRA, and a texture made from its pixels in an RGBA format trades red for blue, which the particles
-gallery did to its fire for a while without anyone noticing under an orange tint. **Block compression**
-is not done: the texture stays eight bits a channel, four to eight times the memory of the BC formats an
-asset gets. For that, or for mipmaps built offline, ship a `.dds`; the loader passes it through with only
-its colour space chosen by the role.
+`TextureLoadOptions` has three switches: `PremultiplyAlpha` (colour textures, default on), `InvertY` (normal
+maps, default off) and `GenerateMipmaps` (default on). `TexturePixels` exposes the pixel operations.
 
-The Material Package's normal maps store X and Y and leave Z to be rebuilt, in the 0..1 range a texture
-holds, so their feature needs both switches: `new MaterialNormalMapFeature(normal) { ScaleAndBias = true, IsXYNormal = true }`.
-A normal map you computed yourself at runtime can use the same convention - the gallery derives one
-from a height map by central differences and it lights the bumps like the pack's.
+### Symptoms of a texture loaded in the wrong role
 
-## A material animates through its parameters
+The **Texture loading** station shows each case beside the correct result.
 
-Once `Material.New` has run, the features are gone; what remains is a shader and its **parameters**,
-the constants the features registered. You do not rebuild a material to change it:
+| Symptom | Cause | Fix |
+|---|---|---|
+| Colours are pale | A colour texture loaded as linear | `Color(path)` |
+| Normal-mapped detail looks flattened | A normal map loaded as sRGB | `NormalMap(path)` |
+| Bumps are lit as dents | The normal map's green channel uses the other convention | `NormalMap(path, invertY: true)` |
+| A white or coloured fringe around transparent areas | Straight alpha | `Color(path)` premultiplies |
+| Shimmer on tiled or distant surfaces | No mipmaps | The loader builds them |
+
+### Normal map convention
+
+Stride's tangent space uses the DirectX convention: the green channel points down the texture. The Material
+Package's normal maps use this convention. Maps from Blender, Unity and glTF use the OpenGL convention, with
+green pointing up. Load those with `invertY: true`.
+
+> [!NOTE]
+> Game Studio's normal map import inverts the green channel by default. `TextureLoader` does not. Check a
+> material in the **Normal (world)** stream view if the lighting looks inverted.
+
+The Material Package's normal maps store X and Y in the range 0 to 1 and leave Z to be rebuilt. Set both
+switches on the feature:
 
 ```csharp
-// examples/code-only/E02_3D_Material_Gallery/Stations.Maps.cs
-var pulse = 0.5f + 0.5f * MathF.Sin(s.Seconds * 2f);
-
-// A material's parameters are the shader's constants; a keyed value set here is picked up
-// by the next draw. EmissiveIntensity is the key the emissive feature registers its scalar under.
-material.Passes[0].Parameters.Set(MaterialKeys.EmissiveIntensity, 0.2f + 3f * pulse);
+new MaterialNormalMapFeature(normal) { ScaleAndBias = true, IsXYNormal = true }
 ```
 
-The keys live in `MaterialKeys` and in the generated key classes of your own shaders. A number in a slot
-registers under the slot's key (`GlossinessValue`, `MetalnessValue`, `EmissiveIntensity`); a colour or
-texture node can carry a key of your own, which is how a value gets a handle without touching the shader:
+### Limitations
+
+- Textures are not block compressed. They use 8 bits per channel, which takes four to eight times the memory of
+  a BC format.
+- The loader prepares 2D images in 8-bit RGBA or BGRA. Other formats throw `NotSupportedException`.
+- A `.dds` file is loaded as it is. Only its colour space is set by the role. Use `.dds` for compressed
+  textures and for mipmaps built offline.
+
+## Change parameters at runtime
+
+A compiled material is a shader and a set of parameters. To change a value, set its parameter. The material
+is not rebuilt.
+
+`MaterialParameters` provides extension methods on `Material`.
+
+| Method | Description |
+|---|---|
+| `Set(key, value)` | Sets a value or an object parameter on every pass |
+| `SetColor(key, colour, premultiply)` | Sets a colour, converted to linear and premultiplied by alpha |
+| `SetTextureOffset(offset, textureIndex)` | Sets the offset of a texture node |
+| `SetTextureScale(scale, textureIndex)` | Sets the tiling of a texture node |
+| `ColorKey(name)`, `FloatKey(name)`, `TextureKey(name)` | Creates a named key to assign to a node |
+| `ToMaterialValue(colour, premultiply)` | Returns the converted colour without setting it |
+| `TextureKeyAt(key, textureIndex)` | Returns the key of the nth texture node |
+
+A constant in a slot registers under the slot's key in `MaterialKeys`, for example `GlossinessValue`,
+`MetalnessValue` and `EmissiveIntensity`. To address a specific node, assign it a key of your own.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/Stations.Maps.cs
@@ -297,89 +255,50 @@ state.Scroll.SetTextureOffset(new Vector2(s.Seconds * 0.15f, 0f));
 state.Gloss.Set(MaterialKeys.GlossinessValue, 0.5f + 0.5f * MathF.Sin(s.Seconds));
 ```
 
-Three things the toolkit's `MaterialParameters` does that the raw `Parameters.Set` would leave to you,
-each learned from the engine's own gizmo materials:
+Remarks:
 
-1. **A colour set at runtime must be converted the way the generator converted the node's initial
-   value**: to linear, and premultiplied by its alpha. Set the raw sRGB colour and it comes out brighter
-   than the one compiled in. `SetColor` does the conversion; `ToMaterialValue` is the conversion alone.
-2. **A material may have several passes**, each with its own parameters: clear coat has two, hair
-   three, thin glass two or four. Write to `Passes[0]` alone and the other passes keep the old value.
-   Every setter writes to all of them.
-3. **Every texture node registers its scale and offset**, so a texture scrolls or retiles through
-   `SetTextureOffset` and `SetTextureScale` with no recompile. The first texture's keys are the base
-   keys; later ones are the base key composed with `i1`, `i2`, which is how the generator names a key's
-   later uses, and `TextureKeyAt` spells that out.
+- The material generator converts a colour node's value to linear and premultiplies it by alpha. `SetColor`
+  applies the same conversion, so a runtime value matches a compiled one.
+- A material can have several passes, each with its own parameters. Clear coat has two, hair has three and thin
+  glass has two or four. The setters write to every pass. `material.Passes[0].Parameters.Set` writes to one.
+- Every texture node registers a scale and an offset. The first texture uses `MaterialKeys.TextureScale` and
+  `MaterialKeys.TextureOffset`. Later textures use the same keys composed with `i1`, `i2` and so on.
+- The parameters of your own shader are set the same way, through the key class that the shader source
+  generator creates.
 
-A shader of your own goes further: its parameters are set the same way, through the keys the source
-generator makes from its constants, which is how the dissolve below burns away on a timer.
+## Swap materials at runtime
 
-## Swapping materials at runtime
+A material can be assigned in two places. The engine reads both every frame.
 
-Parameters change a material's numbers. Sometimes the whole material has to change: a door turns red
-when locked, a ghost goes see-through, a selected unit is drawn in a team colour. The wrong path is to
-reach for the model, `model.Materials[0].Material = red`, and watch every door in the level turn red.
-A model is shared by every entity that draws it, and so is its material list.
-
-There are two places a material lives, and the engine asks them in order every frame:
-
-| Where | Reaches | Set it | Undo it |
+| Location | Affects | Assign | Restore |
 |---|---|---|---|
-| `modelComponent.Materials[slot]` | This entity only | `component.Materials[0] = red` | `component.Materials.Remove(0)` |
-| `model.Materials[slot].Material` | Every entity drawing the model | `model.Materials[0].Material = blue` | Put the old one back |
+| `modelComponent.Materials[slot]` | One entity | `component.Materials[0] = red` | `component.Materials.Remove(0)` |
+| `model.Materials[slot].Material` | Every entity that draws the model | `model.Materials[0].Material = blue` | Assign the previous material |
 
-The component's entry wins when there is one; with none, the model's material draws. The gallery's
-**Materials at runtime** station shows it on three teapots that share one model, each variation
-flipping one change every second and a half:
+The component's entry takes precedence. Without one, the model's material is used.
 
-```csharp
-// examples/code-only/E02_3D_Material_Gallery/Stations.Models.cs
-case 0:
-    // The component's override wins over the model's material; removing it gives the model's back
-    SetOverride(state.Middle, on ? state.Red : null);
-    break;
+> [!WARNING]
+> A `Model` is shared by every entity that draws it. Changing `model.Materials` changes all of them.
 
-case 1:
-    // The model's material is shared: every entity drawing the model follows
-    slot.Material = on ? state.Blue : state.Grey;
-    break;
-```
+Remarks:
 
-Four things the engine's model processor settles, read in its source and shown on the station:
+- A change takes effect on the next frame. The engine rebuilds the entity's render meshes only when the new
+  material has a different number of passes.
+- A slot casts a shadow when both `modelComponent.IsShadowCaster` and `model.Materials[slot].IsShadowCaster`
+  are true. Only the model has a flag per slot.
+- `material.Passes[n].CullMode` and `DepthFunction` are pipeline state. A change needs no shader compile and
+  affects every entity that uses the material.
+- A compiled material cannot be regenerated in place. Keep the descriptor, change it, compile it again and
+  assign the new material. If only constants changed, the effect is already compiled.
 
-1. **Every change is picked up on the next frame.** The processor looks up each slot's material every
-   frame; nothing needs telling. It rebuilds the entity's render meshes only when the new material has a
-   different number of passes - clear coat has two, hair three - which costs a little more once.
-2. **Shadows per slot live on the model.** A slot casts a shadow only when the component's
-   `IsShadowCaster` and the model's `model.Materials[slot].IsShadowCaster` both say so. The component's
-   flag is for the whole entity; only the model has one per slot, so turning off one slot's shadow turns it
-   off for every entity drawing the model.
-3. **Culling and the depth test are live.** `material.Passes[0].CullMode` and `DepthFunction` are pipeline
-   state, not shader code: flip one and the next frame draws with it, no compile. It is the material's,
-   so every entity wearing it flips together.
-4. **There is no regenerating a material in place.** A compiled material keeps no link to the features it
-   came from. Keep the descriptor, change it, and run `Material.New` again on it (or
-   `game.CreateMaterial(descriptor)`), then assign the new material. When only constants changed the
-   effect is compiled already and the swap is immediate; a new feature means a new effect, and a frame or
-   two of the fallback while it compiles.
+The **Materials at runtime** station shows each case on three entities that share one model.
 
-A trap from the gallery's own code: its `PlaceModel` helper clears the model's material list and adds the
-station's material, which is a write to a shared model. On the runtime station all three teapots wear
-the same material, so it is harmless there; on a model shared with the rest of a scene it would repaint
-everything that draws it.
+## Write a custom material feature
 
-## A feature of your own
+A node supplies the value of one slot. A feature adds shader code to a stage. Write a feature to move vertices,
+discard pixels or add a shading term.
 
-A node fills one slot's value. When what you need is a change to what a stage *does* - move the
-vertices, throw pixels away - the next step is a material feature of your own.
-
-The wrong path first: a custom effect. The engine's SpaceEscape sample bends its world with an `.sdfx` of
-its own and a render feature that swaps it in, and that works, but it replaces the forward effect for
-everything it draws; lighting, shadows and every other material feature are yours to keep in step. A
-material feature is smaller. It is a class the material generator calls while it builds the shader,
-and what it adds is composed with everything else the material has, shadows included.
-
-This is the whole of the gallery's wobble:
+A feature is a class that derives from `MaterialFeature` and implements the interface of the slot it goes in.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/CustomFeatures.cs
@@ -423,109 +342,85 @@ shader GalleryWobble : IMaterialSurface, PositionStream, NormalStream
 };
 ```
 
-It goes in a slot like any feature, `descriptor.Attributes.Displacement = new WobbleFeature()`, and the
-shader is compiled by the asset compiler at build like the gallery's other `.sdsl` files. The source
-generator makes `GalleryWobbleKeys` from the constants. What `GenerateShader` can ask for:
-
-| Call | What it does | Who uses it |
-|---|---|---|
-| `AddShaderSource(stage, shader)` | Adds a surface shader to a stage, in the order the slots are visited | The dissolve |
-| `SetStreamFinalModifier<T>(stage, shader)` | Makes a shader the last of its stage, once per `T` | The wobble, the engine's displacement |
-| `AddFinalCallback(stage, callback)` | Runs after every feature has had its say | The engine's cutoff discard |
-| `AddShading(this)` | Adds a shading model, a term added to the light | The engine's emissive |
-| `SetStream(...)` | Fills a stream from a node, with its keys | Every map feature |
-| `MaterialPass` | The pass's parameters and state: cull mode, blend state, transparency | Most features |
-
-Three rules the gallery's two features taught:
-
-1. **The slot decides the stage and the order.** The displacement slot is the vertex stage's. In the
-   pixel stage the slots are visited diffuse, surface, microsurface, specular, occlusion, emissive,
-   subsurface, transparency, clear coat, and a shader added later sees what the earlier ones wrote. The
-   dissolve writes its glowing edge into the emissive stream, so it lives in the transparency slot,
-   after the emissive feature; in the surface slot the emissive feature would overwrite it. One slot
-   holds one feature, so a dissolving material cannot also be blend-transparent, and the engine skips
-   the transparency slot entirely on a hair material.
-2. **Properties become parameters in `GenerateShader`; what changes per frame goes through the keys.**
-   A multi-pass material generates once per pass, so each pass gets the properties. The dissolve's
-   amount is then driven every frame with `material.Set(GalleryDissolveKeys.DissolveAmount, amount)`,
-   which reaches every pass. The wobble needs nothing per frame: `Global.Time` is the engine's own clock,
-   there for any shader.
-3. **A discard needs the depth pass too.** The shadow caster and the depth prepass run a pixel shader
-   only when the pass asks, so the dissolve sets `MaterialKeys.UsePixelShaderWithDepthPass`, the key the
-   engine's cutoff transparency sets. Without it the dissolved part still casts its shadow.
-
-The scar tissue: the glow that was not there. The first dissolve burned through the shapes and the edge
-looked no warmer than the brick. The Emissive view under M settled it at once: the band was in the
-emissive stream, bright and in the right place. The value had arrived; the tone map had compressed an
-edge colour of (6, 1.6, 0.3) to a pale peach. It is (24, 6, 0.8) now. When a feature of your own seems
-to do nothing, the stream views say whether the value reached the stream before you start doubting the
-shader.
-
-Honest limits. The wobble moves positions but leaves the normals, so the light still describes the
-undeformed shape; for a larger wave the shader would bend the normal too. On split normals, a cube's
-corners, the faces move apart and the seams open, which is why the wobble variation has no cube. The
-dissolve's noise runs over the texture coordinates, so it follows the UV layout, seams and all.
-
-## Seeing one stream at a time
-
-Game Studio's toolbar has a row of view modes - Diffuse, Specular, Glossiness, Normal - that draw
-every mesh with one material stream as its colour, and they are the fastest way to find out why a
-material looks wrong: a normal map loaded as sRGB is a tilted normal view, a glossiness map read from
-the wrong channel is a flat grey, a metal whose colour went into the wrong slot shows black where its
-diffuse should be. The mechanism is not editor-only. The forward effect has a hook,
-`MaterialKeys.PixelStageSurfaceFilter`, a permutation the editor fills with the engine's own
-`MaterialSurfaceStreamShading` shader: it runs the material's surface shading and returns one stream
-instead of the lit colour. What a code-only game lacks is the sub-render-feature that sets the hook,
-and that is what `game.AddMaterialStreamView()` adds:
+Assign the feature to its slot:
 
 ```csharp
-// examples/code-only/E02_3D_Material_Gallery/Program.cs
-var view = game.AddMaterialStreamView();        // after the compositor exists
-
-// A DebugTextDropdown in the overlay: M opens the list, a digit picks, 0 is lit again
-viewMenu = new DebugTextDropdown
-{
-    Title = "View",
-    ToggleKey = Keys.M,
-    Items =
-    [
-        .. MaterialStreamView.All.Select(stream => new DebugTextDropdownItem((Keys)(Keys.D1 + (int)stream), MaterialStreamView.DisplayName(stream), () => view.Stream = stream)),
-        new(Keys.D0, "Lit", () => view.Stream = null),
-    ],
-};
+descriptor.Attributes.Displacement = new WobbleFeature();
 ```
 
-`view.Stream = MaterialStream.Glossiness` picks a stream directly, `Next` steps through them and `null` is
-lit shading. The streams are the values the features wrote before lighting ran:
+### Generator context methods
 
-| View | Stream | Shown as |
+| Member | Description |
+|---|---|
+| `AddShaderSource(stage, shader)` | Adds a surface shader to a stage, in slot order |
+| `SetStreamFinalModifier<T>(stage, shader)` | Sets a shader that runs last in its stage |
+| `AddFinalCallback(stage, callback)` | Runs a callback after all features have generated |
+| `AddShading(feature)` | Adds a shading model |
+| `SetStream(...)` | Fills a stream from a node and registers its keys |
+| `MaterialPass` | The pass's parameters and state: cull mode, blend state, transparency |
+
+### Remarks
+
+- The slot determines the stage and the order. The displacement slot runs in the vertex stage. Pixel stage
+  slots are visited in this order: diffuse, surface, microsurface, specular, occlusion, emissive, subsurface
+  scattering, transparency, clear coat. A shader sees what earlier slots wrote.
+- A slot holds one feature. The engine skips the transparency slot on a hair material.
+- `GenerateShader` runs once per pass. Set the initial parameter values there. Set values that change per frame
+  with `material.Set(key, value)`.
+- A shader that discards pixels must also run in the shadow and depth passes. Set
+  `MaterialKeys.UsePixelShaderWithDepthPass` to `true` on the pass parameters.
+- `Global.Time` is available to mesh materials. It is zero in effects that are not drawn by the mesh renderer,
+  such as particles and `ShapeBatch`.
+
+The **Custom feature** station has two features: `WobbleFeature` in the vertex stage and `DissolveFeature` in
+the pixel stage.
+
+### Limitations of the example features
+
+- `WobbleFeature` moves positions and leaves normals unchanged, so lighting follows the undeformed shape.
+- Displacement along normals separates faces that do not share normals, such as the faces of a cube.
+- `DissolveFeature` computes its noise from texture coordinates, so the pattern follows the UV layout.
+
+## View material streams
+
+`MaterialStreamView` draws every mesh with one material stream as its colour. It is the code equivalent of the
+view modes in Game Studio's toolbar. Use it to check what a texture or a node contributes to a material.
+
+```csharp
+var view = game.AddMaterialStreamView();
+
+view.Stream = MaterialStream.Glossiness;
+view.Next();
+view.Stream = null;
+```
+
+Call `AddMaterialStreamView` after the graphics compositor exists. Set `Stream` to `null` for lit shading.
+`Next` steps through the streams and returns to lit shading after the last one. Dispose the view to remove it.
+
+| `MaterialStream` | Shader stream | Shows |
 |---|---|---|
 | `ColorBase` | `matColorBase` | The colour as authored |
-| `Diffuse` | `matDiffuse` | The colour after metalness took its share - a metal is black here |
+| `Diffuse` | `matDiffuse` | The colour after metalness is applied. A metal is black |
 | `Specular` | `matSpecular` | 0.02 grey for a dielectric, the colour for a metal |
-| `Glossiness` | `matGlossiness` | Grey, black rough to white mirror |
-| `NormalTangent` | `matNormal` | The normal map's value remapped to a colour; flat is (0.5, 0.5, 1) |
-| `NormalWorld` | `normalWS` | The world normal after the map, remapped; up is green |
-| `Occlusion`, `Cavity` | `matAmbientOcclusion`, `matCavity` | Grey, white open |
-| `Emissive` | `matEmissive` | The colour without its intensity |
+| `Glossiness` | `matGlossiness` | Greyscale. Black is rough, white is a mirror |
+| `NormalTangent` | `matNormal` | The tangent-space normal as a colour. Flat is (0.5, 0.5, 1) |
+| `NormalWorld` | `normalWS` | The world-space normal as a colour. Up is green |
+| `Occlusion` | `matAmbientOcclusion` | Greyscale. White is unoccluded |
+| `Cavity` | `matCavity` | Greyscale |
+| `Emissive` | `matEmissive` | The emissive colour without its intensity |
 
-Three things to know. A permutation is part of the effect's identity, so every switch recompiles every
-effect and the meshes draw with the fallback for a frame or two, exactly as the editor's toolbar does.
-The view applies to every mesh the compositor's mesh feature draws, not to one material. And the value
-is the stream's linear value drawn through the post effects like any colour, so it is tone-mapped the
-way the lit picture is; a glossiness of 0.5 is not a pixel of 128. In the gallery M opens the list and a
-digit picks the view for the whole ring; the Normal map and the Gloss and metal maps stations are where they earn their keep.
+Remarks:
 
-## A highlight from a material
+- Changing the stream recompiles the effects in use. Meshes draw with the fallback effect for a few frames.
+- The view applies to every mesh drawn by the compositor's `MeshRenderFeature`.
+- Values are linear and pass through the post effects, including tone mapping.
 
-Something under the mouse should look under the mouse, and the first ideas for that are both heavier
-than they need to be. An outline is a render feature of its own - the toolkit's mesh outline example
-is one - drawing selected meshes again in a pass with its own shader. Swapping the hovered object's
-material for a brighter copy, as the cube-collapse game does, needs a lit variant of every material in
-the scene.
+In the Material Gallery, press `M` to open the list of views.
 
-The engine's TopDownRPG template does it with one material and one entity: the hovered model drawn
-again, a little larger, with a faint glow over it. The toolkit has that as `HighlightShell`:
+## Highlight a model
+
+`HighlightShell` draws a model again, slightly larger, with a glow. It needs no render feature and no post
+effect.
 
 ```csharp
 // examples/code-only/E09_3D_GpuPicking/Program.cs
@@ -534,7 +429,6 @@ picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
 ...
 if (picker.Result is { Hit: true, ModelComponent: { } model } hovered)
 {
-    // A crate has no entity of its own: the shell goes to the instance's matrix instead
     if (model.Entity == crates) hover?.Show(model, crateMatrices[hovered.InstanceIndex]);
     else hover?.Show(model);
 }
@@ -544,31 +438,24 @@ else
 }
 ```
 
-`MaterialDescriptors.Highlight` is four features and no diffuse: a constant displacement in the vertex
-stage pushes every vertex out along its normal, an emissive colour is the whole of its shading, a blend
-transparency with a small alpha lets the model show through, and no culling makes the glow read from
-inside as well. What reaches the screen is the colour added over the model, like light. `Show` puts the
-shell on a model as a child of its entity, filling every material slot, so it follows the model; showing
-the same target again every frame costs nothing.
+| Member | Description |
+|---|---|
+| `Show(model)` | Attaches the shell to the model's entity, so it follows the entity |
+| `Show(model, world)` | Places the shell at a world matrix, for one instance of an instanced model |
+| `Hide()` | Removes the shell |
+| `RenderGroup` | The render group the shell draws in. The default is `Group30` |
 
-Three things to know:
+`MaterialDescriptors.Highlight(colour, strength, inflate)` combines a constant vertex displacement, an emissive
+colour, blend transparency and no culling.
 
-1. **The shell must stay out of the picking pass.** It is in front of the model it highlights, so a
-   picker that sees it answers "the shell" the frame after it appears, and the hover flickers. The shell
-   draws in render group 30, and the picker's pickable mask leaves that group out.
-2. **Split normals open the seams.** A cube's faces each have their own normals, so the displacement
-   moves them apart at the corners. At the default two hundredths of a unit it is a thin bright rim; the
-   gallery's thick variation shows it plainly. Smooth models close.
-3. **An instance has no entity to follow.** For one instance of an instanced model, `Show(model, world)`
-   places a free shell at the instance's matrix; call it again if the instance moves.
+Remarks:
 
-The gallery's **Highlight shell** station moves one shell from shape to shape the way it would follow
-the mouse, and V cycles the colour and a thick shell.
+- Exclude the shell's render group from a GPU picker. Otherwise the picker returns the shell.
+- The shell casts no shadow.
+- Displacement along normals separates faces that do not share normals. The default `inflate` of 0.02 keeps
+  the gaps small.
 
-## Choosing the surface
-
-Past the four numbers, each aspect of a surface is a feature you add, and most of them come with a
-choice of model. The decision is mostly "what does the light do at this surface":
+## Choose surface features
 
 ```mermaid
 flowchart TD
@@ -584,18 +471,20 @@ flowchart TD
     F -- No --> K{Bumps?}
     K -- "painted only" --> L["Surface = MaterialNormalMapFeature"]
     K -- "real geometry" --> M["Displacement = MaterialDisplacementMapFeature<br/>+ tessellation for a smooth silhouette"]
-    K -- No --> N["The four numbers, plus maps"]
+    K -- No --> N["The PBR parameters, plus maps"]
 ```
 
-Three of these have lessons the class names do not tell you.
+### Thin glass
 
-**Thin glass is its own multi-pass material.** It draws a transmittance pass that multiplies what is
-behind, then an additive reflection pass, per face side. So it takes *no* transparency feature (one
-would fight its blend states), and *no* diffuse model (the reflection pass would add lit colour and
-the glass would go opaque); the diffuse colour is the transmission tint, what the glass absorbs. That
-is how the engine's own sample glass is built. The gallery adds one thing more, because the engine's
-transmittance pass ships with its blend state wiped by a 2025 refactor and paints its transmittance as a
-grey wall:
+`MaterialSpecularThinGlassModelFeature` is a multi-pass material. It draws a transmittance pass and a
+reflection pass for each face side.
+
+- Do not add a transparency feature.
+- Do not add a diffuse model. The diffuse colour is the transmission tint.
+
+> [!WARNING]
+> On Stride 4.4 the transmittance pass is generated without its blend state, and the glass renders opaque. Set
+> the blend state on the even passes after you compile the material.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/Stations.Surfaces.cs
@@ -609,24 +498,20 @@ foreach (var pass in glass.Passes)
 }
 ```
 
-A pass's blend state is yours to set after generation, which is worth knowing even once the engine fix
-ships and this workaround goes.
+### Displacement and tessellation
 
-**Displacement moves the vertices, and the shadow pass does not know.** A height map in the
-displacement slot moves vertices along their normals, so the silhouette changes; but the shadow map is
-drawn from the undisplaced mesh, and the displaced surface then shades itself black in its own stale
-shadow. The gallery's displaced models cast no shadow for that reason. Tessellation (PN triangles round
-off a five-segment sphere on the GPU) needs feature level 11, which a code-only game does not get unless
-it asks:
+- A displacement map moves vertices along their normals. The shadow map is drawn from the undisplaced mesh, so
+  a displaced mesh that casts shadows darkens itself. Turn off shadow casting for displaced models.
+- Tessellation requires graphics profile level 11. A code-only game starts at level 10.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/Program.cs
 game.UseGameSettings(settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0);
 ```
 
-**Layers compose whole materials, and the layer needs its descriptor.** Painted iron in the Material
-Package is iron with a paint material laid over it through a mask; rusted iron the same with rust; and
-the two stack:
+### Layers
+
+A layer blends a whole material over another through a mask.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/Stations.Models.cs
@@ -636,79 +521,68 @@ descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMateria
 descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronRust(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
 ```
 
-The generator composes a layer from its features, and `Material.New` leaves `Material.Descriptor`
-null. A material used as a layer that was built the plain way throws; the gallery's `s.Material`
-helper puts the descriptor back on every material it builds, which costs nothing and makes any of them
-usable as a layer later.
+> [!NOTE]
+> A material used as a layer must have its `Descriptor` set. `Material.New` leaves it `null`.
+> `game.CreateMaterial(descriptor)` sets it.
 
-## What the editor does that code does not
+### Known issues on Stride 4.4
 
-Building materials from code is not free of trade-offs, and it is worth being clear about them before
-choosing it for a whole game.
+| Feature | Status |
+|---|---|
+| Hair | The effect does not compile. The gallery's hair stations are disabled unless you start it with `--engine-fix` on a Stride build that contains the fix |
+| Subsurface scattering | Same as hair. The blur post effect is not used |
+| Thin glass | Renders opaque without the blend state workaround above |
+| Tessellated shadow casters | Log a constant buffer warning each frame. The gallery's tessellated models cast no shadow |
 
-| | Game Studio asset | Code |
+## Compare with Game Studio assets
+
+| Task | Game Studio asset | Code |
 |---|---|---|
-| Iterating a look | Property grid, live preview, no rebuild | Edit, build, run; a parameter change at runtime is the only live path |
-| Textures | The content pipeline: compression, mips, colour space set per asset | You load, you choose the format and colour space, you make the mips |
-| Reuse | An asset referenced by many models | A descriptor factory, which is what `Recipes.cs` and `PackMaterials` are |
-| Versioning and review | A YAML asset that diffs badly | C# that diffs like C# |
-| Generation | Fixed at edit time | Materials from data, from rules, from a texture computed a moment ago |
-| Discovering what exists | Every feature in the Add menu | The class names, which this page and the gallery list |
-| Seeing one stream | The toolbar's view modes | `game.AddMaterialStreamView()`, the same hook, on a key |
+| Iterate on a look | Property grid with live preview | Edit, build and run. Runtime parameters are the only live path |
+| Textures | The content pipeline compresses, builds mipmaps and sets the colour space | `TextureLoader` sets the colour space and builds mipmaps. No compression |
+| Reuse | One asset referenced by many models | A method that returns a descriptor |
+| Version control | A YAML asset | C# source |
+| Generated materials | Fixed at edit time | Built from data or rules at runtime |
+| Discover features | The Add menu | Class names, listed in this article and in the gallery |
+| View one stream | Toolbar view modes | `game.AddMaterialStreamView()` |
 
-The Material Package transcribed onto a row of spheres is the proof of equivalence: the same features
-with the same settings, which is all an `.sdmat` file is. It is also where the pack's authors' habits
-show - a metalness map reused as a glossiness map plus a constant, a specular map at 5 % for a
-dielectric - which are tuning choices made in nodes, and yours to copy or not.
+The gallery's **Material Package, in code** station builds each material of Game Studio's Material Package from
+the same features and values as its `.sdmat` file.
 
-Two features are honest works in progress on Stride 4.4. **Hair** (the Kajiya-Kay family, highlight
-along the strand, written for hair cards) and **subsurface scattering** (light in at one point, out at
-another) both need an engine fix that is written up for upstream: their function shaders implement
-abstract methods without `override`, which the SPIR-V shader mixer rejects. The three stations are behind
-`Stations.EngineHasOverrideFix` (or `--engine-fix` at start) and stand as empty pads with the message
-until then: with a package that has the fix, the gallery shows three heads of runtime hair cards that
-sway in a wind; without it, the effect fails to compile at the first draw, which no station guard can
-catch because it happens in the renderer. The subsurface *blur* stays off either way; what shows is the
-translucency term from the shadow map's thickness.
+### Material thumbnails
 
-### Why the editor's thumbnail and the game disagree
+Game Studio renders a material's thumbnail with a fixed rig. The
+[Material Preview](../code-only/examples/material-preview.md) example (`E02_3D_MaterialPreview`) builds the same
+rig in code.
 
-A material that looks right in Game Studio's thumbnail can look different in the game, most of all a
-metal, and the reason is the thumbnail's rig rather than the material. The
-[Material Preview](../code-only/examples/material-preview.md) example (`E02_3D_MaterialPreview`) rebuilds
-that rig in code with the editor's own numbers:
-
-| Part | The thumbnail's |
+| Part | Setting |
 |---|---|
-| Compositor | The forward renderer with **no post effects**, cleared to grey 0x434343, no skybox |
-| Camera | Pitched down 30 degrees, turned 45, far enough back that the front of a unit sphere fits |
-| Lights | Ambient 0.02, a front directional 0.07 and a top directional 0.8 tilted 80 degrees; the two directional ones times 5 in an HDR project |
-| Subject | A sphere, scaled to its unit bounding sphere and turned half round so the texture's middle faces the camera |
+| Compositor | Forward renderer, no post effects, background `0x434343`, no skybox |
+| Camera | Pitched down 30 degrees and turned 45 degrees, at a distance that fits a unit sphere |
+| Lights | Ambient 0.02, front directional 0.07, top directional 0.8 tilted 80 degrees. Directional intensities are multiplied by 5 in an HDR project |
+| Subject | A sphere scaled to a unit bounding sphere and rotated 180 degrees about Y |
 
-G in the example swaps to how a game shows the same material, with post effects and a skybox. Polished
-gold is the lesson: in the thumbnail it is a dark ball with two highlights, since a metal is almost all
-reflection and an ambient of 0.02 gives it nothing to reflect; in the game it reflects the sky and reads as
-gold. When a material looks dull in the editor and fine in the game, or the other way round, the rig is the
-first suspect.
+The rig has almost no environment lighting. A metal therefore looks darker in a thumbnail than in a scene
+with a skybox. Press `G` in the example to compare both.
 
-One thing the example does differently: the editor centres the model and then turns it, without turning
-the centre offset. That is exact for its sphere and moves any model not centred on its origin - a teapot,
-a cone - off the middle of the frame, so the example turns the offset with the model.
+## Gallery stations by topic
 
-## The gallery, station by station
+Press `V` to cycle a station's variations. Start the gallery with `--station N --variation M` to open a
+station directly.
 
-The ring is ordered the way this page is: the numbers first, then the maps, then the inputs, then the
-surfaces and the models. `V` cycles a station's variations; `--station N --variation M` starts there.
-
-| Stations | Concept on this page |
+| Stations | Section of this article |
 |---|---|
-| Diffuse colour · Glossiness sweep · Metalness sweep · Specular colour · Three distributions · Mirror | The four numbers, the two workflows, the microfacet functions |
-| Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive · Animated parameters | Textures in slots; the emissive and animated stations are the parameters set every frame |
-| Vertex colours · Node arithmetic · Custom shader node · Custom feature · Runtime textures · Texture loading | Every slot is a node; a feature of your own; loading a file right |
-| Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
-| Displacement · Tessellation · Overrides · Layers · Highlight shell · Materials at runtime | The vertices, the whole-material settings, composition, a material drawn over a model, swapping materials |
-| The Material Package, in code · The lot | Equivalence with the editor; a full physically based material as a page of features |
+| Diffuse colour, Glossiness sweep, Metalness sweep, Specular colour, Three distributions, Mirror | PBR parameters |
+| Albedo texture, Normal map, Gloss and metal maps, Occlusion, Emissive, Animated parameters | Material nodes, Change parameters at runtime |
+| Vertex colours, Node arithmetic, Custom shader node, Custom feature, Runtime textures, Texture loading | Material nodes, Write a custom material feature, Load textures |
+| Transparency, Thin glass, Clear coat, Cel shading, Hair, Hair passes and functions, Subsurface scattering | Choose surface features |
+| Displacement, Tessellation, Overrides, Layers, Highlight shell, Materials at runtime | Choose surface features, Highlight a model, Swap materials at runtime |
+| The Material Package, in code, The lot | Compare with Game Studio assets |
 
-The beginner example, [Material](../code-only/examples/material.md) (`E02_3D_Material`), stays the
-first stop: a row of cubes that differ in one number each, with the skybox light on a key so the
-metalness lesson can be seen rather than read.
+## See also
+
+- [Material](../code-only/examples/material.md) example (`E02_3D_Material`): glossiness and metalness sweeps
+- [Material Gallery](../code-only/examples/material-gallery.md) example
+- [Material Preview](../code-only/examples/material-preview.md) example
+- [GPU picking](gpu-picking.md)
+- [Shaders in a toolkit package](../../contributing/toolkit/shaders.md)

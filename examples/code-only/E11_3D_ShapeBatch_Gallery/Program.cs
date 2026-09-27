@@ -11,6 +11,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
+using Stride.Rendering.Materials.ComputeColors;
 
 // A gallery of ShapeBatch. Every exhibit is one static method in Stations.*.cs that draws in its
 // station's own coordinates and knows nothing about where it stands, so any of them can be copied
@@ -58,11 +59,15 @@ void Start(Scene rootScene)
 
     // Depth-tested: scene geometry occludes these, so a disc on the floor goes behind a pillar.
     // Overlay: drawn on top of everything, which is what you want for gizmos and debug marks.
-    // Two more carry a fill source - a picture, clamped at its edges, and the same picture tiled -
-    // because a shader composition is one fill per batch.
+    // Three more carry a fill source - a picture, clamped at its edges, the same picture tiled, and a
+    // shader - because a shader composition is one fill per batch.
     var picture = GalleryPicture.Create(game.GraphicsDevice);
     var pictures = game.AddShapeBatch(depthTest: true);
     var stripes = game.AddShapeBatch(depthTest: true);
+
+    // A third fill is a shader class from this example's Effects folder; its clock is a node composed
+    // in, which the station sets every frame
+    var clock = new ComputeFloat4(Vector4.Zero);
 
     pictures.FillWith(picture);
 
@@ -71,7 +76,9 @@ void Start(Scene rootScene)
         Overlay: game.AddShapeBatch(depthTest: false),
         Pictures: pictures,
         Stripes: stripes,
-        Stripe: stripes.FillWith(picture, scale: new Vector2(4f, 1f), addressMode: TextureAddressMode.Wrap));
+        Stripe: stripes.FillWith(picture, scale: new Vector2(4f, 1f), addressMode: TextureAddressMode.Wrap),
+        Shaded: game.AddShapeBatch(depthTest: true, fill: new ComputeShaderClassColor { MixinReference = "GalleryPlasma", CompositionNodes = { ["Clock"] = clock } }),
+        Clock: clock);
 
     // The text renderers, appended after the camera renderer that draws the shapes, so text lands
     // on top of a panel's fill; neither writes depth, so coplanar is fine
@@ -157,7 +164,7 @@ void HandleInput(Gallery<ShapeStation> gallery)
         style.BorderWidth = MathF.Max(style.BorderWidth - 1f, 0f);
 }
 
-int Submitted() => batches is null ? 0 : batches.Scene.Count + batches.Overlay.Count + batches.Pictures.Count + batches.Stripes.Count;
+int Submitted() => batches is null ? 0 : batches.Scene.Count + batches.Overlay.Count + batches.Pictures.Count + batches.Stripes.Count + batches.Shaded.Count;
 
 IReadOnlyList<TextElement> BuildOverlayLines()
 {
