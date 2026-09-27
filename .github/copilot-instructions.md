@@ -240,6 +240,15 @@ the worked examples. Verify against a package from `build/pack-local.cs`, not a 
 - Update conceptual docs and XML comments when changing public APIs.
 - New libraries: update navigation, TOC, and contributing guides (`docs/contributing/toolkit/library-project.md`).
 - Provide concise, runnable examples that minimize boilerplate.
+- Write manual pages as reference documentation, in the style of the Microsoft .NET docs:
+  - State what a feature is, how to use it, and its limits. Use task-named headings ("Load textures",
+    "Pick shapes"), short sentences, present tense and second person.
+  - Prefer tables for parameters, members and comparisons, numbered steps for procedures, and DocFX
+    alerts (`> [!NOTE]`, `> [!IMPORTANT]`, `> [!WARNING]`) for what goes wrong.
+  - Leave out history, anecdotes and how a problem was found. Explain a concept when it teaches the
+    reader something they need; keep the explanation short.
+  - End with a **See also** list.
+- Release notes entries are one or two factual sentences: what changed and how to use it.
 - Keep `docs/release-notes/index.md` current: every change goes under the heading of the version in
   progress, in the categories of `.github/release.yml` (breaking changes first - a renamed or moved
   public type, a changed property type, a visual change a user would notice). Write the entry with the
