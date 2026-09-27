@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
@@ -130,9 +131,52 @@ public static class MapStations
         var pulse = 0.5f + 0.5f * MathF.Sin(s.Seconds * 2f);
 
         // A material's parameters are the shader's constants; a keyed value set here is picked up
-        // by the next draw. EmissiveIntensity is the key the emissive feature registers its scalar under.
-        material.Passes[0].Parameters.Set(MaterialKeys.EmissiveIntensity, 0.2f + 3f * pulse);
+        // by the next draw. EmissiveIntensity is the key the emissive feature registers its scalar under,
+        // and the toolkit's setter writes it to every pass the material has.
+        material.Set(MaterialKeys.EmissiveIntensity, 0.2f + 3f * pulse);
     }
+
+    /// <summary>
+    /// Three ways a material changes every frame without being rebuilt, all through the parameters
+    /// the generator registered: the sphere's diffuse is a colour node carrying a key of the
+    /// station's own, so its tint walks round the hue; the cube's brick texture scrolls through the
+    /// offset key every texture node registers; the teapot's glossiness breathes through the key the
+    /// number in its glossiness slot registered under. Every write goes through the toolkit's
+    /// <c>MaterialParameters</c>, which converts a colour the way the generator did - to linear,
+    /// premultiplied - and reaches every pass of the material.
+    /// </summary>
+    public static void AnimatedParameters(MaterialStation s)
+    {
+        s.Clear();
+
+        // A colour node with a key of our own: what the generator would have named MaterialKeys.DiffuseValue
+        // is instead this key, and this key is what the update sets
+        var tint = s.Material(Recipes.Mapped(new ComputeColor(Color.White) { Key = TintKey }, glossiness: new ComputeFloat(0.6f)));
+        var scroll = s.Material(Recipes.Mapped(Recipes.Colour(s.Textures.Color("brick/brick_dif.png"), 2f), glossiness: new ComputeFloat(0.4f)));
+        var gloss = s.Material(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f));
+
+        s.State = new AnimatedState(tint, scroll, gloss);
+        s.Place(PrimitiveModelType.Sphere, tint, MaterialStation.SphereSpot);
+        s.Place(PrimitiveModelType.Cube, scroll, MaterialStation.CubeSpot);
+        s.Place(PrimitiveModelType.Teapot, gloss, MaterialStation.TeapotSpot);
+    }
+
+    /// <summary>The per-frame half: the tint round the hue, the bricks scrolling, the glossiness breathing.</summary>
+    public static void AnimatedParametersUpdate(MaterialStation s)
+    {
+        if (s.State is not AnimatedState state) return;
+
+        var hue = s.Seconds * 40f % 360f;
+
+        state.Tint.SetColor(TintKey, new ColorHSV(hue, 0.7f, 1f, 1f).ToColor());
+        state.Scroll.SetTextureOffset(new Vector2(s.Seconds * 0.15f, 0f));
+        state.Gloss.Set(MaterialKeys.GlossinessValue, 0.5f + 0.5f * MathF.Sin(s.Seconds));
+    }
+
+    /// <summary>The key the tint sphere's colour node carries; named so it reads in a debugger.</summary>
+    private static readonly ValueParameterKey<Color4> TintKey = MaterialParameters.ColorKey("MaterialGallery.Tint");
+
+    private sealed record AnimatedState(Material Tint, Material Scroll, Material Gloss);
 
     /// <summary>
     /// The colour from the vertices: a cube built with <c>MeshBuilder</c> whose corners each carry
