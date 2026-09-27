@@ -9,7 +9,16 @@ namespace E11_3D_ShapeBatch_Gallery;
 /// <param name="Pictures">Depth-tested, filled with the gallery's picture, clamped at its edges.</param>
 /// <param name="Stripes">Depth-tested, the same picture tiled four times across and free to scroll.</param>
 /// <param name="Stripe">The node behind <see cref="Stripes"/>, whose offset a station animates.</param>
-public sealed record GalleryBatches(ShapeBatch Scene, ShapeBatch Overlay, ShapeBatch Pictures, ShapeBatch Stripes, Stride.Rendering.Materials.ComputeColors.ComputeTextureColor Stripe);
+/// <param name="Shaded">Depth-tested, filled by a shader class of the gallery's own instead of a texture.</param>
+/// <param name="Clock">The node composed into <see cref="Shaded"/>'s shader, whose X a station sets to the time.</param>
+public sealed record GalleryBatches(
+    ShapeBatch Scene,
+    ShapeBatch Overlay,
+    ShapeBatch Pictures,
+    ShapeBatch Stripes,
+    Stride.Rendering.Materials.ComputeColors.ComputeTextureColor Stripe,
+    ShapeBatch Shaded,
+    Stride.Rendering.Materials.ComputeColors.ComputeFloat4 Clock);
 
 /// <summary>The three per-frame states the visitor changes with keys, applied to every station.</summary>
 public sealed class GalleryStyle
@@ -66,5 +75,6 @@ public sealed class ShapeStation : GalleryStation
         ResetStyle(Batches.Overlay);
         ResetStyle(Batches.Pictures);
         ResetStyle(Batches.Stripes);
+        ResetStyle(Batches.Shaded);
     }
 }

@@ -40,6 +40,7 @@ public static class Stations
         new("Screen shapes", "a HUD in pixels from the same batch, shown while you stand here", nameof(ShapeBatch.Screen), EffectStations.ScreenHud),
         new("Textured fill", "a picture inside an outlined shape", nameof(ShapeBatch.FillSource), EffectStations.TexturedFill, Anchor: new Vector3(-2.5f, 0.6f, 0f)),
         new("Scrolling texture", "the picture tiled and moving, one offset a frame", nameof(ShapeBatch.FillWith), EffectStations.ScrollingTexture, Anchor: new Vector3(0f, 0.6f, 0f)),
+        new("Shader fill", "a fill computed by a shader class of your own, no texture", nameof(ShapeBatch.FillSource), EffectStations.ShaderFill, Anchor: new Vector3(0f, 0.6f, 0f)),
         new("Second camera in a panel", "a live view from another camera, inside a shape", nameof(RenderTextureSceneRenderer), EffectStations.Mirror, EffectStations.MirrorSetup, Pillars: 1, Anchor: new Vector3(-2.5f, 1f, -1f)),
         new("Picking", "which shape is under the mouse: the batch knows, from what it drew", nameof(ShapeBatch.TryPick), EffectStations.Picking, EffectStations.PickingSetup, Anchor: new Vector3(0f, 0.3f, 1.5f)),
     ];

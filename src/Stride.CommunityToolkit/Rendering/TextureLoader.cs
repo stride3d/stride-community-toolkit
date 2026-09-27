@@ -104,14 +104,38 @@ public sealed class TextureLoader(GraphicsDevice device, string? root = null) : 
 
         if (format == PixelFormat.B8G8R8A8_UNorm) TexturePixels.SwapRedBlue(pixels);
 
+        return FromPixels(device, pixels, description.Width, description.Height, options);
+    }
+
+    /// <summary>
+    /// Makes a texture from pixels computed in code, prepared for its role like a loaded file: a colour
+    /// premultiplied, a normal map's green flipped on request, and the mipmap chain built. Not kept: the
+    /// caller owns it.
+    /// </summary>
+    /// <param name="device">The device to create it on.</param>
+    /// <param name="pixels">The pixels, RGBA, row by row from the top; a colour in sRGB with straight alpha. Changed in place.</param>
+    /// <param name="width">The width in pixels.</param>
+    /// <param name="height">The height in pixels.</param>
+    /// <param name="options">The role and the steps to take.</param>
+    /// <exception cref="ArgumentException"><paramref name="pixels"/> does not hold <paramref name="width"/> times <paramref name="height"/> pixels.</exception>
+    public static Texture FromPixels(GraphicsDevice device, Color[] pixels, int width, int height, TextureLoadOptions options)
+    {
+        ArgumentNullException.ThrowIfNull(device);
+        ArgumentNullException.ThrowIfNull(pixels);
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
+
+        if (pixels.Length != width * height) throw new ArgumentException($"Expected {width * height} pixels for {width} by {height}, got {pixels.Length}", nameof(pixels));
+
         if (options.Role == TextureRole.Color && options.PremultiplyAlpha) TexturePixels.PremultiplyAlpha(pixels);
 
         if (options.Role == TextureRole.NormalMap && options.InvertY) TexturePixels.InvertGreen(pixels);
 
-        var levels = options.GenerateMipmaps ? TexturePixels.BuildMipChain(pixels, description.Width, description.Height, options.Role) : [pixels];
+        var levels = options.GenerateMipmaps ? TexturePixels.BuildMipChain(pixels, width, height, options.Role) : [pixels];
         var target = options.Role == TextureRole.Color ? PixelFormat.R8G8B8A8_UNorm_SRgb : PixelFormat.R8G8B8A8_UNorm;
 
-        using var prepared = Image.New2D(description.Width, description.Height, levels.Count, target);
+        using var prepared = Image.New2D(width, height, levels.Count, target);
 
         for (var level = 0; level < levels.Count; level++)
         {

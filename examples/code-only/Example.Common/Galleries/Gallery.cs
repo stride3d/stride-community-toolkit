@@ -320,6 +320,18 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         Guarded(station, () => exhibit.Setup?.Invoke(station));
 
         // The label: screen-space text pinned to a point above the pad, so it reads at any distance
+        // ToDo: Test this component as well
+        //var label = new WorldTextComponent
+        //{
+        //    Text = $"{station.Number}",
+        //    FontSize = 12,
+        //    Font = _labelFont,
+        //    TextColor = Color.White,
+        //    Anchor = TextAnchor.MiddleLeft,
+        //    AutoScale = true,
+        //    Offset = new Vector3(1, 0f, 0f),
+        //    Billboard = false
+        //};
         var label = new EntityTextComponent
         {
             Text = $"{station.Number}",

@@ -8,15 +8,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ## 1.0.0.0-preview.66
 
-<!-- If needed add more categories -->
-
 ## What's Changed
+
+<!-- If needed add more categories -->
 
 ### 💥 Breaking Changes
 
 ### 🎉 New Features
-
-- `TextureLoader.FromPixels(device, pixels, width, height, options)`: makes a texture from pixels computed in code, prepared by role and with mipmaps, like a loaded file.
 
 ### 🐞 Bug Fixes
 
@@ -26,12 +24,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
-- ShapeBatch manual: new section on using a shader class as a fill.
-
 ### 🎓 Examples
-
-- `E11_3D_ShapeBatch_Gallery`: new station **Shader fill**, a fill computed by a shader class instead of a texture. The gallery picture has mipmaps.
-- `E09_3D_Particles_Gallery`: new station **Shader node**, particles drawn by a shader class instead of a texture. `--station N --variation M` starts at a variation.
 
 ### 🔧 Engineering
 

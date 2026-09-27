@@ -1,0 +1,22 @@
+namespace E09_3D_Particles_Gallery
+{
+    // A particle drawn by a formula instead of a texture: a bright core with six rays. The texture
+    // coordinate runs 0 to 1 across the particle's quad, so the shape turns with the particle's
+    // rotation and scales with its size like a textured one. The value goes out in all four channels,
+    // so it works additive and alpha-blended.
+    shader GalleryParticleStar : ComputeColor, Texturing
+    {
+        override float4 Compute()
+        {
+            float2 p = streams.TexCoord * 2.0 - 1.0;
+            float r = length(p);
+            float angle = atan2(p.y, p.x);
+
+            float core = saturate(1.0 - r);
+            float rays = pow(abs(cos(angle * 3.0)), 12.0);
+            float v = saturate(pow(core, 4.0) * 1.5 + pow(core, 1.5) * rays * 0.8);
+
+            return float4(v, v, v, v);
+        }
+    };
+}

@@ -3,6 +3,7 @@ using Stride.Particles;
 using Stride.Particles.Modules;
 using Stride.Particles.Initializers;
 using Stride.Particles.Materials;
+using Stride.Rendering.Materials.ComputeColors;
 using Stride.Particles.ShapeBuilders;
 using Stride.Particles.Spawners;
 using Stride.Particles.Updaters;
@@ -41,6 +42,7 @@ public static class Stations
         new("Scrolling texture", "texture coordinates that slide over the particle's life", nameof(UVBuilderScroll), Setup: LookStations.Scroll),
         new("Soft particles", "fading where a particle meets geometry, instead of a hard cut", nameof(ParticleMaterialSimple.SoftEdgeDistance), Setup: LookStations.Soft, Pillars: 1),
         new("Colour graph", "a material from nodes: texture times colour, texture plus colour", nameof(ParticleMaterialComputeColor.ComputeColor), Setup: LookStations.ColorGraph),
+        new("Shader node", "a particle drawn by a shader class of your own, no texture", nameof(ComputeShaderClassColor), Setup: LookStations.ShaderNode),
 
         // The showpieces, each several of the above at once
         new("Campfire", "flames, embers and smoke from three emitters", nameof(ParticleSystem), Setup: ShowStations.Campfire),
