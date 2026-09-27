@@ -24,6 +24,7 @@ public sealed class FrameLights
     // For each corner, how many lights run along its horizontal edge and along its vertical edge
     private readonly (int Across, int Up)[] _runs;
 
+    /// <summary>Constructs the lights.</summary>
     /// <param name="seed">The same seed gives the same runs.</param>
     public FrameLights(int seed)
     {
