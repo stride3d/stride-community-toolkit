@@ -48,6 +48,7 @@ public static class Stations
         new("Vertex colours", "a colour per vertex from a MeshBuilder mesh, no texture", nameof(ComputeVertexStreamColor), Setup: MapStations.VertexColours, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Node arithmetic", "two textures combined by an operator before the material sees them", nameof(ComputeBinaryColor), Setup: MapStations.NodeArithmetic, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Custom shader node", "a ComputeColor class of your own in any slot, twenty lines of shader", nameof(ComputeShaderClassColor), Setup: InputStations.CustomNode, Anchor: new Vector3(0f, 1.8f, 0f)),
+        new("Custom feature", "a feature of your own adds shaders to a stage: a vertex wobble, a pixel dissolve", nameof(MaterialFeature), InputStations.CustomFeatureUpdate, InputStations.CustomFeature, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Runtime textures", "a height map and its normal map computed in C#, no asset", nameof(Stride.Graphics.Texture.New2D), Setup: InputStations.RuntimeTexturesStation, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Texture loading", "the same files loaded wrong on the left, right on the right: colour space, green, alpha, mipmaps", nameof(TextureLoader), Setup: InputStations.TextureLoading, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Transparency", "blend, additive, cutoff and a dithered cutoff, on one shape", nameof(MaterialTransparencyBlendFeature), Setup: SurfaceStations.Transparency, Anchor: new Vector3(0f, 1.8f, 0f)),

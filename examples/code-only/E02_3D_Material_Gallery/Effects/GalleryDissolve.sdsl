@@ -1,0 +1,56 @@
+namespace E02_3D_Material_Gallery
+{
+    // A dissolve, added by DissolveFeature to the pixel stage: fractal noise over the texture
+    // coordinates, every pixel whose noise is below the amount discarded, and a band just above it
+    // written into the emissive stream as a hot edge. It runs after the emissive feature's own shader,
+    // because the transparency slot is visited after the emissive one, so the edge replaces whatever
+    // emissive colour was there; the emissive feature's shading then adds it to the light. With no
+    // emissive feature on the material the edge is written and nobody reads it: the surface dissolves
+    // without a glow.
+    shader GalleryDissolve : IMaterialSurfacePixel, MaterialPixelStream, Texturing
+    {
+        cbuffer PerMaterial
+        {
+            stage float DissolveAmount;
+            stage float DissolveEdgeWidth;
+            stage float DissolveScale;
+            stage float3 DissolveEdgeColor;
+        }
+
+        float Hash(float2 p)
+        {
+            return frac(sin(dot(p, float2(127.1, 311.7))) * 43758.5453);
+        }
+
+        float Noise(float2 p)
+        {
+            float2 cell = floor(p);
+            float2 f = frac(p);
+            float2 u = f * f * (3.0 - 2.0 * f);
+
+            float a = Hash(cell);
+            float b = Hash(cell + float2(1.0, 0.0));
+            float c = Hash(cell + float2(0.0, 1.0));
+            float d = Hash(cell + float2(1.0, 1.0));
+
+            return lerp(lerp(a, b, u.x), lerp(c, d, u.x), u.y);
+        }
+
+        override void Compute()
+        {
+            float2 uv = streams.TexCoord * DissolveScale;
+            float noise = (0.5 * Noise(uv) + 0.25 * Noise(uv * 2.03) + 0.125 * Noise(uv * 4.01) + 0.0625 * Noise(uv * 8.05)) / 0.9375;
+            float left = noise - DissolveAmount;
+
+            if (left < 0.0)
+            {
+                discard;
+            }
+
+            float edge = 1.0 - saturate(left / DissolveEdgeWidth);
+
+            streams.matEmissive = float4(lerp(streams.matEmissive.rgb, DissolveEdgeColor, edge), streams.matEmissive.a);
+            streams.matEmissiveIntensity = lerp(streams.matEmissiveIntensity, 1.0, edge);
+        }
+    };
+}

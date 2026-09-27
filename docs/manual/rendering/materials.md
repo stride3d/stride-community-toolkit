@@ -9,7 +9,7 @@ objects, that the engine turns into a shader for you. This page is about that ba
 what each piece changes on screen, and the handful of things that go wrong when you build one from code.
 Every rule is illustrated by real code in this repository, most of it in the
 [Material Gallery](../code-only/examples/material-gallery.md) (`E02_3D_Material_Gallery`), a ring of
-thirty stations you can walk through and compare.
+thirty-one stations you can walk through and compare.
 
 ## The wrong path: turn the numbers up
 
@@ -311,9 +311,106 @@ each learned from the engine's own gizmo materials:
    keys; later ones are the base key composed with `i1`, `i2`, which is how the generator names a key's
    later uses, and `TextureKeyAt` spells that out.
 
-The hair station goes further: a feature of the gallery's own in the displacement slot installs a
-vertex-stage shader, and every frame sets that shader's wind through the keys the source generator made
-for it - which is the whole recipe for a material that moves.
+A shader of your own goes further: its parameters are set the same way, through the keys the source
+generator makes from its constants, which is how the dissolve below burns away on a timer.
+
+## A feature of your own
+
+A node fills one slot's value. When what you need is a change to what a stage *does* - move the
+vertices, throw pixels away - the next step is a material feature of your own.
+
+The wrong path first: a custom effect. The engine's SpaceEscape sample bends its world with an `.sdfx` of
+its own and a render feature that swaps it in, and that works, but it replaces the forward effect for
+everything it draws; lighting, shadows and every other material feature are yours to keep in step. A
+material feature is smaller. It is a class the material generator calls while it builds the shader,
+and what it adds is composed with everything else the material has, shadows included.
+
+This is the whole of the gallery's wobble:
+
+```csharp
+// examples/code-only/E02_3D_Material_Gallery/CustomFeatures.cs
+[DataContract]
+public class WobbleFeature : MaterialFeature, IMaterialDisplacementFeature
+{
+    public float Amplitude { get; set; } = 0.08f;
+    public float Frequency { get; set; } = 7f;
+    public float Speed { get; set; } = 4f;
+
+    public override void GenerateShader(MaterialGeneratorContext context)
+    {
+        context.SetStreamFinalModifier<WobbleFeature>(MaterialShaderStage.Vertex, new ShaderClassSource("GalleryWobble"));
+
+        var parameters = context.MaterialPass.Parameters;
+
+        parameters.Set(GalleryWobbleKeys.WobbleAmplitude, Amplitude);
+        parameters.Set(GalleryWobbleKeys.WobbleFrequency, Frequency);
+        parameters.Set(GalleryWobbleKeys.WobbleSpeed, Speed);
+    }
+}
+```
+
+```hlsl
+// examples/code-only/E02_3D_Material_Gallery/Effects/GalleryWobble.sdsl
+shader GalleryWobble : IMaterialSurface, PositionStream, NormalStream
+{
+    cbuffer PerMaterial
+    {
+        stage float WobbleAmplitude;
+        stage float WobbleFrequency;
+        stage float WobbleSpeed;
+    }
+
+    override void Compute()
+    {
+        float wave = sin(streams.Position.y * WobbleFrequency - Global.Time * WobbleSpeed);
+
+        streams.Position = float4(streams.Position.xyz + streams.meshNormal * (wave * WobbleAmplitude), streams.Position.w);
+    }
+};
+```
+
+It goes in a slot like any feature, `descriptor.Attributes.Displacement = new WobbleFeature()`, and the
+shader is compiled by the asset compiler at build like the gallery's other `.sdsl` files. The source
+generator makes `GalleryWobbleKeys` from the constants. What `GenerateShader` can ask for:
+
+| Call | What it does | Who uses it |
+|---|---|---|
+| `AddShaderSource(stage, shader)` | Adds a surface shader to a stage, in the order the slots are visited | The dissolve |
+| `SetStreamFinalModifier<T>(stage, shader)` | Makes a shader the last of its stage, once per `T` | The wobble, the engine's displacement |
+| `AddFinalCallback(stage, callback)` | Runs after every feature has had its say | The engine's cutoff discard |
+| `AddShading(this)` | Adds a shading model, a term added to the light | The engine's emissive |
+| `SetStream(...)` | Fills a stream from a node, with its keys | Every map feature |
+| `MaterialPass` | The pass's parameters and state: cull mode, blend state, transparency | Most features |
+
+Three rules the gallery's two features taught:
+
+1. **The slot decides the stage and the order.** The displacement slot is the vertex stage's. In the
+   pixel stage the slots are visited diffuse, surface, microsurface, specular, occlusion, emissive,
+   subsurface, transparency, clear coat, and a shader added later sees what the earlier ones wrote. The
+   dissolve writes its glowing edge into the emissive stream, so it lives in the transparency slot,
+   after the emissive feature; in the surface slot the emissive feature would overwrite it. One slot
+   holds one feature, so a dissolving material cannot also be blend-transparent, and the engine skips
+   the transparency slot entirely on a hair material.
+2. **Properties become parameters in `GenerateShader`; what changes per frame goes through the keys.**
+   A multi-pass material generates once per pass, so each pass gets the properties. The dissolve's
+   amount is then driven every frame with `material.Set(GalleryDissolveKeys.DissolveAmount, amount)`,
+   which reaches every pass. The wobble needs nothing per frame: `Global.Time` is the engine's own clock,
+   there for any shader.
+3. **A discard needs the depth pass too.** The shadow caster and the depth prepass run a pixel shader
+   only when the pass asks, so the dissolve sets `MaterialKeys.UsePixelShaderWithDepthPass`, the key the
+   engine's cutoff transparency sets. Without it the dissolved part still casts its shadow.
+
+The scar tissue: the glow that was not there. The first dissolve burned through the shapes and the edge
+looked no warmer than the brick. The Emissive view under M settled it at once: the band was in the
+emissive stream, bright and in the right place. The value had arrived; the tone map had compressed an
+edge colour of (6, 1.6, 0.3) to a pale peach. It is (24, 6, 0.8) now. When a feature of your own seems
+to do nothing, the stream views say whether the value reached the stream before you start doubting the
+shader.
+
+Honest limits. The wobble moves positions but leaves the normals, so the light still describes the
+undeformed shape; for a larger wave the shader would bend the normal too. On split normals, a cube's
+corners, the faces move apart and the seams open, which is why the wobble variation has no cube. The
+dissolve's noise runs over the texture coordinates, so it follows the UV layout, seams and all.
 
 ## Seeing one stream at a time
 
@@ -480,7 +577,7 @@ surfaces and the models. `V` cycles a station's variations; `--station N --varia
 |---|---|
 | Diffuse colour · Glossiness sweep · Metalness sweep · Specular colour · Three distributions · Mirror | The four numbers, the two workflows, the microfacet functions |
 | Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive · Animated parameters | Textures in slots; the emissive and animated stations are the parameters set every frame |
-| Vertex colours · Node arithmetic · Custom shader node · Runtime textures · Texture loading | Every slot is a node; loading a file right |
+| Vertex colours · Node arithmetic · Custom shader node · Custom feature · Runtime textures · Texture loading | Every slot is a node; a feature of your own; loading a file right |
 | Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
 | Displacement · Tessellation · Overrides · Layers | The vertices, the whole-material settings, composition |
 | The Material Package, in code · The lot | Equivalence with the editor; a full physically based material as a page of features |

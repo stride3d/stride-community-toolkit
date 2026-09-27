@@ -1,0 +1,24 @@
+namespace E02_3D_Material_Gallery
+{
+    // A wobble, installed by WobbleFeature as the vertex stage's final modifier: every vertex moves along
+    // its normal by a wave that runs up the shape. Positions are in object space here, before the world
+    // transform, so the wave travels with the shape and the shadow pass, which runs the same vertex
+    // stage, wobbles with it. The clock is the engine's own Global.Time, so nothing has to be set per
+    // frame; the three numbers are the feature's properties, set once as the pass's parameters.
+    shader GalleryWobble : IMaterialSurface, PositionStream, NormalStream
+    {
+        cbuffer PerMaterial
+        {
+            stage float WobbleAmplitude;
+            stage float WobbleFrequency;
+            stage float WobbleSpeed;
+        }
+
+        override void Compute()
+        {
+            float wave = sin(streams.Position.y * WobbleFrequency - Global.Time * WobbleSpeed);
+
+            streams.Position = float4(streams.Position.xyz + streams.meshNormal * (wave * WobbleAmplitude), streams.Position.w);
+        }
+    };
+}

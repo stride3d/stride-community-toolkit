@@ -8,8 +8,9 @@ using Stride.Rendering.Materials.ComputeColors;
 
 namespace E02_3D_Material_Gallery;
 
-// The inputs a slot can take beyond a texture: a shader class of your own, a texture computed
-// at runtime with no asset behind it, and what loading a texture file right takes.
+// The inputs a slot can take beyond a texture: a shader class of your own, a feature of your own that
+// adds shaders to a stage, a texture computed at runtime with no asset behind it, and what loading a
+// texture file right takes.
 public static class InputStations
 {
     /// <summary>
@@ -25,6 +26,56 @@ public static class InputStations
         var shader = s.Pick("GalleryChecker", "GalleryStripes") == 0 ? "GalleryChecker" : "GalleryStripes";
 
         s.PlaceTrio(s.Material(Recipes.Mapped(new ComputeShaderClassColor { MixinReference = shader }, glossiness: new ComputeFloat(0.45f))));
+    }
+
+    /// <summary>
+    /// A material feature of your own, the next step past a node: where a node fills one slot's value,
+    /// a feature decides which shaders a stage runs. Two of the gallery's own - a wobble in the
+    /// displacement slot, the vertex stage, and a dissolve in the transparency slot, the pixel stage,
+    /// whose amount is driven every frame through a parameter. Each is a small class in
+    /// <c>CustomFeatures.cs</c> and a shader in <c>Effects</c>. V switches them.
+    /// </summary>
+    public static void CustomFeature(MaterialStation s)
+    {
+        s.Clear();
+        s.State = null;
+
+        if (s.Pick("wobble", "dissolve") == 0)
+        {
+            // Smooth shapes: on a cube's split normals the faces would move apart
+            var wobble = Recipes.Pbr(new Color(90, 170, 230), glossiness: 0.7f, metalness: 0f);
+
+            wobble.Attributes.Displacement = new WobbleFeature();
+
+            var material = s.Material(wobble);
+
+            s.Place(PrimitiveModelType.Sphere, material, MaterialStation.SphereSpot, new Vector3(1f));
+            s.Place(PrimitiveModelType.Capsule, material, new Vector3(0f, 1.1f, 0f));
+            s.Place(PrimitiveModelType.Teapot, material, MaterialStation.TeapotSpot, new Vector3(2.4f));
+
+            return;
+        }
+
+        // The dissolve writes its edge into the emissive stream, so the material carries an emissive
+        // feature - black, so it adds nothing but the edge - to shade it
+        var dissolve = Recipes.Mapped(Recipes.Colour(s.Textures.Color("brick/brick_dif.png")), glossiness: new ComputeFloat(0.4f), emissive: new ComputeColor(Color.Black));
+
+        dissolve.Attributes.Transparency = new DissolveFeature();
+
+        var burning = s.Material(dissolve);
+
+        s.State = burning;
+        s.PlaceTrio(burning);
+    }
+
+    /// <summary>The dissolve's amount, from untouched to gone and back, through the key its shader declares.</summary>
+    public static void CustomFeatureUpdate(MaterialStation s)
+    {
+        if (s.State is not Material burning) return;
+
+        var amount = 0.5f - 0.6f * MathF.Cos(s.Seconds * 0.7f);
+
+        burning.Set(GalleryDissolveKeys.DissolveAmount, amount);
     }
 
     /// <summary>
