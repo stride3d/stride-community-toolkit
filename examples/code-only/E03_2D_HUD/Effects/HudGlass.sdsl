@@ -1,0 +1,30 @@
+namespace E03_2D_HUD
+{
+    // The glass of a panel, computed per pixel: scanlines fixed to the screen, a sheen that is
+    // brighter at the top of the panel, and a band of light that travels down it. The result
+    // multiplies the fill colour, alpha included. The texture coordinate runs 0 to 1 across the
+    // shape's bounding box. The clock is a node composed in from C#, because the engine's Global.Time
+    // is written by the mesh renderer and never reaches a shape batch's effect.
+    shader HudGlass : ComputeColor, Texturing, ShaderBaseStream
+    {
+        compose ComputeColor Clock;
+
+        override float4 Compute()
+        {
+            float t = Clock.Compute().x;
+            float2 uv = streams.TexCoord;
+
+            // One dark line every four pixels
+            float scan = 0.7 + 0.3 * step(0.5, frac(streams.ShadingPosition.y * 0.25));
+
+            float sheen = lerp(1.0, 0.35, uv.y);
+
+            // The band crosses the panel once every eight seconds
+            float band = 1.0 - smoothstep(0.0, 0.12, abs(uv.y - frac(t * 0.125) * 1.4 + 0.2));
+
+            float light = scan * sheen + 0.6 * band;
+
+            return float4(1.0, 1.0, 1.0, saturate(light));
+        }
+    };
+}

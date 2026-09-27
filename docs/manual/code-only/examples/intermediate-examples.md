@@ -17,7 +17,7 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [3D Letters (Mesh Text)](letters-3d.md): A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and the dash - as solid extruded meshes that catch the light like any other geometry, plus a frame counter whose digits are rebuilt as a new mesh every frame.
 - [Give Me a Cube (SimulationUpdate)](simulation-update.md): Drive an entity from the physics clock instead of the render loop.
 - [Raycast](raycast.md): Click the ground and a sphere is kicked towards where you clicked; click the sphere and it stops dead.
-- [Ship HUD](hud.md): A cockpit HUD composed from the toolkit's shapes and world text: a heading tape that scrolls, a pitch ladder, a gun-sight, speed and altitude tapes with moving readouts, a radar with a sweep and contacts, ring gauges, a sparkline drawn as one glowing stroke, a spectrum, a comms log in a framed panel, four status tiles with a selected one that glows, mode buttons with one disabled, and a warning strip that goes amber and then red as the shield drops.
+- [Ship HUD](hud.md): A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file.
 - [Spatial Sound](spatial-sound.md): 3D positional audio for a runtime sound: a looping pad on an orb that circles a pillar, heard from the camera.
 - [Collision Group](collision-group.md): Two players and an enemy, where the players collide with each other but the enemy passes through both.
 - [Collision Layer](collision-layer.md): The same players-and-enemy scene as the collision group example, solved the other way.
