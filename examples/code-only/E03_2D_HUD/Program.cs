@@ -18,6 +18,7 @@ using Stride.Rendering.Materials.ComputeColors;
 //   HudCanvas.cs    what a widget draws with: shapes, labels, theme, clock, pointer
 //   HudTheme.cs     the ten colour schemes
 //   HudPanel.cs     the frame the panels share
+//   FrameLights.cs  the small lights between the frame and the panels
 //   ShipState.cs    the simulated ship
 //   *Widget.cs      one widget each
 //

@@ -19,6 +19,7 @@ public sealed class Hud
     private const float Tape = 2.6f;
 
     private readonly HudWidget _root;
+    private readonly FrameLights _lights = new(seed: 2026);
 
     public Hud(ShipState ship)
     {
@@ -54,6 +55,9 @@ public sealed class Hud
         var frame = HudRect.Centered(Vector2.Zero, new Vector2(Width, Height));
 
         DrawFrame(canvas, frame);
+
+        // In the middle of the band the padding leaves between the frame and the panels
+        _lights.Draw(canvas, frame, Padding / 2f);
 
         _root.Draw(canvas, frame.Inset(Padding));
     }
