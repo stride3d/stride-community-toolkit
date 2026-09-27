@@ -33,13 +33,11 @@ using Stride.Rendering.Lights;
 // really feeding the material.
 // "--station 5" starts at a station; "--station 5 --variation 2" at its third variation; "--stream Glossiness"
 // starts with that view on - handy for screenshots.
-// "--engine-fix" enables the hair and subsurface stations, which need an engine fix - see Stations.EngineHasOverrideFix.
 
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
 var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryParse(args[3], out var variation) ? variation : 0;
 var streamAt = Array.IndexOf(args, "--stream");
 var startStream = streamAt >= 0 && streamAt + 1 < args.Length && Enum.TryParse<MaterialStream>(args[streamAt + 1], ignoreCase: true, out var parsed) ? parsed : (MaterialStream?)null;
-Stations.EngineHasOverrideFix = args.Contains("--engine-fix");
 
 Gallery<MaterialStation>? gallery = null;
 MaterialTextures? textures = null;

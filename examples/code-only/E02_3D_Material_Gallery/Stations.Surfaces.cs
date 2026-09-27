@@ -114,15 +114,11 @@ public static class SurfaceStations
     /// highlight slides along the strands as they move. V cycles the three shading models.
     /// </summary>
     /// <remarks>
-    /// On 4.4 this needs a small engine fix, reported upstream:
-    /// the hair functions implement abstract methods without <c>override</c>, which the old mixer
-    /// forgave and the new one does not. The light attenuation is set to none on both models: the
-    /// default directional attenuation renders these shapes black at its defaults, which is not
-    /// understood yet and is noted in the same file.
+    /// Requires a Stride build newer than 4.4.0-beta8. The light attenuation is set to none on both
+    /// models: the default directional attenuation renders these shapes black at its defaults.
     /// </remarks>
     public static void Hair(MaterialStation s)
     {
-        Stations.RequireEngineFix();
         s.Clear();
 
         // Scheuermann first: on solid shapes its sheen reads at once, where Kajiya-Kay's is subtle
@@ -203,7 +199,6 @@ public static class SurfaceStations
     /// </summary>
     public static void HairParts(MaterialStation s)
     {
-        Stations.RequireEngineFix();
         s.Clear();
 
         var device = s.Game.GraphicsDevice;
@@ -286,10 +281,8 @@ public static class SurfaceStations
     /// frame wrong (reported upstream), so what shows is the translucency, from the sun's shadow map
     /// with transmittance on. V cycles it.
     /// </summary>
-    /// <remarks>Needs the same engine fix as the hair station: its profile functions lack <c>override</c>.</remarks>
     public static void Subsurface(MaterialStation s)
     {
-        Stations.RequireEngineFix();
         s.Clear();
 
         var translucency = s.Pick("translucency 0.83", "translucency 0.3", "translucency 1") switch { 0 => 0.83f, 1 => 0.3f, _ => 1f };

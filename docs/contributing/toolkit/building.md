@@ -212,9 +212,8 @@ an example against the local packages instead:
 
 ## Building against a local Stride build
 
-The repository builds against the released Stride version set by `StrideVersion` in
-`Directory.Build.props`. To build against an engine you built from source, override the version in a
-local file.
+The repository builds against the Stride version set by `StrideVersion` in `Directory.Build.props`. To
+build against a different version, such as an engine you built from source, override it in a local file.
 
 1. Build Stride from source. Its build writes `4.4.0-dev` packages to `%LOCALAPPDATA%\stride\nugetdev`
    and registers that folder as the **Stride Dev** NuGet source.
@@ -247,8 +246,8 @@ To return to the released version, delete `Directory.Build.local.props` and the 
 > previous package, and the examples keep loading them.
 
 > [!NOTE]
-> Do not change `StrideVersion` in `Directory.Build.props` to a `-dev` version. The CI workflows restore
-> from nuget.org, where that package does not exist.
+> Keep a released version in `Directory.Build.props`. A `-dev` version exists only as local packages from a
+> Stride build, so the CI workflows, which restore from nuget.org, cannot restore it.
 
 ## Running the examples
 

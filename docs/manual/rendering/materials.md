@@ -529,8 +529,8 @@ descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMateria
 
 | Feature | Status |
 |---|---|
-| Hair | The effect does not compile. The gallery's hair stations are disabled unless you start it with `--engine-fix` on a Stride build that contains the fix |
-| Subsurface scattering | Same as hair. The blur post effect is not used |
+| Hair, subsurface scattering | Require a Stride build newer than 4.4.0-beta8. On beta8 and earlier their effects do not compile |
+| Subsurface scattering blur | The post effect does not compile. The gallery does not use it |
 | Thin glass | Renders opaque without the blend state workaround above |
 | Tessellated shadow casters | Log a constant buffer warning each frame. The gallery's tessellated models cast no shadow |
 
