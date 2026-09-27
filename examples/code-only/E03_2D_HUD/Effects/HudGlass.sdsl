@@ -1,0 +1,50 @@
+namespace E03_2D_HUD
+{
+    // The glass of a panel, computed per pixel, in one of two patterns. Both are fixed to the screen,
+    // both are brighter at the top of the panel and both have a band of light that travels down it.
+    //
+    //   0  Lines    one dark scanline every four pixels
+    //   1  Squares  five-pixel squares, each at one of five opacities picked by a hash of its cell
+    //
+    // The result multiplies the fill colour, alpha included. The texture coordinate runs 0 to 1
+    // across the shape's bounding box. Settings is a node composed in from C#: x is the clock and y
+    // the pattern. The clock comes this way because the engine's Global.Time is written by the mesh
+    // renderer and never reaches a shape batch's effect.
+    shader HudGlass : ComputeColor, Texturing, ShaderBaseStream
+    {
+        compose ComputeColor Settings;
+
+        float Lines(float2 pixel)
+        {
+            return 0.7 + 0.3 * step(0.5, frac(pixel.y * 0.25));
+        }
+
+        float Squares(float2 pixel)
+        {
+            float2 cell = floor(pixel / 5.0);
+            float2 inside = step(frac(pixel / 5.0), 0.8);
+
+            // A number from 0 to 1 that depends on the cell alone, cut into five steps
+            float random = frac(sin(dot(cell, float2(12.9898, 78.233))) * 43758.5453);
+            float level = floor(random * 5.0) / 4.0;
+
+            // One pixel in five is the gap between squares
+            return lerp(0.12, 1.0, level) * inside.x * inside.y;
+        }
+
+        override float4 Compute()
+        {
+            float4 settings = Settings.Compute();
+            float2 uv = streams.TexCoord;
+            float2 pixel = streams.ShadingPosition.xy;
+
+            float pattern = settings.y < 0.5 ? Lines(pixel) : Squares(pixel);
+            float sheen = lerp(1.0, 0.35, uv.y);
+
+            // The band crosses the panel once every eight seconds
+            float band = 1.0 - smoothstep(0.0, 0.12, abs(uv.y - frac(settings.x * 0.125) * 1.4 + 0.2));
+
+            return float4(1.0, 1.0, 1.0, saturate(pattern * sheen + 0.6 * band));
+        }
+    };
+}

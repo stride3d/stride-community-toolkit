@@ -402,7 +402,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="hud.md">Ship HUD</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">A cockpit HUD composed from the toolkit's shapes and world text: a heading tape that scrolls, a pitch ladder, a gun-sight, speed and altitude tapes...</p>
+                <p class="card-text">A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file.</p>
             </div>
         </div>
     </div>
