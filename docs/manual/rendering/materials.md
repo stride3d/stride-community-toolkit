@@ -671,6 +671,30 @@ sway in a wind; without it, the effect fails to compile at the first draw, which
 catch because it happens in the renderer. The subsurface *blur* stays off either way; what shows is the
 translucency term from the shadow map's thickness.
 
+### Why the editor's thumbnail and the game disagree
+
+A material that looks right in Game Studio's thumbnail can look different in the game, most of all a
+metal, and the reason is the thumbnail's rig rather than the material. The
+[Material Preview](../code-only/examples/material-preview.md) example (`E02_3D_MaterialPreview`) rebuilds
+that rig in code with the editor's own numbers:
+
+| Part | The thumbnail's |
+|---|---|
+| Compositor | The forward renderer with **no post effects**, cleared to grey 0x434343, no skybox |
+| Camera | Pitched down 30 degrees, turned 45, far enough back that the front of a unit sphere fits |
+| Lights | Ambient 0.02, a front directional 0.07 and a top directional 0.8 tilted 80 degrees; the two directional ones times 5 in an HDR project |
+| Subject | A sphere, scaled to its unit bounding sphere and turned half round so the texture's middle faces the camera |
+
+G in the example swaps to how a game shows the same material, with post effects and a skybox. Polished
+gold is the lesson: in the thumbnail it is a dark ball with two highlights, since a metal is almost all
+reflection and an ambient of 0.02 gives it nothing to reflect; in the game it reflects the sky and reads as
+gold. When a material looks dull in the editor and fine in the game, or the other way round, the rig is the
+first suspect.
+
+One thing the example does differently: the editor centres the model and then turns it, without turning
+the centre offset. That is exact for its sphere and moves any model not centred on its origin - a teapot,
+a cone - off the middle of the frame, so the example turns the offset with the model.
+
 ## The gallery, station by station
 
 The ring is ordered the way this page is: the numbers first, then the maps, then the inputs, then the

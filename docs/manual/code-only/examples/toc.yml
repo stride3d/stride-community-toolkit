@@ -63,7 +63,7 @@
     href: debug-render-2d.md
   - name: DPI-Aware Window
     href: dpi-aware.md
-- name: C# Intermediate (35)
+- name: C# Intermediate (36)
   href: intermediate-examples.md
   items:
   - name: Procedural Geometry
@@ -72,6 +72,8 @@
     href: simple-geometry.md
   - name: Material Gallery
     href: material-gallery.md
+  - name: Material Preview
+    href: material-preview.md
   - name: Cylinder Mesh
     href: cylinder-mesh.md
   - name: Partial Torus Mesh
