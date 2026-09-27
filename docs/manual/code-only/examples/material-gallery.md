@@ -20,6 +20,7 @@ The `Program.cs` file shows how to:
 - Normal, glossiness, metalness, occlusion and emissive maps
 - Compute nodes - vertex streams, arithmetic, a custom shader class, textures made at runtime
 - Transparency, thin glass, clear coat, cel shading, hair and subsurface scattering
+- The editor's view modes in code - one material stream drawn as colour on every mesh
 - Displacement, tessellation and material layers
 - Game Studio's Material Package, transcribed from its .sdmat files
 
@@ -27,4 +28,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_Material_Gallery).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_Material_Gallery/Program.cs?start=1&end=184)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_Material_Gallery/Program.cs?start=1&end=212)]

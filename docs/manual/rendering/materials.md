@@ -289,6 +289,56 @@ The hair station goes further: a feature of the gallery's own in the displacemen
 vertex-stage shader, and every frame sets that shader's wind through the keys the source generator made
 for it - which is the whole recipe for a material that moves.
 
+## Seeing one stream at a time
+
+Game Studio's toolbar has a row of view modes - Diffuse, Specular, Glossiness, Normal - that draw
+every mesh with one material stream as its colour, and they are the fastest way to find out why a
+material looks wrong: a normal map loaded as sRGB is a tilted normal view, a glossiness map read from
+the wrong channel is a flat grey, a metal whose colour went into the wrong slot shows black where its
+diffuse should be. The mechanism is not editor-only. The forward effect has a hook,
+`MaterialKeys.PixelStageSurfaceFilter`, a permutation the editor fills with the engine's own
+`MaterialSurfaceStreamShading` shader: it runs the material's surface shading and returns one stream
+instead of the lit colour. What a code-only game lacks is the sub-render-feature that sets the hook,
+and that is what `game.AddMaterialStreamView()` adds:
+
+```csharp
+// examples/code-only/E02_3D_Material_Gallery/Program.cs
+var view = game.AddMaterialStreamView();        // after the compositor exists
+
+// A DebugTextDropdown in the overlay: M opens the list, a digit picks, 0 is lit again
+viewMenu = new DebugTextDropdown
+{
+    Title = "View",
+    ToggleKey = Keys.M,
+    Items =
+    [
+        .. MaterialStreamView.All.Select(stream => new DebugTextDropdownItem((Keys)(Keys.D1 + (int)stream), MaterialStreamView.DisplayName(stream), () => view.Stream = stream)),
+        new(Keys.D0, "Lit", () => view.Stream = null),
+    ],
+};
+```
+
+`view.Stream = MaterialStream.Glossiness` picks a stream directly, `Next` steps through them and `null` is
+lit shading. The streams are the values the features wrote before lighting ran:
+
+| View | Stream | Shown as |
+|---|---|---|
+| `ColorBase` | `matColorBase` | The colour as authored |
+| `Diffuse` | `matDiffuse` | The colour after metalness took its share - a metal is black here |
+| `Specular` | `matSpecular` | 0.02 grey for a dielectric, the colour for a metal |
+| `Glossiness` | `matGlossiness` | Grey, black rough to white mirror |
+| `NormalTangent` | `matNormal` | The normal map's value remapped to a colour; flat is (0.5, 0.5, 1) |
+| `NormalWorld` | `normalWS` | The world normal after the map, remapped; up is green |
+| `Occlusion`, `Cavity` | `matAmbientOcclusion`, `matCavity` | Grey, white open |
+| `Emissive` | `matEmissive` | The colour without its intensity |
+
+Three things to know. A permutation is part of the effect's identity, so every switch recompiles every
+effect and the meshes draw with the fallback for a frame or two, exactly as the editor's toolbar does.
+The view applies to every mesh the compositor's mesh feature draws, not to one material. And the value
+is the stream's linear value drawn through the post effects like any colour, so it is tone-mapped the
+way the lit picture is; a glossiness of 0.5 is not a pixel of 128. In the gallery M opens the list and a
+digit picks the view for the whole ring; the Normal map and the Gloss and metal maps stations are where they earn their keep.
+
 ## Choosing the surface
 
 Past the four numbers, each aspect of a surface is a feature you add, and most of them come with a
@@ -378,6 +428,7 @@ choosing it for a whole game.
 | Versioning and review | A YAML asset that diffs badly | C# that diffs like C# |
 | Generation | Fixed at edit time | Materials from data, from rules, from a texture computed a moment ago |
 | Discovering what exists | Every feature in the Add menu | The class names, which this page and the gallery list |
+| Seeing one stream | The toolbar's view modes | `game.AddMaterialStreamView()`, the same hook, on a key |
 
 The Material Package transcribed onto a row of spheres is the proof of equivalence: the same features
 with the same settings, which is all an `.sdmat` file is. It is also where the pack's authors' habits
