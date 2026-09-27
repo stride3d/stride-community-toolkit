@@ -18,11 +18,13 @@ namespace Stride.CommunityToolkit.Tests.Audio;
 /// </summary>
 /// <remarks>
 /// <para>
-/// The audio engine is created inside <c>Run</c> and is absent on a machine without a native audio
-/// backend (Linux without OpenAL, some CI runners): <c>AudioSystem.Initialize</c> swallows the
-/// failure and leaves <see cref="AudioSystem.AudioEngine"/> null. Those tests record whether the
-/// engine existed and skip with that reason rather than fail. The one thing that holds everywhere
-/// is the helpful exception before <c>Run</c>.
+/// The audio engine is created inside <c>Run</c>, and a machine may not be able to play: without a
+/// native audio backend (Linux without OpenAL) <c>AudioSystem.Initialize</c> swallows the failure and
+/// leaves <see cref="AudioSystem.AudioEngine"/> null; without an audio device (a CI runner) the engine
+/// exists but is <see cref="AudioEngineState.Invalidated"/>, every instance is inert and the worker
+/// never feeds a source. The playback tests record whether the engine could play and skip with that
+/// reason rather than fail. The listener test needs no device and runs wherever there is an engine;
+/// the helpful exception before <c>Run</c> holds everywhere.
 /// </para>
 /// <para>
 /// Same collection as <see cref="GameExtensionsRunTests"/>: one headless game at a time.
@@ -32,6 +34,10 @@ namespace Stride.CommunityToolkit.Tests.Audio;
 public class AudioSystemExtensionsTests
 {
     private const string NoEngine = "No audio engine on this machine (AudioSystem.Initialize failed silently).";
+    private const string NoPlayback = "No audio playback on this machine: no engine, or no audio device (the engine is invalidated).";
+
+    /// <summary>Whether the machine can play sound: an engine, and a device behind it.</summary>
+    private static bool CanPlay(AudioSystem audio) => audio.AudioEngine is { State: not AudioEngineState.Invalidated };
 
     [Fact]
     public void CreateProceduralSound_BeforeRun_ExplainsThatTheEngineIsMissing()
@@ -49,15 +55,15 @@ public class AudioSystemExtensionsTests
         using var game = new Game();
 
         var fills = 0;
-        var engineAvailable = false;
+        var canPlay = false;
         var clock = Stopwatch.StartNew();
         SoundInstance? instance = null;
 
         game.Run(update: (_, _) =>
         {
-            engineAvailable = game.Audio.AudioEngine is not null;
+            canPlay = CanPlay(game.Audio);
 
-            if (!engineAvailable)
+            if (!canPlay)
             {
                 game.Exit();
                 return;
@@ -84,7 +90,7 @@ public class AudioSystemExtensionsTests
             }
         }, context: new GameContextHeadless());
 
-        Skip.If(!engineAvailable, NoEngine);
+        Skip.If(!canPlay, NoPlayback);
 
         Assert.True(fills >= 4, $"Expected the callback to fill at least the four prebuffered blocks; it ran {fills} times.");
     }
@@ -94,7 +100,7 @@ public class AudioSystemExtensionsTests
     {
         using var game = new Game();
 
-        var engineAvailable = false;
+        var canPlay = false;
         var clock = Stopwatch.StartNew();
         WavSound? sound = null;
         SoundInstance? instance = null;
@@ -105,9 +111,9 @@ public class AudioSystemExtensionsTests
 
         game.Run(update: (_, _) =>
         {
-            engineAvailable = game.Audio.AudioEngine is not null;
+            canPlay = CanPlay(game.Audio);
 
-            if (!engineAvailable)
+            if (!canPlay)
             {
                 game.Exit();
                 return;
@@ -131,7 +137,7 @@ public class AudioSystemExtensionsTests
             }
         }, context: new GameContextHeadless());
 
-        Skip.If(!engineAvailable, NoEngine);
+        Skip.If(!canPlay, NoPlayback);
 
         Assert.NotNull(sound);
         Assert.Equal(2000, sound.FrameCount);
