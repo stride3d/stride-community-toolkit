@@ -29,4 +29,10 @@ Source and 50+ runnable examples: https://github.com/stride3d/stride-community-t
   <PropertyGroup Condition="'$(SolutionDir)' != ''">
     <ErrorLog>$(SolutionDir)\.sarif\$(MSBuildProjectName).json</ErrorLog>
   </PropertyGroup>
+  <!--
+    Local overrides, never committed. A Directory.Build.local.props beside this file is imported last, so it
+    can point StrideVersion at a locally built engine (4.4.0-dev). CI has no such package, which is why the
+    version committed above stays a released one. See docs/contributing/toolkit/building.md.
+  -->
+  <Import Project="$(MSBuildThisFileDirectory)Directory.Build.local.props" Condition="Exists('$(MSBuildThisFileDirectory)Directory.Build.local.props')" />
 </Project>

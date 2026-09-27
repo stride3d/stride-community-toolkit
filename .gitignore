@@ -409,3 +409,6 @@ screenshots-review/
 imgui.ini
 /favorites.json
 /notes
+
+# Local build overrides, such as a locally built Stride version
+Directory.Build.local.props
