@@ -42,8 +42,8 @@ public sealed class Hud
             new SystemsWidget(ship));
 
         var right = new HudColumn(Padding,
-            new TargetWidget(ship).Sized(4.4f),
-            new WingWidget(ship).Sized(5.6f),
+            new TargetWidget(ship).Sized(4.2f),
+            new WingWidget(ship).Sized(5.2f),
             new PowerWidget(ship).Sized(4.4f),
             new ModesWidget(ship));
 

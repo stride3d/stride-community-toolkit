@@ -3,7 +3,7 @@ using Stride.Core.Mathematics;
 namespace E03_2D_HUD;
 
 /// <summary>
-/// The mode buttons. An engaged mode is lit: filled in the accent with dark lettering. A mode the
+/// The mode buttons, in a panel. An engaged mode is lit: filled in the accent with dark lettering. A mode the
 /// ship does not have is the same button at a quarter of its opacity. Click a button to switch it.
 /// </summary>
 public sealed class ModesWidget(ShipState ship) : HudWidget
@@ -14,9 +14,11 @@ public sealed class ModesWidget(ShipState ship) : HudWidget
 
     public override void Draw(HudCanvas canvas, HudRect bounds)
     {
+        var content = canvas.Panel(bounds, Name, "MODES", $"{ship.Modes.Count(mode => mode.Engaged)} ENGAGED");
+
         for (var i = 0; i < ship.Modes.Length; i++)
         {
-            DrawButton(canvas, i, bounds.Column(i, ship.Modes.Length, Gap));
+            DrawButton(canvas, i, content.Column(i, ship.Modes.Length, Gap));
         }
     }
 
@@ -43,7 +45,7 @@ public sealed class ModesWidget(ShipState ship) : HudWidget
             additive: true);
 
         canvas.Shapes.Tag = id;
-        canvas.ChamferedPanel(button.Center, button.Size, 0.16f, Color.Lerp(accent, theme.Text, engaged));
+        canvas.ChamferedPanel(button.Center, button.Size, 0.14f, Color.Lerp(accent, theme.Text, engaged));
         canvas.Shapes.Tag = null;
 
         // The decoy button carries its count on a second line
