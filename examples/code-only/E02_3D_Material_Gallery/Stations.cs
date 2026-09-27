@@ -62,6 +62,7 @@ public static class Stations
         new("Tessellation", "PN triangles round off a five-segment sphere on the GPU", nameof(MaterialTessellationPNFeature), Setup: ModelStations.Tessellation, Anchor: new Vector3(0f, 2f, 0f)),
         new("Overrides", "a UV scale for every map at once, and which side of a face is drawn", nameof(MaterialOverrides), Setup: ModelStations.Overrides, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Layers", "a material over a material, mixed by a mask: painted and rusted iron", nameof(MaterialBlendLayer), Setup: ModelStations.Layers, Anchor: new Vector3(0f, 1.8f, 0f)),
+        new("Highlight shell", "the model drawn again a little larger with a glow: a hover highlight from a material alone", nameof(HighlightShell), ModelStations.HighlightShellUpdate, ModelStations.HighlightShellStation, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("The Material Package, in code", "every material of Game Studio's pack, from its .sdmat", nameof(PackMaterials), Setup: PackStations.ThePack, Anchor: new Vector3(0f, 1.6f, 0f)),
         new("The lot", "every slot filled: what a full PBR material is in code", nameof(MaterialDescriptor), Setup: PackStations.TheLot, Anchor: new Vector3(0f, 1.8f, 0f)),
     ];

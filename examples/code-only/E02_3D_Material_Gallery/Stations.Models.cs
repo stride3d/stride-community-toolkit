@@ -1,4 +1,7 @@
+using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
+using Stride.Engine;
 using Stride.Graphics;
 using Stride.Graphics.GeometricPrimitives;
 using Stride.Rendering.Materials;
@@ -8,7 +11,7 @@ using Stride.Rendering.ProceduralModels;
 namespace E02_3D_Material_Gallery;
 
 // The features that reach past the pixel: light under the surface, vertices moved, triangles
-// added, a material over a material.
+// added, a material over a material, and a material drawn over a whole model as a highlight.
 public static class ModelStations
 {
     /// <summary>
@@ -121,4 +124,42 @@ public static class ModelStations
 
         s.PlaceTrio(s.Material(descriptor));
     }
+
+    /// <summary>
+    /// A highlight with no render feature: the toolkit's <c>HighlightShell</c> draws the model again a
+    /// little larger, every slot filled with <c>MaterialDescriptors.Highlight</c> - a constant vertex
+    /// displacement, an emissive glow, a faint blend and no culling - and moves from shape to shape the
+    /// way it would follow the mouse. The cube shows the technique's seam: its faces have normals of
+    /// their own, so they move apart at the corners, plainly on the thick variation. V cycles the colour
+    /// and the thickness.
+    /// </summary>
+    public static void HighlightShellStation(MaterialStation s)
+    {
+        s.Clear();
+
+        var (colour, inflate) = s.Pick("cyan", "gold", "thick, to show the seams") switch
+        {
+            0 => (Color.Cyan, 0.02f),
+            1 => (Color.Gold, 0.02f),
+            _ => (Color.Cyan, 0.08f),
+        };
+
+        var grey = s.Material(Recipes.Pbr(new Color(150, 150, 155), glossiness: 0.5f, metalness: 0f));
+        var sphere = s.Place(PrimitiveModelType.Sphere, grey, MaterialStation.SphereSpot, new Vector3(1f));
+        var cube = s.Place(PrimitiveModelType.Cube, grey, MaterialStation.CubeSpot, new Vector3(1.8f));
+        var teapot = s.Place(PrimitiveModelType.Teapot, grey, MaterialStation.TeapotSpot, new Vector3(2.4f));
+        var shell = new HighlightShell(s.Material(MaterialDescriptors.Highlight(colour, inflate: inflate)));
+
+        s.State = new ShellState(shell, [sphere.Get<ModelComponent>()!, cube.Get<ModelComponent>()!, teapot.Get<ModelComponent>()!]);
+    }
+
+    /// <summary>The shell on each shape in turn, a second and a half each; showing the same one again costs nothing.</summary>
+    public static void HighlightShellUpdate(MaterialStation s)
+    {
+        if (s.State is not ShellState state) return;
+
+        state.Shell.Show(state.Targets[(int)(s.Seconds / 1.5f) % state.Targets.Count]);
+    }
+
+    private sealed record ShellState(HighlightShell Shell, IReadOnlyList<ModelComponent> Targets);
 }

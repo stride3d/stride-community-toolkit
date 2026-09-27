@@ -14,6 +14,7 @@ pixel. One call, AddGpuPicker, and a result two frames later.
 The `Program.cs` file shows how to:
 
 - Picking without colliders through AddGpuPicker, and what the call builds in the compositor
+- A hover highlight with no render feature - HighlightShell, kept out of the picking pass by its render group
 - Why the answer is two frames late, and why that does not matter for hover and click
 - Reading the entity, mesh, material and instance index from a PickResult
 - The hit point rebuilt from the depth the picking pass wrote
@@ -24,4 +25,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E09_3D_GpuPicking).
 
-[!code-csharp[](../../../../examples/code-only/E09_3D_GpuPicking/Program.cs?start=1&end=253)]
+[!code-csharp[](../../../../examples/code-only/E09_3D_GpuPicking/Program.cs?start=1&end=281)]

@@ -84,4 +84,25 @@ public class MaterialDescriptorsTests
         Assert.Null(a.Specular);
         Assert.Null(a.SpecularModel);
     }
+
+    [Fact]
+    public void HighlightIsAnInflatedTwoSidedGlowWithNoDiffuse()
+    {
+        var a = MaterialDescriptors.Highlight(Color.White, strength: 2f, inflate: 0.05f).Attributes;
+
+        var displacement = Assert.IsType<MaterialDisplacementMapFeature>(a.Displacement);
+        Assert.Equal(DisplacementMapStage.Vertex, displacement.Stage);
+        Assert.Equal(0.05f, Assert.IsType<ComputeFloat>(displacement.Intensity).Value);
+
+        var emissive = Assert.IsType<MaterialEmissiveMapFeature>(a.Emissive);
+        Assert.True(emissive.UseAlpha);
+        Assert.Equal(2f, Assert.IsType<ComputeFloat>(emissive.Intensity).Value);
+
+        // A float4 node is passed raw, so white goes in as linear white, alpha the template's tenth
+        Assert.Equal(new Vector4(1f, 1f, 1f, 0.1f), Assert.IsType<ComputeFloat4>(emissive.EmissiveMap).Value);
+
+        Assert.IsType<MaterialTransparencyBlendFeature>(a.Transparency);
+        Assert.Equal(Stride.Graphics.CullMode.None, a.CullMode);
+        Assert.Null(a.Diffuse);
+    }
 }
