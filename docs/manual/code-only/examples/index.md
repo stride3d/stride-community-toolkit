@@ -338,6 +338,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/material-preview.webp" class="card-img-top" alt="Screenshot of the Material Preview example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="material-preview.md">Material Preview</a></h3>
+                <p><span class="badge text-bg-secondary">Rendering</span></p>
+                <p class="card-text">Game Studio's material thumbnail rebuilt in code, with the editor's own numbers: the forward renderer with no post effects on a grey background, a...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/cylinder-mesh.webp" class="card-img-top" alt="Screenshot of the Cylinder Mesh example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="cylinder-mesh.md">Cylinder Mesh</a></h3>

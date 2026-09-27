@@ -188,6 +188,7 @@ tags:
 related:
   - E01_3D_BasicScene
   - E02_3D_Material_Gallery
+  - E02_3D_MaterialPreview
   - E07_3D_ProceduralGeometry
 enabled: true
 created: 2025-03-09

@@ -20,6 +20,7 @@
     <Project Path="examples/code-only/E02_3D_GiveMeACube_SimulationUpdate/E02_3D_GiveMeACube_SimulationUpdate.csproj" />
     <Project Path="examples/code-only/E02_3D_Material/E02_3D_Material.csproj" />
     <Project Path="examples/code-only/E02_3D_Material_Gallery/E02_3D_Material_Gallery.csproj" />
+    <Project Path="examples/code-only/E02_3D_MaterialPreview/E02_3D_MaterialPreview.csproj" />
     <Project Path="examples/code-only/E02_3D_Primitives/E02_3D_Primitives.csproj" />
     <Project Path="examples/code-only/E02_3D_SyncScript/E02_3D_SyncScript.csproj" />
     <Project Path="examples/code-only/E03_2D_HUD/E03_2D_HUD.csproj" />

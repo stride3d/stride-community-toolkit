@@ -252,6 +252,7 @@ tags:
   - Gallery
 related:
   - E02_3D_Material
+  - E02_3D_MaterialPreview
   - E11_3D_ShapeBatch_Gallery
   - E09_3D_Particles_Gallery
 enabled: true
