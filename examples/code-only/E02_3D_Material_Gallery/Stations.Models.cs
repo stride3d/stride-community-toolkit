@@ -94,7 +94,7 @@ public static class ModelStations
         var descriptor = Recipes.Mapped(
             Recipes.Colour(s.Textures.Color("rooftile/rooftile_dif.png")),
             glossiness: Recipes.Scalar(s.Textures.Data("rooftile/rooftile_gls.png")),
-            normal: Recipes.Colour(s.Textures.Data("rooftile/rooftile_nml.png")),
+            normal: Recipes.Colour(s.Textures.Normal("rooftile/rooftile_nml.png")),
             occlusion: Recipes.Scalar(s.Textures.Data("rooftile/rooftile_AO.png")));
 
         descriptor.Attributes.Overrides.UVScale = new Vector2(tiling);

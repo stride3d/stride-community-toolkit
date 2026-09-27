@@ -1,45 +1,33 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.Graphics;
 
 namespace E02_3D_Material_Gallery;
 
 /// <summary>
 /// The Material Package's textures, loaded from the resources folder next to the executable on
-/// first use and kept for the run. A colour map is sRGB; a normal, gloss, metalness, occlusion or
-/// mask map is linear data and must not be gamma-decoded, which is the one thing that goes wrong
-/// when every texture is loaded the same way.
+/// first use and kept for the run, through the toolkit's <see cref="TextureLoader"/>: a colour map
+/// sRGB and premultiplied, a data map linear, a normal map linear with unit normals in every mip, each
+/// with its mipmaps. The one thing that goes wrong when every texture is
+/// loaded the same way is the role, so each accessor names one.
 /// </summary>
 public sealed class MaterialTextures(GraphicsDevice device) : IDisposable
 {
-    private readonly Dictionary<string, Texture> _loaded = [];
     private readonly Dictionary<string, Texture> _generated = [];
 
-    /// <summary>A colour map, decoded as sRGB.</summary>
+    /// <summary>The loader behind the accessors, rooted at <c>Resources/materials</c>; the texture-loading station asks it for the wrong roles on purpose.</summary>
+    public TextureLoader Loader { get; } = new(device, Path.Combine(AppContext.BaseDirectory, "Resources", "materials"));
+
+    /// <summary>A colour map: sRGB, premultiplied.</summary>
     /// <param name="path">The file under <c>Resources/materials</c>, such as <c>brick/brick_dif.png</c>.</param>
-    public Texture Color(string path) => Get(path, srgb: true);
+    public Texture Color(string path) => Loader.Color(path);
 
-    /// <summary>A data map - normal, gloss, metalness, occlusion, mask - kept linear.</summary>
+    /// <summary>A data map - gloss, metalness, occlusion, specular, mask - kept linear.</summary>
+    /// <param name="path">The file under <c>Resources/materials</c>, such as <c>brick/brick_gls.png</c>.</param>
+    public Texture Data(string path) => Loader.Data(path);
+
+    /// <summary>A normal map: linear, as stored - the pack's maps are green-down, the engine's own convention.</summary>
     /// <param name="path">The file under <c>Resources/materials</c>, such as <c>brick/brick_nml.png</c>.</param>
-    public Texture Data(string path) => Get(path, srgb: false);
-
-    private Texture Get(string path, bool srgb)
-    {
-        var key = $"{(srgb ? "srgb" : "linear")}:{path}";
-
-        if (_loaded.TryGetValue(key, out var texture)) return texture;
-
-        using var stream = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "Resources", "materials", path));
-        using var image = Image.Load(stream);
-
-        // The texture takes the pixels in the format the file decoded to - a PNG comes out BGRA -
-        // because the bytes are copied as they are; asking for RGBA would trade red for blue. Only
-        // the colour space is chosen here: a colour map is sRGB, a data map is not.
-        var format = srgb ? image.Description.Format.ToSRgb() : image.Description.Format.ToNonSRgb();
-
-        texture = Texture.New2D(device, image.Description.Width, image.Description.Height, format, image.PixelBuffer[0].GetPixels<Stride.Core.Mathematics.Color>());
-        _loaded[key] = texture;
-
-        return texture;
-    }
+    public Texture Normal(string path) => Loader.NormalMap(path);
 
     /// <summary>A texture computed in code, made on first use and kept for the run.</summary>
     /// <param name="name">Its name, the key it is kept under.</param>
@@ -60,8 +48,6 @@ public sealed class MaterialTextures(GraphicsDevice device) : IDisposable
         foreach (var texture in _generated.Values) texture.Dispose();
 
         _generated.Clear();
-        foreach (var texture in _loaded.Values) texture.Dispose();
-
-        _loaded.Clear();
+        Loader.Dispose();
     }
 }

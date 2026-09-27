@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -17,12 +18,9 @@ void Start(Scene scene)
     // Set up a base 3D scene with default lighting and camera
     game.SetupBase3DScene();
 
-    // Load the texture from a file
-    var texturePath = "Stride-logo.png";
-
-    using var textureFile = File.Open(texturePath, FileMode.Open);
-
-    var texture = Texture.Load(game.GraphicsDevice, textureFile);
+    // Load the texture from a file as a colour: sRGB, premultiplied and mipmapped, the way the content
+    // pipeline would have imported it
+    var texture = new TextureLoader(game.GraphicsDevice).Color("Stride-logo.png");
 
     // Create a material descriptor and assign the loaded texture to it
     var materialDescriptor = new MaterialDescriptor
