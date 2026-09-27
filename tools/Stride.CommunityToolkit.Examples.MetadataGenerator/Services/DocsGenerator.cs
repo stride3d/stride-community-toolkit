@@ -112,9 +112,6 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
     }
 
     /// <summary>
-    /// Writes one landing page per language and level group that actually has examples.
-    /// </summary>
-    /// <summary>
     /// Writes the visual gallery, which is the landing page for the whole examples section.
     /// </summary>
     /// <remarks>
@@ -129,6 +126,9 @@ public class DocsGenerator(ILogger<DocsGenerator> logger)
         WriteIfOwned(path, () => builder.BuildGallery(groups), dryRun);
     }
 
+    /// <summary>
+    /// Writes one landing page per language and level group that actually has examples.
+    /// </summary>
     private void WriteLandingPages(IReadOnlyList<ExampleMetadata> examples, DirectoryInfo docsDirectory, bool dryRun)
     {
         foreach (var group in GroupByLanguageAndLevel(examples))

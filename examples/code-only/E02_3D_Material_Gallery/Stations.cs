@@ -1,4 +1,5 @@
 using Example.Common.Galleries;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
@@ -43,6 +44,7 @@ public static class Stations
         new("Gloss and metal maps", "wood, iron and gold: the numbers varying per texel", nameof(MaterialMetalnessMapFeature.MetalnessMap), Setup: MapStations.GlossAndMetalMaps, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Occlusion", "ambient occlusion darkens the crevices, left without, right with", nameof(MaterialOcclusionMapFeature), Setup: MapStations.Occlusion, Anchor: new Vector3(1.6f, 1.8f, 0f)),
         new("Emissive", "light from the surface itself, its intensity changed every frame", nameof(MaterialEmissiveMapFeature), MapStations.EmissivePulse, MapStations.Emissive, Anchor: new Vector3(0f, 1.8f, 0f)),
+        new("Animated parameters", "a tint, a scroll and a glossiness driven through keys every frame, no rebuild", nameof(MaterialParameters), MapStations.AnimatedParametersUpdate, MapStations.AnimatedParameters, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Vertex colours", "a colour per vertex from a MeshBuilder mesh, no texture", nameof(ComputeVertexStreamColor), Setup: MapStations.VertexColours, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Node arithmetic", "two textures combined by an operator before the material sees them", nameof(ComputeBinaryColor), Setup: MapStations.NodeArithmetic, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Custom shader node", "a ComputeColor class of your own in any slot, twenty lines of shader", nameof(ComputeShaderClassColor), Setup: InputStations.CustomNode, Anchor: new Vector3(0f, 1.8f, 0f)),

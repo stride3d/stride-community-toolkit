@@ -9,7 +9,7 @@ objects, that the engine turns into a shader for you. This page is about that ba
 what each piece changes on screen, and the handful of things that go wrong when you build one from code.
 Every rule is illustrated by real code in this repository, most of it in the
 [Material Gallery](../code-only/examples/material-gallery.md) (`E02_3D_Material_Gallery`), a ring of
-twenty-eight stations you can walk through and compare.
+twenty-nine stations you can walk through and compare.
 
 ## The wrong path: turn the numbers up
 
@@ -256,10 +256,38 @@ var pulse = 0.5f + 0.5f * MathF.Sin(s.Seconds * 2f);
 material.Passes[0].Parameters.Set(MaterialKeys.EmissiveIntensity, 0.2f + 3f * pulse);
 ```
 
-The keys live in `MaterialKeys` and in the generated key classes of your own shaders. The hair station
-goes further: a feature of the gallery's own in the displacement slot installs a vertex-stage shader,
-and every frame sets that shader's wind through the keys the source generator made for it - which is
-the whole recipe for a material that moves.
+The keys live in `MaterialKeys` and in the generated key classes of your own shaders. A number in a slot
+registers under the slot's key (`GlossinessValue`, `MetalnessValue`, `EmissiveIntensity`); a colour or
+texture node can carry a key of your own, which is how a value gets a handle without touching the shader:
+
+```csharp
+// examples/code-only/E02_3D_Material_Gallery/Stations.Maps.cs
+private static readonly ValueParameterKey<Color4> TintKey = MaterialParameters.ColorKey("MaterialGallery.Tint");
+
+var tint = s.Material(Recipes.Mapped(new ComputeColor(Color.White) { Key = TintKey }, glossiness: new ComputeFloat(0.6f)));
+...
+state.Tint.SetColor(TintKey, new ColorHSV(hue, 0.7f, 1f, 1f).ToColor());
+state.Scroll.SetTextureOffset(new Vector2(s.Seconds * 0.15f, 0f));
+state.Gloss.Set(MaterialKeys.GlossinessValue, 0.5f + 0.5f * MathF.Sin(s.Seconds));
+```
+
+Three things the toolkit's `MaterialParameters` does that the raw `Parameters.Set` would leave to you,
+each learned from the engine's own gizmo materials:
+
+1. **A colour set at runtime must be converted the way the generator converted the node's initial
+   value**: to linear, and premultiplied by its alpha. Set the raw sRGB colour and it comes out brighter
+   than the one compiled in. `SetColor` does the conversion; `ToMaterialValue` is the conversion alone.
+2. **A material may have several passes**, each with its own parameters: clear coat has two, hair
+   three, thin glass two or four. Write to `Passes[0]` alone and the other passes keep the old value.
+   Every setter writes to all of them.
+3. **Every texture node registers its scale and offset**, so a texture scrolls or retiles through
+   `SetTextureOffset` and `SetTextureScale` with no recompile. The first texture's keys are the base
+   keys; later ones are the base key composed with `i1`, `i2`, which is how the generator names a key's
+   later uses, and `TextureKeyAt` spells that out.
+
+The hair station goes further: a feature of the gallery's own in the displacement slot installs a
+vertex-stage shader, and every frame sets that shader's wind through the keys the source generator made
+for it - which is the whole recipe for a material that moves.
 
 ## Choosing the surface
 
@@ -374,7 +402,7 @@ surfaces and the models. `V` cycles a station's variations; `--station N --varia
 | Stations | Concept on this page |
 |---|---|
 | Diffuse colour · Glossiness sweep · Metalness sweep · Specular colour · Three distributions · Mirror | The four numbers, the two workflows, the microfacet functions |
-| Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive | Textures in slots; the emissive station is the animated parameter |
+| Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive · Animated parameters | Textures in slots; the emissive and animated stations are the parameters set every frame |
 | Vertex colours · Node arithmetic · Custom shader node · Runtime textures | Every slot is a node |
 | Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
 | Displacement · Tessellation · Overrides · Layers | The vertices, the whole-material settings, composition |

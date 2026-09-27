@@ -62,7 +62,7 @@ For image-based ambient light, `AddSkybox()` ships in the `Stride.CommunityToolk
 
 ## Materials and primitives
 
-- [`CreateMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)) - A basic lit material, with optional colour, specular and micro-surface values.
+- [`CreateMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color},System.Single,System.Single)) - A basic lit material, with optional colour, metalness and glossiness values.
 - [`CreateFlatMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateFlatMaterial(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color})) - An emissive material unaffected by lighting, which is what you want for 2D and for anything that must stay readable regardless of where the lights are.
 - [`CreateEmissiveMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateEmissiveMaterial(Stride.Games.IGame,Stride.Core.Mathematics.Color,System.Single)) - A surface that gives off its own light: a lamp, a sign, a glowing edge. Above an intensity of 1 it blooms under post effects.
 - [`CreateTexturedMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateTexturedMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single,System.Single,System.Single)) - A texture where the colour would be, tiled, with the same metalness and glossiness numbers.
