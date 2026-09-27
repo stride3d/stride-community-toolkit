@@ -112,7 +112,7 @@ The effect file and the id writer are eleven lines between them; what a package 
   `Pickable` to a render group to keep decorative geometry out.
 - **Meshes only.** Sprites, UI, particles, debug shapes and shape-batch shapes are not picked.
   A shape is an analytic function the CPU can test directly, which is what `ShapeBatch.TryPick`
-  does - see [ShapeBatch](shape-batch.md#which-shape-is-under-the-mouse) - and the right tool for
+  does - see [ShapeBatch](shape-batch.md#pick-shapes) - and the right tool for
   them.
 - **The main camera.** The picker reads the camera in the compositor's first slot. A feed drawn
   into a texture would need a picker of its own if its picture were ever clickable.

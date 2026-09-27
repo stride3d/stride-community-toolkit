@@ -35,4 +35,6 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🔧 Engineering
 
+- `Directory.Build.local.props`: an optional, git-ignored file that overrides build properties locally, such as `StrideVersion` for a Stride build from source. See the contributing build page.
+
 ### 💪 Other Changes

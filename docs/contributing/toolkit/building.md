@@ -210,6 +210,46 @@ an example against the local packages instead:
 > `Stride.CommunityToolkit.*`, because the `.*` pattern alone does not match the base package name and
 > would leave it looking on nuget.org, where no `99.0.0` exists.
 
+## Building against a local Stride build
+
+The repository builds against the released Stride version set by `StrideVersion` in
+`Directory.Build.props`. To build against an engine you built from source, override the version in a
+local file.
+
+1. Build Stride from source. Its build writes `4.4.0-dev` packages to `%LOCALAPPDATA%\stride\nugetdev`
+   and registers that folder as the **Stride Dev** NuGet source.
+2. Create `Directory.Build.local.props` in the repository root:
+
+    ```xml
+    <Project>
+      <PropertyGroup>
+        <StrideVersion>4.4.0-dev</StrideVersion>
+      </PropertyGroup>
+    </Project>
+    ```
+
+3. Delete the build output, then build:
+
+    ```bash
+    delete-bin.bat
+    dotnet build Stride.CommunityToolkit.slnx
+    ```
+
+To return to the released version, delete `Directory.Build.local.props` and the build output.
+
+| Item | Description |
+|---|---|
+| `Directory.Build.local.props` | Imported last by `Directory.Build.props`. Ignored by git |
+| `StrideVersion` | Any property set in the local file overrides the committed value |
+
+> [!IMPORTANT]
+> Delete the build output after every version switch. The asset compiler keeps shaders compiled from the
+> previous package, and the examples keep loading them.
+
+> [!NOTE]
+> Do not change `StrideVersion` in `Directory.Build.props` to a `-dev` version. The CI workflows restore
+> from nuget.org, where that package does not exist.
+
 ## Running the examples
 
 Code-only examples are GUI applications. Run one directly:
