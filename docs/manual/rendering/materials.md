@@ -9,7 +9,7 @@ objects, that the engine turns into a shader for you. This page is about that ba
 what each piece changes on screen, and the handful of things that go wrong when you build one from code.
 Every rule is illustrated by real code in this repository, most of it in the
 [Material Gallery](../code-only/examples/material-gallery.md) (`E02_3D_Material_Gallery`), a ring of
-thirty-two stations you can walk through and compare.
+thirty-three stations you can walk through and compare.
 
 ## The wrong path: turn the numbers up
 
@@ -313,6 +313,60 @@ each learned from the engine's own gizmo materials:
 
 A shader of your own goes further: its parameters are set the same way, through the keys the source
 generator makes from its constants, which is how the dissolve below burns away on a timer.
+
+## Swapping materials at runtime
+
+Parameters change a material's numbers. Sometimes the whole material has to change: a door turns red
+when locked, a ghost goes see-through, a selected unit is drawn in a team colour. The wrong path is to
+reach for the model, `model.Materials[0].Material = red`, and watch every door in the level turn red.
+A model is shared by every entity that draws it, and so is its material list.
+
+There are two places a material lives, and the engine asks them in order every frame:
+
+| Where | Reaches | Set it | Undo it |
+|---|---|---|---|
+| `modelComponent.Materials[slot]` | This entity only | `component.Materials[0] = red` | `component.Materials.Remove(0)` |
+| `model.Materials[slot].Material` | Every entity drawing the model | `model.Materials[0].Material = blue` | Put the old one back |
+
+The component's entry wins when there is one; with none, the model's material draws. The gallery's
+**Materials at runtime** station shows it on three teapots that share one model, each variation
+flipping one change every second and a half:
+
+```csharp
+// examples/code-only/E02_3D_Material_Gallery/Stations.Models.cs
+case 0:
+    // The component's override wins over the model's material; removing it gives the model's back
+    SetOverride(state.Middle, on ? state.Red : null);
+    break;
+
+case 1:
+    // The model's material is shared: every entity drawing the model follows
+    slot.Material = on ? state.Blue : state.Grey;
+    break;
+```
+
+Four things the engine's model processor settles, read in its source and shown on the station:
+
+1. **Every change is picked up on the next frame.** The processor looks up each slot's material every
+   frame; nothing needs telling. It rebuilds the entity's render meshes only when the new material has a
+   different number of passes - clear coat has two, hair three - which costs a little more once.
+2. **Shadows per slot live on the model.** A slot casts a shadow only when the component's
+   `IsShadowCaster` and the model's `model.Materials[slot].IsShadowCaster` both say so. The component's
+   flag is for the whole entity; only the model has one per slot, so turning off one slot's shadow turns it
+   off for every entity drawing the model.
+3. **Culling and the depth test are live.** `material.Passes[0].CullMode` and `DepthFunction` are pipeline
+   state, not shader code: flip one and the next frame draws with it, no compile. It is the material's,
+   so every entity wearing it flips together.
+4. **There is no regenerating a material in place.** A compiled material keeps no link to the features it
+   came from. Keep the descriptor, change it, and run `Material.New` again on it (or
+   `game.CreateMaterial(descriptor)`), then assign the new material. When only constants changed the
+   effect is compiled already and the swap is immediate; a new feature means a new effect, and a frame or
+   two of the fallback while it compiles.
+
+A trap from the gallery's own code: its `PlaceModel` helper clears the model's material list and adds the
+station's material, which is a write to a shared model. On the runtime station all three teapots wear
+the same material, so it is harmless there; on a model shared with the rest of a scene it would repaint
+everything that draws it.
 
 ## A feature of your own
 
@@ -628,7 +682,7 @@ surfaces and the models. `V` cycles a station's variations; `--station N --varia
 | Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive · Animated parameters | Textures in slots; the emissive and animated stations are the parameters set every frame |
 | Vertex colours · Node arithmetic · Custom shader node · Custom feature · Runtime textures · Texture loading | Every slot is a node; a feature of your own; loading a file right |
 | Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
-| Displacement · Tessellation · Overrides · Layers · Highlight shell | The vertices, the whole-material settings, composition, a material drawn over a model |
+| Displacement · Tessellation · Overrides · Layers · Highlight shell · Materials at runtime | The vertices, the whole-material settings, composition, a material drawn over a model, swapping materials |
 | The Material Package, in code · The lot | Equivalence with the editor; a full physically based material as a page of features |
 
 The beginner example, [Material](../code-only/examples/material.md) (`E02_3D_Material`), stays the
