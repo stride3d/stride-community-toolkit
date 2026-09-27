@@ -2,6 +2,7 @@ using E02_3D_Material_Gallery;
 using Example.Common;
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
@@ -26,16 +27,23 @@ using Stride.Rendering.Lights;
 // the ring, so what the editor hands you is here in C#.
 //
 // Keys: N and P fly to the next and previous station, Home flies home to the index board, Tab
-// shows one station at a time, L widens the labels, V cycles the current station's variation.
-// "--station 5" starts at a station; "--station 5 --variation 2" at its third variation - handy for screenshots.
+// shows one station at a time, L widens the labels, V cycles the current station's variation, M opens
+// the list of material stream views - diffuse, glossiness, normals - and a digit draws every mesh with
+// that stream as its colour, the way the editor's view modes do: the fastest way to see what a map is
+// really feeding the material.
+// "--station 5" starts at a station; "--station 5 --variation 2" at its third variation; "--stream Glossiness"
+// starts with that view on - handy for screenshots.
 // "--engine-fix" enables the hair and subsurface stations, which need an engine fix - see Stations.EngineHasOverrideFix.
 
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
 var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryParse(args[3], out var variation) ? variation : 0;
+var streamAt = Array.IndexOf(args, "--stream");
+var startStream = streamAt >= 0 && streamAt + 1 < args.Length && Enum.TryParse<MaterialStream>(args[streamAt + 1], ignoreCase: true, out var parsed) ? parsed : (MaterialStream?)null;
 Stations.EngineHasOverrideFix = args.Contains("--engine-fix");
 
 Gallery<MaterialStation>? gallery = null;
 MaterialTextures? textures = null;
+DebugTextDropdown? viewMenu = null;
 
 WindowsDpiManager.EnablePerMonitorV2();
 
@@ -58,6 +66,24 @@ void Start(Scene rootScene)
     var sun = game.AddDirectionalLight();
     game.AddSkybox();
     game.AddProfiler();
+
+    // The editor's view modes for a code-only game: M opens the list, a digit picks the stream every
+    // mesh draws, 0 is lit shading again. The digits count only while the list is open
+    var view = game.AddMaterialStreamView();
+
+    view.Stream = startStream;
+    viewMenu = new DebugTextDropdown
+    {
+        Title = "View",
+        ToggleKey = Keys.M,
+        TitleColor = Color.Gold,
+        SelectedIndex = startStream is { } chosen ? (int)chosen : MaterialStreamView.All.Count,
+        Items =
+        [
+            .. MaterialStreamView.All.Select(stream => new DebugTextDropdownItem((Keys)(Keys.D1 + (int)stream), MaterialStreamView.DisplayName(stream), () => view.Stream = stream)),
+            new(Keys.D0, "Lit", () => view.Stream = null),
+        ],
+    };
 
     // The text renderers, appended after the camera renderer, so labels land on top of everything
     game.AddWorldTextRenderer();
@@ -96,6 +122,7 @@ void HandleInput(Gallery<MaterialStation> gallery)
     if (game.Input.IsKeyPressed(Keys.P)) gallery.Step(-1);
     if (game.Input.IsKeyPressed(Keys.Home)) gallery.GoHome();
     if (game.Input.IsKeyPressed(Keys.Tab)) gallery.Solo = !gallery.Solo;
+    if (viewMenu?.Update(game.Input) == true) return;
 
     if (game.Input.IsKeyPressed(Keys.L))
     {
@@ -155,6 +182,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new("Home", "Home", Color.Gold),
         new("Tab", gallery.Solo ? "One station at a time" : "Every station", Color.Gold),
         new("L", gallery.LabelDetail switch { 0 => "Labels: the number", 1 => "Labels: the number and the feature", _ => "Labels: everything" }, Color.Gold),
+        .. viewMenu?.GetLines() ?? [],
         new(""),
     ];
 
@@ -213,6 +241,7 @@ concepts:
   - Normal, glossiness, metalness, occlusion and emissive maps
   - Compute nodes - vertex streams, arithmetic, a custom shader class, textures made at runtime
   - Transparency, thin glass, clear coat, cel shading, hair and subsurface scattering
+  - The editor's view modes in code - one material stream drawn as colour on every mesh
   - Displacement, tessellation and material layers
   - "Game Studio's Material Package, transcribed from its .sdmat files"
 tags:
