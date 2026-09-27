@@ -118,6 +118,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - The metadata generator writes CRLF without a final newline and rewrites only pages whose content changed.
 - DPI awareness: examples call `WindowsDpiManager.EnablePerMonitorV2()`. Only `E08_DpiAware` keeps an `app.manifest`.
 - NDepend reports zero issues across the solution.
+- Audio playback tests skip on machines without an audio device, such as CI runners.
 - GitHub code-quality findings triaged. `Tween` rejects a NaN or infinite duration, the Box2D task scheduler locks a private object, and gallery variations run through the station guard.
 - Known issue: thin glass renders opaque on Stride 4.4 because of an engine bug. The material gallery restores the blend state after the material is generated.
 - Known issue: after changing `StrideVersion`, delete an example's `obj/stride`, `obj/Debug/net10.0/stride` and `bin/.../data` folders, or shaders from the previous package are reused.
