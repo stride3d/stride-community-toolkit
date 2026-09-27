@@ -49,6 +49,7 @@ public static class Stations
         new("Node arithmetic", "two textures combined by an operator before the material sees them", nameof(ComputeBinaryColor), Setup: MapStations.NodeArithmetic, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Custom shader node", "a ComputeColor class of your own in any slot, twenty lines of shader", nameof(ComputeShaderClassColor), Setup: InputStations.CustomNode, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Runtime textures", "a height map and its normal map computed in C#, no asset", nameof(Stride.Graphics.Texture.New2D), Setup: InputStations.RuntimeTexturesStation, Anchor: new Vector3(0f, 1.8f, 0f)),
+        new("Texture loading", "the same files loaded wrong on the left, right on the right: colour space, green, alpha, mipmaps", nameof(TextureLoader), Setup: InputStations.TextureLoading, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Transparency", "blend, additive, cutoff and a dithered cutoff, on one shape", nameof(MaterialTransparencyBlendFeature), Setup: SurfaceStations.Transparency, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Thin glass", "the thin-glass model: a refractive index, its own Fresnel, the sky through it", nameof(MaterialSpecularThinGlassModelFeature), Setup: SurfaceStations.ThinGlass, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Clear coat", "car paint: base, metal flakes and a coat with its own gloss", nameof(MaterialClearCoatFeature), Setup: SurfaceStations.ClearCoat, Anchor: new Vector3(0f, 1.8f, 0f)),

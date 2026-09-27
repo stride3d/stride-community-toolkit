@@ -1,5 +1,6 @@
 using Example.Common.Galleries;
 using Stride.Animations;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Graphics;
@@ -35,17 +36,25 @@ public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame
 
             var pixels = image.PixelBuffer[0].GetPixels<Color>();
 
-            // The sample's textures are white on black with no alpha, made for additive blending. Alpha
-            // from brightness makes the same picture work alpha-blended too, and leaves a real alpha alone
-            if (pixels.All(pixel => pixel.A == byte.MaxValue))
+            // The sample's textures are bright on black with no alpha, made for additive blending. Alpha
+            // from brightness makes the same picture work alpha-blended too, and leaves a real alpha alone.
+            // A pixel whose alpha is its brightest channel is already premultiplied - a colour at that
+            // coverage - so only a real alpha is premultiplied by the loader
+            var derived = pixels.All(pixel => pixel.A == byte.MaxValue);
+
+            if (derived)
             {
                 for (var i = 0; i < pixels.Length; i++)
                 {
                     pixels[i].A = Math.Max(pixels[i].R, Math.Max(pixels[i].G, pixels[i].B));
                 }
+
+                image.PixelBuffer[0].SetPixels(pixels);
             }
 
-            return Texture.New2D(device, image.Description.Width, image.Description.Height, PixelFormat.R8G8B8A8_UNorm_SRgb, pixels);
+            // The toolkit's loader takes it from here: the decoder's BGRA put the right way round, sRGB, and
+            // the mipmaps a particle a few pixels wide needs
+            return TextureLoader.FromImage(device, image, new TextureLoadOptions(TextureRole.Color) { PremultiplyAlpha = !derived });
         }
     }
 

@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Extensions;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -9,7 +10,6 @@ using Stride.Rendering.Sprites;
 using Stride.UI;
 using Stride.UI.Controls;
 using Stride.UI.Panels;
-using System.Reflection;
 
 using var game = new Game();
 
@@ -27,10 +27,9 @@ void Start(Scene rootScene)
 {
     game.SetupBase3D();
 
-    var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
-    var filePath = Path.Combine(directory, "input.png");
-    using var input = File.Open(filePath, FileMode.Open);
-    var texture = Texture.Load(game.GraphicsDevice, input);
+    // A colour picture: sRGB and premultiplied, as the content pipeline would have imported it. Texture.Load
+    // with its defaults reads it as linear, and every mid-tone comes out pale
+    var texture = new TextureLoader(game.GraphicsDevice).Color("input.png");
 
     var grid = new UniformGrid
     {

@@ -9,7 +9,7 @@ objects, that the engine turns into a shader for you. This page is about that ba
 what each piece changes on screen, and the handful of things that go wrong when you build one from code.
 Every rule is illustrated by real code in this repository, most of it in the
 [Material Gallery](../code-only/examples/material-gallery.md) (`E02_3D_Material_Gallery`), a ring of
-twenty-nine stations you can walk through and compare.
+thirty stations you can walk through and compare.
 
 ## The wrong path: turn the numbers up
 
@@ -213,29 +213,55 @@ The file lives in the example's `Effects` folder and the asset compiler builds i
 that happen). Twenty lines, and the material generator does not know or care that the diffuse slot is
 procedural.
 
-### Textures: two ways to load them wrong
+### Textures: five ways to load them wrong
 
-A texture is pixels in a format plus a colour space, and both have a trap when you load one yourself
-instead of through the content pipeline. The gallery's loader carries the scar:
+A texture is pixels plus a promise about what they mean, and Game Studio's content pipeline keeps that
+promise at import: a colour texture is made sRGB and premultiplied, a normal map linear, and every
+texture gets its mipmaps. `Texture.Load(device, stream)` with its defaults does none of it - every file
+linear, straight alpha, one mip - and nothing fails; the picture is just wrong. The toolkit's
+`TextureLoader` does the pipeline's work at runtime, by role:
 
 ```csharp
-// examples/code-only/E02_3D_Material_Gallery/MaterialTextures.cs
-using var image = Image.Load(stream);
+var textures = new TextureLoader(game.GraphicsDevice, "Resources/materials");
 
-// The texture takes the pixels in the format the file decoded to - a PNG comes out BGRA -
-// because the bytes are copied as they are; asking for RGBA would trade red for blue. Only
-// the colour space is chosen here: a colour map is sRGB, a data map is not.
-var format = srgb ? image.Description.Format.ToSRgb() : image.Description.Format.ToNonSRgb();
-
-texture = Texture.New2D(device, image.Description.Width, image.Description.Height, format, image.PixelBuffer[0].GetPixels<Color>());
+var albedo = textures.Color("brick/brick_dif.png");      // sRGB, premultiplied, mipmapped
+var gloss = textures.Data("brick/brick_gls.png");        // linear
+var normal = textures.NormalMap("brick/brick_nml.png");  // linear, unit normals in every mip
 ```
 
-1. **Channel order.** `Image.Load` decodes a PNG as BGRA. Create the texture in the format the image
-   reports, not the one you expect, or every brick is blue.
-2. **Colour space.** An albedo is sRGB and must be gamma-decoded on sample; a normal, gloss, metalness,
-   occlusion or mask map is *data* and must not be. Load them all the same way and either the colours
-   are washed out or the normals point the wrong way. The gallery's loader has a `Colour` and a `Data`
-   entry point so the choice is made at the call site.
+The gallery's **Texture loading** station puts each mistake beside its fix, wrong on the left, and V
+walks through them:
+
+1. **A colour loaded as data.** The sRGB bytes skip the gamma decode, so every mid-tone comes out
+   brighter: a byte of 128 means a fifth of full light, not half. The bricks go pale.
+2. **A normal map loaded as a colour.** Now the decode runs on data, and every tilt is squashed towards
+   flat. The Normal (tangent) view under M shows it.
+3. **The green channel the wrong way.** There are two conventions for a normal map's Y. The engine's
+   tangent space has green pointing down the texture, the DirectX convention, which is how the Material
+   Package's maps are stored; Blender, Unity and glTF store it pointing up. The wrong one lights every
+   bump as a dent. `NormalMap(path, invertY: true)` flips a green-up map.
+4. **Straight alpha.** The engine's blend states expect colour premultiplied by alpha. A PNG stores it
+   straight, and paint programs leave any colour, often white, under the fully transparent part; loaded
+   as it is, that colour is added to whatever is behind. Premultiplied, it is black and adds nothing.
+5. **No mipmaps.** A PNG carries one level and the engine builds none at runtime, so a surface seen small
+   or at a grazing angle samples one texel of dozens per pixel and turns to crawling noise. The loader
+   builds the chain on the CPU, averaging in linear light for a colour (averaging sRGB bytes darkens
+   every mip) and renormalising a normal map's vectors.
+
+The third one comes with a warning. Game Studio's normal-map import inverts green by default, which is
+right for a green-up map, and the Material Package's texture assets keep that default although their
+maps are green-down. The toolkit worked this out by measuring the brick map's green on either side of a
+mortar groove and rendering both ways in the world-normal view: loaded as stored, the wall above each
+groove faces down and the one below faces up, as a recess should. So the gallery loads the pack's maps
+as stored, and it is worth checking a pack's bricks in the editor's normal view before trusting either
+default.
+
+Two things the loader leaves alone. **Channel order** is handled for you: `Image.Load` decodes a PNG as
+BGRA, and a texture made from its pixels in an RGBA format trades red for blue, which the particles
+gallery did to its fire for a while without anyone noticing under an orange tint. **Block compression**
+is not done: the texture stays eight bits a channel, four to eight times the memory of the BC formats an
+asset gets. For that, or for mipmaps built offline, ship a `.dds`; the loader passes it through with only
+its colour space chosen by the role.
 
 The Material Package's normal maps store X and Y and leave Z to be rebuilt, in the 0..1 range a texture
 holds, so their feature needs both switches: `new MaterialNormalMapFeature(normal) { ScaleAndBias = true, IsXYNormal = true }`.
@@ -454,7 +480,7 @@ surfaces and the models. `V` cycles a station's variations; `--station N --varia
 |---|---|
 | Diffuse colour · Glossiness sweep · Metalness sweep · Specular colour · Three distributions · Mirror | The four numbers, the two workflows, the microfacet functions |
 | Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive · Animated parameters | Textures in slots; the emissive and animated stations are the parameters set every frame |
-| Vertex colours · Node arithmetic · Custom shader node · Runtime textures | Every slot is a node |
+| Vertex colours · Node arithmetic · Custom shader node · Runtime textures · Texture loading | Every slot is a node; loading a file right |
 | Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
 | Displacement · Tessellation · Overrides · Layers | The vertices, the whole-material settings, composition |
 | The Material Package, in code · The lot | Equivalence with the editor; a full physically based material as a page of features |

@@ -158,7 +158,7 @@ public static class PackMaterials
         },
     };
 
-    private static MaterialNormalMapFeature Normal(MaterialTextures t, string path) => new(Recipes.Colour(t.Data(path))) { ScaleAndBias = true, IsXYNormal = true };
+    private static MaterialNormalMapFeature Normal(MaterialTextures t, string path) => new(Recipes.Colour(t.Normal(path))) { ScaleAndBias = true, IsXYNormal = true };
 }
 
 // The last two stations: the pack as a whole, and one material with every slot filled.
@@ -211,7 +211,7 @@ public static class PackStations
             Recipes.Colour(t.Color("brick/brick_dif.png")),
             glossiness: Recipes.Scalar(t.Data("brick/brick_gls.png")),
             metalness: new ComputeFloat(0f),
-            normal: Recipes.Colour(t.Data("brick/brick_nml.png")),
+            normal: Recipes.Colour(t.Normal("brick/brick_nml.png")),
             occlusion: Recipes.Scalar(t.Data("brick/brick_AO.png")),
             emissive: new ComputeBinaryColor(Recipes.Colour(t.Data("brick/brick_AO.png")), new ComputeColor(new Color(255, 120, 30)), BinaryOperator.Multiply),
             emissiveIntensity: 0.6f);

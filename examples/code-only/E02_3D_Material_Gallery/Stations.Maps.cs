@@ -37,7 +37,7 @@ public static class MapStations
 
         var set = s.Pick("brick", "rock", "rooftile") switch { 0 => "brick", 1 => "rock", _ => "rooftile" };
         var albedo = s.Textures.Color($"{set}/{set}_dif.png");
-        var normal = s.Textures.Data($"{set}/{set}_nml.png");
+        var normal = s.Textures.Normal($"{set}/{set}_nml.png");
         var gloss = s.Textures.Data($"{set}/{set}_gls.png");
 
         var flat = s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss)));
@@ -63,7 +63,7 @@ public static class MapStations
             Recipes.Colour(t.Color("wood_nongloss/wood_nongloss_dif.png")),
             glossiness: Recipes.Scalar(t.Data("wood_nongloss/wood_nongloss_gls.png")),
             specular: Recipes.Colour(t.Data("wood_nongloss/wood_nongloss_spc.png")),
-            normal: Recipes.Colour(t.Data("wood_nongloss/wood_nongloss_nml.png"))));
+            normal: Recipes.Colour(t.Normal("wood_nongloss/wood_nongloss_nml.png"))));
 
         var iron = s.Material(Recipes.Mapped(
             Recipes.Colour(t.Color("iron_blend/iron/iron_dif.png")),
@@ -90,7 +90,7 @@ public static class MapStations
 
         var set = s.Pick("brick", "rooftile") == 0 ? "brick" : "rooftile";
         var albedo = Recipes.Colour(s.Textures.Color($"{set}/{set}_dif.png"));
-        var normal = Recipes.Colour(s.Textures.Data($"{set}/{set}_nml.png"));
+        var normal = Recipes.Colour(s.Textures.Normal($"{set}/{set}_nml.png"));
         var gloss = Recipes.Scalar(s.Textures.Data($"{set}/{set}_gls.png"));
 
         var open = s.Material(Recipes.Mapped(albedo, glossiness: gloss, normal: normal));

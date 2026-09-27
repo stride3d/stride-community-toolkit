@@ -3,17 +3,16 @@ using Example.Common;
 using Example_2D_Playground;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
-using Stride.Graphics;
 using Stride.Input;
 using Stride.Physics;
 using Stride.Rendering.Sprites;
-using System.Reflection;
 using System.Xml.Linq;
 
 var boxSize = new Vector3(0.2f);
@@ -204,11 +203,8 @@ void AddBackground(string fileName)
 {
     var entity = new Entity("Background");
 
-    var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
-    var filePath = Path.Combine(directory, fileName);
-
-    using var input = File.OpenRead(filePath);
-    var texture = Texture.Load(game.GraphicsDevice, input);
+    // sRGB and premultiplied, the way a sprite asset would have been imported
+    var texture = new TextureLoader(game.GraphicsDevice).Color(fileName);
 
     var spriteComponent = new SpriteComponent
     {
