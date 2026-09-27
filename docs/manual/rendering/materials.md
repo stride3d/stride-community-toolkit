@@ -9,7 +9,7 @@ objects, that the engine turns into a shader for you. This page is about that ba
 what each piece changes on screen, and the handful of things that go wrong when you build one from code.
 Every rule is illustrated by real code in this repository, most of it in the
 [Material Gallery](../code-only/examples/material-gallery.md) (`E02_3D_Material_Gallery`), a ring of
-thirty-one stations you can walk through and compare.
+thirty-two stations you can walk through and compare.
 
 ## The wrong path: turn the numbers up
 
@@ -462,6 +462,55 @@ is the stream's linear value drawn through the post effects like any colour, so 
 way the lit picture is; a glossiness of 0.5 is not a pixel of 128. In the gallery M opens the list and a
 digit picks the view for the whole ring; the Normal map and the Gloss and metal maps stations are where they earn their keep.
 
+## A highlight from a material
+
+Something under the mouse should look under the mouse, and the first ideas for that are both heavier
+than they need to be. An outline is a render feature of its own - the toolkit's mesh outline example
+is one - drawing selected meshes again in a pass with its own shader. Swapping the hovered object's
+material for a brighter copy, as the cube-collapse game does, needs a lit variant of every material in
+the scene.
+
+The engine's TopDownRPG template does it with one material and one entity: the hovered model drawn
+again, a little larger, with a faint glow over it. The toolkit has that as `HighlightShell`:
+
+```csharp
+// examples/code-only/E09_3D_GpuPicking/Program.cs
+hover = new HighlightShell(game.CreateMaterial(MaterialDescriptors.Highlight(Color.Cyan)));
+picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
+...
+if (picker.Result is { Hit: true, ModelComponent: { } model } hovered)
+{
+    // A crate has no entity of its own: the shell goes to the instance's matrix instead
+    if (model.Entity == crates) hover?.Show(model, crateMatrices[hovered.InstanceIndex]);
+    else hover?.Show(model);
+}
+else
+{
+    hover?.Hide();
+}
+```
+
+`MaterialDescriptors.Highlight` is four features and no diffuse: a constant displacement in the vertex
+stage pushes every vertex out along its normal, an emissive colour is the whole of its shading, a blend
+transparency with a small alpha lets the model show through, and no culling makes the glow read from
+inside as well. What reaches the screen is the colour added over the model, like light. `Show` puts the
+shell on a model as a child of its entity, filling every material slot, so it follows the model; showing
+the same target again every frame costs nothing.
+
+Three things to know:
+
+1. **The shell must stay out of the picking pass.** It is in front of the model it highlights, so a
+   picker that sees it answers "the shell" the frame after it appears, and the hover flickers. The shell
+   draws in render group 30, and the picker's pickable mask leaves that group out.
+2. **Split normals open the seams.** A cube's faces each have their own normals, so the displacement
+   moves them apart at the corners. At the default two hundredths of a unit it is a thin bright rim; the
+   gallery's thick variation shows it plainly. Smooth models close.
+3. **An instance has no entity to follow.** For one instance of an instanced model, `Show(model, world)`
+   places a free shell at the instance's matrix; call it again if the instance moves.
+
+The gallery's **Highlight shell** station moves one shell from shape to shape the way it would follow
+the mouse, and V cycles the colour and a thick shell.
+
 ## Choosing the surface
 
 Past the four numbers, each aspect of a surface is a feature you add, and most of them come with a
@@ -579,7 +628,7 @@ surfaces and the models. `V` cycles a station's variations; `--station N --varia
 | Albedo texture · Normal map · Gloss and metal maps · Occlusion · Emissive · Animated parameters | Textures in slots; the emissive and animated stations are the parameters set every frame |
 | Vertex colours · Node arithmetic · Custom shader node · Custom feature · Runtime textures · Texture loading | Every slot is a node; a feature of your own; loading a file right |
 | Transparency · Thin glass · Clear coat · Cel shading · Hair · Hair passes and functions · Subsurface scattering | Choosing the surface |
-| Displacement · Tessellation · Overrides · Layers | The vertices, the whole-material settings, composition |
+| Displacement · Tessellation · Overrides · Layers · Highlight shell | The vertices, the whole-material settings, composition, a material drawn over a model |
 | The Material Package, in code · The lot | Equivalence with the editor; a full physically based material as a page of features |
 
 The beginner example, [Material](../code-only/examples/material.md) (`E02_3D_Material`), stays the

@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Effects.Picking;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -11,6 +12,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
+using Stride.Rendering;
 
 // What is under the mouse, answered by the renderer instead of by physics. There is no physics
 // package in this example and nothing has a collider: a teapot, a ring of pillars, a few
@@ -23,6 +25,11 @@ using Stride.Input;
 // The answer arrives two frames after the request, because the GPU is asked and the readback
 // waits for it without stalling. For hovering and clicking that is invisible.
 //
+// The hover highlight is a HighlightShell: the hovered model drawn again a little larger with a faint
+// glow, no render feature and no post effect - the TopDownRPG template's loot highlight. It draws in
+// its own render group, which the picker is told to leave out, or the shell would be what is under
+// the mouse the moment it appeared.
+//
 // Mouse: hover to highlight, left click to select, Escape to clear the selection.
 
 const int CrateColumns = 14;
@@ -34,6 +41,7 @@ Entity? crates = null;
 GpuPicker? picker = null;
 ShapeBatch? shapes = null;
 PickResult? selected = null;
+HighlightShell? hover = null;
 
 WindowsDpiManager.EnablePerMonitorV2();
 
@@ -63,6 +71,10 @@ void Start(Scene scene)
     picker = game.AddGpuPicker();
     picker.Continuous = true;
 
+    // The hover glow, a shell that moves onto whatever is under the mouse, kept out of the picking pass
+    hover = new HighlightShell(game.CreateMaterial(MaterialDescriptors.Highlight(Color.Cyan)));
+    picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
+
     var overlay = DebugOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", OverlayLines);
     overlay.SetPosition(DisplayPosition.BottomLeft);
@@ -82,9 +94,17 @@ void Update(Scene scene, GameTime time)
         selected = null;
     }
 
-    if (picker.Result is { } hovered)
+    if (picker.Result is { Hit: true, ModelComponent: { } model } hovered)
     {
-        DrawHighlight(hovered, Color.Cyan, 10f);
+        // A crate has no entity of its own: the shell goes to the instance's matrix instead
+        if (model.Entity == crates) hover?.Show(model, crateMatrices[Math.Clamp(hovered.InstanceIndex, 0, crateMatrices.Length - 1)]);
+        else hover?.Show(model);
+
+        DrawRing(hovered, Color.Cyan, 10f);
+    }
+    else
+    {
+        hover?.Hide();
     }
 
     if (selected is { } chosen)
@@ -200,17 +220,15 @@ void BuildCrates(Scene scene)
 }
 
 /// <summary>
-/// A ring at the point on the surface, and a box around what was picked: the model's bounds for
-/// an entity of its own, the instance's cube for a crate, because the instanced model's bounds are
-/// the whole field.
+/// The selection: a ring at the point on the surface, and a box around what was picked - the model's
+/// bounds for an entity of its own, the instance's cube for a crate, because the instanced model's
+/// bounds are the whole field.
 /// </summary>
 void DrawHighlight(PickResult result, Color colour, float ringPixels)
 {
-    if (shapes is null || result is not { Hit: true, WorldPosition: { } at, Entity: { } entity, ModelComponent: { } model }) return;
+    if (shapes is null || result is not { Hit: true, Entity: { } entity, ModelComponent: { } model }) return;
 
-    shapes.BorderWidth = 2f;
-    shapes.Fill.Alpha = 0f;
-    shapes.DrawPixelRing(at, ringPixels, colour);
+    DrawRing(result, colour, ringPixels);
 
     if (entity == crates)
     {
@@ -224,6 +242,16 @@ void DrawHighlight(PickResult result, Color colour, float ringPixels)
 
         shapes.DrawWireBox(bounds.Center, bounds.Extent * 2f + new Vector3(0.1f), 0.03f, colour);
     }
+}
+
+/// <summary>A ring at the point on the surface the pick hit.</summary>
+void DrawRing(PickResult result, Color colour, float ringPixels)
+{
+    if (shapes is null || result is not { Hit: true, WorldPosition: { } at }) return;
+
+    shapes.BorderWidth = 2f;
+    shapes.Fill.Alpha = 0f;
+    shapes.DrawPixelRing(at, ringPixels, colour);
 }
 
 IReadOnlyList<TextElement> OverlayLines()
@@ -277,6 +305,7 @@ description:
     AddGpuPicker, a výsledek o dva snímky později.
 concepts:
   - Picking without colliders through AddGpuPicker, and what the call builds in the compositor
+  - A hover highlight with no render feature - HighlightShell, kept out of the picking pass by its render group
   - Why the answer is two frames late, and why that does not matter for hover and click
   - Reading the entity, mesh, material and instance index from a PickResult
   - The hit point rebuilt from the depth the picking pass wrote

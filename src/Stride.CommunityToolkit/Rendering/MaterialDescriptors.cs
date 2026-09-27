@@ -120,6 +120,53 @@ public static class MaterialDescriptors
     };
 
     /// <summary>
+    /// A highlight shell: the model drawn again a little larger, glowing faintly over the original, the
+    /// hover effect of the engine's TopDownRPG template transcribed. For a <see cref="HighlightShell"/>,
+    /// which puts it on every material slot of the model under the mouse.
+    /// </summary>
+    /// <param name="colour">The glow's colour.</param>
+    /// <param name="strength">How much of the colour is added over the model; 1 is the template's, strong enough to read on a bright surface.</param>
+    /// <param name="inflate">How far the shell stands off the surface along the vertex normals, in the model's own units before its scale.</param>
+    /// <remarks>
+    /// <para>
+    /// Four features, no diffuse: a constant displacement in the vertex stage pushes every vertex out
+    /// along its normal; an emissive colour is the whole of its shading, with its alpha taken from the
+    /// emissive; a blend transparency with a small alpha lets the original show through; and no culling,
+    /// so the glow reads from inside the shell as well. What ends up on screen is the colour added over
+    /// the model, like light. The shell's shadow is its entity's business: a <see cref="HighlightShell"/>
+    /// turns it off.
+    /// </para>
+    /// <para>
+    /// On a model with split normals - a cube's corners, any flat-shaded edge - the faces move apart
+    /// and the shell opens at the seams; on smooth models it closes.
+    /// </para>
+    /// </remarks>
+    public static MaterialDescriptor Highlight(Color colour, float strength = 1f, float inflate = 0.02f)
+    {
+        // A float4 node is passed to the shader as it is, so the colour goes in as linear light
+        var linear = new Color4(colour).ToColorSpace(ColorSpace.Linear);
+
+        return new()
+        {
+            Attributes =
+            {
+                Displacement = new MaterialDisplacementMapFeature(new ComputeFloat(1f))
+                {
+                    Intensity = new ComputeFloat(inflate),
+                    Stage = DisplacementMapStage.Vertex,
+                },
+                Emissive = new MaterialEmissiveMapFeature(new ComputeFloat4(new Vector4(linear.R, linear.G, linear.B, 0.1f)))
+                {
+                    Intensity = new ComputeFloat(strength),
+                    UseAlpha = true,
+                },
+                Transparency = new MaterialTransparencyBlendFeature { Alpha = new ComputeFloat(0.1f) },
+                CullMode = CullMode.None,
+            },
+        };
+    }
+
+    /// <summary>
     /// The engine's microfacet specular model at its defaults: Schlick Fresnel, Smith-Schlick-GGX visibility,
     /// the GGX distribution and the GGX lookup-table environment term. One method so every descriptor here
     /// shares one choice; the lookup table needs the content manager at compile time (see <see cref="Pbr"/>).
