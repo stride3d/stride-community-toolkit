@@ -542,7 +542,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="particles.md">Particle Gallery</a></h3>
                 <p><span class="badge text-bg-secondary">Rendering</span></p>
-                <p class="card-text">Thirty-one particle systems on a ring of stations, all built from code: the building blocks one at a time - spawners, shapes, initializers, updaters,...</p>
+                <p class="card-text">Thirty-eight particle systems on a ring of stations, all built from code: the building blocks one at a time - spawners, shapes, initializers,...</p>
             </div>
         </div>
     </div>

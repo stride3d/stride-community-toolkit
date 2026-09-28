@@ -18,6 +18,7 @@
         <None Include="..\Resources\bonfire8x8.png" Link="Resources\bonfire8x8.png" CopyToOutputDirectory="PreserveNewest" />
         <None Include="..\Resources\dot.png" Link="Resources\dot.png" CopyToOutputDirectory="PreserveNewest" />
         <None Include="..\Resources\radial-grad-gray.png" Link="Resources\radial-grad-gray.png" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="..\Resources\smoke-billow.png" Link="Resources\smoke-billow.png" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>

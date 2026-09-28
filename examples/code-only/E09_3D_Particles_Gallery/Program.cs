@@ -16,19 +16,21 @@ using Stride.Input;
 // come from the shared gallery frame in Example.Common. Most stations have a few variations of
 // their own parameter - press V - so "what does this setting do" is a keypress, not a rebuild.
 //
-// The first twenty-three stations are the building blocks one at a time: spawners, shapes,
-// initializers, updaters, materials. The last eight put several together - a campfire, fireworks
+// The first twenty-four stations are the building blocks one at a time: spawners, shapes,
+// initializers, updaters, materials. The next eight put several together - a campfire, fireworks
 // with child emitters, a tornado, a swarm driven by an updater of our own, lasers, rain that
-// splashes, a portal from an initializer of our own, a rocket engine - because that is what the
-// system is for.
+// splashes, a portal from an initializer of our own, a landing burn - because that is what the
+// system is for. The last six are thrusters, one fuel each, built from the same few layers.
 //
 // Keys: N and P fly to the next and previous station, Home flies home to the index board, Tab
 // shows one station at a time, L widens the labels, V cycles the current station's variation,
 // Space restarts the current station's simulation. "--station 25" starts at a station;
-// "--station 25 --variation 2" at its third variation - handy for screenshots.
+// "--station 25 --variation 2" at its third variation - handy for screenshots. "--clean" hides the
+// overlay, for a screenshot or a recording of the particles alone.
 
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
 var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryParse(args[3], out var variation) ? variation : 0;
+var clean = args.Contains("--clean");
 
 Gallery<ParticleStation>? gallery = null;
 ParticleTextures? textures = null;
@@ -69,7 +71,10 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
+    var overlay = DebugOverlay.GetOrCreate(game);
+
+    overlay.AddSection("Gallery", BuildOverlayLines);
+    overlay.Visible = !clean;
 }
 
 void Update(Scene scene, GameTime gameTime)
@@ -173,17 +178,21 @@ complexity: 3
 order: 140
 description:
   en: |-
-    Thirty-one particle systems on a ring of stations, all built from code: the building blocks one at a
-    time - spawners, shapes, initializers, updaters, materials, flipbooks, soft particles - and then
+    Thirty-eight particle systems on a ring of stations, all built from code: the building blocks one at a
+    time - spawners, shapes, initializers, updaters, materials, flipbooks, soft particles - then
     the showpieces that put them together: a campfire, fireworks with child emitters, a tornado, a
-    swarm driven by an updater of our own, lasers, rain that splashes, a portal, a rocket engine. Most
+    swarm driven by an updater of our own, lasers, rain that splashes, a portal, a landing burn. The
+    last six are thrusters: a kerosene engine, a cluster of nine, a methane engine with shock
+    diamonds, a jet afterburner, a solid booster that leaves a trail, and small thrusters. Most
     stations have variations on a key, so what a setting does is a keypress away.
   cs: |-
-    Třicet částicových systémů na kruhu stanic, vše postavené z kódu: stavební kameny jeden po
-    druhém - spawnery, tvary, inicializátory, updatery, materiály, flipbooky, měkké částice - a pak
+    Třicet osm částicových systémů na kruhu stanic, vše postavené z kódu: stavební kameny jeden po
+    druhém - spawnery, tvary, inicializátory, updatery, materiály, flipbooky, měkké částice - pak
     ukázky, které je skládají dohromady: táborák, ohňostroj s dětskými emitory, tornádo, hejno řízené
-    vlastním updaterem, lasery, déšť, který stříká, portál, raketový motor. Většina stanic má varianty
-    na klávese, takže co které nastavení dělá, je na jedno stisknutí.
+    vlastním updaterem, lasery, déšť, který stříká, portál, přistávací zážeh. Posledních šest jsou
+    trysky: kerosinový motor, svazek devíti motorů, metanový motor s rázovými diamanty, přídavné
+    spalování proudového motoru, motor na tuhé palivo, který za sebou nechává stopu, a malé trysky.
+    Většina stanic má varianty na klávese, takže co které nastavení dělá, je na jedno stisknutí.
 concepts:
   - Building a ParticleSystemComponent from code - emitters, spawners, initializers, updaters, shapes, materials
   - Textures, flipbooks and scrolling texture coordinates on particles
@@ -192,6 +201,9 @@ concepts:
   - Child emitters spawned on a parent's death, distance or collision
   - Soft particles against geometry
   - Writing an updater and an initializer of your own
+  - A particle's own colour as a vertex stream node in the material
+  - An exhaust from layers - flare, core, body, shock diamonds, smoke - and a throttle that drives them
+  - A smoke trail spawned by distance behind an emitter that flies
   - A ring of stations from the shared gallery frame in Example.Common, with variations per station
 tags:
   - 3D

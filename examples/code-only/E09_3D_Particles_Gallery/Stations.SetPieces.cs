@@ -133,35 +133,43 @@ public static class SetPieceStations
         s.Place(new Vector3(0f, 3f, 0f), 2f, glow, ring, sparks);
     }
     /// <summary>
-    /// A rocket engine firing down at the pad: a white-blue core of stretched quads at the throat,
+    /// A landing burn, a rocket engine firing down at the pad: a white-blue core of stretched quads at the throat,
     /// an orange plume of flame frames around it, sparks thrown clear, and exhaust smoke that hits
     /// the ground through a collider and rolls out across the pad. The variations are how much the
     /// engine smokes - a clean burn, a sooty one - and an afterburner with a longer, hotter core.
+    /// The flame ends above the pad, so all of it shows; the smoke is what reaches the ground.
     /// </summary>
     public static void RocketEngine(ParticleStation s)
     {
+        // How high the nozzle's exit is above the pad. Everything below is measured from the exit.
+        const float Height = 4.6f;
+
         var v = s.Pick("clean burn, little smoke", "sooty, lots of smoke", "landing burn: dust and mach diamonds");
 
         var sooty = v == 1;
         var afterburner = v == 2;
 
-        // The engine itself, once: a nozzle cone with the throat up, and the body above it
+        // The engine itself, once: a nozzle cone with the throat up, and the body standing on it. A cone's
+        // size is its radius and its height; a cylinder's is its radius in X and its length in Z.
         if (s.State is null)
         {
+            const float NozzleLength = 1f;
+            const float BodyLength = 2.6f;
+
             var nozzle = s.Game.Create3DPrimitive(PrimitiveModelType.Cone, new Primitive3DEntityOptions
             {
                 EntityName = $"Station {s.Number} nozzle",
                 Material = s.Game.CreateMaterial(new Color(70, 72, 78), metalness: 0.5f, glossiness: 0.7f),
-                Size = new Vector3(1.2f, 1f, 1.2f),
-                Position = s.At(0f, 3.7f, 0f),
+                Size = new Vector3(0.6f, NozzleLength, 0f),
+                Position = s.At(0f, Height + NozzleLength / 2f, 0f),
             });
 
             var body = s.Game.Create3DPrimitive(PrimitiveModelType.Cylinder, new Primitive3DEntityOptions
             {
                 EntityName = $"Station {s.Number} body",
                 Material = s.Game.CreateMaterial(new Color(200, 205, 210), metalness: 0.3f, glossiness: 0.6f),
-                Size = new Vector3(0.9f, 2f, 0.9f),
-                Position = s.At(0f, 5.2f, 0f),
+                Size = new Vector3(0.45f, 0f, BodyLength),
+                Position = s.At(0f, Height + NozzleLength + BodyLength / 2f, 0f),
             });
 
             nozzle.Scene = s.Scene;
@@ -171,22 +179,23 @@ public static class SetPieceStations
 
         var core = new ParticleEmitter
         {
-            ParticleLifetime = afterburner ? new Vector2(0.35f, 0.5f) : new Vector2(0.22f, 0.35f),
+            ParticleLifetime = afterburner ? new Vector2(0.2f, 0.27f) : new Vector2(0.2f, 0.28f),
             SimulationSpace = EmitterSimulationSpace.World,
-            ShapeBuilder = new ShapeBuilderOrientedQuad { ScaleLength = true, LengthFactor = afterburner ? 5f : 3.5f },
+            // The length is the factor times the size times the speed, so a fast particle needs a small factor
+            ShapeBuilder = new ShapeBuilderOrientedQuad { ScaleLength = true, LengthFactor = 0.3f },
             Material = ParticleMaterials.Textured(s.Textures.Radial, afterburner ? new Color4(2.5f, 2f, 3f, 1f) : new Color4(1.6f, 1.9f, 2.6f, 1f), additive: 1f),
         };
 
         core.Spawners.Add(new SpawnerPerSecond { SpawnCount = afterburner ? 420 : 300 });
         core.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.3f, 0.45f) });
         core.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.15f, 0f, -0.15f), PositionMax = new Vector3(0.15f, 0f, 0.15f) });
-        core.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-0.8f, afterburner ? -20f : -15f, -0.8f), VelocityMax = new Vector3(0.8f, afterburner ? -16f : -12f, 0.8f) });
+        core.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-0.6f, afterburner ? -16f : -13f, -0.6f), VelocityMax = new Vector3(0.6f, afterburner ? -13f : -10f, 0.6f) });
         core.Updaters.Add(new UpdaterSpeedToDirection());
-        core.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, 1f), (0.7f, 0.8f), (1f, 0f)) });
+        core.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, 0.5f), (0.7f, 0.4f), (1f, 0f)) });
 
         var plume = new ParticleEmitter
         {
-            ParticleLifetime = new Vector2(0.5f, 0.8f),
+            ParticleLifetime = new Vector2(0.4f, 0.6f),
             SimulationSpace = EmitterSimulationSpace.World,
             ShapeBuilder = new ShapeBuilderBillboard(),
             Material = ParticleMaterials.Flipbook(s.Textures.Flame, 8, 8, 64, new Color4(2.2f, 1.1f, 0.35f, 1f), additive: 1f),
@@ -195,7 +204,7 @@ public static class SetPieceStations
         plume.Spawners.Add(new SpawnerPerSecond { SpawnCount = afterburner ? 160 : 110 });
         plume.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.7f, 1.1f) });
         plume.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.3f, -0.3f, -0.3f), PositionMax = new Vector3(0.3f, 0f, 0.3f) });
-        plume.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-1.2f, -9f, -1.2f), VelocityMax = new Vector3(1.2f, -6f, 1.2f) });
+        plume.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-1f, -7.5f, -1f), VelocityMax = new Vector3(1f, -5f, 1f) });
         plume.Initializers.Add(new InitialRotationSeed { AngularRotation = new Vector2(170f, 190f) });
         plume.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, 0.5f), (0.4f, 1.3f), (1f, 0.6f)) });
         plume.Updaters.Add(new UpdaterColorOverTime { SamplerMain = Curves.Color((0f, Color4.White), (0.5f, new Color4(1f, 0.7f, 0.5f, 0.8f)), (1f, new Color4(0.6f, 0.2f, 0.05f, 0f))) });
@@ -217,7 +226,7 @@ public static class SetPieceStations
         sparks.Updaters.Add(new UpdaterCollider
         {
             FieldShape = new Cube { HalfSideX = 7f, HalfSideY = 0.1f, HalfSideZ = 7f },
-            Position = new Vector3(0f, -3.25f, 0f),
+            Position = new Vector3(0f, -Height - 0.05f, 0f),
             InheritPosition = true,
             Restitution = 0.45f,
             Friction = 0.2f,
@@ -234,7 +243,8 @@ public static class SetPieceStations
 
         smoke.Spawners.Add(new SpawnerPerSecond { SpawnCount = v switch { 0 => 10, 1 => 70, _ => 25 } });
         smoke.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.8f, 1.3f) });
-        smoke.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.4f, -1.5f, -0.4f), PositionMax = new Vector3(0.4f, -0.5f, 0.4f) });
+        // The smoke starts where the flame ends
+        smoke.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.4f, -3.2f, -0.4f), PositionMax = new Vector3(0.4f, -2f, 0.4f) });
         smoke.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-1f, -6f, -1f), VelocityMax = new Vector3(1f, -3.5f, 1f) });
         smoke.Initializers.Add(new InitialRotationSeed { AngularRotation = new Vector2(-180f, 180f) });
         smoke.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, 0.5f), (1f, 2.8f)) });
@@ -244,7 +254,7 @@ public static class SetPieceStations
         smoke.Updaters.Add(new UpdaterCollider
         {
             FieldShape = new Cube { HalfSideX = 8f, HalfSideY = 0.1f, HalfSideZ = 8f },
-            Position = new Vector3(0f, -3.05f, 0f),
+            Position = new Vector3(0f, -Height + 0.15f, 0f),
             InheritPosition = true,
             Restitution = 0.02f,
             Friction = 0.03f,
@@ -252,7 +262,7 @@ public static class SetPieceStations
 
         if (!afterburner)
         {
-            s.Place(new Vector3(0f, 3.2f, 0f), 2f, smoke, plume, core, sparks);
+            s.Place(new Vector3(0f, Height, 0f), 2f, smoke, plume, core, sparks);
 
             return;
         }
@@ -268,7 +278,7 @@ public static class SetPieceStations
 
         diamonds.Spawners.Add(new SpawnerPerSecond { SpawnCount = 90 });
         diamonds.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.35f, 0.55f) });
-        diamonds.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.05f, -2.6f, -0.05f), PositionMax = new Vector3(0.05f, -0.4f, 0.05f) });
+        diamonds.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.05f, -3.2f, -0.05f), PositionMax = new Vector3(0.05f, -0.4f, 0.05f) });
 
         // Dust: the landing burn stirs up the pad, a wide low cloud that the smoke's collider keeps on the ground
         var dust = new ParticleEmitter
@@ -282,7 +292,7 @@ public static class SetPieceStations
 
         dust.Spawners.Add(new SpawnerPerSecond { SpawnCount = 40 });
         dust.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(1.2f, 1.8f) });
-        dust.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-1.5f, -3.1f, -1.5f), PositionMax = new Vector3(1.5f, -2.9f, 1.5f) });
+        dust.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-1.5f, -Height + 0.1f, -1.5f), PositionMax = new Vector3(1.5f, -Height + 0.3f, 1.5f) });
         dust.Initializers.Add(new InitialVelocitySeed { VelocityMin = new Vector3(-5f, 0.2f, -5f), VelocityMax = new Vector3(5f, 1.5f, 5f) });
         dust.Initializers.Add(new InitialRotationSeed { AngularRotation = new Vector2(-180f, 180f) });
         dust.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, 1f), (1f, 4f)) });
@@ -297,6 +307,6 @@ public static class SetPieceStations
             EnergyConservation = 0.5f,
         });
 
-        s.Place(new Vector3(0f, 3.2f, 0f), 2f, dust, smoke, plume, core, sparks, diamonds);
+        s.Place(new Vector3(0f, Height, 0f), 2f, dust, smoke, plume, core, sparks, diamonds);
     }
 }

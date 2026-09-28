@@ -52,6 +52,14 @@ public static class Stations
         new("Lasers", "ribbons in local space with a scrolling additive texture", nameof(EmitterSimulationSpace.Local), Setup: ShowStations.Lasers, Update: ShowStations.Turn),
         new("Rain", "drops that splash where they hit the floor - a collision trigger", nameof(ParticleSpawnTriggerCollision), Setup: SetPieceStations.Rain),
         new("Portal", "a ring from an initializer of our own, with sparks and a glow", nameof(RingInitializer), Setup: SetPieceStations.Portal),
-        new("Rocket engine", "a white-blue core, an orange plume, sparks, and exhaust that rolls across the pad", nameof(UpdaterCollider), Setup: SetPieceStations.RocketEngine),
+        new("Landing burn", "a white-blue core, an orange plume, sparks, and exhaust that rolls across the pad", nameof(UpdaterCollider), Setup: SetPieceStations.RocketEngine),
+
+        // Thrusters: one fuel each, from the same few layers
+        new("Kerosene engine", "like Falcon 9's Merlin: a bright orange plume and a dark streak of soot", nameof(Exhaust), Setup: ThrusterStations.Kerosene, Update: ThrusterStations.Run),
+        new("Engine cluster", "like a Falcon 9 liftoff: nine engines, one plume, from one emitter", nameof(ClusterInitializer), Setup: ThrusterStations.Cluster, Update: ThrusterStations.Run),
+        new("Methane engine", "like Starship's Raptor: a see-through blue flame with shock diamonds", nameof(ShockCellInitializer), Setup: ThrusterStations.Methane, Update: ThrusterStations.Run),
+        new("Jet afterburner", "orange with a blue root, and the best-known shock diamonds", nameof(Throttle), Setup: ThrusterStations.Afterburner, Update: ThrusterStations.Run),
+        new("Solid booster", "a white flame and a thick trail that stays in the sky, spawned by distance", nameof(SpawnerFromDistance), Setup: ThrusterStations.SolidBooster, Update: ThrusterStations.Run),
+        new("Small thrusters", "cold gas puffs, a hypergolic burst, an ion beam", nameof(SpawnerPerSecond), Setup: ThrusterStations.SmallThrusters, Update: ThrusterStations.Run),
     ];
 }
