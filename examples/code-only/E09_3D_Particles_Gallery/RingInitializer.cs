@@ -27,6 +27,7 @@ public sealed class RingInitializer : ParticleInitializer
     public RingInitializer()
     {
         RequiredFields.Add(ParticleFields.Position);
+        RequiredFields.Add(ParticleFields.OldPosition);
         RequiredFields.Add(ParticleFields.Velocity);
         RequiredFields.Add(ParticleFields.RandomSeed);
     }
@@ -37,6 +38,7 @@ public sealed class RingInitializer : ParticleInitializer
         if (!pool.FieldExists(ParticleFields.Position) || !pool.FieldExists(ParticleFields.Velocity) || !pool.FieldExists(ParticleFields.RandomSeed)) return;
 
         var positions = pool.GetField(ParticleFields.Position);
+        var oldPositions = pool.GetField(ParticleFields.OldPosition);
         var velocities = pool.GetField(ParticleFields.Velocity);
         var seeds = pool.GetField(ParticleFields.RandomSeed);
 
@@ -57,6 +59,9 @@ public sealed class RingInitializer : ParticleInitializer
             WorldRotation.Rotate(ref velocity);
 
             particle.Set(positions, position + WorldPosition);
+
+            // The old position too: an updater that reads a direction from the two must not see a jump
+            particle.Set(oldPositions, position + WorldPosition);
             particle.Set(velocities, velocity);
         }
     }

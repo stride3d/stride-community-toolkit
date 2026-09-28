@@ -85,7 +85,7 @@ public static class ShapeStations
             ShapeBuilder = new ShapeBuilderRibbon
             {
                 SmoothingPolicy = v switch { 0 => SmoothingPolicy.None, 1 => SmoothingPolicy.Fast, _ => SmoothingPolicy.Best },
-                Segments = 5,
+                Segments = 3,
                 TextureCoordinatePolicy = TextureCoordinatePolicy.Stretched,
                 // The strip runs the texture along its length from 0 to this factor. The default is 0: every
                 // vertex samples the top row of the texture, which on a radial glow is black, and the ribbon
@@ -95,7 +95,7 @@ public static class ShapeStations
             Material = ParticleMaterials.Textured(s.Textures.Radial, new Color4(0.4f, 1f, 0.6f, 1f), additive: 1f),
         };
 
-        emitter.Spawners.Add(new SpawnerPerSecond { SpawnCount = 30 });
+        emitter.Spawners.Add(new SpawnerPerSecond { SpawnCount = 45 });
         emitter.Initializers.Add(new InitialSpawnOrder());
         emitter.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.6f, 0.6f) });
 
@@ -109,7 +109,11 @@ public static class ShapeStations
 
         var (sin, cos) = MathF.SinCos(s.Seconds * 1.6f);
 
-        s.Entity.Transform.Position = s.At(cos * 2.5f, 2f + sin * 0.8f, sin * 1.5f);
+        // A ribbon turns its width to face the camera. Where its path runs towards the camera or away
+        // from it there is no width to turn, and the strip twists into a fan of thin lines. So the path
+        // stays in the plane that faces the visitor. And it turns gently: on a bend tighter than the strip is
+        // wide, the inside edges of neighbouring segments cross and the overlap shows as bright specks.
+        s.Entity.Transform.Position = s.At(cos * 2.6f, 3f + sin * 2f, 0f);
     }
 
     /// <summary>
