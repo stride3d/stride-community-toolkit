@@ -20,16 +20,18 @@ namespace E09_3D_Particles_Gallery;
 /// <param name="Bonfire">An 8 by 8 flipbook of a bonfire.</param>
 /// <param name="Dot">A small soft dot, for sparks and fireflies.</param>
 /// <param name="Radial">A radial grey gradient, for glows and beams.</param>
-public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame, Texture Bonfire, Texture Dot, Texture Radial) : IDisposable
+/// <param name="Billow">An 8 by 8 flipbook of a billowing puff, for exhaust and smoke trails.</param>
+/// <param name="Cell">A soft diamond made in code, for the shock cells of a supersonic exhaust.</param>
+public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame, Texture Bonfire, Texture Dot, Texture Radial, Texture Billow, Texture Cell) : IDisposable
 {
     /// <summary>Loads every texture from the resources folder next to the executable, as sRGB.</summary>
     /// <param name="device">The device to create them on.</param>
     /// <returns>The set, owned by the caller.</returns>
     public static ParticleTextures Load(GraphicsDevice device)
     {
-        return new ParticleTextures(One("smoke.png"), One("fire8x8.png"), One("flame8x8.png"), One("bonfire8x8.png"), One("dot.png"), One("radial-grad-gray.png"));
+        return new ParticleTextures(One("smoke.png"), One("fire8x8.png"), One("flame8x8.png"), One("bonfire8x8.png"), One("dot.png"), One("radial-grad-gray.png"), One("smoke-billow.png", coverage: true), ShockCell(device));
 
-        Texture One(string file)
+        Texture One(string file, bool coverage = false)
         {
             using var stream = File.OpenRead(Path.Combine(AppContext.BaseDirectory, "Resources", file));
             using var image = Image.Load(stream);
@@ -46,7 +48,11 @@ public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame
             {
                 for (var i = 0; i < pixels.Length; i++)
                 {
-                    pixels[i].A = Math.Max(pixels[i].R, Math.Max(pixels[i].G, pixels[i].B));
+                    var brightness = Math.Max(pixels[i].R, Math.Max(pixels[i].G, pixels[i].B));
+
+                    // A coverage texture is a shape and nothing else: white, with the picture as its alpha. Its
+                    // colour then comes from the particle alone, so white smoke is white and not the grey of the file
+                    pixels[i] = coverage ? new Color(byte.MaxValue, byte.MaxValue, byte.MaxValue, brightness) : pixels[i] with { A = brightness };
                 }
 
                 image.PixelBuffer[0].SetPixels(pixels);
@@ -54,8 +60,34 @@ public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame
 
             // The toolkit's loader takes it from here: the decoder's BGRA put the right way round, sRGB, and
             // the mipmaps a particle a few pixels wide needs
-            return TextureLoader.FromImage(device, image, new TextureLoadOptions(TextureRole.Color) { PremultiplyAlpha = !derived });
+            return TextureLoader.FromImage(device, image, new TextureLoadOptions(TextureRole.Color) { PremultiplyAlpha = !derived || coverage });
         }
+    }
+
+    /// <summary>
+    /// A soft diamond, white, brightest in the middle: no file has this shape, so it is computed.
+    /// </summary>
+    /// <param name="device">The device to create it on.</param>
+    /// <returns>The texture, owned by the caller.</returns>
+    public static Texture ShockCell(GraphicsDevice device)
+    {
+        const int Size = 64;
+
+        var pixels = new Color[Size * Size];
+
+        for (var y = 0; y < Size; y++)
+        {
+            for (var x = 0; x < Size; x++)
+            {
+                // The distance from the middle in the diamond's own measure: 0 in the middle, 1 on its edge
+                var distance = MathF.Abs((x + 0.5f) / Size * 2f - 1f) + MathF.Abs((y + 0.5f) / Size * 2f - 1f);
+                var light = MathF.Pow(MathUtil.SmoothStep(MathUtil.Clamp(1f - distance, 0f, 1f)), 1.6f);
+
+                pixels[y * Size + x] = new Color(1f, 1f, 1f, light);
+            }
+        }
+
+        return TextureLoader.FromPixels(device, pixels, Size, Size, new TextureLoadOptions(TextureRole.Color));
     }
 
     /// <inheritdoc/>
@@ -67,6 +99,8 @@ public sealed record ParticleTextures(Texture Smoke, Texture Fire, Texture Flame
         Bonfire.Dispose();
         Dot.Dispose();
         Radial.Dispose();
+        Billow.Dispose();
+        Cell.Dispose();
     }
 }
 
@@ -165,7 +199,11 @@ public sealed class ParticleStation : GalleryStation
     public void Restart() => Particles?.ParticleSystem.ResetSimulation();
 }
 
-/// <summary>Materials in one call, since every station wants one and the defaults are not the ones anybody wants.</summary>
+/// <summary>
+/// Materials in one call, since every station wants one and the defaults are not the ones anybody wants.
+/// Each multiplies in the particle's own colour: that colour is a vertex stream, and it reaches the
+/// shader only through a node that reads it, so without one a colour updater changes nothing.
+/// </summary>
 public static class ParticleMaterials
 {
     /// <summary>A flat colour, alpha-blended or additive.</summary>
@@ -173,7 +211,7 @@ public static class ParticleMaterials
     /// <param name="additive">0 blends, 1 adds light, anything between mixes.</param>
     /// <returns>The material.</returns>
     public static ParticleMaterialComputeColor Flat(Color4 color, float additive = 0f)
-        => new() { ComputeColor = new ComputeColor(color), AlphaAdditive = additive };
+        => new() { ComputeColor = new ComputeBinaryColor(new ComputeColor(color), ParticleColour(), BinaryOperator.Multiply), AlphaAdditive = additive };
 
     /// <summary>A texture, optionally tinted, alpha-blended or additive.</summary>
     /// <param name="texture">The texture; its alpha is the particle's shape.</param>
@@ -184,7 +222,7 @@ public static class ParticleMaterials
     /// <param name="softEdge">The distance over which the particle fades where it meets geometry; 0 is a hard cut.</param>
     public static ParticleMaterialComputeColor Textured(Texture texture, Color4? tint = null, float additive = 0f, UVBuilder? uv = null, float softEdge = 0f)
     {
-        IComputeColor color = new ComputeTextureColor(texture);
+        IComputeColor color = new ComputeBinaryColor(new ComputeTextureColor(texture), ParticleColour(), BinaryOperator.Multiply);
 
         if (tint is { } t)
         {
@@ -210,9 +248,13 @@ public static class ParticleMaterials
     /// <param name="speed">Frames shown over the particle's life; columns times rows shows each once.</param>
     /// <param name="tint">A colour multiplied in, white by default.</param>
     /// <param name="additive">0 blends, 1 adds light, anything between mixes.</param>
+    /// <param name="softEdge">The distance over which the particle fades where it meets geometry; 0 is a hard cut.</param>
     /// <returns>The material.</returns>
-    public static ParticleMaterialComputeColor Flipbook(Texture texture, uint columns, uint rows, uint speed, Color4? tint = null, float additive = 0f)
-        => Textured(texture, tint, additive, new UVBuilderFlipbook { XDivisions = columns, YDivisions = rows, AnimationSpeed = speed });
+    public static ParticleMaterialComputeColor Flipbook(Texture texture, uint columns, uint rows, uint speed, Color4? tint = null, float additive = 0f, float softEdge = 0f)
+        => Textured(texture, tint, additive, new UVBuilderFlipbook { XDivisions = columns, YDivisions = rows, AnimationSpeed = speed }, softEdge);
+
+    /// <summary>The node that reads a particle's own colour, as an updater or an initializer set it. White where the particles have none.</summary>
+    private static ComputeVertexStreamColor ParticleColour() => new() { Stream = new ColorVertexStreamDefinition() };
 }
 
 /// <summary>Initializers every world-space emitter needs and nobody remembers.</summary>

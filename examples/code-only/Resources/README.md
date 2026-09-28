@@ -10,6 +10,10 @@ MIT licensed. The `8x8` sheets and `smoke.png` are flipbooks of 64 frames; the r
 with no alpha channel, made for additive blending. `E09_3D_Particles_Gallery` derives alpha from brightness at load for the
 ones that lack it, so the same textures work alpha-blended too.
 
+`smoke-billow.png` is `Smoke01/SMO001.png` from Game Studio's **VFX Package**
+(`samples/Templates/Packs/VFXPackage/Resources/Textures` in the same repository), MIT licensed, unchanged: a flipbook of
+64 frames of a billowing puff. The gallery's thruster stations use it for exhaust and smoke trails.
+
 ## Material textures
 
 `materials/` holds the textures of Game Studio's **Material Package** - the pack the new-game dialog offers - from
