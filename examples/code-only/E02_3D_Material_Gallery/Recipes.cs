@@ -104,6 +104,9 @@ public static class Recipes
         => new(texture, TextureCoordinate.Texcoord0, new Vector2(tiling), Vector2.Zero);
 
     /// <summary>A data texture as a scalar input - gloss, metalness, occlusion, a mask - tiled <paramref name="tiling"/> times.</summary>
-    public static ComputeTextureScalar Scalar(Stride.Graphics.Texture texture, float tiling = 1f)
-        => new(texture, TextureCoordinate.Texcoord0, new Vector2(tiling), Vector2.Zero);
+    /// <param name="texture">The texture.</param>
+    /// <param name="tiling">How many times it repeats across the shape.</param>
+    /// <param name="channel">The channel the scalar is read from. A packed texture has a map in each.</param>
+    public static ComputeTextureScalar Scalar(Stride.Graphics.Texture texture, float tiling = 1f, ColorChannel channel = ColorChannel.R)
+        => new(texture, TextureCoordinate.Texcoord0, new Vector2(tiling), Vector2.Zero) { Channel = channel };
 }

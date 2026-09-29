@@ -19,6 +19,10 @@ public static class SurfaceStations
     /// dithered is a cutoff whose mask is an ordered dither from a shader class, a screen-door
     /// fade the engine itself uses for shadows of translucent things. V cycles them.
     /// </summary>
+    /// <remarks>
+    /// A blended or additive material casts a dithered shadow by default. Set <c>DitheredShadows</c> to
+    /// <see langword="false"/> on the transparency feature, or <c>IsShadowCaster</c> on the model, for none.
+    /// </remarks>
     public static void Transparency(MaterialStation s)
     {
         s.Clear();

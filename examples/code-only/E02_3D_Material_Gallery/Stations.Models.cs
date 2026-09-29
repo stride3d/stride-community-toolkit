@@ -60,6 +60,10 @@ public static class ModelStations
     /// the engine's shadow pass binds a hull-shader constant buffer 32 bytes short for a tessellated
     /// material and the debug layer reports it every frame (noted upstream).
     /// </summary>
+    /// <remarks>
+    /// While the tessellated effect compiles, the engine draws the mesh with a fallback effect: it shows
+    /// untessellated for the first frame or two.
+    /// </remarks>
     public static void Tessellation(MaterialStation s)
     {
         s.Clear();
@@ -84,6 +88,9 @@ public static class ModelStations
     /// map at once, and the cull mode, which decides which side of a face is drawn. Front culling
     /// on a cube shows its inside, which is what a skybox or a room interior wants.
     /// </summary>
+    /// <remarks>
+    /// <c>CullMode.None</c> lights both sides of a face: the surface shader flips the normal on back faces.
+    /// </remarks>
     public static void Overrides(MaterialStation s)
     {
         s.Clear();
@@ -113,6 +120,11 @@ public static class ModelStations
     /// where the top one shows. This is how the pack's painted and rusted iron are made, and it
     /// composes: V cycles paint, rust and both.
     /// </summary>
+    /// <remarks>
+    /// Known engine issue: a base of one shading model under two or more layers that share another
+    /// shading model applies the masks wrongly. Layers that all share the base's shading model, as here,
+    /// are not affected.
+    /// </remarks>
     public static void Layers(MaterialStation s)
     {
         s.Clear();
