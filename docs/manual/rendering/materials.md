@@ -128,6 +128,50 @@ Every slot takes a node. A constant is the simplest node.
 | `ComputeBinaryColor` | Two child nodes combined by an operator | Node arithmetic |
 | `ComputeShaderClassColor` | A shader class, referenced by name | Custom shader node |
 
+### Texture node options
+
+`ComputeTextureColor` and `ComputeTextureScalar` share these options.
+
+| Property | Default | Effect |
+|---|---|---|
+| `Scale`, `Offset` | 1, 0 | Tiles and shifts the texture |
+| `TexcoordIndex` | `Texcoord0` | The texture coordinate set of the mesh, up to `Texcoord9` |
+| `AddressModeU`, `AddressModeV` | `Wrap` | What is sampled outside 0 to 1 |
+| `UseRandomTextureCoordinates` | `false` | Breaks up the repetition of a tiled texture |
+| `FallbackValue` | White, or 1 | What the node gives when `Texture` is `null` |
+| `Swizzle` (colour only) | `"rgba"` | The channels the node reads, in order. `"bgra"` swaps red and blue |
+| `Channel` (scalar only) | `R` | The channel the scalar is read from |
+
+One packed texture can feed several slots through `Channel`.
+
+```csharp
+// examples/code-only/E02_3D_Material_Gallery/Stations.Maps.cs
+var ironMaps = t.Packed("iron-gloss-metal", "iron_blend/iron/iron_gls.png", "iron_blend/iron/iron_mtl.png");
+
+glossiness: Recipes.Scalar(ironMaps, channel: ColorChannel.R),
+metalness: Recipes.Scalar(ironMaps, channel: ColorChannel.G)
+```
+
+> [!NOTE]
+> A node that has no texture when the material is generated compiles to its fallback value. The shader then has
+> no texture slot, so setting the texture key later has no effect. Give the node a texture before you
+> generate the material.
+
+### Operators
+
+`ComputeBinaryColor` combines two nodes by a `BinaryOperator`.
+
+| Operator | Result |
+|---|---|
+| `Add` | The second colour composited over the first by its alpha, as an Add layer in a paint program. A colour at half alpha adds half of itself |
+| `AddMath` | The sum of the two colours, alpha included |
+| `Multiply`, `Average`, `Overlay`, `Screen`, `Difference`, `Desaturate` and others | As in a paint program |
+
+Use `AddMath` for arithmetic.
+
+`ComputeFloat4` passes its value to the shader unchanged: no colour space conversion and no premultiplied
+alpha. `ComputeColor` converts and premultiplies.
+
 ### Custom shader node
 
 A shader class that derives from `ComputeColor` and overrides `Compute()` can fill any slot.
@@ -474,6 +518,28 @@ flowchart TD
     K -- No --> N["The PBR parameters, plus maps"]
 ```
 
+Remarks:
+
+- Hair, clear coat and thin glass each draw in several passes. A material can use one of them. The generator
+  ignores the second and logs an error.
+- A blended or additive material casts a dithered shadow. Set `DitheredShadows` to `false` on the transparency
+  feature, or `IsShadowCaster` to `false` on the model, for none.
+- `CullMode.None` lights both sides of a face. The surface shader flips the normal on back faces.
+
+### Occlusion
+
+`MaterialOcclusionMapFeature` darkens ambient light by default. Two options darken direct light.
+
+| Property | Default | Effect |
+|---|---|---|
+| `AmbientOcclusionMap` | | How much ambient light reaches each point. White is unoccluded |
+| `DirectLightingFactor` | 0 | How much of the occlusion applies to direct light |
+| `CavityMap` | | A second map that darkens direct light |
+| `DiffuseCavity`, `SpecularCavity` | 1 | The strength of the cavity map on the diffuse and on the specular term |
+
+On a face lit by the sun, the occlusion map alone changes little. The Occlusion station shows all three cases
+on the same map.
+
 ### Thin glass
 
 `MaterialSpecularThinGlassModelFeature` is a multi-pass material. It draws a transmittance pass and a
@@ -503,6 +569,7 @@ foreach (var pass in glass.Passes)
 - A displacement map moves vertices along their normals. The shadow map is drawn from the undisplaced mesh, so
   a displaced mesh that casts shadows darkens itself. Turn off shadow casting for displaced models.
 - Tessellation requires graphics profile level 11. A code-only game starts at level 10.
+- A tessellated mesh draws untessellated for the first frame or two, while its effect compiles.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/Program.cs
@@ -533,6 +600,7 @@ descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMateria
 | Subsurface scattering blur | The post effect does not compile. The gallery does not use it |
 | Thin glass | Renders opaque without the blend state workaround above |
 | Tessellated shadow casters | Log a constant buffer warning each frame. The gallery's tessellated models cast no shadow |
+| Layers | A base of one shading model under two or more layers that share another shading model applies the masks wrongly. Other combinations work |
 
 ## Compare with Game Studio assets
 
@@ -568,7 +636,7 @@ with a skybox. Press `G` in the example to compare both.
 ## Gallery stations by topic
 
 Press `V` to cycle a station's variations. Start the gallery with `--station N --variation M` to open a
-station directly.
+station directly. Add `--clean` to hide the overlay.
 
 | Stations | Section of this article |
 |---|---|

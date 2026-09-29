@@ -32,12 +32,13 @@ using Stride.Rendering.Lights;
 // that stream as its colour, the way the editor's view modes do: the fastest way to see what a map is
 // really feeding the material.
 // "--station 5" starts at a station; "--station 5 --variation 2" at its third variation; "--stream Glossiness"
-// starts with that view on - handy for screenshots.
+// starts with that view on - handy for screenshots. "--clean" hides the overlay.
 
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
 var startVariation = args.Length >= 4 && args[2] == "--variation" && int.TryParse(args[3], out var variation) ? variation : 0;
 var streamAt = Array.IndexOf(args, "--stream");
 var startStream = streamAt >= 0 && streamAt + 1 < args.Length && Enum.TryParse<MaterialStream>(args[streamAt + 1], ignoreCase: true, out var parsed) ? parsed : (MaterialStream?)null;
+var clean = args.Contains("--clean");
 
 Gallery<MaterialStation>? gallery = null;
 MaterialTextures? textures = null;
@@ -103,7 +104,10 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
+    var overlay = DebugOverlay.GetOrCreate(game);
+
+    overlay.AddSection("Gallery", BuildOverlayLines);
+    overlay.Visible = !clean;
 }
 
 void Update(Scene scene, GameTime gameTime)
