@@ -50,6 +50,7 @@ public static class Stations
         new("Highlight shell", "the model drawn again a little larger with a glow: a hover highlight from a material alone", nameof(HighlightShell), ModelStations.HighlightShellUpdate, ModelStations.HighlightShellStation, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("Materials at runtime", "one model, three teapots: an override, the shared material, a slot's shadow, culling, a rebuild", nameof(ModelComponent.Materials), ModelStations.AtRuntimeUpdate, ModelStations.AtRuntime, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("The Material Package, in code", "every material of Game Studio's pack, from its .sdmat", nameof(PackMaterials), Setup: PackStations.ThePack, Anchor: new Vector3(0f, 1.6f, 0f)),
+        new("Sample recipes", "five tunings from the engine's samples: a mirrored gloss map, a map reused, a normal weakened, a neon layer, a tinted grid", nameof(MaterialBlendLayer.BlendMap), Setup: SampleStations.SampleRecipes, Anchor: new Vector3(0f, 1.8f, 0f)),
         new("The lot", "every slot filled: what a full PBR material is in code", nameof(MaterialDescriptor), Setup: PackStations.TheLot, Anchor: new Vector3(0f, 1.8f, 0f)),
     ];
 }

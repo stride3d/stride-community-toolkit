@@ -50,12 +50,13 @@ The helpers are extension methods on `Game`.
 | `CreateEmissiveMaterial(color, intensity)` | A lit colour that also emits light. An intensity above 1 blooms under post effects |
 | `CreateTexturedMaterial(texture, metalness, glossiness, tiling)` | A PBR material with a texture as its colour |
 | `CreateScreenMaterial(texture)` | An unlit, clamped texture, for a monitor that shows a render-texture feed |
+| `CreateOverlayMaterial(color, intensity)` | An unlit translucent colour, with the colour's alpha as the opacity: a zone, a placement preview, a marker over the scene |
 | `CreateMaterial(descriptor)` | Compiles any descriptor and keeps it on `Material.Descriptor` |
 
 ### Descriptors
 
 `MaterialDescriptors` in `Stride.CommunityToolkit.Rendering` returns the descriptor behind each helper: `Pbr`,
-`Textured`, `Emissive`, `Screen`, `Flat` and `Highlight`. To extend a helper's material, take its descriptor,
+`Textured`, `Emissive`, `Screen`, `Flat`, `Overlay` and `Highlight`. To extend a helper's material, take its descriptor,
 add or replace a feature, and compile it.
 
 ```csharp
@@ -522,8 +523,9 @@ Remarks:
 
 - Hair, clear coat and thin glass each draw in several passes. A material can use one of them. The generator
   ignores the second and logs an error.
-- A blended or additive material casts a dithered shadow. Set `DitheredShadows` to `false` on the transparency
-  feature, or `IsShadowCaster` to `false` on the model, for none.
+- A blended or additive material casts a dithered shadow, lighter where its alpha is lower. Set `DitheredShadows`
+  to `false` on the transparency feature for a full shadow, or `IsShadowCaster` to `false` on the model component
+  for none.
 - `CullMode.None` lights both sides of a face. The surface shader flips the normal on back faces.
 
 ### Occlusion
@@ -617,6 +619,19 @@ descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMateria
 The gallery's **Material Package, in code** station builds each material of Game Studio's Material Package from
 the same features and values as its `.sdmat` file.
 
+### Sample recipes
+
+The engine's samples tune their materials in nodes. The Sample recipes station transcribes five of them, with the
+samples' own numbers and with textures the pack has or that are made in code.
+
+| Recipe | Sample | Nodes |
+|---|---|---|
+| Brushed metal | DullSilver | A gloss map tiled twice, mirrored at the seams and offset, so its streaks never repeat visibly |
+| Wood table | board1 | One specular map as the specular colour at 30 percent and, scaled to a quarter and inverted, as the glossiness |
+| Weakened normal map | board1 | The map multiplied by (0.015, 0.015, 1, 1). That map is signed; an unsigned map is scaled about 0.5 |
+| Neon sign | LogoA over MaskC | A layer masked by a texture's alpha channel, its emissive the mask times (5, 9, 50, 5) |
+| Tinted grid | Prototyping Blocks | One grey checker texture with a colour added to it in the diffuse slot |
+
 ### Material thumbnails
 
 Game Studio renders a material's thumbnail with a fixed rig. The
@@ -644,6 +659,7 @@ station directly. Add `--clean` to hide the overlay.
 | Albedo texture, Normal map, Gloss and metal maps, Occlusion, Emissive, Animated parameters | Material nodes, Change parameters at runtime |
 | Vertex colours, Node arithmetic, Custom shader node, Custom feature, Runtime textures, Texture loading | Material nodes, Write a custom material feature, Load textures |
 | Transparency, Thin glass, Clear coat, Cel shading, Hair, Hair passes and functions, Subsurface scattering | Choose surface features |
+| Sample recipes | Compare with Game Studio assets |
 | Displacement, Tessellation, Overrides, Layers, Highlight shell, Materials at runtime | Choose surface features, Highlight a model, Swap materials at runtime |
 | The Material Package, in code, The lot | Compare with Game Studio assets |
 

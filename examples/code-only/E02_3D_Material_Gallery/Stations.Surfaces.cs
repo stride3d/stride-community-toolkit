@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -17,25 +18,33 @@ public static class SurfaceStations
     /// behind it by an alpha; additive only brightens, a hologram; cutoff keeps or drops each pixel
     /// by a threshold on a mask, which is how leaves and fences are done with no sorting at all;
     /// dithered is a cutoff whose mask is an ordered dither from a shader class, a screen-door
-    /// fade the engine itself uses for shadows of translucent things. V cycles them.
+    /// fade the engine itself uses for shadows of translucent things. The last variation is the toolkit's
+    /// overlay: unlit, so it reads the same from every angle, with the colour's alpha as its opacity.
+    /// V cycles them.
     /// </summary>
     /// <remarks>
-    /// A blended or additive material casts a dithered shadow by default. Set <c>DitheredShadows</c> to
-    /// <see langword="false"/> on the transparency feature, or <c>IsShadowCaster</c> on the model, for none.
+    /// A blended or additive material casts a dithered shadow, lighter where its alpha is lower. Set
+    /// <c>DitheredShadows</c> to <see langword="false"/> on the transparency feature for a full shadow, or
+    /// <c>IsShadowCaster</c> to <see langword="false"/> on the model component for none.
     /// </remarks>
     public static void Transparency(MaterialStation s)
     {
         s.Clear();
 
         var colour = new Color(70, 150, 255);
-        var descriptor = Recipes.Pbr(colour, glossiness: 0.7f, metalness: 0f);
+        var v = s.Pick("blend", "additive", "cutoff", "dithered", "overlay: unlit, the alpha is the opacity");
 
-        descriptor.Attributes.Transparency = s.Pick("blend", "additive", "cutoff", "dithered") switch
+        var descriptor = v == 4
+            ? MaterialDescriptors.Overlay(new Color(colour.R, colour.G, colour.B, 115))
+            : Recipes.Pbr(colour, glossiness: 0.7f, metalness: 0f);
+
+        descriptor.Attributes.Transparency = v switch
         {
             0 => new MaterialTransparencyBlendFeature { Alpha = new ComputeFloat(0.45f), Tint = new ComputeColor(Color.White) },
             1 => new MaterialTransparencyAdditiveFeature { Alpha = new ComputeFloat(0.7f), Tint = new ComputeColor(Color.White) },
             2 => new MaterialTransparencyCutoffFeature { Alpha = Recipes.Scalar(s.Textures.Generated("holes", () => RuntimeTextures.Holes(s.Game.GraphicsDevice)), tiling: 2f) },
-            _ => new MaterialTransparencyCutoffFeature { Alpha = new ComputeShaderClassScalar { MixinReference = "GalleryDither" } },
+            3 => new MaterialTransparencyCutoffFeature { Alpha = new ComputeShaderClassScalar { MixinReference = "GalleryDither" } },
+            _ => descriptor.Attributes.Transparency,
         };
 
         // Something behind, so see-through has something to see

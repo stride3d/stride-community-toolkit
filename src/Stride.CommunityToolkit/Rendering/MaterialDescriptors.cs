@@ -120,6 +120,34 @@ public static class MaterialDescriptors
     };
 
     /// <summary>
+    /// An unlit translucent colour: a zone, a placement preview, a selection volume, a marker drawn over
+    /// the scene. The colour's alpha is the opacity. What <c>game.CreateOverlayMaterial(colour)</c> compiles.
+    /// </summary>
+    /// <param name="colour">The colour, with its alpha as the opacity. 255 is opaque.</param>
+    /// <param name="intensity">The emissive strength; 1 is the colour as given, more than 1 blooms under post effects.</param>
+    /// <remarks>
+    /// <para>
+    /// Two features and nothing else: the colour as emissive with its alpha, and a blend transparency.
+    /// No diffuse and no specular, so no light touches it and it reads the same from every angle. The
+    /// colour node premultiplies the alpha, which is what the blend state expects.
+    /// </para>
+    /// <para>
+    /// It casts a dithered shadow, lighter where its alpha is lower, like any blended material; set
+    /// <c>IsShadowCaster</c> to <see langword="false"/> on the model component for none. Faces are culled
+    /// as usual, so a closed shape shows its front faces only; set <c>CullMode = CullMode.None</c> on the
+    /// attributes to see it from inside as well, at the cost of both faces blending where they overlap.
+    /// </para>
+    /// </remarks>
+    public static MaterialDescriptor Overlay(Color colour, float intensity = 1f) => new()
+    {
+        Attributes =
+        {
+            Emissive = new MaterialEmissiveMapFeature(new ComputeColor(colour)) { Intensity = new ComputeFloat(intensity), UseAlpha = true },
+            Transparency = new MaterialTransparencyBlendFeature(),
+        },
+    };
+
+    /// <summary>
     /// A highlight shell: the model drawn again a little larger, glowing faintly over the original, the
     /// hover effect of the engine's TopDownRPG template transcribed. For a <see cref="HighlightShell"/>,
     /// which puts it on every material slot of the model under the mouse.

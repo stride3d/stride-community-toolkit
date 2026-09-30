@@ -801,6 +801,17 @@ public static partial class GameExtensions
         => Material.New(game.GraphicsDevice, MaterialDescriptors.Screen(texture, intensity), game.Content);
 
     /// <summary>
+    /// Creates an unlit translucent material: a zone, a placement preview, a selection volume, a marker drawn over the
+    /// scene. The colour's alpha is the opacity, and no light touches it.
+    /// </summary>
+    /// <param name="game">The game instance used to access the graphics device.</param>
+    /// <param name="color">The colour, with its alpha as the opacity. 255 is opaque.</param>
+    /// <param name="intensity">The emissive strength; 1 is the colour as given, more than 1 blooms under post effects.</param>
+    /// <returns>A new material instance.</returns>
+    public static Material CreateOverlayMaterial(this IGame game, Color color, float intensity = 1f)
+        => Material.New(game.GraphicsDevice, MaterialDescriptors.Overlay(color, intensity), game.Content);
+
+    /// <summary>
     /// Creates a material with flat colors ideal for 2D rendering, using emissive color unaffected by lighting.
     /// </summary>
     /// <param name="game">The game instance used to access the graphics device.</param>
