@@ -134,6 +134,26 @@ public static class RuntimeTextures
         return Texture.New2D(device, size, size, PixelFormat.R8G8B8A8_UNorm, pixels);
     }
 
+    /// <summary>Streaks along X, as a brushed metal's glossiness varies: 0.55 to 0.9, mostly bright.</summary>
+    public static Texture Brushed(GraphicsDevice device, int size = 256)
+    {
+        var pixels = new Color[size * size];
+        var random = new Random(23);
+
+        // Each row is one streak: a value of its own, then a little noise along it
+        for (var y = 0; y < size; y++)
+        {
+            var streak = 0.6f + 0.3f * (float)random.NextDouble();
+
+            for (var x = 0; x < size; x++)
+            {
+                pixels[y * size + x] = Grey(streak + 0.05f * ((float)random.NextDouble() - 0.5f));
+            }
+        }
+
+        return Texture.New2D(device, size, size, PixelFormat.R8G8B8A8_UNorm, pixels);
+    }
+
     /// <summary>Grey noise, 0 to 1 per texel: what a per-strand jitter reads from.</summary>
     public static Texture Noise(GraphicsDevice device, int size = 128)
     {

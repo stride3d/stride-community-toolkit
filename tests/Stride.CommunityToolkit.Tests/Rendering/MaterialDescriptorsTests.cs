@@ -86,6 +86,30 @@ public class MaterialDescriptorsTests
     }
 
     [Fact]
+    public void OverlayIsAnUnlitBlendedColourWithItsAlphaAsOpacity()
+    {
+        var colour = new Color(70, 150, 255, 115);
+        var a = MaterialDescriptors.Overlay(colour, intensity: 3f).Attributes;
+
+        var emissive = Assert.IsType<MaterialEmissiveMapFeature>(a.Emissive);
+        var node = Assert.IsType<ComputeColor>(emissive.EmissiveMap);
+
+        // The alpha rides on the emissive, and the colour node premultiplies it for the blend state
+        Assert.Equal(colour, node.Value);
+        Assert.True(node.PremultiplyAlpha);
+        Assert.True(emissive.UseAlpha);
+        Assert.Equal(3f, Assert.IsType<ComputeFloat>(emissive.Intensity).Value);
+
+        Assert.IsType<MaterialTransparencyBlendFeature>(a.Transparency);
+
+        // Unlit: nothing for a light to shade
+        Assert.Null(a.Diffuse);
+        Assert.Null(a.DiffuseModel);
+        Assert.Null(a.Specular);
+        Assert.Null(a.SpecularModel);
+    }
+
+    [Fact]
     public void HighlightIsAnInflatedTwoSidedGlowWithNoDiffuse()
     {
         var a = MaterialDescriptors.Highlight(Color.White, strength: 2f, inflate: 0.05f).Attributes;

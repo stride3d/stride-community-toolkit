@@ -16,6 +16,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎉 New Features
 
+- `MaterialDescriptors.Overlay(colour, intensity)` and `game.CreateOverlayMaterial(colour, intensity)`: an unlit translucent colour with the colour's alpha as the opacity, for zones, placement previews and markers over the scene.
 - `TextureLoader.FromPixels(device, pixels, width, height, options)`: makes a texture from pixels computed in code, prepared by role and with mipmaps, like a loaded file.
 
 ### 🐞 Bug Fixes
@@ -26,11 +27,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
+- Materials manual: the overlay helper, the sample recipes, and a corrected remark on dithered shadows: `DitheredShadows = false` gives a full shadow, not none.
 - Materials manual: texture node options, operators, occlusion, and remarks on multi-pass features, dithered shadows and two-sided lighting.
 - ShapeBatch manual: new section on using a shader class as a fill.
 
 ### 🎓 Examples
 
+- `E02_3D_Material_Gallery`: new station **Sample recipes**, five tunings from the engine's sample materials: a brushed metal from a mirrored gloss map, a specular map reused as roughness, a weakened normal map, a neon sign as a masked emissive layer, a tinted prototyping grid. The **Transparency** station gained an overlay variation.
 - `E02_3D_Material_Gallery`: new variations. **Albedo texture**: random coordinates, swizzle, fallback value. **Gloss and metal maps**: two maps packed into one texture. **Occlusion**: direct light and a cavity map. **Node arithmetic**: `Add` and `AddMath`. `--clean` hides the overlay.
 - `E09_3D_Particles_Gallery`: six thruster stations, 33 to 38: **Kerosene engine**, **Engine cluster**, **Methane engine**, **Jet afterburner**, **Solid booster** and **Small thrusters**, three variations each. They use no shader of their own. The station **Rocket engine** is renamed **Landing burn**. `--clean` hides the overlay.
 - `E09_3D_Particles_Gallery`: colour updaters now colour the particles. The gallery's materials did not read the particle colour, so colour curves had no effect.
