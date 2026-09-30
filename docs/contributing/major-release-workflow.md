@@ -14,7 +14,8 @@ Preparing for a major release, such as upgrading from **.NET 8** to **.NET 9**, 
    - Update the version in `docs\docfx.json`, under `build:globalMetadata:_appFooter`.
 3. **Update CI/CD Workflows**:
    - Update the `dotnet-version` in:
-     - `.github\workflows\dotnet.yml`.
+     - `.github\workflows\dotnet-build-test.yml`.
+     - `.github\workflows\gold-images.yml`.
      - `.github\workflows\dotnet-nuget.yml`.
 4. **Test Examples**:
    - Test all examples to ensure they function as expected with the new framework version.
