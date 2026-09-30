@@ -20,7 +20,7 @@ internal static class ShapeDistance
     /// <param name="slice">The cut, band and run flags.</param>
     /// <param name="radius">The rounding radius, in the same units as the points.</param>
     /// <param name="ringWidth">The band's depth, in the same units.</param>
-    public static float SdShape(Vector2 p, ReadOnlySpan<Vector2> points, in ShapeSlice slice, float radius, float ringWidth)
+    internal static float SdShape(Vector2 p, ReadOnlySpan<Vector2> points, in ShapeSlice slice, float radius, float ringWidth)
     {
         var cut = slice.SweepAngle > 0f;
 
@@ -53,7 +53,7 @@ internal static class ShapeDistance
     }
 
     /// <summary>Signed distance to a convex polygon with counter-clockwise winding, negative inside.</summary>
-    public static float SdConvexPolygon(Vector2 p, ReadOnlySpan<Vector2> points)
+    private static float SdConvexPolygon(Vector2 p, ReadOnlySpan<Vector2> points)
     {
         var first = points[0];
         var d = Vector2.DistanceSquared(p, first);
@@ -79,7 +79,7 @@ internal static class ShapeDistance
     }
 
     /// <summary>Distance to a run of points: the nearest of its segments. A stroke of some radius around it is the run with round joins and caps.</summary>
-    public static float SdPolyline(Vector2 p, ReadOnlySpan<Vector2> points)
+    private static float SdPolyline(Vector2 p, ReadOnlySpan<Vector2> points)
     {
         var previous = points[0];
         var d = Vector2.DistanceSquared(p, previous);
@@ -104,7 +104,7 @@ internal static class ShapeDistance
     /// counter-clockwise from the first, negative inside. Exact along the edges and inside; outside
     /// a corner it is the Chebyshev distance, which keeps the corner sharp.
     /// </summary>
-    public static float SdWedge(Vector2 p, float startAngle, float sweepAngle)
+    private static float SdWedge(Vector2 p, float startAngle, float sweepAngle)
     {
         var (sin1, cos1) = MathF.SinCos(startAngle);
         var (sin2, cos2) = MathF.SinCos(startAngle + sweepAngle);
@@ -129,7 +129,7 @@ internal static class ShapeDistance
     /// or the whole circle when not cut, and the shape is everything within half the band width of
     /// it, which is what makes the ends semicircles.
     /// </summary>
-    public static float SdArc(Vector2 p, float radius, float ringWidth, float startAngle, float sweepAngle, bool cut)
+    private static float SdArc(Vector2 p, float radius, float ringWidth, float startAngle, float sweepAngle, bool cut)
     {
         // Rotate so the arc is symmetric about +Y; the endpoint is then a fixed half-sweep away
         var halfSweep = cut ? 0.5f * sweepAngle : MathF.PI;
@@ -160,7 +160,7 @@ internal static class ShapeDistance
     /// <param name="view">The view the run was drawn in.</param>
     /// <param name="nearest">The world point of the run nearest the screen position.</param>
     /// <param name="depth">Its depth, 0 at the near plane and 1 at the far one.</param>
-    public static float SdSpacePolyline(Vector2 pixel, ReadOnlySpan<Vector4> points, in ShapeView view, out Vector3 nearest, out float depth)
+    internal static float SdSpacePolyline(Vector2 pixel, ReadOnlySpan<Vector4> points, in ShapeView view, out Vector3 nearest, out float depth)
     {
         var pixelsPerUnit = view.PixelScale * view.ScreenScale;
         var previous = Project(points[0], view, pixelsPerUnit);

@@ -210,8 +210,8 @@ select new {
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1101$]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1102$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1103$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1104$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1105$]]></Query>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1104$]]></Query>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1105$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1106$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1107$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1108$]]></Query>
@@ -1019,7 +1019,85 @@ select new {
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1404$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1405$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1406$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1407$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Assemblies that don't satisfy the Abstractness/Instability principle</Name>
+// <Id>ND1407:AssembliesThatDontSatisfyTheAbstractnessInstabilityPrinciple</Id>
+
+warnif count > 0 from a in Application.Assemblies 
+  where a.NormDistFromMainSeq > 0.7
+
+  // Stride Community Toolkit tweak: the Windows assembly is a handful of static Win32 calls - DPI
+  // awareness, window helpers - that every example references. Concrete and depended on is what a
+  // platform helper is; there is nothing in it to abstract, so the metric has nothing to say.
+  // An assembly-level issue cannot be suppressed from the central GlobalSuppression.cs, hence here.
+  && a.Name != "Stride.CommunityToolkit.Windows"
+
+  orderby a.NormDistFromMainSeq descending
+select new { 
+   a,
+   a.NormDistFromMainSeq,
+   Debt = 10.ToMinutes().ToDebt(),
+   Severity = Severity.Low
+}
+
+//<Expl>
+// The *{0}* has a *Normalized Distance from the Main Sequence* metric equals to {1}.
+// To understand this metric, its implications, and the necessary corrective actions, 
+// please read this rule description.
+//</Expl>
+
+//<Desc>
+// The **Abstractness versus Instability Diagram** that is shown in the NDepend 
+// report helps to assess which assemblies are **potentially painful to maintain**
+// (i.e concrete and stable) and which assemblies are **potentially useless** 
+// (i.e abstract and instable).
+//
+// • **Abstractness**: If an assembly contains many abstract types 
+// (i.e interfaces and abstract classes) and few concrete types, 
+// it is considered as abstract.
+//
+// • **Stability**: An assembly is considered stable if its types 
+// are used by a lot of types from other assemblies. In this context 
+// stable means *painful to modify*.
+//
+// From these metrics, we define the *perpendicular normalized distance of
+// an assembly from the idealized line* **A + I = 1** (called *main sequence*). 
+// This metric is an indicator of the assembly's balance between abstractness 
+// and stability. We precise that the word *normalized* means that the range 
+// of values is [0.0 … 1.0].
+//
+// This rule warns about assemblies with a *normalized distance* greater than 
+// than 0.7.
+//
+// This rules use the default code metric on assembly
+// *Normalized Distance from the Main Sequence* explained here: 
+// https://www.ndepend.com/docs/code-metrics#DitFromMainSeq
+//
+// These concepts have been originally introduced by *Robert C. Martin*
+// in 1994 in this paper: http://www.objectmentor.com/resources/articles/oodmetrc.pdf
+//</Desc>
+
+//<HowToFix>
+// Violations of this rule indicate assemblies with an improper 
+// *abstractness / stability* balance.
+//
+// • Either the assembly is *potentially painful to maintain* (i.e is massively
+// used and contains mostly concrete types). This can be fixed by creating 
+// abstractions to avoid too high coupling with concrete implementations.
+//
+// • Either the assembly is *potentially useless* (i.e contains mostly
+// abstractions and is not used enough). In such situation, the design
+// must be reviewed to see if it can be enhanced.
+//
+// The severity of issues of this rule is **Low** because
+// the *Abstractness/Instability principle* is an information 
+// about the code structure state but **is not actionable**, 
+// it doesn't tell precisely what to do obtain a better score.
+//
+// Fixing actionable issues of others **Architecture** and 
+// **Code Smells** default rules will necessarily push 
+// the *Abstractness/Instability principle* scores in the 
+// right direction.
+//</HowToFix>]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1408$]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1409$]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND9900$]]></Query>

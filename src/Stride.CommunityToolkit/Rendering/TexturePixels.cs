@@ -104,16 +104,22 @@ public static class TexturePixels
         if (baseLevel.Length != width * height) throw new ArgumentException($"Expected {width * height} pixels for {width} by {height}, got {baseLevel.Length}", nameof(baseLevel));
 
         var levels = new List<Color[]>(MipCount(width, height)) { baseLevel };
+
+        // The working copy is decoded once - linear light for a colour, a vector for a normal - and
+        // every level is averaged from the one above it in that space, never from encoded bytes
         var current = new Vector4[baseLevel.Length];
 
         for (var i = 0; i < baseLevel.Length; i++) current[i] = Decode(baseLevel[i], role);
 
+        // Halve until both sides are 1. A side that reaches 1 first stays there while the other
+        // keeps halving
         while (width > 1 || height > 1)
         {
             var nextWidth = Math.Max(1, width / 2);
             var nextHeight = Math.Max(1, height / 2);
             var next = new Vector4[nextWidth * nextHeight];
 
+            // A 2 by 2 box filter. The clamp repeats the last row or column of an odd size
             for (var y = 0; y < nextHeight; y++)
             {
                 var y0 = Math.Min(2 * y, height - 1);
@@ -128,6 +134,8 @@ public static class TexturePixels
                 }
             }
 
+            // Back to bytes for the GPU. The decoded level is kept for the next halving, so the
+            // rounding of one level is not carried into the ones below it
             var pixels = new Color[next.Length];
 
             for (var i = 0; i < next.Length; i++)
