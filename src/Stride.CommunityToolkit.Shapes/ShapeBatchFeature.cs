@@ -116,7 +116,7 @@ public class ShapeBatchFeature : RootRenderFeature
     }
 
     /// <summary>
-    /// Gathers every batch's shapes into the two buffers, once per frame, before any view draws.
+    /// Gathers every batch's shapes into the three buffers, once per frame, before any view draws.
     /// </summary>
     public override void Prepare(RenderDrawContext context)
     {
@@ -331,8 +331,8 @@ public class ShapeBatchFeature : RootRenderFeature
         public void Dispose() => Effect.Dispose();
     }
 
-    // Default usage and a whole-buffer update: the one contiguous upload per frame that every
-    // backend takes on its fast path. Grown by powers of two, never shrunk.
+    // Default usage and one contiguous upload per frame: the bytes of the data given, which is
+    // often less than the buffer holds. Grown by powers of two, never shrunk.
     private static void Upload<T>(RenderDrawContext context, ref Buffer buffer, ReadOnlySpan<T> data) where T : unmanaged
     {
         if (data.IsEmpty) return;

@@ -1,0 +1,118 @@
+using Stride.CommunityToolkit.Shapes;
+using Stride.Core.Mathematics;
+using Xunit;
+
+namespace Stride.CommunityToolkit.Tests.Rendering;
+
+/// <summary>
+/// What a draw call records for the GPU at the edges of its input: shapes with no extent, a
+/// rounding larger than the rectangle, a line shorter than it is wide. No graphics device; the
+/// records are read as the batch holds them.
+/// </summary>
+public class ShapeBatchSubmissionTests
+{
+    [Theory]
+    [InlineData(0.5f)]
+    [InlineData(2f)]
+    public void LineIsSolidWhateverItsLength(float length)
+    {
+        var batch = new ShapeBatch { BorderWidth = 0f };
+
+        // A fill the line must ignore: it is drawn solid, in its own colour
+        batch.Fill.Set(Color.Blue, 0f);
+        batch.DrawLine(Vector3.Zero, new Vector3(length, 0f, 0f), 1f, Color.Red);
+
+        var line = Assert.Single(batch.Instances);
+
+        Assert.Equal(Color.Red, line.FillColor);
+        Assert.Equal(1f, line.AxisY.W);
+    }
+
+    [Fact]
+    public void CircleOfRadiusZeroHasAScaleTheShaderCanDivideBy()
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawSolidCircle(Vector2.Zero, 0f, Color.White);
+
+        Assert.True(Assert.Single(batch.Instances).LocalScale > 0f);
+    }
+
+    [Fact]
+    public void PolylineOfCoincidentPointsHasAScaleTheShaderCanDivideBy()
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawPixelPolyline([new Vector2(3f, 3f), new Vector2(3f, 3f), new Vector2(3f, 3f)], 2f, Color.White);
+
+        Assert.All(batch.Instances, instance => Assert.True(instance.LocalScale > 0f));
+    }
+
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(-1f)]
+    [InlineData(float.NaN)]
+    [InlineData(float.PositiveInfinity)]
+    public void ShapeScaledToNothingIsNotDrawn(float scale)
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawSolidPolygon([new Vector2(-1f, -1f), new Vector2(1f, -1f), new Vector2(0f, 1f)], Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Color.White, scale: scale);
+
+        Assert.Empty(batch.Instances);
+    }
+
+    [Fact]
+    public void RadiusThatIsNotANumberIsNotDrawn()
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawSolidCircle(Vector2.Zero, float.NaN, Color.White);
+
+        Assert.Empty(batch.Instances);
+    }
+
+    [Theory]
+    [InlineData(0f)]
+    [InlineData(0.5f)]
+    [InlineData(1f)]
+    [InlineData(2f)]
+    [InlineData(100f)]
+    public void RectangleKeepsItsSizeWhateverTheRounding(float cornerRadius)
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawRectangle(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, new Vector2(4f, 2f), Color.White, cornerRadius);
+
+        var rectangle = Assert.Single(batch.Instances);
+        var upper = new Vector2(float.MinValue);
+
+        // The outline reaches the rounding radius beyond the furthest corner
+        for (var i = 0; i < rectangle.Count; i++)
+        {
+            upper = Vector2.Max(upper, batch.Points[rectangle.PointOffset + i] * rectangle.LocalScale + rectangle.Center);
+        }
+
+        Assert.Equal(2f, upper.X + rectangle.Radius, 3);
+        Assert.Equal(1f, upper.Y + rectangle.Radius, 3);
+    }
+
+    [Fact]
+    public void DiscardedBatchIsEmptyAndAnswersNoPick()
+    {
+        var batch = new ShapeBatch { Tag = "disc" };
+
+        batch.DrawSolidCircle(Vector2.Zero, 1f, Color.White);
+        batch.LastView = new ShapeView(Matrix.Identity, Matrix.Identity, new Vector2(800f, 600f), 300f, 1f, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ);
+        batch.Reset();
+
+        Assert.True(batch.TryPick(new Vector2(0.5f, 0.5f), out _));
+
+        batch.DrawSolidCircle(Vector2.Zero, 1f, Color.White);
+        batch.Discard();
+
+        Assert.Equal(0, batch.Count);
+        Assert.False(batch.CanPick);
+        Assert.False(batch.TryPick(new Vector2(0.5f, 0.5f), out _));
+    }
+}

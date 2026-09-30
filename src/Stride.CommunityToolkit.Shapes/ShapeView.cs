@@ -4,8 +4,9 @@ namespace Stride.CommunityToolkit.Shapes;
 
 /// <summary>
 /// What the render feature knew about the view when it drew a batch: the figures the vertex stage
-/// placed every shape with, kept so a pick can place the mouse the same way. The feature sets one
-/// per draw; the last view to draw a batch is the one its picks answer for.
+/// placed every shape with, kept so a pick can place the mouse the same way. The view drawn at the
+/// window's size is the one a batch's picks answer for; until that view has drawn, the first view
+/// to draw the batch stands in.
 /// </summary>
 /// <param name="ViewProjection">The view's view-projection matrix.</param>
 /// <param name="InverseViewProjection">Its inverse, for casting a ray from a screen position.</param>

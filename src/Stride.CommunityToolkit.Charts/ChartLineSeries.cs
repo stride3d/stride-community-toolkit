@@ -11,8 +11,9 @@ namespace Stride.CommunityToolkit.Charts;
 /// </summary>
 /// <remarks>
 /// A line whose points all share one depth is drawn as a stroke in that plane. On a 3D chart a line that
-/// leaves its plane - a helix, a path through the depth - is a space curve, which the shape batch cannot
-/// stroke yet, and is drawn as a ribbon mesh instead; the difference shows only in how its glow is made.
+/// leaves its plane - a helix, a path through the depth - is a space curve, and is drawn as a ribbon mesh
+/// instead; the difference shows only in how its glow is made. The shape batch can stroke a space curve,
+/// but the charts do not use that path.
 /// </remarks>
 public sealed class ChartLineSeries : ChartSeries
 {

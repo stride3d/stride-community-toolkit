@@ -22,8 +22,8 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </para>
 /// <para>
 /// Sizes: lines are <see cref="LinePixels"/> wide on screen at any zoom; a point's size is in
-/// screen pixels in the testbed and has no equivalent in the batch, so it is scaled by
-/// <see cref="PointScale"/> into world units. Text has no renderer of its own; set
+/// screen pixels in the testbed and is scaled by <see cref="PointScale"/> into world units here,
+/// although the batch can draw a pixel-sized disc. Text has no renderer of its own; set
 /// <see cref="DrawString"/> to route body names and joint labels wherever you like.
 /// </para>
 /// </remarks>

@@ -10,12 +10,12 @@ public sealed partial class ShapeBatch
     /// <summary>
     /// Submits a convex polygon lying in the XY plane, the 2D case.
     /// </summary>
-    /// <param name="vertices">The corners in local space, counter-clockwise, at most 8.</param>
+    /// <param name="vertices">The corners in local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's local origin.</param>
     /// <param name="rotation">Rotation in radians about the Z axis.</param>
     /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
-    /// <exception cref="ArgumentException">Fewer than 1 or more than 8 vertices were given.</exception>
+    /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector2 position, float rotation, Color color, float radius = 0f)
     {
         var (sin, cos) = MathF.SinCos(rotation);
@@ -41,14 +41,14 @@ public sealed partial class ShapeBatch
     /// <summary>
     /// Submits a convex polygon lying in an arbitrary plane in 3D.
     /// </summary>
-    /// <param name="vertices">The corners in the plane's local space, counter-clockwise, at most 8.</param>
+    /// <param name="vertices">The corners in the plane's local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's local origin.</param>
     /// <param name="axisX">The plane's X axis. Normalized for you.</param>
     /// <param name="axisY">The plane's Y axis. Normalized for you.</param>
     /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
-    /// <param name="scale">Uniform scale applied to the whole shape, radius included.</param>
-    /// <exception cref="ArgumentException">Fewer than 1 or more than 8 vertices were given.</exception>
+    /// <param name="scale">Uniform scale applied to the whole shape, radius included. Zero or less draws nothing.</param>
+    /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector3 position, Vector3 axisX, Vector3 axisY, Color color, float radius = 0f, float scale = 1f)
         => Add(vertices,
             new ShapePlane(position, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed),
@@ -57,12 +57,12 @@ public sealed partial class ShapeBatch
     /// <summary>
     /// Submits a convex polygon in the plane a rotation puts the XY plane in.
     /// </summary>
-    /// <param name="vertices">The corners in local space, counter-clockwise, at most 8.</param>
+    /// <param name="vertices">The corners in local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's local origin.</param>
     /// <param name="rotation">Orientation of the shape's plane.</param>
     /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
-    /// <exception cref="ArgumentException">Fewer than 1 or more than 8 vertices were given.</exception>
+    /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector3 position, Quaternion rotation, Color color, float radius = 0f)
         => Add(vertices,
             new ShapePlane(position, Vector3.Transform(Vector3.UnitX, rotation), Vector3.Transform(Vector3.UnitY, rotation), PlaneMode.Fixed),
@@ -72,11 +72,11 @@ public sealed partial class ShapeBatch
     /// Submits a convex polygon that always faces the camera, screen-aligned - a marker that keeps
     /// its shape and orientation from any viewpoint.
     /// </summary>
-    /// <param name="vertices">The corners in local space, counter-clockwise, at most 8.</param>
+    /// <param name="vertices">The corners in local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's centre.</param>
     /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
-    /// <exception cref="ArgumentException">Fewer than 1 or more than 8 vertices were given.</exception>
+    /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawBillboard(ReadOnlySpan<Vector2> vertices, Vector3 position, Color color, float radius = 0f)
         => Add(vertices,
             new ShapePlane(position, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen),
@@ -236,9 +236,13 @@ public sealed partial class ShapeBatch
     /// <param name="axisY">The plane's Y axis. Normalized for you.</param>
     /// <param name="size">Width along X and height along Y, in world units.</param>
     /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
-    /// <param name="cornerRadius">Optional corner rounding, in world units.</param>
+    /// <param name="cornerRadius">Optional corner rounding, in world units. Limited to half the smaller side, where the rectangle is a capsule or a circle.</param>
     public void DrawRectangle(Vector3 center, Vector3 axisX, Vector3 axisY, Vector2 size, Color color, float cornerRadius = 0f)
     {
+        // A radius beyond half the smaller side would grow the rectangle past the size asked for.
+        // The limit stops a hair short, so the corners never coincide.
+        cornerRadius = Math.Clamp(cornerRadius, 0f, MathF.Max(MathF.Min(size.X, size.Y) * 0.5f - 0.0001f, 0f));
+
         // The rounding radius grows the shape, so shrink the corners to keep the size as asked
         var halfWidth = MathF.Max(size.X * 0.5f - cornerRadius, 0.0001f);
         var halfHeight = MathF.Max(size.Y * 0.5f - cornerRadius, 0.0001f);

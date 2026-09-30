@@ -71,13 +71,14 @@ public static class ShapeBatchExtensions
             return new Vector2(backBuffer.Width, backBuffer.Height) / (batch.AutoScale ? displayScale.Value : 1f);
         };
 
-        // Expose the first batch to ShapeProcessor and anything else that wants to draw
+        Register(sceneInstance, compositor.RenderSystem, batch);
+
+        // Expose the first batch to ShapeProcessor and anything else that wants to draw. After the
+        // registration, so a batch that could not be registered is never the default
         if (game.Services.GetService<ShapeBatch>() is null)
         {
             game.Services.AddService(batch);
         }
-
-        Register(sceneInstance, compositor.RenderSystem, batch);
 
         return batch;
     }
@@ -143,17 +144,25 @@ public static class ShapeBatchExtensions
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(batch);
 
-        if (game.SceneSystem.GraphicsCompositor is not { } compositor) return;
-
-        foreach (var visibilityGroup in game.SceneSystem.SceneInstance.VisibilityGroups)
+        // A removed batch is no longer the default: shape components fall back to the next batch
+        // added, or to the processor's own
+        if (ReferenceEquals(game.Services.GetService<ShapeBatch>(), batch))
         {
-            if (visibilityGroup.RenderSystem == compositor.RenderSystem)
+            game.Services.RemoveService<ShapeBatch>();
+        }
+
+        if (game.SceneSystem.GraphicsCompositor is { } compositor && game.SceneSystem.SceneInstance is { } sceneInstance)
+        {
+            foreach (var visibilityGroup in sceneInstance.VisibilityGroups)
             {
-                visibilityGroup.RenderObjects.Remove(batch);
+                if (visibilityGroup.RenderSystem == compositor.RenderSystem)
+                {
+                    visibilityGroup.RenderObjects.Remove(batch);
+                }
             }
         }
 
-        batch.Reset();
+        batch.Discard();
     }
 
     // The visibility group that pairs the scene with the compositor's render system, which is

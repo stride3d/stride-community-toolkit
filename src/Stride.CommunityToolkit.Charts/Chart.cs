@@ -549,7 +549,7 @@ public sealed class Chart : IDisposable
         // batch is not left in the visibility group for the rest of the game
         if (_ownedBatch is not null)
         {
-            RenderContext.GetShared(Game.Services).VisibilityGroup?.RenderObjects.Remove(_ownedBatch);
+            Game.RemoveShapeBatch(_ownedBatch);
             _ownedBatch = null;
         }
     }
