@@ -598,18 +598,22 @@ public static class ThrusterStations
     /// </summary>
     private sealed class Engine
     {
-        public List<Entity> Model { get; } = [];
+        private Engine()
+        {
+        }
 
-        public Throttle Throttle { get; set; } = new();
+        internal List<Entity> Model { get; } = [];
+
+        internal Throttle Throttle { get; set; } = new();
 
         /// <summary>The throttle at a moment, from the station's seconds.</summary>
-        public Func<float, float> Schedule { get; set; } = _ => 1f;
+        internal Func<float, float> Schedule { get; set; } = _ => 1f;
 
         /// <summary>What else the variation does every frame, or nothing.</summary>
-        public Action<ParticleStation>? Tick { get; set; }
+        internal Action<ParticleStation>? Tick { get; set; }
 
         /// <summary>The station's engine, with its scenery built the first time.</summary>
-        public static Engine Of(ParticleStation s, Action<ParticleStation, List<Entity>> build)
+        internal static Engine Of(ParticleStation s, Action<ParticleStation, List<Entity>> build)
         {
             if (s.State is Engine engine) return engine;
 

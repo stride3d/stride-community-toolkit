@@ -44,7 +44,7 @@ internal sealed class GalleryBoard
     /// <param name="lines">One line per station. An empty registry keeps its board, with nothing listed.</param>
     /// <param name="homePosition">Where the home camera sits.</param>
     /// <param name="homeRotation">Where the home camera looks.</param>
-    public GalleryBoard(Scene scene, IReadOnlyList<string> lines, Vector3 homePosition, Quaternion homeRotation)
+    internal GalleryBoard(Scene scene, IReadOnlyList<string> lines, Vector3 homePosition, Quaternion homeRotation)
     {
         _size = new Vector2(Width, MathF.Max(4f, lines.Count * LineHeight + 1f));
         _right = Vector3.Transform(Vector3.UnitX, homeRotation);
@@ -93,7 +93,7 @@ internal sealed class GalleryBoard
     }
 
     /// <summary>Draws the frame and its corner brackets. The batch's fill, border and glow are set and not restored.</summary>
-    public void DrawFrame(ShapeBatch shapes)
+    internal void DrawFrame(ShapeBatch shapes)
     {
         var hudBlue = new Color(110, 200, 255);
 

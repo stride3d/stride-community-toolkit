@@ -48,8 +48,10 @@ public static class HairCards
         var pixels = new Color[size * size];
         var random = new Random(11);
 
+        // The same seed every run, so the texture and a screenshot of it are repeatable
         for (var i = 0; i < strands; i++)
         {
+            // One strand: where it starts, how it sways, how wide, how dark and how long
             var x0 = (float)random.NextDouble() * size;
             var wobble = ((float)random.NextDouble() - 0.5f) * 5f;
             var phase = (float)random.NextDouble() * MathF.Tau;
@@ -57,6 +59,7 @@ public static class HairCards
             var shade = 0.65f + (float)random.NextDouble() * 0.5f;
             var length = 0.7f + (float)random.NextDouble() * 0.3f;
 
+            // Row by row from the root: the strand sways sideways and thins towards its tip
             for (var y = 0; y < size * length; y++)
             {
                 var v = y / (float)size;
@@ -69,6 +72,7 @@ public static class HairCards
                     var px = (int)x + dx;
                     if (px < 0 || px >= size) continue;
 
+                    // Full at the strand's centre, nothing at its edge
                     var cover = 1f - MathF.Abs(px - x) / w;
                     if (cover <= 0f) continue;
 
@@ -76,6 +80,7 @@ public static class HairCards
                     var alpha = MathF.Min(1f, cover * 2.2f) * (1f - MathF.Max(0f, (v / length - 0.85f) / 0.15f));
                     ref var pixel = ref pixels[y * size + px];
 
+                    // Strands overlap: the more opaque one keeps the texel
                     if (alpha * 255f > pixel.A)
                     {
                         pixel = new Color(

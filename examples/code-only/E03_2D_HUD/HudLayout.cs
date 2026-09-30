@@ -59,7 +59,7 @@ public sealed class HudColumn(float gap, params HudSlot[] slots) : HudWidget
 internal static class HudStack
 {
     /// <summary>The size each unsized slot gets: what the sized slots and the gaps leave, shared equally.</summary>
-    public static float Shared(HudSlot[] slots, float available, float gap)
+    internal static float Shared(HudSlot[] slots, float available, float gap)
     {
         var unsized = slots.Count(slot => slot.Size <= 0f);
 
@@ -69,7 +69,7 @@ internal static class HudStack
     }
 
     /// <summary>Draws a widget. A row or a column passes through; anything else is next in the fade-in.</summary>
-    public static void Draw(HudCanvas canvas, HudWidget widget, HudRect bounds)
+    internal static void Draw(HudCanvas canvas, HudWidget widget, HudRect bounds)
     {
         if (widget is not (HudRow or HudColumn)) canvas.NextWidget();
 

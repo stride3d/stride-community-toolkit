@@ -27,7 +27,7 @@ internal readonly record struct ShapeView(
     Vector3 EyePosition)
 {
     /// <summary>The ray through a screen position, normalised (0,0) top left to (1,1) bottom right, from the near plane into the scene.</summary>
-    public Ray RayAt(Vector2 screenPosition)
+    internal Ray RayAt(Vector2 screenPosition)
     {
         var clip = new Vector3(screenPosition.X * 2f - 1f, 1f - screenPosition.Y * 2f, 0f);
         var near = Vector3.TransformCoordinate(clip, InverseViewProjection);
@@ -40,10 +40,10 @@ internal readonly record struct ShapeView(
     }
 
     /// <summary>The clip w of a world point: its distance term, 1 under an orthographic projection.</summary>
-    public float ClipW(Vector3 world) => Vector4.Transform(new Vector4(world, 1f), ViewProjection).W;
+    internal float ClipW(Vector3 world) => Vector4.Transform(new Vector4(world, 1f), ViewProjection).W;
 
     /// <summary>The depth a world point rasterises to, 0 at the near plane and 1 at the far one.</summary>
-    public float Depth(Vector3 world)
+    internal float Depth(Vector3 world)
     {
         var clip = Vector4.Transform(new Vector4(world, 1f), ViewProjection);
 
@@ -51,5 +51,5 @@ internal readonly record struct ShapeView(
     }
 
     /// <summary>World units per scaled pixel at a world point's depth - the relation the border width uses.</summary>
-    public float WorldPerPixel(Vector3 world) => MathF.Max(ClipW(world), 0.0001f) / PixelScale;
+    internal float WorldPerPixel(Vector3 world) => MathF.Max(ClipW(world), 0.0001f) / PixelScale;
 }
