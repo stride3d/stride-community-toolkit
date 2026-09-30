@@ -12,6 +12,23 @@ using Stride.Rendering.Lights;
 
 namespace E09_3D_Particles_Gallery;
 
+/// <summary>The shape of a plume's body: where it starts, how it opens and how far it goes.</summary>
+/// <param name="Width">The width at the nozzle.</param>
+/// <param name="Flare">How many times wider the plume is where it ends.</param>
+/// <param name="Speed">How fast the gas leaves.</param>
+/// <param name="Reach">How far the plume reaches.</param>
+/// <param name="HalfAngle">Half the angle the plume opens at, in degrees.</param>
+public readonly record struct PlumeShape(float Width, float Flare, float Speed, float Reach, float HalfAngle);
+
+/// <summary>What a puff of smoke looks like over its life.</summary>
+/// <param name="Width">The width of a puff at birth.</param>
+/// <param name="Flare">How many times wider a puff is when it dies.</param>
+/// <param name="Young">The colour of a young puff.</param>
+/// <param name="Old">The colour of an old one.</param>
+/// <param name="Opacity">The alpha of a puff at its thickest.</param>
+/// <param name="Brightness">How bright the smoke is. Particles are not lit, so smoke in daylight needs more than 1 to look white.</param>
+public readonly record struct SmokeLook(float Width, float Flare, Color4 Young, Color4 Old, float Opacity = 0.6f, float Brightness = 1f);
+
 /// <summary>
 /// The layers an exhaust is built from, each one emitter. Every layer fires along the emitter's
 /// local X. A layer is described by how fast the gas leaves, how far it reaches and how wide it
@@ -87,16 +104,13 @@ public static class Exhaust
 
     /// <summary>The body of the plume: billboards of a flipbook that widen as they fly and change colour along the way.</summary>
     /// <param name="sheet">An 8 by 8 flipbook.</param>
-    /// <param name="width">The width at the nozzle.</param>
-    /// <param name="flare">How many times wider the plume is where it ends.</param>
-    /// <param name="speed">How fast the gas leaves.</param>
-    /// <param name="reach">How far the plume reaches.</param>
-    /// <param name="halfAngle">Half the angle the plume opens at, in degrees.</param>
+    /// <param name="shape">Its width, how it opens, its speed and its reach.</param>
     /// <param name="colours">The colour at the nozzle, along the body and at the tail. Values above 1 are intensity in HDR.</param>
     /// <param name="additive">0 blends, 1 adds light.</param>
     /// <param name="rate">Particles per second.</param>
-    public static ParticleEmitter Body(Texture sheet, float width, float flare, float speed, float reach, float halfAngle, (Color4 Nozzle, Color4 Middle, Color4 Tail) colours, float additive = 1f, int rate = 140)
+    public static ParticleEmitter Body(Texture sheet, PlumeShape shape, (Color4 Nozzle, Color4 Middle, Color4 Tail) colours, float additive = 1f, int rate = 140)
     {
+        var (width, flare, speed, reach, halfAngle) = shape;
         var life = reach / speed;
         var sideways = speed * MathF.Tan(MathUtil.DegreesToRadians(halfAngle));
         var peak = Peak(colours.Nozzle, colours.Middle, colours.Tail);
@@ -155,16 +169,12 @@ public static class Exhaust
 
     /// <summary>Smoke: alpha-blended puffs that leave slowly, grow and fade.</summary>
     /// <param name="textures">The loaded textures.</param>
-    /// <param name="width">The width of a puff at birth.</param>
-    /// <param name="flare">How many times wider a puff is when it dies.</param>
+    /// <param name="look">A puff's size, colours, opacity and brightness.</param>
     /// <param name="velocity">The slowest and the fastest a puff leaves, in the emitter's space.</param>
     /// <param name="life">The shortest and the longest a puff lives, in seconds.</param>
-    /// <param name="colours">The colour of a young puff and of an old one.</param>
-    /// <param name="opacity">The alpha of a puff at its thickest.</param>
-    /// <param name="brightness">How bright the smoke is. Particles are not lit, so smoke in daylight needs more than 1 to look white.</param>
     /// <param name="rate">Particles per second.</param>
     /// <param name="at">Where the puffs are born, in the emitter's space.</param>
-    public static ParticleEmitter Smoke(ParticleTextures textures, float width, float flare, (Vector3 Min, Vector3 Max) velocity, Vector2 life, (Color4 Young, Color4 Old) colours, float opacity = 0.6f, float brightness = 1f, int rate = 40, Vector3 at = default)
+    public static ParticleEmitter Smoke(ParticleTextures textures, SmokeLook look, (Vector3 Min, Vector3 Max) velocity, Vector2 life, int rate = 40, Vector3 at = default)
     {
         var smoke = new ParticleEmitter
         {
@@ -172,20 +182,20 @@ public static class Exhaust
             SimulationSpace = EmitterSimulationSpace.World,
             SortingPolicy = EmitterSortingPolicy.ByDepth,
             ShapeBuilder = new ShapeBuilderBillboard(),
-            Material = ParticleMaterials.Flipbook(textures.Billow, 8, 8, 64, Tint(brightness), softEdge: 0.5f),
+            Material = ParticleMaterials.Flipbook(textures.Billow, 8, 8, 64, Tint(look.Brightness), softEdge: 0.5f),
         };
 
         smoke.Spawners.Add(new SpawnerPerSecond { SpawnCount = rate });
         smoke.Initializers.Add(new InitialPositionSeed { PositionMin = at, PositionMax = at });
         smoke.Initializers.Add(new InitialVelocitySeed { VelocityMin = velocity.Min, VelocityMax = velocity.Max });
         smoke.Initializers.Add(new InitialRotationSeed { AngularRotation = new Vector2(-180f, 180f) });
-        smoke.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, width), (1f, width * flare)) });
+        smoke.Updaters.Add(new UpdaterSizeOverTime { SamplerMain = Curves.Float((0f, look.Width), (1f, look.Width * look.Flare)) });
         smoke.Updaters.Add(new UpdaterColorOverTime
         {
             SamplerMain = Curves.Color(
-                (0f, new Color4(colours.Young.R, colours.Young.G, colours.Young.B, 0f)),
-                (0.12f, new Color4(colours.Young.R, colours.Young.G, colours.Young.B, opacity)),
-                (1f, new Color4(colours.Old.R, colours.Old.G, colours.Old.B, 0f))),
+                (0f, new Color4(look.Young.R, look.Young.G, look.Young.B, 0f)),
+                (0.12f, new Color4(look.Young.R, look.Young.G, look.Young.B, look.Opacity)),
+                (1f, new Color4(look.Old.R, look.Old.G, look.Old.B, 0f))),
         });
 
         return smoke;

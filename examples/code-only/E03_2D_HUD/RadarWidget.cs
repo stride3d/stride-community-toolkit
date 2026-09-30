@@ -38,10 +38,10 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
         var sweep = ship.RadarSweep;
         var middle = sweep + Trail / 2f;
 
-        canvas.Style(0f, 1f, colour.WithAlpha(0.45f), gradientTo: colour.WithAlpha(0f), gradientAlong: new Vector2(-MathF.Sin(middle), MathF.Cos(middle)));
+        canvas.Style(new HudStyle(0f, 1f, colour.WithAlpha(0.45f)) { GradientTo = colour.WithAlpha(0f), GradientAlong = new Vector2(-MathF.Sin(middle), MathF.Cos(middle)) });
         canvas.Shapes.DrawSector(center, radius - 0.03f, sweep, Trail, colour);
 
-        canvas.Style(HudCanvas.Thin, 0f, glow: 1.5f, glowColour: glow, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 1.5f, GlowColour = glow, Additive = true });
         canvas.Line(center, center + Direction(sweep) * radius, HudCanvas.Thick, colour);
 
         for (var i = 0; i < ship.Contacts.Length; i++)
@@ -50,7 +50,7 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
         }
 
         // Bezel, and a tick ring outside it that turns slowly: its phase is the whole animation
-        canvas.Style(HudCanvas.Thick, 0f, glow: 4f, glowColour: glow);
+        canvas.Style(new HudStyle(HudCanvas.Thick, 0f) { Glow = 4f, GlowColour = glow });
         canvas.Shapes.DrawArc(center, radius, 0f, MathF.Tau, colour);
         canvas.DashedRing(center, radius + 0.22f, 4f, 10f, dim, canvas.Time * 12f);
     }
@@ -73,7 +73,7 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
         {
             var pulse = 0.5f + 0.5f * MathF.Sin(canvas.Time * 5f);
 
-            canvas.Style(HudCanvas.Thin, 0f, glow: 4f + 6f * pulse, glowColour: colour, additive: true);
+            canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 4f + 6f * pulse, GlowColour = colour, Additive = true });
             canvas.Shapes.DrawArc(position, 0.18f, 0f, MathF.Tau, colour);
         }
 
@@ -82,7 +82,7 @@ public sealed class RadarWidget(ShipState ship) : HudWidget
         {
             var commanded = theme.For(HudRole.Commanded);
 
-            canvas.Style(HudCanvas.Thin, 0f, glow: 3f, glowColour: commanded, additive: true);
+            canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 3f, GlowColour = commanded, Additive = true });
 
             foreach (var side in (ReadOnlySpan<Vector2>)[new(-1f, -1f), new(-1f, 1f), new(1f, -1f), new(1f, 1f)])
             {

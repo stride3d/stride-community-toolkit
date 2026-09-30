@@ -31,7 +31,7 @@ public sealed class WarningWidget(ShipState ship) : HudWidget
         var pulse = 0.5f + 0.5f * MathF.Sin(canvas.Time * 6f);
 
         // The panel is the lamp. Its lettering is dark on it and its glow spills onto the glass.
-        canvas.Style(HudCanvas.Thin, 0.55f + 0.35f * pulse, colour, 6f * pulse, colour, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0.55f + 0.35f * pulse, colour) { Glow = 6f * pulse, GlowColour = colour, Additive = true });
         canvas.ChamferedPanel(bounds.Center, size, 0.14f, colour);
         canvas.Text(Name, shield < Critical ? "SHIELD CRITICAL" : "SHIELD LOW", bounds.Center, HudText.Caption, HudTheme.Ink, Color.Transparent);
     }

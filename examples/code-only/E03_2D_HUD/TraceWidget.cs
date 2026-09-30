@@ -40,7 +40,7 @@ public sealed class TraceWidget : HudWidget
         // The signal in front, glowing like a phosphor trace
         count = Sample(points, plot, canvas.Time, ShipState.Signal);
 
-        canvas.Style(HudCanvas.Thin, 0f, glow: 4f, glowColour: theme.Glow, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 4f, GlowColour = theme.Glow, Additive = true });
         canvas.Shapes.DrawPixelPolyline(points[..count], HudCanvas.Thin, theme.Text);
     }
 

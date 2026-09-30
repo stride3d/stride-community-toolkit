@@ -42,14 +42,14 @@ public static class HudPanel
         var hover = canvas.Animate(new(name, "hover"), canvas.HoversPanel(name) ? 1f : 0f);
 
         // The body, tagged so the pointer finds the panel
-        canvas.Style(HudCanvas.Thin + 0.6f * hover, 0.62f, theme.Ground, glow: 3f * hover, glowColour: theme.Glow, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin + 0.6f * hover, 0.62f, theme.Ground) { Glow = 3f * hover, GlowColour = theme.Glow, Additive = true });
         canvas.Shapes.Tag = new HudId(name);
         canvas.ChamferedPanel(bounds.Center, bounds.Size, Cut, accent.WithAlpha(0.55f + 0.45f * hover));
         canvas.Shapes.Tag = null;
 
         // The glass over it: the batch's fill source, tinted by the accent. Squares cover less of
         // the panel than lines, so they are drawn stronger.
-        canvas.Style(0f, canvas.Glass == GlassPattern.Squares ? 0.3f : 0.16f, accent, textured: true);
+        canvas.Style(new HudStyle(0f, canvas.Glass == GlassPattern.Squares ? 0.3f : 0.16f, accent) { Textured = true });
         canvas.ChamferedPanel(bounds.Center, bounds.Size - new Vector2(0.08f), Cut, accent);
 
         if (title is null) return bounds.Inset(Margin);

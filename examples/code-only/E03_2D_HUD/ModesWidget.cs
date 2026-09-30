@@ -35,14 +35,15 @@ public sealed class ModesWidget(ShipState ship) : HudWidget
         var hover = canvas.Animate(new(Name, "hover", index), mode.Available && canvas.Hovers(id) ? 1f : 0f);
         var opacity = mode.Available ? 1f : Unavailable;
 
-        canvas.Style(
-            border: MathUtil.Lerp(HudCanvas.Thin, HudCanvas.Thick, MathF.Max(engaged, hover)),
-            fillAlpha: MathUtil.Lerp(0.5f, 0.9f, engaged),
-            fill: Color.Lerp(theme.Ground, accent, engaged),
-            glow: 4f * engaged + 3f * hover,
-            glowColour: theme.GlowFor(HudRole.Engaged),
-            opacity: opacity,
-            additive: true);
+        var border = MathUtil.Lerp(HudCanvas.Thin, HudCanvas.Thick, MathF.Max(engaged, hover));
+
+        canvas.Style(new HudStyle(border, MathUtil.Lerp(0.5f, 0.9f, engaged), Color.Lerp(theme.Ground, accent, engaged))
+        {
+            Glow = 4f * engaged + 3f * hover,
+            GlowColour = theme.GlowFor(HudRole.Engaged),
+            Opacity = opacity,
+            Additive = true,
+        });
 
         canvas.Shapes.Tag = id;
         canvas.ChamferedPanel(button.Center, button.Size, 0.14f, Color.Lerp(accent, theme.Text, engaged));

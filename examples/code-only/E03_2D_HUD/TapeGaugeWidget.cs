@@ -31,7 +31,7 @@ public sealed class TapeGaugeWidget(string name, string caption, Func<float> val
         canvas.Box(track.Center, track.Size, theme.Dim(HudRole.Navigation));
 
         // The fill grows from the bottom and is brightest at its top edge
-        canvas.Style(0f, 0.9f, colour.WithAlpha(0.35f), gradientTo: theme.Text);
+        canvas.Style(new HudStyle(0f, 0.9f, colour.WithAlpha(0.35f)) { GradientTo = theme.Text });
         canvas.Box(new Vector2(track.Center.X, track.Bottom + track.Height * level / 2f), new Vector2(Width - 0.08f, track.Height * level), colour);
 
         // Ticks up the inner side, a longer one every fifth

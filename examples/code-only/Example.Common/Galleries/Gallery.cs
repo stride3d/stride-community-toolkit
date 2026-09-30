@@ -30,14 +30,6 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private const float PinHeight = 5.25f;
 
     /// <summary>
-    /// One line of the index board, in world units; the frame is the lines plus a margin. The list's
-    /// size on screen is set by <see cref="BoardShare"/>, not by this or by the text's font size,
-    /// which is only how finely it is rasterised: the board hangs at whatever distance makes it that
-    /// share of the home view, so a taller line just means a bigger board at a greater distance.
-    /// </summary>
-    private const float LineHeight = 0.45f;
-
-    /// <summary>
     /// The home view: how high above and how far outside the ring the camera sits, as fractions of
     /// the radius, and how far it looks down - the whole ring in view at once.
     /// </summary>
@@ -55,23 +47,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
     private const float LeaderEndRadius = 4f;
     private const float LeaderWidth = 1f;
 
-    /// <summary>The index board's width in world units; its height follows the registry.</summary>
-    private const float BoardWidth = 10f;
-
-    /// <summary>How much of the home view's height the board takes, and the margin it keeps from the view's top and left edges, in world units at its distance.</summary>
-    private const float BoardShare = 0.48f;
-    private const float BoardMargin = 0.6f;
-
-    /// <summary>How far in from the frame the corner brackets sit and the list starts.</summary>
-    private const float BoardInset = 0.3f;
-
-    /// <summary>The field of view the board's placement assumes: the default camera's, at a 16:9 window.</summary>
-    private const float ViewFovDegrees = 45f;
-    private const float ViewAspect = 16f / 9f;
-
-    private readonly Vector3 _boardCentre;
-    private readonly Vector3 _boardRight;
-    private readonly Vector3 _boardUp;
+    private readonly GalleryBoard _board;
     private readonly SpriteFont? _labelFont;
 
     private readonly Game _game;
@@ -126,12 +102,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             _stations.Add(BuildStation(i, exhibits.Count, exhibits[i], configure));
         }
 
-        // The board hangs in the air where the home view has its top-left corner: in front of the
-        // home camera, offset left and up in its frame, turned to face it. Steer the camera away
-        // and it stays put; Home brings it back to the corner
-        (_boardCentre, _boardRight, _boardUp) = PlaceBoard();
-
-        BuildBoard();
+        _board = new GalleryBoard(scene, [.. _stations.Select(s => $"{s.Number,2}  {s.Exhibit.Title}")], HomePosition, HomeRotation);
     }
 
     /// <summary>The layout figures the ring was built with.</summary>
@@ -257,7 +228,9 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         }
 
         DrawLabels();
-        DrawBoardFrame();
+        _board.DrawFrame(_furniture);
+        _furniture.Fill.Set(null, 0.45f);
+        _furniture.BorderWidth = 3f;
     }
 
     /// <summary>The label texts follow the detail level; call it after changing <see cref="LabelDetail"/>.</summary>
@@ -392,95 +365,6 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         });
 
         ground.Scene = _scene;
-    }
-
-    /// <summary>
-    /// The index board at the centre: a HUD panel listing every station, drawn each frame like any
-    /// other shape, with the list as world text placed once.
-    /// </summary>
-    private void BuildBoard()
-    {
-        // An empty registry keeps its board, with nothing listed: the frame is the same whatever is on it
-        var lines = _stations.Count > 0 ? string.Join('\n', _stations.Select(s => $"{s.Number,2}  {s.Exhibit.Title}")) : " ";
-
-        var board = new WorldTextComponent
-        {
-            Text = lines,
-            FontSize = 40,
-            // The height is the whole block's, every line of it; hung from the top of the frame
-            Height = _stations.Count * LineHeight,
-            TextColor = new Color(130, 205, 255),
-            GlowColor = new Color(0, 140, 255, 120),
-            GlowSize = 3f,
-            Anchor = TextAnchor.TopLeft,
-            Alignment = TextAlignment.Left,
-            Billboard = false,
-        };
-
-        // Hung from the top-left of the frame, inset like the corner brackets, a hair in front, in the board's own plane
-        var towardsCamera = Vector3.Cross(_boardRight, _boardUp);
-        var entity = new Entity("Index board")
-        {
-            Transform =
-            {
-                Position = _boardCentre - _boardRight * (BoardSize.X * 0.5f - BoardInset) + _boardUp * (BoardSize.Y * 0.5f - 0.5f) + towardsCamera * 0.01f,
-                Rotation = HomeRotation,
-            },
-        };
-
-        entity.Add(board);
-        entity.Scene = _scene;
-    }
-
-    private Vector2 BoardSize => new(BoardWidth, MathF.Max(4f, _stations.Count * LineHeight + 1f));
-
-    /// <summary>
-    /// Where the board hangs: the home camera's frame, far enough in front that the board takes
-    /// <see cref="BoardShare"/> of the view's height, then across to the view's top-left corner.
-    /// </summary>
-    private (Vector3 Centre, Vector3 Right, Vector3 Up) PlaceBoard()
-    {
-        var rotation = HomeRotation;
-        var right = Vector3.Transform(Vector3.UnitX, rotation);
-        var up = Vector3.Transform(Vector3.UnitY, rotation);
-        var forward = Vector3.Transform(-Vector3.UnitZ, rotation);
-
-        var halfTan = MathF.Tan(MathUtil.DegreesToRadians(ViewFovDegrees) * 0.5f);
-        var distance = BoardSize.Y / (2f * halfTan * BoardShare);
-        var viewHalf = new Vector2(distance * halfTan * ViewAspect, distance * halfTan);
-        var half = BoardSize * 0.5f;
-
-        var centre = HomePosition
-            + forward * distance
-            + right * (-viewHalf.X + BoardMargin + half.X)
-            + up * (viewHalf.Y - BoardMargin - half.Y);
-
-        return (centre, right, up);
-    }
-
-    private void DrawBoardFrame()
-    {
-        var shapes = _furniture;
-        var hudBlue = new Color(110, 200, 255);
-
-        shapes.Fill.Set(new Color(4, 14, 30), 0.8f);
-        shapes.BorderWidth = 1.5f;
-        shapes.Glow.Set(7f, new Color(0, 150, 255, 160));
-        shapes.DrawRectangle(_boardCentre, _boardRight, _boardUp, BoardSize, hudBlue, cornerRadius: 0.35f);
-        shapes.Glow.Clear();
-
-        // The corner brackets, the HUD cliche
-        var half = BoardSize * 0.5f;
-        var topLeft = _boardCentre - _boardRight * (half.X - BoardInset) + _boardUp * (half.Y - BoardInset);
-        var bottomRight = _boardCentre + _boardRight * (half.X - BoardInset) - _boardUp * (half.Y - BoardInset);
-
-        shapes.DrawPixelLine(topLeft, topLeft + _boardRight * 0.8f, 1.5f, hudBlue);
-        shapes.DrawPixelLine(topLeft, topLeft - _boardUp * 0.5f, 1.5f, hudBlue);
-        shapes.DrawPixelLine(bottomRight, bottomRight - _boardRight * 0.8f, 1.5f, hudBlue);
-        shapes.DrawPixelLine(bottomRight, bottomRight + _boardUp * 0.5f, 1.5f, hudBlue);
-
-        shapes.Fill.Set(null, 0.45f);
-        shapes.BorderWidth = 3f;
     }
 
     /// <summary>A faint ring under every station, so a pad reads as a place even when its exhibit is small.</summary>
