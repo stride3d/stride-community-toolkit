@@ -42,7 +42,7 @@ public sealed class TargetWidget(ShipState ship) : HudWidget
 
         canvas.DashedRing(center, radius, 8f, 6f, colour.WithAlpha(0.6f), canvas.Time * 14f);
 
-        canvas.Style(HudCanvas.Thin, 0.2f, colour, glow: 4f, glowColour: colour, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0.2f, colour) { Glow = 4f, GlowColour = colour, Additive = true });
 
         if (target.Hostile)
         {

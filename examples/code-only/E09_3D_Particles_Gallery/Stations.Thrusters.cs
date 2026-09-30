@@ -46,18 +46,18 @@ public static class ThrusterStations
         var core = Exhaust.Core(s.Textures, D * 0.75f, 24f, altitude ? 2.2f : 3.4f, Hue(255, 215, 150, 1.8f), Hue(255, 140, 60, 1.4f), rate: 360);
 
         var body = altitude
-            ? Exhaust.Body(s.Textures.Billow, D * 1.2f, 5f, 12f, 5f, 30f, (Hue(255, 160, 90, 1.3f), Hue(150, 50, 45, 1f), Hue(60, 55, 150, 0.7f)), rate: 320)
-            : Exhaust.Body(s.Textures.Flame, D * 1.1f, 2.2f, 16f, 6.5f, 3.5f, (Hue(255, 190, 110, 1.3f), Hue(255, 120, 50, 1.1f), Hue(220, 45, 15, 0.8f)), rate: 320);
+            ? Exhaust.Body(s.Textures.Billow, new(D * 1.2f, 5f, 12f, 5f, 30f), (Hue(255, 160, 90, 1.3f), Hue(150, 50, 45, 1f), Hue(60, 55, 150, 0.7f)), rate: 320)
+            : Exhaust.Body(s.Textures.Flame, new(D * 1.1f, 2.2f, 16f, 6.5f, 3.5f), (Hue(255, 190, 110, 1.3f), Hue(255, 120, 50, 1.1f), Hue(220, 45, 15, 0.8f)), rate: 320);
 
         var tail = altitude
-            ? Exhaust.Body(s.Textures.Billow, D * 2f, 4f, 9f, 6f, 38f, (Hue(140, 58, 54, 0f), Hue(110, 50, 100, 0.6f), Hue(60, 55, 150, 0.4f)), rate: 200)
-            : Exhaust.Body(s.Textures.Billow, D * 1.5f, 2.2f, 12f, 8f, 5f, (Hue(255, 150, 100, 0f), Hue(240, 80, 30, 0.7f), Hue(170, 30, 10, 0.4f)), rate: 220);
+            ? Exhaust.Body(s.Textures.Billow, new(D * 2f, 4f, 9f, 6f, 38f), (Hue(140, 58, 54, 0f), Hue(110, 50, 100, 0.6f), Hue(60, 55, 150, 0.4f)), rate: 200)
+            : Exhaust.Body(s.Textures.Billow, new(D * 1.5f, 2.2f, 12f, 8f, 5f), (Hue(255, 150, 100, 0f), Hue(240, 80, 30, 0.7f), Hue(170, 30, 10, 0.4f)), rate: 220);
 
         // The gas generator burns rich, so its exhaust is soot: alpha-blended, and it starts beside the nozzle
-        var soot = Exhaust.Smoke(s.Textures, D * 0.35f, 4f, (new Vector3(6f, -0.7f, 0.2f), new Vector3(9f, -0.1f, 0.9f)), new Vector2(0.5f, 0.8f), (Hue(150, 70, 10), Hue(30, 11, 11)), opacity: 0.85f, rate: 80, at: new Vector3(0f, -0.05f, 0.6f));
+        var soot = Exhaust.Smoke(s.Textures, new(D * 0.35f, 4f, Hue(150, 70, 10), Hue(30, 11, 11), Opacity: 0.85f), (new Vector3(6f, -0.7f, 0.2f), new Vector3(9f, -0.1f, 0.9f)), new Vector2(0.5f, 0.8f), rate: 80, at: new Vector3(0f, -0.05f, 0.6f));
 
         // The igniter fluid burns green for a moment before the kerosene lights
-        var flash = Exhaust.Body(s.Textures.Billow, D * 1.2f, 2.5f, 7f, 2.2f, 14f, (Hue(90, 255, 90, 1.3f), Hue(40, 255, 70, 1f), Hue(20, 200, 40, 0.5f)), rate: 0);
+        var flash = Exhaust.Body(s.Textures.Billow, new(D * 1.2f, 2.5f, 7f, 2.2f, 14f), (Hue(90, 255, 90, 1.3f), Hue(40, 255, 70, 1f), Hue(20, 200, 40, 0.5f)), rate: 0);
         var flashSpawner = flash.Spawners.OfType<SpawnerPerSecond>().First();
 
         flash.MaxParticlesOverride = 200;
@@ -113,11 +113,11 @@ public static class ThrusterStations
 
         core.Initializers.Add(new ClusterInitializer { Nozzles = nozzles, Radius = D * 0.3f });
 
-        var body = Exhaust.Body(s.Textures.Flame, 1.6f * spread, 2f, 13f, 4.4f, 5f, (Hue(255, 190, 110, 1.2f), Hue(255, 120, 50, 1f), Hue(220, 45, 15, 0.7f)), rate: three ? 140 : 280);
-        var tail = Exhaust.Body(s.Textures.Billow, 2f * spread, 2.2f, 10f, 5f, 8f, (Hue(255, 150, 100, 0f), Hue(240, 80, 30, 0.6f), Hue(170, 30, 10, 0.35f)), rate: three ? 80 : 150);
+        var body = Exhaust.Body(s.Textures.Flame, new(1.6f * spread, 2f, 13f, 4.4f, 5f), (Hue(255, 190, 110, 1.2f), Hue(255, 120, 50, 1f), Hue(220, 45, 15, 0.7f)), rate: three ? 140 : 280);
+        var tail = Exhaust.Body(s.Textures.Billow, new(2f * spread, 2.2f, 10f, 5f, 8f), (Hue(255, 150, 100, 0f), Hue(240, 80, 30, 0.6f), Hue(170, 30, 10, 0.35f)), rate: three ? 80 : 150);
 
         // The smoke and steam of a launch: it comes down with the exhaust and rolls out over the pad
-        var cloud = Exhaust.Smoke(s.Textures, 1.2f, 2.6f, (new Vector3(6f, -1.6f, -1.6f), new Vector3(9f, 1.6f, 1.6f)), new Vector2(1.8f, 2.8f), (Hue(245, 238, 230), Hue(190, 190, 195)), opacity: 0.6f, brightness: 3.5f, rate: three ? 35 : 70, at: new Vector3(1.5f, 0f, 0f));
+        var cloud = Exhaust.Smoke(s.Textures, new(1.2f, 2.6f, Hue(245, 238, 230), Hue(190, 190, 195), Opacity: 0.6f, Brightness: 3.5f), (new Vector3(6f, -1.6f, -1.6f), new Vector3(9f, 1.6f, 1.6f)), new Vector2(1.8f, 2.8f), rate: three ? 35 : 70, at: new Vector3(1.5f, 0f, 0f));
 
         foreach (var emitter in (ParticleEmitter[])[body, tail, cloud])
         {
@@ -169,11 +169,11 @@ public static class ThrusterStations
             : Exhaust.Core(s.Textures, D * 0.65f, 26f, 3.6f, Hue(150, 180, 255, 2.2f), Hue(80, 100, 240, 1.5f));
 
         var body = hydrogen
-            ? Exhaust.Body(s.Textures.Billow, D, 1.8f, 17f, 6f, 3f, (Hue(100, 130, 255, 0.3f), Hue(90, 120, 255, 0.22f), Hue(255, 139, 117, 0.08f)))
-            : Exhaust.Body(s.Textures.Billow, D, 1.9f, 16f, 6.5f, 3f, (Hue(90, 130, 255, 1.1f), Hue(70, 100, 245, 0.9f), Hue(130, 40, 180, 0.5f)), rate: 200);
+            ? Exhaust.Body(s.Textures.Billow, new(D, 1.8f, 17f, 6f, 3f), (Hue(100, 130, 255, 0.3f), Hue(90, 120, 255, 0.22f), Hue(255, 139, 117, 0.08f)))
+            : Exhaust.Body(s.Textures.Billow, new(D, 1.9f, 16f, 6.5f, 3f), (Hue(90, 130, 255, 1.1f), Hue(70, 100, 245, 0.9f), Hue(130, 40, 180, 0.5f)), rate: 200);
 
         // Fuel-rich gas along the wall burns with the air outside: a thin orange skin round the blue
-        var sheath = Exhaust.Body(s.Textures.Billow, D * 1.3f, 2.2f, 11f, 5.5f, 5f, (Hue(241, 99, 23, 0f), Hue(241, 99, 23, hydrogen ? 0.06f : 0.4f), Hue(228, 100, 40, hydrogen ? 0.03f : 0.25f)), rate: 80);
+        var sheath = Exhaust.Body(s.Textures.Billow, new(D * 1.3f, 2.2f, 11f, 5.5f, 5f), (Hue(241, 99, 23, 0f), Hue(241, 99, 23, hydrogen ? 0.06f : 0.4f), Hue(228, 100, 40, hydrogen ? 0.03f : 0.25f)), rate: 80);
 
         var particles = s.Place(StandNozzle, 1f, sheath, body, core, diamonds, flare);
 
@@ -201,7 +201,7 @@ public static class ThrusterStations
         var engine = Engine.Of(s, JetStand);
 
         // Dry exhaust is always there, under the flame too
-        var haze = Exhaust.Smoke(s.Textures, D * 0.8f, 3f, (new Vector3(10f, -0.3f, -0.3f), new Vector3(14f, 0.3f, 0.3f)), new Vector2(0.5f, 0.8f), (Hue(90, 85, 80), Hue(60, 60, 65)), opacity: 0.2f, brightness: 1.5f, rate: 60);
+        var haze = Exhaust.Smoke(s.Textures, new(D * 0.8f, 3f, Hue(90, 85, 80), Hue(60, 60, 65), Opacity: 0.2f, Brightness: 1.5f), (new Vector3(10f, -0.3f, -0.3f), new Vector3(14f, 0.3f, 0.3f)), new Vector2(0.5f, 0.8f), rate: 60);
 
         var cells = new ShockCellInitializer
         {
@@ -216,7 +216,7 @@ public static class ThrusterStations
         var flare = Exhaust.Flare(s.Textures, D * 1.3f, Hue(130, 150, 255, 0.9f));
         var diamonds = Exhaust.Diamonds(s.Textures, cells, Hue(255, 200, 120, 1.8f), rate: 220);
         var core = Exhaust.Core(s.Textures, D * 0.7f, 26f, 4.2f, Hue(140, 160, 255, 2f), Hue(255, 150, 70, 1.6f));
-        var body = Exhaust.Body(s.Textures.Flame, D * 0.9f, 1.7f, 17f, 6.5f, 2.5f, (Hue(90, 110, 255, 1.2f), Hue(255, 130, 50, 1.2f), Hue(220, 60, 20, 0.6f)), rate: 200);
+        var body = Exhaust.Body(s.Textures.Flame, new(D * 0.9f, 1.7f, 17f, 6.5f, 2.5f), (Hue(90, 110, 255, 1.2f), Hue(255, 130, 50, 1.2f), Hue(220, 60, 20, 0.6f)), rate: 200);
 
         var particles = s.Place(StandNozzle, 1f, haze, body, core, diamonds, flare);
 
@@ -250,7 +250,7 @@ public static class ThrusterStations
 
         var flare = Exhaust.Flare(s.Textures, D * 2.2f, Hue(255, 245, 215, 1f));
         var core = Exhaust.Core(s.Textures, D * 0.9f, 16f, 1.6f, Hue(255, 245, 215, 2.4f), Hue(255, 215, 130, 1.7f), rate: 220);
-        var body = Exhaust.Body(s.Textures.Flame, D * 1.2f, 2f, 9f, 2.4f, 7f, (Hue(255, 240, 200, 1.9f), Hue(255, 210, 120, 1.5f), Hue(255, 150, 70, 0.7f)), rate: 140);
+        var body = Exhaust.Body(s.Textures.Flame, new(D * 1.2f, 2f, 9f, 2.4f, 7f), (Hue(255, 240, 200, 1.9f), Hue(255, 210, 120, 1.5f), Hue(255, 150, 70, 0.7f)), rate: 140);
 
         // Slag: burning drops of aluminium thrown out of the flame, falling
         var slag = new ParticleEmitter
@@ -353,17 +353,17 @@ public static class ThrusterStations
         {
             0 =>
             [
-                Exhaust.Smoke(s.Textures, D * 0.8f, 5f, (new Vector3(9f, -1.6f, -1.6f), new Vector3(14f, 1.6f, 1.6f)), new Vector2(0.25f, 0.45f), (Hue(255, 255, 255), Hue(225, 235, 245)), opacity: 0.6f, brightness: 4f, rate: 220),
+                Exhaust.Smoke(s.Textures, new(D * 0.8f, 5f, Hue(255, 255, 255), Hue(225, 235, 245), Opacity: 0.6f, Brightness: 4f), (new Vector3(9f, -1.6f, -1.6f), new Vector3(14f, 1.6f, 1.6f)), new Vector2(0.25f, 0.45f), rate: 220),
             ],
             1 =>
             [
-                Exhaust.Body(s.Textures.Billow, D, 5f, 14f, 3.4f, 16f, (Hue(120, 200, 245, 1f), Hue(190, 190, 170, 0.5f), Hue(241, 170, 100, 0.25f)), rate: 150),
+                Exhaust.Body(s.Textures.Billow, new(D, 5f, 14f, 3.4f, 16f), (Hue(120, 200, 245, 1f), Hue(190, 190, 170, 0.5f), Hue(241, 170, 100, 0.25f)), rate: 150),
                 Exhaust.Core(s.Textures, D * 0.6f, 22f, 1.2f, Hue(190, 225, 255, 1.8f), Hue(120, 200, 245, 0.9f), rate: 120),
                 Exhaust.Flare(s.Textures, D * 1.6f, Hue(190, 225, 255, 0.4f)),
             ],
             _ =>
             [
-                Exhaust.Body(s.Textures.Billow, D * 0.9f, 1.5f, 9f, 7f, 0.6f, (Hue(0, 150, 255, 1.2f), Hue(0, 150, 255, 0.9f), Hue(80, 180, 255, 0.25f)), rate: 160),
+                Exhaust.Body(s.Textures.Billow, new(D * 0.9f, 1.5f, 9f, 7f, 0.6f), (Hue(0, 150, 255, 1.2f), Hue(0, 150, 255, 0.9f), Hue(80, 180, 255, 0.25f)), rate: 160),
                 Exhaust.Core(s.Textures, D * 0.5f, 18f, 5.5f, Hue(170, 225, 255, 2.4f), Hue(0, 150, 255, 1.6f), rate: 220),
                 Exhaust.Flare(s.Textures, D * 2f, Hue(80, 180, 255, 0.6f)),
             ],

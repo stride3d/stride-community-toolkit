@@ -83,7 +83,7 @@ public sealed class Hud
         canvas.Style(HudCanvas.Thin, 0f);
         canvas.Shapes.DrawPixelPolyline(outline, new Vector3(frame.Center, 0f), Vector3.UnitX, Vector3.UnitY, HudCanvas.Thin, theme.Dim(HudRole.Frame), closed: true);
 
-        canvas.Style(HudCanvas.Thick, 0f, glow: 4f, glowColour: theme.Glow, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thick, 0f) { Glow = 4f, GlowColour = theme.Glow, Additive = true });
 
         foreach (var side in (ReadOnlySpan<Vector2>)[new(1f, 1f), new(-1f, 1f), new(-1f, -1f), new(1f, -1f)])
         {

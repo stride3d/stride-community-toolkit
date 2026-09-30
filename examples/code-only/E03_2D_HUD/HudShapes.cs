@@ -42,7 +42,7 @@ public static class HudShapes
     /// </summary>
     public static void DashedRing(this HudCanvas canvas, Vector2 center, float radius, float dash, float gap, Color colour, float phase = 0f)
     {
-        canvas.Style(HudCanvas.Thin, 0f, dash: dash, gap: gap, phase: phase);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Dash = dash, Gap = gap, Phase = phase });
         canvas.Shapes.DrawArc(center, radius, 0f, MathF.Tau, colour);
     }
 
@@ -78,7 +78,7 @@ public static class HudShapes
     /// </summary>
     public static void HitDisc(this HudCanvas canvas, HudId id, Vector2 center, float radius)
     {
-        canvas.Style(0f, 1f, opacity: 0f);
+        canvas.Style(new HudStyle(0f, 1f) { Opacity = 0f });
         canvas.Shapes.Tag = id;
         canvas.Shapes.DrawSolidCircle(center, radius, Color.White);
         canvas.Shapes.Tag = null;

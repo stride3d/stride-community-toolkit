@@ -120,18 +120,24 @@ public sealed class HudCanvas
         _widget++;
     }
 
+    /// <summary>A border and a flat fill, with everything else off.</summary>
+    /// <param name="border">The outline's width, in pixels. 0 for none.</param>
+    /// <param name="fillAlpha">The fill's opacity. 0 for an outline alone.</param>
+    /// <param name="fill">The fill's colour, or <c>null</c> for the colour the shape is drawn with.</param>
+    public void Style(float border, float fillAlpha, Color? fill = null) => Style(new HudStyle(border, fillAlpha, fill));
+
     /// <summary>Sets the whole of the batch's captured state at once, so no draw inherits a stale value.</summary>
-    public void Style(float border, float fillAlpha, Color? fill = null, float glow = 0f, Color? glowColour = null, float dash = 0f, float gap = 0f, float phase = 0f, Color? gradientTo = null, Vector2? gradientAlong = null, float opacity = 1f, bool additive = false, bool textured = false)
+    public void Style(HudStyle style)
     {
-        Shapes.BorderWidth = border;
-        Shapes.Fill.Set(fill, fillAlpha);
-        Shapes.Glow.Set(glow, glowColour);
-        Shapes.Glow.Additive = additive;
-        Shapes.Dash.Set(dash, gap, phase);
-        Shapes.Gradient.Color = gradientTo;
-        Shapes.Gradient.Direction = gradientAlong ?? Vector2.UnitY;
-        Shapes.Opacity = opacity * Opacity;
-        Shapes.Textured = textured;
+        Shapes.BorderWidth = style.Border;
+        Shapes.Fill.Set(style.Fill, style.FillAlpha);
+        Shapes.Glow.Set(style.Glow, style.GlowColour);
+        Shapes.Glow.Additive = style.Additive;
+        Shapes.Dash.Set(style.Dash, style.Gap, style.Phase);
+        Shapes.Gradient.Color = style.GradientTo;
+        Shapes.Gradient.Direction = style.GradientAlong ?? Vector2.UnitY;
+        Shapes.Opacity = style.Opacity * Opacity;
+        Shapes.Textured = style.Textured;
     }
 
     /// <summary>Draws a label: moves it, sets its string and its colour.</summary>

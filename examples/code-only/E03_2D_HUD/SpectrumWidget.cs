@@ -23,7 +23,7 @@ public sealed class SpectrumWidget(ShipState ship) : HudWidget
             var height = MathF.Max(0.04f, plot.Height * bars[i]);
             var colour = bars[i] > Tall ? theme.Text : theme.For(HudRole.Engaged);
 
-            canvas.Style(0f, 0.9f, colour.WithAlpha(0.4f), gradientTo: colour);
+            canvas.Style(new HudStyle(0f, 0.9f, colour.WithAlpha(0.4f)) { GradientTo = colour });
             canvas.Box(new Vector2(bar.Center.X, plot.Bottom + height / 2f), new Vector2(bar.Width * 0.6f, height), colour);
         }
     }

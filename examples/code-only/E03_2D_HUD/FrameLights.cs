@@ -66,7 +66,7 @@ public sealed class FrameLights
         var breath = 0.75f + 0.25f * MathF.Sin(canvas.Time * 1.3f + position.X * 2f + position.Y * 3f);
         var fade = 1f - 0.6f * step / Longest;
 
-        canvas.Style(0f, 0.9f, colour, glow: 3f, glowColour: theme.Glow, opacity: breath * fade, additive: true);
+        canvas.Style(new HudStyle(0f, 0.9f, colour) { Glow = 3f, GlowColour = theme.Glow, Opacity = breath * fade, Additive = true });
         canvas.Shapes.DrawSolidCircle(position, Radius, colour);
     }
 }

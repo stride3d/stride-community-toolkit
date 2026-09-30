@@ -24,7 +24,7 @@ public sealed class SightWidget(ShipState ship) : HudWidget
         var theme = canvas.Theme;
         var glow = theme.GlowFor(HudRole.Navigation);
 
-        canvas.Style(HudCanvas.Thin, 0f, glow: 3f, glowColour: glow, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 3f, GlowColour = glow, Additive = true });
 
         // Four arcs read as a sight; a full ring reads as a target
         for (var i = 0; i < 4; i++)
@@ -32,7 +32,7 @@ public sealed class SightWidget(ShipState ship) : HudWidget
             canvas.Shapes.DrawArc(center, 0.42f, i * MathF.PI / 2f + 0.25f, MathF.PI / 2f - 0.5f, theme.Text);
         }
 
-        canvas.Style(0f, 1f, theme.Text, glow: 2.5f, glowColour: glow, additive: true);
+        canvas.Style(new HudStyle(0f, 1f, theme.Text) { Glow = 2.5f, GlowColour = glow, Additive = true });
         canvas.Shapes.DrawSolidCircle(center, 0.035f, theme.Text);
 
         canvas.Style(HudCanvas.Thin, 0f);
@@ -68,7 +68,7 @@ public sealed class SightWidget(ShipState ship) : HudWidget
             // Fades out towards the edge of the window rather than popping
             var fade = MathUtil.Clamp((window - MathF.Abs(offset)) / 0.5f, 0f, 1f);
 
-            canvas.Style(HudCanvas.Thin, 0f, dash: pitch > 0 ? 0f : 9f, gap: 6f, opacity: fade);
+            canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Dash = pitch > 0 ? 0f : 9f, Gap = 6f, Opacity = fade });
             canvas.Line(new Vector2(center.X - Arm - Gap, y), new Vector2(center.X - Gap, y), HudCanvas.Thin, colour);
             canvas.Line(new Vector2(center.X + Gap, y), new Vector2(center.X + Arm + Gap, y), HudCanvas.Thin, colour);
 
@@ -87,7 +87,7 @@ public sealed class SightWidget(ShipState ship) : HudWidget
         var center = bounds.Center + ship.TargetInSight * (bounds.Size / 2f - new Vector2(1.2f, 0.9f));
         var half = 0.5f + 0.05f * MathF.Sin(canvas.Time * 4f);
 
-        canvas.Style(HudCanvas.Thin, 0f, glow: 3f, glowColour: colour, additive: true);
+        canvas.Style(new HudStyle(HudCanvas.Thin, 0f) { Glow = 3f, GlowColour = colour, Additive = true });
 
         foreach (var side in (ReadOnlySpan<Vector2>)[new(-1f, -1f), new(-1f, 1f), new(1f, -1f), new(1f, 1f)])
         {

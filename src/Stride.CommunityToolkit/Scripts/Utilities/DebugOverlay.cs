@@ -409,10 +409,65 @@ public sealed class DebugOverlay : GameSystemBase
         _background ??= ScreenTextDrawer.CreateBackgroundTexture(device);
 
         var scale = EffectiveScale;
-        var fontSize = FontSize * scale;
+        var block = MeasureBlock(lines, font, scale);
+        var padding = new Vector2(MathF.Round(BackgroundPadding.X * scale), MathF.Round(BackgroundPadding.Y * scale));
+        var linePitch = LinePitch(block.Sizes, padding, scale);
+        var origin = GetOrigin(lines.Count * linePitch / scale, block.Width / scale);
 
-        // Measured rather than declared, so a section appearing or a dropdown expanding keeps the block
-        // anchored to its corner instead of running off the edge
+        BlockBounds = new RectangleF(origin.X * scale - padding.X, origin.Y * scale - padding.Y, block.Width + padding.X * 2f, lines.Count * linePitch);
+
+        var style = new ScreenTextStyle
+        {
+            Font = font,
+            FontSize = FontSize * scale,
+            Color = DefaultTextColor,
+            Anchor = TextAnchor.TopLeft,
+            Scale = 1f,
+            Opacity = 1f,
+            EnableBackground = false,
+            BackgroundColor = BackgroundColor.ToColor4(),
+            Padding = padding,
+            TextOffset = new Vector2(0f, MathF.Round(TextNudge)),
+        };
+
+        graphicsContext.CommandList.SetRenderTargetAndViewport(null, backBuffer);
+
+        _spriteBatch.Begin(graphicsContext,
+            sortMode: SpriteSortMode.Deferred,
+            blendState: BlendStates.AlphaBlend,
+            samplerState: null,
+            depthStencilState: DepthStencilStates.None);
+
+        // The origin is in unscaled pixels; at a 150% display scale it would land between two rows
+        var y = MathF.Round(origin.Y * scale);
+        var left = MathF.Round(origin.X * scale);
+
+        for (var i = 0; i < lines.Count; i++)
+        {
+            var position = new Vector2(left + (lines[i].Indented ? block.IndentWidth : 0f), y);
+
+            DrawLine(_spriteBatch, _background, lines[i], block.Prefixes[i], position, block.Sizes[i], style);
+
+            y += linePitch;
+        }
+
+        _spriteBatch.End();
+    }
+
+    /// <summary>What the lines measure at the current font and scale, in screen pixels.</summary>
+    /// <param name="Sizes">The size of each line's text, in whole pixels. Zero for a blank line.</param>
+    /// <param name="Prefixes">The marker and keys each line starts with.</param>
+    /// <param name="IndentWidth">How far a line under a collapsible title is moved in.</param>
+    /// <param name="Width">The width of the block.</param>
+    private readonly record struct BlockMeasure(Vector2[] Sizes, string[] Prefixes, float IndentWidth, float Width);
+
+    /// <summary>
+    /// Measures every line. Measured rather than declared, so a section appearing or a dropdown
+    /// expanding keeps the block anchored to its corner instead of running off the edge.
+    /// </summary>
+    private BlockMeasure MeasureBlock(List<TextElement> lines, SpriteFont font, float scale)
+    {
+        var fontSize = FontSize * scale;
         var sizes = new Vector2[lines.Count];
         var prefixes = new string[lines.Count];
         var blockWidth = 0f;
@@ -446,82 +501,47 @@ public sealed class DebugOverlay : GameSystemBase
         }
 
         _stickyWidth = Math.Max(_stickyWidth, blockWidth / scale);
-        blockWidth = _stickyWidth * scale;
 
-        var padding = new Vector2(MathF.Round(BackgroundPadding.X * scale), MathF.Round(BackgroundPadding.Y * scale));
+        return new BlockMeasure(sizes, prefixes, indentWidth, _stickyWidth * scale);
+    }
 
-        // Line pitch in screen pixels: fixed if asked for, otherwise what the font and strips need
+    /// <summary>Line pitch in screen pixels: fixed if asked for, otherwise what the font and strips need.</summary>
+    private float LinePitch(Vector2[] sizes, Vector2 padding, float scale)
+    {
+        if (LineHeight is { } fixedHeight) return MathF.Ceiling(fixedHeight * scale);
+
         var textHeight = 0f;
 
-        for (var i = 0; i < lines.Count; i++)
-            textHeight = Math.Max(textHeight, sizes[i].Y);
+        foreach (var size in sizes)
+            textHeight = Math.Max(textHeight, size.Y);
 
-        var linePitch = MathF.Ceiling(LineHeight is { } fixedHeight
-            ? fixedHeight * scale
-            : textHeight + padding.Y * 2f + LineSpacing * scale);
+        return MathF.Ceiling(textHeight + padding.Y * 2f + LineSpacing * scale);
+    }
 
-        var origin = GetOrigin(lines.Count * linePitch / scale, blockWidth / scale);
+    /// <summary>
+    /// Draws one line: one strip under the whole line, then the text in up to two runs, the marker
+    /// and keys in the key colour, and what they do in the line's own, starting where the keys end.
+    /// </summary>
+    private void DrawLine(SpriteBatch batch, Texture background, TextElement line, string prefix, Vector2 position, Vector2 size, ScreenTextStyle style)
+    {
+        // Blank entries exist to space sections apart; drawing them would be wasted work
+        if (prefix.Length + line.Text.Length == 0) return;
 
-        BlockBounds = new RectangleF(origin.X * scale - padding.X, origin.Y * scale - padding.Y, blockWidth + padding.X * 2f, lines.Count * linePitch);
-        var backgroundColor = BackgroundColor.ToColor4();
-        var drawBackground = BackgroundColor.A > 0;
+        var colour = line.Color ?? DefaultTextColor;
 
-        graphicsContext.CommandList.SetRenderTargetAndViewport(null, backBuffer);
+        style = style with { Color = colour };
 
-        _spriteBatch.Begin(graphicsContext,
-            sortMode: SpriteSortMode.Deferred,
-            blendState: BlendStates.AlphaBlend,
-            samplerState: null,
-            depthStencilState: DepthStencilStates.None);
+        if (BackgroundColor.A > 0) ScreenTextDrawer.DrawBackground(batch, background, position, size, style);
 
-        // The origin is in unscaled pixels; at a 150% display scale it would land between two rows
-        var y = MathF.Round(origin.Y * scale);
-        var left = MathF.Round(origin.X * scale);
-
-        for (var i = 0; i < lines.Count; i++)
+        if (prefix.Length > 0)
         {
-            var line = lines[i];
-            var prefix = prefixes[i];
+            var keyColour = KeyColor ?? Color.Lerp(colour, Color.White, 0.5f);
 
-            // Blank entries exist to space sections apart; drawing them would be wasted work
-            if (prefix.Length + line.Text.Length > 0)
-            {
-                var colour = line.Color ?? DefaultTextColor;
-                var position = new Vector2(left + (line.Indented ? indentWidth : 0f), y);
-
-                var style = new ScreenTextStyle
-                {
-                    Font = font,
-                    FontSize = fontSize,
-                    Color = colour,
-                    Anchor = TextAnchor.TopLeft,
-                    Scale = 1f,
-                    Opacity = 1f,
-                    EnableBackground = false,
-                    BackgroundColor = backgroundColor,
-                    Padding = padding,
-                    TextOffset = new Vector2(0f, MathF.Round(TextNudge)),
-                };
-
-                // One strip under the whole line, then the text in up to two runs: the marker and keys in
-                // the key colour, and what they do in the line's own, starting where the keys end
-                if (drawBackground) ScreenTextDrawer.DrawBackground(_spriteBatch, _background, position, sizes[i], style);
-
-                if (prefix.Length > 0)
-                {
-                    var keyColour = KeyColor ?? Color.Lerp(colour, Color.White, 0.5f);
-
-                    ScreenTextDrawer.Draw(_spriteBatch, null, prefix, position, sizes[i], style with { Color = keyColour });
-                    position.X += MathF.Round(font.MeasureString(prefix, fontSize).X);
-                }
-
-                if (line.Text.Length > 0) ScreenTextDrawer.Draw(_spriteBatch, null, line.Text, position, sizes[i], style);
-            }
-
-            y += linePitch;
+            ScreenTextDrawer.Draw(batch, null, prefix, position, size, style with { Color = keyColour });
+            position.X += MathF.Round(style.Font.MeasureString(prefix, style.FontSize).X);
         }
 
-        _spriteBatch.End();
+        if (line.Text.Length > 0) ScreenTextDrawer.Draw(batch, null, line.Text, position, size, style);
     }
 
     /// <inheritdoc />

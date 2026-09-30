@@ -65,7 +65,7 @@ public sealed class PowerWidget(ShipState ship) : HudWidget
             canvas.Style(HudCanvas.Thin, 0f);
             canvas.Line(middle, corners[i], HudCanvas.Thin, theme.Dim(HudRole.Frame));
 
-            canvas.Style(HudCanvas.Thin, 0.3f + 0.6f * focused, colour, 5f * focused, commanded, additive: true);
+            canvas.Style(new HudStyle(HudCanvas.Thin, 0.3f + 0.6f * focused, colour) { Glow = 5f * focused, GlowColour = commanded, Additive = true });
             canvas.Shapes.DrawSolidCircle(corners[i], 0.13f + 0.04f * hover, colour);
 
             // The top label sits above its corner, the other two under theirs
@@ -84,7 +84,7 @@ public sealed class PowerWidget(ShipState ship) : HudWidget
         canvas.HitDisc(balance, middle, 0.35f);
 
         // The setting itself
-        canvas.Style(0f, 1f, commanded, 6f, commanded, additive: true);
+        canvas.Style(new HudStyle(0f, 1f, commanded) { Glow = 6f, GlowColour = commanded, Additive = true });
         canvas.Shapes.DrawSolidCircle(dot, 0.1f, commanded);
     }
 
