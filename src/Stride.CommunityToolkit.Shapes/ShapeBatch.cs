@@ -56,7 +56,8 @@ public sealed partial class ShapeBatch : RenderObject
     // the stroke is not opaque: an opacity or a colour alpha below one, or an additive glow.
     private const int PolylineRunLength = 64;
 
-    // Scratch for closing a polyline, so a long run costs no allocation per frame
+    // Scratch for closing a polyline, so a long closed run costs no allocation per frame; an open
+    // run is read where the caller has it
     private readonly List<Vector2> _run = [];
     private readonly List<Vector3> _spaceRun = [];
 
@@ -371,20 +372,32 @@ public sealed partial class ShapeBatch : RenderObject
     {
         if (points.Length < 2) return;
 
-        _run.Clear();
+        var run = points;
 
-        foreach (var point in points) _run.Add(point);
+        // Only a closed run needs a copy, for the point that joins it back to its start
+        if (closed)
+        {
+            _run.Clear();
+            _run.AddRange(points);
+            _run.Add(points[0]);
 
-        if (closed) _run.Add(points[0]);
+            run = CollectionsMarshal.AsSpan(_run);
+        }
 
-        var run = CollectionsMarshal.AsSpan(_run);
+        const int stride = PolylineRunLength - 1;
+
+        var dashed = style.Dash.Length > 0f;
         var offset = 0f;
 
-        for (var start = 0; start + 1 < run.Length; start += PolylineRunLength - 1)
+        for (var start = 0; start + 1 < run.Length; start += stride)
         {
             var piece = run.Slice(start, Math.Min(PolylineRunLength, run.Length - start));
 
             Add(piece, plane, style, ShapeSlice.Whole with { Polyline = true, RunOffset = offset }, radius, 1f);
+
+            // Where the next piece starts along the run: only a dash pattern reads it, and only
+            // when there is a next piece
+            if (!dashed || start + stride + 1 >= run.Length) continue;
 
             for (var i = 0; i + 1 < piece.Length; i++) offset += Vector2.Distance(piece[i], piece[i + 1]);
         }
@@ -400,13 +413,16 @@ public sealed partial class ShapeBatch : RenderObject
     {
         if (points.Length < 2) return;
 
-        _spaceRun.Clear();
+        var run = points;
 
-        foreach (var point in points) _spaceRun.Add(point);
+        if (closed)
+        {
+            _spaceRun.Clear();
+            _spaceRun.AddRange(points);
+            _spaceRun.Add(points[0]);
 
-        if (closed) _spaceRun.Add(points[0]);
-
-        var run = CollectionsMarshal.AsSpan(_spaceRun);
+            run = CollectionsMarshal.AsSpan(_spaceRun);
+        }
 
         for (var start = 0; start + 1 < run.Length; start += PolylineRunLength - 1)
         {

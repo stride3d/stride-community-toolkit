@@ -44,7 +44,8 @@ public class ShapeBatchFeature : RootRenderFeature
 
     // The effect of every batch with a fill source, keyed by the batch: its own parameters carry
     // the textures, samplers and values the source generates keys for, and its own effect instance
-    // reloads when the composed source changes. Pruned in Flush when a batch drops its source.
+    // reloads when the composed source changes. Its source is generated once per frame, in
+    // Prepare, however many views draw the batch. Pruned in Flush when a batch drops its source.
     private readonly Dictionary<ShapeBatch, TexturedEffect> _textured = [];
 
     // Every batch's records and points for the frame, one after another
@@ -139,6 +140,10 @@ public class ShapeBatchFeature : RootRenderFeature
             _instances.AddRange(batch.Instances);
             _points.AddRange(batch.Points);
             _spacePoints.AddRange(batch.SpacePoints);
+
+            // A textured batch with something to draw gets its fill source generated here, once
+            // for every view that will draw it
+            if (batch.Instances.Count > 0 && batch.FillSource is { } fill) PrepareTextured(batch, fill, context.GraphicsDevice);
         }
 
         Upload(context, ref _instanceBuffer!, CollectionsMarshal.AsSpan(_instances));
@@ -167,14 +172,15 @@ public class ShapeBatchFeature : RootRenderFeature
         // palette only then, the way SpriteBatch picks its sRGB effect
         var linearOutput = context.GraphicsDevice.ColorSpace == ColorSpace.Linear ? 1u : 0u;
 
+        // For picking: the same for every batch this view draws
+        var inverseViewProjection = Matrix.Invert(renderView.ViewProjection);
+
         lock (_drawLock)
         {
             for (var index = startIndex; index < endIndex; index++)
             {
                 var renderNodeReference = renderViewStage.SortedRenderNodes[index].RenderNode;
                 var batch = (ShapeBatch)GetRenderNode(renderNodeReference).RenderObject;
-
-                var effect = EffectFor(batch, context.GraphicsDevice);
 
                 // A display at 150% has 1.5 physical pixels where a 100% one has one, so the same
                 // width in "pixels" needs 1.5 of them: fewer pixels per world unit, as the shader
@@ -190,13 +196,15 @@ public class ShapeBatchFeature : RootRenderFeature
 
                 if (windowView || batch.LastView is null)
                 {
-                    batch.LastView = new ShapeView(renderView.ViewProjection, Matrix.Invert(renderView.ViewProjection), renderView.ViewSize, pixelScale / displayScale, displayScale, cameraRight, cameraUp, eyePosition);
+                    batch.LastView = new ShapeView(renderView.ViewProjection, inverseViewProjection, renderView.ViewSize, pixelScale / displayScale, displayScale, cameraRight, cameraUp, eyePosition);
                 }
 
+                // The view above is taken even from an empty batch; nothing else is worth doing for one
                 if (batch.Instances.Count == 0) continue;
 
                 using var _ = context.QueryManager.BeginProfile(ProfileColor, ProfilingKey);
 
+                var effect = EffectFor(batch, context.GraphicsDevice);
 
                 effect.UpdateEffect(context.GraphicsDevice);
                 effect.Parameters.Set(ShapeShaderKeys.ViewProjection, renderView.ViewProjection);
@@ -278,25 +286,39 @@ public class ShapeBatchFeature : RootRenderFeature
                 textured.Dispose();
                 _textured.Remove(batch);
             }
+            else
+            {
+                textured.Prepared = false;
+            }
         }
     }
 
     /// <summary>
     /// The effect a batch draws with this frame: the shared plain one, or the batch's own with its
-    /// fill source composed in. The source is regenerated every frame - a handful of parameter
-    /// sets and one equality check - so a node's texture, scale or offset changed from code is
-    /// picked up next frame, and only a different composition reloads the effect.
+    /// fill source composed in, as <see cref="Prepare"/> left it.
     /// </summary>
     private DynamicEffectInstance EffectFor(ShapeBatch batch, GraphicsDevice graphicsDevice)
-    {
-        if (batch.FillSource is not { } fill) return _effect!;
+        => batch.FillSource is { } fill ? PrepareTextured(batch, fill, graphicsDevice) : _effect!;
 
+    /// <summary>
+    /// Generates a textured batch's fill source into its own effect, once per frame. The source is
+    /// regenerated every frame, so a node's texture, scale or offset changed from code is picked up
+    /// next frame, and only a different composition reloads the effect. It is a material generator
+    /// run, not just a few parameter sets, which is why an empty batch skips it and a batch drawn by
+    /// several views pays for it once.
+    /// </summary>
+    private DynamicEffectInstance PrepareTextured(ShapeBatch batch, IComputeColor fill, GraphicsDevice graphicsDevice)
+    {
         if (!_textured.TryGetValue(batch, out var textured))
         {
             textured = new TexturedEffect();
             textured.Effect.Initialize(Context.Services);
             _textured[batch] = textured;
         }
+
+        if (textured.Prepared) return textured.Effect;
+
+        textured.Prepared = true;
 
         // A fresh context each time hands out the same indexed keys, so the parameters of the
         // previous frame are overwritten rather than accumulated
@@ -322,6 +344,9 @@ public class ShapeBatchFeature : RootRenderFeature
         internal ParameterCollection Parameters { get; } = new();
 
         internal DynamicEffectInstance Effect { get; }
+
+        /// <summary>Whether the fill source has been generated this frame. Cleared in Flush.</summary>
+        internal bool Prepared { get; set; }
 
         public TexturedEffect()
         {

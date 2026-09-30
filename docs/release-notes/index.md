@@ -30,6 +30,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - `RemoveShapeBatch`: the removed batch stayed registered as the default, so shape components kept drawing into it. It also no longer publishes the removed batch's pick records. `Chart.Dispose` removes its own batch the same way.
 ### 🎨 Rendering
 
+- `ShapeBatch`: an open polyline is read from the caller's span with no scratch copy, and arc lengths are summed only for a dashed run of more than one piece.
+- `ShapeBatch`: a textured batch generates its fill source once per frame instead of once per view, and not at all when it has nothing to draw.
 ### ✨ Enhancement
 
 ### 📄 Docs
