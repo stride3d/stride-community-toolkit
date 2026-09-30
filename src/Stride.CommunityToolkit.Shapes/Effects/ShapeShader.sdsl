@@ -265,19 +265,11 @@ namespace Stride.CommunityToolkit.Shapes
                 axisY = CameraUp;
             }
 
-            // The quad needs a margin around the shape or a thick border is clipped at the edge.
-            // The border straddles the outline, so half its thickness has to fit outside, and the
-            // glow sits entirely outside it.
             float3 centerWorld = origin + worldCenter.x * axisX + worldCenter.y * axisY;
             float centerW = screen ? 1.0 : mul(float4(centerWorld, 1.0), ViewProjection).w;
-            float margin = 1.0 + max(0.1, (thickness + glow) * max(centerW, 0.0001));
 
-            float2 local = margin * streams.LocalPosition;
-
-            // Texture coordinates span the shape's bounding box in its own space, (0,0) at the top
-            // left, so an image fills a rectangle edge to edge and a disc gets its inscribed square.
-            // The quad's margin runs a little past 0..1, where the fill source's address mode decides
-            // what shows. Only a textured fill reads them; the loop is at most 64 points, per vertex.
+            // The shape's bounding box in its own space: the box of its points, grown by the
+            // rounding radius. The loop is at most 64 points, per vertex.
             float2 boxLow = float2(1e9, 1e9);
             float2 boxHigh = float2(-1e9, -1e9);
 
@@ -292,6 +284,25 @@ namespace Stride.CommunityToolkit.Shapes
             boxLow -= boxPad;
             boxHigh += boxPad;
 
+            // The quad is that box, not the square around it: a long line or a narrow column is
+            // rasterized as the strip it is, and the pixel stage is not run over the empty rest of
+            // a square. The field is still measured in the one isotropic space, so round corners
+            // and constant-width strokes are untouched. The points are centred, so the box is too.
+            float2 tight = max(boxHigh, -boxLow) * streams.LocalPosition;
+
+            // Around it, room for what lies outside the outline: half the border, the glow and the
+            // anti-aliasing ramp, with some to spare. They are pixel widths, so their size in local
+            // units grows with clip w; a corner further away than the centre needs more.
+            float2 cornerLocal = worldScale * tight + worldCenter;
+            float cornerW = screen ? 1.0 : mul(float4(origin + cornerLocal.x * axisX + cornerLocal.y * axisY, 1.0), ViewProjection).w;
+            float reach = (thickness + glow + 4.0 * pixelToLocal) * max(max(cornerW, centerW), 0.0001) * 1.25;
+
+            float2 local = tight + reach * streams.LocalPosition;
+
+            // Texture coordinates span the bounding box, (0,0) at the top left, so an image fills a
+            // rectangle edge to edge and a disc gets its inscribed square. The quad's margin runs a
+            // little past 0..1, where the fill source's address mode decides what shows. Only a
+            // textured fill reads them.
             float2 texCoord = (local - boxLow) / max(boxHigh - boxLow, 0.000001);
             // On the screen local Y already runs down, so the picture is upright as it is
             streams.TexCoord = float2(texCoord.x, screen ? texCoord.y : 1.0 - texCoord.y);
