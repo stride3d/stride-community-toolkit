@@ -1,18 +1,44 @@
 name: .NET Build Test
 
+# Builds every library and runs the unit tests, in the configuration the release workflow uses.
+# It runs on a pull request that touches what the libraries or the tests are built from, so a
+# failure that only shows on a runner is found in the pull request and not at release time.
+
+permissions:
+  contents: read
+
 env:
   PROJECTS: |
     src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
     src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
     src/Stride.CommunityToolkit.Bullet/Stride.CommunityToolkit.Bullet.csproj
     src/Stride.CommunityToolkit.DebugShapes/Stride.CommunityToolkit.DebugShapes.csproj
+    src/Stride.CommunityToolkit.Effects/Stride.CommunityToolkit.Effects.csproj
     src/Stride.CommunityToolkit.ImGui/Stride.CommunityToolkit.ImGui.csproj
     src/Stride.CommunityToolkit.Shapes/Stride.CommunityToolkit.Shapes.csproj
     src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
     src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
     src/Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj
+  TEST_PROJECT: tests/Stride.CommunityToolkit.Tests/Stride.CommunityToolkit.Tests.csproj
+
 on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/Stride.CommunityToolkit.Tests/**'
+      - 'tests/Directory.Build.*'
+      # The test project references this example
+      - 'examples/code-only/E20_3D_CubeCollapse/**'
+      - 'examples/Directory.Build.*'
+      - 'build/HostRuntime.*'
+      - 'Directory.Build.props'
+      - '.github/workflows/dotnet-build-test.yml'
   workflow_dispatch:
+
+# A newer push to the same pull request replaces the run in progress
+concurrency:
+  group: build-test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -29,10 +55,24 @@ jobs:
 
     - name: Build projects
       run: |
+        set -eo pipefail
         IFS=$'\n'
         for project in $PROJECTS; do
-          echo "Building $project"
+          project="${project//$'\r'/}"
+          echo "::group::$project"
           dotnet restore "$project"
-          dotnet build "$project" --no-restore
+          dotnet build "$project" --no-restore -c Release
+          echo "::endgroup::"
         done
       shell: bash
+
+    - name: Test
+      run: dotnet test ${{ env.TEST_PROJECT }} -c Release --logger "trx;LogFileName=tests.trx" --results-directory TestResults
+
+    - name: Upload the test results
+      if: failure()
+      uses: actions/upload-artifact@v7
+      with:
+        name: test-results
+        path: TestResults
+        if-no-files-found: ignore

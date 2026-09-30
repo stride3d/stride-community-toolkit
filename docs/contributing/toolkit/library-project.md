@@ -16,7 +16,7 @@
    - Update `docs/docfx.json` to include the new `.csproj` so the [API documentation](../../api/index.md) is generated for the library.
 5. Update CI/CD workflows
    - Add the project to:
-     - `.github/workflows/dotnet-build-test.yml` (`PROJECTS`) - otherwise CI never builds it
+     - `.github/workflows/dotnet-build-test.yml` (`PROJECTS`) - otherwise pull requests never build it
      - `.github/workflows/dotnet-nuget.yml` (`PACK_PROJECTS`) - otherwise it is never published
 6. Update the local package feed
    - Add the project to the `projects` array in [`build/pack-local.cs`](building.md), which mirrors
