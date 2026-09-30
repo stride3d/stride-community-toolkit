@@ -97,6 +97,44 @@ public class ShapeBatchSubmissionTests
         Assert.Equal(1f, upper.Y + rectangle.Radius, 3);
     }
 
+    [Theory]
+    [InlineData(false, 64, 64, 4)]
+    [InlineData(true, 64, 64, 5)]
+    public void LongPolylineIsSplitIntoPiecesThatShareAPoint(bool closed, int first, int second, int third)
+    {
+        var batch = new ShapeBatch();
+        var points = new Vector2[130];
+
+        for (var i = 0; i < points.Length; i++) points[i] = new Vector2(i, i % 2);
+
+        batch.DrawPixelPolyline(points, 2f, Color.White, closed);
+
+        Assert.Equal([first, second, third], batch.Instances.Select(instance => instance.Count));
+
+        // The caller's points are read, not kept
+        Assert.Equal(130, points.Length);
+        Assert.Equal(new Vector2(129f, 1f), points[^1]);
+    }
+
+    [Theory]
+    [InlineData(false, 64, 64, 4)]
+    [InlineData(true, 64, 64, 5)]
+    public void LongSpacePolylineIsSplitIntoPiecesThatShareAPoint(bool closed, int first, int second, int third)
+    {
+        var batch = new ShapeBatch();
+        var points = new Vector3[130];
+
+        for (var i = 0; i < points.Length; i++) points[i] = new Vector3(i, i % 2, i * 0.5f);
+
+        batch.DrawPixelPolyline(points, 2f, Color.White, closed);
+
+        Assert.Equal([first, second, third], batch.Instances.Select(instance => instance.Count));
+        Assert.Equal(first + second + third, batch.SpacePoints.Count);
+
+        // A piece starts on the point the one before it ended on
+        Assert.Equal(batch.SpacePoints[first - 1], batch.SpacePoints[first]);
+    }
+
     [Fact]
     public void DiscardedBatchIsEmptyAndAnswersNoPick()
     {
