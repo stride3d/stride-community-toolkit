@@ -42,7 +42,7 @@ public sealed class ShapeComponent : ActivableEntityComponent
     public static readonly float Inherit = -1f;
 
     /// <summary>
-    /// The shape outline in local space, counter-clockwise, at most 8 corners. May be swapped or
+    /// The shape outline in local space, counter-clockwise. May be swapped or
     /// edited at runtime; the next frame draws the new outline. A single vertex with
     /// <see cref="Radius"/> set draws a circle; two vertices with a radius draw a capsule.
     /// </summary>

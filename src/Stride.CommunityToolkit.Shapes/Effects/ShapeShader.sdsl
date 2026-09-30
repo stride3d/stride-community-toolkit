@@ -102,7 +102,7 @@ namespace Stride.CommunityToolkit.Shapes
 
         cbuffer PerDraw
         {
-            // Every batch of the frame shares the two buffers; these say where this batch's
+            // Every batch of the frame shares the three buffers; these say where this batch's
             // records and points start. The instance id counts from 0 for every draw.
             stage uint InstanceBase;
             stage uint PointBase;
@@ -148,8 +148,7 @@ namespace Stride.CommunityToolkit.Shapes
                 float pixelsPerUnit = PixelScale * ScreenScale;
                 float2 low = float2(1e9, 1e9);
                 float2 high = float2(-1e9, -1e9);
-                float nearestW = 1e9;
-                float nearestDepth = 1.0;
+                float nearestDepth = 1e9;
                 float widest = 0.0;
 
                 for (int k = 0; k < data.Count; ++k)
@@ -163,11 +162,9 @@ namespace Stride.CommunityToolkit.Shapes
                     high = max(high, ndc);
                     widest = max(widest, spacePoint.w * pixelsPerUnit / w);
 
-                    if (w < nearestW)
-                    {
-                        nearestW = w;
-                        nearestDepth = pointClip.z / w;
-                    }
+                    // The smallest depth, not the smallest w: under an orthographic projection every
+                    // w is 1, and the first point's depth would stand for the whole run
+                    nearestDepth = min(nearestDepth, pointClip.z / w);
                 }
 
                 float thicknessPx = data.AxisX.w * ScreenScale;
@@ -432,8 +429,8 @@ namespace Stride.CommunityToolkit.Shapes
             }
             borderColor = ToTarget(borderColor, linearTarget);
 
-            // Perspective term: near shapes have a large w, far ones a small one, so the same pixel
-            // width maps to more or fewer world units with distance
+            // Perspective term: near shapes have a small w, far ones a large one, so the same pixel
+            // width maps to fewer or more world units with distance
             float localPerPixel = streams.FragPosition.w * clipW;
             float localPerPixelCentre = streams.FragPosition.w * streams.CentreW;
             float thickness = streams.FragScale.z * clipW;
@@ -463,7 +460,9 @@ namespace Stride.CommunityToolkit.Shapes
                 {
                     float along = SpacePolylineAlong(pixel, spaceOffset, count, ViewProjection, ViewSize);
 
-                    s = max(s, SdDashAlong(along, data.Dash.x, data.Dash.x + data.Dash.y, 1.0, data.Dash.z));
+                    // The run is measured in physical pixels and the pattern is in scaled ones, like the
+                    // stroke's width: the display's scale is the ratio between them
+                    s = max(s, SdDashAlong(along, data.Dash.x, data.Dash.x + data.Dash.y, ScreenScale, data.Dash.z));
                 }
             }
             else if (roundCaps && count == 1)
@@ -571,9 +570,10 @@ namespace Stride.CommunityToolkit.Shapes
             // Soft depth fade: how far in front of the scene's surface this fragment sits, in world
             // units, against the distance the shape asked for. A disc on an uneven floor fades where
             // the floor rises through it instead of cutting off; a marker crossing a wall dissolves
-            // into it. Both depths go through the same reconstruction, so their difference is a
-            // distance whatever the projection. A fragment behind the surface fades to nothing, which
-            // on an overlay batch is a soft depth test of its own.
+            // into it. Both depths go through the same perspective reconstruction, so their
+            // difference is a distance in world units under a perspective camera; under an
+            // orthographic one it is not. A fragment behind the surface fades to nothing, which on
+            // an overlay batch is a soft depth test of its own.
             float depthFade = data.Gradient.w;
 
             if (depthFade > 0.0 && DepthAvailable != 0)
@@ -584,7 +584,14 @@ namespace Stride.CommunityToolkit.Shapes
                 blended *= smoothstep(0.0, 1.0, (sceneDistance - ownDistance) / depthFade);
             }
 
-            blended.rgb = Dither(blended.rgb, Bayer(streams.ShadingPosition.xy), linearTarget);
+            // Only where the shape paints something. The blend adds the colour as it is, so noise on
+            // a fragment that came out empty - outside the outline, in a dash gap, faded to nothing -
+            // would be added to the target all the same. An additive glow has colour and no alpha,
+            // hence the test on all four channels.
+            if (any(blended > 0.0))
+            {
+                blended.rgb = Dither(blended.rgb, Bayer(streams.ShadingPosition.xy), linearTarget);
+            }
 
             streams.ColorTarget = blended;
             streams.Depth = depth;

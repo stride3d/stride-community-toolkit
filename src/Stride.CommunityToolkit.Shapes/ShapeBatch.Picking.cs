@@ -181,6 +181,19 @@ public sealed partial class ShapeBatch
         _pickSpacePoints.Clear();
     }
 
+    /// <summary>Drops this frame's records and the ones a pick is answered from, and forgets the view.</summary>
+    private void DiscardPicks()
+    {
+        _picks.Clear();
+        _pickPoints.Clear();
+        _pickSpacePoints.Clear();
+        _lastPicks.Clear();
+        _lastPickPoints.Clear();
+        _lastPickSpacePoints.Clear();
+
+        LastView = null;
+    }
+
     private bool Test(in ShapePickRecord record, in ShapeView view, Vector2 screenPosition, float slackPixels, out ShapeHit hit)
     {
         if (record.Slice.Space) return TestSpace(record, view, screenPosition, slackPixels, out hit);
@@ -255,7 +268,7 @@ public sealed partial class ShapeBatch
         var worldPerPixel = view.WorldPerPixel(point);
         var reach = (0.5f * record.BorderWidth + slackPixels) * worldPerPixel;
 
-        if (distance > reach) return false;
+        if (!(distance <= reach)) return false;
 
         hit = new ShapeHit(record.Tag, point, local, distance, view.Depth(point));
 
@@ -294,7 +307,7 @@ public sealed partial class ShapeBatch
         var distance = ShapeDistance.SdShape(local, points, record.Slice, record.Radius, record.Slice.RingWidth) * record.Scale;
         var reach = 0.5f * record.BorderWidth + slackPixels;
 
-        if (distance > reach) return false;
+        if (!(distance <= reach)) return false;
 
         hit = new ShapeHit(record.Tag, point, local, distance, -1f);
 
@@ -313,7 +326,7 @@ public sealed partial class ShapeBatch
         // The border is in scaled pixels; the run was measured in physical ones
         var reach = (0.5f * record.BorderWidth + slackPixels) * view.ScreenScale;
 
-        if (distance > reach) return false;
+        if (!(distance <= reach)) return false;
 
         hit = new ShapeHit(record.Tag, nearest, Vector2.Zero, distance / view.ScreenScale, depth);
 

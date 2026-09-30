@@ -7,7 +7,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// captures its values as it is made.
 /// </summary>
 /// <remarks>
-/// The glow lies outside the shape only, never under the fill or the border, and fades out
+/// The glow shows outside the shape only - it is composed under the fill and the border, so there is no seam where they meet - and fades out
 /// quadratically from the border's outer edge over <see cref="Width"/> pixels - constant at any
 /// distance, like the border. For a
 /// stroke-only ring or arc the shape is the stroke, so the glow sits on both sides of it, which is

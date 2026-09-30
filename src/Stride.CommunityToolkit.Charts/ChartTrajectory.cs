@@ -13,8 +13,9 @@ namespace Stride.CommunityToolkit.Charts;
 /// Points are clipped to the chart's ranges the way <see cref="Chart.Plot"/> clips a function: a segment
 /// that leaves the chart ends exactly on the edge, and when the path comes back the trail resumes from the
 /// edge as a separate run. On a flat chart the trail is a stroke, resubmitted each frame from the recorded
-/// points; on a 3D chart it may leave the chart plane, so it is a ribbon mesh grown in place until the
-/// shape batch can stroke a space curve. Call <see cref="Add"/> from the game thread.
+/// points; on a 3D chart it may leave the chart plane, so it is a ribbon mesh grown in place. The shape
+/// batch can stroke a space curve, but the charts do not use that path. Call <see cref="Add"/> from the
+/// game thread.
 /// </remarks>
 public sealed class ChartTrajectory : ChartSeries
 {

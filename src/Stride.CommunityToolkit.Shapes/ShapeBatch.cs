@@ -52,8 +52,8 @@ public sealed partial class ShapeBatch : RenderObject
 
     // A polyline longer than this is split into runs that share an end point. The pixel stage
     // tests every segment of a run for every fragment of its quad, so the cap bounds the cost of a
-    // very long run; where two runs meet, the shared round cap is drawn twice, which shows only
-    // under an opacity below one.
+    // very long run; where two runs meet, the shared round cap is drawn twice, which shows wherever
+    // the stroke is not opaque: an opacity or a colour alpha below one, or an additive glow.
     private const int PolylineRunLength = 64;
 
     // Scratch for closing a polyline, so a long run costs no allocation per frame
@@ -61,9 +61,13 @@ public sealed partial class ShapeBatch : RenderObject
     private readonly List<Vector3> _spaceRun = [];
 
     /// <summary>
-    /// How many shapes have been submitted so far this frame. Resets to zero once the batch is
+    /// How many records have been submitted so far this frame. Resets to zero once the batch is
     /// drawn, so read it after your own submissions and before the frame ends.
     /// </summary>
+    /// <remarks>
+    /// A record is what the GPU draws as one instance. Most draw calls submit one; a polyline of
+    /// more than 64 points submits one per piece, and a wire box one per edge.
+    /// </remarks>
     public int Count => Instances.Count;
 
     /// <summary>
@@ -126,6 +130,10 @@ public sealed partial class ShapeBatch : RenderObject
     /// default; where a compositor turns that off the fade has nothing to read and the shape keeps
     /// its hard cut. On an overlay batch a fragment behind the surface fades to nothing too, which
     /// makes the fade a soft depth test of its own.
+    /// </para>
+    /// <para>
+    /// The distance is in world units under a perspective camera. Under an orthographic camera the
+    /// fade is much stronger than the figure asks for.
     /// </para>
     /// </remarks>
     public float DepthFade { get; set; }
@@ -273,6 +281,18 @@ public sealed partial class ShapeBatch : RenderObject
         HandOverPicks();
     }
 
+    /// <summary>
+    /// Empties the batch without publishing anything: what was submitted is dropped, and a pick has
+    /// nothing to answer from until the batch is drawn again. For a batch taken out of rendering.
+    /// </summary>
+    internal void Discard()
+    {
+        Instances.Clear();
+        Points.Clear();
+        SpacePoints.Clear();
+        DiscardPicks();
+    }
+
     /// <summary>A stroke with no area: a hollow band of zero depth, which is what a ring or an arc is.</summary>
     private static readonly ShapeSlice Stroke = new(Hollow: true, RingWidth: 0f, StartAngle: 0f, SweepAngle: 0f, RoundCaps: false);
 
@@ -412,9 +432,13 @@ public sealed partial class ShapeBatch : RenderObject
     /// </summary>
     private void Add(ReadOnlySpan<Vector2> vertices, in ShapePlane plane, in ShapeStyle style, in ShapeSlice slice, float radius, float scale)
     {
-        var placed = Placed(plane, style);
         if (vertices.Length < 1)
             throw new ArgumentException("A shape needs at least one vertex.", nameof(vertices));
+
+        // A shape scaled to nothing, or by something that is not a number, has nothing to draw
+        if (!(scale > 0f) || !float.IsFinite(scale) || !float.IsFinite(radius)) return;
+
+        var placed = Placed(plane, style);
 
         // A pixel-measured radius is converted to world units on the GPU, at the shape's own
         // depth, and the scale with it - which only works out when there is nothing else to scale
@@ -436,8 +460,14 @@ public sealed partial class ShapeBatch : RenderObject
         // The radius reaches beyond the furthest point either way, so radius plus half the widest
         // extent is the half-size of the square that holds the outline; the border and glow
         // get their room from the vertex stage's margin
-        var localScale = radius + 0.5f * MathF.Max(extent.X, extent.Y);
-        var invScale = 1f / MathF.Max(localScale, 0.000001f);
+        // Never zero: the shader divides by it. A shape with no extent - a circle of radius zero, a
+        // run whose points coincide - is then a dot the width of its border, which is what a
+        // stroke of no length is.
+        var localScale = MathF.Max(radius + 0.5f * MathF.Max(extent.X, extent.Y), 0.000001f);
+
+        if (!float.IsFinite(localScale)) return;
+
+        var invScale = 1f / localScale;
 
         var offset = Points.Count;
 

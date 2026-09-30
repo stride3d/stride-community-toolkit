@@ -21,6 +21,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🐞 Bug Fixes
 
+- `ShapeBatch`: a `DrawLine` shorter than its width took the current fill instead of drawing solid.
+- `ShapeBatch`: a circle of radius zero, or a polyline whose points coincide, uploaded a zero scale that the shader divided by. Such a shape is now a dot the width of its border. A scale of zero or less, or a value that is not a number, draws nothing.
+- `ShapeBatch.DrawRectangle`: a corner radius above half the smaller side enlarged the rectangle. The radius is now limited to that half.
+- `ShapeBatch`: dashes on space strokes (`DrawPolyline` and `DrawPixelPolyline` with 3D points) did not follow the display scale.
+- `ShapeBatch`: a space stroke under an orthographic camera was clipped whole when its first point lay beyond the far plane.
+- `ShapeBatch`: the dither added faint noise to pixels a shape left empty, such as the area around its outline or a dash gap.
+- `RemoveShapeBatch`: the removed batch stayed registered as the default, so shape components kept drawing into it. It also no longer publishes the removed batch's pick records. `Chart.Dispose` removes its own batch the same way.
 ### 🎨 Rendering
 
 ### ✨ Enhancement

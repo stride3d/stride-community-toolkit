@@ -65,9 +65,9 @@ public sealed partial class ShapeBatch
     /// The stroke is measured on screen: every point is projected and the run is stroked in pixels,
     /// so it narrows with distance the way a rope does while <see cref="BorderWidth"/> stays a
     /// constant pixel width, and it faces the camera from every angle with no geometry behind it.
-    /// A run of more than 64 points is split into pieces that share a point; each piece depth-tests
-    /// as its nearest point, and <see cref="Dash"/> restarts its pattern at each piece. A run that
-    /// crosses the camera's near plane is not supported.
+    /// Every fragment is depth-tested at its own depth along the run. A run of more than 64 points
+    /// is split into pieces that share a point, and <see cref="Dash"/> restarts its pattern at each
+    /// piece. A run that crosses the camera's near plane is not supported.
     /// </remarks>
     public void DrawPolyline(ReadOnlySpan<Vector3> points, float width, Color color, bool closed = false)
         => AddSpacePolyline(points, SolidStyle(color), MathF.Max(width, 0.0001f) * 0.5f, closed);
@@ -111,7 +111,10 @@ public sealed partial class ShapeBatch
         // Shorter than it is wide: the round caps have swallowed the segment, so it is just a dot
         if (length <= lineRadius * 2f)
         {
-            DrawBillboardCircle(center, lineRadius, color);
+            // Solid like the line it stands in for, whatever the current fill says
+            Add([Vector2.Zero],
+                new ShapePlane(center, Vector3.UnitX, Vector3.UnitY, PlaneMode.Screen),
+                SolidStyle(color), ShapeSlice.Whole, lineRadius, 1f);
 
             return;
         }
