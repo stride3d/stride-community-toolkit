@@ -16,11 +16,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎉 New Features
 
+- `Buffer.SetDataPinned(commandList, span)` in `Stride.CommunityToolkit.Graphics`: uploads a span with its memory pinned for the call, for data held in an array or a list.
 - `MaterialDescriptors.Overlay(colour, intensity)` and `game.CreateOverlayMaterial(colour, intensity)`: an unlit translucent colour with the colour's alpha as the opacity, for zones, placement previews and markers over the scene.
 - `TextureLoader.FromPixels(device, pixels, width, height, options)`: makes a texture from pixels computed in code, prepared by role and with mipmaps, like a loaded file.
 
 ### 🐞 Bug Fixes
 
+- `ShapeBatch`, `BufferedEntityInstancing` and the charts' ribbon lines uploaded managed arrays through an engine path that, on Direct3D 11, does not pin them. A garbage collection during the upload could corrupt it. They now upload through the new `Buffer.SetDataPinned` extension.
 - `ShapeBatch`: a `DrawLine` shorter than its width took the current fill instead of drawing solid.
 - `ShapeBatch`: a circle of radius zero, or a polyline whose points coincide, uploaded a zero scale that the shader divided by. Such a shape is now a dot the width of its border. A scale of zero or less, or a value that is not a number, draws nothing.
 - `ShapeBatch.DrawRectangle`: a corner radius above half the smaller side enlarged the rectangle. The radius is now limited to that half.
@@ -56,7 +58,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🔧 Engineering
 
-- NDepend: the remaining issues are cleared. Members of internal types are declared `internal` or `private`, two complex methods gained comments, and the baseline rules ND1104 and ND1105 are switched off, as the project does not compare against a baseline.
+- NDepend: the remaining issues are cleared. Members of internal types are declared `internal` or `private`, and two complex methods gained comments.
 - NDepend critical rules: `DebugOverlay.Draw` is split into measure and draw steps, the galleries' index board is its own class (`GalleryBoard`), and three example helpers take a settings value instead of a long parameter list (`HudStyle` in `E03_2D_HUD`, `PlumeShape` and `SmokeLook` in `E09_3D_Particles_Gallery`). No public API changed.
 - The **.NET Build Test** workflow runs on pull requests that touch `src`, the test project or the build files. It builds every library and runs the unit tests in Release, as the release workflow does. It also builds `Stride.CommunityToolkit.Effects`, which was missing from its list.
 - Removed the repository's `Directory.Build.targets`, which replaced Stride's `StrideSortItems` task to silence CS0162. Stride builds newer than 4.4.0-beta8 do not raise the warning.

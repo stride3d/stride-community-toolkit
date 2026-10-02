@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Graphics;
 using Stride.Engine;
 using Stride.Graphics;
 using Buffer = Stride.Graphics.Buffer;
@@ -157,8 +158,9 @@ public class BufferedEntityInstancing : InstancingUserBuffer, IInstancing, IDisp
             return;
         }
 
-        InstanceWorldBuffer!.SetData(commandList, (ReadOnlySpan<Matrix>)_gather.WorldMatrices.AsSpan(0, count));
-        InstanceWorldInverseBuffer.SetData(commandList, (ReadOnlySpan<Matrix>)_gather.WorldInverseMatrices.AsSpan(0, count));
+        // Pinned: see SetDataPinned for what the engine's Direct3D 11 upload does with an unpinned array
+        InstanceWorldBuffer!.SetDataPinned(commandList, (ReadOnlySpan<Matrix>)_gather.WorldMatrices.AsSpan(0, count));
+        InstanceWorldInverseBuffer.SetDataPinned(commandList, (ReadOnlySpan<Matrix>)_gather.WorldInverseMatrices.AsSpan(0, count));
 
         _needUpload = false;
         UploadSkippedLastFrame = false;

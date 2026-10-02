@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Graphics;
 using Stride.Core.Mathematics;
 using Stride.Games;
 using Stride.Graphics;
@@ -276,7 +277,8 @@ internal sealed class GrowingPolyline : IDisposable
             return;
 
         var commandList = _game.GraphicsContext.CommandList;
-        _vertexBuffer.SetData(commandList, (ReadOnlySpan<VertexPositionNormalTexture>)CollectionsMarshal.AsSpan(_vertices));
-        _indexBuffer.SetData(commandList, (ReadOnlySpan<int>)CollectionsMarshal.AsSpan(_indices));
+        // Pinned: see SetDataPinned for what the engine's Direct3D 11 upload does with an unpinned array
+        _vertexBuffer.SetDataPinned(commandList, (ReadOnlySpan<VertexPositionNormalTexture>)CollectionsMarshal.AsSpan(_vertices));
+        _indexBuffer.SetDataPinned(commandList, (ReadOnlySpan<int>)CollectionsMarshal.AsSpan(_indices));
     }
 }
