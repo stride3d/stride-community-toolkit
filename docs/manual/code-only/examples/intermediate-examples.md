@@ -20,6 +20,7 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Ship HUD](hud.md): A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file.
 - [Spatial Sound](spatial-sound.md): 3D positional audio for a runtime sound: a looping pad on an orb that circles a pillar, heard from the camera.
 - [Collision Group](collision-group.md): Two players and an enemy, where the players collide with each other but the enemy passes through both.
+- [Cube Fountain](cube-fountain.md): A fountain of cubes, spheres and cylinders that runs on the physics clock.
 - [Collision Layer](collision-layer.md): The same players-and-enemy scene as the collision group example, solved the other way.
 - [Box2D Joints](box2d-joints.md): Every Box2D joint, one rig each, in a row you can pull on: a hinge pendulum with a motor and a limit, a slider on a spring, a wheel on a suspension, a rope of distance joints, a soft weld and a motor joint that springs its box back home.
 - [Box2D Car](box2d-car.md): A car on two wheel joints over hilly terrain: the wheel joint pins the wheel, lets it turn, springs it along the suspension axis with a travel limit, and drives it with a motor whose speed is the throttle and whose zero is the brake.
