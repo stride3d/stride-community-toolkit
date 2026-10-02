@@ -47,6 +47,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- `E05_3D_Cloth`: the solver comment had Bepu's `SolveDescription(8, 1)` backwards; it is eight velocity iterations in one substep, where the example runs eight substeps. The text now says so, and that either works.
+- `E02_3D_SyncScript`: the script drove its kinematic body with `SetTargetPose` from a per-frame `Update`, the pattern the toolkit's guidance warns against. It now sets a velocity, like `E02_3D_GiveMeACube`, and starts on its circle.
 - A sweep of every code-only example: typos, comments and metadata that contradicted the code, clearer names, dead code, and small bugs. The bugs: a collected coin drawn again in `E02_2D_EasingInGame`; degrees passed as radians in `E02_3D_Primitives`; a material appended per click in `E04_CubeClicker`; entities removed while enumerating in both `E04_StrideUI_DragAndDrop` examples; resets that built a second scene on top of the first in `E05_3D_Grabber` and `E05_3D_Constraints`; an extra capsule in `E05_2D_FallingShapes`; unequal masses in `E06_Box2D_Explosion`; normals that were not unit length in the `E07` cylinder and torus meshes; batches short by up to 69 bodies in both `E10_2D_StressPile` examples; a sound instance leaked per chime in `E12_Audio_Spatial`; a key bound twice in `E13_SignalR`; repeat-click on the left shift key only in `E20_3D_CubeCollapse`; and buffers or textures that were never released in five examples.
 - `E05_3D_Car`: the ramp, the pillars and the crates collide as they are drawn. The pillars are now 3 m tall, as their colliders always were.
 - `E11_2D_Charts` and `E11_3D_Charts`: the key help uses the overlay's key format.

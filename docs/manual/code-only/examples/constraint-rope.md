@@ -41,4 +41,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Constraints_Rope).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Constraints_Rope/Program.cs?start=1&end=225)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Constraints_Rope/Program.cs?start=1&end=223)]

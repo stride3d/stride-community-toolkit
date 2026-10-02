@@ -26,8 +26,8 @@ using Stride.Rendering;
 // Three sheets hang side by side, differing only in stiffness and whether they have area
 // constraints; a fourth drapes itself over a ball. Every node is drawn by one instanced master, so
 // about eleven hundred bodies cost one draw call. The solver runs eight substeps, set through
-// UseGameSettings before the game starts - cloth is exactly the kind of stiff, connected system
-// that substepping is for.
+// UseGameSettings before the game starts: cloth is exactly the kind of stiff, connected system
+// that needs more solver work than the default, and substeps are one of the two ways to buy it.
 //
 // Pull on any sheet with the left mouse button; N drops a ball onto the draped one; R rebuilds;
 // Z opens a menu of node sizes. The sheets keep their dimensions and the spacing follows the
@@ -57,8 +57,12 @@ ushort nextGroupId = 1;
 
 using var game = new Game();
 
-// Eight substeps: the demo's SolveDescription(8, 1). The engine reads this while it initialises,
-// so it has to come from the settings, before Run.
+// Eight substeps and one velocity iteration. Bepu's ClothDemo takes the other road: its
+// SolveDescription(8, 1) is eight velocity iterations in one substep - the first argument is the
+// iteration count. Either holds these sheets; Bepu's stability tips offer both as the remedy for a
+// stiff system, and substeps also shorten the time step, which helps fast motion. Swap the two
+// numbers to compare. The engine reads this while it initialises, so it has to come from the
+// settings, before Run.
 game.UseGameSettings(settings =>
 {
     var bepu = settings.GetOrCreateConfiguration<BepuConfiguration>();
@@ -392,7 +396,7 @@ description:
     every triangle against shear, and collision groups keeping neighbours from fighting. Three
     sheets hang side by side to compare stiffness with and without area constraints, a fourth
     drapes over a ball, about eleven hundred nodes are one instanced draw call, and the solver runs eight
-    substeps set through UseGameSettings. Pull on anything with the grabber, and pick the node
+    substeps set through UseGameSettings, where Bepu's demo runs eight velocity iterations instead. Pull on anything with the grabber, and pick the node
     size from a menu: the sheets keep their dimensions, so smaller nodes mean a denser lattice
     with finer folds and a higher body count.
 concepts:
@@ -400,7 +404,7 @@ concepts:
   - "A distance limit with a low minimum: the sheet can bunch but not stretch"
   - Area constraints against shear, and what a sheet looks like without them
   - Keeping neighbouring nodes from colliding with CollisionGroup's index rule
-  - Solver substeps for a stiff connected system, set through UseGameSettings
+  - Solver substeps or velocity iterations for a stiff connected system, set through UseGameSettings
   - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
   - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds"
   - "Using helpers: SetupBase3D, Add3DGround, GrabberScript, DebugOverlay, DebugTextDropdown"
