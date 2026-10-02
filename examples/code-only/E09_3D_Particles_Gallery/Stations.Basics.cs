@@ -12,7 +12,7 @@ namespace E09_3D_Particles_Gallery;
 public static class BasicStations
 {
     /// <summary>
-    /// The original example, unchanged in spirit: fifty particles a second launched upward from a
+    /// The original example, unchanged in spirit: particles launched upward from a
     /// small area and pulled back by gravity. One spawner, three initializers, one updater. The
     /// variation is the spawn rate, so the same fountain is a trickle or a torrent.
     /// </summary>

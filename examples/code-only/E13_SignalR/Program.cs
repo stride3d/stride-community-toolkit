@@ -25,7 +25,8 @@ using Stride.Input;
 // other console: E13_SignalR_Blazor, then open its page.
 //
 // Keys: 1 2 3 release small, medium, large - SPACE random - B batch of ten - C clear - X shake -
-// T scheme list, then 1-5, or click a scheme on the board. Right-drag and WASD fly the camera.
+// T scheme list, then 1-5, or click a scheme on the board. Left-drag carries a container, R turns
+// it. Right-drag and WASD fly the camera.
 
 const float HeartbeatSeconds = 1f;
 
@@ -125,7 +126,6 @@ void Start(Scene scene)
     };
 
     // The overlay keeps only what is genuinely keyboard help; everything else is on the boards.
-    // Bottom-left is the one corner with nothing behind it.
     var overlay = DebugOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Station", OverlayLines);
@@ -206,12 +206,13 @@ IReadOnlyList<TextElement> OverlayLines()
     lines.AddRange(console.MenuLines());
     lines.AddRange(
     [
-        new(["1 - 3"], "Drop a container of that size", Color.Gold),
+        new(["1", "2", "3"], "Drop a container of that size", Color.Gold),
         new("Space", "Drop a random one", Color.Gold),
         new("B", "Drop a batch", Color.Gold),
         new("C", "Clear the deck", Color.Gold),
         new("X", "Shake", Color.Gold),
         new("Click", "Pick a scheme", Color.Gold),
+        new("Left drag", "Carry a container; R turns it", Color.Gold),
     ]);
 
     return lines;

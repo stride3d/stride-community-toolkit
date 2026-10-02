@@ -4,7 +4,7 @@ using Stride.Rendering;
 namespace E09_3D_RootRendererShader.Renderers;
 
 /// <summary>
-/// The per-frame snapshot the render feature draws from: <see cref="RibbonRenderBackgroundProcessor"/>
+/// The per-frame snapshot the render feature draws from: <see cref="RibbonBackgroundRenderProcessor"/>
 /// copies the component's values onto it each frame, and
 /// <see cref="RibbonBackgroundRenderFeature"/> reads them back out into the shader's parameters.
 /// </summary>

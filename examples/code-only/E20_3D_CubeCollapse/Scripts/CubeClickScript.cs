@@ -118,7 +118,7 @@ public class CubeClickScript : AsyncScript
     /// is also the camera controller's speed modifier, so holding it moves the camera faster too.
     /// </remarks>
     private bool IsClicking()
-        => Input.IsKeyDown(Keys.LeftShift) && Input.IsMouseButtonDown(MouseButton.Left)
+        => (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift)) && Input.IsMouseButtonDown(MouseButton.Left)
         || Input.IsMouseButtonPressed(MouseButton.Left);
 
 /// <summary>

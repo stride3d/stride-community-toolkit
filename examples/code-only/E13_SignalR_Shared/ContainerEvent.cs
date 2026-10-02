@@ -2,7 +2,7 @@ namespace E13_SignalR_Shared;
 
 /// <summary>
 /// One thing that happened to one container. The same shape reports a release, a landing and a
-/// loss; <see cref="Position"/> and <see cref="AirTime"/> are only known once it has landed.
+/// loss; <see cref="Position"/> is set for a landing and a loss, <see cref="AirTime"/> for a landing only.
 /// </summary>
 public sealed record ContainerEvent(
     int Id,

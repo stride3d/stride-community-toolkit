@@ -13,7 +13,7 @@ using Stride.UI.Panels;
 
 using var game = new Game();
 
-// A tall window for the 9 by 9 grid of 1000-pixel tiles. This runs before the device exists;
+// A tall window for the 9 by 9 grid, 1000 pixels square. This runs before the device exists;
 // game.Window.SetSize(...) inside Start would resize an already-created window, which also works
 // but shows a flash at the default size first. The rendering settings a Game Studio project
 // carries (DefaultBackBufferWidth and Height through game.UseGameSettings) are not enough on their

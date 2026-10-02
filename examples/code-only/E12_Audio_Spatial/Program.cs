@@ -39,6 +39,9 @@ WavSound? pad = null;
 WavSound? chime = null;
 AudioListener? listener = null;
 SoundInstance? padInstance = null;
+
+// Every chime that is still sounding, so each can be disposed when it has finished
+var chimes = new List<SoundInstance>();
 Entity? orb = null;
 SoundEmitterScript? emitter = null;
 
@@ -61,20 +64,20 @@ void Start(Scene scene)
     game.SetCameraPosition(new Vector3(0, 2.2f, -4));
     game.SetCameraRotation(new Vector3(180, -10, 0));
 
-    var pillar = game.Create3DPrimitive(PrimitiveModelType.Cylinder, new()
+    // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
+    // and its height in Z
+    var pillar = game.Create3DPrimitive(PrimitiveModelType.Cylinder, new Primitive3DEntityOptions
     {
-        Size = new Vector3(0.6f, 2.5f, 0.6f),
+        Size = new Vector3(0.3f, 0f, 2.5f),
         Material = game.CreateMaterial(new Color(150, 150, 160)),
-        IncludeCollider = false,
         Position = new Vector3(0, 1.25f, 0),
     });
     pillar.Scene = scene;
 
-    orb = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    orb = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
     {
         Size = new Vector3(0.6f),
         Material = game.CreateMaterial(new Color(255, 120, 60)),
-        IncludeCollider = false,
     });
     orb.Scene = scene;
 
@@ -131,7 +134,19 @@ void Update(Scene scene, Stride.Games.GameTime time)
         var instance = chime.CreateInstance(spatialized: true, useHrtf: hrtf, listener: listener);
         instance.Apply3D(emitter.Emitter);
         instance.Play();
+
+        chimes.Add(instance);
     }
+
+    // A finished instance still holds a native source: dispose it once it reports Stopped
+    chimes.RemoveAll(instance =>
+    {
+        if (instance.PlayState != PlayState.Stopped)
+            return false;
+
+        instance.Dispose();
+        return true;
+    });
 
     if (orbiting)
         angle += OrbitSpeed * (float)time.Elapsed.TotalSeconds;

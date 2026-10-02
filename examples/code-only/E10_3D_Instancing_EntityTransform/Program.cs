@@ -11,7 +11,7 @@ using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
 
-// Example21 showed instancing at its simplest: one entity, an array of matrices, no behaviour.
+// E10_3D_Instancing showed instancing at its simplest: one entity, an array of matrices, no behaviour.
 // This one keeps the entities.
 //
 // Every falling body here is a real Entity with a real TransformComponent and a real Bepu
@@ -273,7 +273,7 @@ Entity CreateStockInstancedItem(InstancingComponent master)
 }
 
 /// <summary>
-/// A body for one of the toolkit masters to draw: the physics body with its
+/// A body for one of the masters to draw: the physics body with its
 /// <see cref="ModelComponent"/> taken back off, which is the whole point of the example.
 /// </summary>
 Entity CreateInstancedItem(string name)
@@ -398,7 +398,7 @@ description:
     porovnat čtyři druhy těles: vlastní InstancingEntityTransform ze Stride, žádný instancing,
     BepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu přestanou pracovat, jakmile
     Bepu uspí tělesa, což u usazené hromady 20 000 kostek zvýší snímkovou frekvenci z 239 na 329.
-    Jediný řádek na začátku přepne celou hromadu na libovolnou jinou primitivní tvar.
+    Jediný řádek na začátku přepne celou hromadu na libovolný jiný primitivní tvar.
 concepts:
   - Combining physics bodies with instanced rendering
   - Comparing four instancing strategies side by side at runtime

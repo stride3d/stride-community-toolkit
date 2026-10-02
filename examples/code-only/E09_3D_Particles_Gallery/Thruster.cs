@@ -204,7 +204,7 @@ public static class Exhaust
     // A core quad is this many times longer than wide for every unit of speed
     private const float CoreLength = 0.22f;
 
-    // A particle's texture is soft: on average it covers about a third of its quad
+    // How much of its quad a particle's soft texture effectively covers, tuned by eye
     private const float Coverage = 0.03f;
 
     /// <summary>

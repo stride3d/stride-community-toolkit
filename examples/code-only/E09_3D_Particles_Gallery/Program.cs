@@ -41,6 +41,9 @@ using var game = new Game();
 
 game.Run(start: Start, update: Update);
 
+// The textures loaded in Start are this example's own: released once the game has ended
+textures?.Dispose();
+
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;

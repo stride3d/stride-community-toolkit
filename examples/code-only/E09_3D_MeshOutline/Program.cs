@@ -93,8 +93,7 @@ concepts:
   - Building a MutablePipelineState and applying a DynamicEffectInstance
   - Inflating a mesh along its normals in a shader
   - Skipping render stages that bind no render target
-  - "Using helpers: SetupBase3DScene"
-  - "Using helpers: AddSkybox"
+  - "Using helpers: SetupBase3DScene, AddSkybox"
 tags:
   - 3D
   - Rendering

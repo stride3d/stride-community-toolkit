@@ -54,7 +54,7 @@ public class ScorePopupScript : SyncScript
 
         var progress = Math.Clamp(_elapsed / Duration, 0f, 1f);
 
-        // Ease out: nearly all of the rise is spent in the first third of the time
+        // Ease out: more than half of the rise happens in the first third of the time
         var rise = MathUtilEx.Interpolate(0f, RiseDistance, progress, EasingFunction.QuadraticEaseOut);
 
         Entity.Transform.Position = _startPosition + new Vector3(HorizontalDrift * progress, rise, 0);

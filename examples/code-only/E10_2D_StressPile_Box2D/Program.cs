@@ -25,8 +25,11 @@ using Stride.Rendering;
 // of two Models - shapes cannot be mixed. Changing shape therefore clears and respawns the pile, while
 // changing the layout or the batch size only affects what is spawned next.
 
-Vector3 wallHeight = new(1, 65, 1);
+Vector3 wallSize = new(1, 65, 1);
 const float WallWidth = 100;
+
+// A body further than this from the pile, sideways or below, has escaped and is removed
+const float EscapeDistance = 70f;
 const float SpawnHeight = 150;
 const float ColumnWidth = WallWidth - 30;
 
@@ -119,8 +122,8 @@ void Start(Scene rootScene)
     // one here; the grabber picks on the XY plane the bodies live in.
     game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
 
-    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallHeight);
-    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallHeight);
+    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
+    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);
     // The ramps overlap deeply at the middle: with a shallow overlap, pressure from the pile
     // squeezes boxes through the crack where they meet and fires them out at high speed
     CreateWall(new Vector3(-23.27f, -47.6f, 0), new Vector3(62.3f, 1, 1), MathUtil.DegreesToRadians(-30));
@@ -316,19 +319,20 @@ void SpawnBatch(int count)
     if (layout == SpawnLayout.Grid)
     {
         var perRow = (int)ColumnWidth;
-        var rows = Math.Max(1, count / perRow);
 
-        for (var i = 0; i < rows; i++)
+        // One loop over the count, so the batch is exactly as large as asked for: whole rows, then
+        // a last row that is only partly filled
+        for (var i = 0; i < count; i++)
         {
-            for (var j = 0; j < perRow; j++)
-            {
-                // Box2D copes with a regular lattice, but the jitter is kept from the Bepu version:
-                // perfectly aligned columns balance on each other instead of toppling into a pile
-                Spawn(new Vector3(
-                    (j - perRow / 2f) * 1.2f + Jitter(),
-                    SpawnHeight + i * 1.2f + Jitter(),
-                    0));
-            }
+            var row = i / perRow;
+            var column = i % perRow;
+
+            // Box2D copes with a regular lattice, but the jitter is kept from the Bepu version:
+            // perfectly aligned columns balance on each other instead of toppling into a pile
+            Spawn(new Vector3(
+                (column - perRow / 2f) * 1.2f + Jitter(),
+                SpawnHeight + row * 1.2f + Jitter(),
+                0));
         }
     }
     else
@@ -426,7 +430,7 @@ void DespawnEscaped()
     {
         var position = b2Body_GetPosition(bodyIds[i]);
 
-        if (MathF.Abs(position.X) < 70f && position.Y > -70f) continue;
+        if (MathF.Abs(position.X) < EscapeDistance && position.Y > -EscapeDistance) continue;
 
         var entity = bodies[i];
 

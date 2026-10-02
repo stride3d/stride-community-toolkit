@@ -182,13 +182,13 @@ void Start(Scene rootScene)
 
     overlay.AddSection("Chart", () =>
     [
-        new("CHART"),
-        new($"Press G to toggle the grid ({(chart.Options.Grid.Visible ? "on" : "off")})", Color.Yellow),
-        new($"Press T to {(tangent is null ? "restore" : "remove")} the tan curve", Color.Yellow),
-        new($"Press L to toggle the legend ({(chart.Options.Legend.Visible ? "on" : "off")})", Color.Yellow),
-        new($"Press Space to throw the ball (trail: {trail.Count}/{trail.Capacity} points)", Color.Yellow),
-        new($"Press A to {(animate ? "pause" : "resume")} the wave (k = {waveFrequency:0.00})", Color.Yellow),
-        new($"Press V for the {(showcase ? "chart" : "showcase")} look (glow {chart.Options.Series.Glow:0.0})", Color.Yellow),
+        new("G", $"Grid {(chart.Options.Grid.Visible ? "on" : "off")}", Color.Yellow),
+        new("T", tangent is null ? "Restore the tan curve" : "Remove the tan curve", Color.Yellow),
+        new("L", $"Legend {(chart.Options.Legend.Visible ? "on" : "off")}", Color.Yellow),
+        new("Space", $"Throw the ball (trail {trail.Count}/{trail.Capacity})", Color.Yellow),
+        new("A", $"{(animate ? "Pause" : "Resume")} the wave (k = {waveFrequency:0.00})", Color.Yellow),
+        new("V", $"The {(showcase ? "chart" : "showcase")} look (glow {chart.Options.Series.Glow:0.0})", Color.Yellow),
+        new(""),
         new($"{chart.Series.Count} series: {string.Join(", ", chart.Series.Select(s => s.Name))}"),
     ]);
 }

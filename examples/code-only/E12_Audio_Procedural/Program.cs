@@ -20,7 +20,7 @@ using Stride.Media;
 // second.
 //
 // The callback runs on the audio worker thread, not the game thread. Everything it reads from the
-// game - waveform, frequency, mute - is a single int or float, which .NET writes atomically, so
+// game - waveform, frequency, mute - is a single int, float or bool, which .NET writes atomically, so
 // no lock is needed; the phase it keeps between calls belongs to the audio thread alone.
 
 const float MinFrequency = 55f;
@@ -53,10 +53,9 @@ void Start(Scene scene)
     game.SetCameraRotation(new Vector3(180, -12, 0));
 
     // Something to look at: the orb swells with the signal level.
-    orb = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    orb = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
     {
         Material = game.CreateMaterial(new Color(255, 170, 60)),
-        IncludeCollider = false,
         Position = new Vector3(0, 1.5f, 0),
     });
     orb.Scene = scene;

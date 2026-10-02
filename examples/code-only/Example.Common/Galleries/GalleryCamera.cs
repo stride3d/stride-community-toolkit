@@ -18,8 +18,7 @@ namespace Example.Common.Galleries;
 /// </remarks>
 public sealed class GalleryCamera(Game game)
 {
-    /// <summary>How long a flight from one pose to another takes, in seconds.</summary>
-    /// <summary>How long a flight between stations takes; a flight home may ask for longer.</summary>
+    /// <summary>How long a flight between stations takes, in seconds; a flight home may ask for longer.</summary>
     public const float FlightDuration = 1.5f;
 
     // Where the camera set off from, where it is going, and how far along it is. An elapsed time
@@ -35,11 +34,7 @@ public sealed class GalleryCamera(Game game)
     /// <summary>Whether the camera is flying itself somewhere rather than being steered.</summary>
     public bool Flying => _elapsed < _duration;
 
-    /// <summary>Sends the camera to a pose, eased, or puts it there at once.</summary>
-    /// <param name="position">Where the camera ends up.</param>
-    /// <param name="rotation">Which way it looks when it gets there.</param>
-    /// <param name="instant">Put it there at once, rather than flying it.</param>
-    /// <summary>Flies the camera to a pose, or puts it there.</summary>
+    /// <summary>Flies the camera to a pose, eased, or puts it there at once.</summary>
     /// <param name="position">Where to end up.</param>
     /// <param name="rotation">How to face on arrival.</param>
     /// <param name="instant">Put the camera there at once, rather than flying it.</param>

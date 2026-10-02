@@ -10,7 +10,7 @@ namespace Example.Common.Galleries;
 /// <remarks>
 /// A gallery makes one of these per exhibit and fills the frame in; an example that needs more on
 /// a station - a batch to draw through, a particle system to restart - derives from it and adds
-/// what it needs, and the gallery's <c>Configure</c> callback sets it before the exhibit's setup runs.
+/// what it needs, and the gallery's <c>configure</c> callback sets it before the exhibit's setup runs.
 /// </remarks>
 public class GalleryStation
 {

@@ -29,8 +29,8 @@ public static class EntityNames
     /// <summary>The axis gizmo that shows which way X, Y and Z run.</summary>
     public const string OrientationGizmo = "OrientationGizmo";
 
-    /// <summary>Colliderless reference cube. See the orientation-aids note in the plan.</summary>
-    public const string ReferenceCube = "ReferenceCube";
+    /// <summary>What the name of every falling letter starts with; the letter itself follows.</summary>
+    public const string LetterPrefix = "Letter";
 
     /// <summary>One line of the 3D game-over menu, so a restart can find and remove them.</summary>
     public const string GameOverMenu = "GameOverMenu";

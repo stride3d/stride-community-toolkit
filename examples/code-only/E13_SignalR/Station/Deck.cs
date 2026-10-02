@@ -43,11 +43,10 @@ public sealed class Deck(ContainerFactory factory)
 
     public event Action<int>? Cleared;
 
-    public int OnDeck => _containers.Count;
 
     public int PendingCount => _pending.Count;
 
-    /// <summary>The live container with this id, or <see langword="null"/> once it has landed for good or been lost.</summary>
+    /// <summary>The live container with this id, or <see langword="null"/> once it has been lost or cleared.</summary>
     public Container? Find(int id) => _containers.Find(container => container.Id == id);
 
     /// <summary>Drops one container now. Unspecified size or paint is chosen at random.</summary>

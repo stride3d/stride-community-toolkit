@@ -40,9 +40,9 @@ void Start(Scene rootScene)
 
     for (int i = -count / 2; i < count / 2; i++)
     {
-        foreach (var (index, primitive2) in primitives.Index())
+        foreach (var (index, primitive) in primitives.Index())
         {
-            var entity = game.Create2DPrimitive(primitive2, new()
+            var entity = game.Create2DPrimitive(primitive, new()
             {
                 Material = game.CreateFlatMaterial(random.NextColor()),
             });

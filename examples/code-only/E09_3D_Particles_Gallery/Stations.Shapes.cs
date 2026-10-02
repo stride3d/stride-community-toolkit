@@ -102,7 +102,7 @@ public static class ShapeStations
         s.Place(new Vector3(0f, 2f, 0f), emitter);
     }
 
-    /// <summary>Moves the station's emitter round a circle, for the ribbon and the comet.</summary>
+    /// <summary>Moves the station's emitter round a circle, for the ribbon.</summary>
     public static void Circle(ParticleStation s)
     {
         if (s.Entity is null) return;
@@ -161,7 +161,7 @@ public static class ShapeStations
 
     /// <summary>
     /// Quads with a rotation in three dimensions, so a falling leaf tumbles rather than spinning
-    /// flat on the screen. A random quaternion per particle, a fixed one, or none.
+    /// flat on the screen. A random quaternion per particle, or one of two fixed ones.
     /// </summary>
     public static void Orientation(ParticleStation s)
     {

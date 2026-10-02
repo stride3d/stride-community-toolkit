@@ -7,6 +7,7 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Input;
 using Stride.Rendering;
 using Stride.Rendering.Colors;
 using Stride.Rendering.Images;
@@ -76,9 +77,9 @@ public sealed class StationScene(Game game)
 
         game.Add3DCamera();
 
-        // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
-        var grabber = new GrabberScript();
-        game.GetCameraEntity().Add(grabber);
+        // Left mouse grabs a container, the wheel changes the carry distance, R + mouse turns it.
+        // R and not the grabber's default T: T opens the scheme list here
+        game.GetCameraEntity().Add(new GrabberScript { RotateKey = Keys.R });
 
         // The sun from high on the camera's side, so shadows fall back towards the bulkhead and
         // stay short. The default lights from behind the station and lays the bulkhead's shadow

@@ -5,8 +5,8 @@ using Stride.Particles.Initializers;
 namespace E09_3D_Particles_Gallery;
 
 /// <summary>
-/// An initializer of our own: new particles start on a ring in the emitter's XY plane, evenly
-/// spaced by spawn order, moving along the ring. What a portal, a halo or a magic circle needs and
+/// An initializer of our own: new particles start on a ring in the emitter's XY plane, placed
+/// around it by their random seed, moving along the ring. What a portal, a halo or a magic circle needs and
 /// none of the engine's initializers gives, in thirty lines.
 /// </summary>
 public sealed class RingInitializer : ParticleInitializer

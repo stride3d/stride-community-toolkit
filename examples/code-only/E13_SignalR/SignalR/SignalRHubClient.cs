@@ -185,10 +185,6 @@ public sealed class SignalRHubClient : IAsyncDisposable
     /// </summary>
     public async Task EnsureStartedAsync(CancellationToken ct = default)
     {
-        if (Connection is null)
-        {
-            throw new InvalidOperationException("Connection is not initialized.");
-        }
 
         // Stopping is terminal for this client - StopAsync is followed by DisposeAsync - so a start
         // arriving afterwards is a race, not a request. Returning is right; throwing would only move
@@ -213,7 +209,7 @@ public sealed class SignalRHubClient : IAsyncDisposable
                 // hub would otherwise print this line every second or two for the whole session.
                 _logger?.LogDebug("Starting SignalR connection to {Url}...", _hubUrl);
 
-                await Connection!.StartAsync(ct).ConfigureAwait(false);
+                await Connection.StartAsync(ct).ConfigureAwait(false);
 
                 _logger?.LogInformation("SignalR connected. State={State}, ConnectionId={ConnectionId}", Connection.State, Connection.ConnectionId);
             }
