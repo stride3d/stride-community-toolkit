@@ -254,6 +254,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E02_3D_Material_Gallery:E02_3D_Material_Gallery.RuntimeTextures", Scope = "deep", Justification = "Seeded noise for textures made in code - ripples, flakes, brushed streaks; the same texture every run.")]
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E03_2D_HUD:E03_2D_HUD.FrameLights", Scope = "deep", Justification = "Seeded count and phase of the decorative lights around the HUD frame.")]
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E20_2D_Pong:E20_2D_Pong.Ball", Scope = "deep", Justification = "The angle of a serve, a few degrees up or down.")]
+[assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E05_3D_CubeFountain:E05_3D_CubeFountain.CubeFountain", Scope = "deep", Justification = "Seeded scatter of each cube's launch velocity and spin; the same fountain every run.")]
 [assembly: SuppressMessage("NDepend", "ND3101:DontUseSystemRandomForSecurityPurposes", Target = "E10_3D_ComputeBoids:BoidsSimulation", Scope = "deep", Justification = "Seeded starting positions and headings for the flock; the seed is what makes the golden image reproducible.")]
 
 // --- Examples: helper types that live beside top-level statements -------------------------------

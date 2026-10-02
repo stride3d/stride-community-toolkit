@@ -49,6 +49,7 @@
     <Project Path="examples/code-only/E05_3D_Constraints_Motors/E05_3D_Constraints_Motors.csproj" />
     <Project Path="examples/code-only/E05_3D_Constraints_Rope/E05_3D_Constraints_Rope.csproj" />
     <Project Path="examples/code-only/E05_3D_Constraints_Simple/E05_3D_Constraints_Simple.csproj" />
+    <Project Path="examples/code-only/E05_3D_CubeFountain/E05_3D_CubeFountain.csproj" />
     <Project Path="examples/code-only/E05_3D_FirstPersonCharacter/E05_3D_FirstPersonCharacter.csproj" />
     <Project Path="examples/code-only/E05_3D_Grabber/E05_3D_Grabber.csproj" />
     <Project Path="examples/code-only/E05_3D_MultipleSimulations/E05_3D_MultipleSimulations.csproj" />

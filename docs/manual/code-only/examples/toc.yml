@@ -65,7 +65,7 @@
     href: dpi-aware.md
   - name: Game - Pong
     href: pong.md
-- name: C# Intermediate (36)
+- name: C# Intermediate (37)
   href: intermediate-examples.md
   items:
   - name: Procedural Geometry
@@ -92,6 +92,8 @@
     href: spatial-sound.md
   - name: Collision Group
     href: collision-group.md
+  - name: Cube Fountain
+    href: cube-fountain.md
   - name: Collision Layer
     href: collision-layer.md
   - name: Box2D Joints
