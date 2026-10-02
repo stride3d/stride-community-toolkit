@@ -19,7 +19,7 @@ using static Box2D.NET.B2Shapes;
 //
 // Rendering works exactly like the Box2D testbed: no meshes, no materials, no entities - every
 // shape is submitted each frame to the toolkit's ShapeBatch, whose shader (a port of the
-// testbed's solid_polygon shader) draws all of them in one instanced call, computing the 60%-alpha
+// testbed's solid_polygon shader) draws all of them in one instanced call, computing the 40%-alpha
 // fill and the pixel-constant border per fragment. Zoom and resize cost nothing; overlapping
 // shapes blend through each other; body states show as the testbed's colours - pale green statics,
 // pink awake, salmon fast-movers, gray sleepers, royal blue pusher - on its dark gray background.
@@ -328,7 +328,7 @@ description:
     target transform once per fixed step. Rendering works exactly like the Box2D testbed: no meshes,
     materials or entities - every shape is submitted each frame to the toolkit's ShapeBatch,
     whose shader (a port of the testbed's solid_polygon shader) draws them all in one instanced
-    call with the 60%-alpha fill and pixel-constant border computed per fragment. Body states show
+    call with the 40%-alpha fill and pixel-constant border computed per fragment. Body states show
     as the testbed's colours - pink awake, salmon fast-movers, gray sleepers.
   cs: |-
     Věrná replika ukázky BenchmarkJunkyard z Box2D.NET: 8 000 malých pětiúhelníkových kamenů prší

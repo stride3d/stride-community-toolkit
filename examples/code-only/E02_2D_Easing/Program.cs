@@ -388,9 +388,8 @@ description:
     vzorcem a závodem s lineárním pohybem; rodiny ease-in, ease-out a in-out lze filtrovat. Tahák,
     který běží.
 concepts:
-  - EasingFunction and Easing - every curve by name and by direct call
-  - The fluent extensions - function.Ease(t) and function.Interpolate(start, end, t)
-  - Why the dispatcher clamps time and the raw curves do not
+  - EasingFunction - every curve by name
+  - The fluent extension function.Ease(t)
   - Ease-in, ease-out and in-out families, and what overshoot looks like in motion
   - A 2D ShapeBatch scene with pixel polylines, discs and a dashed reference line
   - Screen-space labels with EntityTextComponent, and DebugOverlay for the keys

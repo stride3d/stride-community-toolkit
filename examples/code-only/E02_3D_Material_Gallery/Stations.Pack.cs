@@ -161,7 +161,7 @@ public static class PackMaterials
     private static MaterialNormalMapFeature Normal(MaterialTextures t, string path) => new(Recipes.Colour(t.Normal(path))) { ScaleAndBias = true, IsXYNormal = true };
 }
 
-// The last two stations: the pack as a whole, and one material with every slot filled.
+// Two of the closing stations: the pack as a whole, and one material with every slot filled.
 public static class PackStations
 {
     /// <summary>

@@ -22,15 +22,15 @@ public static class HudShapes
     /// <summary>A rectangle with its corners cut at 45 degrees, the HUD's panel shape, as one convex polygon.</summary>
     public static void ChamferedPanel(this HudCanvas canvas, Vector2 center, Vector2 size, float cut, Color colour)
     {
-        var w = size.X / 2f;
-        var h = size.Y / 2f;
+        var halfWidth = size.X / 2f;
+        var halfHeight = size.Y / 2f;
 
-        cut = MathF.Min(cut, MathF.Min(w, h));
+        cut = MathF.Min(cut, MathF.Min(halfWidth, halfHeight));
 
         ReadOnlySpan<Vector2> corners =
         [
-            new(-w + cut, -h), new(w - cut, -h), new(w, -h + cut), new(w, h - cut),
-            new(w - cut, h), new(-w + cut, h), new(-w, h - cut), new(-w, -h + cut),
+            new(-halfWidth + cut, -halfHeight), new(halfWidth - cut, -halfHeight), new(halfWidth, -halfHeight + cut), new(halfWidth, halfHeight - cut),
+            new(halfWidth - cut, halfHeight), new(-halfWidth + cut, halfHeight), new(-halfWidth, halfHeight - cut), new(-halfWidth, -halfHeight + cut),
         ];
 
         canvas.Shapes.DrawSolidPolygon(corners, center, 0f, colour);

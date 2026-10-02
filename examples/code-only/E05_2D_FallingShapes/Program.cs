@@ -24,7 +24,7 @@ void Start(Scene rootScene)
     otherShape.Transform.Position = new Vector3(0.2f, 4f, 0);
     otherShape.Scene = rootScene;
 
-    for (int i = 0; i <= ShapeCount; i++)
+    for (int i = 0; i < ShapeCount; i++)
     {
         var shape = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
         {
@@ -44,7 +44,7 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: falling-shapes-2d
 title:
-  en: Basic2D Scene (Falling Shapes)
+  en: Basic 2D Scene (Falling Shapes)
   cs: Základní 2D scéna (Padající tvary)
 level: Beginner
 category: Physics
@@ -62,7 +62,7 @@ description:
 concepts:
   - Creating a 2D primitive with Create2DPrimitive
   - Applying a flat material with CreateFlatMaterial
-  - Setting an entity position through primitive options
+  - Setting an entity position through Transform.Position
   - Adding entities to a Scene (rootScene)
   - "Using helpers: SetupBase2DScene"
 tags:

@@ -102,7 +102,8 @@ void BuildPartialTorusMesh(MeshBuilder meshBuilder, float cylinderRadius, float 
             double xr = cylinderRadius * Math.Cos(tTheta) * Math.Sin(tPhi);
             double zr = cylinderRadius * Math.Cos(tTheta) * Math.Cos(tPhi);
 
-            var tNorm = new Vector3((float)xr, (float)yr, (float)zr);
+            // A normal has length 1: the direction out from the tube's centre line
+            var tNorm = Vector3.Normalize(new Vector3((float)xr, (float)yr, (float)zr));
             var tPos = new Vector3((float)(xc + xr), (float)yr, (float)(zc + zr));
 
             meshBuilder.AddVertex();

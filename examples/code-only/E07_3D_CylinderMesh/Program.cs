@@ -117,7 +117,8 @@ static void CreateRingVertices(MeshBuilder meshBuilder, int segments, float radi
 
         meshBuilder.AddVertex();
         meshBuilder.SetElement(position, new Vector3(x, y, zPosition));
-        meshBuilder.SetElement(normal, new Vector3(x, y, 0));
+        // A normal has length 1: the direction out from the axis, without the radius
+        meshBuilder.SetElement(normal, new Vector3(x, y, 0) / radius);
     }
 }
 

@@ -104,7 +104,7 @@ Material FromDescriptor(Color colour, float glossiness, float metalness)
             MicroSurface = new MaterialGlossinessMapFeature(new ComputeFloat(glossiness)),
             Specular = new MaterialMetalnessMapFeature(new ComputeFloat(metalness)),
             // The engine's microfacet model at its defaults; its environment term is a lookup texture the
-            // engine ships as an asset, which is why Material.New below is given the content manager
+            // engine ships as an asset, which is why this Material.New call is given the content manager
             SpecularModel = new MaterialSpecularMicrofacetModelFeature(),
         },
     });

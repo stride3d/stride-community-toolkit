@@ -52,8 +52,8 @@ public sealed class CommsWidget : HudWidget
             var y = content.Top - (i + 0.5f - slide) * Pitch;
 
             // Older lines are dimmer, the top one fades out and the incoming one fades in
-            var age = 0.55f + 0.45f * (i - slide) / lines;
-            var alpha = i == 0 ? age * (1f - slide) : i == lines ? slide : age;
+            var brightness = 0.55f + 0.45f * (i - slide) / lines;
+            var alpha = i == 0 ? brightness * (1f - slide) : i == lines ? slide : brightness;
 
             canvas.Text(new(Name, "speaker", i), line.Speaker, new Vector2(content.Left, y), HudText.Caption.Left, SpeakerColour(line).WithAlpha(alpha));
             canvas.Text(new(Name, "message", i), line.Text, new Vector2(content.Left + SpeakerColumn, y), HudText.Body, MessageColour(canvas.Theme, line).WithAlpha(alpha));

@@ -11,7 +11,7 @@ using Stride.Rendering;
 // rebuilt as solid geometry every frame.
 //
 // LetterMeshFactory makes letters that are MESHES: real extruded geometry that catches the light,
-// takes a material, casts onto the scene like any other model - and could carry a physics body and
+// takes a material, casts a shadow onto the scene like any other model - and could carry a physics body and
 // tumble (E20_3D_CubeCollapse drops its GAME OVER that way). The price is that only the
 // characters someone has authored exist; see LetterMeshFactory.SupportedCharacters.
 //

@@ -29,8 +29,6 @@ const float SpringFrequency = 20;         // Reduced from 40
 const float FrictionCoefficient = 0.1f;   // Reduced from 0.5f for smoother sliding
 const float ServoMaxForce = 500;          // Reduced from 1000 for softer constraints
 
-DebugOverlaySection? instructions = null;
-
 // Game entities and components
 CameraComponent? mainCamera = null;
 
@@ -149,6 +147,9 @@ void CreateReferenceCube(Scene scene)
 
     referenceCube.Add(angularServoSetB);
     referenceCube.Scene = scene;
+
+    // Remembered like every other entity here, so that a reset removes it before building again
+    entities.Add(referenceCube);
 }
 
 void CreateReferenceCapsule(Scene scene)
@@ -159,6 +160,8 @@ void CreateReferenceCapsule(Scene scene)
     referenceCapsuleBody.CollisionLayer = CollisionLayer.Layer5;
 
     referenceCapsule.Scene = scene;
+
+    entities.Add(referenceCapsule);
 }
 
 void CreateDistanceLimitConstraintExamples(Scene scene)
@@ -291,6 +294,8 @@ void CreatePointOnLineServoConstraintExample(Scene scene)
     lineBodyB.CollisionLayer = CollisionLayer.Layer1;
     lineEntityB.Scene = scene;
 
+    entities.AddRange([lineEntityA, lineEntityB]);
+
     var cubeSize = new Vector3(0.99f);
 
     for (int i = 0; i < 10; i++)
@@ -320,6 +325,8 @@ void CreatePointOnLineServoConstraintExample(Scene scene)
         lineEntityB.Add(pointOnLineServoConstraintSetB);
         cubeEntitySetB.Add(angularServoSetB);
         cubeEntitySetB.Scene = scene;
+
+        entities.AddRange([cubeEntitySetA, cubeEntitySetB]);
     }
 }
 
@@ -332,7 +339,7 @@ void TryRemoveCubeStack(Vector2 mousePosition)
         // Get the stack name to determine which column was clicked
         string stackName = hitInfo.Collidable.Entity.Name;
 
-        // Apply small upward force to cubes above the clicked one to ensure movement
+        // Remember where the clicked cube was, so the cubes above it can be nudged downward
         var clickedY = hitInfo.Collidable.Entity.Transform.Position.Y;
         var clickedZ = hitInfo.Collidable.Entity.Transform.Position.Z;
 
@@ -389,7 +396,7 @@ void InitializeDebugOverlay()
 {
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    instructions = overlay.AddSection("Game", static () =>
+    overlay.AddSection("Game", static () =>
     [
         new("Left mouse", "Pick up any body, carry it, throw it", Color.Yellow),
         new("Mouse wheel", "Carry distance", Color.Yellow),
@@ -469,7 +476,7 @@ description:
   en: |-
     The full tour of Bepu constraints in one interactive scene: a distance limit holding two spheres
     within a range, a distance servo actively driving a separation with spring settings, a ball socket
-    pivoting a platform on a static foundation, and point-on-line servos confining cubes to vertical
+    pivoting a platform on a kinematic foundation, and point-on-line servos confining cubes to vertical
     tracks. It is meant to be played with - pick up any body with the mouse and throw it while its
     constraints keep pulling, middle-click a cube to remove it so the stack above collapses, R resets
     everything.
@@ -480,7 +487,7 @@ concepts:
   - "Pivoting a body with BallSocketConstraintComponent"
   - "Confining motion to an axis with PointOnLineServoConstraintComponent"
   - Tuning a servo with spring frequency and damping
-  - Anchoring a constraint to a static foundation
+  - Anchoring a constraint to a kinematic foundation
   - Filtering collisions between the connected parts
   - Removing constrained bodies at runtime and resetting the scene
   - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"

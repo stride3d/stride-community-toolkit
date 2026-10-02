@@ -320,7 +320,7 @@ public static class SurfaceStations
     {
         s.Clear();
 
-        var paint = s.Pick("candy red", "midnight blue", "british green") switch
+        var paint = s.Pick("candy red", "midnight blue", "British green") switch
         {
             0 => new Color(180, 20, 30),
             1 => new Color(20, 30, 90),

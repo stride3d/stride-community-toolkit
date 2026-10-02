@@ -17,8 +17,8 @@ using Stride.Input;
 // stack of boxes up and down on a sine in-out curve, and because a body owned by Bepu ignores
 // writes to its transform, the eased value is a target the body chases with a velocity. Coins pop
 // into the scene on a back ease-out, fly to the score on a quadratic ease-in when collected, and
-// leave a "+10" that rises on a quadratic ease-out while it fades. A landing shakes the camera on
-// an elastic ease-out. Every effect is the same three lines: start a tween, feed it the frame
+// leave a "+10" that rises on a quadratic ease-out while it fades. X shakes the camera on an
+// elastic ease-out. Every effect is the same three lines: start a tween, feed it the frame
 // time, read a value.
 //
 // Keys: C pops the next coin in, Space collects every coin on screen, X shakes the camera,
@@ -31,6 +31,9 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 const float LiftLow = -2.6f;
 const float LiftHigh = 2.4f;
+
+// How hard the lift is pulled back onto its eased target when it has drifted off it
+const float LiftCorrectionGain = 8f;
 
 var liftHome = new Vector3(-5f, LiftLow, 0f);
 var scoreSpot = new Vector3(-9f, 3.2f, 0f);
@@ -141,8 +144,6 @@ void Start(Scene rootScene)
         new("target with a velocity.", Color.LightGray),
         new("Coins, popups, camera: transforms from tweens.", Color.LightGray),
     ]);
-
-    scoreEntity.Get<EntityTextComponent>().Text = $"Score {score}";
 }
 
 void Update(Scene scene, GameTime time)
@@ -159,7 +160,7 @@ void Update(Scene scene, GameTime time)
     if (liftBody is not null && dt > 0f)
     {
         var feedForward = (liftTarget - liftTargetBefore) / dt;
-        var correction = (liftTarget - liftBody.Position) * 8f;
+        var correction = (liftTarget - liftBody.Position) * LiftCorrectionGain;
 
         liftBody.LinearVelocity = feedForward + correction;
         liftBody.Awake = true;
@@ -172,6 +173,10 @@ void Update(Scene scene, GameTime time)
     {
         coin.Pop.Update(time);
         coin.Fly.Update(time);
+
+        // A counted coin is gone. Its flight stays complete, so without this it would be drawn
+        // again at the end of the flight, small, on the score
+        if (coin.Counted) continue;
 
         if (coin.Fly.IsRunning || coin.Fly.IsComplete)
         {
@@ -314,13 +319,13 @@ description:
   en: |-
     Easing doing real work in a 2D physics scene, each piece a Tween: a kinematic lift carries a
     stack of boxes up and down on a sine curve, coins pop in with an overshoot and fly to the score
-    when collected, a "+10" rises and fades, and a landing shakes the camera on an elastic curve.
+    when collected, a "+10" rises and fades, and X shakes the camera on an elastic curve.
     The lift shows how an eased value drives a Bepu body: as a target the body chases with a
     velocity, never as a transform write.
   cs: |-
     Easing při skutečné práci ve 2D fyzikální scéně, každý kousek jako Tween: kinematický výtah
     vozí hromádku krabic nahoru a dolů po sinusové křivce, mince vyskočí s přestřelením a po
-    sebrání odletí ke skóre, „+10" stoupá a mizí a přistání zatřese kamerou po elastické křivce.
+    sebrání odletí ke skóre, „+10" stoupá a mizí a klávesa X zatřese kamerou po elastické křivce.
     Výtah ukazuje, jak zjemněná hodnota řídí těleso Bepu: jako cíl, za kterým těleso jede
     rychlostí, nikdy zápisem do transformace.
 concepts:

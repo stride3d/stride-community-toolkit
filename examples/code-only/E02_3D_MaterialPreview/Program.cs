@@ -43,13 +43,13 @@ DebugTextDropdown? shapeMenu = null;
 DebugTextDropdown? materialMenu = null;
 TextureLoader? textures = null;
 var shape = PrimitiveModelType.Sphere;
-var material = 0;
+var materialIndex = 0;
 var gameLook = false;
 
 for (var i = 0; i < args.Length; i++)
 {
     if (args[i] == "--game") gameLook = true;
-    else if (i + 1 < args.Length && args[i] == "--material" && int.TryParse(args[i + 1], out var number)) material = number - 1;
+    else if (i + 1 < args.Length && args[i] == "--material" && int.TryParse(args[i + 1], out var number)) materialIndex = number - 1;
     else if (i + 1 < args.Length && args[i] == "--shape" && Enum.TryParse<PrimitiveModelType>(args[i + 1], ignoreCase: true, out var type)) shape = type;
 }
 
@@ -74,6 +74,9 @@ using var game = new Game();
 
 game.Run(start: Start, update: Update);
 
+// The textures loaded in Start are this example's own: released once the game has ended
+textures?.Dispose();
+
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
@@ -95,7 +98,7 @@ void Start(Scene scene)
     textures = new TextureLoader(game.GraphicsDevice, Path.Combine(AppContext.BaseDirectory, "Resources", "materials"));
     materials = MakeMaterials();
     built = new Material?[materials.Length];
-    material = Math.Clamp(material, 0, materials.Length - 1);
+    materialIndex = Math.Clamp(materialIndex, 0, materials.Length - 1);
 
     shapeMenu = new DebugTextDropdown
     {
@@ -111,8 +114,8 @@ void Start(Scene scene)
         Title = "Material",
         ToggleKey = Keys.M,
         TitleColor = Color.Gold,
-        SelectedIndex = material,
-        Items = [.. materials.Select((entry, i) => new DebugTextDropdownItem((Keys)(Keys.D1 + i), entry.Name, () => { material = i; Rebuild(scene); }))],
+        SelectedIndex = materialIndex,
+        Items = [.. materials.Select((entry, i) => new DebugTextDropdownItem((Keys)(Keys.D1 + i), entry.Name, () => { materialIndex = i; Rebuild(scene); }))],
     };
 
     Rebuild(scene);
@@ -178,9 +181,9 @@ void Rebuild(Scene scene)
 {
     if (subject is not null) subject.Scene = null;
 
-    built[material] ??= materials[material].Make();
+    built[materialIndex] ??= materials[materialIndex].Make();
 
-    subject = game.Create3DPrimitive(shape, new Primitive3DEntityOptions { Material = built[material] });
+    subject = game.Create3DPrimitive(shape, new Primitive3DEntityOptions { Material = built[materialIndex] });
 
     var sphere = subject.Get<ModelComponent>()!.Model.BoundingSphere;
     var scale = sphere.Radius > MathUtil.ZeroTolerance ? 1f / sphere.Radius : 1f;

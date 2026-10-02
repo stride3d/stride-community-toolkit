@@ -11,7 +11,7 @@ using Stride.Engine;
 // The same scene as E02_3D_GiveMeACube, with one difference: the orbit is driven from the physics
 // clock instead of the render loop.
 //
-// Example02 sets a velocity every frame, which is safe because the velocity it sets is bounded. This
+// E02_3D_GiveMeACube sets a velocity every frame, which is safe because the velocity it sets is bounded. This
 // version calls SetTargetPose, which is only correct when exactly one physics step consumes it - so the
 // script implements ISimulationUpdate and is called once per fixed step rather than once per frame.
 

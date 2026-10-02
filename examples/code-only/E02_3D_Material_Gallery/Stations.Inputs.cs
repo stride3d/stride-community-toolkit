@@ -80,8 +80,8 @@ public static class InputStations
 
     /// <summary>
     /// Textures made in C# a moment ago: a height map of ripples, and the normal map derived from
-    /// it by finite differences - both a <c>Color[]</c> handed to <c>Texture.New2D</c>. The left
-    /// sphere wears the height map as its colour, the right one the normal map as its surface, and
+    /// it by finite differences - both a <c>Color[]</c> handed to <c>Texture.New2D</c>. The
+    /// sphere wears the height map as its colour, the teapot the normal map as its surface, and
     /// the cube both. No file was involved; a texture is just pixels.
     /// </summary>
     public static void RuntimeTexturesStation(MaterialStation s)

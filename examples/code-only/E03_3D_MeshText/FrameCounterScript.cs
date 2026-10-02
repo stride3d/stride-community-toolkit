@@ -53,6 +53,9 @@ public class FrameCounterScript : SyncScript
         };
     }
 
+    /// <summary>The last mesh is the script's too: released when the script leaves the scene.</summary>
+    public override void Cancel() => ReleaseMeshBuffers();
+
     // Disposes the GPU buffers behind the current model. Only for meshes this script built itself -
     // content-manager-loaded models manage their own buffers.
     private void ReleaseMeshBuffers()

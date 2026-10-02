@@ -80,7 +80,7 @@ void CreateUi()
 
     for (int i = 0; i < 10; i++)
     {
-        listBox.Items?.Add($"Item{i}");
+        listBox.Items?.Add($"Item {i}");
     }
 
     listBox.SelectionChanged += (_, _) =>

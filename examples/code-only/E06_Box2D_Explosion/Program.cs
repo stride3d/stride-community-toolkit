@@ -96,9 +96,10 @@ void BuildScene(Scene scene)
         DynamicCircle(scene, new Vector2(2 + i * 1.6f, 0.5f), 0.45f, royalBlue);
 
     // The perimeter rule: a wide slab and a ball with the same mass, at the same distance from a
-    // blast centred between them. The slab shows the wave more of its edge, so it flies harder.
+    // blast centred between them. The slab is 4 by 0.5 at density 1, a mass of 2, and the ball's
+    // density is chosen to give it the same. The slab shows the wave more of its edge, so it flies harder.
     DynamicBox(scene, new Vector2(13, 2), new Vector2(4, 0.5f), gold, density: 1f);
-    DynamicCircle(scene, new Vector2(19, 0.8f), 0.8f, gold, density: 4f / (MathF.PI * 0.8f * 0.8f));
+    DynamicCircle(scene, new Vector2(19, 0.8f), 0.8f, gold, density: 2f / (MathF.PI * 0.8f * 0.8f));
 }
 
 void Update(Scene rootScene, GameTime time)

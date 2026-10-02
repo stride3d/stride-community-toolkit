@@ -55,7 +55,7 @@ void Start(Scene scene)
 
     // Set up a distance servo constraint between the sphere and connected sphere
     // The distance servo constraint will try to keep the distance between the two spheres the same
-    // Observe the speheres pulling towards each other and the distance between them being maintained
+    // Observe the spheres pulling towards each other and the distance between them being maintained
     // Zoom out to see the effect better
     var distanceServo = new DistanceServoConstraintComponent
     {

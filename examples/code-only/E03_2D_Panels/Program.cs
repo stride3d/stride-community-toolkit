@@ -31,13 +31,14 @@ const float ColumnPitch = 4.6f;
 const float RowPitch = 3.0f;
 const float PanelWidth = 4.0f;
 const float PanelHeight = 2.0f;
+
+// The whole grid framed at once; every cell is one wheel notch away from filling the window
 const float ViewHeight = 29f;
 
 // The grid sits low on purpose. The overlay is screen-space and lives in the top-right corner, so the
 // band above the grid is what keeps it from covering the last columns.
 const float GridOffsetY = -4.8f;
 
-// The whole grid framed at once; every cell is one wheel notch away from filling the window
 var panelSize = new Vector2(PanelWidth, PanelHeight);
 
 // The stripe behind each cell, slanted so it is obvious it belongs to the background
@@ -121,7 +122,7 @@ GalleryStation[] stations =
         (text, theme) => { text.TextColor = theme.Text; text.Font = boldFont; text.GlowColor = theme.Glow; text.GlowSize = 5f; },
         BorderWidth: 1.5f, FillAlpha: 0.55f, CornerRadius: 0.25f, GlowWidth: 6f, Ornaments: true),
 
-    new(13, "Dash.Length 6 on a ring and a line\n(polygons stay solid)", "System sans, italic",
+    new(13, "Dash.Length 6 on a ring, 8 on a line\n(polygons stay solid)", "System sans, italic",
         (text, theme) => { text.TextColor = theme.Text; text.Font = italicFont; },
         Dashed: true),
 

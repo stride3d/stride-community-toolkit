@@ -54,7 +54,7 @@ void Start(Scene rootScene)
 
     game.SetupBase2DScene();
 
-    // The starting row, one of each shape
+    // The starting column, one of each shape
     foreach (var (index, shape) in shapes.Index())
     {
         Spawn(shape, new Vector3(0, 10 + index * 1.5f, 0));

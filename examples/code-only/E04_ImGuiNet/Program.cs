@@ -155,7 +155,6 @@ void DrawTopLeftPanel(ImGuiNetSystem imGui, GameTime gameTime)
     [
         "ImGui.NET Text Rendering Example",
         $"Frame Time: {gameTime.Elapsed.TotalMilliseconds:F2}ms",
-        "Press ESC to exit"
     ];
 
     // The font atlas is already scaled by the system; the layout has to follow it too
@@ -242,9 +241,7 @@ concepts:
   - Driving a kinematic BodyComponent with SetTargetPose
   - Why writing Transform.Position does not move a physics body
   - Rebuilding the ImGui font atlas for the window DPI
-  - "Using helpers: AddImGuiNet"
-  - "Using helpers: SetupBase3DScene"
-  - "Using helpers: AddProfiler"
+  - "Using helpers: AddImGuiNet, SetupBase3DScene, AddProfiler"
 tags:
   - 3D
   - UI

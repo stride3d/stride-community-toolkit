@@ -46,9 +46,9 @@ public static class HairCards
     public static Texture Strands(GraphicsDevice device, Color baseColour, int size = 256, int strands = 320)
     {
         var pixels = new Color[size * size];
+        // The same seed every run, so the texture and a screenshot of it are repeatable
         var random = new Random(11);
 
-        // The same seed every run, so the texture and a screenshot of it are repeatable
         for (var i = 0; i < strands; i++)
         {
             // One strand: where it starts, how it sways, how wide, how dark and how long

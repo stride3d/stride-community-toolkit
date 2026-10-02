@@ -12,25 +12,7 @@ public static class RuntimeTextures
 {
     /// <summary>Ripples from the centre with a little noise: a height map, 0 to 1 in every channel.</summary>
     public static Texture Ripples(GraphicsDevice device, int size = 256)
-    {
-        var pixels = new Color[size * size];
-        var random = new Random(7);
-
-        for (var y = 0; y < size; y++)
-        {
-            for (var x = 0; x < size; x++)
-            {
-                var dx = x / (float)size - 0.5f;
-                var dy = y / (float)size - 0.5f;
-                var r = MathF.Sqrt(dx * dx + dy * dy);
-                var height = 0.5f + 0.4f * MathF.Sin(r * 60f) + 0.1f * ((float)random.NextDouble() - 0.5f);
-
-                pixels[y * size + x] = Grey(height);
-            }
-        }
-
-        return Texture.New2D(device, size, size, PixelFormat.R8G8B8A8_UNorm, pixels);
-    }
+        => Texture.New2D(device, size, size, PixelFormat.R8G8B8A8_UNorm, RipplePixels(size));
 
     /// <summary>
     /// The normal map of a height map, by central differences, in the tangent-space convention a

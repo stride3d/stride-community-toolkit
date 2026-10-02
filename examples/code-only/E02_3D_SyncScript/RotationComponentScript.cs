@@ -10,14 +10,14 @@ public class RotationComponentScript : SyncScript
     private readonly float _rotateSpeed = 2f;
     private readonly float _radius = 3f;
     private float _angle;
-    BodyComponent? _sphereBody;
+    private BodyComponent? _body;
 
     public override void Start()
     {
-        _sphereBody = Entity.Get<BodyComponent>();
+        _body = Entity.Get<BodyComponent>();
 
-        if (_sphereBody is { })
-            _sphereBody.Kinematic = true;
+        if (_body is not null)
+            _body.Kinematic = true;
 
         _initialPosition = Entity.Transform.Position;
     }
@@ -29,6 +29,6 @@ public class RotationComponentScript : SyncScript
         var offset = new Vector3((float)Math.Sin(_angle), 0, (float)Math.Cos(_angle)) * _radius;
         var targetPosition = _initialPosition + offset;
 
-        _sphereBody?.SetTargetPose(targetPosition, Entity.Transform.Rotation);
+        _body?.SetTargetPose(targetPosition, Entity.Transform.Rotation);
     }
 }

@@ -23,7 +23,7 @@ public class WobbleFeature : MaterialFeature, IMaterialDisplacementFeature
     /// <summary>How far a vertex moves along its normal at the crest of the wave, in object units.</summary>
     public float Amplitude { get; set; } = 0.08f;
 
-    /// <summary>How many waves fit in one object unit of height, in radians per unit.</summary>
+    /// <summary>How fast the wave's phase changes with height, in radians per object unit.</summary>
     public float Frequency { get; set; } = 7f;
 
     /// <summary>How fast the wave runs up the shape, in radians per second.</summary>
