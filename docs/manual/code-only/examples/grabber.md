@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
 - Locking a body's rotation through its BodyInertia, and what the grabber does about it
 - Reading the held body's mass and the servo cap from the script for the overlay
-- Using helpers: SetupBase3DScene, Create3DPrimitive, GetCameraEntity, DebugOverlay
+- Using helpers: SetupBase3DScene, Create3DPrimitive, AddGrabber, DebugOverlay
 
 ![Grabber](media/grabber.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Grabber).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Grabber/Program.cs?start=1&end=159)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Grabber/Program.cs?start=1&end=165)]

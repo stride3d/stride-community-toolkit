@@ -7,7 +7,7 @@ slug: easing-2d-game
 
 Easing doing real work in a 2D physics scene, each piece a Tween: a kinematic lift carries a
 stack of boxes up and down on a sine curve, coins pop in with an overshoot and fly to the score
-when collected, a "+10" rises and fades, and a landing shakes the camera on an elastic curve.
+when collected, a "+10" rises and fades, and X shakes the camera on an elastic curve.
 The lift shows how an eased value drives a Bepu body: as a target the body chases with a
 velocity, never as a transform write.
 
@@ -23,4 +23,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_2D_EasingInGame).
 
-[!code-csharp[](../../../../examples/code-only/E02_2D_EasingInGame/Program.cs?start=1&end=301)]
+[!code-csharp[](../../../../examples/code-only/E02_2D_EasingInGame/Program.cs?start=1&end=306)]

@@ -9,7 +9,7 @@ Cloth from ordinary bodies and constraints, the way bepuphysics2's own demo does
 of sphere nodes tied by distance limits that may bunch but never stretch, area constraints on
 every triangle against shear, and collision groups keeping neighbours from fighting. Three
 sheets hang side by side to compare stiffness with and without area constraints, a fourth
-drapes over a ball, nine hundred nodes are one instanced draw call, and the solver runs eight
+drapes over a ball, about eleven hundred nodes are one instanced draw call, and the solver runs eight
 substeps set through UseGameSettings. Pull on anything with the grabber, and pick the node
 size from a menu: the sheets keep their dimensions, so smaller nodes mean a denser lattice
 with finer folds and a higher body count.

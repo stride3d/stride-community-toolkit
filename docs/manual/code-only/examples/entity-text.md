@@ -15,7 +15,7 @@ The `Program.cs` file shows how to:
 - Registering the text renderer once: AddEntityTextRenderer
 - Centring a label over an object with TextAnchor, not TextAlignment
 - Shadow and background for readability over a 3D scene
-- Animating Scale instead of FontSize
+- Scale as the cheap way to resize, instead of FontSize
 - Distance fading with FadeStartDistance and MaxDistance
 - Several EntityTextComponents on one entity
 - HUD text that survives window resizing: TextPositionMode.Anchored

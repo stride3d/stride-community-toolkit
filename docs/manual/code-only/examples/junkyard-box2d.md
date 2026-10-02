@@ -10,7 +10,7 @@ into a walled yard and a kinematic plow sweeps back and forth through the pile, 
 target transform once per fixed step. Rendering works exactly like the Box2D testbed: no meshes,
 materials or entities - every shape is submitted each frame to the toolkit's ShapeBatch,
 whose shader (a port of the testbed's solid_polygon shader) draws them all in one instanced
-call with the 60%-alpha fill and pixel-constant border computed per fragment. Body states show
+call with the 40%-alpha fill and pixel-constant border computed per fragment. Body states show
 as the testbed's colours - pink awake, salmon fast-movers, gray sleepers.
 
 The `Program.cs` file shows how to:

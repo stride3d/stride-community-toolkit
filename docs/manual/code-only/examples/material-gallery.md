@@ -28,4 +28,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_Material_Gallery).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_Material_Gallery/Program.cs?start=1&end=214)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_Material_Gallery/Program.cs?start=1&end=217)]

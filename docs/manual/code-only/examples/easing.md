@@ -12,9 +12,8 @@ filter by ease-in, ease-out and in-out families. The cheat sheet that runs.
 
 The `Program.cs` file shows how to:
 
-- EasingFunction and Easing - every curve by name and by direct call
-- The fluent extensions - function.Ease(t) and function.Interpolate(start, end, t)
-- Why the dispatcher clamps time and the raw curves do not
+- EasingFunction - every curve by name
+- The fluent extension function.Ease(t)
 - Ease-in, ease-out and in-out families, and what overshoot looks like in motion
 - A 2D ShapeBatch scene with pixel polylines, discs and a dashed reference line
 - Screen-space labels with EntityTextComponent, and DebugOverlay for the keys

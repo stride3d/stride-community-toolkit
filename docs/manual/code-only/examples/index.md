@@ -83,11 +83,11 @@ Prefer a list? Each level has its own page, linked from the table of contents.
 <div class="row g-4 mb-4">
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/primitives-3d.webp" class="card-img-top" alt="Screenshot of the Basic3D Scene (Every Primitive) example" width="1280" height="720" loading="lazy">
+            <img src="media/primitives-3d.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Eight Primitives) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-3d.md">Basic3D Scene (Every Primitive)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-3d.md">Basic 3D Scene (Eight Primitives)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">Every 3D primitive the toolkit can build - cube, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the...</p>
+                <p class="card-text">Eight of the toolkit's 3D primitives - cube, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the...</p>
             </div>
         </div>
     </div>
@@ -127,7 +127,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="mesh-line.md">Mesh Line</a></h3>
                 <p><span class="badge text-bg-secondary">Geometry</span></p>
-                <p class="card-text">A line drawn between two spheres, built as a real mesh rather than a debug primitive.</p>
+                <p class="card-text">A line attached to a sphere, built as a real mesh rather than a debug primitive.</p>
             </div>
         </div>
     </div>
@@ -263,9 +263,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/falling-shapes-2d.webp" class="card-img-top" alt="Screenshot of the Basic2D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
+            <img src="media/falling-shapes-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-2d.md">Basic2D Scene (Falling Shapes)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-2d.md">Basic 2D Scene (Falling Shapes)</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
                 <p class="card-text">Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.</p>
             </div>
@@ -552,7 +552,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="instancing.md">GPU Instancing</a></h3>
                 <p><span class="badge text-bg-secondary">Performance</span></p>
-                <p class="card-text">Render two identical walls of cubes built two different ways, side by side.</p>
+                <p class="card-text">Render two walls of the same cube built two different ways, side by side.</p>
             </div>
         </div>
     </div>
@@ -697,7 +697,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="renderer.md">Custom Scene Renderers</a></h3>
                 <p><span class="badge text-bg-secondary">Rendering</span></p>
-                <p class="card-text">Two ways to draw your own 2D content over a 3D scene, side by side.</p>
+                <p class="card-text">Three ways to draw 2D content over a 3D scene, side by side.</p>
             </div>
         </div>
     </div>
@@ -743,9 +743,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/stress-pile-2d.webp" class="card-img-top" alt="Screenshot of the Basic2D Scene (Stress Pile) example" width="1280" height="720" loading="lazy">
+            <img src="media/stress-pile-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Stress Pile) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="stress-pile-2d.md">Basic2D Scene (Stress Pile)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="stress-pile-2d.md">Basic 2D Scene (Stress Pile)</a></h3>
                 <p><span class="badge text-bg-secondary">Performance</span></p>
                 <p class="card-text">Thousands of 2D physics bodies piling up, drawn in two instanced draw calls - awake bodies through one master, sleeping bodies tinted green through...</p>
             </div>

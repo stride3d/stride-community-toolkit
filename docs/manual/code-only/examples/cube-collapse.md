@@ -5,7 +5,7 @@ slug: cube-collapse
 
 # Game - Cube Collapse
 
-A colour-match collapse puzzle built entirely from code. A 10x10x10 platform of cubes builds
+A colour-match collapse puzzle built entirely from code. A platform of cubes, 5x5x5 at level one and growing to 10x10x10, builds
 itself one layer at a time, clicking a cube clears every same-coloured cube connected to it, and
 what is left above drops into the gap.
 Shows how to structure a whole game without the editor: scene setup split from gameplay, a custom
