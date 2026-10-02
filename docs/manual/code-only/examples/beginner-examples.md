@@ -30,6 +30,7 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [Box2D Explosion](box2d-explosion.md): A grenade in one call: Explode gives every shape within a radius an impulse away from the centre, per metre of perimeter facing the blast, so a wide slab flies harder than a ball of the same mass.
 - [Basic2D Scene (Debug Rendering)](debug-render-2d.md): A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is actually solving can be seen rather than inferred.
 - [DPI-Aware Window](dpi-aware.md): The capsule scene again, with two differences.
+- [Game - Pong](pong.md): Pong, the first game: two paddles, a ball and a score to seven, with no assets and no physics engine.
 
 > [!NOTE]
 > Each example references a handful of toolkit packages. The `using` directives at the top of

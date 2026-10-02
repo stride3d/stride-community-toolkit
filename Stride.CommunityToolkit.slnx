@@ -96,6 +96,7 @@
     <Project Path="examples/code-only/E13_SignalR/E13_SignalR.csproj" />
     <Project Path="examples/code-only/E13_SignalR_Blazor/E13_SignalR_Blazor.csproj" />
     <Project Path="examples/code-only/E13_SignalR_Shared/E13_SignalR_Shared.csproj" />
+    <Project Path="examples/code-only/E20_2D_Pong/E20_2D_Pong.csproj" />
     <Project Path="examples/code-only/E20_3D_CubeCollapse/E20_3D_CubeCollapse.csproj" />
     <Project Path="examples/code-only/Example.Common/Example.Common.csproj" />
     <Project Path="examples/code-only/Example_2D_Playground/Example_2D_Playground.csproj" />
