@@ -16,11 +16,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎉 New Features
 
+- `Buffer.SetDataPinned(commandList, span)` in `Stride.CommunityToolkit.Graphics`: uploads a span with its memory pinned for the call, for data held in an array or a list.
 - `MaterialDescriptors.Overlay(colour, intensity)` and `game.CreateOverlayMaterial(colour, intensity)`: an unlit translucent colour with the colour's alpha as the opacity, for zones, placement previews and markers over the scene.
 - `TextureLoader.FromPixels(device, pixels, width, height, options)`: makes a texture from pixels computed in code, prepared by role and with mipmaps, like a loaded file.
 
 ### 🐞 Bug Fixes
 
+- `ShapeBatch`, `BufferedEntityInstancing` and the charts' ribbon lines uploaded managed arrays through an engine path that, on Direct3D 11, does not pin them. A garbage collection during the upload could corrupt it. They now upload through the new `Buffer.SetDataPinned` extension.
 - `ShapeBatch`: a `DrawLine` shorter than its width took the current fill instead of drawing solid.
 - `ShapeBatch`: a circle of radius zero, or a polyline whose points coincide, uploaded a zero scale that the shader divided by. Such a shape is now a dot the width of its border. A scale of zero or less, or a value that is not a number, draws nothing.
 - `ShapeBatch.DrawRectangle`: a corner radius above half the smaller side enlarged the rectangle. The radius is now limited to that half.

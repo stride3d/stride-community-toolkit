@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Graphics;
 using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Diagnostics;
 using Stride.Core.Mathematics;
@@ -370,7 +371,9 @@ public class ShapeBatchFeature : RootRenderFeature
             buffer = Buffer.Structured.New<T>(context.GraphicsDevice, capacity);
         }
 
-        buffer.SetData(context.CommandList, data);
+        // Pinned: the span is over a list's array, which the engine's Direct3D 11 upload would
+        // otherwise read by an address the garbage collector is free to move
+        buffer.SetDataPinned(context.CommandList, data);
     }
 
     /// <inheritdoc/>
