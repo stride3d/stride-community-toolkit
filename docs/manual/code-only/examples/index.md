@@ -301,6 +301,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             </div>
         </div>
     </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/pong.webp" class="card-img-top" alt="Screenshot of the Game - Pong example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="pong.md">Game - Pong</a></h3>
+                <p><span class="badge text-bg-secondary">Game</span></p>
+                <p class="card-text">Pong, the first game: two paddles, a ball and a score to seven, with no assets and no physics engine.</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 ## C# Intermediate

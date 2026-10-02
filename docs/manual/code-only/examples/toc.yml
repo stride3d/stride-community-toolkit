@@ -16,7 +16,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (22)
+- name: C# Beginner (23)
   href: beginner-examples.md
   items:
   - name: Basic3D Scene (Every Primitive)
@@ -63,6 +63,8 @@
     href: debug-render-2d.md
   - name: DPI-Aware Window
     href: dpi-aware.md
+  - name: Game - Pong
+    href: pong.md
 - name: C# Intermediate (36)
   href: intermediate-examples.md
   items:
