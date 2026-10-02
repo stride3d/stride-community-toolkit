@@ -23,7 +23,7 @@ public enum HudRole
 
 /// <summary>
 /// A colour scheme: a dark ground, one accent, a text colour and a glow. A single-colour scheme
-/// answers every role with its accent. A scheme with <see cref="Roles"/> gives each role a colour of
+/// answers every role with its accent, except data, which is the text colour. A scheme with <see cref="Roles"/> gives each role a colour of
 /// its own. Caution and warning are the same in every scheme.
 /// </summary>
 public sealed record HudTheme(string Name, Color Accent, Color Ground, Color Text, Color Glow)

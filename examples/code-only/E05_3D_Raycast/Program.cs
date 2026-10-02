@@ -43,7 +43,7 @@ void Start(Scene scene)
 
     DebugOverlay.GetOrCreate(game).AddSection("Raycast", static () =>
     [
-        new("Left click", "On the ground: apply a direction impulse", Color.Gold),
+        new("Left click", "On the ground: push the sphere towards the click", Color.Gold),
         new("Left click", "On the sphere: stop it moving", Color.Gold),
     ]);
 
@@ -122,7 +122,7 @@ void UpdateLineVisualization(Vector3 hitPointWorld)
     // Convert the hit point from world space to the sphere's entity local coordinate space
     var localHitPoint = Vector3.Transform(hitPointWorld, Matrix.Invert(sphereEntity.Transform.WorldMatrix));
 
-    // Update the end vertex of the line's endpoint
+    // Update the line's end vertex
     lineVertices[1] = localHitPoint.XYZ();
 
     // Re-upload the updated vertex data to the GPU
@@ -182,7 +182,7 @@ Entity CreateLineEntity(Game game)
     // Create the mesh
     var mesh = new Mesh { Draw = meshDraw };
 
-    // The model is built from the mesh and a gizmo material: emissive, so the ray is visible whatever the
+    // The model is built from the mesh and a gizmo material: emissive, so the line is visible whatever the
     // lighting, and bright enough (intensity above 1) that bloom gives it a glow
     var lineModelComponent = new ModelComponent { Model = new Model { mesh, GizmoEmissiveColorMaterial.Create(game.GraphicsDevice, Color.OrangeRed, 4) } };
 
@@ -204,15 +204,15 @@ description:
     Click the ground and a sphere is kicked towards where you clicked; click the sphere and it stops
     dead. Turning a mouse position into a world direction is the whole trick - the camera unprojects the
     screen point into a ray, physics reports what that ray hit and where, and the impulse is derived
-    from the hit point. A line is drawn along the ray so an unexpected result can be seen rather than
-    guessed at.
+    from the hit point. A line is drawn from the sphere to the hit point, so the direction of the
+    impulse can be seen.
 concepts:
   - Turning a screen position into a world ray from the camera
   - Querying the physics world with a raycast
   - Reading the hit point and the entity that was hit
   - Applying an impulse towards a point
   - Stopping a body by zeroing its velocity
-  - Drawing the ray so a miss is visible
+  - Drawing the impulse direction as a line from the sphere to the hit point
   - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
 tags:
   - 3D

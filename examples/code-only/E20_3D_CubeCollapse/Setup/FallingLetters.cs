@@ -1,4 +1,5 @@
 using CubeCollapse.Components;
+using CubeCollapse.Shared;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering.Utilities;
@@ -74,7 +75,7 @@ public static class FallingLetters
 
             if (character == ' ') continue;
 
-            var entity = new Entity($"Letter{character}")
+            var entity = new Entity($"{EntityNames.LetterPrefix}{character}")
             {
                 new ModelComponent
                 {

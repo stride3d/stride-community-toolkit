@@ -26,7 +26,7 @@ public class ClickHandlerComponent : AsyncScript
 
         if (_camera is null || _gameManager is null)
         {
-            // notify user about missing components or services
+            // Nothing to do without a camera and the GameManager service
             return;
         }
 
@@ -79,9 +79,9 @@ public class ClickHandlerComponent : AsyncScript
         }
         else
         {
-            foreach (var vector in loadedCubes)
+            foreach (var position in loadedCubes)
             {
-                CreateCube(vector);
+                CreateCube(position);
             }
         }
     }
@@ -135,17 +135,18 @@ public class ClickHandlerComponent : AsyncScript
 
     private void ChangeColor(Entity clickedEntity)
     {
-        var model = clickedEntity.GetComponent<ModelComponent>();
+        var modelComponent = clickedEntity.GetComponent<ModelComponent>();
 
-        if (model is null) return;
+        if (modelComponent is null) return;
 
-        if (model.Materials.Count > 0)
+        // The model's own material list, the same one that is written to below
+        if (modelComponent.Model.Materials.Count > 0)
         {
-            model.Model.Materials[0] = _material;
+            modelComponent.Model.Materials[0] = _material;
         }
         else
         {
-            model.Model.Materials.Add(_material);
+            modelComponent.Model.Materials.Add(_material);
         }
     }
 

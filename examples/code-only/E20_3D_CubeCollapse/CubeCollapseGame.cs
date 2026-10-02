@@ -36,7 +36,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// <summary>Seed for cube colours, so the same board comes up every run while tuning.</summary>
     private const int Seed = 1;
 
-    private readonly Vector3 _referenceCubePosition = new(-4, 1, -4);
 
     private readonly CubeGrid _grid = new();
     private readonly ScoreKeeper _keeper = new();
@@ -244,7 +243,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// <remarks>
     /// Building a game from code alone means there is no editor viewport to orient in - no grid, no
     /// axis widget, nothing that answers "which way is X" except what the scene draws for itself.
-    /// This is that. Its placement is under review; see the plan notes on orientation aids.
+    /// This is that.
     /// </remarks>
     private void AddOrientationGizmo()
     {
@@ -445,7 +444,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             {
                 entity.Remove();
             }
-            else if (entity.Name.StartsWith("Letter", StringComparison.Ordinal))
+            else if (entity.Name.StartsWith(EntityNames.LetterPrefix, StringComparison.Ordinal))
             {
                 FallingLetters.ReleaseAndRemove(entity);
             }

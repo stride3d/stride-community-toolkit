@@ -21,6 +21,7 @@ namespace CubeCollapse.Setup;
 /// </remarks>
 /// <param name="game">The running game, used to create the cube primitives.</param>
 /// <param name="scene">The scene cubes are added to.</param>
+/// <param name="grid">The logical grid every spawned cube is recorded in.</param>
 /// <param name="levels">The current level, which sets the board's dimensions.</param>
 /// <param name="seed">Seed for the colour picker, so a run is reproducible.</param>
 public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState levels, int seed)

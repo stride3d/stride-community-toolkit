@@ -131,7 +131,7 @@ public class QuadPrimitiveModel : PrimitiveProceduralModelBase
         var vertices = new VertexPositionNormalTexture[vertexCount];
         var indices = new int[indexCount];
 
-        // Create custom vertices, in this case just a quad facing in Y direction
+        // Create custom vertices, in this case just a quad facing in Z direction
         var normal = Vector3.UnitZ;
         vertices[0] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.5f, 0) * Size, normal, new Vector2(0, 0));
         vertices[1] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.5f, 0) * Size, normal, new Vector2(1, 0));

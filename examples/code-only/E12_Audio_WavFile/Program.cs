@@ -50,10 +50,10 @@ void Start(Scene scene)
     game.SetCameraPosition(new Vector3(0, 2.5f, -6));
     game.SetCameraRotation(new Vector3(180, -12, 0));
 
-    speaker = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    // Scenery only, so the plain options: no physics body
+    speaker = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
     {
         Material = game.CreateMaterial(new Color(90, 160, 255)),
-        IncludeCollider = false,
         Position = new Vector3(0, 1, 0),
     });
     speaker.Scene = scene;

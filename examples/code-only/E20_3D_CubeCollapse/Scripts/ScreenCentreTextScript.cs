@@ -12,7 +12,7 @@ namespace CubeCollapse.Scripts;
 /// <see cref="TextPositionMode.Screen"/> takes a fixed pixel position, so neither of them centres
 /// anything on its own. Recomputing the position each frame covers the gap in four lines. It is worth
 /// knowing this is the workaround rather than the intended route - a centre option belongs in the
-/// component, and is noted as such in the toolkit's architecture notes.
+/// component.
 /// </remarks>
 public class ScreenCentreTextScript : SyncScript
 {

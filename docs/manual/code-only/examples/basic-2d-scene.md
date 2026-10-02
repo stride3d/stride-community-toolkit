@@ -12,7 +12,7 @@ The `Program.cs` file shows how to:
 
 - Creating a 2D primitive with Create2DPrimitive
 - Applying a flat material with CreateFlatMaterial
-- Setting an entity position through primitive options
+- Positioning an entity with Transform.Position
 - Adding entities to a Scene (rootScene)
 - Using helpers: SetupBase2DScene
 

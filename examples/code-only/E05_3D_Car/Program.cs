@@ -55,7 +55,7 @@ Car? car = null;
 var steeringAngle = 0f;
 var previousTargetSpeed = float.NaN;
 var previousTargetForce = float.NaN;
-List<Entity> crates = [];
+
 var start = new Vector3(0, 1.5f, 0);
 
 using var game = new Game();
@@ -336,7 +336,8 @@ void BuildCourse(Scene scene)
     {
         Size = new Vector3(6, 0.4f, 10),
         Material = game.CreateMaterial(new Color(150, 150, 160)),
-        Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider() } } },
+        // An empty compound: the helper adds the box that fits the ramp's size
+        Component = new StaticComponent { Collider = new CompoundCollider() },
         Position = new Vector3(0, 0.9f, 30),
     });
     ramp.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(12));
@@ -346,9 +347,10 @@ void BuildCourse(Scene scene)
     {
         var pillar = game.Create3DPrimitive(PrimitiveModelType.Cylinder, new()
         {
-            Size = new Vector3(0.5f, 3, 0.5f),
+            // A cylinder's size is its radius in X and its height in Z
+            Size = new Vector3(0.5f, 0, 3),
             Material = game.CreateMaterial(new Color(120, 170, 220)),
-            Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new CylinderCollider { Radius = 0.5f, Length = 3 } } } },
+            Component = new StaticComponent { Collider = new CompoundCollider() },
             Position = new Vector3(i % 2 == 0 ? -4 : 4, 1.5f, -20 - i * 8),
         });
         pillar.Scene = scene;
@@ -362,11 +364,12 @@ void BuildCourse(Scene scene)
             {
                 Size = new Vector3(1.2f),
                 Material = game.CreateMaterial(new Color(220, 180, 90)),
-                Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Mass = 2 } } } },
+                // The crate's own collider, for its mass: a compound that already holds a shape is
+                // kept as it is, so the size has to be given too
+                Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Mass = 2, Size = new Vector3(1.2f) } } } },
                 Position = new Vector3(-3.6f + i * 1.3f, 0.6f + row * 1.25f, 60),
             });
             crate.Scene = scene;
-            crates.Add(crate);
         }
     }
 }

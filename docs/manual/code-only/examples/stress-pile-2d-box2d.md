@@ -34,4 +34,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_2D_StressPile_Box2D).
 
-[!code-csharp[](../../../../examples/code-only/E10_2D_StressPile_Box2D/Program.cs?start=1&end=514)]
+[!code-csharp[](../../../../examples/code-only/E10_2D_StressPile_Box2D/Program.cs?start=1&end=518)]

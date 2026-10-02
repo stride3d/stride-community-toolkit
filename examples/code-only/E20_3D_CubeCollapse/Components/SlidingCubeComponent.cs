@@ -19,9 +19,8 @@ namespace CubeCollapse.Components;
 /// over.
 /// </para>
 /// <para>
-/// This also keeps every cube exactly on the spawn grid, which is what the neighbour search in
-/// <c>RaycastInteractionScript.IsNeighbor</c> relies on - drifting cubes make that flood fill start
-/// missing matches.
+/// This also keeps every cube in the column the game's grid records for it, so a falling cube
+/// can only come to rest in the slot the grid has already given it.
 /// </para>
 /// </remarks>
 [ComponentCategory("Cube Collapse")]

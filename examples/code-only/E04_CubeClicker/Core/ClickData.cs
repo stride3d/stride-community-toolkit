@@ -25,7 +25,7 @@ public sealed class ClickData
 
     /// <summary>
     /// We can serialize Interfaces, Abstracts as long as the "real" object in it
-    /// has it's class [DataContract] tagged
+    /// has its class tagged [DataContract]
     /// </summary>
     [AllowNull]
     public List<IClickable> Clickables { get => field; set => field = value ?? []; } = [];

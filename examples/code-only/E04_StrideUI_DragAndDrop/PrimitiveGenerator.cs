@@ -75,7 +75,7 @@ public class PrimitiveGenerator
     }
 
     /// <summary>
-    /// Configures the transform properties (scale and position) of the given entity.
+    /// Gives the entity a random position.
     /// </summary>
     /// <param name="entity">The entity to configure.</param>
     private static void ConfigureTransform(Entity entity)

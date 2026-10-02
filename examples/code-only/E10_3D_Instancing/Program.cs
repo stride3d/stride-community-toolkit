@@ -8,18 +8,19 @@ using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
 
-// Two identical-looking walls of cubes, built two different ways:
+// Two walls of the same cube, one green and one orange, built two different ways:
 //
-//   LEFT  - one entity per cube. The renderer issues one draw call per cube.
-//   RIGHT - a single entity plus an array of transformation matrices. The renderer issues
-//           ONE draw call for the whole wall.
+//   LEFT  - green: a single entity plus an array of transformation matrices. The renderer
+//           issues ONE draw call for the whole wall.
+//   RIGHT - orange: one entity per cube. The renderer issues one draw call per cube.
 //
-// Both walls share the same Model, so the only difference between them is instancing.
+// Both walls use the same cube mesh and differ only in colour, so the only rendering difference
+// between them is instancing.
 // Press 1 and 2 to toggle each wall and watch the frame rate in the profiler.
 //
 // On a typical desktop the 2000 individual cubes run at roughly 35 FPS (~29 ms per frame) while the
-// 2000 instanced cubes run at roughly 380 FPS (~2.6 ms) - about eleven times faster for a picture the
-// eye cannot tell apart. Give the frame rate a couple of seconds to settle after toggling: the counter
+// 2000 instanced cubes run at roughly 380 FPS (~2.6 ms) - about eleven times faster for the same wall
+// of cubes. Give the frame rate a couple of seconds to settle after toggling: the counter
 // is a rolling average, so it lags the change.
 
 const int GridWidth = 20;
@@ -204,7 +205,7 @@ IReadOnlyList<TextElement> OverlayLines() =>
     new($"Left wall: 1 entity, 1 draw call, {cubeCount} instances", Color.LightGreen),
     new($"Right wall: {cubeCount} entities, {cubeCount} draw calls", Color.Orange),
     new($"Visible: {(showIndividual && showInstanced ? "both walls" : showIndividual ? $"individual ({cubeCount} draws)" : showInstanced ? "instanced (1 draw)" : "nothing")}", Color.Yellow),
-    new("Both walls draw the same Model and look identical.", Color.LightGray),
+    new("Both walls draw the same cube; only the colour differs.", Color.LightGray),
     new("Toggle each one and compare the frame rate above.", Color.LightGray),
     new("The counter is a rolling average; give it a second.", Color.LightGray),
 ];
@@ -221,16 +222,16 @@ complexity: 3
 order: 130
 description:
   en: |-
-    Render two identical walls of cubes built two different ways, side by side. The left wall uses one
-    entity per cube and costs one draw call each; the right wall uses a single entity with an
-    InstancingComponent and an array of world matrices, and costs one draw call in total. Both share the
-    same Model, so the only difference is instancing. Toggle each wall to compare the frame rate, and
+    Render two walls of the same cube built two different ways, side by side. The right wall uses one
+    entity per cube and costs one draw call each; the left wall uses a single entity with an
+    InstancingComponent and an array of world matrices, and costs one draw call in total. Each wall
+    shares one Model across its cubes, so the only rendering difference is instancing. Toggle each wall to compare the frame rate, and
     note that the InstancingRenderFeature has to be added to the compositor by hand in code-only projects.
   cs: |-
-    Vykreslení dvou stejných stěn z kostek postavených dvěma způsoby vedle sebe. Levá stěna používá jednu
-    entitu na kostku a stojí jedno vykreslovací volání za každou z nich; pravá stěna používá jedinou entitu
-    s komponentou InstancingComponent a pole světových matic a stojí celkem jedno volání. Obě sdílejí
-    stejný Model, takže jediným rozdílem je instancing. Přepínáním stěn porovnáte snímkovou frekvenci.
+    Vykreslení dvou stěn ze stejné kostky postavených dvěma způsoby vedle sebe. Pravá stěna používá jednu
+    entitu na kostku a stojí jedno vykreslovací volání za každou z nich; levá stěna používá jedinou entitu
+    s komponentou InstancingComponent a pole světových matic a stojí celkem jedno volání. Každá stěna
+    sdílí jeden Model pro všechny své kostky, takže jediným rozdílem ve vykreslování je instancing. Přepínáním stěn porovnáte snímkovou frekvenci.
     Pozor, v projektech psaných pouze kódem je nutné přidat InstancingRenderFeature do kompozitoru ručně.
 concepts:
   - Reducing draw calls with an InstancingComponent

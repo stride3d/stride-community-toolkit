@@ -58,6 +58,20 @@ public class MyCustomSceneRenderer : SceneRendererBase
     }
 
     /// <summary>
+    /// Releases what <see cref="InitializeCore"/> created. The font came from the content manager,
+    /// which owns it; the sprite batch and the texture are this renderer's own.
+    /// </summary>
+    protected override void Destroy()
+    {
+        _spriteBatch?.Dispose();
+        _spriteBatch = null;
+        _colorTexture?.Dispose();
+        _colorTexture = null;
+
+        base.Destroy();
+    }
+
+    /// <summary>
     /// Performs the actual drawing of the scene, including rendering text and backgrounds for each entity.
     /// This method is called every frame.
     /// </summary>

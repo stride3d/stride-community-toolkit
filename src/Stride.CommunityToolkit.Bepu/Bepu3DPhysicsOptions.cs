@@ -18,7 +18,7 @@ public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
     /// Gets or sets the Bepu collidable component attached to the entity.
     /// </summary>
     /// <remarks>
-    /// When <see langword="null"/> (the default), the consuming helper chooses: primitive creation attaches a dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>, while ground helpers attach a <see cref="StaticComponent"/>. Set it explicitly to override either default or to preconfigure collider children.
+    /// When <see langword="null"/> (the default), the consuming helper chooses: primitive creation attaches a dynamic <see cref="BodyComponent"/> with an empty <see cref="CompoundCollider"/>, while ground helpers attach a <see cref="StaticComponent"/>. Set it explicitly to override either default. Give it an empty <see cref="CompoundCollider"/> to have the shape that fits the primitive added, or a compound that already holds your own shapes to have it kept as it is: the fitted shape is added to an empty compound only.
     /// </remarks>
     public CollidableComponent? Component { get; set; }
 
@@ -26,7 +26,7 @@ public class Bepu3DPhysicsOptions : Primitive3DEntityOptions
     /// Gets or sets a value indicating whether a collider shape matching the primitive type is created automatically.
     /// </summary>
     /// <remarks>
-    /// Defaults to <see langword="true"/>. When set to <see langword="false"/>, the <see cref="Component"/> is attached without generated collider shapes so they can be added later.
+    /// Defaults to <see langword="true"/>. When set to <see langword="false"/>, the <see cref="Component"/> is attached without generated collider shapes so they can be added later. A compound collider that already holds a shape gets none either way.
     /// </remarks>
     public bool IncludeCollider { get; set; } = true;
 }

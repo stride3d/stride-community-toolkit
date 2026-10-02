@@ -11,7 +11,7 @@ using Stride.Rendering.ProceduralModels;
 
 namespace E02_3D_Material_Gallery;
 
-// The features that reach past the pixel: light under the surface, vertices moved, triangles
+// The features that reach past the pixel: vertices moved, triangles
 // added, a material over a material, and a material drawn over a whole model as a highlight.
 public static class ModelStations
 {
@@ -45,7 +45,7 @@ public static class ModelStations
 
         var material = s.Material(descriptor);
 
-        // Dense meshes, or there are no vertices to move: 64 segments where the primitives default to far fewer
+        // Dense meshes, or there are no vertices to move: 96 segments where the primitives default to far fewer.
         // No shadow casting: the shadow pass draws the undisplaced mesh, and the displaced surface then
         // sits behind its own shadow-map depth and shades itself black
         s.PlaceModel(new PlaneProceduralModel { Size = new Vector2(3.2f), Tessellation = new Int2(96), Normal = NormalDirection.UpZ }.Generate(s.Game.Services), material, new Vector3(-2.2f, 1.6f, 0f), castShadows: false);

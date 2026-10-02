@@ -6,7 +6,7 @@ namespace E13_SignalR.SignalR;
 public sealed class SignalRClientOptions
 {
     /// <summary>
-    /// Absolute hub URL (e.g. https://localhost:44304/screen1). Required.
+    /// Absolute hub URL (e.g. https://localhost:44369/station). Required.
     /// </summary>
     public Uri? HubUrl { get; set; }
 

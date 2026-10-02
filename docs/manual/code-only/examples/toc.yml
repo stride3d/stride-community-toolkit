@@ -19,7 +19,7 @@
 - name: C# Beginner (23)
   href: beginner-examples.md
   items:
-  - name: Basic3D Scene (Every Primitive)
+  - name: Basic 3D Scene (Eight Primitives)
     href: primitives-3d.md
   - name: Basic Gum UI
     href: gum-stride-ui-basic.md
@@ -55,7 +55,7 @@
     href: 2d-scene-panels.md
   - name: Basic2D Scene (Multiple Primitives)
     href: primitives-2d.md
-  - name: Basic2D Scene (Falling Shapes)
+  - name: Basic 2D Scene (Falling Shapes)
     href: falling-shapes-2d.md
   - name: Box2D Explosion
     href: box2d-explosion.md
@@ -155,7 +155,7 @@
     href: image-processing.md
   - name: Instancing with Entity Transforms
     href: instancing-entity-transform.md
-  - name: Basic2D Scene (Stress Pile)
+  - name: Basic 2D Scene (Stress Pile)
     href: stress-pile-2d.md
   - name: Basic 2D Scene (Stress Pile, Box2D)
     href: stress-pile-2d-box2d.md

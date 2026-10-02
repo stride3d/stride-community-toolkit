@@ -62,7 +62,7 @@ description:
 concepts:
   - Building an interactive UI from Grid, TextBlock and Button
   - Saving and loading game state with the NexVYaml serializer
-  - "Choosing between SyncScript and AsyncScript for game logic"
+  - "Running game logic and short animations in AsyncScript"
   - Separating UI, state and game logic into their own files
   - Restoring a scene from persisted data on startup
 tags:

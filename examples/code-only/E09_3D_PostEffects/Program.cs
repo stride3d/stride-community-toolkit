@@ -142,7 +142,7 @@ static string KeyLabel(Keys key) => key switch
 void BuildScene(Scene scene)
 {
     // A glossy floor: what screen-space reflections have to work with. Glossy, not mirror-like -
-    // at specular 1 the floor turns metallic and simply shows the dark underside of the skybox.
+    // at metalness 1 the floor turns metallic and simply shows the dark underside of the skybox.
     game.Add3DGround(new()
     {
         Size = new Vector3(40, 1, 40),
@@ -211,7 +211,7 @@ description:
     enabled. The scene is built for the effects: over-bright lamps, a glossy floor, a receding corridor
     and a cluster of cubes.
 concepts:
-  - Enabling post effects with ConfigurePostEffects, and toggling them at runtime with GetPostEffects
+  - Enabling post effects with ConfigurePostEffects, and toggling them at runtime by flipping Enabled on the same objects
   - Which effects exist on the compositor and start disabled
   - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
   - Building an emissive material above intensity 1 so bloom has something to bloom

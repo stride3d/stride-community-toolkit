@@ -18,7 +18,7 @@ public sealed class SightWidget(ShipState ship) : HudWidget
         DrawTargetBox(canvas, bounds);
     }
 
-    /// <summary>Two rings' worth of arcs with gaps at the cardinal points, four ticks and a dot.</summary>
+    /// <summary>Four arcs of one ring with gaps at the cardinal points, four ticks and a dot.</summary>
     private static void DrawReticle(HudCanvas canvas, Vector2 center)
     {
         var theme = canvas.Theme;

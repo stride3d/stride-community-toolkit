@@ -11,7 +11,7 @@ using Stride.Engine;
 // and set up collision groups to control which objects can collide with each other.
 
 // Define collision groups to control which objects can collide with each other
-// Objects within the same group can't collide with each other, however, if IndexA is used, the objects collide with each other if the difference is more than 2
+// Objects within the same group can't collide with each other, however, if IndexA is used, the objects collide with each other if the difference is 2 or more
 
 // In this example, the players will collide with each other because the difference between their IndexA values is 2
 // The enemy entity (red box) won't collide with the players because the difference between their IndexA values is 1
@@ -39,12 +39,12 @@ void Start(Scene scene)
 
 void CreateEntityWithGroup(string name, Color color, Vector3 position, Scene scene, CollisionGroup collisionGroup)
 {
-    var enemy = CreateEntity(name, color, position);
-    var body = enemy.GetComponent<BodyComponent>();
+    var entity = CreateEntity(name, color, position);
+    var body = entity.GetComponent<BodyComponent>();
 
     body!.CollisionGroup = collisionGroup;
 
-    enemy.Scene = scene;
+    entity.Scene = scene;
 }
 
 Entity CreateEntity(string name, Color color, Vector3 position)
@@ -79,7 +79,7 @@ concepts:
   - "How the IndexA difference rule decides whether two bodies collide"
   - Choosing index values so one entity phases through others
   - When an arithmetic rule beats a full collision matrix
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateFlatMaterial"
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

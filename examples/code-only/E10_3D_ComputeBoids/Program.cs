@@ -225,7 +225,7 @@ public sealed class BoidsSimulation : IDisposable
     /// <summary>After a dispatch: what was written becomes what is read.</summary>
     public void Swap() => _current = 1 - _current;
 
-    /// <summary>Throws every boid to a new random place with a new random heading.</summary>
+    /// <summary>Puts every boid back to its scattered starting place and heading. The seed is fixed, so it is the same every time.</summary>
     public void Scatter(CommandList commandList) => Input.SetData(commandList, Scattered(Count));
 
     private Boid[] Scattered(int count)

@@ -67,9 +67,7 @@ const float ArmLength = 2.5f;
 // anchor's centre would force the arm inside the anchor, and the jammed pendulum would never swing.
 const float PinDrop = 0.45f;
 
-// Both comparison pendulums start tilted, so gravity gets them moving without any push. It also
-// makes the middle pendulum's motor visible: a perfectly vertical arm driven about Y just spins
-// about its own axis, which looks like nothing happening at all.
+// Both comparison pendulums start tilted, so gravity gets them moving without any push.
 const float StartTilt = 0.75f;
 
 // Roughly 20 degrees. SwingLimit takes radians.
@@ -83,7 +81,7 @@ const float FreePendulumX = 7.5f;
 // stations never touch each other.
 var pushVelocity = new Vector3(0, 0, 4.5f);
 
-DebugOverlaySection? instructions = null;
+
 
 // Kept so the update loop can switch them off at runtime - the fastest way to feel what a
 // constraint is actually contributing is to remove it while everything is moving.
@@ -188,7 +186,7 @@ void CreateMixer(Scene scene)
     };
 
     // A motor targets a VELOCITY, so there is no "finished" state - it keeps pushing for as long as
-    // it is enabled. The default MotorMaximumForce is the budget it may spend to reach that
+    // it is enabled. MotorMaximumForce is the budget it may spend to reach that
     // velocity; lower it and the cubes would stall the blade instead of being swept aside.
     mixerMotor = new OneBodyAngularMotorConstraintComponent
     {
@@ -228,7 +226,7 @@ void CreateLooseCubes(Scene scene)
 }
 
 /// <summary>
-/// A pendulum hanging from a ball-socket joint, swept around a cone by a ball-socket motor.
+/// A pendulum hanging from a ball-socket joint, swept around a cone by an angular axis motor.
 /// </summary>
 void CreateMotorisedPendulum(Scene scene)
 {
@@ -302,7 +300,7 @@ void CreateSwingLimitComparison(Scene scene)
 /// the caller can add whatever motor or limit it wants to demonstrate.
 /// </summary>
 /// <remarks>
-/// The arm starts tilted by <see cref="StartTilt"/>. Its position is derived from the joint rather
+/// The arm starts tilted by <paramref name="tilt"/>. Its position is derived from the joint rather
 /// than written by hand: the ball socket will drag the arm until the two pivot points coincide, so
 /// placing the arm anywhere else just means it snaps on the first frame.
 /// </remarks>
@@ -421,7 +419,7 @@ void InitializeDebugOverlay()
 
     // BuildInstructions runs every frame the overlay is drawn, which is what puts the live spin
     // readouts on screen without anything having to push them
-    instructions = overlay.AddSection("Game", BuildInstructions);
+    overlay.AddSection("Game", BuildInstructions);
 }
 
 /*

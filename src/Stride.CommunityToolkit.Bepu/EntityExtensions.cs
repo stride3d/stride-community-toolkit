@@ -42,13 +42,13 @@ public static class EntityExtensions
                 return entity;
             }
 
-            var colliderShape = Get2DColliderShape(type, options.Size, options.Depth, options.Vertices);
-
-            //if (colliderShape is null) return entity;
-
-            var compoundCollider = component.Collider as CompoundCollider;
-
-            compoundCollider?.Colliders.Add(colliderShape);
+            // The fitted shape goes into an empty compound only. A compound that already holds a
+            // shape is the caller's own collider and is kept as it is: adding to it would give the
+            // body two colliders, and the mass of both
+            if (component.Collider is CompoundCollider { Colliders.Count: 0 } compoundCollider)
+            {
+                compoundCollider.Colliders.Add(Get2DColliderShape(type, options.Size, options.Depth, options.Vertices));
+            }
 
             entity.Add(component);
 
@@ -86,13 +86,13 @@ public static class EntityExtensions
                 return entity;
             }
 
-            var colliderShape = Get3DColliderShape(type, options.Size);
-
-            //if (colliderShape is null) return entity;
-
-            var compoundCollider = component.Collider as CompoundCollider;
-
-            compoundCollider?.Colliders.Add(colliderShape);
+            // The fitted shape goes into an empty compound only. A compound that already holds a
+            // shape is the caller's own collider and is kept as it is: adding to it would give the
+            // body two colliders, and the mass of both
+            if (component.Collider is CompoundCollider { Colliders.Count: 0 } compoundCollider)
+            {
+                compoundCollider.Colliders.Add(Get3DColliderShape(type, options.Size));
+            }
 
             entity.Add(component);
 

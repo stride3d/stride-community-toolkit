@@ -47,7 +47,7 @@ let CreateMeshEntity (graphicsDevice:GraphicsDevice) (scene:Scene) (position:Vec
     entity
 
 let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle bendRadius circumferenceStepsCount bendSegmentSteps =
-    //for partial torus up to 360 degrees (tAngle in degrees)
+    //for partial torus up to 360 degrees (torusAngle in degrees)
     meshBuilder.WithIndexType(IndexingType.Int16) |> ignore
     meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList)  |> ignore
 
@@ -69,14 +69,15 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
         let xr = cylinderRadius * Math.Cos(tTheta) * Math.Sin(tPhi)
         let zr = cylinderRadius * Math.Cos(tTheta) * Math.Cos(tPhi)
 
-        let tNorm = Vector3(float32 xr, float32 yr, float32 zr)
+        // A normal has length 1: the direction out from the tube's centre line
+        let tNorm = Vector3.Normalize(Vector3(float32 xr, float32 yr, float32 zr))
         let tPos = Vector3(float32 (xc + xr), float32 yr, float32 (zc + zr))
 
         meshBuilder.AddVertex() |> ignore
         meshBuilder.SetElement(position, tPos)
         meshBuilder.SetElement(normal, tNorm)
 
-    //triangle eles
+    //triangle indices
     for j in 0..(bendSegmentSteps - 1) do
       for i in 0..(circumferenceStepsCount - 1) do
 
@@ -131,11 +132,11 @@ order: 10
 description:
   en: |-
     The parametric partial torus, written in F#. The geometry is identical to the C# version; what
-    differs is the shape of the code - the vertex generation reads naturally as comprehensions and
-    folds, and mutable engine state has to be assigned with the left arrow rather than plain equals.
+    differs is the shape of the code - the vertex generation is nested for loops with
+    their results piped to ignore, and mutable engine state has to be assigned with the left arrow rather than plain equals.
 concepts:
   - Generating parametric geometry in F#
-  - Expressing vertex generation with comprehensions
+  - Expressing vertex generation with nested for loops
   - "Assigning to engine properties with the <- operator"
   - Computing correct normals for smooth shading
   - Interoperating with the C# MeshBuilder API from F#

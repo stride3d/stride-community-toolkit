@@ -90,7 +90,7 @@ void Update(Scene scene, GameTime time)
 
 /// <summary>
 /// Something to watch: a ground, a ring of coloured pillars, a bright ball orbiting among them and
-/// a slowly turning cube in the middle. The ball is emissive, so it reads white-hot on the thermal
+/// a cube in the middle. The ball is emissive, so it reads white-hot on the thermal
 /// camera and blooms on the night-vision one.
 /// </summary>
 void BuildScene(Scene scene)

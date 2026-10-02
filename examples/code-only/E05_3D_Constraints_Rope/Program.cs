@@ -78,8 +78,6 @@ const float SwingSpeed = 4f;
 
 var swingImpulse = new Vector3(0, 0, WeightMass * SwingSpeed);
 
-DebugOverlaySection? instructions = null;
-
 Rope? naiveRope = null;
 Rope? stableRope = null;
 var stabilised = true;
@@ -109,7 +107,7 @@ void Start(Scene scene)
         Color.OrangeRed, Color.Firebrick);
 
     // Same rope, same weight. It is built with the naive lever arm and then stabilised, so the same
-    // settings describe both states and S can move it between them while it hangs.
+    // settings describe both states and Z can move it between them while it hangs.
     stableRope = RopeBuilder.Build(game, scene,
         new Vector3(StableRopeX, AnchorHeight, 0),
         new RopeSettings(LinkCount, LinkRadius, LinkSpacing, LinkMass, LeverArm: LinkRadius, SkipSpan, WeightRadius, WeightMass),
@@ -221,7 +219,7 @@ void InitializeDebugOverlay()
 
     // BuildInstructions runs every frame the overlay is drawn, which is what keeps the measured rope
     // lengths live
-    instructions = overlay.AddSection("Game", BuildInstructions);
+    overlay.AddSection("Game", BuildInstructions);
 }
 
 /*
@@ -242,8 +240,9 @@ description:
     to the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by
     side carrying the same weight: the naive one anchors its constraints at the segment ends and ties
     each segment only to its neighbour, while the stable one anchors at the segment centres and adds
-    skip constraints that let impulses take shortcuts along the chain. The skip constraints can be
-    switched off while it hangs, which shows immediately what they were holding together. Follows
+    skip constraints that let impulses take shortcuts along the chain. Z switches the stabilisation
+    off while it hangs, the centre anchors and the skip constraints together, which shows
+    immediately what it was holding together. Follows
     Bepu's own RopeStabilityDemo rather than the more obvious ball-socket construction, which is
     precisely the one that misbehaves.
   cs: |-
@@ -253,7 +252,8 @@ description:
     omezený počet průchodů za snímek. Vedle sebe visí dvě lana se stejným závažím: naivní má vazby
     ukotvené na koncích článků a každý článek spojený jen se sousedem, kdežto stabilní je ukotvené ve
     středech článků a navíc má přeskakující vazby, které impulzům umožní zkratku podél řetězu.
-    Přeskakující vazby lze za běhu vypnout, což okamžitě ukáže, co držely pohromadě. Vychází z
+    Klávesa Z stabilizaci za běhu vypne, ukotvení ve středech i přeskakující vazby zároveň, což
+    okamžitě ukáže, co držela pohromadě. Vychází z
     ukázky RopeStabilityDemo přímo od autora Bepu, nikoli z nasnadě ležící konstrukce s kulovými
     klouby, která je právě tou nefungující.
 concepts:

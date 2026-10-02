@@ -136,7 +136,7 @@ public static class SetPieceStations
     /// A landing burn, a rocket engine firing down at the pad: a white-blue core of stretched quads at the throat,
     /// an orange plume of flame frames around it, sparks thrown clear, and exhaust smoke that hits
     /// the ground through a collider and rolls out across the pad. The variations are how much the
-    /// engine smokes - a clean burn, a sooty one - and an afterburner with a longer, hotter core.
+    /// engine smokes - a clean burn, a sooty one - and a landing burn with a hotter core, mach diamonds and dust.
     /// The flame ends above the pad, so all of it shows; the smoke is what reaches the ground.
     /// </summary>
     public static void RocketEngine(ParticleStation s)
@@ -280,7 +280,7 @@ public static class SetPieceStations
         diamonds.Initializers.Add(new InitialSizeSeed { RandomSize = new Vector2(0.35f, 0.55f) });
         diamonds.Initializers.Add(new InitialPositionSeed { PositionMin = new Vector3(-0.05f, -3.2f, -0.05f), PositionMax = new Vector3(0.05f, -0.4f, 0.05f) });
 
-        // Dust: the landing burn stirs up the pad, a wide low cloud that the smoke's collider keeps on the ground
+        // Dust: the landing burn stirs up the pad, a wide low cloud born at pad height and pushed outward
         var dust = new ParticleEmitter
         {
             ParticleLifetime = new Vector2(3f, 5f),

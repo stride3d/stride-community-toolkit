@@ -21,8 +21,11 @@ using Stride.Rendering;
 // of two Models - shapes cannot be mixed. Changing shape therefore clears the pile and respawns it, while
 // changing the layout or the batch size only affects what is spawned next.
 
-Vector3 wallHeight = new(1, 65, 1);
+Vector3 wallSize = new(1, 65, 1);
 const float WallWidth = 100;
+
+// A body further than this from the pile, sideways or below, has escaped and is removed
+const float EscapeDistance = 70f;
 const float SpawnHeight = 150;
 const float ColumnWidth = WallWidth - 30;
 
@@ -94,8 +97,8 @@ void Start(Scene rootScene)
     game.Add3DCameraController();
     game.AddSkybox();
 
-    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallHeight);
-    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallHeight);
+    CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
+    CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);
     // The ramps overlap deeply at the middle: with a shallow overlap, pressure from the pile
     // squeezes boxes through the crack where they meet and fires them out at high speed
     CreateWall(new Vector3(-23.27f, -47.6f, 0), new Vector3(62.3f, 1, 1), Quaternion.RotationZ(MathUtil.DegreesToRadians(-30)));
@@ -268,20 +271,21 @@ void SpawnBatch(int count)
     if (layout == SpawnLayout.Grid)
     {
         var perRow = (int)ColumnWidth;
-        var rows = Math.Max(1, count / perRow);
 
-        for (var i = 0; i < rows; i++)
+        // One loop over the count, so the batch is exactly as large as asked for: whole rows, then
+        // a last row that is only partly filled
+        for (var i = 0; i < count; i++)
         {
-            for (var j = 0; j < perRow; j++)
-            {
-                // The jitter matters. A perfectly regular lattice of touching bodies degenerates
-                // Bepu's broad-phase tree and kills the process with a stack overflow in
-                // Refit2WithCacheOptimization - a millimetre of noise is enough to avoid it.
-                Spawn(new Vector3(
-                    (j - perRow / 2f) * 1.2f + Jitter(),
-                    SpawnHeight + i * 1.2f + Jitter(),
-                    0));
-            }
+            var row = i / perRow;
+            var column = i % perRow;
+
+            // The jitter matters. A perfectly regular lattice of touching bodies degenerates
+            // Bepu's broad-phase tree and kills the process with a stack overflow in
+            // Refit2WithCacheOptimization - a millimetre of noise is enough to avoid it.
+            Spawn(new Vector3(
+                (column - perRow / 2f) * 1.2f + Jitter(),
+                SpawnHeight + row * 1.2f + Jitter(),
+                0));
         }
     }
     else
@@ -377,7 +381,7 @@ void DespawnEscaped()
     {
         var position = bodies[i].Transform.Position;
 
-        if (MathF.Abs(position.X) < 70f && position.Y > -70f) continue;
+        if (MathF.Abs(position.X) < EscapeDistance && position.Y > -EscapeDistance) continue;
 
         var entity = bodies[i];
 
@@ -467,7 +471,7 @@ public enum SpawnLayout
 ---example-metadata
 slug: stress-pile-2d
 title:
-  en: Basic2D Scene (Stress Pile)
+  en: Basic 2D Scene (Stress Pile)
   cs: Základní 2D scéna (Zátěžová hromada)
 level: Advanced
 category: Performance
@@ -480,13 +484,13 @@ description:
     layout switchable while it runs. Because one master entity per sleep state draws every body, all
     of them share one of two Models and shapes cannot be mixed - changing shape clears and
     respawns the pile, which the example uses to show how to tear a pile down safely. Models are cached
-    per shape and the instancing object is reused rather than recreated, so switching costs nothing.
+    per shape and the instancing objects are reused rather than recreated, so switching costs nothing.
     Grid spawns are deliberately jittered: a perfectly regular lattice of touching bodies degenerates
     Bepu's broad-phase tree.
   cs: |-
     Tisíce 2D fyzikálních těles se vrší na sebe a vykreslují se dvěma voláními díky instancingu; spící tělesa se zbarví zeleně.
-    Za běhu lze měnit tvar, velikost dávky i způsob rozmístění. Protože vše vykresluje jedna hlavní
-    entita, sdílejí všechna tělesa jeden model a tvary nelze míchat - změna tvaru proto hromadu smaže
+    Za běhu lze měnit tvar, velikost dávky i způsob rozmístění. Protože každý stav spánku vykresluje
+    jedna hlavní entita, sdílejí všechna tělesa jeden ze dvou modelů a tvary nelze míchat - změna tvaru proto hromadu smaže
     a vytvoří znovu. Modely se ukládají do mezipaměti podle tvaru a instancing se používá opakovaně.
 concepts:
   - Drawing thousands of physics bodies in two instanced draw calls, split by sleep state

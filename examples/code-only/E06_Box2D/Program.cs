@@ -7,7 +7,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 
-// Example 18: Box2D Physics Integration
+// Box2D Physics Integration
 // This example demonstrates how to integrate Box2D.NET with Stride game engine
 // for 2D physics simulations with shapes, collisions, and interactive controls
 
@@ -103,7 +103,7 @@ description:
 concepts:
   - Hosting an external physics world alongside Stride
   - "Stepping a simulation on a fixed timestep, independent of frame rate"
-  - Creating dynamic, kinematic and static bodies in Box2D
+  - Creating dynamic and static bodies in Box2D
   - Copying body poses onto entity transforms each frame
   - Why the scene graph must not write back to the simulation
   - "Requires the Box2D.NET NuGet package"

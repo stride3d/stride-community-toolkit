@@ -25,7 +25,7 @@ using Stride.Rendering;
 //
 // Three sheets hang side by side, differing only in stiffness and whether they have area
 // constraints; a fourth drapes itself over a ball. Every node is drawn by one instanced master, so
-// nine hundred bodies cost one draw call. The solver runs eight substeps, set through
+// about eleven hundred bodies cost one draw call. The solver runs eight substeps, set through
 // UseGameSettings before the game starts - cloth is exactly the kind of stiff, connected system
 // that substepping is for.
 //
@@ -391,7 +391,7 @@ description:
     of sphere nodes tied by distance limits that may bunch but never stretch, area constraints on
     every triangle against shear, and collision groups keeping neighbours from fighting. Three
     sheets hang side by side to compare stiffness with and without area constraints, a fourth
-    drapes over a ball, nine hundred nodes are one instanced draw call, and the solver runs eight
+    drapes over a ball, about eleven hundred nodes are one instanced draw call, and the solver runs eight
     substeps set through UseGameSettings. Pull on anything with the grabber, and pick the node
     size from a menu: the sheets keep their dimensions, so smaller nodes mean a denser lattice
     with finer folds and a higher body count.

@@ -27,7 +27,7 @@ game.Run(start: Start);
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
-    //DisplayScale.GetOrCreate(game).Override = 1f;
+
     game.SetupBase3DScene();
     game.AddSkybox();
 
@@ -37,68 +37,68 @@ void Start(Scene scene)
 
     // --- Row 1: placement ----------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)", station => { });
+    AddStation(scene, new Vector3(-4.5f, 0, -2), "Plain label\n(all defaults)", label => { });
 
-    AddStation(scene, new Vector3(-1.5f, 0, -2), "Anchor = BottomCenter\nOffset = (0, -12)", station =>
+    AddStation(scene, new Vector3(-1.5f, 0, -2), "Anchor = BottomCenter\nOffset = (0, -12)", label =>
     {
         // The label floats centred above its pole. This pairing is what "put a name over a thing"
         // means, and it is Anchor doing the centring - not Alignment, which only arranges the lines
         // of a multi-line block relative to each other.
-        station.Anchor = TextAnchor.BottomCenter;
-        station.Offset = new Vector2(0, -12);
+        label.Anchor = TextAnchor.BottomCenter;
+        label.Offset = new Vector2(0, -12);
     });
 
-    AddStation(scene, new Vector3(1.5f, 0, -2), "FontSize = 26", station =>
+    AddStation(scene, new Vector3(1.5f, 0, -2), "FontSize = 26", label =>
     {
-        station.FontSize = 26;
+        label.FontSize = 26;
     });
 
-    AddStation(scene, new Vector3(4.5f, 0, -2), "Scale = 1.6\n(cheaper to animate\nthan FontSize)", station =>
+    AddStation(scene, new Vector3(4.5f, 0, -2), "Scale = 1.6\n(cheaper to animate\nthan FontSize)", label =>
     {
         // Scale multiplies the drawn size without re-rasterising glyphs, which is why a score punch
         // animates Scale and leaves FontSize alone
-        station.Scale = 1.6f;
+        label.Scale = 1.6f;
     });
 
     // --- Row 2: readability --------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, 1), "EnableShadow = true", station =>
+    AddStation(scene, new Vector3(-4.5f, 0, 1), "EnableShadow = true", label =>
     {
-        station.EnableShadow = true;
+        label.EnableShadow = true;
     });
 
-    AddStation(scene, new Vector3(-1.5f, 0, 1), "EnableBackground = true", station =>
+    AddStation(scene, new Vector3(-1.5f, 0, 1), "EnableBackground = true", label =>
     {
-        station.EnableBackground = true;
+        label.EnableBackground = true;
     });
 
-    AddStation(scene, new Vector3(1.5f, 0, 1), "TextColor = Orange\nOpacity = 0.55", station =>
+    AddStation(scene, new Vector3(1.5f, 0, 1), "TextColor = Orange\nOpacity = 0.55", label =>
     {
-        station.TextColor = Color.Orange;
-        station.Opacity = 0.55f;
+        label.TextColor = Color.Orange;
+        label.Opacity = 0.55f;
     });
 
-    AddStation(scene, new Vector3(4.5f, 0, 1), "Rotation = 0.35 rad", station =>
+    AddStation(scene, new Vector3(4.5f, 0, 1), "Rotation = 0.35 rad", label =>
     {
-        station.Rotation = 0.35f;
+        label.Rotation = 0.35f;
     });
 
     // --- Row 3: distance -----------------------------------------------------------------------
 
-    AddStation(scene, new Vector3(-4.5f, 0, 4), "FadeStartDistance = 8\nMaxDistance = 14\n(walk backwards!)", station =>
+    AddStation(scene, new Vector3(-4.5f, 0, 4), "FadeStartDistance = 8\nMaxDistance = 14\n(walk backwards!)", label =>
     {
         // World-positioned text can fade with camera distance; past MaxDistance it stops drawing
-        station.EnableShadow = true;
-        station.FadeStartDistance = 8;
-        station.MaxDistance = 14;
+        label.EnableShadow = true;
+        label.FadeStartDistance = 8;
+        label.MaxDistance = 14;
     });
 
     // Two components on one entity: a name and a subtitle. LayerDepth decides who wins overlaps.
-    var titled = AddStation(scene, new Vector3(-1.5f, 0, 4), "Two components,\none entity", station =>
+    var titled = AddStation(scene, new Vector3(-1.5f, 0, 4), "Two components,\none entity", label =>
     {
-        station.Anchor = TextAnchor.BottomCenter;
-        station.Offset = new Vector2(0, -26);
-        station.EnableShadow = true;
+        label.Anchor = TextAnchor.BottomCenter;
+        label.Offset = new Vector2(0, -26);
+        label.EnableShadow = true;
     });
 
     titled.Add(new EntityTextComponent
@@ -199,7 +199,7 @@ concepts:
   - "Registering the text renderer once: AddEntityTextRenderer"
   - Centring a label over an object with TextAnchor, not TextAlignment
   - Shadow and background for readability over a 3D scene
-  - Animating Scale instead of FontSize
+  - Scale as the cheap way to resize, instead of FontSize
   - Distance fading with FadeStartDistance and MaxDistance
   - Several EntityTextComponents on one entity
   - "HUD text that survives window resizing: TextPositionMode.Anchored"

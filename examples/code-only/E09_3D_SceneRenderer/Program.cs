@@ -21,11 +21,9 @@ bool impulseApplied = false;
 
 using var game = new Game();
 
-/// <summary>
-/// Entry point for the game setup. The game runs with two main customizations:
-/// 1. A custom scene renderer is added to display entity debug information using SpriteBatch.
-/// 2. A custom script is added to an entity for specific entity-related rendering (e.g., "Hello Stride").
-/// </summary>
+// Three ways to draw over the scene: a scene-wide renderer (MyCustomSceneRenderer), the toolkit's
+// EntityTextRenderer for EntityTextComponent labels, and a renderer that belongs to one entity
+// (SpriteBatchRendererScript)
 game.Run(start: Start, update: Update);
 
 void Start(Scene scene)
@@ -39,7 +37,7 @@ void Start(Scene scene)
     // Adds a skybox (a background environment) to the scene
     game.AddSkybox();
 
-    // Example 1: Adds a custom scene renderer to render text for all entities in the scene and also "Hello Stride" text
+    // Example 1: Adds a custom scene renderer to render text for all entities in the scene and also the static "Example 1" text
     game.AddSceneRenderer(new MyCustomSceneRenderer());
 
     // Example 2: Adds a custom scene renderer to render text for all entities with a component of type EntityTextComponent
@@ -52,7 +50,7 @@ void Start(Scene scene)
     // Example 2: Adds an EntityTextComponent to the cube entity, which renders text
     cube.Add(new EntityTextComponent()
     {
-        Text = "Example2: Me, Cube",
+        Text = "Example 2: Me, Cube",
         FontSize = 12,
         TextColor = Color.Purple,
     });
@@ -63,7 +61,7 @@ void Start(Scene scene)
     var capsule = game.Create3DPrimitive(PrimitiveModelType.Capsule);
     capsule.Transform.Position = new Vector3(0, 8, 0);
 
-    // Lets tilt the capsule a bit which should cause it to move after it falls
+    // Let's tilt the capsule a bit which should cause it to move after it falls
     capsule.Transform.Rotation = Quaternion.RotationZ(MathUtil.DegreesToRadians(2));
 
     // Get the body component
@@ -74,7 +72,7 @@ void Start(Scene scene)
 
     var textComponent = new EntityTextComponent()
     {
-        Text = "Example2: Hello, Stride!",
+        Text = "Example 2: Hello, Stride!",
         FontSize = 13,
         TextColor = Color.Blue,
         Offset = new(0, -100),
@@ -93,7 +91,7 @@ void Update(Scene scene, GameTime time)
     if (impulseApplied) return;
 
     // Let's add some momentum so it rolls after it falls, the rigid body is already added by Create3DPrimitive
-    //body.ApplyImpulse(new(0, 0, 0.1f), new());
+
     body.ApplyAngularImpulse(new(0, 10, 0));
 
     impulseApplied = true;
@@ -109,10 +107,11 @@ complexity: 4
 order: 10
 description:
   en: |-
-    Two ways to draw your own 2D content over a 3D scene, side by side. A SceneRendererBase subclass
+    Three ways to draw 2D content over a 3D scene, side by side. A SceneRendererBase subclass
     covers the whole scene and is the right shape for HUDs and debug overlays; a DelegateSceneRenderer
     created from a StartupScript belongs to one entity and is the right shape for labels attached to a
-    thing. Both project world positions into screen space and draw through a SpriteBatch, so the example
+    thing; the toolkit's EntityTextComponent does the same with no renderer of your own. The first
+    two project world positions into screen space and draw through a SpriteBatch, so the example
     also covers where those resources are created and when they must be released.
 concepts:
   - "Hooking the pipeline by subclassing SceneRendererBase"
@@ -120,6 +119,7 @@ concepts:
   - Converting a world position into screen coordinates
   - Drawing text and backgrounds with SpriteBatch
   - Deciding between a scene-wide and an entity-scoped renderer
+  - "Labelling entities with the toolkit's EntityTextComponent and EntityTextRenderer"
   - Initialising and releasing renderer resources at the right time
   - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
 tags:

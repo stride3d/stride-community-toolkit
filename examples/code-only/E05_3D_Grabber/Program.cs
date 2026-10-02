@@ -29,7 +29,6 @@ var masses = new[] { 1f, 3f, 10f, 30f, 100f };
 var spawned = new List<Entity>();
 
 GrabberScript? grabber = null;
-Entity? lockedBody = null;
 
 using var game = new Game();
 
@@ -45,8 +44,7 @@ void Start(Scene scene)
     game.SetCameraRotation(new Vector3(180, -14, 0));
 
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
-    grabber = new GrabberScript();
-    game.GetCameraEntity().Add(grabber);
+    grabber = game.AddGrabber();
 
     BuildScene(scene);
     AddInstructions();
@@ -96,7 +94,7 @@ void BuildScene(Scene scene)
     }
 
     // A capsule whose rotation is locked once it is in the simulation: it can be dragged, never turned.
-    lockedBody = game.Create3DPrimitive(PrimitiveModelType.Capsule, new()
+    var lockedBody = game.Create3DPrimitive(PrimitiveModelType.Capsule, new()
     {
         Material = game.CreateMaterial(new Color(255, 200, 80)),
         Position = new Vector3(-4.5f, 1, 1.5f),
@@ -113,13 +111,20 @@ void BuildScene(Scene scene)
     {
         Size = new Vector3(8, 3, 0.4f),
         Material = game.CreateMaterial(new Color(140, 140, 150)),
-        Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider() } } },
+        // An empty compound: the helper adds the box that fits the wall's size. A box given here
+        // would be kept as the wall's collider, at its own default size
+        Component = new StaticComponent { Collider = new CompoundCollider() },
         Position = new Vector3(0, 1.5f, 7),
     });
     wall.Name = "wall";
     Place(wall, scene);
 
-    static void Place(Entity entity, Scene scene) => entity.Scene = scene;
+    // Remembered, so that R can take the scene away before building it again
+    void Place(Entity entity, Scene scene)
+    {
+        entity.Scene = scene;
+        spawned.Add(entity);
+    }
 }
 
 void AddInstructions()
@@ -180,7 +185,7 @@ concepts:
   - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
   - Locking a body's rotation through its BodyInertia, and what the grabber does about it
   - Reading the held body's mass and the servo cap from the script for the overlay
-  - "Using helpers: SetupBase3DScene, Create3DPrimitive, GetCameraEntity, DebugOverlay"
+  - "Using helpers: SetupBase3DScene, Create3DPrimitive, AddGrabber, DebugOverlay"
 tags:
   - 3D
   - Physics

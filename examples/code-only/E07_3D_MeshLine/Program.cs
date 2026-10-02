@@ -73,7 +73,7 @@ complexity: 2
 order: 30
 description:
   en: |-
-    A line drawn between two spheres, built as a real mesh rather than a debug primitive. Two vertices,
+    A line attached to a sphere, built as a real mesh rather than a debug primitive. Two vertices,
     an index buffer, a MeshDraw set to LineList and an emissive material are all it takes, which makes
     this the smallest useful tour of Stride's low-level geometry API. The line is parented to one of the
     spheres, so moving that sphere moves the line with it.
@@ -84,7 +84,7 @@ concepts:
   - Wrapping a MeshDraw in a Mesh, Model and ModelComponent
   - Making a line visible with an emissive material
   - Parenting an entity so it follows another
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateMaterial"
+  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, GizmoEmissiveColorMaterial.Create"
 tags:
   - 3D
   - Geometry

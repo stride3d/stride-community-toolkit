@@ -1,9 +1,9 @@
-open Stride.CommunityToolkit.Bepu;
-open Stride.CommunityToolkit.Engine;
-open Stride.CommunityToolkit.Skyboxes;
-open Stride.CommunityToolkit.Rendering.ProceduralModels;
-open Stride.Core.Mathematics;
-open Stride.Engine;
+open Stride.CommunityToolkit.Bepu
+open Stride.CommunityToolkit.Engine
+open Stride.CommunityToolkit.Skyboxes
+open Stride.CommunityToolkit.Rendering.ProceduralModels
+open Stride.Core.Mathematics
+open Stride.Engine
 
 let game = new Game()
 
@@ -12,9 +12,9 @@ let Start rootScene =
     game.AddSkybox() |> ignore
     game.AddProfiler() |> ignore
 
-    let firstBox = game.Create3DPrimitive(PrimitiveModelType.Capsule, Bepu3DPhysicsOptions());
-    firstBox.Transform.Position <- new Vector3(0f, 2.5f, 0f)
-    firstBox.Scene <- rootScene
+    let capsule = game.Create3DPrimitive(PrimitiveModelType.Capsule, Bepu3DPhysicsOptions())
+    capsule.Transform.Position <- new Vector3(0f, 2.5f, 0f)
+    capsule.Scene <- rootScene
 
 [<EntryPoint>]
 let main argv =
@@ -31,8 +31,8 @@ complexity: 1
 order: 10
 description:
   en: |-
-    The first code-only scene written in F#. Everything the C# version does - base scene, skybox,
-    profiler, one capsule - with the differences F# forces you to be explicit about: helpers that return
+    The first code-only scene written in F#. What the C# version does - base scene, skybox, one
+    capsule - plus a profiler, with the differences F# forces you to be explicit about: helpers that return
     a value must be piped to ignore, assignment to a mutable property uses the left arrow, and the game
     loop is started from a real main function marked with EntryPoint.
 concepts:

@@ -10,9 +10,8 @@ using Stride.Input;
 
 const string EntityName = "PrimitiveModelGroup";
 
-var size1 = new Vector3(0.5f);
-var size2 = new Vector3(0.25f, 0.5f, 0.25f);
-DebugOverlaySection? instructions = null;
+var uniformSize = new Vector3(0.5f);
+var narrowSize = new Vector3(0.25f, 0.5f, 0.25f);
 
 using var game = new Game();
 
@@ -25,7 +24,7 @@ void Start(Scene scene)
     game.AddProfiler();
 
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
-    var grabber = game.AddGrabber();
+    game.AddGrabber();
 
     InitializeDebugOverlay();
     Add3DPrimitives(scene);
@@ -45,15 +44,15 @@ void Add3DPrimitives(Scene scene)
 {
     var primitives = new[]
     {
-        (Type: PrimitiveModelType.Cube, Position: new Vector3(-4f, 0.5f, 0), Size: size1, Rotation: null, AddDebug: true),
-        (Type: PrimitiveModelType.Cube, Position: new Vector3(-2.2f, 0.5f, -4f), Size: size2, Rotation: null, AddDebug: false),
+        (Type: PrimitiveModelType.Cube, Position: new Vector3(-4f, 0.5f, 0), Size: uniformSize, Rotation: null, AddDebug: true),
+        (Type: PrimitiveModelType.Cube, Position: new Vector3(-2.2f, 0.5f, -4f), Size: narrowSize, Rotation: null, AddDebug: false),
         (Type: PrimitiveModelType.Cone, Position: new Vector3(0, 2, 0), Size: new (0.5f, 3, 0), Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Capsule, Position: new Vector3(0.01f, 6, 0), Size: size2, Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Sphere, Position: new Vector3(0, 8, 0), Size: size2, Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Cylinder, Position: new Vector3(0.5f, 10, 0), Size: size2, Rotation: null, AddDebug: false),
+        (Type: PrimitiveModelType.Capsule, Position: new Vector3(0.01f, 6, 0), Size: narrowSize, Rotation: null, AddDebug: false),
+        (Type: PrimitiveModelType.Sphere, Position: new Vector3(0, 8, 0), Size: narrowSize, Rotation: null, AddDebug: false),
+        (Type: PrimitiveModelType.Cylinder, Position: new Vector3(0.5f, 10, 0), Size: narrowSize, Rotation: null, AddDebug: false),
         (Type: PrimitiveModelType.Teapot, Position: new Vector3(3, 4f, 0), Size: null, Rotation: null, AddDebug: false)!,
         (Type: PrimitiveModelType.Torus, Position: new Vector3(0, 12, 0), Size: null, Rotation: null, AddDebug: false)!,
-        (Type: PrimitiveModelType.TriangularPrism, Position: new Vector3(-8.0f, 2, -3.0f), Size: (Vector3?)null, Rotation: (Quaternion?)Quaternion.RotationY(75), AddDebug: false),
+        (Type: PrimitiveModelType.TriangularPrism, Position: new Vector3(-8.0f, 2, -3.0f), Size: (Vector3?)null, Rotation: (Quaternion?)Quaternion.RotationY(MathUtil.DegreesToRadians(75)), AddDebug: false),
         (Type: PrimitiveModelType.TriangularPrism, Position: new Vector3(-3.5f, 0.5f, 1), Size: null, Rotation: null, AddDebug: false)!,
     };
 
@@ -104,32 +103,33 @@ void InitializeDebugOverlay()
     // needs to be called every frame
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    instructions = overlay.AddSection("Game", static () =>
+    overlay.AddSection("Game", static () =>
     [
         new("P", "Show or hide the collidable gizmos", Color.Gold),
         new("F11", "Show or hide the debug meshes", Color.Gold),
         new("R", "Reset the scene", Color.Gold),
     ]);
 }
+
 /*
 ---example-metadata
 slug: primitives-3d
 title:
-  en: Basic3D Scene (Every Primitive)
+  en: Basic 3D Scene (Eight Primitives)
 level: Beginner
 category: Shapes
 complexity: 2
 order: 10
 description:
   en: |-
-    Every 3D primitive the toolkit can build - cube, cone, capsule, sphere, cylinder, teapot, torus and
+    Eight of the toolkit's 3D primitives - cube, cone, capsule, sphere, cylinder, teapot, torus and
     triangular prism - dropped into one scene so the shapes, their default sizes and their generated
     colliders can be compared side by side. Naming each entity is what makes the scene resettable: R
     removes everything with that name and rebuilds, which is the simplest safe teardown pattern there
     is. P and F11 turn on the collider and debug-mesh overlays.
 concepts:
-  - Creating each PrimitiveModelType and comparing their defaults
-  - Sizing a primitive with Primitive3DCreationOptions
+  - Creating eight PrimitiveModelType shapes and comparing their defaults
+  - Sizing a primitive with the Size option of Create3DPrimitive
   - Rotating an entity with Transform.Rotation
   - Tagging entities with a name so the scene can be torn down and rebuilt
   - Inspecting generated colliders with CollidableGizmoScript

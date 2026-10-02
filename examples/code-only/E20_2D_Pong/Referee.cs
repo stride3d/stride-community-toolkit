@@ -28,7 +28,7 @@ public class Referee : AsyncScript
     /// <summary>The right player's score on the court.</summary>
     public required WorldTextComponent RightScore { get; init; }
 
-    /// <summary>The line under the net that says what to press.</summary>
+    /// <summary>The line under the court that says what to press.</summary>
     public required WorldTextComponent Message { get; init; }
 
     /// <summary>Whether a match is on. False during the demo the game opens with.</summary>

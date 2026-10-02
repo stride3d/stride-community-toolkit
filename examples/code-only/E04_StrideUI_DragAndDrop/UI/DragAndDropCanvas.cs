@@ -7,7 +7,7 @@ using Stride.UI.Panels;
 namespace E04_StrideUI_DragAndDrop.UI;
 
 /// <summary>
-/// Represents a draggable and resizable window with a close button.
+/// Represents a draggable window with a close button.
 /// </summary>
 public class DragAndDropCanvas : Canvas
 {

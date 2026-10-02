@@ -15,7 +15,7 @@ PrimitiveGenerator? _shapeGenerator = null;
 
 const int ShapeCount = 100;
 const int RemovalThresholdY = -30;
-const string TotalCubes = "Total Shapes: ";
+const string TotalShapesLabel = "Total Shapes:";
 
 using var game = new Game();
 
@@ -50,15 +50,19 @@ void Start(Scene scene)
 
 void Update(Scene scene, GameTime time)
 {
-    foreach (var entity in scene.Entities)
+    // Backwards by index: taking an entity out of the scene while a foreach walks the same list
+    // would skip the entity after it
+    for (var i = scene.Entities.Count - 1; i >= 0; i--)
     {
+        var entity = scene.Entities[i];
+
         if (entity.Transform.Position.Y < RemovalThresholdY)
         {
             entity.Scene = null;
 
             _shapeGenerator?.SubtractTotalCubes(1);
 
-            _uiManager?.UpdateTextBlock($"{TotalCubes} {_shapeGenerator?.TotalShapes ?? 0}");
+            _uiManager?.UpdateTextBlock($"{TotalShapesLabel} {_shapeGenerator?.TotalShapes ?? 0}");
         }
     }
 }
@@ -83,7 +87,7 @@ void GenerateRandomSpheres()
 {
     var totalShapes = _shapeGenerator?.Generate(ShapeCount, PrimitiveModelType.Sphere);
 
-    _uiManager?.UpdateTextBlock($"{TotalCubes} {totalShapes ?? 0}");
+    _uiManager?.UpdateTextBlock($"{TotalShapesLabel} {totalShapes ?? 0}");
 }
 
 static void MoveToAnotherProjectOrSnippetExample(Scene scene, Game game)

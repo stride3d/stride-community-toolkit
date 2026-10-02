@@ -33,6 +33,9 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 const float LiftLow = 1f;
 const float LiftHigh = 3.5f;
+
+// How hard the lift is pulled back onto its eased target when it has drifted off it
+const float LiftCorrectionGain = 8f;
 const float DoorOpenAngle = 110f;
 
 var liftHome = new Vector3(-4f, LiftLow, 0f);
@@ -170,7 +173,7 @@ void Update(Scene scene, GameTime time)
     if (liftBody is not null && dt > 0f)
     {
         var feedForward = (liftTarget - liftTargetBefore) / dt;
-        var correction = (liftTarget - liftBody.Position) * 8f;
+        var correction = (liftTarget - liftBody.Position) * LiftCorrectionGain;
 
         liftBody.LinearVelocity = feedForward + correction;
         liftBody.Awake = true;

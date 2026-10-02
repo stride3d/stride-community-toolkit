@@ -123,7 +123,7 @@ public class CameraRotationScript : SyncScript
     static List<TextElement> GenerateInstructions(Vector3 cameraPosition)
      => [
             new("Left mouse", "Click a cube", Color.Yellow),
-            new("Shift", "Hold with the left mouse button down", Color.Yellow),
+            new("Shift", "Hold with left mouse to keep clearing", Color.Yellow),
             new(["Z", "C"], "Orbit around the platform, Shift for faster", Color.Yellow),
             new(""),
             new($"Camera position {cameraPosition.X:0.00}, {cameraPosition.Y:0.00}, {cameraPosition.Z:0.00}", Color.Yellow),

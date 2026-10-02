@@ -15,7 +15,9 @@ public sealed class ShipState
     // A new comms line arrives this often, in seconds
     private const float CommsInterval = 2.4f;
 
-    public float Time { get; private set; }
+    /// <summary>How many decoys the ship carries when full.</summary>
+    private const int DecoyLoad = 48;
+
 
     public FlightState Flight { get; } = new();
 
@@ -83,7 +85,7 @@ public sealed class ShipState
     /// <summary>How many comms lines have arrived, with the fraction of the next one's wait.</summary>
     public float CommsPosition { get; private set; }
 
-    public int Decoys { get; private set; } = 48;
+    public int Decoys { get; private set; } = DecoyLoad;
 
     public float[] Spectrum { get; } = new float[14];
 
@@ -99,7 +101,6 @@ public sealed class ShipState
     /// <param name="time">The ship's clock in seconds.</param>
     public void Advance(float time)
     {
-        Time = time;
 
         Flight.Advance(time);
         Systems.Advance(time, Flight.Speed);
@@ -107,7 +108,7 @@ public sealed class ShipState
         RadarSweep = -time * 1.4f;
         TargetInSight = new Vector2(0.55f + 0.25f * MathF.Sin(time * 0.5f), 0.5f + 0.3f * MathF.Sin(time * 0.33f + 1f));
         CommsPosition = time / CommsInterval;
-        Decoys = 48 - (int)(time / 15f) % 20;
+        Decoys = DecoyLoad - (int)(time / 15f) % 20;
 
         for (var i = 0; i < Contacts.Length; i++)
         {
@@ -160,7 +161,7 @@ public sealed class SystemsState
 
     internal void Advance(float time, float speed)
     {
-        // The shield takes a hit every 20 seconds and recharges over the next ten
+        // The shield drains for ten seconds, then recharges over the next ten
         var cycle = time % 20f;
 
         Shield = cycle < 10f ? 1f - cycle / 10f * 0.9f : 0.1f + (cycle - 10f) / 10f * 0.9f;

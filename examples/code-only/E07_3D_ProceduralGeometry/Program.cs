@@ -183,11 +183,11 @@ void CreateCircleMesh(MeshBuilder meshBuilder, int segments)
     {
         var x = (float)Math.Sin(Math.Tau / segments * i) / 2;
         var y = (float)Math.Cos(Math.Tau / segments * i) / 2;
-        var hsl = new ColorHSV(360f / segments * i, 1, 1, 1).ToColor();
+        var vertexColor = new ColorHSV(360f / segments * i, 1, 1, 1).ToColor();
 
         meshBuilder.AddVertex();
         meshBuilder.SetElement(position, new Vector3(x + .5f, y + .5f, 0));
-        meshBuilder.SetElement(color, hsl);
+        meshBuilder.SetElement(color, vertexColor);
     }
 
     meshBuilder.AddVertex();
@@ -258,10 +258,10 @@ concepts:
   - Declaring a vertex layout and filling it with MeshBuilder
   - Building a triangle, a plane and a circle from first principles
   - Rebuilding a mesh every frame as a parameter changes
-  - "Disposing the previous mesh and material before replacing them"
+  - "Disposing the previous mesh's buffers before replacing it, and sharing one material"
   - Why clockwise winding matters for which face you see
   - Creating a non-indexed mesh when index reuse buys nothing
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreateFlatMaterial"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreateMaterial"
 tags:
   - 3D
   - Geometry

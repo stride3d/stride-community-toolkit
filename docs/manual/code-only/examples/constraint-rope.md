@@ -11,8 +11,9 @@ apart is the real problem, because the force holding that weight up has to trave
 to the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by
 side carrying the same weight: the naive one anchors its constraints at the segment ends and ties
 each segment only to its neighbour, while the stable one anchors at the segment centres and adds
-skip constraints that let impulses take shortcuts along the chain. The skip constraints can be
-switched off while it hangs, which shows immediately what they were holding together. Follows
+skip constraints that let impulses take shortcuts along the chain. Z switches the stabilisation
+off while it hangs, the centre anchors and the skip constraints together, which shows
+immediately what it was holding together. Follows
 Bepu's own RopeStabilityDemo rather than the more obvious ball-socket construction, which is
 precisely the one that misbehaves.
 

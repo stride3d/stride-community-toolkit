@@ -59,7 +59,7 @@ var masters = new BufferedEntityInstancing[shapes.Length];
 
 CubeFountain? fountain = null;
 DebugTextDropdown? shapeMenu = null;
-var timeScale = Array.IndexOf(timeScales, 1f);
+var timeScaleIndex = Array.IndexOf(timeScales, 1f);
 var interpolated = true;
 
 using var game = new Game();
@@ -148,10 +148,10 @@ void Update(Scene scene, GameTime time)
 
     if ((faster || slower) && fountain.Simulation is { } simulation)
     {
-        timeScale = Math.Clamp(timeScale + (faster ? 1 : -1), 0, timeScales.Length - 1);
+        timeScaleIndex = Math.Clamp(timeScaleIndex + (faster ? 1 : -1), 0, timeScales.Length - 1);
 
         // The one line that slows, stops or speeds up the fountain. Nothing is sent to the fountain
-        simulation.TimeScale = timeScales[timeScale];
+        simulation.TimeScale = timeScales[timeScaleIndex];
 
         // Five times the speed is five physics steps a frame at 60 frames a second, and the
         // simulation is meant to run at most this many, three by default
@@ -195,7 +195,7 @@ IReadOnlyList<TextElement> OverlayLines()
         new($"Launching: {shapes[fountain.Kind].Name}", shapes[fountain.Kind].Colour),
         new($"{fountain.Rate:0} bodies per simulated second", Color.LightGreen),
         new($"{fountain.Count} of {fountain.Capacity} bodies, {fountain.Recycled} places reused", Color.LightGreen),
-        new(timeScales[timeScale] > 0f ? $"Simulation at {timeScales[timeScale]:0.##}x" : "Simulation paused", Color.LightGreen),
+        new(timeScales[timeScaleIndex] > 0f ? $"Simulation at {timeScales[timeScaleIndex]:0.##}x" : "Simulation paused", Color.LightGreen),
         new("The rate is counted in physics steps,", Color.LightGray),
         new("so the fountain keeps the simulation's time.", Color.LightGray),
     ]);
