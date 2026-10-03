@@ -837,7 +837,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="jitter2-constraints.md">Jitter2 Physics - Constraining to 2D</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour.</p>
+                <p class="card-text">Demonstrates restricting a Jitter2 3D physics simulation to 2D-style behaviour using axis locking.</p>
             </div>
         </div>
     </div>
