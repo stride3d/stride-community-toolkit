@@ -25,33 +25,7 @@ file-based app into exactly that project when it outgrows one file, so nothing i
    ```
 2. Create `Program.cs` with the directives and the scene:
 
-   ```csharp
-   #:package Stride.CommunityToolkit.Windows@1.0.0-preview.63
-   #:package Stride.CommunityToolkit.Bepu@1.0.0-preview.63
-   #:package Stride.CommunityToolkit.Skyboxes@1.0.0-preview.63
-   #:property PublishAot=false
-
-   using Stride.CommunityToolkit.Bepu;
-   using Stride.CommunityToolkit.Engine;
-   using Stride.CommunityToolkit.Rendering.ProceduralModels;
-   using Stride.CommunityToolkit.Skyboxes;
-   using Stride.Core.Mathematics;
-   using Stride.Engine;
-
-   using var game = new Game();
-
-   game.Run(start: Start);
-
-   void Start(Scene rootScene)
-   {
-       game.SetupBase3DScene();
-       game.AddSkybox();
-
-       var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
-       entity.Transform.Position = new Vector3(0, 8, 0);
-       entity.Scene = rootScene;
-   }
-   ```
+   [!code-csharp[](../../../examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramSimple.cs)]
 
    Use the toolkit version that matches your Stride - see the table in [Getting Started](../getting-started.md).
 3. Run it:

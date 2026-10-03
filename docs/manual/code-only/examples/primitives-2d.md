@@ -3,7 +3,7 @@ generated: true
 slug: primitives-2d
 ---
 
-# Basic2D Scene (Multiple Primitives)
+# Basic 2D Scene (Multiple Primitives)
 
 Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.
 Demonstrates entity creation, basic positioning, and attaching the entities to the scene.
@@ -15,7 +15,7 @@ The `Program.cs` file shows how to:
 - Adding entities to a Scene (rootScene)
 - Using helpers: SetupBase2DScene
 
-![Basic2D Scene (Multiple Primitives)](media/primitives-2d.webp)
+![Basic 2D Scene (Multiple Primitives)](media/primitives-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_2D_Primitives).
 

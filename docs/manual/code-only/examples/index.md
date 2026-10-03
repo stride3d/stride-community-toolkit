@@ -18,9 +18,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
 <div class="row g-4 mb-4">
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/capsule-with-rigid-body.webp" class="card-img-top" alt="Screenshot of the Basic3D Scene (Capsule) example" width="1280" height="720" loading="lazy">
+            <img src="media/capsule-with-rigid-body.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Capsule) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="capsule-with-rigid-body.md">Basic3D Scene (Capsule)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="capsule-with-rigid-body.md">Basic 3D Scene (Capsule)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.</p>
             </div>
@@ -28,9 +28,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/basic-scene-engine-only.webp" class="card-img-top" alt="Screenshot of the Basic3D Scene (Engine Only) example" width="1280" height="720" loading="lazy">
+            <img src="media/basic-scene-engine-only.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Engine Only) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-scene-engine-only.md">Basic3D Scene (Engine Only)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-scene-engine-only.md">Basic 3D Scene (Engine Only)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">A ground, a cube and a camera written against Stride alone, with no toolkit package: the graphics compositor, the camera, the lights, the procedural...</p>
             </div>
@@ -38,9 +38,19 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/file-based-app.webp" class="card-img-top" alt="Screenshot of the Basic3D Scene (Capsule) - File-Based App example" width="1280" height="720" loading="lazy">
+            <img src="media/falling-shapes-3d.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="file-based-app.md">Basic3D Scene (Capsule) - File-Based App</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-3d.md">Basic 3D Scene (Falling Shapes)</a></h3>
+                <p><span class="badge text-bg-secondary">Shapes</span></p>
+                <p class="card-text">The next step after the basic 3D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/file-based-app.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Capsule) - File-Based App example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="file-based-app.md">Basic 3D Scene (Capsule) - File-Based App</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">The same minimal 3D scene as E01_3D_BasicScene, written as a .NET 10 file-based app: a single C# file with no .csproj.</p>
             </div>
@@ -48,9 +58,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/basic-2d-scene.webp" class="card-img-top" alt="Screenshot of the Basic2D Scene (Capsule) example" width="1280" height="720" loading="lazy">
+            <img src="media/basic-2d-scene.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Capsule) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-2d-scene.md">Basic2D Scene (Capsule)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-2d-scene.md">Basic 2D Scene (Capsule)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.</p>
             </div>
@@ -58,9 +68,19 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/basic-2d-scene-bullet.webp" class="card-img-top" alt="Screenshot of the Basic2D Scene (Capsule) - Bullet Physics example" width="1280" height="720" loading="lazy">
+            <img src="media/falling-shapes-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-2d-scene-bullet.md">Basic2D Scene (Capsule) - Bullet Physics</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-2d.md">Basic 2D Scene (Falling Shapes)</a></h3>
+                <p><span class="badge text-bg-secondary">Shapes</span></p>
+                <p class="card-text">The next step after the basic 2D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/basic-2d-scene-bullet.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Capsule) - Bullet Physics example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-2d-scene-bullet.md">Basic 2D Scene (Capsule) - Bullet Physics</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">The same first 2D scene as E01_2D_BasicScene, running on the legacy Bullet physics engine instead of Bepu.</p>
             </div>
@@ -68,9 +88,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/capsule-with-rigid-body-bullet.webp" class="card-img-top" alt="Screenshot of the Basic3D Scene (Capsule) - Bullet Physics example" width="1280" height="720" loading="lazy">
+            <img src="media/capsule-with-rigid-body-bullet.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Capsule) - Bullet Physics example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="capsule-with-rigid-body-bullet.md">Basic3D Scene (Capsule) - Bullet Physics</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="capsule-with-rigid-body-bullet.md">Basic 3D Scene (Capsule) - Bullet Physics</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">The same first scene as E01_3D_BasicScene, running on the legacy Bullet physics engine instead of Bepu.</p>
             </div>
@@ -263,9 +283,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/primitives-2d.webp" class="card-img-top" alt="Screenshot of the Basic2D Scene (Multiple Primitives) example" width="1280" height="720" loading="lazy">
+            <img src="media/primitives-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Multiple Primitives) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-2d.md">Basic2D Scene (Multiple Primitives)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-2d.md">Basic 2D Scene (Multiple Primitives)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.</p>
             </div>
@@ -273,11 +293,11 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/falling-shapes-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Falling Shapes) example" width="1280" height="720" loading="lazy">
+            <img src="media/falling-shapes-physics-2d.webp" class="card-img-top" alt="Screenshot of the Falling Shapes with Physics Options (2D) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-2d.md">Basic 2D Scene (Falling Shapes)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="falling-shapes-physics-2d.md">Falling Shapes with Physics Options (2D)</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.</p>
+                <p class="card-text">Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing added: each capsule is given its own Body2DComponent...</p>
             </div>
         </div>
     </div>
@@ -293,9 +313,9 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/debug-render-2d.webp" class="card-img-top" alt="Screenshot of the Basic2D Scene (Debug Rendering) example" width="1280" height="720" loading="lazy">
+            <img src="media/debug-render-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Debug Rendering) example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-render-2d.md">Basic2D Scene (Debug Rendering)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-render-2d.md">Basic 2D Scene (Debug Rendering)</a></h3>
                 <p><span class="badge text-bg-secondary">Debug</span></p>
                 <p class="card-text">A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is actually solving can be seen rather than inferred.</p>
             </div>

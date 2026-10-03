@@ -165,7 +165,7 @@ whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use
 
-- [Basic2D Scene (Debug Rendering)](../code-only/examples/debug-render-2d.md) - the 2D controller on a
+- [Basic 2D Scene (Debug Rendering)](../code-only/examples/debug-render-2d.md) - the 2D controller on a
   physics playground.
 - [Spawn Menu (2D)](../code-only/examples/spawn-menu-2d.md) - a scene that adds its own key help to the
   same overlay the camera uses.

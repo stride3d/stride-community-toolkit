@@ -44,6 +44,9 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
+- Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It now uses `1.0.0-preview.65`.
+- The console launcher's menu shown in the examples pages is refreshed.
+- Removed the empty "What's new in docs" page.
 - Physics manual: new page "Bepu: Bounce and Friction", the four contact properties of a collidable, how a pair combines them, and measured rebounds.
 - Materials manual: the overlay helper, the sample recipes, and a corrected remark on dithered shadows: `DitheredShadows = false` gives a full shadow, not none.
 - Materials manual: texture node options, operators, occlusion, and remarks on multi-pass features, dithered shadows and two-sided lighting.
@@ -51,6 +54,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- New examples `E01_2D_FallingShapes` and `E01_3D_FallingShapes`: the step after the basic scene. Thirty shapes of five kinds and five colours drop in a column and topple into a pile. The 2D and 3D versions use the same shapes and colours, and their code differs only in the scene setup, the primitive type and the material.
 - New example `E05_3D_PhysicsMaterials`: seven identical balls dropped and six identical boxes pushed, on lanes that differ only in `SpringFrequency`, `SpringDampingRatio`, `FrictionCoefficient` and `MaximumRecoveryVelocity`. The overlay prints the rebound and the slide each lane measured.
 - New example `E05_3D_CubeFountain`: a fountain of cubes, spheres and cylinders whose rate is counted in `ISimulationUpdate`, so it follows the simulation's time and slows or stops with `BepuSimulation.TimeScale`. Slow motion shows what `BodyComponent.InterpolationMode` is for, with a key to turn it off. A capped store of bodies is reused through `Teleport`, and one instancing master per shape draws them all.
 - New example `E20_2D_Pong`: Pong in three small scripts with no assets and no physics engine. The paddles and the ball are `SyncScript`s, the referee is an `AsyncScript` that runs a match as one method, and the ball reports a point through an `EventKey`. The computer plays both sides until Space is pressed.
@@ -69,10 +73,13 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - `E11_2D_Charts` and `E11_3D_Charts`: the key help uses the overlay's key format.
 - `E09_3D_Particles_Gallery`: colour updaters now colour the particles. The gallery's materials did not read the particle colour, so colour curves had no effect.
 - `E09_3D_Particles_Gallery`: the **Ribbon** station no longer shows lines at the ends of its path, and the **Landing burn** flame ends above the pad.
+- `E05_2D_FallingShapes`: its docs page moved from `falling-shapes-2d` to `falling-shapes-physics-2d` and it is titled "Falling Shapes with Physics Options (2D)". The old address now shows `E01_2D_FallingShapes`.
+- Example titles: "Basic2D Scene" and "Basic3D Scene" are written "Basic 2D Scene" and "Basic 3D Scene" everywhere.
 - `E01_2D_BasicScene_Bullet`: reset to the same scene as `E01_2D_BasicScene`, one capsule, so the pair differs only in the physics package, as the 3D pair does. It had grown into a column of 31 capsules with a profiler.
 
 ### 🔧 Engineering
 
+- `Example.Common`: new `ColorTheme` and `ColorThemes.Default`, five named accents (blue, orange, red, green, purple) that read against both the 2D background and the 3D ground. The playgrounds use it.
 - `Example_2D_Playground` and `Example_Bepu_Playground` are reduced to a matching pair of scratch scenes on Bepu, 2D and 3D, with the same five shapes: Space adds ten, X removes them. The 2D one no longer uses Bullet. They stay out of the docs and the launcher.
 - NDepend: the remaining issues are cleared. Members of internal types are declared `internal` or `private`, and two complex methods gained comments.
 - NDepend critical rules: `DebugOverlay.Draw` is split into measure and draw steps, the galleries' index board is its own class (`GalleryBoard`), and three example helpers take a settings value instead of a long parameter list (`HudStyle` in `E03_2D_HUD`, `PlumeShape` and `SmokeLook` in `E09_3D_Particles_Gallery`). No public API changed.

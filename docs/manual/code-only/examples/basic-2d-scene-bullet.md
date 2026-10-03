@@ -3,7 +3,7 @@ generated: true
 slug: basic-2d-scene-bullet
 ---
 
-# Basic2D Scene (Capsule) - Bullet Physics
+# Basic 2D Scene (Capsule) - Bullet Physics
 
 The same first 2D scene as E01_2D_BasicScene, running on the legacy Bullet physics engine instead
 of Bepu. The scene code is character-for-character identical; the only difference is which toolkit
@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Why the scene code needs no change when the physics engine does
 - Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial
 
-![Basic2D Scene (Capsule) - Bullet Physics](media/basic-2d-scene-bullet.webp)
+![Basic 2D Scene (Capsule) - Bullet Physics](media/basic-2d-scene-bullet.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_2D_BasicScene_Bullet).
 

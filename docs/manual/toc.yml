@@ -8,8 +8,7 @@
   href: engine-patterns.md
 - name: Using the Toolkit in Game Studio
   href: game-studio.md
-# - name: What's new in docs
-#   href: whats-new.md
+
 - name: Code-Only
   href: code-only/index.md
   items:

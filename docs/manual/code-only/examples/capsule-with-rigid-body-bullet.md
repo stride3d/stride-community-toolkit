@@ -3,7 +3,7 @@ generated: true
 slug: capsule-with-rigid-body-bullet
 ---
 
-# Basic3D Scene (Capsule) - Bullet Physics
+# Basic 3D Scene (Capsule) - Bullet Physics
 
 The same first scene as E01_3D_BasicScene, running on the legacy Bullet physics engine instead
 of Bepu. The scene code is character-for-character identical; the only difference is which toolkit
@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Why the scene code needs no change when the physics engine does
 - Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive
 
-![Basic3D Scene (Capsule) - Bullet Physics](media/capsule-with-rigid-body-bullet.webp)
+![Basic 3D Scene (Capsule) - Bullet Physics](media/capsule-with-rigid-body-bullet.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_3D_BasicScene_Bullet).
 
