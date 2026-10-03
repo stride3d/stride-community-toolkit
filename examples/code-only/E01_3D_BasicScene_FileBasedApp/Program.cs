@@ -1,4 +1,4 @@
-// Basic3D Scene as a .NET 10 file-based app - the same scene as E01_3D_BasicScene, but with
+// Basic 3D Scene as a .NET 10 file-based app - the same scene as E01_3D_BasicScene, but with
 // no .csproj at all. Everything the build needs is declared by the #: directives below.
 //
 //   Run:     dotnet run Program.cs
@@ -52,7 +52,7 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: file-based-app
 title:
-  en: Basic3D Scene (Capsule) - File-Based App
+  en: Basic 3D Scene (Capsule) - File-Based App
   cs: Základní 3D scéna (Kapsle) - aplikace bez projektu
 level: Getting Started
 category: Shapes

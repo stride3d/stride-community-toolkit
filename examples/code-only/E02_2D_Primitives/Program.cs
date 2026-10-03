@@ -51,7 +51,7 @@ public record ShapeItem(Primitive2DModelType Type, Vector2[]? Vertices = null);
 ---example-metadata
 slug: primitives-2d
 title:
-  en: Basic2D Scene (Multiple Primitives)
+  en: Basic 2D Scene (Multiple Primitives)
   cs: Základní 2D scéna (Více primitiv)
 level: Beginner
 category: Shapes

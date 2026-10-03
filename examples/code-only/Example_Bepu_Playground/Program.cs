@@ -1,3 +1,4 @@
+using Example.Common;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -16,13 +17,16 @@ using Stride.Input;
 
 const string ShapeName = "Shape";
 
+var theme = ColorThemes.Default;
+
+// The same five colours as the 2D and 3D twins of the first examples, from Example.Common
 (PrimitiveModelType Type, Color Colour)[] shapes =
 [
-    (PrimitiveModelType.Cube, new Color(70, 160, 235)),
-    (PrimitiveModelType.RectangularPrism, new Color(240, 150, 60)),
-    (PrimitiveModelType.Sphere, new Color(235, 100, 80)),
-    (PrimitiveModelType.Capsule, new Color(110, 200, 110)),
-    (PrimitiveModelType.TriangularPrism, new Color(190, 130, 230)),
+    (PrimitiveModelType.Cube, theme.Blue),
+    (PrimitiveModelType.RectangularPrism, theme.Orange),
+    (PrimitiveModelType.Sphere, theme.Red),
+    (PrimitiveModelType.Capsule, theme.Green),
+    (PrimitiveModelType.TriangularPrism, theme.Purple),
 ];
 
 var created = 0;

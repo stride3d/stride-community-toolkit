@@ -1,9 +1,7 @@
-//#:project ../../../src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
-//#:project ../../../src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-//#:project ../../../src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
-#:package Stride.CommunityToolkit.Bepu@1.0.0-preview.63
-#:package Stride.CommunityToolkit.Skyboxes@1.0.0-preview.63
-#:package Stride.CommunityToolkit.Windows@1.0.0-preview.63
+#:package Stride.CommunityToolkit.Windows@1.0.0-preview.65
+#:package Stride.CommunityToolkit.Bepu@1.0.0-preview.65
+#:package Stride.CommunityToolkit.Skyboxes@1.0.0-preview.65
+#:property PublishAot=false
 
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;

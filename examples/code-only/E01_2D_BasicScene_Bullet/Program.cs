@@ -24,7 +24,7 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: basic-2d-scene-bullet
 title:
-  en: Basic2D Scene (Capsule) - Bullet Physics
+  en: Basic 2D Scene (Capsule) - Bullet Physics
   cs: Základní 2D scéna (Kapsle) - Bullet Physics
 level: Getting Started
 category: Shapes

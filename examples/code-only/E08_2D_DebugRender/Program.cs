@@ -100,7 +100,7 @@ static void AddPhysicsDebugGizmo(Scene rootScene)
 ---example-metadata
 slug: debug-render-2d
 title:
-  en: Basic2D Scene (Debug Rendering)
+  en: Basic 2D Scene (Debug Rendering)
 level: Beginner
 category: Debug
 complexity: 2

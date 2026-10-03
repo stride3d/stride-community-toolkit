@@ -24,7 +24,7 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: basic-2d-scene
 title:
-  en: Basic2D Scene (Capsule)
+  en: Basic 2D Scene (Capsule)
   cs: Základní 2D scéna (Kapsle)
 level: Getting Started
 category: Shapes

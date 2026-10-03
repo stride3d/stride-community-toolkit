@@ -94,7 +94,7 @@ Material CreateMaterial(Color colour) => Material.New(game.GraphicsDevice, new M
 ---example-metadata
 slug: basic-scene-engine-only
 title:
-  en: Basic3D Scene (Engine Only)
+  en: Basic 3D Scene (Engine Only)
   cs: Základní 3D scéna (pouze engine)
 level: Getting Started
 category: Shapes
