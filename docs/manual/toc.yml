@@ -76,6 +76,8 @@
     href: rendering/debug-shapes.md
   - name: ShapeBatch
     href: rendering/shape-batch.md
+  - name: Reference Grid
+    href: rendering/reference-grid.md
   - name: Render to Texture
     href: rendering/render-to-texture.md
   - name: GPU Picking

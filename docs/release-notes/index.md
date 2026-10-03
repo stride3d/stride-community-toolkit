@@ -18,6 +18,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎉 New Features
 
+- `game.AddGrid()` in `Stride.CommunityToolkit.Shapes`: a reference grid with numbered lines that shows world coordinates or screen pixels. In the world it lies in the XY plane of a 2D scene and on the ground of a 3D one, with the axes in Game Studio's colours. The key G steps through off, world and screen; `ReferenceGrid.Cycle()`, `Visible` and `Space` do the same from code. It can write the coordinates under the mouse in both spaces.
 - `Buffer.SetDataPinned(commandList, span)` in `Stride.CommunityToolkit.Graphics`: uploads a span with its memory pinned for the call, for data held in an array or a list.
 - `MaterialDescriptors.Overlay(colour, intensity)` and `game.CreateOverlayMaterial(colour, intensity)`: an unlit translucent colour with the colour's alpha as the opacity, for zones, placement previews and markers over the scene.
 - `TextureLoader.FromPixels(device, pixels, width, height, options)`: makes a texture from pixels computed in code, prepared by role and with mipmaps, like a loaded file.
@@ -43,6 +44,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
+- Rendering manual: new page "Reference Grid".
 - New tutorial "Build a simple HUD with ShapeBatch", for beginners: eight steps from an empty window to a HUD with a health bar, an energy dial, a crosshair, labels, a warning light and a damage flash, ending with the HUD moved into a class. Every code block on the page is taken from the example it describes. The ShapeBatch manual page links to it.
 - Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It uses `1.0.0-preview.66`.
 - The console launcher's menu shown in the examples pages is refreshed.
@@ -82,9 +84,10 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🔧 Engineering
 
+- `Stride.CommunityToolkit.Shapes`: the source files are sorted into folders by what works together (`Batch`, `Style`, `Picking`, `Rendering`, `Components`, `Grid`). The namespace is unchanged.
 - Removed two diagnostic probe projects, `_Temp2DProbe` and `_TempMemProbe`, from `examples/code-only`. They were never examples and were not in the solution.
 - `Example.Common`: new `ColorTheme` and `ColorThemes.Default`, five named accents (blue, orange, red, green, purple) that read against both the 2D background and the 3D ground. The playgrounds use it.
-- `Example_2D_Playground` and `Example_Bepu_Playground` are reduced to a matching pair of scratch scenes on Bepu, 2D and 3D, with the same five shapes: Space adds ten, X removes them. The 2D one no longer uses Bullet. They stay out of the docs and the launcher.
+- `Example_2D_Playground` and `Example_Bepu_Playground` are reduced to a matching pair of scratch scenes on Bepu, 2D and 3D, with the same five shapes and a reference grid: Space adds ten, X removes them, G steps the grid. The 2D one no longer uses Bullet. They stay out of the docs and the launcher.
 - NDepend: the remaining issues are cleared. Members of internal types are declared `internal` or `private`, and two complex methods gained comments.
 - NDepend critical rules: `DebugOverlay.Draw` is split into measure and draw steps, the galleries' index board is its own class (`GalleryBoard`), and three example helpers take a settings value instead of a long parameter list (`HudStyle` in `E03_2D_HUD`, `PlumeShape` and `SmokeLook` in `E09_3D_Particles_Gallery`). No public API changed.
 - The **.NET Build Test** workflow runs on pull requests that touch `src`, the test project or the build files. It builds every library and runs the unit tests in Release, as the release workflow does. It also builds `Stride.CommunityToolkit.Effects`, which was missing from its list.
