@@ -16,7 +16,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (23)
+- name: C# Beginner (24)
   href: beginner-examples.md
   items:
   - name: Basic 3D Scene (Eight Primitives)
@@ -37,6 +37,8 @@
     href: give-me-cube-body.md
   - name: Grabber
     href: grabber.md
+  - name: Physics Materials
+    href: physics-materials.md
   - name: SyncScript - moving a body every frame
     href: sync-script.md
   - name: Entity Text (Screen-Space)

@@ -62,6 +62,8 @@
     href: physics-extensions/bepu-transform-ownership.md
   - name: Bepu - Why isn't my constraint doing anything?
     href: physics-extensions/bepu-constraints.md
+  - name: Bepu - Bounce and friction
+    href: physics-extensions/bepu-contact-materials.md
 - name: Rendering
   expanded: true
   items:
