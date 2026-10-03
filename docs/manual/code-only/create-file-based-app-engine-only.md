@@ -14,8 +14,8 @@ when the app is a single file.
    [project version](create-project-engine-only.md#the-code) after them:
 
    ```csharp
-   #:package Stride.Engine@4.4.0-beta7
-   #:package Stride.AssetCompiler@4.4.0-beta7
+   #:package Stride.Engine@4.4.0-beta8
+   #:package Stride.AssetCompiler@4.4.0-beta8
    #:property PublishAot=false
    ```
 
@@ -48,12 +48,23 @@ project. The toolkit's file-based apps do not need this because `Stride.Communit
 already passes the asset compiler on build-only; this is the one thing the toolkit does on the
 packaging side, and the reason the engine-only version is not quite a single file.
 
-## See it in the toolkit
+## See it in the repository
 
-`examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramEngineOnly.cs` is this app in the
-repository, next to the toolkit versions of the same scene, with the `Directory.Build.targets` beside
-it. It writes the version as `@$(StrideVersion)`, which the repository's `Directory.Build.props`
-resolves; outside the repository write the version number. Run it with:
+[`ProgramEngineOnly.cs`](https://github.com/stride3d/stride-community-toolkit/blob/main/examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramEngineOnly.cs)
+is this app in the toolkit's repository, in the examples folder
+`examples/code-only/E01_3D_BasicScene_FileBasedApp`, next to the toolkit versions of the same scene.
+Two things differ from the steps above, both because the file lives inside the repository:
+
+- It writes the version as `@$(StrideVersion)`, which the repository's `Directory.Build.props`
+  resolves. Outside the repository write the version number.
+- The [`Directory.Build.targets`](https://github.com/stride3d/stride-community-toolkit/blob/main/examples/code-only/E01_3D_BasicScene_FileBasedApp/Directory.Build.targets)
+  beside it has one more line, an `Import` of the examples folder's own `Directory.Build.targets`.
+  MSBuild imports only the nearest file of that name, so a folder that adds one has to pass the
+  outer one on. Your own app has no outer file and does not need the line.
+
+That `Directory.Build.targets` is read by all three apps in the folder, but it only changes the
+engine-only one: it updates a direct reference to `Stride.AssetCompiler`, and the two toolkit apps
+have none. Run the engine-only app with:
 
 ```
 dotnet run examples/code-only/E01_3D_BasicScene_FileBasedApp/ProgramEngineOnly.cs

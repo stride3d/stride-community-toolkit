@@ -24,6 +24,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🐞 Bug Fixes
 
+- `E01_3D_BasicScene_FileBasedApp`: removed a `NuGet.config` that had been committed with a package source on a local drive. It sent every toolkit package to that path, so `ProgramSimple.cs` failed to restore with `NU1301` on any machine that did not already have the packages cached.
 - `AddBepu3DPhysics`, `AddBepu2DPhysics` and the `Create3DPrimitive` / `Create2DPrimitive` Bepu overloads added the collider fitted to the primitive even to a compound collider that already held the caller's own shape, so the body had two colliders and the mass of both. The fitted shape is now added to an empty compound only; a compound that holds a shape is kept as it is. This corrects `E05_3D_Grabber`, `E05_3D_Car` and `E05_3D_Cloth`, whose bodies were heavier than written.
 - `ShapeBatch`, `BufferedEntityInstancing` and the charts' ribbon lines uploaded managed arrays through an engine path that, on Direct3D 11, does not pin them. A garbage collection during the upload could corrupt it. They now upload through the new `Buffer.SetDataPinned` extension.
 - `ShapeBatch`: a `DrawLine` shorter than its width took the current fill instead of drawing solid.
@@ -42,8 +43,10 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
-- Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It now uses `1.0.0-preview.65`.
+- Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It uses `1.0.0-preview.66`.
 - The console launcher's menu shown in the examples pages is refreshed.
+- Engine-only pages: the Stride version in the package lines is `4.4.0-beta8`. The file-based page's last section is "See it in the repository", links to the two files, and says how the repository's `Directory.Build.targets` differs from the one the page has you write.
+- Glossary: new entries **Playground**, **Body interpolation**, **Contact spring** and **Sleeping**; **Restitution / friction** now says how Bepu does both.
 - Removed the empty "What's new in docs" page.
 - Physics manual: new page "Bepu: Bounce and Friction", the four contact properties of a collidable, how a pair combines them, and measured rebounds.
 - Materials manual: the overlay helper, the sample recipes, and a corrected remark on dithered shadows: `DitheredShadows = false` gives a full shadow, not none.
