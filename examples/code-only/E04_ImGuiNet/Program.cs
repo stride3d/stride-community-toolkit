@@ -21,6 +21,9 @@ const float OrbitRadius = 3f;
 const float OrbitHeight = 2f;
 const float OrbitBobHeight = 0.5f;
 
+// How strongly the cube is steered back onto its path, per second
+const float PathCorrectionStrength = 2f;
+
 // Stacks of boxes standing on that path
 const int ObstacleStackCount = 3;
 const int BoxesPerStack = 3;
@@ -131,19 +134,33 @@ void CreateObstacleStacks(Scene rootScene)
 }
 
 /// <summary>
-/// Moves the cube along its circular path. <see cref="BodyComponent.SetTargetPose(Vector3)"/>
-/// turns the target into a velocity for the next physics tick, so Bepu sweeps the body there and
-/// it collides on the way. Assigning <c>Transform.Position</c> instead would move only the mesh:
-/// the transform sync runs physics to transform, never the other way round.
+/// Moves the cube along its circular path by giving the kinematic body a velocity, so Bepu sweeps
+/// it along and it collides on the way. Assigning <c>Transform.Position</c> instead would move
+/// only the mesh: the transform sync runs physics to transform, never the other way round.
 /// </summary>
+/// <remarks>
+/// A velocity, not <c>SetTargetPose</c>: that call assumes exactly one physics step will consume
+/// it, which a per-frame update cannot promise. It belongs in <c>ISimulationUpdate</c>, as in
+/// E02_3D_GiveMeACube_SimulationUpdate.
+/// </remarks>
 void MoveOrbitingCube()
 {
-    var target = new Vector3(
+    if (orbitingCubeBody is null) return;
+
+    // Where the cube should be now, and how fast that point is moving
+    var onPath = new Vector3(
         MathF.Sin(elapsedSeconds) * OrbitRadius,
         OrbitHeight + MathF.Sin(elapsedSeconds * 2f) * OrbitBobHeight,
         MathF.Cos(elapsedSeconds) * OrbitRadius);
 
-    orbitingCubeBody?.SetTargetPose(target);
+    var pathVelocity = new Vector3(
+        MathF.Cos(elapsedSeconds) * OrbitRadius,
+        MathF.Cos(elapsedSeconds * 2f) * 2f * OrbitBobHeight,
+        -MathF.Sin(elapsedSeconds) * OrbitRadius);
+
+    // The path's own velocity, plus a gentle pull towards the path: it brings the cube out from
+    // its start in the middle and keeps small errors from adding up
+    orbitingCubeBody.LinearVelocity = pathVelocity + (onPath - orbitingCubeBody.Position) * PathCorrectionStrength;
 }
 
 /// <summary>
@@ -227,18 +244,18 @@ description:
   en: |-
     Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.
     A kinematic Bepu body follows a circular path and knocks over stacks of dynamic boxes, showing why
-    SetTargetPose moves a physics body while writing Transform.Position does not. The ImGui font atlas
+    a velocity moves a physics body while writing Transform.Position does not. The ImGui font atlas
     is rebuilt for the monitor's DPI so the overlay stays crisp on high-DPI displays.
   cs: |-
     Vykreslování ladicího textu pomocí ImGui.NET, jak v souřadnicích obrazovky, tak ukotveného
     k pozicím ve 3D scéně. Kinematické těleso Bepu se pohybuje po kruhové dráze a shazuje stohy
-    dynamických kostek, čímž ukazuje, proč SetTargetPose tělesem pohne, zatímco zápis do
+    dynamických kostek, čímž ukazuje, proč rychlost tělesem pohne, zatímco zápis do
     Transform.Position nikoli. Atlas písma ImGui se přestaví podle DPI monitoru, aby byl text
     ostrý i na displejích s vysokým rozlišením.
 concepts:
   - Drawing screen-space text with DrawText
   - Anchoring text to a world-space position
-  - Driving a kinematic BodyComponent with SetTargetPose
+  - Driving a kinematic BodyComponent with LinearVelocity from a per-frame update
   - Why writing Transform.Position does not move a physics body
   - Rebuilding the ImGui font atlas for the window DPI
   - "Using helpers: AddImGuiNet, SetupBase3DScene, AddProfiler"
