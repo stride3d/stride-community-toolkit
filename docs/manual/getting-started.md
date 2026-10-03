@@ -7,12 +7,13 @@ This article walks you through the initial steps to use the packages in the Stri
 Each toolkit release is built against one Stride release and will not work with another, because the
 engine's own packages change between them. Match the two:
 
-| Stride | Toolkit packages |
-|---|---|
+| Stride      | Toolkit packages   |
+| ----------- | ------------------ |
+| 4.4.0-beta8 | `1.0.0-preview.66` |
 | 4.4.0-beta8 | `1.0.0-preview.65` |
 | 4.4.0-beta5 | `1.0.0-preview.63` |
-| 4.3 | `1.0.0-preview.62` |
-| 4.2 | `1.0.0-preview.61` |
+| 4.3         | `1.0.0-preview.62` |
+| 4.2         | `1.0.0-preview.61` |
 
 `dotnet add package ... --prerelease` always takes the newest preview, so on an older Stride pin the
 version explicitly, for example `dotnet add package Stride.CommunityToolkit --version 1.0.0-preview.62`.

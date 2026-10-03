@@ -40,8 +40,6 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - `ShapeBatch`: an open polyline is read from the caller's span with no scratch copy, and arc lengths are summed only for a dashed run of more than one piece.
 - `ShapeBatch`: a textured batch generates its fill source once per frame instead of once per view, and not at all when it has nothing to draw.
 
-### ✨ Enhancement
-
 ### 📄 Docs
 
 - Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It now uses `1.0.0-preview.65`.
@@ -86,5 +84,3 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - The **.NET Build Test** workflow runs on pull requests that touch `src`, the test project or the build files. It builds every library and runs the unit tests in Release, as the release workflow does. It also builds `Stride.CommunityToolkit.Effects`, which was missing from its list.
 - Removed the repository's `Directory.Build.targets`, which replaced Stride's `StrideSortItems` task to silence CS0162. Stride builds newer than 4.4.0-beta8 do not raise the warning.
 - `Directory.Build.local.props`: an optional, git-ignored file that overrides build properties locally, such as `StrideVersion` for a Stride build from source. See the contributing build page.
-
-### 💪 Other Changes

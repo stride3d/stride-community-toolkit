@@ -1,6 +1,6 @@
-#:package Stride.CommunityToolkit.Windows@1.0.0-preview.65
-#:package Stride.CommunityToolkit.Bepu@1.0.0-preview.65
-#:package Stride.CommunityToolkit.Skyboxes@1.0.0-preview.65
+#:package Stride.CommunityToolkit.Windows@1.0.0-preview.66
+#:package Stride.CommunityToolkit.Bepu@1.0.0-preview.66
+#:package Stride.CommunityToolkit.Skyboxes@1.0.0-preview.66
 #:property PublishAot=false
 
 using Stride.CommunityToolkit.Bepu;
