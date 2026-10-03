@@ -80,6 +80,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🔧 Engineering
 
+- Removed two diagnostic probe projects, `_Temp2DProbe` and `_TempMemProbe`, from `examples/code-only`. They were never examples and were not in the solution.
 - `Example.Common`: new `ColorTheme` and `ColorThemes.Default`, five named accents (blue, orange, red, green, purple) that read against both the 2D background and the 3D ground. The playgrounds use it.
 - `Example_2D_Playground` and `Example_Bepu_Playground` are reduced to a matching pair of scratch scenes on Bepu, 2D and 3D, with the same five shapes: Space adds ten, X removes them. The 2D one no longer uses Bullet. They stay out of the docs and the launcher.
 - NDepend: the remaining issues are cleared. Members of internal types are declared `internal` or `private`, and two complex methods gained comments.
