@@ -26,6 +26,7 @@
     <Project Path="examples/code-only/E02_3D_Primitives/E02_3D_Primitives.csproj" />
     <Project Path="examples/code-only/E02_3D_SyncScript/E02_3D_SyncScript.csproj" />
     <Project Path="examples/code-only/E03_2D_HUD/E03_2D_HUD.csproj" />
+    <Project Path="examples/code-only/E03_2D_HUD_Basics/E03_2D_HUD_Basics.csproj" />
     <Project Path="examples/code-only/E03_2D_Panels/E03_2D_Panels.csproj" />
     <Project Path="examples/code-only/E03_3D_EntityText/E03_3D_EntityText.csproj" />
     <Project Path="examples/code-only/E03_3D_MeshText/E03_3D_MeshText.csproj" />
