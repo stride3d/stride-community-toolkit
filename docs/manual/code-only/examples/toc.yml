@@ -20,7 +20,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic 3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (24)
+- name: C# Beginner (25)
   href: beginner-examples.md
   items:
   - name: Basic 3D Scene (Eight Primitives)
@@ -57,6 +57,8 @@
     href: easing-2d-game.md
   - name: World Text (In-Scene)
     href: world-text.md
+  - name: HUD Basics (Step by Step)
+    href: hud-basics.md
   - name: 2D Panels and Text
     href: 2d-scene-panels.md
   - name: Basic 2D Scene (Multiple Primitives)

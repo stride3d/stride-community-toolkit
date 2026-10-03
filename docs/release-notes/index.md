@@ -43,6 +43,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
+- New tutorial "Build a simple HUD with ShapeBatch", for beginners: eight steps from an empty window to a HUD with a health bar, an energy dial, a crosshair, labels, a warning light and a damage flash, ending with the HUD moved into a class. Every code block on the page is taken from the example it describes. The ShapeBatch manual page links to it.
 - Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It uses `1.0.0-preview.66`.
 - The console launcher's menu shown in the examples pages is refreshed.
 - Engine-only pages: the Stride version in the package lines is `4.4.0-beta8`. The file-based page's last section is "See it in the repository", links to the two files, and says how the repository's `Directory.Build.targets` differs from the one the page has you write.
@@ -55,6 +56,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- New example `E03_2D_HUD_Basics`: the program of the HUD tutorial. The keys 1 to 8 show the HUD as it stands after each step; step 8 draws it from `SimpleHud.cs` and `HudStyle.cs`.
 - New examples `E01_2D_FallingShapes` and `E01_3D_FallingShapes`: the step after the basic scene. Thirty shapes of five kinds and five colours drop in a column and topple into a pile. The 2D and 3D versions use the same shapes and colours, and their code differs only in the scene setup, the primitive type and the material.
 - New example `E05_3D_PhysicsMaterials`: seven identical balls dropped and six identical boxes pushed, on lanes that differ only in `SpringFrequency`, `SpringDampingRatio`, `FrictionCoefficient` and `MaximumRecoveryVelocity`. The overlay prints the rebound and the slide each lane measured.
 - New example `E05_3D_CubeFountain`: a fountain of cubes, spheres and cylinders whose rate is counted in `ISimulationUpdate`, so it follows the simulation's time and slows or stops with `BepuSimulation.TimeScale`. Slow motion shows what `BodyComponent.InterpolationMode` is for, with a key to turn it off. A capped store of bodies is reused through `Teleport`, and one instancing master per shape draws them all.

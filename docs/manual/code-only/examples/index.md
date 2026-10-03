@@ -273,6 +273,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/hud-basics.webp" class="card-img-top" alt="Screenshot of the HUD Basics (Step by Step) example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="hud-basics.md">HUD Basics (Step by Step)</a></h3>
+                <p><span class="badge text-bg-secondary">Shapes</span></p>
+                <p class="card-text">A simple HUD built in eight steps with ShapeBatch: a panel in a corner, a health bar, an energy dial, a crosshair, labels, a warning light and a...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/2d-scene-panels.webp" class="card-img-top" alt="Screenshot of the 2D Panels and Text example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="2d-scene-panels.md">2D Panels and Text</a></h3>

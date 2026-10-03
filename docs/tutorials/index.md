@@ -16,5 +16,7 @@ New to Stride? Start with these tutorials to get familiar with the basics of the
    - [Easing](mathematics/easing.md)
 1. Physics
    - [Pick and aim](physics/pick-and-aim.md)
+1. Rendering
+   - [Build a simple HUD with ShapeBatch](rendering/shapebatch-hud.md) - Beginner. Eight steps from an empty window to a HUD with a health bar, a dial, a crosshair and labels.
 1. Textures
    - [Adding a Texture at Runtime](textures/add-a-texture.md)

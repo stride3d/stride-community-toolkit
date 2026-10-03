@@ -8,6 +8,10 @@ their width at any distance or zoom. It works in 2D and 3D scenes and is in the
 For a tour of every shape, see the [ShapeBatch example](../code-only/examples/shape-batch.md). For method
 signatures, see the API reference.
 
+> [!TIP]
+> New to `ShapeBatch`? The tutorial [Build a simple HUD with ShapeBatch](../../tutorials/rendering/shapebatch-hud.md)
+> goes through it in eight steps. This page is the reference.
+
 ## When to use ShapeBatch
 
 | Tool | Use it for | Not suited for |
