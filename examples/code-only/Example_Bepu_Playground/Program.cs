@@ -1,505 +1,80 @@
-using Example.Common;
-using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
-using Stride.Rendering;
 
-const float Depth = 5f;
-const string ShapeName = "BepuCube";
+// A scratch 3D scene on Bepu, for trying things out. It is not an example: it has no metadata
+// block, so the docs and the launcher do not list it. Keep it this small. When something tried
+// here grows into a lesson, it becomes an example of its own, and this file goes back to basics.
+//
+// Its 2D twin is Example_2D_Playground.
 
-var boxSize = new Vector3(0.2f, 0.2f, Depth);
-var rectangleSize = new Vector3(0.2f, 0.3f, Depth);
-var groundSize = new Vector3(20, 0.5f, 20);
-int cubes = 0;
-int debugX = 5;
-int debugY = 30;
+const string ShapeName = "Shape";
 
-//Simulation? _simulation = null;
-CameraComponent? _camera = null;
-Scene scene = new();
-
-// One master for every instanced shape, created on first use by AddInstancedShapes
-BepuEntityInstancing? _instancing = null;
-//BepuConfiguration? _bepuConfig = null;
-//int _simulationIndex = 0;
-//float _maxDistance = 100;
-
-List<Shape2DModel> _2DShapes = [
-    new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
-    new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
-    new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
-    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
+(PrimitiveModelType Type, Color Colour)[] shapes =
+[
+    (PrimitiveModelType.Cube, new Color(70, 160, 235)),
+    (PrimitiveModelType.RectangularPrism, new Color(240, 150, 60)),
+    (PrimitiveModelType.Sphere, new Color(235, 100, 80)),
+    (PrimitiveModelType.Capsule, new Color(110, 200, 110)),
+    (PrimitiveModelType.TriangularPrism, new Color(190, 130, 230)),
 ];
 
-List<Shape3DModel> _3DShapes = [
-    new() { Type = PrimitiveModelType.Cube, Color = Color.Green, Size = boxSize },
-    new() { Type = PrimitiveModelType.RectangularPrism, Color = Color.Orange, Size = rectangleSize },
-    new() { Type = PrimitiveModelType.Cylinder, Color = Color.Red, Size = boxSize },
-    new() { Type = PrimitiveModelType.TriangularPrism, Color = Color.Purple, Size = boxSize }
-];
+var created = 0;
 
 using var game = new Game();
 
-game.Run(start: (Action<Scene>?)((Scene rootScene) =>
-{
-    scene = rootScene;
+game.Run(start: Start, update: Update);
 
+void Start(Scene scene)
+{
     game.Window.AllowUserResizing = true;
-    game.Window.Title = "2D Example with Instancing";
+    game.Window.Title = "3D playground";
 
     game.SetupBase3DScene();
     game.AddSkybox();
-    game.AddAllDirectionLighting(intensity: 2f);
-    //game.SetupBase2DSceneWithBepu();
-
     game.AddProfiler();
-    //game.AddAllDirectionLighting(intensity: 5f, true);
-    //game.ShowColliders();
 
-    // Without this nothing instanced is drawn: the code-built compositor has no instancing feature
-    game.AddInstancingSupport();
+    AddShapes(scene, shapes.Length);
 
-    _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
-
-    //_simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
-    //simulation.FixedTimeStep = 1f / 90;
-
-    //_bepuConfig = game.Services.GetService<BepuConfiguration>();
-    //bepuConfig.BepuSimulations[0].SolverSubStep = 5;
-    //bepuConfig.BepuSimulations[0].FixedTimeStep = TimeSpan.FromTicks(TimeSpan.TicksPerSecond / 150);
-    //bepuConfig.BepuSimulations[0] = new BepuSimulation() { SolverSubStep = 1 };
-
-    //var simulation2DEntity = new Entity("Simulation2D")
-    //{
-    //    new Simulation2DComponent()
-    //};
-    //var simulation2DEntity = new Entity("Simulation2D");
-    //simulation2DEntity.Scene = rootScene;
-    //simulation2DEntity.AddGizmo(game.GraphicsDevice, showAxisName: true);
-
-}), update: Update);
+    DebugOverlay.GetOrCreate(game).AddSection("3D playground", () =>
+    [
+        new("Space", "Add ten shapes", Color.Gold),
+        new("X", "Remove every shape", Color.Gold),
+        new(""),
+        new($"{scene.Entities.Count(entity => entity.Name == ShapeName)} shapes", Color.LightGreen),
+    ]);
+}
 
 void Update(Scene scene, GameTime time)
 {
-    if (!game.Input.HasKeyboard) return;
+    if (game.Input.IsKeyPressed(Keys.Space)) AddShapes(scene, 10);
 
-    if (game.Input.IsMouseButtonDown(MouseButton.Left))
+    if (game.Input.IsKeyPressed(Keys.X))
     {
-        ProcessRaycast(MouseButton.Left, game.Input.MousePosition);
-    }
-
-    if (game.Input.IsKeyDown(Keys.LeftShift))
-    {
-        if (game.Input.IsKeyPressed(Keys.M))
-        {
-            Add3DShapes(PrimitiveModelType.Cube, 10);
-
-            SetCubeCount(scene);
-        }
-        else if (game.Input.IsKeyPressed(Keys.R))
-        {
-            Add3DShapes(PrimitiveModelType.RectangularPrism, 10);
-
-            SetCubeCount(scene);
-        }
-        else if (game.Input.IsKeyPressed(Keys.C))
-        {
-            Add3DShapes(PrimitiveModelType.Cylinder, 10);
-
-            SetCubeCount(scene);
-        }
-        else if (game.Input.IsKeyPressed(Keys.T))
-        {
-            Add3DShapes(PrimitiveModelType.TriangularPrism, 10);
-
-            SetCubeCount(scene);
-        }
-        else if (game.Input.IsKeyPressed(Keys.P))
-        {
-            Add3DShapes(count: 30);
-
-            SetCubeCount(scene);
-        }
-
-        RenderNavigation();
-
-        return;
-    }
-
-    if (game.Input.IsKeyPressed(Keys.M))
-    {
-        Add2DShapes(Primitive2DModelType.Square, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.R))
-    {
-        Add2DShapes(Primitive2DModelType.Rectangle, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.C))
-    {
-        Add2DShapes(Primitive2DModelType.Circle, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.T))
-    {
-        Add2DShapes(Primitive2DModelType.Triangle, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.P))
-    {
-        Add2DShapes(count: 30);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyReleased(Keys.X))
-    {
-        foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube" || w.Name == "InstancedShapes" || w.Name == "VisualInstances" || w.Name == "InstancingMaster").ToList())
-        {
-            entity.Remove();
-        }
-
-        // Leaving the scene does not unregister an instance, and the master entity is gone too,
-        // so drop the instancing and let the next press build a fresh one
-        _instancing?.Clear();
-        _instancing = null;
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.I))
-    {
-        AddInstancedShapes(Primitive2DModelType.Square, 100);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.O))
-    {
-        AddVisualOnlyInstancing(Primitive2DModelType.Square, 1000);
-
-        SetCubeCount(scene);
-    }
-
-    RenderNavigation();
-}
-
-void RenderNavigation()
-{
-    var space = 0;
-    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
-    space += 30;
-    game.DebugTextSystem.Print($"X - Delete all cubes and shapes", new Int2(x: debugX, y: debugY + space), Color.Red);
-    space += 20;
-    game.DebugTextSystem.Print($"M - Generate 2D squares", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"R - Generate 2D rectangles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"C - Generate 2D circles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"T - Generate 2D triangles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"P - Generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"I - Generate 100 instances (physics + instancing!)", new Int2(x: debugX, y: debugY + space), Color.Yellow);
-    space += 20;
-    game.DebugTextSystem.Print($"O - Generate 1000 visual-only instanced shapes", new Int2(x: debugX, y: debugY + space), Color.Cyan);
-}
-
-void ProcessRaycast(MouseButton mouseButton, Vector2 screenPosition)
-{
-    if (_camera is null) return;
-
-    if (mouseButton == MouseButton.Left)
-    {
-        var invertedMatrix = Matrix.Invert(_camera.ViewProjectionMatrix);
-
-        Vector3 position;
-        position.X = screenPosition.X * 2f - 1f;
-        position.Y = 1f - screenPosition.Y * 2f;
-        position.Z = 0f;
-
-        var vectorNear = Vector3.Transform(position, invertedMatrix);
-        vectorNear /= vectorNear.W;
-
-        position.Z = 1f;
-
-        var vectorFar = Vector3.Transform(position, invertedMatrix);
-        vectorFar /= vectorFar.W;
-
-        Span<HitInfoStack> buffer = stackalloc HitInfoStack[16];
-
-        //var hits = _bepuConfig.BepuSimulations[_simulationIndex].RayCastPenetrating(vectorNear.XYZ(), vectorFar.XYZ() - vectorNear.XYZ(), _maxDistance, buffer);
-
-        //if (hits.Span.Length > 0)
-        //{
-        //    var space = 0;
-
-        //    foreach (var hitInfo in hits)
-        //    {
-        //        if (hitInfo.Collidable.Entity.Name == ShapeName)
-        //        {
-        //            game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Collidable.Entity}", new Int2(x: debugX, y: 200 + space));
-
-        //            space += 20;
-
-        //            var body2D = hitInfo.Collidable.Entity.Get<BodyComponent>();
-
-        //            if (body2D == null) continue;
-
-        //            var direction = new Vector3(0, 20, 0);
-
-        //            body2D.ApplyImpulse(direction * 10, new());
-        //            body2D.LinearVelocity = direction * 1;
-        //        }
-        //    }
-
-        //    //for (int j = 0; j < hits.Span.Length; j++)
-        //    //{
-        //    //    var hitInfo = hits.Span[j].HitInfo;
-
-        //    //    if (hitInfo.Collidable.Entity.Name == ShapeName)
-        //    //    {
-        //    //        game.DebugTextSystem.Print($"Hit! Distance : {hitInfo.Distance}  |  normal : {hitInfo.Normal}  |  Entity : {hitInfo.Container.Entity}", new Int2(x: debugX, y: 200 + space));
-
-        //    //        space += 20;
-
-        //    //        var body2D = hitInfo.Container.Entity.Get<BodyComponent>();
-
-        //    //        if (body2D == null) continue;
-
-        //    //        var direction = new Vector3(0, 20, 0);
-
-        //    //        body2D.ApplyImpulse(direction * 10, new());
-        //    //        body2D.LinearVelocity = direction * 1;
-        //    //    }
-        //    //}
-        //}
-        //else
-        //{
-        //    game.DebugTextSystem.Print("No raycast hit", new Int2(x: debugX, y: 200));
-        //}
+        foreach (var entity in scene.Entities.Where(entity => entity.Name == ShapeName).ToList()) entity.Scene = null;
     }
 }
 
-void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
+/// <summary>
+/// Drops <paramref name="count"/> shapes, taking each kind in turn. The positions follow a fixed
+/// pattern, not a random one, so two runs start alike.
+/// </summary>
+void AddShapes(Scene scene, int count)
 {
-    //var entity = new Entity();
-
-    for (int i = 1; i <= count; i++)
+    for (var i = 0; i < count; i++, created++)
     {
-        var shapeModel = Get2DShape(type);
+        var (type, colour) = shapes[created % shapes.Length];
 
-        if (shapeModel == null) return;
-
-        var entity = game.Create2DPrimitive(shapeModel.Type,
-            new()
-            {
-                Size = shapeModel.Size,
-                Depth = Depth,
-                Material = game.CreateFlatMaterial(shapeModel.Color),
-            });
-
-        //if (type == null || i == 1)
-        //{
-        //    entity = game.Create2DPrimitiveWithBepu(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
-        //}
-        //else
-        //{
-        //    entity = entity.Clone();
-        //}
+        var entity = game.Create3DPrimitive(type, new() { Material = game.CreateMaterial(colour) });
 
         entity.Name = ShapeName;
-        entity.Transform.Position = GetRandomPosition();
+        entity.Transform.Position = new Vector3(created * 7 % 11 - 5, 6 + created % 10 * 1.5f, created * 3 % 7 - 3);
         entity.Scene = scene;
     }
 }
-
-void Add3DShapes(PrimitiveModelType? type = null, int count = 5)
-{
-    //var entity = new Entity();
-
-    for (int i = 1; i <= count; i++)
-    {
-        var shapeModel = Get3DShape(type);
-
-        if (shapeModel == null) return;
-
-        var entity = game.Create3DPrimitive(shapeModel.Type,
-            new()
-            {
-                Size = shapeModel.Size,
-                Material = game.CreateMaterial(shapeModel.Color)
-            });
-
-        //if (type == null || i == 1)
-        //{
-        //    entity = game.Create2DPrimitiveWithBepu(shapeModel.Type, new() { Size = shapeModel.Size, Material = game.CreateMaterial(shapeModel.Color) });
-        //}
-        //else
-        //{
-        //    entity = entity.Clone();
-        //}
-
-        entity.Name = ShapeName;
-        entity.Transform.Position = Get3DRandomPosition();
-        entity.Scene = scene;
-    }
-}
-
-void AddInstancedShapes(Primitive2DModelType type, int count)
-{
-    var shapeModel = Get2DShape(type);
-
-    if (shapeModel == null) return;
-
-    // Master-Instance pattern: individual physics AND a single draw call for the whole group.
-    // See E10_3D_Instancing_EntityTransform for the same pattern explained in isolation.
-
-    // Step 1: the master, created once and reused by later presses. It must carry BOTH a
-    // ModelComponent and an InstancingComponent: InstancingProcessor skips a bare Entity holding
-    // only an InstancingComponent, and no instancing happens at all.
-    if (_instancing is null)
-    {
-        var masterEntity = game.Create2DPrimitive(shapeModel.Type,
-            new Bepu2DPhysicsOptions()
-            {
-                Size = shapeModel.Size,
-                Depth = Depth,
-                Material = game.CreateFlatMaterial(shapeModel.Color),
-                IncludeCollider = false, // the master only supplies the model, it is never simulated
-            });
-
-        // BepuEntityInstancing stops gathering entirely once every shape has fallen asleep, unlike
-        // Stride's InstancingEntityTransform which re-reads them forever
-        _instancing = new BepuEntityInstancing();
-
-        masterEntity.Name = "InstancingMaster";
-        masterEntity.Add(new InstancingComponent { Type = _instancing });
-        masterEntity.Scene = scene;
-    }
-
-    // Step 2: the instances. Each contributes only a transform, so it needs a body but no model -
-    // keeping a ModelComponent would draw every shape twice, once on its own and once as an
-    // instance, which is slower than not instancing at all.
-    for (int i = 0; i < count; i++)
-    {
-        var entity = new Entity("InstancedShapes");
-
-        // Builds the matching 2D collider without creating a procedural model and its GPU buffers,
-        // which the previous InstanceComponent-based version had to make and immediately throw away
-        entity.AddBepu2DPhysics(shapeModel.Type, new Bepu2DPhysicsOptions()
-        {
-            Size = shapeModel.Size,
-            Depth = Depth
-        });
-
-        entity.Transform.Position = GetRandomPosition();
-        entity.Scene = scene;
-
-        // Registered directly rather than through an InstanceComponent
-        _instancing.AddInstance(entity);
-    }
-}
-
-void AddVisualOnlyInstancing(Primitive2DModelType type, int count)
-{
-    var shapeModel = Get2DShape(type);
-
-    if (shapeModel == null) return;
-
-    // TRUE GPU INSTANCING: One entity, one mesh, one draw call for all instances.
-    // This is the optimal way to render many copies of the same object.
-    // Perfect for: static decorations, particles, grass, rocks, trees, etc.
-    // Limitation: No individual physics - these are visual-only.
-
-    var entity = game.Create2DPrimitive(shapeModel.Type,
-        new()
-        {
-            Size = shapeModel.Size,
-            Depth = Depth,
-            Material = game.CreateFlatMaterial(shapeModel.Color),
-        });
-
-    entity.Name = "VisualInstances";
-
-    // Create transformation matrices for all instances
-    Matrix[] instanceMatrices = new Matrix[count];
-
-    for (int i = 0; i < count; i++)
-    {
-        // Spread them in a wider area and at various heights to show scale
-        var position = new Vector3(
-            Random.Shared.Next(-15, 15),
-            Random.Shared.Next(5, 40),
-            Random.Shared.NextSingle() * 0.5f - 0.25f
-        );
-        var rotation = Quaternion.RotationZ(Random.Shared.NextSingle() * MathF.PI * 2);
-        var scale = Vector3.One * (0.3f + Random.Shared.NextSingle() * 0.8f);
-
-        instanceMatrices[i] = Matrix.Scaling(scale) * Matrix.RotationQuaternion(rotation) * Matrix.Translation(position);
-    }
-
-    // Add instancing component - this is where the GPU instancing magic happens
-    var instancingComponent = entity.GetOrCreate<InstancingComponent>();
-    instancingComponent.Type = new InstancingUserArray();
-    ((InstancingUserArray)instancingComponent.Type).UpdateWorldMatrices(instanceMatrices);
-
-    entity.Scene = scene;
-}
-
-Shape2DModel? Get2DShape(Primitive2DModelType? type = null)
-{
-    if (type == null)
-    {
-        int randomIndex = Random.Shared.Next(_2DShapes.Count);
-
-        return _2DShapes[randomIndex];
-    }
-
-    return _2DShapes.Find(x => x.Type == type);
-}
-
-Shape3DModel? Get3DShape(PrimitiveModelType? type = null)
-{
-    if (type == null)
-    {
-        int randomIndex = Random.Shared.Next(_3DShapes.Count);
-
-        return _3DShapes[randomIndex];
-    }
-
-    return _3DShapes.Find(x => x.Type == type);
-}
-
-void SetCubeCount(Scene scene)
-{
-    var regularShapes = scene.Entities.Where(w => w.Name == ShapeName || w.Name == "Cube").Count();
-    var physicsInstances = scene.Entities.Where(w => w.Name == "InstancedShapes").Count();
-    var visualInstances = scene.Entities.Where(w => w.Name == "VisualInstances").ToList();
-
-    var visualInstanceCount = 0;
-    foreach (var entity in visualInstances)
-    {
-        var instancingComponent = entity.Get<InstancingComponent>();
-        if (instancingComponent?.Type is InstancingUserArray userArray)
-        {
-            visualInstanceCount += userArray.InstanceCount;
-        }
-    }
-
-    cubes = regularShapes + physicsInstances + visualInstanceCount;
-}
-
-static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);
-
-static Vector3 Get3DRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), Random.Shared.Next(-5, 5));

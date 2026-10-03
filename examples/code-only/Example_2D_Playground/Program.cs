@@ -1,279 +1,78 @@
-//using DebugShapes;
-using Example.Common;
-using Example_2D_Playground;
-using Stride.CommunityToolkit.Bullet;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Skyboxes;
+using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
-using Stride.Physics;
-using Stride.Rendering.Sprites;
-using System.Xml.Linq;
 
-var boxSize = new Vector3(0.2f);
-var rectangleSize = new Vector3(0.2f, 0.3f, 0);
-int cubes = 0;
-int debugX = 5;
-int debugY = 30;
-var bgImage = "JumpyJetBackground.jpg";
+// A scratch 2D scene on Bepu, for trying things out. It is not an example: it has no metadata
+// block, so the docs and the launcher do not list it. Keep it this small. When something tried
+// here grows into a lesson, it becomes an example of its own, and this file goes back to basics.
+//
+// Its 3D twin is Example_Bepu_Playground.
+
 const string ShapeName = "Shape";
+
+(Primitive2DModelType Type, Color Colour)[] shapes =
+[
+    (Primitive2DModelType.Square, new Color(70, 160, 235)),
+    (Primitive2DModelType.Rectangle, new Color(240, 150, 60)),
+    (Primitive2DModelType.Circle, new Color(235, 100, 80)),
+    (Primitive2DModelType.Capsule, new Color(110, 200, 110)),
+    (Primitive2DModelType.Triangle, new Color(190, 130, 230)),
+];
+
+var created = 0;
 
 using var game = new Game();
 
-//int currentNumPrimitives = 1024;
-Simulation? _simulation = null;
-CameraComponent? _camera = null;
-Scene scene = new();
-//ImmediateDebugRenderSystem? DebugDraw = null;
-//List<Entity> cubesList = [];
-
-List<Shape2DModel> shapes = [
-    new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = (Vector2)boxSize },
-    new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = (Vector2)rectangleSize },
-    new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = (Vector2)boxSize / 2 },
-    //new() { Type = Primitive2DModelType.Capsule, Color = Color.Purple, Size = rectangleSize }
-    new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)boxSize }
-    //new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = (Vector2)rectangleSize }
-];
-
-Dictionary<Primitive2DModelType, Entity> templates = [];
-
 game.Run(start: Start, update: Update);
 
-void Start(Scene rootScene)
+void Start(Scene scene)
 {
-    scene = rootScene;
-
     game.Window.AllowUserResizing = true;
-    game.Window.Title = "2D Example";
+    game.Window.Title = "2D playground";
 
-    //game.SetupBase2DScene();
-    //game.SetupBase3DScene();
-
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    //game.AddGraphicsCompositor().AddCleanUIStage().AddImmediateDebugRenderFeature();
-
-    game.Add3DCamera().Add3DCameraController();
-    //game.Add2DCamera().Add2DCameraController();
-
-    game.AddDirectionalLight();
-    game.AddAllDirectionLighting(intensity: 5f, true);
-    game.AddSkybox();
-
-    //game.Add2DGround();
-    game.Add3DGround();
-    //game.AddInfinite3DGround();
-
-    game.AddGroundGizmo(new(0, 0, -7.5f), showAxisName: true);
+    game.SetupBase2DScene();
     game.AddProfiler();
-    //game.ShowColliders();
 
-    //AddSpriteBatchRenderer(rootScene);
+    AddShapes(scene, shapes.Length);
 
-    _camera = game.SceneSystem.SceneInstance.RootScene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
-
-    // needed for Raycast
-    _simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
-    //simulation.FixedTimeStep = 1f / 90;
-
-    //var processor = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>();
-
-    //Add2DShapes(ShapeType.Square, 1);
-
-    AddBackground(bgImage);
-
-    //DebugDraw = new ImmediateDebugRenderSystem(game.Services, RenderGroup.Group1);
-    //DebugDraw.PrimitiveColor = Color.Green;
-    //DebugDraw.MaxPrimitives = (currentNumPrimitives * 2) + 8;
-    //DebugDraw.MaxPrimitivesWithLifetime = (currentNumPrimitives * 2) + 8;
-    //DebugDraw.Visible = true;
-
-    //// keep DebugText visible in release builds too
-    //game.DebugTextSystem.Visible = true;
-    //game.Services.AddService(DebugDraw);
-    //game.GameSystems.Add(DebugDraw);
-
-    game.ShowColliders();
+    DebugOverlay.GetOrCreate(game).AddSection("2D playground", () =>
+    [
+        new("Space", "Add ten shapes", Color.Gold),
+        new("X", "Remove every shape", Color.Gold),
+        new(""),
+        new($"{scene.Entities.Count(entity => entity.Name == ShapeName)} shapes", Color.LightGreen),
+    ]);
 }
 
 void Update(Scene scene, GameTime time)
 {
-    //var gameSettings = game.Services.GetService<IGameSettingsService>();
-    //simulation.ContinuousCollisionDetection = true;
+    if (game.Input.IsKeyPressed(Keys.Space)) AddShapes(scene, 10);
 
-    if (!game.Input.HasKeyboard) return;
-
-    if (game.Input.IsMouseButtonDown(MouseButton.Left))
+    if (game.Input.IsKeyPressed(Keys.X))
     {
-        ProcessRaycast(MouseButton.Left, game.Input.MousePosition);
-    }
-
-    if (game.Input.IsKeyPressed(Keys.M))
-    {
-        Add2DShapes(Primitive2DModelType.Square, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.R))
-    {
-        Add2DShapes(Primitive2DModelType.Rectangle, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.C))
-    {
-        Add2DShapes(Primitive2DModelType.Circle, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.T))
-    {
-        Add2DShapes(Primitive2DModelType.Triangle, 10);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyPressed(Keys.P))
-    {
-        Add2DShapes(count: 30);
-
-        SetCubeCount(scene);
-    }
-    else if (game.Input.IsKeyReleased(Keys.X))
-    {
-        foreach (var entity in scene.Entities.Where(w => w.Name == ShapeName).ToList())
-        {
-            entity.Remove();
-        }
-
-        SetCubeCount(scene);
-    }
-
-    //for (var i = 0; i < cubesList.Count; i++)
-    //{
-    //    var entity = cubesList[i];
-
-    //    DebugDraw.DrawCube(entity.Transform.Position, boxSize, entity.Transform.Rotation, Color.Red, depthTest: false, solid: !true);
-    //}
-
-    RenderNavigation();
-}
-
-void RenderNavigation()
-{
-    var space = 0;
-    game.DebugTextSystem.Print($"Cubes: {cubes}", new Int2(x: debugX, y: debugY));
-    space += 30;
-    game.DebugTextSystem.Print($"X - Delete all cubes and shapes", new Int2(x: debugX, y: debugY + space), Color.Red);
-    //game.DebugTextSystem.Print($"N - generate 3D cubes", new Int2(x: debugX, y: debugY + space + 60));
-    space += 20;
-    game.DebugTextSystem.Print($"M - generate 2D squares", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"R - generate 2D rectangles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"C - generate 2D circles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"T - generate 2D triangles", new Int2(x: debugX, y: debugY + space));
-    space += 20;
-    game.DebugTextSystem.Print($"P - generate random 2D shapes", new Int2(x: debugX, y: debugY + space));
-}
-
-void ProcessRaycast(MouseButton mouseButton, Vector2 mousePosition)
-{
-    var hitResult = _camera!.RaycastMouse(_simulation!, mousePosition);
-
-    if (hitResult.Succeeded && hitResult.Collider.Entity.Name == ShapeName && mouseButton == MouseButton.Left)
-    {
-        var rigidBody = hitResult.Collider.Entity.Get<RigidbodyComponent>();
-
-        if (rigidBody == null) return;
-
-        var direction = new Vector3(0, 20, 0);
-
-        rigidBody.ApplyImpulse(direction * 10);
-        rigidBody.LinearVelocity = direction * 1;
+        foreach (var entity in scene.Entities.Where(entity => entity.Name == ShapeName).ToList()) entity.Scene = null;
     }
 }
 
-void AddBackground(string fileName)
+/// <summary>
+/// Drops <paramref name="count"/> shapes, taking each kind in turn. The positions follow a fixed
+/// pattern, not a random one, so two runs start alike.
+/// </summary>
+void AddShapes(Scene scene, int count)
 {
-    var entity = new Entity("Background");
-
-    // sRGB and premultiplied, the way a sprite asset would have been imported
-    var texture = new TextureLoader(game.GraphicsDevice).Color(fileName);
-
-    var spriteComponent = new SpriteComponent
+    for (var i = 0; i < count; i++, created++)
     {
-        SpriteProvider = new SpriteFromTexture { Texture = texture },
-    };
+        var (type, colour) = shapes[created % shapes.Length];
 
-    entity.Add(spriteComponent);
-    entity.Transform.Position.Z = -100;
-    entity.Transform.Position.Y = 0f;
-
-    entity.Scene = scene;
-}
-
-// Search ImmediateDebugRenderObject in the project
-
-void Add2DShapes(Primitive2DModelType? type = null, int count = 5)
-{
-    var entity = new Entity();
-
-    entity.Add(new CustomScriptComponent());
-
-    for (int i = 1; i <= count; i++)
-    {
-        var shapeModel = GetShape(type);
-
-        if (shapeModel == null) return;
-
-        if (type == null || i == 1)
-        {
-            entity = game.Create2DPrimitive(shapeModel.Type, new() { Size = shapeModel.Size });
-        }
-        else
-        {
-            entity = entity.Clone();
-        }
+        var entity = game.Create2DPrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
 
         entity.Name = ShapeName;
-        entity.Transform.Position = GetRandomPosition();
+        entity.Transform.Position = new Vector3(created * 7 % 11 - 5, 6 + created % 10 * 1.5f, 0);
         entity.Scene = scene;
-
-        AddAngularAndLinearFactor(shapeModel.Type, entity);
-    }
-
-    static void AddAngularAndLinearFactor(Primitive2DModelType? type, Entity entity)
-    {
-        if (type != Primitive2DModelType.Triangle) return;
-
-        var rigidBody = entity.Get<RigidbodyComponent>();
-        rigidBody.AngularFactor = new Vector3(0, 0, 1);
-        rigidBody.LinearFactor = new Vector3(1, 1, 0);
-
-        // seems doing nothing
-        //rigidBody.CcdMotionThreshold = 10000;
-        //rigidBody.CcdSweptSphereRadius = 10000;
     }
 }
-
-Shape2DModel? GetShape(Primitive2DModelType? type = null)
-{
-    if (type == null)
-    {
-        int randomIndex = Random.Shared.Next(shapes.Count);
-
-        return shapes[randomIndex];
-    }
-
-    return shapes.Find(x => x.Type == type);
-}
-
-void SetCubeCount(Scene scene) => cubes = scene.Entities.Count(w => w.Name == ShapeName);
-
-static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), 3 + Random.Shared.Next(0, 7), 0);
