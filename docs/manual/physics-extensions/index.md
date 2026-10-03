@@ -12,6 +12,9 @@ Bepu is the newer engine and the toolkit's default; the examples and the `SetupB
 > Building joints or motors? [Bepu: Why Isn't My Constraint Doing Anything?](bepu-constraints.md)
 > covers the equivalent silent failures on the constraint side - jammed joints, motors that produce
 > no force, and settings that are discarded without warning.
+>
+> Want something to bounce or slide? [Bepu: Bounce and Friction](bepu-contact-materials.md) lists
+> the four contact properties, their defaults, and how two collidables combine them.
 
 ## Bepu
 

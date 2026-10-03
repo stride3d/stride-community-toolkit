@@ -17,6 +17,7 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [Procedural Sound](procedural-sound.md): A tone with no sound file: a callback computes the samples as they play.
 - [Give Me a Cube](give-me-cube-body.md): Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
 - [Grabber](grabber.md): A gravity gun: click any body to pick it up, carry it on the end of the camera ray, and let go - with its velocity, so a flick throws it.
+- [Physics Materials](physics-materials.md): How to make something bouncy and how to make something slippery.
 - [SyncScript - moving a body every frame](sync-script.md): A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.
 - [Entity Text (Screen-Space)](entity-text.md): A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows, backgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and HUD text pinned to window corners that survives resizing.
 - [Easing Basics](easing-basics.md): Easing from the ground up, in four lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the toolkit's easing functions, and with a Tween.

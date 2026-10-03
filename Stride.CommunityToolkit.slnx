@@ -53,6 +53,7 @@
     <Project Path="examples/code-only/E05_3D_FirstPersonCharacter/E05_3D_FirstPersonCharacter.csproj" />
     <Project Path="examples/code-only/E05_3D_Grabber/E05_3D_Grabber.csproj" />
     <Project Path="examples/code-only/E05_3D_MultipleSimulations/E05_3D_MultipleSimulations.csproj" />
+    <Project Path="examples/code-only/E05_3D_PhysicsMaterials/E05_3D_PhysicsMaterials.csproj" />
     <Project Path="examples/code-only/E05_3D_Raycast/E05_3D_Raycast.csproj" />
     <Project Path="examples/code-only/E06_Box2D/E06_Box2D.csproj" />
     <Project Path="examples/code-only/E06_Box2D_Car/E06_Box2D_Car.csproj" />
