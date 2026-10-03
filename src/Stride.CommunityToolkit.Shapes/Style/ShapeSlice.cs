@@ -9,7 +9,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// <param name="Hollow">Whether only the band <paramref name="RingWidth"/> deep inside the outline is the shape.</param>
 /// <param name="RingWidth">Depth of the band from the outline inward, in world units; 0 leaves a stroke with no area.</param>
 /// <param name="StartAngle">Where the kept angular range starts, radians from the plane's X axis.</param>
-/// <param name="SweepAngle">Size of the kept range, counter-clockwise; 0 keeps the full turn.</param>
+/// <param name="SweepAngle">Size of the kept range, counter-clockwise, as the shader reads it: 0 keeps the full turn. A sweep given to a draw call, where 0 is nothing, becomes this through <see cref="TryNormalizeSweep"/>.</param>
 /// <param name="RoundCaps">Whether the range ends in semicircles rather than radial edges. Circles only.</param>
 /// <param name="PixelRadius">Whether the radius and band depth are in pixels on screen rather than world units, converted per shape at its own depth.</param>
 /// <param name="Polyline">Whether the points are a run to stroke - the shape is everything within the radius of the nearest segment - rather than a convex polygon.</param>
@@ -39,9 +39,15 @@ internal readonly record struct ShapeSlice(bool Hollow, float RingWidth, float S
     internal int Flags => (Hollow ? HollowFlag : 0) | (RoundCaps ? RoundCapsFlag : 0) | (PixelRadius ? PixelRadiusFlag : 0) | (Polyline ? PolylineFlag : 0) | (Space ? SpaceFlag : 0);
 
     /// <summary>
-    /// Puts a sweep into the form the shader reads: counter-clockwise, and 0 for a full turn.
-    /// Returns <c>false</c> for a sweep of nothing, which draws nothing.
+    /// Turns the sweep a draw call was given into the form the shader reads. Zero means two
+    /// different things on the way in and on the way out:
+    /// <list type="bullet">
+    /// <item><description>In: a sweep of 0 is nothing to draw, and the method returns <c>false</c>.</description></item>
+    /// <item><description>In: a negative sweep is clockwise. Out: the same range, counter-clockwise from its other end.</description></item>
+    /// <item><description>In: a full turn or more. Out: 0, which the shader reads as "not cut".</description></item>
+    /// </list>
     /// </summary>
+    /// <returns><c>false</c> when there is nothing to draw; <paramref name="sweepAngle"/> is then left as it was.</returns>
     internal static bool TryNormalizeSweep(ref float startAngle, ref float sweepAngle)
     {
         if (sweepAngle == 0f) return false;

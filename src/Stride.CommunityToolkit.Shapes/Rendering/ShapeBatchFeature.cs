@@ -279,7 +279,8 @@ public class ShapeBatchFeature : RootRenderFeature
             ((ShapeBatch)renderObject).Reset();
         }
 
-        // A batch that dropped its fill source, or left rendering, gives its effect back
+        // A batch that dropped its fill source, or left rendering, gives its effect back. Removing
+        // inside the loop is safe: Dictionary.Remove leaves a running enumerator valid
         foreach (var (batch, textured) in _textured)
         {
             if (batch.FillSource is null || !RenderObjects.Contains(batch))

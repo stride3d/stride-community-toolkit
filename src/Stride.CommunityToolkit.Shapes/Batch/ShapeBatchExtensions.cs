@@ -47,6 +47,25 @@ public static class ShapeBatchExtensions
     /// <exception cref="InvalidOperationException">The compositor has no "Transparent" render stage.</exception>
     public static ShapeBatch AddShapeBatch(this Game game, bool depthTest = false, IComputeColor? fill = null, bool afterPostEffects = false)
     {
+        var batch = Create(game, depthTest, fill, afterPostEffects);
+
+        // Expose the first batch to ShapeProcessor and anything else that wants to draw. After the
+        // registration, so a batch that could not be registered is never the default
+        if (game.Services.GetService<ShapeBatch>() is null)
+        {
+            game.Services.AddService(batch);
+        }
+
+        return batch;
+    }
+
+    /// <summary>
+    /// Creates a batch and registers it for drawing, without offering it as the game's default
+    /// batch. For a toolkit feature that draws with a batch of its own, such as the reference grid:
+    /// its batch must not become the one shape components draw into.
+    /// </summary>
+    internal static ShapeBatch Create(Game game, bool depthTest, IComputeColor? fill, bool afterPostEffects)
+    {
         ArgumentNullException.ThrowIfNull(game);
 
         var compositor = game.SceneSystem.GraphicsCompositor
@@ -72,13 +91,6 @@ public static class ShapeBatchExtensions
         };
 
         Register(sceneInstance, compositor.RenderSystem, batch);
-
-        // Expose the first batch to ShapeProcessor and anything else that wants to draw. After the
-        // registration, so a batch that could not be registered is never the default
-        if (game.Services.GetService<ShapeBatch>() is null)
-        {
-            game.Services.AddService(batch);
-        }
 
         return batch;
     }

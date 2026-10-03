@@ -70,6 +70,47 @@ public class ShapePickTests
     }
 
     [Fact]
+    public void SweepOfNothingDrawsNothing()
+    {
+        var (batch, _) = Scene(new Vector3(0f, 0f, 10f), Vector3.Zero);
+
+        batch.DrawSector(Vector2.Zero, 2f, 0f, 0f, Color.White);
+        batch.DrawArc(Vector2.Zero, 2f, 0f, 0f, Color.White, 0.2f);
+
+        Assert.Empty(batch.Instances);
+    }
+
+    [Fact]
+    public void SweepOfAFullTurnIsTheWholeDisc()
+    {
+        var (batch, view) = Scene(new Vector3(0f, 0f, 10f), Vector3.Zero);
+
+        batch.Tag = "sector";
+        batch.DrawSector(Vector2.Zero, 2f, 0f, MathF.Tau, Color.White);
+        Drawn(batch, view);
+
+        // One point in each quarter
+        Assert.True(batch.TryPick(ScreenOf(new Vector3(0.5f, 0.5f, 0f), view), out _));
+        Assert.True(batch.TryPick(ScreenOf(new Vector3(-0.5f, 0.5f, 0f), view), out _));
+        Assert.True(batch.TryPick(ScreenOf(new Vector3(-0.5f, -0.5f, 0f), view), out _));
+        Assert.True(batch.TryPick(ScreenOf(new Vector3(0.5f, -0.5f, 0f), view), out _));
+    }
+
+    [Fact]
+    public void NegativeSweepGoesClockwise()
+    {
+        var (batch, view) = Scene(new Vector3(0f, 0f, 10f), Vector3.Zero);
+
+        batch.Tag = "sector";
+        batch.DrawSector(Vector2.Zero, 2f, 0f, -MathF.PI * 0.5f, Color.White);
+        Drawn(batch, view);
+
+        // A quarter turn clockwise from the X axis is the quarter below it
+        Assert.True(batch.TryPick(ScreenOf(new Vector3(0.5f, -0.5f, 0f), view), out _));
+        Assert.False(batch.TryPick(ScreenOf(new Vector3(0.5f, 0.5f, 0f), view), out _));
+    }
+
+    [Fact]
     public void RoundedRectangleMissesItsCutCorner()
     {
         var (batch, view) = Scene(new Vector3(0f, 0f, 10f), Vector3.Zero);
