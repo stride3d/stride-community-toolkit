@@ -62,7 +62,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="basic-2d-scene-bullet.md">Basic2D Scene (Capsule) - Bullet Physics</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.</p>
+                <p class="card-text">The same first 2D scene as E01_2D_BasicScene, running on the legacy Bullet physics engine instead of Bepu.</p>
             </div>
         </div>
     </div>

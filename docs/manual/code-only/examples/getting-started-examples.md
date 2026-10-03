@@ -12,7 +12,7 @@ Your first code-only Stride application in C#: boilerplate, one helper call, and
 - [Basic3D Scene (Engine Only)](basic-scene-engine-only.md): A ground, a cube and a camera written against Stride alone, with no toolkit package: the graphics compositor, the camera, the lights, the procedural models and the material that the toolkit's SetupBase3D and Create3DPrimitive stand for.
 - [Basic3D Scene (Capsule) - File-Based App](file-based-app.md): The same minimal 3D scene as E01_3D_BasicScene, written as a .NET 10 file-based app: a single C# file with no .csproj.
 - [Basic2D Scene (Capsule)](basic-2d-scene.md): Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.
-- [Basic2D Scene (Capsule) - Bullet Physics](basic-2d-scene-bullet.md): Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.
+- [Basic2D Scene (Capsule) - Bullet Physics](basic-2d-scene-bullet.md): The same first 2D scene as E01_2D_BasicScene, running on the legacy Bullet physics engine instead of Bepu.
 - [Basic3D Scene (Capsule) - Bullet Physics](capsule-with-rigid-body-bullet.md): The same first scene as E01_3D_BasicScene, running on the legacy Bullet physics engine instead of Bepu.
 
 > [!NOTE]
