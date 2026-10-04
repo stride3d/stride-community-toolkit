@@ -13,7 +13,7 @@ public sealed class HudStyle
 {
     public float Margin { get; init; } = 24f;
 
-    public Vector2 PanelSize { get; init; } = new(300f, 96f);
+    public Vector2 PanelSize { get; init; } = new(300f, 100f);
 
     public Color PanelFill { get; init; } = new(12, 18, 32);
 
@@ -27,7 +27,7 @@ public sealed class HudStyle
 
     public Color Hurt { get; init; } = new(235, 100, 80);
 
-    /// <summary>The health at and below which the bar turns red and the warning light comes on.</summary>
+    /// <summary>The health at and below which the bar turns red and the warning panel comes on.</summary>
     public float LowHealth { get; init; } = 0.3f;
 
     public float DialRadius { get; init; } = 40f;
@@ -37,4 +37,6 @@ public sealed class HudStyle
     public Color DialTrack { get; init; } = new(60, 70, 90);
 
     public Color Energy { get; init; } = new(240, 150, 60);
+
+    public Vector2 WarningSize { get; init; } = new(160f, 40f);
 }

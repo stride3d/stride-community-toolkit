@@ -18,21 +18,27 @@ namespace E03_2D_HUD_Basics;
 /// </remarks>
 public sealed class SimpleHud
 {
-    private readonly ShapeBatch _shapes;
+    private readonly ShapeBatch _shapeBatch;
     private readonly HudStyle _style;
     private readonly EntityTextComponent _healthLabel;
     private readonly EntityTextComponent _energyLabel;
+    private readonly EntityTextComponent _warningLabel;
 
     #region Step8Class
-    public SimpleHud(Game game, Scene scene, ShapeBatch shapes, HudStyle style)
+    public SimpleHud(Game game, Scene scene, ShapeBatch shapeBatch, HudStyle style)
     {
-        _shapes = shapes;
+        _shapeBatch = shapeBatch;
         _style = style;
 
         game.AddEntityTextRenderer();
 
         _healthLabel = AddLabel(scene, TextAnchor.BottomLeft);
         _energyLabel = AddLabel(scene, TextAnchor.MiddleCenter);
+
+        _warningLabel = AddLabel(scene, TextAnchor.MiddleCenter);
+        _warningLabel.Text = "WARNING";
+        _warningLabel.TextColor = style.Hurt;
+        _warningLabel.FontSize = 20;
     }
 
     /// <summary>From 0 to 1.</summary>
@@ -47,14 +53,20 @@ public sealed class SimpleHud
     /// <summary>Whether the labels are shown. The shapes need no such switch: not drawing them is enough.</summary>
     public bool Visible
     {
-        set => _healthLabel.Opacity = _energyLabel.Opacity = value ? 1f : 0f;
+        set
+        {
+            _healthLabel.Opacity = _energyLabel.Opacity = value ? 1f : 0f;
+
+            // The warning shows itself when the health is low, and only while the HUD is drawn
+            if (!value) _warningLabel.IsVisible = false;
+        }
     }
 
     /// <summary>Draws the whole HUD. Call it once a frame.</summary>
-    /// <param name="seconds">The game's total time, which the warning light blinks by.</param>
+    /// <param name="seconds">The game's total time, which the warning panel pulses by.</param>
     public void Draw(float seconds)
     {
-        _shapes.Screen = true;
+        _shapeBatch.Screen = true;
 
         DrawDamageFlash();
         DrawPanel();
@@ -62,36 +74,36 @@ public sealed class SimpleHud
         DrawEnergyDial();
         DrawCrosshair();
         UpdateLabels();
-        DrawWarningLight(seconds);
+        DrawWarning(seconds);
 
-        _shapes.Screen = false;
+        _shapeBatch.Screen = false;
     }
     #endregion
 
     private Vector2 PanelCentre
-        => _shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(_style.Margin + _style.PanelSize.X * 0.5f, -_style.Margin - _style.PanelSize.Y * 0.5f);
+        => _shapeBatch.Corner(ScreenCorner.BottomLeft) + new Vector2(_style.PanelSize.X * 0.5f, -_style.PanelSize.Y * 0.5f) + new Vector2(_style.Margin, -_style.Margin);
 
     private Vector2 DialCentre
-        => _shapes.Corner(ScreenCorner.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
+        => _shapeBatch.Corner(ScreenCorner.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
 
     private void Outline(float width = 2f)
     {
-        _shapes.BorderWidth = width;
-        _shapes.Fill.Set(null, 0f);
+        _shapeBatch.BorderWidth = width;
+        _shapeBatch.Fill.Set(null, 0f);
     }
 
     private void Solid()
     {
-        _shapes.BorderWidth = 0f;
-        _shapes.Fill.Set(null, 1f);
+        _shapeBatch.BorderWidth = 0f;
+        _shapeBatch.Fill.Set(null, 1f);
     }
 
     private void DrawPanel()
     {
-        _shapes.BorderWidth = 2f;
-        _shapes.Fill.Set(_style.PanelFill, 0.8f);
+        _shapeBatch.BorderWidth = 2f;
+        _shapeBatch.Fill.Set(_style.PanelFill, 0.8f);
 
-        _shapes.DrawRectangle(PanelCentre, _style.PanelSize, _style.PanelEdge, cornerRadius: 14f);
+        _shapeBatch.DrawRectangle(PanelCentre, _style.PanelSize, _style.PanelEdge, cornerRadius: 14f);
     }
 
     private void DrawHealthBar()
@@ -99,36 +111,36 @@ public sealed class SimpleHud
         var left = PanelCentre + new Vector2(-_style.BarSize.X * 0.5f, 16f);
 
         Outline();
-        _shapes.DrawRectangle(left + new Vector2(_style.BarSize.X * 0.5f, 0f), _style.BarSize, _style.TrackEdge, cornerRadius: 5f);
+        _shapeBatch.DrawRectangle(left + new Vector2(_style.BarSize.X * 0.5f, 0f), _style.BarSize, _style.TrackEdge, cornerRadius: 5f);
 
         var colour = Health > _style.LowHealth ? _style.Healthy : _style.Hurt;
         var size = new Vector2((_style.BarSize.X - 8f) * Health, _style.BarSize.Y - 8f);
 
         Solid();
-        _shapes.DrawRectangle(left + new Vector2(4f + size.X * 0.5f, 0f), size, colour, cornerRadius: 2f);
+        _shapeBatch.DrawRectangle(left + new Vector2(4f + size.X * 0.5f, 0f), size, colour, cornerRadius: 2f);
     }
 
     private void DrawEnergyDial()
     {
         Solid();
-        _shapes.DrawArc(DialCentre, _style.DialRadius, 0f, MathF.Tau, _style.DialTrack, _style.DialWidth);
-        _shapes.DrawArc(DialCentre, _style.DialRadius, -MathF.PI * 0.5f, MathF.Tau * Energy, _style.Energy, _style.DialWidth);
+        _shapeBatch.DrawArc(DialCentre, _style.DialRadius, 0f, MathF.Tau, _style.DialTrack, _style.DialWidth);
+        _shapeBatch.DrawArc(DialCentre, _style.DialRadius, -MathF.PI * 0.5f, MathF.Tau * Energy, _style.Energy, _style.DialWidth);
     }
 
     private void DrawCrosshair()
     {
-        var centre = _shapes.ScreenSize * 0.5f;
+        var centre = _shapeBatch.ScreenSize * 0.5f;
 
         Outline();
-        _shapes.DrawRing(centre, 14f, Color.White);
+        _shapeBatch.DrawRing(centre, 14f, Color.White);
 
-        foreach (var direction in (Vector2[])[new(1f, 0f), new(-1f, 0f), new(0f, 1f), new(0f, -1f)])
-        {
-            _shapes.DrawPixelLine(centre + direction * 20f, centre + direction * 32f, 2f, Color.White);
-        }
+        _shapeBatch.DrawPixelLine(centre + new Vector2(20f, 0f), centre + new Vector2(32f, 0f), 2f, Color.White);
+        _shapeBatch.DrawPixelLine(centre + new Vector2(-20f, 0f), centre + new Vector2(-32f, 0f), 2f, Color.White);
+        _shapeBatch.DrawPixelLine(centre + new Vector2(0f, 20f), centre + new Vector2(0f, 32f), 2f, Color.White);
+        _shapeBatch.DrawPixelLine(centre + new Vector2(0f, -20f), centre + new Vector2(0f, -32f), 2f, Color.White);
 
         Solid();
-        _shapes.DrawPixelDisc(new Vector3(centre, 0f), 2f, Color.White);
+        _shapeBatch.DrawPixelDisc(new Vector3(centre, 0f), 2f, Color.White);
     }
 
     private static EntityTextComponent AddLabel(Scene scene, TextAnchor anchor)
@@ -156,21 +168,28 @@ public sealed class SimpleHud
         _energyLabel.ScreenPosition = DialCentre;
     }
 
-    private void DrawWarningLight(float seconds)
+    private void DrawWarning(float seconds)
     {
+        _warningLabel.IsVisible = Health <= _style.LowHealth;
+
         if (Health > _style.LowHealth) return;
 
-        var centre = new Vector2(_shapes.ScreenSize.X * 0.5f, _style.Margin + 16f);
+        var centre = new Vector2(_shapeBatch.ScreenSize.X * 0.5f, _style.Margin + _style.WarningSize.Y * 0.5f);
+        var pulse = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
 
-        Solid();
-        _shapes.Glow.Set(18f);
-        _shapes.Glow.Strength = 0.5f;
-        _shapes.Opacity = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
+        _shapeBatch.BorderWidth = 2f;
+        _shapeBatch.Fill.Set(_style.PanelFill, 0.8f);
+        _shapeBatch.Glow.Set(18f);
+        _shapeBatch.Glow.Strength = 0.5f;
+        _shapeBatch.Opacity = pulse;
 
-        _shapes.DrawDisc(centre, 10f, _style.Hurt);
+        _shapeBatch.DrawRectangle(centre, _style.WarningSize, _style.Hurt, cornerRadius: 10f);
 
-        _shapes.Glow.Clear();
-        _shapes.Opacity = 1f;
+        _shapeBatch.Glow.Clear();
+        _shapeBatch.Opacity = 1f;
+
+        _warningLabel.ScreenPosition = centre;
+        _warningLabel.Opacity = pulse;
     }
 
     private void DrawDamageFlash()
@@ -178,10 +197,10 @@ public sealed class SimpleHud
         if (Flash <= 0f) return;
 
         Solid();
-        _shapes.Opacity = Flash * 0.35f;
+        _shapeBatch.Opacity = Flash * 0.35f;
 
-        _shapes.DrawRectangle(_shapes.ScreenSize * 0.5f, _shapes.ScreenSize, _style.Hurt);
+        _shapeBatch.DrawRectangle(_shapeBatch.ScreenSize * 0.5f, _shapeBatch.ScreenSize, _style.Hurt);
 
-        _shapes.Opacity = 1f;
+        _shapeBatch.Opacity = 1f;
     }
 }
