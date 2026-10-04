@@ -19,7 +19,7 @@ public static class BufferExtensions
     /// <remarks>
     /// Use it for a span over managed memory, such as an array or a <see cref="List{T}"/>. On
     /// Direct3D 11 the engine's upload of a default-usage buffer hands the span's address to native
-    /// code without pinning it, in Stride 4.4.0-beta8 and in later builds at the time of writing. A
+    /// code without pinning it, in Stride 4.4.0-beta9 and earlier. A
     /// garbage collection during that call may move the array, and the upload then reads the wrong
     /// memory. The other backends pin the span themselves, where pinning again costs nothing.
     /// </remarks>

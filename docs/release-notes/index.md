@@ -14,6 +14,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 💥 Breaking Changes
 
+- Built against Stride 4.4.0-beta9 (was 4.4.0-beta8).
 - `ShapeBatch`: the default fill is solid. `Fill.Alpha` defaults to 1 (was 0.6), so a draw call with one colour draws a solid shape in that colour; it used to draw an outline around a dimmed, see-through inside. For the old look set `Fill.Alpha = ShapeFill.TestbedAlpha`. `Box2DDebugDraw` keeps that look through its new `FillAlpha` property. A `ShapeComponent` on a batch that never set its fill is solid too.
 - `AddBepu3DPhysics`, `AddBepu2DPhysics` and the Bepu `Create3DPrimitive` / `Create2DPrimitive` overloads no longer add the fitted collider to a compound collider that already holds a shape. Code that passed a placeholder such as `new CompoundCollider { Colliders = { new BoxCollider() } }` and relied on the fitted shape now gets only the placeholder, at its default size: pass an empty `CompoundCollider` instead.
 
@@ -52,7 +53,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - New tutorial "Build a simple HUD with ShapeBatch", for beginners: eight steps from an empty window to a HUD with a health bar, an energy dial, a crosshair, labels, a warning light and a damage flash, ending with the HUD moved into a class. Every code block on the page is taken from the example it describes. The ShapeBatch manual page links to it.
 - Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It uses `1.0.0-preview.66`.
 - The console launcher's menu shown in the examples pages is refreshed.
-- Engine-only pages: the Stride version in the package lines is `4.4.0-beta8`. The file-based page's last section is "See it in the repository", links to the two files, and says how the repository's `Directory.Build.targets` differs from the one the page has you write.
+- Engine-only pages: the Stride version in the package lines is `4.4.0-beta9`. The file-based page's last section is "See it in the repository", links to the two files, and says how the repository's `Directory.Build.targets` differs from the one the page has you write.
 - Glossary: new entries **Playground**, **Body interpolation**, **Contact spring** and **Sleeping**; **Restitution / friction** now says how Bepu does both.
 - Removed the empty "What's new in docs" page.
 - Physics manual: new page "Bepu: Bounce and Friction", the four contact properties of a collidable, how a pair combines them, and measured rebounds.
@@ -72,7 +73,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - `E02_3D_Material_Gallery`: new variations. **Albedo texture**: random coordinates, swizzle, fallback value. **Gloss and metal maps**: two maps packed into one texture. **Occlusion**: direct light and a cavity map. **Node arithmetic**: `Add` and `AddMath`. `--clean` hides the overlay.
 - `E09_3D_Particles_Gallery`: six thruster stations, 33 to 38: **Kerosene engine**, **Engine cluster**, **Methane engine**, **Jet afterburner**, **Solid booster** and **Small thrusters**, three variations each. They use no shader of their own. The station **Rocket engine** is renamed **Landing burn**. `--clean` hides the overlay.
 - `E03_2D_HUD`: reworked. One widget per file, three columns of panels in a frame, ten colour schemes on keys 1 to 9 and 0, and new contacts, target and power panels. Contacts, wing tiles, mode buttons and the power triangle respond to clicks through `ShapeBatch` picking. The panel background is a shader fill with two patterns, lines and squares, on key G. `--scheme N` starts in a scheme.
-- `E02_3D_Material_Gallery`: the hair and subsurface scattering stations are always on and require a Stride build newer than 4.4.0-beta8. The `--engine-fix` switch is removed.
+- `E02_3D_Material_Gallery`: the hair and subsurface scattering stations are always on and require Stride 4.4.0-beta9 or later. The `--engine-fix` switch is removed.
+- `E02_3D_Material_Gallery` and `E20_3D_CubeCollapse`: the thin-glass blend state workaround is removed. Stride 4.4.0-beta9 generates the transmittance pass with its blend state.
 - `E11_3D_ShapeBatch_Gallery`: new station **Shader fill**, a fill computed by a shader class instead of a texture. The gallery picture has mipmaps.
 - `E09_3D_Particles_Gallery`: new station **Shader node**, particles drawn by a shader class instead of a texture. `--station N --variation M` starts at a variation.
 - `E04_ImGuiNet`: the orbiting cube was driven with `SetTargetPose` from a per-frame `Update`. It now sets a velocity, like `E02_3D_SyncScript`.
@@ -96,5 +98,5 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - NDepend: the remaining issues are cleared. Members of internal types are declared `internal` or `private`, and two complex methods gained comments.
 - NDepend critical rules: `DebugOverlay.Draw` is split into measure and draw steps, the galleries' index board is its own class (`GalleryBoard`), and three example helpers take a settings value instead of a long parameter list (`HudStyle` in `E03_2D_HUD`, `PlumeShape` and `SmokeLook` in `E09_3D_Particles_Gallery`). No public API changed.
 - The **.NET Build Test** workflow runs on pull requests that touch `src`, the test project or the build files. It builds every library and runs the unit tests in Release, as the release workflow does. It also builds `Stride.CommunityToolkit.Effects`, which was missing from its list.
-- Removed the repository's `Directory.Build.targets`, which replaced Stride's `StrideSortItems` task to silence CS0162. Stride builds newer than 4.4.0-beta8 do not raise the warning.
+- Removed the repository's `Directory.Build.targets`, which replaced Stride's `StrideSortItems` task to silence CS0162. Stride 4.4.0-beta9 does not raise the warning.
 - `Directory.Build.local.props`: an optional, git-ignored file that overrides build properties locally, such as `StrideVersion` for a Stride build from source. See the contributing build page.

@@ -59,11 +59,7 @@ public static class MaterialFactory
     /// diffuse colour is the tint, what the glass lets through; there is no diffuse model, or the
     /// glass would go opaque.
     /// </summary>
-    /// <remarks>
-    /// The engine's transmittance passes ship with their blend state wiped, which paints them opaque
-    /// grey. The material gallery explains it; the same workaround puts the multiply back here, on
-    /// every even pass. It can go once the engine fix ships.
-    /// </remarks>
+
     /// <param name="game">The running game, which owns the graphics device the material is created on.</param>
     /// <param name="tint">What the glass lets through.</param>
     /// <param name="glossiness">The material gallery uses 0.95 clear, 0.85 tinted and 0.45 frosted.</param>
@@ -87,19 +83,7 @@ public static class MaterialFactory
             },
         };
 
-        var material = Material.New(game.GraphicsDevice, descriptor, game.Content);
-
-        // What is behind, times the transmittance, the alpha left alone
-        var transmit = new BlendStateDescription(Blend.Zero, Blend.SourceColor);
-        transmit.RenderTargets[0].AlphaSourceBlend = Blend.One;
-        transmit.RenderTargets[0].AlphaDestinationBlend = Blend.Zero;
-
-        foreach (var pass in material.Passes)
-        {
-            if (pass.PassIndex % 2 == 0) pass.BlendState = transmit;
-        }
-
-        return material;
+        return Material.New(game.GraphicsDevice, descriptor, game.Content);
     }
 
     /// <summary>

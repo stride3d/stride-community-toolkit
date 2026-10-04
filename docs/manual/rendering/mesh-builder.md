@@ -67,7 +67,7 @@ Other types would work as well but these are very common so we will use them as 
 Next we define our vertices. For that we use a new method @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex.
 This will add a new vertex to our builder and allows us to use the `Get/SetElement` methods.
 
-You can also declare multiple vertices before setting the actual values but this is the simplest way for now.
+You can also add several vertices first and set their values afterwards.
 
 ```csharp
 meshBuilder.AddVertex();

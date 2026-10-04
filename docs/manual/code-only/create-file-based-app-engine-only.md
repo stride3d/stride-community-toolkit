@@ -14,8 +14,8 @@ when the app is a single file.
    [project version](create-project-engine-only.md#the-code) after them:
 
    ```csharp
-   #:package Stride.Engine@4.4.0-beta8
-   #:package Stride.AssetCompiler@4.4.0-beta8
+   #:package Stride.Engine@4.4.0-beta9
+   #:package Stride.AssetCompiler@4.4.0-beta9
    #:property PublishAot=false
    ```
 
