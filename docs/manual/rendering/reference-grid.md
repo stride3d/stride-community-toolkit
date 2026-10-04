@@ -100,6 +100,8 @@ Remarks:
 - On the ground plane the grid does not extend beyond `Extent`.
 - The grid draws with two batches of its own. It does not become the batch that `ShapeComponent` draws
   through, and it does not change the state of any batch you created.
+- The screen grid draws over the shapes of your own batches, whenever those were added. A panel drawn
+  after the post effects has the grid's lines across it.
 
 ## See also
 

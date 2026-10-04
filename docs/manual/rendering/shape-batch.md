@@ -330,9 +330,9 @@ Limitations:
 - **No text.** Use World Text, or render text to a texture and use it as a fill.
 - **One fill source per batch.** Use a second batch for a second texture.
 - **No layout or events.** Hover and click handling is your code, based on `TryPick`.
-- **Sorting.** A batch sorts against transparent meshes as one object. The draw order of two batches is not
-  guaranteed. Draw shapes that must layer in a fixed order through one batch, and use an overlay batch for
-  shapes that must never be covered.
+- **Sorting.** A batch sorts against transparent meshes as one object. Two batches in the same stage draw
+  in the order they were added, the later one on top. Draw shapes that must layer in a fixed order
+  through one batch, and use an overlay batch for shapes that must never be covered.
 
 ## Example: an in-scene console
 

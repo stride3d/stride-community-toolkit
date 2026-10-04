@@ -302,7 +302,9 @@ public static class GraphicsCompositorExtensions
     private static void AddRenderStagesAndFeatures(GraphicsCompositor graphicsCompositor)
     {
         var cameraSlot = graphicsCompositor.Cameras[0];
-        var uiStage = new RenderStage(UiStageName, MainStageName);
+        // A stage without a sort mode draws its objects in the order the engine collected them, and
+        // it collects them on several threads: two objects that overlap would swap from frame to frame
+        var uiStage = new RenderStage(UiStageName, MainStageName) { SortMode = new BackToFrontSortMode() };
 
         graphicsCompositor.RenderStages.Add(uiStage);
 

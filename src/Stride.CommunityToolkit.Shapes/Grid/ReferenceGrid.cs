@@ -143,11 +143,14 @@ public class ReferenceGrid : SyncScript
 
         // Batches of the grid's own. The world one is depth tested, so the scene hides the lines
         // behind it; the other draws over everything, after the post effects
-        _canvas = new GridCanvas(
-            this,
-            ShapeBatchExtensions.Create(game, depthTest: true, fill: null, afterPostEffects: false),
-            ShapeBatchExtensions.Create(game, depthTest: false, fill: null, afterPostEffects: true),
-            Entity);
+        var world = ShapeBatchExtensions.Create(game, depthTest: true, fill: null, afterPostEffects: false);
+        var overlay = ShapeBatchExtensions.Create(game, depthTest: false, fill: null, afterPostEffects: true);
+
+        // Batches in one stage draw in the order they were made. The screen grid is a ruler laid
+        // over the picture, so its batch sorts last whenever a game makes its own batches
+        overlay.StateSortKey = uint.MaxValue;
+
+        _canvas = new GridCanvas(this, world, overlay, Entity);
 
         game.AddEntityTextRenderer();
 

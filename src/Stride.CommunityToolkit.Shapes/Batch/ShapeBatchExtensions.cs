@@ -40,7 +40,8 @@ public static class ShapeBatchExtensions
     /// before UI and debug text - or, with <paramref name="afterPostEffects"/>, in the UI stage
     /// after the post effects. Call after the graphics compositor exists (from the Start callback).
     /// Calling this more than once adds another independent batch, which is how you get depth-tested
-    /// and overlay shapes in the same scene; the first batch registers as the service that
+    /// and overlay shapes in the same scene. Batches in the same stage draw in the order they were
+    /// added, the later one on top. The first batch registers as the service that
     /// <see cref="ShapeComponent"/> draws through. A scene that never calls this still draws its
     /// components: the processor registers a depth-tested batch of its own the first time it needs one.
     /// </remarks>
