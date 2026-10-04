@@ -17,8 +17,8 @@ var debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
 > the `Draw*` methods from your update loop, not once at startup. `duration` is how many extra seconds
 > the shape survives without being re-issued; leave it at `0` for the once-per-frame case.
 >
-> `AddDebugShapes()` sets `Visible = true` only in `DEBUG` builds. In a Release build you have to set
-> it yourself, or nothing appears.
+> `AddDebugShapes()` leaves `Visible` off in the published package. Set `Visible = true` on the
+> system, or nothing appears.
 
 ## Shared parameters
 

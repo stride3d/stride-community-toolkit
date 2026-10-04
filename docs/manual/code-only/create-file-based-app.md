@@ -56,8 +56,7 @@ folder and it never comes up.
 ## Where the build output goes
 
 There is no `obj/` or `bin/` next to the file: the SDK keeps them in its own temporary build cache,
-which is what keeps the folder to one file. Stride 4.4 handles that layout (its asset compiler used to
-build a malformed path from it in early 4.4 previews; that is fixed in 4.4.0-beta5). If you ever need
+which is what keeps the folder to one file. If you ever need
 the output next to the file - to inspect the compiled `data/` folder, say - two directives put it there:
 
 ```csharp

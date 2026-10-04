@@ -1,10 +1,8 @@
 # GPU picking - what is under the mouse, answered by the renderer
 
 Every click-to-select, hover-to-highlight and drag-this-object interaction starts with one
-question: which thing is under this screen point? The toolkit has answered it with physics for as
-long as it has had physics, and that answer is right for a lot of games. This page is about the
-other answer, the one Game Studio's own viewport uses when you click an entity, and the one that
-works when nothing has a collider.
+question: which thing is under this screen point? A physics raycast answers it for colliders. The
+GPU picker answers it from the rendered frame, as Game Studio's viewport does, with no collider.
 
 ## The ray that goes straight through
 
@@ -123,7 +121,7 @@ The effect file and the id writer are eleven lines between them; what a package 
 |---|---|
 | The first body along a line, from anywhere, now | A physics raycast |
 | What the eye sees under a screen point, colliders or not | The GPU picker |
-| A hit on a shape-batch panel or button | The board's own ray-to-plane test |
+| A hit on a shape-batch panel or button | `ShapeBatch.TryPick` |
 | Both: click selects a mesh, then the drag is physical | Pick with the GPU, then drive the body |
 
 The GPU picking example (`E09_3D_GpuPicking`) has no physics package at all: a teapot, pillars,

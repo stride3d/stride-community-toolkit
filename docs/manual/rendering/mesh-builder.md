@@ -46,7 +46,7 @@ meshBuilder.WithPrimitiveType(PrimitiveType.TriangleList);
 
 ### Indexing
 The mesh builder supports three types of indexing, `None`, `Int16` or `Int32`.
-In our case we definitely don't need more than 32k indices so we can safely use the `Int16` version.
+Three vertices are far below the 32,767 an `Int16` index can address, so `Int16` is enough.
 
 ```csharp
 meshBuilder.WithIndexType(IndexingType.Int16);
@@ -142,7 +142,6 @@ var model = new Model
 }
 ```
 
-Congrats 🥳 you got a triangle.
 
 ## Who owns the buffers
 

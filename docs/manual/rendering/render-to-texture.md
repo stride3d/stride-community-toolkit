@@ -79,9 +79,8 @@ package's `Effects` folder; a third one is written the same way.
 
 ## What it is not
 
-- **Not a wireframe or a depth view.** Those need meshes drawn with a different rasterizer state
-  or a post effect that reads the depth buffer, which is a render stage of its own rather than a
-  colour transform. Both are in the backlog as feeds for later.
+- **Not a wireframe or a depth view.** Those need a different rasterizer state or a post effect
+  that reads the depth buffer, not a colour transform.
 - **Not free.** Every feed is another pass over the scene. Five 512-pixel feeds in the example are
   cheap; five full-resolution ones are five more frames a frame.
 - **Not the same frame.** The previous one, as above. A feed that must show this frame would have

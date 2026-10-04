@@ -12,8 +12,8 @@ lives inside the scene - scaled by perspective and hidden by geometry in front o
 Two pieces are involved:
 
 - **`EntityTextComponent`** records *what* to draw and *where*.
-- **`EntityTextRenderer`** is a scene renderer that draws it. Nothing appears until one is added to
-  the graphics compositor.
+- **`EntityTextRenderer`** is a scene renderer that draws it. `EntityTextProcessor` adds it to the
+  compositor when no `AddEntityTextRenderer()` call has.
 
 `EntityTextComponent`, `TextAnchor` and `TextPositionMode` live in the `Stride.CommunityToolkit.Rendering.Text`
 namespace; the renderer is there too, and the `AddEntityTextRenderer()`
@@ -56,8 +56,6 @@ the top-right grows to the left and stays on screen. Use `Screen` when you want 
 position and the anchor independently.
 
 ## Anchor is not Alignment
-
-This is the part that catches people, so it is worth stating plainly:
 
 - **`Anchor`** decides which point of the text sits on the position. This is what "centre the label on
   the object" means, and it is almost certainly the property you want.
@@ -103,10 +101,10 @@ on a 150% laptop as on a 100% monitor; the glyphs are rasterised at the larger s
 stretched, so they stay sharp. A projected world position is not scaled - it is where the entity is,
 not a design figure. `AutoScale = false` on the component turns this off for exactly the pixels
 asked for. The same applies to `EntityDebugSceneRendererOptions`, and it only works when the process
-is DPI aware; see [the debug overlay page](debug-overlay.md#size-and-high-dpi-displays) for the manifest.
+is DPI aware; see [the debug overlay page](debug-overlay.md#size-and-high-dpi-displays).
 
-For world text, `FadeStartDistance` and `MaxDistance` fade labels out with distance, or simply stop
-drawing them past a cutoff when only `MaxDistance` is set.
+In `World` mode, `FadeStartDistance` and `MaxDistance` fade labels out with distance; `MaxDistance`
+alone is a cutoff.
 
 ## Fonts
 
@@ -118,11 +116,8 @@ different text use different faces in the same scene.
 Components are gathered by `EntityTextProcessor`, registered automatically through the component's
 `DefaultEntityComponentProcessor` attribute. Nothing needs to add it.
 
-This matters for one reason worth knowing: because the engine reports components as they are added
-and removed, **text on child entities is drawn**, and cached measurements are released when a
-component goes away. An earlier version of the renderer walked the scene's top-level entity list
-instead, so labels parented to another entity - the obvious way to attach a label to a thing - never
-drew, and every short-lived label leaked a cache entry.
+Because the engine reports components as they are added and removed, **text on child entities is
+drawn**, and cached measurements are released when a component goes away.
 
 ## The debug renderer
 
@@ -157,8 +152,7 @@ Options worth knowing:
 > [!IMPORTANT]
 > A default background only makes sense paired with a default text colour. The debug renderer's text
 > defaults to **black** on a **light** panel; `EntityTextComponent` defaults to **white** on a **dark**
-> one. The two used to share a single default background, so darkening it to suit white text silently
-> turned every debug label into black-on-black. If you change one, change the other.
+> one. If you change one default, change the other.
 
 ## Limitations
 

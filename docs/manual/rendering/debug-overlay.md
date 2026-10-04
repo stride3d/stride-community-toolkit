@@ -5,10 +5,8 @@ something to say - the camera controller's key help, your own instructions, a li
 position and one hide key for the lot. It is a game system, so it survives scene swaps and draws
 itself every frame; nothing calls it.
 
-The tempting alternative is `game.DebugTextSystem.Print(...)` from every script's `Update`. That works
-for one line. With three scripts each printing at a hand-picked pixel position, the lines overlap on
-the first window resize, the camera help draws on top of your counter, and every one of them is 8 by 16
-pixel text that a 4K display makes unreadable. The overlay exists so that text has one owner.
+Use it instead of `game.DebugTextSystem.Print(...)` from several scripts, whose hand-placed lines
+overlap and are unreadable on a high-DPI display.
 
 `DebugOverlay`, `DebugOverlaySection`, `TextElement` and `DisplayPosition` live in the
 `Stride.CommunityToolkit.Scripts.Utilities` namespace.
@@ -42,20 +40,18 @@ A section can collapse to a single title line and expand again on a key:
 overlay.AddCollapsibleSection("Physics", "Physics", Keys.F5, () => [ ... ], collapsed: true);
 ```
 
-That is how `[+] [F2] Camera controls` works: the marker first so every dropdown lines up, then the key, decorated the same way the section's own key lines are, and the body indented one marker so its keys sit under the title's. `AddSection` returns the `DebugOverlaySection`, so a
+That is how `[+] [F2] Camera controls` works: the marker first so every dropdown lines up, then the key, decorated the same way the section's own key lines are, and the body indented one marker so its keys sit under the title's. `AddSection` returns the `DebugOverlaySection`, so a section can be disabled, collapsed or removed later.
 
 Keys are data, not text. A help line names them - `new("H", "Reset camera", Color.Gold)`, or
 `new(["Q", "E"], "Ascend / descend")` for keys that do the same thing, or `new("Arrow keys", "Move")` -
 and the overlay decorates them when it draws: each key through `KeyFormat` (default `[{0}]`), joined by
 `KeySeparator`, in `KeyColor`, which defaults to the line's colour blended halfway to white so the keys
-and the `[+]` marker read a shade apart from what they do. Restyling every help line in every example,
-from `[F2]` to `F2:`, is then one property: `overlay.KeyFormat = "{0}:"`. A line with no keys is drawn
-as it always was.
+and the `[+]` marker read a shade apart from what they do. `overlay.KeyFormat = "{0}:"` restyles every
+help line from `[F2]` to `F2:`. A line with no keys is drawn as given.
 
 `BlockBounds` is the rectangle the block was last drawn in, in screen pixels. A scene laid out in world units can read it to keep something clear of the help - the easing sheet places its big panel under the block each frame, as tall as the space left, instead of guessing how many pixels twelve lines are on a scaled display.
 
 Sections are separated by one blank line; `SectionGap` changes how many, and `0` runs them together.
-section can be disabled, collapsed or removed later.
 
 > [!TIP]
 > Something that already knows how to describe itself as lines - `DebugTextDropdown.GetLines()`, for
@@ -78,8 +74,8 @@ off still takes effect.
 > [!NOTE]
 > The camera controllers claim <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd>, <kbd>Q</kbd> <kbd>E</kbd>,
 > the arrow keys, <kbd>H</kbd>, <kbd>F2</kbd> and <kbd>F3</kbd>. Bind section toggles and example
-> keys elsewhere; safe single letters include <kbd>G</kbd> <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd>
-> <kbd>M</kbd> <kbd>N</kbd> <kbd>P</kbd> <kbd>R</kbd> <kbd>T</kbd> <kbd>Z</kbd>.
+> keys elsewhere; <kbd>G</kbd> is the reference grid's and <kbd>T</kbd> the grabbers'. Safe single
+> letters include <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>M</kbd> <kbd>N</kbd> <kbd>P</kbd> <kbd>R</kbd> <kbd>Z</kbd>.
 
 ## Size, and high-DPI displays
 
@@ -94,8 +90,7 @@ re-read when the window moves to a differently scaled monitor. Three properties 
 - **`Scale`** multiplies everything - text, line spacing, margins, padding - on top of the display's
   factor, so the block keeps its layout. It is a preference, "a bit bigger", not a DPI figure:
   `1.25` on a 150% display draws at 1.875.
-- **`FontSize`** is the text height at scale 1 on a 100% display, in pixels. Defaults to 16, the
-  height of Stride's own debug text.
+- **`FontSize`** is the text height at scale 1 on a 100% display, in pixels. Defaults to 14.
 
 The display factor is only right if the process is DPI aware - otherwise Windows is already
 stretching the whole window and the factor correctly reads 1. Declare awareness in an
@@ -103,12 +98,8 @@ stretching the whole window and the factor correctly reads 1. Declare awareness 
 the `Stride.CommunityToolkit.Windows` package before the game is created; see the
 [DPI-aware example](../code-only/examples/dpi-aware.md).
 
-Why not just scale Stride's debug text? Because it is a bitmap: an 8 by 16 pixel glyph sheet that
-`DebugTextSystem` draws at exactly that size, with a grey strip baked behind every glyph. The first
-attempt at enlarging it - a transform over the small texture - came out blurred; the second - doubling
-every pixel - came out sharp but blocky next to the vector text everywhere else on a 4K desktop. A
-rasterised font is what makes debug text look like the rest of the screen, and it is what the toolkit's
-[entity text](entity-text.md) already used.
+Stride's `DebugTextSystem` draws an 8 by 16 pixel bitmap font that blurs or turns blocky when scaled.
+The overlay uses a rasterised font instead, as [entity text](entity-text.md) does.
 
 ## Fonts
 
@@ -161,9 +152,8 @@ overlay.BackgroundColor = new Color(255, 255, 255, 230);
 overlay.DefaultTextColor = Color.Black;
 ```
 
-The strip is drawn by the overlay, not by the font. This is worth knowing only because Stride's own
-debug text is the other way round - its strip is baked into the glyphs at a fixed 49% black and cannot
-be changed, which is why a text-only fix was never going to make it readable on white.
+The strip is drawn by the overlay, not by the font. Stride's own debug text bakes its strip into the
+glyphs, so it cannot be changed there.
 
 ## Line spacing
 
@@ -191,5 +181,5 @@ unscaled pixels overrides the calculation entirely.
 | `DebugOverlay.GetOrCreate(game)` | `Program.cs`, `Start` | one shared instance, registered as a service |
 | `WindowsDpiManager.EnablePerMonitorV2()` | `Program.cs`, before `new Game()` | a sharp window; the overlay's size then follows `DisplayScale` on its own |
 | `overlay.BackgroundColor = new Color(0, 0, 0, 200)` | `Program.cs`, 2D branch | readable on a white scene |
-| `overlay.AddSection("Chart", () => [...])` | `Program.cs` | a live line: `Press G to toggle the grid (on)` |
-| `Add3DCameraController()` | via `SetupBase3DScene` | the collapsible `[+] [F2] Camera controls` section, order `-100` |
+| `overlay.AddSection("Chart", () => [...])` | `Program.cs` | a live key line: `[G] Grid on` |
+| `Add2DCameraController()` | `Program.cs`, `Start` | the collapsible `[+] [F2] Camera controls` section, order `-100` |

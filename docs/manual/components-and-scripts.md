@@ -63,10 +63,8 @@ asks for it.
 
 There is a subtler benefit too. A component's data **lives and dies with its entity**. The usual
 alternative - a `Dictionary<Entity, Color>` somewhere - has to be cleaned up by hand every time an
-entity is removed, and when someone forgets, it leaks silently. This repository contains the scar
-tissue: a renderer once cached text measurements in exactly such a dictionary, and every short-lived
-score popup leaked one entry forever. Attach the data to the entity and that entire class of bug
-cannot exist.
+entity is removed, and when someone forgets, it leaks silently. Attach the data to the entity and
+that class of bug cannot exist.
 
 Finally, a typed component is **identity you can query**. "Is this a playable cube?" is answered by
 `entity.Get<CubeComponent>() is not null` - the compiler checks it, a rename refactors it. The

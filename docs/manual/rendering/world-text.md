@@ -53,7 +53,7 @@ On a scaled display the same `Height` covers that many more pixels, so the rende
 1.5x the size and stays as sharp as on a 100% monitor. Nothing moves or resizes; `GlowSize`, being
 in font pixels, scales along so the glow keeps its reach. `AutoScale = false` on the component
 rasterises at exactly `FontSize`. This only works when the process is DPI aware; see
-[the debug overlay page](debug-overlay.md#size-and-high-dpi-displays) for the manifest.
+[the debug overlay page](debug-overlay.md#size-and-high-dpi-displays).
 
 ## Orientation
 
@@ -76,8 +76,7 @@ For distance control, `MaxDistance` stops drawing text beyond a range, and `Fade
 
 The axis letters on the ground gizmo (`AddGroundGizmo(showAxisName: true)`) are world text: one sharp
 camera-facing quad per letter, coloured to match its axis, occluded by the scene exactly as the axis
-arrows are. They replaced letter shapes assembled from cylinder meshes - which were being turned to
-face the camera every frame anyway, at which point geometry buys nothing a flat quad does not.
+arrows are.
 
 ## Costs and limits
 

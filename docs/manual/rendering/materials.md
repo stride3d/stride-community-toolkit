@@ -549,8 +549,6 @@ reflection pass for each face side.
 
 - Do not add a transparency feature.
 - Do not add a diffuse model. The diffuse colour is the transmission tint.
-- Stride 4.4.0-beta8 and earlier generate the transmittance pass without its blend state, so the glass renders
-  opaque. 4.4.0-beta9 fixes it.
 
 ### Displacement and tessellation
 
@@ -584,9 +582,7 @@ descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMateria
 
 | Feature | Status |
 |---|---|
-| Hair, subsurface scattering | Require 4.4.0-beta9 or later. On beta8 and earlier their effects do not compile |
 | Subsurface scattering blur | The post effect does not compile. The gallery does not use it |
-| Thin glass | Renders opaque on 4.4.0-beta8 and earlier |
 | Tessellated shadow casters | Log a constant buffer warning each frame. The gallery's tessellated models cast no shadow |
 | Layers | A base of one shading model under two or more layers that share another shading model applies the masks wrongly. Other combinations work |
 
