@@ -43,10 +43,9 @@ public sealed partial class ShapeBatch
     public bool CanPick => LastView is not null;
 
     /// <summary>
-    /// How much of the world one on-screen pixel covers at a point, as the last drawn frame saw it -
-    /// the same figure the shader uses for a pixel-measured width or radius, in the display's scaled
-    /// pixels when <see cref="AutoScale"/> is on. What a line needs to stop short of a pixel-radius
-    /// ring by the ring's radius, whatever the distance; 0 until the batch has been drawn once.
+    /// World units per on-screen pixel at a point, as of the frame last drawn: the figure the shader
+    /// uses for pixel-measured widths and radii, in scaled pixels when <see cref="AutoScale"/> is on.
+    /// Returns 0 until the batch has been drawn once.
     /// </summary>
     /// <param name="point">The point in the world.</param>
     public float WorldPerPixel(Vector3 point) => LastView?.WorldPerPixel(point) ?? 0f;

@@ -13,7 +13,7 @@ public sealed partial class ShapeBatch
     /// <param name="vertices">The corners in local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's local origin.</param>
     /// <param name="rotation">Rotation in radians about the Z axis.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector2 position, float rotation, Color color, float radius = 0f)
@@ -34,7 +34,7 @@ public sealed partial class ShapeBatch
     /// </summary>
     /// <param name="center">World-space centre.</param>
     /// <param name="radius">Radius in world units.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     public void DrawSolidCircle(Vector2 center, float radius, Color color)
         => DrawSolidPolygon([Vector2.Zero], center, 0f, color, radius);
 
@@ -45,7 +45,7 @@ public sealed partial class ShapeBatch
     /// <param name="position">World position of the shape's local origin.</param>
     /// <param name="axisX">The plane's X axis. Normalized for you.</param>
     /// <param name="axisY">The plane's Y axis. Normalized for you.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <param name="scale">Uniform scale applied to the whole shape, radius included. Zero or less draws nothing.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
@@ -60,7 +60,7 @@ public sealed partial class ShapeBatch
     /// <param name="vertices">The corners in local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's local origin.</param>
     /// <param name="rotation">Orientation of the shape's plane.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawSolidPolygon(ReadOnlySpan<Vector2> vertices, Vector3 position, Quaternion rotation, Color color, float radius = 0f)
@@ -74,7 +74,7 @@ public sealed partial class ShapeBatch
     /// </summary>
     /// <param name="vertices">The corners in local space, counter-clockwise.</param>
     /// <param name="position">World position of the shape's centre.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="radius">Optional rounding radius around the polygon, in world units.</param>
     /// <exception cref="ArgumentException">No vertices were given.</exception>
     public void DrawBillboard(ReadOnlySpan<Vector2> vertices, Vector3 position, Color color, float radius = 0f)
@@ -87,7 +87,7 @@ public sealed partial class ShapeBatch
     /// </summary>
     /// <param name="center">World-space centre.</param>
     /// <param name="radius">Radius in world units.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     public void DrawBillboardCircle(Vector3 center, float radius, Color color)
         => DrawBillboard([Vector2.Zero], center, color, radius);
 
@@ -120,7 +120,7 @@ public sealed partial class ShapeBatch
     /// <param name="center">World-space centre.</param>
     /// <param name="normal">Normal of the plane the disc lies in.</param>
     /// <param name="radius">Radius in world units.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     public void DrawDisc(Vector3 center, Vector3 normal, float radius, Color color)
         => Add([Vector2.Zero], ShapePlane.FromNormal(center, normal), CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
 
@@ -147,7 +147,7 @@ public sealed partial class ShapeBatch
     /// <param name="normal">Normal of the plane the annulus lies in.</param>
     /// <param name="outerRadius">Outer radius in world units.</param>
     /// <param name="innerRadius">Radius of the hole in world units, smaller than the outer one.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     public void DrawAnnulus(Vector3 center, Vector3 normal, float outerRadius, float innerRadius, Color color)
         => AddSector(ShapePlane.FromNormal(center, normal), outerRadius, innerRadius, 0f, MathF.Tau, color);
 
@@ -157,7 +157,7 @@ public sealed partial class ShapeBatch
     /// <param name="center">World-space centre.</param>
     /// <param name="outerRadius">Outer radius in world units.</param>
     /// <param name="innerRadius">Radius of the hole in world units, smaller than the outer one.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     public void DrawAnnulus(Vector2 center, float outerRadius, float innerRadius, Color color)
         => AddSector(ShapePlane.XY(center), outerRadius, innerRadius, 0f, MathF.Tau, color);
 
@@ -171,7 +171,7 @@ public sealed partial class ShapeBatch
     /// <param name="radius">Outer radius in world units.</param>
     /// <param name="startAngle">Where the slice starts, in radians. See the remarks for where 0 is.</param>
     /// <param name="sweepAngle">How far it extends, in radians. Positive is counter-clockwise, negative clockwise; a full turn or more is the whole ring or disc.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="innerRadius">Radius of the hole, in world units; 0 (the default) cuts from the centre.</param>
     /// <remarks>
     /// Angles increase counter-clockwise as seen from the side the normal points to. Zero lies
@@ -190,7 +190,7 @@ public sealed partial class ShapeBatch
     /// <param name="radius">Outer radius in world units.</param>
     /// <param name="startAngle">Where the slice starts, in radians from the X axis.</param>
     /// <param name="sweepAngle">How far it extends, in radians. Positive is counter-clockwise, negative clockwise; a full turn or more is the whole ring or disc.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="innerRadius">Radius of the hole, in world units; 0 (the default) cuts from the centre.</param>
     public void DrawSector(Vector2 center, float radius, float startAngle, float sweepAngle, Color color, float innerRadius = 0f)
         => AddSector(ShapePlane.XY(center), radius, innerRadius, startAngle, sweepAngle, color);
@@ -235,7 +235,7 @@ public sealed partial class ShapeBatch
     /// <param name="axisX">The plane's X axis. Normalized for you.</param>
     /// <param name="axisY">The plane's Y axis. Normalized for you.</param>
     /// <param name="size">Width along X and height along Y, in world units.</param>
-    /// <param name="color">The outline colour; the fill derives from it and <see cref="ShapeFill.Alpha"/>.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
     /// <param name="cornerRadius">Optional corner rounding, in world units. Limited to half the smaller side, where the rectangle is a capsule or a circle.</param>
     public void DrawRectangle(Vector3 center, Vector3 axisX, Vector3 axisY, Vector2 size, Color color, float cornerRadius = 0f)
     {

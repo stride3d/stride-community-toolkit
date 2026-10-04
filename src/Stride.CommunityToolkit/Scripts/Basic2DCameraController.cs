@@ -8,7 +8,7 @@ namespace Stride.CommunityToolkit.Scripts;
 /// <summary>
 /// Provides an interactive 2D camera controller for navigating 2D scenes in Stride.
 /// This controller supports movement in the XY-plane using the arrow keys (optionally WASD),
-/// zooming in and out with the mouse wheel, middle-mouse drag panning, optional screen edge panning,
+/// zooming in and out with the mouse wheel, mouse drag panning, optional screen edge panning,
 /// camera following, and smooth movement. Additional features include a speed boost when holding shift
 /// and the ability to reset the camera to a default position and zoom level using the 'H' key.
 /// </summary>
@@ -17,7 +17,6 @@ namespace Stride.CommunityToolkit.Scripts;
 /// - Zooming scales the camera's OrthographicSize by a fixed fraction per mouse-wheel notch; shift zooms faster too.
 /// - Optional features: screen edge movement, camera bounds, follow target, smooth movement, mouse drag panning.
 /// - The 'H' key resets the camera to its default position and orthographic size.
-/// - Default settings: FarClipPlane=1000, NearClipPlane=0.1f, OrthographicSize=10.
 /// </remarks>
 [Display("Basic 2D Camera Controller")]
 [ComponentCategory("Camera")]
@@ -79,9 +78,8 @@ public class Basic2DCameraController : SyncScript
     public float MaxOrthographicSize { get; set; } = 100.0f;
 
     /// <summary>
-    /// Gets or sets whether zooming keeps the world point under the cursor fixed, the way map and canvas
-    /// applications do. Defaults to <see langword="true"/>; set to <see langword="false"/> for the old
-    /// behaviour of zooming about the centre of the screen.
+    /// Gets or sets whether zooming keeps the world point under the cursor fixed. Defaults to
+    /// <see langword="true"/>; <see langword="false"/> zooms about the centre of the screen.
     /// </summary>
     /// <remarks>
     /// With smoothing enabled the position shift is applied to the smoothing target, so the anchor is
@@ -243,10 +241,8 @@ public class Basic2DCameraController : SyncScript
     /// Initializes the camera controller by setting up the instruction overlay and caching the initial state.
     /// </summary>
     /// <remarks>
-    /// This method sets the target position to the current camera position and configures the debug text printer
-    /// for displaying on-screen instructions. Called once when the script starts.
-    /// The position captured here is the one the 'H' key restores, so a camera created at a custom
-    /// position resets to that position rather than to a fixed default.
+    /// Registers the camera's help section with the shared <see cref="DebugOverlay"/> and records the
+    /// current position as the one the 'H' key restores.
     /// </remarks>
     public override void Start()
     {
@@ -296,13 +292,11 @@ public class Basic2DCameraController : SyncScript
     /// <para>The update order is as follows:</para>
     /// <list type="number">
     /// <item><description>Cache the camera component reference if not already cached.</description></item>
-    /// <item><description>Process instruction toggle keys (F2, F3).</description></item>
     /// <item><description>Process camera follow if <see cref="FollowTarget"/> is set, otherwise process manual controls (movement, screen edge, mouse drag).</description></item>
     /// <item><description>Process camera zoom via mouse wheel.</description></item>
     /// <item><description>Check for camera reset (H key).</description></item>
     /// <item><description>Apply smooth movement if <see cref="EnableSmoothing"/> is enabled.</description></item>
     /// <item><description>Apply camera bounds if <see cref="EnableBounds"/> is enabled.</description></item>
-    /// <item><description>Display instructions if visible.</description></item>
     /// </list>
     /// </remarks>
     public override void Update()

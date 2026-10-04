@@ -36,10 +36,7 @@ namespace Stride.CommunityToolkit.Bepu;
 /// resting body.
 /// </para>
 /// <para>
-/// This design has been upstreamed as <c>Stride.BepuPhysics.Body2DComponent</c>, and this copy keeps
-/// the toolkit working against Stride builds that predate it. The matching name is deliberate: once
-/// that version ships, deleting this one file switches every call site over to the engine's, because
-/// the same code carries on resolving to it. Until then, code importing both
+/// A type of the same name is proposed for <c>Stride.BepuPhysics</c>. Code importing both
 /// <c>Stride.BepuPhysics</c> and <c>Stride.CommunityToolkit.Bepu</c> must qualify which one it means.
 /// </para>
 /// </remarks>

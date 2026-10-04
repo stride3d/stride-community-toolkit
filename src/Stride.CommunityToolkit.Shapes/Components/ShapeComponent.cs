@@ -34,10 +34,8 @@ namespace Stride.CommunityToolkit.Shapes;
 public sealed class ShapeComponent : ActivableEntityComponent
 {
     /// <summary>
-    /// Assigned to <see cref="BorderWidth"/>, <see cref="FillAlpha"/> or <see cref="GlowWidth"/> to take the batch's value
-    /// instead of one set here. A negative width or fill is meaningless, which is what makes it a
-    /// safe sentinel - and Game Studio's property grid cannot edit a nullable value type at all,
-    /// so an optional float has to be expressed this way rather than as float?.
+    /// Assigned to <see cref="BorderWidth"/>, <see cref="FillAlpha"/> or <see cref="GlowWidth"/> to take
+    /// the batch's value instead of one set here.
     /// </summary>
     public static readonly float Inherit = -1f;
 
@@ -77,14 +75,9 @@ public sealed class ShapeComponent : ActivableEntityComponent
     /// registered with <c>AddShapeBatch()</c>.
     /// </summary>
     /// <remarks>
-    /// Set this whenever a scene has more than one batch and the shape must land in a particular
-    /// one. Library code especially cannot assume anything about the default: it is whichever batch
-    /// the host game happened to register first, which may well be depth-tested, and a marker that
-    /// must never be occluded would then silently disappear behind scene geometry.
-    /// </remarks>
-    /// <remarks>
-    /// Not serialized: a batch is a live render object owned by the running game, so there is
-    /// nothing for Game Studio to author here. Assign it from code.
+    /// Set this when a scene has more than one batch: the default is whichever batch the game registered
+    /// first, which may be depth-tested and hide the shape behind scene geometry. Not serialized; assign
+    /// it from code.
     /// </remarks>
     [DataMemberIgnore]
     public ShapeBatch? Batch { get; set; }

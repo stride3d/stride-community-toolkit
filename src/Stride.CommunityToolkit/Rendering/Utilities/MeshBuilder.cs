@@ -8,7 +8,7 @@ using Buffer = System.Buffer;
 namespace Stride.CommunityToolkit.Rendering.Utilities;
 
 /// <summary>
-/// A utility class for building meshes by defining vertex elements with different data types and primitives types.
+/// Builds a <see cref="MeshDraw"/> from vertex elements of any unmanaged type, with optional indices.
 /// </summary>
 public class MeshBuilder : IDisposable
 {
@@ -167,7 +167,7 @@ public class MeshBuilder : IDisposable
     /// <param name="semanticIndex">The semantic index</param>
     /// <param name="semanticName">The semantic name</param>
     /// <param name="pixelFormat">The pixel format (use <see cref="PixelFormat.None" /> to auto-detect)</param>
-    /// <typeparam name="T">The type of the position element</typeparam>
+    /// <typeparam name="T">The element's value type, such as <see cref="Vector3"/></typeparam>
     /// <returns>The element index used in <see cref="GetElement{T}(int)" /> and <see cref="SetElement{T}(int,T)" /></returns>
     public int WithElement<T>(int semanticIndex, string semanticName, PixelFormat pixelFormat = PixelFormat.None)
         where T : unmanaged
@@ -342,7 +342,7 @@ public class MeshBuilder : IDisposable
     ///     Gets the value for the specified element index
     /// </summary>
     /// <remarks>
-    ///     This overload always target's the last vertex index and is a convenience version of
+    ///     This overload always targets the last vertex and is a convenience version of
     ///     <see cref="GetElement{T}(int,int)" />
     /// </remarks>
     /// <param name="elementIndex">The element index</param>
@@ -370,12 +370,12 @@ public class MeshBuilder : IDisposable
     ///     Sets the value for the specified element index
     /// </summary>
     /// <remarks>
-    ///     This overload always target's the last vertex index and is a convenience version of
+    ///     This overload always targets the last vertex and is a convenience version of
     ///     <see cref="SetElement{T}(int,int,T)" />
     /// </remarks>
     /// <param name="elementIndex">The element index</param>
     /// <param name="value">The value to set</param>
-    /// <typeparam name="T">The element type to retrieve</typeparam>
+    /// <typeparam name="T">The element type to set</typeparam>
     /// <exception cref="ArgumentOutOfRangeException">The vertex index was outside the range of the currently added vertices</exception>
     /// <exception cref="ArgumentOutOfRangeException">The element index was outside the range of the currently added elements</exception>
     /// <exception cref="ArgumentException">The size of T does not match the type used when defining this element</exception>
@@ -388,7 +388,7 @@ public class MeshBuilder : IDisposable
     /// <param name="vertexIndex">The vertex index</param>
     /// <param name="elementIndex">The element index</param>
     /// <param name="value">The value to set</param>
-    /// <typeparam name="T">The element type to retrieve</typeparam>
+    /// <typeparam name="T">The element type to set</typeparam>
     /// <exception cref="ArgumentOutOfRangeException">The vertex index was outside the range of the currently added vertices</exception>
     /// <exception cref="ArgumentOutOfRangeException">The element index was outside the range of the currently added elements</exception>
     /// <exception cref="ArgumentException">The size of T does not match the type used when defining this element</exception>

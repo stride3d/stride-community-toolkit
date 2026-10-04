@@ -26,8 +26,9 @@ namespace Stride.CommunityToolkit.Shapes;
 /// </para>
 /// <para>
 /// <see cref="BorderWidth"/>, <see cref="Fill"/>, <see cref="Glow"/>, <see cref="Dash"/>,
-/// <see cref="Gradient"/>, <see cref="Opacity"/>, <see cref="DepthFade"/>, <see cref="Textured"/> and <see cref="Screen"/> are current state, captured by each draw call
-/// as it is made, so you can change them between calls the way you would with a sprite batch.
+/// <see cref="Gradient"/>, <see cref="Opacity"/>, <see cref="DepthFade"/>, <see cref="Textured"/>,
+/// <see cref="Screen"/> and <see cref="Tag"/> are current state, captured by each draw call as it is
+/// made, so you can change them between calls the way you would with a sprite batch.
 /// </para>
 /// </remarks>
 public sealed partial class ShapeBatch : RenderObject
@@ -259,11 +260,9 @@ public sealed partial class ShapeBatch : RenderObject
     /// monitor. Defaults to <see langword="true"/>.
     /// </summary>
     /// <remarks>
-    /// The figure comes from <see cref="Rendering.DisplayScale"/>, shared with everything else in the
-    /// toolkit that draws in pixels, and is re-read when the window moves to another monitor. Turn
-    /// it off to get exactly the pixels asked for - a screenshot at a known size, or a game applying
-    /// its own UI-scale setting through <see cref="Rendering.DisplayScale.Override"/> and nothing
-    /// else should compound it. World-unit sizes are never affected either way.
+    /// The scale comes from <see cref="Rendering.DisplayScale"/>, shared with the rest of the toolkit,
+    /// and is re-read when the window moves to another monitor. Turn this off to get exactly the pixels
+    /// asked for, such as for a screenshot at a known size. World-unit sizes are never affected.
     /// </remarks>
     public bool AutoScale { get; set; } = true;
 

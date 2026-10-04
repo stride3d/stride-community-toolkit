@@ -47,7 +47,7 @@ public sealed class ChartOptions
     /// <summary>The legend that names each series.</summary>
     public ChartLegendOptions Legend { get; set; } = new();
 
-    /// <summary>The chart's own title, above its top edge.</summary>
+    /// <summary>The chart's own title, just inside its top edge.</summary>
     public ChartTitleOptions Title { get; set; } = new();
 
     /// <summary>The defaults a series takes when it is added without a style of its own.</summary>

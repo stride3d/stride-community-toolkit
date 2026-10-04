@@ -289,7 +289,7 @@ public class ImGuiSystem : GameSystemBase
 
     /// <summary>
     /// Feeds one frame of Stride input into ImGui: mouse position and buttons, text, keys, wheel and
-    /// modifiers. Skipped while the mouse is position-locked, matching the previous inline behaviour.
+    /// modifiers. Skipped while the mouse is position-locked.
     /// </summary>
     void FeedInput()
     {

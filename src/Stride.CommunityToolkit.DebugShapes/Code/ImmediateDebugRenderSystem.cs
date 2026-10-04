@@ -187,10 +187,10 @@ public class ImmediateDebugRenderSystem : GameSystemBase
     }
 
     /// <summary>
-    /// Draws axis-aligned bounds represented by a cube.
+    /// Draws the box spanning two opposite corners, rotated about its centre.
     /// </summary>
-    /// <param name="start">Start position of the bounding box.</param>
-    /// <param name="end">End position of the bounding box.</param>
+    /// <param name="start">One corner of the box.</param>
+    /// <param name="end">The opposite corner.</param>
     /// <param name="rotation">Rotation applied to the box.</param>
     /// <param name="color">Color. Uses <see cref="PrimitiveColor"/> when default.</param>
     /// <param name="duration">Duration in seconds the bounds remain visible. 0 draws for a single frame.</param>

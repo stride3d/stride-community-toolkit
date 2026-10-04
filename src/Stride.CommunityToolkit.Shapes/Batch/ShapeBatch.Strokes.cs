@@ -21,8 +21,8 @@ public sealed partial class ShapeBatch
     /// <remarks>
     /// Joins are round: the stroke is everything within half the width of the run itself, drawn as
     /// one shape. Only a run of more than 64 points is split, into pieces that share a point; where
-    /// two pieces meet the round cap is drawn twice, which shows only under an <see cref="Opacity"/>
-    /// below one, as a slightly brighter dot. <see cref="Dash"/> runs along the whole run.
+    /// two pieces meet the round cap is drawn twice, which shows as a slightly brighter dot when the
+    /// stroke is translucent or has an additive glow. <see cref="Dash"/> runs along the whole run.
     /// </remarks>
     public void DrawPolyline(ReadOnlySpan<Vector2> points, Vector3 position, Vector3 axisX, Vector3 axisY, float width, Color color, bool closed = false)
         => AddPolyline(points, new ShapePlane(position, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed), SolidStyle(color), MathF.Max(width, 0.0001f) * 0.5f, closed);

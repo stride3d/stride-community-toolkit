@@ -16,8 +16,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// when the text should look like it belongs in the scene.
 /// </para>
 /// <para>
-/// Add <see cref="WorldTextRenderer"/> to the graphics compositor
-/// for anything to appear.
+/// <see cref="WorldTextProcessor"/> adds a <see cref="WorldTextRenderer"/> to the scene's compositor when none is there.
 /// </para>
 /// <example>
 /// A label standing on the ground, facing the camera:

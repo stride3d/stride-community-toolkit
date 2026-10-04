@@ -19,7 +19,7 @@ namespace Stride.CommunityToolkit.Scripts;
 public class GameProfiler : AsyncScript
 {
     /// <summary>
-    /// Enables or disable the game profiling
+    /// Gets or sets whether profiling is enabled.
     /// </summary>
     public bool Enabled { get; set; } = true;
 
@@ -36,13 +36,13 @@ public class GameProfiler : AsyncScript
     public double RefreshTime { get; set; } = 500;
 
     /// <summary>
-    /// Gets or set the sorting mode of the profiling entries
+    /// Gets or sets the sorting mode of the profiling entries.
     /// </summary>
     [Display(1, "Sort by")]
     public GameProfilingSorting SortingMode { get; set; } = GameProfilingSorting.ByTime;
 
     /// <summary>
-    /// Gets or sets the type of the profiling to display: CPU or GPU
+    /// Gets or sets which profiling results are displayed: frame rate, CPU events or GPU events.
     /// </summary>
     [Display(0, "Filter")]
     public GameProfilingResults FilteringMode { get; set; } = GameProfilingResults.Fps;

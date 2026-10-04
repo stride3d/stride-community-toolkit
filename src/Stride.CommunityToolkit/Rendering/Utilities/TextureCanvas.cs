@@ -125,7 +125,7 @@ public class TextureCanvas : IDisposable
     ///     Draws a texture to the <see cref="TextureCanvas" />
     /// </summary>
     /// <param name="sourceTexture">The source texture to draw</param>
-    /// <param name="destinationRect">The sub rectangle of the target texture in percentages</param>
+    /// <param name="destinationRect">The sub rectangle of the target texture, in pixels</param>
     /// <param name="colorMultiplier">The color multiplier. Default is <see cref="Stride.Core.Mathematics.Color.White"/></param>
     /// <param name="stretch">The stretch mode</param>
     /// <param name="anchor">The anchor mode</param>
@@ -508,7 +508,7 @@ public class TextureCanvas : IDisposable
     /// </summary>
     /// <param name="size">The new size</param>
     /// <param name="pixelFormat">The new pixel format</param>
-    /// <param name="samplingPattern">The sampling pattern</param>
+    /// <param name="samplingPattern">Not used; resampling is always linear</param>
     public void Resample(Size2 size, PixelFormat pixelFormat, SamplingPattern samplingPattern = SamplingPattern.Linear)
     {
         // Nothing changed so we can safely skip this step

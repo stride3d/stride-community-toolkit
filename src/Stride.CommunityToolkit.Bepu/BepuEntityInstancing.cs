@@ -11,18 +11,15 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Bepu puts bodies to sleep when they come to rest, and a sleeping body's transform cannot change.
-/// That makes re-reading every transform, re-inverting every matrix and re-computing the bounding box
-/// pure waste, which is what the engine does forever once a pile settles. This class checks the
-/// bodies instead and reuses the previous frame's results while they are all asleep.
+/// A sleeping body's transform cannot change. While every registered body is asleep, this class
+/// skips the per-frame transform read, matrix inversion and bounding-box update, and reuses the
+/// previous frame's results.
 /// </para>
 /// <para>
-/// Measured on 20,000 settled cubes, this took the per-frame instancing update from 1.94 ms to zero.
 /// Pair it with <see cref="BufferedEntityInstancing"/> to stop the redundant GPU upload as well.
 /// </para>
 /// <para>
-/// The check is a scan over the registered bodies, so it costs a little while things are moving - it
-/// gives up at the first awake body - and pays for itself many times over when they are not. Instances
+/// The check scans the registered bodies and stops at the first awake one. Instances
 /// registered without a <see cref="BodyComponent"/> (a static or kinematic entity moved by script, say)
 /// disable skipping altogether, since nothing indicates when they move.
 /// </para>

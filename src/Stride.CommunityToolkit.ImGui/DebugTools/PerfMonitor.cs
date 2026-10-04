@@ -42,7 +42,7 @@ public class PerfMonitor : BaseWindow
     public bool MonitorSampleAlloc;
 
     /// <summary>
-    /// Circumvent <see cref="_cpuSamples"/> dictionary access access but
+    /// Circumvents the <see cref="_cpuSamples"/> dictionary lookup, but
     /// only works for <see cref="_threadStaticMonitor"/>
     /// </summary>
     [System.ThreadStatic] static ThreadSampleCollection? _threadStaticCollection;
@@ -73,8 +73,7 @@ public class PerfMonitor : BaseWindow
 
     /// <summary>
     /// Place within a using statement to monitor the code within it.
-    /// Creates a string each call which will produces unneeded garbage,
-    /// see <see cref="Sample(string, bool)"/> for alloc less version.
+    /// Allocates a string on every call; use <see cref="Sample(string, bool)"/> to avoid the garbage.
     /// </summary>
     public PerfSampler Sample(
         bool sample = true,

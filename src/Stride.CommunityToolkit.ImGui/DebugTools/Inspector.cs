@@ -37,7 +37,7 @@ public class Inspector : BaseWindow
 
 
     // Settings
-    /// <summary>Is this interface returned by <see cref="FindFreeInspector"/></summary>
+    /// <summary>When <see langword="true"/>, <see cref="FindFreeInspector"/> skips this inspector, so its target is kept.</summary>
     public bool Locked = false;
     /// <summary>Show specialized interface to handle IEnumerable types</summary>
     public bool EnumerableView = true;

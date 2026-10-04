@@ -129,8 +129,8 @@ public class ImmediateDebugRenderObject : RenderObject
     /// <summary>
     /// Adds a cube to the debug render queue.
     /// </summary>
-    /// <param name="start">The starting position of the cube.</param>
-    /// <param name="end">The ending position of the cube.</param>
+    /// <param name="start">The centre of the cube.</param>
+    /// <param name="end"><paramref name="start"/> plus the cube's size.</param>
     /// <param name="rotation">The rotation of the cube.</param>
     /// <param name="color">The color of the cube.</param>
     /// <param name="depthTest">Whether to use depth testing for rendering.</param>

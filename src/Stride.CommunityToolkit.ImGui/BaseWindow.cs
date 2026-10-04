@@ -110,10 +110,10 @@ public abstract class BaseWindow : GameSystem
         }
     }
 
-    ///<inheritdoc />
+    /// <summary>Builds the window's content each frame. Skip drawing when <paramref name="collapsed"/> is <see langword="true"/>.</summary>
     protected abstract void OnDraw(bool collapsed);
 
-    ///<inheritdoc />
+    /// <summary>Called once when the window is destroyed, to release what it owns.</summary>
     protected abstract void OnDestroy();
 
     ///<inheritdoc />

@@ -14,9 +14,8 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Add one of these to the graphics compositor - <c>game.AddSceneRenderer(new EntityTextRenderer())</c> -
-/// and any entity carrying an <see cref="EntityTextComponent"/> is drawn, wherever it sits in the
-/// entity hierarchy.
+/// <see cref="EntityTextProcessor"/> adds one to the scene's compositor when the scene has an
+/// <see cref="EntityTextComponent"/>, wherever it sits in the entity hierarchy.
 /// </para>
 /// <para>
 /// Text is drawn with <see cref="SpriteBatch"/> and no depth testing, so it always appears on top of

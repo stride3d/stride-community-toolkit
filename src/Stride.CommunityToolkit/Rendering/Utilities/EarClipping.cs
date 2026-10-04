@@ -11,9 +11,8 @@ namespace Stride.CommunityToolkit.Rendering.Utilities;
 /// extruded letter glyphs need: X, Y and Z are all concave.
 /// </para>
 /// <para>
-/// It does not handle self-intersecting polygons, and it does not handle holes directly - a glyph
-/// with a hole, such as O or 8, is authored as a single outline with a bridge cut connecting the
-/// hole to the outside.
+/// It does not handle self-intersecting polygons or holes. A glyph with a hole, such as O or 8, is
+/// built from several abutting polygons; see <see cref="LetterMeshFactory"/>.
 /// </para>
 /// </remarks>
 public static class EarClipping

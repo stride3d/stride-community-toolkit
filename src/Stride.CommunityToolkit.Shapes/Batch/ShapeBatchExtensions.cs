@@ -25,14 +25,11 @@ public static class ShapeBatchExtensions
     /// for plain fills. <see cref="ShapeBatch.FillWith"/> installs one later for the common case.
     /// </param>
     /// <param name="afterPostEffects">
-    /// Draw the batch after the post-processing chain, in the compositor's UI stage, where the text
-    /// renderers draw: a colour comes out as given. In the scene, a shape goes through the tone
-    /// mapper with everything else, and under auto exposure a white shape lands at whatever grey
-    /// the frame's brightness leaves it - about half, next to text that is truly white. That is
-    /// right for a decal on the ground and wrong for a HUD. Nothing is depth-tested there; the
-    /// compositor must have the toolkit's UI stage (<c>AddUIStage</c> or <c>AddCleanUIStage</c>,
-    /// which <c>SetupBase3D</c> and <c>AddGraphicsCompositor</c> both do), else the batch falls
-    /// back to the scene's transparent stage.
+    /// Draw the batch after post-processing, in the compositor's UI stage, so colours are not
+    /// tone-mapped; in the scene, auto exposure can draw a white shape about half grey. Right for a
+    /// HUD, wrong for a decal. Nothing is depth-tested there. Needs the toolkit's UI stage
+    /// (<c>AddUIStage</c> or <c>AddCleanUIStage</c>, added by <c>SetupBase3D</c> and
+    /// <c>AddGraphicsCompositor</c>); without it the batch draws in the transparent stage.
     /// </param>
     /// <returns>The batch: submit shapes to it every frame from your update logic.</returns>
     /// <remarks>

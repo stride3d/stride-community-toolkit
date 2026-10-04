@@ -7,11 +7,9 @@ namespace Stride.CommunityToolkit.Shapes;
 /// captures its values as it is made.
 /// </summary>
 /// <remarks>
-/// The glow shows outside the shape only - it is composed under the fill and the border, so there is no seam where they meet - and fades out
-/// quadratically from the border's outer edge over <see cref="Width"/> pixels - constant at any
-/// distance, like the border. For a
-/// stroke-only ring or arc the shape is the stroke, so the glow sits on both sides of it, which is
-/// what makes a light ring with a dark glow readable on any background.
+/// The glow shows outside the shape only, under the fill and the border, and fades out
+/// quadratically from the border's outer edge over <see cref="Width"/> pixels at any distance. For a
+/// stroke-only ring or arc the shape is the stroke, so the glow sits on both sides of it.
 /// </remarks>
 /// <example>
 /// <code>
@@ -29,19 +27,14 @@ public sealed class ShapeGlow
     public float Width { get; set; }
 
     /// <summary>
-    /// The glow's colour, or <c>null</c> (the default) to glow in the outline colour. Its alpha is
-    /// the glow's strength at the outline, before the fade - and it is the number that decides what
-    /// the glow reads as. At full alpha the halo is solid colour where it meets the edge and only
-    /// then falls off, so a thin stroke looks like a fatter stroke; at 30 to 40 percent it reads as
-    /// light around the stroke, which is the neon look. Start there.
+    /// The glow's colour, or <c>null</c> (the default) to glow in the outline colour. Its alpha is the
+    /// glow's strength at the outline: full alpha reads as a fatter stroke, 30 to 40 percent as neon.
     /// </summary>
     public Color? Color { get; set; }
 
     /// <summary>
-    /// How strong a glow in the outline colour is at the outline, 0 to 1. The default 1 is the
-    /// outline colour as it is, which reads as a fatter stroke; <c>0.35f</c> is the neon look in
-    /// every shape's own colour. It is the knob for the case where there is no colour of your own
-    /// to give an alpha to: a <see cref="Color"/> you set carries its own alpha and is used as given.
+    /// How strong a glow in the outline colour is at the outline, 0 to 1. The default 1 reads as a
+    /// fatter stroke; <c>0.35f</c> reads as neon. Ignored when <see cref="Color"/> is set.
     /// </summary>
     public float Strength { get; set; } = 1f;
 

@@ -14,17 +14,12 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </summary>
 /// <remarks>
 /// <para>
-/// <c>b2World_Draw</c> walks the world and calls back for each primitive - a solid polygon with a
-/// transform and rounding radius, a circle, a capsule, a line, a point. Those map almost one to one
-/// onto the batch, which draws polygons with rounding and pixel-constant borders. Shapes are on by
-/// default, as in Box2D; joints are on here as well, since drawing them is the usual reason to use
-/// this. The rest is off until asked for.
+/// <c>b2World_Draw</c> calls back once per primitive (polygon, circle, capsule, line, point), and
+/// each maps onto one batch call. Shapes and joints are drawn by default; everything else is off.
 /// </para>
 /// <para>
-/// Sizes: lines are <see cref="LinePixels"/> wide on screen at any zoom; a point's size is in
-/// screen pixels in the testbed and is scaled by <see cref="PointScale"/> into world units here,
-/// although the batch can draw a pixel-sized disc. Text has no renderer of its own; set
-/// <see cref="DrawString"/> to route body names and joint labels wherever you like.
+/// Lines are <see cref="LinePixels"/> wide on screen at any zoom. Points are sized in world units:
+/// Box2D's pixel size times <see cref="PointScale"/>. Text is drawn only through <see cref="DrawString"/>.
 /// </para>
 /// </remarks>
 /// <example>

@@ -1,7 +1,7 @@
 namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
-/// The chart's own title, drawn above its top edge in the label style.
+/// The chart's own title, centred just inside its top edge, in the label style.
 /// </summary>
 public sealed class ChartTitleOptions
 {

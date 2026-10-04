@@ -3,9 +3,9 @@ using Stride.Core.Mathematics;
 namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
-/// The defaults a series takes when it is added without a style of its own. <see cref="CurveWidth"/>,
-/// <see cref="Glow"/> and <see cref="AdditiveGlow"/> are live: a series whose style left them unset reads
-/// them every frame, so changing them here changes every such series at once.
+/// The defaults a series takes when it is added without a style of its own. All but
+/// <see cref="MarkerSize"/>, <see cref="MarkerWidth"/> and <see cref="Palette"/> are read every frame, so
+/// changing one changes every series that has no value of its own.
 /// </summary>
 public sealed class ChartSeriesOptions
 {
@@ -38,8 +38,8 @@ public sealed class ChartSeriesOptions
     public float MarkerWidth { get; set; } = 1.5f;
 
     /// <summary>
-    /// How opaque a shaded region is when no colour is given, from <c>0</c> to <c>1</c>. Defaults to
-    /// <c>0.25</c> - enough to read as a region, faint enough to see the grid and curves through it.
+    /// How opaque a shaded region is, from <c>0</c> to <c>1</c>; it multiplies the alpha of the region's
+    /// colour, given or from the palette. Defaults to <c>0.25</c>.
     /// </summary>
     public float AreaOpacity { get; set; } = 0.25f;
 

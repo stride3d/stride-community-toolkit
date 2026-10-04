@@ -6,12 +6,6 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// The shared drawing path for screen-space text: projecting a world position, resolving the anchor,
 /// and drawing the background, shadow and glyphs.
 /// </summary>
-/// <remarks>
-/// Extracted because the two text renderers had drifted into carrying the same handful of defects
-/// independently - projecting from a local rather than a world position, multiplying a background
-/// colour into itself, culling text that had an explicit screen position. Each was fixed once, in one
-/// renderer, and stayed broken in the other. There is now one copy to be wrong.
-/// </remarks>
 internal static class ScreenTextDrawer
 {
     /// <summary>
@@ -135,9 +129,6 @@ internal static class ScreenTextDrawer
     }
 
     /// <summary>
-    /// Maps an anchor to the fraction of the text's width and height sitting before the anchor point.
-    /// </summary>
-    /// <summary>
     /// Draws only the background strip a text of <paramref name="textSize"/> at <paramref name="position"/>
     /// would get, for a caller that then draws the text itself in more than one run or colour.
     /// </summary>
@@ -175,6 +166,9 @@ internal static class ScreenTextDrawer
         spriteBatch.Draw(backgroundTexture, background, colour);
     }
 
+    /// <summary>
+    /// Maps an anchor to the fraction of the text's width and height sitting before the anchor point.
+    /// </summary>
     internal static Vector2 GetAnchorFactor(TextAnchor anchor) => anchor switch
     {
         TextAnchor.TopLeft => new Vector2(0f, 0f),
@@ -194,9 +188,7 @@ internal static class ScreenTextDrawer
     /// </summary>
     /// <remarks>
     /// Opaque white on purpose: the colour is supplied when the rectangle is drawn, so anything baked
-    /// in here would be multiplied into the requested colour. Both renderers used to bake their
-    /// default background in as well, squaring the colour and its alpha - which is why a background
-    /// asked for at alpha 0.01 arrived at 0.0001 and never appeared.
+    /// in here would be multiplied into the requested colour.
     /// </remarks>
     internal static Texture CreateBackgroundTexture(GraphicsDevice graphicsDevice)
         => Texture.New2D(graphicsDevice, 1, 1, PixelFormat.R8G8B8A8_UNorm, [Color.White]);

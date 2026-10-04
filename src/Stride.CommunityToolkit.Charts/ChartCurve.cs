@@ -10,11 +10,8 @@ namespace Stride.CommunityToolkit.Charts;
 /// possible.
 /// </summary>
 /// <remarks>
-/// Returned by <see cref="Chart.Plot"/>. Samples outside the <c>y</c> range are clipped to the chart edge,
-/// samples that are not finite (a function outside its domain) break the curve, and so does a zero-crossing
-/// jump larger than a quarter of the chart's height between two samples - the asymptotes of <c>tan(x)</c>
-/// or <c>1/x</c> - where the branches are instead extended to the chart edge. Curves plotted from points
-/// rather than a function - <see cref="Chart.PlotParametric"/>, <see cref="Chart.AddLine"/> - are
+/// Returned by <see cref="Chart.Plot"/>, which describes how samples are clipped and broken. Curves
+/// plotted from points - <see cref="Chart.PlotParametric"/>, <see cref="Chart.AddLine"/> - are
 /// <see cref="ChartLineSeries"/>, because there is no function to re-evaluate.
 /// </remarks>
 public sealed class ChartCurve : ChartSeries

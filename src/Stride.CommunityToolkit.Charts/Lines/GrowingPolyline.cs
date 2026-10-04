@@ -51,7 +51,7 @@ internal sealed class GrowingPolyline : IDisposable
     /// <summary>The mesh to put in a <see cref="Model"/>; its draw count and bounds are kept up to date.</summary>
     internal Mesh Mesh { get; }
 
-    /// <summary>How many points the line currently holds, over all runs.</summary>
+    /// <summary>How many points the line holds, over all runs.</summary>
     internal int Count => _count;
 
     /// <summary>The most points the line can hold; fixed at construction, when the buffers are allocated.</summary>
