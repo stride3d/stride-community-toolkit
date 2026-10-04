@@ -91,7 +91,7 @@ void Start(Scene scene)
     simulation = new Box2DSimulation();
 
     // Box2D's own view of the contacts, for when the planes the mover collects are not enough.
-    debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJoints = false, DrawContactPoints = true, DrawContactNormals = true };
+    debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJoints = false, DrawContactPoints = true, DrawContactNormals = true, FillAlpha = shapeBatch.Fill.Alpha };
 
     cameraEntity.Add(new Grabber2DScript { Simulation = simulation });
 

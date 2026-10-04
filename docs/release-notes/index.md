@@ -14,6 +14,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 💥 Breaking Changes
 
+- `ShapeBatch`: the default fill is solid. `Fill.Alpha` defaults to 1 (was 0.6), so a draw call with one colour draws a solid shape in that colour; it used to draw an outline around a dimmed, see-through inside. For the old look set `Fill.Alpha = ShapeFill.TestbedAlpha`. `Box2DDebugDraw` keeps that look through its new `FillAlpha` property. A `ShapeComponent` on a batch that never set its fill is solid too.
 - `AddBepu3DPhysics`, `AddBepu2DPhysics` and the Bepu `Create3DPrimitive` / `Create2DPrimitive` overloads no longer add the fitted collider to a compound collider that already holds a shape. Code that passed a placeholder such as `new CompoundCollider { Colliders = { new BoxCollider() } }` and relied on the fitted shape now gets only the placeholder, at its default size: pass an empty `CompoundCollider` instead.
 
 ### 🎉 New Features
@@ -46,6 +47,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - Rendering manual: new page "Reference Grid".
+- ShapeBatch manual: the draw state table lists the defaults, and a new section "Outline and fill" explains them. Corrected: the border is centred on a shape's edge, half inside and half outside.
 - New tutorial "Build a simple HUD with ShapeBatch", for beginners: eight steps from an empty window to a HUD with a health bar, an energy dial, a crosshair, labels, a warning light and a damage flash, ending with the HUD moved into a class. Every code block on the page is taken from the example it describes. The ShapeBatch manual page links to it.
 - Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It uses `1.0.0-preview.66`.
 - The console launcher's menu shown in the examples pages is refreshed.

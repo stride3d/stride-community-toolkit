@@ -75,12 +75,17 @@ public sealed partial class ShapeBatch : RenderObject
     /// Outline width in on-screen pixels, constant at any zoom or distance. The Box2D testbed uses
     /// 3; set 0 for a borderless fill. Captured by each draw call as it is made.
     /// </summary>
+    /// <remarks>
+    /// The border is centred on the shape's edge: half its width lies outside. With the default of
+    /// 3 a shape is 3 pixels wider and taller than its size; with 0 it is exactly its size.
+    /// </remarks>
     public float BorderWidth { get; set; } = 3f;
 
     /// <summary>
-    /// How the interior is painted: the fill's own colour, or <c>null</c> for the outline colour the
-    /// testbed way, and its intensity. See <see cref="ShapeFill"/>. Captured by each draw call as it
-    /// is made.
+    /// How the interior is painted: the fill's own colour, or <c>null</c> for the outline colour,
+    /// and its intensity. The default is the outline colour at full intensity, so a draw call with
+    /// one colour draws a solid shape. See <see cref="ShapeFill"/>. Captured by each draw call as
+    /// it is made.
     /// </summary>
     public ShapeFill Fill { get; } = new();
 
@@ -323,7 +328,7 @@ public sealed partial class ShapeBatch : RenderObject
     {
         // No explicit fill colour: the testbed's own formula, where FillAlpha scales the outline
         // colour's brightness as well as its opacity. Keeping it verbatim is what makes the Box2D
-        // examples match the testbed side by side.
+        // examples match the testbed side by side. At the default alpha of 1 it is the plain colour.
         if (Fill.Color is not { } fill)
         {
             // The gradient's far end gets the same treatment as the near one: scaled by the fill

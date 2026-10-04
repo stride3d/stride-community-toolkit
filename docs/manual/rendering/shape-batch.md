@@ -40,9 +40,9 @@ shape's edge: negative inside, positive outside. The rest follows from that dist
 
 | Distance | Result |
 |---|---|
-| Inside by more than the border width | Fill colour |
-| Inside by less than the border width | Border colour |
-| Outside | Transparent, anti-aliased over the last pixel |
+| Inside by more than half the border width | Fill colour |
+| Within half the border width of the edge, inside or outside | Border colour |
+| Outside by more than half the border width | Transparent, anti-aliased over the last pixel |
 
 The border width is compared in pixels, so it is constant on screen. Rings, sectors, glows, dashes and
 gradients are further functions of the same distance. A polyline is the distance to the nearest segment of a
@@ -86,18 +86,30 @@ order, and discarded. Nothing is retained between frames.
 
 Style properties are the batch's current state. Each draw call captures the state at the time of the call.
 
-| Property | Description |
-|---|---|
-| `BorderWidth` | Outline width in pixels |
-| `Fill` | Fill colour and alpha |
-| `Glow` | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
-| `Dash` | Dash pattern in pixels |
-| `Gradient` | A second fill colour and a direction |
-| `Opacity` | Multiplies the alpha of border, fill and glow |
-| `DepthFade` | Distance in world units over which a shape fades as it approaches scene geometry |
-| `Textured` | Whether the fill samples the batch's fill source |
-| `Screen` | Draws in window pixels instead of world units |
-| `Tag` | Marks shapes for picking |
+| Property | Default | Description |
+|---|---|---|
+| `BorderWidth` | 3 | Outline width in pixels |
+| `Fill` | The draw call's colour, alpha 1 | Fill colour and alpha |
+| `Glow` | Off | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
+| `Dash` | Solid | Dash pattern in pixels |
+| `Gradient` | None | A second fill colour and a direction |
+| `Opacity` | 1 | Multiplies the alpha of border, fill and glow |
+| `DepthFade` | 0 | Distance in world units over which a shape fades as it approaches scene geometry |
+| `Textured` | `true` | Whether the fill samples the batch's fill source, when the batch has one |
+| `Screen` | `false` | Draws in window pixels instead of world units |
+| `Tag` | `null` | Marks shapes for picking |
+
+### Outline and fill
+
+Every shape has an outline and a fill. The colour passed to a draw call is the outline's colour.
+
+- By default the fill is the same colour at full strength, so a draw call with one colour draws a solid shape.
+- The border is centred on the shape's edge: half its width lies outside. With the default width of 3, a
+  shape is 3 pixels wider and taller than its size. Set `BorderWidth = 0` for a shape of exactly its size.
+- `Fill.Set(colour)` gives the fill a colour of its own, such as a dark panel inside a bright border.
+- `Fill.Alpha = 0` leaves only the outline.
+- `Fill.Alpha = ShapeFill.TestbedAlpha` with no fill colour gives the look of the Box2D testbed: a bright
+  outline around a dimmed, see-through inside. `Box2DDebugDraw` draws this way.
 
 > [!NOTE]
 > State persists until you change it. A method that sets `Textured`, `Screen` or `Tag` for its own shapes must

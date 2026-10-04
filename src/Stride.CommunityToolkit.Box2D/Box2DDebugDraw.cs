@@ -121,8 +121,24 @@ public sealed class Box2DDebugDraw
     /// </summary>
     public Action<Vector2, string, Color>? DrawString { get; set; }
 
+    /// <summary>
+    /// Fill intensity of the shapes while the world is drawn, 0 to 1. Defaults to
+    /// <see cref="ShapeFill.TestbedAlpha"/>, the testbed's look: a bright outline around a dimmed,
+    /// see-through inside. The batch's own value is put back when the draw is done.
+    /// </summary>
+    public float FillAlpha { get; set; } = ShapeFill.TestbedAlpha;
+
     /// <summary>Submits the whole world to the batch. Call once per frame, after stepping.</summary>
-    public void Draw(B2WorldId world) => b2World_Draw(world, _draw);
+    public void Draw(B2WorldId world)
+    {
+        var fillAlpha = _batch.Fill.Alpha;
+
+        _batch.Fill.Alpha = FillAlpha;
+
+        b2World_Draw(world, _draw);
+
+        _batch.Fill.Alpha = fillAlpha;
+    }
 
     /// <inheritdoc cref="Draw(B2WorldId)"/>
     public void Draw(Box2DSimulation simulation)

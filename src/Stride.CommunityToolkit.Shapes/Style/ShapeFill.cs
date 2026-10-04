@@ -8,10 +8,12 @@ namespace Stride.CommunityToolkit.Shapes;
 /// </summary>
 /// <remarks>
 /// <para>
-/// With no <see cref="Color"/>, the fill is the outline colour dimmed and made translucent by
-/// <see cref="Alpha"/> - the Box2D testbed's formula, kept so the physics examples match it side by
-/// side. With a colour, it is that colour at its own alpha times <see cref="Alpha"/>, which is what
-/// a dark panel behind a bright border needs and what the testbed formula cannot produce.
+/// With no <see cref="Color"/>, the fill is the outline colour. At the default <see cref="Alpha"/>
+/// of 1 that is a solid shape in the colour of the draw call. Below 1 the fill is dimmed and made
+/// translucent - the Box2D testbed's formula, kept so the physics examples match it side by side;
+/// <see cref="TestbedAlpha"/> is the testbed's own value. With a colour, the fill is that colour at
+/// its own alpha times <see cref="Alpha"/>, which is what a dark panel behind a bright border needs
+/// and what the testbed formula cannot produce.
 /// </para>
 /// <para>
 /// A gradient across the fill is <see cref="ShapeBatch.Gradient"/>.
@@ -19,6 +21,12 @@ namespace Stride.CommunityToolkit.Shapes;
 /// </remarks>
 public sealed class ShapeFill
 {
+    /// <summary>
+    /// The fill intensity the Box2D testbed draws with. Assign it to <see cref="Alpha"/>, with no
+    /// <see cref="Color"/>, for the testbed look: a bright outline around a dimmed, see-through inside.
+    /// </summary>
+    public static readonly float TestbedAlpha = 0.6f;
+
     /// <summary>
     /// The fill's own colour, or <c>null</c> (the default) to fill with the outline colour, which is
     /// what the Box2D testbed does. Set it when the two should differ - a chart marker filled in its
@@ -34,9 +42,9 @@ public sealed class ShapeFill
     public Color? Color { get; set; }
 
     /// <summary>
-    /// Fill intensity, 0 to 1; 0 leaves an unfilled outline. Defaults to 0.6, the testbed's value.
+    /// Fill intensity, 0 to 1; 0 leaves an unfilled outline. Defaults to 1, a solid fill.
     /// </summary>
-    public float Alpha { get; set; } = 0.6f;
+    public float Alpha { get; set; } = 1f;
 
     /// <summary>Sets both at once.</summary>
     /// <param name="color">The fill's own colour, or <c>null</c> for the outline colour.</param>

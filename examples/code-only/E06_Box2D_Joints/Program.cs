@@ -72,7 +72,7 @@ void Start(Scene rootScene)
 
     // Box2D's own debug draw through the batch: joints, and on request contacts, bounds and mass.
     // Shapes stay off - the entities' ShapeComponents already draw the bodies.
-    debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJointExtras = true };
+    debugDraw = new Box2DDebugDraw(shapeBatch) { DrawShapes = false, DrawJointExtras = true, FillAlpha = shapeBatch.Fill.Alpha };
 
     // The 2D grabber: left mouse picks any dynamic body up. Every rig below is built to be pulled.
     cameraEntity.Add(new Grabber2DScript { Simulation = simulation });

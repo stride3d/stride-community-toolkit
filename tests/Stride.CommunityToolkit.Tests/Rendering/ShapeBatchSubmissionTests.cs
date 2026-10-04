@@ -29,6 +29,20 @@ public class ShapeBatchSubmissionTests
     }
 
     [Fact]
+    public void ShapeIsSolidInTheColourOfItsDrawCallByDefault()
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawRectangle(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, new Vector2(2f, 1f), Color.Red);
+
+        var rectangle = Assert.Single(batch.Instances);
+
+        Assert.Equal(Color.Red, rectangle.Color);
+        Assert.Equal(Color.Red, rectangle.FillColor);
+        Assert.Equal(1f, rectangle.AxisY.W);
+    }
+
+    [Fact]
     public void CircleOfRadiusZeroHasAScaleTheShaderCanDivideBy()
     {
         var batch = new ShapeBatch();

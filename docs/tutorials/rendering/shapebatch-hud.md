@@ -87,7 +87,8 @@ What to notice:
   stays in its corner when the window is resized. Try it.
 - **Outline and fill.** Every shape is an outline and a fill. The outline takes the colour you pass
   to the draw call. `BorderWidth` sets how wide it is, and `Fill` sets what is inside: here a colour of
-  its own, at 80% so the scene shows through.
+  its own, at 80% so the scene shows through. Left at its default, the fill is the outline's colour at
+  full strength, which draws a solid shape.
 - **After the post effects.** `afterPostEffects: true` draws the batch after the scene has been tone
   mapped, so the colours you write are the colours you get.
 
