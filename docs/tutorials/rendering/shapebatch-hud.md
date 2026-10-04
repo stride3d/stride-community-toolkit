@@ -19,7 +19,7 @@ You will learn how to:
 - Layer shapes by the order in which you draw them.
 - Organise a HUD as a class.
 
-This is the first part. It only draws. A later part will make the HUD respond to the mouse.
+This is the first part. It only draws. A later part turns it into a small game.
 
 The finished program is the example
 [HUD Basics (Step by Step)](../../manual/code-only/examples/hud-basics.md). You do not need it to
