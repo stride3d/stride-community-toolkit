@@ -277,7 +277,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="hud-basics.md">HUD Basics (Step by Step)</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">A simple HUD built in eight steps with ShapeBatch: a panel in a corner, a health bar, an energy dial, a crosshair, labels, a warning light and a...</p>
+                <p class="card-text">A simple HUD built in eight steps with ShapeBatch: a panel in a corner, a health bar, an energy dial, a crosshair, labels, a warning panel and a...</p>
             </div>
         </div>
     </div>

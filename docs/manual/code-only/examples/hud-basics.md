@@ -6,7 +6,7 @@ slug: hud-basics
 # HUD Basics (Step by Step)
 
 A simple HUD built in eight steps with ShapeBatch: a panel in a corner, a health bar, an energy
-dial, a crosshair, labels, a warning light and a damage flash, and at the end the same HUD moved
+dial, a crosshair, labels, a warning panel and a damage flash, and at the end the same HUD moved
 into files of its own. The number keys show the HUD as it stood after each step. It is the
 program of the tutorial "Build a simple HUD with ShapeBatch", which walks through it a step at
 a time.
@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_2D_HUD_Basics).
 
-[!code-csharp[](../../../../examples/code-only/E03_2D_HUD_Basics/Program.cs?start=1&end=379)]
+[!code-csharp[](../../../../examples/code-only/E03_2D_HUD_Basics/Program.cs?start=1&end=414)]
