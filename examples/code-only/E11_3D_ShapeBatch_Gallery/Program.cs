@@ -27,7 +27,8 @@ using Stride.Rendering.Materials.ComputeColors;
 //
 // Keys: N and P fly to the next and previous station, Home flies home to the index board, Tab shows
 // one station at a time, L widens the labels, T switches the shapes between the depth-tested batch
-// and the overlay, G, F and + / - change the glow, the fill and the border for every station.
+// and the overlay, G, F and + / - change the glow, the fill and the border of the plain shapes. A
+// station that shows a recipe, such as a HUD panel, sets its own.
 
 // "--station 7" starts the visitor at a station instead of the index board - handy for screenshots
 var startStation = args.Length >= 2 && args[0] == "--station" && int.TryParse(args[1], out var number) ? number : 0;
@@ -178,7 +179,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
         new("Tab", gallery.Solo ? "One station at a time" : "Every station", Color.Gold),
         new("L", gallery.LabelDetail switch { 0 => "Labels: the number", 1 => "Labels: the number and the method", _ => "Labels: everything" }, Color.Gold),
         new("T", depthTested ? "Depth tested: the scene occludes shapes" : "Overlay: shapes draw on top", Color.Gold),
-        new(["+", "-"], $"Border {style.BorderWidth:0} px", Color.Gold),
+        new(["+", "-"], $"Border {style.BorderWidth:0} px (plain shapes)", Color.Gold),
         new("F", $"Fill {style.FillAlpha:0.00}", Color.Gold),
         new("G", $"Glow {style.GlowWidth:0} px", Color.Gold),
         new(""),

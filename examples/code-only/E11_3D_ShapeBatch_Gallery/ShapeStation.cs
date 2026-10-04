@@ -23,7 +23,7 @@ public sealed record GalleryBatches(
 /// <summary>The three per-frame states the visitor changes with keys, applied to every station.</summary>
 public sealed class GalleryStyle
 {
-    public float BorderWidth { get; set; } = 3f;
+    public float BorderWidth { get; set; } = 1f;
     public float FillAlpha { get; set; } = 0.45f;
     public float GlowWidth { get; set; }
 }
