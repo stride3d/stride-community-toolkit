@@ -94,6 +94,32 @@ internal static class ScreenTextDrawer
                 style.Alignment);
         }
 
+        if (style.EnableOutline && style.OutlineWidth > 0f)
+        {
+            var outlineColor = WithOpacity(style.OutlineColor, opacity);
+
+            // The string once in each of the eight directions round itself, the width away: the text
+            // drawn over them leaves a ring of that width
+            for (var direction = 0; direction < 8; direction++)
+            {
+                var angle = direction * MathF.PI / 4f;
+                var offset = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * style.OutlineWidth;
+
+                spriteBatch.DrawString(
+                    style.Font,
+                    text,
+                    style.FontSize,
+                    position + style.TextOffset + offset,
+                    outlineColor,
+                    style.Rotation,
+                    origin,
+                    scale,
+                    SpriteEffects.None,
+                    style.LayerDepth,
+                    style.Alignment);
+            }
+        }
+
         spriteBatch.DrawString(
             style.Font,
             text,

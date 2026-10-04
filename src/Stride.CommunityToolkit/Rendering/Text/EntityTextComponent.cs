@@ -200,6 +200,27 @@ public class EntityTextComponent : EntityComponent
     public Vector2 ShadowOffset { get; set; } = new(1, 1);
 
     /// <summary>
+    /// Gets or sets whether the text is drawn with an outline around every glyph. Defaults to
+    /// <see langword="false"/>.
+    /// </summary>
+    /// <remarks>
+    /// An outline in a contrasting colour keeps text readable over anything, including a
+    /// background of its own colour, where a shadow on one side is not enough. It costs eight extra
+    /// draws of the same string.
+    /// </remarks>
+    public bool EnableOutline { get; set; }
+
+    /// <summary>
+    /// Gets or sets the outline colour. Defaults to white.
+    /// </summary>
+    public Color OutlineColor { get; set; } = Color.White;
+
+    /// <summary>
+    /// Gets or sets how far the outline reaches beyond the glyphs, in pixels. Defaults to 1.
+    /// </summary>
+    public float OutlineWidth { get; set; } = 1f;
+
+    /// <summary>
     /// Gets or sets whether a filled rectangle is drawn behind the text. Defaults to <see langword="false"/>.
     /// </summary>
     public bool EnableBackground { get; set; }
