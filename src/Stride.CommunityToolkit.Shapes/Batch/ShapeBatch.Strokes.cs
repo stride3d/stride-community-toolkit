@@ -35,7 +35,7 @@ public sealed partial class ShapeBatch
 
     /// <summary>
     /// Submits a run of points as one stroke a constant number of pixels wide at any distance, with
-    /// round joins and caps - the <see cref="DrawPixelLine"/> of curves and frames.
+    /// round joins and caps - the <see cref="DrawPixelLine(Vector3, Vector3, float, Color)"/> of curves and frames.
     /// </summary>
     /// <param name="points">The run, in the plane's own coordinates, of any length.</param>
     /// <param name="position">World position of the plane's origin.</param>
@@ -74,7 +74,7 @@ public sealed partial class ShapeBatch
 
     /// <summary>
     /// Submits a run of points anywhere in 3D as one stroke a constant number of pixels wide at any
-    /// distance, with round joins and caps - the <see cref="DrawPixelLine"/> of space curves, and
+    /// distance, with round joins and caps - the <see cref="DrawPixelLine(Vector3, Vector3, float, Color)"/> of space curves, and
     /// what a trail through a 3D scene is drawn with.
     /// </summary>
     /// <param name="points">The run, in world space, of any length.</param>
@@ -131,6 +131,16 @@ public sealed partial class ShapeBatch
     }
 
     /// <summary>
+    /// Submits a thick line in the XY plane, the 2D case.
+    /// </summary>
+    /// <param name="start">Start point in the XY plane.</param>
+    /// <param name="end">End point in the XY plane.</param>
+    /// <param name="width">Line width in world units, or pixels with <see cref="Screen"/> on.</param>
+    /// <param name="color">The line colour.</param>
+    public void DrawLine(Vector2 start, Vector2 end, float width, Color color)
+        => DrawLine(new Vector3(start, 0f), new Vector3(end, 0f), width, color);
+
+    /// <summary>
     /// Submits a line whose width is measured in on-screen pixels rather than world units, so it
     /// keeps exactly the same thickness however far away it is - grid lines, axis rules, leader
     /// lines, anything that should read as drawn on the screen rather than placed in the scene.
@@ -140,7 +150,7 @@ public sealed partial class ShapeBatch
     /// <param name="pixelWidth">Line width in on-screen pixels.</param>
     /// <param name="color">The line colour.</param>
     /// <remarks>
-    /// This is <see cref="DrawLine"/> with its world width collapsed to nothing, which leaves the
+    /// This is <see cref="DrawLine(Vector3, Vector3, float, Color)"/> with its world width collapsed to nothing, which leaves the
     /// outline - already measured in pixels - drawing the whole line. <see cref="BorderWidth"/> and
     /// <see cref="ShapeFill.Alpha"/> do not apply; <paramref name="pixelWidth"/> is the width.
     /// </remarks>
@@ -159,6 +169,16 @@ public sealed partial class ShapeBatch
             new ShapePlane((start + end) * 0.5f, direction / length, Vector3.UnitY, PlaneMode.Axial),
             OutlineStyle(color, pixelWidth), ShapeSlice.Whole, 0f, 1f);
     }
+
+    /// <summary>
+    /// Submits a line in the XY plane, the 2D case, <paramref name="pixelWidth"/> on-screen pixels wide.
+    /// </summary>
+    /// <param name="start">Start point in the XY plane.</param>
+    /// <param name="end">End point in the XY plane.</param>
+    /// <param name="pixelWidth">Line width in on-screen pixels.</param>
+    /// <param name="color">The line colour.</param>
+    public void DrawPixelLine(Vector2 start, Vector2 end, float pixelWidth, Color color)
+        => DrawPixelLine(new Vector3(start, 0f), new Vector3(end, 0f), pixelWidth, color);
 
     /// <summary>
     /// Submits the twelve edges of an axis-aligned box as thick lines - a bounds or selection

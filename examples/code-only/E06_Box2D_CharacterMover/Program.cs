@@ -337,7 +337,7 @@ void Draw()
     foreach (var outline in terrain)
     {
         for (var i = 0; i < outline.Length; i++)
-            shapeBatch.DrawPixelLine(new Vector3(outline[i], 0), new Vector3(outline[(i + 1) % outline.Length], 0), 2f, Color.PaleGreen);
+            shapeBatch.DrawPixelLine(outline[i], outline[(i + 1) % outline.Length], 2f, Color.PaleGreen);
     }
 
     // Orange on the ground, aquamarine in the air: the pogo's verdict, painted on the capsule.
@@ -351,14 +351,14 @@ void Draw()
         var p2 = p1 + 0.1f * normal;
 
         shapeBatch.DrawPixelDisc(new Vector3(p1, 0), 4f, Color.Yellow);
-        shapeBatch.DrawPixelLine(new Vector3(p1, 0), new Vector3(p2, 0), 2f, Color.Yellow);
+        shapeBatch.DrawPixelLine(p1, p2, 2f, Color.Yellow);
     }
 
     // The pogo: grey while it reaches nothing, plum when it stands on something.
     var pogoColor = mover.PogoHit ? Color.Plum : Color.Gray;
     var end = mover.PogoEnd;
 
-    shapeBatch.DrawPixelLine(new Vector3(mover.PogoOrigin, 0), new Vector3(end, 0), 2f, pogoColor);
+    shapeBatch.DrawPixelLine(mover.PogoOrigin, end, 2f, pogoColor);
 
     switch (mover.PogoShape)
     {
@@ -366,19 +366,19 @@ void Draw()
             shapeBatch.DrawPixelDisc(new Vector3(end, 0), 5f, pogoColor);
             break;
         case PogoShape.Circle:
-            shapeBatch.DrawRing(new Vector3(end, 0), Vector3.UnitZ, 0.5f * mover.Radius, pogoColor);
+            shapeBatch.DrawRing(end, 0.5f * mover.Radius, pogoColor);
             break;
         default:
             var half = new Vector2(0.75f * mover.Radius, 0);
-            shapeBatch.DrawPixelLine(new Vector3(end - half, 0), new Vector3(end + half, 0), 2f, pogoColor);
+            shapeBatch.DrawPixelLine(end - half, end + half, 2f, pogoColor);
             break;
     }
 
     // Velocity, drawn as a line from the centre.
-    shapeBatch.DrawPixelLine(new Vector3(mover.Position, 0), new Vector3(mover.Position + mover.Velocity, 0), 2f, Color.Purple);
+    shapeBatch.DrawPixelLine(mover.Position, mover.Position + mover.Velocity, 2f, Color.Purple);
 
     if (kickFlash > 0)
-        shapeBatch.DrawRing(new Vector3(KickCentre(), 0), Vector3.UnitZ, 0.5f, Color.Goldenrod);
+        shapeBatch.DrawRing(KickCentre(), 0.5f, Color.Goldenrod);
 
     if (showContacts && simulation is not null)
         debugDraw?.Draw(simulation);

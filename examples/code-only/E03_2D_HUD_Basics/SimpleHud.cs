@@ -74,9 +74,6 @@ public sealed class SimpleHud
     private Vector2 DialCentre
         => _shapes.Corner(ScreenCorner.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
 
-    private void Rectangle(Vector2 centre, Vector2 size, Color colour, float cornerRadius = 0f)
-        => _shapes.DrawRectangle(new Vector3(centre, 0f), Vector3.UnitX, Vector3.UnitY, size, colour, cornerRadius);
-
     private void Outline(float width = 2f)
     {
         _shapes.BorderWidth = width;
@@ -94,7 +91,7 @@ public sealed class SimpleHud
         _shapes.BorderWidth = 2f;
         _shapes.Fill.Set(_style.PanelFill, 0.8f);
 
-        Rectangle(PanelCentre, _style.PanelSize, _style.PanelEdge, cornerRadius: 14f);
+        _shapes.DrawRectangle(PanelCentre, _style.PanelSize, _style.PanelEdge, cornerRadius: 14f);
     }
 
     private void DrawHealthBar()
@@ -102,13 +99,13 @@ public sealed class SimpleHud
         var left = PanelCentre + new Vector2(-_style.BarSize.X * 0.5f, 16f);
 
         Outline();
-        Rectangle(left + new Vector2(_style.BarSize.X * 0.5f, 0f), _style.BarSize, _style.TrackEdge, cornerRadius: 5f);
+        _shapes.DrawRectangle(left + new Vector2(_style.BarSize.X * 0.5f, 0f), _style.BarSize, _style.TrackEdge, cornerRadius: 5f);
 
         var colour = Health > _style.LowHealth ? _style.Healthy : _style.Hurt;
         var size = new Vector2((_style.BarSize.X - 8f) * Health, _style.BarSize.Y - 8f);
 
         Solid();
-        Rectangle(left + new Vector2(4f + size.X * 0.5f, 0f), size, colour, cornerRadius: 2f);
+        _shapes.DrawRectangle(left + new Vector2(4f + size.X * 0.5f, 0f), size, colour, cornerRadius: 2f);
     }
 
     private void DrawEnergyDial()
@@ -123,11 +120,11 @@ public sealed class SimpleHud
         var centre = _shapes.ScreenSize * 0.5f;
 
         Outline();
-        _shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 14f, Color.White);
+        _shapes.DrawRing(centre, 14f, Color.White);
 
         foreach (var direction in (Vector2[])[new(1f, 0f), new(-1f, 0f), new(0f, 1f), new(0f, -1f)])
         {
-            _shapes.DrawPixelLine(new Vector3(centre + direction * 20f, 0f), new Vector3(centre + direction * 32f, 0f), 2f, Color.White);
+            _shapes.DrawPixelLine(centre + direction * 20f, centre + direction * 32f, 2f, Color.White);
         }
 
         Solid();
@@ -170,7 +167,7 @@ public sealed class SimpleHud
         _shapes.Glow.Strength = 0.5f;
         _shapes.Opacity = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
 
-        _shapes.DrawDisc(new Vector3(centre, 0f), Vector3.UnitZ, 10f, _style.Hurt);
+        _shapes.DrawDisc(centre, 10f, _style.Hurt);
 
         _shapes.Glow.Clear();
         _shapes.Opacity = 1f;
@@ -183,7 +180,7 @@ public sealed class SimpleHud
         Solid();
         _shapes.Opacity = Flash * 0.35f;
 
-        Rectangle(_shapes.ScreenSize * 0.5f, _shapes.ScreenSize, _style.Hurt);
+        _shapes.DrawRectangle(_shapes.ScreenSize * 0.5f, _shapes.ScreenSize, _style.Hurt);
 
         _shapes.Opacity = 1f;
     }

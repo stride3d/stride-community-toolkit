@@ -24,7 +24,7 @@ namespace Stride.CommunityToolkit.Shapes;
 /// shapes.Fill.Color = new Color(90, 190, 255, 120);
 /// shapes.Gradient.Color = new Color(90, 190, 255, 0);   // fades to nothing
 /// shapes.Gradient.Direction = Vector2.UnitX;            // left to right
-/// shapes.DrawRectangle(center, Vector3.UnitX, Vector3.UnitY, size, outline);
+/// shapes.DrawRectangle(center, size, outline);
 /// shapes.Gradient.Clear();
 /// </code>
 /// </example>

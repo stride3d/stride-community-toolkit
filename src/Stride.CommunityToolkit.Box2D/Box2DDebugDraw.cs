@@ -152,7 +152,7 @@ public sealed class Box2DDebugDraw
             var a = vertices[i];
             var b = vertices[(i + 1) % vertexCount];
 
-            _batch.DrawPixelLine(new Vector3(a.X, a.Y, 0), new Vector3(b.X, b.Y, 0), LinePixels, stride);
+            _batch.DrawPixelLine(new Vector2(a.X, a.Y), new Vector2(b.X, b.Y), LinePixels, stride);
         }
     }
 
@@ -179,7 +179,7 @@ public sealed class Box2DDebugDraw
 
         // The testbed draws the x-axis so a rolling circle is seen to roll.
         var axis = b2Rot_GetXAxis(transform.q);
-        _batch.DrawPixelLine(new Vector3(centre, 0), new Vector3(centre.X + axis.X * radius, centre.Y + axis.Y * radius, 0), LinePixels, stride);
+        _batch.DrawPixelLine(centre, new Vector2(centre.X + axis.X * radius, centre.Y + axis.Y * radius), LinePixels, stride);
     }
 
     private void DrawSolidCapsule(in B2Vec2 p1, in B2Vec2 p2, float radius, B2HexColor color, object context)
@@ -190,7 +190,7 @@ public sealed class Box2DDebugDraw
     }
 
     private void DrawLine(in B2Vec2 p1, in B2Vec2 p2, B2HexColor color, object context)
-        => _batch.DrawPixelLine(new Vector3(p1.X, p1.Y, 0), new Vector3(p2.X, p2.Y, 0), LinePixels, DebugDrawColors.ToColor(color));
+        => _batch.DrawPixelLine(new Vector2(p1.X, p1.Y), new Vector2(p2.X, p2.Y), LinePixels, DebugDrawColors.ToColor(color));
 
     private void DrawTransform(in B2Transform transform, object context)
     {

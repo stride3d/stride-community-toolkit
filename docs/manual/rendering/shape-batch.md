@@ -232,7 +232,7 @@ shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed
 
 shapes.Screen = true;
 var centre = shapes.ScreenSize * 0.5f;
-shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
+shapes.DrawRing(centre, 22f, Color.White);
 shapes.DrawArc(shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(100f, -90f), 50f, -MathF.PI * 0.5f, MathF.Tau * health, Color.LimeGreen, width: 14f);
 shapes.Screen = false;
 ```

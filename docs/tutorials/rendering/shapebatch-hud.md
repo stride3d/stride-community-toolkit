@@ -62,8 +62,7 @@ The panel needs a few values. Put them at the top of the file.
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/Program.cs#Step1Values)]
 
-Now the drawing. `PanelCentre` works out where the panel goes, `Rectangle` is a shorthand you will use
-in every step, and `DrawPanel` draws.
+Now the drawing. `PanelCentre` works out where the panel goes, and `DrawPanel` draws.
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/Program.cs#Step1)]
 

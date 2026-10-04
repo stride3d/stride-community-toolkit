@@ -193,10 +193,6 @@ void Update(Scene scene, GameTime time)
 Vector2 PanelCentre()
     => shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(Margin + panelSize.X * 0.5f, -Margin - panelSize.Y * 0.5f);
 
-/// <summary>A rectangle on the screen: flat, upright, given by its middle and its size.</summary>
-void Rectangle(Vector2 centre, Vector2 size, Color colour, float cornerRadius = 0f)
-    => shapes.DrawRectangle(new Vector3(centre, 0f), Vector3.UnitX, Vector3.UnitY, size, colour, cornerRadius);
-
 void DrawPanel()
 {
     // Every shape is an outline and a fill. The outline takes the colour of the draw call and
@@ -204,7 +200,7 @@ void DrawPanel()
     shapes.BorderWidth = 2f;
     shapes.Fill.Set(panelFill, 0.8f);
 
-    Rectangle(PanelCentre(), panelSize, panelEdge, cornerRadius: 14f);
+    shapes.DrawRectangle(PanelCentre(), panelSize, panelEdge, cornerRadius: 14f);
 }
 #endregion
 
@@ -230,14 +226,14 @@ void DrawHealthBar()
 
     // The track
     Outline();
-    Rectangle(left + new Vector2(barSize.X * 0.5f, 0f), barSize, trackEdge, cornerRadius: 5f);
+    shapes.DrawRectangle(left + new Vector2(barSize.X * 0.5f, 0f), barSize, trackEdge, cornerRadius: 5f);
 
     // The bar: as wide as the health says, a little inside the track, red when the health is low
     var colour = health > LowHealth ? healthy : hurt;
     var size = new Vector2((barSize.X - 8f) * health, barSize.Y - 8f);
 
     Solid();
-    Rectangle(left + new Vector2(4f + size.X * 0.5f, 0f), size, colour, cornerRadius: 2f);
+    shapes.DrawRectangle(left + new Vector2(4f + size.X * 0.5f, 0f), size, colour, cornerRadius: 2f);
 }
 #endregion
 
@@ -267,12 +263,12 @@ void DrawCrosshair()
     var centre = shapes.ScreenSize * 0.5f;
 
     Outline();
-    shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 14f, Color.White);
+    shapes.DrawRing(centre, 14f, Color.White);
 
     // Four ticks around it, each from 20 to 32 pixels out
     foreach (var direction in (Vector2[])[new(1f, 0f), new(-1f, 0f), new(0f, 1f), new(0f, -1f)])
     {
-        shapes.DrawPixelLine(new Vector3(centre + direction * 20f, 0f), new Vector3(centre + direction * 32f, 0f), 2f, Color.White);
+        shapes.DrawPixelLine(centre + direction * 20f, centre + direction * 32f, 2f, Color.White);
     }
 
     Solid();
@@ -322,7 +318,7 @@ void DrawWarningLight(float seconds)
     shapes.Glow.Strength = 0.5f;
     shapes.Opacity = 0.4f + 0.6f * MathF.Abs(MathF.Sin(seconds * MathF.Tau));
 
-    shapes.DrawDisc(new Vector3(centre, 0f), Vector3.UnitZ, 10f, hurt);
+    shapes.DrawDisc(centre, 10f, hurt);
 
     // The state stays as it is set. Put back what the other shapes expect
     shapes.Glow.Clear();
@@ -339,7 +335,7 @@ void DrawDamageFlash()
     Solid();
     shapes.Opacity = flash * 0.35f;
 
-    Rectangle(shapes.ScreenSize * 0.5f, shapes.ScreenSize, hurt);
+    shapes.DrawRectangle(shapes.ScreenSize * 0.5f, shapes.ScreenSize, hurt);
 
     shapes.Opacity = 1f;
 }

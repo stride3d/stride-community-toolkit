@@ -131,9 +131,9 @@ void Draw(ShapeBatch shapes)
         shapes.Opacity = focus < 0 || focus == lane ? 1f : 0.2f;
 
         // The track, with a mark at the start and at the finish
-        shapes.DrawPixelLine(new Vector3(StartX, y, 0f), new Vector3(EndX, y, 0f), 2f, new Color(70, 76, 90));
-        shapes.DrawPixelLine(new Vector3(StartX, y - 0.5f, 0f), new Vector3(StartX, y + 0.5f, 0f), 2f, new Color(70, 76, 90));
-        shapes.DrawPixelLine(new Vector3(EndX, y - 0.5f, 0f), new Vector3(EndX, y + 0.5f, 0f), 2f, new Color(70, 76, 90));
+        shapes.DrawPixelLine(new Vector2(StartX, y), new Vector2(EndX, y), 2f, new Color(70, 76, 90));
+        shapes.DrawPixelLine(new Vector2(StartX, y - 0.5f), new Vector2(StartX, y + 0.5f), 2f, new Color(70, 76, 90));
+        shapes.DrawPixelLine(new Vector2(EndX, y - 0.5f), new Vector2(EndX, y + 0.5f), 2f, new Color(70, 76, 90));
 
         // Where the disc is at every tenth of the run: the spacing is the easing
         for (var i = 0; i <= 10; i++)
@@ -142,7 +142,7 @@ void Draw(ShapeBatch shapes)
         }
 
         shapes.Fill.Set(colour, 1f);
-        shapes.DrawDisc(new Vector3(positions[lane], y, 0f), Vector3.UnitZ, 0.45f, Color.White);
+        shapes.DrawDisc(new Vector2(positions[lane], y), 0.45f, Color.White);
         shapes.Fill.Set(null, 1f);
     }
 

@@ -20,6 +20,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎉 New Features
 
+- `ShapeBatch`: 2D overloads that draw in the XY plane without plane axes: `DrawRectangle(Vector2 center, Vector2 size, color, cornerRadius, rotation)`, `DrawDisc(Vector2, radius, color)`, `DrawRing(Vector2, radius, color)`, `DrawLine(Vector2, Vector2, width, color)` and `DrawPixelLine(Vector2, Vector2, pixelWidth, color)`. The 2D examples and the HUD tutorial use them.
 - `EntityTextComponent`: `EnableOutline`, `OutlineColor` and `OutlineWidth` draw an outline round every glyph, white and 1 pixel by default, for text that must stay readable over anything.
 - `game.AddGrid()` in `Stride.CommunityToolkit.Shapes`: a reference grid with numbered lines that shows world coordinates or screen pixels. In the world it lies in the XY plane of a 2D scene and on the ground of a 3D one, with the axes in Game Studio's colours. The key G steps through off, world and screen; `ReferenceGrid.Cycle()`, `Visible` and `Space` do the same from code. It can write the coordinates under the mouse in both spaces.
 - `Buffer.SetDataPinned(commandList, span)` in `Stride.CommunityToolkit.Graphics`: uploads a span with its memory pinned for the call, for data held in an array or a list.
@@ -28,6 +29,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🐞 Bug Fixes
 
+- `Scene.GetCamera(name)` returned the last camera it looked at when no entity had the name. It now returns `null`, and it finds cameras on child entities at any depth.
+- Bullet `Add2DGround`, `Add3DGround` and `AddInfinite3DGround`: passing any options made the ground a dynamic rigid body, because the options default to one. The ground is static unless the options set `PhysicsComponent`.
 - `Random.NextDirection2D` and `NextDirection3D` returned directions only into the positive quadrant or octant. They now return every direction with equal likelihood.
 - `E01_3D_BasicScene_FileBasedApp`: removed a `NuGet.config` that had been committed with a package source on a local drive. It sent every toolkit package to that path, so `ProgramSimple.cs` failed to restore with `NU1301` on any machine that did not already have the packages cached.
 - `AddBepu3DPhysics`, `AddBepu2DPhysics` and the `Create3DPrimitive` / `Create2DPrimitive` Bepu overloads added the collider fitted to the primitive even to a compound collider that already held the caller's own shape, so the body had two colliders and the mass of both. The fitted shape is now added to an empty compound only; a compound that holds a shape is kept as it is. This corrects `E05_3D_Grabber`, `E05_3D_Car` and `E05_3D_Cloth`, whose bodies were heavier than written.

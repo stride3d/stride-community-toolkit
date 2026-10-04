@@ -125,6 +125,15 @@ public sealed partial class ShapeBatch
         => Add([Vector2.Zero], ShapePlane.FromNormal(center, normal), CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
 
     /// <summary>
+    /// Submits a filled disc in the XY plane, the 2D case.
+    /// </summary>
+    /// <param name="center">Centre in the XY plane.</param>
+    /// <param name="radius">Radius in world units, or pixels with <see cref="Screen"/> on.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
+    public void DrawDisc(Vector2 center, float radius, Color color)
+        => Add([Vector2.Zero], ShapePlane.XY(center), CurrentStyle(color), ShapeSlice.Whole, radius, 1f);
+
+    /// <summary>
     /// Submits an unfilled circle lying flat in the plane a normal defines - a selection ring or a
     /// range indicator that does not tint what it encircles.
     /// </summary>
@@ -138,6 +147,15 @@ public sealed partial class ShapeBatch
     /// </remarks>
     public void DrawRing(Vector3 center, Vector3 normal, float radius, Color color)
         => Add([Vector2.Zero], ShapePlane.FromNormal(center, normal), OutlineStyle(color), Stroke, radius, 1f);
+
+    /// <summary>
+    /// Submits an unfilled circle in the XY plane, the 2D case, stroked <see cref="BorderWidth"/> pixels wide.
+    /// </summary>
+    /// <param name="center">Centre in the XY plane.</param>
+    /// <param name="radius">Radius in world units, or pixels with <see cref="Screen"/> on.</param>
+    /// <param name="color">The ring colour.</param>
+    public void DrawRing(Vector2 center, float radius, Color color)
+        => Add([Vector2.Zero], ShapePlane.XY(center), OutlineStyle(color), Stroke, radius, 1f);
 
     /// <summary>
     /// Submits a filled ring - a disc with a hole - lying flat in the plane a normal defines, with
@@ -197,7 +215,7 @@ public sealed partial class ShapeBatch
 
     /// <summary>
     /// Submits an arc of a circle with round ends, lying flat in the plane a normal defines. With no
-    /// width it is a stroke the border's pixel width - a partial <see cref="DrawRing"/>; with one it
+    /// width it is a stroke the border's pixel width - a partial <see cref="DrawRing(Vector3, Vector3, float, Color)"/>; with one it
     /// is a filled, outlined band of that world width centred on the radius - a radial progress bar.
     /// </summary>
     /// <param name="center">World-space centre of the circle.</param>
@@ -258,5 +276,20 @@ public sealed partial class ShapeBatch
         Add(corners,
             new ShapePlane(center, Vector3.Normalize(axisX), Vector3.Normalize(axisY), PlaneMode.Fixed),
             CurrentStyle(color), ShapeSlice.Whole, cornerRadius, 1f);
+    }
+
+    /// <summary>
+    /// Submits a rectangle in the XY plane, the 2D case: a panel, a bar, a tile.
+    /// </summary>
+    /// <param name="center">Centre in the XY plane.</param>
+    /// <param name="size">Width and height, in world units, or pixels with <see cref="Screen"/> on.</param>
+    /// <param name="color">The outline colour, and the fill colour unless <see cref="ShapeFill.Color"/> is set.</param>
+    /// <param name="cornerRadius">Optional corner rounding, in the same units as <paramref name="size"/>. Limited to half the smaller side.</param>
+    /// <param name="rotation">Rotation in radians about the centre, counter-clockwise in the world and clockwise on screen.</param>
+    public void DrawRectangle(Vector2 center, Vector2 size, Color color, float cornerRadius = 0f, float rotation = 0f)
+    {
+        var (sin, cos) = MathF.SinCos(rotation);
+
+        DrawRectangle(new Vector3(center, 0f), new Vector3(cos, sin, 0f), new Vector3(-sin, cos, 0f), size, color, cornerRadius);
     }
 }
