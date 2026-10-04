@@ -48,7 +48,7 @@ public static class CameraComponentExtensions
     /// </summary>
     /// <param name="camera">The <see cref="CameraComponent"/> used to generate the view and projection matrices for the calculation.</param>
     /// <param name="screenPosition">
-    /// The normalized position on the screen (typically the mouse position), with coordinates ranging from (0,0) at the bottom-left to (1,1) at the top-right.
+    /// The normalized screen position (typically the mouse position), from (0,0) at the top-left to (1,1) at the bottom-right.
     /// </param>
     /// <returns>
     /// A tuple containing two points:
@@ -72,7 +72,7 @@ public static class CameraComponentExtensions
     /// </summary>
     /// <param name="camera">The <see cref="CameraComponent"/> used for the ray calculation.</param>
     /// <param name="screenPosition">
-    /// The position on the screen, typically the mouse position, normalized between (0,0) (bottom-left) and (1,1) (top-right).
+    /// The normalized screen position, typically the mouse position, from (0,0) at the top-left to (1,1) at the bottom-right.
     /// </param>
     /// <returns>
     /// A <see cref="Ray"/> starting from the camera and pointing into the 3D world through the specified screen position.
@@ -145,7 +145,7 @@ public static class CameraComponentExtensions
 
     /// <summary>
     /// Calculates the near and far vectors for a ray that starts at the camera and passes through a given screen point.
-    /// The ray is in world space, starting at the near plane of the camera and extending through the specified pixel coordinates on the screen.
+    /// The ray is in world space, from the near plane to the far plane, through the specified normalized screen position.
     /// </summary>
     /// <param name="camera">The camera component used to calculate the ray.</param>
     /// <param name="screenPosition">The screen position (in normalized coordinates) through which the ray passes.</param>
@@ -181,12 +181,11 @@ public static class CameraComponentExtensions
     /// Converts the screen position to a point in world coordinates relative to <paramref name="cameraComponent"/>.
     /// </summary>
     /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
-    /// <param name="position">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from the near camera plane. Passed by reference, allowing for potential optimizations in memory usage.</param>
+    /// <param name="position">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from the near camera plane.</param>
     /// <returns>The world position calculated from the screen position.</returns>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
-    /// <para>This method takes the <paramref name="position"/> parameter by reference (<c>ref</c>), which may optimize memory usage and prevent unnecessary copies of the vector.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static Vector3 ScreenToWorldPoint(this CameraComponent cameraComponent, ref Vector3 position)
@@ -202,12 +201,11 @@ public static class CameraComponentExtensions
     /// Converts the screen position to a point in world coordinates relative to <paramref name="cameraComponent"/>.
     /// </summary>
     /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
-    /// <param name="position">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from the near camera plane. Passed by value, which may be simpler to use but less efficient in memory-constrained environments.</param>
+    /// <param name="position">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from the near camera plane.</param>
     /// <returns>The world position calculated from the screen position.</returns>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
-    /// <para>This method takes the <paramref name="position"/> parameter by value, which is simpler to use but may involve a copy of the vector, which could be less efficient for large or frequent transformations.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static Vector3 ScreenToWorldPoint(this CameraComponent cameraComponent, Vector3 position)
@@ -226,7 +224,7 @@ public static class CameraComponentExtensions
     /// <exception cref="ArgumentNullException">If the cameraComponent argument is <see langword="null"/>.</exception>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     public static void ScreenToWorldPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
     {
@@ -251,11 +249,11 @@ public static class CameraComponentExtensions
     /// </summary>
     /// <param name="cameraComponent"></param>
     /// <param name="position"></param>
-    /// <returns><see cref="RaySegment"/>, starting at near plain and ending at the far plain.</returns>
+    /// <returns><see cref="RaySegment"/>, starting at the near plane and ending at the far plane.</returns>
     /// <exception cref="ArgumentNullException">If the cameraComponent argument is <see langword="null"/>.</exception>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     public static RaySegment ScreenToWorldRaySegment(this CameraComponent cameraComponent, Vector2 position)
     {
@@ -269,10 +267,10 @@ public static class CameraComponentExtensions
     /// </summary>
     /// <param name="cameraComponent"></param>
     /// <param name="position"></param>
-    /// <param name="result"><see cref="RaySegment"/>, starting at near plain and ending at the far plain.</param>
+    /// <param name="result"><see cref="RaySegment"/>, starting at the near plane and ending at the far plane.</param>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     public static void ScreenToWorldRaySegment(this CameraComponent cameraComponent, ref Vector2 position, out RaySegment result)
     {
@@ -301,7 +299,7 @@ public static class CameraComponentExtensions
     /// <returns>The position in clip space as a <see cref="Vector3"/>.</returns>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static Vector3 WorldToClip(this CameraComponent cameraComponent, ref Vector3 position)
@@ -323,7 +321,7 @@ public static class CameraComponentExtensions
     /// <param name="result">The resulting position in clip space.</param>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static void WorldToClip(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
@@ -337,14 +335,13 @@ public static class CameraComponentExtensions
     /// Converts the world position to screen space coordinates relative to <paramref name="cameraComponent"/>.
     /// </summary>
     /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
-    /// <param name="position">The world space position to be converted to screen space. Passed by reference, allowing for potential optimizations in memory usage.</param>
+    /// <param name="position">The world space position to be converted to screen space.</param>
     /// <returns>
     /// The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.
     /// </returns>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
-    /// <para>This method takes the <paramref name="position"/> parameter by reference (<c>ref</c>), which may optimize memory usage and prevent unnecessary copies of the vector.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position)
@@ -360,14 +357,13 @@ public static class CameraComponentExtensions
     /// Converts the world position to screen space coordinates relative to <paramref name="cameraComponent"/>.
     /// </summary>
     /// <param name="cameraComponent">The camera component used to perform the calculation.</param>
-    /// <param name="position">The world space position to be converted to screen space. Passed by value, which may be simpler to use but less efficient in memory-constrained environments.</param>
+    /// <param name="position">The world space position to be converted to screen space.</param>
     /// <returns>
     /// The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.
     /// </returns>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
     /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
-    /// <para>This method takes the <paramref name="position"/> parameter by value, which is simpler to use but may involve a copy of the vector, which could be less efficient for large or frequent transformations.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static Vector3 WorldToScreenPoint(this CameraComponent cameraComponent, Vector3 position)
@@ -387,7 +383,7 @@ public static class CameraComponentExtensions
     /// <param name="result">The screen position in normalized X, Y coordinates. Top-left is (0,0), bottom-right is (1,1). Z is in world units from near camera plane.</param>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="cameraComponent"/> is null.</exception>
     public static void WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, out Vector3 result)
@@ -413,12 +409,12 @@ public static class CameraComponentExtensions
     /// <param name="position">The world space position to be converted to screen space.</param>
     /// <param name="graphicsDevice">The graphics device providing information about the window size.</param>
     /// <returns>
-    /// The screen position as  normalized X * <paramref name="graphicsDevice"/> width, normalized Y * <paramref name="graphicsDevice"/> height. Z is always 0.
+    /// The screen position in pixels: normalized X times the window width, normalized Y times the window height.
     /// </returns>
     /// <exception cref="ArgumentNullException">If the cameraComponent argument is <see langword="null"/>.</exception>
     /// <remarks>
     /// This method does not update the <see cref="CameraComponent.ViewMatrix"/> or <see cref="CameraComponent.ProjectionMatrix"/> before performing the transformation.
-    /// If the <see cref="CameraComponent"/> or it's containing <see cref="Entity"/> <see cref="TransformComponent"/>has been modified since the last frame you may need to call the <see cref="CameraComponent.Update()"/> method first.
+    /// If the <see cref="CameraComponent"/> or its containing <see cref="Entity"/> <see cref="TransformComponent"/> has been modified since the last frame, you may need to call the <see cref="CameraComponent.Update()"/> method first.
     /// </remarks>
     public static Vector2 WorldToScreenPoint(this CameraComponent cameraComponent, ref Vector3 position, GraphicsDevice graphicsDevice)
     {

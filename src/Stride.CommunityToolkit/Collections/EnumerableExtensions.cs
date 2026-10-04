@@ -23,7 +23,7 @@ public static class EnumerableExtensions
     /// <param name="first">The first sequence to concatenate.</param>
     /// <param name="second">The sequence to concatenate to the first sequence.</param>
     /// <returns>An <see cref="IEnumerable{T}"/> that contains the concatenated elements of the two input sequences.</returns>
-    /// <exception cref="ArgumentException"><paramref name="first"/> or <paramref name="second"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is <see langword="null"/>.</exception>
     public static IEnumerable<T> Concat<T>(this IEnumerable<T> first, params T[] second)
     {
         ArgumentNullException.ThrowIfNull(first);
@@ -36,9 +36,9 @@ public static class EnumerableExtensions
     /// Performs the specified action on each element of the <see cref="IEnumerable{T}"/>.
     /// </summary>
     /// <typeparam name="T">The type of the elements of the input sequence.</typeparam>
-    /// <param name="source">The sequence of elements to execute the <see cref="IEnumerable{T}"/>.</param>
-    /// <param name="action">The <see cref="Action{T}"/> delegate to perform on each element of the <see cref="IEnumerable{T}"/>1.</param>
-    /// <exception cref="ArgumentException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
+    /// <param name="source">The sequence whose elements the action runs on.</param>
+    /// <param name="action">The action to perform on each element.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
         ArgumentNullException.ThrowIfNull(source);

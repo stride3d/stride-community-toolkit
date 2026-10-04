@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.Collections;
 public static class DictionaryExtensions
 {
     /// <summary>
-    /// Adds items from one dictionary to the other.
+    /// Copies every entry of <paramref name="source"/> into <paramref name="target"/>, overwriting existing keys.
     /// </summary>
     /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>

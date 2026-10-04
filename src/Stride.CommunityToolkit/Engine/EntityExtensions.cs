@@ -80,8 +80,7 @@ public static partial class EntityExtensions
     }
 
     /// <summary>
-    /// Adds a directional light gizmo to the specified entity for visual representation and manipulation
-    /// in the editor or during runtime.
+    /// Adds a gizmo that shows a directional light's direction at runtime.
     /// </summary>
     /// <param name="entity">The entity to which the directional light gizmo will be added.</param>
     /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
@@ -118,11 +117,11 @@ public static partial class EntityExtensions
     }
 
     /// <summary>
-    /// Recursively searches the entity's children and their descendants using a depth-first search (DFS) for the first component of the specified type.
+    /// Searches the entity, then its descendants depth-first, for the first component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
     /// <param name="entity">The <see cref="Entity"/> from which to start the search.</param>
-    /// <returns>The first component of the specified type found in the entity's children or descendants, or <c>null</c> if no such component exists.</returns>
+    /// <returns>The first component of the specified type on the entity or its descendants, or <c>null</c> if none exists.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the <paramref name="entity"/> is <c>null</c>.</exception>
     public static T? GetComponentInChildren<T>(this Entity entity)
     {
@@ -177,11 +176,11 @@ public static partial class EntityExtensions
     }
 
     /// <summary>
-    /// Searches for an entity by name within the top-level entities of the current scene.
+    /// Searches the scene's top-level entities and all their descendants for an entity by name.
     /// </summary>
     /// <param name="parent">The reference entity used to access the scene.</param>
     /// <param name="name">The name of the entity to find.</param>
-    /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
+    /// <returns>The first entity with the specified name, or null if none is found.</returns>
     public static Entity? FindEntityRecursive(this Entity parent, string name)
     {
         var entities = parent.Scene.Entities;
@@ -203,7 +202,7 @@ public static partial class EntityExtensions
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
     /// <param name="entity">The entity from which to retrieve the component.</param>
-    /// <param name="result">When this method returns, contains the first component of a type</param>
+    /// <param name="result">When this method returns, the first component of type <typeparamref name="T"/>, or the default value if none exists.</param>
     /// <returns>
     /// <c>true</c> if a component of type <typeparamref name="T"/> is found in the entity;
     /// otherwise, <c>false</c>.

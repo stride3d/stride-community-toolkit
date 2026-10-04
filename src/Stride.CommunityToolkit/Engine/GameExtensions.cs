@@ -232,7 +232,7 @@ public static partial class GameExtensions
     /// Adds a 2D camera entity to the game's root scene with customizable position and rotation, defaulting to orthographic projection.
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="cameraName">Optional name for the camera entity and camera slot. Defaults to "MainCamera" if not provided. If null, the entity will not be named.</param>
+    /// <param name="cameraName">Name for the camera entity and camera slot. Defaults to "Main". If null, the entity is not named.</param>
     /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 2D position.</param>
     /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to the default 2D orientation.</param>
     /// <returns>The created Entity object representing the 2D camera.</returns>
@@ -252,7 +252,7 @@ public static partial class GameExtensions
     /// Adds a 3D camera entity to the game's root scene with customizable position, rotation, projection mode and default camera name "Main".
     /// </summary>
     /// <param name="game">The Game instance to which the camera entity will be added.</param>
-    /// <param name="cameraName">Optional name for the camera entity and camera slot. Defaults to "MainCamera" if not provided. If null, the entity will not be named.</param>
+    /// <param name="cameraName">Name for the camera entity and camera slot. Defaults to "Main". If null, the entity is not named.</param>
     /// <param name="initialPosition">Initial position for the camera entity. If not provided, the camera will be positioned at a default 3D position (6, 6, 6).</param>
     /// <param name="initialRotation">Initial rotation for the camera entity specified in degrees. If not provided, the camera will be rotated to face towards the origin with default angles (Yaw: 45, Pitch: -30, Roll: 0).</param>
     /// <param name="projectionMode">The projection mode for the camera (Perspective or Orthographic). Defaults to Perspective.</param>
@@ -380,7 +380,7 @@ public static partial class GameExtensions
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
     /// <param name="displayPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
     /// leaves the overlay's own position alone; <see cref="DisplayPosition.None"/> registers no camera help at all.</param>
-    /// <param name="cameraName">The name of the camera entity to attach the 2D camera controller to. If not specified, the main camera name is
+    /// <param name="cameraName">The name of the camera entity to attach the 3D camera controller to. If not specified, the main camera name is
     /// used.</param>
     /// <returns>The camera entity to which the 3D camera controller was added.</returns>
     /// <exception cref="InvalidOperationException">Thrown if no camera entity with the specified name exists in the current scene.</exception>
@@ -521,17 +521,10 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The game instance to which the lighting will be added.</param>
     /// <param name="intensity">The intensity of the light sources.</param>
-    /// <param name="showLightGizmo">Specifies whether to display a gizmo for the light in the editor. Default is true.</param>
+    /// <param name="showLightGizmo">Whether to show a gizmo for each light. Default is true.</param>
     /// <remarks>
     /// <para>
-    /// This method creates six directional lights positioned around a central point, each aiming from a unique angle to simulate uniform lighting from all directions.
-    /// The lights are added at predefined positions and rotations to cover the scene evenly.
-    /// </para>
-    /// <para>
-    /// There really are six. Until this was corrected the array held only five - both horizontal axes,
-    /// both depth axes, and a single vertical one - so every object in the scene was left permanently
-    /// unlit from either above or below, which reads as an object whose colour is wrong on one face
-    /// rather than as a missing light.
+    /// Creates six directional lights, one shining along each world axis, for even lighting from all directions.
     /// </para>
     /// </remarks>
     public static void AddAllDirectionLighting(this Game game, float intensity = 5, bool showLightGizmo = true)
@@ -581,7 +574,7 @@ public static partial class GameExtensions
     /// rig around with it.
     /// </param>
     /// <param name="enableShadows">Whether the key light casts shadows. Only the key ever does. Default is true.</param>
-    /// <param name="showLightGizmo">Specifies whether to display a gizmo for each light in the scene. Default is true.</param>
+    /// <param name="showLightGizmo">Whether to show a gizmo for each light. Default is false.</param>
     /// <returns>The three light entities - key, fill and rim - for further adjustment.</returns>
     /// <remarks>
     /// <para>
@@ -728,7 +721,7 @@ public static partial class GameExtensions
 
 
     /// <summary>
-    /// Creates a material from the four numbers of a PBR (physically based rendering) material: a colour, a metalness and a glossiness,
+    /// Creates a PBR (physically based rendering) material from a colour, a metalness and a glossiness,
     /// under the Lambert diffuse and microfacet specular models.
     /// </summary>
     /// <param name="game">The game instance used to access the graphics device.</param>

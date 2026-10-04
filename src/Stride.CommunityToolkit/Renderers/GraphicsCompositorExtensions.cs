@@ -6,9 +6,7 @@ using Stride.Rendering.Compositing;
 namespace Stride.CommunityToolkit.Renderers;
 
 /// <summary>
-/// Provides extension methods for the <see cref="GraphicsCompositor"/> class to enhance its functionality.
-/// These methods allow for the addition of UI stages, scene renderers, and debug render features,
-/// as well as utility methods for working with render stages.
+/// Extension methods that add an <see cref="EntityDebugSceneRenderer"/> to a <see cref="GraphicsCompositor"/>.
 /// </summary>
 public static class GraphicsCompositorExtensions
 {

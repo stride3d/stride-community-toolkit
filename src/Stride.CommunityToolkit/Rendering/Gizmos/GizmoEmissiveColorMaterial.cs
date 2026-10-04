@@ -18,8 +18,8 @@ public static class GizmoEmissiveColorMaterial
     /// <see cref="MaterialTransparencyBlendFeature"/>, the emissive feature is told to take the material alpha from
     /// its own alpha channel, and the color values are premultiplied. All three are needed - Stride blends
     /// transparent materials with premultiplied alpha, and without the blend feature the alpha is simply ignored,
-    /// so the mesh renders fully opaque or, for a low alpha, appears to vanish. Opaque colors take the same path as
-    /// before and stay in the opaque render stage.
+    /// so the mesh renders fully opaque or, for a low alpha, appears to vanish. Opaque colors stay in the
+    /// opaque render stage.
     /// </remarks>
     /// <param name="device">The <see cref="GraphicsDevice"/> used to create the material.</param>
     /// <param name="color">The <see cref="Color"/> to apply to the material.</param>

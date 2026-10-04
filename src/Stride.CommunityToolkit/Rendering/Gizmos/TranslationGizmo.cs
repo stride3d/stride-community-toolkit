@@ -102,17 +102,7 @@ public class TranslationGizmo : AxialGizmoBase
     /// </summary>
     /// <remarks>
     /// <para>
-    /// These used to be little meshes built from cylinders, one entity and draw call per stroke, spun
-    /// to face the camera every frame by a script. That last part is what made the geometry pointless:
-    /// a mesh that always turns to face you can never look like anything a flat quad could not, so all
-    /// the extra vertices bought was a blurry approximation of a letter. Text drawn in world space is
-    /// sharper, is one object instead of three, and gives the axis names the same depth behaviour as
-    /// the arrows they label.
-    /// </para>
-    /// <para>
-    /// Requires a <see cref="WorldTextRenderer"/> in the graphics compositor. The
-    /// <see cref="Engine.GameExtensions.AddGroundGizmo"/> helper arranges that; a gizmo added straight
-    /// to an entity cannot, because it is handed only a graphics device.
+    /// <see cref="WorldTextProcessor"/> adds the <see cref="WorldTextRenderer"/> the label needs.
     /// </para>
     /// </remarks>
     private static Entity CreateAxisLabel(string axisName, Vector3 position, Color color, bool billboard)

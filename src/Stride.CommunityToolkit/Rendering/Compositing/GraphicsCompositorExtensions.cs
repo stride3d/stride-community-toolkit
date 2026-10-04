@@ -7,9 +7,7 @@ using Stride.Rendering.UI;
 namespace Stride.CommunityToolkit.Rendering.Compositing;
 
 /// <summary>
-/// Provides extension methods for the <see cref="GraphicsCompositor"/> class to enhance its functionality.
-/// These methods allow for the addition of UI stages, scene renderers, and debug render features,
-/// as well as utility methods for working with render stages.
+/// Extension methods for <see cref="GraphicsCompositor"/>: UI stages, scene renderers, post effects, particles and render stages.
 /// </summary>
 public static class GraphicsCompositorExtensions
 {
@@ -39,10 +37,9 @@ public static class GraphicsCompositorExtensions
     /// <para>
     /// "Reset" means what <see cref="GraphicsCompositorHelper.CreateDefault"/> produces: a
     /// <see cref="PostProcessingEffects"/> with every effect disabled except the colour transforms, which
-    /// hold a <see cref="ToneMap"/>. A bare <c>new PostProcessingEffects()</c> is not that - it ships with
-    /// bloom, ambient occlusion, screen-space reflections, light streaks, lens flare and FXAA
-    /// <em>enabled</em>, which is what this method used to install by accident. Enable effects after this
-    /// call, not before it.
+    /// hold a <see cref="ToneMap"/>, unlike a bare <c>new PostProcessingEffects()</c>, which enables bloom,
+    /// ambient occlusion, screen-space reflections, light streaks, lens flare and FXAA. Enable effects
+    /// after this call, not before it.
     /// </para>
     /// <para>
     /// Renderers already hanging off the compositor (see <see cref="AddSceneRenderer"/>) are kept; the UI
@@ -84,9 +81,6 @@ public static class GraphicsCompositorExtensions
     /// of some other type.
     /// </returns>
     /// <remarks>
-    /// Two casts stand between a compositor and its post effects - <see cref="GraphicsCompositor.SingleView"/>
-    /// is an <c>ISceneRenderer</c> and <see cref="ForwardRenderer.PostEffects"/> an <c>IPostProcessingEffects</c> -
-    /// and every example that wanted to touch bloom at runtime wrote them out by hand. This is that, once.
     /// The 2D compositor from <c>Add2DGraphicsCompositor</c> has no post effects, so it returns
     /// <see langword="null"/>.
     /// </remarks>

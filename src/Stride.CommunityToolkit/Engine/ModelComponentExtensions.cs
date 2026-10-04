@@ -56,7 +56,6 @@ public static class ModelComponentExtensions
     /// <remarks>
     /// This method extracts raw vertex and index data from the meshes in the provided ModelComponent.
     /// It's useful for operations that require direct access to mesh data, such as custom rendering, collision detection, or physics simulations.
-    /// Note that this method extracts combined vertex and index data from all meshes in the ModelComponent.
     /// </remarks>
     public static (List<Vector3> vertices, List<int> indices) GetMeshVerticesAndIndices(this ModelComponent model, IGame game)
     {
@@ -74,8 +73,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ObjectParameterAccessor<T> parameterAccessor, T value, int materialIndex = 0, int passIndex = 0)
     {
@@ -93,8 +92,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameter<T> parameter, T value, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -113,8 +112,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameter<T> parameter, int count, ref T firstValue, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -132,8 +131,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameter<T> parameter, ref T value, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -152,8 +151,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameterKey<T> parameter, int count, ref T firstValue, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -171,8 +170,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameterKey<T> parameter, T[] values, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -190,8 +189,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameterKey<T> parameter, ref T value, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -199,7 +198,7 @@ public static class ModelComponentExtensions
     }
 
     /// <summary>
-    /// Sets a blittable of the material pass parameter. Cloning the <see cref="Material"/> if required.
+    /// Sets a blittable value of the material pass parameter. Cloning the <see cref="Material"/> if required.
     /// </summary>
     /// <typeparam name="T">The type of value.</typeparam>
     /// <param name="modelComponent">The <see cref="ModelComponent"/> to update material parameter on.</param>
@@ -209,8 +208,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ValueParameterKey<T> parameter, T value, int materialIndex = 0, int passIndex = 0) where T : struct
     {
@@ -228,8 +227,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, PermutationParameter<T> parameter, T value, int materialIndex = 0, int passIndex = 0)
     {
@@ -247,8 +246,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, ObjectParameterKey<T> parameter, T value, int materialIndex = 0, int passIndex = 0)
     {
@@ -266,8 +265,8 @@ public static class ModelComponentExtensions
     /// <param name="passIndex">The index of the pass of the material to update. Default is 0.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="modelComponent"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="materialIndex"/> is less than 0 or greater than <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
-    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the mu,ber of passes the material has.
+    /// If <paramref name="materialIndex"/> is less than 0 or greater than or equal to <see cref="ModelComponent.GetMaterialCount"/> and not in <see cref="ModelComponent.Materials"/>.
+    /// Or if <paramref name="passIndex"/> is less than 0 or greater than or equal to the number of passes the material has.
     /// </exception>
     public static void SetMaterialParameter<T>(this ModelComponent modelComponent, PermutationParameterKey<T> parameter, T value, int materialIndex = 0, int passIndex = 0)
     {
