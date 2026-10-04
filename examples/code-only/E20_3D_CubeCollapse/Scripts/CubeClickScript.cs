@@ -60,6 +60,12 @@ public class CubeClickScript : AsyncScript
     public EntityTextComponent? GameOverText { get; set; }
 
     /// <summary>
+    /// The colour a score pops up in, from the colour of the cubes it cleared. Unset, the score is
+    /// written in that colour as it is.
+    /// </summary>
+    public Func<Color, Color>? PopupColour { get; set; }
+
+    /// <summary>
     /// Gets whether the board has run out of moves.
     /// </summary>
     public bool IsGameOver { get; private set; }
@@ -121,7 +127,7 @@ public class CubeClickScript : AsyncScript
         => (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift)) && Input.IsMouseButtonDown(MouseButton.Left)
         || Input.IsMouseButtonPressed(MouseButton.Left);
 
-/// <summary>
+    /// <summary>
     /// Clears the cube under the mouse, if the ray finds one. Not named Try* because it reports
     /// nothing: a ray that hits nothing, or hits something that is not a cube, is an ordinary miss.
     /// </summary>
@@ -165,7 +171,7 @@ public class CubeClickScript : AsyncScript
 
         Log.Info($"Cleared {group.Count} {cube.Get<Components.CubeComponent>()?.Color} at {cube.Transform.Position}: {result.Breakdown}");
 
-        AddScorePopup(cube.Transform.Position, result);
+        AddScorePopup(cube.Transform.Position, result, cube.Get<Components.CubeComponent>()?.Color);
 
         // The grid collapses immediately, so the next click already matches the finished layout while
         // the cubes are still visibly falling into it. Nothing here moves a body: gravity does that,
@@ -201,6 +207,9 @@ public class CubeClickScript : AsyncScript
         Log.Info($"No moves left. {Grid.Count} cubes stranded, final score {Keeper.TotalScore:N0}.");
 
         SpawnGameOverLetters();
+
+        // Back off a little, so the words landing and the menu above the board are all in view
+        Entity.Scene.GetCamera()?.Entity.Add(new CameraPullBackScript { Centre = Levels.Current.PlatformCentre });
 
         if (GameOverText is null) return;
 
@@ -280,7 +289,7 @@ public class CubeClickScript : AsyncScript
         }
     }
 
-    private void AddScorePopup(Vector3 position, ScoreResult result)
+    private void AddScorePopup(Vector3 position, ScoreResult result, Color? cubeColour)
     {
         var tierLabel = ScoreRules.GetTierLabel(result.Tier);
         var text = string.IsNullOrEmpty(tierLabel)
@@ -298,10 +307,12 @@ public class CubeClickScript : AsyncScript
             {
                 Text = text,
                 FontSize = GetFontSize(result.Tier),
-                TextColor = GetTierColour(result.Tier),
+                TextColor = cubeColour is { } colour ? PopupColour?.Invoke(colour) ?? colour : GetTierColour(result.Tier),
                 Anchor = TextAnchor.MiddleCenter,
                 Alignment = Stride.Graphics.TextAlignment.Center,
-                EnableShadow = true,
+                // A white ring round the cube's own colour, so the score reads over cubes of that colour
+                EnableOutline = true,
+                OutlineWidth = 1f,
                 LayerDepth = 1f,
             },
             new ScorePopupScript { HorizontalDrift = (float)(_drift.NextDouble() - 0.5) * 0.8f }
@@ -312,11 +323,11 @@ public class CubeClickScript : AsyncScript
 
     private static float GetFontSize(ScoreTier tier) => tier switch
     {
-        ScoreTier.Calamity => 34,
-        ScoreTier.Huge => 30,
-        ScoreTier.Great => 26,
-        ScoreTier.Nice => 22,
-        _ => 18,
+        ScoreTier.Calamity => 58,
+        ScoreTier.Huge => 54,
+        ScoreTier.Great => 50,
+        ScoreTier.Nice => 46,
+        _ => 42,
     };
 
     /// <summary>

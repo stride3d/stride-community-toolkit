@@ -19,6 +19,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎉 New Features
 
+- `EntityTextComponent`: `EnableOutline`, `OutlineColor` and `OutlineWidth` draw an outline round every glyph, white and 1 pixel by default, for text that must stay readable over anything.
 - `game.AddGrid()` in `Stride.CommunityToolkit.Shapes`: a reference grid with numbered lines that shows world coordinates or screen pixels. In the world it lies in the XY plane of a 2D scene and on the ground of a 3D one, with the axes in Game Studio's colours. The key G steps through off, world and screen; `ReferenceGrid.Cycle()`, `Visible` and `Space` do the same from code. It can write the coordinates under the mouse in both spaces.
 - `Buffer.SetDataPinned(commandList, span)` in `Stride.CommunityToolkit.Graphics`: uploads a span with its memory pinned for the call, for data held in an array or a list.
 - `MaterialDescriptors.Overlay(colour, intensity)` and `game.CreateOverlayMaterial(colour, intensity)`: an unlit translucent colour with the colour's alpha as the opacity, for zones, placement previews and markers over the scene.
@@ -61,6 +62,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- `E20_3D_CubeCollapse`: palettes Classic, Soft, High visibility, Examples (the examples' colour theme), Glass and Frosted glass (the material gallery's thin glass under its sun and key light). The colour palettes use the lit material and light of the Bepu playground plus a weak fill light, and no longer cast the studio key light's shadow. Scores pop up in the colour of the cleared cubes with a white outline, larger and rising higher. At game over the camera eases back so the menu is in view. A hovered lone cube no longer dims. `--palette N` starts on a palette.
 - New example `E03_2D_HUD_Basics`: the program of the HUD tutorial. The keys 1 to 8 show the HUD as it stands after each step; step 8 draws it from `SimpleHud.cs` and `HudStyle.cs`.
 - New examples `E01_2D_FallingShapes` and `E01_3D_FallingShapes`: the step after the basic scene. Thirty shapes of five kinds and five colours drop in a column and topple into a pile. The 2D and 3D versions use the same shapes and colours, and their code differs only in the scene setup, the primitive type and the material.
 - New example `E05_3D_PhysicsMaterials`: seven identical balls dropped and six identical boxes pushed, on lanes that differ only in `SpringFrequency`, `SpringDampingRatio`, `FrictionCoefficient` and `MaximumRecoveryVelocity`. The overlay prints the rebound and the slide each lane measured.

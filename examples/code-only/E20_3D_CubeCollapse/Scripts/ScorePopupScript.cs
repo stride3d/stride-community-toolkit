@@ -25,8 +25,8 @@ namespace CubeCollapse.Scripts;
 /// </remarks>
 public class ScorePopupScript : SyncScript
 {
-    private const float Duration = 1.2f;
-    private const float RiseDistance = 2.2f;
+    private const float Duration = 2.18f;
+    private const float RiseDistance = 4f;
     private const float FadeStart = 0.6f;
     private const float StartScale = 0.4f;
     private const float PopDuration = 0.25f;

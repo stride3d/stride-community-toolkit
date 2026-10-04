@@ -40,8 +40,8 @@ The platform builds itself layer by layer, then drops onto the physics. From the
 Hover before you click - the board answers:
 
 - The whole group under the mouse **lights up**: this is what a click would clear.
-- A hovered cube **fades**: it is a stranded single, and clicking it does nothing (a dull note
-  confirms it if you try).
+- A hovered cube that **stays as it is** is a stranded single, and clicking it does nothing (a dull
+  note confirms it if you try).
 
 ### Controls
 
@@ -52,7 +52,7 @@ Hover before you click - the board answers:
 | Z / C | Orbit the camera around the platform (hold Shift to sprint) |
 | WASD, Q / E, right-drag | Free camera movement and look (F2 shows the full overlay) |
 | H | Reset the camera to its starting view |
-| P, then 1 / 2 / 3 | Switch the colour palette - Classic, Soft, or High visibility (colour-blind friendly). Repaints the standing board in place |
+| P, then 1 to 6 | Switch the colour palette - Classic, Soft, High visibility (colour-blind friendly), Examples (blue, orange, red and green from the colour theme of the first examples), or one of two glass looks from the material gallery: Glass (clear) and Frosted glass, under the gallery's sun and key light. Repaints the standing board in place |
 | N (after game over) | Advance to the next, larger level - score carries over |
 | R (after game over) | Restart the current level from zero |
 | Q (after game over) | Quit |
