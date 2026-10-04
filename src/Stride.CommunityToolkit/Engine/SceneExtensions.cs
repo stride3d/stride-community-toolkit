@@ -46,25 +46,20 @@ public static class SceneExtensions
     /// The first <see cref="CameraComponent"/> found with the specified entity name, or <c>null</c> if no matching camera is found.
     /// </returns>
     /// <remarks>
-    /// This method searches through the scene's entities for a camera that belongs to an entity with the given name.
-    /// It performs a recursive search through child entities as well.
+    /// Searches every top-level entity of the scene and all of its descendants.
     /// </remarks>
     public static CameraComponent? GetCamera(this Scene scene, string name)
     {
-        var entities = scene.Entities;
+        ArgumentNullException.ThrowIfNull(scene);
 
-        CameraComponent? camera = null;
-
-        foreach (var entity in entities)
+        foreach (var entity in scene.Entities)
         {
-            camera = entity.GetComponentInChildren<CameraComponent>();
-
-            if (camera != null && camera.Entity.Name == name)
+            foreach (var camera in entity.GetComponentsInDescendantsAndSelf<CameraComponent>(includeDisabled: true))
             {
-                break;
+                if (camera.Entity.Name == name) return camera;
             }
         }
 
-        return camera;
+        return null;
     }
 }

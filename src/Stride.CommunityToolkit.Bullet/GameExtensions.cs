@@ -55,7 +55,7 @@ public static class GameExtensions
     /// </param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
-    /// The ground gets a <see cref="StaticColliderComponent"/> when <paramref name="options"/> is <see langword="null"/>. Otherwise <see cref="Bullet2DPhysicsOptions.PhysicsComponent"/> is used, and it defaults to a <see cref="RigidbodyComponent"/>.
+    /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet2DPhysicsOptions.PhysicsComponent"/>.
     /// </remarks>
     public static Entity Add2DGround(this Game game, Bullet2DPhysicsOptions? options = null)
     {
@@ -67,7 +67,7 @@ public static class GameExtensions
             Size = size,
             Position = options?.Position ?? GameDefaults.Default2DGroundPosition,
             Material = game.CreateFlatMaterial(GameDefaults.Default2DGroundMaterialColor),
-            PhysicsComponent = options?.PhysicsComponent ?? new StaticColliderComponent()
+            PhysicsComponent = options is { IsPhysicsComponentSet: true } ? options.PhysicsComponent : new StaticColliderComponent()
         };
 
         return CreateGround(game, PrimitiveModelType.Cube, options3D);
@@ -80,13 +80,14 @@ public static class GameExtensions
     /// <param name="options">Optional 3D physics options used to configure the ground. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
-    /// When <paramref name="options"/> is <see langword="null"/>, the ground gets a <see cref="StaticColliderComponent"/>. Otherwise <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/> is used as given, and it defaults to a <see cref="RigidbodyComponent"/>; set a <see cref="StaticColliderComponent"/> for a static ground. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
+    /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/>. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// </remarks>
     public static Entity Add3DGround(this Game game, Bullet3DPhysicsOptions? options = null)
     {
-        var physicsComponent = new StaticColliderComponent();
+        options ??= new Bullet3DPhysicsOptions();
 
-        options ??= new Bullet3DPhysicsOptions() { PhysicsComponent = physicsComponent };
+        if (!options.IsPhysicsComponentSet) options.PhysicsComponent = new StaticColliderComponent();
+
         options.EntityName ??= GameDefaults.DefaultGroundName;
 
         return CreateGround(game, PrimitiveModelType.Plane, options);
@@ -99,14 +100,15 @@ public static class GameExtensions
     /// <param name="options">Optional 3D physics options used to configure the ground. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created infinite ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
-    /// When <paramref name="options"/> is <see langword="null"/>, the ground gets a <see cref="StaticColliderComponent"/>. Otherwise <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/> is used as given, and it defaults to a <see cref="RigidbodyComponent"/>; set a <see cref="StaticColliderComponent"/> for a static ground. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
+    /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/>. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// The visible part of the ground is defined by <paramref name="options"/>, while the collider is infinite and extends beyond the visible ground.
     /// </remarks>
     public static Entity AddInfinite3DGround(this Game game, Bullet3DPhysicsOptions? options = null)
     {
-        var physicsComponent = new StaticColliderComponent();
+        options ??= new Bullet3DPhysicsOptions();
 
-        options ??= new Bullet3DPhysicsOptions() { PhysicsComponent = physicsComponent };
+        if (!options.IsPhysicsComponentSet) options.PhysicsComponent = new StaticColliderComponent();
+
         options.EntityName ??= GameDefaults.DefaultGroundName;
 
         return CreateGround(game, PrimitiveModelType.InfinitePlane, options);
