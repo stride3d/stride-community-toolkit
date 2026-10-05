@@ -53,6 +53,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - Rendering manual: new page "Reference Grid".
+- Materials manual: a layer needs only `new Material { Descriptor = descriptor }`; compiling the layer on its own first is wasted work. The material gallery's Layers station builds its layers this way.
 - Manual and API reference: a wording and accuracy pass. Stale statements are corrected against the code (screen positions start top left, the 2D camera pans with the right mouse button, the debug overlay font is 14 pixels, the text renderers add themselves, the chart grid has no texture), and history and repetition are removed.
 - ShapeBatch manual: the draw state table lists the defaults, and a new section "Outline and fill" explains them. Corrected: the border is centred on a shape's edge, half inside and half outside.
 - New tutorial "Build a simple HUD with ShapeBatch", for beginners: eight steps from an empty window to a HUD with a health bar, an energy dial, a crosshair, labels, a warning panel and a damage flash, ending with the HUD moved into a class. Every code block on the page is taken from the example it describes. The ShapeBatch manual page links to it.

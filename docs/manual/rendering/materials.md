@@ -570,13 +570,15 @@ A layer blends a whole material over another through a mask.
 // examples/code-only/E02_3D_Material_Gallery/Stations.Models.cs
 var descriptor = PackMaterials.Iron(s.Textures);
 
-descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronPaint(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
-descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronRust(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
+descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronPaint(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
+descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronRust(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
 ```
 
 > [!NOTE]
-> A material used as a layer must have its `Descriptor` set. `Material.New` leaves it `null`.
-> `game.CreateMaterial(descriptor)` sets it.
+> A layer is compiled into the material it lies on, from its `Descriptor` alone. So
+> `new Material { Descriptor = descriptor }` is enough, and compiling the layer itself first, with
+> `Material.New` or `game.CreateMaterial`, is wasted work. `Material.New` also leaves `Descriptor`
+> `null`, which leaves the layer empty.
 
 ### Known issues on Stride 4.4
 

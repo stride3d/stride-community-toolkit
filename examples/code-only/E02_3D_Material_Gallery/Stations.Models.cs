@@ -132,8 +132,10 @@ public static class ModelStations
         var which = s.Pick("paint over iron", "rust over iron", "rust over paint over iron");
         var descriptor = PackMaterials.Iron(s.Textures);
 
-        if (which != 1) descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronPaint(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
-        if (which != 0) descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronRust(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
+        // A layer is compiled into the material it lies on, from its descriptor alone, so a bare
+        // material holding the descriptor is enough; compiling it on its own would be wasted work
+        if (which != 1) descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronPaint(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
+        if (which != 0) descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronRust(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
 
         s.PlaceTrio(s.Material(descriptor));
     }
