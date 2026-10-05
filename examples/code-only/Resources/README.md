@@ -2,6 +2,10 @@
 
 Files here are linked into the examples that use them (see each `.csproj`), so one copy serves them all.
 
+Everything below that comes from the [stride](https://github.com/stride3d/stride) repository is used under its MIT
+licence: Copyright (c) .NET Foundation and Contributors, Stride contributors and Silicon Studio Corp.
+See [LICENSE.md](https://github.com/stride3d/stride/blob/master/LICENSE.md).
+
 ## Particle textures
 
 `smoke.png`, `fire8x8.png`, `flame8x8.png`, `bonfire8x8.png`, `dot.png` and `radial-grad-gray.png` come from the
