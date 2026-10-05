@@ -90,6 +90,8 @@
     href: rendering/mesh-builder.md
   - name: TextureCanvas
     href: rendering/texture-canvas.md
+- name: FAQ
+  href: faq.md
 - name: Troubleshooting
   href: troubleshooting.md
 - name: Glossary
