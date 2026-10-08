@@ -21,7 +21,7 @@ Custom engine extension points, third-party integration and multi-project archit
 - [Rope - building a stable chain of constraints](constraint-rope.md): Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime.
 - [Box2D.NET Physics](box2d-physics.md): A 2D simulation run by Box2D.NET rather than by Stride's own physics, with Stride reduced to drawing the result.
 - [Jitter2 Physics Integration](jitter2-physics.md): Demonstrates integrating Jitter2 physics engine with Stride.
-- [Jitter2 Physics - Constraining to 2D](jitter2-constraints.md): Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour.
+- [Jitter2 Physics - Constraining to 2D](jitter2-constraints.md): Demonstrates restricting a Jitter2 3D physics simulation to 2D-style behaviour using axis locking.
 - [Stride UI - Draggable Window](stride-ui-draggable-window.md): A windowing system built on Stride's UI: windows with title bars and close buttons that can be dragged around, and that come to the front when clicked.
 - [Stride UI - Draggable Window - Bullet Physics](stride-ui-draggable-window-bullet.md): The draggable window example running on the legacy Bullet physics engine.
 - [Compute Shader Boids](compute-boids.md): A flock of thousands of boids that lives entirely on the GPU.
