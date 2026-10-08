@@ -1,7 +1,6 @@
 using Jitter2;
 using Jitter2.Collision.Shapes;
 using Jitter2.Dynamics;
-using Jitter2.Dynamics.Constraints;
 using Jitter2.LinearMath;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -39,7 +38,7 @@ game.Run(start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.Window.Title = "Jitter 2 Physics Constraints Example - Stride Community Toolkit";
+    game.Window.Title = "Jitter 2 Physics Axis Locking Example - Stride Community Toolkit";
 
     game.SetupBase3D();
     game.AddSkybox();
@@ -99,7 +98,7 @@ void CreateCubes(Scene rootScene, int count)
     for (int i = 0; i < count; i++)
     {
         // Spread cubes across a grid of columns instead of a single vertical stack, so they
-        // cascade and pile up sideways - a much better way to see the 2D constraint at work.
+        // cascade and pile up sideways - a much better way to see the planar motion at work.
         var column = i % Columns;
         var row = i / Columns;
         var cubePosition = new Vector3((column - Columns / 2f) * HorizontalSpacing, 10 + row * VerticalSpacing, 0);
@@ -120,32 +119,11 @@ void CreateCubes(Scene rootScene, int count)
         cubeBody.SetMassInertia(1f);
         cubeBody.Position = new JVector(cubePosition.X, cubePosition.Y, cubePosition.Z);
 
-        ConstrainToPlane(cubeBody);
+        // Allow translation in X/Y and rotation about Z; lock the other world-space axes.
+        cubeBody.AllowedMotion = MotionAxes.PlaneXY;
 
         cubes.Add(new CubeInstance(cubeEntity, cubeBody));
     }
-}
-
-/// <summary>
-/// Restricts a dynamic body to the X/Y plane (Z = 0), giving Jitter2's 3D solver 2D-style behaviour.
-/// </summary>
-/// <remarks>
-/// Jitter2 has no dedicated 2D mode. Locking one translation axis and the two out-of-plane rotation
-/// axes confines a body to a plane while it keeps running on the same 3D solver - the same trick the
-/// toolkit already uses for Bepu in <c>Body2DComponent</c>. See the maintainer's write-up at
-/// https://github.com/notgiven688/jitterphysics2/discussions/232 for the general recipe, including a
-/// cheaper alternative that edits the inverse inertia tensor directly instead of adding constraints.
-/// </remarks>
-void ConstrainToPlane(RigidBody body)
-{
-    // Pins the body's own origin to the world's Z=0 plane, removing translation along Z
-    var positionConstraint = world.CreateConstraint<PointOnPlane>(world.NullBody, body);
-    positionConstraint.Initialize(JVector.UnitZ, JVector.Zero, body.Position);
-
-    // A hinge around Z removes the other two angular degrees of freedom, so the body can only
-    // spin around the axis facing the camera instead of tumbling out of the plane
-    var rotationConstraint = world.CreateConstraint<HingeAngle>(world.NullBody, body);
-    rotationConstraint.Initialize(JVector.UnitZ, AngularLimit.Full);
 }
 
 void SyncPhysicsToEntities()
@@ -178,21 +156,19 @@ complexity: 4
 order: 110
 description:
   en: |-
-    Demonstrates constraining a Jitter2 3D physics simulation to 2D-style behaviour. Jitter2 has no
-    dedicated 2D mode, so each falling cube gets a PointOnPlane constraint locking translation along Z
-    and a HingeAngle constraint locking rotation to the Z axis, confining it to the X/Y plane while it
-    keeps running on the same 3D solver. Builds on E06_Jitter2 with the same falling-cubes
-    setup, spread across a grid so they cascade and pile up sideways.
+    Demonstrates restricting a Jitter2 3D physics simulation to 2D-style behaviour using axis locking.
+    Each falling cube uses AllowedMotion = MotionAxes.PlaneXY to allow translation in X/Y and rotation
+    about Z while locking the other world-space axes, without additional constraints. Builds on
+    E06_Jitter2 with falling cubes spread across a grid so they cascade and pile up sideways.
   cs: |-
-    Ukazuje, jak omezit 3D fyzikální simulaci Jitter2 na chování podobné 2D. Jitter2 nemá vyhrazený 2D
-    režim, takže každá padající kostka dostane omezení PointOnPlane, které uzamkne posun podél osy Z,
-    a omezení HingeAngle, které uzamkne rotaci na osu Z - kostka tak zůstává v rovině X/Y, přestože běží
-    na stejném 3D řešiči. Navazuje na E06_Jitter2 se stejným nastavením padajících kostek,
-    tentokrát rozmístěných do mřížky, aby se sesypávaly do sebe.
+    Ukazuje, jak omezit 3D fyzikální simulaci Jitter2 na chování podobné 2D pomocí uzamčení os.
+    Každá padající kostka používá AllowedMotion = MotionAxes.PlaneXY, které povoluje posun v rovině X/Y
+    a rotaci kolem osy Z, zatímco ostatní světové osy uzamkne bez dalších omezení. Navazuje na
+    E06_Jitter2 s padajícími kostkami rozmístěnými do mřížky, aby se sesypávaly do sebe.
 concepts:
   - Constraining a 3D physics engine to 2D motion
-  - Creating and initializing Jitter2 constraints (PointOnPlane, HingeAngle)
-  - Locking translation and rotation axes with world.CreateConstraint
+  - Configuring RigidBody.AllowedMotion with MotionAxes.PlaneXY
+  - Locking world-space translation and rotation axes without additional constraints
   - Synchronizing physics bodies with visual entities
   - Fixed-timestep physics update loop, decoupled from the render frame rate
 tags:
@@ -200,7 +176,7 @@ tags:
   - Physics
   - Jitter2
   - Rigid Body
-  - Constraint
+  - Axis Locking
   - 2D
   - External Engine
   - Simulation
