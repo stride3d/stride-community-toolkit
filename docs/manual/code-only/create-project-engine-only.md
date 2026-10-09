@@ -8,8 +8,7 @@ is plain Stride, and everything it does the toolkit does for you in `SetupBase3D
 `Create3DPrimitive()`.
 
 > [!NOTE]
-> The prerequisites in [Getting Started](../getting-started.md) still apply. The Stride packages are
-> prerelease while Stride 4.4 is in preview, hence `--prerelease` below.
+> The prerequisites in [Getting Started](../getting-started.md) still apply.
 
 ## Steps
 
@@ -20,19 +19,19 @@ is plain Stride, and everything it does the toolkit does for you in `SetupBase3D
    ```
 2. Add the engine, which is the runtime:
    ```
-   dotnet add package Stride.Engine --prerelease
+   dotnet add package Stride.Engine
    ```
 3. Add the asset compiler, which is the build step that compiles the engine's shaders into your
    output. A code-only project has no assets of its own, but the engine's shaders still have to be
    compiled for the graphics API you run on, and without this the first frame fails with
    `Shader ShaderBase could not be found`:
    ```
-   dotnet add package Stride.AssetCompiler --prerelease
+   dotnet add package Stride.AssetCompiler
    ```
 4. Make that reference build-only. Open the `.csproj` and add `IncludeAssets` to the line the previous
    step wrote, so it reads:
    ```xml
-   <PackageReference Include="Stride.AssetCompiler" Version="4.4.0-beta9" IncludeAssets="build;buildTransitive" />
+   <PackageReference Include="Stride.AssetCompiler" Version="4.4.0" IncludeAssets="build;buildTransitive" />
    ```
    Without it the package's own assemblies are copied next to your app and it fails at start-up with
    `Could not load file or assembly 'Stride.NuGetResolver'`. This is the one thing the toolkit's

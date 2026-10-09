@@ -14,7 +14,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 💥 Breaking Changes
 
-- Built against Stride 4.4.0-beta9 (was 4.4.0-beta8).
+- Built against Stride 4.4.0, the first stable 4.4 release (was 4.4.0-beta8).
 - `ShapeBatch`: the default fill is solid. `Fill.Alpha` defaults to 1 (was 0.6), so a draw call with one colour draws a solid shape in that colour; it used to draw an outline around a dimmed, see-through inside. For the old look set `Fill.Alpha = ShapeFill.TestbedAlpha`. `Box2DDebugDraw` keeps that look through its new `FillAlpha` property. A `ShapeComponent` on a batch that never set its fill is solid too.
 - `AddBepu3DPhysics`, `AddBepu2DPhysics` and the Bepu `Create3DPrimitive` / `Create2DPrimitive` overloads no longer add the fitted collider to a compound collider that already holds a shape. Code that passed a placeholder such as `new CompoundCollider { Colliders = { new BoxCollider() } }` and relied on the fitted shape now gets only the placeholder, at its default size: pass an empty `CompoundCollider` instead.
 
@@ -60,7 +60,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - New tutorial "Build a simple HUD with ShapeBatch", for beginners: eight steps from an empty window to a HUD with a health bar, an energy dial, a crosshair, labels, a warning panel and a damage flash, ending with the HUD moved into a class. Every code block on the page is taken from the example it describes. The ShapeBatch manual page links to it.
 - Create File-Based App: the page shows `ProgramSimple.cs` from the example folder instead of a copy, so the package version is kept in one place. It uses `1.0.0-preview.66`.
 - The console launcher's menu shown in the examples pages is refreshed.
-- Engine-only pages: the Stride version in the package lines is `4.4.0-beta9`. The file-based page's last section is "See it in the repository", links to the two files, and says how the repository's `Directory.Build.targets` differs from the one the page has you write.
+- Engine-only pages: the Stride version in the package lines is `4.4.0`, and `dotnet add package` for the Stride packages no longer needs `--prerelease`. The file-based page's last section is "See it in the repository", links to the two files, and says how the repository's `Directory.Build.targets` differs from the one the page has you write.
 - Glossary: new entries **Playground**, **Body interpolation**, **Contact spring** and **Sleeping**; **Restitution / friction** now says how Bepu does both.
 - Removed the empty "What's new in docs" page.
 - Physics manual: new page "Bepu: Bounce and Friction", the four contact properties of a collidable, how a pair combines them, and measured rebounds.
@@ -75,6 +75,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - New examples `E01_2D_FallingShapes` and `E01_3D_FallingShapes`: the step after the basic scene. Thirty shapes of five kinds and five colours drop in a column and topple into a pile. The 2D and 3D versions use the same shapes and colours, and their code differs only in the scene setup, the primitive type and the material.
 - New example `E05_3D_PhysicsMaterials`: seven identical balls dropped and six identical boxes pushed, on lanes that differ only in `SpringFrequency`, `SpringDampingRatio`, `FrictionCoefficient` and `MaximumRecoveryVelocity`. The overlay prints the rebound and the slide each lane measured.
 - New example `E05_3D_CubeFountain`: a fountain of cubes, spheres and cylinders whose rate is counted in `ISimulationUpdate`, so it follows the simulation's time and slows or stops with `BepuSimulation.TimeScale`. Slow motion shows what `BodyComponent.InterpolationMode` is for, with a key to turn it off. A capped store of bodies is reused through `Teleport`, and one instancing master per shape draws them all.
+- `E05_3D_CubeFountain`: the comment on `MaxStepPerFrame` says Stride 4.4.0 ignores the cap and Stride 4.5 applies it.
 - New example `E20_2D_Pong`: Pong in three small scripts with no assets and no physics engine. The paddles and the ball are `SyncScript`s, the referee is an `AsyncScript` that runs a match as one method, and the ball reports a point through an `EventKey`. The computer plays both sides until Space is pressed.
 - `E02_3D_Material_Gallery`: new station **Sample recipes**, five tunings from the engine's sample materials: a brushed metal from a mirrored gloss map, a specular map reused as roughness, a weakened normal map, a neon sign as a masked emissive layer, a tinted prototyping grid. The **Transparency** station gained an overlay variation.
 - `E02_3D_Material_Gallery`: new variations. **Albedo texture**: random coordinates, swizzle, fallback value. **Gloss and metal maps**: two maps packed into one texture. **Occlusion**: direct light and a cavity map. **Node arithmetic**: `Add` and `AddMath`. `--clean` hides the overlay.
@@ -98,6 +99,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🔧 Engineering
 
+- The five SixLabors.ImageSharp 3.1.12 advisories that come with Stride.Foundation are suppressed with `NuGetAuditSuppress` in the repository build, until Stride ships ImageSharp 4.1.2. Any new advisory still warns.
+- `WindowsDpiManager`: Release builds no longer warn CS0168. The debug lines need no `#if DEBUG`, because `Debug.WriteLine` is already left out of Release builds.
 - `Stride.CommunityToolkit.Shapes`: the source files are sorted into folders by what works together (`Batch`, `Style`, `Picking`, `Rendering`, `Components`, `Grid`). The namespace is unchanged.
 - Removed two diagnostic probe projects, `_Temp2DProbe` and `_TempMemProbe`, from `examples/code-only`. They were never examples and were not in the solution.
 - `Example.Common`: new `ColorTheme` and `ColorThemes.Default`, five named accents (blue, orange, red, green, purple) that read against both the 2D background and the 3D ground. The playgrounds use it.
