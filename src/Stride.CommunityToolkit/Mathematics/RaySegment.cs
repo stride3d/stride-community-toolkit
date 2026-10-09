@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Stride.CommunityToolkit.Mathematics;
 
 /// <summary>
-/// Represents a three dimensional line based on a 2 points in space.
+/// Represents a line segment between two points in 3D space.
 /// </summary>
 [DataContract]
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
@@ -122,11 +122,11 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     }
 
     /// <summary>
-    /// Determines whether the specified <see cref="Stride.Core.Mathematics.Vector4"/> is equal to this instance.
+    /// Determines whether the specified <see cref="RaySegment"/> is equal to this instance.
     /// </summary>
-    /// <param name="value">The <see cref="Stride.Core.Mathematics.Vector4"/> to compare with this instance.</param>
+    /// <param name="value">The <see cref="RaySegment"/> to compare with this instance.</param>
     /// <returns>
-    /// <c>true</c> if the specified <see cref="Stride.Core.Mathematics.Vector4"/> is equal to this instance; otherwise, <c>false</c>.
+    /// <c>true</c> if the specified <see cref="RaySegment"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
     public bool Equals(RaySegment value)
     {

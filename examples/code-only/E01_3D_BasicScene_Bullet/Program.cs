@@ -23,7 +23,7 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: capsule-with-rigid-body-bullet
 title:
-  en: Basic3D Scene (Capsule) - Bullet Physics
+  en: Basic 3D Scene (Capsule) - Bullet Physics
 level: Getting Started
 category: Shapes
 complexity: 1

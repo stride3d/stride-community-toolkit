@@ -8,21 +8,18 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 public static class Procedural2DModelBuilder
 {
     /// <summary>
-    /// Generates a 2D procedural model based on the specified primitive model type, size, depth, and custom vertices.
+    /// Creates a flat 2D procedural model in the XY plane.
     /// </summary>
     /// <param name="type">The type of 2D primitive model to create (e.g., Circle, Square, Triangle).</param>
     /// <param name="size">
-    /// The size parameters for the model as a <see cref="Vector2"/>, where X and Y represent the dimensions. If null, default dimensions for the model type will be used.
+    /// Width and height; X is the radius for a circle, radius and total height for a capsule, radius and side count for a polygon. <see langword="null"/> uses the type's defaults.
     /// </param>
-    /// <param name="depth">The depth of the 2D model, which affects its thickness in 3D space.</param>
+    /// <param name="depth">Not used.</param>
     /// <param name="vertices">Custom polygon vertices in the XY plane. Used only for <see cref="Primitive2DModelType.Polygon"/> and takes precedence over <paramref name="size"/>.</param>
     /// <returns>
     /// A <see cref="PrimitiveProceduralModelBase"/> object representing the generated 2D model.
     /// </returns>
     /// <exception cref="InvalidOperationException">Thrown when an unsupported <paramref name="type"/> is specified.</exception>
-    /// <remarks>
-    /// This method creates different types of 2D procedural models (such as Rectangle, Circle, etc.) with the specified size and depth. The depth adds a third dimension to the 2D shape, turning it into a 3D object (e.g., a 2D rectangle becomes a 3D rectangular prism).
-    /// </remarks>
     public static PrimitiveProceduralModelBase Build(Primitive2DModelType type, Vector2? size = null, float depth = 0, Vector2[]? vertices = null)
         => type switch
         {

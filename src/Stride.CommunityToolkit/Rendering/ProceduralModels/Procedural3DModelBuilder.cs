@@ -12,18 +12,10 @@ public static class Procedural3DModelBuilder
     /// </summary>
     /// <param name="type">The type of 3D primitive model to create (e.g., Cube, Sphere, Capsule).</param>
     /// <param name="size">
-    /// The size parameters for the model as a <see cref="Vector3"/>, where X, Y, and Z represent the dimensions.
-    /// If null, default dimensions for the model type will be used.
+    /// The full size of a cube or prism, X and Z of a plane; otherwise X is the radius (the size for a teapot) and Y the length, height or thickness, except a cylinder, whose height is Z. <see langword="null"/> uses the type's defaults.
     /// </param>
-    /// <returns>
-    /// A <see cref="PrimitiveProceduralModelBase"/> object representing the generated 3D model.
-    /// The dimensions of the model will be determined by the provided <paramref name="size"/> or default dimensions if <paramref name="size"/> is null.
-    /// </returns>
+    /// <returns>The procedural model.</returns>
     /// <exception cref="InvalidOperationException">Thrown when an unsupported <paramref name="type"/> is specified.</exception>
-    /// <remarks>
-    /// This method allows for the creation of different types of primitive 3D models (such as Cube, Sphere, etc.) with the specified size.
-    /// If no size is provided, default dimensions for each model type will be used.
-    /// </remarks>
     public static PrimitiveProceduralModelBase Build(PrimitiveModelType type, Vector3? size = null)
         => type switch
         {

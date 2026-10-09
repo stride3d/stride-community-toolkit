@@ -49,7 +49,7 @@ parameters rather than properties you set later.
 | <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> | Move - **off by default**, see below | `EnableWasdMovement` |
 | Hold <kbd>Shift</kbd> | Move and zoom faster | `SpeedFactor` (×5) |
 | Mouse wheel | Zoom toward the cursor, 10 % of the view per notch | `ZoomStep` (0.1), `ZoomToCursor` (on), `MinOrthographicSize` (0.1), `MaxOrthographicSize` (100) |
-| Middle mouse drag | Pan - the point under the cursor stays under the cursor; wheel rolls are ignored while the wheel button is held | `EnableMouseDragPan` (on), `MouseDragButton` |
+| Right mouse drag | Pan - the point under the cursor stays under the cursor | `EnableMouseDragPan` (on), `MouseDragButton` (right) |
 | <kbd>H</kbd> | Reset to where the camera *started*, at the zoom it started with (or `OrthographicSizeDefault` if set) | `OrthographicSizeDefault` |
 
 Three of those defaults are decisions rather than accidents:
@@ -59,8 +59,8 @@ Three of those defaults are decisions rather than accidents:
   keys the game wants. The arrow keys are always live; turn WASD on for tools and playgrounds where
   nothing else needs it.
 - **Zoom is per notch, not per second.** A wheel notch is an impulse - it arrives on one frame and
-  is gone the next - so scaling it by delta time, as an earlier version did, only made each notch
-  depend on the frame rate: a stutter turned one click into a lurch. Zoom is also multiplicative, so
+  is gone the next - so it is not scaled by delta time, which would tie each notch to the frame
+  rate. Zoom is also multiplicative, so
   every notch changes the visible area by the same fraction whether you are zoomed far in or far
   out; subtracting a constant is a nudge at size 100 and a wall at size 1.
 - **Drag is cursor-locked.** `OrthographicSize` is the visible height and mouse positions are
@@ -165,7 +165,7 @@ whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use
 
-- [Basic2D Scene (Debug Rendering)](../code-only/examples/debug-render-2d.md) - the 2D controller on a
+- [Basic 2D Scene (Debug Rendering)](../code-only/examples/debug-render-2d.md) - the 2D controller on a
   physics playground.
 - [Spawn Menu (2D)](../code-only/examples/spawn-menu-2d.md) - a scene that adds its own key help to the
   same overlay the camera uses.

@@ -18,7 +18,7 @@ public class Primitive2DEntityOptions : PrimitiveEntityOptionsBase
     /// When <c>null</c>, a shape-appropriate default is chosen by the creation helper.
     /// The meaning of <see cref="Size"/> components depends on the primitive type being created:
     /// <para /> - For rectangular shapes: X = width, Y = height.
-    /// <para /> - For cylindrical shapes: X = radius, Y = length.
+    /// <para /> - For capsules: X = radius, Y = total height.
     /// <para /> - For regular polygons: X = radius, Y = number of sides.
     /// </remarks>
     public Vector2? Size { get; set; }

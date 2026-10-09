@@ -4,7 +4,7 @@ Sound for a game with no sound assets: tones generated in a callback, `.wav` fil
 
 ## Why this exists
 
-The type an `AudioEmitterComponent` plays, `Sound`, only comes out of the asset pipeline: its constructor is internal and its data is compressed by ffmpeg at build time. A code-only game has no `.sdpkg`, so it has no `Sound`, and until now no way to make a noise at all.
+The type an `AudioEmitterComponent` plays, `Sound`, only comes out of the asset pipeline: its constructor is internal and its data is compressed by ffmpeg at build time. A code-only game has no `.sdpkg`, so it has no `Sound` and no other way to make a sound.
 
 The door that is open is the `SoundInstance` constructor that takes a `DynamicSoundSource`. The engine asks the source for a block of PCM whenever a device buffer is free; the toolkit provides two sources - one backed by a callback, one by an array decoded from a `.wav` - and hides the constructor dance behind three methods.
 

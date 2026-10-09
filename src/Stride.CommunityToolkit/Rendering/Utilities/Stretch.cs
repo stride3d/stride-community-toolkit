@@ -1,7 +1,7 @@
 namespace Stride.CommunityToolkit.Rendering.Utilities;
 
 /// <summary>
-///     Stretch modes when textures to a <see cref="TextureCanvas" />
+///     Specifies how a texture is scaled when drawn to a <see cref="TextureCanvas" />.
 /// </summary>
 public enum Stretch
 {

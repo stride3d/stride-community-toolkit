@@ -8,8 +8,9 @@ using static Box2D.NET.B2Worlds;
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Component that ties a Stride entity to a Box2D body: creation-time configuration plus live
-/// velocity, force and impulse access once <see cref="BodyId"/> refers to a created body.
+/// Component that ties a Stride entity to a Box2D body, with live velocity, force and impulse
+/// access once <see cref="BodyId"/> refers to a created body. The configuration properties are
+/// authoring data only; <see cref="Box2DSimulation"/> creates bodies from code and does not read them.
 /// </summary>
 // DataContract is what makes the component usable from Game Studio at all; the body itself is
 // created by the simulation from code, so in the editor this is the authoring data only.
@@ -25,7 +26,7 @@ public class Box2DBodyComponent : EntityComponent
     /// <summary>The body type used when the body is created.</summary>
     public B2BodyType BodyType { get; set; } = B2BodyType.b2_dynamicBody;
 
-    /// <summary>Collision group used with <see cref="Box2DCollisionMatrix"/>-style filtering.</summary>
+    /// <summary>Collision group, for use with a <see cref="Box2DCollisionMatrix"/>. Not read by the toolkit.</summary>
     public int CollisionGroup { get; set; }
 
     /// <summary>Whether shapes created for this body should be sensors (detect contacts, no collision response).</summary>
@@ -34,7 +35,7 @@ public class Box2DBodyComponent : EntityComponent
     // Creation-time material configuration: applied when the body's shapes are created;
     // changing these later does not affect an existing body.
 
-    /// <summary>Mass density used when shapes are created.</summary>
+    /// <summary>Shape density, in kilograms per square metre. Not read by the toolkit.</summary>
     public float Mass { get; set; } = 1.0f;
 
     /// <summary>Friction coefficient used when shapes are created.</summary>

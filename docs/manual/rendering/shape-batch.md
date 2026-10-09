@@ -8,6 +8,10 @@ their width at any distance or zoom. It works in 2D and 3D scenes and is in the
 For a tour of every shape, see the [ShapeBatch example](../code-only/examples/shape-batch.md). For method
 signatures, see the API reference.
 
+> [!TIP]
+> New to `ShapeBatch`? The tutorial [Build a simple HUD with ShapeBatch](../../tutorials/rendering/shapebatch-hud.md)
+> goes through it in eight steps. This page is the reference.
+
 ## When to use ShapeBatch
 
 | Tool | Use it for | Not suited for |
@@ -36,9 +40,9 @@ shape's edge: negative inside, positive outside. The rest follows from that dist
 
 | Distance | Result |
 |---|---|
-| Inside by more than the border width | Fill colour |
-| Inside by less than the border width | Border colour |
-| Outside | Transparent, anti-aliased over the last pixel |
+| Inside by more than half the border width | Fill colour |
+| Within half the border width of the edge, inside or outside | Border colour |
+| Outside by more than half the border width | Transparent, anti-aliased over the last pixel |
 
 The border width is compared in pixels, so it is constant on screen. Rings, sectors, glows, dashes and
 gradients are further functions of the same distance. A polyline is the distance to the nearest segment of a
@@ -82,18 +86,30 @@ order, and discarded. Nothing is retained between frames.
 
 Style properties are the batch's current state. Each draw call captures the state at the time of the call.
 
-| Property | Description |
-|---|---|
-| `BorderWidth` | Outline width in pixels |
-| `Fill` | Fill colour and alpha |
-| `Glow` | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
-| `Dash` | Dash pattern in pixels |
-| `Gradient` | A second fill colour and a direction |
-| `Opacity` | Multiplies the alpha of border, fill and glow |
-| `DepthFade` | Distance in world units over which a shape fades as it approaches scene geometry |
-| `Textured` | Whether the fill samples the batch's fill source |
-| `Screen` | Draws in window pixels instead of world units |
-| `Tag` | Marks shapes for picking |
+| Property | Default | Description |
+|---|---|---|
+| `BorderWidth` | 3 | Outline width in pixels |
+| `Fill` | The draw call's colour, alpha 1 | Fill colour and alpha |
+| `Glow` | Off | Halo outside the outline: width in pixels, colour, `Strength`, `Additive` |
+| `Dash` | Solid | Dash pattern in pixels |
+| `Gradient` | None | A second fill colour and a direction |
+| `Opacity` | 1 | Multiplies the alpha of border, fill and glow |
+| `DepthFade` | 0 | Distance in world units over which a shape fades as it approaches scene geometry |
+| `Textured` | `true` | Whether the fill samples the batch's fill source, when the batch has one |
+| `Screen` | `false` | Draws in window pixels instead of world units |
+| `Tag` | `null` | Marks shapes for picking |
+
+### Outline and fill
+
+Every shape has an outline and a fill. The colour passed to a draw call is the outline's colour.
+
+- By default the fill is the same colour at full strength, so a draw call with one colour draws a solid shape.
+- The border is centred on the shape's edge: half its width lies outside. With the default width of 3, a
+  shape is 3 pixels wider and taller than its size. Set `BorderWidth = 0` for a shape of exactly its size.
+- `Fill.Set(colour)` gives the fill a colour of its own, such as a dark panel inside a bright border.
+- `Fill.Alpha = 0` leaves only the outline.
+- `Fill.Alpha = ShapeFill.TestbedAlpha` with no fill colour gives the look of the Box2D testbed: a bright
+  outline around a dimmed, see-through inside. `Box2DDebugDraw` draws this way.
 
 > [!NOTE]
 > State persists until you change it. A method that sets `Textured`, `Screen` or `Tag` for its own shapes must
@@ -216,7 +232,7 @@ shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed
 
 shapes.Screen = true;
 var centre = shapes.ScreenSize * 0.5f;
-shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
+shapes.DrawRing(centre, 22f, Color.White);
 shapes.DrawArc(shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(100f, -90f), 50f, -MathF.PI * 0.5f, MathF.Tau * health, Color.LimeGreen, width: 14f);
 shapes.Screen = false;
 ```
@@ -326,9 +342,9 @@ Limitations:
 - **No text.** Use World Text, or render text to a texture and use it as a fill.
 - **One fill source per batch.** Use a second batch for a second texture.
 - **No layout or events.** Hover and click handling is your code, based on `TryPick`.
-- **Sorting.** A batch sorts against transparent meshes as one object. The draw order of two batches is not
-  guaranteed. Draw shapes that must layer in a fixed order through one batch, and use an overlay batch for
-  shapes that must never be covered.
+- **Sorting.** A batch sorts against transparent meshes as one object. Two batches in the same stage draw
+  in the order they were added, the later one on top. Draw shapes that must layer in a fixed order
+  through one batch, and use an overlay batch for shapes that must never be covered.
 
 ## Example: an in-scene console
 
@@ -347,6 +363,7 @@ The SignalR example (`E13_SignalR/Station/`) builds a console in the scene from 
 ## See also
 
 - [ShapeBatch example](../code-only/examples/shape-batch.md)
+- [Reference Grid](reference-grid.md)
 - [World Text](world-text.md)
 - [Render to texture](render-to-texture.md)
 - [GPU picking](gpu-picking.md)

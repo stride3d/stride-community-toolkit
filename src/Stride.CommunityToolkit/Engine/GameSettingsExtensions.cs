@@ -61,9 +61,8 @@ public static class GameSettingsExtensions
     ///   colour space - mirroring <c>Game.PrepareContext</c>, and again from <c>WindowCreated</c>:
     ///   with <see cref="Game.AutoLoadDefaultSettings"/> on and no asset, <c>PrepareContext</c>
     ///   writes the engine's built-in defaults (feature level 10) over the device manager, so
-    ///   the caller's values are put back before the device is created. As in the engine, the
-    ///   back buffer and colour space are only applied while <see cref="Game.AutoLoadDefaultSettings"/>
-    ///   is <see langword="true"/>.
+    ///   the caller's values are put back before the device is created. They are applied whether or
+    ///   not <see cref="Game.AutoLoadDefaultSettings"/> is on.
     ///   </description></item>
     ///   <item><description>
     ///   <see cref="GameSettings.CompilationMode"/> and a <see cref="StreamingSettings"/>
@@ -74,7 +73,7 @@ public static class GameSettingsExtensions
     /// </list>
     /// </para>
     /// <para>
-    /// On the compilation mode, measured rather than assumed: on Direct3D 11 the compiler applies the
+    /// On Direct3D 11 the compiler applies the
     /// optimisation level only when the mode turns debug information off, so
     /// <see cref="CompilationMode.Debug"/> (the engine's default for a game without settings) and
     /// <see cref="CompilationMode.Release"/> produce identical bytecode. Only

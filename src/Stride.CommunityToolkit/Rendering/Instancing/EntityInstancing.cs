@@ -52,8 +52,8 @@ public class EntityInstancing : InstancingUserArray
     private BoundingBox _boundingBox = BoundingBox.Empty;
 
     /// <summary>
-    /// Gets the number of registered instances, which is not necessarily the number drawn: disabled
-    /// or skipped frames aside, <see cref="InstancingUserArray.InstanceCount"/> is what the renderer uses.
+    /// Gets the number of registered instances. The number drawn is
+    /// <see cref="InstancingUserArray.InstanceCount"/>.
     /// </summary>
     public int RegisteredInstanceCount => _transforms.Count;
 

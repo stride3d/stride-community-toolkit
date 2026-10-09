@@ -11,12 +11,6 @@ engine and editor sources, with where each lives, what the toolkit built on it, 
 in a game. Source paths are relative to the [Stride repository](https://github.com/stride3d/stride)
 `sources/` folder, as of Stride 4.4.
 
-The tempting path, every time, is to reimplement. We know because we took it: the toolkit's chart
-playground first drew its grid as triangle-ribbon lines, and the result shimmered and faded at every
-zoom level - while ten metres away Game Studio's scene grid sat perfectly still. The fix was not
-better geometry; it was discovering that the editor's grid *is not geometry at all*. That story is the
-first entry.
-
 ```mermaid
 flowchart LR
     subgraph engine [Stride engine and editor sources]
@@ -30,16 +24,14 @@ flowchart LR
         FTR[FastTextRenderer]
     end
     subgraph toolkit [What the toolkit built on them]
-        CHART[Chart grid planes]
         MODELS[Procedural models and gizmo meshes]
         GIZMAT[Code-only gizmo materials]
-        TEX[Generated grid texture]
+        TEX[TextureLoader mip images]
         OVERLAY[DebugOverlay system fonts]
         CURSOR[Chart cursor readout]
         TGIZ[TranslationGizmo]
         DBGTXT[DebugTextSystem lessons]
     end
-    GRID --> CHART
     PRIM --> MODELS
     MAT --> GIZMAT
     IMG --> TEX
@@ -65,9 +57,7 @@ The lesson generalises past grids: **when thin repeating detail must stay stable
 put it in a texture and let the sampler do the anti-aliasing.** Rasterising thin triangles fights the
 hardware; sampling a well-mipped texture uses it.
 
-**In the toolkit:** the chart library's grid (`src/Stride.CommunityToolkit.Charts/ChartGridTexture.cs`)
-is this technique nearly verbatim - same luminance-constant mip formula, same emissive-times-colour
-material, same snapping - with the decade steps swapped for the chart's 1-2-5 tick steps.
+**In the toolkit:** not used; the chart grid and the reference grid are drawn as pixel-width `ShapeBatch` lines.
 
 **In a game:** build-mode placement grids, city-builder zoning overlays, the synthwave infinite floor
 (this plus emissive intensity above 1 and bloom *is* that aesthetic), sports-pitch and runway
@@ -84,7 +74,7 @@ uses them for every gizmo and for the grid plane; they convert to a render-ready
 `.ToMeshDraw()` (the extension lives in `Stride.Extensions`).
 
 **In the toolkit:** the code-only primitives (`Create3DPrimitive`, the 2D procedural models) and the
-gizmo meshes are built this way, as is the chart's grid plane.
+gizmo meshes are built this way.
 
 **In a game:** placeholder art that ships, debug volumes, procedural level geometry, anything a
 code-only project needs before an artist exists.
@@ -100,17 +90,15 @@ describes them in code, sets colours through `ParameterKeys` it declares itself,
 parameters live.
 
 **In the toolkit:** `Rendering/Gizmos/GizmoEmissiveColorMaterial.cs` and
-`GizmoUniformColorMaterial.cs` are small factories over this; the chart grid material adds the
-texture-times-colour and anisotropic-sampler variations copied from the editor.
+`GizmoUniformColorMaterial.cs` are small factories over this.
 
 **In a game:** highlight and hologram materials, team colours set per instance, debug visualisation -
 any material whose definition is more natural as three lines of code than as an asset.
 
 ### The transparency trap
 
-Asking for a translucent colour is not enough to get a translucent material. We learned this shading
-the area under a curve: the fill simply was not there, and forcing the colour opaque proved the
-geometry had been right all along. Three things have to line up.
+Asking for a translucent colour is not enough to get a translucent material. Three things have to
+line up.
 
 1. **A transparency feature.** `Attributes.Transparency = new MaterialTransparencyBlendFeature()` is
    what sets a blend state on the pass and marks it transparent. Setting `MaterialPass.HasTransparency`
@@ -140,7 +128,7 @@ on the CPU, `image.PixelBuffer[i].SetPixel(x, y, color)` writes any level, and `
 image)` uploads the lot. That last part is the rare capability: most texture helpers generate mips for
 you; this one lets you *author* each level - which is exactly what the grid technique above needs.
 
-**In the toolkit:** the chart grid texture is generated this way at startup, mips and all.
+**In the toolkit:** `TextureLoader` builds its mip chains this way.
 
 **In a game:** procedural textures (noise, gradients, identicons), minimap fog-of-war, decals baked at
 runtime - and any case where the automatic mip average is the wrong answer for small sizes.
@@ -210,10 +198,10 @@ text with literally zero setup.
 
 | Pattern | Engine source (under `sources/`) | Toolkit use | Game use |
 |---|---|---|---|
-| Mip-authored texture grid | `editor/.../Gizmos/ViewportGridGizmo.cs` | Chart grid planes | Build grids, infinite floors, line markings |
+| Mip-authored texture grid | `editor/.../Gizmos/ViewportGridGizmo.cs` | - | Build grids, infinite floors, line markings |
 | Runtime primitives | `engine/Stride.Graphics/GeometricPrimitives/` | Procedural models, gizmos, grid plane | Placeholder and procedural meshes |
 | Code-only materials | `engine/Stride.Rendering/.../Materials/` | Gizmo and grid materials | Highlights, holograms, team colours |
-| CPU image authoring | `core/Stride.Foundation/Graphics/Image.cs` | Generated grid texture | Procedural textures, fog-of-war |
+| CPU image authoring | `core/Stride.Foundation/Graphics/Image.cs` | `TextureLoader` | Procedural textures, fog-of-war |
 | Runtime fonts | `engine/Stride.Graphics/Font/FontSystem.cs` | DebugOverlay system fonts | User and modded fonts |
 | Picking helpers | `editor/.../GameEditor/Game/EditorGameHelper.cs` | Camera extensions, chart cursor | Placement, aiming, measuring |
 | Gizmo scripts | `editor/.../AssetEditors/Gizmos/` | TranslationGizmo and friends | In-game editors, photo modes |

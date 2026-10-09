@@ -50,6 +50,15 @@ internal readonly record struct ScreenTextStyle
     /// <summary>How far the shadow sits from the text, in pixels.</summary>
     internal Vector2 ShadowOffset { get; init; }
 
+    /// <summary>Whether to draw the string eight more times around itself, as an outline.</summary>
+    internal bool EnableOutline { get; init; }
+
+    /// <summary>Colour of the outline.</summary>
+    internal Color OutlineColor { get; init; }
+
+    /// <summary>How far the outline reaches beyond the glyphs, in pixels.</summary>
+    internal float OutlineWidth { get; init; }
+
     /// <summary>How far the text is drawn from its position, in pixels, leaving the background where it is. Lets a caller centre glyphs in a strip sized from the line height, where a font's line gap otherwise sits above them.</summary>
     internal Vector2 TextOffset { get; init; }
 

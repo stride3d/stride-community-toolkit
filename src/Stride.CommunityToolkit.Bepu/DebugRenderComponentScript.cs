@@ -26,7 +26,7 @@ namespace Stride.CommunityToolkit.Bepu;
 public class DebugRenderComponentScript : SyncScript
 {
     /// <summary>
-    /// Gets or sets a value indicating whether the debug mesh is initially <see langword="true"/> when added.
+    /// Gets or sets whether the debug render is visible when the component is added. Defaults to <see langword="false"/>.
     /// </summary>
     public bool Visible { get; set; }
 
@@ -42,12 +42,7 @@ public class DebugRenderComponentScript : SyncScript
     /// <see cref="DebugRenderComponent"/> to the <see cref="Entity"/>.
     /// </summary>
     /// <remarks>
-    /// This method intentionally performs an inexpensive count check every frame and only performs the
-    /// addition once. After the component is added, the component's visibility can be toggled
-    /// at runtime by pressing <c>Keys.F11</c> (handled by <see cref="DebugRenderComponent"/>).
-    /// See the class-level remarks for additional behavior: the debug renderer is global to the
-    /// scene, the component is added invisible by default here, and sleeping physics bodies use
-    /// a lighter mesh color.
+    /// The component is added once; after that the method only returns. Press <c>Keys.F11</c> to toggle it.
     /// </remarks>
     public override void Update()
     {

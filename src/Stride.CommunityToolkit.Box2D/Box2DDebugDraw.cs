@@ -14,17 +14,12 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </summary>
 /// <remarks>
 /// <para>
-/// <c>b2World_Draw</c> walks the world and calls back for each primitive - a solid polygon with a
-/// transform and rounding radius, a circle, a capsule, a line, a point. Those map almost one to one
-/// onto the batch, which draws polygons with rounding and pixel-constant borders. Shapes are on by
-/// default, as in Box2D; joints are on here as well, since drawing them is the usual reason to use
-/// this. The rest is off until asked for.
+/// <c>b2World_Draw</c> calls back once per primitive (polygon, circle, capsule, line, point), and
+/// each maps onto one batch call. Shapes and joints are drawn by default; everything else is off.
 /// </para>
 /// <para>
-/// Sizes: lines are <see cref="LinePixels"/> wide on screen at any zoom; a point's size is in
-/// screen pixels in the testbed and is scaled by <see cref="PointScale"/> into world units here,
-/// although the batch can draw a pixel-sized disc. Text has no renderer of its own; set
-/// <see cref="DrawString"/> to route body names and joint labels wherever you like.
+/// Lines are <see cref="LinePixels"/> wide on screen at any zoom. Points are sized in world units:
+/// Box2D's pixel size times <see cref="PointScale"/>. Text is drawn only through <see cref="DrawString"/>.
 /// </para>
 /// </remarks>
 /// <example>
@@ -121,8 +116,24 @@ public sealed class Box2DDebugDraw
     /// </summary>
     public Action<Vector2, string, Color>? DrawString { get; set; }
 
+    /// <summary>
+    /// Fill intensity of the shapes while the world is drawn, 0 to 1. Defaults to
+    /// <see cref="ShapeFill.TestbedAlpha"/>, the testbed's look: a bright outline around a dimmed,
+    /// see-through inside. The batch's own value is put back when the draw is done.
+    /// </summary>
+    public float FillAlpha { get; set; } = ShapeFill.TestbedAlpha;
+
     /// <summary>Submits the whole world to the batch. Call once per frame, after stepping.</summary>
-    public void Draw(B2WorldId world) => b2World_Draw(world, _draw);
+    public void Draw(B2WorldId world)
+    {
+        var fillAlpha = _batch.Fill.Alpha;
+
+        _batch.Fill.Alpha = FillAlpha;
+
+        b2World_Draw(world, _draw);
+
+        _batch.Fill.Alpha = fillAlpha;
+    }
 
     /// <inheritdoc cref="Draw(B2WorldId)"/>
     public void Draw(Box2DSimulation simulation)
@@ -141,7 +152,7 @@ public sealed class Box2DDebugDraw
             var a = vertices[i];
             var b = vertices[(i + 1) % vertexCount];
 
-            _batch.DrawPixelLine(new Vector3(a.X, a.Y, 0), new Vector3(b.X, b.Y, 0), LinePixels, stride);
+            _batch.DrawPixelLine(new Vector2(a.X, a.Y), new Vector2(b.X, b.Y), LinePixels, stride);
         }
     }
 
@@ -168,7 +179,7 @@ public sealed class Box2DDebugDraw
 
         // The testbed draws the x-axis so a rolling circle is seen to roll.
         var axis = b2Rot_GetXAxis(transform.q);
-        _batch.DrawPixelLine(new Vector3(centre, 0), new Vector3(centre.X + axis.X * radius, centre.Y + axis.Y * radius, 0), LinePixels, stride);
+        _batch.DrawPixelLine(centre, new Vector2(centre.X + axis.X * radius, centre.Y + axis.Y * radius), LinePixels, stride);
     }
 
     private void DrawSolidCapsule(in B2Vec2 p1, in B2Vec2 p2, float radius, B2HexColor color, object context)
@@ -179,7 +190,7 @@ public sealed class Box2DDebugDraw
     }
 
     private void DrawLine(in B2Vec2 p1, in B2Vec2 p2, B2HexColor color, object context)
-        => _batch.DrawPixelLine(new Vector3(p1.X, p1.Y, 0), new Vector3(p2.X, p2.Y, 0), LinePixels, DebugDrawColors.ToColor(color));
+        => _batch.DrawPixelLine(new Vector2(p1.X, p1.Y), new Vector2(p2.X, p2.Y), LinePixels, DebugDrawColors.ToColor(color));
 
     private void DrawTransform(in B2Transform transform, object context)
     {

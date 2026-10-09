@@ -15,13 +15,24 @@ namespace Stride.CommunityToolkit.Bullet;
 public class Bullet2DPhysicsOptions : Primitive2DEntityOptions
 {
     /// <summary>
-    /// Gets or sets the Bullet physics component to attach. Defaults to a new <see cref="RigidbodyComponent"/>.
+    /// Gets or sets the Bullet physics component to attach. Defaults to a new <see cref="RigidbodyComponent"/>,
+    /// except for the ground helper, which defaults to a <see cref="StaticColliderComponent"/>.
+    /// <see langword="null"/> attaches no physics.
     /// </summary>
-    /// <remarks>
-    /// Swap with a configured rigid body (e.g. static, kinematic) or a custom subclass prior to entity creation
-    /// to tailor collision / motion behavior.
-    /// </remarks>
-    public PhysicsComponent? PhysicsComponent { get; set; } = new RigidbodyComponent();
+    public PhysicsComponent? PhysicsComponent
+    {
+        get => _physicsComponent;
+        set
+        {
+            _physicsComponent = value;
+            IsPhysicsComponentSet = true;
+        }
+    }
+
+    /// <summary>Whether <see cref="PhysicsComponent"/> was set, so a helper can tell the default from a choice.</summary>
+    internal bool IsPhysicsComponentSet { get; private set; }
+
+    private PhysicsComponent? _physicsComponent = new RigidbodyComponent();
 
     /// <summary>
     /// When true (default), a collider shape matching the primitive type is auto-created and added.

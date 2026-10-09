@@ -17,8 +17,9 @@ public static class DebugShapeExtensions
     /// <para>Adds <see cref="ImmediateDebugRenderFeature"/> and <see cref="ImmediateDebugRenderSystem"/> to the game.</para>
     /// <para>Registers the system to the service registry for easy access.</para>
     /// </summary>
-    /// <param name="game"></param>
-    /// <param name="debugShapeRenderGroup"></param>
+    /// <param name="game">The game to add debug shapes to.</param>
+    /// <param name="debugShapeRenderGroup">The render group the shapes are drawn in.</param>
+    /// <remarks>Shapes are visible by default only when the toolkit itself is a Debug build; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
     public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
     {
         game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
@@ -72,13 +73,12 @@ public static class DebugShapeExtensions
     }
 
     /// <summary>
-    /// Attempts to retrieve a render stage from the specified <see cref="GraphicsCompositor"/> based on the provided effect name.
+    /// Finds a render stage of the given name in the compositor's render system.
     /// </summary>
     /// <param name="graphicsCompositor">The <see cref="GraphicsCompositor"/> containing the render stages.</param>
     /// <param name="effectName">The name of the render stage to search for.</param>
     /// <param name="renderStage">
     /// When this method returns, contains the <see cref="RenderStage"/> if the render stage was found; otherwise, <c>null</c>.
-    /// This parameter is passed uninitialized.
     /// </param>
     /// <returns>
     /// <c>true</c> if the render stage is found; otherwise, <c>false</c>.

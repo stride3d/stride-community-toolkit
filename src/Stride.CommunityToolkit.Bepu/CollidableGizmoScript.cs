@@ -35,7 +35,7 @@ public class CollidableGizmoScript : SyncScript
     public float SizeFactor { get; set; } = 1f;
 
     /// <summary>
-    /// Gets a value indicating whether gizmos are currently active in the scene.
+    /// Gets or sets whether the gizmos are shown. Set it before the script starts to show them from the first frame.
     /// </summary>
     public bool Visible { get; set; }
 

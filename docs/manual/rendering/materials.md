@@ -550,22 +550,6 @@ reflection pass for each face side.
 - Do not add a transparency feature.
 - Do not add a diffuse model. The diffuse colour is the transmission tint.
 
-> [!WARNING]
-> On Stride 4.4 the transmittance pass is generated without its blend state, and the glass renders opaque. Set
-> the blend state on the even passes after you compile the material.
-
-```csharp
-// examples/code-only/E02_3D_Material_Gallery/Stations.Surfaces.cs
-var transmit = new BlendStateDescription(Blend.Zero, Blend.SourceColor);
-transmit.RenderTargets[0].AlphaSourceBlend = Blend.One;
-transmit.RenderTargets[0].AlphaDestinationBlend = Blend.Zero;
-
-foreach (var pass in glass.Passes)
-{
-    if (pass.PassIndex % 2 == 0) pass.BlendState = transmit;
-}
-```
-
 ### Displacement and tessellation
 
 - A displacement map moves vertices along their normals. The shadow map is drawn from the undisplaced mesh, so
@@ -586,21 +570,21 @@ A layer blends a whole material over another through a mask.
 // examples/code-only/E02_3D_Material_Gallery/Stations.Models.cs
 var descriptor = PackMaterials.Iron(s.Textures);
 
-descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronPaint(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
-descriptor.Layers.Add(new MaterialBlendLayer { Material = s.Material(PackMaterials.IronRust(s.Textures)), BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
+descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronPaint(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/paint/iron_paint_msk.png")) });
+descriptor.Layers.Add(new MaterialBlendLayer { Material = new Material { Descriptor = PackMaterials.IronRust(s.Textures) }, BlendMap = Recipes.Scalar(s.Textures.Data("iron_blend/rust/rust_msk.png")) });
 ```
 
 > [!NOTE]
-> A material used as a layer must have its `Descriptor` set. `Material.New` leaves it `null`.
-> `game.CreateMaterial(descriptor)` sets it.
+> A layer is compiled into the material it lies on, from its `Descriptor` alone. So
+> `new Material { Descriptor = descriptor }` is enough, and compiling the layer itself first, with
+> `Material.New` or `game.CreateMaterial`, is wasted work. `Material.New` also leaves `Descriptor`
+> `null`, which leaves the layer empty.
 
 ### Known issues on Stride 4.4
 
 | Feature | Status |
 |---|---|
-| Hair, subsurface scattering | Require a Stride build newer than 4.4.0-beta8. On beta8 and earlier their effects do not compile |
 | Subsurface scattering blur | The post effect does not compile. The gallery does not use it |
-| Thin glass | Renders opaque without the blend state workaround above |
 | Tessellated shadow casters | Log a constant buffer warning each frame. The gallery's tessellated models cast no shadow |
 | Layers | A base of one shading model under two or more layers that share another shading model applies the masks wrongly. Other combinations work |
 

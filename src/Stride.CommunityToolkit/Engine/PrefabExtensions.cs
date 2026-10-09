@@ -23,8 +23,8 @@ public static class PrefabExtensions
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab)
     {
         ValidateSinglePrefab(prefab);
@@ -40,8 +40,8 @@ public static class PrefabExtensions
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, ref Vector3 translation)
     {
         var one = Vector3.One;
@@ -55,8 +55,8 @@ public static class PrefabExtensions
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, Vector3 translation)
     {
         var one = Vector3.One;
@@ -71,8 +71,8 @@ public static class PrefabExtensions
     /// <param name="translation">The <see cref="Vector3"/> to translate the entity by.</param>
     /// <param name="rotationEulerAngles">The X, Y and Z rotations in radians to rotate the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, ref Vector3 translation, ref Vector3 rotationEulerAngles)
     {
         var one = Vector3.One;
@@ -87,8 +87,8 @@ public static class PrefabExtensions
     /// <param name="translation">The <see cref="Vector3"/> to translate the entity by.</param>
     /// <param name="rotationEulerAngles">The X, Y and Z rotations in radians to rotate the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, Vector3 translation, Vector3 rotationEulerAngles)
     {
         var one = Vector3.One;
@@ -103,8 +103,8 @@ public static class PrefabExtensions
     /// <param name="translation">The <see cref="Vector3"/> to translate the entity by.</param>
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, ref Vector3 translation, ref Quaternion rotation)
     {
         var one = Vector3.One;
@@ -118,8 +118,8 @@ public static class PrefabExtensions
     /// <param name="translation">The <see cref="Vector3"/> to translate the entity by.</param>
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, Vector3 translation, Quaternion rotation)
     {
         var one = Vector3.One;
@@ -134,8 +134,8 @@ public static class PrefabExtensions
     /// <param name="rotationEulerAngles">The X, Y and Z rotations in radians to rotate the entity by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, ref Vector3 translation, ref Vector3 rotationEulerAngles, ref Vector3 scale)
     {
         MathUtilEx.ToQuaternion(ref rotationEulerAngles, out var rotation);
@@ -150,8 +150,8 @@ public static class PrefabExtensions
     /// <param name="rotationEulerAngles">The X, Y and Z rotations in radians to rotate the entity by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, Vector3 translation, Vector3 rotationEulerAngles, Vector3 scale)
     {
         MathUtilEx.ToQuaternion(ref rotationEulerAngles, out var rotation);
@@ -166,8 +166,8 @@ public static class PrefabExtensions
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entity by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, ref Vector3 translation, ref Quaternion rotation, ref Vector3 scale)
     {
         ValidateSinglePrefab(prefab);
@@ -200,20 +200,20 @@ public static class PrefabExtensions
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entity by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entity by.</param>
     /// <returns>The instantiated and translated <see cref="Entity"/>.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
-    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> does not have exactly 1 <see cref="Entity"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="InvalidOperationException">If <paramref name="prefab"/> has more than one <see cref="Entity"/>.</exception>
     public static Entity InstantiateSingle(this Prefab prefab, Vector3 translation, Quaternion rotation, Vector3 scale)
     {
         return prefab.InstantiateSingle(ref translation, ref rotation, ref scale);
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, ref Vector3 translation)
     {
         var one = Vector3.One;
@@ -222,12 +222,12 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, Vector3 translation)
     {
         var one = Vector3.One;
@@ -236,13 +236,13 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
-    /// <param name="rotationEulerAngles">The X, Y and Z rotations in euler angles to rotate the entities by.</param>
+    /// <param name="rotationEulerAngles">The X, Y and Z rotations, in radians, to rotate the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, ref Vector3 translation, ref Vector3 rotationEulerAngles)
     {
         var one = Vector3.One;
@@ -251,13 +251,13 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
-    /// <param name="rotationEulerAngles">The X, Y and Z rotations in euler angles to rotate the entities by.</param>
+    /// <param name="rotationEulerAngles">The X, Y and Z rotations, in radians, to rotate the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, Vector3 translation, Vector3 rotationEulerAngles)
     {
         var one = Vector3.One;
@@ -266,13 +266,13 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, ref Vector3 translation, ref Quaternion rotation)
     {
         var one = Vector3.One;
@@ -280,13 +280,13 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, Vector3 translation, Quaternion rotation)
     {
         var one = Vector3.One;
@@ -294,14 +294,14 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
-    /// <param name="rotationEulerAngles">The X, Y and Z rotations in euler angles to rotate the entities by.</param>
+    /// <param name="rotationEulerAngles">The X, Y and Z rotations, in radians, to rotate the entities by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, ref Vector3 translation, ref Vector3 rotationEulerAngles, ref Vector3 scale)
     {
         MathUtilEx.ToQuaternion(ref rotationEulerAngles, out var rotation);
@@ -309,14 +309,14 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
-    /// <param name="rotationEulerAngles">The X, Y and Z rotations in euler angles to rotate the entities by.</param>
+    /// <param name="rotationEulerAngles">The X, Y and Z rotations, in radians, to rotate the entities by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, Vector3 translation, Vector3 rotationEulerAngles, Vector3 scale)
     {
         MathUtilEx.ToQuaternion(ref rotationEulerAngles, out var rotation);
@@ -324,14 +324,14 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entities by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, ref Vector3 translation, ref Quaternion rotation, ref Vector3 scale)
     {
         ArgumentNullException.ThrowIfNull(prefab);
@@ -361,14 +361,14 @@ public static class PrefabExtensions
     }
 
     /// <summary>
-    /// Instantiates a <see cref="Prefab"/> and a applies a transform to all the entites.
+    /// Instantiates a <see cref="Prefab"/> and applies a transform to all its entities.
     /// </summary>
     /// <param name="prefab">The <see cref="Prefab"/> to instantiate.</param>
     /// <param name="translation">The <see cref="Vector3"/> to translate the entities by.</param>
     /// <param name="rotation">The <see cref="Quaternion"/> to rotate the entities by.</param>
     /// <param name="scale">The <see cref="Vector3"/> to scale the entities by.</param>
     /// <returns>The instantiated and translated entities.</returns>
-    /// <exception cref="ArgumentException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="prefab"/> is <see langword="null"/>.</exception>
     public static List<Entity> Instantiate(this Prefab prefab, Vector3 translation, Quaternion rotation, Vector3 scale)
     {
         return prefab.Instantiate(ref translation, ref rotation, ref scale);

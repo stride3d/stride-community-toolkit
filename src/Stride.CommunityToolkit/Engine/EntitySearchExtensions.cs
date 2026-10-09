@@ -29,11 +29,11 @@ namespace Stride.CommunityToolkit.Engine;
 public static class EntitySearchExtensions
 {
     /// <summary>
-    /// Searches the entity's children using a breadth-first search (BFS) to find the first component of the specified type.
+    /// Searches the entity's descendants breadth-first for the first component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
     /// <param name="entity">The <see cref="Entity"/> to search within.</param>
-    /// <returns>The first component of type <typeparamref name="T"/> found in the entity's children, or <c>null</c> if none exists.</returns>
+    /// <returns>The first component of type <typeparamref name="T"/> found in the entity's descendants, or <c>null</c> if none exists.</returns>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="entity"/> is <c>null</c>.</exception>
     public static T? GetComponentInChildrenBFS<T>(this Entity entity)
         where T : EntityComponent
@@ -49,11 +49,11 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a breadth first search of the entity and it's children for a component of the specified type.
+    /// Performs a breadth-first search of the entity and its descendants for a component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
-    /// <returns>The component or null if does no exist.</returns>
+    /// <returns>The component, or null if none exists.</returns>
     /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
     public static T? GetComponentInChildrenAndSelf<T>(this Entity entity)
         where T : EntityComponent
@@ -93,12 +93,12 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a breadth first search of the entities children for a component of the specified type.
+    /// Performs a breadth-first search of the entity's descendants for a component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
     /// <param name="includeDisabled">Should search include <see cref="ActivableEntityComponent"/> where <see cref="ActivableEntityComponent.Enabled"/> is <c>false</c>.</param>
-    /// <returns>The component or null if does no exist.</returns>
+    /// <returns>The component, or null if none exists.</returns>
     /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
     public static T? GetComponentInChildren<T>(this Entity entity, bool includeDisabled = false)
         where T : ActivableEntityComponent
@@ -113,12 +113,12 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a breadth first search of the entity and it's children for a component of the specified type.
+    /// Performs a breadth-first search of the entity and its descendants for a component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
     /// <param name="includeDisabled">Should search include <see cref="ActivableEntityComponent"/> where <see cref="ActivableEntityComponent.Enabled"/> is <c>false</c>.</param>
-    /// <returns>The component or null if does no exist.</returns>
+    /// <returns>The component, or null if none exists.</returns>
     /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
     public static T? GetComponentInChildrenAndSelf<T>(this Entity entity, bool includeDisabled = false)
         where T : ActivableEntityComponent
@@ -157,7 +157,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entities children for all components of the specified type.
+    /// Gets all components of the specified type on the entity's direct children.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -176,7 +176,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entity and it's children for all components of the specified type.
+    /// Gets all components of the specified type on the entity and its direct children.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -210,7 +210,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entities children for all components of the specified type.
+    /// Gets all components of the specified type on the entity's direct children.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -230,7 +230,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entity and it's children for all components of the specified type.
+    /// Gets all components of the specified type on the entity and its direct children.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -268,7 +268,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entities decendants for all components of the specified type.
+    /// Performs a depth-first search of the entity's descendants for all components of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -287,7 +287,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entity and it's decendants for all components of the specified type.
+    /// Performs a depth-first search of the entity and its descendants for all components of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -332,7 +332,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entity and it's decendants for all components of the specified type.
+    /// Performs a depth-first search of the entity's descendants for all components of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -352,7 +352,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a depth first search of the entity and it's decendants for all components of the specified type.
+    /// Performs a depth-first search of the entity and its descendants for all components of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -401,11 +401,11 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a search of the entity and it's ancestors for a component of the specified type.
+    /// Performs a search of the entity and its ancestors for a component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
-    /// <returns>The component or <c>null</c> if does no exist.</returns>
+    /// <returns>The component, or <c>null</c> if none exists.</returns>
     /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
     public static T? GetComponentInParent<T>(this Entity entity) where T : EntityComponent
     {
@@ -428,12 +428,12 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a search of the entity and it's ancestors for a component of the specified type.
+    /// Performs a search of the entity and its ancestors for a component of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
     /// <param name="includeDisabled">Should search include <see cref="ActivableEntityComponent"/> where <see cref="ActivableEntityComponent.Enabled"/> is <c>false</c>.</param>
-    /// <returns>The component or <c>null</c> if does no exist.</returns>
+    /// <returns>The component, or <c>null</c> if none exists.</returns>
     /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
     public static T? GetComponentInParent<T>(this Entity entity, bool includeDisabled = false) where T : ActivableEntityComponent
     {
@@ -456,7 +456,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a search of the entity and it's ancestors for all components of the specified type.
+    /// Performs a search of the entity and its ancestors for all components of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>
@@ -480,7 +480,7 @@ public static class EntitySearchExtensions
     }
 
     /// <summary>
-    /// Performs a search of the entity and it's ancestors for all components of the specified type.
+    /// Performs a search of the entity and its ancestors for all components of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of component.</typeparam>
     /// <param name="entity">The entity.</param>

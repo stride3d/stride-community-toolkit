@@ -10,8 +10,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Add <see cref="EntityTextRenderer"/> to the graphics compositor
-/// for anything to appear - the component records what to draw, the renderer draws it.
+/// <see cref="EntityTextProcessor"/> adds an <see cref="EntityTextRenderer"/> to the scene's compositor when none is there.
 /// </para>
 /// <para>
 /// The text can follow its entity through the world, sit at a fixed pixel position, or anchor to a
@@ -81,7 +80,7 @@ public class EntityTextComponent : EntityComponent
 
     /// <summary>
     /// Gets or sets whether everything measured in pixels - <see cref="FontSize"/>, <see cref="Offset"/>,
-    /// <see cref="ScreenPosition"/>, <see cref="Padding"/> and <see cref="ShadowOffset"/> - follows
+    /// <see cref="ScreenPosition"/>, <see cref="Padding"/>, <see cref="ShadowOffset"/> and <see cref="OutlineWidth"/> - follows
     /// the display's scale, so the text is the same size to the eye on a 150% laptop as on a 100%
     /// monitor. Defaults to <see langword="true"/>.
     /// </summary>
@@ -114,7 +113,7 @@ public class EntityTextComponent : EntityComponent
     public Color TextColor { get; set; } = Color.White;
 
     /// <summary>
-    /// Gets or sets an overall opacity from 0 to 1, applied on top of the text, shadow and background
+    /// Gets or sets an overall opacity from 0 to 1, applied to the text, shadow, outline and background
     /// colours. Defaults to 1.
     /// </summary>
     /// <remarks>
@@ -198,6 +197,27 @@ public class EntityTextComponent : EntityComponent
     /// right and down.
     /// </summary>
     public Vector2 ShadowOffset { get; set; } = new(1, 1);
+
+    /// <summary>
+    /// Gets or sets whether the text is drawn with an outline around every glyph. Defaults to
+    /// <see langword="false"/>.
+    /// </summary>
+    /// <remarks>
+    /// An outline in a contrasting colour keeps text readable over anything, including a
+    /// background of its own colour, where a shadow on one side is not enough. It costs eight extra
+    /// draws of the same string.
+    /// </remarks>
+    public bool EnableOutline { get; set; }
+
+    /// <summary>
+    /// Gets or sets the outline colour. Defaults to white.
+    /// </summary>
+    public Color OutlineColor { get; set; } = Color.White;
+
+    /// <summary>
+    /// Gets or sets how far the outline reaches beyond the glyphs, in pixels. Defaults to 1.
+    /// </summary>
+    public float OutlineWidth { get; set; } = 1f;
 
     /// <summary>
     /// Gets or sets whether a filled rectangle is drawn behind the text. Defaults to <see langword="false"/>.

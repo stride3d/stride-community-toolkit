@@ -38,4 +38,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E11_3D_ShapeBatch_Gallery).
 
-[!code-csharp[](../../../../examples/code-only/E11_3D_ShapeBatch_Gallery/Program.cs?start=1&end=200)]
+[!code-csharp[](../../../../examples/code-only/E11_3D_ShapeBatch_Gallery/Program.cs?start=1&end=201)]

@@ -237,7 +237,7 @@ void DrawTerrain()
     if (shapeBatch is null) return;
 
     for (var i = 0; i + 1 < terrain.Length; i++)
-        shapeBatch.DrawPixelLine(new Vector3(terrain[i], 0), new Vector3(terrain[i + 1], 0), 2f, paleGreen);
+        shapeBatch.DrawPixelLine(terrain[i], terrain[i + 1], 2f, paleGreen);
 }
 
 void Reset(Scene scene)

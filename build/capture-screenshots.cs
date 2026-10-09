@@ -136,6 +136,11 @@ var failed = new List<string>();
 // Why each example has no image, for the contact sheet to show in place of one.
 var notes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+// How many examples this run goes through, for the "10/97" at the start of each line
+var total = examples.Count(example => Text(example, "slug") is { } slug && Text(example, "projectName") is not null && Text(example, "projectPath") is not null
+    && (only.Count == 0 || only.Contains(slug, StringComparer.OrdinalIgnoreCase)));
+var position = 0;
+
 foreach (var example in examples)
 {
     var slug = Text(example, "slug");
@@ -150,9 +155,11 @@ foreach (var example in examples)
         continue;
     }
 
+    var counter = $"{++position}/{total}".PadLeft(total.ToString().Length * 2 + 1);
+
     if (Bool(example, "screenshot") == false)
     {
-        Console.WriteLine($"  - {slug}: screenshot: false");
+        Console.WriteLine($"  {counter} - {slug}: screenshot: false");
         notes[slug] = "screenshot: false - cannot produce a meaningful frame on its own";
         skipped++;
         continue;
@@ -165,7 +172,7 @@ foreach (var example in examples)
     // in one unattended run, silently, is not something a script should be able to do by accident.
     if (File.Exists(webpPath) && !force && !reviewing || updateIndex)
     {
-        Console.WriteLine($"  - {slug}: already has {mediaName}, pass --force to replace it");
+        Console.WriteLine($"  {counter} - {slug}: already has {mediaName}, pass --force to replace it");
         skipped++;
         continue;
     }
@@ -175,7 +182,7 @@ foreach (var example in examples)
 
     File.Delete(pngPath);
 
-    Console.WriteLine($"  · {slug} ({projectName})");
+    Console.WriteLine($"  {counter} · {slug} ({projectName})");
 
     if (!RunExample(root, projectPath, pngPath, frame, timeout, out var failure))
     {

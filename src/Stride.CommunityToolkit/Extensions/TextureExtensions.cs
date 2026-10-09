@@ -13,12 +13,11 @@ public static class TextureExtensions
     private const string SourceFileIdentifier = "Source: !file";
 
     /// <summary>
-    /// Retrieves the full filename of the Source of an asset.
-    /// workDir should be your Assets directory.
+    /// Finds the asset file named <paramref name="urlName"/> and returns the path on its <c>Source: !file</c> line.
     /// </summary>
-    /// <param name="urlName"></param>
-    /// <param name="workDir"></param>
-    /// <returns></returns>
+    /// <param name="urlName">The asset file name to search for, such as <c>Brick.sdtex</c>.</param>
+    /// <param name="workDir">The folder to search, appended to the folder three levels above the executing assembly.</param>
+    /// <returns>The source path, or an empty string if the asset or its source line is not found.</returns>
     public static string FindAssetSourceDir(string urlName, string workDir)
     {
         //start in the same directory as the .sln project
@@ -55,9 +54,8 @@ public static class TextureExtensions
     }
 
     /// <summary>
-    /// Resizes and reformats a given texture by rendering it to a new texture with the specified dimensions and pixel format.
-    /// This is useful for processing textures loaded through `Content.Load&lt;Texture&gt;()`, which may be compressed and default to a smaller size like 32x32 pixels.
-    /// To properly resize a compressed texture, ensure it's decompressed by loading the source file from disk before applying this method.
+    /// Renders a texture into a new texture with the given size and pixel format.
+    /// Also clears the back buffer and draws the result onto it. Load a compressed texture from its source file first.
     /// </summary>
     /// <param name="texture">The original texture to resize.</param>
     /// <param name="width">The desired width of the resized texture.</param>

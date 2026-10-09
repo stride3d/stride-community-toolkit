@@ -154,7 +154,7 @@ void DrawTile(ShapeBatch shapes, Tile tile, bool isSelected)
 
     // The box carries the tile as its tag, so a click can ask the batch which tile it hit
     shapes.Tag = tile;
-    shapes.DrawRectangle(new Vector3(tile.Centre, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(TileSize), isSelected ? colour : new Color(70, 76, 90), cornerRadius: 0.12f);
+    shapes.DrawRectangle(tile.Centre, new Vector2(TileSize), isSelected ? colour : new Color(70, 76, 90), cornerRadius: 0.12f);
     shapes.Tag = null;
     shapes.Glow.Clear();
     shapes.Fill.Set(null, 1f);
@@ -186,12 +186,12 @@ void DrawPanel(ShapeBatch shapes, Tile tile)
 
     shapes.BorderWidth = 2f;
     shapes.Fill.Set(new Color(32, 36, 46), 0.9f);
-    shapes.DrawRectangle(new Vector3(panelCentre, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(panelSize), new Color(90, 98, 115), cornerRadius: 0.2f);
+    shapes.DrawRectangle(panelCentre, new Vector2(panelSize), new Color(90, 98, 115), cornerRadius: 0.2f);
     shapes.Fill.Set(null, 1f);
 
     // A dashed diagonal is the linear curve, the reference every other one is judged against
     shapes.Dash.Set(6f, 6f);
-    shapes.DrawPixelLine(new Vector3(left, bottom, 0f), new Vector3(left + panelSize, bottom + panelSize, 0f), 1.5f, new Color(90, 98, 115));
+    shapes.DrawPixelLine(new Vector2(left, bottom), new Vector2(left + panelSize, bottom + panelSize), 1.5f, new Color(90, 98, 115));
     shapes.Dash.Clear();
 
     Span<Vector2> points = stackalloc Vector2[129];
@@ -215,12 +215,12 @@ void DrawPanel(ShapeBatch shapes, Tile tile)
     var laneY = panelCentre.Y + panelSize / 2f + 1.5f;
 
     shapes.BorderWidth = 1f;
-    shapes.DrawPixelLine(new Vector3(left, laneY, 0f), new Vector3(left + panelSize, laneY, 0f), 1f, new Color(70, 76, 90));
-    shapes.DrawPixelLine(new Vector3(left, laneY - 0.7f, 0f), new Vector3(left + panelSize, laneY - 0.7f, 0f), 1f, new Color(70, 76, 90));
+    shapes.DrawPixelLine(new Vector2(left, laneY), new Vector2(left + panelSize, laneY), 1f, new Color(70, 76, 90));
+    shapes.DrawPixelLine(new Vector2(left, laneY - 0.7f), new Vector2(left + panelSize, laneY - 0.7f), 1f, new Color(70, 76, 90));
     shapes.Fill.Set(colour, 1f);
-    shapes.DrawDisc(new Vector3(left + eased * panelSize, laneY, 0f), Vector3.UnitZ, 0.28f, colour);
+    shapes.DrawDisc(new Vector2(left + eased * panelSize, laneY), 0.28f, colour);
     shapes.Fill.Set(new Color(110, 116, 130), 1f);
-    shapes.DrawDisc(new Vector3(left + t * panelSize, laneY - 0.7f, 0f), Vector3.UnitZ, 0.2f, new Color(150, 156, 170));
+    shapes.DrawDisc(new Vector2(left + t * panelSize, laneY - 0.7f), 0.2f, new Color(150, 156, 170));
     shapes.Fill.Set(null, 1f);
 
     if (title is not null) title.Text = tile.Function.ToString();

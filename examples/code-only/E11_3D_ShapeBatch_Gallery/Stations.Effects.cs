@@ -351,11 +351,11 @@ public static class EffectStations
         var centre = shapes.ScreenSize * 0.5f;
 
         shapes.BorderWidth = 2f;
-        shapes.DrawRing(new Vector3(centre, 0f), Vector3.UnitZ, 22f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X - 40f, centre.Y, 0f), new Vector3(centre.X - 10f, centre.Y, 0f), 2f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X + 10f, centre.Y, 0f), new Vector3(centre.X + 40f, centre.Y, 0f), 2f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X, centre.Y - 40f, 0f), new Vector3(centre.X, centre.Y - 10f, 0f), 2f, Color.White);
-        shapes.DrawPixelLine(new Vector3(centre.X, centre.Y + 10f, 0f), new Vector3(centre.X, centre.Y + 40f, 0f), 2f, Color.White);
+        shapes.DrawRing(centre, 22f, Color.White);
+        shapes.DrawPixelLine(new Vector2(centre.X - 40f, centre.Y), new Vector2(centre.X - 10f, centre.Y), 2f, Color.White);
+        shapes.DrawPixelLine(new Vector2(centre.X + 10f, centre.Y), new Vector2(centre.X + 40f, centre.Y), 2f, Color.White);
+        shapes.DrawPixelLine(new Vector2(centre.X, centre.Y - 40f), new Vector2(centre.X, centre.Y - 10f), 2f, Color.White);
+        shapes.DrawPixelLine(new Vector2(centre.X, centre.Y + 10f), new Vector2(centre.X, centre.Y + 40f), 2f, Color.White);
 
         // A radial gauge in the bottom-left corner, clockwise from twelve because Y is down
         var gauge = shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(110f, -110f);
@@ -372,18 +372,18 @@ public static class EffectStations
         shapes.Fill.Set(HudFill, 0.7f);
         shapes.BorderWidth = 1.5f;
         shapes.Glow.Set(8f, HudGlow);
-        shapes.DrawRectangle(new Vector3(panel, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(260f, 140f), HudBlue, cornerRadius: 12f);
+        shapes.DrawRectangle(panel, new Vector2(260f, 140f), HudBlue, cornerRadius: 12f);
         shapes.Glow.Clear();
         shapes.Fill.Set(null, 0.45f);
         shapes.Dash.Set(8f, 6f, s.Seconds * 30f);
-        shapes.DrawRing(new Vector3(panel, 0f), Vector3.UnitZ, 44f, Color.Orange);
+        shapes.DrawRing(panel, 44f, Color.Orange);
         shapes.Dash.Clear();
 
         // A viewport rectangle across the bottom: the bar is drawn in the rectangle's own coordinates
         shapes.Viewport = new RectangleF(centre.X - 200f, shapes.ScreenSize.Y - 60f, 400f, 40f);
         shapes.Fill.Set(new Color(255, 120, 40, 200), 1f);
         shapes.Gradient.Set(new Color(255, 230, 120), Vector2.UnitX);
-        shapes.DrawRectangle(new Vector3(200f, 20f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(360f * level + 20f, 16f), Color.Orange);
+        shapes.DrawRectangle(new Vector2(200f, 20f), new Vector2(360f * level + 20f, 16f), Color.Orange);
         shapes.Gradient.Clear();
         shapes.Viewport = null;
 

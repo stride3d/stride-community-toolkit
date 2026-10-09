@@ -23,7 +23,7 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: capsule-with-rigid-body
 title:
-  en: Basic3D Scene (Capsule)
+  en: Basic 3D Scene (Capsule)
   cs: Základní 3D scéna (Kapsle)
 level: Getting Started
 category: Shapes

@@ -15,15 +15,8 @@ namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 /// pegged and no exception to catch.
 /// </para>
 /// <para>
-/// There is no safe <see cref="Sides"/> value to dodge it. A Monte Carlo sweep over random
-/// overlapping poses fails for every side count from 3 upwards, at 15-40% of placements once the
-/// bodies have rotated about Z; freshly spawned axis-aligned bodies fail at roughly 40% for 5, 7 and
-/// 8 sides. Triangles and custom-vertex polygons are exposed for the same reason. The identical
-/// placements with an analytic box collider never fail, so this is the hull path alone.
-/// </para>
-/// <para>
-/// The only mitigation available today is to space spawns so hull-collider bodies do not start
-/// interpenetrating. A fix belongs upstream in Bepu; until it lands, treat overlap as unsupported.
+/// No <see cref="Sides"/> value avoids it, and triangles and custom-vertex polygons are affected too;
+/// box colliders are not. Space spawns so hull-collider bodies do not start interpenetrating.
 /// </para>
 /// </remarks>
 public class PolygonProceduralModel : PrimitiveProceduralModelBase

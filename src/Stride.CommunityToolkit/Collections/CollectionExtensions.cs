@@ -1,23 +1,8 @@
 namespace Stride.CommunityToolkit.Collections;
 
 /// <summary>
-/// Provides a set of extension methods for common collection types, including <see cref="ICollection{T}"/>, <see cref="Queue{T}"/>,
-/// and <see cref="Stack{T}"/>. These methods offer additional functionality for efficiently adding or manipulating multiple elements in bulk.
+/// Methods that add several elements at once to an <see cref="ICollection{T}"/>, <see cref="Queue{T}"/> or <see cref="Stack{T}"/>.
 /// </summary>
-/// <remarks>
-/// These extensions simplify common tasks such as adding multiple elements to collections, queues, and stacks.
-/// While built-in methods like <see cref="ICollection{T}.Add"/> and <see cref="Queue{T}.Enqueue"/> only handle single elements,
-/// these methods support adding multiple elements at once, improving code readability and reducing verbosity.
-///
-/// The collection types covered by these extensions include:
-/// <list type="bullet">
-/// <item><description><see cref="ICollection{T}"/>: Add multiple elements to collections in bulk.</description></item>
-/// <item><description><see cref="Queue{T}"/>: Enqueue multiple elements at once.</description></item>
-/// <item><description><see cref="Stack{T}"/>: Push multiple elements onto a stack.</description></item>
-/// </list>
-///
-/// All methods are null-safe and will throw <see cref="ArgumentNullException"/> if the target collection or input collection is <see langword="null"/>.
-/// </remarks>
 public static class CollectionExtensions
 {
     /// <summary>

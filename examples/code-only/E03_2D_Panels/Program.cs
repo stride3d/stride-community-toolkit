@@ -341,14 +341,14 @@ void DrawPanel(GalleryStation station, Vector3 center, Theme theme)
     }
     else
     {
-        shapes.DrawRectangle(center, Vector3.UnitX, Vector3.UnitY, panelSize, accent, station.CornerRadius);
+        shapes.DrawRectangle(center.XY(), panelSize, accent, station.CornerRadius);
     }
 
     if (station.Overlap)
     {
         // The same panel again, offset: two translucent fills over each other, and the border of
         // the one on top over the fill of the one below, all composited in one pass
-        shapes.DrawRectangle(center + new Vector3(0.55f, -0.4f, 0f), Vector3.UnitX, Vector3.UnitY, panelSize * 0.8f, accent, station.CornerRadius);
+        shapes.DrawRectangle(center.XY() + new Vector2(0.55f, -0.4f), panelSize * 0.8f, accent, station.CornerRadius);
     }
 
     if (station.Ornaments)
@@ -403,8 +403,8 @@ void DrawBracket(Vector3 center, Color color)
     var borderWidth = shapes!.BorderWidth;
 
     shapes.BorderWidth = 0f;
-    shapes.DrawRectangle(center, Vector3.UnitX, Vector3.UnitY, panelSize - new Vector2(0.12f, 2f * Notch + 0.12f), color);
-    shapes.DrawRectangle(center, Vector3.UnitX, Vector3.UnitY, panelSize - new Vector2(2f * Notch + 0.12f, 0.12f), color);
+    shapes.DrawRectangle(center.XY(), panelSize - new Vector2(0.12f, 2f * Notch + 0.12f), color);
+    shapes.DrawRectangle(center.XY(), panelSize - new Vector2(2f * Notch + 0.12f, 0.12f), color);
     shapes.BorderWidth = borderWidth;
 
     // Twelve points: each corner is cut into two, turning inward

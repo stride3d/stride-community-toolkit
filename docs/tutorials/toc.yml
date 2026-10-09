@@ -8,6 +8,10 @@
   items:
   - name: Pick and aim
     href: physics/pick-and-aim.md
+- name: Rendering
+  items:
+  - name: Build a simple HUD with ShapeBatch
+    href: rendering/shapebatch-hud.md
 - name: Textures
   items:
   - name: Add a Texture at Runtime

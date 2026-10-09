@@ -43,7 +43,7 @@ public static class ScreenshotCapture
     /// </summary>
     /// <remarks>
     /// Late enough for the first shaders to have compiled and for a scene to have settled into
-    /// something worth looking at, short enough that capturing sixty examples is not an afternoon.
+    /// something worth looking at.
     /// </remarks>
     public static readonly int DefaultFrame = 240;
 

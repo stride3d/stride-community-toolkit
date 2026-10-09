@@ -17,13 +17,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <c>AddEntityTextRenderer</c>.
 /// </para>
 /// <para>
-/// It replaces the renderer walking the scene's entity list each frame, which had two consequences
-/// worth naming because both looked like the renderer being broken. Only top-level entities were
-/// ever visited, so a label added as a child of another entity - the obvious way to attach a label to
-/// a thing - never drew at all. And the cached text measurements were keyed on entities that the
-/// renderer had no way of knowing had been removed, so every short-lived label leaked one entry.
-/// Collection through a processor fixes both: the engine reports components arriving and leaving
-/// wherever they sit in the hierarchy.
+/// Components are tracked wherever they sit in the entity hierarchy, including on child entities.
 /// </para>
 /// </remarks>
 public class EntityTextProcessor : EntityProcessor<EntityTextComponent, EntityTextRenderData>

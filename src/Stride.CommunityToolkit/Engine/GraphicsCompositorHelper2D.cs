@@ -20,8 +20,8 @@ public static class GraphicsCompositorHelper2D
     /// <summary>
     /// Creates a default <see cref="GraphicsCompositor"/> configured with specified rendering options.
     /// </summary>
-    /// <param name="enablePostEffects">If <see langword="true"/>, post-processing effects such as tone mapping are enabled; otherwise, they are
-    /// disabled.</param>
+    /// <param name="enablePostEffects">If <see langword="true"/>, adds post effects with everything off except the colour-transform group,
+    /// whose tone map is also off; otherwise, adds none.</param>
     /// <param name="modelEffectName">The name of the effect used for rendering models. Defaults to "StrideForwardShadingEffect".</param>
     /// <param name="camera">An optional <see cref="CameraComponent"/> to be associated with the compositor. If provided, it will be assigned
     /// to a camera slot.</param>

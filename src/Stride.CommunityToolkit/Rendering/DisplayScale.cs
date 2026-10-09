@@ -10,11 +10,8 @@ namespace Stride.CommunityToolkit.Rendering;
 /// </summary>
 /// <remarks>
 /// <para>
-/// "4K" is two different things, and only the DPI tells them apart. A 4K laptop at 200% scaling has
-/// the same physical area as a 1080p one, so 16-pixel text is now half the height to the eye - a
-/// bug. A 4K monitor at 100% has more area, and its owner bought it to see more, not bigger - the
-/// same text is correct there. Scaling by the window size would get one of those wrong; scaling by
-/// this gets both right. It is what every game's "UI scale" slider defaults to.
+/// Scale by this, not by the window size: a 4K laptop at 200% needs 16-pixel text drawn at 32 to
+/// look the same, while a 4K monitor at 100% does not. Only the DPI tells the two apart.
 /// </para>
 /// <para>
 /// It applies to what is measured in pixels: a debug overlay's font, a screen-space label, a shape
@@ -28,8 +25,7 @@ namespace Stride.CommunityToolkit.Rendering;
 /// the backbuffer matches the window and the whole difference is the operating system's scale
 /// setting, which SDL reports as the display DPI over 96; it follows the process's DPI awareness, so
 /// an unaware process - one Windows is already stretching - correctly reads 1. Stride draws sprites
-/// in backbuffer pixels either way, which is why one number serves both cases rather than the two
-/// the Box2D samples keep apart.
+/// in backbuffer pixels either way, so one number serves both cases.
 /// </para>
 /// <para>
 /// Verified on Windows. On X11 with a scale set through <c>Xft.dpi</c> or <c>GDK_SCALE</c> nothing
@@ -37,8 +33,8 @@ namespace Stride.CommunityToolkit.Rendering;
 /// stays 1; supply a <see cref="Source"/> that reads the setting if that matters to you.
 /// </para>
 /// <para>
-/// The value is re-read when the window changes size, which is also what happens when it moves to a
-/// monitor with a different scale, and every second regardless as a safety net. <see cref="Changed"/>
+/// The value is re-read when the window changes size, which also happens when it moves to a
+/// monitor with a different scale, and every 60 frames. <see cref="Changed"/>
 /// fires when it differs; consumers holding a rasterised font at the old size rebuild it then.
 /// </para>
 /// <para>

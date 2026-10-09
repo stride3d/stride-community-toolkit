@@ -66,29 +66,36 @@ public static class RandomExtensions
     }
 
     /// <summary>
-    /// Generates a random normalized 2D direction vector.
+    /// Generates a random unit direction in the XY plane, every angle equally likely.
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
-    /// <returns>A unit-length (or zero) direction vector in the XY plane.</returns>
+    /// <returns>A unit-length direction vector in the XY plane.</returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Vector2 NextDirection2D(this Random random)
     {
         ArgumentNullException.ThrowIfNull(random);
 
-        return Vector2.Normalize(new Vector2(random.NextSingle(), random.NextSingle()));
+        var angle = random.NextSingle() * MathUtil.TwoPi;
+
+        return new Vector2(MathF.Cos(angle), MathF.Sin(angle));
     }
 
     /// <summary>
-    /// Generates a random normalized 3D direction vector.
+    /// Generates a random unit direction in 3D, every direction equally likely.
     /// </summary>
     /// <param name="random">An instance of <see cref="Random"/>.</param>
-    /// <returns>A unit-length (or zero) direction vector in 3D space.</returns>
+    /// <returns>A unit-length direction vector.</returns>
     /// <exception cref="ArgumentNullException">If the random argument is null.</exception>
     public static Vector3 NextDirection3D(this Random random)
     {
         ArgumentNullException.ThrowIfNull(random);
 
-        return Vector3.Normalize(new Vector3(random.NextSingle(), random.NextSingle(), random.NextSingle()));
+        // A uniform height and a uniform angle round it cover the sphere evenly
+        var z = random.NextSingle() * 2f - 1f;
+        var angle = random.NextSingle() * MathUtil.TwoPi;
+        var ring = MathF.Sqrt(1f - z * z);
+
+        return new Vector3(ring * MathF.Cos(angle), ring * MathF.Sin(angle), z);
     }
 
     /// <summary>

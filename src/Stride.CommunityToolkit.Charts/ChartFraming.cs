@@ -3,9 +3,8 @@ using Stride.Core.Mathematics;
 namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
-/// The pure mathematics behind <c>Chart.FrameCamera</c>: how large an orthographic view, or how distant a
-/// perspective camera, must be for a box to fit the window with some breathing room. Kept free of engine
-/// state so it is covered by unit tests.
+/// The arithmetic behind chart ticks and <see cref="Chart.FrameCamera"/>: tick steps and values, and how
+/// large an orthographic view, or how distant a perspective camera, must be for a box to fit the window.
 /// </summary>
 public static class ChartFraming
 {

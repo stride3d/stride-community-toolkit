@@ -16,9 +16,5 @@ namespace Stride.CommunityToolkit.Audio;
 /// <see langword="float"/> or an <see langword="int"/> is enough) rather than a structure updated
 /// in several steps.
 /// </para>
-/// <para>
-/// A named delegate rather than <c>Action&lt;Span&lt;short&gt;, int, int&gt;</c> on purpose: the two
-/// integers are only telling apart by name, and the name is what a caller sees at the call site.
-/// </para>
 /// </remarks>
 public delegate void SampleFiller(Span<short> samples, int sampleRate, int channels);

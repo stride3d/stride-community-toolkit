@@ -42,29 +42,30 @@ void Start(Scene rootScene)
 
 /*
 ---example-metadata
-slug: falling-shapes-2d
+slug: falling-shapes-physics-2d
 title:
-  en: Basic 2D Scene (Falling Shapes)
-  cs: Základní 2D scéna (Padající tvary)
+  en: Falling Shapes with Physics Options (2D)
+  cs: Padající tvary s nastavením fyziky (2D)
 level: Beginner
 category: Physics
 complexity: 1
 order: 90
 description:
   en: |-
-    Create a minimal 2D scene using toolkit helpers and place multiple capsule primitives with flat materials.
-    Demonstrates primitive creation, basic positioning, and attaching the entities to the scene.
-    The shapes will fall due to physics, showcasing the integration of Bepu physics in a 2D scene.
+    Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing
+    added: each capsule is given its own Body2DComponent with a lower FrictionCoefficient, so the pile
+    spreads wider than with the default. It shows where a body's physics options go when a primitive
+    is created.
   cs: |-
-    Vytvoření minimální 2D scény pomocí nástrojů sady a umístění několika kapslí s plochými materiály.
-    Ukazuje vytvoření primitivních tvarů, základní umístění a připojení entit k scéně.
-    Tvary budou padat díky fyzice, což ukazuje integraci Bepu fyziky v 2D scéně.
+    Třicet kapslí a obdélník spuštěné ve sloupci jako v E01_2D_FallingShapes, s jedním přídavkem:
+    každá kapsle dostane vlastní Body2DComponent s nižším FrictionCoefficient, takže se hromada
+    rozprostře víc než s výchozí hodnotou. Ukazuje, kam patří fyzikální nastavení tělesa při
+    vytváření primitivního tvaru.
 concepts:
-  - Creating a 2D primitive with Create2DPrimitive
-  - Applying a flat material with CreateFlatMaterial
-  - Setting an entity position through Transform.Position
-  - Adding entities to a Scene (rootScene)
-  - "Using helpers: SetupBase2DScene"
+  - Passing a Body2DComponent to Create2DPrimitive to set physics options
+  - FrictionCoefficient - a lower value lets the pile spread
+  - An empty CompoundCollider that the helper fills with the fitted shape
+  - "Using helpers: SetupBase2DScene, AddProfiler, Create2DPrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bepu
@@ -76,7 +77,8 @@ tags:
   - Transform
   - Position
 related:
-  - E02_3D_GiveMeACube
+  - E01_2D_FallingShapes
+  - E05_3D_PhysicsMaterials
   - E02_2D_Primitives
   - E02_3D_Material
 enabled: true

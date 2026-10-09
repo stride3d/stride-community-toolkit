@@ -77,8 +77,8 @@ public class ImGuiNetSystem : GameSystemBase
     public float FontSize { get; set; } = 15f;
 
     /// <summary>
-    /// When true (default), the font atlas is rebuilt automatically if the framebuffer scale changes
-    /// due to window resize or monitor DPI change. This keeps text crisp instead of scaled/blurry.
+    /// When true (default), the font atlas is rebuilt when the display scale changes, for example
+    /// when the window moves to a monitor with a different DPI, so text stays crisp.
     /// </summary>
     public bool AutoScaleFonts { get; set; } = true;
 

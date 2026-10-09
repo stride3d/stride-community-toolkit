@@ -63,13 +63,12 @@ public static partial class GameExtensions
     }
 
     /// <summary>
-    /// Sets the minimum update interval used while the game window is minimized.
+    /// Sets the update interval used while the window is minimized, or unfocused when <see cref="GameBase.TreatNotFocusedLikeMinimized"/> is set.
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
     /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the minimized update interval. Must be greater than 0.</param>
     /// <remarks>
     /// <para>This method configures <see cref="GameBase.MinimizedMinimumUpdateRate"/> and is useful for reducing resource usage while the game is minimized.</para>
-    /// <para>Setting <paramref name="targetFPS"/> to zero disables throttling.</para>
     /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
@@ -89,7 +88,6 @@ public static partial class GameExtensions
     /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the active-window update interval. Must be greater than 0.</param>
     /// <remarks>
     /// <para>This method configures <see cref="GameBase.WindowMinimumUpdateRate"/> and can be used to limit the update rate while the game is running normally.</para>
-    /// <para>Setting <paramref name="targetFPS"/> to zero disables throttling.</para>
     /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>

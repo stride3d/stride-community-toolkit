@@ -20,7 +20,7 @@ public static class GameExtensions
     /// Adds a skybox to the specified game scene, providing a background texture to create a more immersive environment.
     /// </summary>
     /// <param name="game">The <see cref="Game"/> instance to which the skybox will be added.</param>
-    /// <param name="entityName">The optional name for the skybox entity. If null, a default name ("Skybox") will be used.</param>
+    /// <param name="entityName">The name of the skybox entity. Defaults to "Skybox".</param>
     /// <returns>The created <see cref="Entity"/> representing the skybox.</returns>
     /// <remarks>
     /// The skybox texture is loaded from the Resources folder and is used to generate a skybox using the <see cref="SkyboxGenerator"/>.

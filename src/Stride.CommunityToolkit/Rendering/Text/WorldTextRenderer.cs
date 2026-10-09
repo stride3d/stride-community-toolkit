@@ -13,20 +13,17 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Add one to the graphics compositor - <c>game.AddSceneRenderer(new WorldTextRenderer())</c> - and any
-/// entity carrying a <see cref="WorldTextComponent"/> is drawn at its transform, scaled by perspective
-/// and, by default, hidden by geometry in front of it.
+/// <see cref="WorldTextProcessor"/> adds one to the scene's compositor when the scene has a
+/// <see cref="WorldTextComponent"/>. Each text is drawn at its entity's transform, scaled by
+/// perspective and, by default, hidden by geometry in front of it.
 /// </para>
 /// <para>
 /// <b>How it works, and what it costs.</b> <see cref="SpriteBatch"/> can be given explicit view and
 /// projection matrices, which turns its 2D quads into geometry positioned in world space. Folding each
 /// text's world matrix into the view matrix places and orients it, and the depth state decides whether
 /// the scene occludes it. The catch is that the matrices belong to the batch rather than the draw call,
-/// so each text needs its own <c>Begin</c>/<c>End</c> pair and therefore its own draw call. That is
-/// fine for the tens of labels this is meant for - axis names, debug markers, a sign over a spawn point
-/// - and would not be fine for thousands. Batching them would mean rendering each distinct string to a
-/// texture and drawing those through <see cref="Sprite3DBatch"/>, which takes a world matrix per
-/// sprite; worth doing only if the counts ever justify the cache it needs.
+/// so each text needs its own <c>Begin</c>/<c>End</c> pair and therefore its own draw call: fine for
+/// tens of labels, not for thousands.
 /// </para>
 /// </remarks>
 public class WorldTextRenderer : SceneRendererBase

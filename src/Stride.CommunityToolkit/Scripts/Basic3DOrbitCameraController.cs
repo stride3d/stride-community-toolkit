@@ -74,10 +74,10 @@ public class Basic3DOrbitCameraController : SyncScript
     /// <summary>Gets or sets the mouse button that pans the target while held. Defaults to the middle button.</summary>
     public MouseButton PanButton { get; set; } = MouseButton.Middle;
 
-    /// <summary>Gets or sets the lowest pitch in radians - how far below the target the camera may sink. Defaults to about −85°.</summary>
+    /// <summary>Gets or sets the lowest pitch in radians - how far above the target the camera may climb. Defaults to about −85°.</summary>
     public float MinPitch { get; set; } = -1.48f;
 
-    /// <summary>Gets or sets the highest pitch in radians - how far above the target the camera may climb. Defaults to about 85°.</summary>
+    /// <summary>Gets or sets the highest pitch in radians - how far below the target the camera may sink. Defaults to about 85°.</summary>
     public float MaxPitch { get; set; } = 1.48f;
 
     /// <summary>Gets or sets the key that collapses and expands the help section. Defaults to <see cref="Keys.F2"/>.</summary>

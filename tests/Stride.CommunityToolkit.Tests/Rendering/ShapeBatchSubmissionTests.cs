@@ -11,6 +11,44 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// </summary>
 public class ShapeBatchSubmissionTests
 {
+    [Fact]
+    public void FlatOverloadsDrawWhatTheirXYPlaneCallsDraw()
+    {
+        var flat = new ShapeBatch();
+        var plane = new ShapeBatch();
+
+        flat.DrawRectangle(new Vector2(3f, 2f), new Vector2(4f, 1f), Color.Red, cornerRadius: 0.2f);
+        plane.DrawRectangle(new Vector3(3f, 2f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(4f, 1f), Color.Red, 0.2f);
+        flat.DrawDisc(new Vector2(1f, 1f), 0.5f, Color.Red);
+        plane.DrawDisc(new Vector3(1f, 1f, 0f), Vector3.UnitZ, 0.5f, Color.Red);
+        flat.DrawPixelLine(new Vector2(0f, 0f), new Vector2(2f, 1f), 2f, Color.Red);
+        plane.DrawPixelLine(Vector3.Zero, new Vector3(2f, 1f, 0f), 2f, Color.Red);
+
+        Assert.Equal(plane.Instances.Count, flat.Instances.Count);
+
+        for (var i = 0; i < flat.Instances.Count; i++)
+        {
+            Assert.Equal(plane.Instances[i].Position, flat.Instances[i].Position);
+            Assert.Equal(plane.Instances[i].Radius, flat.Instances[i].Radius);
+        }
+
+        Assert.Equal(plane.Points, flat.Points);
+    }
+
+    [Fact]
+    public void FlatRectangleTurnsCounterClockwise()
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawRectangle(Vector2.Zero, new Vector2(4f, 1f), Color.Red, rotation: MathF.PI / 2f);
+
+        // A quarter turn puts the rectangle's X axis along world Y
+        var axis = Assert.Single(batch.Instances).AxisX;
+
+        Assert.Equal(0f, axis.X, 5);
+        Assert.Equal(1f, axis.Y, 5);
+    }
+
     [Theory]
     [InlineData(0.5f)]
     [InlineData(2f)]
@@ -26,6 +64,20 @@ public class ShapeBatchSubmissionTests
 
         Assert.Equal(Color.Red, line.FillColor);
         Assert.Equal(1f, line.AxisY.W);
+    }
+
+    [Fact]
+    public void ShapeIsSolidInTheColourOfItsDrawCallByDefault()
+    {
+        var batch = new ShapeBatch();
+
+        batch.DrawRectangle(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, new Vector2(2f, 1f), Color.Red);
+
+        var rectangle = Assert.Single(batch.Instances);
+
+        Assert.Equal(Color.Red, rectangle.Color);
+        Assert.Equal(Color.Red, rectangle.FillColor);
+        Assert.Equal(1f, rectangle.AxisY.W);
     }
 
     [Fact]

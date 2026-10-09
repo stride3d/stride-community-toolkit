@@ -10,11 +10,9 @@ namespace Stride.CommunityToolkit.Charts;
 /// with <see cref="Chart.AddArea(Func{float, float}, float, float, float, Color?, string?, int)"/>.
 /// </summary>
 /// <remarks>
-/// The region remembers its two functions and its <c>x</c> stretch, so a view-driven chart re-samples and
-/// re-clips it when the visible range changes, exactly as it re-plots a curve. The shape batch fills convex
-/// shapes only, and the region under a curve is not one - but sampled into columns it is a run of convex
-/// quadrilaterals, drawn one after another at <see cref="ChartSeriesOptions.AreaOpacity"/>, behind the
-/// grid lines' successors: the axes and the curves.
+/// The region keeps its two functions and its <c>x</c> stretch, so a view-driven chart re-samples it when
+/// the visible range changes. It is drawn as a run of convex columns at
+/// <see cref="ChartSeriesOptions.AreaOpacity"/>, over the grid and behind the axes and curves.
 /// </remarks>
 public sealed class ChartAreaSeries : ChartSeries
 {

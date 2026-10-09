@@ -9,10 +9,9 @@ namespace Stride.CommunityToolkit.Rendering.Compositing;
 /// renderer and so have no current camera on the context.
 /// </summary>
 /// <remarks>
-/// A game's compositor names its camera in a slot, and slot zero is the one every toolkit renderer
-/// used to read. Game Studio's scene editor clears the slots and hands its own camera to the
-/// top-level camera renderer as an external camera instead, so the slots are tried first and the
-/// renderer tree is walked for a camera renderer after that. Null when neither has one.
+/// Tries the compositor's first camera slot, then walks the renderer tree for a camera renderer.
+/// Game Studio's scene editor leaves the slots empty and hands its camera to the top-level
+/// renderer instead. Returns <see langword="null"/> when neither has a camera.
 /// </remarks>
 public static class CompositorCameras
 {

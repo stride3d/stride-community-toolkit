@@ -14,7 +14,7 @@ provides you with a simpler builder API to define your texture dynamically.
 
 ```csharp
 var renderContext = RenderContext.GetShared(game.Services);
-using var canvas = new TextureCanvas(renderContext);
+using var canvas = new TextureCanvas(renderContext, new Size2(1024, 1024));
 ```
 
 > [!NOTE]
@@ -49,8 +49,8 @@ To get the resulting image you have the option to save the image to a file, stre
 
 ```csharp
 var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
-var filePath = Path.Combine(directory, "input.png");
-using var output = File.Open(filePath, FileMode.Open);
+var filePath = Path.Combine(directory, "output.png");
+using var output = File.Create(filePath);
 canvas.Store(output, ImageFileType.Png);
 ```
 
@@ -67,13 +67,13 @@ The `TextureCanvas` supports various image manipulations as well as image effect
 
 ### Resample
 The **Resample** method changes the current size of the texture or pixel format while preserving the current content.
-The content will be resized to match the new size if neccesary.
+The content will be resized to match the new size if necessary.
 ```csharp
 canvas.Resample(size: new Size2(512, 512), pixelFormat: PixelFormat.R8G8B8A8_UNorm)
 ```
 
 ### BrightFilter
-The **BrightFilter** method a @Stride.Rendering.Images.BrightFilter filter to the image
+The **BrightFilter** method applies a @Stride.Rendering.Images.BrightFilter filter to the image
 
 ```csharp
 canvas.BrightFilter(threshold: 0.2f, steepness: 1.0f)
@@ -153,7 +153,7 @@ the source texture is clipped to fit in the destination dimensions.
 
 ### Anchors
 This enum controls the alignment mode if clipping or padding is necessary.
-How the anchors behave is dependant on the selected stretch mode.
+How the anchors behave depends on the selected stretch mode.
 
 - **TopLeft:**
   Adjust the position so the top-left corner of the source and target rect are aligned.

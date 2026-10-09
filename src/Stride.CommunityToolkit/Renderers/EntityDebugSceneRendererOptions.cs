@@ -34,9 +34,7 @@ public class EntityDebugSceneRendererOptions
     /// in <see cref="FontColor"/> on the same line as the name.
     /// </summary>
     /// <remarks>
-    /// Setting this moves the coordinates onto their own line beneath the name, because two colours
-    /// on one line means measuring and chaining the parts, and the result is harder to read than a
-    /// stack. Name and numbers are easier to tell apart when they differ in both colour and position.
+    /// Setting this moves the coordinates onto their own line beneath the name.
     /// </remarks>
     public Color? PositionColor { get; set; }
 
@@ -78,7 +76,7 @@ public class EntityDebugSceneRendererOptions
 
     /// <summary>
     /// Gets or sets which point of the label sits on the entity's projected position. Default is
-    /// <see cref="TextAnchor.TopLeft"/>, which matches how this renderer has always placed text.
+    /// <see cref="TextAnchor.TopLeft"/>.
     /// </summary>
     /// <remarks>
     /// <see cref="TextAnchor.BottomCenter"/> is usually the one wanted for a label floating over an

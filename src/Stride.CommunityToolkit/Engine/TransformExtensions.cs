@@ -19,7 +19,7 @@ public static class TransformExtensions
     public static Vector3 WorldUp { get; set; } = Vector3.UnitY;
 
     /// <summary>
-    /// Updates the <see cref="TransformComponent.Position"/>, <see cref="TransformComponent.Rotation"/> and <see cref="TransformComponent.Scale"/> members of the given <see cref="TransformComponent"/>.
+    /// Sets <see cref="TransformComponent.Position"/>, <see cref="TransformComponent.Rotation"/> and <see cref="TransformComponent.Scale"/> by decomposing <see cref="TransformComponent.LocalMatrix"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
@@ -37,7 +37,7 @@ public static class TransformExtensions
     /// <param name="translation">The translation vector to move by.</param>
     /// <param name="relativeTo">The coordinate space to perform the translation in.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -76,7 +76,7 @@ public static class TransformExtensions
     /// <param name="translation">The translation vector to move by.</param>
     /// <param name="relativeTo">The coordinate space to perform the translation in.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -92,7 +92,7 @@ public static class TransformExtensions
     /// <param name="translation">The translation vector to move by.</param>
     /// <param name="relativeTo">The <see cref="TransformComponent"/> to perform the translation relative to.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="relativeTo"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -119,7 +119,7 @@ public static class TransformExtensions
     /// <param name="translation">The translation vector to move by.</param>
     /// <param name="relativeTo">The <see cref="TransformComponent"/> to perform the translation relative to.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="relativeTo"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -135,7 +135,7 @@ public static class TransformExtensions
     /// <param name="eulerAngles">The euler angles in radians to rotate by.</param>
     /// <param name="relativeTo">The coordinate space to perform the rotation in.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -201,7 +201,7 @@ public static class TransformExtensions
     /// <param name="eulerAngles">The euler angles in radians to rotate by.</param>
     /// <param name="relativeTo">The coordinate space to perform the rotation in.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -443,14 +443,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="worldUp">A Vector specifying the upward direction.</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="target"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -465,14 +465,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="worldUp">A Vector specifying the upward direction.</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="target"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -482,14 +482,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
     /// The world up vector used is defined by <see cref="WorldUp"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> or <paramref name="target"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -500,14 +500,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="worldUp">A Vector specifying the upward direction.</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -561,14 +561,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="worldUp">A Vector specifying the upward direction.</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -578,14 +578,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
-    /// The world up vector use is defined by <see cref="WorldUp"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
+    /// The world up vector used is defined by <see cref="WorldUp"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>
@@ -596,14 +596,14 @@ public static class TransformExtensions
     }
 
     /// <summary>
-    /// Sets the transforms rotation so it's forward vector points at the <paramref name="target"/>.
-    /// The world up vector use is defined by <see cref="WorldUp"/>.
+    /// Sets the transform's rotation so its forward vector points at the <paramref name="target"/>.
+    /// The world up vector used is defined by <see cref="WorldUp"/>.
     /// </summary>
     /// <param name="transform">The <see cref="TransformComponent"/> to update.</param>
     /// <param name="target">The target to point towards</param>
     /// <param name="smooth">Value between 0 and 1 indicating the weight of target orientation. The default is 1.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="transform"/> has <see cref="TransformComponent.UseTRS"/> set to <see langword="false"/>.</exception>
     /// <remarks>
     /// This method updates the <see cref="TransformComponent.LocalMatrix"/> and <see cref="TransformComponent.WorldMatrix"/> after transformation.
     /// </remarks>

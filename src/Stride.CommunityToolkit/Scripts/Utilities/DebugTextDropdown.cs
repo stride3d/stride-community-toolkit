@@ -48,7 +48,7 @@ public class DebugTextDropdown
     private const int LineIncrement = 20;
 
     /// <summary>
-    /// Gets the name shown next to the toggle key, for example <c>Shape</c> in "C - Shape: Sphere".
+    /// Gets the name shown after the toggle key, for example <c>Shape</c> in <c>[+] [C] Shape: Sphere</c>.
     /// </summary>
     public required string Title { get; init; }
 
@@ -73,7 +73,7 @@ public class DebugTextDropdown
     public Color? TitleColor { get; set; }
 
     /// <summary>
-    /// Gets or sets the marker appended to the title while the list is collapsed.
+    /// Gets or sets the marker drawn before the toggle key while the list is collapsed.
     /// </summary>
     /// <remarks>
     /// Printable ASCII only - see the remarks on <see cref="DebugTextDropdown"/>. Arrow glyphs such as
@@ -82,7 +82,7 @@ public class DebugTextDropdown
     public string CollapsedMarker { get; set; } = "[+]";
 
     /// <summary>
-    /// Gets or sets the marker appended to the title while the list is expanded.
+    /// Gets or sets the marker drawn before the toggle key while the list is expanded.
     /// </summary>
     /// <inheritdoc cref="CollapsedMarker" path="/remarks"/>
     public string ExpandedMarker { get; set; } = "[-]";

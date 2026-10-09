@@ -62,9 +62,9 @@ public static class MathUtilEx
     }
 
     /// <summary>
-    /// Creates a rotation with the specified forward and upwards directions.
+    /// Creates a rotation that looks from <paramref name="eye"/> towards <paramref name="target"/>.
     /// </summary>
-    /// <param name="eye">The postion of the observer. i.e. camera</param>
+    /// <param name="eye">The position of the observer, such as a camera.</param>
     /// <param name="target">The location of the object to look-at.</param>
     /// <param name="up">The vector that defines which direction is up.</param>
     /// <param name="result">The created quaternion rotation</param>
@@ -72,18 +72,6 @@ public static class MathUtilEx
     /// The result is always finite and unit length, including for the degenerate inputs: an eye
     /// sitting on the target, a line of sight parallel to <paramref name="up"/>, and a zero-length
     /// <paramref name="up"/>.
-    /// <para>
-    /// This used to build the quaternion with the single-branch trace formula,
-    /// <c>w = sqrt(1 + m11 + m22 + m33) / 2</c>, which is only valid while that sum is positive. A
-    /// camera orbited to the far side of its target is a 180 degree rotation, where the sum is
-    /// exactly -1: <c>w</c> came out as zero, the reciprocal that follows it divided by zero, and the
-    /// quaternion's components became <c>0 * infinity</c>, which is <c>NaN</c>. Assigning that to a
-    /// <c>TransformComponent.Rotation</c> poisoned the entity's matrix, and any position integrated
-    /// through that matrix afterwards became <c>NaN</c> as well - a camera that could not be
-    /// recovered without resetting its transform. Delegating to
-    /// <see cref="Quaternion.RotationMatrix(Matrix)"/> picks up the branch for each sign of the
-    /// trace, which is what makes every orientation safe rather than merely most of them.
-    /// </para>
     /// </remarks>
     public static void LookRotation(ref Vector3 eye, ref Vector3 target, ref Vector3 up, out Quaternion result)
     {
@@ -148,14 +136,14 @@ public static class MathUtilEx
     }
 
     /// <summary>
-    /// Creates a rotation with the specified forward and upwards directions.
+    /// Creates a rotation that looks from <paramref name="eye"/> towards <paramref name="target"/>.
     /// </summary>
-    /// <param name="eye">The postion of the observer. i.e. camera</param>
+    /// <param name="eye">The position of the observer, such as a camera.</param>
     /// <param name="target">The location of the object to look-at.</param>
     /// <param name="up">The vector that defines which direction is up.</param>
     /// <returns>The created quaternion rotation</returns>
     /// <example>
-    /// var cameraRotation = Quaternion.LookRotation(cameraPosition, targetPosition, Vector3.UnitY);
+    /// var cameraRotation = MathUtilEx.LookRotation(cameraPosition, targetPosition, Vector3.UnitY);
     /// </example>
     public static Quaternion LookRotation(Vector3 eye, Vector3 target, Vector3 up)
     {
@@ -211,7 +199,7 @@ public static class MathUtilEx
     /// Convert <see cref="Quaternion"/> to rotation Euler angles.
     /// </summary>
     /// <param name="rotation">The rotation.</param>
-    /// <param name="result">Reulting euler rotation, with XYZ order.</param>
+    /// <param name="result">The Euler rotation, in XYZ order.</param>
     public static void ToRotationEulerXYZ(ref Quaternion rotation, out Vector3 result)
     {
 
@@ -247,7 +235,7 @@ public static class MathUtilEx
     /// Convert <see cref="Quaternion"/> to rotation Euler angles.
     /// </summary>
     /// <param name="rotation">The rotation.</param>
-    /// <returns>Reulting euler rotation, with XYZ order.</returns>
+    /// <returns>The Euler rotation, in XYZ order.</returns>
     public static Vector3 ToRotationEulerXYZ(this Quaternion rotation)
     {
         ToRotationEulerXYZ(ref rotation, out var result);

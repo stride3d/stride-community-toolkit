@@ -6,7 +6,7 @@ using Stride.Physics;
 namespace Stride.CommunityToolkit.Bullet;
 
 /// <summary>
-/// Provides extension methods for the <see cref="Simulation"/> class to perform raycasting operations in a game simulation fro the Bullet physics.
+/// Provides raycasting extension methods for the Bullet <see cref="Simulation"/>.
 /// </summary>
 public static class SimulationExtensions
 {

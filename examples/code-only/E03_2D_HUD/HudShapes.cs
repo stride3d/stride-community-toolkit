@@ -13,11 +13,11 @@ public static class HudShapes
 
     /// <summary>A line between two points, its width in pixels.</summary>
     public static void Line(this HudCanvas canvas, Vector2 from, Vector2 to, float width, Color colour)
-        => canvas.Shapes.DrawPixelLine(new Vector3(from, 0f), new Vector3(to, 0f), width, colour);
+        => canvas.Shapes.DrawPixelLine(from, to, width, colour);
 
     /// <summary>A rectangle with square corners.</summary>
     public static void Box(this HudCanvas canvas, Vector2 center, Vector2 size, Color colour)
-        => canvas.Shapes.DrawRectangle(new Vector3(center, 0f), Vector3.UnitX, Vector3.UnitY, size, colour);
+        => canvas.Shapes.DrawRectangle(center, size, colour);
 
     /// <summary>A rectangle with its corners cut at 45 degrees, the HUD's panel shape, as one convex polygon.</summary>
     public static void ChamferedPanel(this HudCanvas canvas, Vector2 center, Vector2 size, float cut, Color colour)

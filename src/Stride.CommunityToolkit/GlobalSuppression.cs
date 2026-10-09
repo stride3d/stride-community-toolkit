@@ -173,6 +173,10 @@ using System.Diagnostics.CodeAnalysis;
 // as-is through a structured buffer. Grouping the fields into smaller types would be a layout change,
 // not a design improvement, and the shader would have to change with it.
 [assembly: SuppressMessage("NDepend", "ND1002:AvoidTypesWithTooManyFields", Target = "Stride.CommunityToolkit.Shapes:Stride.CommunityToolkit.Shapes.ShapeInstance", Justification = "GPU instance layout mirrored by ShapeShader.sdsl; the field list is the byte layout.")]
+// The Shapes package keeps one namespace and sorts its files into folders by what works together
+// (Batch, Style, Picking, Rendering, Components, Grid). The public types are spread over all of them,
+// so a namespace per folder would cost every user a using per folder for a small API.
+[assembly: SuppressMessage("NDepend", "ND2105:TypesDeclaredInTheSameNamespaceShouldHaveTheirSourceFilesStoredInTheSameDirectory", Target = "Stride.CommunityToolkit.Shapes:Stride.CommunityToolkit.Shapes", Justification = "One namespace on purpose; the folders group source files and are not part of the API.")]
 // The other two Vertices properties are inputs, not live collections: an options bag filled in an object
 // initializer and handed to a builder, and a procedural model's outline, shaped like Stride's own
 // procedural models. Nothing is wired to the array, so replacing it breaks nothing; an outline's length

@@ -3,7 +3,7 @@ using Stride.Core.Mathematics;
 namespace Stride.CommunityToolkit.Charts.Lines;
 
 /// <summary>
-/// Turns functions into point lists for <see cref="PolylineMeshBuilder"/>.
+/// Samples functions into point lists.
 /// </summary>
 public static class PolylineSampling
 {

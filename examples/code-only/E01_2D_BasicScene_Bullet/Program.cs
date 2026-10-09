@@ -6,47 +6,25 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: (Scene rootScene) =>
+game.Run(start: Start);
+
+void Start(Scene rootScene)
 {
     game.SetupBase2DScene();
-    game.AddProfiler();
 
-    for (int i = 0; i <= 30; i++)
+    var entity = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
     {
-        var primitive = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
-        {
-            Material = game.CreateFlatMaterial(Color.White),
-            //Size = new Vector2(0.2f, 0.7f),
-            //Size = new Vector2(0.1f, 1),
-            Depth = 1
-        });
-        primitive.Transform.Position = new Vector3(0.001f * i, 10 + i * 2, 0);
-        primitive.Scene = rootScene;
-    }
-
-    var entity2 = game.Create2DPrimitive(Primitive2DModelType.Rectangle, new()
-    {
-        Material = game.CreateFlatMaterial(Color.Red),
-        Size = new Vector2(0.5f, 0.8f),
-        Depth = 1
+        Material = game.CreateFlatMaterial(Color.White)
     });
-
-    entity2.Transform.Position = new Vector3(0.2f, 20f, 0);
-    //entity2.Add(new DebugRenderComponentScript());
-    //entity2.Add(new CollidableGizmoScript()
-    //{
-    //    Color = new Color4(0.4f, 0.843f, 0, 0.9f),
-    //    Visible = false
-    //});
-
-    entity2.Scene = rootScene;
-});
+    entity.Transform.Position = new Vector3(0, 8, 0);
+    entity.Scene = rootScene;
+}
 
 /*
 ---example-metadata
 slug: basic-2d-scene-bullet
 title:
-  en: Basic2D Scene (Capsule) - Bullet Physics
+  en: Basic 2D Scene (Capsule) - Bullet Physics
   cs: Základní 2D scéna (Kapsle) - Bullet Physics
 level: Getting Started
 category: Shapes
@@ -54,29 +32,32 @@ complexity: 1
 order: 40
 description:
   en: |-
-    Create a minimal 2D scene using toolkit helpers and place a single capsule primitive.
-    Demonstrates entity creation, basic positioning, and attaching the entity to the scene.
+    The same first 2D scene as E01_2D_BasicScene, running on the legacy Bullet physics engine instead
+    of Bepu. The scene code is character-for-character identical; the only difference is which toolkit
+    package is referenced and which namespace is opened. That is the point of the example - physics is
+    swapped at the project level, not by rewriting the scene.
   cs: |-
-    Vytvoření minimální 2D scény pomocí nástrojů sady a umístění jediné kapsle jako primitivního tvaru.
-    Ukazuje vytvoření entity, základní umístění a připojení entity k scéně.
+    Stejná první 2D scéna jako E01_2D_BasicScene, jen běží na starším fyzikálním enginu Bullet místo
+    Bepu. Kód scény je znak po znaku totožný; liší se jen tím, na který balíček sady projekt odkazuje
+    a který jmenný prostor otevírá. O to v příkladu jde - fyzika se vymění na úrovni projektu, ne
+    přepsáním scény.
 concepts:
-  - Creating a 2D primitive (Capsule)
-  - Positioning an entity with Transform.Position
-  - Adding entities to a Scene (rootScene)
-  - "Using helpers: SetupBase2DScene"
+  - Running the base 2D scene on the legacy Bullet physics engine
+  - "Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu"
+  - Why the scene code needs no change when the physics engine does
+  - "Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bullet
+  - Physics
   - Shapes
   - Primitive
   - Capsule
   - Scene Setup
-  - Transform
-  - Position
+  - Legacy
 related:
-  - E02_3D_GiveMeACube
-  - E02_2D_Primitives
-  - E02_3D_Material
+  - E01_2D_BasicScene
+  - E01_3D_BasicScene_Bullet
 enabled: true
 created: 2025-11-30
 ---

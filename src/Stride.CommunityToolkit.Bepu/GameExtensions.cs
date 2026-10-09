@@ -102,16 +102,10 @@ public static class GameExtensions
     /// <param name="type">The type of 2D primitive shape to create.</param>
     /// <returns>The newly created <see cref="Entity"/> with Bepu 2D physics attached.</returns>
     /// <remarks>
-    /// <para>Exists so that <c>game.Create2DPrimitive(type)</c> resolves here rather than to the physics-free
-    /// overload in <c>Stride.CommunityToolkit.Engine</c>, which has the same shape and is in scope whenever this
-    /// package is. Both are applicable to that call; C# prefers the candidate that needs no default argument
-    /// substituted, so this exact-arity overload wins, and F# applies the same preference. VB does not, so VB
-    /// callers pass the options explicitly. Passing a <see cref="Bepu2DPhysicsOptions"/> reaches the overload
-    /// below; passing a <c>Primitive2DEntityOptions</c> reaches the physics-free one.</para>
-    /// <para>Two things keep this working: a literal <c>null</c> for the options is still ambiguous, so use a typed
-    /// null as the forwarding call here does; and the core method must not grow an exact-arity overload of its
-    /// own, or the tie returns. This shadowing is a bridge until physics is selected once at setup, at which
-    /// point these overloads go.</para>
+    /// <para>Makes <c>game.Create2DPrimitive(type)</c> resolve here rather than to the physics-free overload in
+    /// <c>Stride.CommunityToolkit.Engine</c>: C# and F# prefer the overload with no default arguments to fill in.
+    /// VB callers pass the options explicitly. Passing a <c>Primitive2DEntityOptions</c> reaches the physics-free
+    /// overload. A literal <c>null</c> for the options is ambiguous; pass a typed null.</para>
     /// </remarks>
     public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type)
         => game.Create2DPrimitive(type, (Bepu2DPhysicsOptions?)null);
@@ -141,16 +135,10 @@ public static class GameExtensions
     /// <param name="type">The type of 3D primitive shape to create.</param>
     /// <returns>The newly created <see cref="Entity"/> with Bepu 3D physics attached.</returns>
     /// <remarks>
-    /// <para>Exists so that <c>game.Create3DPrimitive(type)</c> resolves here rather than to the physics-free
-    /// overload in <c>Stride.CommunityToolkit.Engine</c>, which has the same shape and is in scope whenever this
-    /// package is. Both are applicable to that call; C# prefers the candidate that needs no default argument
-    /// substituted, so this exact-arity overload wins, and F# applies the same preference. VB does not, so VB
-    /// callers pass the options explicitly. Passing a <see cref="Bepu3DPhysicsOptions"/> reaches the overload
-    /// below; passing a <c>Primitive3DEntityOptions</c> reaches the physics-free one.</para>
-    /// <para>Two things keep this working: a literal <c>null</c> for the options is still ambiguous, so use a typed
-    /// null as the forwarding call here does; and the core method must not grow an exact-arity overload of its
-    /// own, or the tie returns. This shadowing is a bridge until physics is selected once at setup, at which
-    /// point these overloads go.</para>
+    /// <para>Makes <c>game.Create3DPrimitive(type)</c> resolve here rather than to the physics-free overload in
+    /// <c>Stride.CommunityToolkit.Engine</c>: C# and F# prefer the overload with no default arguments to fill in.
+    /// VB callers pass the options explicitly. Passing a <c>Primitive3DEntityOptions</c> reaches the physics-free
+    /// overload. A literal <c>null</c> for the options is ambiguous; pass a typed null.</para>
     /// </remarks>
     public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type)
         => game.Create3DPrimitive(type, (Bepu3DPhysicsOptions?)null);

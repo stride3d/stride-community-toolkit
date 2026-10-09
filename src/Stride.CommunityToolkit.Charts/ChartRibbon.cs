@@ -5,10 +5,8 @@ using Stride.Engine;
 namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
-/// The mesh a space curve is drawn with until the shape batch can stroke one: a ribbon through the runs,
-/// rebuilt when the view changes its width by more than a twentieth. Everything else on the chart is a
-/// stroke; this is the one place a series still owns geometry, and it is private so that it can go
-/// without a public change when the space polyline lands.
+/// The ribbon mesh a space curve is drawn with, rebuilt when the view changes its width by more than a
+/// twentieth. The one place a series owns geometry rather than submitting strokes.
 /// </summary>
 internal sealed class ChartRibbon : IDisposable
 {

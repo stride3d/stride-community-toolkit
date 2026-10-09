@@ -26,9 +26,8 @@ namespace Stride.CommunityToolkit.Bullet;
 public static class HeightmapExtensions
 {
     /// <summary>
-    /// Used to distinguish between Grey scale heightmaps HeightMultiplier=255.0f (yields a byte 0-255)
-    /// or float heightmaps HeightMultiplier=10000.0f (based on a short -32,768 to 32,767,
-    /// sum yields 65,535 levels for much smoother maps).
+    /// Divisor applied to each stored sample before it is mapped into <see cref="Heightmap.HeightRange"/>;
+    /// 255 suits 8-bit greyscale heightmaps.
     /// </summary>
     public static readonly float HeightMultiplier = 255.0f;
 
@@ -74,7 +73,7 @@ public static class HeightmapExtensions
     }
 
     /// <summary>
-    /// Returns the interpolated height at sample coordinate (x,y) or the minimum height if out of range.
+    /// Returns the height of sample (x, y) mapped into <see cref="Heightmap.HeightRange"/>, or <c>HeightRange.X</c> when out of range.
     /// </summary>
     public static float GetHeightAt(this Heightmap heightmap, int x, int y)
     {

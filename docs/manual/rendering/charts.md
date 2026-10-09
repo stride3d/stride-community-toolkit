@@ -263,8 +263,8 @@ chart.PlotParametric(
 
 The `Glow3D` preset's halo is `Series.Glow` pixels wide at `Series.GlowStrength` of the stroke's
 brightness, added to the scene (`Series.AdditiveGlow`). Widen it for a showcase, set it to `0` for
-none. A curve that leaves the chart plane - the helix, a 3D trail - is currently a mesh rather than
-a stroke, so its glow is an emissive tint under bloom; everything else is a stroke.
+none. A curve that leaves the chart plane, such as the helix or a 3D trail, is a mesh rather than a
+stroke, so its glow is an emissive tint under bloom. Everything else is a stroke.
 
 ## 6. Sharing the batch, and cleaning up
 

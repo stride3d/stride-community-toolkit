@@ -8,8 +8,7 @@
   href: engine-patterns.md
 - name: Using the Toolkit in Game Studio
   href: game-studio.md
-# - name: What's new in docs
-#   href: whats-new.md
+
 - name: Code-Only
   href: code-only/index.md
   items:
@@ -25,7 +24,7 @@
       href: code-only/create-file-based-app-engine-only.md
   - name: Extensions
     href: code-only/extensions.md
-- name: Code-Only Examples (89)
+- name: Code-Only Examples (95)
   # href supplies the children (the generated per-level toc); topicHref makes the node itself
   # clickable, landing on the visual gallery.
   href: code-only/examples/toc.yml
@@ -77,6 +76,8 @@
     href: rendering/debug-shapes.md
   - name: ShapeBatch
     href: rendering/shape-batch.md
+  - name: Reference Grid
+    href: rendering/reference-grid.md
   - name: Render to Texture
     href: rendering/render-to-texture.md
   - name: GPU Picking
@@ -89,6 +90,8 @@
     href: rendering/mesh-builder.md
   - name: TextureCanvas
     href: rendering/texture-canvas.md
+- name: FAQ
+  href: faq.md
 - name: Troubleshooting
   href: troubleshooting.md
 - name: Glossary

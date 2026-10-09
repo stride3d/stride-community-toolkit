@@ -309,7 +309,7 @@ public static class ScriptSystemExtensions
     /// <param name="priority">The priority of the micro thread action being added.</param>
     /// <returns>The <see cref="MicroThread"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is zero or negative.</exception>
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
@@ -349,7 +349,7 @@ public static class ScriptSystemExtensions
     /// <param name="priority">The priority of the micro thread action being added.</param>
     /// <returns>The <see cref="MicroThread"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is zero or negative.</exception>
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
@@ -395,7 +395,7 @@ public static class ScriptSystemExtensions
     /// <param name="priority">The priority of the micro thread action being added.</param>
     /// <returns>The <see cref="MicroThread"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> or <paramref name="repeatEvery"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is zero or negative.</exception>
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
@@ -450,7 +450,7 @@ public static class ScriptSystemExtensions
     /// <param name="priority">The priority of the micro thread action being added.</param>
     /// <returns>The <see cref="MicroThread"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> or <paramref name="repeatEvery"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> or <paramref name="repeatEvery"/> is zero or negative.</exception>
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
@@ -501,7 +501,7 @@ public static class ScriptSystemExtensions
     }
 
     /// <summary>
-    /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes after waiting specified delay and repeats execution.
+    /// Adds a micro thread function to the <paramref name="scriptSystem"/> that runs every frame for <paramref name="duration"/>, passing the progress.
     /// </summary>
     /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
     /// <param name="action">The micro thread function to execute. The parameter is the progress over time from 0.0f to 1.0f.</param>
@@ -509,7 +509,7 @@ public static class ScriptSystemExtensions
     /// <param name="priority">The priority of the micro thread action being added.</param>
     /// <returns>The <see cref="MicroThread"/>.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="duration"/> is less than zero.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="duration"/> is zero or negative.</exception>
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>

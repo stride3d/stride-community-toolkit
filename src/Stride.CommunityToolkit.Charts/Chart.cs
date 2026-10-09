@@ -27,7 +27,7 @@ namespace Stride.CommunityToolkit.Charts;
 /// drawn every frame by <see cref="Update(CameraComponent)"/> as pixel-measured strokes in a shape batch - the
 /// grid, the axes and ticks, the curves themselves, markers, legend swatches, the cursor - so all of it
 /// keeps its width at any zoom or distance, and every width in the options is a width in pixels. The one
-/// exception is a 3D curve that leaves the chart plane, a mesh until the batch can stroke it.
+/// exception is a 3D curve that leaves the chart plane, which is drawn as a ribbon mesh.
 /// </para>
 /// </remarks>
 public sealed class Chart : IDisposable
@@ -243,7 +243,7 @@ public sealed class Chart : IDisposable
     /// <param name="from">The first <c>x</c> of the stretch.</param>
     /// <param name="to">The last <c>x</c> of the stretch.</param>
     /// <param name="baseline">The <c>y</c> the region is measured from. Defaults to <c>0</c>, the x axis.</param>
-    /// <param name="color">The fill colour; <see langword="null"/> takes the next palette colour at <see cref="ChartSeriesOptions.AreaOpacity"/>.</param>
+    /// <param name="color">The fill colour, drawn at <see cref="ChartSeriesOptions.AreaOpacity"/>; <see langword="null"/> takes the next palette colour.</param>
     /// <param name="name">The series name.</param>
     /// <param name="samples">How many columns the region is built from; more follows a wiggly curve more closely.</param>
     /// <returns>The region, already on the chart; remove it like any other series.</returns>
@@ -265,7 +265,7 @@ public sealed class Chart : IDisposable
     /// <param name="lower">The other; the two may cross, and the region simply narrows to nothing there.</param>
     /// <param name="from">The first <c>x</c> of the stretch.</param>
     /// <param name="to">The last <c>x</c> of the stretch.</param>
-    /// <param name="color">The fill colour; <see langword="null"/> takes the next palette colour at <see cref="ChartSeriesOptions.AreaOpacity"/>.</param>
+    /// <param name="color">The fill colour, drawn at <see cref="ChartSeriesOptions.AreaOpacity"/>; <see langword="null"/> takes the next palette colour.</param>
     /// <param name="name">The series name.</param>
     /// <param name="samples">How many columns the region is built from.</param>
     /// <returns>The region, already on the chart; remove it like any other series.</returns>
@@ -294,7 +294,7 @@ public sealed class Chart : IDisposable
     /// Takes a series off the chart and frees whatever it owned. Does nothing if the series
     /// is not on this chart.
     /// </summary>
-    /// <param name="series">The series returned by <see cref="Plot"/>, <see cref="PlotParametric"/> or <see cref="AddLine"/>.</param>
+    /// <param name="series">A series returned by one of the chart's <c>Plot</c> or <c>Add</c> methods.</param>
     /// <returns><see langword="true"/> if the series was on the chart and has been removed.</returns>
     /// <exception cref="ArgumentNullException">If <paramref name="series"/> is <see langword="null"/>.</exception>
     public bool Remove(ChartSeries series)
@@ -332,9 +332,8 @@ public sealed class Chart : IDisposable
     /// </summary>
     /// <remarks>
     /// <para>
-    /// A changed range rebuilds the axes, ticks, labels and legend and re-plots every series; a changed
-    /// visibility or glow is a flag or a parameter write. Nothing happens on a frame where nothing changed,
-    /// so the call is cheap to make unconditionally.
+    /// A changed range lays out the labels, titles and legend again and re-plots every series. Every
+    /// stroke and fill is read from the options and submitted afresh each frame.
     /// </para>
     /// <para>
     /// The camera is a parameter rather than something the chart finds for itself, because a scene can hold
@@ -358,7 +357,7 @@ public sealed class Chart : IDisposable
     /// chart never creates a batch of its own when it is updated this way.
     /// </summary>
     /// <param name="camera">The camera looking at this chart.</param>
-    /// <param name="shapes">The batch to submit the axes, ticks, legend swatches, markers and cursor into.</param>
+    /// <param name="shapes">The batch to submit every stroke and fill of the chart into.</param>
     /// <exception cref="ArgumentNullException">If either argument is <see langword="null"/>.</exception>
     /// <exception cref="InvalidOperationException">If <see cref="ChartRangeOptions"/> has no positive width or height.</exception>
     /// <exception cref="ObjectDisposedException">If the chart has been disposed.</exception>
@@ -412,11 +411,6 @@ public sealed class Chart : IDisposable
         _cursor?.Draw(batch, in view);
     }
 
-    /// <summary>
-    /// Re-targets the chart when the range differs from the one last applied: axes, ticks, labels, titles
-    /// and the legend are torn down and rebuilt with their ribbon buffers freed, the grid planes are
-    /// re-aimed, and every series is re-plotted for the new ranges and view scale.
-    /// </summary>
     /// <summary>Submits the series a layer is made of, in the order they were added.</summary>
     private void DrawSeries(ShapeBatch batch, in ChartView view, Func<ChartSeries, bool> layer)
     {
@@ -429,6 +423,9 @@ public sealed class Chart : IDisposable
         }
     }
 
+    /// <summary>
+    /// Applies a changed range: lays out the labels, titles and legend again and re-plots every series.
+    /// </summary>
     private void ApplyRange()
     {
         var r = Options.Range;
@@ -528,8 +525,8 @@ public sealed class Chart : IDisposable
     }
 
     /// <summary>
-    /// Frees everything the chart owns: series buffers, scaffolding, legend, cursors, and the grid planes
-    /// with their texture. Remove <see cref="Root"/> from its scene first.
+    /// Frees everything the chart owns: series, scaffolding, legend, cursor and its own shape batch.
+    /// Remove <see cref="Root"/> from its scene first.
     /// </summary>
     public void Dispose()
     {

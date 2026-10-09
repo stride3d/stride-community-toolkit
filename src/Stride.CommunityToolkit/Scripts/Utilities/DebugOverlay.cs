@@ -80,7 +80,7 @@ public sealed class DebugOverlay : GameSystemBase
     public string? FontFile { get; set; }
 
     /// <summary>
-    /// Gets or sets the text height in unscaled pixels. Defaults to 16, the size of Stride's debug text.
+    /// Gets or sets the text height in unscaled pixels. Defaults to 14.
     /// </summary>
     public float FontSize { get; set; } = 14f;
 
@@ -111,7 +111,7 @@ public sealed class DebugOverlay : GameSystemBase
     /// Gets or sets whether the overlay follows the display's scale, so it is the same size to the eye on a 150% laptop as on a 100% monitor. Defaults to <see langword="true"/>.
     /// </summary>
     /// <remarks>
-    /// A debug overlay that is unreadable on first launch is a bug in the tool, so this is on by default; <see cref="Scale"/> stays yours on top of it. The figure comes from <see cref="DisplayScale"/>, which is shared with everything else that draws in pixels and is re-read when the window moves to another monitor. Turn it off to draw at exactly <see cref="Scale"/> - for a screenshot at a known size, or when the game applies its own UI-scale setting through <see cref="DisplayScale.Override"/> and nothing else should compound it.
+    /// <see cref="Scale"/> multiplies on top. The factor comes from <see cref="DisplayScale"/> and is re-read when the window moves to another monitor. Turn it off to draw at exactly <see cref="Scale"/>, for example for a screenshot at a known size or when the game sets its own UI scale through <see cref="DisplayScale.Override"/>.
     /// </remarks>
     public bool AutoScale { get; set; } = true;
 
@@ -211,7 +211,7 @@ public sealed class DebugOverlay : GameSystemBase
     /// </summary>
     public Color? KeyColor { get; set; }
 
-    /// <summary>Gets or sets the colour used for section title lines.</summary>
+    /// <summary>Gets or sets the colour of section title lines. <see langword="null"/>, the default, uses <see cref="DefaultTextColor"/>.</summary>
     public Color? TitleColor { get; set; }
 
     /// <summary>

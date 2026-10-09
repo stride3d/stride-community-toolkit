@@ -12,20 +12,19 @@ namespace CubeCollapse.Scripts;
 
 /// <summary>
 /// Shows, before any click, what the cube under the mouse would do: a clearable group lights up,
-/// a lone cube fades.
+/// and a lone cube, which a click cannot clear, shows nothing.
 /// </summary>
 /// <remarks>
 /// <para>
 /// This is the game's one wordless tutorial. The minimum-group rule is otherwise only discoverable
-/// by clicking and being rejected; with the hover, a group brightens to say "this will clear" and a
-/// stranded single dims to say "this one is dead", so the player reads the board instead of testing
-/// it.
+/// by clicking and being rejected; with the hover, a group brightens to say "this will clear", and
+/// a stranded single stays as it is, so the player reads the board instead of testing it.
 /// </para>
 /// <para>
 /// The highlight is a material swap, not an outline. The shell-inflation outline technique
 /// (E09_3D_MeshOutline) offsets vertices along their normals, and a flat-shaded cube has split
 /// normals at every corner - the shell tears apart at the edges. Swapping to a pre-built
-/// brightened or dimmed variant of the cube's own material needs no rendering code at all, and the
+/// brightened variant of the cube's own material needs no rendering code at all, and the
 /// per-<see cref="ModelComponent"/> material override means no other cube sharing that colour is
 /// touched.
 /// </para>
@@ -75,16 +74,11 @@ public class HoverHighlightScript : SyncScript
 
         var group = MatchFinder.FindGroup(Grid, cube);
 
-        if (MatchFinder.IsClearable(group.Count))
+        if (!MatchFinder.IsClearable(group.Count)) return;
+
+        foreach (var member in group)
         {
-            foreach (var member in group)
-            {
-                Apply(member, Materials.Brightened);
-            }
-        }
-        else
-        {
-            Apply(cube, Materials.Dimmed);
+            Apply(member, Materials.Brightened);
         }
     }
 

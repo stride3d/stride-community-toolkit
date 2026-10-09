@@ -4,13 +4,8 @@
         <OutputType>Exe</OutputType>
     </PropertyGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="copy ..\Resources\JumpyJetBackground.jpg $(OutDir)" />
-    </Target>
-
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bullet\Stride.CommunityToolkit.Bullet.csproj" />
-        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Skyboxes\Stride.CommunityToolkit.Skyboxes.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
         <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
         <ProjectReference Include="..\Example.Common\Example.Common.csproj" />
     </ItemGroup>

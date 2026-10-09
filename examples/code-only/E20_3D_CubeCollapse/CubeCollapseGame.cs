@@ -9,11 +9,14 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
+using Stride.Rendering.Colors;
+using Stride.Rendering.Lights;
 
 namespace CubeCollapse;
 
@@ -64,6 +67,17 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     private BepuSimulation? _simulation;
     private Scene? _scene;
 
+    // Two lighting rigs under one sky, one rig in the scene at a time. For the colour palettes the
+    // Bepu playground's: the default directional light, so the cubes look as the playground's shapes
+    // do, plus a weak fill from the opposite side so no face of a cube goes dark. For the glass
+    // palettes the material gallery's: its steeper sun and its key light, so the glass looks exactly
+    // as it does in the gallery
+    private Entity? _light;
+    private Entity? _fillLight;
+    private Entity? _sun;
+    private Entity? _keyLight;
+
+
     private double _elapsedTime;
     private int _layer = 1;
     private bool _platformComplete;
@@ -87,15 +101,42 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         AddCamera();
 
         game.AddSceneRenderer(new EntityTextRenderer());
-        // No shadows: the cubes are mostly emissive, so a cast shadow would darken a face that is
-        // otherwise showing its true colour, which is the one thing this board cannot afford
-        game.AddDirectionalLight(enableShadows: false, intensity: 3f);
-        game.Add3DGround();
+        _light = game.AddDirectionalLight();
+        _fillLight = AddFillLight(_light);
+        LowerGroundSurface(game.Add3DGround());
+        game.AddSkybox();
         game.AddProfiler();
+
+        // The gallery's sun: the default directional light, steepened the way its LightTheRing does,
+        // with the thickness term its subsurface station reads
+        _sun = game.AddDirectionalLight();
+        _sun.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-65f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(-180f));
+        ((LightDirectional)_sun.Get<LightComponent>().Type).Shadow.ComputeTransmittance = true;
+
+        // The gallery's key light stands at the ring's centre, the ring's radius r up, and reaches each
+        // exhibit at forty-five degrees from r times root two away, with an intensity of 30 r squared
+        // and a range of 2.5 r. The same here with r = KeyDistance, from the camera's side of the board
+        _keyLight = new Entity("Key light")
+        {
+            new LightComponent
+            {
+                Intensity = 30f * KeyDistance * KeyDistance,
+                Type = new LightPoint { Radius = KeyDistance * 2.5f, Color = new ColorRgbProvider(Color.White) },
+            },
+        };
+
+        // "--palette 4" starts on the fourth palette, for screenshots of the other looks
+        var arguments = Environment.GetCommandLineArgs();
+        var paletteAt = Array.IndexOf(arguments, "--palette");
+
+        if (paletteAt >= 0 && paletteAt + 1 < arguments.Length && int.TryParse(arguments[paletteAt + 1], out var palette) && palette >= 1 && palette <= ColourPalettes.All.Count)
+        {
+            _paletteIndex = palette - 1;
+        }
 
         // Every palette's materials, built once up front - a palette switch is then a repaint,
         // never an allocation
-        _materialSets = [.. ColourPalettes.All.Select(palette => MaterialFactory.CreateCubeMaterialSet(game, palette.Colours))];
+        _materialSets = [.. ColourPalettes.All.Select(palette => MaterialFactory.CreateCubeMaterialSet(game, palette))];
         _materials = _materialSets[_paletteIndex];
 
         _spawner = new CubeSpawner(game, scene, _grid, _levels, Seed);
@@ -106,9 +147,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         AddOrientationGizmo();
         AddPaletteDropdown();
 
-        // The toolkit's studio rig: key, fill and rim. The cubes supply most of their own colour, so
-        // this is here for edge definition and to model the game-over letters.
-        game.AddStudioLighting();
+        UseLighting(ColourPalettes.All[_paletteIndex].Glass);
 
         _spawner.SpawnLayer(0);
 
@@ -286,6 +325,9 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
                 Sounds = _audio!,
                 Scoreboard = _scoreboard,
                 GameOverText = gameOver,
+                // A score in the colour of the cubes it cleared. Glass tints are too pale to read as
+                // text, so a glass palette shows the deeper colour its hover uses
+                PopupColour = colour => ColourPalettes.All[_paletteIndex].Glass ? MaterialFactory.Deepen(colour) : colour,
             },
             new ScreenCentreTextScript { Text = gameOver }
         };
@@ -333,6 +375,74 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     }
 
     /// <summary>
+    /// Swaps the lighting rigs: the material gallery's for the glass palette, the board's own for the
+    /// others. The key light stands above the board on the camera's side and comes in at forty-five
+    /// degrees, the way the gallery's reaches its exhibits.
+    /// </summary>
+    private void UseLighting(bool glass)
+    {
+        if (_light is null || _sun is null || _keyLight is null || _scene is null) return;
+
+        _light.Scene = glass ? null : _scene;
+
+        if (_fillLight is not null) _fillLight.Scene = glass ? null : _scene;
+        _sun.Scene = glass ? _scene : null;
+        _keyLight.Scene = glass ? _scene : null;
+
+        var cameraSide = Vector3.Normalize(new Vector3(1f, 0f, 1f)) * KeyDistance;
+
+        _keyLight.Transform.Position = _levels.Current.PlatformCentre + cameraSide + new Vector3(0f, KeyDistance, 0f);
+
+    }
+
+    /// <summary>
+    /// A weak directional light from the camera's starting side, without shadows. The main light
+    /// shines toward +Z, so from the starting view it lights only the tops; the two side faces the
+    /// camera sees, +X and +Z, would stay dark. The fill comes from the opposite corner at the same
+    /// height and gives both of them a quarter of the main light's strength.
+    /// </summary>
+    private Entity AddFillLight(Entity light)
+    {
+        var fill = game.AddDirectionalLight("Fill light", enableShadows: false, intensity: light.Get<LightComponent>().Intensity * 0.25f);
+        var direction = Vector3.Transform(-Vector3.UnitZ, light.Transform.Rotation);
+        var across = MathF.Sqrt(direction.X * direction.X + direction.Z * direction.Z) / MathF.Sqrt(2f);
+
+        fill.Transform.Rotation = Quaternion.BetweenDirections(-Vector3.UnitZ, new Vector3(-across, direction.Y, -across));
+
+        return fill;
+    }
+
+    /// <summary>
+    /// How far the ground's visible surface sits below the surface the cubes rest on. A cube's bottom
+    /// face and the floor in the same plane fight for the depth buffer, which the two-sided glass
+    /// shows as a flickering bottom; a centimetre apart they do not. The material gallery stands its
+    /// glass a centimetre up for the same reason.
+    /// </summary>
+    private const float GroundGap = 0.01f;
+
+    /// <summary>
+    /// The glass key light's distance across and up from the board, the gallery's ring radius. Large
+    /// against the board, as the ring is against an exhibit, so every cube gets the same light.
+    /// </summary>
+    private const float KeyDistance = 20f;
+
+    /// <summary>
+    /// Moves the ground's model, not its collider, down by <see cref="GroundGap"/>: the cubes are
+    /// physics bodies and settle on the collider wherever it is, so only the picture can move.
+    /// </summary>
+    private static void LowerGroundSurface(Entity ground)
+    {
+        if (ground.Get<ModelComponent>() is not { } model) return;
+
+        ground.Remove(model);
+
+        var surface = new Entity("Ground surface") { model };
+
+        surface.Transform.Position = new Vector3(0f, -GroundGap, 0f);
+        ground.AddChild(surface);
+    }
+
+    /// <summary>
     /// Switches the whole game to another palette: cubes yet to spawn, the hover variants, and every
     /// cube already standing.
     /// </summary>
@@ -352,6 +462,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
 
         _paletteIndex = index;
         _materials = _materialSets[index];
+        UseLighting(ColourPalettes.All[index].Glass);
 
         _spawner.UsePalette(newColours, _materials.Normal);
 
@@ -419,6 +530,9 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         {
             _cameraRotation.RotationCentre = _levels.Current.PlatformCentre;
         }
+
+        // The key light follows the bigger board
+        UseLighting(ColourPalettes.All[_paletteIndex].Glass);
 
         RebuildBoard();
     }

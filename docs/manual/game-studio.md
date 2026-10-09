@@ -19,21 +19,17 @@ graph LR
     P -. "puts it on the compositor<br/>if nothing else did" .-> R
 ```
 
-The dashed step is the one that used to be missing. The renderer had to be registered by the
-running game, from code, and Game Studio never runs a game's setup code - the editor builds the
-game itself - so a component added in the editor collected quietly and nothing consumed it. The
-processors now do that step themselves: the first time one has something to draw, it makes sure
-its renderer is on the compositor of the scene it lives in, and it checks again whenever the
-editor swaps compositors, which happens at start and on every change of the viewport's view mode.
+Game Studio never runs a game's setup code, so the processor does the dashed step: the first time
+it has something to draw, it puts its renderer on the scene's compositor, and checks again whenever
+the editor swaps compositors (at start and on every change of view mode).
 
 The processors also run in the editor, not only at runtime, which is what makes the viewport show
 the result while you edit.
 
 ## What the manual calls are still for
 
-`game.AddEntityTextRenderer()`, `game.AddWorldTextRenderer()` and `game.AddShapeBatch()` remain,
-and code-only projects keep calling them. They are no longer required for a component to draw;
-they are how you take control:
+`game.AddEntityTextRenderer()`, `game.AddWorldTextRenderer()` and `game.AddShapeBatch()` are not
+required for a component to draw; they are how you take control:
 
 | Call | What it gives you beyond the automatic path |
 |---|---|

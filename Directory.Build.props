@@ -8,7 +8,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StrideVersion>4.4.0-beta8</StrideVersion>
+    <StrideVersion>4.4.0-beta9</StrideVersion>
 
     <!--
       Appended to every package <Description>. It has to be defined here, not in src/CommonSettings.props:
