@@ -46,7 +46,7 @@ void Start(Scene rootScene)
     game.AddProfiler();
 
     CreateGround(rootScene);
-    CreateCubes(rootScene, count: 150);
+    CreateCubes(rootScene, count: 350);
 }
 
 void Update(Scene scene, GameTime time)
@@ -121,6 +121,7 @@ void CreateCubes(Scene rootScene, int count)
 
         // Allow translation in X/Y and rotation about Z; lock the other world-space axes.
         cubeBody.AllowedMotion = MotionAxes.PlaneXY;
+        cubeBody.AngularVelocity = new JVector(0f, 0f, 0.01f);
 
         cubes.Add(new CubeInstance(cubeEntity, cubeBody));
     }
