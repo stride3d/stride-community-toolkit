@@ -94,8 +94,8 @@ re-read when the window moves to a differently scaled monitor. Three properties 
 
 The display factor is only right if the process is DPI aware - otherwise Windows is already
 stretching the whole window and the factor correctly reads 1. Declare awareness in an
-`app.manifest`, as the Stride templates do, or call `WindowsDpiManager.EnablePerMonitorV2()` from
-the `Stride.CommunityToolkit.Windows` package before the game is created; see the
+`app.manifest`, as the Stride templates do, or call `WindowsDpiManager.EnablePerMonitorV2()` (in the core
+package, namespace `Stride.CommunityToolkit.Engine`) before the game is created; see the
 [DPI-aware example](../code-only/examples/dpi-aware.md).
 
 Stride's `DebugTextSystem` draws an 8 by 16 pixel bitmap font that blurs or turns blocky when scaled.

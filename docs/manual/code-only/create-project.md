@@ -5,7 +5,7 @@
 The steps below show how to create a new Stride project using the command line. If you prefer Visual Studio Code, run the same commands from its integrated terminal. For the shortest possible start - one `.cs` file, no project file at all - see [Create a File-Based App](create-file-based-app.md).
 
 > [!NOTE]
-> These instructions target Windows. On Linux, reference `Stride.CommunityToolkit.Linux` instead of `Stride.CommunityToolkit.Windows` and set `<RuntimeIdentifier>linux-x64</RuntimeIdentifier>` in the project file; the Linux package copies the native libraries the asset compiler needs.
+> These instructions work on Windows as they are. On Linux, also reference `Stride.CommunityToolkit.Linux` and set `<RuntimeIdentifier>linux-x64</RuntimeIdentifier>` in the project file; the Linux package copies the native libraries the asset compiler needs.
 >
 > Match the toolkit version to your Stride version - the table is in [Getting Started](../getting-started.md). `--prerelease` takes the newest preview, so on an older Stride pin it, for example `--version 1.0.0-preview.62` for Stride 4.3.
 
@@ -20,7 +20,7 @@ The steps below show how to create a new Stride project using the command line. 
    ``` 
 4. Add toolkit package:
    ```
-   dotnet add package Stride.CommunityToolkit.Windows --prerelease
+   dotnet add package Stride.CommunityToolkit --prerelease
    ```
 5. Add the Bepu physics package:
    ```
@@ -40,7 +40,7 @@ The steps below show how to create a new Stride project using the command line. 
 ## Visual Studio 2026 and JetBrains Rider
 
 1. Create a C# Console Application targeting .NET 10.
-2. Add the `Stride.CommunityToolkit.Windows` NuGet package (pre-release). This pulls in the required Stride packages.
+2. Add the `Stride.CommunityToolkit` NuGet package (pre-release). This pulls in the required Stride packages and the asset compiler.
 3. Add the `Stride.CommunityToolkit.Bepu` package (pre-release) to include the Bepu physics integration.
 4. Update Program.cs: Paste the example code below.
 5. Run the project using your IDE.

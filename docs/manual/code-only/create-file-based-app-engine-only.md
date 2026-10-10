@@ -44,7 +44,7 @@ copied next to the app, and the app fails at start-up with
 `Could not load file or assembly 'Stride.NuGetResolver'`. A `.csproj` says build-only with
 `IncludeAssets="build;buildTransitive"` on the reference; a `#:package` directive has no way to, so
 a `Directory.Build.targets` beside the file says it instead - a file-based app imports one like any
-project. The toolkit's file-based apps do not need this because `Stride.CommunityToolkit.Windows`
+project. The toolkit's file-based apps do not need this because `Stride.CommunityToolkit`
 already passes the asset compiler on build-only; this is the one thing the toolkit does on the
 packaging side, and the reason the engine-only version is not quite a single file.
 

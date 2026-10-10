@@ -14,6 +14,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 💥 Breaking Changes
 
+- `Stride.CommunityToolkit` brings in `Stride.AssetCompiler` (build-only) and holds `WindowsDpiManager`, so a code-only project needs the core package, or any package that depends on it, and nothing else. `WindowsDpiManager` is in the `Stride.CommunityToolkit.Engine` namespace (was `Stride.CommunityToolkit.Windows`). `Stride.CommunityToolkit.Windows` is empty and only depends on the core; it ships once more so that a project still naming it keeps building, and will be unlisted. Reference `Stride.CommunityToolkit` instead. `Stride.CommunityToolkit.Linux` is unchanged.
 ### 🎉 New Features
 
 ### 🐞 Bug Fixes

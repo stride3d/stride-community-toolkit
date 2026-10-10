@@ -48,7 +48,7 @@
         eck" exited with code 1. [D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj]
         ```
 1. **Error - at Stride.Shaders.Compiler.TaskOrResult.**
-   - If this is from code-only, make sure you added `Stride.CommunityToolkit.Windows` NuGet package instead of `Stride.CommunityToolkit`, further instructions can be found [here](code-only/create-project.md)
+   - If this is from code-only, make sure the project references `Stride.CommunityToolkit` (or a package that depends on it, such as `Stride.CommunityToolkit.Bepu`), which brings in the asset compiler. Before 1.0.0-preview.67 that was the job of `Stride.CommunityToolkit.Windows`. Further instructions are [here](code-only/create-project.md)
     ```
      at Stride.Shaders.Compiler.TaskOrResult`1.WaitForResult() in C:\BuildAgent\work\b5f46e3c4829a09e\sources\engine\Stride.Shaders\Compiler\TaskOrResult.cs:line 37
        at Stride.Rendering.DynamicEffectInstance.ChooseEffect(GraphicsDevice graphicsDevice) in C:\BuildAgent\work\b5f46e3c4829a09e\sources\engine\Stride.Rendering\Rendering\DynamicEffectInstance.cs:line 60

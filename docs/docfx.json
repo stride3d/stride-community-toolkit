@@ -14,7 +14,6 @@
             "Stride.CommunityToolkit.ImGuiNet/Stride.CommunityToolkit.ImGuiNet.csproj",
             "Stride.CommunityToolkit.Shapes/Stride.CommunityToolkit.Shapes.csproj",
             "Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj",
-            "Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj",
             "Stride.CommunityToolkit.Charts/Stride.CommunityToolkit.Charts.csproj",
             "Stride.CommunityToolkit.Linux/Stride.CommunityToolkit.Linux.csproj"
           ],
