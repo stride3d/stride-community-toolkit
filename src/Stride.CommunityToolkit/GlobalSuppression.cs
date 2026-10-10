@@ -49,7 +49,7 @@ using System.Diagnostics.CodeAnalysis;
 
 // --- Deliberate design the rules read as a defect ------------------------------------------------
 [assembly: SuppressMessage("NDepend", "ND1901:AvoidNonReadOnlyStaticFields", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Helpers.VectorHelper._defaultRandom", Justification = "Reassigned by SeedRandom, which is the point: an example that seeds the helper gets the same layout every run. Making it readonly would delete that API.")]
-[assembly: SuppressMessage("NDepend", "ND1306:NestedTypesShouldNotBeVisible", Target = "Stride.CommunityToolkit.Windows:Stride.CommunityToolkit.Windows.WindowsDpiManager+ProcessDpiAwareness", Justification = "Returned by WindowsDpiManager.GetProcessDpiAwareness and meaningful only next to it; un-nesting would break callers for a purely taxonomic gain, as for the ImGui nested types below.")]
+[assembly: SuppressMessage("NDepend", "ND1306:NestedTypesShouldNotBeVisible", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.WindowsDpiManager+ProcessDpiAwareness", Justification = "Returned by WindowsDpiManager.GetProcessDpiAwareness and meaningful only next to it; un-nesting would break callers for a purely taxonomic gain, as for the ImGui nested types below.")]
 
 // --- Deliberate naming / API mirroring ---------------------------------------------------------
 [assembly: SuppressMessage("NDepend", "ND2020:AvoidVariousCapitalizationsForMethodName", Target = "Stride.CommunityToolkit.Bepu:Stride.CommunityToolkit.Bepu.SimulationExtensions", Scope = "deep", Justification = "RayCast/RayCastPenetrating mirror Stride.BepuPhysics.BepuSimulation's own casing; the Bullet wrapper mirrors Stride.Physics.Simulation.Raycast. Each wrapper matches its engine on purpose.")]

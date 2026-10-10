@@ -14,8 +14,10 @@ What's inside:
 - On-screen text: DebugOverlay (scalable, high-DPI aware, per-line background), EntityTextComponent and WorldTextComponent
 - Camera controllers for 3D (fly) and 2D (pan and zoom) scenes with built-in key help
 - Easing functions, math and random helpers, collection helpers
+- WindowsDpiManager: opt the process into per-monitor DPI awareness from code, no app.manifest needed, and check that the declaration took (Windows only; a no-op elsewhere)
+- Brings in Stride.AssetCompiler as a build-only dependency: a code-only project has no assets, but the engine's shaders and default font still have to be compiled into its data folder, and this reference is what makes that happen
 
-Physics helpers are in Stride.CommunityToolkit.Bepu (recommended) and Stride.CommunityToolkit.Bullet. Vector shapes with pixel-constant outlines are in Stride.CommunityToolkit.Shapes, and immediate-mode 3D debug primitives in Stride.CommunityToolkit.DebugShapes. Code-only projects also need Stride.CommunityToolkit.Windows or Stride.CommunityToolkit.Linux, which bring in the asset compiler.$(StrideVersionNote)
+Physics helpers are in Stride.CommunityToolkit.Bepu (recommended) and Stride.CommunityToolkit.Bullet. Vector shapes with pixel-constant outlines are in Stride.CommunityToolkit.Shapes, and immediate-mode 3D debug primitives in Stride.CommunityToolkit.DebugShapes. On Linux, add Stride.CommunityToolkit.Linux for the asset compiler's native libraries.$(StrideVersionNote)
         </Description>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
@@ -33,6 +35,13 @@ Physics helpers are in Stride.CommunityToolkit.Bepu (recommended) and Stride.Com
         <PackageReference Include="Stride.Engine" Version="$(StrideVersion)" />
         <PackageReference Include="Stride.Particles" Version="$(StrideVersion)" />
         <PackageReference Include="Stride.UI" Version="$(StrideVersion)" />
+        <!-- The build step that compiles the engine's shaders and default font into a game's data folder. A
+             code-only game has no assets of its own and still needs it, and a Game Studio game already carries the
+             same reference, which NuGet merges into one. Build-only: the package's own assemblies must not reach a
+             game (its lib/ assembly fails at start-up on Stride.NuGetResolver), hence IncludeAssets. The compile
+             step itself runs only for executables (StrideIsExecutable in the package's targets), so libraries,
+             tests and the docs build are untouched. -->
+        <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
         <!-- Stride's desktop window is SDL and ships this binding, but only as a runtime dependency;
              DisplayScale asks SDL for the display DPI, which needs it at compile time. Keep the
              version at what Stride's own Stride.Graphics references, or NuGet reports a downgrade. -->
