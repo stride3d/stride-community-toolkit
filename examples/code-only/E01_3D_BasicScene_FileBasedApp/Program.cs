@@ -12,7 +12,7 @@
 #:package Stride.BepuPhysics.Debug@$(StrideVersion)
 #:project ../../../src/Stride.CommunityToolkit.Bepu/Stride.CommunityToolkit.Bepu.csproj
 #:project ../../../src/Stride.CommunityToolkit.Skyboxes/Stride.CommunityToolkit.Skyboxes.csproj
-#:project ../../../src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj
+#:project ../../../src/Stride.CommunityToolkit/Stride.CommunityToolkit.csproj
 #:property PublishAot=false
 
 // Stride's asset compiler builds its cache path by concatenating $(ProjectDir) with
