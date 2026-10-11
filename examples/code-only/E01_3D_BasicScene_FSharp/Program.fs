@@ -12,7 +12,7 @@ let Start rootScene =
     game.AddSkybox() |> ignore
     game.AddProfiler() |> ignore
 
-    let capsule = game.Create3DPrimitive(PrimitiveModelType.Capsule, Bepu3DPhysicsOptions())
+    let capsule = game.CreatePrimitive(Primitive3D.Capsule(), Bepu3DPhysicsOptions())
     capsule.Transform.Position <- new Vector3(0f, 2.5f, 0f)
     capsule.Scene <- rootScene
 
@@ -41,7 +41,7 @@ concepts:
   - "Assigning to engine properties with the <- operator"
   - "Starting the loop from an [<EntryPoint>] main function"
   - "Passing the start callback by name: game.Run(start = Start)"
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - F#

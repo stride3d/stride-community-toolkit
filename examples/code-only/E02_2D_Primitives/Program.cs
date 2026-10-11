@@ -14,14 +14,14 @@ var parallelogramVertices = new Vector2[]
     new(-0.25f, 0.25f),
 };
 
-List<ShapeItem> shapes = [
-    new(Primitive2DModelType.Circle),
-    new(Primitive2DModelType.Capsule),
-    new(Primitive2DModelType.Rectangle),
-    new(Primitive2DModelType.Square),
-    new(Primitive2DModelType.Polygon),
-    new(Primitive2DModelType.Triangle),
-    new(Primitive2DModelType.Polygon, parallelogramVertices)
+List<Primitive2D> shapes = [
+    Primitive2D.Circle(),
+    Primitive2D.Capsule(),
+    Primitive2D.Rectangle(),
+    Primitive2D.Square(),
+    Primitive2D.RegularPolygon(),
+    Primitive2D.Triangle(),
+    Primitive2D.Polygon(parallelogramVertices),
 ];
 
 using var game = new Game();
@@ -34,18 +34,15 @@ void Start(Scene rootScene)
 
     foreach (var (index, shape) in shapes.Index())
     {
-        var entity = game.Create2DPrimitive(shape.Type, new()
+        var entity = game.CreatePrimitive(shape, new()
         {
             Material = game.CreateFlatMaterial(random.NextColor()),
-            Vertices = shape.Vertices,
         });
 
         entity.Transform.Position = new Vector3(0, 10 + index * 1.5f, 0);
         entity.Scene = rootScene;
     }
 }
-
-public record ShapeItem(Primitive2DModelType Type, Vector2[]? Vertices = null);
 
 /*
 ---example-metadata

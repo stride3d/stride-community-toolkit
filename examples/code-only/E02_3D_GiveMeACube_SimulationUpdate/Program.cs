@@ -45,7 +45,7 @@ void Start(Scene rootScene)
 /// </summary>
 void CreateCentreCube(Scene rootScene)
 {
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions());
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions());
 
     cube.Transform.Position = new Vector3(0, CubeRestingHeight, 0);
     cube.Scene = rootScene;
@@ -63,10 +63,7 @@ void CreateLooseCubes(Scene rootScene)
         var angle = MathF.Tau * (i + 0.5f) / LooseCubeCount;
 
         // Size drives both the generated model and the generated collider
-        var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
-        {
-            Size = new Vector3(LooseCubeSize)
-        });
+        var cube = game.CreatePrimitive(Primitive3D.Cube(LooseCubeSize), new Bepu3DPhysicsOptions());
 
         cube.Transform.Position = new Vector3(
             MathF.Sin(angle) * OrbitRadius,
@@ -86,7 +83,7 @@ void CreateLooseCubes(Scene rootScene)
 /// </remarks>
 void CreateOrbitingCube(Scene rootScene)
 {
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
     {
         Component = new BodyComponent
         {

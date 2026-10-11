@@ -70,11 +70,10 @@ void Start(Scene rootScene)
     camera.Get<Basic2DCameraController>().OrthographicSizeDefault = 14f;
 
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
-    var platform = game.Create2DPrimitive(Primitive2DModelType.Rectangle, new Bepu2DPhysicsOptions
+    var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new Bepu2DPhysicsOptions
     {
         EntityName = "Lift",
         Material = game.CreateFlatMaterial(new Color(70, 140, 200)),
-        Size = new Vector2(4f, 0.4f),
         Component = new Body2DComponent { Kinematic = true, Collider = new CompoundCollider() },
     });
 
@@ -88,11 +87,10 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < boxHomes.Length; i++)
     {
-        var box = game.Create2DPrimitive(Primitive2DModelType.Square, new Bepu2DPhysicsOptions
+        var box = game.CreatePrimitive(Primitive2D.Rectangle(0.7f, 0.7f), new Bepu2DPhysicsOptions
         {
             EntityName = $"Box {i + 1}",
             Material = game.CreateFlatMaterial(i == 2 ? new Color(235, 180, 60) : new Color(220, 90, 70)),
-            Size = new Vector2(0.7f, 0.7f),
         });
 
         box.Transform.Position = boxHomes[i];
@@ -105,11 +103,10 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < coinSpots.Length; i++)
     {
-        var coin = game.Create2DPrimitive(Primitive2DModelType.Circle, new Bepu2DPhysicsOptions
+        var coin = game.CreatePrimitive(Primitive2D.Circle(0.4f), new Bepu2DPhysicsOptions
         {
             EntityName = $"Coin {i + 1}",
             Material = game.CreateFlatMaterial(new Color(250, 210, 60)),
-            Size = new Vector2(0.4f, 0.4f),
             IncludeCollider = false,
         });
 
