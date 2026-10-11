@@ -4,7 +4,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
 
-namespace Stride.CommunityToolkit.Skyboxes;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Provides context for generating a skybox by encapsulating relevant services and rendering contexts.

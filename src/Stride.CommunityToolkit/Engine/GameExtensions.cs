@@ -69,9 +69,7 @@ public static partial class GameExtensions
     /// </code>
     /// </example>
     public static void Run(this Game game, Action<Scene>? start = null, Action<Scene, GameTime>? update = null, GameContext? context = null)
-    {
-        RunCore(game, start is null ? null : scene => { start(scene); return Task.CompletedTask; }, update, context);
-    }
+        => game.Run(SceneSetup3D.Default, start, update, context);
 
     /// <summary>
     /// Starts the game loop with an asynchronous <paramref name="start"/>: the update loop begins only
@@ -117,15 +115,52 @@ public static partial class GameExtensions
     /// </code>
     /// </example>
     public static void Run(this Game game, Func<Scene, Task> start, Action<Scene, GameTime>? update = null, GameContext? context = null)
+        => game.Run(SceneSetup3D.Default, start, update, context);
+
+    /// <summary>
+    /// Applies <paramref name="setup"/> and runs the game: the setup's pieces are added to the root scene in a fixed
+    /// order before <paramref name="start"/> runs, then <paramref name="update"/> runs every frame.
+    /// </summary>
+    /// <param name="game">The game to run.</param>
+    /// <param name="setup">What the scene gets before <paramref name="start"/>: a <see cref="SceneSetup3D"/>, a <see cref="SceneSetup2D"/>, or <see cref="SceneSetup.None"/> for nothing.</param>
+    /// <param name="start">Runs once, after the setup, with the root scene.</param>
+    /// <param name="update">Runs every frame with the root scene and the game time, after <paramref name="start"/> has run.</param>
+    /// <param name="context">The game context, or <see langword="null"/> for a window.</param>
+    /// <remarks>
+    /// The setup's <see cref="SceneSetup.GameSettings"/> and <see cref="SceneSetup.Physics"/> are applied before the
+    /// engine starts; the compositor, camera, lights, sky and ground once the root scene exists, so
+    /// <paramref name="start"/> finds them in place.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio() }.UseBepu(), start: Start);
+    /// </code>
+    /// </example>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="setup"/> is <see langword="null"/>.</exception>
+    public static void Run(this Game game, SceneSetup setup, Action<Scene>? start = null, Action<Scene, GameTime>? update = null, GameContext? context = null)
+    {
+        RunCore(game, setup, start is null ? null : scene => { start(scene); return Task.CompletedTask; }, update, context);
+    }
+
+    /// <summary>
+    /// Applies <paramref name="setup"/> and runs the game with an awaitable <paramref name="start"/>; <paramref name="update"/>
+    /// begins once it has completed.
+    /// </summary>
+    /// <inheritdoc cref="Run(Game, SceneSetup, Action{Scene}?, Action{Scene, GameTime}?, GameContext?)"/>
+    public static void Run(this Game game, SceneSetup setup, Func<Scene, Task> start, Action<Scene, GameTime>? update = null, GameContext? context = null)
     {
         ArgumentNullException.ThrowIfNull(start);
 
-        RunCore(game, start, update, context);
+        RunCore(game, setup, start, update, context);
     }
 
-    private static void RunCore(Game game, Func<Scene, Task>? start, Action<Scene, GameTime>? update, GameContext? context)
+    private static void RunCore(Game game, SceneSetup setup, Func<Scene, Task>? start, Action<Scene, GameTime>? update, GameContext? context)
     {
         ArgumentNullException.ThrowIfNull(game);
+        ArgumentNullException.ThrowIfNull(setup);
+
+        // The settings and the physics service: read while the engine initialises, so before Run
+        setup.Prepare(game);
 
         game.Script.Scheduler.Add(RootScript);
 
@@ -137,6 +172,9 @@ public static partial class GameExtensions
 
         async Task RootScript()
         {
+            // The root scene exists now: the compositor, camera, lights, sky and ground, then the caller's content
+            setup.Apply(game);
+
             if (start is not null)
                 await start(RootScene());
 
@@ -154,36 +192,6 @@ public static partial class GameExtensions
         // have public setters and replacing them is how a game switches scenes; a scene captured once
         // here would keep handing update the detached one.
         Scene RootScene() => game.SceneSystem.SceneInstance.RootScene;
-    }
-
-    /// <summary>
-    /// Configures the game for 2D rendering by setting up the necessary graphics compositor and camera.
-    /// </summary>
-    /// <param name="game">The game instance to configure for 2D rendering.</param>
-    /// <param name="clearColor">The color used to clear the screen. Defaults to <see cref="Color.CornflowerBlue"/> if not specified.</param>
-    public static void SetupBase2D(this Game game, Color? clearColor = null)
-    {
-        game.Add2DGraphicsCompositor(clearColor).AddUIStage();
-        game.Add2DCamera();
-    }
-
-    /// <summary>
-    /// Sets up essential components for the game, including a GraphicsCompositor, a camera, and a directional light.
-    /// </summary>
-    /// <remarks>
-    /// This method performs the following operations:
-    /// <list type="bullet">
-    /// <item><description>Adds a default GraphicsCompositor to the game's SceneSystem and applies a clean UI stage.</description></item>
-    /// <item><description>Adds a camera to the game.</description></item>
-    /// <item><description>Adds a directional light to the game.</description></item>
-    /// </list>
-    /// </remarks>
-    /// <param name="game">The Game instance that will receive the base setup.</param>
-    public static void SetupBase3D(this Game game)
-    {
-        game.AddGraphicsCompositor().AddCleanUIStage();
-        game.Add3DCamera();
-        game.AddDirectionalLight();
     }
 
     /// <summary>
@@ -984,6 +992,10 @@ public static partial class GameExtensions
             entity.Transform.Position = position;
         }
 
+        // The physics engine the setup chose, if any; the core alone attaches nothing
+        if (options.IncludePhysics)
+            PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
+
         return entity;
     }
 
@@ -1021,6 +1033,9 @@ public static partial class GameExtensions
         {
             entity.Transform.Position = position;
         }
+
+        if (options.IncludePhysics)
+            PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
 
         return entity;
     }

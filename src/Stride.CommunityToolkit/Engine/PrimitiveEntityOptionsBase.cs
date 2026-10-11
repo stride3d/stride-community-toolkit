@@ -42,4 +42,14 @@ public abstract class PrimitiveEntityOptionsBase
     /// If <see langword="null"/>, the entity keeps the default transform position, <see cref="Vector3.Zero"/>.
     /// </remarks>
     public Vector3? Position { get; set; }
+
+    /// <summary>
+    /// Whether the physics engine chosen by the scene setup attaches a body to the entity. Defaults to
+    /// <see langword="true"/>; <see langword="false"/> gives a mesh with no physics, whatever the setup chose.
+    /// </summary>
+    /// <remarks>
+    /// Without a setup, or with <see cref="PhysicsSetupBase.None"/>, nothing is attached either way. The physics packages'
+    /// entity extensions (<c>AddBepu3DPhysics</c>, <c>AddBullet3DPhysics</c>) attach physics explicitly whatever this says.
+    /// </remarks>
+    public bool IncludePhysics { get; set; } = true;
 }

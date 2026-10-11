@@ -5,7 +5,7 @@ using Stride.Rendering.ComputeEffect.LambertianPrefiltering;
 using Stride.Rendering.Skyboxes;
 using Stride.Shaders;
 
-namespace Stride.CommunityToolkit.Skyboxes;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Provides functionality to generate a skybox with diffuse and specular lighting parameters from a given texture.
