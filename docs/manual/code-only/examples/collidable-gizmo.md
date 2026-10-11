@@ -16,7 +16,7 @@ The `Program.cs` file shows how to:
 - Suppressing the generated collider with IncludeCollider = false
 - Showing or hiding the gizmo with its Visible property
 - Diagnosing a body that does not collide as expected
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
+- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
 
 ![Collidable Gizmo](media/collidable-gizmo.webp)
 

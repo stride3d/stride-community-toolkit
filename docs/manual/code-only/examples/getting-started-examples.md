@@ -9,7 +9,7 @@ Your first code-only Stride application in C#: boilerplate, one helper call, and
 ## Examples Overview
 
 - [Basic 3D Scene (Capsule)](capsule-with-rigid-body.md): Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.
-- [Basic 3D Scene (Engine Only)](basic-scene-engine-only.md): A ground, a cube and a camera written against Stride alone, with no toolkit package: the graphics compositor, the camera, the lights, the procedural models and the material that the toolkit's SetupBase3D and Create3DPrimitive stand for.
+- [Basic 3D Scene (Engine Only)](basic-scene-engine-only.md): A ground, a cube and a camera written against Stride alone, with no toolkit package: the graphics compositor, the camera, the lights, the procedural models and the material that the toolkit's SetupBase3D and CreatePrimitive stand for.
 - [Basic 3D Scene (Falling Shapes)](falling-shapes-3d.md): The next step after the basic 3D scene: thirty shapes of five kinds and five colours, dropped in a column that topples into a pile.
 - [Basic 3D Scene (Capsule) - File-Based App](file-based-app.md): The same minimal 3D scene as E01_3D_BasicScene, written as a .NET 10 file-based app: a single C# file with no .csproj.
 - [Basic 2D Scene (Capsule)](basic-2d-scene.md): Create a minimal 2D scene using toolkit helpers and place a single capsule primitive with a flat material.

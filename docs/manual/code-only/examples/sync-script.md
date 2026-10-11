@@ -21,7 +21,7 @@ The `Program.cs` file shows how to:
 - Moving a kinematic body with LinearVelocity, not Transform.Position
 - Why SetTargetPose belongs in ISimulationUpdate and not in a per-frame Update
 - Framerate independence with Game.DeltaTime
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
+- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
 
 ![SyncScript - moving a body every frame](media/sync-script.webp)
 

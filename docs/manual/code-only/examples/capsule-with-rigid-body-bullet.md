@@ -15,7 +15,7 @@ The `Program.cs` file shows how to:
 - Running the base 3D scene on the legacy Bullet physics engine
 - Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu
 - Why the scene code needs no change when the physics engine does
-- Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive
+- Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive
 
 ![Basic 3D Scene (Capsule) - Bullet Physics](media/capsule-with-rigid-body-bullet.webp)
 

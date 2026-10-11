@@ -16,7 +16,7 @@ The `Program.cs` file shows how to:
 - How this differs from CollidableGizmoScript, which draws the collider
 - Toggling the overlay with its Visible property
 - Comparing mesh against collider when a body misbehaves
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive
+- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
 
 ![Debug Render Component](media/debug-render-component.webp)
 

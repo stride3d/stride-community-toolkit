@@ -21,7 +21,7 @@ The `Program.cs` file shows how to:
 - Picking entities with a camera raycast from the mouse
 - Drawing screen-space text without the UI system: EntityTextComponent
 - Flood filling a grid to find connected same-coloured neighbours
-- Using helpers: Add3DCamera, Add3DGround, AddGizmo, Create3DPrimitive
+- Using helpers: Add3DCamera, Add3DGround, AddGizmo, CreatePrimitive
 
 ![Game - Cube Collapse](media/cube-collapse.webp)
 

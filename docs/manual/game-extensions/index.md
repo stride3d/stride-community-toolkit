@@ -68,11 +68,11 @@ For image-based ambient light, `AddSkybox()` ships in the `Stride.CommunityToolk
 - [`CreateTexturedMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateTexturedMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single,System.Single,System.Single)) - A texture where the colour would be, tiled, with the same metalness and glossiness numbers.
 - [`CreateScreenMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateScreenMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single)) - A screen showing a texture, unlit and clamped: a monitor for a render-texture camera's feed.
 - [`CreateMaterial(descriptor)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,Stride.Rendering.Materials.MaterialDescriptor)) - Compiles a descriptor and keeps it on the material, so it can be a layer later. The descriptors behind every helper are in [`MaterialDescriptors`](xref:Stride.CommunityToolkit.Rendering.MaterialDescriptors): take one, add a feature, compile it.
-- [`Create3DPrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Create3DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.PrimitiveModelType,Stride.CommunityToolkit.Engine.Primitive3DEntityOptions)) - A cube, sphere, capsule and so on as an entity, with no collider attached.
-- [`Create2DPrimitive()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Create2DPrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2DModelType,Stride.CommunityToolkit.Engine.Primitive2DEntityOptions)) - The 2D equivalent - square, circle, triangle, polygon.
+- [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Engine.Primitive3DEntityOptions)) - A cube, sphere, capsule and so on as an entity, with no collider attached. The shape comes from a [`Primitive3D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D) factory with its dimensions: `Primitive3D.Sphere(0.5f)`, `Primitive3D.Box(new Vector3(2, 1, 1))`.
+- [`CreatePrimitive(Primitive2D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Engine.Primitive2DEntityOptions)) - The 2D equivalent - square, circle, triangle, polygon - from a [`Primitive2D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D) factory.
 
 > [!NOTE]
-> The Bepu and Bullet packages each define their own `Create2DPrimitive()` and `Create3DPrimitive()`
+> The Bepu and Bullet packages each define their own `CreatePrimitive()` overloads
 > that also attach a collider. If you have imported one of those namespaces, that overload is the one
 > you get. The two above are the physics-free versions.
 

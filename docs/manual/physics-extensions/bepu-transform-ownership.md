@@ -72,18 +72,18 @@ public void SimulationUpdate(BepuSimulation simulation, float simTimeStep)
 with no shapes never attaches to the simulation, so you are left with an inert component rather than
 no physics.
 
-For a purely visual entity, use the non-physics `Create3DPrimitive` overload by passing
+For a purely visual entity, use the non-physics `CreatePrimitive` overload by passing
 `Primitive3DEntityOptions` instead.
 
 ## "CS0121: the call is ambiguous"
 
-`Create3DPrimitive` has a Bepu overload taking `Bepu3DPhysicsOptions` and a plain one taking
+`CreatePrimitive` has a Bepu overload taking `Bepu3DPhysicsOptions` and a plain one taking
 `Primitive3DEntityOptions`. With both namespaces imported, a bare `new()` cannot pick between them.
 
 Pass an explicitly typed options object so the intended overload is selected:
 
 ```csharp
-var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule, new Primitive3DEntityOptions
+var entity = game.CreatePrimitive(Primitive3D.Capsule(), new Primitive3DEntityOptions
 {
     Material = material,
 });
@@ -120,7 +120,7 @@ eventually free ten thousand identical hulls. Those hulls hold unmanaged buffers
 hand memory back to that pool while the simulation is allocating from it on its worker threads.
 
 The toolkit shares one hull per distinct shape and size through `SharedHullCache`, so
-`Create3DPrimitive` builds a single hull no matter how many bodies use it, and nothing is ever
+`CreatePrimitive` builds a single hull no matter how many bodies use it, and nothing is ever
 finalized.
 
 **If you build a `ConvexHullCollider` yourself, share the hull data.** Assign the *same*
@@ -226,7 +226,7 @@ mesh collider if it can be static.
 | Kinematic body diverges to `NaN` | `SetTargetPose` called more than once per physics tick | Call it from `SimulationUpdate`, or integrate your own velocity |
 | Null reference in `SimulationUpdate` | It can run before `Start` | Resolve lazily with `??=` |
 | Inert `BodyComponent` | `IncludeCollider = false` still attaches a body | Use the `Primitive3DEntityOptions` overload |
-| `CS0121` ambiguity | Two `Create3DPrimitive` overloads | Pass an explicitly typed options object |
+| `CS0121` ambiguity | Two `CreatePrimitive` overloads | Pass an explicitly typed options object |
 | `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known - keep hull body counts down, or use an analytic collider |
 | Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |
 | `Stack overflow` in `Refit2WithCacheOptimization` | A degenerate broad-phase tree from a perfectly regular lattice | Jitter the spawn positions, or space the bodies apart |

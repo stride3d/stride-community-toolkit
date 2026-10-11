@@ -12,7 +12,7 @@ same shapes in the same colours.
 
 The `Program.cs` file shows how to:
 
-- Creating many 3D primitives in a loop with Create3DPrimitive
+- Creating many 3D primitives in a loop with CreatePrimitive
 - A list of shape types with a colour each
 - Applying a material with CreateMaterial
 - Positioning entities so that they fall into a pile

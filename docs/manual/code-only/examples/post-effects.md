@@ -20,10 +20,10 @@ The `Program.cs` file shows how to:
 - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
 - Building an emissive material above intensity 1 so bloom has something to bloom
 - Showing live effect state as a DebugOverlay section
-- Using helpers: SetupBase3D, Add3DGround, Create3DPrimitive, CreateMaterial
+- Using helpers: SetupBase3D, Add3DGround, CreatePrimitive, CreateMaterial
 
 ![Post Effects](media/post-effects.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E09_3D_PostEffects).
 
-[!code-csharp[](../../../../examples/code-only/E09_3D_PostEffects/Program.cs?start=1&end=193)]
+[!code-csharp[](../../../../examples/code-only/E09_3D_PostEffects/Program.cs?start=1&end=191)]

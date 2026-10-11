@@ -22,10 +22,10 @@ The `Program.cs` file shows how to:
 - Setting the four numbers on a BodyComponent and on a StaticComponent
 - Replaying a scene - Teleport, then Awake, then the velocities
 - Measuring a rebound from a body's LinearVelocity, which cannot miss a short contact
-- Using helpers: SetupBase3DScene, Create3DPrimitive, AddEntityTextRenderer, DebugOverlay
+- Using helpers: SetupBase3DScene, CreatePrimitive, AddEntityTextRenderer, DebugOverlay
 
 ![Physics Materials](media/physics-materials.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_PhysicsMaterials).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_PhysicsMaterials/Program.cs?start=1&end=373)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_PhysicsMaterials/Program.cs?start=1&end=368)]
