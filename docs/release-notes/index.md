@@ -25,6 +25,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
+- Create Project: the command-line steps are Windows and Linux tabs. The Linux tab adds the `linux-x64` runtime identifier, the first-build workaround for the asset compiler's signature check (`DOTNET_NUGET_SIGNATURE_VERIFICATION=false`), and the route that builds for Linux from Windows with `StridePlatform`.
 ### 🎓 Examples
 
 ### 🔧 Engineering
