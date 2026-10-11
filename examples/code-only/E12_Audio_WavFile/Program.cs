@@ -51,7 +51,7 @@ void Start(Scene scene)
     game.SetCameraRotation(new Vector3(180, -12, 0));
 
     // Scenery only, so the plain options: no physics body
-    speaker = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+    speaker = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions
     {
         Material = game.CreateMaterial(new Color(90, 160, 255)),
         Position = new Vector3(0, 1, 0),
@@ -176,7 +176,7 @@ concepts:
   - Looping, volume and pan on a SoundInstance
   - Disposing instances once they have played out
   - "Why the files are mono: Pan and spatialisation need a single channel"
-  - "Using helpers: SetupBase3DScene, Create3DPrimitive, DebugOverlay"
+  - "Using helpers: SetupBase3DScene, CreatePrimitive, DebugOverlay"
 tags:
   - 3D
   - Audio

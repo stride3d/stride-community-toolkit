@@ -9,52 +9,55 @@ using static Box2D.NET.B2Types;
 namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
-/// Builds Box2D shapes (fixtures) matching the toolkit's 2D primitive types, so a body's collision
-/// shape lines up with the rendered <see cref="Primitive2DModelType"/> mesh of the same size.
+/// Builds Box2D shapes (fixtures) matching the toolkit's 2D primitive shapes, so a body's collision
+/// shape lines up with the rendered <see cref="Primitive2D"/> mesh of the same size.
 /// </summary>
 public static class ShapeFixtureBuilder
 {
     /// <summary>
-    /// Creates and attaches a Box2D fixture matching the given primitive type and dimensions.
+    /// Creates and attaches a Box2D fixture matching the given primitive shape and its dimensions.
     /// </summary>
-    /// <param name="type">The 2D primitive type describing the shape's geometry.</param>
-    /// <param name="size">
-    /// The shape dimensions: width/height for boxes and triangles, X as radius for circles,
-    /// X as radius and Y as total height for capsules.
-    /// </param>
+    /// <param name="shape">The 2D shape, from the <see cref="Primitive2D"/> factories.</param>
     /// <param name="bodyId">The Box2D body to which the generated shape will be attached.</param>
     /// <param name="shapeDef">
     /// Optional shape definition (density, friction, restitution, sensor flag). If <c>null</c>,
     /// <see cref="CreateDefaultShapeDef"/> is used.
     /// </param>
-    /// <exception cref="ArgumentException">Thrown if the shape type is not supported.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="shape"/> is not one of the known shapes.</exception>
     /// <example>
     /// <code>
     /// var bodyId = simulation.CreateStaticBody(entity, position);
-    /// ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Circle, new Vector2(0.5f), bodyId);
+    /// ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(0.5f), bodyId);
     /// </code>
     /// </example>
-    public static void AttachShape(Primitive2DModelType type, Vector2 size, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
+    public static void AttachShape(Primitive2D shape, B2BodyId bodyId, B2ShapeDef? shapeDef = null)
     {
+        ArgumentNullException.ThrowIfNull(shape);
+
         var finalShapeDef = shapeDef ?? CreateDefaultShapeDef();
 
-        switch (type)
+        switch (shape)
         {
-            case Primitive2DModelType.Square:
-            case Primitive2DModelType.Rectangle:
-                CreateBox(size, bodyId, finalShapeDef);
+            case Primitive2D.RectangleShape rectangle:
+                CreateBox(rectangle.Size, bodyId, finalShapeDef);
                 break;
-            case Primitive2DModelType.Circle:
-                CreateCircle(size, bodyId, finalShapeDef);
+            case Primitive2D.CircleShape circle:
+                CreateCircle(new Vector2(circle.Radius), bodyId, finalShapeDef);
                 break;
-            case Primitive2DModelType.Triangle:
-                CreateTriangle(size, bodyId, finalShapeDef);
+            case Primitive2D.TriangleShape triangle:
+                CreateTriangle(triangle.Size, bodyId, finalShapeDef);
                 break;
-            case Primitive2DModelType.Capsule:
-                CreateCapsule(size, bodyId, finalShapeDef);
+            case Primitive2D.CapsuleShape capsule:
+                CreateCapsule(new Vector2(capsule.Radius, capsule.Height), bodyId, finalShapeDef);
+                break;
+            case Primitive2D.RegularPolygonShape polygon:
+                AttachPolygon(PolygonProceduralModel.GenerateRegularPolygonVertices(polygon.Radius, polygon.Sides), bodyId, finalShapeDef);
+                break;
+            case Primitive2D.PolygonShape polygon:
+                AttachPolygon(polygon.Vertices, bodyId, finalShapeDef);
                 break;
             default:
-                throw new ArgumentException($"Unsupported shape type: {type}");
+                throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape));
         }
     }
 
@@ -106,7 +109,7 @@ public static class ShapeFixtureBuilder
     /// <example>
     /// <code>
     /// var customDef = ShapeFixtureBuilder.CreateCustomShapeDef(2.0f, 0.6f, 0.1f, isSensor: true);
-    /// ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Square, size, bodyId, customDef);
+    /// ShapeFixtureBuilder.AttachShape(Primitive2D.Square(size), bodyId, customDef);
     /// </code>
     /// </example>
     public static B2ShapeDef CreateCustomShapeDef(float density, float friction, float restitution, bool isSensor = false)

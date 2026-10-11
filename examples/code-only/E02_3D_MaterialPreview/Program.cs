@@ -41,7 +41,19 @@ GraphicsCompositor? inGame = null;
 DebugTextDropdown? shapeMenu = null;
 DebugTextDropdown? materialMenu = null;
 TextureLoader? textures = null;
-var shape = PrimitiveModelType.Sphere;
+// The editor's preview primitives, less its plane
+Primitive3D[] shapes =
+[
+    Primitive3D.Sphere(),
+    Primitive3D.Cube(),
+    Primitive3D.Cylinder(),
+    Primitive3D.Torus(),
+    Primitive3D.Teapot(),
+    Primitive3D.Cone(),
+    Primitive3D.Capsule(),
+];
+
+var shape = shapes[0];
 var materialIndex = 0;
 var gameLook = false;
 
@@ -49,20 +61,8 @@ for (var i = 0; i < args.Length; i++)
 {
     if (args[i] == "--game") gameLook = true;
     else if (i + 1 < args.Length && args[i] == "--material" && int.TryParse(args[i + 1], out var number)) materialIndex = number - 1;
-    else if (i + 1 < args.Length && args[i] == "--shape" && Enum.TryParse<PrimitiveModelType>(args[i + 1], ignoreCase: true, out var type)) shape = type;
+    else if (i + 1 < args.Length && args[i] == "--shape" && Array.Find(shapes, s => string.Equals(s.Name, args[i + 1], StringComparison.OrdinalIgnoreCase)) is { } named) shape = named;
 }
-
-// The editor's preview primitives, less its plane
-PrimitiveModelType[] shapes =
-[
-    PrimitiveModelType.Sphere,
-    PrimitiveModelType.Cube,
-    PrimitiveModelType.Cylinder,
-    PrimitiveModelType.Torus,
-    PrimitiveModelType.Teapot,
-    PrimitiveModelType.Cone,
-    PrimitiveModelType.Capsule,
-];
 
 (string Name, Func<Material> Make)[] materials = [];
 Material?[] built = [];
@@ -105,7 +105,7 @@ void Start(Scene scene)
         ToggleKey = Keys.P,
         TitleColor = Color.Gold,
         SelectedIndex = Array.IndexOf(shapes, shape),
-        Items = [.. shapes.Select((type, i) => new DebugTextDropdownItem((Keys)(Keys.D1 + i), type.ToString(), () => { shape = type; Rebuild(scene); }))],
+        Items = [.. shapes.Select((type, i) => new DebugTextDropdownItem((Keys)(Keys.D1 + i), type.Name, () => { shape = type; Rebuild(scene); }))],
     };
 
     materialMenu = new DebugTextDropdown
@@ -182,7 +182,7 @@ void Rebuild(Scene scene)
 
     built[materialIndex] ??= materials[materialIndex].Make();
 
-    subject = game.Create3DPrimitive(shape, new Primitive3DEntityOptions { Material = built[materialIndex] });
+    subject = game.CreatePrimitive(shape, new Primitive3DEntityOptions { Material = built[materialIndex] });
 
     var sphere = subject.Get<ModelComponent>()!.Model.BoundingSphere;
     var scale = sphere.Radius > MathUtil.ZeroTolerance ? 1f / sphere.Radius : 1f;

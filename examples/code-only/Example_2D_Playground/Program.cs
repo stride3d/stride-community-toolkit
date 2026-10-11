@@ -22,13 +22,13 @@ const string ShapeName = "Shape";
 var theme = ColorThemes.Default;
 
 // The same five colours as the 2D and 3D twins of the first examples, from Example.Common
-(Primitive2DModelType Type, Color Colour)[] shapes =
+(Primitive2D Type, Color Colour)[] shapes =
 [
-    (Primitive2DModelType.Square, theme.Blue),
-    (Primitive2DModelType.Rectangle, theme.Orange),
-    (Primitive2DModelType.Circle, theme.Red),
-    (Primitive2DModelType.Capsule, theme.Green),
-    (Primitive2DModelType.Triangle, theme.Purple),
+    (Primitive2D.Square(), theme.Blue),
+    (Primitive2D.Rectangle(), theme.Orange),
+    (Primitive2D.Circle(), theme.Red),
+    (Primitive2D.Capsule(), theme.Green),
+    (Primitive2D.Triangle(), theme.Purple),
 ];
 
 var created = 0;
@@ -84,7 +84,7 @@ void AddShapes(Scene scene, int count)
     {
         var (type, colour) = shapes[created % shapes.Length];
 
-        var entity = game.Create2DPrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
+        var entity = game.CreatePrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
 
         entity.Name = ShapeName;
         entity.Transform.Position = new Vector3(created * 7 % 11 - 5, 6 + created % 10 * 1.5f, 0);

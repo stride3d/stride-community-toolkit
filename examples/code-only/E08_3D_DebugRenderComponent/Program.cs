@@ -17,7 +17,7 @@ void Start(Scene rootScene)
     game.AddSkybox();
     game.AddProfiler();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube);
+    var entity = game.CreatePrimitive(Primitive3D.Cube());
     entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
     entity.Add(new DebugRenderComponentScript() { Visible = true });
     entity.Scene = rootScene;
@@ -31,7 +31,7 @@ void CreateSpheres(Scene rootScene, int count)
 
     for (int i = -half; i < half; i++)
     {
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new() { EntityName = SphereEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { EntityName = SphereEntityName });
         entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
         entity.Scene = rootScene;
     }
@@ -56,7 +56,7 @@ concepts:
   - "How this differs from CollidableGizmoScript, which draws the collider"
   - Toggling the overlay with its Visible property
   - Comparing mesh against collider when a body misbehaves
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

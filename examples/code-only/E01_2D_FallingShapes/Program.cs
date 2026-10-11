@@ -7,13 +7,13 @@ using Stride.Engine;
 const int ShapeCount = 30;
 
 // The shapes to drop, and the colour of each
-(Primitive2DModelType Type, Color Colour)[] shapes =
+(Primitive2D Type, Color Colour)[] shapes =
 [
-    (Primitive2DModelType.Square, new Color(30, 70, 170)),
-    (Primitive2DModelType.Rectangle, new Color(240, 150, 60)),
-    (Primitive2DModelType.Circle, new Color(235, 100, 80)),
-    (Primitive2DModelType.Capsule, new Color(110, 200, 110)),
-    (Primitive2DModelType.Triangle, new Color(190, 130, 230)),
+    (Primitive2D.Square(), new Color(30, 70, 170)),
+    (Primitive2D.Rectangle(), new Color(240, 150, 60)),
+    (Primitive2D.Circle(), new Color(235, 100, 80)),
+    (Primitive2D.Capsule(), new Color(110, 200, 110)),
+    (Primitive2D.Triangle(), new Color(190, 130, 230)),
 ];
 
 using var game = new Game();
@@ -29,7 +29,7 @@ void Start(Scene rootScene)
         // Each kind of shape in turn
         var (type, colour) = shapes[i % shapes.Length];
 
-        var entity = game.Create2DPrimitive(type, new()
+        var entity = game.CreatePrimitive(type, new()
         {
             Material = game.CreateFlatMaterial(colour)
         });
@@ -62,7 +62,7 @@ description:
     pro každou barvu. O zbytek se postará fyzika Bepu. 3D dvojče, E01_3D_FallingShapes, pouští
     stejné tvary ve stejných barvách.
 concepts:
-  - Creating many 2D primitives in a loop with Create2DPrimitive
+  - Creating many 2D primitives in a loop with CreatePrimitive
   - A list of shape types with a colour each
   - Applying a flat material with CreateFlatMaterial
   - Positioning entities so that they fall into a pile

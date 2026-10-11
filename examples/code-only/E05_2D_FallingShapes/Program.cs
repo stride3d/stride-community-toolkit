@@ -16,17 +16,16 @@ void Start(Scene rootScene)
     game.SetupBase2DScene();
     game.AddProfiler();
 
-    var otherShape = game.Create2DPrimitive(Primitive2DModelType.Rectangle, new()
+    var otherShape = game.CreatePrimitive(Primitive2D.Rectangle(0.5f, 0.8f), new()
     {
         Material = game.CreateFlatMaterial(Color.Gold),
-        Size = new Vector2(0.5f, 0.8f)
     });
     otherShape.Transform.Position = new Vector3(0.2f, 4f, 0);
     otherShape.Scene = rootScene;
 
     for (int i = 0; i < ShapeCount; i++)
     {
-        var shape = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
+        var shape = game.CreatePrimitive(Primitive2D.Capsule(), new()
         {
             Material = game.CreateFlatMaterial(Color.White),
             Component = new Body2DComponent()
@@ -62,10 +61,10 @@ description:
     rozprostře víc než s výchozí hodnotou. Ukazuje, kam patří fyzikální nastavení tělesa při
     vytváření primitivního tvaru.
 concepts:
-  - Passing a Body2DComponent to Create2DPrimitive to set physics options
+  - Passing a Body2DComponent to CreatePrimitive to set physics options
   - FrictionCoefficient - a lower value lets the pile spread
   - An empty CompoundCollider that the helper fills with the fitted shape
-  - "Using helpers: SetupBase2DScene, AddProfiler, Create2DPrimitive, CreateFlatMaterial"
+  - "Using helpers: SetupBase2DScene, AddProfiler, CreatePrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bepu

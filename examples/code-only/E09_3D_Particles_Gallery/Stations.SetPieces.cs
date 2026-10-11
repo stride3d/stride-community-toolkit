@@ -149,26 +149,23 @@ public static class SetPieceStations
         var sooty = v == 1;
         var afterburner = v == 2;
 
-        // The engine itself, once: a nozzle cone with the throat up, and the body standing on it. A cone's
-        // size is its radius and its height; a cylinder's is its radius in X and its length in Z.
+        // The engine itself, once: a nozzle cone with the throat up, and the body standing on it
         if (s.State is null)
         {
             const float NozzleLength = 1f;
             const float BodyLength = 2.6f;
 
-            var nozzle = s.Game.Create3DPrimitive(PrimitiveModelType.Cone, new Primitive3DEntityOptions
+            var nozzle = s.Game.CreatePrimitive(Primitive3D.Cone(0.6f, NozzleLength), new Primitive3DEntityOptions
             {
                 EntityName = $"Station {s.Number} nozzle",
                 Material = s.Game.CreateMaterial(new Color(70, 72, 78), metalness: 0.5f, glossiness: 0.7f),
-                Size = new Vector3(0.6f, NozzleLength, 0f),
                 Position = s.At(0f, Height + NozzleLength / 2f, 0f),
             });
 
-            var body = s.Game.Create3DPrimitive(PrimitiveModelType.Cylinder, new Primitive3DEntityOptions
+            var body = s.Game.CreatePrimitive(Primitive3D.Cylinder(0.45f, BodyLength), new Primitive3DEntityOptions
             {
                 EntityName = $"Station {s.Number} body",
                 Material = s.Game.CreateMaterial(new Color(200, 205, 210), metalness: 0.3f, glossiness: 0.6f),
-                Size = new Vector3(0.45f, 0f, BodyLength),
                 Position = s.At(0f, Height + NozzleLength + BodyLength / 2f, 0f),
             });
 

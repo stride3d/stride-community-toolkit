@@ -43,7 +43,7 @@ void Start(Scene scene)
     var material = Material.New(game.GraphicsDevice, materialDescriptor);
 
     // Create a 3D cube primitive and assign the material to it
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         Material = material,
     });

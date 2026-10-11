@@ -10,7 +10,7 @@ Demonstrates primitive creation, basic positioning, and attaching the entity to 
 
 The `Program.cs` file shows how to:
 
-- Creating a 2D primitive with Create2DPrimitive
+- Creating a 2D primitive with CreatePrimitive
 - Applying a flat material with CreateFlatMaterial
 - Positioning an entity with Transform.Position
 - Adding entities to a Scene (rootScene)

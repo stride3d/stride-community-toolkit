@@ -1,6 +1,6 @@
 // Engine only: the same kind of scene as ProgramSimple.cs - a ground, a cube and a camera - written
 // against Stride alone, with no toolkit package. It is here to show what the toolkit's one-liners
-// stand for: SetupBase3D is the compositor, the camera and the light below; Create3DPrimitive is a
+// stand for: SetupBase3D is the compositor, the camera and the light below; CreatePrimitive is a
 // procedural model, a material and an entity. No physics, no camera controller and no skybox, which
 // are each a page of their own without the toolkit. The same scene as a regular project is
 // E01_3D_BasicScene_EngineOnly; the manual walks through both under Code-Only.

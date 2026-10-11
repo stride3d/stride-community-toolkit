@@ -18,7 +18,7 @@ Module Program
         game.AddSkybox()
         game.AddProfiler()
 
-        Dim entity = game.Create3DPrimitive(PrimitiveModelType.Capsule, New Bepu3DPhysicsOptions())
+        Dim entity = game.CreatePrimitive(Primitive3D.Capsule(), New Bepu3DPhysicsOptions())
         entity.Transform.Position = New Vector3(0, 8, 0)
         entity.Scene = rootScene
     End Sub
@@ -41,7 +41,7 @@ End Module
 '   - "Hosting the app in a Module with a Sub Main"
 '   - "Calling an extension method as a static: GameExtensions.Run(game, ...)"
 '   - "Passing a callback with AddressOf"
-'   - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+'   - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
 ' tags:
 '   - 3D
 '   - Visual Basic

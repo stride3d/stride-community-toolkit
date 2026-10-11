@@ -66,17 +66,15 @@ void Start(Scene scene)
 
     // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
     // and its height in Z
-    var pillar = game.Create3DPrimitive(PrimitiveModelType.Cylinder, new Primitive3DEntityOptions
+    var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new Primitive3DEntityOptions
     {
-        Size = new Vector3(0.3f, 0f, 2.5f),
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         Position = new Vector3(0, 1.25f, 0),
     });
     pillar.Scene = scene;
 
-    orb = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
+    orb = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
     {
-        Size = new Vector3(0.6f),
         Material = game.CreateMaterial(new Color(255, 120, 60)),
     });
     orb.Scene = scene;
@@ -204,7 +202,7 @@ concepts:
   - HRTF as two switches - HrtfSupport through UseGameSettings, then useHrtf per instance
   - Positioning a one-shot once versus tracking a moving emitter every frame
   - Reading the emitter's side and distance relative to the camera for the overlay
-  - "Using helpers: UseGameSettings, SetupBase3DScene, Create3DPrimitive, DebugOverlay"
+  - "Using helpers: UseGameSettings, SetupBase3DScene, CreatePrimitive, DebugOverlay"
 tags:
   - 3D
   - Audio

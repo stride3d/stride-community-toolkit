@@ -32,13 +32,13 @@ var parallelogramVertices = new Vector2[]
 };
 
 List<ShapeItem> shapes = [
-    new(Primitive2DModelType.Circle),
-    new(Primitive2DModelType.Capsule),
-    new(Primitive2DModelType.Rectangle),
-    new(Primitive2DModelType.Square),
-    new(Primitive2DModelType.Polygon),
-    new(Primitive2DModelType.Triangle),
-    new(Primitive2DModelType.Polygon, parallelogramVertices, "Parallelogram")
+    new(Primitive2D.Circle()),
+    new(Primitive2D.Capsule()),
+    new(Primitive2D.Rectangle()),
+    new(Primitive2D.Square()),
+    new(Primitive2D.RegularPolygon(1, 5)),
+    new(Primitive2D.Triangle()),
+    new(Primitive2D.Polygon(parallelogramVertices), "Parallelogram")
 ];
 
 Scene? scene = null;
@@ -73,7 +73,7 @@ void Start(Scene rootScene)
         // Keys are yours to pick, which is why a menu is not limited to the ten digits
         Items = [.. shapes.Index().Select(pair => new DebugTextDropdownItem(
             Key: (Keys)(Keys.D1 + pair.Index),
-            Text: pair.Item.Name ?? pair.Item.Type.ToString(),
+            Text: pair.Item.Name ?? pair.Item.Type.Name,
             Action: () => Spawn(pair.Item, new Vector3((random.NextSingle() - 0.5f) * 6f, 14, 0))))]
     };
 
@@ -88,16 +88,12 @@ void Spawn(ShapeItem shape, Vector3 position)
     var bepuOptions = new Bepu2DPhysicsOptions()
     {
         Material = game.CreateFlatMaterial(random.NextColor()),
-        Vertices = shape.Vertices,
     };
 
-    if (shape.Type == Primitive2DModelType.Polygon && shape.Vertices == null)
-    {
-        bepuOptions.Size = new Vector2(1, 5);
-        bepuOptions.Depth = 4;
-    }
+    // The pentagon is the big one, so its collider gets a depth to match
+    if (shape.Type is Primitive2D.RegularPolygonShape) bepuOptions.Depth = 4;
 
-    var entity = game.Create2DPrimitive(shape.Type, bepuOptions);
+    var entity = game.CreatePrimitive(shape.Type, bepuOptions);
 
     entity.Transform.Position = position;
     entity.Scene = scene;
@@ -111,7 +107,7 @@ void Update(Scene rootScene, GameTime time)
 
 /// <summary>One shape the menu can spawn. <paramref name="Name"/> overrides the label, so two
 /// entries built from the same primitive type can still be told apart.</summary>
-public record ShapeItem(Primitive2DModelType Type, Vector2[]? Vertices = null, string? Name = null);
+public record ShapeItem(Primitive2D Type, string? Name = null);
 
 /*
 ---example-metadata
@@ -144,7 +140,7 @@ concepts:
   - Sharing one on-screen block with the camera help through a DebugOverlay section
   - Spawning entities at runtime from keyboard input
   - Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
-  - "Using helpers: SetupBase2DScene, Create2DPrimitive, CreateFlatMaterial"
+  - "Using helpers: SetupBase2DScene, CreatePrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bepu

@@ -132,11 +132,10 @@ void CreateTower(Scene scene, float x)
     {
         for (var column = 0; column < TowerColumns; column++)
         {
-            var box = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+            var box = game.CreatePrimitive(Primitive3D.Cube(TowerBoxSize), new Bepu3DPhysicsOptions
             {
                 EntityName = "Tower Box",
                 Material = game.CreateMaterial(row % 2 == 0 ? Color.Tan : Color.SandyBrown),
-                Size = new Vector3(TowerBoxSize),
             });
 
             box.Transform.Position = new Vector3(

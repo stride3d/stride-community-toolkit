@@ -20,11 +20,11 @@ The `Program.cs` file shows how to:
 - Building a world matrix and its inverse in a shader from a heading
 - Using helpers: SetupBase3DScene
 - Using helpers: AddSkybox
-- Using helpers: Create3DPrimitive
+- Using helpers: CreatePrimitive
 - Using helpers: DebugOverlay
 
 ![Compute Shader Boids](media/compute-boids.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_3D_ComputeBoids).
 
-[!code-csharp[](../../../../examples/code-only/E10_3D_ComputeBoids/Program.cs?start=1&end=337)]
+[!code-csharp[](../../../../examples/code-only/E10_3D_ComputeBoids/Program.cs?start=1&end=336)]

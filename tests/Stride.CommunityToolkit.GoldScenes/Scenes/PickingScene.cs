@@ -41,42 +41,38 @@ internal sealed class PickingScene : IGoldScene
         game.SetCameraRotation(new Vector3(0f, -18f, 0f));
         game.AddInstancingSupport();
 
-        var ground = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new Primitive3DEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
-            Size = new Vector3(30f, 0.5f, 30f),
             Position = new Vector3(0f, -0.25f, 0f),
         });
 
         ground.Scene = scene;
 
-        var pillar = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, 4f, 1.6f)), new Primitive3DEntityOptions
         {
             EntityName = "Pillar",
             Material = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f),
-            Size = new Vector3(1.6f, 4f, 1.6f),
             Position = new Vector3(0f, 2f, 0f),
         });
 
         pillar.Scene = scene;
 
-        var sphere = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
+        var sphere = game.CreatePrimitive(Primitive3D.Sphere(1.6f), new Primitive3DEntityOptions
         {
             EntityName = "Sphere",
             Material = game.CreateMaterial(Color.MediumPurple, metalness: 0.3f, glossiness: 0.6f),
-            Size = new Vector3(1.6f),
             Position = new Vector3(-4.5f, 0.8f, 1f),
         });
 
         sphere.Scene = scene;
 
         // A row of five cubes drawn as one instanced model, so a pick can name the instance
-        var prototype = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+        var prototype = game.CreatePrimitive(Primitive3D.Cube(0.9f), new Primitive3DEntityOptions
         {
             EntityName = "Row",
             Material = game.CreateMaterial(Color.SteelBlue, metalness: 0.2f, glossiness: 0.5f),
-            Size = new Vector3(0.9f),
         });
 
         var matrices = new Matrix[5];

@@ -10,7 +10,7 @@ using Stride.Rendering.ProceduralModels;
 
 // Engine only: a ground, a cube and a camera written against Stride alone, with no toolkit package.
 // It is here to show what the toolkit's one-liners stand for: SetupBase3D is the compositor, the
-// camera and the light below; Create3DPrimitive is a procedural model, a material and an entity.
+// camera and the light below; CreatePrimitive is a procedural model, a material and an entity.
 // No physics, no camera controller and no skybox, which are each a page of their own without the
 // toolkit. The same scene as a file-based app is E01_3D_BasicScene_FileBasedApp/ProgramEngineOnly.cs.
 
@@ -104,11 +104,11 @@ description:
   en: |-
     A ground, a cube and a camera written against Stride alone, with no toolkit package: the graphics
     compositor, the camera, the lights, the procedural models and the material that the toolkit's
-    SetupBase3D and Create3DPrimitive stand for. About ninety lines where the toolkit version is five,
+    SetupBase3D and CreatePrimitive stand for. About ninety lines where the toolkit version is five,
     and a map of what each helper does underneath.
   cs: |-
     Země, krychle a kamera napsané jen proti Stride, bez balíčku toolkitu: grafický kompozitor, kamera,
-    světla, procedurální modely a materiál, které se skrývají za SetupBase3D a Create3DPrimitive z
+    světla, procedurální modely a materiál, které se skrývají za SetupBase3D a CreatePrimitive z
     toolkitu. Asi devadesát řádků tam, kde má verze s toolkitem pět, a mapa toho, co každý pomocník
     dělá uvnitř.
 concepts:

@@ -66,8 +66,8 @@ public static class MapStations
         var flat = s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss)));
         var bumped = s.Material(Recipes.Mapped(Recipes.Colour(albedo), glossiness: Recipes.Scalar(gloss), normal: Recipes.Colour(normal)));
 
-        s.Place(PrimitiveModelType.Cube, flat, new Vector3(-1.6f, 0.9f, 0f), new Vector3(1.8f));
-        s.Place(PrimitiveModelType.Cube, bumped, new Vector3(1.6f, 0.9f, 0f), new Vector3(1.8f));
+        s.Place(Primitive3D.Cube(1.8f), flat, new Vector3(-1.6f, 0.9f, 0f));
+        s.Place(Primitive3D.Cube(1.8f), bumped, new Vector3(1.6f, 0.9f, 0f));
     }
 
     /// <summary>
@@ -152,8 +152,8 @@ public static class MapStations
         var open = s.Material(Recipes.Mapped(albedo, glossiness: gloss, normal: normal));
         var occluded = s.Material(descriptor);
 
-        s.Place(PrimitiveModelType.Cube, open, new Vector3(-1.6f, 0.9f, 0f), new Vector3(1.8f));
-        s.Place(PrimitiveModelType.Cube, occluded, new Vector3(1.6f, 0.9f, 0f), new Vector3(1.8f));
+        s.Place(Primitive3D.Cube(1.8f), open, new Vector3(-1.6f, 0.9f, 0f));
+        s.Place(Primitive3D.Cube(1.8f), occluded, new Vector3(1.6f, 0.9f, 0f));
     }
 
     /// <summary>
@@ -212,9 +212,9 @@ public static class MapStations
         var gloss = s.Material(Recipes.Pbr(new Color(60, 110, 200), glossiness: 0.5f, metalness: 0f));
 
         s.State = new AnimatedState(tint, scroll, gloss);
-        s.Place(PrimitiveModelType.Sphere, tint, MaterialStation.SphereSpot);
-        s.Place(PrimitiveModelType.Cube, scroll, MaterialStation.CubeSpot);
-        s.Place(PrimitiveModelType.Teapot, gloss, MaterialStation.TeapotSpot);
+        s.Place(Primitive3D.Sphere(), tint, MaterialStation.SphereSpot);
+        s.Place(Primitive3D.Cube(), scroll, MaterialStation.CubeSpot);
+        s.Place(Primitive3D.Teapot(), gloss, MaterialStation.TeapotSpot);
     }
 
     /// <summary>The per-frame half: the tint round the hue, the bricks scrolling, the glossiness breathing.</summary>

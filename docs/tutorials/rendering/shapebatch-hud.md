@@ -49,13 +49,13 @@ follow the steps, but it is there if you want to compare.
    const int ShapeCount = 30;
 
    // The shapes to drop, and the colour of each
-   (Primitive2DModelType Type, Color Colour)[] shapes =
+   (Primitive2D Type, Color Colour)[] shapes =
    [
-       (Primitive2DModelType.Square, new Color(30, 70, 170)),
-       (Primitive2DModelType.Rectangle, new Color(240, 150, 60)),
-       (Primitive2DModelType.Circle, new Color(235, 100, 80)),
-       (Primitive2DModelType.Capsule, new Color(110, 200, 110)),
-       (Primitive2DModelType.Triangle, new Color(190, 130, 230)),
+       (Primitive2D.Square(), new Color(30, 70, 170)),
+       (Primitive2D.Rectangle(), new Color(240, 150, 60)),
+       (Primitive2D.Circle(), new Color(235, 100, 80)),
+       (Primitive2D.Capsule(), new Color(110, 200, 110)),
+       (Primitive2D.Triangle(), new Color(190, 130, 230)),
    ];
 
    using var game = new Game();
@@ -71,7 +71,7 @@ follow the steps, but it is there if you want to compare.
            // Each kind of shape in turn
            var (type, colour) = shapes[i % shapes.Length];
 
-           var entity = game.Create2DPrimitive(type, new()
+           var entity = game.CreatePrimitive(type, new()
            {
                Material = game.CreateFlatMaterial(colour)
            });

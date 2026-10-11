@@ -5,7 +5,7 @@ them helpers. This page builds the same kind of scene - a ground, a cube and a c
 alone, with no toolkit package. It is not the recommended route; it is here so you can see what the
 helpers stand for, and so you know the toolkit is a convenience, not a requirement. Everything it uses
 is plain Stride, and everything it does the toolkit does for you in `SetupBase3D()` and
-`Create3DPrimitive()`.
+`CreatePrimitive()`.
 
 > [!NOTE]
 > The prerequisites in [Getting Started](../getting-started.md) still apply.
@@ -57,13 +57,13 @@ This is the toolkit's `E01_3D_BasicScene_EngineOnly` example, verbatim.
 | `GraphicsCompositorHelper.CreateDefault(...)` assigned to `SceneSystem.GraphicsCompositor` | `AddGraphicsCompositor()`, inside `SetupBase3D()`. Without a compositor nothing is drawn. |
 | An entity with a `CameraComponent` bound to `compositor.Cameras[0]`, placed and rotated | `Add3DCamera()`, inside `SetupBase3D()`, with the same position and angles. |
 | A `LightDirectional` with shadows and a `LightAmbient` fill | `AddDirectionalLight()`, inside `SetupBase3D()`. The toolkit's lit scenes usually add a skybox instead of the ambient light, which also lights the shaded faces. |
-| `PlaneProceduralModel` / `CubeProceduralModel` → `Generate(...)` → `Model` → `ModelComponent` | `Create3DPrimitive(PrimitiveModelType.Cube)`. |
+| `PlaneProceduralModel` / `CubeProceduralModel` → `Generate(...)` → `Model` → `ModelComponent` | `CreatePrimitive(Primitive3D.Cube())`. |
 | `Material.New(device, new MaterialDescriptor { ... })` | `game.CreateMaterial(colour)`. |
 
 What the engine-only version leaves out, because each is a page of its own without the toolkit:
 
 - **Physics.** `SetupBase3DScene()` (the Bepu package's version of the setup) gives the ground a static
-  collider and `Create3DPrimitive()` gives the cube a rigid body, so it can fall and land. Here the
+  collider and `CreatePrimitive()` gives the cube a rigid body, so it can fall and land. Here the
   cube is placed on the ground by hand and nothing moves.
 - **A camera controller.** The toolkit's `Add3DCameraController()` flies the camera with the keyboard
   and mouse; here the camera is fixed where `Start` put it.

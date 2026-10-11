@@ -21,7 +21,7 @@ void Start(Scene scene)
     game.AddGroundGizmo(showAxisName: true);
 
     // Create a cube entity with a violet material and position it in the scene
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         Material = game.CreateMaterial(Color.Violet),
     });
@@ -33,7 +33,7 @@ void Start(Scene scene)
     cube.Scene = scene;
 
     // Create a sphere entity with a wheat-colored material
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    var entity = game.CreatePrimitive(Primitive3D.Sphere(), new()
     {
         Material = game.CreateMaterial(Color.Wheat),
     });

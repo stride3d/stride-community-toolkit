@@ -73,7 +73,7 @@ void CreateAndAddUI(Scene scene, SpriteFont font)
 
 void AddExampleShape(Scene scene)
 {
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -82,7 +82,7 @@ void AddExampleShape(Scene scene)
 
 void GenerateRandomSpheres()
 {
-    var totalShapes = _shapeGenerator?.Generate(ShapeCount, PrimitiveModelType.Sphere);
+    var totalShapes = _shapeGenerator?.Generate(ShapeCount, Primitive3D.Sphere(0.3f));
 
     _uiManager?.UpdateTextBlock($"{TotalShapesLabel} {totalShapes ?? 0}");
 }
@@ -109,7 +109,7 @@ concepts:
   - Spawning scene objects from a UI button
   - Keeping a UI counter in step with the scene
   - Removing entities that fall out of the world
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - UI

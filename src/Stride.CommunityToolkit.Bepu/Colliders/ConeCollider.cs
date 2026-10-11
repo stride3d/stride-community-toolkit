@@ -1,59 +1,32 @@
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu.Extensions;
 using Stride.Core.Mathematics;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Graphics.GeometricPrimitives;
-using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Bepu.Colliders;
 
 /// <summary>
-/// Provides helpers to construct Bepu <see cref="ConvexHullCollider"/> instances from a cone primitive mesh.
+/// Builds the convex hull collider of a cone, decomposed from the same mesh the model is built from, and shares
+/// it between every cone of the same dimensions.
 /// </summary>
-/// <remarks>
-/// Builds a convex hull from a generated cone mesh. If no explicit size is provided,
-/// default values are taken from <see cref="ConeProceduralModel"/>.
-/// The cone mesh is generated with 16 radial segments via <see cref="GeometricPrimitive.Cone"/>.
-/// </remarks>
-/// <example>
-/// <code>
-/// // Create a collider using defaults from ConeProceduralModel
-/// var collider = ConeCollider.Create(null);
-///
-/// // Or create a collider with explicit radius (X) and height (Y); Z is unused
-/// var collider2 = ConeCollider.Create(new Vector3(0.5f, 2.0f, 0f));
-/// </code>
-/// </example>
-/// <seealso cref="ConvexHullCollider"/>
-/// <seealso cref="GeometricPrimitive.Cone"/>
 public static class ConeCollider
 {
     /// <summary>
-    /// Creates a Bepu <see cref="ConvexHullCollider"/> from a cone primitive mesh.
+    /// Creates the collider of a cone with the given base radius and height.
     /// </summary>
-    /// <param name="size">
-    /// Optional size in world units: X = radius, Y = height, Z is unused and ignored.
-    /// When <c>null</c>, defaults from <see cref="ConeProceduralModel"/> are used.
-    /// </param>
-    /// <returns>
-    /// A <see cref="ConvexHullCollider"/> whose hull is computed from the generated cone mesh.
-    /// </returns>
-    public static ConvexHullCollider Create(Vector3? size)
+    public static ConvexHullCollider Create(float radius, float height)
+        => SharedHullCache.CreateCollider(
+            nameof(ConeCollider), radius, height, 0,
+            () => GeometricPrimitive.Cone.New(radius: radius, height: height).ToDecomposedHulls());
+
+    /// <summary>
+    /// Creates the collider of <paramref name="cone"/>.
+    /// </summary>
+    public static ConvexHullCollider Create(Primitive3D.ConeShape cone)
     {
-        Vector3 validatedSize;
+        ArgumentNullException.ThrowIfNull(cone);
 
-        if (size is null)
-        {
-            var coneModel = new ConeProceduralModel();
-
-            validatedSize = new(coneModel.Radius, coneModel.Height, 1);
-        }
-        else
-        {
-            validatedSize = size.Value;
-        }
-
-        return SharedHullCache.CreateCollider(
-            nameof(ConeCollider), validatedSize.X, validatedSize.Y, 0,
-            () => GeometricPrimitive.Cone.New(radius: validatedSize.X, height: validatedSize.Y).ToDecomposedHulls());
+        return Create(cone.Radius, cone.Height);
     }
 }

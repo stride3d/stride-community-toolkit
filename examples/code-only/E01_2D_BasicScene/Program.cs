@@ -12,7 +12,7 @@ void Start(Scene rootScene)
 {
     game.SetupBase2DScene();
 
-    var entity = game.Create2DPrimitive(Primitive2DModelType.Capsule, new()
+    var entity = game.CreatePrimitive(Primitive2D.Capsule(), new()
     {
         Material = game.CreateFlatMaterial(Color.White)
     });
@@ -38,7 +38,7 @@ description:
     Vytvoření minimální 2D scény pomocí nástrojů sady a umístění jediné kapsle s plochým materiálem.
     Ukazuje vytvoření primitivního tvaru, základní umístění a připojení entity k scéně.
 concepts:
-  - Creating a 2D primitive with Create2DPrimitive
+  - Creating a 2D primitive with CreatePrimitive
   - Applying a flat material with CreateFlatMaterial
   - Positioning an entity with Transform.Position
   - Adding entities to a Scene (rootScene)

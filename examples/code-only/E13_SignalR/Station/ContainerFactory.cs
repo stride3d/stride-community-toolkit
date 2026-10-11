@@ -32,11 +32,10 @@ public sealed class ContainerFactory(Game game)
     {
         var (box, mass) = Spec(size);
 
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(Primitive3D.Box(box), new Bepu3DPhysicsOptions
         {
             EntityName = $"Container {id} ({size}, {paint})",
             Material = MaterialFor(paint),
-            Size = box,
             Position = position,
         });
 

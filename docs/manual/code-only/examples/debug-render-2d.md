@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Hanging both off one otherwise empty entity
 - Lighting a 2D scene with a LightSpot
 - Giving each shape its own colour with a flat material
-- Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, Create2DPrimitive
+- Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, CreatePrimitive
 
 ![Basic 2D Scene (Debug Rendering)](media/debug-render-2d.webp)
 

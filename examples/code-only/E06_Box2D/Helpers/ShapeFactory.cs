@@ -7,25 +7,36 @@ using Stride.Engine;
 namespace E06_Box2D.Helpers;
 
 /// <summary>
-/// Factory class to create 2D shapes for the Box2D simulation with Box2D.NET
+/// The 2D shapes the Box2D demo spawns, each a shape with its dimensions and a colour, and the
+/// entities drawn for them.
 /// </summary>
 public class ShapeFactory(Scene scene)
 {
-    private readonly List<Shape2DModel> _shapes =
-    [
-        new() { Type = Primitive2DModelType.Square, Color = Color.Green, Size = GameConfig.BoxSize },
-        new() { Type = Primitive2DModelType.Rectangle, Color = Color.Orange, Size = GameConfig.RectangleSize },
-        new() { Type = Primitive2DModelType.Circle, Color = Color.Red, Size = GameConfig.BoxSize / 2 },
-        new() { Type = Primitive2DModelType.Circle, Color = Color.Gold, Size = GameConfig.BoxSize },
-        new() { Type = Primitive2DModelType.Triangle, Color = Color.Purple, Size = GameConfig.BoxSize },
-        new() { Type = Primitive2DModelType.Capsule, Color = Color.Blue, Size = GameConfig.CapsuleSize }
-    ];
+    /// <summary>A green square, <see cref="GameConfig.BoxSize"/> across.</summary>
+    public Shape2DModel Square { get; } = new() { Type = Primitive2D.Square(GameConfig.BoxSize.X), Color = Color.Green };
 
-    public Shape2DModel? GetShapeModel(Primitive2DModelType type)
-        => _shapes.Find(x => x.Type == type);
+    /// <summary>An orange rectangle of <see cref="GameConfig.RectangleSize"/>.</summary>
+    public Shape2DModel Rectangle { get; } = new() { Type = Primitive2D.Rectangle(GameConfig.RectangleSize.X, GameConfig.RectangleSize.Y), Color = Color.Orange };
+
+    /// <summary>A red circle as wide as the square.</summary>
+    public Shape2DModel Circle { get; } = new() { Type = Primitive2D.Circle(GameConfig.BoxSize.X / 2), Color = Color.Red };
+
+    /// <summary>A gold circle twice as wide as the square.</summary>
+    public Shape2DModel LargeCircle { get; } = new() { Type = Primitive2D.Circle(GameConfig.BoxSize.X), Color = Color.Gold };
+
+    /// <summary>A purple triangle as wide and as tall as the square.</summary>
+    public Shape2DModel Triangle { get; } = new() { Type = Primitive2D.Triangle(GameConfig.BoxSize.X, GameConfig.BoxSize.Y), Color = Color.Purple };
+
+    /// <summary>A blue capsule of <see cref="GameConfig.CapsuleSize"/>: its radius and its height end to end.</summary>
+    public Shape2DModel Capsule { get; } = new() { Type = Primitive2D.Capsule(GameConfig.CapsuleSize.X, GameConfig.CapsuleSize.Y), Color = Color.Blue };
+
+    private Shape2DModel[]? _all;
+
+    /// <summary>Every model, for a random pick.</summary>
+    public IReadOnlyList<Shape2DModel> All => _all ??= [Square, Rectangle, Circle, LargeCircle, Triangle, Capsule];
 
     public Shape2DModel GetRandomShapeModel()
-        => _shapes[Random.Shared.Next(_shapes.Count)];
+        => All[Random.Shared.Next(All.Count)];
 
     public Entity CreateEntity(Shape2DModel shape, Color? overrideColor = null, Vector2? position = null, string? name = null)
     {
@@ -34,7 +45,7 @@ public class ShapeFactory(Scene scene)
         // The Box2D debug-draw component renders the shape testbed-style - fill plus a
         // pixel-constant border from the same numbers the collider uses. No mesh, no material,
         // no outline shader.
-        var entity = new Entity(name ?? $"{shape.Type}-{GameConfig.ShapeName}")
+        var entity = new Entity(name ?? $"{shape.Type.Name}-{GameConfig.ShapeName}")
         {
             CreateShapeComponent(shape, actualColor)
         };
@@ -52,34 +63,35 @@ public class ShapeFactory(Scene scene)
     /// </summary>
     private static ShapeComponent CreateShapeComponent(Shape2DModel shape, Color color) => shape.Type switch
     {
-        Primitive2DModelType.Circle => new() { Vertices = [Vector2.Zero], Radius = shape.Size.X, Color = color },
-        Primitive2DModelType.Capsule => new()
+        Primitive2D.CircleShape circle => new() { Vertices = [Vector2.Zero], Radius = circle.Radius, Color = color },
+        Primitive2D.CapsuleShape capsule => new()
         {
-            Vertices = [new(0, -(shape.Size.Y / 2 - shape.Size.X)), new(0, shape.Size.Y / 2 - shape.Size.X)],
-            Radius = shape.Size.X,
+            Vertices = [new(0, -(capsule.Height / 2 - capsule.Radius)), new(0, capsule.Height / 2 - capsule.Radius)],
+            Radius = capsule.Radius,
             Color = color,
         },
-        Primitive2DModelType.Triangle => new()
-        {
-            Vertices =
-            [
-                new(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),
-                new(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),
-                new(0, shape.Size.Y * 0.5f),
-            ],
-            Color = color,
-        },
-        _ => new()
+        Primitive2D.TriangleShape triangle => new()
         {
             Vertices =
             [
-                new(-shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),
-                new(shape.Size.X * 0.5f, -shape.Size.Y * 0.5f),
-                new(shape.Size.X * 0.5f, shape.Size.Y * 0.5f),
-                new(-shape.Size.X * 0.5f, shape.Size.Y * 0.5f),
+                new(-triangle.Size.X * 0.5f, -triangle.Size.Y * 0.5f),
+                new(triangle.Size.X * 0.5f, -triangle.Size.Y * 0.5f),
+                new(0, triangle.Size.Y * 0.5f),
             ],
             Color = color,
         },
+        Primitive2D.RectangleShape rectangle => new()
+        {
+            Vertices =
+            [
+                new(-rectangle.Size.X * 0.5f, -rectangle.Size.Y * 0.5f),
+                new(rectangle.Size.X * 0.5f, -rectangle.Size.Y * 0.5f),
+                new(rectangle.Size.X * 0.5f, rectangle.Size.Y * 0.5f),
+                new(-rectangle.Size.X * 0.5f, rectangle.Size.Y * 0.5f),
+            ],
+            Color = color,
+        },
+        _ => throw new NotSupportedException($"No outline for a {shape.Type.Name}."),
     };
 
     private static Vector3 GetRandomPosition() => new(Random.Shared.Next(-5, 5), Random.Shared.Next(10, 30), 0);

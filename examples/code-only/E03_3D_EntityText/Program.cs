@@ -150,10 +150,9 @@ void Start(Scene scene)
 // station's own settings. Returns the pole so a station can add more components to it.
 Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextComponent> configure)
 {
-    var pole = game.Create3DPrimitive(PrimitiveModelType.Cylinder, new Primitive3DEntityOptions
+    var pole = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 1f), new Primitive3DEntityOptions
     {
         EntityName = "Pole",
-        Size = new Vector3(0.15f, 1f, 0.15f),
     });
 
     pole.Transform.Position = position + new Vector3(0, 0.5f, 0);

@@ -98,11 +98,10 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddGround(string name, Vector3 position, int simulation)
 {
-    var ground = game.Add3DGround(new()
+    var ground = game.Add3DGround(new Vector2(10), new()
     {
         EntityName = name,
         Position = position,
-        Size = new Vector3(10, 1, 10),
     });
 
     // Changing the selector on an attached collidable moves it to the other simulation.
@@ -122,7 +121,7 @@ void Spawn(Scene scene)
 
     // Simulation 1 (Moon gravity, so it takes its time), positioned over the Earth ground: nothing
     // in simulation 1 is there to stop it, so it passes straight through.
-    var ghost = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    var ghost = game.CreatePrimitive(Primitive3D.Sphere(), new()
     {
         EntityName = "Ghost Ball",
         Material = game.CreateMaterial(Color.Orange),
@@ -137,7 +136,7 @@ void Spawn(Scene scene)
 
 void SpawnCube(string name, Color color, Vector3 position, int simulation, Scene scene)
 {
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
@@ -176,7 +175,7 @@ concepts:
   - Why bodies in different simulations pass through each other
   - Respawning entities with Space
   - Showing instructions as a DebugOverlay section beside the camera help
-  - "Using helpers: SetupBase3D, Add3DGround, Create3DPrimitive, SetCameraPosition, SetCameraRotation"
+  - "Using helpers: SetupBase3D, Add3DGround, CreatePrimitive, SetCameraPosition, SetCameraRotation"
 tags:
   - 3D
   - Bepu

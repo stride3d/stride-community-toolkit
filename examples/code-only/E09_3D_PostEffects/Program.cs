@@ -11,8 +11,6 @@ using Stride.Input;
 using Stride.Rendering;
 using Stride.Rendering.Images;
 using Stride.Rendering.Images.Dither;
-using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 
 // Every post effect Stride ships, one key each, on a scene built to show them.
 //
@@ -71,7 +69,7 @@ void Start(Scene scene)
 
         // The colour transforms have to be added, not enabled; only the vignette starts on.
         fx.ColorTransforms.Transforms.Add(vignette = new Vignetting { Amount = 0.35f, Radius = 0.8f });
-        fx.ColorTransforms.Transforms.Add(filmGrain = new FilmGrain { Enabled = false, Amount = 0.35f, Animate = true });
+        fx.ColorTransforms.Transforms.Add(filmGrain = new FilmGrain { Enabled = false, Amount = 0.6f, GrainSize = 2f, Animate = true });
         fx.ColorTransforms.Transforms.Add(dither = new Dither { Enabled = false });
 
         effects[Keys.D1] = ("Bloom", () => fx.Bloom.Enabled, () => fx.Bloom.Enabled ^= true);
@@ -143,9 +141,8 @@ void BuildScene(Scene scene)
 {
     // A glossy floor: what screen-space reflections have to work with. Glossy, not mirror-like -
     // at metalness 1 the floor turns metallic and simply shows the dark underside of the skybox.
-    game.Add3DGround(new()
+    game.Add3DGround(new Vector2(40), new()
     {
-        Size = new Vector3(40, 1, 40),
         Material = game.CreateMaterial(new Color(95, 100, 110), metalness: 0.5f, glossiness: 0.85f),
     });
 
@@ -155,27 +152,26 @@ void BuildScene(Scene scene)
         var z = -4 + i * 3f;
         var shade = (byte)(170 - i * 8);
 
-        Place(PrimitiveModelType.Cylinder, new Vector3(-4, 1, z), new Vector3(0.6f, 2, 0.6f), game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20))));
-        Place(PrimitiveModelType.Cylinder, new Vector3(4, 1, z), new Vector3(0.6f, 2, 0.6f), game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20))));
+        Place(Primitive3D.Cylinder(0.6f, 2), new Vector3(-4, 1, z), game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20))));
+        Place(Primitive3D.Cylinder(0.6f, 2), new Vector3(4, 1, z), game.CreateMaterial(new Color(shade, shade, (byte)(shade + 20))));
     }
 
     // Three lamps brighter than white: bloom haloes them, light streaks and lens flare stretch them.
-    Place(PrimitiveModelType.Sphere, new Vector3(2.5f, 1.2f, -5), new Vector3(0.6f), Emissive(new Color(255, 140, 60)));
-    Place(PrimitiveModelType.Sphere, new Vector3(0.8f, 0.7f, -2), new Vector3(0.7f), Emissive(new Color(120, 200, 255)));
-    Place(PrimitiveModelType.Sphere, new Vector3(-1.5f, 1.4f, 2), new Vector3(0.5f), Emissive(new Color(255, 255, 200)));
+    Place(Primitive3D.Sphere(0.6f), new Vector3(2.5f, 1.2f, -5), Emissive(new Color(255, 140, 60)));
+    Place(Primitive3D.Sphere(0.7f), new Vector3(0.8f, 0.7f, -2), Emissive(new Color(120, 200, 255)));
+    Place(Primitive3D.Sphere(0.5f), new Vector3(-1.5f, 1.4f, 2), Emissive(new Color(255, 255, 200)));
 
     // A tight cluster of cubes: creases and contact corners that ambient occlusion darkens.
     // Negative X is screen-right for a camera looking along +Z.
     var cluster = new Vector3(-2.2f, 0, -3);
     foreach (var offset in new[] { new Vector3(-0.55f, 0.5f, 0), new Vector3(0.55f, 0.5f, 0), new Vector3(0, 0.5f, 0.9f), new Vector3(0, 1.5f, 0.35f), new Vector3(1.4f, 0.5f, 0.6f) })
-        Place(PrimitiveModelType.Cube, cluster + offset, Vector3.One, game.CreateMaterial(new Color(200, 200, 205)));
+        Place(Primitive3D.Cube(), cluster + offset, game.CreateMaterial(new Color(200, 200, 205)));
 
-    void Place(PrimitiveModelType type, Vector3 position, Vector3 size, Material material)
+    void Place(Primitive3D shape, Vector3 position, Material material)
     {
         // Static, so the scene holds still: this example is about the picture, not the physics.
-        var entity = game.Create3DPrimitive(type, new()
+        var entity = game.CreatePrimitive(shape, new()
         {
-            Size = size,
             Material = material,
             Component = new StaticComponent { Collider = new CompoundCollider() },
         });
@@ -216,7 +212,7 @@ concepts:
   - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
   - Building an emissive material above intensity 1 so bloom has something to bloom
   - Showing live effect state as a DebugOverlay section
-  - "Using helpers: SetupBase3D, Add3DGround, Create3DPrimitive, CreateMaterial"
+  - "Using helpers: SetupBase3D, Add3DGround, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Rendering

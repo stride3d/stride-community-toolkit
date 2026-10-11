@@ -30,7 +30,7 @@ void Start(Scene scene)
 
 void AddCapsule(Scene scene)
 {
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -107,7 +107,7 @@ concepts:
   - Loading a SpriteFont before any text can be drawn
   - Hosting a UI on an entity through UIComponent
   - Keeping scene setup readable by splitting it per element
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - UI

@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - HRTF as two switches - HrtfSupport through UseGameSettings, then useHrtf per instance
 - Positioning a one-shot once versus tracking a moving emitter every frame
 - Reading the emitter's side and distance relative to the camera for the overlay
-- Using helpers: UseGameSettings, SetupBase3DScene, Create3DPrimitive, DebugOverlay
+- Using helpers: UseGameSettings, SetupBase3DScene, CreatePrimitive, DebugOverlay
 
 ![Spatial Sound](media/spatial-sound.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E12_Audio_Spatial).
 
-[!code-csharp[](../../../../examples/code-only/E12_Audio_Spatial/Program.cs?start=1&end=183)]
+[!code-csharp[](../../../../examples/code-only/E12_Audio_Spatial/Program.cs?start=1&end=181)]

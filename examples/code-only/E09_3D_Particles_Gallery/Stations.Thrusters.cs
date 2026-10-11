@@ -554,35 +554,33 @@ public static class ThrusterStations
     private static void Spacecraft(ParticleStation s, List<Entity> model)
     {
         // A box of a spacecraft with a solar panel through it, and the thruster on its side
-        model.Add(Part(s, PrimitiveModelType.Cube, new Vector3(1.6f, 1.6f, 1.6f), new Vector3(-3.7f, 2.6f, 0f), new Color(190, 170, 110)));
-        model.Add(Part(s, PrimitiveModelType.Cube, new Vector3(0.08f, 3.6f, 1.2f), new Vector3(-3.7f, 2.6f, 0f), new Color(40, 60, 130)));
+        model.Add(Part(s, Primitive3D.Cube(1.6f), new Vector3(-3.7f, 2.6f, 0f), new Color(190, 170, 110)));
+        model.Add(Part(s, Primitive3D.Box(new Vector3(0.08f, 3.6f, 1.2f)), new Vector3(-3.7f, 2.6f, 0f), new Color(40, 60, 130)));
         model.Add(Cone(s, 0.4f, 0.4f, new Vector3(-2.75f, 2.6f, 0f), Steel, Lying));
     }
 
     /// <summary>A cylinder by its diameter and its length. It stands on end unless it is turned.</summary>
     private static Entity Tube(ParticleStation s, float diameter, float length, Vector3 local, Color colour, Quaternion? rotation = null)
-        => Part(s, PrimitiveModelType.Cylinder, new Vector3(diameter / 2f, 0f, length), local, colour, rotation);
+        => Part(s, Primitive3D.Cylinder(diameter / 2f, length), local, colour, rotation);
 
     /// <summary>A cone by the diameter of its base and its height. Its tip points up unless it is turned.</summary>
     private static Entity Cone(ParticleStation s, float diameter, float height, Vector3 local, Color colour, Quaternion? rotation = null)
-        => Part(s, PrimitiveModelType.Cone, new Vector3(diameter / 2f, height, 0f), local, colour, rotation);
+        => Part(s, Primitive3D.Cone(diameter / 2f, height), local, colour, rotation);
 
     /// <summary>The leg of a test stand: a post from the ground up to a height.</summary>
     private static Entity Leg(ParticleStation s, float x, float height)
-        => Part(s, PrimitiveModelType.Cube, new Vector3(0.5f, height, 1.1f), new Vector3(x, height / 2f, 0f), Frame);
+        => Part(s, Primitive3D.Box(new Vector3(0.5f, height, 1.1f)), new Vector3(x, height / 2f, 0f), Frame);
 
     /// <summary>
-    /// One piece of scenery: a primitive in the station's coordinates, turned with the station. The
-    /// size means what the primitive takes it to mean: a radius and a height for a cone, a radius in
-    /// X and a length in Z for a cylinder.
+    /// One piece of scenery: a primitive with its dimensions, in the station's coordinates, turned
+    /// with the station.
     /// </summary>
-    private static Entity Part(ParticleStation s, PrimitiveModelType type, Vector3 size, Vector3 local, Color colour, Quaternion? rotation = null)
+    private static Entity Part(ParticleStation s, Primitive3D shape, Vector3 local, Color colour, Quaternion? rotation = null)
     {
-        var part = s.Game.Create3DPrimitive(type, new Primitive3DEntityOptions
+        var part = s.Game.CreatePrimitive(shape, new Primitive3DEntityOptions
         {
-            EntityName = $"Station {s.Number} {type}",
+            EntityName = $"Station {s.Number} {shape.Name}",
             Material = s.Game.CreateMaterial(colour, metalness: 0.4f, glossiness: 0.6f),
-            Size = size,
         });
 
         part.Transform.Position = s.At(local);

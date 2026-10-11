@@ -950,24 +950,25 @@ public static partial class GameExtensions
         return cameraEntity;
     }
     /// <summary>
-    /// Creates an entity with a 3D procedural primitive model of the specified <paramref name="type"/>.
+    /// Creates an entity with the procedural model of a 3D <paramref name="shape"/>.
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance used to access game services.</param>
-    /// <param name="type">The 3D primitive type to create.</param>
-    /// <param name="options">Optional creation parameters, including size, material, render group, entity name, and position. If <see langword="null"/>, default options are used.</param>
+    /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive3D"/> factories, such as <c>Primitive3D.Sphere(0.5f)</c>.</param>
+    /// <param name="options">Optional creation parameters: material, render group, entity name and position. If <see langword="null"/>, default options are used.</param>
     /// <returns>A new <see cref="Entity"/> with a <see cref="ModelComponent"/> containing the generated primitive model.</returns>
     /// <remarks>
     /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
-    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Primitive3DEntityOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, Primitive3D shape, Primitive3DEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
+        ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
 
-        var modelBase = Procedural3DModelBuilder.Build(type, options.Size);
+        var modelBase = Procedural3DModelBuilder.Build(shape);
 
         var model = modelBase.Generate(game.Services);
 
@@ -987,32 +988,25 @@ public static partial class GameExtensions
     }
 
     /// <summary>
-    /// Creates an entity with a 2D procedural primitive model of the specified <paramref name="type"/>.
+    /// Creates an entity with the procedural model of a flat 2D <paramref name="shape"/> in the XY plane.
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance used to access game services.</param>
-    /// <param name="type">The 2D primitive type to create.</param>
-    /// <param name="options">Optional creation parameters, including size, custom polygon vertices, depth, material, render group, entity name, and position. If <see langword="null"/>, default options are used.</param>
+    /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive2D"/> factories, such as <c>Primitive2D.Circle(0.5f)</c>.</param>
+    /// <param name="options">Optional creation parameters: material, render group, entity name, position, and the depth a physics package gives the collider. If <see langword="null"/>, default options are used.</param>
     /// <returns>A new <see cref="Entity"/> with a <see cref="ModelComponent"/> containing the generated primitive model.</returns>
     /// <remarks>
     /// <para>The returned entity is not added to a scene automatically. Assign it to a scene before rendering.</para>
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
-    /// <para>If no size is specified for capsules or rectangles, this method applies default dimensions before building the model.</para>
-    /// <para>The <c>Depth</c> option controls the generated mesh thickness along the Z axis.</para>
     /// </remarks>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Primitive2DEntityOptions? options = null)
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="shape"/> is <see langword="null"/>.</exception>
+    public static Entity CreatePrimitive(this IGame game, Primitive2D shape, Primitive2DEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
+        ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
-        options.Size ??= type switch
-        {
-            Primitive2DModelType.Capsule => new Vector2(0.25f, 1f),
-            Primitive2DModelType.Rectangle => new Vector2(0.5f, 1f),
-            _ => options.Size
-        };
 
-        var modelBase = Procedural2DModelBuilder.Build(type, options.Size, options.Depth, options.Vertices);
+        var modelBase = Procedural2DModelBuilder.Build(shape);
 
         var model = modelBase.Generate(game.Services);
 

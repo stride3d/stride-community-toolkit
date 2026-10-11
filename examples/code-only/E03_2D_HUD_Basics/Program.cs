@@ -382,19 +382,19 @@ void DrawDamageFlash()
 /// <summary>Thirty shapes of five kinds dropped in a column, as in E01_2D_FallingShapes.</summary>
 void AddFallingShapes(Scene scene)
 {
-    (Primitive2DModelType Type, Color Colour)[] kinds =
+    (Primitive2D Type, Color Colour)[] kinds =
     [
-        (Primitive2DModelType.Square, new Color(30, 70, 170)),
-        (Primitive2DModelType.Rectangle, new Color(240, 150, 60)),
-        (Primitive2DModelType.Circle, new Color(235, 100, 80)),
-        (Primitive2DModelType.Capsule, new Color(110, 200, 110)),
-        (Primitive2DModelType.Triangle, new Color(190, 130, 230)),
+        (Primitive2D.Square(), new Color(30, 70, 170)),
+        (Primitive2D.Rectangle(), new Color(240, 150, 60)),
+        (Primitive2D.Circle(), new Color(235, 100, 80)),
+        (Primitive2D.Capsule(), new Color(110, 200, 110)),
+        (Primitive2D.Triangle(), new Color(190, 130, 230)),
     ];
 
     for (var i = 0; i < 30; i++)
     {
         var (type, colour) = kinds[i % kinds.Length];
-        var entity = game.Create2DPrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
+        var entity = game.CreatePrimitive(type, new() { Material = game.CreateFlatMaterial(colour) });
 
         entity.Transform.Position = new Vector3(0.1f * (i % 3 - 1), 8 + i * 1.5f, 0);
         entity.Scene = scene;

@@ -275,11 +275,10 @@ public sealed class StationScene(Game game)
 
     private void AddStatic(Scene scene, string name, Material material, Vector3 size, Vector3 position)
     {
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(Primitive3D.Box(size), new Bepu3DPhysicsOptions
         {
             EntityName = name,
             Material = material,
-            Size = size,
             Position = position,
             Component = new StaticComponent { Collider = new CompoundCollider() },
         });

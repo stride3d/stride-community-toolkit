@@ -11,6 +11,6 @@ View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/
 - `game.SetupBase3DScene()` This line sets up a basic 3D scene. It's a helper method provided to quickly set up a scene with a default camera, lighting.
 - `game.AddSkybox()` This line adds a skybox to the scene. A [skybox](https://doc.stride3d.net/latest/en/manual/graphics/textures/skyboxes-and-backgrounds.html) is a cube that surrounds the entire scene and is textured with an image to create the illusion of a sky.
 - `game.AddProfiler()` This line adds a profiler to the game.
-- `Dim entity = game.Create3DPrimitive(PrimitiveModelType.Capsule)` Here, a new entity is created in the form of a 3D capsule primitive. The `Create3DPrimitive` method is a helper method provided to create basic 3D shapes.
+- `Dim entity = game.CreatePrimitive(Primitive3D.Capsule())` Here, a new entity is created in the form of a 3D capsule primitive. The `CreatePrimitive` method is a helper method provided to create basic 3D shapes.
 - `entity.Transform.Position = New Vector3(0, 8, 0)` This line sets the position of the created entity in the 3D space. The `Position` property of the `Transform` component determines the location of the entity.
 - `entity.Scene = rootScene` Finally, the entity is added to the `rootScene`. The `Scene` property of an entity determines which scene it belongs to.

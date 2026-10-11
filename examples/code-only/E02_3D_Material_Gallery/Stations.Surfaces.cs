@@ -48,7 +48,7 @@ public static class SurfaceStations
         };
 
         // Something behind, so see-through has something to see
-        s.Place(PrimitiveModelType.Sphere, s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(0f, 0.8f, -2.4f), new Vector3(0.8f));
+        s.Place(Primitive3D.Sphere(0.8f), s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(0f, 0.8f, -2.4f));
         s.PlaceTrio(s.Material(descriptor));
     }
 
@@ -91,8 +91,8 @@ public static class SurfaceStations
         });
 
 
-        s.Place(PrimitiveModelType.Sphere, s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(-2.8f, 0.8f, -2.4f), new Vector3(0.8f));
-        s.Place(PrimitiveModelType.Cube, s.Material(Recipes.Pbr(new Color(60, 160, 90), 0.5f, 0f)), new Vector3(2.8f, 0.8f, -2.4f), new Vector3(1.4f));
+        s.Place(Primitive3D.Sphere(0.8f), s.Material(Recipes.Pbr(new Color(230, 120, 60), 0.5f, 0f)), new Vector3(-2.8f, 0.8f, -2.4f));
+        s.Place(Primitive3D.Cube(1.4f), s.Material(Recipes.Pbr(new Color(60, 160, 90), 0.5f, 0f)), new Vector3(2.8f, 0.8f, -2.4f));
         s.PlaceTrio(glass);
     }
 
@@ -149,7 +149,7 @@ public static class SurfaceStations
 
         void Head(Vector3 at, HairStyle style)
         {
-            var head = s.Place(PrimitiveModelType.Sphere, skin, at, new Vector3(headRadius));
+            var head = s.Place(Primitive3D.Sphere(headRadius), skin, at);
             var hair = s.PlaceModel(HairCards.Haircut(device, headRadius, style), cards, at);
 
             heads.Add((head, head.Transform.Rotation));
@@ -216,7 +216,7 @@ public static class SurfaceStations
         var skin = s.Material(Recipes.Pbr(new Color(225, 180, 150), 0.35f, 0f));
         var at = new Vector3(0f, 1.1f, 0f);
 
-        s.Place(PrimitiveModelType.Sphere, skin, at, new Vector3(headRadius));
+        s.Place(Primitive3D.Sphere(headRadius), skin, at);
         s.PlaceModel(HairCards.Haircut(device, headRadius, HairStyle.Bob, directionInBitangent: part == 4), cards, at);
     }
 

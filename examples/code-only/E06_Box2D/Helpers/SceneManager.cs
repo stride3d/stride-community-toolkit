@@ -1,7 +1,6 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -73,18 +72,14 @@ public class SceneManager
         AddGroundAndWalls();
 
         // Create a single shape with zero gravity for demonstration
-        var shape = _shapeFactory.GetShapeModel(Primitive2DModelType.Rectangle);
+        var shape = _shapeFactory.Rectangle;
+        var entity = _shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
+        var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-        if (shape != null)
-        {
-            var entity = _shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
-            var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
+        // Set zero gravity for this body to demonstrate weightless behavior
+        b2Body_SetGravityScale(bodyId, 0);
 
-            // Set zero gravity for this body to demonstrate weightless behavior
-            b2Body_SetGravityScale(bodyId, 0);
-
-            ShapeFixtureBuilder.AttachShape(shape.Type, shape.Size, bodyId, ShapeSpawner.DefaultShapeDef());
-        }
+        ShapeFixtureBuilder.AttachShape(shape.Type, bodyId, ShapeSpawner.DefaultShapeDef());
 
         AddInitialShapes();
     }
@@ -156,7 +151,7 @@ public class SceneManager
     public void AddInitialShapes()
     {
         // Add some demo shapes with different properties
-        _shapeSpawner.Add(Primitive2DModelType.Rectangle, 10, GameConfig.ShapeColor);
+        _shapeSpawner.Add(_shapeFactory.Rectangle, 10, GameConfig.ShapeColor);
         LogAction($"Added {10} initial demo shapes");
     }
 
@@ -173,27 +168,27 @@ public class SceneManager
         // Shape creation commands
         if (input.IsKeyPressed(Keys.M))
         {
-            _shapeSpawner.Add(Primitive2DModelType.Square, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(_shapeFactory.Square, GameConfig.DefaultSpawnCount);
             LogAction("Added squares");
         }
         else if (input.IsKeyPressed(Keys.R))
         {
-            _shapeSpawner.Add(Primitive2DModelType.Rectangle, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(_shapeFactory.Rectangle, GameConfig.DefaultSpawnCount);
             LogAction("Added rectangles");
         }
         else if (input.IsKeyPressed(Keys.C))
         {
-            _shapeSpawner.Add(Primitive2DModelType.Circle, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(_shapeFactory.Circle, GameConfig.DefaultSpawnCount);
             LogAction("Added circles");
         }
         else if (input.IsKeyPressed(Keys.T))
         {
-            _shapeSpawner.Add(Primitive2DModelType.Triangle, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(_shapeFactory.Triangle, GameConfig.DefaultSpawnCount);
             LogAction("Added triangles");
         }
         else if (input.IsKeyPressed(Keys.V))
         {
-            _shapeSpawner.Add(Primitive2DModelType.Capsule, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(_shapeFactory.Capsule, GameConfig.DefaultSpawnCount);
             LogAction("Added capsules");
         }
         else if (input.IsKeyPressed(Keys.P))
@@ -244,10 +239,9 @@ public class SceneManager
         // empty space spawns something there.
         if (_simulation.OverlapPoint(worldPoint.Value, GameConfig.MouseQuerySize).HasValue) return;
 
-        if (_shapeSpawner.AddAtPosition(worldPoint.Value) is { } spawned)
-        {
-            LogAction($"Created {spawned} at mouse position");
-        }
+        var spawned = _shapeSpawner.AddAtPosition(worldPoint.Value);
+
+        LogAction($"Created {spawned.Type.Name} at mouse position");
     }
 
     private void TogglePhysics()

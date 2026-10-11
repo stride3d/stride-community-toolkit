@@ -154,7 +154,7 @@ void CreateReferenceCube(Scene scene)
 
 void CreateReferenceCapsule(Scene scene)
 {
-    var referenceCapsule = CreateEntity(PrimitiveModelType.Capsule, "Reference Capsule", Color.Orange, new Vector3(0, 3, 0));
+    var referenceCapsule = CreateEntity(Primitive3D.Capsule(), "Reference Capsule", Color.Orange, new Vector3(0, 3, 0));
 
     var referenceCapsuleBody = referenceCapsule.Get<BodyComponent>();
     referenceCapsuleBody.CollisionLayer = CollisionLayer.Layer5;
@@ -167,12 +167,12 @@ void CreateReferenceCapsule(Scene scene)
 void CreateDistanceLimitConstraintExamples(Scene scene)
 {
     // Create the golden sphere
-    var goldenSphere = CreateEntity(PrimitiveModelType.Sphere, GoldenSphereName, Color.Gold, new Vector3(-2, 3, -2));
+    var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, 3, -2));
     var goldenBody = goldenSphere.Get<BodyComponent>();
     goldenBody.CollisionLayer = CollisionLayer.Layer5;
 
     // Create a second sphere to demonstrate a connected constraint
-    var connectedSphere = CreateEntity(PrimitiveModelType.Sphere, ConnectedEntityName, Color.Blue, new Vector3(-2.1f, 3, -2.9f));
+    var connectedSphere = CreateEntity(Primitive3D.Sphere(), ConnectedEntityName, Color.Blue, new Vector3(-2.1f, 3, -2.9f));
     var connectedBody = connectedSphere.Get<BodyComponent>();
     connectedBody.CollisionLayer = CollisionLayer.Layer5;
 
@@ -198,11 +198,11 @@ void CreateDistanceLimitConstraintExamples(Scene scene)
 void CreateDistanceServoConstraintExamples(Scene scene)
 {
     // Create the golden sphere
-    var goldenSphere = CreateEntity(PrimitiveModelType.Sphere, GoldenSphereName, Color.Gold, new Vector3(-2, 6, -2));
+    var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, 6, -2));
     var goldenBody = goldenSphere.Get<BodyComponent>();
     goldenBody.CollisionLayer = CollisionLayer.Layer5;
 
-    var connectedSphere = CreateEntity(PrimitiveModelType.Sphere, ConnectedEntityName, Color.LightBlue, new Vector3(-2.1f, 6, -2.9f));
+    var connectedSphere = CreateEntity(Primitive3D.Sphere(), ConnectedEntityName, Color.LightBlue, new Vector3(-2.1f, 6, -2.9f));
     var connectedBody = connectedSphere.Get<BodyComponent>();
     connectedBody.CollisionLayer = CollisionLayer.Layer5;
 
@@ -409,15 +409,14 @@ void InitializeDebugOverlay()
 }
 
 Entity CreateCubeEntity(string name, Color color, Vector3 position, Vector3? size = null)
-    => CreateEntity(PrimitiveModelType.Cube, name, color, position, size);
+    => CreateEntity(Primitive3D.Box(size ?? Vector3.One), name, color, position);
 
-Entity CreateEntity(PrimitiveModelType type, string name, Color color, Vector3 position, Vector3? size = null)
+Entity CreateEntity(Primitive3D shape, string name, Color color, Vector3 position)
 {
-    var entity = game.Create3DPrimitive(type, new()
+    var entity = game.CreatePrimitive(shape, new()
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
-        Size = size
     });
 
     entity.Transform.Position = position;

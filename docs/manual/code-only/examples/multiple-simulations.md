@@ -19,10 +19,10 @@ The `Program.cs` file shows how to:
 - Why bodies in different simulations pass through each other
 - Respawning entities with Space
 - Showing instructions as a DebugOverlay section beside the camera help
-- Using helpers: SetupBase3D, Add3DGround, Create3DPrimitive, SetCameraPosition, SetCameraRotation
+- Using helpers: SetupBase3D, Add3DGround, CreatePrimitive, SetCameraPosition, SetCameraRotation
 
 ![Multiple Physics Simulations](media/multiple-simulations.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_MultipleSimulations).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_MultipleSimulations/Program.cs?start=1&end=154)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_MultipleSimulations/Program.cs?start=1&end=153)]

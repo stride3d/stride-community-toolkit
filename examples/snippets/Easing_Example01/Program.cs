@@ -41,7 +41,7 @@ void Start(Scene scene)
     game.SetupBase3DScene();
 
     // Create a 3D sphere primitive and assign the material to it
-    entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    entity = game.CreatePrimitive(Primitive3D.Sphere(), new()
     {
         Material = game.CreateMaterial(Color.White),
         Component = new BodyComponent()

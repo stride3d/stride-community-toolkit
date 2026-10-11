@@ -38,19 +38,19 @@ void Start(Scene scene)
     ]);
 
     // Create an additional capsule for visual reference
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 3, 0);
     entity.Scene = scene;
 
     // Create a sphere with a golden material
-    var sphere = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    var sphere = game.CreatePrimitive(Primitive3D.Sphere(), new()
     {
         Material = game.CreateMaterial(Color.Gold)
     });
     sphere.Transform.Position = new Vector3(0.1f, 5, -0.3f);
 
     // Create a second sphere to demonstrate a connected constraint
-    var connectedSphere = game.Create3DPrimitive(PrimitiveModelType.Sphere);
+    var connectedSphere = game.CreatePrimitive(Primitive3D.Sphere());
     connectedSphere.Transform.Position = new Vector3(-2f, 1, -2f);
 
     // Set up a distance servo constraint between the sphere and connected sphere

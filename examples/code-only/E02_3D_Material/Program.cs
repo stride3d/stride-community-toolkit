@@ -71,7 +71,7 @@ void Start(Scene scene)
 
 void Cube(Scene scene, Vector3 position, Material material, string label)
 {
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new() { Material = material });
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { Material = material });
 
     entity.Transform.Position = position;
 
@@ -175,7 +175,7 @@ concepts:
   - Why the microfacet model's environment term matters in a code-only game
   - Labelling entities with screen-space EntityTextComponent
   - Adjusting the skybox light at runtime from keyboard input
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddEntityTextRenderer, Create3DPrimitive, CreateMaterial"
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddEntityTextRenderer, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Rendering

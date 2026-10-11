@@ -49,9 +49,9 @@ public static class InputStations
 
             var material = s.Material(wobble);
 
-            s.Place(PrimitiveModelType.Sphere, material, MaterialStation.SphereSpot, new Vector3(1f));
-            s.Place(PrimitiveModelType.Capsule, material, new Vector3(0f, 1.1f, 0f));
-            s.Place(PrimitiveModelType.Teapot, material, MaterialStation.TeapotSpot, new Vector3(2.4f));
+            s.Place(Primitive3D.Sphere(1f), material, MaterialStation.SphereSpot);
+            s.Place(Primitive3D.Capsule(), material, new Vector3(0f, 1.1f, 0f));
+            s.Place(Primitive3D.Teapot(2.4f), material, MaterialStation.TeapotSpot);
 
             return;
         }
@@ -150,8 +150,8 @@ public static class InputStations
 
     private static void Pair(MaterialStation s, Material wrong, Material right)
     {
-        s.Place(PrimitiveModelType.Cube, wrong, new Vector3(-1.6f, 0.9f, 0f), new Vector3(1.8f));
-        s.Place(PrimitiveModelType.Cube, right, new Vector3(1.6f, 0.9f, 0f), new Vector3(1.8f));
+        s.Place(Primitive3D.Cube(1.8f), wrong, new Vector3(-1.6f, 0.9f, 0f));
+        s.Place(Primitive3D.Cube(1.8f), right, new Vector3(1.6f, 0.9f, 0f));
     }
 
     /// <summary>
@@ -179,8 +179,8 @@ public static class InputStations
 
         foreach (var (x, texture) in new[] { (-1.6f, straight), (1.6f, premultiplied) })
         {
-            s.Place(PrimitiveModelType.Sphere, behind, new Vector3(x, 0.8f, -1.6f), new Vector3(0.7f));
-            s.Place(PrimitiveModelType.Cube, Decal(texture), new Vector3(x, 1f, 0f), new Vector3(1.8f, 1.8f, 0.02f));
+            s.Place(Primitive3D.Sphere(0.7f), behind, new Vector3(x, 0.8f, -1.6f));
+            s.Place(Primitive3D.Box(new Vector3(1.8f, 1.8f, 0.02f)), Decal(texture), new Vector3(x, 1f, 0f));
         }
     }
 
@@ -223,7 +223,7 @@ public static class InputStations
         var single = loader.Load("brick/brick_dif.png", new TextureLoadOptions(TextureRole.Color) { GenerateMipmaps = false });
         var mipmapped = loader.Color("brick/brick_dif.png");
 
-        s.Place(PrimitiveModelType.Cube, s.Material(Recipes.Mapped(Recipes.Colour(single, 12f), glossiness: new ComputeFloat(0.3f))), new Vector3(-1.5f, 0.02f, -2f), new Vector3(2.8f, 0.04f, 7f));
-        s.Place(PrimitiveModelType.Cube, s.Material(Recipes.Mapped(Recipes.Colour(mipmapped, 12f), glossiness: new ComputeFloat(0.3f))), new Vector3(1.5f, 0.02f, -2f), new Vector3(2.8f, 0.04f, 7f));
+        s.Place(Primitive3D.Box(new Vector3(2.8f, 0.04f, 7f)), s.Material(Recipes.Mapped(Recipes.Colour(single, 12f), glossiness: new ComputeFloat(0.3f))), new Vector3(-1.5f, 0.02f, -2f));
+        s.Place(Primitive3D.Box(new Vector3(2.8f, 0.04f, 7f)), s.Material(Recipes.Mapped(Recipes.Colour(mipmapped, 12f), glossiness: new ComputeFloat(0.3f))), new Vector3(1.5f, 0.02f, -2f));
     }
 }

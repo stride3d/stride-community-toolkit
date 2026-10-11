@@ -103,7 +103,7 @@ void Start(Scene rootScene)
 {
     game.SetupBase3DScene();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -115,11 +115,11 @@ void Start(Scene rootScene)
 - `game.Run(start: Start);` starts the game and calls `Start` when the game begins.
 - `void Start(Scene rootScene)` is invoked on start with the active root scene.
 - `game.SetupBase3DScene();` creates a basic 3D scene (camera, lighting, ground).
-- `game.Create3DPrimitive(PrimitiveModelType.Capsule)` creates a capsule primitive.
+- `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
 - `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. This step is crucial because assigning the entity to the scene ensures it is rendered and visible in the game. Without this assignment, the entity would not be part of the scene graph, and therefore, it would not appear in the game. 
 
-`Create3DPrimitive()` creates a capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because it starts above the ground, it will fall due to gravity.
+`CreatePrimitive()` creates a capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because it starts above the ground, it will fall due to gravity.
 
 Curious what those helpers do underneath, or want Stride with nothing else? [Create Project - Engine Only](create-project-engine-only.md) builds a ground, a cube and a camera against the engine alone and maps each part to the helper it replaces.
 

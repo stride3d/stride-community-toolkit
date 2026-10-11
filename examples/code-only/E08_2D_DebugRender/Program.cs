@@ -9,14 +9,14 @@ using Stride.Rendering.Lights;
 
 var random = new Random(1);
 var count = 10;
-List<Primitive2DModelType> primitives = [
-    Primitive2DModelType.Circle,
-    Primitive2DModelType.Capsule,
-    Primitive2DModelType.Rectangle,
-    Primitive2DModelType.Square,
-    Primitive2DModelType.Triangle,
-    Primitive2DModelType.Circle,
-    Primitive2DModelType.Capsule,
+List<Primitive2D> primitives = [
+    Primitive2D.Circle(),
+    Primitive2D.Capsule(),
+    Primitive2D.Rectangle(),
+    Primitive2D.Square(),
+    Primitive2D.Triangle(),
+    Primitive2D.Circle(),
+    Primitive2D.Capsule(),
 ];
 
 using var game = new Game();
@@ -42,7 +42,7 @@ void Start(Scene rootScene)
     {
         foreach (var (index, primitive) in primitives.Index())
         {
-            var entity = game.Create2DPrimitive(primitive, new()
+            var entity = game.CreatePrimitive(primitive, new()
             {
                 Material = game.CreateFlatMaterial(random.NextColor()),
             });
@@ -118,7 +118,7 @@ concepts:
   - Hanging both off one otherwise empty entity
   - Lighting a 2D scene with a LightSpot
   - Giving each shape its own colour with a flat material
-  - "Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, Create2DPrimitive"
+  - "Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, CreatePrimitive"
 tags:
   - 2D
   - Bepu

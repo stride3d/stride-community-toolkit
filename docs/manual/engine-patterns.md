@@ -73,7 +73,7 @@ complete vertex and index buffers from a couple of parameters, no asset pipeline
 uses them for every gizmo and for the grid plane; they convert to a render-ready mesh with
 `.ToMeshDraw()` (the extension lives in `Stride.Extensions`).
 
-**In the toolkit:** the code-only primitives (`Create3DPrimitive`, the 2D procedural models) and the
+**In the toolkit:** the code-only primitives (`CreatePrimitive`, the 2D procedural models) and the
 gizmo meshes are built this way.
 
 **In a game:** placeholder art that ships, debug volumes, procedural level geometry, anything a

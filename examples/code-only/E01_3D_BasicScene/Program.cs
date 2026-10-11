@@ -14,7 +14,7 @@ void Start(Scene rootScene)
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
 }
@@ -37,7 +37,7 @@ description:
     Vytvoření minimální 3D scény pomocí nástrojů sady, přidání skyboxu a umístění jediné kapsle jako primitivního tvaru.
     Ukazuje vytvoření primitivního tvaru, základní umístění a připojení entity k scéně.
 concepts:
-  - Creating a 3D primitive with Create3DPrimitive
+  - Creating a 3D primitive with CreatePrimitive
   - Positioning an entity with Transform.Position
   - Adding entities to a Scene (rootScene)
   - "Using helpers: SetupBase3DScene"

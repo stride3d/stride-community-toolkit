@@ -152,7 +152,7 @@ public static class RopeBuilder
     /// </remarks>
     private static Entity CreateSphere(Game game, string name, Color color, Vector3 position, float radius, float mass, bool kinematic)
     {
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(radius), new Bepu3DPhysicsOptions
         {
             EntityName = name,
             Material = game.CreateMaterial(color),
@@ -160,7 +160,6 @@ public static class RopeBuilder
             // Size for a sphere is its RADIUS, not its diameter - unlike a cube, where Size is the
             // full extent. Passing a diameter here draws every sphere at twice the size of the
             // collider below, and the weight then appears to sail straight through anything it hits.
-            Size = new Vector3(radius),
             IncludeCollider = false,
             Component = new BodyComponent
             {

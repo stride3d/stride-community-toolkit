@@ -17,12 +17,12 @@ void Start(Scene scene)
     game.AddProfiler();
 
     // The cube starts on its circle; the script works the centre out from where it starts
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube);
+    var entity = game.CreatePrimitive(Primitive3D.Cube());
     entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
     entity.Add(new RotationComponentScript());
     entity.Scene = scene;
 
-    var entityCone = game.Create3DPrimitive(PrimitiveModelType.Cone, new() { Size = new(0.5f, 5, 0) });
+    var entityCone = game.CreatePrimitive(Primitive3D.Cone(0.5f, 5));
     entityCone.Transform.Position = new Vector3(0, 6, 0);
     entityCone.Scene = scene;
 }
@@ -51,7 +51,7 @@ concepts:
   - "Moving a kinematic body with LinearVelocity, not Transform.Position"
   - Why SetTargetPose belongs in ISimulationUpdate and not in a per-frame Update
   - Framerate independence with Game.DeltaTime
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

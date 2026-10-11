@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.Core.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
 using Stride.Games;
@@ -47,42 +48,41 @@ public static class GameExtensions
     }
 
     /// <summary>
-    /// Adds a 2D ground entity to the game using a cube primitive and Bullet static physics.
+    /// Adds a 2D ground entity to the game: a flat box in the XY plane with Bullet static physics.
     /// </summary>
     /// <param name="game">The game instance to which the ground entity will be added.</param>
-    /// <param name="options">
-    /// Optional 2D physics options used to configure the ground. When provided, <see cref="Primitive2DEntityOptions.Size"/> is mapped to X/Y while Z uses <see cref="GameDefaults.Default2DGroundSize"/>, and <see cref="PrimitiveEntityOptionsBase.Position"/> defaults to <see cref="GameDefaults.Default2DGroundPosition"/>.
-    /// </param>
+    /// <param name="size">The width (X) and height (Y) of the ground. Defaults to <see cref="GameDefaults.Default2DGroundSize"/>; its depth along Z is always that default's.</param>
+    /// <param name="options">Optional physics options for the ground. <see cref="PrimitiveEntityOptionsBase.Position"/> defaults to <see cref="GameDefaults.Default2DGroundPosition"/>.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
     /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet2DPhysicsOptions.PhysicsComponent"/>.
     /// </remarks>
-    public static Entity Add2DGround(this Game game, Bullet2DPhysicsOptions? options = null)
+    public static Entity Add2DGround(this Game game, Vector2? size = null, Bullet2DPhysicsOptions? options = null)
     {
-        var size = options?.Size is null ? GameDefaults.Default2DGroundSize : new(options.Size.Value.X, options.Size.Value.Y, GameDefaults.Default2DGroundSize.Z);
+        var groundSize = size ?? new Vector2(GameDefaults.Default2DGroundSize.X, GameDefaults.Default2DGroundSize.Y);
 
         var options3D = new Bullet3DPhysicsOptions
         {
             EntityName = options?.EntityName ?? GameDefaults.DefaultGroundName,
-            Size = size,
             Position = options?.Position ?? GameDefaults.Default2DGroundPosition,
             Material = game.CreateFlatMaterial(GameDefaults.Default2DGroundMaterialColor),
             PhysicsComponent = options is { IsPhysicsComponentSet: true } ? options.PhysicsComponent : new StaticColliderComponent()
         };
 
-        return CreateGround(game, PrimitiveModelType.Cube, options3D);
+        return CreateGround(game, Primitive3D.Box(new Vector3(groundSize.X, groundSize.Y, GameDefaults.Default2DGroundSize.Z)), options3D);
     }
 
     /// <summary>
-    /// Adds a 3D ground entity to the game using a plane primitive and Bullet static physics.
+    /// Adds a 3D ground entity to the game: a plane with Bullet static physics.
     /// </summary>
     /// <param name="game">The game instance to which the ground entity will be added.</param>
-    /// <param name="options">Optional 3D physics options used to configure the ground. If <c>null</c>, defaults will be used.</param>
+    /// <param name="size">The width (X) and length (Z) of the ground. Defaults to <see cref="GameDefaults.Default3DGroundSize"/>.</param>
+    /// <param name="options">Optional physics options for the ground. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
     /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/>. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// </remarks>
-    public static Entity Add3DGround(this Game game, Bullet3DPhysicsOptions? options = null)
+    public static Entity Add3DGround(this Game game, Vector2? size = null, Bullet3DPhysicsOptions? options = null)
     {
         options ??= new Bullet3DPhysicsOptions();
 
@@ -90,92 +90,107 @@ public static class GameExtensions
 
         options.EntityName ??= GameDefaults.DefaultGroundName;
 
-        return CreateGround(game, PrimitiveModelType.Plane, options);
+        var groundSize = size ?? new Vector2(GameDefaults.Default3DGroundSize.X, GameDefaults.Default3DGroundSize.Z);
+
+        return CreateGround(game, Primitive3D.Plane(groundSize.X, groundSize.Y), options);
     }
 
     /// <summary>
     /// Adds an infinite 3D ground entity to the game using an infinite plane primitive and Bullet static physics.
     /// </summary>
     /// <param name="game">The game instance to which the infinite ground entity will be added.</param>
+    /// <param name="size">The width (X) and length (Z) of the visible plane. Defaults to <see cref="GameDefaults.Default3DGroundSize"/>; the collider is infinite either way.</param>
     /// <param name="options">Optional 3D physics options used to configure the ground. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created infinite ground <see cref="Entity"/> added to the game.</returns>
     /// <remarks>
     /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/>. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// The visible part of the ground is defined by <paramref name="options"/>, while the collider is infinite and extends beyond the visible ground.
     /// </remarks>
-    public static Entity AddInfinite3DGround(this Game game, Bullet3DPhysicsOptions? options = null)
+    public static Entity AddInfinite3DGround(this Game game, Vector2? size = null, Bullet3DPhysicsOptions? options = null)
     {
         options ??= new Bullet3DPhysicsOptions();
 
         if (!options.IsPhysicsComponentSet) options.PhysicsComponent = new StaticColliderComponent();
 
         options.EntityName ??= GameDefaults.DefaultGroundName;
+        options.Material ??= game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
-        return CreateGround(game, PrimitiveModelType.InfinitePlane, options);
-    }
+        // The visible plane is finite; the collider is Bullet's infinite static plane, not the plane's own
+        // box, so the shape's collider is left out and the plane collider added in its place
+        options.IncludeCollider = false;
 
-    /// <summary>
-    /// Creates a 2D primitive entity with a matching Bullet collider, using the default options.
-    /// </summary>
-    /// <param name="game">The game instance.</param>
-    /// <param name="type">The type of 2D primitive shape to create.</param>
-    /// <returns>The newly created <see cref="Entity"/> with Bullet 2D physics attached.</returns>
-    /// <remarks>
-    /// <para>Makes <c>game.Create2DPrimitive(type)</c> resolve here rather than to the physics-free overload in
-    /// <c>Stride.CommunityToolkit.Engine</c>: C# and F# prefer the overload with no default arguments to fill in.
-    /// VB callers pass the options explicitly. Passing a <c>Primitive2DEntityOptions</c> reaches the physics-free
-    /// overload. A literal <c>null</c> for the options is ambiguous; pass a typed null.</para>
-    /// </remarks>
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type)
-        => game.Create2DPrimitive(type, (Bullet2DPhysicsOptions?)null);
+        var groundSize = size ?? new Vector2(GameDefaults.Default3DGroundSize.X, GameDefaults.Default3DGroundSize.Z);
+        var entity = game.CreatePrimitive(Primitive3D.Plane(groundSize.X, groundSize.Y), options);
 
-    /// <summary>
-    /// Creates a 2D primitive entity and attaches Bullet 2D physics as defined by <paramref name="options"/>.
-    /// </summary>
-    /// <param name="game">The game instance.</param>
-    /// <param name="type">The type of 2D primitive shape to create.</param>
-    /// <param name="options">Options for both the primitive geometry and physics. If <c>null</c>, defaults will be used.</param>
-    /// <returns>The newly created <see cref="Entity"/> with Bullet 2D physics attached.</returns>
-    public static Entity Create2DPrimitive(this IGame game, Primitive2DModelType type, Bullet2DPhysicsOptions? options = null)
-    {
-        options ??= new();
+        options.PhysicsComponent?.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
 
-        var entity = game.Create2DPrimitive(type, (Primitive2DEntityOptions)options);
-
-        entity.AddBullet2DPhysics(type, options);
+        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 
         return entity;
     }
 
     /// <summary>
-    /// Creates a 3D primitive entity with a matching Bullet collider, using the default options.
+    /// Creates an entity with the model of a flat 2D shape and a matching Bullet collider, using the default options.
     /// </summary>
     /// <param name="game">The game instance.</param>
-    /// <param name="type">The type of 3D primitive shape to create.</param>
+    /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive2D"/> factories.</param>
+    /// <returns>The newly created <see cref="Entity"/> with Bullet 2D physics attached.</returns>
+    /// <remarks>
+    /// <para>Makes <c>game.CreatePrimitive(shape)</c> with a 2D shape resolve here rather than to the physics-free overload in
+    /// <c>Stride.CommunityToolkit.Engine</c>: C# and F# prefer the overload with no default arguments to fill in.
+    /// VB callers pass the options explicitly. Passing a <c>Primitive2DEntityOptions</c> reaches the physics-free
+    /// overload. A literal <c>null</c> for the options is ambiguous; pass a typed null.</para>
+    /// </remarks>
+    public static Entity CreatePrimitive(this IGame game, Primitive2D shape)
+        => game.CreatePrimitive(shape, (Bullet2DPhysicsOptions?)null);
+
+    /// <summary>
+    /// Creates an entity with the model of a flat 2D shape and attaches Bullet 2D physics as defined by <paramref name="options"/>.
+    /// </summary>
+    /// <param name="game">The game instance.</param>
+    /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive2D"/> factories.</param>
+    /// <param name="options">Options for both the primitive geometry and physics. If <c>null</c>, defaults will be used.</param>
+    /// <returns>The newly created <see cref="Entity"/> with Bullet 2D physics attached.</returns>
+    public static Entity CreatePrimitive(this IGame game, Primitive2D shape, Bullet2DPhysicsOptions? options = null)
+    {
+        options ??= new();
+
+        var entity = game.CreatePrimitive(shape, (Primitive2DEntityOptions)options);
+
+        entity.AddBullet2DPhysics(shape, options);
+
+        return entity;
+    }
+
+    /// <summary>
+    /// Creates an entity with the model of a 3D shape and a matching Bullet collider, using the default options.
+    /// </summary>
+    /// <param name="game">The game instance.</param>
+    /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive3D"/> factories.</param>
     /// <returns>The newly created <see cref="Entity"/> with Bullet 3D physics attached.</returns>
     /// <remarks>
-    /// <para>Makes <c>game.Create3DPrimitive(type)</c> resolve here rather than to the physics-free overload in
+    /// <para>Makes <c>game.CreatePrimitive(shape)</c> with a 3D shape resolve here rather than to the physics-free overload in
     /// <c>Stride.CommunityToolkit.Engine</c>: C# and F# prefer the overload with no default arguments to fill in.
     /// VB callers pass the options explicitly. Passing a <c>Primitive3DEntityOptions</c> reaches the physics-free
     /// overload. A literal <c>null</c> for the options is ambiguous; pass a typed null.</para>
     /// </remarks>
-    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type)
-        => game.Create3DPrimitive(type, (Bullet3DPhysicsOptions?)null);
+    public static Entity CreatePrimitive(this IGame game, Primitive3D shape)
+        => game.CreatePrimitive(shape, (Bullet3DPhysicsOptions?)null);
 
     /// <summary>
-    /// Creates a 3D primitive entity and attaches Bullet 3D physics as defined by <paramref name="options"/>.
+    /// Creates an entity with the model of a 3D shape and attaches Bullet 3D physics as defined by <paramref name="options"/>.
     /// </summary>
     /// <param name="game">The game instance.</param>
-    /// <param name="type">The type of 3D primitive shape to create.</param>
+    /// <param name="shape">The shape and its dimensions, from the <see cref="Primitive3D"/> factories.</param>
     /// <param name="options">Options for both the primitive geometry and physics. If <c>null</c>, defaults will be used.</param>
     /// <returns>The newly created <see cref="Entity"/> with Bullet 3D physics attached.</returns>
-    public static Entity Create3DPrimitive(this IGame game, PrimitiveModelType type, Bullet3DPhysicsOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, Primitive3D shape, Bullet3DPhysicsOptions? options = null)
     {
         options ??= new();
 
-        var entity = game.Create3DPrimitive(type, (Primitive3DEntityOptions)options);
+        var entity = game.CreatePrimitive(shape, (Primitive3DEntityOptions)options);
 
-        entity.AddBullet3DPhysics(type, options);
+        entity.AddBullet3DPhysics(shape, options);
 
         return entity;
     }
@@ -196,12 +211,11 @@ public static class GameExtensions
         simulation.ColliderShapesRendering = true;
     }
 
-    private static Entity CreateGround(Game game, PrimitiveModelType type, Bullet3DPhysicsOptions options)
+    private static Entity CreateGround(Game game, Primitive3D shape, Bullet3DPhysicsOptions options)
     {
-        options.Size ??= GameDefaults.Default3DGroundSize;
         options.Material ??= game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
-        var entity = game.Create3DPrimitive(type, options);
+        var entity = game.CreatePrimitive(shape, options);
 
         entity.Scene = game.SceneSystem.SceneInstance.RootScene;
 

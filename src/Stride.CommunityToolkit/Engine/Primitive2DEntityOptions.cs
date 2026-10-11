@@ -1,43 +1,18 @@
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
-
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// Option set for creating a 2D primitive entity using the toolkit's code-only helpers.
+/// Options for creating a 2D primitive entity: the name, material, render group and position of the entity, and the
+/// depth a physics package gives its collider. The shape and its dimensions are the
+/// <see cref="Rendering.ProceduralModels.Primitive2D"/> passed beside the options.
 /// </summary>
-/// <remarks>
-/// Inherits common properties from <see cref="PrimitiveEntityOptionsBase"/> and adds sizing + thickness information
-/// suitable for 2D style content that still lives in a 3D world / physics space.
-/// </remarks>
 public class Primitive2DEntityOptions : PrimitiveEntityOptionsBase
 {
     /// <summary>
-    /// Gets or sets the logical size values for the generated 2D primitive.
+    /// The thickness along Z that a physics package gives the collider of the flat shape. Defaults to <c>1</c>.
     /// </summary>
     /// <remarks>
-    /// When <c>null</c>, a shape-appropriate default is chosen by the creation helper.
-    /// The meaning of <see cref="Size"/> components depends on the primitive type being created:
-    /// <para /> - For rectangular shapes: X = width, Y = height.
-    /// <para /> - For capsules: X = radius, Y = total height.
-    /// <para /> - For regular polygons: X = radius, Y = number of sides.
-    /// </remarks>
-    public Vector2? Size { get; set; }
-
-    /// <summary>
-    /// Gets or sets custom polygon vertices in the XY plane.
-    /// </summary>
-    /// <remarks>
-    /// Used only with <see cref="Primitive2DModelType.Polygon"/>. When provided, vertices take precedence over <see cref="Size"/>.
-    /// The polygon must contain at least 3 unique vertices and should be ordered around a convex outline.
-    /// </remarks>
-    public Vector2[]? Vertices { get; set; }
-
-    /// <summary>
-    /// Gets or sets the depth (thickness) assigned to the generated 2D primitive. Defaults to <c>1</c>.
-    /// </summary>
-    /// <remarks>
-    /// Even "2D" primitives often exist in a 3D simulation. A small Z thickness can improve collision stability
-    /// or simplify shared 3D physics pipelines; constraints can still lock motion/rotation axes to emulate 2D.
+    /// A 2D shape still lives in a 3D simulation. Some thickness keeps its collisions stable; the body's motion is
+    /// kept in the plane by the physics package's 2D body, not by the shape.
     /// </remarks>
     public float Depth { get; set; } = 1;
 }

@@ -96,11 +96,10 @@ void BuildScene(Scene scene)
 {
     var groundMaterial = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f);
 
-    var ground = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+    var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new Primitive3DEntityOptions
     {
         EntityName = "Ground",
         Material = groundMaterial,
-        Size = new Vector3(40f, 0.5f, 40f),
         Position = new Vector3(0f, -0.25f, 0f),
     });
 
@@ -113,32 +112,29 @@ void BuildScene(Scene scene)
         var angle = i * MathF.Tau / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
-        var pillar = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new Primitive3DEntityOptions
         {
             EntityName = $"Pillar {i}",
             Material = game.CreateMaterial(colours[i], metalness: 0.2f, glossiness: 0.5f),
-            Size = new Vector3(1.4f, height, 1.4f),
             Position = new Vector3(MathF.Cos(angle) * 8f, height * 0.5f, MathF.Sin(angle) * 8f),
         });
 
         pillar.Scene = scene;
     }
 
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(2f), new Primitive3DEntityOptions
     {
         EntityName = "Cube",
         Material = game.CreateMaterial(Color.LightSteelBlue, metalness: 0.4f, glossiness: 0.7f),
-        Size = new Vector3(2f),
         Position = new Vector3(0f, 1.5f, 0f),
     });
 
     cube.Scene = scene;
 
-    ball = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
+    ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
     {
         EntityName = "Ball",
         Material = EmissiveMaterial(new Color(255, 200, 120), 6f),
-        Size = new Vector3(0.6f),
         Position = new Vector3(5f, 1f, 0f),
     });
 
@@ -270,11 +266,10 @@ void BuildMonitors(Scene scene)
 
     Entity Monitor(string name, Material material, Vector3 position, float size)
     {
-        var monitor = game.Create3DPrimitive(PrimitiveModelType.Plane, new Primitive3DEntityOptions
+        var monitor = game.CreatePrimitive(Primitive3D.Plane(size, size), new Primitive3DEntityOptions
         {
             EntityName = name,
             Material = material,
-            Size = new Vector3(size, 0f, size),
             Position = position,
         });
 

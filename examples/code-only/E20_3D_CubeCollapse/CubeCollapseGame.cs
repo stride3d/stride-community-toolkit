@@ -484,7 +484,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
 
             component.Color = newColours[colourIndex];
 
-            // The model is per cube (Create3DPrimitive builds one each), so repainting its slot
+            // The model is per cube (CreatePrimitive builds one each), so repainting its slot
             // touches no other cube. The hover override sits above this and is per component anyway.
             model.Materials[0] = new MaterialInstance { Material = _materials.Normal[component.Color] };
         }
