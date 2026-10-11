@@ -33,11 +33,10 @@ internal sealed class RenderTextureScene : IGoldScene
 
         // Something for the feeds to look at: a floor, three pillars of different heights and
         // colours, and a bright emissive ball on an orbit - the thing the thermal feed calls hot
-        var ground = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new Primitive3DEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f),
-            Size = new Vector3(40f, 0.5f, 40f),
             Position = new Vector3(0f, -0.25f, 0f),
         });
 
@@ -52,18 +51,17 @@ internal sealed class RenderTextureScene : IGoldScene
 
         foreach (var (at, height, colour) in pillars)
         {
-            var pillar = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+            var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new Primitive3DEntityOptions
             {
                 EntityName = "Pillar",
                 Material = game.CreateMaterial(colour, metalness: 0.2f, glossiness: 0.5f),
-                Size = new Vector3(1.4f, height, 1.4f),
                 Position = at + Vector3.UnitY * (height * 0.5f),
             });
 
             pillar.Scene = scene;
         }
 
-        _ball = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
+        _ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
         {
             EntityName = "Ball",
             Material = Material.New(game.GraphicsDevice, new MaterialDescriptor
@@ -75,7 +73,6 @@ internal sealed class RenderTextureScene : IGoldScene
                     Emissive = new MaterialEmissiveMapFeature(new ComputeColor(new Color(255, 200, 120))) { Intensity = new ComputeFloat(6f) },
                 },
             }),
-            Size = new Vector3(0.6f),
             Position = new Vector3(4f, 1f, 0f),
         });
 
@@ -101,7 +98,7 @@ internal sealed class RenderTextureScene : IGoldScene
         // feed's texture, so the picture is shown and not lit again
         for (var i = 0; i < feeds.Length; i++)
         {
-            var monitor = game.Create3DPrimitive(PrimitiveModelType.Plane, new Primitive3DEntityOptions
+            var monitor = game.CreatePrimitive(Primitive3D.Plane(3.6f, 3.6f), new Primitive3DEntityOptions
             {
                 EntityName = $"Monitor {feeds[i].Name}",
                 Material = Material.New(game.GraphicsDevice, new MaterialDescriptor
@@ -118,7 +115,6 @@ internal sealed class RenderTextureScene : IGoldScene
                         },
                     },
                 }),
-                Size = new Vector3(3.6f, 0f, 3.6f),
                 Position = new Vector3((i - 1.5f) * 4.2f, 4f, -9f),
             });
 

@@ -1,68 +1,33 @@
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu.Extensions;
+using Stride.Core.Mathematics;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Graphics.GeometricPrimitives;
-using Stride.Rendering.ProceduralModels;
 
 namespace Stride.CommunityToolkit.Bepu.Colliders;
 
 /// <summary>
-/// Provides helpers to construct Bepu <see cref="ConvexHullCollider"/> instances from a torus primitive mesh.
+/// Builds the convex hull collider of a torus, decomposed from the same mesh the model is built from, and shares
+/// it between every torus of the same dimensions.
 /// </summary>
-/// <remarks>
-/// Builds a convex hull from a generated torus mesh. If no explicit radii are provided,
-/// default values are taken from <see cref="TorusProceduralModel"/>.
-/// The torus mesh is generated via <see cref="GeometricPrimitive.Torus"/>.
-/// </remarks>
-/// <example>
-/// <code>
-/// // Create a collider using defaults from TorusProceduralModel
-/// var collider = TorusCollider.Create(null, null);
-///
-/// // Or create a collider with explicit major and minor radii
-/// var collider2 = TorusCollider.Create(majorRadius: 1.25f, minorRadius: 0.35f);
-/// </code>
-/// </example>
-/// <seealso cref="ConvexHullCollider"/>
-/// <seealso cref="GeometricPrimitive.Torus"/>
 public static class TorusCollider
 {
     /// <summary>
-    /// Creates a Bepu <see cref="ConvexHullCollider"/> from a torus primitive mesh.
+    /// Creates the collider of a torus: <paramref name="radius"/> from the centre to the middle of the tube, a tube
+    /// <paramref name="thickness"/> across.
     /// </summary>
-    /// <param name="majorRadius">Optional major radius of the torus. When <c>null</c>, defaults from <see cref="TorusProceduralModel"/> are used.</param>
-    /// <param name="minorRadius">Optional minor radius (thickness) of the torus. When <c>null</c>, defaults from <see cref="TorusProceduralModel"/> are used.</param>
-    /// <returns>
-    /// A <see cref="ConvexHullCollider"/> whose hull is computed from the generated torus mesh.
-    /// </returns>
-    public static ConvexHullCollider Create(float? majorRadius, float? minorRadius)
+    public static ConvexHullCollider Create(float radius, float thickness)
+        => SharedHullCache.CreateCollider(
+            nameof(TorusCollider), radius, thickness, 0,
+            () => GeometricPrimitive.Torus.New(majorRadius: radius, minorRadius: thickness).ToDecomposedHulls());
+
+    /// <summary>
+    /// Creates the collider of <paramref name="torus"/>.
+    /// </summary>
+    public static ConvexHullCollider Create(Primitive3D.TorusShape torus)
     {
-        float validatedMajorRadius;
-        float validatedMinorRadius;
+        ArgumentNullException.ThrowIfNull(torus);
 
-        if (majorRadius is null)
-        {
-            var torusModel = new TorusProceduralModel();
-
-            validatedMajorRadius = torusModel.Radius;
-        }
-        else
-        {
-            validatedMajorRadius = majorRadius.Value;
-        }
-
-        if (minorRadius is null)
-        {
-            var torusModel = new TorusProceduralModel();
-
-            validatedMinorRadius = torusModel.Thickness;
-        }
-        else
-        {
-            validatedMinorRadius = minorRadius.Value;
-        }
-
-        return SharedHullCache.CreateCollider(
-            nameof(TorusCollider), validatedMajorRadius, validatedMinorRadius, 0,
-            () => GeometricPrimitive.Torus.New(majorRadius: validatedMajorRadius, minorRadius: validatedMinorRadius).ToDecomposedHulls());
+        return Create(torus.Radius, torus.Thickness);
     }
 }

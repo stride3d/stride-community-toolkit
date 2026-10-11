@@ -33,8 +33,8 @@ namespace Stride.CommunityToolkit.Scripts.Utilities;
 ///     Position = new Int2(10, 200),
 ///     Items =
 ///     [
-///         new(Keys.D1, "Cube", () => Rebuild(PrimitiveModelType.Cube)),
-///         new(Keys.D2, "Sphere", () => Rebuild(PrimitiveModelType.Sphere)),
+///         new(Keys.D1, "Cube", () => Rebuild(Primitive3D.Cube())),
+///         new(Keys.D2, "Sphere", () => Rebuild(Primitive3D.Sphere())),
 ///     ],
 /// };
 ///

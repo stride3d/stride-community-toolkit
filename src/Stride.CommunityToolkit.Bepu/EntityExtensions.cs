@@ -8,23 +8,25 @@ using Stride.Engine;
 namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
-/// Provides extension methods for the <see cref="Entity"/> class to simplify adding Bepu 2D and 3D physics components. These methods automatically configure appropriate collider shapes based on primitive types and allow customization through options.
+/// Extension methods on <see cref="Entity"/> that add Bepu 2D and 3D physics with the collider that matches a
+/// primitive shape, plus the collider derivation itself, <see cref="ColliderFor(Primitive3D)"/> and
+/// <see cref="ColliderFor(Primitive2D, float)"/>, for callers who build their own body.
 /// </summary>
 public static class EntityExtensions
 {
     extension(Entity entity)
     {
         /// <summary>
-        /// Adds Bepu 2D physics components to the entity with an appropriate collider shape based on the primitive type.
+        /// Adds Bepu 2D physics to the entity, with the collider that matches <paramref name="shape"/>.
         /// </summary>
-        /// <param name="type">The type of 2D primitive shape for the collider.</param>
-        /// <param name="options">Optional physics configuration including the body component, size, custom polygon vertices, depth, and whether to include a collider. If null, default options are used.</param>
+        /// <param name="shape">The flat shape the entity's model was built from; the collider is derived from it.</param>
+        /// <param name="options">Optional physics configuration: the body component, the collider depth, and whether to include a collider. If null, default options are used.</param>
         /// <returns>The entity with the Bepu 2D physics components added.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when an unsupported <see cref="Primitive2DModelType"/> is specified.</exception>
-        public Entity AddBepu2DPhysics(Primitive2DModelType type, Bepu2DPhysicsOptions? options = null)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
+        public Entity AddBepu2DPhysics(Primitive2D shape, Bepu2DPhysicsOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(shape);
 
             options ??= new();
 
@@ -47,7 +49,7 @@ public static class EntityExtensions
             // body two colliders, and the mass of both
             if (component.Collider is CompoundCollider { Colliders.Count: 0 } compoundCollider)
             {
-                compoundCollider.Colliders.Add(Get2DColliderShape(type, options.Size, options.Depth, options.Vertices));
+                compoundCollider.Colliders.Add(ColliderFor(shape, options.Depth));
             }
 
             entity.Add(component);
@@ -56,21 +58,16 @@ public static class EntityExtensions
         }
 
         /// <summary>
-        /// Adds Bepu 3D physics components to the entity with an appropriate collider shape based on the primitive type.
+        /// Adds Bepu 3D physics to the entity, with the collider that matches <paramref name="shape"/>.
         /// </summary>
-        /// <param name="type">The type of 3D primitive shape for the collider.</param>
-        /// <param name="options">Optional physics configuration including the body component, size, and whether to include a collider. If null, default options are used.</param>
+        /// <param name="shape">The shape the entity's model was built from; the collider is derived from it.</param>
+        /// <param name="options">Optional physics configuration: the body component and whether to include a collider. If null, default options are used.</param>
         /// <returns>The entity with the Bepu 3D physics components added.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the entity does not have a <see cref="ModelComponent"/> with a valid model, or when an unsupported <see cref="PrimitiveModelType"/> is specified.</exception>
-        public Entity AddBepu3DPhysics(PrimitiveModelType type, Bepu3DPhysicsOptions? options = null)
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
+        public Entity AddBepu3DPhysics(Primitive3D shape, Bepu3DPhysicsOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(entity);
-
-            var model = entity.Get<ModelComponent>()?.Model;
-
-            if (model is null)
-                throw new InvalidOperationException("Entity must have a ModelComponent with a valid model to add Bepu physics.");
+            ArgumentNullException.ThrowIfNull(shape);
 
             options ??= new();
 
@@ -91,7 +88,7 @@ public static class EntityExtensions
             // body two colliders, and the mass of both
             if (component.Collider is CompoundCollider { Colliders.Count: 0 } compoundCollider)
             {
-                compoundCollider.Colliders.Add(Get3DColliderShape(type, options.Size));
+                compoundCollider.Colliders.Add(ColliderFor(shape));
             }
 
             entity.Add(component);
@@ -101,64 +98,58 @@ public static class EntityExtensions
     }
 
     /// <summary>
-    /// Creates a 2D collider shape based on the specified primitive type.
+    /// The Bepu collider that matches a flat <paramref name="shape"/>, extruded <paramref name="depth"/> along Z.
     /// </summary>
-    /// <param name="type">The type of 2D primitive shape.</param>
-    /// <param name="size">Optional size for the collider. For most shapes, X represents width and Y represents height.</param>
-    /// <param name="depth">The depth (Z-axis) of the 2D shape in 3D space.</param>
-    /// <param name="vertices">Optional custom polygon vertices in the XY plane. Used only for <see cref="Primitive2DModelType.Polygon"/>.</param>
-    /// <returns>A <see cref="ColliderBase"/> configured for the specified primitive type.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when an unsupported <see cref="Primitive2DModelType"/> is specified.</exception>
-    private static ColliderBase Get2DColliderShape(Primitive2DModelType type, Vector2? size = null, float depth = 0, Vector2[]? vertices = null)
+    /// <param name="shape">The 2D shape.</param>
+    /// <param name="depth">The thickness of the collider along Z.</param>
+    /// <returns>A collider the same size as the shape's model, to put into a <see cref="CompoundCollider"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="shape"/> is null.</exception>
+    public static ColliderBase ColliderFor(Primitive2D shape, float depth)
     {
-        return type switch
-        {
-            Primitive2DModelType.Triangle => TriangularPrismCollider.Create(size is null ? null : new(size.Value.X, size.Value.Y, depth)),
-            Primitive2DModelType.Rectangle => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.Y, depth) },
-            Primitive2DModelType.Square => size is null ? new BoxCollider() : new() { Size = new(size.Value.X, size.Value.X, depth) },
-            Primitive2DModelType.Capsule => size is null ? new CapsuleCollider() : new() { Radius = size.Value.X, Length = size.Value.Y - 2 * size.Value.X },
-            Primitive2DModelType.Circle => CreateCircleCollider(depth, size),
-            Primitive2DModelType.Polygon => PolygonCollider.Create(vertices, size?.X, size.HasValue ? (int)size.Value.Y : null, depth),
-            _ => throw new InvalidOperationException($"Unsupported Primitive2DModelType: {type}"),
-        };
+        ArgumentNullException.ThrowIfNull(shape);
 
-        // The RotationLocal needs to be initialized before the bounding shape is calculated.
-        static CylinderCollider CreateCircleCollider(float depth, Vector2? size) => size is null ? new CylinderCollider()
+        return shape switch
         {
-            RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
-        } : new()
-        {
-            Radius = size.Value.X,
-            Length = depth,
-            RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
+            Primitive2D.RectangleShape rectangle => new BoxCollider { Size = new Vector3(rectangle.Size.X, rectangle.Size.Y, depth) },
+            // The RotationLocal needs to be initialized before the bounding shape is calculated.
+            Primitive2D.CircleShape circle => new CylinderCollider
+            {
+                Radius = circle.Radius,
+                Length = depth,
+                RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
+            },
+            // A capsule's Length is the straight part between the two semicircles; the shape's Height is the whole thing
+            Primitive2D.CapsuleShape capsule => new CapsuleCollider { Radius = capsule.Radius, Length = capsule.Height - 2 * capsule.Radius },
+            Primitive2D.TriangleShape triangle => TriangularPrismCollider.Create(new Vector3(triangle.Size.X, triangle.Size.Y, depth)),
+            Primitive2D.RegularPolygonShape polygon => PolygonCollider.Create(polygon, depth),
+            Primitive2D.PolygonShape polygon => PolygonCollider.Create(polygon, depth),
+            _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
     }
 
     /// <summary>
-    /// Creates a 3D collider shape based on the specified primitive type.
+    /// The Bepu collider that matches <paramref name="shape"/>.
     /// </summary>
-    /// <param name="type">The type of 3D primitive shape.</param>
-    /// <param name="size">Optional size for the collider. Interpretation varies by shape type (e.g., radius, dimensions).</param>
-    /// <returns>A <see cref="ColliderBase"/> configured for the specified primitive type.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when an unsupported <see cref="PrimitiveModelType"/> is specified.</exception>
-    private static ColliderBase Get3DColliderShape(PrimitiveModelType type, Vector3? size = null)
-        => type switch
+    /// <param name="shape">The 3D shape.</param>
+    /// <returns>A collider the same size as the shape's model, to put into a <see cref="CompoundCollider"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="shape"/> is null.</exception>
+    public static ColliderBase ColliderFor(Primitive3D shape)
+    {
+        ArgumentNullException.ThrowIfNull(shape);
+
+        return shape switch
         {
-            PrimitiveModelType.Capsule => size is null ? new CapsuleCollider() { Radius = 0.35f } : new() { Radius = size.Value.X, Length = size.Value.Y },
-            PrimitiveModelType.Cone => ConeCollider.Create(size),
-            PrimitiveModelType.Cube => size is null ? new BoxCollider() : new() { Size = (Vector3)size },
-            PrimitiveModelType.Cylinder => size is null ? new CylinderCollider() : new()
-            {
-                Radius = size.Value.X,
-                Length = size.Value.Z,
-                //RotationLocal = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90))
-            },
-            PrimitiveModelType.Plane => size is null ? new BoxCollider() : new() { Size = new Vector3(size.Value.X, 0, size.Value.Z) },
-            PrimitiveModelType.RectangularPrism => size is null ? new BoxCollider() : new() { Size = (Vector3)size },
-            PrimitiveModelType.Sphere => size is null ? new SphereCollider() : new() { Radius = size.Value.X },
-            PrimitiveModelType.Teapot => TeapotCollider.Create(size?.X),
-            PrimitiveModelType.TriangularPrism => TriangularPrismCollider.Create(size),
-            PrimitiveModelType.Torus => TorusCollider.Create(majorRadius: size?.X, minorRadius: size?.Y),
-            _ => throw new InvalidOperationException(),
+            Primitive3D.BoxShape box => new BoxCollider { Size = box.Size },
+            Primitive3D.SphereShape sphere => new SphereCollider { Radius = sphere.Radius },
+            Primitive3D.CapsuleShape capsule => new CapsuleCollider { Radius = capsule.Radius, Length = capsule.Length },
+            Primitive3D.CylinderShape cylinder => new CylinderCollider { Radius = cylinder.Radius, Length = cylinder.Height },
+            Primitive3D.ConeShape cone => ConeCollider.Create(cone),
+            Primitive3D.TorusShape torus => TorusCollider.Create(torus),
+            // A plane has no thickness; a flat box the size of the plane is what a static ground needs
+            Primitive3D.PlaneShape plane => new BoxCollider { Size = new Vector3(plane.Width, 0, plane.Length) },
+            Primitive3D.TeapotShape teapot => TeapotCollider.Create(teapot),
+            Primitive3D.TriangularPrismShape prism => TriangularPrismCollider.Create(prism),
+            _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
+    }
 }

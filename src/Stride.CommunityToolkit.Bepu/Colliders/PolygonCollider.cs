@@ -7,40 +7,62 @@ using static Stride.BepuPhysics.Definitions.DecomposedHulls;
 namespace Stride.CommunityToolkit.Bepu.Colliders;
 
 /// <summary>
-/// Provides helpers to construct Bepu <see cref="ConvexHullCollider"/> instances
-/// from a regular or custom polygon extruded into a prism.
+/// Builds the convex hull collider of a flat polygon extruded along Z: the prism a 2D polygon shape collides as.
 /// </summary>
 public static class PolygonCollider
 {
     /// <summary>
-    /// Creates a Bepu <see cref="ConvexHullCollider"/> from a polygon extruded along the Z axis.
+    /// Creates the collider of a regular polygon with <paramref name="sides"/> corners on a circle of
+    /// <paramref name="radius"/>, extruded <paramref name="depth"/> along Z.
     /// </summary>
-    /// <param name="vertices">
-    /// Optional custom polygon vertices in the XY plane. When provided, these take precedence over <paramref name="radius"/> and <paramref name="sides"/>.
-    /// </param>
-    /// <param name="radius">Optional circumradius for a regular polygon. When <c>null</c>, defaults from <see cref="PolygonProceduralModel"/> are used.</param>
-    /// <param name="sides">Optional side count for a regular polygon. When <c>null</c>, defaults from <see cref="PolygonProceduralModel"/> are used.</param>
-    /// <param name="depth">The prism depth along the Z axis. Must be greater than 0.</param>
-    /// <returns>A <see cref="ConvexHullCollider"/> whose hull is computed from the extruded polygon prism.</returns>
-    public static ConvexHullCollider Create(Vector2[]? vertices = null, float? radius = null, int? sides = null, float depth = 1f)
+    public static ConvexHullCollider Create(float radius, int sides, float depth = 1f)
+        => Create(PolygonProceduralModel.GenerateRegularPolygonVertices(radius, sides), depth);
+
+    /// <summary>
+    /// Creates the collider of <paramref name="polygon"/>, extruded <paramref name="depth"/> along Z.
+    /// </summary>
+    public static ConvexHullCollider Create(Primitive2D.RegularPolygonShape polygon, float depth = 1f)
     {
+        ArgumentNullException.ThrowIfNull(polygon);
+
+        return Create(polygon.Radius, polygon.Sides, depth);
+    }
+
+    /// <summary>
+    /// Creates the collider of <paramref name="polygon"/>, extruded <paramref name="depth"/> along Z.
+    /// </summary>
+    public static ConvexHullCollider Create(Primitive2D.PolygonShape polygon, float depth = 1f)
+    {
+        ArgumentNullException.ThrowIfNull(polygon);
+
+        return Create(polygon.Vertices, depth);
+    }
+
+    /// <summary>
+    /// Creates the collider of the convex polygon with the given corners, in order around the outline, extruded
+    /// <paramref name="depth"/> along Z.
+    /// </summary>
+    public static ConvexHullCollider Create(Vector2[] vertices, float depth = 1f)
+    {
+        ArgumentNullException.ThrowIfNull(vertices);
+
+        if (vertices.Length < 3)
+            throw new ArgumentException("A polygon needs at least three vertices.", nameof(vertices));
+
         if (depth <= 0)
             throw new ArgumentOutOfRangeException(nameof(depth), "Depth must be greater than 0.");
 
-        var polygonModel = CreatePolygonModel(vertices, radius, sides);
-        var vertices2D = polygonModel.Vertices.Length > 0
-            ? polygonModel.Vertices
-            : PolygonProceduralModel.GenerateRegularPolygonVertices(polygonModel.Radius, polygonModel.Sides);
-        var vertexCount = vertices2D.Length;
+        var vertexCount = vertices.Length;
         var halfDepth = depth / 2f;
 
         // The prism as an explicit triangle mesh: the polygon at +halfDepth first, the same polygon
         // at -halfDepth second, so index i and i+vertexCount are the two ends of one side edge.
         var points = new Vector3[vertexCount * 2];
+
         for (var i = 0; i < vertexCount; i++)
         {
-            points[i] = new Vector3(vertices2D[i].X, vertices2D[i].Y, halfDepth);
-            points[i + vertexCount] = new Vector3(vertices2D[i].X, vertices2D[i].Y, -halfDepth);
+            points[i] = new Vector3(vertices[i].X, vertices[i].Y, halfDepth);
+            points[i + vertexCount] = new Vector3(vertices[i].X, vertices[i].Y, -halfDepth);
         }
 
         var indexList = new List<uint>();
@@ -55,6 +77,7 @@ public static class PolygonCollider
 
         // Back cap: the same fan with the last two indices swapped, so it faces -Z instead.
         var backBase = (uint)vertexCount;
+
         for (var i = 1; i < vertexCount - 1; i++)
         {
             indexList.Add(backBase);
@@ -74,6 +97,7 @@ public static class PolygonCollider
             indexList.Add(firstFrontIndex);
             indexList.Add(secondFrontIndex);
             indexList.Add(secondBackIndex);
+
             indexList.Add(firstFrontIndex);
             indexList.Add(secondBackIndex);
             indexList.Add(firstBackIndex);
@@ -90,21 +114,5 @@ public static class PolygonCollider
                 ])
             ])
         };
-    }
-
-    private static PolygonProceduralModel CreatePolygonModel(Vector2[]? vertices, float? radius, int? sides)
-    {
-        if (vertices is { Length: > 0 })
-            return new PolygonProceduralModel { Vertices = vertices };
-
-        var polygonModel = new PolygonProceduralModel();
-
-        if (radius.HasValue)
-            polygonModel.Radius = radius.Value;
-
-        if (sides.HasValue)
-            polygonModel.Sides = sides.Value;
-
-        return polygonModel;
     }
 }
