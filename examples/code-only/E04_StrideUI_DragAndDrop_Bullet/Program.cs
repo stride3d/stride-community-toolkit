@@ -19,20 +19,16 @@ const string TotalShapesLabel = "Total Shapes:";
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBullet().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Setup the base 3D scene with default lighting, camera, etc.
-    game.SetupBase3DScene();
-
     // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
         EnableBackground = true
     });
 
-    game.AddSkybox();
     game.AddProfiler();
 
     _shapeGenerator = new PrimitiveGenerator(game, scene);

@@ -1,6 +1,5 @@
-using Stride.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.Rendering.Compositing;
+using Stride.Engine;
 
 namespace Stride.CommunityToolkit.Engine;
 

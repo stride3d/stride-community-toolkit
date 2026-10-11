@@ -20,12 +20,10 @@ using Stride.Rendering;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.AddProfiler();
-
     // The base scene's single directional light shines from behind this gallery, leaving the front
     // caps in the dark. Six lights down the six world axes make solid lettering read from any side.
     game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);

@@ -24,14 +24,11 @@ collisionMatrix.Set(enemyLayer, groundLayer, shouldCollide: true);
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 // Sets up the initial scene with players and enemies
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     SetupCollisionMatrix(scene);
     SetupGroundCollisionLayer(scene);
 
@@ -108,7 +105,7 @@ concepts:
   - Filling in the collision matrix pair by pair
   - Letting one entity phase through another while both keep colliding with the ground
   - When to prefer a layer matrix over an index rule
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

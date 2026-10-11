@@ -9,11 +9,10 @@ const int ShapeCount = 30;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase2DScene();
     game.AddProfiler();
 
     var otherShape = game.CreatePrimitive(Primitive2D.Rectangle(0.5f, 0.8f), new()
@@ -25,7 +24,7 @@ void Start(Scene rootScene)
 
     for (int i = 0; i < ShapeCount; i++)
     {
-        var shape = game.CreatePrimitive(Primitive2D.Capsule(), new()
+        var shape = game.CreatePrimitive(Primitive2D.Capsule(), new Bepu2DPhysicsOptions
         {
             Material = game.CreateFlatMaterial(Color.White),
             Component = new Body2DComponent()
@@ -64,7 +63,7 @@ concepts:
   - Passing a Body2DComponent to CreatePrimitive to set physics options
   - FrictionCoefficient - a lower value lets the pile spread
   - An empty CompoundCollider that the helper fills with the fitted shape
-  - "Using helpers: SetupBase2DScene, AddProfiler, CreatePrimitive, CreateFlatMaterial"
+  - "Using helpers: SceneSetup2D, AddProfiler, CreatePrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bepu

@@ -8,12 +8,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.AddProfiler();
-
     // The cube starts on its circle; the script works the centre out from where it starts
     var entity = game.CreatePrimitive(Primitive3D.Cube());
     entity.Transform.Position = new Vector3(1f, 0.5f, 3f);

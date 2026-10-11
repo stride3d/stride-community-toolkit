@@ -41,7 +41,7 @@ var sinceStart = 0f;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = background, Ground = null }, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -50,8 +50,7 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Explosion - Stride Community Toolkit";
 
-    game.SetupBase2D(clearColor: background);
-    var cameraEntity = game.Add2DCameraController();
+    var cameraEntity = game.GetCameraEntity();
     game.AddProfiler();
 
     camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
@@ -248,7 +247,7 @@ concepts:
   - Why the impulse is per metre of perimeter, shown with a slab and a ball of equal mass
   - Drawing a transient effect with ShapeBatch rings that fade
   - Picking bodies up with Grabber2DScript
-  - "Using helpers: SetupBase2D, Add2DCameraController, AddShapeBatch, ShapeComponent"
+  - "Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent"
 tags:
   - 2D
   - Box2D

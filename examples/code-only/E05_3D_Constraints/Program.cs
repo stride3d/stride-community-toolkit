@@ -54,13 +54,11 @@ collisionMatrix.Set(cubeLayer, cubeLayer, shouldCollide: true);
 using var game = new Game();
 
 // Run the game loop with the Start and Update methods
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Set up a basic 3D scene with skybox, profiler, and a ground gizmo
-    game.SetupBase3DScene();
-    game.AddSkybox();
+    // Set up profiler and a ground gizmo
     game.AddProfiler();
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
@@ -489,7 +487,7 @@ concepts:
   - Anchoring a constraint to a kinematic foundation
   - Filtering collisions between the connected parts
   - Removing constrained bodies at runtime and resetting the scene
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler"
 tags:
   - 3D
   - Bepu

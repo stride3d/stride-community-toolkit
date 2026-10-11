@@ -89,15 +89,13 @@ var launched = false;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Physics materials - Stride Community Toolkit";
 
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddProfiler();
     game.AddEntityTextRenderer();
 
@@ -401,7 +399,7 @@ concepts:
   - Setting the four numbers on a BodyComponent and on a StaticComponent
   - Replaying a scene - Teleport, then Awake, then the velocities
   - Measuring a rebound from a body's LinearVelocity, which cannot miss a short contact
-  - "Using helpers: SetupBase3DScene, CreatePrimitive, AddEntityTextRenderer, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddEntityTextRenderer, DebugOverlay"
 tags:
   - 3D
   - Physics

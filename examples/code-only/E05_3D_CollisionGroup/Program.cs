@@ -21,14 +21,11 @@ var enemyCollisionGroup = new CollisionGroup { Id = 1, IndexA = 1 };
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 // Sets up the initial scene with players and enemies
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     // Create player entities
     CreateEntityWithGroup("Player1", Color.MediumSeaGreen, new Vector3(0, 0.5f, 0), scene, playerCollisionGroup1);
     CreateEntityWithGroup("Player2", Color.MediumPurple, new Vector3(0.5f, 4, 0.7f), scene, playerCollisionGroup2);
@@ -79,7 +76,7 @@ concepts:
   - "How the IndexA difference rule decides whether two bodies collide"
   - Choosing index values so one entity phases through others
   - When an arithmetic rule beats a full collision matrix
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

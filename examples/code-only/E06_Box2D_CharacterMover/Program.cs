@@ -66,7 +66,7 @@ var background = new Color(0.2f, 0.2f, 0.2f);
 using var game = new Game();
 
 // Start builds the course, Update drives it; the simulation is created in Start and outlives Run.
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = background, Ground = null }, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -75,8 +75,7 @@ void Start(Scene scene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Character Mover - Stride Community Toolkit";
 
-    game.SetupBase2D(clearColor: background);
-    var cameraEntity = game.Add2DCameraController();
+    var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
     game.AddProfiler();
 

@@ -12,12 +12,10 @@ const string EntityName = "PrimitiveModelGroup";
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.AddProfiler();
-
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
     game.AddGrabber();
 
@@ -32,7 +30,6 @@ void Update(Scene scene, GameTime time)
         ResetTheScene(scene);
         Add3DPrimitives(scene);
     }
-
 }
 
 void Add3DPrimitives(Scene scene)

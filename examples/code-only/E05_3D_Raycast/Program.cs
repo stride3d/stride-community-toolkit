@@ -30,14 +30,12 @@ Vector3[] lineVertices = new Vector3[2];
 using var game = new Game();
 
 // Run the game loop with the Start and Update methods
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 // Sets up the initial scene with a skybox, profiler, ground reference, and a sphere with physics
 void Start(Scene scene)
 {
     // Set up a basic 3D scene with skybox, profiler, and a ground gizmo
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddProfiler();
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
@@ -213,7 +211,7 @@ concepts:
   - Applying an impulse towards a point
   - Stopping a body by zeroing its velocity
   - Drawing the impulse direction as a line from the sphere to the hit point
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bepu

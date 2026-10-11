@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
 using Stride.Engine.Processors;
 
@@ -9,21 +10,30 @@ namespace Stride.CommunityToolkit.Engine;
 /// </summary>
 /// <param name="Projection">Perspective or orthographic.</param>
 /// <param name="Position">The initial position.</param>
-/// <param name="Rotation">The initial yaw, pitch and roll, in degrees.</param>
+/// <param name="Rotation">
+/// The initial rotation in degrees, packed as <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c> - the same convention
+/// <see cref="GameExtensions.Add3DCamera"/> uses for its <c>initialRotation</c>, and the order the camera controller's F2 panel prints.
+/// </param>
 /// <param name="Controller">Whether the camera controller is added, after the camera is aimed, so its reset pose is the aimed one.</param>
 /// <param name="Name">The entity name, which <see cref="GameExtensions.GetCameraEntity"/> finds it by.</param>
-public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName)
+/// <param name="HelpPosition">Where the 3D controller's key help goes, or <see langword="null"/> for the overlay's own corner; <see cref="DisplayPosition.None"/> registers no help.</param>
+public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName, DisplayPosition? HelpPosition = null)
 {
     /// <summary>A perspective camera, at <see cref="CameraDefaults.Initial3DPosition"/> looking at the origin unless told otherwise.</summary>
+    /// <param name="position">The initial position, or <see langword="null"/> for <see cref="CameraDefaults.Initial3DPosition"/>.</param>
+    /// <param name="rotation">The initial rotation in degrees, <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c>, or <see langword="null"/> for <see cref="CameraDefaults.Initial3DRotation"/>.</param>
     public static CameraSetup Perspective(Vector3? position = null, Vector3? rotation = null)
         => new(CameraProjectionMode.Perspective, position ?? CameraDefaults.Initial3DPosition, rotation ?? CameraDefaults.Initial3DRotation);
 
     /// <summary>An orthographic camera, at <see cref="CameraDefaults.Initial2DPosition"/> looking down Z unless told otherwise.</summary>
+    /// <param name="position">The initial position, or <see langword="null"/> for <see cref="CameraDefaults.Initial2DPosition"/>.</param>
+    /// <param name="rotation">The initial rotation in degrees, <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c>, or <see langword="null"/> for <see cref="CameraDefaults.Initial2DRotation"/>.</param>
     public static CameraSetup Orthographic(Vector3? position = null, Vector3? rotation = null)
         => new(CameraProjectionMode.Orthographic, position ?? CameraDefaults.Initial2DPosition, rotation ?? CameraDefaults.Initial2DRotation);
 
     /// <summary>The same camera with the controller: the 3D one for a perspective camera, the 2D one for an orthographic camera.</summary>
-    public CameraSetup WithController() => this with { Controller = true };
+    /// <param name="helpPosition">Where the 3D controller's key help goes; <see langword="null"/> leaves the overlay's own corner.</param>
+    public CameraSetup WithController(DisplayPosition? helpPosition = null) => this with { Controller = true, HelpPosition = helpPosition };
 
     internal Entity Apply(Game game)
     {
@@ -34,7 +44,7 @@ public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Positi
         if (Projection == CameraProjectionMode.Orthographic)
             entity.Add2DCameraController();
         else
-            entity.Add3DCameraController();
+            entity.Add3DCameraController(HelpPosition);
 
         return entity;
     }

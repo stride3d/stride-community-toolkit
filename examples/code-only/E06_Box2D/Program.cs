@@ -20,7 +20,7 @@ SceneManager? sceneManager = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(0.2f), Ground = null }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
@@ -29,8 +29,6 @@ void Start(Scene rootScene)
     game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
 
     // Set up a 2D scene with camera and controls
-    game.SetupBase2D(clearColor: new Color(0.2f));
-    game.Add2DCameraController();
     //game.AddGraphicsCompositor();
     //game.AddGraphicsCompositor2();
     //game.Add2DGraphicsCompositor(clearColor);
