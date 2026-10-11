@@ -218,7 +218,93 @@ select new {
     </Group>
     <Group Name="Object Oriented Design" Active="True" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1200$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1201$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Base class should not use derivatives</Name>
+// <Id>ND1201:BaseClassShouldNotUseDerivatives</Id>
+warnif count > 0
+from baseClass in JustMyCode.Types
+where baseClass.IsClass && baseClass.NbChildren > 0 // <-- for optimization!
+
+// Stride Community Toolkit tweak: a closed hierarchy is closed on purpose. A base class whose every
+// constructor is private (a record's compiler-generated copy constructor aside) can be derived from
+// only by its own nested types, so those are the whole
+// set, and the static factories on the base that build them are the type's API (Primitive3D,
+// Primitive2D) - the shape a C# union type takes. The open/closed principle does not apply to it.
+let isClosed = baseClass.IsAbstract &&
+               baseClass.Constructors.Count() > 0 &&
+               baseClass.Constructors.All(c => c.Visibility == Visibility.Private || c.IsGeneratedByCompiler)
+
+let derivedClassesUsed = baseClass.DerivedTypes.UsedBy(baseClass)
+   // Don't warn when a base class is using nested private derived class
+   .Where(derivedClass =>
+            !(derivedClass.IsNested &&
+              derivedClass.ParentType == baseClass &&
+              (derivedClass.Visibility == Visibility.Private || isClosed)))
+where derivedClassesUsed.Count() > 0
+
+let derivedClassesMemberUsed = derivedClassesUsed.SelectMany(c => c.Members).UsedBy(baseClass)
+orderby derivedClassesMemberUsed.Count() descending
+
+select new {
+   baseClass,
+   derivedClassesUsed,
+   derivedClassesMemberUsed,
+
+   Debt = 3*(derivedClassesUsed.Count()+derivedClassesMemberUsed.Count()).ToMinutes().ToDebt(),
+   Severity = Severity.High
+}
+
+//<Expl>
+// The *base {0}* should not rely on its derivative{1?:s}, specifically the *{1}*,
+// because it should remain *open* for the creation of new derived
+// classes without requiring modifications.
+//</Expl>
+
+//<Desc>
+// In *Object-Oriented Programming*, the **open/closed principle** states:
+// *software entities (components, classes, methods, etc.) should be open
+// for extension, but closed for modification*.
+// http://en.wikipedia.org/wiki/Open/closed_principle
+//
+// Hence a base class should be designed properly to make it easy to derive from,
+// this is *extension*. But creating a new derived class, or modifying an
+// existing one, shouldn't provoke any *modification* in the base class.
+// And if a base class is using some derivative classes somehow, there
+// are good chances that such *modification* will be needed.
+//
+// Extending the base class is not anymore a simple operation,
+// this is not good design.
+//
+// Note that this rule doesn't warn when a base class is using a derived class
+// that is nested in the base class and declared as private. In such situation
+// we consider that the derived class is an encapsulated implementation
+// detail of the base class. The toolkit's copy also leaves alone a base class
+// with only private constructors: a closed set of nested cases built by the
+// base's own factories.
+//</Desc>
+
+//<HowToFix>
+// Understand the need for using derivatives,
+// then imagine a new design, and then refactor.
+//
+// Typically an algorithm in the base class needs to access something
+// from derived classes. You can try to encapsulate this access behind
+// an abstract or a virtual method.
+//
+// If you see in the base class some conditions on *typeof(DerivedClass)*
+// not only *urgent refactoring* is needed. Such condition can easily
+// be replaced through an abstract or a virtual method.
+//
+// Sometime you'll see a base class that creates instance of some derived classes.
+// In such situation, certainly using the *factory method pattern*
+// http://en.wikipedia.org/wiki/Factory_method_pattern
+// or the *abstract factory pattern*
+// http://en.wikipedia.org/wiki/Abstract_factory_pattern
+// will improve the design.
+//
+// The estimated Debt, which means the effort to fix such issue,
+// is equal to 3 minutes per derived class used by the base class +
+// 3 minutes per member of a derived class used by the base class.
+//</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1202$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1203$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1204$]]></Query>
@@ -476,6 +562,14 @@ warnif count > 0 from t in JustMyCode.Types where
  // Stride Community Toolkit tweak: only externally visible nested types, which is what the rule's
  // own description targets; internal nested types are a normal encapsulation tool here.
  t.IsPubliclyVisible &&
+
+ // Stride Community Toolkit tweak: the cases of a closed hierarchy are nested on purpose. A base
+ // class with only private constructors (a record's compiler-generated copy constructor aside)
+ // can be derived from only by its own nested types; those are its public cases, spelled
+ // Primitive3D.SphereShape, the shape a C# union type takes.
+ !(t.ParentType != null && t.ParentType.IsAbstract && t.DeriveFrom(t.ParentType) &&
+   t.ParentType.Constructors.Count() > 0 &&
+   t.ParentType.Constructors.All(c => c.Visibility == Visibility.Private || c.IsGeneratedByCompiler)) &&
 
  // It is accepted that non-private nested types are declared inside Razor page classes.
  !t.OutterTypes.Any(ot => ot.DeriveFrom("Microsoft.AspNetCore.Mvc.RazorPages.PageModel".AllowNoMatch()) ||
@@ -1769,7 +1863,48 @@ select new {
 // make sure to name all matched static fields adequately.
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[$ND2002$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND2003$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Abstract base class should be suffixed with 'Base'</Name>
+// <Id>ND2003:AbstractBaseClassShouldBeSuffixedWithBase</Id>
+
+warnif count > 0 from t in Application.Types where 
+  t.IsAbstract && 
+  t.IsClass &&
+
+  // Stride Community Toolkit tweak: a closed hierarchy is a set of cases, not a base to derive
+  // from. An abstract class with only private constructors (a record's compiler-generated copy
+  // constructor aside) is named for the set, Primitive3D, the way a C# union type would be.
+  !(t.Constructors.Count() > 0 &&
+    t.Constructors.All(c => c.Visibility == Visibility.Private || c.IsGeneratedByCompiler)) &&
+
+  t.BaseClass != null &&
+  t.BaseClass.FullName == "System.Object" &&
+
+  ((!t.IsGeneric && !t.NameLike (@"Base$")) ||
+   ( t.IsGeneric && !t.NameLike (@"Base<")))
+select new {
+   t,
+   Debt = 5.ToMinutes().ToDebt(),
+   Severity = Severity.Medium
+}
+
+//<Expl>
+// The *abstract base {0}'s name* should be suffixed with *Base*.
+//</Expl>
+
+//<Desc>
+// This rule warns about *abstract classes* whose names are not 
+// suffixed with **Base**. It is a common practice in the .NET 
+// world to suffix base classes names with **Base**.
+//
+// Notice that this rule doesn't match abstract classes that 
+// are in a middle of a hierarchy chain.
+// In other words, only base classes that derive directly 
+// from *System.Object* are matched.
+//</Desc>
+
+//<HowToFix>
+// Suffix the names of matched base classes with **Base**.
+//</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[$ND2004$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[$ND2005$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND2006$]]></Query>
