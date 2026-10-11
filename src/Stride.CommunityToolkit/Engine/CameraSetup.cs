@@ -17,7 +17,8 @@ namespace Stride.CommunityToolkit.Engine;
 /// <param name="Controller">Whether the camera controller is added, after the camera is aimed, so its reset pose is the aimed one.</param>
 /// <param name="Name">The entity name, which <see cref="GameExtensions.GetCameraEntity"/> finds it by.</param>
 /// <param name="HelpPosition">Where the 3D controller's key help goes, or <see langword="null"/> for the overlay's own corner; <see cref="DisplayPosition.None"/> registers no help.</param>
-public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName, DisplayPosition? HelpPosition = null)
+/// <param name="OrthographicSize">The height of the view in world units for an orthographic camera, or <see langword="null"/> for the engine's default of 10.</param>
+public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Position, Vector3 Rotation, bool Controller = false, string Name = CameraDefaults.MainCameraName, DisplayPosition? HelpPosition = null, float? OrthographicSize = null)
 {
     /// <summary>A perspective camera, at <see cref="CameraDefaults.Initial3DPosition"/> looking at the origin unless told otherwise.</summary>
     /// <param name="position">The initial position, or <see langword="null"/> for <see cref="CameraDefaults.Initial3DPosition"/>.</param>
@@ -28,8 +29,9 @@ public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Positi
     /// <summary>An orthographic camera, at <see cref="CameraDefaults.Initial2DPosition"/> looking down Z unless told otherwise.</summary>
     /// <param name="position">The initial position, or <see langword="null"/> for <see cref="CameraDefaults.Initial2DPosition"/>.</param>
     /// <param name="rotation">The initial rotation in degrees, <c>X = Yaw</c>, <c>Y = Pitch</c>, <c>Z = Roll</c>, or <see langword="null"/> for <see cref="CameraDefaults.Initial2DRotation"/>.</param>
-    public static CameraSetup Orthographic(Vector3? position = null, Vector3? rotation = null)
-        => new(CameraProjectionMode.Orthographic, position ?? CameraDefaults.Initial2DPosition, rotation ?? CameraDefaults.Initial2DRotation);
+    /// <param name="orthographicSize">The height of the view in world units, or <see langword="null"/> for the engine's default of 10.</param>
+    public static CameraSetup Orthographic(Vector3? position = null, Vector3? rotation = null, float? orthographicSize = null)
+        => new(CameraProjectionMode.Orthographic, position ?? CameraDefaults.Initial2DPosition, rotation ?? CameraDefaults.Initial2DRotation, OrthographicSize: orthographicSize);
 
     /// <summary>The same camera with the controller: the 3D one for a perspective camera, the 2D one for an orthographic camera.</summary>
     /// <param name="helpPosition">Where the 3D controller's key help goes; <see langword="null"/> leaves the overlay's own corner.</param>
@@ -38,6 +40,9 @@ public sealed record CameraSetup(CameraProjectionMode Projection, Vector3 Positi
     internal Entity Apply(Game game)
     {
         var entity = game.Add3DCamera(Name, Position, Rotation, Projection);
+
+        if (OrthographicSize is { } size)
+            entity.Get<CameraComponent>().OrthographicSize = size;
 
         if (!Controller) return entity;
 

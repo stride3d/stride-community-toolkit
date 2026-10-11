@@ -71,7 +71,14 @@ List<DebugTextDropdown> menus = [];
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    // A head-on view of the XY plane; the light is aimed by hand below, so the setup adds none
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 0, 80), rotation: Vector3.Zero).WithController(),
+    Lighting = null,
+    Ground = null,
+    Profiler = true
+}.UseBepu().UseSkybox(), start: Start, update: Update);
 
 // The buffered instancings own their GPU buffers, and the engine never releases user-owned buffers
 awakeInstancing?.Dispose();
@@ -84,18 +91,10 @@ void Start(Scene rootScene)
 
     scene = rootScene;
 
-    // SetupBase3D() unrolled, so the camera and the light can be aimed for a head-on view of the XY plane
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add3DCamera(initialPosition: new Vector3(0, 0, 80), initialRotation: Vector3.Zero);
-    game.AddProfiler();
-
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
     light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) *
                                Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
-
-    game.Add3DCameraController();
-    game.AddSkybox();
 
     CreateWall(new Vector3(-WallWidth / 2, 0, 0), wallSize);
     CreateWall(new Vector3(WallWidth / 2, 0, 0), wallSize);
@@ -112,7 +111,7 @@ void Start(Scene rootScene)
 
 void CreateWall(Vector3 position, Vector3 size, Quaternion? rotation = null)
 {
-    var wall = game.CreatePrimitive(Primitive3D.Box(size), new()
+    var wall = game.CreatePrimitive(Primitive3D.Box(size), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(Color.LightGray),
         Component = new StaticComponent { Collider = new CompoundCollider() }
