@@ -59,7 +59,7 @@ public class AudioSystemExtensionsTests
         var clock = Stopwatch.StartNew();
         SoundInstance? instance = null;
 
-        game.Run(update: (_, _) =>
+        game.Run(SceneSetup.None, update: (_, _) =>
         {
             canPlay = CanPlay(game.Audio);
 
@@ -109,7 +109,7 @@ public class AudioSystemExtensionsTests
         // A quarter of a second of silence, mono, 8 kHz: 2000 frames.
         var wav = WavSoundTests.Wav(channels: 1, sampleRate: 8000, bits: 16, new byte[4000]);
 
-        game.Run(update: (_, _) =>
+        game.Run(SceneSetup.None, update: (_, _) =>
         {
             canPlay = CanPlay(game.Audio);
 
@@ -154,7 +154,7 @@ public class AudioSystemExtensionsTests
         AudioListener? second = null;
         InvalidOperationException? outsideScene = null;
 
-        game.Run(start: scene =>
+        game.Run(SceneSetup.None, start: scene =>
         {
             engineAvailable = game.Audio.AudioEngine is not null;
 

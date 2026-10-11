@@ -15,9 +15,10 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class TextScene : IGoldScene
 {
+    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+
     public void Start(Game game, Scene scene)
     {
-        game.SetupBase3D();
         game.SetCameraPosition(new Vector3(0f, 4f, 12f));
         game.SetCameraRotation(new Vector3(0f, -15f, 0f));
 

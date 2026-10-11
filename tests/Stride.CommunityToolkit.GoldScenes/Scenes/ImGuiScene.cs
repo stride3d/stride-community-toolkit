@@ -18,10 +18,10 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class ImGuiScene : IGoldScene
 {
+    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+
     public void Start(Game game, Scene scene)
     {
-        game.SetupBase3D();
-
         // Registers itself with the game on construction; the game owns it from here
         _ = new ImGuiSystem(game.Services, game.GraphicsDeviceManager);
         _ = new GoldWindow(game.Services);

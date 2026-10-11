@@ -24,10 +24,11 @@ internal sealed class RenderTextureScene : IGoldScene
 {
     private Entity? _ball;
 
+    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+
     public void Start(Game game, Scene scene)
     {
         // The main camera looks at the row of monitors over the scene, so the capture holds both
-        game.SetupBase3D();
         game.SetCameraPosition(new Vector3(0f, 6f, 17f));
         game.SetCameraRotation(new Vector3(0f, -12f, 0f));
 

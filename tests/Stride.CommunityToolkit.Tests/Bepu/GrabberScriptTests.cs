@@ -45,7 +45,7 @@ public class GrabberScriptTests
         var constraintsAfterRelease = -1;
         var releasedEvents = 0;
 
-        game.Run(start: scene =>
+        game.Run(SceneSetup.None, start: scene =>
         {
             grabber = new GrabberScript();
             grabber.Released += _ => releasedEvents++;
@@ -112,7 +112,7 @@ public class GrabberScriptTests
         var frames = 0;
         var grabbed = true;
 
-        game.Run(start: scene =>
+        game.Run(SceneSetup.None, start: scene =>
         {
             grabber = new GrabberScript();
 

@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
 using Stride.Games;
 
@@ -9,6 +10,9 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal interface IGoldScene
 {
+    /// <summary>What the scene gets before <see cref="Start"/>; the goldens pin a bare compositor, camera and light, no sky and no ground.</summary>
+    SceneSetup Setup { get; }
+
     /// <summary>Builds the scene: camera, geometry, renderers.</summary>
     void Start(Game game, Scene scene);
 

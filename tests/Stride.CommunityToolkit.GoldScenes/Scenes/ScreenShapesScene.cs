@@ -18,9 +18,10 @@ internal sealed class ScreenShapesScene : IGoldScene
 {
     private ShapeBatch? _shapes;
 
+    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+
     public void Start(Game game, Scene scene)
     {
-        game.SetupBase3D();
         game.SetCameraPosition(new Vector3(0f, 5f, 12f));
         game.SetCameraRotation(new Vector3(0f, -18f, 0f));
 

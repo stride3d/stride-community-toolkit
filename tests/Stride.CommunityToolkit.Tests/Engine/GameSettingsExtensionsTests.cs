@@ -49,7 +49,7 @@ public class GameSettingsExtensionsTests
 
         IGameSettingsService? service = null;
 
-        game.Run(update: (_, _) =>
+        game.Run(SceneSetup.None, update: (_, _) =>
         {
             service = game.Services.GetService<IGameSettingsService>();
             game.Exit();
@@ -70,7 +70,7 @@ public class GameSettingsExtensionsTests
 
         EffectCompilerParameters? parameters = null;
 
-        game.Run(update: (_, _) =>
+        game.Run(SceneSetup.None, update: (_, _) =>
         {
             parameters = ReadCompilerParameters(game);
             game.Exit();
@@ -133,7 +133,7 @@ public class GameSettingsExtensionsTests
 
         EffectCompilerParameters? parameters = null;
 
-        game.Run(update: (_, _) =>
+        game.Run(SceneSetup.None, update: (_, _) =>
         {
             parameters = ReadCompilerParameters(game);
             game.Exit();
@@ -151,7 +151,7 @@ public class GameSettingsExtensionsTests
 
         InvalidOperationException? thrown = null;
 
-        game.Run(update: (_, _) =>
+        game.Run(SceneSetup.None, update: (_, _) =>
         {
             thrown = Assert.Throws<InvalidOperationException>(() => game.UseGameSettings());
             game.Exit();
