@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.Windows;
+namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
 /// The Win32 entry points used by this assembly, kept in one place as the .NET interop guidelines ask

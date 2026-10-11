@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Gum.Stride" Version="2026.10.1.1" />
-    <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+    <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
   </ItemGroup>
 
 </Project>

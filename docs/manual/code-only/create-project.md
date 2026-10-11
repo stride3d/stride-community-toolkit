@@ -5,9 +5,9 @@
 The steps below show how to create a new Stride project using the command line. If you prefer Visual Studio Code, run the same commands from its integrated terminal. For the shortest possible start - one `.cs` file, no project file at all - see [Create a File-Based App](create-file-based-app.md).
 
 > [!NOTE]
-> These instructions target Windows. On Linux, reference `Stride.CommunityToolkit.Linux` instead of `Stride.CommunityToolkit.Windows` and set `<RuntimeIdentifier>linux-x64</RuntimeIdentifier>` in the project file; the Linux package copies the native libraries the asset compiler needs.
->
 > Match the toolkit version to your Stride version - the table is in [Getting Started](../getting-started.md). `--prerelease` takes the newest preview, so on an older Stride pin it, for example `--version 1.0.0-preview.62` for Stride 4.3.
+
+# [Windows](#tab/windows)
 
 1. Prerequisites: Make sure all prerequisites are installed. See [Getting started](../getting-started.md) for details.
 2. Create a console app. You can follow the official [Microsoft tutorial](https://learn.microsoft.com/en-gb/dotnet/core/tutorials/with-visual-studio-code) or run:
@@ -17,10 +17,10 @@ The steps below show how to create a new Stride project using the command line. 
 3. Navigate to the project folder:
    ```
    cd YourProjectName
-   ``` 
-4. Add toolkit package:
    ```
-   dotnet add package Stride.CommunityToolkit.Windows --prerelease
+4. Add the toolkit package. It brings in the Stride packages and the asset compiler build step:
+   ```
+   dotnet add package Stride.CommunityToolkit --prerelease
    ```
 5. Add the Bepu physics package:
    ```
@@ -37,10 +37,49 @@ The steps below show how to create a new Stride project using the command line. 
    ```
 9. Enjoy Stride: If everything is set up correctly, your project should run.
 
+# [Linux](#tab/linux)
+
+1. Prerequisites: the .NET 10 SDK, Microsoft's build (`dotnet-install.sh` or the Microsoft package feed). A distribution's own `dotnet` package is not supported: it reports a distribution-specific runtime identifier that the asset compiler does not map, so no native library is found, and its older Roslyn skips Stride's source generators without an error. If you must build with it, `Stride.CommunityToolkit.Linux` copies the asset compiler's native libraries into place; the source generators stay skipped.
+2. Create a console app:
+   ```
+   dotnet new console --framework net10.0 --name YourProjectName
+   ```
+3. Navigate to the project folder:
+   ```
+   cd YourProjectName
+   ```
+4. Tell the build it targets Linux. Add this line to the `<PropertyGroup>` of `YourProjectName.csproj`; Stride reads the platform from it and copies the Linux native libraries next to your app:
+   ```xml
+   <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+   ```
+5. Add the toolkit package. It brings in the Stride packages and the asset compiler build step:
+   ```
+   dotnet add package Stride.CommunityToolkit --prerelease
+   ```
+6. Add the Bepu physics package:
+   ```
+   dotnet add package Stride.CommunityToolkit.Bepu --prerelease
+   ```
+7. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
+8. Build. On Stride 4.4 the first build of a project fails inside the asset compiler with NuGet signature errors, because the compiler inherits the SDK's signature verification without the SDK's trust store (reported upstream). Until that is fixed, turn the verification off for the build:
+   ```
+   DOTNET_NUGET_SIGNATURE_VERIFICATION=false dotnet build
+   ```
+   Later builds in the same project no longer need the variable.
+9. Run the project:
+   ```
+   dotnet run
+   ```
+
+> [!TIP]
+> To build for Linux from a Windows machine instead, as Game Studio does, replace the `RuntimeIdentifier` line with `<StridePlatform>Linux</StridePlatform>`, build on Windows, copy the output to the Linux machine and start it with `dotnet YourProjectName.dll`.
+
+---
+
 ## Visual Studio 2026 and JetBrains Rider
 
 1. Create a C# Console Application targeting .NET 10.
-2. Add the `Stride.CommunityToolkit.Windows` NuGet package (pre-release). This pulls in the required Stride packages.
+2. Add the `Stride.CommunityToolkit` NuGet package (pre-release). This pulls in the required Stride packages and the asset compiler.
 3. Add the `Stride.CommunityToolkit.Bepu` package (pre-release) to include the Bepu physics integration.
 4. Update Program.cs: Paste the example code below.
 5. Run the project using your IDE.

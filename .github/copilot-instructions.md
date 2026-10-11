@@ -44,10 +44,10 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
   - **Stride.CommunityToolkit.DebugShapes**: Debug visualization tools
   - **Stride.CommunityToolkit.ImGui**: ImGui integration
   - **Stride.CommunityToolkit.ImGuiNet**: ImGui.NET bindings and helpers
-  - **Stride.CommunityToolkit.Linux**: Linux-specific features
+  - **Stride.CommunityToolkit.Linux**: the asset compiler's Linux native libraries, for code-only projects on Linux
   - **Stride.CommunityToolkit.Shapes**: `ShapeBatch`, the signed-distance-field shape renderer behind the HUD, panel and gizmo examples (see `docs/manual/rendering/shape-batch.md`)
   - **Stride.CommunityToolkit.Skyboxes**: Skybox utilities
-  - **Stride.CommunityToolkit.Windows**: Windows-specific features
+  - **Stride.CommunityToolkit.Windows**: empty since preview.67, a forwarder to the core (which holds `WindowsDpiManager` and brings in the asset compiler); to be unlisted
 - `examples/`: Code-only and snippet example projects (C#, F#, VB)
 - `benchmarks/`: BenchmarkDotNet-based performance tests
 - `tests/`: Unit and regression test projects (xUnit, targeting net10.0), and `tests/gold/`, the golden images that `build/gold-images.cs` compares example captures against

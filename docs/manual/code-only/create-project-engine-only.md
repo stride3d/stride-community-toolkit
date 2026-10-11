@@ -35,7 +35,7 @@ is plain Stride, and everything it does the toolkit does for you in `SetupBase3D
    ```
    Without it the package's own assemblies are copied next to your app and it fails at start-up with
    `Could not load file or assembly 'Stride.NuGetResolver'`. This is the one thing the toolkit's
-   `Stride.CommunityToolkit.Windows` package does for you on the packaging side: it passes the asset
+   `Stride.CommunityToolkit` package does for you on the packaging side: it passes the asset
    compiler on build-only, which is why the [Create Project](create-project.md) steps never mention it.
 5. Replace `Program.cs` with the code below.
 6. Run it:

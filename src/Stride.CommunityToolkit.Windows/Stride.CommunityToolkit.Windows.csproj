@@ -1,24 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Title>Stride Community Toolkit - Windows</Title>
-        <Description>The Windows package for code-only Stride projects: reference it instead of hand-writing the project boilerplate.
-
-What's inside:
-- Brings in Stride.AssetCompiler as a build-only dependency. A code-only project has no assets, but the engine's shaders and default font still have to be compiled into its data folder, and this is the package that makes that happen
-- WindowsDpiManager: opt the process into per-monitor DPI awareness from code, no app.manifest needed - for file-based apps and anything else without a project file - and check that the declaration took. Reading the display's scale is cross-platform and lives in the core package's DisplayScale
-
-Use Stride.CommunityToolkit.Linux on Linux.$(StrideVersionNote)</Description>
-        <!-- LibraryImport (NativeMethods.cs) generates marshalling code that uses pointers. -->
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Title>Stride Community Toolkit - Windows (superseded)</Title>
+        <Description>Superseded: reference Stride.CommunityToolkit instead. Since 1.0.0-preview.67 the core package brings in the asset compiler and holds WindowsDpiManager, so this package is empty and only depends on the core. It is published once more so that a project still naming it keeps building with the matching core; it will be unlisted.$(StrideVersionNote)</Description>
+        <!--
+            An empty package that forwards to the core. Without it, a project that still references this package
+            with a floating prerelease version would pair the old 1.0.0-preview.66 assembly with the new core and
+            have WindowsDpiManager twice. No build output is packed; the core is the one dependency.
+        -->
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
     </PropertyGroup>
 
     <Import Project="..\CommonSettings.props" />
-
-    <ItemGroup>
-        <!-- This library requires a shader defined in the engine assemblies. Shaders are assets typically compiled by the asset compiler according to the Graphics API target, necessitating the inclusion of Stride.AssetCompiler. -->
-        <PackageReference Include="Stride.AssetCompiler" Version="$(StrideVersion)" IncludeAssets="build;buildTransitive" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />

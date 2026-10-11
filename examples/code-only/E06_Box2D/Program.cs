@@ -2,7 +2,6 @@ using E06_Box2D.Helpers;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Shapes;
-using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;

@@ -6,7 +6,6 @@ using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
-using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;

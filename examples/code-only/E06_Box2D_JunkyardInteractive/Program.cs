@@ -6,7 +6,6 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
-using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;

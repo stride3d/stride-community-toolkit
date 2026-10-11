@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Stride.CommunityToolkit.Windows;
+namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
 /// Declares the process DPI aware from code, and reports whether it is - the two things about DPI

@@ -16,7 +16,7 @@ using Stride.Engine;
 //
 //     WindowsDpiManager.EnablePerMonitorV2();
 //
-// from Stride.CommunityToolkit.Windows - see E02_2D_EasingBasics or E09_3D_Particles_Gallery.
+// from the core package (namespace Stride.CommunityToolkit.Engine) - see E02_2D_EasingBasics or E09_3D_Particles_Gallery.
 // The call also works in a file-based app, which has no project file to hold a manifest. Use one
 // route, not both: when a manifest exists Windows refuses the call, and the manifest's setting wins.
 
@@ -78,7 +78,6 @@ concepts:
   - "Wiring the manifest in with <ApplicationManifest>"
   - "The code alternative, WindowsDpiManager.EnablePerMonitorV2(), and why a project uses one route, not both"
   - "Reading the display's scale factor with DisplayScale, and why the overlay follows it by default"
-  - Referencing Stride.CommunityToolkit.Windows for Windows-only concerns
   - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
 tags:
   - 3D

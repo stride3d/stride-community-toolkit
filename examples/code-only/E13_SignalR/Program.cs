@@ -4,7 +4,6 @@ using E13_SignalR.Station;
 using E13_SignalR_Shared;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Scripts.Utilities;
-using Stride.CommunityToolkit.Windows;
 using Stride.Core.Diagnostics;
 using Stride.Core.Mathematics;
 using Stride.Engine;

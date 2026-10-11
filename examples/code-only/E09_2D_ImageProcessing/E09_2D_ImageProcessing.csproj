@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit.Windows\Stride.CommunityToolkit.Windows.csproj" />
+        <ProjectReference Include="..\..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
     </ItemGroup>
 
     <ItemGroup>

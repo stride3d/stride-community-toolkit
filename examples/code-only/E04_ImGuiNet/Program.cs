@@ -6,7 +6,6 @@ using Stride.CommunityToolkit.ImGuiNet;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
-using Stride.CommunityToolkit.Windows;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
