@@ -45,17 +45,18 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Ground = null,
+    Profiler = true
+}.UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Shape Gallery - Stride Community Toolkit";
-
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
 
     // Depth-tested: scene geometry occludes these, so a disc on the floor goes behind a pillar.
     // Overlay: drawn on top of everything, which is what you want for gizmos and debug marks.

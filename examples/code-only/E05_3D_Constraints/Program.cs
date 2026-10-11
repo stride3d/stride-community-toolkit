@@ -54,12 +54,10 @@ collisionMatrix.Set(cubeLayer, cubeLayer, shouldCollide: true);
 using var game = new Game();
 
 // Run the game loop with the Start and Update methods
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Set up profiler and a ground gizmo
-    game.AddProfiler();
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
     SetupCollisionMatrix(scene);
@@ -388,7 +386,6 @@ void ResetTheScene(Scene scene)
 
     InitializeEntities(scene);
 }
-
 
 void InitializeDebugOverlay()
 {

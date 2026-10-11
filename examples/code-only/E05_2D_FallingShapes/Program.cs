@@ -9,12 +9,10 @@ const int ShapeCount = 30;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D().UseBepu(), start: Start);
+game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.AddProfiler();
-
     var otherShape = game.CreatePrimitive(Primitive2D.Rectangle(0.5f, 0.8f), new()
     {
         Material = game.CreateFlatMaterial(Color.Gold),

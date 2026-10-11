@@ -18,7 +18,7 @@ const string TotalShapesLabel = "Total Shapes:";
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
@@ -27,8 +27,6 @@ void Start(Scene scene)
     {
         EnableBackground = true
     });
-
-    game.AddProfiler();
 
     _shapeGenerator = new PrimitiveGenerator(game, scene);
 

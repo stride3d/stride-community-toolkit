@@ -12,14 +12,11 @@ using Stride.Engine;
 using var game = new Game();
 
 // Run the game loop with the Start method
-game.Run(start: Start);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
     // Set up a basic 3D scene with skybox, profiler, and a ground gizmo
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
     // Left mouse picks either sphere up; the servo drags the other one along (GrabberScript, see E05_3D_Grabber).
@@ -91,7 +88,7 @@ concepts:
   - How a constraint component attaches to an entity
   - Reading the result against a ground reference grid
   - Picking a sphere up with GrabberScript and feeling the servo pull the other along
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler"
 tags:
   - 3D
   - Bepu

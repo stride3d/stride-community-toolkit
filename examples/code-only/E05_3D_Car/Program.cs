@@ -60,11 +60,17 @@ var start = new Vector3(0, 1.5f, 0);
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null }.UseBepu().UseSkybox(), start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(),
+    Ground = null,
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.AddProfiler();
     game.Add3DGround(new Vector2(240), new()
     {
         Material = game.CreateMaterial(new Color(95, 105, 100), metalness: 0.3f, glossiness: 0.7f),

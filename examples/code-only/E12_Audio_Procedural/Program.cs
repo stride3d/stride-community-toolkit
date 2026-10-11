@@ -41,20 +41,20 @@ Entity? orb = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 2.5f, -6), rotation: new Vector3(180, -12, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    game.SetCameraPosition(new Vector3(0, 2.5f, -6));
-    game.SetCameraRotation(new Vector3(180, -12, 0));
-
     // Something to look at: the orb swells with the signal level.
     orb = game.CreatePrimitive(Primitive3D.Sphere(), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         Material = game.CreateMaterial(new Color(255, 170, 60)),
         Position = new Vector3(0, 1.5f, 0),
     });
@@ -180,7 +180,7 @@ concepts:
   - Sharing state between the game thread and the audio thread without a lock
   - Buffering and the latency it implies
   - Showing live audio state as a DebugOverlay section
-  - "Using helpers: SetupBase3DScene, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Audio

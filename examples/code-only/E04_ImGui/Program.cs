@@ -8,7 +8,7 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
@@ -17,8 +17,6 @@ void Start(Scene scene)
     {
         EnableBackground = true
     });
-
-    game.AddProfiler();
 
     // Each of these registers itself with the game on construction, so the instance is deliberately
     // not kept: the game owns them from here on.

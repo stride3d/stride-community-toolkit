@@ -49,14 +49,11 @@ WorldLabel[] worldLabels =
     new(new Vector3(0, 1, -2), "Blue Text", 0, 0, 255)
 ];
 
-game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     ConfigureWindow();
-
-    // Camera, directional light and a ground plane
-    game.AddProfiler();
 
     imGuiSystem = game.AddImGuiNet();
 
@@ -88,9 +85,7 @@ void ConfigureWindow()
 }
 
 /// <summary>
-/// Creates the cube the world-space label is attached to. It is kinematic, so it follows a
-/// scripted path without being affected by gravity or collisions, yet still pushes away the
-/// dynamic boxes it runs into.
+/// Creates the cube the world-space label is attached to. It is kinematic, so it follows a scripted path without being affected by gravity or collisions, yet still pushes away the dynamic boxes it runs into.
 /// </summary>
 Entity CreateOrbitingCube(Scene rootScene)
 {
@@ -110,8 +105,7 @@ Entity CreateOrbitingCube(Scene rootScene)
 }
 
 /// <summary>
-/// Builds towers of dynamic boxes spaced evenly around the cube's path, so there is something
-/// visible for it to knock over.
+/// Builds towers of dynamic boxes spaced evenly around the cube's path, so there is something visible for it to knock over.
 /// </summary>
 void CreateObstacleStacks(Scene rootScene)
 {
@@ -131,14 +125,10 @@ void CreateObstacleStacks(Scene rootScene)
 }
 
 /// <summary>
-/// Moves the cube along its circular path by giving the kinematic body a velocity, so Bepu sweeps
-/// it along and it collides on the way. Assigning <c>Transform.Position</c> instead would move
-/// only the mesh: the transform sync runs physics to transform, never the other way round.
+/// Moves the cube along its circular path by giving the kinematic body a velocity, so Bepu sweeps it along and it collides on the way. Assigning <c>Transform.Position</c> instead would move only the mesh: the transform sync runs physics to transform, never the other way round.
 /// </summary>
 /// <remarks>
-/// A velocity, not <c>SetTargetPose</c>: that call assumes exactly one physics step will consume
-/// it, which a per-frame update cannot promise. It belongs in <c>ISimulationUpdate</c>, as in
-/// E02_3D_GiveMeACube_SimulationUpdate.
+/// A velocity, not <c>SetTargetPose</c>: that call assumes exactly one physics step will consume it, which a per-frame update cannot promise. It belongs in <c>ISimulationUpdate</c>, as in E02_3D_GiveMeACube_SimulationUpdate.
 /// </remarks>
 void MoveOrbitingCube()
 {
@@ -195,8 +185,7 @@ void DrawWorldLabels(ImGuiNetSystem imGui, Entity cube)
 }
 
 /// <summary>
-/// Draws the diagnostics block anchored to the bottom-left corner, so it stays put when the
-/// window is resized.
+/// Draws the diagnostics block anchored to the bottom-left corner, so it stays put when the window is resized.
 /// </summary>
 void DrawBottomLeftPanel(ImGuiNetSystem imGui, Scene rootScene)
 {

@@ -54,7 +54,7 @@ game.Run(new SceneSetup3D
     // The sun is aimed by the stations, so it is added by hand below
     Lighting = null,
     Ground = null,
-    Profiler = true,
+    Profiler = true
 }.UseSkybox(), start: Start, update: Update);
 
 // The textures loaded in Start are this example's own: released once the game has ended

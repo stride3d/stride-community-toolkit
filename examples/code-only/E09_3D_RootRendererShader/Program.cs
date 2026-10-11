@@ -6,13 +6,17 @@ using Stride.Rendering;
 
 using var game = new Game();
 
-game.Run(start: Start);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase3D();
-    game.AddProfiler();
-
     AddRenderFeature();
 
     // We must use a component here as it makes sure to add the render processor to the scene.
