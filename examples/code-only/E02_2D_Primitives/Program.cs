@@ -26,12 +26,10 @@ List<Primitive2D> shapes = [
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase2DScene();
-
     foreach (var (index, shape) in shapes.Index())
     {
         var entity = game.CreatePrimitive(shape, new()
@@ -65,7 +63,7 @@ concepts:
   - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
   - Positioning entities with Transform.Position
   - Adding entities to a Scene (rootScene)
-  - "Using helpers: SetupBase2DScene"
+  - "Using helpers: SceneSetup2D"
 tags:
   - 2D
   - Bepu

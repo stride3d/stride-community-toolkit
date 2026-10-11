@@ -8,12 +8,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddProfiler();
 
     // The cube starts on its circle; the script works the centre out from where it starts
@@ -51,7 +49,7 @@ concepts:
   - "Moving a kinematic body with LinearVelocity, not Transform.Position"
   - Why SetTargetPose belongs in ISimulationUpdate and not in a per-frame Update
   - Framerate independence with Game.DeltaTime
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

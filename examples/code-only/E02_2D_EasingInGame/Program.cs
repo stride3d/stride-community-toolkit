@@ -53,14 +53,13 @@ var shakeBase = Vector3.Zero;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Easing in a 2D game - Stride Community Toolkit";
 
-    game.SetupBase2DScene();
     game.AddEntityTextRenderer();
 
     // Closer than the default view, so the lift and the coins fill the window

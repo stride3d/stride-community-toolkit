@@ -178,15 +178,13 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(6, 8, 14), Ground = null }, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
 
     // No ground and no physics: this is a gallery, and the default 2D ground would cut through it
-    game.SetupBase2D(new Color(6, 8, 14));
-    game.Add2DCameraController();
     game.AddWorldTextRenderer();
 
     shapes = game.AddShapeBatch();

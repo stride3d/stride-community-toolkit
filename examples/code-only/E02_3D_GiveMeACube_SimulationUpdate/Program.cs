@@ -26,14 +26,11 @@ const int LooseCubeCount = 8;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
     // Camera, directional light and a ground plane
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     CreateCentreCube(rootScene);
     CreateLooseCubes(rootScene);
     CreateOrbitingCube(rootScene);
@@ -135,7 +132,7 @@ concepts:
   - Using SetTargetPose safely, once per physics step
   - StartupScript as a component with no per-frame Update
   - Moving a kinematic body so it pushes dynamic bodies
-  - "Using helpers: SetupBase3DScene"
+  - "Using helpers: SceneSetup3D"
   - "Using helpers: AddSkybox"
 tags:
   - 3D

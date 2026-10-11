@@ -92,7 +92,7 @@ SimpleHud hud = null!;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
@@ -100,7 +100,6 @@ void Start(Scene rootScene)
     game.Window.Title = "HUD basics - Stride Community Toolkit";
 
     // Something for the HUD to sit over: the scene of E01_2D_FallingShapes
-    game.SetupBase2DScene();
     AddFallingShapes(rootScene);
 
     #region Step1Create

@@ -46,13 +46,11 @@ DebugTextDropdown? spawnMenu = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     scene = rootScene;
-
-    game.SetupBase2DScene();
 
     // The starting column, one of each shape
     foreach (var (index, shape) in shapes.Index())
@@ -140,7 +138,7 @@ concepts:
   - Sharing one on-screen block with the camera help through a DebugOverlay section
   - Spawning entities at runtime from keyboard input
   - Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
-  - "Using helpers: SetupBase2DScene, CreatePrimitive, CreateFlatMaterial"
+  - "Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bepu

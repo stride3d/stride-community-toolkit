@@ -49,15 +49,13 @@ WorldLabel[] worldLabels =
     new(new Vector3(0, 1, -2), "Blue Text", 0, 0, 255)
 ];
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     ConfigureWindow();
 
     // Camera, directional light and a ground plane
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddProfiler();
 
     imGuiSystem = game.AddImGuiNet();
@@ -257,7 +255,7 @@ concepts:
   - Driving a kinematic BodyComponent with LinearVelocity from a per-frame update
   - Why writing Transform.Position does not move a physics body
   - Rebuilding the ImGui font atlas for the window DPI
-  - "Using helpers: AddImGuiNet, SetupBase3DScene, AddProfiler"
+  - "Using helpers: AddImGuiNet, SceneSetup3D, AddProfiler"
 tags:
   - 3D
   - UI

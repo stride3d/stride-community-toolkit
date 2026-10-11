@@ -6,12 +6,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup2D().UseBullet(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase2DScene();
-
     var entity = game.CreatePrimitive(Primitive2D.Capsule(), new()
     {
         Material = game.CreateFlatMaterial(Color.White)
@@ -45,7 +43,7 @@ concepts:
   - Running the base 2D scene on the legacy Bullet physics engine
   - "Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu"
   - Why the scene code needs no change when the physics engine does
-  - "Using helpers: SetupBase2DScene, CreatePrimitive, CreateFlatMaterial"
+  - "Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial"
 tags:
   - 2D
   - Bullet

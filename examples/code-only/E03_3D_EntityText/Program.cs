@@ -21,14 +21,11 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
-
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     // One call, however much text the scene has. Without the renderer, components collect quietly
     // and nothing appears - there is no error for a missing renderer.
@@ -152,6 +149,7 @@ Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextC
 {
     var pole = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 1f), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         EntityName = "Pole",
     });
 

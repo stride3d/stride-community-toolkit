@@ -20,12 +20,10 @@ using Stride.Rendering;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddProfiler();
 
     // The base scene's single directional light shines from behind this gallery, leaving the front

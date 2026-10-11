@@ -51,15 +51,13 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(5, 7, 12), Ground = null }, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Ship HUD";
 
-    game.SetupBase2D(new Color(5, 7, 12));
-    game.Add2DCameraController();
     game.AddWorldTextRenderer();
 
     game.GetCameraEntity().Get<CameraComponent>().OrthographicSize = ViewHeight;

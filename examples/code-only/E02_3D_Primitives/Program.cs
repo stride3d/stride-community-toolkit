@@ -12,12 +12,10 @@ const string EntityName = "PrimitiveModelGroup";
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddProfiler();
 
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
@@ -131,7 +129,7 @@ concepts:
   - Tagging entities with a name so the scene can be torn down and rebuilt
   - Inspecting generated colliders with CollidableGizmoScript
   - Adding keyboard instructions as a DebugOverlay section
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

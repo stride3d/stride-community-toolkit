@@ -8,20 +8,16 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    // Setup the base 3D scene with default lighting, camera, etc.
-    game.SetupBase3DScene();
-
     // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
         EnableBackground = true
     });
 
-    game.AddSkybox();
     game.AddProfiler();
 
     // Each of these registers itself with the game on construction, so the instance is deliberately

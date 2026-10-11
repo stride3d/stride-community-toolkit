@@ -11,29 +11,17 @@ using var game = new Game();
 // State flag to track health bar visibility
 bool isHealthBarVisible = false;
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    SetupBase3DScene();
+    game.AddSceneRenderer(new MyraSceneRenderer());
 }
 
 void Update(Scene rootScene, GameTime time)
 {
     InitializeHealthBar();
 }
-
-void SetupBase3DScene()
-{
-    game.AddGraphicsCompositor()
-        .AddCleanUIStage() //optional
-        .AddSceneRenderer(new MyraSceneRenderer());
-    game.Add3DCamera().Add3DCameraController();
-    game.AddDirectionalLight();
-    game.AddSkybox();
-    game.Add3DGround();
-}
-
 
 // Initializes the health bar if it is not already visible.
 void InitializeHealthBar()

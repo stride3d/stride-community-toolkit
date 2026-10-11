@@ -30,11 +30,10 @@ float skyBoxLightIntensity = 0;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
     game.AddEntityTextRenderer();
     var skyboxEntity = game.AddSkybox();
 
@@ -175,7 +174,7 @@ concepts:
   - Why the microfacet model's environment term matters in a code-only game
   - Labelling entities with screen-space EntityTextComponent
   - Adjusting the skybox light at runtime from keyboard input
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddEntityTextRenderer, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddEntityTextRenderer, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Rendering

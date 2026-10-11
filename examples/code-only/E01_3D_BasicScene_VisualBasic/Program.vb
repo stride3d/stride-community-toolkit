@@ -10,12 +10,12 @@ Module Program
     Private ReadOnly game As New Game()
 
     Sub Main()
-        GameExtensions.Run(game, AddressOf StartGame)
+        Dim setup = New SceneSetup3D().UseBepu().UseSkybox()
+
+        GameExtensions.Run(game, setup, AddressOf StartGame)
     End Sub
 
     Private Sub StartGame(rootScene As Scene)
-        game.SetupBase3DScene()
-        game.AddSkybox()
         game.AddProfiler()
 
         Dim entity = game.CreatePrimitive(Primitive3D.Capsule(), New Bepu3DPhysicsOptions())
@@ -41,7 +41,7 @@ End Module
 '   - "Hosting the app in a Module with a Sub Main"
 '   - "Calling an extension method as a static: GameExtensions.Run(game, ...)"
 '   - "Passing a callback with AddressOf"
-'   - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
+'   - "Using helpers: SceneSetup3D, UseBepu, UseSkybox, AddProfiler, CreatePrimitive"
 ' tags:
 '   - 3D
 '   - Visual Basic

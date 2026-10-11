@@ -18,14 +18,11 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
-
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     // One call, however much text the scene has. Without the renderer, world text simply never
     // appears - there is no error for a missing renderer.
@@ -89,6 +86,7 @@ void Start(Scene scene)
     // around it, while DepthTest = false text shows through everything
     var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 2f, 0.2f)), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         EntityName = "Wall",
     });
 

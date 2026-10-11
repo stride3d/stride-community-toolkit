@@ -7,13 +7,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBullet().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
@@ -38,7 +35,7 @@ concepts:
   - Running the base 3D scene on the legacy Bullet physics engine
   - "Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu"
   - Why the scene code needs no change when the physics engine does
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bullet
