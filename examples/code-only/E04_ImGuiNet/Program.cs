@@ -96,7 +96,7 @@ void ConfigureWindow()
 /// </summary>
 Entity CreateOrbitingCube(Scene rootScene)
 {
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
     {
         Component = new BodyComponent
         {
@@ -125,7 +125,7 @@ void CreateObstacleStacks(Scene rootScene)
 
         for (var level = 0; level < BoxesPerStack; level++)
         {
-            var box = game.Create3DPrimitive(PrimitiveModelType.Cube);
+            var box = game.CreatePrimitive(Primitive3D.Cube());
             box.Transform.Position = new Vector3(x, BoxSize * (0.5f + level), z);
             box.Scene = rootScene;
         }

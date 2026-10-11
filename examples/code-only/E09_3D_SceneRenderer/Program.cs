@@ -44,7 +44,7 @@ void Start(Scene scene)
     game.AddSceneRenderer(new EntityTextRenderer());
 
     // Creates a 3D primitive (a cube) and sets its position in the scene
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube);
+    var cube = game.CreatePrimitive(Primitive3D.Cube());
     cube.Transform.Position = new Vector3(0, 0.5f, 0);
 
     // Example 2: Adds an EntityTextComponent to the cube entity, which renders text
@@ -58,7 +58,7 @@ void Start(Scene scene)
     cube.Scene = scene;
 
     // Creates a 3D primitive (a capsule) and sets its position in the scene
-    var capsule = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var capsule = game.CreatePrimitive(Primitive3D.Capsule());
     capsule.Transform.Position = new Vector3(0, 8, 0);
 
     // Let's tilt the capsule a bit which should cause it to move after it falls
@@ -90,7 +90,7 @@ void Update(Scene scene, GameTime time)
 
     if (impulseApplied) return;
 
-    // Let's add some momentum so it rolls after it falls, the rigid body is already added by Create3DPrimitive
+    // Let's add some momentum so it rolls after it falls, the rigid body is already added by CreatePrimitive
 
     body.ApplyAngularImpulse(new(0, 10, 0));
 
@@ -121,7 +121,7 @@ concepts:
   - Deciding between a scene-wide and an entity-scoped renderer
   - "Labelling entities with the toolkit's EntityTextComponent and EntityTextRenderer"
   - Initialising and releasing renderer resources at the right time
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Rendering

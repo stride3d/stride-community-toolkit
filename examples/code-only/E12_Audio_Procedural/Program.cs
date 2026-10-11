@@ -53,7 +53,7 @@ void Start(Scene scene)
     game.SetCameraRotation(new Vector3(180, -12, 0));
 
     // Something to look at: the orb swells with the signal level.
-    orb = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
+    orb = game.CreatePrimitive(Primitive3D.Sphere(), new Primitive3DEntityOptions
     {
         Material = game.CreateMaterial(new Color(255, 170, 60)),
         Position = new Vector3(0, 1.5f, 0),
@@ -180,7 +180,7 @@ concepts:
   - Sharing state between the game thread and the audio thread without a lock
   - Buffering and the latency it implies
   - Showing live audio state as a DebugOverlay section
-  - "Using helpers: SetupBase3DScene, Create3DPrimitive, CreateMaterial"
+  - "Using helpers: SetupBase3DScene, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Audio

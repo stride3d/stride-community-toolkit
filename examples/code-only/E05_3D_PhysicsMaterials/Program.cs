@@ -159,9 +159,8 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
     if (lane.Pad is { } pad)
     {
         // The pad carries the lane's spring, and the ball keeps the defaults
-        var padEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+        var padEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, PadHeight, 1.4f)), new Bepu3DPhysicsOptions
         {
-            Size = new Vector3(1.4f, PadHeight, 1.4f),
             Material = game.CreateMaterial(lane.Colour, metalness: 0f, glossiness: 0.3f),
             Component = new StaticComponent
             {
@@ -179,9 +178,8 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
     }
 
     // A sphere's size is its radius in X
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Bepu3DPhysicsOptions
+    var entity = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
     {
-        Size = new Vector3(BallRadius, 0f, 0f),
         Material = game.CreateMaterial(lane.Pad is null ? lane.Colour : new Color(225, 225, 230), metalness: 0f, glossiness: 0.6f),
         Component = new BodyComponent
         {
@@ -208,9 +206,8 @@ void BuildBounceLane(Scene scene, BounceLane lane, float x)
 /// <summary>One lane with its own friction, and a box at its left end.</summary>
 void BuildFrictionLane(Scene scene, FrictionLane lane, float z)
 {
-    var laneEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+    var laneEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(LaneLength, LaneThickness, LaneWidth)), new Bepu3DPhysicsOptions
     {
-        Size = new Vector3(LaneLength, LaneThickness, LaneWidth),
         Material = game.CreateMaterial(lane.Colour, metalness: 0f, glossiness: lane.Lane == 0f ? 0.9f : 0.2f),
         Component = new StaticComponent { Collider = new CompoundCollider(), FrictionCoefficient = lane.Lane },
     });
@@ -218,9 +215,8 @@ void BuildFrictionLane(Scene scene, FrictionLane lane, float z)
     laneEntity.Transform.Position = new Vector3(0f, LaneThickness * 0.5f, z);
     laneEntity.Scene = scene;
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+    var entity = game.CreatePrimitive(Primitive3D.Cube(BoxSize), new Bepu3DPhysicsOptions
     {
-        Size = new Vector3(BoxSize),
         Material = game.CreateMaterial(lane.Box == 1f ? new Color(235, 235, 240) : new Color(230, 90, 70), metalness: 0f, glossiness: 0.4f),
         Component = new BodyComponent
         {
@@ -245,9 +241,8 @@ void BuildEndWall(Scene scene)
 {
     var depth = (frictionLanes.Length - 1) * LaneSpacing + LaneWidth;
 
-    var wall = game.Create3DPrimitive(PrimitiveModelType.Cube, new Bepu3DPhysicsOptions
+    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.3f, 0.8f, depth)), new Bepu3DPhysicsOptions
     {
-        Size = new Vector3(0.3f, 0.8f, depth),
         Material = game.CreateMaterial(new Color(150, 150, 158), metalness: 0f, glossiness: 0.3f),
         Component = new StaticComponent { Collider = new CompoundCollider() },
     });
@@ -406,7 +401,7 @@ concepts:
   - Setting the four numbers on a BodyComponent and on a StaticComponent
   - Replaying a scene - Teleport, then Awake, then the velocities
   - Measuring a rebound from a body's LinearVelocity, which cannot miss a short contact
-  - "Using helpers: SetupBase3DScene, Create3DPrimitive, AddEntityTextRenderer, DebugOverlay"
+  - "Using helpers: SetupBase3DScene, CreatePrimitive, AddEntityTextRenderer, DebugOverlay"
 tags:
   - 3D
   - Physics

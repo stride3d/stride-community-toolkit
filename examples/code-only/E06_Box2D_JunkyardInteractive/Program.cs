@@ -271,13 +271,13 @@ void AttachCollider(ShapeDefinition definition, B2BodyId bodyId, B2ShapeDef shap
     if (definition.Vertices.Length == 1)
     {
         // A circle: the rounding radius is the whole shape
-        ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Circle, new Vector2(definition.Radius, definition.Radius), bodyId, shapeDef);
+        ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(definition.Radius), bodyId, shapeDef);
     }
     else if (definition.Vertices.Length == 2)
     {
         // A capsule: two segment endpoints plus the radius; total height = segment + both caps
         var halfSegment = MathF.Abs(definition.Vertices[1].Y - definition.Vertices[0].Y) * 0.5f;
-        ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Capsule, new Vector2(definition.Radius, 2f * (halfSegment + definition.Radius)), bodyId, shapeDef);
+        ShapeFixtureBuilder.AttachShape(Primitive2D.Capsule(definition.Radius, 2f * (halfSegment + definition.Radius)), bodyId, shapeDef);
     }
     else
     {

@@ -23,13 +23,13 @@ const string ShapeName = "Shape";
 var theme = ColorThemes.Default;
 
 // The same five colours as the 2D and 3D twins of the first examples, from Example.Common
-(PrimitiveModelType Type, Color Colour)[] shapes =
+(Primitive3D Type, Color Colour)[] shapes =
 [
-    (PrimitiveModelType.Cube, theme.Blue),
-    (PrimitiveModelType.RectangularPrism, theme.Orange),
-    (PrimitiveModelType.Sphere, theme.Red),
-    (PrimitiveModelType.Capsule, theme.Green),
-    (PrimitiveModelType.TriangularPrism, theme.Purple),
+    (Primitive3D.Cube(), theme.Blue),
+    (Primitive3D.Box(new(0.2f, 1, 1)), theme.Orange),
+    (Primitive3D.Sphere(), theme.Red),
+    (Primitive3D.Capsule(), theme.Green),
+    (Primitive3D.TriangularPrism(Vector3.One), theme.Purple),
 ];
 
 var created = 0;
@@ -46,6 +46,7 @@ void Start(Scene scene)
     game.SetupBase3DScene();
     game.AddSkybox();
     game.AddProfiler();
+    game.AddGrabber();
 
     // G steps the grid through off, world and screen. On the command line, "--screen" starts it
     // in screen space and "--no-cursor" leaves out the coordinates under the mouse
@@ -86,7 +87,7 @@ void AddShapes(Scene scene, int count)
     {
         var (type, colour) = shapes[created % shapes.Length];
 
-        var entity = game.Create3DPrimitive(type, new() { Material = game.CreateMaterial(colour) });
+        var entity = game.CreatePrimitive(type, new() { Material = game.CreateMaterial(colour) });
 
         entity.Name = ShapeName;
         entity.Transform.Position = new Vector3(created * 7 % 11 - 5, 6 + created % 10 * 1.5f, created * 3 % 7 - 3);

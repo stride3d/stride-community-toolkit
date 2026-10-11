@@ -139,7 +139,7 @@ void BuildBridge(Scene scene, B2BodyId ground1, B2BodyId ground2)
 
         var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
         b2Body_SetAngularDamping(body, 0.2f);
-        ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Rectangle, new Vector2(1f, 0.25f), body);
+        ShapeFixtureBuilder.AttachShape(Primitive2D.Rectangle(1f, 0.25f), body);
         entity.Add(new Box2DBodyComponent { BodyId = body });
 
         simulation.Joints.CreateRevolute(previous, body, new Vector2(BridgeStart + i, BridgeHeight), options);
@@ -177,7 +177,7 @@ void BuildBall(Scene scene)
     // Bouncy, with a little rolling resistance so it settles.
     def.material.restitution = 0.7f;
     def.material.rollingResistance = 0.2f;
-    ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Circle, new Vector2(0.3f, 0.3f), ballBody, def);
+    ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(0.3f), ballBody, def);
     entity.Add(new Box2DBodyComponent { BodyId = ballBody });
 }
 

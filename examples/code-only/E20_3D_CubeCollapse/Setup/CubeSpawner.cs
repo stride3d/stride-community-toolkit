@@ -96,11 +96,10 @@ public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState level
     {
         var colour = _colours[_random.Next(0, _colours.Count)];
 
-        var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions()
+        var cube = game.CreatePrimitive(Primitive3D.Box(GameSettings.CubeSize), new Primitive3DEntityOptions()
         {
             EntityName = EntityNames.Cube,
             Material = _materials?[colour],
-            Size = GameSettings.CubeSize
         });
 
         cube.Add(new CubeComponent(colour));

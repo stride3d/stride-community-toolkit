@@ -82,13 +82,13 @@ void EnableInstancing()
 /// Creates one cube entity and returns its <see cref="Model"/>, so both walls can share it.
 /// </summary>
 /// <remarks>
-/// Sharing matters for a fair comparison. Calling Create3DPrimitive per cube would also generate a
+/// Sharing matters for a fair comparison. Calling CreatePrimitive per cube would also generate a
 /// separate vertex and index buffer per cube, so the slow side would be losing on memory as well as
 /// on draw calls, and the measurement would not be about instancing any more.
 /// </remarks>
 Model CreateSharedCubeModel(Scene rootScene, Color color)
 {
-    var prototype = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions()
+    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions()
     {
         Material = game.CreateMaterial(color)
     });

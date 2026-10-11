@@ -49,7 +49,7 @@ void CreateEntityWithGroup(string name, Color color, Vector3 position, Scene sce
 
 Entity CreateEntity(string name, Color color, Vector3 position)
 {
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
@@ -79,7 +79,7 @@ concepts:
   - "How the IndexA difference rule decides whether two bodies collide"
   - Choosing index values so one entity phases through others
   - When an arithmetic rule beats a full collision matrix
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateMaterial"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

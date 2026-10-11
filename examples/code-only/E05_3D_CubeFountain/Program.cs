@@ -40,13 +40,12 @@ const float NozzleHeight = 1.4f;
 const float BasinHalfSize = 5f;
 const float ThrowSpeed = 22f;
 
-// What the fountain can launch. Size means what Create3DPrimitive takes for the shape: a cube's
-// three sides, a sphere's radius in X, a cylinder's radius in X and height in Z
-(string Name, PrimitiveModelType Type, Vector3 Size, Color Colour)[] shapes =
+// What the fountain can launch, each shape with its dimensions
+(string Name, Primitive3D Type, Color Colour)[] shapes =
 [
-    ("Cube", PrimitiveModelType.Cube, new Vector3(0.35f), new Color(70, 160, 235)),
-    ("Sphere", PrimitiveModelType.Sphere, new Vector3(0.2f, 0f, 0f), new Color(240, 150, 60)),
-    ("Cylinder", PrimitiveModelType.Cylinder, new Vector3(0.18f, 0f, 0.36f), new Color(110, 200, 110)),
+    ("Cube", Primitive3D.Cube(0.35f), new Color(70, 160, 235)),
+    ("Sphere", Primitive3D.Sphere(0.2f), new Color(240, 150, 60)),
+    ("Cylinder", Primitive3D.Cylinder(0.18f, 0.36f), new Color(110, 200, 110)),
 ];
 
 // The simulation speeds + and - step through, from paused to five times as fast
@@ -85,9 +84,8 @@ void Start(Scene scene)
     for (var i = 0; i < shapes.Length; i++)
     {
         // The model, owned by a prototype parked out of sight
-        var prototype = game.Create3DPrimitive(shapes[i].Type, new Primitive3DEntityOptions
+        var prototype = game.CreatePrimitive(shapes[i].Type, new Primitive3DEntityOptions
         {
-            Size = shapes[i].Size,
             Material = game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f),
         });
 
@@ -210,14 +208,12 @@ InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolat
 /// </summary>
 Entity CreateBody(Scene scene, int kind, Vector3 position)
 {
-    // AddBepu3DPhysics derives the collider from the primitive type and size; it needs a model
+    // AddBepu3DPhysics derives the collider from the shape; it needs a model
     // component to be present, which is then taken off again
     var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
 
     body.AddBepu3DPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
     {
-        Size = shapes[kind].Size,
-
         // A body is not interpolated unless asked: by default it is moved on physics steps only
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = Interpolation() },
     });
@@ -245,26 +241,24 @@ void BuildBasin(Scene scene)
 {
     var stone = game.CreateMaterial(new Color(150, 150, 158), metalness: 0f, glossiness: 0.3f);
 
-    // A cylinder's size is its radius in X and its height in Z
-    Static(PrimitiveModelType.Cylinder, new Vector3(0.3f, 0f, NozzleHeight), new Vector3(0f, NozzleHeight * 0.5f, 0f));
+    Static(Primitive3D.Cylinder(0.3f, NozzleHeight), new Vector3(0f, NozzleHeight * 0.5f, 0f));
 
     const float WallHeight = 0.8f;
     const float WallThickness = 0.3f;
 
     var length = BasinHalfSize * 2f + WallThickness;
 
-    Static(PrimitiveModelType.Cube, new Vector3(length, WallHeight, WallThickness), new Vector3(0f, WallHeight * 0.5f, BasinHalfSize));
-    Static(PrimitiveModelType.Cube, new Vector3(length, WallHeight, WallThickness), new Vector3(0f, WallHeight * 0.5f, -BasinHalfSize));
-    Static(PrimitiveModelType.Cube, new Vector3(WallThickness, WallHeight, length), new Vector3(BasinHalfSize, WallHeight * 0.5f, 0f));
-    Static(PrimitiveModelType.Cube, new Vector3(WallThickness, WallHeight, length), new Vector3(-BasinHalfSize, WallHeight * 0.5f, 0f));
+    Static(Primitive3D.Box(new Vector3(length, WallHeight, WallThickness)), new Vector3(0f, WallHeight * 0.5f, BasinHalfSize));
+    Static(Primitive3D.Box(new Vector3(length, WallHeight, WallThickness)), new Vector3(0f, WallHeight * 0.5f, -BasinHalfSize));
+    Static(Primitive3D.Box(new Vector3(WallThickness, WallHeight, length)), new Vector3(BasinHalfSize, WallHeight * 0.5f, 0f));
+    Static(Primitive3D.Box(new Vector3(WallThickness, WallHeight, length)), new Vector3(-BasinHalfSize, WallHeight * 0.5f, 0f));
 
-    void Static(PrimitiveModelType type, Vector3 size, Vector3 position)
+    void Static(Primitive3D shape, Vector3 position)
     {
-        // An empty compound collider: Create3DPrimitive adds the shape that fits the primitive and
-        // its size. A shape given here as well would be a second one, at its default size
-        var entity = game.Create3DPrimitive(type, new Bepu3DPhysicsOptions
+        // An empty compound collider: CreatePrimitive adds the collider that fits the shape. A
+        // collider given here as well would be a second one, at its default size
+        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
         {
-            Size = size,
             Material = stone,
             Component = new StaticComponent { Collider = new CompoundCollider() },
         });

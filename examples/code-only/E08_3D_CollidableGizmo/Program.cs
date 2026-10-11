@@ -17,7 +17,7 @@ void Start(Scene rootScene)
     game.AddSkybox();
     game.AddProfiler();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         IncludeCollider = false
     });
@@ -38,7 +38,7 @@ void CreateCubes(Scene rootScene, int count)
 
     for (int i = -half; i < half; i++)
     {
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new() { EntityName = CubeEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Cube(), new() { EntityName = CubeEntityName });
         entity.Transform.Position = new Vector3(i * 0.99f, 1, 0);
         entity.Scene = rootScene;
     }
@@ -63,7 +63,7 @@ concepts:
   - "Suppressing the generated collider with IncludeCollider = false"
   - Showing or hiding the gizmo with its Visible property
   - Diagnosing a body that does not collide as expected
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

@@ -2,7 +2,6 @@ using Box2D.NET;
 using Example.Common;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Joints;
@@ -36,20 +35,16 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
         => ShapeFixtureBuilder.CreateCustomShapeDef(GameConfig.DefaultDensity, GameConfig.DefaultFriction, GameConfig.DefaultRestitution);
 
     /// <summary>
-    /// Spawns <paramref name="count"/> shapes of one type at the factory's default positions.
+    /// Spawns <paramref name="count"/> copies of one of the factory's models at its default positions.
     /// </summary>
-    /// <param name="type">The primitive to spawn.</param>
+    /// <param name="model">The model to spawn, one of the <see cref="ShapeFactory"/> properties.</param>
     /// <param name="count">How many to spawn.</param>
-    /// <param name="color">An override colour, or <see langword="null"/> for the factory's own.</param>
-    public void Add(Primitive2DModelType type, int count, Color? color = null)
+    /// <param name="color">An override colour, or <see langword="null"/> for the model's own.</param>
+    public void Add(Shape2DModel model, int count, Color? color = null)
     {
         for (var i = 0; i < count; i++)
         {
-            var shapeModel = shapeFactory.GetShapeModel(type);
-
-            if (shapeModel is null) continue;
-
-            AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, color));
+            AttachBody(model, shapeFactory.CreateEntity(model, color));
         }
     }
 
@@ -62,8 +57,6 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
         for (var i = 0; i < count; i++)
         {
             var shapeModel = shapeFactory.GetRandomShapeModel();
-
-            if (shapeModel is null) continue;
 
             AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, overrideColor: GameConfig.ShapeColor));
         }
@@ -85,16 +78,14 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     /// Spawns one shape at a world position, for example where the mouse was clicked.
     /// </summary>
     /// <param name="position">The world position to spawn at.</param>
-    /// <returns>The type that was spawned, or <see langword="null"/> if the factory had none to give.</returns>
-    public Primitive2DModelType? AddAtPosition(Vector2 position)
+    /// <returns>The model that was spawned.</returns>
+    public Shape2DModel AddAtPosition(Vector2 position)
     {
         var shapeModel = shapeFactory.GetRandomShapeModel();
 
-        if (shapeModel is null) return null;
-
         AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position));
 
-        return shapeModel.Type;
+        return shapeModel;
     }
 
     /// <summary>
@@ -119,7 +110,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     {
         var bodyId = simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-        ShapeFixtureBuilder.AttachShape(shapeModel.Type, shapeModel.Size, bodyId, DefaultShapeDef());
+        ShapeFixtureBuilder.AttachShape(shapeModel.Type, bodyId, DefaultShapeDef());
 
         TotalCreated++;
 
@@ -130,8 +121,6 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     {
         var shapeModel1 = shapeFactory.GetRandomShapeModel();
         var shapeModel2 = shapeFactory.GetRandomShapeModel();
-
-        if (shapeModel1 is null || shapeModel2 is null) return;
 
         var entity1 = shapeFactory.CreateEntity(shapeModel1, GameConfig.ConstraintColor);
         var entity2 = shapeFactory.CreateEntity(shapeModel2, GameConfig.ConstraintColor);

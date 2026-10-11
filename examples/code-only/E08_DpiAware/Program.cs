@@ -30,7 +30,7 @@ game.Run(start: (Scene rootScene) =>
     game.SetupBase3DScene();
     game.AddSkybox();
 
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -78,7 +78,7 @@ concepts:
   - "Wiring the manifest in with <ApplicationManifest>"
   - "The code alternative, WindowsDpiManager.EnablePerMonitorV2(), and why a project uses one route, not both"
   - "Reading the display's scale factor with DisplayScale, and why the overlay follows it by default"
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Windows

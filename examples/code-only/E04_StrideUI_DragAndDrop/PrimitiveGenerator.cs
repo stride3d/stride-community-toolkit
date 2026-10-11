@@ -37,7 +37,7 @@ public class PrimitiveGenerator
     /// </summary>
     /// <param name="count">The number of primitives to generate.</param>
     /// <returns>The updated total number of primitives generated.</returns>
-    public int Generate(int count, PrimitiveModelType type)
+    public int Generate(int count, Primitive3D type)
     {
         for (int i = 0; i < count; i++)
         {
@@ -50,18 +50,17 @@ public class PrimitiveGenerator
     }
 
     /// <summary>
-    /// Generates a 3D primitive (cube by default) in the scene, with optional type and color.
+    /// Generates a 3D primitive (a cube 0.3 units across by default) in the scene, with optional shape and color.
     /// </summary>
-    /// <param name="modelType">The type of the 3D primitive to generate (default: Cube).</param>
-    /// <param name="color">The color of the cube (default: random color).</param>
-    public void Generate(PrimitiveModelType modelType = PrimitiveModelType.Cube, Color? color = null)
+    /// <param name="shape">The shape to generate, with its dimensions (default: a cube 0.3 units across).</param>
+    /// <param name="color">The color of the shape (default: random color).</param>
+    public void Generate(Primitive3D? shape = null, Color? color = null)
     {
         var selectedColor = color ?? _random.NextColor();
 
-        var entity = _game.Create3DPrimitive(modelType, new Bepu3DPhysicsOptions
+        var entity = _game.CreatePrimitive(shape ?? Primitive3D.Cube(0.3f), new Bepu3DPhysicsOptions
         {
             Material = _game.CreateMaterial(selectedColor),
-            Size = new Vector3(0.3f)
         });
 
         ConfigureTransform(entity);

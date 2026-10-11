@@ -32,7 +32,7 @@ void Start(Scene rootScene)
 }
 
 static Entity CreateSphereEntity(Game game)
-    => game.Create3DPrimitive(PrimitiveModelType.Sphere);
+    => game.CreatePrimitive(Primitive3D.Sphere());
 
 static Entity CreateLineEntity(Game game)
 {
@@ -84,7 +84,7 @@ concepts:
   - Wrapping a MeshDraw in a Mesh, Model and ModelComponent
   - Making a line visible with an emissive material
   - Parenting an entity so it follows another
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, GizmoEmissiveColorMaterial.Create"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create"
 tags:
   - 3D
   - Geometry

@@ -48,7 +48,7 @@ void Start(Scene scene)
     ]);
 
     // Create a sphere entity and position it above the ground
-    sphereEntity = game.Create3DPrimitive(PrimitiveModelType.Sphere);
+    sphereEntity = game.CreatePrimitive(Primitive3D.Sphere());
     sphereEntity.Transform.Position = new Vector3(0, 8, 0);
 
     // Retrieve the physics body component attached to the sphere
@@ -213,7 +213,7 @@ concepts:
   - Applying an impulse towards a point
   - Stopping a body by zeroing its velocity
   - Drawing the impulse direction as a line from the sphere to the hit point
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bepu

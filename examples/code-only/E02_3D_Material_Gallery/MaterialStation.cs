@@ -76,17 +76,15 @@ public sealed class MaterialStation : GalleryStation
     /// Places a primitive with a material in station coordinates, turned to face the ring's centre
     /// like everything on a station.
     /// </summary>
-    /// <param name="type">Which primitive.</param>
+    /// <param name="shape">Which primitive, with its dimensions.</param>
     /// <param name="material">Its material.</param>
     /// <param name="local">Where, in station coordinates.</param>
-    /// <param name="size">The primitive's size, or its default.</param>
-    public Entity Place(PrimitiveModelType type, Material material, Vector3 local, Vector3? size = null)
+    public Entity Place(Primitive3D shape, Material material, Vector3 local)
     {
-        var entity = Game.Create3DPrimitive(type, new Primitive3DEntityOptions
+        var entity = Game.CreatePrimitive(shape, new Primitive3DEntityOptions
         {
-            EntityName = $"Station {Number} {type}",
+            EntityName = $"Station {Number} {shape.Name}",
             Material = material,
-            Size = size,
             Position = At(local),
         });
 
@@ -129,9 +127,9 @@ public sealed class MaterialStation : GalleryStation
     /// <summary>The trio with a material each.</summary>
     public void PlaceTrio(Material sphere, Material cube, Material teapot)
     {
-        Place(PrimitiveModelType.Sphere, sphere, SphereSpot, new Vector3(SphereRadius));
-        Place(PrimitiveModelType.Cube, cube, CubeSpot, new Vector3(1.8f));
-        Place(PrimitiveModelType.Teapot, teapot, TeapotSpot, new Vector3(2.4f));
+        Place(Primitive3D.Sphere(SphereRadius), sphere, SphereSpot);
+        Place(Primitive3D.Cube(1.8f), cube, CubeSpot);
+        Place(Primitive3D.Teapot(2.4f), teapot, TeapotSpot);
     }
 
     /// <summary>A row of spheres across the station, one material each - the shape of a sweep.</summary>
@@ -144,7 +142,7 @@ public sealed class MaterialStation : GalleryStation
 
         for (var i = 0; i < materials.Count; i++)
         {
-            Place(PrimitiveModelType.Sphere, materials[i], new Vector3(left + i * spacing, RowRadius, depth), new Vector3(RowRadius));
+            Place(Primitive3D.Sphere(RowRadius), materials[i], new Vector3(left + i * spacing, RowRadius, depth));
         }
     }
 }

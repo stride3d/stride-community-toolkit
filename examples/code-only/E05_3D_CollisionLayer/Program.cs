@@ -77,7 +77,7 @@ void CreateEntityWithLayer(string name, Color color, Vector3 position, Scene sce
 
 Entity CreateEntity(string name, Color color, Vector3 position)
 {
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new()
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
@@ -108,7 +108,7 @@ concepts:
   - Filling in the collision matrix pair by pair
   - Letting one entity phase through another while both keep colliding with the ground
   - When to prefer a layer matrix over an index rule
-  - "Using helpers: SetupBase3DScene, AddSkybox, Create3DPrimitive, CreateMaterial"
+  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

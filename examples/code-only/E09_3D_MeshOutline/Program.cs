@@ -30,28 +30,28 @@ void Start(Scene rootScene)
     // From here on, any entity carrying a MeshOutlineComponent gets an outline
     game.AddRootRenderFeature(new MeshOutlineRenderFeature { Thickness = OutlineThickness });
 
-    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Sphere, Color.Cyan, new Vector3(2f, 0.5f, -2f));
-    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Capsule, Color.Yellow, new Vector3(-1f, 0.5f, -2f));
-    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Sphere, Color.Red, new Vector3(-1f, 0.5f, 4f));
-    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Capsule, Color.Green, new Vector3(2f, 0.5f, 1f));
-    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Sphere, Color.Magenta, new Vector3(-1f, 0.5f, 1f));
+    CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Cyan, new Vector3(2f, 0.5f, -2f));
+    CreateOutlinedPrimitive(rootScene, Primitive3D.Capsule(), Color.Yellow, new Vector3(-1f, 0.5f, -2f));
+    CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Red, new Vector3(-1f, 0.5f, 4f));
+    CreateOutlinedPrimitive(rootScene, Primitive3D.Capsule(), Color.Green, new Vector3(2f, 0.5f, 1f));
+    CreateOutlinedPrimitive(rootScene, Primitive3D.Sphere(), Color.Magenta, new Vector3(-1f, 0.5f, 1f));
     // Cube has hard per-face normals (duplicated vertices at each edge), so inflating along the
     // normal pushes adjacent faces apart instead of outward as one shell - expect visible gaps/
     // seams at the cube's edges and corners, unlike the smooth outline on curved primitives like
     // Sphere/Capsule.
-    CreateOutlinedPrimitive(rootScene, PrimitiveModelType.Cube, Color.Orange, new Vector3(2f, 0.5f, 4f));
+    CreateOutlinedPrimitive(rootScene, Primitive3D.Cube(), Color.Orange, new Vector3(2f, 0.5f, 4f));
 }
 
 /// <summary>
 /// Creates a 3D primitive, gives it an outline, and adds it to the scene.
 /// </summary>
 /// <param name="rootScene">The scene to which the entity will be added.</param>
-/// <param name="modelType">The type of primitive model to create (e.g., Sphere, Capsule).</param>
+/// <param name="modelType">The shape to create, such as <c>Primitive3D.Sphere()</c>.</param>
 /// <param name="color">The color of the outline effect.</param>
 /// <param name="position">The position of the entity in the scene.</param>
-void CreateOutlinedPrimitive(Scene rootScene, PrimitiveModelType modelType, Color4 color, Vector3 position)
+void CreateOutlinedPrimitive(Scene rootScene, Primitive3D modelType, Color4 color, Vector3 position)
 {
-    var entity = game.Create3DPrimitive(modelType);
+    var entity = game.CreatePrimitive(modelType);
 
     entity.Transform.Position = position;
 

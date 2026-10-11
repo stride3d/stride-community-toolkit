@@ -65,11 +65,10 @@ void Start(Scene scene)
     var leftPaddle = Rectangle("Left paddle", Court.PaddleSize, new Vector3(-Court.PaddleX, 0f, 0f), material);
     var rightPaddle = Rectangle("Right paddle", Court.PaddleSize, new Vector3(Court.PaddleX, 0f, 0f), material);
 
-    var ballEntity = game.Create2DPrimitive(Primitive2DModelType.Circle, new Primitive2DEntityOptions
+    var ballEntity = game.CreatePrimitive(Primitive2D.Circle(Court.BallSize * 0.5f), new Primitive2DEntityOptions
     {
         EntityName = "Ball",
         Material = material,
-        Size = new Vector2(Court.BallSize * 0.5f),
     });
 
     ballEntity.Scene = scene;
@@ -114,11 +113,10 @@ void Start(Scene scene)
 
     Entity Rectangle(string name, Vector2 size, Vector3 position, Material fill)
     {
-        var entity = game.Create2DPrimitive(Primitive2DModelType.Rectangle, new Primitive2DEntityOptions
+        var entity = game.CreatePrimitive(Primitive2D.Rectangle(size.X, size.Y), new Primitive2DEntityOptions
         {
             EntityName = name,
             Material = fill,
-            Size = size,
         });
 
         entity.Transform.Position = position;

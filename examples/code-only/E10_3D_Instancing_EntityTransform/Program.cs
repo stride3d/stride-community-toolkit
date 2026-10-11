@@ -46,7 +46,7 @@ using Stride.Rendering;
 // The shape every body uses. Change this one line to drop something else: spheres roll, cones tip
 // over, and Cone, Teapot, Torus and TriangularPrism come out as convex hulls, which are far more
 // expensive to simulate than a box or a sphere. Everything below is shape-agnostic.
-var modelType = PrimitiveModelType.Cube;
+var modelType = Primitive3D.Cube();
 
 const int ItemsPerDrop = 200;
 const float ItemScale = 0.5f;
@@ -55,7 +55,7 @@ const float DropSpread = 4f;
 
 // Size means something different for every primitive - extents for a cube, a radius for a sphere,
 // radius and height for a cone - so the one scale above is mapped per shape
-var modelSize = SizeFor(modelType);
+var modelShape = Scaled(modelType);
 
 var random = new Random(1);
 
@@ -86,7 +86,7 @@ void Start(Scene rootScene)
     game.Add3DCameraController();
 
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
-    game.Add3DGround(new() { Size = new Vector3(300, 1, 300) });
+    game.Add3DGround(new Vector2(300));
     game.AddSkybox();
     game.AddProfiler();
     DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
@@ -114,31 +114,31 @@ void Start(Scene rootScene)
 }
 
 /// <summary>
-/// Maps one scale onto whatever <c>Size</c> means for the chosen primitive, so every shape comes out
-/// roughly the same size and the drop area and camera framing stay usable.
+/// Maps one scale onto the dimensions of the chosen shape, so every shape comes out roughly the
+/// same size and the drop area and camera framing stay usable.
 /// </summary>
-static Vector3 SizeFor(PrimitiveModelType type) => type switch
+static Primitive3D Scaled(Primitive3D shape) => shape switch
 {
-    // X is the radius, so half the scale gives a body one scale across
-    PrimitiveModelType.Sphere => new Vector3(ItemScale / 2, 0, 0),
+    // The radius, so half the scale gives a body one scale across
+    Primitive3D.SphereShape => Primitive3D.Sphere(ItemScale / 2),
 
-    // X radius, Y the length of the cylindrical section between the two caps
-    PrimitiveModelType.Capsule => new Vector3(ItemScale / 4, ItemScale / 2, 0),
+    // The radius and the length of the cylindrical section between the two caps
+    Primitive3D.CapsuleShape => Primitive3D.Capsule(ItemScale / 4, ItemScale / 2),
 
-    // X radius, Y height
-    PrimitiveModelType.Cone => new Vector3(ItemScale / 2, ItemScale, 0),
+    // The radius and the height
+    Primitive3D.ConeShape => Primitive3D.Cone(ItemScale / 2, ItemScale),
+    Primitive3D.CylinderShape => Primitive3D.Cylinder(ItemScale / 2, ItemScale),
 
-    // X radius, Z height - not Y, which the cylinder ignores
-    PrimitiveModelType.Cylinder => new Vector3(ItemScale / 2, 0, ItemScale),
+    // The radius out to the middle of the ring and the thickness of the ring itself
+    Primitive3D.TorusShape => Primitive3D.Torus(ItemScale / 2, ItemScale / 4),
 
-    // X the radius out to the middle of the ring, Y the thickness of the ring itself
-    PrimitiveModelType.Torus => new Vector3(ItemScale / 2, ItemScale / 4, 0),
+    // The teapot is uniformly scaled
+    Primitive3D.TeapotShape => Primitive3D.Teapot(ItemScale),
 
-    // X only; the teapot is uniformly scaled
-    PrimitiveModelType.Teapot => new Vector3(ItemScale, 0, 0),
+    Primitive3D.TriangularPrismShape => Primitive3D.TriangularPrism(new Vector3(ItemScale)),
 
-    // Cube, RectangularPrism, TriangularPrism: full extents on all three axes
-    _ => new Vector3(ItemScale)
+    // Cube and box: full extents on all three axes
+    _ => Primitive3D.Cube(ItemScale)
 };
 
 /// <summary>
@@ -146,10 +146,7 @@ static Vector3 SizeFor(PrimitiveModelType type) => type switch
 /// </summary>
 Model CreateSharedModel(Scene rootScene)
 {
-    var prototype = game.Create3DPrimitive(modelType, new Primitive3DEntityOptions
-    {
-        Size = modelSize
-    });
+    var prototype = game.CreatePrimitive(modelShape, new Primitive3DEntityOptions());
 
     // Parked out of sight; it exists only to own the Model
     prototype.Transform.Position = new Vector3(0, -100, 0);
@@ -291,7 +288,7 @@ Entity CreateInstancedItem(string name)
 /// </summary>
 /// <remarks>
 /// <para>
-/// The model is attached here rather than by <c>Create3DPrimitive</c>, which would build a fresh
+/// The model is attached here rather than by <c>CreatePrimitive</c>, which would build a fresh
 /// mesh for each of the 20,000 bodies. <c>AddBepu3DPhysics</c> only requires that a
 /// <see cref="ModelComponent"/> is present - it derives the collider from the primitive type and
 /// size, and reads nothing out of the mesh.
@@ -305,7 +302,7 @@ Entity CreatePhysicsItem(string name)
 {
     var entity = new Entity(name) { new ModelComponent(sharedModel) };
 
-    entity.AddBepu3DPhysics(modelType, new Bepu3DPhysicsOptions { Size = modelSize });
+    entity.AddBepu3DPhysics(modelShape);
 
     return entity;
 }
@@ -358,7 +355,7 @@ IReadOnlyList<TextElement> OverlayLines()
         new($"Stock update {stockType?.LastUpdateMilliseconds:0.00} ms, uploads every frame", Color.LightGreen),
         new($"Toolkit update {toolkitStatus}, uploads every frame", Color.Cyan),
         new($"Buffered update {bufferedStatus}, upload {uploadStatus}", Color.Magenta),
-        new($"Shape: {modelType}, set modelType at the top of Program.cs", Color.LightGray),
+        new($"Shape: {modelType.Name}, set modelType at the top of Program.cs", Color.LightGray),
         new("Drop one kind at a time and let the pile come to rest.", Color.LightGray),
         new("The frame counter is a rolling average; give it a second.", Color.LightGray),
         new("Kinds 3 and 4 stop working once Bepu sleeps every body:", Color.LightGray),

@@ -80,9 +80,8 @@ void Update(Scene scene, GameTime time)
 void CreateGround(Scene rootScene)
 {
     // Create visual ground plane
-    var groundEntity = game.Create3DPrimitive(PrimitiveModelType.Plane, new()
+    var groundEntity = game.CreatePrimitive(Primitive3D.Plane(groundSize.X, groundSize.Z), new()
     {
-        Size = groundSize,
     });
     groundEntity.Scene = rootScene;
 
@@ -104,10 +103,9 @@ void CreateCubes(Scene rootScene, int count)
         var cubePosition = new Vector3((column - Columns / 2f) * HorizontalSpacing, 10 + row * VerticalSpacing, 0);
 
         // Create visual cube entity
-        var cubeEntity = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var cubeEntity = game.CreatePrimitive(Primitive3D.Cube(CubeSize), new()
         {
             Material = game.CreateMaterial(Color.Red),
-            Size = new Vector3(CubeSize),
         });
 
         cubeEntity.Transform.Position = cubePosition;

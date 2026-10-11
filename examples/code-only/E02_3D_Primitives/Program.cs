@@ -10,9 +10,6 @@ using Stride.Input;
 
 const string EntityName = "PrimitiveModelGroup";
 
-var uniformSize = new Vector3(0.5f);
-var narrowSize = new Vector3(0.25f, 0.5f, 0.25f);
-
 using var game = new Game();
 
 game.Run(start: Start, update: Update);
@@ -44,21 +41,21 @@ void Add3DPrimitives(Scene scene)
 {
     var primitives = new[]
     {
-        (Type: PrimitiveModelType.Cube, Position: new Vector3(-4f, 0.5f, 0), Size: uniformSize, Rotation: null, AddDebug: true),
-        (Type: PrimitiveModelType.Cube, Position: new Vector3(-2.2f, 0.5f, -4f), Size: narrowSize, Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Cone, Position: new Vector3(0, 2, 0), Size: new (0.5f, 3, 0), Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Capsule, Position: new Vector3(0.01f, 6, 0), Size: narrowSize, Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Sphere, Position: new Vector3(0, 8, 0), Size: narrowSize, Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Cylinder, Position: new Vector3(0.5f, 10, 0), Size: narrowSize, Rotation: null, AddDebug: false),
-        (Type: PrimitiveModelType.Teapot, Position: new Vector3(3, 4f, 0), Size: null, Rotation: null, AddDebug: false)!,
-        (Type: PrimitiveModelType.Torus, Position: new Vector3(0, 12, 0), Size: null, Rotation: null, AddDebug: false)!,
-        (Type: PrimitiveModelType.TriangularPrism, Position: new Vector3(-8.0f, 2, -3.0f), Size: (Vector3?)null, Rotation: (Quaternion?)Quaternion.RotationY(MathUtil.DegreesToRadians(75)), AddDebug: false),
-        (Type: PrimitiveModelType.TriangularPrism, Position: new Vector3(-3.5f, 0.5f, 1), Size: null, Rotation: null, AddDebug: false)!,
+        (Type: Primitive3D.Cube(0.5f), Position: new Vector3(-4f, 0.5f, 0), Rotation: (Quaternion?)null, AddDebug: true),
+        (Type: Primitive3D.Box(new Vector3(0.25f, 0.5f, 0.25f)), Position: new Vector3(-2.2f, 0.5f, -4f), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Cone(0.5f, 3), Position: new Vector3(0, 2, 0), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Capsule(0.25f, 0.5f), Position: new Vector3(0.01f, 6, 0), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Sphere(0.25f), Position: new Vector3(0, 8, 0), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Cylinder(0.25f, 0.5f), Position: new Vector3(0.5f, 10, 0), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Teapot(), Position: new Vector3(3, 4f, 0), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Torus(), Position: new Vector3(0, 12, 0), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-8.0f, 2, -3.0f), Rotation: Quaternion.RotationY(MathUtil.DegreesToRadians(75)), AddDebug: false),
+        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-3.5f, 0.5f, 1), Rotation: null, AddDebug: false),
     };
 
     foreach (var primitive in primitives)
     {
-        var entity = CreatePrimitive(primitive.Type, primitive.Position, primitive.Size, primitive.Rotation);
+        var entity = CreatePrimitive(primitive.Type, primitive.Position, primitive.Rotation);
 
         if (primitive.AddDebug)
             AddDebugComponents(entity);
@@ -66,9 +63,9 @@ void Add3DPrimitives(Scene scene)
         entity.Scene = scene;
     }
 
-    Entity CreatePrimitive(PrimitiveModelType type, Vector3 position, Vector3? size, Quaternion? rotation)
+    Entity CreatePrimitive(Primitive3D shape, Vector3 position, Quaternion? rotation)
     {
-        var entity = game.Create3DPrimitive(type, size.HasValue ? new() { Size = size.Value } : null);
+        var entity = game.CreatePrimitive(shape);
         entity.Transform.Position = position;
 
         if (rotation.HasValue)
@@ -128,13 +125,13 @@ description:
     removes everything with that name and rebuilds, which is the simplest safe teardown pattern there
     is. P and F11 turn on the collider and debug-mesh overlays.
 concepts:
-  - Creating eight PrimitiveModelType shapes and comparing their defaults
-  - Sizing a primitive with the Size option of Create3DPrimitive
+  - Creating eight Primitive3D shapes and comparing their defaults
+  - Sizing a primitive through its factory arguments, such as Primitive3D.Cone(0.5f, 3)
   - Rotating an entity with Transform.Rotation
   - Tagging entities with a name so the scene can be torn down and rebuilt
   - Inspecting generated colliders with CollidableGizmoScript
   - Adding keyboard instructions as a DebugOverlay section
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, Create3DPrimitive"
+  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

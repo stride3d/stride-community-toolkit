@@ -119,21 +119,19 @@ void Update(Scene scene, GameTime time)
 /// </summary>
 void BuildScene(Scene scene)
 {
-    var ground = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+    var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(44f, 0.5f, 44f)), new Primitive3DEntityOptions
     {
         EntityName = "Ground",
         Material = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f),
-        Size = new Vector3(44f, 0.5f, 44f),
         Position = new Vector3(0f, -0.25f, 0f),
     });
 
     ground.Scene = scene;
 
-    var teapot = game.Create3DPrimitive(PrimitiveModelType.Teapot, new Primitive3DEntityOptions
+    var teapot = game.CreatePrimitive(Primitive3D.Teapot(3f), new Primitive3DEntityOptions
     {
         EntityName = "Teapot",
         Material = game.CreateMaterial(Color.Gold, metalness: 0.6f, glossiness: 0.8f),
-        Size = new Vector3(3f),
         Position = new Vector3(0f, 0f, 0f),
     });
 
@@ -146,32 +144,30 @@ void BuildScene(Scene scene)
         var angle = i * MathF.Tau / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
-        var pillar = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new Primitive3DEntityOptions
         {
             EntityName = $"Pillar {i + 1}",
             Material = game.CreateMaterial(colours[i], metalness: 0.2f, glossiness: 0.5f),
-            Size = new Vector3(1.4f, height, 1.4f),
             Position = new Vector3(MathF.Cos(angle) * 7f, height * 0.5f, MathF.Sin(angle) * 7f),
         });
 
         pillar.Scene = scene;
     }
 
-    ReadOnlySpan<(string Name, PrimitiveModelType Type, Vector3 At, Color Colour)> primitives =
+    ReadOnlySpan<(string Name, Primitive3D Type, Vector3 At, Color Colour)> primitives =
     [
-        ("Sphere", PrimitiveModelType.Sphere, new Vector3(-11f, 1f, 4f), Color.LightSteelBlue),
-        ("Capsule", PrimitiveModelType.Capsule, new Vector3(11f, 1f, 4f), Color.Plum),
-        ("Torus", PrimitiveModelType.Torus, new Vector3(-11f, 0.6f, -4f), Color.Khaki),
-        ("Cylinder", PrimitiveModelType.Cylinder, new Vector3(11f, 1f, -4f), Color.PaleGreen),
+        ("Sphere", Primitive3D.Sphere(2f), new Vector3(-11f, 1f, 4f), Color.LightSteelBlue),
+        ("Capsule", Primitive3D.Capsule(2f, 2f), new Vector3(11f, 1f, 4f), Color.Plum),
+        ("Torus", Primitive3D.Torus(2f, 2f), new Vector3(-11f, 0.6f, -4f), Color.Khaki),
+        ("Cylinder", Primitive3D.Cylinder(2f, 2f), new Vector3(11f, 1f, -4f), Color.PaleGreen),
     ];
 
     foreach (var (name, type, at, colour) in primitives)
     {
-        var entity = game.Create3DPrimitive(type, new Primitive3DEntityOptions
+        var entity = game.CreatePrimitive(type, new Primitive3DEntityOptions
         {
             EntityName = name,
             Material = game.CreateMaterial(colour, metalness: 0.3f, glossiness: 0.6f),
-            Size = new Vector3(2f),
             Position = at,
         });
 
@@ -207,11 +203,10 @@ void BuildCrates(Scene scene)
 
     instancing.UpdateWorldMatrices(crateMatrices);
 
-    crates = game.Create3DPrimitive(PrimitiveModelType.Cube, new Primitive3DEntityOptions
+    crates = game.CreatePrimitive(Primitive3D.Cube(0.9f), new Primitive3DEntityOptions
     {
         EntityName = "Crates",
         Material = game.CreateMaterial(new Color(176, 120, 64), metalness: 0.1f, glossiness: 0.4f),
-        Size = new Vector3(0.9f),
     });
 
     crates.Add(new InstancingComponent { Type = instancing });

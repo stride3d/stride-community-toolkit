@@ -41,7 +41,7 @@ void CreateSpheres(Scene rootScene, int count)
 
     for (int i = -half; i < half; i++)
     {
-        var entity = game.Create3DPrimitive(PrimitiveModelType.Sphere, new() { EntityName = SphereEntityName });
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(), new() { EntityName = SphereEntityName });
         entity.Transform.Position = new Vector3(i * 0.99f, 8, 0);
         entity.Scene = rootScene;
         sphereEntities.Add(entity);

@@ -33,13 +33,13 @@ void Start(Scene scene)
     // A few boxes to walk into and jump onto.
     for (int i = 0; i < 5; i++)
     {
-        var box = game.Create3DPrimitive(PrimitiveModelType.Cube);
+        var box = game.CreatePrimitive(Primitive3D.Cube());
         box.Transform.Position = new Vector3(3 + i * 2.5f, 0.5f + i * 0.4f, -4);
         box.Scene = scene;
     }
 
     // The character body: a Bepu CharacterComponent riding a capsule primitive. Passing the
-    // component through Bepu3DPhysicsOptions makes Create3DPrimitive attach a matching capsule
+    // component through Bepu3DPhysicsOptions makes CreatePrimitive attach a matching capsule
     // collider to it.
     character = new CharacterComponent
     {
@@ -48,7 +48,7 @@ void Start(Scene scene)
         Collider = new CompoundCollider(),
         Gravity = true,
     };
-    var body = game.Create3DPrimitive(PrimitiveModelType.Capsule, new Bepu3DPhysicsOptions { Component = character });
+    var body = game.CreatePrimitive(Primitive3D.Capsule(), new Bepu3DPhysicsOptions { Component = character });
     body.Transform.Position = new Vector3(0, 2f, 0);
     body.Scene = scene;
 
@@ -96,7 +96,7 @@ concepts:
   - "Pairing an EntityComponent with an EntityProcessor"
   - "Auto-registering a processor with [DefaultEntityComponentProcessor]"
   - Driving a physics body from the camera entity
-  - "Using helpers: SetupBase3D, Add3DGround, AddSkybox, Create3DPrimitive"
+  - "Using helpers: SetupBase3D, Add3DGround, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bepu

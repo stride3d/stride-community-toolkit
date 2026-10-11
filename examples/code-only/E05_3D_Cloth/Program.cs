@@ -79,7 +79,7 @@ void Start(Scene scene)
     game.Add3DCameraController(displayPosition: DisplayPosition.BottomRight);
     game.AddSkybox();
     game.AddProfiler();
-    game.Add3DGround(new() { Size = new Vector3(40, 1, 40) });
+    game.Add3DGround(new Vector2(40));
 
     game.SetCameraPosition(new Vector3(-1, 8, -26));
     game.SetCameraRotation(new Vector3(180, -12, 0));
@@ -141,9 +141,8 @@ Model ModelFor(float radius)
 {
     if (models.TryGetValue(radius, out var cached)) return cached;
 
-    var model = game.Create3DPrimitive(PrimitiveModelType.Sphere, new Primitive3DEntityOptions
+    var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new Primitive3DEntityOptions
     {
-        Size = new Vector3(radius),
         Material = game.CreateMaterial(new Color(230, 120, 90), metalness: 0.3f, glossiness: 0.7f),
     }).Get<ModelComponent>().Model;
 
@@ -182,9 +181,8 @@ void BuildScene(Scene scene)
     HangSheet(scene, new Vector3(-13, 10, 2), distanceHertz: 5, areaHertz: 30);
 
     // A ball for the fourth sheet to drape over.
-    var ball = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new()
     {
-        Size = new Vector3(1.5f),
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 1.5f } } } },
         Position = new Vector3(9, 2, -4),
@@ -192,9 +190,8 @@ void BuildScene(Scene scene)
     ball.Scene = scene;
     extras.Add(ball);
 
-    var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new()
     {
-        Size = new Vector3(1.0f),
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(1.0f) } } } },
         Position = new Vector3(13, 0.5f, -7),
@@ -350,9 +347,8 @@ void Area(Entity a, Entity b, Entity c, float hertz)
 
 void DropBall(Scene scene)
 {
-    var ball = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new()
     {
-        Size = new Vector3(0.7f),
         Material = game.CreateMaterial(new Color(240, 200, 80)),
         Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 0.7f, Mass = 4 } } } },
         Position = new Vector3(9, 12, -4),

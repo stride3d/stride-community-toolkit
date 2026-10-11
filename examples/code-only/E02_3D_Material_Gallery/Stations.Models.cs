@@ -160,9 +160,9 @@ public static class ModelStations
         };
 
         var grey = s.Material(Recipes.Pbr(new Color(150, 150, 155), glossiness: 0.5f, metalness: 0f));
-        var sphere = s.Place(PrimitiveModelType.Sphere, grey, MaterialStation.SphereSpot, new Vector3(1f));
-        var cube = s.Place(PrimitiveModelType.Cube, grey, MaterialStation.CubeSpot, new Vector3(1.8f));
-        var teapot = s.Place(PrimitiveModelType.Teapot, grey, MaterialStation.TeapotSpot, new Vector3(2.4f));
+        var sphere = s.Place(Primitive3D.Sphere(1f), grey, MaterialStation.SphereSpot);
+        var cube = s.Place(Primitive3D.Cube(1.8f), grey, MaterialStation.CubeSpot);
+        var teapot = s.Place(Primitive3D.Teapot(2.4f), grey, MaterialStation.TeapotSpot);
         var shell = new HighlightShell(s.Material(MaterialDescriptors.Highlight(colour, inflate: inflate)));
 
         s.State = new ShellState(shell, [sphere.Get<ModelComponent>()!, cube.Get<ModelComponent>()!, teapot.Get<ModelComponent>()!]);
@@ -201,7 +201,7 @@ public static class ModelStations
         var grey = s.Material(descriptor);
 
         // One model, three entities: the teapot primitive's model, placed twice more
-        var left = s.Place(PrimitiveModelType.Teapot, grey, new Vector3(-3f, 0.4f, 0f), new Vector3(2.4f));
+        var left = s.Place(Primitive3D.Teapot(2.4f), grey, new Vector3(-3f, 0.4f, 0f));
         var model = left.Get<ModelComponent>()!.Model;
         var middle = s.PlaceModel(model, grey, new Vector3(0f, 0.4f, 0f));
 

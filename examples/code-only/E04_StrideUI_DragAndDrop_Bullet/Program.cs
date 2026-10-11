@@ -76,7 +76,7 @@ void CreateAndAddUI(Scene scene, SpriteFont font)
 
 void AddExampleShape(Scene scene)
 {
-    var entity = game.Create3DPrimitive(PrimitiveModelType.Capsule);
+    var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
 
@@ -85,7 +85,7 @@ void AddExampleShape(Scene scene)
 
 void GenerateRandomSpheres()
 {
-    var totalShapes = _shapeGenerator?.Generate(ShapeCount, PrimitiveModelType.Sphere);
+    var totalShapes = _shapeGenerator?.Generate(ShapeCount, Primitive3D.Sphere(0.3f));
 
     _uiManager?.UpdateTextBlock($"{TotalShapesLabel} {totalShapes ?? 0}");
 }

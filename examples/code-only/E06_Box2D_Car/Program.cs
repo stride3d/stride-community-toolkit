@@ -189,7 +189,7 @@ B2BodyId Wheel(Scene scene, Vector2 centre, B2ShapeDef shapeDef)
     spawned.Add(entity);
 
     var body = simulation!.CreateDynamicBody(entity, new Vector3(centre, 0));
-    ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Circle, new Vector2(radius, radius), body, shapeDef);
+    ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(radius), body, shapeDef);
     entity.Add(new Box2DBodyComponent { BodyId = body });
 
     return body;

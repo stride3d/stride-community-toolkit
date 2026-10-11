@@ -70,7 +70,7 @@ void BuildScene(Scene scene)
     for (var i = 0; i < masses.Length; i++)
     {
         var shade = (byte)(230 - i * 35);
-        var cube = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+        var cube = game.CreatePrimitive(Primitive3D.Cube(), new()
         {
             Material = game.CreateMaterial(new Color(shade, (byte)(120 + i * 20), (byte)(80 + i * 30))),
             Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Mass = masses[i] } } } },
@@ -83,9 +83,8 @@ void BuildScene(Scene scene)
     // Spheres to flick.
     for (var i = 0; i < 4; i++)
     {
-        var sphere = game.Create3DPrimitive(PrimitiveModelType.Sphere, new()
+        var sphere = game.CreatePrimitive(Primitive3D.Sphere(0.35f), new()
         {
-            Size = new Vector3(0.35f),
             Material = game.CreateMaterial(new Color(120, 200, 255)),
             Position = new Vector3(2.5f - i * 1.7f, SpawnHeight, 3),
         });
@@ -94,7 +93,7 @@ void BuildScene(Scene scene)
     }
 
     // A capsule whose rotation is locked once it is in the simulation: it can be dragged, never turned.
-    var lockedBody = game.Create3DPrimitive(PrimitiveModelType.Capsule, new()
+    var lockedBody = game.CreatePrimitive(Primitive3D.Capsule(), new()
     {
         Material = game.CreateMaterial(new Color(255, 200, 80)),
         Position = new Vector3(-4.5f, 1, 1.5f),
@@ -107,9 +106,8 @@ void BuildScene(Scene scene)
     locked.BodyInertia = new BodyInertia { InverseMass = inertia.InverseMass };   // zero inverse inertia: rotation locked
 
     // A wall to throw at.
-    var wall = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(8, 3, 0.4f)), new()
     {
-        Size = new Vector3(8, 3, 0.4f),
         Material = game.CreateMaterial(new Color(140, 140, 150)),
         // An empty compound: the helper adds the box that fits the wall's size. A box given here
         // would be kept as the wall's collider, at its own default size
@@ -185,7 +183,7 @@ concepts:
   - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
   - Locking a body's rotation through its BodyInertia, and what the grabber does about it
   - Reading the held body's mass and the servo cap from the script for the overlay
-  - "Using helpers: SetupBase3DScene, Create3DPrimitive, AddGrabber, DebugOverlay"
+  - "Using helpers: SetupBase3DScene, CreatePrimitive, AddGrabber, DebugOverlay"
 tags:
   - 3D
   - Physics

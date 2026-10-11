@@ -31,8 +31,8 @@ public static class SampleStations
                 s.PlaceTrio(s.Material(WoodTable(s)));
                 break;
             case 2:
-                s.Place(PrimitiveModelType.Cube, s.Material(Brick(s, 1f)), new Vector3(-1.6f, 0.9f, 0f), new Vector3(1.8f));
-                s.Place(PrimitiveModelType.Cube, s.Material(Brick(s, 0.2f)), new Vector3(1.6f, 0.9f, 0f), new Vector3(1.8f));
+                s.Place(Primitive3D.Cube(1.8f), s.Material(Brick(s, 1f)), new Vector3(-1.6f, 0.9f, 0f));
+                s.Place(Primitive3D.Cube(1.8f), s.Material(Brick(s, 0.2f)), new Vector3(1.6f, 0.9f, 0f));
                 break;
             case 3:
                 s.PlaceTrio(s.Material(NeonSign(s)));

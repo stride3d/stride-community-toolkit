@@ -67,9 +67,8 @@ void Start(Scene scene)
     game.SetupBase3D();                                 // compositor, camera, light - no camera controller, the car owns W A S D
     game.AddSkybox();
     game.AddProfiler();
-    game.Add3DGround(new()
+    game.Add3DGround(new Vector2(240), new()
     {
-        Size = new Vector3(240, 1, 240),
         Material = game.CreateMaterial(new Color(95, 105, 100), metalness: 0.3f, glossiness: 0.7f),
     });
 
@@ -227,8 +226,8 @@ Car BuildCar(Scene scene, Vector3 position)
     chassisEntity.Transform.Position = position;
 
     var body = game.CreateMaterial(new Color(200, 60, 50), metalness: 0.6f, glossiness: 0.8f);
-    chassisEntity.AddChild(Model(PrimitiveModelType.Cube, new Vector3(1.85f, 0.7f, 4.73f), body, Vector3.Zero));
-    chassisEntity.AddChild(Model(PrimitiveModelType.Cube, new Vector3(1.85f, 0.6f, 2.5f), body, new Vector3(0, 0.65f, -0.35f)));
+    chassisEntity.AddChild(Model(Primitive3D.Box(new Vector3(1.85f, 0.7f, 4.73f)), body, Vector3.Zero));
+    chassisEntity.AddChild(Model(Primitive3D.Box(new Vector3(1.85f, 0.6f, 2.5f)), body, new Vector3(0, 0.65f, -0.35f)));
     chassisEntity.Scene = scene;
 
     var chassis = chassisEntity.Get<BodyComponent>();
@@ -256,7 +255,7 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
     };
     entity.Transform.Position = chassis.Entity.Transform.Position + mount + suspensionDirection * SuspensionLength;
     entity.Transform.Rotation = wheelTurn;
-    entity.AddChild(Model(PrimitiveModelType.Cylinder, new Vector3(0.4f, 0, 0.18f), game.CreateMaterial(new Color(40, 40, 45), metalness: 0.2f, glossiness: 0.5f), Vector3.Zero));
+    entity.AddChild(Model(Primitive3D.Cylinder(0.4f, 0.18f), game.CreateMaterial(new Color(40, 40, 45), metalness: 0.2f, glossiness: 0.5f), Vector3.Zero));
 
     var wheel = entity.Get<BodyComponent>();
 
@@ -320,35 +319,33 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
     return new Wheel(wheel, motor, hinge, mount);
 }
 
-Entity Model(PrimitiveModelType type, Vector3 size, Material material, Vector3 localPosition)
+Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
 {
     // The core, physics-free primitive: the body is on the parent, this is only the look.
-    var entity = game.Create3DPrimitive(type, new Primitive3DEntityOptions { Size = size, Material = material });
+    var entity = game.CreatePrimitive(shape, new Primitive3DEntityOptions { Material = material });
     entity.Transform.Position = localPosition;
 
     return entity;
 }
 
+// A ramp, a slalom of pillars, and a wall of crates to drive through or throw with the grabber.
 void BuildCourse(Scene scene)
 {
-    // A ramp, a slalom of pillars, and a wall of crates to drive through or throw with the grabber.
-    var ramp = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+    var ramp = game.CreatePrimitive(Primitive3D.Box(new Vector3(6, 0.4f, 10)), new()
     {
-        Size = new Vector3(6, 0.4f, 10),
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         // An empty compound: the helper adds the box that fits the ramp's size
         Component = new StaticComponent { Collider = new CompoundCollider() },
         Position = new Vector3(0, 0.9f, 30),
     });
-    ramp.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(12));
+    ramp.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-12));
     ramp.Scene = scene;
 
     for (var i = 0; i < 6; i++)
     {
-        var pillar = game.Create3DPrimitive(PrimitiveModelType.Cylinder, new()
+        var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.5f, 3), new()
         {
             // A cylinder's size is its radius in X and its height in Z
-            Size = new Vector3(0.5f, 0, 3),
             Material = game.CreateMaterial(new Color(120, 170, 220)),
             Component = new StaticComponent { Collider = new CompoundCollider() },
             Position = new Vector3(i % 2 == 0 ? -4 : 4, 1.5f, -20 - i * 8),
@@ -360,9 +357,8 @@ void BuildCourse(Scene scene)
     {
         for (var i = 0; i < 6; i++)
         {
-            var crate = game.Create3DPrimitive(PrimitiveModelType.Cube, new()
+            var crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new()
             {
-                Size = new Vector3(1.2f),
                 Material = game.CreateMaterial(new Color(220, 180, 90)),
                 // The crate's own collider, for its mass: a compound that already holds a shape is
                 // kept as it is, so the size has to be given too
@@ -460,7 +456,7 @@ concepts:
   - Re-applying constraint targets only when they change, so the car sleeps when idle
   - Filtering chassis-wheel collisions with a collision layer that does not collide with itself
   - A chase camera in place of the camera controller, to free the driving keys
-  - "Using helpers: SetupBase3D, Add3DGround, Create3DPrimitive (both overloads), GrabberScript"
+  - "Using helpers: SetupBase3D, Add3DGround, CreatePrimitive (both overloads), GrabberScript"
 tags:
   - 3D
   - Bepu
