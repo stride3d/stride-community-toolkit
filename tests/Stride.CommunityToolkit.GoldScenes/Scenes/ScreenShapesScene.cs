@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -74,16 +75,16 @@ internal sealed class ScreenShapesScene : IGoldScene
         // Corner widgets, each placed as a corner plus an offset
         shapes.Fill.Set(new Color(4, 14, 30), 0.7f);
         shapes.Glow.Set(8f, new Color(0, 150, 255, 160));
-        shapes.DrawRectangle(new Vector3(shapes.Corner(ScreenCorner.TopLeft) + new Vector2(110f, 60f), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(180f, 80f), new Color(110, 200, 255), cornerRadius: 12f);
+        shapes.DrawRectangle(new Vector3(shapes.Anchor(ScreenAnchor.TopLeft) + new Vector2(110f, 60f), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(180f, 80f), new Color(110, 200, 255), cornerRadius: 12f);
         shapes.Glow.Clear();
 
         shapes.Fill.Set(null, 0.45f);
         shapes.Dash.Set(8f, 6f, seconds * 30f);
-        shapes.DrawRing(new Vector3(shapes.Corner(ScreenCorner.TopRight) + new Vector2(-90f, 80f), 0f), Vector3.UnitZ, 50f, Color.Orange);
+        shapes.DrawRing(new Vector3(shapes.Anchor(ScreenAnchor.TopRight) + new Vector2(-90f, 80f), 0f), Vector3.UnitZ, 50f, Color.Orange);
         shapes.Dash.Clear();
 
         // A radial gauge: a faint full track and a bright arc, clockwise from twelve because Y is down
-        var bottomLeft = shapes.Corner(ScreenCorner.BottomLeft) + new Vector2(100f, -90f);
+        var bottomLeft = shapes.Anchor(ScreenAnchor.BottomLeft) + new Vector2(100f, -90f);
 
         shapes.Fill.Alpha = 0.25f;
         shapes.DrawArc(bottomLeft, 50f, 0f, MathF.Tau, Color.Gray, width: 14f);
@@ -93,14 +94,14 @@ internal sealed class ScreenShapesScene : IGoldScene
 
         // A sector in the bottom-right corner, its sweep turning clockwise on screen
         shapes.Fill.Color = Color.DodgerBlue;
-        shapes.DrawSector(shapes.Corner(ScreenCorner.BottomRight) + new Vector2(-100f, -90f), 60f, 0.3f, 4.2f, Color.White, innerRadius: 28f);
+        shapes.DrawSector(shapes.Anchor(ScreenAnchor.BottomRight) + new Vector2(-100f, -90f), 60f, 0.3f, 4.2f, Color.White, innerRadius: 28f);
         shapes.Fill.Color = null;
 
         // A viewport rectangle: the panel and its bar are drawn in the rectangle's own coordinates
         shapes.Viewport = new RectangleF(360f, 470f, 560f, 150f);
         shapes.Fill.Set(new Color(4, 14, 30), 0.7f);
         shapes.BorderWidth = 1.5f;
-        shapes.DrawRectangle(new Vector3(shapes.Corner(ScreenCorner.BottomRight) * 0.5f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(560f, 150f), new Color(110, 200, 255), cornerRadius: 10f);
+        shapes.DrawRectangle(new Vector3(shapes.Anchor(ScreenAnchor.MiddleCenter), 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(560f, 150f), new Color(110, 200, 255), cornerRadius: 10f);
         shapes.Fill.Set(new Color(255, 120, 40, 200), 1f);
         shapes.Gradient.Set(new Color(255, 230, 120), Vector2.UnitX);
         shapes.DrawRectangle(new Vector3(200f, 75f, 0f), Vector3.UnitX, Vector3.UnitY, new Vector2(340f, 24f), Color.Orange);

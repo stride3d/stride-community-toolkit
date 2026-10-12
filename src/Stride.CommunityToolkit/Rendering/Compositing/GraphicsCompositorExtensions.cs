@@ -143,24 +143,28 @@ public static class GraphicsCompositorExtensions
     /// <typeparam name="TRenderer">Type of renderer to ensure.</typeparam>
     /// <param name="graphicsCompositor">The GraphicsCompositor to add to.</param>
     /// <param name="create">Creates the renderer, called only when one is actually needed.</param>
-    /// <returns>Returns the GraphicsCompositor instance, allowing for method chaining.</returns>
+    /// <returns>The renderer of that type now in the compositor: the existing one, or the one just created.</returns>
     /// <remarks>
     /// Meant for renderers that draw everything of a given kind in the scene, where a second instance
     /// would draw everything twice rather than add anything. It lets a helper guarantee the rendering
     /// its own output depends on, without having to know whether the caller already arranged it.
     /// </remarks>
-    public static GraphicsCompositor EnsureSceneRenderer<TRenderer>(this GraphicsCompositor graphicsCompositor, Func<TRenderer> create)
+    public static TRenderer EnsureSceneRenderer<TRenderer>(this GraphicsCompositor graphicsCompositor, Func<TRenderer> create)
         where TRenderer : SceneRendererBase
     {
         ArgumentNullException.ThrowIfNull(graphicsCompositor);
         ArgumentNullException.ThrowIfNull(create);
 
-        if (graphicsCompositor.Game is SceneRendererCollection existing && existing.Children.Any(child => child is TRenderer))
+        if (graphicsCompositor.Game is SceneRendererCollection existing && existing.Children.OfType<TRenderer>().FirstOrDefault() is { } present)
         {
-            return graphicsCompositor;
+            return present;
         }
 
-        return graphicsCompositor.AddSceneRenderer(create());
+        var renderer = create();
+
+        graphicsCompositor.AddSceneRenderer(renderer);
+
+        return renderer;
     }
 
     /// <summary>
@@ -195,9 +199,12 @@ public static class GraphicsCompositorExtensions
     /// </summary>
     /// <param name="graphicsCompositor">The graphics compositor to which the render feature will be added. Cannot be null.</param>
     /// <param name="renderFeature">The root render feature to add. Cannot be null.</param>
-    public static void AddRootRenderFeature(this GraphicsCompositor graphicsCompositor, RootRenderFeature renderFeature)
+    /// <returns>The compositor, so a chain of setup calls continues.</returns>
+    public static GraphicsCompositor AddRootRenderFeature(this GraphicsCompositor graphicsCompositor, RootRenderFeature renderFeature)
     {
         graphicsCompositor.RenderFeatures.Add(renderFeature);
+
+        return graphicsCompositor;
     }
 
     /// <summary>
@@ -241,8 +248,9 @@ public static class GraphicsCompositorExtensions
     /// in the compositor. The method will throw a <see cref="NullReferenceException"/> if either stage is
     /// missing.</remarks>
     /// <param name="graphicsCompositor">The graphics compositor to which the particle stages and features will be added.</param>
+    /// <returns>The compositor, so a chain of setup calls continues.</returns>
     /// <exception cref="NullReferenceException">Thrown if the "Opaque" or "Transparent" render stage is not found in the graphics compositor.</exception>
-    public static void AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
+    public static GraphicsCompositor AddParticleStagesAndFeatures(this GraphicsCompositor graphicsCompositor)
     {
         if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
         {
@@ -268,6 +276,8 @@ public static class GraphicsCompositorExtensions
                 }
             }
         });
+
+        return graphicsCompositor;
     }
 
     /// <summary>

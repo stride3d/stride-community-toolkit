@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
@@ -24,7 +24,7 @@ public class DebugOverlayPositionTests
 
         overlay.SetPosition(40, 60);
 
-        Assert.Equal(DisplayPosition.Custom, overlay.Position);
+        Assert.Null(overlay.Position);
         Assert.Equal(new Int2(40, 60), overlay.CustomPosition);
     }
 
@@ -39,7 +39,7 @@ public class DebugOverlayPositionTests
         overlay.CustomPosition = new Int2(40, 60);
 
         Assert.Equal(corner, overlay.Position);
-        Assert.NotEqual(DisplayPosition.Custom, corner);
+        Assert.NotNull(corner);
     }
 
     [Fact]
@@ -50,14 +50,14 @@ public class DebugOverlayPositionTests
         var overlay = DebugOverlay.GetOrCreate(game);
 
         overlay.SetPosition(40, 60);
-        overlay.SetPosition(DisplayPosition.BottomLeft);
+        overlay.SetPosition(ScreenAnchor.BottomLeft);
 
-        Assert.Equal(DisplayPosition.BottomLeft, overlay.Position);
+        Assert.Equal(ScreenAnchor.BottomLeft, overlay.Position);
         Assert.Equal(new Int2(40, 60), overlay.CustomPosition);
 
-        overlay.SetPosition(DisplayPosition.Custom);
+        overlay.SetPosition(null);
 
-        Assert.Equal(DisplayPosition.Custom, overlay.Position);
+        Assert.Null(overlay.Position);
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class DebugOverlayPositionTests
         overlay.CyclePosition();
 
         // The key handler refuses to cycle a custom position; the method itself is the deliberate way back to the corners
-        Assert.Equal(DisplayPosition.TopLeft, overlay.Position);
+        Assert.Equal(ScreenAnchor.TopLeft, overlay.Position);
         Assert.Equal(new Int2(10, 10), overlay.CustomPosition);
     }
 }

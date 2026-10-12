@@ -45,6 +45,7 @@ public static class GraphicsCompositorExtensions
     /// </summary>
     /// <param name="game">The <see cref="Game"/> instance to which the entity debug renderer will be added.</param>
     /// <param name="options">Optional settings to customize the appearance of the debug renderer. If not provided, default options will be used.</param>
+    /// <returns>The renderer, already in the compositor.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
     /// <remarks>
     /// This method adds a custom <see cref="EntityDebugSceneRenderer"/> to the game's graphics compositor, allowing the display of debug information
@@ -64,10 +65,14 @@ public static class GraphicsCompositorExtensions
     /// game.AddEntityDebugSceneRenderer(options);
     /// </code>
     /// </example>
-    public static void AddEntityDebugSceneRenderer(this IGame game, EntityDebugSceneRendererOptions? options = null)
+    public static EntityDebugSceneRenderer AddEntityDebugSceneRenderer(this IGame game, EntityDebugSceneRendererOptions? options = null)
     {
         var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
-        graphicsCompositor.AddEntityDebugRenderer(options);
+        var renderer = new EntityDebugSceneRenderer(options);
+
+        graphicsCompositor.AddSceneRenderer(renderer);
+
+        return renderer;
     }
 }

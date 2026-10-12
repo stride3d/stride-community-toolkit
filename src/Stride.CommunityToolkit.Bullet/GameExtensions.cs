@@ -59,15 +59,16 @@ public static class GameExtensions
     /// Enables the visualization of collider shapes in the game scene for debugging physics-related issues.
     /// </summary>
     /// <param name="game">The current game instance.</param>
+    /// <returns>The game, so a chain of setup calls continues.</returns>
     /// <remarks>
     /// This method activates the rendering of collider shapes within the physics simulation, helping to visually inspect and debug the positioning and behavior of colliders at runtime.
     /// </remarks>
-    public static void ShowColliders(this IGame game)
+    public static IGame ShowColliders(this IGame game)
     {
         var simulation = game.GetSceneSystem().SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
-        if (simulation is null) return;
+        if (simulation is not null) simulation.ColliderShapesRendering = true;
 
-        simulation.ColliderShapesRendering = true;
+        return game;
     }
 }

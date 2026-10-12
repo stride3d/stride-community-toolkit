@@ -34,7 +34,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// {
 ///     Text = "Score: 0",
 ///     PositionMode = TextPositionMode.Anchored,
-///     ScreenAnchor = DisplayPosition.TopLeft,
+///     ScreenAnchor = ScreenAnchor.TopLeft,
 ///     Offset = new Vector2(16, 16),
 ///     FontSize = 20
 /// });
@@ -135,16 +135,10 @@ public class EntityTextComponent : EntityComponent
     public Vector2 ScreenPosition { get; set; }
 
     /// <summary>
-    /// Gets or sets the window corner used when <see cref="PositionMode"/> is
-    /// <see cref="TextPositionMode.Anchored"/>. Defaults to the top-left.
+    /// Gets or sets the point of the window the text is pinned to when <see cref="PositionMode"/> is
+    /// <see cref="TextPositionMode.Anchored"/>: a corner, the middle of an edge or the centre. Defaults to the top-left.
     /// </summary>
-    /// <remarks>
-    /// <see cref="DisplayPosition.Custom"/> and
-    /// <see cref="DisplayPosition.None"/> are treated as the top-left; use
-    /// <see cref="TextPositionMode.Screen"/> for an explicit position and <see cref="IsVisible"/> to
-    /// hide the text.
-    /// </remarks>
-    public DisplayPosition ScreenAnchor { get; set; } = DisplayPosition.TopLeft;
+    public ScreenAnchor ScreenAnchor { get; set; } = ScreenAnchor.TopLeft;
 
     /// <summary>
     /// Gets or sets a pixel offset applied after the position is resolved, in every position mode.

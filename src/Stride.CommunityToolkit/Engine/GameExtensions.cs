@@ -386,23 +386,25 @@ public static partial class GameExtensions
     /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
     /// </summary>
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="displayPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
-    /// leaves the overlay's own position alone; <see cref="DisplayPosition.None"/> registers no camera help at all.</param>
+    /// <param name="helpPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// leaves the overlay's own position alone.</param>
     /// <param name="cameraName">The name of the camera entity to attach the 3D camera controller to. If not specified, the main camera name is
     /// used.</param>
     /// <returns>The camera entity to which the 3D camera controller was added.</returns>
     /// <exception cref="InvalidOperationException">Thrown if no camera entity with the specified name exists in the current scene.</exception>
     /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
+    /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
     public static Entity Add3DCameraController(this IGame game,
-        DisplayPosition? displayPosition = null,
+        ScreenAnchor? helpPosition = null,
         string? cameraName = CameraDefaults.MainCameraName,
         Keys helpToggleKey = Keys.F2,
-        bool helpCollapsed = true)
+        bool helpCollapsed = true,
+        bool showHelp = true)
     {
         var cameraEntity = GetCameraEntity(game, cameraName);
 
-        cameraEntity.Add3DCameraController(displayPosition, helpToggleKey, helpCollapsed);
+        cameraEntity.Add3DCameraController(helpPosition, helpToggleKey, helpCollapsed, showHelp);
 
         return cameraEntity;
     }
@@ -530,12 +532,13 @@ public static partial class GameExtensions
     /// <param name="game">The game instance to which the lighting will be added.</param>
     /// <param name="intensity">The intensity of the light sources.</param>
     /// <param name="showLightGizmo">Whether to show a gizmo for each light. Default is true.</param>
+    /// <returns>The six light entities, already in the root scene.</returns>
     /// <remarks>
     /// <para>
     /// Creates six directional lights, one shining along each world axis, for even lighting from all directions.
     /// </para>
     /// </remarks>
-    public static void AddAllDirectionLighting(this IGame game, float intensity = 5, bool showLightGizmo = true)
+    public static IReadOnlyList<Entity> AddAllDirectionLighting(this IGame game, float intensity = 5, bool showLightGizmo = true)
     {
         var position = new Vector3(7f, 2f, 0);
 
@@ -550,6 +553,8 @@ public static partial class GameExtensions
             Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(90)),
             Quaternion.RotationAxis(Vector3.UnitY, MathUtil.DegreesToRadians(270))
         };
+
+        var lights = new List<Entity>(rotations.Length);
 
         foreach (var rotation in rotations)
         {
@@ -568,7 +573,11 @@ public static partial class GameExtensions
 
             if (showLightGizmo)
                 entity.AddLightDirectionalGizmo(game.GraphicsDevice);
+
+            lights.Add(entity);
         }
+
+        return lights;
     }
 
     /// <summary>
@@ -679,15 +688,16 @@ public static partial class GameExtensions
     /// <param name="rotateAxisNames">
     /// A boolean indicating whether the axis names should rotate to always face the camera. Default is true.
     /// </param>
+    /// <returns>The gizmo entity, a child of the ground, or <see langword="null"/> when there is no ground entity.</returns>
     /// <remarks>
     /// The gizmo is added as a child to an existing ground entity. If the ground entity is not found, the method will return without adding the gizmo.
     /// The gizmo helps visualize the ground with axis indicators in 3D space.
     /// </remarks>
-    public static void AddGroundGizmo(this IGame game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
+    public static Entity? AddGroundGizmo(this IGame game, Vector3? position = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
         var groundEntity = game.GetSceneSystem().SceneInstance.RootScene.Entities.FirstOrDefault(w => w.Name == GameDefaults.DefaultGroundName);
 
-        if (groundEntity is null) return;
+        if (groundEntity is null) return null;
 
         // The axis letters are world-space text, so the renderer that draws them has to be present.
         // Doing it here rather than leaving it to the caller keeps this a single call - and without it
@@ -704,6 +714,8 @@ public static partial class GameExtensions
         gizmoEntity.Transform.Position = position ?? Vector3.Zero;
 
         groundEntity.AddChild(gizmoEntity);
+
+        return gizmoEntity;
     }
 
     /// <summary>
@@ -841,8 +853,9 @@ public static partial class GameExtensions
     /// <param name="game">The <see cref="Game"/> instance to add the renderer to.</param>
     /// <param name="renderer">The scene renderer to be added, inheriting from <see cref="SceneRendererBase"/>.</param>
     /// <exception cref="ArgumentNullException">Thrown when the <paramref name="renderer"/> is null.</exception>
+    /// <returns>The game, so a chain of setup calls continues.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
-    public static void AddSceneRenderer(this IGame game, SceneRendererBase renderer)
+    public static IGame AddSceneRenderer(this IGame game, SceneRendererBase renderer)
     {
         ArgumentNullException.ThrowIfNull(renderer);
 
@@ -850,6 +863,8 @@ public static partial class GameExtensions
                                  throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
         graphicsCompositor.AddSceneRenderer(renderer);
+
+        return game;
     }
 
     /// <summary>
@@ -864,12 +879,13 @@ public static partial class GameExtensions
     /// world text themselves, such as <see cref="AddGroundGizmo"/> with axis names, call it on your
     /// behalf; calling it again is harmless, because a duplicate renderer is not added.
     /// </remarks>
-    public static void AddWorldTextRenderer(this IGame game)
+    /// <returns>The renderer: the one already in the compositor when there was one.</returns>
+    public static WorldTextRenderer AddWorldTextRenderer(this IGame game)
     {
         var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ??
                                  throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
-        graphicsCompositor.EnsureSceneRenderer(() => new WorldTextRenderer());
+        return graphicsCompositor.EnsureSceneRenderer(() => new WorldTextRenderer());
     }
 
     /// <summary>
@@ -882,12 +898,13 @@ public static partial class GameExtensions
     /// The screen-space counterpart of <see cref="AddWorldTextRenderer"/>, with the same failure mode
     /// when forgotten: components collect, nothing draws them, and no error says why.
     /// </remarks>
-    public static void AddEntityTextRenderer(this IGame game)
+    /// <returns>The renderer: the one already in the compositor when there was one.</returns>
+    public static EntityTextRenderer AddEntityTextRenderer(this IGame game)
     {
         var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ??
                                  throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
-        graphicsCompositor.EnsureSceneRenderer(() => new EntityTextRenderer());
+        return graphicsCompositor.EnsureSceneRenderer(() => new EntityTextRenderer());
     }
 
     /// <summary>
@@ -917,9 +934,12 @@ public static partial class GameExtensions
     /// </summary>
     /// <param name="game">The game instance to which the render feature will be added. Cannot be null.</param>
     /// <param name="renderFeature">The root render feature to add. Cannot be null.</param>
-    public static void AddRootRenderFeature(this IGame game, RootRenderFeature renderFeature)
+    /// <returns>The game, so a chain of setup calls continues.</returns>
+    public static IGame AddRootRenderFeature(this IGame game, RootRenderFeature renderFeature)
     {
         game.GetSceneSystem().GraphicsCompositor.AddRootRenderFeature(renderFeature);
+
+        return game;
     }
 
     /// <summary>
@@ -929,9 +949,12 @@ public static partial class GameExtensions
     /// necessary for rendering particles. Ensure that the game has a valid scene system before invoking this
     /// method.</remarks>
     /// <param name="game">The game to which particle rendering stages and features will be added. Cannot be null.</param>
-    public static void AddParticleRenderer(this IGame game)
+    /// <returns>The game, so a chain of setup calls continues.</returns>
+    public static IGame AddParticleRenderer(this IGame game)
     {
         game.GetSceneSystem().GraphicsCompositor.AddParticleStagesAndFeatures();
+
+        return game;
     }
 
     /// <summary>

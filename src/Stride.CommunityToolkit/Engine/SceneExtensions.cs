@@ -26,7 +26,7 @@ public static class SceneExtensions
 
         foreach (var entity in entities)
         {
-            camera = entity.GetComponentInChildren<CameraComponent>();
+            camera = entity.GetComponentInDescendantsAndSelf<CameraComponent>();
 
             if (camera != null)
             {

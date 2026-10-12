@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
@@ -93,7 +94,7 @@ internal sealed class TextScene : IGoldScene
             Text = "SCREEN TEXT, TOP LEFT",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = DisplayPosition.TopLeft,
+            ScreenAnchor = ScreenAnchor.TopLeft,
             Offset = new Vector2(16f, 16f),
             TextColor = Color.LightGreen,
         });
@@ -103,7 +104,7 @@ internal sealed class TextScene : IGoldScene
             Text = "with a background",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = DisplayPosition.BottomRight,
+            ScreenAnchor = ScreenAnchor.BottomRight,
             Offset = new Vector2(16f, 16f),
             EnableBackground = true,
             BackgroundColor = new Color4(0f, 0f, 0f, 0.6f),

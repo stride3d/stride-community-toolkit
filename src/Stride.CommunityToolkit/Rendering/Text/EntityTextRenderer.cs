@@ -154,22 +154,27 @@ public class EntityTextRenderer : SceneRendererBase
             return;
         }
 
-        // Anchored text takes its anchor from the corner it is pinned to, so it always grows inwards
+        // Anchored text takes its anchor from the point it is pinned to, so it always grows inwards
         // and stays on screen. Anchor is ignored here rather than obeyed, because the combination
         // that a HUD wants is the only one that keeps the text visible - and getting it wrong shows
         // up as text half off the edge of the window. Screen mode is there when the caller wants to
         // place and anchor text independently.
-        DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, GetAnchorForCorner(component.ScreenAnchor), display);
+        DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, GetAnchorForScreenAnchor(component.ScreenAnchor), display);
     }
 
     /// <summary>
-    /// Returns the text anchor that keeps text pinned to the given corner inside the window.
+    /// Returns the text anchor that keeps text pinned to the given point inside the window: the one of the same name.
     /// </summary>
-    private static TextAnchor GetAnchorForCorner(DisplayPosition corner) => corner switch
+    private static TextAnchor GetAnchorForScreenAnchor(ScreenAnchor anchor) => anchor switch
     {
-        DisplayPosition.TopRight => TextAnchor.TopRight,
-        DisplayPosition.BottomLeft => TextAnchor.BottomLeft,
-        DisplayPosition.BottomRight => TextAnchor.BottomRight,
+        ScreenAnchor.TopCenter => TextAnchor.TopCenter,
+        ScreenAnchor.TopRight => TextAnchor.TopRight,
+        ScreenAnchor.MiddleLeft => TextAnchor.MiddleLeft,
+        ScreenAnchor.MiddleCenter => TextAnchor.MiddleCenter,
+        ScreenAnchor.MiddleRight => TextAnchor.MiddleRight,
+        ScreenAnchor.BottomLeft => TextAnchor.BottomLeft,
+        ScreenAnchor.BottomCenter => TextAnchor.BottomCenter,
+        ScreenAnchor.BottomRight => TextAnchor.BottomRight,
         _ => TextAnchor.TopLeft,
     };
 
@@ -212,16 +217,16 @@ public class EntityTextRenderer : SceneRendererBase
     }
 
     /// <summary>
-    /// Resolves a window corner into a pixel position, with the offset always pointing inwards.
+    /// Resolves a point of the window into a pixel position, with the offset always pointing inwards: away from
+    /// a right edge or a bottom edge, and as given from the left, the top or the middle.
     /// </summary>
-    private static Vector2 ResolveAnchoredPosition(DisplayPosition corner, Vector2 offset, Vector2 screenSize)
-        => corner switch
-        {
-            DisplayPosition.TopRight => new Vector2(screenSize.X - offset.X, offset.Y),
-            DisplayPosition.BottomLeft => new Vector2(offset.X, screenSize.Y - offset.Y),
-            DisplayPosition.BottomRight => new Vector2(screenSize.X - offset.X, screenSize.Y - offset.Y),
-            _ => offset,
-        };
+    private static Vector2 ResolveAnchoredPosition(ScreenAnchor anchor, Vector2 offset, Vector2 screenSize)
+    {
+        var x = anchor is ScreenAnchor.TopRight or ScreenAnchor.MiddleRight or ScreenAnchor.BottomRight ? -offset.X : offset.X;
+        var y = anchor is ScreenAnchor.BottomLeft or ScreenAnchor.BottomCenter or ScreenAnchor.BottomRight ? -offset.Y : offset.Y;
+
+        return anchor.At(screenSize) + new Vector2(x, y);
+    }
 
     // display: the display's scale, applied to every pixel figure; 1 when not following it
     private void DrawAt(EntityTextRenderData data, Vector2 position, float opacity, TextAnchor anchor, float display)

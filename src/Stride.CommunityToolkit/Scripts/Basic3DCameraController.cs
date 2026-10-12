@@ -1,6 +1,5 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Scripts.Utilities;
-using Stride.Core;
 using Stride.Engine;
 using Stride.Input;
 
@@ -20,7 +19,7 @@ namespace Stride.CommunityToolkit.Scripts;
 public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
-    private readonly DisplayPosition? _displayPosition;
+    private readonly ScreenAnchor? _helpPosition;
     private Vector3 _upVector;
     private Vector3 _translation;
     private Vector3 _defaultCameraPosition;
@@ -49,17 +48,22 @@ public class Basic3DCameraController : SyncScript
     public bool HelpCollapsed { get; set; } = true;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
-    /// shared overlay to a corner.
+    /// Gets or sets whether the camera's help is put on the shared <see cref="DebugOverlay"/> at all. Defaults to
+    /// <see langword="true"/>, and must be set before the script starts.
     /// </summary>
-    /// <param name="displayPosition">Where the shared <see cref="DebugOverlay"/> - and so the camera help - is
+    public bool ShowHelp { get; set; } = true;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
+    /// shared overlay to an anchor.
+    /// </summary>
+    /// <param name="helpPosition">Where the shared <see cref="DebugOverlay"/> - and so the camera help - is
     /// drawn. <see langword="null"/>, the default, leaves the overlay where it is, so a position set elsewhere
-    /// (for example before the controller starts) is kept; <see cref="DisplayPosition.None"/> registers no
-    /// help at all.
+    /// (for example before the controller starts) is kept.
     /// </param>
-    public Basic3DCameraController(DisplayPosition? displayPosition = null)
+    public Basic3DCameraController(ScreenAnchor? helpPosition = null)
     {
-        _displayPosition = displayPosition;
+        _helpPosition = helpPosition;
     }
 
     /// <summary>
@@ -109,15 +113,14 @@ public class Basic3DCameraController : SyncScript
     {
         base.Start();
 
-        // DisplayPosition.None means the caller does not want camera help on screen, so no section is
-        // registered. The overlay is shared, and this Start runs a frame after the game's own start
-        // callback, so its position is only touched when a corner was asked for explicitly - otherwise
-        // a position set by the example before the controller started would be silently overwritten
-        if (_displayPosition != DisplayPosition.None)
+        // The overlay is shared, and this Start runs a frame after the game's own start callback, so
+        // its position is only touched when an anchor was asked for explicitly - otherwise a position
+        // set by the example before the controller started would be silently overwritten
+        if (ShowHelp)
         {
             var overlay = DebugOverlay.GetOrCreate(Game);
 
-            if (_displayPosition is { } position)
+            if (_helpPosition is { } position)
             {
                 overlay.Position = position;
             }
