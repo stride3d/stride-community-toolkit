@@ -65,8 +65,8 @@ In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitr
 ### Primitives and colliders
 
 - `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bullet chosen, the entity comes with a matching Bullet collider. A [`Bullet3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions) or [`Bullet2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions) passed as the options sets the physics component and whether a collider is included.
-- [`AddBullet3DPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBullet3DPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
-- [`AddBullet2DPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBullet2DPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
+- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
+- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
 
 ### Raycasting
 

@@ -23,7 +23,7 @@ The `Program.cs` file shows how to:
 - Tearing down an instanced pile safely, clearing the instancing before the entities
 - Switching shape, batch size and layout at runtime with DebugTextDropdown
 - Why a perfectly regular spawn lattice must be jittered
-- Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics
+- Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepuPhysics
 
 ![Basic 2D Scene (Stress Pile)](media/stress-pile-2d.webp)
 

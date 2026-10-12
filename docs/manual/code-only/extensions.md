@@ -38,7 +38,7 @@ game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio(), Ground = null }.U
 - [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Adds a ground plane that nothing can fall off. Bullet only.
 
 > [!NOTE]
-> The grounds and `CreatePrimitive` attach the collider of whichever physics engine the setup chose with `UseBepu()` or `UseBullet()`; with neither, they add the mesh alone. Each package's entity extensions (`AddBepu3DPhysics()`, `AddBullet3DPhysics()`) attach its physics explicitly, whatever the setup chose.
+> The grounds and `CreatePrimitive` attach the collider of whichever physics engine the setup chose with `UseBepu()` or `UseBullet()`; with neither, they add the mesh alone. Each package's entity extensions (`AddBepuPhysics()`, `AddBulletPhysics()`) attach its physics explicitly, whatever the setup chose.
 
 ## Cameras
 

@@ -39,7 +39,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 | `Primitive2DModelType.Circle` with `Size = new Vector2(0.5f)` | `Primitive2D.Circle(0.5f)` | Likewise `Rectangle(width, height)`, `Square(size)`, `Capsule(radius, height)`, `Triangle(width, height)`. |
 | `Primitive2DModelType.Polygon` with `Size = new Vector2(radius, sides)` | `Primitive2D.RegularPolygon(radius, sides)` | |
 | `Primitive2DModelType.Polygon` with `Vertices = points` | `Primitive2D.Polygon(points)` | |
-| `entity.AddBepu3DPhysics(PrimitiveModelType.Cube, new() { Size = size })` | `entity.AddBepu3DPhysics(Primitive3D.Box(size))` | The same for `AddBepu2DPhysics`, `AddBullet3DPhysics`, `AddBullet2DPhysics`. |
+| `entity.AddBepu3DPhysics(PrimitiveModelType.Cube, new() { Size = size })` | `entity.AddBepuPhysics(Primitive3D.Box(size))` | The same for the 2D and the Bullet pairs; the names lose their `3D` and `2D`, see below. |
 | `game.Add3DGround(new() { Size = new Vector3(40, 1, 40) })` | `game.Add3DGround(new Vector2(40))` | `Add2DGround`, `Add3DGround` and `AddInfinite3DGround` take a `Vector2? size` first, the options second. |
 | `ShapeFixtureBuilder.AttachShape(Primitive2DModelType.Circle, new Vector2(r, r), body)` | `ShapeFixtureBuilder.AttachShape(Primitive2D.Circle(r), body)` | |
 | `ConeCollider.Create(Vector3? size)` | `ConeCollider.Create(radius, height)` | Also `Create(ConeShape)`. |
@@ -73,6 +73,18 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 | `using Stride.CommunityToolkit.Skyboxes;` for `SkyboxGenerator` | `using Stride.CommunityToolkit.Rendering;` | `SkyboxGenerator` and `SkyboxGeneratorContext` moved into the core; the Skyboxes package depends on the core. |
 
 - `game.Add3DGround(size, new Bepu3DPhysicsOptions { … })` is unchanged in spelling: the method is the core's and takes `Primitive3DEntityOptions`. `AddInfinite3DGround` stays in Bullet.
+
+#### One name where the shape says the world
+
+The `3D` and `2D` in a method name repeated what its `Primitive3D` or `Primitive2D` argument already says.
+
+| Before | After | Note |
+|---|---|---|
+| `entity.AddBepu3DPhysics(shape, options)`, `entity.AddBepu2DPhysics(shape, options)` | `entity.AddBepuPhysics(shape, options)` | One name, overloaded on the shape. |
+| `entity.AddBullet3DPhysics(shape, options)`, `entity.AddBullet2DPhysics(shape, options)` | `entity.AddBulletPhysics(shape, options)` | |
+| `Procedural3DModelBuilder.Build(shape)`, `Procedural2DModelBuilder.Build(shape)` | `ProceduralModelBuilder.Build(shape)` | |
+
+- Kept with the digit, on purpose: `Add3DGround`/`Add2DGround`, `Add3DCamera`/`Add2DCamera` and the controllers, where nothing but the name says the world, and the types that differ in content (`SceneSetup3D`/`2D`, the options, the controllers).
 ### 🎉 New Features
 
 - `Primitive3D` and `Primitive2D`, closed sets of shape records with factories; the mesh builder and every physics package switch over the same set, so a shape missed by one is a compile error, not a mesh that does not match its collider. The round shapes take a `tessellation`, which the enums could not express.
