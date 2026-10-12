@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -81,10 +82,10 @@ public sealed class SimpleHud
     #endregion
 
     private Vector2 PanelCentre
-        => _shapeBatch.Corner(ScreenCorner.BottomLeft) + new Vector2(_style.PanelSize.X * 0.5f, -_style.PanelSize.Y * 0.5f) + new Vector2(_style.Margin, -_style.Margin);
+        => _shapeBatch.Anchor(ScreenAnchor.BottomLeft) + new Vector2(_style.PanelSize.X * 0.5f, -_style.PanelSize.Y * 0.5f) + new Vector2(_style.Margin, -_style.Margin);
 
     private Vector2 DialCentre
-        => _shapeBatch.Corner(ScreenCorner.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
+        => _shapeBatch.Anchor(ScreenAnchor.BottomRight) + new Vector2(-_style.Margin - _style.DialRadius - _style.DialWidth, -_style.Margin - _style.DialRadius - _style.DialWidth);
 
     private void Outline(float width = 2f)
     {

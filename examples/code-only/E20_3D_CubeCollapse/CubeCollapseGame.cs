@@ -4,12 +4,11 @@ using CubeCollapse.Scripts;
 using CubeCollapse.Setup;
 using CubeCollapse.Shared;
 using Stride.BepuPhysics;
-using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
-using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -584,7 +583,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             Text = "Total Score: 0",
             FontSize = 20,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = DisplayPosition.TopLeft,
+            ScreenAnchor = ScreenAnchor.TopLeft,
             Offset = new Vector2(16, 16),
             TextColor = Color.White,
             EnableShadow = true,
@@ -595,7 +594,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             Text = string.Empty,
             FontSize = 16,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = DisplayPosition.TopLeft,
+            ScreenAnchor = ScreenAnchor.TopLeft,
             Offset = new Vector2(16, 44),
             TextColor = new Color(255, 210, 70),
             EnableShadow = true,
@@ -608,7 +607,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             Text = string.Empty,
             FontSize = 14,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = DisplayPosition.TopLeft,
+            ScreenAnchor = ScreenAnchor.TopLeft,
             Offset = new Vector2(16, 66),
             TextColor = new Color(255, 210, 70),
             EnableShadow = true,
@@ -621,7 +620,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
             Text = string.Empty,
             FontSize = 14,
             PositionMode = TextPositionMode.Anchored,
-            ScreenAnchor = DisplayPosition.TopLeft,
+            ScreenAnchor = ScreenAnchor.TopLeft,
             Offset = new Vector2(16, 88),
             TextColor = new Color(200, 205, 215),
             EnableShadow = true,

@@ -3,7 +3,6 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.CommunityToolkit.Skyboxes;
@@ -76,7 +75,7 @@ void Start(Scene scene)
 
     var overlay = DebugOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", OverlayLines);
-    overlay.SetPosition(DisplayPosition.BottomLeft);
+    overlay.SetPosition(ScreenAnchor.BottomLeft);
 }
 
 void Update(Scene scene, GameTime time)

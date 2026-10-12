@@ -4,9 +4,9 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -71,7 +71,7 @@ var sceneSetup = new SceneSetup3D
         bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = new Vector3(0, -10, 0), SolverSubStep = 8, SolverIteration = 1 });
     },
     // Aimed at the sheets from the front, with the camera help out of the menu's way
-    Camera = CameraSetup.Perspective(position: new Vector3(-1, 8, -26), rotation: new Vector3(180, -12, 0)).WithController(DisplayPosition.BottomRight),
+    Camera = CameraSetup.Perspective(position: new Vector3(-1, 8, -26), rotation: new Vector3(180, -12, 0)).WithController(ScreenAnchor.BottomRight),
     Ground = GroundSetup.Plane(new Vector2(40)),
     Profiler = true
 }.UseBepu().UseSkybox();

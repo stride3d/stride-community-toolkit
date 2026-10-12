@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
@@ -117,7 +118,7 @@ void Start(Scene scene)
     {
         Text = "PositionMode = Anchored, TopLeft",
         PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = DisplayPosition.TopLeft,
+        ScreenAnchor = ScreenAnchor.TopLeft,
         Offset = new Vector2(16, 16),
         EnableShadow = true,
     });
@@ -126,7 +127,7 @@ void Start(Scene scene)
     {
         Text = "Anchored, BottomRight\n(resize the window - I stay put)",
         PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = DisplayPosition.BottomRight,
+        ScreenAnchor = ScreenAnchor.BottomRight,
         Offset = new Vector2(16, 40),
         EnableShadow = true,
     });

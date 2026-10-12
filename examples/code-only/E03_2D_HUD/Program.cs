@@ -1,6 +1,6 @@
 using E03_2D_HUD;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -78,7 +78,7 @@ void Start(Scene scene)
 
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    overlay.Position = DisplayPosition.TopLeft;
+    overlay.Position = ScreenAnchor.TopLeft;
     overlay.SectionGap = 0;
     overlay.AddSection("HUD", OverlayLines);
 }

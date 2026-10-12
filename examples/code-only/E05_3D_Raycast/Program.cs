@@ -66,7 +66,7 @@ void Start(Scene scene)
 // Called every frame to update game logic and process user input
 void Update(Scene scene, GameTime time)
 {
-    if (mainCamera == null) return;
+    if (mainCamera is null) return;
 
     // On left mouse button click, process the interaction
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))

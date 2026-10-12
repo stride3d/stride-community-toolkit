@@ -1,15 +1,14 @@
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Rendering.Images;
 using Stride.Games;
 using Stride.Input;
+using Stride.Rendering.Images;
 
 // The same chart API as E11_2D_Charts, in a lit 3D scene - and what the third axis adds.
 //
@@ -178,7 +177,7 @@ void Start(Scene rootScene)
     var overlay = DebugOverlay.GetOrCreate(game);
 
     // The chart fills the window, so the help goes in a corner rather than across the figure (F3 moves it)
-    overlay.Position = DisplayPosition.BottomLeft;
+    overlay.Position = ScreenAnchor.BottomLeft;
 
     overlay.AddSection("Chart", () =>
     [
