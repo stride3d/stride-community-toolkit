@@ -35,10 +35,10 @@ The `Program.cs` file shows how to:
 - Making the topmost segment kinematic to hold the chain up
 - Applying an impulse from the update loop rather than a velocity at build time
 - Picking up and throwing bodies with GrabberScript
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler
 
 ![Rope - building a stable chain of constraints](media/constraint-rope.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Constraints_Rope).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Constraints_Rope/Program.cs?start=1&end=222)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Constraints_Rope/Program.cs?start=1&end=220)]

@@ -28,7 +28,7 @@ The `Program.cs` file shows how to:
 - Switching the whole scene to a different primitive from one line
 - Knowing when instancing does not help
 - Using helpers: AddInstancingSupport, AddInstancingBufferUpload
-- Using helpers: SetupBase3D, Add3DGround, AddBepu3DPhysics
+- Using helpers: SceneSetup3D, Add3DGround, AddBepu3DPhysics
 
 ![Instancing with Entity Transforms](media/instancing-entity-transform.webp)
 

@@ -8,7 +8,7 @@ View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/
 
 - `Private game As New Game()` This line of code creates a new instance of the `Game` class. The Game class is central to the Stride engine, managing the overall game loop, scenes, and updates to the entities.
 - `GameExtensions.Run(game, AddressOf StartGame)` This line initiates the game loop. The `Run` method, from `GameExtensions`, is responsible for starting the game and it takes a reference to the `StartGame` method as a parameter. This method is called once when the game starts.
-- `game.SetupBase3DScene()` This line sets up a basic 3D scene. It's a helper method provided to quickly set up a scene with a default camera, lighting.
+- `New SceneSetup3D().UseBepu().UseSkybox()` is the scene setup `Run` applies before `StartGame`: a camera with the camera controller, a light, the photographed sky, a ground, and Bepu as the physics engine.
 - `game.AddSkybox()` This line adds a skybox to the scene. A [skybox](https://doc.stride3d.net/latest/en/manual/graphics/textures/skyboxes-and-backgrounds.html) is a cube that surrounds the entire scene and is textured with an image to create the illusion of a sky.
 - `game.AddProfiler()` This line adds a profiler to the game.
 - `Dim entity = game.CreatePrimitive(Primitive3D.Capsule())` Here, a new entity is created in the form of a 3D capsule primitive. The `CreatePrimitive` method is a helper method provided to create basic 3D shapes.

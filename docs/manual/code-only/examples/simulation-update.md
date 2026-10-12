@@ -18,11 +18,11 @@ The `Program.cs` file shows how to:
 - Using SetTargetPose safely, once per physics step
 - StartupScript as a component with no per-frame Update
 - Moving a kinematic body so it pushes dynamic bodies
-- Using helpers: SetupBase3DScene
+- Using helpers: SceneSetup3D
 - Using helpers: AddSkybox
 
 ![Give Me a Cube (SimulationUpdate)](media/simulation-update.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_GiveMeACube_SimulationUpdate).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_GiveMeACube_SimulationUpdate/Program.cs?start=1&end=107)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_GiveMeACube_SimulationUpdate/Program.cs?start=1&end=104)]

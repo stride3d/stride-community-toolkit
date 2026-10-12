@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Sharing state between the game thread and the audio thread without a lock
 - Buffering and the latency it implies
 - Showing live audio state as a DebugOverlay section
-- Using helpers: SetupBase3DScene, CreatePrimitive, CreateMaterial
+- Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial
 
 ![Procedural Sound](media/procedural-sound.webp)
 

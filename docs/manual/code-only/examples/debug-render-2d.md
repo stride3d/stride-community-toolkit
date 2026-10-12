@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - Hanging both off one otherwise empty entity
 - Lighting a 2D scene with a LightSpot
 - Giving each shape its own colour with a flat material
-- Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, CreatePrimitive
+- Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive
 
 ![Basic 2D Scene (Debug Rendering)](media/debug-render-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_2D_DebugRender).
 
-[!code-csharp[](../../../../examples/code-only/E08_2D_DebugRender/Program.cs?start=1&end=98)]
+[!code-csharp[](../../../../examples/code-only/E08_2D_DebugRender/Program.cs?start=1&end=94)]

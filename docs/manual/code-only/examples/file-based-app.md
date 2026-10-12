@@ -17,11 +17,11 @@ The `Program.cs` file shows how to:
 - Referencing projects inline with #:project
 - Setting MSBuild properties inline with #:property
 - Converting a file-based app to a project with dotnet project convert
-- Using helpers: SetupBase3DScene
+- Using helpers: SceneSetup3D
 - Using helpers: AddSkybox
 
 ![Basic 3D Scene (Capsule) - File-Based App](media/file-based-app.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_3D_BasicScene_FileBasedApp).
 
-[!code-csharp[](../../../../examples/code-only/E01_3D_BasicScene_FileBasedApp/Program.cs?start=1&end=49)]
+[!code-csharp[](../../../../examples/code-only/E01_3D_BasicScene_FileBasedApp/Program.cs?start=1&end=46)]

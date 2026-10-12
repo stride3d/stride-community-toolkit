@@ -27,4 +27,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E20_3D_CubeCollapse).
 
-[!code-csharp[](../../../../examples/code-only/E20_3D_CubeCollapse/Program.cs?start=1&end=9)]
+[!code-csharp[](../../../../examples/code-only/E20_3D_CubeCollapse/Program.cs?start=1&end=12)]

@@ -16,10 +16,10 @@ The `Program.cs` file shows how to:
 - How this differs from CollidableGizmoScript, which draws the collider
 - Toggling the overlay with its Visible property
 - Comparing mesh against collider when a body misbehaves
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive
 
 ![Debug Render Component](media/debug-render-component.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_DebugRenderComponent).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_DebugRenderComponent/Program.cs?start=1&end=38)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_DebugRenderComponent/Program.cs?start=1&end=34)]

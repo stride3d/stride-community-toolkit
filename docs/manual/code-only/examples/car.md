@@ -19,10 +19,10 @@ The `Program.cs` file shows how to:
 - Re-applying constraint targets only when they change, so the car sleeps when idle
 - Filtering chassis-wheel collisions with a collision layer that does not collide with itself
 - A chase camera in place of the camera controller, to free the driving keys
-- Using helpers: SetupBase3D, Add3DGround, CreatePrimitive (both overloads), GrabberScript
+- Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive (both overloads), GrabberScript
 
 ![Car](media/car.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Car).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Car/Program.cs?start=1&end=434)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Car/Program.cs?start=1&end=438)]

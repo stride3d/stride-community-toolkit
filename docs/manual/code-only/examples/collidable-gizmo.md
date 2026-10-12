@@ -16,10 +16,10 @@ The `Program.cs` file shows how to:
 - Suppressing the generated collider with IncludeCollider = false
 - Showing or hiding the gizmo with its Visible property
 - Diagnosing a body that does not collide as expected
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive
 
 ![Collidable Gizmo](media/collidable-gizmo.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_CollidableGizmo).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_CollidableGizmo/Program.cs?start=1&end=45)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_CollidableGizmo/Program.cs?start=1&end=41)]

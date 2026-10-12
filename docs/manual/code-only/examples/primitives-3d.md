@@ -19,10 +19,10 @@ The `Program.cs` file shows how to:
 - Tagging entities with a name so the scene can be torn down and rebuilt
 - Inspecting generated colliders with CollidableGizmoScript
 - Adding keyboard instructions as a DebugOverlay section
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive
 
 ![Basic 3D Scene (Eight Primitives)](media/primitives-3d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_Primitives).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_Primitives/Program.cs?start=1&end=109)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_Primitives/Program.cs?start=1&end=104)]

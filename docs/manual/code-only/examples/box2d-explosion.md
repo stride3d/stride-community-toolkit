@@ -16,7 +16,7 @@ The `Program.cs` file shows how to:
 - Why the impulse is per metre of perimeter, shown with a slab and a ball of equal mass
 - Drawing a transient effect with ShapeBatch rings that fade
 - Picking bodies up with Grabber2DScript
-- Using helpers: SetupBase2D, Add2DCameraController, AddShapeBatch, ShapeComponent
+- Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent
 
 > [!NOTE]
 > This example references `Stride.CommunityToolkit.Box2D`, which is not on NuGet yet. Run it from a clone of the
@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Box2D_Explosion).
 
-[!code-csharp[](../../../../examples/code-only/E06_Box2D_Explosion/Program.cs?start=1&end=229)]
+[!code-csharp[](../../../../examples/code-only/E06_Box2D_Explosion/Program.cs?start=1&end=233)]

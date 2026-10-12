@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Registering InstancingRenderFeature on the MeshRenderFeature
 - Sharing one Model between many entities
 - Toggling a ModelComponent to compare rendering cost
-- Using helpers: SetupBase3D
+- Using helpers: SceneSetup3D
 - Using helpers: Add3DCameraController
 - Using helpers: AddProfiler
 
