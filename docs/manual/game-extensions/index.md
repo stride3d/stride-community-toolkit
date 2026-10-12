@@ -19,14 +19,14 @@ They all live in `Stride.CommunityToolkit.Engine`, so one `using` covers everyth
 > [!NOTE]
 > On the compilation mode, measured rather than assumed: on Direct3D 11 `Debug` (the engine's default for a game without settings) and `Release` produce identical shader bytecode, because the compiler only applies the optimisation level when debug information is off. `AppStore` is the one that differs - optimisation level 2 with the symbols stripped, so RenderDoc no longer shows shader source. Vulkan and Direct3D 12 ignore the mode. Bytecode is cached per mode, so a change means one full recompile on the next run.
 
-## Scene setup shortcuts
+## Scene setup
 
-One call instead of assembling the compositor, camera and lighting by hand.
+The compositor, camera, lighting, sky and ground of a code-only scene as one object that `Run` applies before `start`.
 
-- [`SetupBase2D()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2D(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color})) - Adds a graphics compositor and a 2D camera.
-- [`SetupBase3D()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3D(Stride.Engine.Game)) - Adds a graphics compositor, a 3D camera and a directional light.
+- [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) and [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D) - Every piece a property with a default; `null` leaves a piece out. `game.Run(start:)` with no setup applies `SceneSetup3D.Default`.
+- [`Run(setup, start, update)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)) - Applies the setup and runs the game.
 
-The physics packages extend these into a full playable scene - see [Physics Extensions](../physics-extensions/index.md) for `SetupBase2DScene()` and `SetupBase3DScene()`.
+The physics packages choose the engine with `UseBepu()` and `UseBullet()` - see [Physics Extensions](../physics-extensions/index.md); the pieces one by one are under [Code-Only Extensions](../code-only/extensions.md).
 
 ## Graphics compositor
 
@@ -58,7 +58,7 @@ See [Camera Controllers](../camera-extensions/camera-controllers.md) for the key
 - [`AddAllDirectionLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddAllDirectionLighting(Stride.Engine.Game,System.Single,System.Boolean)) - Lights the scene from every direction at once, so nothing is left in shadow. Blunt, but it makes a debug scene readable.
 - [`AddStudioLighting()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddStudioLighting(Stride.Engine.Game,System.Single,System.Single,System.Boolean,System.Boolean)) - A three-point key, fill and rim rig aimed at the scene centre, returned as a tuple so you can adjust each light afterwards.
 
-For image-based ambient light, `AddSkybox()` ships in the `Stride.CommunityToolkit.Skyboxes` package - see [Code-Only Extensions](../code-only/extensions.md).
+The setup's gradient sky lights the scene from above; for a photographed sky, `UseSkybox()` and `AddSkybox()` ship in the `Stride.CommunityToolkit.Skyboxes` package - see [Code-Only Extensions](../code-only/extensions.md).
 
 ## Materials and primitives
 

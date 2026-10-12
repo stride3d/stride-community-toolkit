@@ -97,12 +97,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
@@ -112,9 +110,8 @@ void Start(Scene rootScene)
 ```
 
 - `using var game = new Game();` creates a new `Game` instance.
-- `game.Run(start: Start);` starts the game and calls `Start` when the game begins.
+- `game.Run(new SceneSetup3D().UseBepu(), start: Start);` sets up a basic 3D scene (camera, lighting, sky, ground) with Bepu physics, starts the game and calls `Start` when the scene is ready.
 - `void Start(Scene rootScene)` is invoked on start with the active root scene.
-- `game.SetupBase3DScene();` creates a basic 3D scene (camera, lighting, ground).
 - `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
 - `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. This step is crucial because assigning the entity to the scene ensures it is rendered and visible in the game. Without this assignment, the entity would not be part of the scene graph, and therefore, it would not appear in the game. 

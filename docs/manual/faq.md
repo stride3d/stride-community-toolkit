@@ -176,8 +176,8 @@ Use the toolkit's camera extensions: `ScreenToWorldPoint`, `ScreenToWorldRaySegm
 ### My code-only scene is blank. What is missing?
 
 A scene needs a camera, a graphics compositor that renders it, and at least one light.
-`game.SetupBase3D()` adds all three. With the Bepu package, `game.SetupBase3DScene()` also adds a
-camera controller and a ground. See
+`game.Run(new SceneSetup3D(), start: Start)` adds all three, with a camera controller, a sky and a
+ground; `.UseBepu()` on the setup gives the ground a collider. See
 [Code-Only](code-only/index.md).
 
 ### My procedurally built model doesn't show. Why?

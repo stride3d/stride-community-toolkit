@@ -42,7 +42,7 @@ by line.
 
 | Directive | Meaning |
 |---|---|
-| `#:package Name@Version` | A NuGet package reference. `Stride.CommunityToolkit` brings in Stride itself and the asset compiler; `Bepu` adds physics; `Skyboxes` adds `AddSkybox()`. On Linux add `Stride.CommunityToolkit.Linux` as well; see the note on the [Create Project](create-project.md) page. |
+| `#:package Name@Version` | A NuGet package reference. `Stride.CommunityToolkit` brings in Stride itself and the asset compiler; `Bepu` adds physics; `Skyboxes` adds the photographed sky, `UseSkybox()`. On Linux add `Stride.CommunityToolkit.Linux` as well; see the note on the [Create Project](create-project.md) page. |
 | `#:property Name=Value` | An MSBuild property, as if written in a `.csproj`. `PublishAot=false` is there because file-based apps publish as native AOT by default and Stride is not AOT-compatible; without it every build carries the trimming and AOT analyser warnings. |
 | `#:project ../path/To.csproj` | A project reference. The toolkit's own [file-based example](examples/file-based-app.md) uses this to build against the toolkit source instead of a package. |
 

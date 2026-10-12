@@ -60,12 +60,10 @@ follow the steps, but it is there if you want to compare.
 
    using var game = new Game();
 
-   game.Run(start: Start);
+   game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
    void Start(Scene rootScene)
    {
-       game.SetupBase2DScene();
-
        for (var i = 0; i < ShapeCount; i++)
        {
            // Each kind of shape in turn
@@ -111,7 +109,7 @@ ShapeBatch shapeBatch = null!;
 ```
 
 It needs `using Stride.CommunityToolkit.Shapes;`. The `null!` says that the value is set later, in
-`Start`. Add two lines to `Start`, after `game.SetupBase2DScene();`:
+`Start`. Add two lines at the top of `Start`:
 
 [!code-csharp[](../../../examples/code-only/E03_2D_HUD_Basics/Program.cs#Step1Create)]
 

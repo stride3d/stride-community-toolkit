@@ -35,7 +35,7 @@ that point, per pixel, through the same vertex pipeline that drew the frame - sk
 instancing, material displacement, all of it, for free.
 
 ```csharp
-var picker = game.AddGpuPicker();   // once, after SetupBase3D
+var picker = game.AddGpuPicker();   // once, in Start
 picker.Continuous = true;           // follow the mouse every frame
 
 // each frame

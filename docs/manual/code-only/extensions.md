@@ -16,24 +16,29 @@ Feel free to inspect and modify the source to adapt behaviour or create your own
 
 ## Setting up a scene
 
-The `SetupBase*` methods are the shortcut: one call instead of assembling the pieces below by hand.
+The setup is data that `Run` applies before `start`: one object instead of assembling the pieces below by hand, and one property to change one thing.
 
-- [`SetupBase2D()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase2D(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color})) - Adds a graphics compositor and a 2D camera.
-- [`SetupBase3D()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetupBase3D(Stride.Engine.Game)) - Adds a graphics compositor, a 3D camera and a directional light.
-- [`SetupBase2DScene()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.SetupBase2DScene(Stride.Engine.Game)) - `SetupBase2D()` plus a skybox, 2D ground and a camera controller, so the scene is immediately visible and navigable.
-- [`SetupBase3DScene()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.SetupBase3DScene(Stride.Engine.Game)) - `SetupBase3D()` plus a skybox, 3D ground and a camera controller.
+- [`Run(setup, start, update)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)) - Applies the setup, then runs `start` and `update`. `game.Run(start:)` with no setup applies `SceneSetup3D.Default`; `SceneSetup.None` applies nothing.
+- [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) - A forward compositor with the UI stage, a perspective camera with its controller, a directional light, a gradient sky and a ground plane. `Camera`, `Lighting`, `Skybox` and `Ground` each take `null` to leave that piece out; `ClearColor`, `Msaa`, `PostEffects`, `GameSettings`, `DebugOverlay` and `Profiler` are the rest.
+- [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D) - The 2D equivalent: an orthographic camera with the 2D controller and a flat ground, no lights and no sky, and no tone map, so flat colours stay as written.
+- [`CameraSetup`](xref:Stride.CommunityToolkit.Engine.CameraSetup), [`LightingSetup`](xref:Stride.CommunityToolkit.Engine.LightingSetup), [`GroundSetup`](xref:Stride.CommunityToolkit.Engine.GroundSetup), [`SkyboxSetupBase`](xref:Stride.CommunityToolkit.Engine.SkyboxSetupBase) - The pieces, each built through a factory: `CameraSetup.Perspective(position, rotation).WithController()`, `LightingSetup.Studio()`, `GroundSetup.Visual()`, `new GradientSkyboxSetup()`.
+- `UseBepu()` and `UseBullet()`, from the physics packages, choose the physics engine; `UseSkybox()`, from the skyboxes package, swaps the gradient sky for the photographed one. See [Physics Extensions](../physics-extensions/index.md).
+
+```csharp
+game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio(), Ground = null }.UseBepu().UseSkybox(), start: Start);
+```
 
 ## Building a scene piece by piece
 
 - [`AddGraphicsCompositor()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGraphicsCompositor(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Color},Stride.Graphics.MultisampleCount)) - Adds a default `GraphicsCompositor`. Nothing renders without one.
 - [`AddDirectionalLight()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddDirectionalLight(Stride.Engine.Game,System.String,System.Boolean,System.Single)) - Adds a directional light, with shadows on by default.
 - [`AddSkybox()`](xref:Stride.CommunityToolkit.Skyboxes.GameExtensions.AddSkybox(Stride.Engine.Game,System.String)) - Adds a skybox, which also provides ambient lighting.
-- [`Add2DGround()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.Add2DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions)) - Adds a static 2D ground collider.
-- [`Add3DGround()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.Add3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions)) - Adds a static 3D ground plane.
+- [`Add2DGround()`](xref:Stride.CommunityToolkit.Engine.GroundExtensions.Add2DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Engine.Primitive2DEntityOptions)) - Adds a flat 2D ground, with a static collider from the physics engine the setup chose.
+- [`Add3DGround()`](xref:Stride.CommunityToolkit.Engine.GroundExtensions.Add3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Engine.Primitive3DEntityOptions)) - Adds a ground plane, with a static collider from the physics engine the setup chose.
 - [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Adds a ground plane that nothing can fall off. Bullet only.
 
 > [!NOTE]
-> The scene and ground methods come in a Bepu and a Bullet flavour, in `Stride.CommunityToolkit.Bepu` and `Stride.CommunityToolkit.Bullet`. The links above point at Bepu, which is the default. Import one namespace or the other, not both.
+> The grounds and `CreatePrimitive` attach the collider of whichever physics engine the setup chose with `UseBepu()` or `UseBullet()`; with neither, they add the mesh alone. Each package's entity extensions (`AddBepu3DPhysics()`, `AddBullet3DPhysics()`) attach its physics explicitly, whatever the setup chose.
 
 ## Cameras
 
@@ -45,7 +50,7 @@ The `SetupBase*` methods are the shortcut: one call instead of assembling the pi
 - [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - On the camera entity too, through `game.AddGrabber()`: left mouse picks up any dynamic body, carries it, and throws it on release, through servo constraints so the body still collides. One line that makes any Bepu scene a toy.
 - [`Grabber2DScript`](xref:Stride.CommunityToolkit.Box2D.Grabber2DScript) - The same for a Box2D world: give it the `Box2DSimulation` and the left mouse picks up, drags and throws through a kinematic anchor and a motor joint.
 - [`CharacterMover2D`](xref:Stride.CommunityToolkit.Box2D.CharacterMover2D) - A platformer character for a Box2D world with no rigid body: a capsule moved Quake style on Box2D v3's mover API, registered with the simulation, driven by `Throttle` and `Jump()`.
-- [`SetCameraPosition()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraPosition(Stride.Engine.Game,Stride.Core.Mathematics.Vector3,System.String)) - Moves the existing camera. Use this after `SetupBase3DScene()` rather than calling `Add3DCamera()` again, which would create a second camera competing for the same slot.
+- [`SetCameraPosition()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraPosition(Stride.Engine.Game,Stride.Core.Mathematics.Vector3,System.String)) - Moves the existing camera. Use this after the setup rather than calling `Add3DCamera()` again, which would create a second camera competing for the same slot.
 - [`SetCameraRotation()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraRotation(Stride.Engine.Game,Stride.Core.Mathematics.Vector3,System.String)) - Aims the existing camera, taking yaw, pitch and roll in degrees.
 
 ## Sound

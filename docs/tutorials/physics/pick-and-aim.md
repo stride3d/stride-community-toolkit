@@ -14,7 +14,7 @@ In this tutorial, we will learn how to use **raycasting** to detect entities in 
 
 ## Code Walkthrough
 
-- **Game Setup:** In the `Start()` method, we set up a basic 3D scene with lighting and a camera using the `SetupBase3DScene()` helper method. We then create two 3D entities, a **cube** and a **sphere**, and position them in the scene with different materials.
+- **Game Setup:** In the `Start()` method, the scene setup passed to `game.Run` has already given us lighting, a camera and a ground with Bepu physics. We then create two 3D entities, a **cube** and a **sphere**, and position them in the scene with different materials.
 
 - **Raycasting with Mouse Input:** In the `Update()` method, we check if the left mouse button is pressed. If pressed, a ray is cast from the mouse position into the 3D world using `ScreenToWorldRaySegment()`. This ray is used to check for collisions with 3D entities in the scene via **raycasting**.
 
