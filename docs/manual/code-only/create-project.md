@@ -39,7 +39,7 @@ The steps below show how to create a new Stride project using the command line. 
 
 # [Linux](#tab/linux)
 
-1. Prerequisites: the .NET 10 SDK, Microsoft's build (`dotnet-install.sh` or the Microsoft package feed). A distribution's own `dotnet` package is not supported: it reports a distribution-specific runtime identifier that the asset compiler does not map, so no native library is found, and its older Roslyn skips Stride's source generators without an error. If you must build with it, `Stride.CommunityToolkit.Linux` copies the asset compiler's native libraries into place; the source generators stay skipped.
+1. Prerequisites: the .NET 10 SDK. Microsoft's build (`dotnet-install.sh` or the Microsoft package feed) needs nothing more; a distribution's own `dotnet` package works too, with the Linux package of step 6.
 2. Create a console app:
    ```
    dotnet new console --framework net10.0 --name YourProjectName
@@ -56,17 +56,21 @@ The steps below show how to create a new Stride project using the command line. 
    ```
    dotnet add package Stride.CommunityToolkit --prerelease
    ```
-6. Add the Bepu physics package:
+6. Only with a distribution's `dotnet` package, add the Linux package. The distribution's build reports a runtime identifier the asset compiler does not map, so without this package no native library is found; the package copies them into place. The distribution's older Roslyn also skips Stride's source generators without an error, which Microsoft's build does not.
+   ```
+   dotnet add package Stride.CommunityToolkit.Linux --prerelease
+   ```
+7. Add the Bepu physics package:
    ```
    dotnet add package Stride.CommunityToolkit.Bepu --prerelease
    ```
-7. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
-8. Build. On Stride 4.4 the first build of a project fails inside the asset compiler with NuGet signature errors, because the compiler inherits the SDK's signature verification without the SDK's trust store (reported upstream). Until that is fixed, turn the verification off for the build:
+8. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
+9. Build. On Stride 4.4 the first build of a project fails inside the asset compiler with NuGet signature errors, because the compiler inherits the SDK's signature verification without the SDK's trust store (reported upstream). Until that is fixed, turn the verification off for the build:
    ```
    DOTNET_NUGET_SIGNATURE_VERIFICATION=false dotnet build
    ```
    Later builds in the same project no longer need the variable.
-9. Run the project:
+10. Run the project:
    ```
    dotnet run
    ```
@@ -97,12 +101,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
     entity.Transform.Position = new Vector3(0, 8, 0);
@@ -112,9 +114,8 @@ void Start(Scene rootScene)
 ```
 
 - `using var game = new Game();` creates a new `Game` instance.
-- `game.Run(start: Start);` starts the game and calls `Start` when the game begins.
+- `game.Run(new SceneSetup3D().UseBepu(), start: Start);` sets up a basic 3D scene (camera, lighting, sky, ground) with Bepu physics, starts the game and calls `Start` when the scene is ready. Every piece of the setup is a property; see [Scene Setup](scene-setup.md).
 - `void Start(Scene rootScene)` is invoked on start with the active root scene.
-- `game.SetupBase3DScene();` creates a basic 3D scene (camera, lighting, ground).
 - `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
 - `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. This step is crucial because assigning the entity to the scene ensures it is rendered and visible in the game. Without this assignment, the entity would not be part of the scene graph, and therefore, it would not appear in the game. 

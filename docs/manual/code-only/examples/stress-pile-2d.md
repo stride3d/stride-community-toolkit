@@ -23,10 +23,10 @@ The `Program.cs` file shows how to:
 - Tearing down an instanced pile safely, clearing the instancing before the entities
 - Switching shape, batch size and layout at runtime with DebugTextDropdown
 - Why a perfectly regular spawn lattice must be jittered
-- Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics
+- Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepuPhysics
 
 ![Basic 2D Scene (Stress Pile)](media/stress-pile-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_2D_StressPile).
 
-[!code-csharp[](../../../../examples/code-only/E10_2D_StressPile/Program.cs?start=1&end=467)]
+[!code-csharp[](../../../../examples/code-only/E10_2D_StressPile/Program.cs?start=1&end=466)]

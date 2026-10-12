@@ -10,12 +10,9 @@ using Stride.Rendering.ProceduralModels;
 
 using var game = new Game();
 
-game.Run(start: scene =>
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: scene =>
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
     game.AddGroundGizmo(new(-4, 0, -4), showAxisName: true);
-    game.AddProfiler();
 
     // Add 2D text renderer that renders screen-space labels for entities with EntityTextComponent
     game.AddSceneRenderer(new EntityTextRenderer());
@@ -181,7 +178,7 @@ concepts:
   - Labelling vertices on screen to debug a mesh
   - "Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())"
   - Orienting yourself with a named-axis ground gizmo
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler, CreateFlatMaterial"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler, CreateFlatMaterial"
 tags:
   - 3D
   - Geometry

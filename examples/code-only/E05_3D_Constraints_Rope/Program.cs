@@ -84,19 +84,19 @@ var stabilised = true;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new Vector3(13, 12, 12), rotation: new Vector3(40, -24, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-
     // Pick up and throw any body with the left mouse button (GrabberScript, see E05_3D_Grabber).
     game.GetCameraEntity().Add(new GrabberScript());
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddStudioLighting();
-    game.SetCameraPosition(new Vector3(13, 12, 12));
-    game.SetCameraRotation(new Vector3(40, -24, 0));
 
     InitializeDebugOverlay();
 
@@ -191,8 +191,6 @@ void SwingWeights()
 
 IReadOnlyList<TextElement> BuildInstructions()
 {
-
-
     // Anchor-to-weight distance is the giveaway. Both ropes are built to the same nominal length, so
     // a number that climbs and wanders is a rope being pulled apart faster than the solver can fix.
     return [
@@ -272,7 +270,7 @@ concepts:
   - Making the topmost segment kinematic to hold the chain up
   - Applying an impulse from the update loop rather than a velocity at build time
   - Picking up and throwing bodies with GrabberScript
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler"
 tags:
   - 3D
   - Physics

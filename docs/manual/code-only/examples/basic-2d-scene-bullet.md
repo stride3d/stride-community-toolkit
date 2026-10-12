@@ -15,10 +15,10 @@ The `Program.cs` file shows how to:
 - Running the base 2D scene on the legacy Bullet physics engine
 - Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu
 - Why the scene code needs no change when the physics engine does
-- Using helpers: SetupBase2DScene, CreatePrimitive, CreateFlatMaterial
+- Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial
 
 ![Basic 2D Scene (Capsule) - Bullet Physics](media/basic-2d-scene-bullet.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_2D_BasicScene_Bullet).
 
-[!code-csharp[](../../../../examples/code-only/E01_2D_BasicScene_Bullet/Program.cs?start=1&end=21)]
+[!code-csharp[](../../../../examples/code-only/E01_2D_BasicScene_Bullet/Program.cs?start=1&end=19)]

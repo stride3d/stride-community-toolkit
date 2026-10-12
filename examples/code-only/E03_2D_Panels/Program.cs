@@ -178,23 +178,16 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(6, 8, 14), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(), Ground = null }, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
 
     // No ground and no physics: this is a gallery, and the default 2D ground would cut through it
-    game.SetupBase2D(new Color(6, 8, 14));
-    game.Add2DCameraController();
     game.AddWorldTextRenderer();
 
     shapes = game.AddShapeBatch();
-
-    var camera = game.GetCameraEntity().Get<CameraComponent>();
-
-    // The controller reads this on its first frame and returns to it when H resets the camera
-    camera.OrthographicSize = ViewHeight;
 
     // A code-only game has no font assets, so any font other than Stride's default one comes from
     // the machine. Asking for a list rather than a name is what keeps this working off Windows;

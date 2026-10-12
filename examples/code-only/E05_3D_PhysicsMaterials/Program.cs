@@ -89,21 +89,21 @@ var launched = false;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    // To the right of the scene and looking straight ahead, which leaves the overlay's side clear
+    Camera = CameraSetup.Perspective(position: new Vector3(3.4f, 9.5f, 19.5f), rotation: new Vector3(0f, -26f, 0f)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Physics materials - Stride Community Toolkit";
 
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddEntityTextRenderer();
-
-    // To the right of the scene and looking straight ahead, which leaves the overlay's side clear
-    game.SetCameraPosition(new Vector3(3.4f, 9.5f, 19.5f));
-    game.SetCameraRotation(new Vector3(0f, -26f, 0f));
 
     for (var i = 0; i < bounceLanes.Length; i++) BuildBounceLane(scene, bounceLanes[i], (i - (bounceLanes.Length - 1) * 0.5f) * BallSpacing);
 
@@ -401,7 +401,7 @@ concepts:
   - Setting the four numbers on a BodyComponent and on a StaticComponent
   - Replaying a scene - Teleport, then Awake, then the velocities
   - Measuring a rebound from a body's LinearVelocity, which cannot miss a short contact
-  - "Using helpers: SetupBase3DScene, CreatePrimitive, AddEntityTextRenderer, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddEntityTextRenderer, DebugOverlay"
 tags:
   - 3D
   - Physics

@@ -15,11 +15,8 @@ List<Entity> sphereEntities = new(capacity: 8);
 
 using var game = new Game();
 
-game.Run(start: (Scene rootScene) =>
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: (Scene rootScene) =>
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddDebugShapes();
 
     CreateSpheres(rootScene, 6);
@@ -32,7 +29,6 @@ game.Run(start: (Scene rootScene) =>
         debugDraw.PrimitiveColor = Color.Lime;
     }
 }, update: Update);
-
 
 void CreateSpheres(Scene rootScene, int count)
 {

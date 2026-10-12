@@ -40,7 +40,7 @@ if (scene is null)
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(scene.Setup, start: Start, update: Update);
 
 return 0;
 

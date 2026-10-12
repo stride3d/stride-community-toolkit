@@ -15,10 +15,10 @@ The `Program.cs` file shows how to:
 - Running the base 3D scene on the legacy Bullet physics engine
 - Switching engine by namespace: Stride.CommunityToolkit.Bullet in place of .Bepu
 - Why the scene code needs no change when the physics engine does
-- Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive
 
 ![Basic 3D Scene (Capsule) - Bullet Physics](media/capsule-with-rigid-body-bullet.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_3D_BasicScene_Bullet).
 
-[!code-csharp[](../../../../examples/code-only/E01_3D_BasicScene_Bullet/Program.cs?start=1&end=20)]
+[!code-csharp[](../../../../examples/code-only/E01_3D_BasicScene_Bullet/Program.cs?start=1&end=17)]

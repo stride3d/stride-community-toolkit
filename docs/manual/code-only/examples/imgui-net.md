@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Driving a kinematic BodyComponent with LinearVelocity from a per-frame update
 - Why writing Transform.Position does not move a physics body
 - Rebuilding the ImGui font atlas for the window DPI
-- Using helpers: AddImGuiNet, SetupBase3DScene, AddProfiler
+- Using helpers: AddImGuiNet, SceneSetup3D, AddProfiler
 
 > [!NOTE]
 > This example references `Stride.CommunityToolkit.ImGuiNet`, which is not on NuGet yet. Run it from a clone of the
@@ -27,4 +27,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_ImGuiNet).
 
-[!code-csharp[](../../../../examples/code-only/E04_ImGuiNet/Program.cs?start=1&end=230)]
+[!code-csharp[](../../../../examples/code-only/E04_ImGuiNet/Program.cs?start=1&end=217)]

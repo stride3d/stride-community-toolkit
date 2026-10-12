@@ -11,12 +11,10 @@ using Buffer = Stride.Graphics.Buffer;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     var lineEntity = CreateLineEntity(game);
 
@@ -84,7 +82,7 @@ concepts:
   - Wrapping a MeshDraw in a Mesh, Model and ModelComponent
   - Making a line visible with an emissive material
   - Parenting an entity so it follows another
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create"
 tags:
   - 3D
   - Geometry

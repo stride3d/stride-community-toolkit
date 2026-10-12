@@ -8,8 +8,8 @@ itself every frame; nothing calls it.
 Use it instead of `game.DebugTextSystem.Print(...)` from several scripts, whose hand-placed lines
 overlap and are unreadable on a high-DPI display.
 
-`DebugOverlay`, `DebugOverlaySection`, `TextElement` and `DisplayPosition` live in the
-`Stride.CommunityToolkit.Scripts.Utilities` namespace.
+`DebugOverlay`, `DebugOverlaySection` and `TextElement` live in the
+`Stride.CommunityToolkit.Scripts.Utilities` namespace; `ScreenAnchor` in `Stride.CommunityToolkit.Rendering`.
 
 ## Adding text
 
@@ -19,7 +19,7 @@ values that change need no pushing - this is `E02_3D_Primitives`:
 ```csharp
 var overlay = DebugOverlay.GetOrCreate(game);
 
-overlay.Position = DisplayPosition.BottomLeft;
+overlay.Position = ScreenAnchor.BottomLeft;
 
 overlay.AddSection("Game", static () =>
 [
@@ -64,9 +64,9 @@ Sections are separated by one blank line; `SectionGap` changes how many, and `0`
 | Key or property | Default | Does |
 |---|---|---|
 | `ToggleKey` | <kbd>F4</kbd> | Hides and shows the whole overlay. |
-| `RepositionKey` | <kbd>F3</kbd> | Cycles the corner: top-left, top-right, bottom-right, bottom-left. |
-| `Position` | `TopRight` | The corner. `DisplayPosition.Custom` uses `CustomPosition` instead; `None` draws nothing. |
-| `Margin` | `5, 10` | Distance from the corner, in unscaled pixels. |
+| `RepositionKey` | <kbd>F3</kbd> | Cycles the corners: top-left, top-right, bottom-right, bottom-left. |
+| `Position` | `TopRight` | The `ScreenAnchor`: a corner, the middle of an edge or the centre. `null` uses `CustomPosition` instead; `Visible = false` draws nothing. |
+| `Margin` | `5, 10` | Distance from the edges, in unscaled pixels. |
 
 Section keys are read even while the overlay is hidden, so a collapse toggle pressed with everything
 off still takes effect.

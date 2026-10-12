@@ -21,18 +21,14 @@ List<Primitive2D> primitives = [
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Bepu 2D Physics Primitives";
 
-    game.SetupBase2D();
-    game.Add2DCameraController();
-    game.AddProfiler();
-
-    var ground = game.Add2DGround();
+    var ground = rootScene.Entities.First(e => e.Name == GameDefaults.DefaultGroundName);
     ground.Transform.Position = new Vector3(0, -4, 0);
 
     // Lighting example for 2D scene
@@ -118,7 +114,7 @@ concepts:
   - Hanging both off one otherwise empty entity
   - Lighting a 2D scene with a LightSpot
   - Giving each shape its own colour with a flat material
-  - "Using helpers: SetupBase2D, Add2DCameraController, Add2DGround, CreatePrimitive"
+  - "Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive"
 tags:
   - 2D
   - Bepu

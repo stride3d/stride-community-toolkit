@@ -23,7 +23,7 @@ public static class EntityExtensions
         /// <param name="options">Optional physics configuration: the body component, the collider depth, and whether to include a collider. If null, default options are used.</param>
         /// <returns>The entity with the Bepu 2D physics components added.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-        public Entity AddBepu2DPhysics(Primitive2D shape, Bepu2DPhysicsOptions? options = null)
+        public Entity AddBepuPhysics(Primitive2D shape, Bepu2DPhysicsOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(entity);
             ArgumentNullException.ThrowIfNull(shape);
@@ -64,7 +64,7 @@ public static class EntityExtensions
         /// <param name="options">Optional physics configuration: the body component and whether to include a collider. If null, default options are used.</param>
         /// <returns>The entity with the Bepu 3D physics components added.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-        public Entity AddBepu3DPhysics(Primitive3D shape, Bepu3DPhysicsOptions? options = null)
+        public Entity AddBepuPhysics(Primitive3D shape, Bepu3DPhysicsOptions? options = null)
         {
             ArgumentNullException.ThrowIfNull(entity);
             ArgumentNullException.ThrowIfNull(shape);

@@ -7,7 +7,7 @@ slug: basic-scene-engine-only
 
 A ground, a cube and a camera written against Stride alone, with no toolkit package: the graphics
 compositor, the camera, the lights, the procedural models and the material that the toolkit's
-SetupBase3D and CreatePrimitive stand for. About ninety lines where the toolkit version is five,
+SceneSetup3D and CreatePrimitive stand for. About ninety lines where the toolkit version is five,
 and a map of what each helper does underneath.
 
 The `Program.cs` file shows how to:

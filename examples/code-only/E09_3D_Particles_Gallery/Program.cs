@@ -38,7 +38,7 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D { Ground = null, Profiler = true }.UseSkybox(), start: Start, update: Update);
 
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
@@ -48,10 +48,6 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Particle Gallery - Stride Community Toolkit";
 
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddParticleRenderer();
 
     // The text renderers, appended after the camera renderer, so labels land on top of everything

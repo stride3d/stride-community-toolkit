@@ -3,7 +3,6 @@ using E04_CubeClicker.Scripts;
 using NexVYaml;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 using Stride.Graphics;
@@ -20,15 +19,10 @@ using var game = new Game();
 // Register all DataContracted Types
 NexYamlSerializerRegistry.Init();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add3DCamera().Add3DCameraController();
-    game.AddDirectionalLight();
-    game.Add3DGround();
-    game.AddSkybox();
     game.AddGroundGizmo(showAxisName: true);
 
     CreateAndRegisterGameManagerUI(rootScene);

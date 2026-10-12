@@ -47,7 +47,15 @@ var wheelMotor = true;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup2D
+{
+    ClearColor = background,
+    Camera = CameraSetup.Orthographic(position: new Vector3(0, 7, 50), orthographicSize: 26).WithController(),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -56,13 +64,7 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Joints - Stride Community Toolkit";
 
-    game.SetupBase2D(clearColor: background);
-    var cameraEntity = game.Add2DCameraController();
-    game.AddProfiler();
-
-    var camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
-    camera.Entity.Transform.Position = new Vector3(0, 7, 50);
-    camera.OrthographicSize = 26;
+    var cameraEntity = game.GetCameraEntity();
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;
@@ -343,7 +345,7 @@ concepts:
   - Toggling a joint's motor and limit at runtime through the Box2D joint functions
   - Drawing joints, contacts, bounds and mass with Box2DDebugDraw, Box2D's debug draw through ShapeBatch
   - Pulling on constrained bodies with Grabber2DScript
-  - "Using helpers: SetupBase2D, Add2DCameraController, AddShapeBatch, ShapeComponent"
+  - "Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent"
 tags:
   - 2D
   - Box2D

@@ -62,15 +62,12 @@ var flightFromRotation = Quaternion.Identity;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Easing in a 3D game - Stride Community Toolkit";
-
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     LookFrom(viewpoints[0]);
 
@@ -107,6 +104,7 @@ void Start(Scene rootScene)
     // visual, not a body - the platform already shows how easing meets physics
     var frame = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.2f, 2.6f, 0.2f)), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         EntityName = "Door frame",
         Material = game.CreateMaterial(new Color(60, 62, 70), metalness: 0.2f, glossiness: 0.5f),
         Position = doorHinge,
@@ -118,6 +116,7 @@ void Start(Scene rootScene)
 
     var leaf = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.12f, 2.4f, 1.6f)), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         EntityName = "Door leaf",
         Material = game.CreateMaterial(new Color(170, 110, 60), metalness: 0.2f, glossiness: 0.5f),
         Position = doorOffset,
@@ -133,6 +132,7 @@ void Start(Scene rootScene)
     {
         var crystal = game.CreatePrimitive(Primitive3D.Cone(0.5f, 1f), new Primitive3DEntityOptions
         {
+            IncludePhysics = false,
             EntityName = $"Crystal {i + 1}",
             Material = game.CreateMaterial(new Color(120, 230, 200), metalness: 0.9f, glossiness: 0.9f),
             Position = crystalSpots[i],

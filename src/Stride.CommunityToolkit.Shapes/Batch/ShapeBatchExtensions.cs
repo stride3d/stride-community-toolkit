@@ -1,8 +1,10 @@
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Rendering;
+using Stride.Games;
 using Stride.Rendering.Materials;
+using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.Shapes;
 
@@ -43,7 +45,7 @@ public static class ShapeBatchExtensions
     /// components: the processor registers a depth-tested batch of its own the first time it needs one.
     /// </remarks>
     /// <exception cref="InvalidOperationException">The compositor has no "Transparent" render stage.</exception>
-    public static ShapeBatch AddShapeBatch(this Game game, bool depthTest = false, IComputeColor? fill = null, bool afterPostEffects = false)
+    public static ShapeBatch AddShapeBatch(this IGame game, bool depthTest = false, IComputeColor? fill = null, bool afterPostEffects = false)
     {
         var batch = Create(game, depthTest, fill, afterPostEffects);
 
@@ -62,14 +64,14 @@ public static class ShapeBatchExtensions
     /// batch. For a toolkit feature that draws with a batch of its own, such as the reference grid:
     /// its batch must not become the one shape components draw into.
     /// </summary>
-    internal static ShapeBatch Create(Game game, bool depthTest, IComputeColor? fill, bool afterPostEffects)
+    internal static ShapeBatch Create(IGame game, bool depthTest, IComputeColor? fill, bool afterPostEffects)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var compositor = game.SceneSystem.GraphicsCompositor
+        var compositor = game.GetSceneSystem().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor.");
 
-        var sceneInstance = game.SceneSystem.SceneInstance
+        var sceneInstance = game.GetSceneSystem().SceneInstance
             ?? throw new InvalidOperationException("The game has no scene instance yet; add the batch from the Start callback or later.");
 
         var batch = new ShapeBatch { DepthTest = depthTest, FillSource = fill };
@@ -149,7 +151,7 @@ public static class ShapeBatchExtensions
     /// </summary>
     /// <param name="game">The game the batch was added to.</param>
     /// <param name="batch">The batch <see cref="AddShapeBatch"/> returned.</param>
-    public static void RemoveShapeBatch(this Game game, ShapeBatch batch)
+    public static void RemoveShapeBatch(this IGame game, ShapeBatch batch)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(batch);
@@ -161,7 +163,7 @@ public static class ShapeBatchExtensions
             game.Services.RemoveService<ShapeBatch>();
         }
 
-        if (game.SceneSystem.GraphicsCompositor is { } compositor && game.SceneSystem.SceneInstance is { } sceneInstance)
+        if (game.GetSceneSystem().GraphicsCompositor is { } compositor && game.GetSceneSystem().SceneInstance is { } sceneInstance)
         {
             foreach (var visibilityGroup in sceneInstance.VisibilityGroups)
             {

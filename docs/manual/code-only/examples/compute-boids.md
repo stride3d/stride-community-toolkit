@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Unordered-access structured buffers, and two of them swapped each frame so reads never race writes
 - Filling an InstancingUserBuffer's matrix buffers on the GPU, so the mesh is drawn from data the CPU never sees
 - Building a world matrix and its inverse in a shader from a heading
-- Using helpers: SetupBase3DScene
+- Using helpers: SceneSetup3D
 - Using helpers: AddSkybox
 - Using helpers: CreatePrimitive
 - Using helpers: DebugOverlay
@@ -27,4 +27,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_3D_ComputeBoids).
 
-[!code-csharp[](../../../../examples/code-only/E10_3D_ComputeBoids/Program.cs?start=1&end=336)]
+[!code-csharp[](../../../../examples/code-only/E10_3D_ComputeBoids/Program.cs?start=1&end=338)]

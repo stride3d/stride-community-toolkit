@@ -20,7 +20,7 @@ namespace Stride.CommunityToolkit.Audio;
 /// class does not provide.
 /// </para>
 /// <para>
-/// Load through <c>game.Audio.LoadWav(...)</c> to get a sound that can create instances; the static
+/// Load through <c>game.GetAudioSystem().LoadWav(...)</c> to get a sound that can create instances; the static
 /// <see cref="Read(Stream)"/> and <see cref="Read(string)"/> decode the data only, for inspection
 /// or for tests, and a sound obtained that way cannot create instances.
 /// </para>
@@ -54,14 +54,14 @@ public sealed class WavSound
 
     /// <summary>
     /// Decodes a <c>.wav</c> from a stream. Data only: the result cannot create instances - use
-    /// <c>game.Audio.LoadWav</c> for that.
+    /// <c>game.GetAudioSystem().LoadWav</c> for that.
     /// </summary>
     /// <exception cref="InvalidDataException">The stream is not a WAVE file, or holds a format this class does not decode.</exception>
     public static WavSound Read(Stream stream) => WavReader.Read(stream, engine: null);
 
     /// <summary>
     /// Decodes a <c>.wav</c> file. Data only: the result cannot create instances - use
-    /// <c>game.Audio.LoadWav</c> for that.
+    /// <c>game.GetAudioSystem().LoadWav</c> for that.
     /// </summary>
     /// <exception cref="InvalidDataException">The file is not a WAVE file, or holds a format this class does not decode.</exception>
     public static WavSound Read(string path)
@@ -84,7 +84,7 @@ public sealed class WavSound
     public SoundInstance CreateInstance(bool spatialized = false, bool useHrtf = false, AudioListener? listener = null)
     {
         if (_engine is null)
-            throw new InvalidOperationException($"This {nameof(WavSound)} holds data only. Load it through game.Audio.LoadWav(...) to create instances.");
+            throw new InvalidOperationException($"This {nameof(WavSound)} holds data only. Load it through game.GetAudioSystem().LoadWav(...) to create instances.");
 
         if (spatialized && Channels != 1)
             throw new ArgumentException("A spatialised sound must be mono: the engine positions a single channel in space. Export the file as mono.", nameof(spatialized));

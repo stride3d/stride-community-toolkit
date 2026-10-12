@@ -13,8 +13,8 @@ using Stride.Input;
 //
 // A Bepu game normally has exactly one simulation, created for you with default settings. The
 // engine reads the list of simulations from GameSettings - which a code-only game does not have -
-// so UseGameSettings is how that list is written in code: it must run before the game starts,
-// because the physics system reads it while the engine initialises.
+// so the setup's GameSettings is how that list is written in code: Run applies it before the game
+// starts, because the physics system reads it while the engine initialises.
 //
 // Every collidable then chooses a simulation through its SimulationSelector. The default picks
 // the first one, so nothing changes for a game that never asks; here the right-hand lane asks for
@@ -37,28 +37,26 @@ var spawned = new List<Entity>();
 
 using var game = new Game();
 
-game.UseGameSettings(settings =>
+var sceneSetup = new SceneSetup3D
 {
-    var bepu = settings.GetOrCreateConfiguration<BepuConfiguration>();
+    GameSettings = settings =>
+    {
+        var bepu = settings.GetOrCreateConfiguration<BepuConfiguration>();
 
-    // Index 0 is the default simulation; index 1 is the one the Moon lane selects below.
-    bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = earthGravity });
-    bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = moonGravity });
-});
+        // Index 0 is the default simulation; index 1 is the one the Moon lane selects below.
+        bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = earthGravity });
+        bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = moonGravity });
+    },
+    // No ground: it would land in simulation 0 only, and each lane needs its own
+    Ground = null,
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 7, -21), rotation: new Vector3(180, -6, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
 
-game.Run(start: Start, update: Update);
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Not SetupBase3DScene: its ground would land in simulation 0 only, and each lane needs its own.
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    game.SetCameraPosition(new Vector3(0, 7, -21));
-    game.SetCameraRotation(new Vector3(180, -6, 0));
-
     AddGround("Earth Ground", -laneOffset, Earth);
     AddGround("Moon Ground", laneOffset, Moon);
 
@@ -166,16 +164,16 @@ description:
     Two Bepu simulations in one game, side by side: the left lane falls under Earth gravity, the
     right under Moon gravity, and an amber ball that belongs to the Moon world sinks straight
     through the Earth ground because the two worlds never touch. The simulation list comes from
-    UseGameSettings, the code-only stand-in for the GameSettings asset, and each body picks its
+    the setup's GameSettings, the code-only stand-in for the GameSettings asset, and each body picks its
     world with a SimulationSelector.
 concepts:
-  - Configuring physics before the game starts with UseGameSettings and BepuConfiguration
+  - Configuring physics before the game starts with the setup's GameSettings and BepuConfiguration
   - Giving each simulation its own gravity
   - Choosing a simulation per body and per static with IndexBasedSimulationSelector
   - Why bodies in different simulations pass through each other
   - Respawning entities with Space
   - Showing instructions as a DebugOverlay section beside the camera help
-  - "Using helpers: SetupBase3D, Add3DGround, CreatePrimitive, SetCameraPosition, SetCameraRotation"
+  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, SetCameraPosition, SetCameraRotation"
 tags:
   - 3D
   - Bepu

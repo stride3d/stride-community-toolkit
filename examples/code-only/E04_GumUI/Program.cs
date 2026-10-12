@@ -3,20 +3,16 @@ using Gum.Forms.Controls;
 using Gum.Forms.DefaultVisuals.V3;
 using SkiaGum.Helpers;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
 using Stride.Games;
 using System.Drawing;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D { Camera = CameraSetup.Orthographic(), Lighting = null, Skybox = null, Ground = null }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add2DCamera();
-
     //Initialize GumUi
     GumService.Default.Initialize(game);
 
@@ -63,9 +59,11 @@ void CreateUi()
 
     //ComboBox
     var comboBox = new ComboBox();
+    var items = comboBox.Items ?? throw new InvalidOperationException("The combo box has no item list.");
+
     for (int i = 0; i < 10; i++)
     {
-        comboBox.Items.Add($"Item {i}");
+        items.Add($"Item {i}");
     }
     comboBox.SelectionChanged += (_, _) =>
     {

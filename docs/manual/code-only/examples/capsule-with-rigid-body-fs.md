@@ -8,7 +8,7 @@ View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/
 
 - `let game = new Game()` Creates a new instance of the `Game` class, serving as the central part of the Stride engine for managing game loop, scenes, and entities.
 - `let Start rootScene =` Defines a function named `Start` that takes a `Scene` object named `rootScene` as an argument.
-- `game.SetupBase3DScene()` Sets up a basic 3D scene with a default camera, lighting.
+- `SceneSetup3D().UseBepu().UseSkybox()` is the scene setup `Run` applies before `Start`: a camera with the camera controller, a light, the photographed sky, a ground, and Bepu as the physics engine.
 - `game.AddSkybox()` Adds a skybox to the scene, providing a background image for the 3D environment.
 - `game.AddProfiler() |> ignore` Adds a profiler to the game and discards the unneeded return value.
 - `let firstBox = game.CreatePrimitive(Primitive3D.Capsule())` Creates a new 3D capsule primitive entity.

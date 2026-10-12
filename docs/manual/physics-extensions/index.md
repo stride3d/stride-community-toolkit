@@ -1,8 +1,9 @@
 # Physics Extensions
 
-Stride ships two physics engines, and the toolkit wraps both. The methods below come in matching pairs - `Stride.CommunityToolkit.Bepu` and `Stride.CommunityToolkit.Bullet` define many of the same names - so **import one namespace or the other, not both**. A third, Box2D.NET, is not a Stride engine at all but a 2D world the toolkit runs beside Stride; its wrapper is at the [end of this page](#box2d).
+Stride ships two physics engines, and the toolkit wraps both. The scene setup chooses the engine, `new SceneSetup3D().UseBepu()` or `.UseBullet()`, and the core's `CreatePrimitive`, `Add3DGround` and `Add2DGround` attach that engine's bodies and colliders; each package's entity extensions attach its physics explicitly, so both namespaces can be imported together. A third, Box2D.NET, is not a Stride engine at all but a 2D world the toolkit runs beside Stride; its wrapper is at the [end of this page](#box2d).
 
-Bepu is the newer engine and the toolkit's default; the examples and the `SetupBase*Scene()` shortcuts assume it unless they say otherwise.
+Bepu is the newer engine and the toolkit's default; the examples choose it with `UseBepu()` unless they say otherwise.
+Bullet is maintained, not extended: the package follows every toolkit change and its three examples stay, but new helpers and examples are written for Bepu, the engine Stride itself is moving to.
 
 > [!TIP]
 > New to Bepu, or seeing a mesh that moves without colliding? Read
@@ -20,15 +21,13 @@ Bepu is the newer engine and the toolkit's default; the examples and the `SetupB
 
 ### Scene setup
 
-- [`SetupBase3DScene()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.SetupBase3DScene(Stride.Engine.Game)) - Compositor, 3D camera, directional light, skybox, ground and a camera controller. One call to a scene you can fly around.
-- [`SetupBase2DScene()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.SetupBase2DScene(Stride.Engine.Game)) - The 2D equivalent, with a 2D camera and 2D ground.
-- [`Add3DGround()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.Add3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions)) - A static ground plane on its own, when you do not want the rest of the scene setup.
-- [`Add2DGround()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.Add2DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions)) - The 2D static ground collider.
+- [`UseBepu()`](xref:Stride.CommunityToolkit.Bepu.SceneSetupExtensions.UseBepu``1(``0)) - Makes Bepu the physics engine of a [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) or [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D): `game.Run(new SceneSetup3D().UseBepu(), start: Start)` is a scene you can fly around, with a ground that collides.
+- [`BepuPhysicsSetup`](xref:Stride.CommunityToolkit.Bepu.BepuPhysicsSetup) - What `UseBepu()` sets: the core's `CreatePrimitive` then attaches a `BodyComponent` (a `Body2DComponent` for a flat shape) with the collider fitted to the shape, and the grounds a `StaticComponent`.
+- `Add3DGround()` and `Add2DGround()` are the core's; with Bepu chosen, the ground gets a static collider on its own, when you do not want the rest of the scene setup.
 
 ### Primitives with colliders
 
-- [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions)) - A primitive model entity with a matching Bepu collider already attached. The shape and its dimensions come from a `Primitive3D` factory; `Bepu3DPhysicsOptions` controls the material, the body component and whether a collider is included.
-- [`CreatePrimitive(Primitive2D)`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions)) - The 2D equivalent, constrained to the XY plane.
+- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bepu chosen, the entity comes with a matching Bepu collider. A [`Bepu3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions) or [`Bepu2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions) passed as the options sets the body component and whether a collider is included; `IncludePhysics = false` on any options leaves the physics out.
 
 ### Raycasting
 
@@ -60,18 +59,15 @@ In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitr
 
 ### Scene setup
 
-- [`SetupBase3DScene()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.SetupBase3DScene(Stride.Engine.Game)) - The Bullet counterpart of the Bepu scene setup.
-- [`SetupBase2DScene()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.SetupBase2DScene(Stride.Engine.Game)) - The 2D equivalent.
-- [`Add3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.Add3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A static ground plane.
-- [`Add2DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.Add2DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D static ground collider.
-- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A ground plane nothing can fall off the edge of. Bullet only; there is no Bepu equivalent.
+- [`UseBullet()`](xref:Stride.CommunityToolkit.Bullet.SceneSetupExtensions.UseBullet``1(``0)) - Makes Bullet the physics engine of a scene setup, the counterpart of `UseBepu()`.
+- [`BulletPhysicsSetup`](xref:Stride.CommunityToolkit.Bullet.BulletPhysicsSetup) - What `UseBullet()` sets: the core's `CreatePrimitive` then attaches a `RigidbodyComponent` with the collider fitted to the shape, and the grounds a `StaticColliderComponent`.
+- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A ground plane nothing can fall off the edge of. Bullet only; there is no Bepu equivalent.
 
 ### Primitives and colliders
 
-- [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A primitive model entity with a matching Bullet collider.
-- [`CreatePrimitive(Primitive2D)`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
-- [`AddBullet3DPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBullet3DPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
-- [`AddBullet2DPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBullet2DPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
+- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bullet chosen, the entity comes with a matching Bullet collider. A [`Bullet3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions) or [`Bullet2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions) passed as the options sets the physics component and whether a collider is included.
+- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
+- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
 
 ### Raycasting
 
@@ -82,7 +78,7 @@ In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitr
 
 ### Debugging
 
-- [`ShowColliders()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Engine.Game)) - Draws the collider shapes over the scene, which is how you find out that the collider is not where the model is.
+- [`ShowColliders()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Games.IGame)) - Draws the collider shapes over the scene, which is how you find out that the collider is not where the model is.
 ## Box2D
 
 In `Stride.CommunityToolkit.Box2D`, for a 2D world run by Box2D.NET beside Stride. The wrapper is built around `Box2DSimulation`, which owns the world and steps it; see the Box2D examples for the whole pattern.

@@ -21,10 +21,10 @@ The `Program.cs` file shows how to:
 - Moving a kinematic body with LinearVelocity, not Transform.Position
 - Why SetTargetPose belongs in ISimulationUpdate and not in a per-frame Update
 - Framerate independence with Game.DeltaTime
-- Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive
 
 ![SyncScript - moving a body every frame](media/sync-script.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_SyncScript).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_SyncScript/Program.cs?start=1&end=28)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_SyncScript/Program.cs?start=1&end=24)]

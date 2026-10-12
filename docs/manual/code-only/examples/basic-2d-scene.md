@@ -14,10 +14,10 @@ The `Program.cs` file shows how to:
 - Applying a flat material with CreateFlatMaterial
 - Positioning an entity with Transform.Position
 - Adding entities to a Scene (rootScene)
-- Using helpers: SetupBase2DScene
+- Using helpers: SceneSetup2D
 
 ![Basic 2D Scene (Capsule)](media/basic-2d-scene.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_2D_BasicScene).
 
-[!code-csharp[](../../../../examples/code-only/E01_2D_BasicScene/Program.cs?start=1&end=21)]
+[!code-csharp[](../../../../examples/code-only/E01_2D_BasicScene/Program.cs?start=1&end=19)]

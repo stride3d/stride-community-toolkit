@@ -12,8 +12,6 @@ using Stride.Games;
 using Stride.Graphics;
 using Stride.Input;
 using Stride.Rendering;
-using Stride.Rendering.Materials;
-using Stride.Rendering.Materials.ComputeColors;
 
 // Five cameras watching one small scene, each drawing into a texture, each texture on a monitor:
 // an overhead map, a chase camera following the orbiting ball, a fixed CCTV corner, and two
@@ -43,22 +41,22 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Ground = null,
+    // Looking at the monitors from the scene's side, with the scene in the foreground
+    Camera = CameraSetup.Perspective(position: new(-1, 15, 27), rotation: new(0, -17, 0)).WithController(),
+    Profiler = true
+}.UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Render to Texture - Stride Community Toolkit";
 
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddEntityTextRenderer();
-
-    // Looking at the monitors from the scene's side, with the scene in the foreground
-    game.SetCameraPosition(new(-1, 15, 27));
-    game.SetCameraRotation(new(0, -17, 0));
 
     BuildScene(scene);
 

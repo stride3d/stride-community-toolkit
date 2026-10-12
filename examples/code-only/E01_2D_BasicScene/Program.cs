@@ -6,12 +6,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase2DScene();
-
     var entity = game.CreatePrimitive(Primitive2D.Capsule(), new()
     {
         Material = game.CreateFlatMaterial(Color.White)
@@ -42,7 +40,7 @@ concepts:
   - Applying a flat material with CreateFlatMaterial
   - Positioning an entity with Transform.Position
   - Adding entities to a Scene (rootScene)
-  - "Using helpers: SetupBase2DScene"
+  - "Using helpers: SceneSetup2D"
 tags:
   - 2D
   - Bepu

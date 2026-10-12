@@ -20,7 +20,7 @@ public static class EntityExtensions
     /// <param name="options">Optional physics configuration: the physics component, the collider depth, and whether to include a collider. If null, default options are used.</param>
     /// <returns>The entity with the Bullet 2D physics components added.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-    public static Entity AddBullet2DPhysics(this Entity entity, Primitive2D shape, Bullet2DPhysicsOptions? options = null)
+    public static Entity AddBulletPhysics(this Entity entity, Primitive2D shape, Bullet2DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(shape);
@@ -60,7 +60,7 @@ public static class EntityExtensions
     /// <remarks>
     /// A torus or a teapot has no Bullet collider shape and is added without a collider even when <c>IncludeCollider</c> is <see langword="true"/>.
     /// </remarks>
-    public static Entity AddBullet3DPhysics(this Entity entity, Primitive3D shape, Bullet3DPhysicsOptions? options = null)
+    public static Entity AddBulletPhysics(this Entity entity, Primitive3D shape, Bullet3DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(shape);

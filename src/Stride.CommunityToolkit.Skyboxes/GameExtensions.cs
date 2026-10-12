@@ -1,5 +1,8 @@
+using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Skyboxes;
@@ -33,7 +36,7 @@ public static class GameExtensions
     /// game.AddSkybox();
     /// </code>
     /// </example>
-    public static Entity AddSkybox(this Game game, string? entityName = "Skybox")
+    public static Entity AddSkybox(this IGame game, string? entityName = "Skybox")
     {
         using var stream = new FileStream(Path.Combine(AppContext.BaseDirectory, "Resources", SkyboxTexture), FileMode.Open, FileAccess.Read);
 
@@ -54,7 +57,7 @@ public static class GameExtensions
 
         entity.Transform.Position = new Vector3(0.0f, 2.0f, -2.0f);
 
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 
         return entity;
     }

@@ -56,7 +56,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     {
         for (var i = 0; i < count; i++)
         {
-            var shapeModel = shapeFactory.GetRandomShapeModel();
+            var shapeModel = ShapeFactory.GetRandomShapeModel();
 
             AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, overrideColor: GameConfig.ShapeColor));
         }
@@ -81,7 +81,7 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
     /// <returns>The model that was spawned.</returns>
     public Shape2DModel AddAtPosition(Vector2 position)
     {
-        var shapeModel = shapeFactory.GetRandomShapeModel();
+        var shapeModel = ShapeFactory.GetRandomShapeModel();
 
         AttachBody(shapeModel, shapeFactory.CreateEntity(shapeModel, GameConfig.SelectedShapeColor, position));
 
@@ -119,8 +119,8 @@ public sealed class ShapeSpawner(Scene scene, Box2DSimulation simulation, ShapeF
 
     private void CreateConnectedShapePair()
     {
-        var shapeModel1 = shapeFactory.GetRandomShapeModel();
-        var shapeModel2 = shapeFactory.GetRandomShapeModel();
+        var shapeModel1 = ShapeFactory.GetRandomShapeModel();
+        var shapeModel2 = ShapeFactory.GetRandomShapeModel();
 
         var entity1 = shapeFactory.CreateEntity(shapeModel1, GameConfig.ConstraintColor);
         var entity2 = shapeFactory.CreateEntity(shapeModel2, GameConfig.ConstraintColor);

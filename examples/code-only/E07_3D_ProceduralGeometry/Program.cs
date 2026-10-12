@@ -14,13 +14,10 @@ using var game = new Game();
 
 Entity? circleEntity = null;
 Material? sharedMaterial = null;
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.Zero, CreateTriangleMesh);
     CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * 2, CreatePlaneMesh);
     CreateMeshEntity(game.GraphicsDevice, rootScene, Vector3.UnitX * 4, CreateNonIndexedTriangleMesh);
@@ -261,7 +258,7 @@ concepts:
   - "Disposing the previous mesh's buffers before replacing it, and sharing one material"
   - Why clockwise winding matters for which face you see
   - Creating a non-indexed mesh when index reuse buys nothing
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreateMaterial"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreateMaterial"
 tags:
   - 3D
   - Geometry

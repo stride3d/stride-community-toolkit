@@ -97,8 +97,6 @@ let BuildPartialTorusMesh (meshBuilder:MeshBuilder) cylinderRadius torusAngle be
         meshBuilder.AddIndex(i_next + circumferenceStepsCount)
 
 let Start rootScene =
-    game.SetupBase3DScene()
-    game.AddSkybox() |> ignore
     game.AddProfiler() |> ignore
 
     // Torus parameters
@@ -118,7 +116,7 @@ let Start rootScene =
 
 [<EntryPoint>]
 let main argv =
-    game.Run(start = Start)
+    game.Run(SceneSetup3D().UseBepu().UseSkybox(), start = Start)
     0
 (*
 ---example-metadata
@@ -140,7 +138,7 @@ concepts:
   - "Assigning to engine properties with the <- operator"
   - Computing correct normals for smooth shading
   - Interoperating with the C# MeshBuilder API from F#
-  - "Using helpers: SetupBase3DScene, AddSkybox"
+  - "Using helpers: SceneSetup3D, UseBepu, UseSkybox"
 tags:
   - 3D
   - F#

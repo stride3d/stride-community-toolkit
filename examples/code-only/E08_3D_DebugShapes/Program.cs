@@ -7,25 +7,16 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new(13, 15, 27), rotation: new(17, -17, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    SetupBaseScene();
-    AddDebugComponent(rootScene);
-}
-
-void SetupBaseScene()
-{
-    game.AddGraphicsCompositor();
-    game.Add3DCamera().Add3DCameraController();
-    game.AddDirectionalLight();
-    game.AddSkybox();
-    game.Add3DGround();
     game.AddDebugShapes();
-    game.AddProfiler();
-    game.SetCameraPosition(new(13, 15, 27));
-    game.SetCameraRotation(new(17, -17, 0));
+    AddDebugComponent(rootScene);
 }
 
 void AddDebugComponent(Scene scene)

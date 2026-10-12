@@ -7,13 +7,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 8, 0);
     entity.Scene = rootScene;
@@ -40,7 +37,7 @@ concepts:
   - Creating a 3D primitive with CreatePrimitive
   - Positioning an entity with Transform.Position
   - Adding entities to a Scene (rootScene)
-  - "Using helpers: SetupBase3DScene"
+  - "Using helpers: SceneSetup3D"
   - "Using helpers: AddSkybox"
 tags:
   - 3D

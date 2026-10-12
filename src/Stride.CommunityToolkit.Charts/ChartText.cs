@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Charts;
 
@@ -61,7 +62,7 @@ internal sealed class ChartText : IDisposable
     /// Registers the renderer the chart's label mode needs; harmless when already registered, and needed
     /// beyond tick labels because the legend, titles and cursor draw text even when labels are off.
     /// </summary>
-    internal static void EnsureRenderer(Game game, ChartLabelMode mode)
+    internal static void EnsureRenderer(IGame game, ChartLabelMode mode)
     {
         if (mode == ChartLabelMode.Screen)
             game.AddEntityTextRenderer();

@@ -3,7 +3,6 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.CommunityToolkit.Skyboxes;
@@ -46,21 +45,21 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Ground = null,
+    Camera = CameraSetup.Perspective(position: new Vector3(0f, 9f, 22f), rotation: new Vector3(0f, -20f, 0f)).WithController(),
+    Profiler = true
+}.UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "GPU Picking - Stride Community Toolkit";
 
-    // SetupBase3D, not SetupBase3DScene: no ground entity with a collider, no physics at all
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddInstancingSupport();
-    game.SetCameraPosition(new Vector3(0f, 9f, 22f));
-    game.SetCameraRotation(new Vector3(0f, -20f, 0f));
 
     BuildScene(scene);
 
@@ -76,7 +75,7 @@ void Start(Scene scene)
 
     var overlay = DebugOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", OverlayLines);
-    overlay.SetPosition(DisplayPosition.BottomLeft);
+    overlay.SetPosition(ScreenAnchor.BottomLeft);
 }
 
 void Update(Scene scene, GameTime time)

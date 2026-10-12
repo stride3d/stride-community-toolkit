@@ -135,12 +135,12 @@ public sealed class DebugOverlay : GameSystemBase
     }
 
     /// <summary>
-    /// Gets or sets where the overlay is drawn. <see cref="DisplayPosition.None"/> draws nothing.
+    /// Gets or sets where the overlay is drawn: a corner, the middle of an edge or the centre, or <see langword="null"/> for the pixel position in <see cref="CustomPosition"/>. Hide the overlay with <see cref="GameSystemBase.Visible"/>, which the <see cref="ToggleKey"/> flips.
     /// </summary>
-    public DisplayPosition Position { get; set; } = DisplayPosition.TopRight;
+    public ScreenAnchor? Position { get; set; } = ScreenAnchor.TopRight;
 
     /// <summary>
-    /// Gets or sets the pixel position used when <see cref="Position"/> is <see cref="DisplayPosition.Custom"/>, in unscaled pixels from the top left. Setting this alone changes nothing while <see cref="Position"/> is a corner; <see cref="SetPosition(Int2)"/> sets both.
+    /// Gets or sets the pixel position used when <see cref="Position"/> is <see langword="null"/>, in unscaled pixels from the top left. Setting this alone changes nothing while <see cref="Position"/> is an anchor; <see cref="SetPosition(Int2)"/> sets both.
     /// </summary>
     public Int2 CustomPosition { get; set; }
 
@@ -156,7 +156,7 @@ public sealed class DebugOverlay : GameSystemBase
     /// Gets or sets the key that moves the overlay to the next corner. Defaults to <see cref="Keys.F3"/>.
     /// </summary>
     /// <remarks>
-    /// Does nothing while <see cref="Position"/> is <see cref="DisplayPosition.Custom"/>, which is an explicit choice by the caller and not something a keypress should silently override.
+    /// Does nothing while <see cref="Position"/> is <see langword="null"/>, a pixel position chosen by the caller and not something a keypress should silently override.
     /// </remarks>
     public Keys RepositionKey { get; set; } = Keys.F3;
 
@@ -326,41 +326,41 @@ public sealed class DebugOverlay : GameSystemBase
         => _sections.FirstOrDefault(section => section.Name == name);
 
     /// <summary>
-    /// Moves the overlay to the next corner, skipping <see cref="DisplayPosition.None"/> and <see cref="DisplayPosition.Custom"/>.
+    /// Moves the overlay to the next corner clockwise. From an edge, the centre or a pixel position it goes to the top left.
     /// </summary>
     public void CyclePosition() => Position = Position switch
     {
-        DisplayPosition.TopLeft => DisplayPosition.TopRight,
-        DisplayPosition.TopRight => DisplayPosition.BottomRight,
-        DisplayPosition.BottomRight => DisplayPosition.BottomLeft,
-        _ => DisplayPosition.TopLeft,
+        ScreenAnchor.TopLeft => ScreenAnchor.TopRight,
+        ScreenAnchor.TopRight => ScreenAnchor.BottomRight,
+        ScreenAnchor.BottomRight => ScreenAnchor.BottomLeft,
+        _ => ScreenAnchor.TopLeft,
     };
 
     /// <summary>
-    /// Places the overlay at a pixel position instead of a corner: sets <see cref="CustomPosition"/> and switches <see cref="Position"/> to <see cref="DisplayPosition.Custom"/> in one call, so the block moves at once rather than after a second assignment.
+    /// Places the overlay at a pixel position instead of an anchor: sets <see cref="CustomPosition"/> and clears <see cref="Position"/> in one call, so the block moves at once rather than after a second assignment.
     /// </summary>
     /// <param name="position">The top-left corner of the block, in unscaled pixels from the top left of the window; multiplied by <see cref="Scale"/> and the display's scale when drawn.</param>
     /// <remarks>
-    /// The <see cref="RepositionKey"/> is ignored from then on, because a position chosen by the caller is not something a keypress should silently override. Set <see cref="Position"/> back to a corner to hand it back.
+    /// The <see cref="RepositionKey"/> is ignored from then on, because a position chosen by the caller is not something a keypress should silently override. Set <see cref="Position"/> back to an anchor to hand it back.
     /// </remarks>
     public void SetPosition(Int2 position)
     {
         CustomPosition = position;
-        Position = DisplayPosition.Custom;
+        Position = null;
     }
 
     /// <summary>
-    /// Places the overlay at a pixel position instead of a corner. See <see cref="SetPosition(Int2)"/>.
+    /// Places the overlay at a pixel position instead of an anchor. See <see cref="SetPosition(Int2)"/>.
     /// </summary>
     /// <param name="x">Pixels from the left edge of the window, unscaled.</param>
     /// <param name="y">Pixels from the top edge of the window, unscaled.</param>
     public void SetPosition(int x, int y) => SetPosition(new Int2(x, y));
 
     /// <summary>
-    /// Places the overlay in a corner, or hides it with <see cref="DisplayPosition.None"/>. The same as setting <see cref="Position"/>; here so a corner and a pixel position are chosen through one method.
+    /// Places the overlay at an anchor. The same as setting <see cref="Position"/>; here so an anchor and a pixel position are chosen through one method.
     /// </summary>
-    /// <param name="position">The corner, <see cref="DisplayPosition.None"/> to draw nothing, or <see cref="DisplayPosition.Custom"/> to draw at <see cref="CustomPosition"/> as last set.</param>
-    public void SetPosition(DisplayPosition position) => Position = position;
+    /// <param name="position">The corner, edge or centre, or <see langword="null"/> to draw at <see cref="CustomPosition"/> as last set.</param>
+    public void SetPosition(ScreenAnchor? position) => Position = position;
 
     /// <inheritdoc />
     public override void Update(GameTime gameTime)
@@ -371,7 +371,7 @@ public sealed class DebugOverlay : GameSystemBase
 
         if (_input.IsKeyPressed(ToggleKey)) Visible = !Visible;
 
-        if (_input.IsKeyPressed(RepositionKey) && Position != DisplayPosition.Custom) CyclePosition();
+        if (_input.IsKeyPressed(RepositionKey) && Position is not null) CyclePosition();
 
         // Section keys are read even while the overlay is hidden, so a collapse toggle pressed with
         // everything off still takes effect rather than silently doing nothing
@@ -387,7 +387,7 @@ public sealed class DebugOverlay : GameSystemBase
     /// <inheritdoc />
     public override void Draw(GameTime gameTime)
     {
-        if (Position == DisplayPosition.None || _sections.Count == 0) return;
+        if (_sections.Count == 0) return;
 
         var graphicsContext = Game?.GraphicsContext;
         var backBuffer = Game?.GraphicsDevice?.Presenter?.BackBuffer;
@@ -615,7 +615,7 @@ public sealed class DebugOverlay : GameSystemBase
 
     private Int2 GetOrigin(float blockHeight, float blockWidth)
     {
-        if (Position == DisplayPosition.Custom) return CustomPosition;
+        if (Position is not { } anchor) return CustomPosition;
 
         _graphicsDeviceService ??= Services.GetService<IGraphicsDeviceService>();
 
@@ -636,15 +636,12 @@ public sealed class DebugOverlay : GameSystemBase
         var padding = BackgroundColor.A > 0 ? BackgroundPadding : Vector2.Zero;
         var left = Margin.X + (int)MathF.Ceiling(padding.X);
         var top = Margin.Y + (int)MathF.Ceiling(padding.Y);
-        var right = Math.Max(left, screen.X - width - left);
-        var bottom = Math.Max(top, screen.Y - height - top);
 
-        return Position switch
-        {
-            DisplayPosition.TopLeft => new(left, top),
-            DisplayPosition.BottomLeft => new(left, bottom),
-            DisplayPosition.BottomRight => new(right, bottom),
-            _ => new(right, top),
-        };
+        // The block's top left can go anywhere in the screen less the block and a margin on each
+        // side; the anchor picks the point of that room, so an edge or the centre needs no case
+        var room = new Vector2(Math.Max(0, screen.X - width - 2 * left), Math.Max(0, screen.Y - height - 2 * top));
+        var origin = anchor.At(room);
+
+        return new(left + (int)origin.X, top + (int)origin.Y);
     }
 }

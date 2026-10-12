@@ -1,4 +1,5 @@
 using Stride.Engine;
+using Stride.Games;
 using Stride.Rendering;
 
 namespace Stride.CommunityToolkit.Rendering;
@@ -19,11 +20,11 @@ public static class MaterialStreamViewExtensions
     /// every effect drawn while a stream is chosen. Nothing is drawn differently until then.
     /// </remarks>
     /// <exception cref="InvalidOperationException">The game has no compositor or no mesh render feature.</exception>
-    public static MaterialStreamView AddMaterialStreamView(this Game game)
+    public static MaterialStreamView AddMaterialStreamView(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var compositor = game.SceneSystem.GraphicsCompositor
+        var compositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor or SetupBase3D first.");
         var meshFeature = compositor.RenderFeatures.OfType<MeshRenderFeature>().FirstOrDefault()
             ?? throw new InvalidOperationException("The compositor has no MeshRenderFeature; there are no meshes to view.");

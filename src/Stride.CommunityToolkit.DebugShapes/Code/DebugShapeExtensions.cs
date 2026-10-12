@@ -1,4 +1,5 @@
-using Stride.Engine;
+using Stride.CommunityToolkit.Engine;
+using Stride.Games;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
@@ -19,10 +20,11 @@ public static class DebugShapeExtensions
     /// </summary>
     /// <param name="game">The game to add debug shapes to.</param>
     /// <param name="debugShapeRenderGroup">The render group the shapes are drawn in.</param>
+    /// <returns>The system the shapes are drawn through, also registered as a service.</returns>
     /// <remarks>Shapes are visible by default only when the toolkit itself is a Debug build; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
-    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
+    public static ImmediateDebugRenderSystem AddDebugShapes(this IGame game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
     {
-        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
+        game.GetSceneSystem().GraphicsCompositor.AddImmediateDebugRenderFeature();
 
         var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
 #if DEBUG
@@ -30,6 +32,8 @@ public static class DebugShapeExtensions
 #endif
         game.Services.AddService(debugDraw);
         game.GameSystems.Add(debugDraw);
+
+        return debugDraw;
     }
 
     /// <summary>
@@ -41,9 +45,13 @@ public static class DebugShapeExtensions
     /// <exception cref="NullReferenceException">
     /// Thrown when the "Opaque" or "Transparent" render stages are not found in the <paramref name="graphicsCompositor"/>.
     /// </exception>
-    public static void AddImmediateDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
+    /// <returns>The feature now in the compositor: the existing one, or the one just added.</returns>
+    public static ImmediateDebugRenderFeature AddImmediateDebugRenderFeature(this GraphicsCompositor graphicsCompositor)
     {
-        var debugRenderFeatures = graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>();
+        if (graphicsCompositor.RenderFeatures.OfType<ImmediateDebugRenderFeature>().FirstOrDefault() is { } existing)
+        {
+            return existing;
+        }
 
         if (!graphicsCompositor.TryGetRenderStage("Opaque", out var opaqueRenderStage))
         {
@@ -55,21 +63,20 @@ public static class DebugShapeExtensions
             throw new NullReferenceException("Transparent RenderStage not found");
         }
 
-        if (!debugRenderFeatures.Any())
+        var renderFeature = new ImmediateDebugRenderFeature()
         {
-            var newDebugRenderFeature = new ImmediateDebugRenderFeature()
-            {
-                RenderStageSelectors = {
-                        new ImmediateDebugRenderStageSelector
-                        {
-                            OpaqueRenderStage = opaqueRenderStage,
-                            TransparentRenderStage = transparentRenderStage
-                        }
+            RenderStageSelectors = {
+                    new ImmediateDebugRenderStageSelector
+                    {
+                        OpaqueRenderStage = opaqueRenderStage,
+                        TransparentRenderStage = transparentRenderStage
                     }
-            };
+                }
+        };
 
-            graphicsCompositor.RenderFeatures.Add(newDebugRenderFeature);
-        }
+        graphicsCompositor.RenderFeatures.Add(renderFeature);
+
+        return renderFeature;
     }
 
     /// <summary>

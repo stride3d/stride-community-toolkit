@@ -3,7 +3,6 @@ using Example.Common;
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -47,11 +46,16 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-// Tessellation runs on hull and domain shaders, which need feature level 11; a code-only game runs
-// at level 10 unless it asks. UseGameSettings is how it asks.
-game.UseGameSettings(settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0);
-
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    // Tessellation runs on hull and domain shaders, which need feature level 11; a code-only game runs
+    // at level 10 unless it asks. GameSettings is how it asks.
+    GameSettings = settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0,
+    // The sun is aimed by the stations, so it is added by hand below
+    Lighting = null,
+    Ground = null,
+    Profiler = true
+}.UseSkybox(), start: Start, update: Update);
 
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
@@ -61,12 +65,7 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Material Gallery - Stride Community Toolkit";
 
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add3DCamera();
-    game.Add3DCameraController();
     var sun = game.AddDirectionalLight();
-    game.AddSkybox();
-    game.AddProfiler();
 
     // The editor's view modes for a code-only game: M opens the list, a digit picks the stream every
     // mesh draws, 0 is lit shading again. The digits count only while the list is open

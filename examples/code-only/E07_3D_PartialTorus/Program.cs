@@ -41,10 +41,8 @@ const int BendSegmentSteps = 40;
 
 using var game = new Game();
 
-game.Run(start: (Scene rootScene) =>
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: (Scene rootScene) =>
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     CreateMeshEntity(
         game.GraphicsDevice,
@@ -177,7 +175,7 @@ concepts:
   - Computing correct normals for smooth shading
   - Reusing vertices between adjacent triangles through indexing
   - Getting triangle winding right so faces are not culled
-  - "Using helpers: SetupBase3DScene, AddSkybox"
+  - "Using helpers: SceneSetup3D, AddSkybox"
 tags:
   - 3D
   - Geometry

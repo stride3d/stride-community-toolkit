@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Toggling a joint's motor and limit at runtime through the Box2D joint functions
 - Drawing joints, contacts, bounds and mass with Box2DDebugDraw, Box2D's debug draw through ShapeBatch
 - Pulling on constrained bodies with Grabber2DScript
-- Using helpers: SetupBase2D, Add2DCameraController, AddShapeBatch, ShapeComponent
+- Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent
 
 > [!NOTE]
 > This example references `Stride.CommunityToolkit.Box2D`, which is not on NuGet yet. Run it from a clone of the
@@ -28,4 +28,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E06_Box2D_Joints).
 
-[!code-csharp[](../../../../examples/code-only/E06_Box2D_Joints/Program.cs?start=1&end=322)]
+[!code-csharp[](../../../../examples/code-only/E06_Box2D_Joints/Program.cs?start=1&end=324)]

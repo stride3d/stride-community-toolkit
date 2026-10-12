@@ -32,17 +32,16 @@ GrabberScript? grabber = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 3.5f, -9), rotation: new Vector3(180, -14, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    game.SetCameraPosition(new Vector3(0, 3.5f, -9));
-    game.SetCameraRotation(new Vector3(180, -14, 0));
-
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
     grabber = game.AddGrabber();
 
@@ -70,7 +69,7 @@ void BuildScene(Scene scene)
     for (var i = 0; i < masses.Length; i++)
     {
         var shade = (byte)(230 - i * 35);
-        var cube = game.CreatePrimitive(Primitive3D.Cube(), new()
+        var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
         {
             Material = game.CreateMaterial(new Color(shade, (byte)(120 + i * 20), (byte)(80 + i * 30))),
             Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Mass = masses[i] } } } },
@@ -106,7 +105,7 @@ void BuildScene(Scene scene)
     locked.BodyInertia = new BodyInertia { InverseMass = inertia.InverseMass };   // zero inverse inertia: rotation locked
 
     // A wall to throw at.
-    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(8, 3, 0.4f)), new()
+    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(8, 3, 0.4f)), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(140, 140, 150)),
         // An empty compound: the helper adds the box that fits the wall's size. A box given here
@@ -183,7 +182,7 @@ concepts:
   - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
   - Locking a body's rotation through its BodyInertia, and what the grabber does about it
   - Reading the held body's mass and the servo cap from the script for the overlay
-  - "Using helpers: SetupBase3DScene, CreatePrimitive, AddGrabber, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay"
 tags:
   - 3D
   - Physics

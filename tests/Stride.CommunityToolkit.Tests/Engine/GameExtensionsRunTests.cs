@@ -54,7 +54,7 @@ public class GameExtensionsRunTests
         var updatesBeforeStartCompleted = 0;
         var updatesAfterStartCompleted = 0;
 
-        game.Run(start: async _ =>
+        game.Run(SceneSetup.None, start: async _ =>
         {
             // Two real frames, not a thread-pool delay, so the test asserts scheduling order rather
             // than wall-clock timing
@@ -85,7 +85,7 @@ public class GameExtensionsRunTests
 
         var order = new List<string>();
 
-        game.Run(start: _ => order.Add("start"), update: (_, _) =>
+        game.Run(SceneSetup.None, start: _ => order.Add("start"), update: (_, _) =>
         {
             order.Add("update");
 
@@ -104,7 +104,7 @@ public class GameExtensionsRunTests
         Scene? startScene = null;
         Scene? updateScene = null;
 
-        game.Run(start: scene => startScene = scene, update: (scene, _) =>
+        game.Run(SceneSetup.None, start: scene => startScene = scene, update: (scene, _) =>
         {
             updateScene = scene;
             game.Exit();
@@ -123,7 +123,7 @@ public class GameExtensionsRunTests
         var replacement = new Scene();
         var scenesSeen = new List<Scene>();
 
-        game.Run(update: (scene, _) =>
+        game.Run(SceneSetup.None, update: (scene, _) =>
         {
             scenesSeen.Add(scene);
 
@@ -146,7 +146,7 @@ public class GameExtensionsRunTests
 
         var updateCalled = false;
 
-        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(start: async _ =>
+        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(SceneSetup.None, start: async _ =>
         {
             await game.Script.NextFrame();
 
@@ -162,7 +162,7 @@ public class GameExtensionsRunTests
     {
         using var game = new Game();
 
-        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(
+        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(SceneSetup.None,
             start: _ => throw new InvalidOperationException("boom before await"),
             update: null,
             context: new GameContextHeadless()));
@@ -175,7 +175,7 @@ public class GameExtensionsRunTests
     {
         using var game = new Game();
 
-        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(
+        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(SceneSetup.None,
             start: (Scene _) => throw new InvalidOperationException("boom from sync start"),
             context: new GameContextHeadless()));
 
@@ -187,7 +187,7 @@ public class GameExtensionsRunTests
     {
         using var game = new Game();
 
-        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(
+        var exception = Assert.Throws<InvalidOperationException>(() => game.Run(SceneSetup.None,
             update: (_, _) => throw new InvalidOperationException("boom from update"),
             context: new GameContextHeadless()));
 
@@ -199,6 +199,6 @@ public class GameExtensionsRunTests
     {
         using var game = new Game();
 
-        Assert.Throws<ArgumentNullException>(() => game.Run(start: (Func<Scene, Task>)null!));
+        Assert.Throws<ArgumentNullException>(() => game.Run(SceneSetup.None, start: (Func<Scene, Task>)null!));
     }
 }

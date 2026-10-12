@@ -1,6 +1,6 @@
 using E03_2D_HUD;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -51,18 +51,14 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(5, 7, 12), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(), Ground = null }, start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Ship HUD";
 
-    game.SetupBase2D(new Color(5, 7, 12));
-    game.Add2DCameraController();
     game.AddWorldTextRenderer();
-
-    game.GetCameraEntity().Get<CameraComponent>().OrthographicSize = ViewHeight;
 
     // One batch for everything. Its fill source is the panels' glass, a shader class of the
     // example's own, which only the shapes drawn as textured sample.
@@ -82,7 +78,7 @@ void Start(Scene scene)
 
     var overlay = DebugOverlay.GetOrCreate(game);
 
-    overlay.Position = DisplayPosition.TopLeft;
+    overlay.Position = ScreenAnchor.TopLeft;
     overlay.SectionGap = 0;
     overlay.AddSection("HUD", OverlayLines);
 }

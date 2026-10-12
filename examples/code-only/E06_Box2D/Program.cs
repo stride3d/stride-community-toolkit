@@ -20,7 +20,14 @@ SceneManager? sceneManager = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup2D
+{
+    ClearColor = new Color(0.2f),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
@@ -28,15 +35,6 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Physics Example - Stride Community Toolkit";
 
-    // Set up a 2D scene with camera and controls
-    game.SetupBase2D(clearColor: new Color(0.2f));
-    game.Add2DCameraController();
-    //game.AddGraphicsCompositor();
-    //game.AddGraphicsCompositor2();
-    //game.Add2DGraphicsCompositor(clearColor);
-    //game.Add3DCamera().Add3DCameraController();
-    //game.AddSkybox();
-    game.AddProfiler();
     // Shapes render through the toolkit's Box2D debug draw - testbed-style fill and pixel-constant
     // borders from an SDF shader, replacing the old per-mesh outline render features
     var shapeBatch = game.AddShapeBatch();

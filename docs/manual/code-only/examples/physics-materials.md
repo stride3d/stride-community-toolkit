@@ -22,7 +22,7 @@ The `Program.cs` file shows how to:
 - Setting the four numbers on a BodyComponent and on a StaticComponent
 - Replaying a scene - Teleport, then Awake, then the velocities
 - Measuring a rebound from a body's LinearVelocity, which cannot miss a short contact
-- Using helpers: SetupBase3DScene, CreatePrimitive, AddEntityTextRenderer, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddEntityTextRenderer, DebugOverlay
 
 ![Physics Materials](media/physics-materials.webp)
 

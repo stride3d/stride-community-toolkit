@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
@@ -21,14 +22,11 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
-
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     // One call, however much text the scene has. Without the renderer, components collect quietly
     // and nothing appears - there is no error for a missing renderer.
@@ -120,7 +118,7 @@ void Start(Scene scene)
     {
         Text = "PositionMode = Anchored, TopLeft",
         PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = DisplayPosition.TopLeft,
+        ScreenAnchor = ScreenAnchor.TopLeft,
         Offset = new Vector2(16, 16),
         EnableShadow = true,
     });
@@ -129,7 +127,7 @@ void Start(Scene scene)
     {
         Text = "Anchored, BottomRight\n(resize the window - I stay put)",
         PositionMode = TextPositionMode.Anchored,
-        ScreenAnchor = DisplayPosition.BottomRight,
+        ScreenAnchor = ScreenAnchor.BottomRight,
         Offset = new Vector2(16, 40),
         EnableShadow = true,
     });
@@ -152,6 +150,7 @@ Entity AddStation(Scene scene, Vector3 position, string text, Action<EntityTextC
 {
     var pole = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 1f), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         EntityName = "Pole",
     });
 

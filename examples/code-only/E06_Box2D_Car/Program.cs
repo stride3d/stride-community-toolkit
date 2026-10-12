@@ -57,7 +57,15 @@ var autoDrive = true;                  // drives itself until A or D is pressed,
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup2D
+{
+    ClearColor = background,
+    Camera = CameraSetup.Orthographic(orthographicSize: 22).WithController(),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -66,13 +74,8 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Box2D Car - Stride Community Toolkit";
 
-    game.SetupBase2D(clearColor: background);
-    var cameraEntity = game.Add2DCameraController();
+    var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
-    game.AddProfiler();
-
-    var camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
-    camera.OrthographicSize = 22;
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;

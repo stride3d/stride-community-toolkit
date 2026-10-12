@@ -23,7 +23,7 @@ using System.Reflection;
 // and every instance here is created against that.
 //
 // HRTF - head-related transfer function, the "sounds like it is behind you" kind of spatialisation
-// - takes two switches: HrtfSupport in the game settings before Run, which UseGameSettings
+// - takes two switches: HrtfSupport in the game settings before Run, which the setup's GameSettings
 // provides, and useHrtf per instance. It works on Windows (XAudio2); OpenAL on Linux ignores it
 // and spatialises with its own model. T recreates the instance with the flag flipped so the two
 // can be compared.
@@ -49,25 +49,24 @@ var directory = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!;
 
 using var game = new Game();
 
-// The first HRTF switch. Harmless where unsupported.
-game.UseGameSettings(settings => settings.GetOrCreateConfiguration<AudioEngineSettings>().HrtfSupport = true);
+var sceneSetup = new SceneSetup3D
+{
+    // The first HRTF switch. Harmless where unsupported.
+    GameSettings = settings => settings.GetOrCreateConfiguration<AudioEngineSettings>().HrtfSupport = true,
+    // Inside the orbit, so the orb passes beside and behind the listener on every lap
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 2.2f, -4), rotation: new Vector3(180, -10, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
 
-game.Run(start: Start, update: Update);
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    // Inside the orbit, so the orb passes beside and behind the listener on every lap.
-    game.SetCameraPosition(new Vector3(0, 2.2f, -4));
-    game.SetCameraRotation(new Vector3(180, -10, 0));
-
     // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
     // and its height in Z
     var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         Position = new Vector3(0, 1.25f, 0),
     });
@@ -75,6 +74,7 @@ void Start(Scene scene)
 
     orb = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         Material = game.CreateMaterial(new Color(255, 120, 60)),
     });
     orb.Scene = scene;
@@ -199,10 +199,10 @@ description:
 concepts:
   - Creating a spatialised instance and positioning it with Apply3D through SoundEmitterScript
   - "Why the default listener is useless for a moving camera, and AttachListener as the fix"
-  - HRTF as two switches - HrtfSupport through UseGameSettings, then useHrtf per instance
+  - HRTF as two switches - HrtfSupport through the setup's GameSettings, then useHrtf per instance
   - Positioning a one-shot once versus tracking a moving emitter every frame
   - Reading the emitter's side and distance relative to the camera for the overlay
-  - "Using helpers: UseGameSettings, SetupBase3DScene, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay"
 tags:
   - 3D
   - Audio

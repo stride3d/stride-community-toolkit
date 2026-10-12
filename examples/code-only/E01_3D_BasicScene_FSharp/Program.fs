@@ -8,8 +8,6 @@ open Stride.Engine
 let game = new Game()
 
 let Start rootScene =
-    game.SetupBase3DScene()
-    game.AddSkybox() |> ignore
     game.AddProfiler() |> ignore
 
     let capsule = game.CreatePrimitive(Primitive3D.Capsule(), Bepu3DPhysicsOptions())
@@ -18,7 +16,7 @@ let Start rootScene =
 
 [<EntryPoint>]
 let main argv =
-    game.Run(start = Start)
+    game.Run(SceneSetup3D().UseBepu().UseSkybox(), start = Start)
     0
 (*
 ---example-metadata
@@ -41,7 +39,7 @@ concepts:
   - "Assigning to engine properties with the <- operator"
   - "Starting the loop from an [<EntryPoint>] main function"
   - "Passing the start callback by name: game.Run(start = Start)"
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseBepu, UseSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - F#

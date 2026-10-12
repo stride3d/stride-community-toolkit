@@ -26,7 +26,7 @@ public static class GameLoopExtensions
     /// reads the same property back, so the engine renaming it fails a test rather than silently
     /// un-pinning every golden image.
     /// </remarks>
-    public static void SetDeterministic(this Game game, TimeSpan? step = null)
+    public static void SetDeterministic(this IGame game, TimeSpan? step = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 

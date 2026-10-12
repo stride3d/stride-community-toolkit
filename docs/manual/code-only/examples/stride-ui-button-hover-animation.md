@@ -20,10 +20,10 @@ The `Program.cs` file shows how to:
 - Frame-rate independent movement with a clamped lerp
 - Laying an underline out inside the button so nothing resizes
 - Driving many UI elements from a single script
-- Using helpers: SetupBase3D, AddSkybox
+- Using helpers: SceneSetup3D, AddSkybox
 
 ![Stride UI - Button Hover Animation](media/stride-ui-button-hover-animation.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_StrideUI_ButtonHoverAnimation).
 
-[!code-csharp[](../../../../examples/code-only/E04_StrideUI_ButtonHoverAnimation/Program.cs?start=1&end=109)]
+[!code-csharp[](../../../../examples/code-only/E04_StrideUI_ButtonHoverAnimation/Program.cs?start=1&end=103)]

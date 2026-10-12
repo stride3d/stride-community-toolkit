@@ -213,7 +213,7 @@ public static class GameSettingsExtensions
         if (settings.Configurations.OfType<RenderingSettings>().FirstOrDefault() is not { } rendering)
             return;
 
-        if (game.GraphicsDeviceManager is not GraphicsDeviceManager deviceManager)
+        if (game.GetGraphicsDeviceManager() is not GraphicsDeviceManager deviceManager)
             return;
 
         // The engine applies an asset's rendering settings only with AutoLoadDefaultSettings on; these

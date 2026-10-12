@@ -8,7 +8,6 @@ using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Games;
 
 // A code-only first-person character controller on Bepu physics:
 //  • a CharacterComponent capsule built entirely from code (no Game Studio),
@@ -19,17 +18,17 @@ CharacterComponent? character = null;
 
 using var game = new Game();
 
-game.Run(start: Start);
+// The setup's camera is deliberately without WithController(): the fly-around debug camera
+// controller would fight our first-person controller for the same camera.
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective()
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start);
 
 void Start(Scene scene)
 {
-    // SetupBase3D = graphics compositor + camera + directional light. Deliberately NOT
-    // SetupBase3DScene(): that would also attach the fly-around debug camera controller, which
-    // would fight our first-person controller for the same camera.
-    game.SetupBase3D();
-    game.Add3DGround();
-    game.AddSkybox();
-
     // A few boxes to walk into and jump onto.
     for (int i = 0; i < 5; i++)
     {
@@ -85,18 +84,18 @@ description:
   en: |-
     A first-person character built entirely from code - no Game Studio scene - on a Bepu
     CharacterComponent, with boxes to walk into and jump onto. Two details make it work. The scene uses
-    SetupBase3D rather than SetupBase3DScene, because the latter attaches the fly-around debug camera
-    that would fight the controller for the same camera. And the controller is a component plus a
+    a camera without the setup's controller, because the fly-around debug camera would fight the
+    controller for the same camera. And the controller is a component plus a
     processor pair, registered automatically by DefaultEntityComponentProcessor, which is how you add
     per-frame behaviour to many entities without a script on each one.
 concepts:
   - Building a character controller with Bepu CharacterComponent
   - "Attaching a collider by passing the component through Bepu3DPhysicsOptions"
-  - "Why SetupBase3D, not SetupBase3DScene, for a custom camera"
+  - "Why the setup's camera has no controller when the scene brings its own"
   - "Pairing an EntityComponent with an EntityProcessor"
   - "Auto-registering a processor with [DefaultEntityComponentProcessor]"
   - Driving a physics body from the camera entity
-  - "Using helpers: SetupBase3D, Add3DGround, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, Add3DGround, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bepu

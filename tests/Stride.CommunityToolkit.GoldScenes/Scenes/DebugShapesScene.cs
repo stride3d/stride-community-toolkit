@@ -15,9 +15,10 @@ internal sealed class DebugShapesScene : IGoldScene
 {
     private ImmediateDebugRenderSystem? _debug;
 
+    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+
     public void Start(Game game, Scene scene)
     {
-        game.SetupBase3D();
         game.SetCameraPosition(new Vector3(0f, 5f, 14f));
         game.SetCameraRotation(new Vector3(0f, -14f, 0f));
 

@@ -39,20 +39,20 @@ var bump = 0f;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 2.5f, -6), rotation: new Vector3(180, -12, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    game.SetCameraPosition(new Vector3(0, 2.5f, -6));
-    game.SetCameraRotation(new Vector3(180, -12, 0));
-
     // Scenery only, so the plain options: no physics body
     speaker = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         Material = game.CreateMaterial(new Color(90, 160, 255)),
         Position = new Vector3(0, 1, 0),
     });
@@ -176,7 +176,7 @@ concepts:
   - Looping, volume and pan on a SoundInstance
   - Disposing instances once they have played out
   - "Why the files are mono: Pan and spatialisation need a single channel"
-  - "Using helpers: SetupBase3DScene, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay"
 tags:
   - 3D
   - Audio

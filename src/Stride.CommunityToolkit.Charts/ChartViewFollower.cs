@@ -1,6 +1,7 @@
 using Stride.Core.Mathematics;
-using Stride.Engine;
 using Stride.Engine.Processors;
+using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Charts;
 
@@ -19,12 +20,12 @@ namespace Stride.CommunityToolkit.Charts;
 /// </remarks>
 internal sealed class ChartViewFollower
 {
-    private readonly Game _game;
+    private readonly IGame _game;
     private readonly Chart _chart;
     private Vector4? _lastRange;
     private float _lastPixelHeight;
 
-    internal ChartViewFollower(Game game, Chart chart)
+    internal ChartViewFollower(IGame game, Chart chart)
     {
         _game = game;
         _chart = chart;

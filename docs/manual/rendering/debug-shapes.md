@@ -4,7 +4,7 @@ Immediate-mode wireframe and solid shapes for debugging: colliders, ray hits, sp
 
 ## Getting the system
 
-Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.AddDebugShapes(Stride.Engine.Game,Stride.Rendering.RenderGroup)), then resolve `ImmediateDebugRenderSystem` from the game's services. It is registered as a service and as a game system, so you get it the same way from a script or from a code-only `Start` callback.
+Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.AddDebugShapes(Stride.Games.IGame,Stride.Rendering.RenderGroup)), then resolve `ImmediateDebugRenderSystem` from the game's services. It is registered as a service and as a game system, so you get it the same way from a script or from a code-only `Start` callback.
 
 ```csharp
 game.AddDebugShapes();

@@ -21,10 +21,10 @@ The `Program.cs` file shows how to:
 - Wiring the manifest in with <ApplicationManifest>
 - The code alternative, WindowsDpiManager.EnablePerMonitorV2(), and why a project uses one route, not both
 - Reading the display's scale factor with DisplayScale, and why the overlay follows it by default
-- Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive
 
 ![DPI-Aware Window](media/dpi-aware.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_DpiAware).
 
-[!code-csharp[](../../../../examples/code-only/E08_DpiAware/Program.cs?start=1&end=54)]
+[!code-csharp[](../../../../examples/code-only/E08_DpiAware/Program.cs?start=1&end=51)]

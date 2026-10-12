@@ -21,7 +21,7 @@ public class AddBepuPhysicsColliderTests
     {
         var entity = EntityWithModel();
 
-        entity.AddBepu3DPhysics(Primitive3D.Box(new Vector3(8f, 3f, 0.4f)), new Bepu3DPhysicsOptions
+        entity.AddBepuPhysics(Primitive3D.Box(new Vector3(8f, 3f, 0.4f)), new Bepu3DPhysicsOptions
         {
             Component = new StaticComponent { Collider = new CompoundCollider() },
         });
@@ -36,7 +36,7 @@ public class AddBepuPhysicsColliderTests
     {
         var entity = EntityWithModel();
 
-        entity.AddBepu3DPhysics(Primitive3D.Cube(2f), new Bepu3DPhysicsOptions());
+        entity.AddBepuPhysics(Primitive3D.Cube(2f), new Bepu3DPhysicsOptions());
 
         Assert.IsType<BoxCollider>(Assert.Single(CollidersOf(entity)));
         Assert.IsType<BodyComponent>(entity.Get<CollidableComponent>());
@@ -48,7 +48,7 @@ public class AddBepuPhysicsColliderTests
         var entity = EntityWithModel();
         var own = new BoxCollider { Mass = 2f };
 
-        entity.AddBepu3DPhysics(Primitive3D.Cube(1.2f), new Bepu3DPhysicsOptions
+        entity.AddBepuPhysics(Primitive3D.Cube(1.2f), new Bepu3DPhysicsOptions
         {
             Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { own } } },
         });
@@ -62,7 +62,7 @@ public class AddBepuPhysicsColliderTests
     {
         var entity = EntityWithModel();
 
-        entity.AddBepu3DPhysics(Primitive3D.Cube(), new Bepu3DPhysicsOptions
+        entity.AddBepuPhysics(Primitive3D.Cube(), new Bepu3DPhysicsOptions
         {
             Component = new BodyComponent { Collider = new CompoundCollider() },
             IncludeCollider = false,
@@ -78,12 +78,12 @@ public class AddBepuPhysicsColliderTests
         var kept = new Entity();
         var own = new BoxCollider { Mass = 3f };
 
-        fitted.AddBepu2DPhysics(Primitive2D.Rectangle(4f, 0.5f), new Bepu2DPhysicsOptions
+        fitted.AddBepuPhysics(Primitive2D.Rectangle(4f, 0.5f), new Bepu2DPhysicsOptions
         {
             Component = new Body2DComponent { Collider = new CompoundCollider() },
         });
 
-        kept.AddBepu2DPhysics(Primitive2D.Rectangle(4f, 0.5f), new Bepu2DPhysicsOptions
+        kept.AddBepuPhysics(Primitive2D.Rectangle(4f, 0.5f), new Bepu2DPhysicsOptions
         {
             Component = new Body2DComponent { Collider = new CompoundCollider { Colliders = { own } } },
         });

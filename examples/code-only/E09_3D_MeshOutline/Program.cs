@@ -17,16 +17,10 @@ const float OutlineIntensity = 100f;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    // Set up a basic 3D scene with lighting and camera
-    game.SetupBase3DScene();
-
-    // Add a default skybox to the scene for background visuals
-    game.AddSkybox();
-
     // From here on, any entity carrying a MeshOutlineComponent gets an outline
     game.AddRootRenderFeature(new MeshOutlineRenderFeature { Thickness = OutlineThickness });
 
@@ -93,7 +87,7 @@ concepts:
   - Building a MutablePipelineState and applying a DynamicEffectInstance
   - Inflating a mesh along its normals in a shader
   - Skipping render stages that bind no render target
-  - "Using helpers: SetupBase3DScene, AddSkybox"
+  - "Using helpers: SceneSetup3D, AddSkybox"
 tags:
   - 3D
   - Rendering

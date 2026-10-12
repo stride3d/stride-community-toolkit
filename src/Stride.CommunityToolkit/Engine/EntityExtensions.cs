@@ -1,5 +1,5 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Gizmos;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
 using Stride.Graphics;
@@ -19,8 +19,8 @@ public static partial class EntityExtensions
     /// enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
-    /// <param name="displayPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
-    /// leaves the overlay's own position alone; <see cref="DisplayPosition.None"/> registers no camera help at all.</param>
+    /// <param name="helpPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// leaves the overlay's own position alone.</param>
     /// <remarks>
     /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick
     /// or by dragging/scaling using multitouch. Rotation is achieved using the Numpad, the mouse while holding
@@ -28,15 +28,25 @@ public static partial class EntityExtensions
     /// </remarks>
     /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
-    public static void Add3DCameraController(this Entity entity,
-        DisplayPosition? displayPosition = null,
+    /// <param name="showHelp"><see langword="false"/> keeps the controller but puts no key help on the overlay.</param>
+    /// <returns>The controller, already on the entity.</returns>
+    public static Basic3DCameraController Add3DCameraController(this Entity entity,
+        ScreenAnchor? helpPosition = null,
         Keys helpToggleKey = Keys.F2,
-        bool helpCollapsed = true)
-        => entity.Add(new Basic3DCameraController(displayPosition)
+        bool helpCollapsed = true,
+        bool showHelp = true)
+    {
+        var controller = new Basic3DCameraController(helpPosition)
         {
             HelpToggleKey = helpToggleKey,
-            HelpCollapsed = helpCollapsed
-        });
+            HelpCollapsed = helpCollapsed,
+            ShowHelp = showHelp
+        };
+
+        entity.Add(controller);
+
+        return controller;
+    }
 
     /// <summary>
     /// Adds a <see cref="Basic2DCameraController"/> script to the entity enabling panning and zooming
@@ -45,14 +55,21 @@ public static partial class EntityExtensions
     /// <param name="entity">The camera entity that will receive the controller script.</param>
     /// <param name="helpToggleKey">The key that collapses and expands the camera's help.</param>
     /// <param name="helpCollapsed">Whether the help starts collapsed to a single reminder line. Collapsed by default.</param>
-    public static void Add2DCameraController(this Entity entity,
+    /// <returns>The controller, already on the entity.</returns>
+    public static Basic2DCameraController Add2DCameraController(this Entity entity,
         Keys helpToggleKey = Keys.F2,
         bool helpCollapsed = true)
-        => entity.Add(new Basic2DCameraController
+    {
+        var controller = new Basic2DCameraController
         {
             HelpToggleKey = helpToggleKey,
             HelpCollapsed = helpCollapsed
-        });
+        };
+
+        entity.Add(controller);
+
+        return controller;
+    }
 
     /// <summary>
     /// Adds a TranslationGizmo to the specified entity with optional custom colors.
@@ -64,6 +81,7 @@ public static partial class EntityExtensions
     /// <param name="blueColor">Optional custom color for the Z-axis of the gizmo. If not specified, a default color is used.</param>
     /// <param name="showAxisName">Optional flag to show axis names. Default is false.</param>
     /// <param name="rotateAxisNames">Optional flag to rotate axis names. Default is true.</param>
+    /// <returns>The gizmo, whose entity is already a child of <paramref name="entity"/>.</returns>
     /// <example>
     /// This example shows how to add a gizmo to an entity with the default colors:
     /// <code>
@@ -72,11 +90,13 @@ public static partial class EntityExtensions
     /// entity.AddGizmo(game.GraphicsDevice);
     /// </code>
     /// </example>
-    public static void AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null, bool showAxisName = false, bool rotateAxisNames = true)
+    public static TranslationGizmo AddGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null, bool showAxisName = false, bool rotateAxisNames = true)
     {
         var gizmo = new TranslationGizmo(graphicsDevice, redColor, greenColor, blueColor);
 
         gizmo.Create(entity, showAxisName, rotateAxisNames);
+
+        return gizmo;
     }
 
     /// <summary>
@@ -85,6 +105,7 @@ public static partial class EntityExtensions
     /// <param name="entity">The entity to which the directional light gizmo will be added.</param>
     /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
     /// <param name="color">Optional color for the gizmo. If not specified, a default color is used.</param>
+    /// <returns>The gizmo, whose entity is already a child of <paramref name="entity"/>.</returns>
     /// <remarks>
     /// This method is useful for visually representing the direction and orientation of a directional light in a scene.
     /// The gizmo can be used during runtime to provide a visual reference for the light's direction.
@@ -97,11 +118,13 @@ public static partial class EntityExtensions
     /// entity.AddLightDirectionalGizmo(game.GraphicsDevice);
     /// </code>
     /// </example>
-    public static void AddLightDirectionalGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? color = null)
+    public static LightDirectionalGizmo AddLightDirectionalGizmo(this Entity entity, GraphicsDevice graphicsDevice, Color? color = null)
     {
         var gizmo = new LightDirectionalGizmo(graphicsDevice, color);
 
         gizmo.Create(entity);
+
+        return gizmo;
     }
 
     /// <summary>
@@ -112,33 +135,6 @@ public static partial class EntityExtensions
     public static T? GetComponent<T>(this Entity entity)
     {
         var result = entity.OfType<T>().FirstOrDefault();
-
-        return result;
-    }
-
-    /// <summary>
-    /// Searches the entity, then its descendants depth-first, for the first component of the specified type.
-    /// </summary>
-    /// <typeparam name="T">The type of component to retrieve.</typeparam>
-    /// <param name="entity">The <see cref="Entity"/> from which to start the search.</param>
-    /// <returns>The first component of the specified type on the entity or its descendants, or <c>null</c> if none exists.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="entity"/> is <c>null</c>.</exception>
-    public static T? GetComponentInChildren<T>(this Entity entity)
-    {
-        ArgumentNullException.ThrowIfNull(entity);
-
-        var result = entity.OfType<T>().FirstOrDefault();
-
-        if (result is not null) return result;
-
-        var children = entity.GetChildren();
-
-        foreach (var child in children)
-        {
-            result = child.GetComponentInChildren<T>();
-
-            if (result != null) return result;
-        }
 
         return result;
     }

@@ -18,12 +18,10 @@ const int ShapeCount = 30;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase2DScene();
-
     for (var i = 0; i < ShapeCount; i++)
     {
         // Each kind of shape in turn
@@ -66,7 +64,7 @@ concepts:
   - A list of shape types with a colour each
   - Applying a flat material with CreateFlatMaterial
   - Positioning entities so that they fall into a pile
-  - "Using helpers: SetupBase2DScene"
+  - "Using helpers: SceneSetup2D"
 tags:
   - 2D
   - Bepu

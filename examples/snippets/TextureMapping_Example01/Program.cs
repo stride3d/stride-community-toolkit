@@ -11,13 +11,10 @@ using Stride.Rendering.Materials.ComputeColors;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu(), start: Start);
 
 void Start(Scene scene)
 {
-    // Set up a base 3D scene with default lighting and camera
-    game.SetupBase3DScene();
-
     // Load the texture from a file as a colour: sRGB, premultiplied and mipmapped, the way the content
     // pipeline would have imported it
     var texture = new TextureLoader(game.GraphicsDevice).Color("Stride-logo.png");

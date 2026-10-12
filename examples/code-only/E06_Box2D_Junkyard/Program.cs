@@ -67,7 +67,18 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup2D
+{
+    ClearColor = background,
+    // The sample's viewport: camera centered on (8, 25), zoom 60 - which in the testbed means the
+    // visible world is 60 units tall. The camera controller adopts this size and scales it when the
+    // mouse wheel zooms; the shader keeps borders pixel-constant at any zoom on its own
+    Camera = CameraSetup.Orthographic(position: new Vector3(8, 25, 50), orthographicSize: 60).WithController(),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -75,17 +86,6 @@ void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Junkyard Box2D Example - Stride Community Toolkit";
-
-    game.SetupBase2D(clearColor: background);
-    game.Add2DCameraController();
-    game.AddProfiler();
-
-    // The sample's viewport: camera centered on (8, 25), zoom 60 - which in the testbed means the
-    // visible world is 60 units tall. The camera controller adopts this size and scales it when the
-    // mouse wheel zooms; the shader keeps borders pixel-constant at any zoom on its own.
-    var camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
-    camera.Entity.Transform.Position = new Vector3(8, 25, 50);
-    camera.OrthographicSize = 60;
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;

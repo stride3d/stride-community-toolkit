@@ -23,14 +23,11 @@ const int LooseCubeCount = 8;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
     // Camera, directional light and a ground plane
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     CreateCentreCube(rootScene);
     CreateLooseCubes(rootScene);
     CreateOrbitingCube(rootScene);
@@ -135,7 +132,7 @@ concepts:
   - Waking a body after changing its velocity
   - Why writing Transform.Position does not move a physics body
   - Sizing a primitive and its collider together
-  - "Using helpers: SetupBase3DScene"
+  - "Using helpers: SceneSetup3D"
   - "Using helpers: AddSkybox"
   - "Using helpers: Game.DeltaTime"
 tags:

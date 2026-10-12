@@ -1,6 +1,7 @@
 using E03_2D_HUD_Basics;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
@@ -92,7 +93,7 @@ SimpleHud hud = null!;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
@@ -100,7 +101,6 @@ void Start(Scene rootScene)
     game.Window.Title = "HUD basics - Stride Community Toolkit";
 
     // Something for the HUD to sit over: the scene of E01_2D_FallingShapes
-    game.SetupBase2DScene();
     AddFallingShapes(rootScene);
 
     #region Step1Create
@@ -222,7 +222,7 @@ Vector2 PanelCentre()
     var panelY = -panelSize.Y * 0.5f;
 
     // Start from the bottom left corner, and keep a margin from the window's edges
-    return shapeBatch.Corner(ScreenCorner.BottomLeft) + new Vector2(panelX, panelY) + new Vector2(Margin, -Margin);
+    return shapeBatch.Anchor(ScreenAnchor.BottomLeft) + new Vector2(panelX, panelY) + new Vector2(Margin, -Margin);
 }
 #endregion
 
@@ -266,7 +266,7 @@ void DrawHealthBar()
 #region Step3
 /// <summary>The middle of the dial: a margin in from the bottom right corner of the window.</summary>
 Vector2 DialCentre()
-    => shapeBatch.Corner(ScreenCorner.BottomRight) + new Vector2(-Margin - DialRadius - DialWidth, -Margin - DialRadius - DialWidth);
+    => shapeBatch.Anchor(ScreenAnchor.BottomRight) + new Vector2(-Margin - DialRadius - DialWidth, -Margin - DialRadius - DialWidth);
 
 void DrawEnergyDial()
 {

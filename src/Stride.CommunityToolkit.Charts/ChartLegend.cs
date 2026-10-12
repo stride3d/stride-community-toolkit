@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Charts;
 
@@ -20,12 +21,12 @@ internal sealed class ChartLegend : IDisposable
     private const float Gap = 8f;
     private const float RowPitch = 1.6f;
 
-    private readonly Game _game;
+    private readonly IGame _game;
     private readonly Chart _chart;
     private readonly List<Row> _rows = [];
     private bool _visible = true;
 
-    internal ChartLegend(Game game, Chart chart)
+    internal ChartLegend(IGame game, Chart chart)
     {
         _game = game;
         _chart = chart;

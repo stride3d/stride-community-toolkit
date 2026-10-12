@@ -4,9 +4,9 @@ using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -26,7 +26,7 @@ using Stride.Rendering;
 // Three sheets hang side by side, differing only in stiffness and whether they have area
 // constraints; a fourth drapes itself over a ball. Every node is drawn by one instanced master, so
 // about eleven hundred bodies cost one draw call. The solver runs eight substeps, set through
-// UseGameSettings before the game starts: cloth is exactly the kind of stiff, connected system
+// GameSettings on the setup, before the game starts: cloth is exactly the kind of stiff, connected system
 // that needs more solver work than the default, and substeps are one of the two ways to buy it.
 //
 // Pull on any sheet with the left mouse button; N drops a ball onto the draped one; R rebuilds;
@@ -61,29 +61,27 @@ using var game = new Game();
 // SolveDescription(8, 1) is eight velocity iterations in one substep - the first argument is the
 // iteration count. Either holds these sheets; Bepu's stability tips offer both as the remedy for a
 // stiff system, and substeps also shorten the time step, which helps fast motion. Swap the two
-// numbers to compare. The engine reads this while it initialises, so it has to come from the
-// settings, before Run.
-game.UseGameSettings(settings =>
+// numbers to compare. The engine reads this while it initialises, so it comes from the setup's
+// GameSettings, which Run applies before the engine starts.
+var sceneSetup = new SceneSetup3D
 {
-    var bepu = settings.GetOrCreateConfiguration<BepuConfiguration>();
-    bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = new Vector3(0, -10, 0), SolverSubStep = 8, SolverIteration = 1 });
-});
+    GameSettings = settings =>
+    {
+        var bepu = settings.GetOrCreateConfiguration<BepuConfiguration>();
+        bepu.BepuSimulations.Add(new BepuSimulation { PoseGravity = new Vector3(0, -10, 0), SolverSubStep = 8, SolverIteration = 1 });
+    },
+    // Aimed at the sheets from the front, with the camera help out of the menu's way
+    Camera = CameraSetup.Perspective(position: new Vector3(-1, 8, -26), rotation: new Vector3(180, -12, 0)).WithController(ScreenAnchor.BottomRight),
+    Ground = GroundSetup.Plane(new Vector2(40)),
+    Profiler = true
+}.UseBepu().UseSkybox();
 
-game.Run(start: Start, update: Update);
+game.Run(sceneSetup, start: Start, update: Update);
 
 instancing?.Dispose();
 
 void Start(Scene scene)
 {
-    game.SetupBase3D();
-    game.Add3DCameraController(displayPosition: DisplayPosition.BottomRight);
-    game.AddSkybox();
-    game.AddProfiler();
-    game.Add3DGround(new Vector2(40));
-
-    game.SetCameraPosition(new Vector3(-1, 8, -26));
-    game.SetCameraRotation(new Vector3(180, -12, 0));
-
     game.AddGrabber();
 
     rootScene = scene;
@@ -143,6 +141,7 @@ Model ModelFor(float radius)
 
     var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new Primitive3DEntityOptions
     {
+        IncludePhysics = false,
         Material = game.CreateMaterial(new Color(230, 120, 90), metalness: 0.3f, glossiness: 0.7f),
     }).Get<ModelComponent>().Model;
 
@@ -181,7 +180,7 @@ void BuildScene(Scene scene)
     HangSheet(scene, new Vector3(-13, 10, 2), distanceHertz: 5, areaHertz: 30);
 
     // A ball for the fourth sheet to drape over.
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new()
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 1.5f } } } },
@@ -190,7 +189,7 @@ void BuildScene(Scene scene)
     ball.Scene = scene;
     extras.Add(ball);
 
-    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new()
+    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(1.0f) } } } },
@@ -347,7 +346,7 @@ void Area(Entity a, Entity b, Entity c, float hertz)
 
 void DropBall(Scene scene)
 {
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new()
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(240, 200, 80)),
         Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 0.7f, Mass = 4 } } } },
@@ -392,7 +391,7 @@ description:
     every triangle against shear, and collision groups keeping neighbours from fighting. Three
     sheets hang side by side to compare stiffness with and without area constraints, a fourth
     drapes over a ball, about eleven hundred nodes are one instanced draw call, and the solver runs eight
-    substeps set through UseGameSettings, where Bepu's demo runs eight velocity iterations instead. Pull on anything with the grabber, and pick the node
+    substeps set through the setup's GameSettings, where Bepu's demo runs eight velocity iterations instead. Pull on anything with the grabber, and pick the node
     size from a menu: the sheets keep their dimensions, so smaller nodes mean a denser lattice
     with finer folds and a higher body count.
 concepts:
@@ -400,10 +399,10 @@ concepts:
   - "A distance limit with a low minimum: the sheet can bunch but not stretch"
   - Area constraints against shear, and what a sheet looks like without them
   - Keeping neighbouring nodes from colliding with CollisionGroup's index rule
-  - Solver substeps or velocity iterations for a stiff connected system, set through UseGameSettings
+  - Solver substeps or velocity iterations for a stiff connected system, set through the setup's GameSettings
   - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
   - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds"
-  - "Using helpers: SetupBase3D, Add3DGround, GrabberScript, DebugOverlay, DebugTextDropdown"
+  - "Using helpers: SceneSetup3D, Add3DGround, GrabberScript, DebugOverlay, DebugTextDropdown"
 tags:
   - 3D
   - Bepu

@@ -81,8 +81,6 @@ const float FreePendulumX = 7.5f;
 // stations never touch each other.
 var pushVelocity = new Vector3(0, 0, 4.5f);
 
-
-
 // Kept so the update loop can switch them off at runtime - the fastest way to feel what a
 // constraint is actually contributing is to remove it while everything is moving.
 OneBodyAngularMotorConstraintComponent? mixerMotor = null;
@@ -94,18 +92,18 @@ BodyComponent? freeArm = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new(2.5f, 9, 19), rotation: new(3, -25, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.SetCameraPosition(new(2.5f, 9, 19));
-    game.SetCameraRotation(new(3, -25, 0));
-
     // Pick up and throw any body with the left mouse button (GrabberScript, see E05_3D_Grabber).
     game.AddGrabber();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddGroundGizmo(new Vector3(-9, 0, -9), showAxisName: true);
 
     InitializeDebugOverlay();
@@ -382,8 +380,6 @@ Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool 
 
 IReadOnlyList<TextElement> BuildInstructions()
 {
-
-
     // Rebuilt every frame rather than patched line by line. Indexing into the existing list means
     // the labels written here and the placeholders written at startup have to be kept in step by
     // hand, and they drift apart the moment a line is renamed.
@@ -469,7 +465,7 @@ concepts:
   - Why a constraint anchor must be a kinematic body, not a static one
   - Why a velocity set from the start callback is lost
   - Picking up and throwing bodies with GrabberScript
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddGroundGizmo, AddProfiler"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler"
 tags:
   - 3D
   - Physics

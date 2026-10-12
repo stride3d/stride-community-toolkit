@@ -62,7 +62,13 @@ var interpolated = true;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(position: new Vector3(0f, 6.5f, 15f), rotation: new Vector3(0f, -14f, 0f)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 foreach (var master in masters) master?.Dispose();
 
@@ -70,13 +76,6 @@ void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Cube fountain - Stride Community Toolkit";
-
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    game.SetCameraPosition(new Vector3(0f, 6.5f, 15f));
-    game.SetCameraRotation(new Vector3(0f, -14f, 0f));
 
     // Without this nothing instanced is drawn, and nothing warns you
     game.AddInstancingSupport();
@@ -86,6 +85,7 @@ void Start(Scene scene)
         // The model, owned by a prototype parked out of sight
         var prototype = game.CreatePrimitive(shapes[i].Type, new Primitive3DEntityOptions
         {
+            IncludePhysics = false,
             Material = game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f),
         });
 
@@ -208,11 +208,11 @@ InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolat
 /// </summary>
 Entity CreateBody(Scene scene, int kind, Vector3 position)
 {
-    // AddBepu3DPhysics derives the collider from the shape; it needs a model
+    // AddBepuPhysics derives the collider from the shape; it needs a model
     // component to be present, which is then taken off again
     var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
 
-    body.AddBepu3DPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
+    body.AddBepuPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
     {
         // A body is not interpolated unless asked: by default it is moved on physics steps only
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = Interpolation() },

@@ -21,7 +21,7 @@ var groundSize = new Vector3(15f, 1, 15f);
 // Initialize Jitter2 physics world with 4 substeps for better accuracy
 var world = new World()
 {
-    SubstepCount = 4,
+    SubstepCount = 4
 };
 
 // Each cube's visual entity and physics body, kept together so they can never drift out of sync
@@ -32,16 +32,11 @@ var accumulatedTime = 0f;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D { Ground = null, Profiler = true }.UseSkybox(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.Title = "Jitter 2 Physics Example - Stride Community Toolkit";
-
-    game.SetupBase3D();
-    game.AddSkybox();
-    game.Add3DCameraController();
-    game.AddProfiler();
 
     CreateGround(rootScene);
     CreateCubes(rootScene, count: 150);

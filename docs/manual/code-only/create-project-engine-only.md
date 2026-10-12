@@ -4,7 +4,7 @@ The [Create Project](create-project.md) page builds a scene with the toolkit: fi
 them helpers. This page builds the same kind of scene - a ground, a cube and a camera - against Stride
 alone, with no toolkit package. It is not the recommended route; it is here so you can see what the
 helpers stand for, and so you know the toolkit is a convenience, not a requirement. Everything it uses
-is plain Stride, and everything it does the toolkit does for you in `SetupBase3D()` and
+is plain Stride, and everything it does the toolkit does for you in `SceneSetup3D` and
 `CreatePrimitive()`.
 
 > [!NOTE]
@@ -54,21 +54,21 @@ This is the toolkit's `E01_3D_BasicScene_EngineOnly` example, verbatim.
 | Engine code | Toolkit helper |
 |---|---|
 | `game.Script.AddTask(Start)` before `game.Run()` | `game.Run(start: Start)` - the toolkit's `Run` adds the task for you and hands `Start` the root scene. |
-| `GraphicsCompositorHelper.CreateDefault(...)` assigned to `SceneSystem.GraphicsCompositor` | `AddGraphicsCompositor()`, inside `SetupBase3D()`. Without a compositor nothing is drawn. |
-| An entity with a `CameraComponent` bound to `compositor.Cameras[0]`, placed and rotated | `Add3DCamera()`, inside `SetupBase3D()`, with the same position and angles. |
-| A `LightDirectional` with shadows and a `LightAmbient` fill | `AddDirectionalLight()`, inside `SetupBase3D()`. The toolkit's lit scenes usually add a skybox instead of the ambient light, which also lights the shaded faces. |
+| `GraphicsCompositorHelper.CreateDefault(...)` assigned to `SceneSystem.GraphicsCompositor` | `AddGraphicsCompositor()`, which `SceneSetup3D` calls. Without a compositor nothing is drawn. |
+| An entity with a `CameraComponent` bound to `compositor.Cameras[0]`, placed and rotated | `Add3DCamera()`, which `SceneSetup3D` calls with the same position and angles. |
+| A `LightDirectional` with shadows and a `LightAmbient` fill | `AddDirectionalLight()`, which `SceneSetup3D` calls. The setup's sky stands in for the ambient light, which also lights the shaded faces. |
 | `PlaneProceduralModel` / `CubeProceduralModel` → `Generate(...)` → `Model` → `ModelComponent` | `CreatePrimitive(Primitive3D.Cube())`. |
 | `Material.New(device, new MaterialDescriptor { ... })` | `game.CreateMaterial(colour)`. |
 
 What the engine-only version leaves out, because each is a page of its own without the toolkit:
 
-- **Physics.** `SetupBase3DScene()` (the Bepu package's version of the setup) gives the ground a static
-  collider and `CreatePrimitive()` gives the cube a rigid body, so it can fall and land. Here the
+- **Physics.** With `UseBepu()` on the setup, the ground gets a static collider and `CreatePrimitive()`
+  gives the cube a rigid body, so it can fall and land. Here the
   cube is placed on the ground by hand and nothing moves.
 - **A camera controller.** The toolkit's `Add3DCameraController()` flies the camera with the keyboard
   and mouse; here the camera is fixed where `Start` put it.
-- **A skybox.** `AddSkybox()` lights and surrounds the scene with an image; here a cornflower clear
-  colour and an ambient light do the minimum.
+- **A sky.** The setup's gradient sky lights and surrounds the scene, and `UseSkybox()` swaps in a
+  photograph; here a cornflower clear colour and an ambient light do the minimum.
 - **DPI awareness.** `WindowsDpiManager.EnablePerMonitorV2()` is a toolkit call; without it the
   window is stretched on a scaled display.
 

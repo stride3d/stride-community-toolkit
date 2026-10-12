@@ -60,13 +60,17 @@ var start = new Vector3(0, 1.5f, 0);
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Camera = CameraSetup.Perspective(),
+    Ground = null,
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3D();                                 // compositor, camera, light - no camera controller, the car owns W A S D
-    game.AddSkybox();
-    game.AddProfiler();
     game.Add3DGround(new Vector2(240), new()
     {
         Material = game.CreateMaterial(new Color(95, 105, 100), metalness: 0.3f, glossiness: 0.7f),
@@ -322,7 +326,7 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
 Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
 {
     // The core, physics-free primitive: the body is on the parent, this is only the look.
-    var entity = game.CreatePrimitive(shape, new Primitive3DEntityOptions { Material = material });
+    var entity = game.CreatePrimitive(shape, new Primitive3DEntityOptions { IncludePhysics = false, Material = material });
     entity.Transform.Position = localPosition;
 
     return entity;
@@ -331,7 +335,7 @@ Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
 // A ramp, a slalom of pillars, and a wall of crates to drive through or throw with the grabber.
 void BuildCourse(Scene scene)
 {
-    var ramp = game.CreatePrimitive(Primitive3D.Box(new Vector3(6, 0.4f, 10)), new()
+    var ramp = game.CreatePrimitive(Primitive3D.Box(new Vector3(6, 0.4f, 10)), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         // An empty compound: the helper adds the box that fits the ramp's size
@@ -343,7 +347,7 @@ void BuildCourse(Scene scene)
 
     for (var i = 0; i < 6; i++)
     {
-        var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.5f, 3), new()
+        var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.5f, 3), new Bepu3DPhysicsOptions
         {
             // A cylinder's size is its radius in X and its height in Z
             Material = game.CreateMaterial(new Color(120, 170, 220)),
@@ -357,7 +361,7 @@ void BuildCourse(Scene scene)
     {
         for (var i = 0; i < 6; i++)
         {
-            var crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new()
+            var crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new Bepu3DPhysicsOptions
             {
                 Material = game.CreateMaterial(new Color(220, 180, 90)),
                 // The crate's own collider, for its mass: a compound that already holds a shape is
@@ -456,7 +460,7 @@ concepts:
   - Re-applying constraint targets only when they change, so the car sleeps when idle
   - Filtering chassis-wheel collisions with a collision layer that does not collide with itself
   - A chase camera in place of the camera controller, to free the driving keys
-  - "Using helpers: SetupBase3D, Add3DGround, CreatePrimitive (both overloads), GrabberScript"
+  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive (both overloads), GrabberScript"
 tags:
   - 3D
   - Bepu

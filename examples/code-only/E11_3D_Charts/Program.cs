@@ -1,15 +1,14 @@
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
-using Stride.Rendering.Images;
 using Stride.Games;
 using Stride.Input;
+using Stride.Rendering.Images;
 
 // The same chart API as E11_2D_Charts, in a lit 3D scene - and what the third axis adds.
 //
@@ -60,26 +59,27 @@ var waveTime = 0f;
 var waveFrequency = 1f;
 const float WaveAmplitude = 1.5f;
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    // A dark background instead of cornflower blue: emissive curves above intensity 1 only look like they
+    // glow against something dark. Bloom is off by default, like every post effect; the glow look needs
+    // it on, and the showcase widens it later, since the default is tuned for a scene, not thin lines.
+    ClearColor = new Color(16, 18, 28),
+    PostEffects = fx =>
+    {
+        fx.Bloom.Enabled = true;
+        bloom = fx.Bloom;
+    },
+    Lighting = null,
+    Skybox = null,
+    Ground = null
+}, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Charts 3D";
 
-    // What SetupBase3D does, with a dark background instead of cornflower blue: emissive curves above
-    // intensity 1 only look like they glow against something dark
-    game.AddGraphicsCompositor(clearColor: new Color(16, 18, 28)).AddCleanUIStage();
-
-    // Bloom is off by default, like every post effect; the glow look needs it on. The showcase widens
-    // it later, since the default is tuned for a scene, not for thin bright lines.
-    game.ConfigurePostEffects(fx =>
-    {
-        fx.Bloom.Enabled = true;
-        bloom = fx.Bloom;
-    });
-    game.Add3DCamera();
-    game.Add3DCameraController();
     keyLight = game.AddDirectionalLight(intensity: ChartLight).Get<LightComponent>();
 
     // Glow3D is the lit preset: bright palette, emissive intensity above 1, which the default
@@ -177,7 +177,7 @@ void Start(Scene rootScene)
     var overlay = DebugOverlay.GetOrCreate(game);
 
     // The chart fills the window, so the help goes in a corner rather than across the figure (F3 moves it)
-    overlay.Position = DisplayPosition.BottomLeft;
+    overlay.Position = ScreenAnchor.BottomLeft;
 
     overlay.AddSection("Chart", () =>
     [

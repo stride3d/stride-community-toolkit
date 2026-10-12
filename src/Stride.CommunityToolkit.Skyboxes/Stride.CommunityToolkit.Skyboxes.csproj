@@ -16,6 +16,10 @@ What's inside:
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Remove="Resources\skybox_texture_hdr.dds" />
     </ItemGroup>
 

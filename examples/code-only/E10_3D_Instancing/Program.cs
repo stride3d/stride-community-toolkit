@@ -42,19 +42,19 @@ var showInstanced = true;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+// The setup has no ground and no physics, because this example is purely about rendering.
+var sceneSetup = new SceneSetup3D
+{
+    Ground = null,
+    Camera = CameraSetup.Perspective(position: new(33, 65, -90), rotation: new(161, -22, 0)).WithController(),
+    Profiler = true
+}.UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    // Camera, directional light and a graphics compositor. Note this is SetupBase3D, not
-    // SetupBase3DScene: no ground and no physics, because this example is purely about rendering.
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
     DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
-    game.SetCameraPosition(new(33, 65, -90));
-    game.SetCameraRotation(new(161, -22, 0));
 
     EnableInstancing();
 
@@ -239,7 +239,7 @@ concepts:
   - Registering InstancingRenderFeature on the MeshRenderFeature
   - Sharing one Model between many entities
   - Toggling a ModelComponent to compare rendering cost
-  - "Using helpers: SetupBase3D"
+  - "Using helpers: SceneSetup3D"
   - "Using helpers: Add3DCameraController"
   - "Using helpers: AddProfiler"
 tags:

@@ -61,19 +61,14 @@ using var game = new Game();
 // leaves more of the view to the panel
 game.SetWindowSize(1920, 1080);
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight), Ground = null }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Easing - Stride Community Toolkit";
 
-    game.SetupBase2D(new Color(24, 26, 32));
     game.AddEntityTextRenderer();
-
-    var camera = rootScene.GetCamera() ?? throw new InvalidOperationException("The 2D scene has no camera.");
-
-    camera.OrthographicSize = ViewHeight;
 
     shapes = game.AddShapeBatch();
 

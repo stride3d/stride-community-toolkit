@@ -19,7 +19,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// <example>
 /// Example usage:
 /// <code>
-/// var component = entity.GetComponentInChildrenBFS&lt;MyComponent&gt;();
+/// var component = entity.GetComponentInChildren&lt;MyComponent&gt;();
 /// var allComponents = entity.GetComponentsInDescendants&lt;MyComponent&gt;();
 /// </code>
 /// </example>
@@ -35,7 +35,7 @@ public static class EntitySearchExtensions
     /// <param name="entity">The <see cref="Entity"/> to search within.</param>
     /// <returns>The first component of type <typeparamref name="T"/> found in the entity's descendants, or <c>null</c> if none exists.</returns>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="entity"/> is <c>null</c>.</exception>
-    public static T? GetComponentInChildrenBFS<T>(this Entity entity)
+    public static T? GetComponentInChildren<T>(this Entity entity)
         where T : EntityComponent
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -303,6 +303,25 @@ public static class EntitySearchExtensions
         stack.Push(entity);
 
         return GetComponentsInDescendantsCore<T>(stack, true);
+    }
+
+    /// <summary>
+    /// Performs a depth-first search of the entity and then its descendants for the first component of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of component.</typeparam>
+    /// <param name="entity">The entity.</param>
+    /// <returns>The component on the entity itself when it has one, otherwise the first found walking down each child in turn, or <c>null</c> if none exists.</returns>
+    /// <exception cref="ArgumentNullException">The entity was <c>null</c>.</exception>
+    public static T? GetComponentInDescendantsAndSelf<T>(this Entity entity)
+        where T : EntityComponent
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        //depth first
+        var stack = new Stack<Entity>();
+        stack.Push(entity);
+
+        return GetComponentsInDescendantsCore<T>(stack, true).FirstOrDefault();
     }
 
     private static IEnumerable<T> GetComponentsInDescendantsCore<T>(Stack<Entity> stack, bool includeSelf)

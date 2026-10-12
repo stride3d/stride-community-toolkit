@@ -15,26 +15,30 @@ The keys are the same in every scene, so the controllers also print them on scre
 ## Where they come from
 
 ```csharp
-game.SetupBase2DScene();   // compositor + 2D camera + Basic2DCameraController + ground
-game.SetupBase3DScene();   // compositor + 3D camera + light + Basic3DCameraController + ground
+game.Run(new SceneSetup2D(), start: Start);   // orthographic camera + Basic2DCameraController
+game.Run(new SceneSetup3D(), start: Start);   // perspective camera + Basic3DCameraController
 ```
 
-The `SetupBase2DScene()` / `SetupBase3DScene()` helpers from the Bepu and Bullet packages include a
-controller. The plain `SetupBase2D()` / `SetupBase3D()` helpers do not, so when you build a scene
-from those you add the controller yourself - either from the game, which finds the main camera for
-you, or from the camera entity if you already hold it:
+The setups' default cameras come with a controller: `CameraSetup.Orthographic().WithController()` and
+`CameraSetup.Perspective().WithController()`. A camera without `WithController()` has none, and then
+you add the controller yourself - either from the game, which finds the main camera for you, or from
+the camera entity if you already hold it:
 
 ```csharp
-game.SetupBase3D();
-game.Add3DCameraController();                     // finds the camera named "Main"
+game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective() }, start: Start);
 
-// or, on an entity you created
-cameraEntity.Add2DCameraController();
+void Start(Scene scene)
+{
+    game.Add3DCameraController();                 // finds the camera named "Main"
+
+    // or, on an entity you created
+    cameraEntity.Add2DCameraController();
+}
 ```
 
 Both helpers accept the help overlay's toggle key and whether it starts collapsed; the 3D one also
-takes an optional `DisplayPosition` for the overlay corner - leave it out and the overlay keeps
-whatever position it already has (`DisplayPosition.None` registers no help at all).
+takes an optional `ScreenAnchor` for the overlay's corner, edge or centre - leave it out and the
+overlay keeps whatever position it already has - and `showHelp: false` registers no help at all.
 These must be decided up front - the overlay section is created in `Start()` - which is why they are
 parameters rather than properties you set later.
 
@@ -122,8 +126,8 @@ Two details worth knowing before you try to fight them:
   paste straight into the setup code. Plain XYZ Euler angles would look just as plausible and aim the
   camera somewhere else entirely, which is why they are not the ones printed.
 
-The overlay corner can be chosen with the `displayPosition` parameter of `Add3DCameraController()`;
-without it the controller leaves the corner alone, so `DebugOverlay.GetOrCreate(game).Position` set
+The overlay's anchor can be chosen with the `helpPosition` parameter of `Add3DCameraController()`;
+without it the controller leaves the anchor alone, so `DebugOverlay.GetOrCreate(game).Position` set
 anywhere - even before the controller has started - is respected. The 2D controller has no such
 parameter because the overlay belongs to the whole scene, not to the camera; move it with
 <kbd>F3</kbd> or set the position directly. Size, font and
@@ -146,7 +150,7 @@ orbit.
 | H | Reset to the starting view | - |
 | F2 | Collapse or expand the help, with the live target, distance and angles | `HelpToggleKey`, `HelpCollapsed` |
 
-The charts playground uses it in `--3d` mode: the fly controller from `SetupBase3DScene` is removed
+The charts playground uses it in `--3d` mode: the fly controller from the setup is removed
 and an orbit centred on the chart takes its place.
 
 ## When the defaults are wrong
@@ -155,12 +159,13 @@ Both controllers are ordinary `SyncScript`s with nothing else attached to the ca
 one is a matter of not adding it:
 
 ```csharp
-game.SetupBase3D();                  // no controller
-game.GetCameraEntity().Add(new MyOrbitCamera());
+game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective() }, start: Start);   // no controller
+
+void Start(Scene scene) => game.GetCameraEntity().Add(new MyOrbitCameraController());
 ```
 
-If you keep a controller but want the on-screen help gone, pass `displayPosition: DisplayPosition.None`
-to the 3D helper, or set `ShowInstructions = false` on either script after it has started. Hiding the
+If you keep a controller but want the on-screen help gone, pass `showHelp: false` to the 3D helper,
+or set `ShowInstructions = false` on either script after it has started. Hiding the
 whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use

@@ -14,13 +14,10 @@ SpriteFont? _font;
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     AddCapsule(scene);
 
     LoadFont();
@@ -107,7 +104,7 @@ concepts:
   - Loading a SpriteFont before any text can be drawn
   - Hosting a UI on an entity through UIComponent
   - Keeping scene setup readable by splitting it per element
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - UI

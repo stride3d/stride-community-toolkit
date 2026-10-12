@@ -36,20 +36,19 @@ Dither? dither = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Ground = null,
+    // On the lit side of the default directional light, looking along +Z; from the other side every
+    // face turned to the camera is in shadow and the whole scene reads black
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 4.5f, -14), rotation: new Vector3(180, -14, 0)).WithController(),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    game.SetupBase3D();
-    game.Add3DCameraController();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    // On the lit side of the default directional light, looking along +Z; from the other side every
-    // face turned to the camera is in shadow and the whole scene reads black.
-    game.SetCameraPosition(new Vector3(0, 4.5f, -14));
-    game.SetCameraRotation(new Vector3(180, -14, 0));
-
     game.ConfigurePostEffects(fx =>
     {
         // A first set, switched on the way any game would do it. Every key below flips one flag.
@@ -134,7 +133,7 @@ void AddInstructions()
 static string KeyLabel(Keys key) => key switch
 {
     >= Keys.D0 and <= Keys.D9 => ((char)('0' + (key - Keys.D0))).ToString(),
-    _ => key.ToString(),
+    _ => key.ToString()
 };
 
 void BuildScene(Scene scene)
@@ -170,7 +169,7 @@ void BuildScene(Scene scene)
     void Place(Primitive3D shape, Vector3 position, Material material)
     {
         // Static, so the scene holds still: this example is about the picture, not the physics.
-        var entity = game.CreatePrimitive(shape, new()
+        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
         {
             Material = material,
             Component = new StaticComponent { Collider = new CompoundCollider() },
@@ -212,7 +211,7 @@ concepts:
   - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
   - Building an emissive material above intensity 1 so bloom has something to bloom
   - Showing live effect state as a DebugOverlay section
-  - "Using helpers: SetupBase3D, Add3DGround, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Rendering

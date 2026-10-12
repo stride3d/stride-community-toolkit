@@ -72,7 +72,7 @@ public class SceneManager
         AddGroundAndWalls();
 
         // Create a single shape with zero gravity for demonstration
-        var shape = _shapeFactory.Rectangle;
+        var shape = ShapeFactory.Rectangle;
         var entity = _shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
         var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
@@ -151,7 +151,7 @@ public class SceneManager
     public void AddInitialShapes()
     {
         // Add some demo shapes with different properties
-        _shapeSpawner.Add(_shapeFactory.Rectangle, 10, GameConfig.ShapeColor);
+        _shapeSpawner.Add(ShapeFactory.Rectangle, 10, GameConfig.ShapeColor);
         LogAction($"Added {10} initial demo shapes");
     }
 
@@ -168,27 +168,27 @@ public class SceneManager
         // Shape creation commands
         if (input.IsKeyPressed(Keys.M))
         {
-            _shapeSpawner.Add(_shapeFactory.Square, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(ShapeFactory.Square, GameConfig.DefaultSpawnCount);
             LogAction("Added squares");
         }
         else if (input.IsKeyPressed(Keys.R))
         {
-            _shapeSpawner.Add(_shapeFactory.Rectangle, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(ShapeFactory.Rectangle, GameConfig.DefaultSpawnCount);
             LogAction("Added rectangles");
         }
         else if (input.IsKeyPressed(Keys.C))
         {
-            _shapeSpawner.Add(_shapeFactory.Circle, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(ShapeFactory.Circle, GameConfig.DefaultSpawnCount);
             LogAction("Added circles");
         }
         else if (input.IsKeyPressed(Keys.T))
         {
-            _shapeSpawner.Add(_shapeFactory.Triangle, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(ShapeFactory.Triangle, GameConfig.DefaultSpawnCount);
             LogAction("Added triangles");
         }
         else if (input.IsKeyPressed(Keys.V))
         {
-            _shapeSpawner.Add(_shapeFactory.Capsule, GameConfig.DefaultSpawnCount);
+            _shapeSpawner.Add(ShapeFactory.Capsule, GameConfig.DefaultSpawnCount);
             LogAction("Added capsules");
         }
         else if (input.IsKeyPressed(Keys.P))

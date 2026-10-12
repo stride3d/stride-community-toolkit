@@ -81,7 +81,14 @@ List<DebugTextDropdown> menus = [];
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    // A head-on view of the XY plane; the light is aimed by hand below, so the setup adds none
+    Camera = CameraSetup.Perspective(position: new Vector3(0, 0, 80), rotation: Vector3.Zero).WithController(),
+    Lighting = null,
+    Ground = null,
+    Profiler = true
+}.UseSkybox(), start: Start, update: Update);
 
 // The buffered instancing owns its GPU buffers, and the engine never releases user-owned buffers.
 // The simulation owns the native Box2D world - neither is tied to the scene's lifetime.
@@ -96,18 +103,10 @@ void Start(Scene rootScene)
 
     scene = rootScene;
 
-    // SetupBase3D() unrolled, so the camera and the light can be aimed for a head-on view of the XY plane
-    game.AddGraphicsCompositor().AddCleanUIStage();
-    game.Add3DCamera(initialPosition: new Vector3(0, 0, 80), initialRotation: Vector3.Zero);
-    game.AddProfiler();
-
     // The default aim shines toward +Z, which leaves the faces turned towards the camera unlit
     var light = game.AddDirectionalLight();
     light.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-30)) *
                                Quaternion.RotationY(MathUtil.DegreesToRadians(-30));
-
-    game.Add3DCameraController();
-    game.AddSkybox();
 
     // Box2D is not a Stride system: the simulation is created here and stepped from Update below.
     // Default gravity is (0, -10), matching what the Bepu version falls under.
@@ -229,7 +228,7 @@ static Primitive2D FixtureFor(Primitive3D shape) => shape switch
     Primitive3D.TriangularPrismShape prism => Primitive2D.Triangle(prism.Size.X, prism.Size.Y),
     Primitive3D.TorusShape torus => Primitive2D.Circle(torus.Radius + torus.Thickness),
     Primitive3D.TeapotShape teapot => Primitive2D.Circle(teapot.Size / 2),
-    _ => Primitive2D.Square(),
+    _ => Primitive2D.Square()
 };
 
 void SetupMenus()

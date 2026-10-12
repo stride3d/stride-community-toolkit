@@ -35,15 +35,12 @@ var created = 0;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "2D playground";
-
-    game.SetupBase2DScene();
-    game.AddProfiler();
 
     // G steps the grid through off, world and screen. On the command line, "--screen" starts it
     // in screen space and "--no-cursor" leaves out the coordinates under the mouse

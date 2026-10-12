@@ -35,7 +35,7 @@ public class Grabber2DScriptTests
         var heldAfterRelease = true;
         var released = 0;
 
-        game.Run(start: scene =>
+        game.Run(SceneSetup.None, start: scene =>
         {
             grabber = new Grabber2DScript { Simulation = simulation };
             grabber.Released += _ => released++;
@@ -88,7 +88,7 @@ public class Grabber2DScriptTests
         var grabbed = true;
         var frames = 0;
 
-        game.Run(start: scene =>
+        game.Run(SceneSetup.None, start: scene =>
         {
             grabber = new Grabber2DScript { Simulation = simulation };
 

@@ -24,16 +24,10 @@ var underlineColour = new Color(0, 120, 255, 255);
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null }.UseSkybox(), start: Start);
 
 void Start(Scene scene)
 {
-    // SetupBase3D, not SetupBase3DScene: this is the compositor, camera and light, and crucially the
-    // UI stage that draws RenderGroup.Group31. SetupBase3DScene would also add a ground plane and a
-    // physics simulation, and a menu has no use for either.
-    game.SetupBase3D();
-    game.AddSkybox();
-
     // Text draws nothing without a font, and this one ships with the engine, so the example needs no
     // assets of its own.
     var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
@@ -132,7 +126,7 @@ concepts:
   - Frame-rate independent movement with a clamped lerp
   - Laying an underline out inside the button so nothing resizes
   - Driving many UI elements from a single script
-  - "Using helpers: SetupBase3D, AddSkybox"
+  - "Using helpers: SceneSetup3D, AddSkybox"
 tags:
   - UI
   - Stride UI

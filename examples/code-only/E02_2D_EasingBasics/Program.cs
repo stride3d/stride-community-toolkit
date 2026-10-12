@@ -59,19 +59,14 @@ ShapeBatch? shapes = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(24, 26, 32), Camera = CameraSetup.Orthographic(orthographicSize: 26f), Ground = null }, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Easing Basics - Stride Community Toolkit";
 
-    game.SetupBase2D(new Color(24, 26, 32));
     game.AddEntityTextRenderer();
-
-    var camera = rootScene.GetCamera() ?? throw new InvalidOperationException("The 2D scene has no camera.");
-
-    camera.OrthographicSize = 26f;
 
     shapes = game.AddShapeBatch();
 

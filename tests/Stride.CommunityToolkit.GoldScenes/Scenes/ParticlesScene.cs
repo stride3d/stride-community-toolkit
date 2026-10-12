@@ -22,9 +22,10 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// </summary>
 internal sealed class ParticlesScene : IGoldScene
 {
+    public SceneSetup Setup => new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null, Skybox = null };
+
     public void Start(Game game, Scene scene)
     {
-        game.SetupBase3D();
         game.AddParticleRenderer();
         game.SetCameraPosition(new Vector3(0f, 3.5f, 10f));
         game.SetCameraRotation(new Vector3(0f, -12f, 0f));

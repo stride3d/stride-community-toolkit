@@ -73,7 +73,13 @@ Scene? scene = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup3D
+{
+    Ground = GroundSetup.Plane(new Vector2(300)),
+    Profiler = true
+}.UseBepu().UseSkybox();
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 // The buffered instancing owns its GPU buffers, and the engine never releases user-owned buffers
 bufferedInstancing?.Dispose();
@@ -82,13 +88,7 @@ void Start(Scene rootScene)
 {
     scene = rootScene;
 
-    game.SetupBase3D();
-    game.Add3DCameraController();
-
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
-    game.Add3DGround(new Vector2(300));
-    game.AddSkybox();
-    game.AddProfiler();
     DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
 
     // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
@@ -146,7 +146,7 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
 /// </summary>
 Model CreateSharedModel(Scene rootScene)
 {
-    var prototype = game.CreatePrimitive(modelShape, new Primitive3DEntityOptions());
+    var prototype = game.CreatePrimitive(modelShape, new Primitive3DEntityOptions { IncludePhysics = false });
 
     // Parked out of sight; it exists only to own the Model
     prototype.Transform.Position = new Vector3(0, -100, 0);
@@ -289,7 +289,7 @@ Entity CreateInstancedItem(string name)
 /// <remarks>
 /// <para>
 /// The model is attached here rather than by <c>CreatePrimitive</c>, which would build a fresh
-/// mesh for each of the 20,000 bodies. <c>AddBepu3DPhysics</c> only requires that a
+/// mesh for each of the 20,000 bodies. <c>AddBepuPhysics</c> only requires that a
 /// <see cref="ModelComponent"/> is present - it derives the collider from the primitive type and
 /// size, and reads nothing out of the mesh.
 /// </para>
@@ -302,7 +302,7 @@ Entity CreatePhysicsItem(string name)
 {
     var entity = new Entity(name) { new ModelComponent(sharedModel) };
 
-    entity.AddBepu3DPhysics(modelShape);
+    entity.AddBepuPhysics(modelShape);
 
     return entity;
 }
@@ -407,7 +407,7 @@ concepts:
   - Switching the whole scene to a different primitive from one line
   - Knowing when instancing does not help
   - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload"
-  - "Using helpers: SetupBase3D, Add3DGround, AddBepu3DPhysics"
+  - "Using helpers: SceneSetup3D, Add3DGround, AddBepuPhysics"
 tags:
   - 3D
   - Rendering
