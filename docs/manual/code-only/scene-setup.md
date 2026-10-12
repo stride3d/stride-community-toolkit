@@ -179,4 +179,4 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 ## A Game Studio project
 
-The setup is a layer over the `Game` extension methods, never a precondition for them. In a Game Studio project the editor's scene already has its compositor, camera and lights, so a script calls `Game.CreatePrimitive(...)`, `Game.AddSkybox()` or any other helper directly, with no setup object.
+The setup is a layer over the `Game` extension methods, never a precondition for them. In a Game Studio project the editor's scene already has its compositor, camera and lights, so a script calls `Game.CreatePrimitive(...)`, `Game.AddSkybox()` or any other helper directly, with no setup object. The helpers take `IGame`, which is what a script's `Game` property is; only `Run`, `SetWindowSize` and `UseGameSettings`, which act before the engine starts, need a `Game`.

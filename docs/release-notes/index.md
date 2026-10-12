@@ -85,6 +85,19 @@ The `3D` and `2D` in a method name repeated what its `Primitive3D` or `Primitive
 | `Procedural3DModelBuilder.Build(shape)`, `Procedural2DModelBuilder.Build(shape)` | `ProceduralModelBuilder.Build(shape)` | |
 
 - Kept with the digit, on purpose: `Add3DGround`/`Add2DGround`, `Add3DCamera`/`Add2DCamera` and the controllers, where nothing but the name says the world, and the types that differ in content (`SceneSetup3D`/`2D`, the options, the controllers).
+
+#### Every helper takes `IGame`
+
+The `Game` extension methods take `IGame`, the type a script's `Game` property has, so a Game Studio script sees the whole toolkit. Only `Run`, `SetWindowSize` and `UseGameSettings` keep `Game`: they act before the engine starts, on members `IGame` does not have.
+
+| Before | After | Note |
+|---|---|---|
+| `Game.Add3DGround()` in a script did not compile | `Game.Add3DGround()` | The same for every other helper: `AddSkybox()`, `AddProfiler()`, `AddGrid()`, the lights, the renderers. |
+| `Action<Game> step = game.AddSkybox;` | `Action<IGame> step = game.AddSkybox;` | A method group passed as a delegate names the new receiver; a call does not change. |
+| `ConfigurePostEffects()` returned `Game` | returns `IGame` | |
+| `new Chart(Game game, …)`, `SkyboxGeneratorContext(Game game)`, `SkyboxSetupBase.Create(Game game)` | the same with `IGame` | A `Game` still fits. |
+
+- `GetSceneSystem()`, `GetScriptSystem()`, `GetAudioSystem()`, `GetInputManager()` and `GetGraphicsDeviceManager()` on `IGame`, in `GameServiceExtensions`, read the systems a `Game` exposes as properties from the service registry; the helpers use them, and a script can too.
 ### 🎉 New Features
 
 - `Primitive3D` and `Primitive2D`, closed sets of shape records with factories; the mesh builder and every physics package switch over the same set, so a shape missed by one is a compile error, not a mesh that does not match its collider. The round shapes take a `tessellation`, which the enums could not express.

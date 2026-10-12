@@ -60,7 +60,7 @@ In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitr
 
 - [`UseBullet()`](xref:Stride.CommunityToolkit.Bullet.SceneSetupExtensions.UseBullet``1(``0)) - Makes Bullet the physics engine of a scene setup, the counterpart of `UseBepu()`.
 - [`BulletPhysicsSetup`](xref:Stride.CommunityToolkit.Bullet.BulletPhysicsSetup) - What `UseBullet()` sets: the core's `CreatePrimitive` then attaches a `RigidbodyComponent` with the collider fitted to the shape, and the grounds a `StaticColliderComponent`.
-- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Engine.Game,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A ground plane nothing can fall off the edge of. Bullet only; there is no Bepu equivalent.
+- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A ground plane nothing can fall off the edge of. Bullet only; there is no Bepu equivalent.
 
 ### Primitives and colliders
 
@@ -77,7 +77,7 @@ In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitr
 
 ### Debugging
 
-- [`ShowColliders()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Engine.Game)) - Draws the collider shapes over the scene, which is how you find out that the collider is not where the model is.
+- [`ShowColliders()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Games.IGame)) - Draws the collider shapes over the scene, which is how you find out that the collider is not where the model is.
 ## Box2D
 
 In `Stride.CommunityToolkit.Box2D`, for a 2D world run by Box2D.NET beside Stride. The wrapper is built around `Box2DSimulation`, which owns the world and steps it; see the Box2D examples for the whole pattern.
