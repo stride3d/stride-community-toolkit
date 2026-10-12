@@ -22,6 +22,8 @@
     items:
     - name: Engine Only
       href: code-only/create-file-based-app-engine-only.md
+  - name: Scene Setup
+    href: code-only/scene-setup.md
   - name: Extensions
     href: code-only/extensions.md
 - name: Code-Only Examples (95)

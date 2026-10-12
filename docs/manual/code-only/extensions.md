@@ -16,7 +16,7 @@ Feel free to inspect and modify the source to adapt behaviour or create your own
 
 ## Setting up a scene
 
-The setup is data that `Run` applies before `start`: one object instead of assembling the pieces below by hand, and one property to change one thing.
+The setup is data that `Run` applies before `start`: one object instead of assembling the pieces below by hand, and one property to change one thing. Every property and piece is on the [Scene Setup](scene-setup.md) page.
 
 - [`Run(setup, start, update)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)) - Applies the setup, then runs `start` and `update`. `game.Run(start:)` with no setup applies `SceneSetup3D.Default`; `SceneSetup.None` applies nothing.
 - [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) - A forward compositor with the UI stage, a perspective camera with its controller, a directional light, a gradient sky and a ground plane. `Camera`, `Lighting`, `Skybox` and `Ground` each take `null` to leave that piece out; `ClearColor`, `Msaa`, `PostEffects`, `GameSettings`, `DebugOverlay` and `Profiler` are the rest.

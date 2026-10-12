@@ -110,7 +110,7 @@ void Start(Scene rootScene)
 ```
 
 - `using var game = new Game();` creates a new `Game` instance.
-- `game.Run(new SceneSetup3D().UseBepu(), start: Start);` sets up a basic 3D scene (camera, lighting, sky, ground) with Bepu physics, starts the game and calls `Start` when the scene is ready.
+- `game.Run(new SceneSetup3D().UseBepu(), start: Start);` sets up a basic 3D scene (camera, lighting, sky, ground) with Bepu physics, starts the game and calls `Start` when the scene is ready. Every piece of the setup is a property; see [Scene Setup](scene-setup.md).
 - `void Start(Scene rootScene)` is invoked on start with the active root scene.
 - `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
