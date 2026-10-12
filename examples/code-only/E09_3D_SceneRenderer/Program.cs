@@ -24,19 +24,10 @@ using var game = new Game();
 // Three ways to draw over the scene: a scene-wide renderer (MyCustomSceneRenderer), the toolkit's
 // EntityTextRenderer for EntityTextComponent labels, and a renderer that belongs to one entity
 // (SpriteBatchRendererScript)
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Sets up the base 3D scene, including lighting, camera, and default settings
-    game.SetupBase3DScene();
-
-    // Adds the built-in profiler, which provides real-time performance metrics
-    game.AddProfiler();
-
-    // Adds a skybox (a background environment) to the scene
-    game.AddSkybox();
-
     // Example 1: Adds a custom scene renderer to render text for all entities in the scene and also the static "Example 1" text
     game.AddSceneRenderer(new MyCustomSceneRenderer());
 
@@ -121,7 +112,7 @@ concepts:
   - Deciding between a scene-wide and an entity-scoped renderer
   - "Labelling entities with the toolkit's EntityTextComponent and EntityTextRenderer"
   - Initialising and releasing renderer resources at the right time
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Rendering

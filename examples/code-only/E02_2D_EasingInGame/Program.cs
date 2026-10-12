@@ -53,7 +53,9 @@ var shakeBase = Vector3.Zero;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
+// Closer than the default view, so the lift and the coins fill the window; the controller reads the
+// size on its first frame and returns to it when H resets the camera
+game.Run(new SceneSetup2D { Camera = CameraSetup.Orthographic(orthographicSize: 14f).WithController() }.UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
@@ -61,12 +63,6 @@ void Start(Scene rootScene)
     game.Window.Title = "Easing in a 2D game - Stride Community Toolkit";
 
     game.AddEntityTextRenderer();
-
-    // Closer than the default view, so the lift and the coins fill the window
-    var camera = game.GetCameraEntity();
-
-    camera.Get<CameraComponent>().OrthographicSize = 14f;
-    camera.Get<Basic2DCameraController>().OrthographicSizeDefault = 14f;
 
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
     var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new Bepu2DPhysicsOptions

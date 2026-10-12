@@ -36,16 +36,13 @@ var created = 0;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "3D playground";
 
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
     game.AddGrabber();
 
     // G steps the grid through off, world and screen. On the command line, "--screen" starts it

@@ -60,22 +60,9 @@ public sealed class StationScene(Game game)
     {
         _labels = labels;
 
-        // Space: a near-black clear colour instead of a skybox, and a faint cool ambient so the
-        // sides the sun does not reach are dim rather than missing. The exposure is pinned: the
-        // default tone map adapts to the average brightness, and against a black sky that drives
-        // the deck to white.
-        game.AddGraphicsCompositor(clearColor: new Color(3, 5, 9))
-            .AddCleanUIStage()
-            .ConfigurePostEffects(fx =>
-            {
-                foreach (var toneMap in fx.ColorTransforms.Transforms.OfType<ToneMap>())
-                {
-                    toneMap.AutoExposure = false;
-                    toneMap.Exposure = 1f;
-                }
-            });
-
-        game.Add3DCamera();
+        // The compositor, the camera and its controller come from the setup in Program.cs: a near-black
+        // clear colour instead of a skybox, the exposure pinned. A faint cool ambient below keeps the
+        // sides the sun does not reach dim rather than missing.
 
         // Left mouse grabs a container, the wheel changes the carry distance, R + mouse turns it.
         // R and not the grabber's default T: T opens the scheme list here
@@ -89,8 +76,6 @@ public sealed class StationScene(Game game)
         sun.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-58f)) * Quaternion.RotationY(MathUtil.DegreesToRadians(22f));
 
         AddAmbient(scene);
-
-        game.Add3DCameraController();
 
         // Looking down at the pad from the open side, so lost cargo slides towards the viewer; a
         // little wider than the default so the hatch and the board both fit in the frame

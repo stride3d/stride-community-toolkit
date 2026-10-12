@@ -41,7 +41,15 @@ var sinceStart = 0f;
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = background, Ground = null }, start: Start, update: Update);
+var sceneSetup = new SceneSetup2D
+{
+    ClearColor = background,
+    Camera = CameraSetup.Orthographic(position: new Vector3(0, 7, 50), orthographicSize: 26).WithController(),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -51,11 +59,8 @@ void Start(Scene rootScene)
     game.Window.Title = "Box2D Explosion - Stride Community Toolkit";
 
     var cameraEntity = game.GetCameraEntity();
-    game.AddProfiler();
 
     camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
-    camera.Entity.Transform.Position = new Vector3(0, 7, 50);
-    camera.OrthographicSize = 26;
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;

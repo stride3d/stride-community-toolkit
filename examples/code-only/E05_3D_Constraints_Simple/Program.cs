@@ -16,7 +16,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
-    // Set up a basic 3D scene with skybox, profiler, and a ground gizmo
+    // A ground gizmo on top of the setup's scene
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
 
     // Left mouse picks either sphere up; the servo drags the other one along (GrabberScript, see E05_3D_Grabber).

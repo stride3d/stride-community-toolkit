@@ -57,19 +57,20 @@ var waveTime = 0f;
 var waveFrequency = 1f;
 const float WaveAmplitude = 1.5f;
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D
+{
+    // A paper-like background and MSAA, since thin lines flicker without it; no ground, a chart has no physics
+    ClearColor = new Color(250, 250, 250),
+    Msaa = MultisampleCount.X4,
+    Ground = null
+}, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Charts 2D";
 
-    // What SetupBase2DScene does, minus the physics ground a chart does not need, plus MSAA (thin lines
-    // flicker without it) and a paper-like background
-    game.Add2DGraphicsCompositor(clearColor: new Color(250, 250, 250), msaa: MultisampleCount.X4).AddUIStage();
-    game.Add2DCamera();
-
-    var cameraEntity = game.Add2DCameraController();
+    var cameraEntity = game.GetCameraEntity();
     var controller = cameraEntity.Get<Basic2DCameraController>()!;
 
     // Left-drag pans like a canvas app, and the view-driven chart invites zooming far out

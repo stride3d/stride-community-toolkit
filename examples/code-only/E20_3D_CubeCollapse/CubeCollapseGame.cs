@@ -96,7 +96,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _levels.Current = LevelRules.ForNumber(_progress.Level);
 
         game.Window.AllowUserResizing = true;
-        game.AddGraphicsCompositor().AddCleanUIStage();
 
         AddCamera();
 
@@ -104,8 +103,6 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _light = game.AddDirectionalLight();
         _fillLight = AddFillLight(_light);
         LowerGroundSurface(game.Add3DGround());
-        game.AddSkybox();
-        game.AddProfiler();
 
         // The gallery's sun: the default directional light, steepened the way its LightTheRing does,
         // with the thickness term its subsurface station reads

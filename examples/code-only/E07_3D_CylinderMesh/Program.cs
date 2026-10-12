@@ -34,11 +34,8 @@ const float Length = 8;
 
 using var game = new Game();
 
-game.Run(start: (Scene rootScene) =>
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: (Scene rootScene) =>
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-
     CreateMeshEntity(game.GraphicsDevice, rootScene, new(0, 1, -Length / 2), b => BuildCylinderMesh(b, Segments, Radius, Length));
 });
 
@@ -196,7 +193,7 @@ concepts:
   - Closing the ends with fan-triangulated caps
   - Why the two caps must wind in opposite directions
   - Keeping index arithmetic readable by splitting the build into stages
-  - "Using helpers: SetupBase3DScene, AddSkybox"
+  - "Using helpers: SceneSetup3D, AddSkybox"
 tags:
   - 3D
   - Geometry

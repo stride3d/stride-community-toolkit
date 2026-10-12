@@ -21,12 +21,10 @@ using var game = new Game();
 // but never grow it past 1280 by 720. SetWindowSize sizes the window and the back buffer together.
 game.SetWindowSize(1000, 1080);
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective(), Ground = null }, start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3D();
-
     // A colour picture: sRGB and premultiplied, as the content pipeline would have imported it. Texture.Load
     // with its defaults reads it as linear, and every mid-tone comes out pale
     var texture = new TextureLoader(game.GraphicsDevice).Color("input.png");

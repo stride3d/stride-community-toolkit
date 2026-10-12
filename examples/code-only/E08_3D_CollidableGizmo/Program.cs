@@ -9,15 +9,11 @@ const string CubeEntityName = "Cube";
 
 using var game = new Game();
 
-game.Run(start: Start);
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
-    game.SetupBase3DScene();
-    game.AddSkybox();
-    game.AddProfiler();
-
-    var entity = game.CreatePrimitive(Primitive3D.Cube(), new()
+    var entity = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
     {
         IncludeCollider = false
     });
@@ -63,7 +59,7 @@ concepts:
   - "Suppressing the generated collider with IncludeCollider = false"
   - Showing or hiding the gizmo with its Visible property
   - Diagnosing a body that does not collide as expected
-  - "Using helpers: SetupBase3DScene, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
   - Bepu

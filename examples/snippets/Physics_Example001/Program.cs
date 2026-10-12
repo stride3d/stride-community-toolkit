@@ -10,13 +10,10 @@ CameraComponent? camera = null;
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Set up a base 3D scene with default lighting and camera
-    game.SetupBase3DScene();
-
     // Add a gizmo to help visualize the ground plane and axis directions
     game.AddGroundGizmo(showAxisName: true);
 

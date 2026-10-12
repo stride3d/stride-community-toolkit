@@ -1,12 +1,15 @@
 using CubeCollapse;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 
 using var game = new Game();
 
 var cubeCollapse = new CubeCollapseGame(game);
 
-game.Run(start: cubeCollapse.Start, update: cubeCollapse.Update);
+// The game aims its own camera at the platform and lights and lays its own ground
+game.Run(new SceneSetup3D { Camera = null, Lighting = null, Ground = null, Profiler = true }.UseBepu().UseSkybox(), start: cubeCollapse.Start, update: cubeCollapse.Update);
 
 /*
 ---example-metadata

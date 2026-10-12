@@ -91,6 +91,7 @@ using var game = new Game();
 
 var sceneSetup = new SceneSetup3D
 {
+    // To the right of the scene and looking straight ahead, which leaves the overlay's side clear
     Camera = CameraSetup.Perspective(position: new Vector3(3.4f, 9.5f, 19.5f), rotation: new Vector3(0f, -26f, 0f)).WithController(),
     Profiler = true
 }.UseBepu().UseSkybox();
@@ -103,8 +104,6 @@ void Start(Scene scene)
     game.Window.Title = "Physics materials - Stride Community Toolkit";
 
     game.AddEntityTextRenderer();
-
-    // To the right of the scene and looking straight ahead, which leaves the overlay's side clear
 
     for (var i = 0; i < bounceLanes.Length; i++) BuildBounceLane(scene, bounceLanes[i], (i - (bounceLanes.Length - 1) * 0.5f) * BallSpacing);
 

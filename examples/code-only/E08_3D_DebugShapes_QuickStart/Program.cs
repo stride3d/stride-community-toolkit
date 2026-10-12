@@ -15,12 +15,7 @@ List<Entity> sphereEntities = new(capacity: 8);
 
 using var game = new Game();
 
-var sceneSetup = new SceneSetup3D
-{
-    Profiler = true,
-}.UseBepu().UseSkybox();
-
-game.Run(sceneSetup, start: (Scene rootScene) =>
+game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: (Scene rootScene) =>
 {
     game.AddDebugShapes();
 

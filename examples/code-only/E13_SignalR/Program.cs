@@ -2,6 +2,7 @@ using E13_SignalR.Net;
 using E13_SignalR.SignalR;
 using E13_SignalR.Station;
 using E13_SignalR_Shared;
+using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Diagnostics;
@@ -9,6 +10,7 @@ using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
+using Stride.Rendering.Images;
 
 // An orbital cargo deck with two consoles: this window, and a web page. A hatch above the deck
 // releases containers in three sizes and six rusty paints; they drop under physics, skid, stack,
@@ -49,7 +51,24 @@ DeckEffects? effects = null;
 var uptime = 0f;
 var untilHeartbeat = HeartbeatSeconds;
 
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D
+{
+    // Space: a near-black clear colour instead of a sky, and the exposure pinned: the default tone map
+    // adapts to the average brightness, and against a black sky that drives the deck to white
+    ClearColor = new Color(3, 5, 9),
+    PostEffects = fx =>
+    {
+        foreach (var toneMap in fx.ColorTransforms.Transforms.OfType<ToneMap>())
+        {
+            toneMap.AutoExposure = false;
+            toneMap.Exposure = 1f;
+        }
+    },
+    // The station aims its own sun and lays its own deck
+    Lighting = null,
+    Skybox = null,
+    Ground = null
+}.UseBepu(), start: Start, update: Update);
 
 // Shutdown order is load-bearing, and so is the fact that neither line awaits.
 //

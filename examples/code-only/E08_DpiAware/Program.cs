@@ -22,13 +22,10 @@ using Stride.Engine;
 
 using var game = new Game();
 
-game.Run(start: (Scene rootScene) =>
+game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: (Scene rootScene) =>
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "DPI-Aware Window";
-
-    game.SetupBase3DScene();
-    game.AddSkybox();
 
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
 
@@ -78,7 +75,7 @@ concepts:
   - "Wiring the manifest in with <ApplicationManifest>"
   - "The code alternative, WindowsDpiManager.EnablePerMonitorV2(), and why a project uses one route, not both"
   - "Reading the display's scale factor with DisplayScale, and why the overlay follows it by default"
-  - "Using helpers: SetupBase3DScene, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
 tags:
   - 3D
   - Windows

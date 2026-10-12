@@ -34,6 +34,7 @@ var foldedKeys = false;
 
 using var game = new Game();
 
+// No camera controller: the court does not move, and W and S belong to the left paddle
 game.Run(new SceneSetup2D { ClearColor = court, Camera = CameraSetup.Orthographic(orthographicSize: 10f), Ground = null }, start: Start, update: Update);
 
 void Start(Scene scene)
@@ -41,8 +42,6 @@ void Start(Scene scene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Pong - Stride Community Toolkit";
 
-    // A 2D compositor and an orthographic camera. No camera controller: the court does not move,
-    // and W and S belong to the left paddle
     game.AddWorldTextRenderer();
 
     var material = game.CreateFlatMaterial(chalk);

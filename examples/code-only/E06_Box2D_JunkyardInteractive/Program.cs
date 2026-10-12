@@ -67,7 +67,7 @@ var catalogue = new ShapeDefinition[]
     new("Pentagon", FibonacciPentagon(0.4f), 0f),
     new("Circle", [Vector2.Zero], 0.35f),
     new("Capsule", [new(0, -0.25f), new(0, 0.25f)], 0.25f),
-    new("Box", RectangleVertices(0.35f, 0.35f), 0f),
+    new("Box", RectangleVertices(0.35f, 0.35f), 0f)
 };
 var currentShape = 0;
 
@@ -77,7 +77,15 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+var sceneSetup = new SceneSetup2D
+{
+    ClearColor = background,
+    Camera = CameraSetup.Orthographic(position: new Vector3(8, 25, 50), orthographicSize: 60).WithController(),
+    Ground = null,
+    Profiler = true
+};
+
+game.Run(sceneSetup, start: Start, update: Update);
 
 simulation?.Dispose();
 
@@ -86,14 +94,10 @@ void Start(Scene rootScene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Junkyard Playground Box2D Example - Stride Community Toolkit";
 
-    game.SetupBase2D(clearColor: background);
-    var cameraEntity = game.Add2DCameraController();
+    var cameraEntity = game.GetCameraEntity();
     cameraController = cameraEntity.Get<Basic2DCameraController>();
-    game.AddProfiler();
 
     camera = rootScene.GetCamera() ?? throw new InvalidOperationException("Camera not found in scene");
-    camera.Entity.Transform.Position = new Vector3(8, 25, 50);
-    camera.OrthographicSize = 60;
 
     shapeBatch = game.AddShapeBatch();
     shapeBatch.BorderWidth = 1f;

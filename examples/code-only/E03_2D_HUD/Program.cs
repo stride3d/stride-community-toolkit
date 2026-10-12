@@ -51,7 +51,7 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(new SceneSetup2D { ClearColor = new Color(5, 7, 12), Ground = null }, start: Start, update: Update);
+game.Run(new SceneSetup2D { ClearColor = new Color(5, 7, 12), Camera = CameraSetup.Orthographic(orthographicSize: ViewHeight).WithController(), Ground = null }, start: Start, update: Update);
 
 void Start(Scene scene)
 {
@@ -59,8 +59,6 @@ void Start(Scene scene)
     game.Window.Title = "Ship HUD";
 
     game.AddWorldTextRenderer();
-
-    game.GetCameraEntity().Get<CameraComponent>().OrthographicSize = ViewHeight;
 
     // One batch for everything. Its fill source is the panels' glass, a shader class of the
     // example's own, which only the shapes drawn as textured sample.

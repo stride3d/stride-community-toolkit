@@ -53,6 +53,7 @@ var sceneSetup = new SceneSetup3D
 {
     // The first HRTF switch. Harmless where unsupported.
     GameSettings = settings => settings.GetOrCreateConfiguration<AudioEngineSettings>().HrtfSupport = true,
+    // Inside the orbit, so the orb passes beside and behind the listener on every lap
     Camera = CameraSetup.Perspective(position: new Vector3(0, 2.2f, -4), rotation: new Vector3(180, -10, 0)).WithController(),
     Profiler = true
 }.UseBepu().UseSkybox();
@@ -61,8 +62,6 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene scene)
 {
-    // Inside the orbit, so the orb passes beside and behind the listener on every lap.
-
     // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
     // and its height in Z
     var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new Primitive3DEntityOptions

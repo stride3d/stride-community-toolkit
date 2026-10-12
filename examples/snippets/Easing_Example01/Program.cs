@@ -32,16 +32,13 @@ Color color = Color.White;
 using var game = new Game();
 
 // Run the game, specifying both the Start and Update methods
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup3D().UseBepu(), start: Start, update: Update);
 
 // Setup and initialize the scene
 void Start(Scene scene)
 {
-    // Set up a base 3D scene with default lighting and camera
-    game.SetupBase3DScene();
-
     // Create a 3D sphere primitive and assign the material to it
-    entity = game.CreatePrimitive(Primitive3D.Sphere(), new()
+    entity = game.CreatePrimitive(Primitive3D.Sphere(), new Bepu3DPhysicsOptions
     {
         Material = game.CreateMaterial(Color.White),
         Component = new BodyComponent()
