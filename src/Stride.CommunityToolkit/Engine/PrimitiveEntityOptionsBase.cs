@@ -49,7 +49,7 @@ public abstract class PrimitiveEntityOptionsBase
     /// </summary>
     /// <remarks>
     /// Without a setup, or with <see cref="PhysicsSetupBase.None"/>, nothing is attached either way. The physics packages'
-    /// entity extensions (<c>AddBepu3DPhysics</c>, <c>AddBullet3DPhysics</c>) attach physics explicitly whatever this says.
+    /// entity extensions (<c>AddBepuPhysics</c>, <c>AddBulletPhysics</c>) attach physics explicitly whatever this says.
     /// </remarks>
     public bool IncludePhysics { get; set; } = true;
 }

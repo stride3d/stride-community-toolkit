@@ -45,7 +45,7 @@ public static class GameExtensions
         var shape = Primitive3D.Plane(groundSize.X, groundSize.Y);
         var entity = game.CreatePrimitive(shape, options);
 
-        entity.AddBullet3DPhysics(shape, options);
+        entity.AddBulletPhysics(shape, options);
 
         options.PhysicsComponent?.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
 

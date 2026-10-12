@@ -12,7 +12,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// </summary>
 /// <remarks>
 /// The setup is chosen once and decides what the implicit calls mean. The explicit route, the entity extensions of
-/// each physics package (<c>AddBepu3DPhysics</c>, <c>AddBullet2DPhysics</c>), stays open whatever is chosen, so two
+/// each physics package (<c>AddBepuPhysics</c>, <c>AddBulletPhysics</c>), stays open whatever is chosen, so two
 /// engines can share a game.
 /// </remarks>
 public abstract class PhysicsSetupBase

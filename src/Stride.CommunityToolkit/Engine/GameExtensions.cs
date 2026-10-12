@@ -976,7 +976,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var modelBase = Procedural3DModelBuilder.Build(shape);
+        var modelBase = ProceduralModelBuilder.Build(shape);
 
         var model = modelBase.Generate(game.Services);
 
@@ -1018,7 +1018,7 @@ public static partial class GameExtensions
 
         options ??= new();
 
-        var modelBase = Procedural2DModelBuilder.Build(shape);
+        var modelBase = ProceduralModelBuilder.Build(shape);
 
         var model = modelBase.Generate(game.Services);
 
