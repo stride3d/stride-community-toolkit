@@ -225,13 +225,13 @@ from baseClass in JustMyCode.Types
 where baseClass.IsClass && baseClass.NbChildren > 0 // <-- for optimization!
 
 // Stride Community Toolkit tweak: a closed hierarchy is closed on purpose. A base class whose every
-// constructor is private (a record's compiler-generated copy constructor aside) can be derived from
+// constructor is private or private protected (a record's compiler-generated copy constructor aside) can be derived from
 // only by its own nested types, so those are the whole
 // set, and the static factories on the base that build them are the type's API (Primitive3D,
 // Primitive2D) - the shape a C# union type takes. The open/closed principle does not apply to it.
 let isClosed = baseClass.IsAbstract &&
                baseClass.Constructors.Count() > 0 &&
-               baseClass.Constructors.All(c => c.Visibility == Visibility.Private || c.IsGeneratedByCompiler)
+               baseClass.Constructors.All(c => c.Visibility == Visibility.Private || c.Visibility == Visibility.ProtectedAndInternal || c.IsGeneratedByCompiler)
 
 let derivedClassesUsed = baseClass.DerivedTypes.UsedBy(baseClass)
    // Don't warn when a base class is using nested private derived class
@@ -569,7 +569,7 @@ warnif count > 0 from t in JustMyCode.Types where
  // Primitive3D.SphereShape, the shape a C# union type takes.
  !(t.ParentType != null && t.ParentType.IsAbstract && t.DeriveFrom(t.ParentType) &&
    t.ParentType.Constructors.Count() > 0 &&
-   t.ParentType.Constructors.All(c => c.Visibility == Visibility.Private || c.IsGeneratedByCompiler)) &&
+   t.ParentType.Constructors.All(c => c.Visibility == Visibility.Private || c.Visibility == Visibility.ProtectedAndInternal || c.IsGeneratedByCompiler)) &&
 
  // It is accepted that non-private nested types are declared inside Razor page classes.
  !t.OutterTypes.Any(ot => ot.DeriveFrom("Microsoft.AspNetCore.Mvc.RazorPages.PageModel".AllowNoMatch()) ||
@@ -1871,10 +1871,10 @@ warnif count > 0 from t in Application.Types where
   t.IsClass &&
 
   // Stride Community Toolkit tweak: a closed hierarchy is a set of cases, not a base to derive
-  // from. An abstract class with only private constructors (a record's compiler-generated copy
+  // from. An abstract class with only private or private protected constructors (a record's compiler-generated copy
   // constructor aside) is named for the set, Primitive3D, the way a C# union type would be.
   !(t.Constructors.Count() > 0 &&
-    t.Constructors.All(c => c.Visibility == Visibility.Private || c.IsGeneratedByCompiler)) &&
+    t.Constructors.All(c => c.Visibility == Visibility.Private || c.Visibility == Visibility.ProtectedAndInternal || c.IsGeneratedByCompiler)) &&
 
   t.BaseClass != null &&
   t.BaseClass.FullName == "System.Object" &&
