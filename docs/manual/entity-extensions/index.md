@@ -7,7 +7,7 @@ Extension methods for `Entity`, in the `Stride.CommunityToolkit.Engine` namespac
 - [`GetComponent<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponent``1(Stride.Engine.Entity)) - The first component of type `T`, or `null`.
 - [`GetComponents<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponents``1(Stride.Engine.Entity)) - Every component of type `T` on the entity.
 - [`TryGetComponent<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.TryGetComponent``1(Stride.Engine.Entity,``0@)) - The `Try` form, for when a missing component is expected rather than a bug.
-- [`GetComponentInChildren<T>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.GetComponentInChildren``1(Stride.Engine.Entity)) - Searches the entity's descendants, which is where the component usually is on an imported model.
+- [`GetComponentInDescendantsAndSelf<T>()`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInDescendantsAndSelf``1(Stride.Engine.Entity)) - The entity first, then its descendants depth-first, which is where the component usually is on an imported model. [`GetComponentInChildren<T>()`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions.GetComponentInChildren``1(Stride.Engine.Entity)) searches the descendants only, breadth-first.
 - [`Get<T1, T2, …>()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Get``2(Stride.Engine.Entity)) - Fetches several components in one pass and returns them as a tuple, so you can deconstruct them into named locals. Overloads exist for two through sixteen types.
 
 ```csharp
@@ -26,7 +26,7 @@ var (model, light) = entity.Get<ModelComponent, LightComponent>();
 These are the entity-level counterparts of the `Game` extensions; use them when you already hold the camera entity.
 
 - [`Add2DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add2DCameraController(Stride.Engine.Entity,Stride.Input.Keys,System.Boolean)) - Attaches the interactive 2D camera script, giving pan and zoom.
-- [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity,System.Nullable{Stride.CommunityToolkit.Rendering.Text.DisplayPosition},Stride.Input.Keys,System.Boolean)) - Attaches the interactive 3D camera script, giving free-look movement and an on-screen key reminder.
+- [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Add3DCameraController(Stride.Engine.Entity,System.Nullable{Stride.CommunityToolkit.Rendering.ScreenAnchor},Stride.Input.Keys,System.Boolean,System.Boolean)) - Attaches the interactive 3D camera script, giving free-look movement and an on-screen key reminder.
 
 See [Camera Controllers](../camera-extensions/camera-controllers.md) for the keys, the on-screen help and every option on both scripts.
 

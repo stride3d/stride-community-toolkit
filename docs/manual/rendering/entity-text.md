@@ -46,12 +46,13 @@ than being hidden by geometry in front of it.
 |---|---|---|---|
 | `World` (default) | The entity's world position, projected to the screen | Yes | Labels on objects in the scene |
 | `Screen` | `ScreenPosition`, in pixels from the top-left | No | Fixed placement you want full control over |
-| `Anchored` | A window corner, given by `ScreenAnchor` | No | A HUD that must survive the window being resized |
+| `Anchored` | A point of the window, given by `ScreenAnchor`: a corner, the middle of an edge or the centre | No | A HUD that must survive the window being resized |
 
 `Offset` is applied in all three modes. In `Anchored` it acts as a margin and always points *inwards*,
-so `new Vector2(16, 16)` is sixteen pixels in from the chosen corner whichever corner that is.
+so `new Vector2(16, 16)` is sixteen pixels in from the chosen corner whichever corner that is. From
+an edge or the centre only the axis with an edge flips; the other is applied as given.
 
-`Anchored` also takes its `Anchor` from the corner rather than from the property, so text pinned to
+`Anchored` also takes its `Anchor` from the screen anchor rather than from the property, so text pinned to
 the top-right grows to the left and stays on screen. Use `Screen` when you want to choose the
 position and the anchor independently.
 

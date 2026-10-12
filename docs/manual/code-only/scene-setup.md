@@ -65,7 +65,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 |---|---|
 | `CameraSetup.Perspective(position, rotation)` | A perspective camera. Both arguments optional; the defaults are `CameraDefaults.Initial3DPosition` and `Initial3DRotation`. |
 | `CameraSetup.Orthographic(position, rotation, orthographicSize)` | An orthographic camera; `orthographicSize` is the height of the view in world units, 10 by default. |
-| `.WithController(helpPosition)` | Adds the camera controller after the camera is aimed, so H resets to the aimed pose. `helpPosition` places the 3D controller's key help; `DisplayPosition.None` registers none. |
+| `.WithController(helpPosition, showHelp)` | Adds the camera controller after the camera is aimed, so H resets to the aimed pose. `helpPosition` is the `ScreenAnchor` the 3D controller's key help goes to; `showHelp: false` registers none. |
 
 The rotation is in degrees, packed as `X = Yaw`, `Y = Pitch`, `Z = Roll`: the convention `Add3DCamera` uses and the order the controller's F2 panel prints, so a view found by flying can be copied into the setup.
 

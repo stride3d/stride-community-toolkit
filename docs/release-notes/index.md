@@ -98,6 +98,45 @@ The `Game` extension methods take `IGame`, the type a script's `Game` property h
 | `new Chart(Game game, …)`, `SkyboxGeneratorContext(Game game)`, `SkyboxSetupBase.Create(Game game)` | the same with `IGame` | A `Game` still fits. |
 
 - `GetSceneSystem()`, `GetScriptSystem()`, `GetAudioSystem()`, `GetInputManager()` and `GetGraphicsDeviceManager()` on `IGame`, in `GameServiceExtensions`, read the systems a `Game` exposes as properties from the service registry; the helpers use them, and a script can too.
+
+#### One screen anchor
+
+`ScreenAnchor` in `Stride.CommunityToolkit.Rendering` names the nine points of the screen the way `TextAnchor` names the points of a text block: the four corners, the middle of each edge and the centre. It replaces `DisplayPosition` (which also carried `None` and `Custom`, meaningful only to the overlay) and the Shapes package's `ScreenCorner`.
+
+| Before | After | Note |
+|---|---|---|
+| `DisplayPosition.TopLeft` | `ScreenAnchor.TopLeft` | The same four corner names; `using Stride.CommunityToolkit.Rendering;`. |
+| `overlay.Position = DisplayPosition.Custom` | `overlay.Position = null` | `DebugOverlay.Position` is `ScreenAnchor?`; `SetPosition(x, y)` still sets both. |
+| `overlay.Position = DisplayPosition.None` | `overlay.Visible = false` | The <kbd>F4</kbd> key flips the same property. |
+| `Add3DCameraController(DisplayPosition.None)` | `Add3DCameraController(showHelp: false)` | Also `WithController(showHelp: false)` on a `CameraSetup` and `ShowHelp` on the script. |
+| `Add3DCameraController(displayPosition: …)` | `Add3DCameraController(helpPosition: …)` | The parameter is named after what it places. |
+| `shapes.Corner(ScreenCorner.BottomLeft)` | `shapes.Anchor(ScreenAnchor.BottomLeft)` | `ScreenAnchor.MiddleCenter` is the centre of the screen. |
+
+#### One `GetComponentInChildren`
+
+Two searches shared the name: a depth-first one in `EntityExtensions` that checked the entity itself first, and the breadth-first, children-only one in `EntitySearchExtensions`, whose parameterless form had been pushed to `GetComponentInChildrenBFS` to make room.
+
+| Before | After | Note |
+|---|---|---|
+| `entity.GetComponentInChildren<T>()` (entity first, then depth-first) | `entity.GetComponentInDescendantsAndSelf<T>()` | The singular the `Descendants` family lacked; `T` must be an `EntityComponent`, as in the rest of the family. |
+| `entity.GetComponentInChildrenBFS<T>()` | `entity.GetComponentInChildren<T>()` | Breadth-first, children only, as the `includeDisabled` overload beside it always was. |
+
+#### Every helper returns what it makes
+
+The seventeen `Add*` and `Show*` extensions that returned `void` now return the thing they add, or their receiver when they add nothing, so a chain of setup calls continues. Existing calls compile unchanged; in F#, pipe the result to `ignore`.
+
+| Helper | Returns |
+|---|---|
+| `entity.Add3DCameraController()`, `Add2DCameraController()` | The controller script |
+| `entity.AddGizmo()`, `AddLightDirectionalGizmo()` | The gizmo |
+| `game.AddAllDirectionLighting()` | The six light entities |
+| `game.AddGroundGizmo()` | The gizmo entity, or `null` without a ground |
+| `game.AddWorldTextRenderer()`, `AddEntityTextRenderer()`, `AddEntityDebugSceneRenderer()` | The renderer, the existing one when there was one |
+| `game.AddDebugShapes()` | The `ImmediateDebugRenderSystem` to draw with |
+| `compositor.AddImmediateDebugRenderFeature()` | The feature |
+| `game.AddSceneRenderer()`, `AddRootRenderFeature()`, `AddParticleRenderer()`, `ShowColliders()` | The game |
+| `compositor.AddRootRenderFeature()`, `AddParticleStagesAndFeatures()` | The compositor |
+| `compositor.EnsureSceneRenderer()` | The renderer of that type, instead of the compositor |
 ### 🎉 New Features
 
 - `Primitive3D` and `Primitive2D`, closed sets of shape records with factories; the mesh builder and every physics package switch over the same set, so a shape missed by one is a compile error, not a mesh that does not match its collider. The round shapes take a `tessellation`, which the enums could not express.
@@ -107,6 +146,7 @@ The `Game` extension methods take `IGame`, the type a script's `Game` property h
 - `PhysicsSetupBase`, the physics engine of a setup: `UseBepu()` and `UseBullet()` set `BepuPhysicsSetup` or `BulletPhysicsSetup`, and the core's `CreatePrimitive`, `Add3DGround` and `Add2DGround` attach that engine's bodies and colliders. `IncludePhysics` on the primitive options opts one entity out; `PhysicsSetupBase.Of(game)` reads the engine back. Both packages' namespaces can be imported together.
 - `Skies.Cloudy` and `UseSkybox()` in the Skyboxes package choose the photographed sky for a setup.
 - `entity.AddTo(scene)` and `entity.AddTo(parent)` return the entity, so creation, placement and adding read as one line.
+- `ScreenAnchor`: the overlay, anchored `EntityTextComponent` text and `ShapeBatch.Anchor()` can sit on the middle of an edge or the centre of the screen, not only in a corner; `ScreenAnchor.At(size)` gives the point for any rectangle.
 
 ### 🐞 Bug Fixes
 

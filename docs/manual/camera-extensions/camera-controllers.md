@@ -37,8 +37,8 @@ void Start(Scene scene)
 ```
 
 Both helpers accept the help overlay's toggle key and whether it starts collapsed; the 3D one also
-takes an optional `DisplayPosition` for the overlay corner - leave it out and the overlay keeps
-whatever position it already has (`DisplayPosition.None` registers no help at all).
+takes an optional `ScreenAnchor` for the overlay's corner, edge or centre - leave it out and the
+overlay keeps whatever position it already has - and `showHelp: false` registers no help at all.
 These must be decided up front - the overlay section is created in `Start()` - which is why they are
 parameters rather than properties you set later.
 
@@ -126,8 +126,8 @@ Two details worth knowing before you try to fight them:
   paste straight into the setup code. Plain XYZ Euler angles would look just as plausible and aim the
   camera somewhere else entirely, which is why they are not the ones printed.
 
-The overlay corner can be chosen with the `displayPosition` parameter of `Add3DCameraController()`;
-without it the controller leaves the corner alone, so `DebugOverlay.GetOrCreate(game).Position` set
+The overlay's anchor can be chosen with the `helpPosition` parameter of `Add3DCameraController()`;
+without it the controller leaves the anchor alone, so `DebugOverlay.GetOrCreate(game).Position` set
 anywhere - even before the controller has started - is respected. The 2D controller has no such
 parameter because the overlay belongs to the whole scene, not to the camera; move it with
 <kbd>F3</kbd> or set the position directly. Size, font and
@@ -164,8 +164,8 @@ game.Run(new SceneSetup3D { Camera = CameraSetup.Perspective() }, start: Start);
 void Start(Scene scene) => game.GetCameraEntity().Add(new MyOrbitCameraController());
 ```
 
-If you keep a controller but want the on-screen help gone, pass `displayPosition: DisplayPosition.None`
-to the 3D helper, or set `ShowInstructions = false` on either script after it has started. Hiding the
+If you keep a controller but want the on-screen help gone, pass `showHelp: false` to the 3D helper,
+or set `ShowInstructions = false` on either script after it has started. Hiding the
 whole overlay with <kbd>F4</kbd> is the runtime equivalent.
 
 ## See them in use
