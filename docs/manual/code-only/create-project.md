@@ -39,7 +39,7 @@ The steps below show how to create a new Stride project using the command line. 
 
 # [Linux](#tab/linux)
 
-1. Prerequisites: the .NET 10 SDK, Microsoft's build (`dotnet-install.sh` or the Microsoft package feed). A distribution's own `dotnet` package is not supported: it reports a distribution-specific runtime identifier that the asset compiler does not map, so no native library is found, and its older Roslyn skips Stride's source generators without an error. If you must build with it, `Stride.CommunityToolkit.Linux` copies the asset compiler's native libraries into place; the source generators stay skipped.
+1. Prerequisites: the .NET 10 SDK. Microsoft's build (`dotnet-install.sh` or the Microsoft package feed) needs nothing more; a distribution's own `dotnet` package works too, with the Linux package of step 6.
 2. Create a console app:
    ```
    dotnet new console --framework net10.0 --name YourProjectName
@@ -56,17 +56,21 @@ The steps below show how to create a new Stride project using the command line. 
    ```
    dotnet add package Stride.CommunityToolkit --prerelease
    ```
-6. Add the Bepu physics package:
+6. Only with a distribution's `dotnet` package, add the Linux package. The distribution's build reports a runtime identifier the asset compiler does not map, so without this package no native library is found; the package copies them into place. The distribution's older Roslyn also skips Stride's source generators without an error, which Microsoft's build does not.
+   ```
+   dotnet add package Stride.CommunityToolkit.Linux --prerelease
+   ```
+7. Add the Bepu physics package:
    ```
    dotnet add package Stride.CommunityToolkit.Bepu --prerelease
    ```
-7. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
-8. Build. On Stride 4.4 the first build of a project fails inside the asset compiler with NuGet signature errors, because the compiler inherits the SDK's signature verification without the SDK's trust store (reported upstream). Until that is fixed, turn the verification off for the build:
+8. Update Program.cs: Paste the [example code](#example-code) below into your Program.cs file.
+9. Build. On Stride 4.4 the first build of a project fails inside the asset compiler with NuGet signature errors, because the compiler inherits the SDK's signature verification without the SDK's trust store (reported upstream). Until that is fixed, turn the verification off for the build:
    ```
    DOTNET_NUGET_SIGNATURE_VERIFICATION=false dotnet build
    ```
    Later builds in the same project no longer need the variable.
-9. Run the project:
+10. Run the project:
    ```
    dotnet run
    ```
