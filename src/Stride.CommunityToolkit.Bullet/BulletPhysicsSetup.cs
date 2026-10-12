@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.Bullet;
 /// <remarks>
 /// A <see cref="Bullet3DPhysicsOptions"/> or <see cref="Bullet2DPhysicsOptions"/> passed to <c>CreatePrimitive</c> is
 /// read back here, so <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/> and <see cref="Bullet3DPhysicsOptions.IncludeCollider"/>
-/// mean what they mean on <see cref="EntityExtensions.AddBulletPhysics"/>.
+/// mean what they mean on <see cref="EntityExtensions.AddBulletPhysics(Entity, Primitive3D, Bullet3DPhysicsOptions)"/> and <see cref="EntityExtensions.AddBulletPhysics(Entity, Primitive2D, Bullet2DPhysicsOptions)"/>.
 /// </remarks>
 public sealed class BulletPhysicsSetup : PhysicsSetupBase
 {

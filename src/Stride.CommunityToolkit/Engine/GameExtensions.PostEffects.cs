@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Rendering.Images;
 
 namespace Stride.CommunityToolkit.Engine;
@@ -22,11 +23,11 @@ public static partial class GameExtensions
     /// <c>game.GetPostEffects()?.Bloom.Enabled ^= true</c>.
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="game"/> is <see langword="null"/>.</exception>
-    public static PostProcessingEffects? GetPostEffects(this Game game)
+    public static PostProcessingEffects? GetPostEffects(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        return game.SceneSystem.GraphicsCompositor?.GetPostEffects();
+        return game.GetSceneSystem().GraphicsCompositor?.GetPostEffects();
     }
 
     /// <summary>
@@ -38,11 +39,11 @@ public static partial class GameExtensions
     /// <remarks>See <see cref="GraphicsCompositorExtensions.ConfigurePostEffects"/> for what is on by default (nothing but tone mapping) and what must be added rather than enabled.</remarks>
     /// <exception cref="ArgumentNullException"><paramref name="game"/> or <paramref name="configure"/> is <see langword="null"/>.</exception>
     /// <exception cref="InvalidOperationException">The game has no compositor, or its compositor has no post effects.</exception>
-    public static Game ConfigurePostEffects(this Game game, Action<PostProcessingEffects> configure)
+    public static IGame ConfigurePostEffects(this IGame game, Action<PostProcessingEffects> configure)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var compositor = game.SceneSystem.GraphicsCompositor
+        var compositor = game.GetSceneSystem().GraphicsCompositor
             ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
         compositor.ConfigurePostEffects(configure);

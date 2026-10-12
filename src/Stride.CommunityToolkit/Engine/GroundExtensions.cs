@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -24,7 +25,7 @@ public static class GroundExtensions
     /// <remarks>
     /// Without a physics engine in the setup, or in a Game Studio project, the ground is the plane alone.
     /// </remarks>
-    public static Entity Add3DGround(this Game game, Vector2? size = null, Primitive3DEntityOptions? options = null)
+    public static Entity Add3DGround(this IGame game, Vector2? size = null, Primitive3DEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -51,7 +52,7 @@ public static class GroundExtensions
     /// <see cref="Primitive2DEntityOptions.Depth"/> is the collider's thickness. A physics package's options (<c>Bepu2DPhysicsOptions</c>) are read back by that package.
     /// </param>
     /// <returns>The ground entity, already in the root scene.</returns>
-    public static Entity Add2DGround(this Game game, Vector2? size = null, Primitive2DEntityOptions? options = null)
+    public static Entity Add2DGround(this IGame game, Vector2? size = null, Primitive2DEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -81,12 +82,12 @@ public static class GroundExtensions
         if (options.IncludePhysics)
             PhysicsSetupBase.Of(game).AddStatic(entity, shape, options);
 
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 
         return entity;
     }
 
-    private static Entity AddGround(Game game, Primitive3D shape, Primitive3DEntityOptions options, Action<PhysicsSetupBase, Entity, Primitive3D, Primitive3DEntityOptions> attach)
+    private static Entity AddGround(IGame game, Primitive3D shape, Primitive3DEntityOptions options, Action<PhysicsSetupBase, Entity, Primitive3D, Primitive3DEntityOptions> attach)
     {
         // The ground is static, attached below rather than as the body CreatePrimitive would add
         var includePhysics = options.IncludePhysics;
@@ -100,7 +101,7 @@ public static class GroundExtensions
         if (includePhysics)
             attach(PhysicsSetupBase.Of(game), entity, shape, options);
 
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 
         return entity;
     }

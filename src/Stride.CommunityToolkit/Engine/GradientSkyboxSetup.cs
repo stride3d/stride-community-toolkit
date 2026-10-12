@@ -1,6 +1,6 @@
 using Stride.CommunityToolkit.Rendering;
 using Stride.Engine;
-using Stride.Graphics;
+using Stride.Games;
 using Stride.Rendering.Lights;
 using Stride.Rendering.Skyboxes;
 
@@ -25,7 +25,7 @@ public sealed class GradientSkyboxSetup : SkyboxSetupBase
     public float LightIntensity { get; set; } = 1f;
 
     /// <inheritdoc/>
-    public override Entity Create(Game game)
+    public override Entity Create(IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -41,7 +41,7 @@ public sealed class GradientSkyboxSetup : SkyboxSetupBase
             new LightComponent { Type = new LightSkybox { Skybox = skybox }, Intensity = LightIntensity },
         };
 
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 
         return entity;
     }

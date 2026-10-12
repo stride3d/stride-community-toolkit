@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using System.Globalization;
 
 namespace Stride.CommunityToolkit.Charts;
@@ -19,13 +20,13 @@ namespace Stride.CommunityToolkit.Charts;
 /// </remarks>
 internal sealed class ChartScaffold : IDisposable
 {
-    private readonly Game _game;
+    private readonly IGame _game;
     private readonly Chart _chart;
     private readonly List<ChartText> _pool = [];
     private ChartText? _title;
     private int _used;
 
-    internal ChartScaffold(Game game, Chart chart)
+    internal ChartScaffold(IGame game, Chart chart)
     {
         _game = game;
         _chart = chart;

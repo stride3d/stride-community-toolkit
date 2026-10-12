@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Physics;
 
 namespace Stride.CommunityToolkit.Bullet;
@@ -25,7 +26,7 @@ public static class GameExtensions
     /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/>. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// The physics is attached here whatever the scene setup chose, since the plane collider is Bullet's own.
     /// </remarks>
-    public static Entity AddInfinite3DGround(this Game game, Vector2? size = null, Bullet3DPhysicsOptions? options = null)
+    public static Entity AddInfinite3DGround(this IGame game, Vector2? size = null, Bullet3DPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -49,7 +50,7 @@ public static class GameExtensions
 
         options.PhysicsComponent?.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
 
-        entity.Scene = game.SceneSystem.SceneInstance.RootScene;
+        entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 
         return entity;
     }
@@ -61,9 +62,9 @@ public static class GameExtensions
     /// <remarks>
     /// This method activates the rendering of collider shapes within the physics simulation, helping to visually inspect and debug the positioning and behavior of colliders at runtime.
     /// </remarks>
-    public static void ShowColliders(this Game game)
+    public static void ShowColliders(this IGame game)
     {
-        var simulation = game.SceneSystem.SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
+        var simulation = game.GetSceneSystem().SceneInstance.GetProcessor<PhysicsProcessor>()?.Simulation;
 
         if (simulation is null) return;
 

@@ -59,9 +59,11 @@ void CreateUi()
 
     //ComboBox
     var comboBox = new ComboBox();
+    var items = comboBox.Items ?? throw new InvalidOperationException("The combo box has no item list.");
+
     for (int i = 0; i < 10; i++)
     {
-        comboBox.Items.Add($"Item {i}");
+        items.Add($"Item {i}");
     }
     comboBox.SelectionChanged += (_, _) =>
     {

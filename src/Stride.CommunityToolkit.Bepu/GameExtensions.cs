@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Bepu;
 
@@ -20,7 +21,7 @@ public static class GameExtensions
     /// The script is also a Game Studio component, under Physics, for a project that would rather place
     /// it on the camera entity in the editor.
     /// </remarks>
-    public static GrabberScript AddGrabber(this Game game)
+    public static GrabberScript AddGrabber(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 

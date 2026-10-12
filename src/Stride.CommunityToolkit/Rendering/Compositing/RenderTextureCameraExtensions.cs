@@ -1,4 +1,5 @@
 using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering.Compositing;
 using Stride.Rendering.Images;
@@ -47,13 +48,13 @@ public static class RenderTextureCameraExtensions
     /// </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">The game has no graphics compositor, or its opaque and transparent stages are missing.</exception>
-    public static RenderTextureCamera AddRenderTextureCamera(this Game game, Entity cameraEntity, int width, int height,
+    public static RenderTextureCamera AddRenderTextureCamera(this IGame game, Entity cameraEntity, int width, int height,
         PixelFormat format = PixelFormat.R16G16B16A16_Float, Action<PostProcessingEffects>? postEffects = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(cameraEntity);
 
-        var compositor = game.SceneSystem.GraphicsCompositor
+        var compositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor or SetupBase3D first.");
 
         if (!compositor.TryGetRenderStage("Opaque", out var opaque) || !compositor.TryGetRenderStage("Transparent", out var transparent))

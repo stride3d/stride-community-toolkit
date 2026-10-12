@@ -1,4 +1,5 @@
-using Stride.Engine;
+using Stride.CommunityToolkit.Engine;
+using Stride.Games;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
@@ -20,9 +21,9 @@ public static class DebugShapeExtensions
     /// <param name="game">The game to add debug shapes to.</param>
     /// <param name="debugShapeRenderGroup">The render group the shapes are drawn in.</param>
     /// <remarks>Shapes are visible by default only when the toolkit itself is a Debug build; set <see cref="ImmediateDebugRenderSystem"/>.<c>Visible</c> otherwise.</remarks>
-    public static void AddDebugShapes(this Game game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
+    public static void AddDebugShapes(this IGame game, RenderGroup debugShapeRenderGroup = RenderGroup.Group1)
     {
-        game.SceneSystem.GraphicsCompositor.AddImmediateDebugRenderFeature();
+        game.GetSceneSystem().GraphicsCompositor.AddImmediateDebugRenderFeature();
 
         var debugDraw = new ImmediateDebugRenderSystem(game.Services, debugShapeRenderGroup);
 #if DEBUG

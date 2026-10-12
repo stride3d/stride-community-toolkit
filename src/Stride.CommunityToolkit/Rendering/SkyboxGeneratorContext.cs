@@ -1,5 +1,4 @@
-using Stride.Core;
-using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
@@ -30,7 +29,7 @@ public class SkyboxGeneratorContext : ShaderGeneratorContext
     /// Initializes a new instance of the <see cref="SkyboxGeneratorContext"/> class using the provided game instance.
     /// </summary>
     /// <param name="game">The game instance used to access necessary services and contexts.</param>
-    public SkyboxGeneratorContext(Game game)
+    public SkyboxGeneratorContext(IGame game)
     {
         Services = game.Services;
         GraphicsDevice = game.GraphicsDevice;

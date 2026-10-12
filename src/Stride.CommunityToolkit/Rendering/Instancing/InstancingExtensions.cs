@@ -1,4 +1,5 @@
-using Stride.Engine;
+using Stride.CommunityToolkit.Engine;
+using Stride.Games;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
@@ -22,11 +23,11 @@ public static class InstancingExtensions
     /// shadow-caster and lighting, but not instancing. Without it every instanced master renders as a
     /// single model at its own transform and the instances are invisible. Calling it twice is safe.
     /// </remarks>
-    public static bool AddInstancingSupport(this Game game)
+    public static bool AddInstancingSupport(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var meshRenderFeature = game.SceneSystem.GraphicsCompositor?.RenderFeatures.OfType<MeshRenderFeature>().FirstOrDefault()
+        var meshRenderFeature = game.GetSceneSystem().GraphicsCompositor?.RenderFeatures.OfType<MeshRenderFeature>().FirstOrDefault()
             ?? throw new InvalidOperationException("The graphics compositor has no MeshRenderFeature to add instancing to.");
 
         if (meshRenderFeature.RenderFeatures.OfType<InstancingRenderFeature>().Any()) return false;
@@ -48,12 +49,12 @@ public static class InstancingExtensions
     /// the draw calls that read them. Calling this repeatedly reuses the existing renderer rather than
     /// adding another. This does not enable instancing itself - call <see cref="AddInstancingSupport"/> too.
     /// </remarks>
-    public static InstancingBufferUploadRenderer AddInstancingBufferUpload(this Game game, params BufferedEntityInstancing[] instancings)
+    public static InstancingBufferUploadRenderer AddInstancingBufferUpload(this IGame game, params BufferedEntityInstancing[] instancings)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(instancings);
 
-        var compositor = game.SceneSystem.GraphicsCompositor
+        var compositor = game.GetSceneSystem().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor.");
 
         var renderer = FindOrInsertUploadRenderer(compositor);

@@ -1,4 +1,5 @@
 using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Engine;
 
@@ -14,5 +15,5 @@ public abstract class SkyboxSetupBase
     /// <summary>Creates the sky's entity, a <see cref="BackgroundComponent"/> and a skybox <see cref="LightComponent"/>, and adds it to the root scene.</summary>
     /// <param name="game">The running game; the root scene exists and the graphics device is ready.</param>
     /// <returns>The entity added.</returns>
-    public abstract Entity Create(Game game);
+    public abstract Entity Create(IGame game);
 }

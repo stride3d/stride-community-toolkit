@@ -1,6 +1,7 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Rendering.Compositing;
 
 namespace Stride.CommunityToolkit.Renderers;
@@ -63,9 +64,9 @@ public static class GraphicsCompositorExtensions
     /// game.AddEntityDebugSceneRenderer(options);
     /// </code>
     /// </example>
-    public static void AddEntityDebugSceneRenderer(this Game game, EntityDebugSceneRendererOptions? options = null)
+    public static void AddEntityDebugSceneRenderer(this IGame game, EntityDebugSceneRendererOptions? options = null)
     {
-        var graphicsCompositor = game.SceneSystem.GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
+        var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
 
         graphicsCompositor.AddEntityDebugRenderer(options);
     }

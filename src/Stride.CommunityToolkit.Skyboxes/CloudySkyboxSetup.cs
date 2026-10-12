@@ -9,5 +9,5 @@ namespace Stride.CommunityToolkit.Skyboxes;
 public sealed class CloudySkyboxSetup : SkyboxSetupBase
 {
     /// <inheritdoc/>
-    public override Stride.Engine.Entity Create(Stride.Engine.Game game) => game.AddSkybox(EntityName);
+    public override Stride.Engine.Entity Create(Stride.Games.IGame game) => game.AddSkybox(EntityName);
 }

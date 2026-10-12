@@ -26,7 +26,7 @@ namespace Stride.CommunityToolkit.Audio;
 /// </remarks>
 /// <example>
 /// <code>
-/// var listener = game.Audio.AttachListener(game.GetCameraEntity());
+/// var listener = game.GetAudioSystem().AttachListener(game.GetCameraEntity());
 /// var instance = chime.CreateInstance(spatialized: true, listener: listener);
 ///
 /// entity.Add(new SoundEmitterScript { Instance = instance });

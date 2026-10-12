@@ -1,5 +1,6 @@
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
-using Stride.Engine;
+using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
 
@@ -27,11 +28,11 @@ public static class GpuPickerExtensions
     /// main view, drawing and reading back only on frames with a request.
     /// </remarks>
     /// <exception cref="InvalidOperationException">The game has no compositor, no mesh render feature, or no camera slot.</exception>
-    public static GpuPicker AddGpuPicker(this Game game, RenderGroupMask pickable = RenderGroupMask.All)
+    public static GpuPicker AddGpuPicker(this IGame game, RenderGroupMask pickable = RenderGroupMask.All)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var compositor = game.SceneSystem.GraphicsCompositor
+        var compositor = game.GetSceneSystem().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor or SetupBase3D first.");
         var meshFeature = compositor.RenderFeatures.OfType<MeshRenderFeature>().FirstOrDefault()
             ?? throw new InvalidOperationException("The compositor has no MeshRenderFeature; there are no meshes to pick.");
@@ -58,7 +59,7 @@ public static class GpuPickerExtensions
             Stage = stage,
             Feature = feature,
             Camera = slot,
-            FollowSource = () => game.Input.MousePosition,
+            FollowSource = () => game.GetInputManager().MousePosition,
         };
 
         compositor.AddSceneRenderer(renderer);

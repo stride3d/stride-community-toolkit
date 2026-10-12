@@ -40,7 +40,7 @@ public static class AudioSystemExtensions
     /// A 440 Hz sine:
     /// <code>
     /// var phase = 0.0;
-    /// var tone = game.Audio.CreateProceduralSound((samples, rate, channels) =>
+    /// var tone = game.GetAudioSystem().CreateProceduralSound((samples, rate, channels) =>
     /// {
     ///     for (var i = 0; i &lt; samples.Length; i++)
     ///     {
@@ -126,6 +126,6 @@ public static class AudioSystemExtensions
         ArgumentNullException.ThrowIfNull(audio);
 
         return audio.AudioEngine
-            ?? throw new InvalidOperationException("The audio engine is not available: it failed to initialise (no OpenAL on Linux, or a headless machine) or the game has not started yet. Check game.Audio.AudioEngine before creating sounds.");
+            ?? throw new InvalidOperationException("The audio engine is not available: it failed to initialise (no OpenAL on Linux, or a headless machine) or the game has not started yet. Check game.GetAudioSystem().AudioEngine before creating sounds.");
     }
 }

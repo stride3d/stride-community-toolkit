@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Games;
 using System.Globalization;
 
 namespace Stride.CommunityToolkit.Charts;
@@ -30,7 +31,7 @@ internal sealed class ChartCursor : IDisposable
     /// <summary>The point under the mouse in chart units, or <see langword="null"/> while the cursor is off the chart.</summary>
     internal Vector3? Position { get; private set; }
 
-    internal ChartCursor(Game game, Chart chart)
+    internal ChartCursor(IGame game, Chart chart)
     {
         _chart = chart;
         var o = chart.Options;

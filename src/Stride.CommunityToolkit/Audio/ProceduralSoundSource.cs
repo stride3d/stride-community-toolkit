@@ -52,7 +52,7 @@ public sealed class ProceduralSoundSource : DynamicSoundSource
     /// <summary>
     /// Creates a playable <see cref="SoundInstance"/> whose samples come from <paramref name="fill"/>.
     /// </summary>
-    /// <param name="engine">The audio engine, <c>game.Audio.AudioEngine</c>.</param>
+    /// <param name="engine">The audio engine, <c>game.GetAudioSystem().AudioEngine</c>.</param>
     /// <param name="listener">The listener the instance is heard by; <see cref="AudioEngine.DefaultListener"/> when in doubt.</param>
     /// <param name="fill">Produces each block of samples. Runs on the audio worker thread.</param>
     /// <param name="sampleRate">Samples per second per channel.</param>

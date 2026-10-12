@@ -1,4 +1,6 @@
+using Stride.CommunityToolkit.Engine;
 using Stride.Engine;
+using Stride.Games;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Shapes;
@@ -32,11 +34,11 @@ public static class ReferenceGridExtensions
     /// var grid = game.AddGrid();
     /// </code>
     /// </example>
-    public static ReferenceGrid AddGrid(this Game game, GridSpace space = GridSpace.World, Keys toggleKey = Keys.G)
+    public static ReferenceGrid AddGrid(this IGame game, GridSpace space = GridSpace.World, Keys toggleKey = Keys.G)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var scene = game.SceneSystem.SceneInstance?.RootScene
+        var scene = game.GetSceneSystem().SceneInstance?.RootScene
             ?? throw new InvalidOperationException("The game has no scene yet; add the grid from the Start callback or later.");
 
         var grid = new ReferenceGrid { Space = space, ToggleKey = toggleKey };

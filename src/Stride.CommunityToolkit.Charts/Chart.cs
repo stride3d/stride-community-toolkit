@@ -1,10 +1,11 @@
 using Stride.CommunityToolkit.Charts.Lines;
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Engine.Processors;
-using Stride.Rendering;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.Charts;
 
@@ -81,7 +82,7 @@ public sealed class Chart : IDisposable
     public Vector3? CursorPosition { get; private set; }
 
     /// <summary>The game the chart draws in; its device, input and services.</summary>
-    internal Game Game { get; }
+    internal IGame Game { get; }
 
     /// <summary>
     /// Builds a chart. The <see cref="Root"/> is not added to a scene; do that where you want it.
@@ -90,7 +91,7 @@ public sealed class Chart : IDisposable
     /// <param name="options">What the chart shows and how it is drawn; <see langword="null"/> for <see cref="ChartOptions.Glow3D"/>.</param>
     /// <param name="name">The root entity's name, or <c>"Chart"</c>.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="game"/> is <see langword="null"/>.</exception>
-    public Chart(Game game, ChartOptions? options = null, string? name = null)
+    public Chart(IGame game, ChartOptions? options = null, string? name = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -463,7 +464,7 @@ public sealed class Chart : IDisposable
         }
 
         _cursor ??= new ChartCursor(Game, this);
-        _cursor.Update(camera, Game.Input.MousePosition, in view);
+        _cursor.Update(camera, Game.GetInputManager().MousePosition, in view);
         CursorPosition = _cursor.Position;
     }
 

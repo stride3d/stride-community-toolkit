@@ -1,5 +1,5 @@
 using Stride.Core.Mathematics;
-using Stride.Engine;
+using Stride.Games;
 
 namespace Stride.CommunityToolkit.ImGuiNet;
 
@@ -13,7 +13,7 @@ public static class ImGuiNetExtensions
     /// </summary>
     /// <param name="game">The game instance.</param>
     /// <returns>The ImGui.NET system instance.</returns>
-    public static ImGuiNetSystem AddImGuiNet(this Game game)
+    public static ImGuiNetSystem AddImGuiNet(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
@@ -104,7 +104,7 @@ public static class ImGuiNetExtensions
     /// </summary>
     /// <param name="game">The game instance.</param>
     /// <returns>The ImGuiNetSystem, or null if not found.</returns>
-    public static ImGuiNetSystem? GetImGuiNetSystem(this Game game)
+    public static ImGuiNetSystem? GetImGuiNetSystem(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
         return game.Services.GetService<ImGuiNetSystem>();
