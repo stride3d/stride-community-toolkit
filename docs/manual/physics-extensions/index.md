@@ -3,6 +3,7 @@
 Stride ships two physics engines, and the toolkit wraps both. The scene setup chooses the engine, `new SceneSetup3D().UseBepu()` or `.UseBullet()`, and the core's `CreatePrimitive`, `Add3DGround` and `Add2DGround` attach that engine's bodies and colliders; each package's entity extensions attach its physics explicitly, so both namespaces can be imported together. A third, Box2D.NET, is not a Stride engine at all but a 2D world the toolkit runs beside Stride; its wrapper is at the [end of this page](#box2d).
 
 Bepu is the newer engine and the toolkit's default; the examples choose it with `UseBepu()` unless they say otherwise.
+Bullet is maintained, not extended: the package follows every toolkit change and its three examples stay, but new helpers and examples are written for Bepu, the engine Stride itself is moving to.
 
 > [!TIP]
 > New to Bepu, or seeing a mesh that moves without colliding? Read
