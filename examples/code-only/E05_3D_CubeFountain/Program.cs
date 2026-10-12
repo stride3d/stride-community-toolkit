@@ -208,11 +208,11 @@ InterpolationMode Interpolation() => interpolated ? InterpolationMode.Interpolat
 /// </summary>
 Entity CreateBody(Scene scene, int kind, Vector3 position)
 {
-    // AddBepu3DPhysics derives the collider from the shape; it needs a model
+    // AddBepuPhysics derives the collider from the shape; it needs a model
     // component to be present, which is then taken off again
     var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
 
-    body.AddBepu3DPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
+    body.AddBepuPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
     {
         // A body is not interpolated unless asked: by default it is moved on physics steps only
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = Interpolation() },

@@ -302,12 +302,12 @@ void SpawnBatch(int count)
 
 void Spawn(Vector3 position)
 {
-    // AddBepu3DPhysics needs a ModelComponent present, but reads nothing from the mesh - it derives
+    // AddBepuPhysics needs a ModelComponent present, but reads nothing from the mesh - it derives
     // the collider from the primitive type. Using the shared model here rather than
     // CreatePrimitive avoids building one mesh and one pair of GPU buffers per body.
     var entity = new Entity("InstancedItem") { new ModelComponent(models[shape]) };
 
-    entity.AddBepu3DPhysics(shape, new Bepu3DPhysicsOptions
+    entity.AddBepuPhysics(shape, new Bepu3DPhysicsOptions
     {
         Component = new Body2DComponent { Collider = new CompoundCollider() }
     });
@@ -498,7 +498,7 @@ concepts:
   - Tearing down an instanced pile safely, clearing the instancing before the entities
   - Switching shape, batch size and layout at runtime with DebugTextDropdown
   - Why a perfectly regular spawn lattice must be jittered
-  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepu3DPhysics"
+  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepuPhysics"
 tags:
   - 2D
   - Bepu

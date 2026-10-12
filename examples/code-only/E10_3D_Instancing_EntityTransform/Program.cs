@@ -289,7 +289,7 @@ Entity CreateInstancedItem(string name)
 /// <remarks>
 /// <para>
 /// The model is attached here rather than by <c>CreatePrimitive</c>, which would build a fresh
-/// mesh for each of the 20,000 bodies. <c>AddBepu3DPhysics</c> only requires that a
+/// mesh for each of the 20,000 bodies. <c>AddBepuPhysics</c> only requires that a
 /// <see cref="ModelComponent"/> is present - it derives the collider from the primitive type and
 /// size, and reads nothing out of the mesh.
 /// </para>
@@ -302,7 +302,7 @@ Entity CreatePhysicsItem(string name)
 {
     var entity = new Entity(name) { new ModelComponent(sharedModel) };
 
-    entity.AddBepu3DPhysics(modelShape);
+    entity.AddBepuPhysics(modelShape);
 
     return entity;
 }
@@ -407,7 +407,7 @@ concepts:
   - Switching the whole scene to a different primitive from one line
   - Knowing when instancing does not help
   - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload"
-  - "Using helpers: SceneSetup3D, Add3DGround, AddBepu3DPhysics"
+  - "Using helpers: SceneSetup3D, Add3DGround, AddBepuPhysics"
 tags:
   - 3D
   - Rendering
