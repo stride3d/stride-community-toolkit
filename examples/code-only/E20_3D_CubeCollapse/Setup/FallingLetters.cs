@@ -2,7 +2,7 @@ using CubeCollapse.Components;
 using CubeCollapse.Shared;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
-using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Rendering;

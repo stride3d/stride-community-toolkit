@@ -147,8 +147,8 @@ public static class RopeBuilder
     };
 
     /// <remarks>
-    /// The collider is built by hand rather than left to <c>IncludeCollider</c>, because mass is a
-    /// property of the collider shape and the mass ratio is the whole point of this example.
+    /// The mass ratio is the whole point of this example, so each sphere's mass goes on the options and
+    /// lands on the collider shape Bepu reads it from.
     /// </remarks>
     private static Entity CreateSphere(Game game, string name, Color color, Vector3 position, float radius, float mass, bool kinematic)
     {
@@ -156,19 +156,8 @@ public static class RopeBuilder
         {
             EntityName = name,
             Material = game.CreateMaterial(color),
-
-            // Size for a sphere is its RADIUS, not its diameter - unlike a cube, where Size is the
-            // full extent. Passing a diameter here draws every sphere at twice the size of the
-            // collider below, and the weight then appears to sail straight through anything it hits.
-            IncludeCollider = false,
-            Component = new BodyComponent
-            {
-                Kinematic = kinematic,
-                Collider = new CompoundCollider
-                {
-                    Colliders = { new SphereCollider { Radius = radius, Mass = mass } }
-                }
-            }
+            Mass = mass,
+            Component = new BodyComponent { Kinematic = kinematic, Collider = new CompoundCollider() }
         });
 
         entity.Transform.Position = position;

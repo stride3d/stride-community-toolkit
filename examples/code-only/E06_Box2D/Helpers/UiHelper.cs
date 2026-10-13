@@ -1,5 +1,5 @@
 using Stride.CommunityToolkit.Box2D;
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;

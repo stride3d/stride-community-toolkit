@@ -1,6 +1,6 @@
 using E08_3D_DebugShapes.Scripts;
 using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.DebugShapes.Code;
+using Stride.CommunityToolkit.DebugShapes;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;

@@ -1,8 +1,7 @@
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
-using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;

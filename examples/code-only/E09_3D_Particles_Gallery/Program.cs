@@ -2,7 +2,7 @@ using E09_3D_Particles_Gallery;
 using Example.Common;
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;

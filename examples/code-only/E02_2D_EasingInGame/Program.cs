@@ -5,8 +5,6 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
-using Stride.CommunityToolkit.Scripts;
-using Stride.CommunityToolkit.Scripts.Utilities;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -102,7 +100,7 @@ void Start(Scene rootScene)
         {
             EntityName = $"Coin {i + 1}",
             Material = game.CreateFlatMaterial(new Color(250, 210, 60)),
-            IncludeCollider = false,
+            IncludePhysics = false,
         });
 
         coin.Transform.Position = new Vector3(coinSpots[i], 0f);
@@ -324,7 +322,7 @@ concepts:
   - Driving a kinematic Bepu 2D body towards an eased target with feed-forward velocity plus a correction
   - A pop-in by scale, a flight by position, a rise-and-fade on one tween
   - An elastic ease-out as a camera shake
-  - Visual-only primitives with IncludeCollider off, next to physics bodies
+  - Visual-only primitives with IncludePhysics off, next to physics bodies
 tags:
   - 2D
   - Mathematics

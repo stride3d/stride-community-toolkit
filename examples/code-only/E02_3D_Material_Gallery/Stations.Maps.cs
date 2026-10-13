@@ -1,6 +1,5 @@
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Rendering;
 using Stride.Rendering.Materials;
