@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Triangulates a simple 2D polygon by ear clipping.

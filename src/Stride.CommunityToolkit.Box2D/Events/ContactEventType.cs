@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Box2D.Events;
+namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// The kind of contact event carried by a <see cref="ContactEventData"/>.

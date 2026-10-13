@@ -1,4 +1,3 @@
-using Stride.Engine;
 using Stride.Graphics;
 using Stride.Rendering;
 
@@ -88,12 +87,10 @@ public abstract class AxialGizmoBase
     protected Material? BlueUniformMaterial { get; private set; }
 
     /// <summary>
-    /// Creates the base components of the Gizmo, such as the default origin and axis materials.
-    /// This method should be called in derived classes to initialize the Gizmo's materials.
+    /// Creates the origin and axis materials. A derived gizmo calls this before it builds its entities.
     /// </summary>
-    /// <returns>The <see cref="Entity"/> representing the Gizmo, or <c>null</c> if no entity is created.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsDevice"/> is not initialized.</exception>
-    protected virtual Entity? Create()
+    protected void CreateMaterials()
     {
         if (GraphicsDevice == null)
         {
@@ -104,8 +101,6 @@ public abstract class AxialGizmoBase
         RedUniformMaterial = CreateEmissiveColorMaterial(GetRedColor());
         GreenUniformMaterial = CreateEmissiveColorMaterial(GetGreenColor());
         BlueUniformMaterial = CreateEmissiveColorMaterial(GetBlueColor());
-
-        return null;
     }
 
     /// <summary>

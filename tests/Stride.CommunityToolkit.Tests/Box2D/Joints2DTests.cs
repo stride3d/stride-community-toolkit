@@ -1,16 +1,15 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
+using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Xunit;
-using static Box2D.NET.B2Bodies;
 using static Box2D.NET.B2DistanceJoints;
 using static Box2D.NET.B2Geometries;
 using static Box2D.NET.B2Joints;
 using static Box2D.NET.B2RevoluteJoints;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Types;
-using Stride.CommunityToolkit.Tests.Engine;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 

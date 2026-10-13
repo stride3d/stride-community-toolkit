@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Specifies index element size used when building indexed geometry.

@@ -4,7 +4,7 @@
 using Stride.Rendering;
 using System.ComponentModel;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Selects render stages for immediate debug rendering based on the render group and debug render stage.

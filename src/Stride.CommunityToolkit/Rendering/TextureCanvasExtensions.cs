@@ -1,9 +1,8 @@
-using Stride.CommunityToolkit.Rendering.Utilities;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Rendering;
 
-namespace Stride.CommunityToolkit.Extensions;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Provides extension methods for creating instances of <see cref="TextureCanvas"/>.

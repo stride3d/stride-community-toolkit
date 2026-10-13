@@ -27,7 +27,7 @@
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Generates the latitude/longitude-based debug meshes: sphere and capsule. Both build the same

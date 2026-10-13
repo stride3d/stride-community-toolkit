@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Buffer = System.Buffer;
 
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Builds a <see cref="MeshDraw"/> from vertex elements of any unmanaged type, with optional indices.

@@ -1,6 +1,6 @@
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Holds generated primitive meshes and computed offsets to pack them into shared vertex and index buffers.

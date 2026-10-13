@@ -66,7 +66,7 @@ public static partial class GameExtensions
     /// Sets the update interval used while the window is minimized, or unfocused when <see cref="GameBase.TreatNotFocusedLikeMinimized"/> is set.
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
-    /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the minimized update interval. Must be greater than 0.</param>
+    /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the minimized update interval. <c>0</c> or less removes the cap.</param>
     /// <remarks>
     /// <para>This method configures <see cref="GameBase.MinimizedMinimumUpdateRate"/> and is useful for reducing resource usage while the game is minimized.</para>
     /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
@@ -78,14 +78,14 @@ public static partial class GameExtensions
         ArgumentNullException.ThrowIfNull(game);
 
         var gameBase = (GameBase)game;
-        gameBase.MinimizedMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000f / targetFPS);
+        gameBase.MinimizedMinimumUpdateRate.MinimumElapsedTime = MinimumElapsedTime(targetFPS);
     }
 
     /// <summary>
     /// Sets the minimum update interval used while the game window is active.
     /// </summary>
     /// <param name="game">The <see cref="IGame"/> instance to configure.</param>
-    /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the active-window update interval. Must be greater than 0.</param>
+    /// <param name="targetFPS">The target update rate, in frames per second, used to calculate the active-window update interval. <c>0</c> or less removes the cap.</param>
     /// <remarks>
     /// <para>This method configures <see cref="GameBase.WindowMinimumUpdateRate"/> and can be used to limit the update rate while the game is running normally.</para>
     /// <para>The <paramref name="game"/> instance must be a <see cref="GameBase"/> implementation.</para>
@@ -97,8 +97,12 @@ public static partial class GameExtensions
         ArgumentNullException.ThrowIfNull(game);
 
         var gameBase = (GameBase)game;
-        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = TimeSpan.FromMilliseconds(1000f / targetFPS);
+        gameBase.WindowMinimumUpdateRate.MinimumElapsedTime = MinimumElapsedTime(targetFPS);
     }
+
+    // Zero and below mean no cap, where the division would give an infinite TimeSpan and throw
+    private static TimeSpan MinimumElapsedTime(int targetFPS)
+        => targetFPS <= 0 ? TimeSpan.Zero : TimeSpan.FromMilliseconds(1000.0 / targetFPS);
 
     /// <summary>
     /// Sets the presentation interval to wait for every second vertical blank.

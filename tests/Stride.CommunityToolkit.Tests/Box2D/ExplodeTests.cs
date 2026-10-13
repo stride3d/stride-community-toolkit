@@ -1,8 +1,8 @@
 using Stride.CommunityToolkit.Box2D;
+using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
 using Xunit;
 using static Box2D.NET.B2Bodies;
-using Stride.CommunityToolkit.Tests.Engine;
 
 namespace Stride.CommunityToolkit.Tests.Box2D;
 

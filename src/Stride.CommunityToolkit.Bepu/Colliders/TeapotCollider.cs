@@ -1,10 +1,8 @@
 using Stride.BepuPhysics.Definitions.Colliders;
-using Stride.CommunityToolkit.Bepu.Extensions;
-using Stride.Core.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Graphics.GeometricPrimitives;
 
-namespace Stride.CommunityToolkit.Bepu.Colliders;
+namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
 /// Builds the convex hull collider of the Utah teapot, decomposed from a coarse version of the model's mesh, and

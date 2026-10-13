@@ -1,6 +1,6 @@
 using Stride.Core.Mathematics;
 
-namespace Stride.CommunityToolkit.Charts.Lines;
+namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
 /// Samples functions into point lists.

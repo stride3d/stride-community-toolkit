@@ -6,7 +6,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Buffer = Stride.Graphics.Buffer;
 
-namespace Stride.CommunityToolkit.Charts.Lines;
+namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
 /// Builds ribbon <see cref="Mesh"/>es from points, so a line can have real thickness.

@@ -1,6 +1,6 @@
 using Stride.Core.Mathematics;
 
-namespace Stride.CommunityToolkit.Charts.Lines;
+namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
 /// How a chart turns a polyline into a ribbon mesh: its width, colour, glow and the plane it lies in.

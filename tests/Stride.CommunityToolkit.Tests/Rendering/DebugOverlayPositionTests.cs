@@ -1,5 +1,5 @@
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
 using Stride.Engine;

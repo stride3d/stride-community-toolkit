@@ -27,7 +27,7 @@
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Generates the circle-based debug meshes: the circle itself, and the cylinder and cone that are

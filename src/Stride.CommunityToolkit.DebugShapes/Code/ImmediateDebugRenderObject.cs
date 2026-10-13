@@ -4,9 +4,8 @@
 using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Rendering;
-using static Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderFeature;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Represents a render object for immediate debug rendering, allowing the addition of various shapes and lines.

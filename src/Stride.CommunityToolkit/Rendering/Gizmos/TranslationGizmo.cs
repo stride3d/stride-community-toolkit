@@ -53,7 +53,7 @@ public class TranslationGizmo : AxialGizmoBase
     /// <param name="rotateAxisNames">Determines whether the axis names should be rotated to match the axes' orientation.</param>
     public void Create(Entity entity, bool showAxisName = false, bool rotateAxisNames = true)
     {
-        base.Create();
+        CreateMaterials();
 
         _planeMaterials[0] = CreateUniformColorMaterial(GetRedColor().WithAlpha(86));
         _planeMaterials[1] = CreateUniformColorMaterial(GetGreenColor().WithAlpha(86));

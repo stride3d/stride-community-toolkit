@@ -58,17 +58,13 @@ public class AddBepuPhysicsColliderTests
     }
 
     [Fact]
-    public void IncludeColliderOffAddsNothing()
+    public void MassGoesOnTheFittedShape()
     {
         var entity = EntityWithModel();
 
-        entity.AddBepuPhysics(Primitive3D.Cube(), new Bepu3DPhysicsOptions
-        {
-            Component = new BodyComponent { Collider = new CompoundCollider() },
-            IncludeCollider = false,
-        });
+        entity.AddBepuPhysics(Primitive3D.Sphere(0.5f), new Bepu3DPhysicsOptions { Mass = 4f });
 
-        Assert.Empty(CollidersOf(entity));
+        Assert.Equal(4f, Assert.Single(CollidersOf(entity)).Mass);
     }
 
     [Fact]

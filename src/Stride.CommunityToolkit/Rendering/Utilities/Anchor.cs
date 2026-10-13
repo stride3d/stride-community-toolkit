@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 ///     Anchor positions when drawing to a <see cref="TextureCanvas" />

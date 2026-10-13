@@ -1,6 +1,6 @@
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// One selectable entry in a <see cref="DebugTextDropdown"/>.

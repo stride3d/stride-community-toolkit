@@ -4,7 +4,7 @@ using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using static Stride.BepuPhysics.Definitions.DecomposedHulls;
 
-namespace Stride.CommunityToolkit.Bepu.Colliders;
+namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
 /// Builds the convex hull collider of a flat polygon extruded along Z: the prism a 2D polygon shape collides as.

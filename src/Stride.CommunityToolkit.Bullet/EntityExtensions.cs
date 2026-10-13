@@ -17,7 +17,7 @@ public static class EntityExtensions
     /// </summary>
     /// <param name="entity">The entity to add physics components to.</param>
     /// <param name="shape">The flat shape the entity's model was built from; the collider is derived from it.</param>
-    /// <param name="options">Optional physics configuration: the physics component, the collider depth, and whether to include a collider. If null, default options are used.</param>
+    /// <param name="options">Optional physics configuration: the physics component, the collider depth and the mass. If null, default options are used.</param>
     /// <returns>The entity with the Bullet 2D physics components added.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
     public static Entity AddBulletPhysics(this Entity entity, Primitive2D shape, Bullet2DPhysicsOptions? options = null)
@@ -35,14 +35,13 @@ public static class EntityExtensions
 
         if (options.PhysicsComponent is null) return entity;
 
-        if (!options.IncludeCollider)
+        // A component that already holds a shape is the caller's own collider and is kept as it is
+        if (options.PhysicsComponent.ColliderShapes.Count == 0)
         {
-            entity.Add(options.PhysicsComponent);
-
-            return entity;
+            options.PhysicsComponent.ColliderShapes.Add(ColliderFor(shape, options.Depth));
         }
 
-        options.PhysicsComponent.ColliderShapes.Add(ColliderFor(shape, options.Depth));
+        ApplyMass(options.PhysicsComponent, options.Mass);
 
         entity.Add(options.PhysicsComponent);
 
@@ -54,11 +53,11 @@ public static class EntityExtensions
     /// </summary>
     /// <param name="entity">The entity to add physics components to.</param>
     /// <param name="shape">The shape the entity's model was built from; the collider is derived from it.</param>
-    /// <param name="options">Optional physics configuration: the physics component and whether to include a collider. If null, default options are used.</param>
+    /// <param name="options">Optional physics configuration: the physics component and the mass. If null, default options are used.</param>
     /// <returns>The entity with the Bullet 3D physics components added.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
     /// <remarks>
-    /// A torus or a teapot has no Bullet collider shape and is added without a collider even when <c>IncludeCollider</c> is <see langword="true"/>.
+    /// A torus or a teapot has no Bullet collider shape and is added without a collider.
     /// </remarks>
     public static Entity AddBulletPhysics(this Entity entity, Primitive3D shape, Bullet3DPhysicsOptions? options = null)
     {
@@ -69,23 +68,28 @@ public static class EntityExtensions
 
         if (options.PhysicsComponent is null) return entity;
 
-        if (!options.IncludeCollider)
+        // A component that already holds a shape is the caller's own collider and is kept as it is
+        if (options.PhysicsComponent.ColliderShapes.Count == 0)
         {
-            // Should we add the PhysicsComponent even if no collider is included?
-            entity.Add(options.PhysicsComponent);
+            var colliderShape = ColliderFor(shape);
 
-            return entity;
+            if (colliderShape is null) return entity;
+
+            options.PhysicsComponent.ColliderShapes.Add(colliderShape);
         }
 
-        var colliderShape = ColliderFor(shape);
-
-        if (colliderShape is null) return entity;
-
-        options.PhysicsComponent.ColliderShapes.Add(colliderShape);
+        ApplyMass(options.PhysicsComponent, options.Mass);
 
         entity.Add(options.PhysicsComponent);
 
         return entity;
+    }
+
+    // Bullet keeps mass on the rigid body; a static or character component has none to set
+    private static void ApplyMass(PhysicsComponent component, float? mass)
+    {
+        if (mass is { } value && component is RigidbodyComponent rigidbody)
+            rigidbody.Mass = value;
     }
 
     /// <summary>

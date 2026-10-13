@@ -1,6 +1,6 @@
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// A collapsible list of choices drawn with the debug text system, driven entirely by the keyboard.

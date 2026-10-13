@@ -386,7 +386,7 @@ public static partial class GameExtensions
     /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
     /// </summary>
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="helpPosition">Where the shared <see cref="Scripts.Utilities.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// <param name="helpPosition">Where the shared <see cref="Rendering.Text.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
     /// leaves the overlay's own position alone.</param>
     /// <param name="cameraName">The name of the camera entity to attach the 3D camera controller to. If not specified, the main camera name is
     /// used.</param>
@@ -859,10 +859,8 @@ public static partial class GameExtensions
     {
         ArgumentNullException.ThrowIfNull(renderer);
 
-        var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ??
-                                 throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
-
-        graphicsCompositor.AddSceneRenderer(renderer);
+        (game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet))
+            .AddSceneRenderer(renderer);
 
         return game;
     }
@@ -882,10 +880,8 @@ public static partial class GameExtensions
     /// <returns>The renderer: the one already in the compositor when there was one.</returns>
     public static WorldTextRenderer AddWorldTextRenderer(this IGame game)
     {
-        var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ??
-                                 throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
-
-        return graphicsCompositor.EnsureSceneRenderer(() => new WorldTextRenderer());
+        return (game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet))
+            .EnsureSceneRenderer(() => new WorldTextRenderer());
     }
 
     /// <summary>
@@ -901,10 +897,8 @@ public static partial class GameExtensions
     /// <returns>The renderer: the one already in the compositor when there was one.</returns>
     public static EntityTextRenderer AddEntityTextRenderer(this IGame game)
     {
-        var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ??
-                                 throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
-
-        return graphicsCompositor.EnsureSceneRenderer(() => new EntityTextRenderer());
+        return (game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet))
+            .EnsureSceneRenderer(() => new EntityTextRenderer());
     }
 
     /// <summary>

@@ -4,7 +4,7 @@
 using Stride.Core.Mathematics;
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// The payload of a debug cube: what <see cref="ImmediateDebugRenderSystem"/> records when one is

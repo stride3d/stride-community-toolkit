@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Graphics;
+using Stride.CommunityToolkit.Rendering;
 using Stride.Core.Mathematics;
 using Stride.Games;
 using Stride.Graphics;
@@ -6,7 +6,7 @@ using Stride.Rendering;
 using System.Runtime.InteropServices;
 using Buffer = Stride.Graphics.Buffer;
 
-namespace Stride.CommunityToolkit.Charts.Lines;
+namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
 /// A polyline that grows one point at a time - the trail of a moving body, drawn while it moves. The GPU

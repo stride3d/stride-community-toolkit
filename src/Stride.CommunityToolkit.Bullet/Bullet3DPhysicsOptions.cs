@@ -36,8 +36,8 @@ public class Bullet3DPhysicsOptions : Primitive3DEntityOptions
     private PhysicsComponent? _physicsComponent = new RigidbodyComponent();
 
     /// <summary>
-    /// When true (default), a collider shape matching the primitive type is auto-created and added.
-    /// When false, the <see cref="PhysicsComponent"/> is attached without shapes; you can add shapes later.
+    /// Gets or sets the mass of the rigid body, in kilograms, or <see langword="null"/> for Bullet's default of 1.
+    /// Applied when <see cref="PhysicsComponent"/> is a <see cref="RigidbodyComponent"/>.
     /// </summary>
-    public bool IncludeCollider { get; set; } = true;
+    public float? Mass { get; set; }
 }

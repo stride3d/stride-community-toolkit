@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Box2D.Events;
+namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// Implemented by objects that want to receive sensor overlap events from the simulation.
