@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Graphics;
 using Stride.Engine;
 using Stride.Graphics;
 using Buffer = Stride.Graphics.Buffer;

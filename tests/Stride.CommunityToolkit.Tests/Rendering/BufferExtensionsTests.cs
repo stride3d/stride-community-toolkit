@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Graphics;
+using Stride.CommunityToolkit.Rendering;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Rendering;

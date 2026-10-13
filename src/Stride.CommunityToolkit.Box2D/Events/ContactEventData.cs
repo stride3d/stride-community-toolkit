@@ -2,7 +2,7 @@ using Box2D.NET;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-namespace Stride.CommunityToolkit.Box2D.Events;
+namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// A contact event delivered to <see cref="IContactEventHandler"/> implementations: the two entities

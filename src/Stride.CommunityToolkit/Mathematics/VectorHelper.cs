@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Helpers;
+namespace Stride.CommunityToolkit.Mathematics;
 
 /// <summary>
 /// Provides helper methods for generating and manipulating <see cref="Vector3"/> objects.

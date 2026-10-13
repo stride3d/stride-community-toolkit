@@ -6,7 +6,7 @@ using Stride.Rendering;
 using System.Runtime.InteropServices;
 using Buffer = Stride.Graphics.Buffer;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Renders immediate-mode debug primitives (quads, circles, spheres, cubes, capsules, cylinders, cones, lines).

@@ -1,6 +1,5 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
-using Stride.CommunityToolkit.Bepu.Colliders;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -20,7 +19,7 @@ public static class EntityExtensions
         /// Adds Bepu 2D physics to the entity, with the collider that matches <paramref name="shape"/>.
         /// </summary>
         /// <param name="shape">The flat shape the entity's model was built from; the collider is derived from it.</param>
-        /// <param name="options">Optional physics configuration: the body component, the collider depth, and whether to include a collider. If null, default options are used.</param>
+        /// <param name="options">Optional physics configuration: the body component, the collider depth and the mass. If null, default options are used.</param>
         /// <returns>The entity with the Bepu 2D physics components added.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
         public Entity AddBepuPhysics(Primitive2D shape, Bepu2DPhysicsOptions? options = null)
@@ -37,19 +36,16 @@ public static class EntityExtensions
             // version ships and this copy is deleted, this line resolves to it instead, unchanged
             var component = options.Component ?? new Body2DComponent { Collider = new CompoundCollider() };
 
-            if (!options.IncludeCollider)
-            {
-                entity.Add(component);
-
-                return entity;
-            }
-
             // The fitted shape goes into an empty compound only. A compound that already holds a
             // shape is the caller's own collider and is kept as it is: adding to it would give the
             // body two colliders, and the mass of both
             if (component.Collider is CompoundCollider { Colliders.Count: 0 } compoundCollider)
             {
-                compoundCollider.Colliders.Add(ColliderFor(shape, options.Depth));
+                var collider = ColliderFor(shape, options.Depth);
+
+                if (options.Mass is { } mass) collider.Mass = mass;
+
+                compoundCollider.Colliders.Add(collider);
             }
 
             entity.Add(component);
@@ -75,20 +71,16 @@ public static class EntityExtensions
             // be reused across entities
             var component = options.Component ?? new BodyComponent { Collider = new CompoundCollider() };
 
-            if (!options.IncludeCollider)
-            {
-                // Should we add the CollidableComponent even if no collider is included?
-                entity.Add(component);
-
-                return entity;
-            }
-
             // The fitted shape goes into an empty compound only. A compound that already holds a
             // shape is the caller's own collider and is kept as it is: adding to it would give the
             // body two colliders, and the mass of both
             if (component.Collider is CompoundCollider { Colliders.Count: 0 } compoundCollider)
             {
-                compoundCollider.Colliders.Add(ColliderFor(shape));
+                var collider = ColliderFor(shape);
+
+                if (options.Mass is { } mass) collider.Mass = mass;
+
+                compoundCollider.Colliders.Add(collider);
             }
 
             entity.Add(component);

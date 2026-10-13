@@ -1,18 +1,17 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
-using static Box2D.NET.B2Bodies;
-using static Box2D.NET.B2Worlds;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 using Stride.Rendering;
+using static Box2D.NET.B2Bodies;
+using static Box2D.NET.B2Worlds;
 
 // The Box2D twin of E10_2D_StressPile: thousands of bodies in two draw calls -
 // awake through one master, sleeping tinted green through another - with

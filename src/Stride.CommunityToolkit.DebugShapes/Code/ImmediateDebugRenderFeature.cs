@@ -5,7 +5,7 @@ using Stride.Core.Mathematics;
 
 using Stride.Rendering;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Provides functionality for rendering immediate debug primitives such as lines, shapes, and other geometric objects.

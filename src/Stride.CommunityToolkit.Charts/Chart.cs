@@ -1,4 +1,3 @@
-using Stride.CommunityToolkit.Charts.Lines;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Shapes;

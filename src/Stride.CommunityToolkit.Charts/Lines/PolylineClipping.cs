@@ -1,6 +1,6 @@
 using Stride.Core.Mathematics;
 
-namespace Stride.CommunityToolkit.Charts.Lines;
+namespace Stride.CommunityToolkit.Charts;
 
 /// <summary>
 /// Cuts a sampled polyline into the pieces that can be drawn: the runs that stay inside a rectangle or box,

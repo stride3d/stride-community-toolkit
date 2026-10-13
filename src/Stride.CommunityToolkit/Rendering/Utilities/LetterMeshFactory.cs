@@ -1,7 +1,7 @@
 using Stride.Graphics;
 using Stride.Rendering;
 
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Builds solid, extruded 3D letter and digit meshes from glyph outlines authored in code.

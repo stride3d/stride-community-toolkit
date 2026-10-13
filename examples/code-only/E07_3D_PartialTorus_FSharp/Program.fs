@@ -3,7 +3,7 @@ open Stride.CommunityToolkit.Engine;
 open Stride.CommunityToolkit.Skyboxes;
 open Stride.Core.Mathematics;
 open Stride.Engine;
-open Stride.CommunityToolkit.Rendering.Utilities
+open Stride.CommunityToolkit.Rendering
 open Stride.Graphics
 open System
 open Stride.Rendering

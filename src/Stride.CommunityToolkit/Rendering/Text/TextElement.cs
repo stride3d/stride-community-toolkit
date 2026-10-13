@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// One line of on-screen text: what it says, its colour, and, for a help line, the keys it is about.

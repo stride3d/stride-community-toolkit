@@ -1,7 +1,7 @@
 using E03_3D_MeshText;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Utilities;
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;

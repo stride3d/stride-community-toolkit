@@ -9,7 +9,7 @@ Use it instead of `game.DebugTextSystem.Print(...)` from several scripts, whose 
 overlap and are unreadable on a high-DPI display.
 
 `DebugOverlay`, `DebugOverlaySection` and `TextElement` live in the
-`Stride.CommunityToolkit.Scripts.Utilities` namespace; `ScreenAnchor` in `Stride.CommunityToolkit.Rendering`.
+`Stride.CommunityToolkit.Rendering.Text` namespace; `ScreenAnchor` in `Stride.CommunityToolkit.Rendering`.
 
 ## Adding text
 

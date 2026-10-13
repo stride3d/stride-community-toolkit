@@ -1,7 +1,7 @@
 using Stride.Graphics;
 using Stride.Rendering;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Configures pipeline state and effects for debug primitive rendering (solid and line passes).

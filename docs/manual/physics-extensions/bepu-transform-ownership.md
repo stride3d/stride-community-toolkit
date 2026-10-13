@@ -66,11 +66,11 @@ public void SimulationUpdate(BepuSimulation simulation, float simTimeStep)
 }
 ```
 
-## "I disabled the collider but the entity still has a body"
+## "I want the model without a body"
 
-`Bepu3DPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`. A `CompoundCollider`
-with no shapes never attaches to the simulation, so you are left with an inert component rather than
-no physics.
+`IncludePhysics = false` on the options leaves the physics out altogether. A `BodyComponent` whose
+`CompoundCollider` holds no shapes never attaches to the simulation, so a body added by hand with an
+empty compound is an inert component rather than no physics.
 
 For a purely visual entity, use the non-physics `CreatePrimitive` overload by passing
 `Primitive3DEntityOptions` instead.
@@ -225,7 +225,7 @@ mesh collider if it can be static.
 | Velocity-driven motion stops | `LinearVelocity` does not wake a body | Also set `Awake = true` |
 | Kinematic body diverges to `NaN` | `SetTargetPose` called more than once per physics tick | Call it from `SimulationUpdate`, or integrate your own velocity |
 | Null reference in `SimulationUpdate` | It can run before `Start` | Resolve lazily with `??=` |
-| Inert `BodyComponent` | `IncludeCollider = false` still attaches a body | Use the `Primitive3DEntityOptions` overload |
+| Inert `BodyComponent` | A body whose compound holds no shapes | `IncludePhysics = false` for no physics; your own shapes in the compound otherwise |
 | `CS0121` ambiguity | Two `CreatePrimitive` overloads | Pass an explicitly typed options object |
 | `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known - keep hull body counts down, or use an analytic collider |
 | Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |

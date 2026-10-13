@@ -9,7 +9,7 @@ Stride is a very versatile and powerful engine which uses textures for a lot of 
 Sometimes it is necessary to create these textures on the fly for example for simple tasks like scaling, applying image effects or to build new textures based on existing ones (texture atlas).
 
 ## `TextureCanvas`
-The @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas abstracts away a lot of complexity behind custom buffers, textures, memory allocation and instead
+The @Stride.CommunityToolkit.Rendering.TextureCanvas abstracts away a lot of complexity behind custom buffers, textures, memory allocation and instead
 provides you with a simpler builder API to define your texture dynamically.
 
 ```csharp
@@ -67,7 +67,7 @@ The `TextureCanvas` supports various image manipulations as well as image effect
 
 ### Resample
 The **Resample** method changes the current size of the texture or pixel format while preserving the current content.
-The content will be resized to match the new size if necessary.
+The content will be resized to match the new size if necessary. Setting `Size` or `PixelFormat` does the same for one of the two.
 ```csharp
 canvas.Resample(size: new Size2(512, 512), pixelFormat: PixelFormat.R8G8B8A8_UNorm)
 ```

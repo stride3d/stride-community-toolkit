@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 ///     Specifies how a texture is scaled when drawn to a <see cref="TextureCanvas" />.

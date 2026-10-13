@@ -4,7 +4,7 @@ using Stride.Engine;
 using static Box2D.NET.B2Shapes;
 using static Box2D.NET.B2Worlds;
 
-namespace Stride.CommunityToolkit.Box2D.Events;
+namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// Routes Box2D contact and sensor events to registered handlers. Delegates resolution of bodies

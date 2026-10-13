@@ -58,7 +58,7 @@ public abstract class SceneSetup
     /// </summary>
     public Action<Stride.Engine.Design.GameSettings>? GameSettings { get; set; }
 
-    /// <summary>Creates the <see cref="Scripts.Utilities.DebugOverlay"/>, so the first section added shows at once.</summary>
+    /// <summary>Creates the <see cref="Rendering.Text.DebugOverlay"/>, so the first section added shows at once.</summary>
     public bool DebugOverlay { get; set; }
 
     /// <summary>Adds the frame-time profiler readout.</summary>
@@ -80,7 +80,7 @@ public abstract class SceneSetup
     private protected void ApplyCommon(Game game)
     {
         if (DebugOverlay)
-            Scripts.Utilities.DebugOverlay.GetOrCreate(game);
+            Rendering.Text.DebugOverlay.GetOrCreate(game);
 
         if (Profiler)
             game.AddProfiler();

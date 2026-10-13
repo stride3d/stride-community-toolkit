@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Higher-level shapes composed on top of <see cref="MeshBuilder"/>'s per-vertex API.

@@ -77,7 +77,7 @@ using Stride.Core.Mathematics;
 using Stride.Graphics;
 using Stride.Graphics.GeometricPrimitives;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Provides methods for generating geometric primitives for debug visualization.

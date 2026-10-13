@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Scripts.Utilities;
+using Stride.CommunityToolkit.Rendering.Text;
 
 namespace Example.Common;
 

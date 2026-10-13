@@ -38,17 +38,15 @@ public static class GameExtensions
         options.Material ??= game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
         // The visible plane is finite; the collider is Bullet's infinite static plane, not the plane's own
-        // box, so the shape's collider is left out and the plane collider added in its place
-        options.IncludeCollider = false;
+        // box. The component is given the plane collider first, so the helper keeps it as the caller's own
         options.IncludePhysics = false;
+        options.PhysicsComponent?.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
 
         var groundSize = size ?? new Vector2(GameDefaults.Default3DGroundSize.X, GameDefaults.Default3DGroundSize.Z);
         var shape = Primitive3D.Plane(groundSize.X, groundSize.Y);
         var entity = game.CreatePrimitive(shape, options);
 
         entity.AddBulletPhysics(shape, options);
-
-        options.PhysicsComponent?.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
 
         entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 

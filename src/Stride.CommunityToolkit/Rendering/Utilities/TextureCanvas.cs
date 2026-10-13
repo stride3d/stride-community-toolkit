@@ -2,7 +2,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using Stride.Rendering.Images;
 
-namespace Stride.CommunityToolkit.Rendering.Utilities;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Provides functionality for drawing and manipulating textures on a canvas.
@@ -37,36 +37,28 @@ public class TextureCanvas : IDisposable
     ///     Gets or sets the current pixel format
     /// </summary>
     /// <remarks>
-    ///     Setting a different pixel format may cause a resample of the already drawn back buffer or call the setter before
-    ///     you start drawing.<br />
+    ///     Setting a different pixel format resamples what has been drawn so far; before the first draw it only
+    ///     changes what the first draw creates.<br />
     ///     You may consider using <see cref="Resample" /> if you also want to change the size in a single operation.
     /// </remarks>
     public PixelFormat PixelFormat
     {
         get => _pixelFormat;
-        set
-        {
-            _pixelFormat = value;
-            Resample(_size, value);
-        }
+        set => Resample(_size, value);
     }
 
     /// <summary>
     ///     Gets or sets the current texture size
     /// </summary>
     /// <remarks>
-    ///     Setting a different size may cause a resample of the already drawn back buffer or call the setter before you start
-    ///     drawing.<br />
+    ///     Setting a different size resamples what has been drawn so far; before the first draw it only changes
+    ///     what the first draw creates.<br />
     ///     You may consider using <see cref="Resample" /> if you also want to change the pixel format in a single operation.
     /// </remarks>
     public Size2 Size
     {
         get => _size;
-        set
-        {
-            _size = value;
-            Resample(value, _pixelFormat);
-        }
+        set => Resample(value, _pixelFormat);
     }
 
     /// <summary>
@@ -81,23 +73,6 @@ public class TextureCanvas : IDisposable
     {
         Clear();
         GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Draws a rectangle on the canvas.
-    /// </summary>
-    /// <param name="destinationRect">The destination rectangle where the rectangle will be drawn.</param>
-    /// <param name="stretch">The stretch mode to apply to the rectangle.</param>
-    /// <param name="anchor">The anchor point for the rectangle.</param>
-    /// <param name="samplingPattern">The sampling pattern to use for drawing.</param>
-    public void DrawRect(
-        Rectangle destinationRect,
-        Stretch stretch = Stretch.Stretch,
-        Anchor anchor = Anchor.TopLeft,
-        SamplingPattern samplingPattern = SamplingPattern.Linear
-    )
-    {
-        CommandList.DrawQuad();
     }
 
     /// <summary>
@@ -213,9 +188,7 @@ public class TextureCanvas : IDisposable
         SamplingPattern samplingPattern = SamplingPattern.Linear
     )
     {
-        var sourceRect = ToAbsoluteSize(sourceTexture.Size, relativeSourceRect);
-        var destinationRect = ToAbsoluteSize(_size, relativeSourceRect);
-        DrawTexture(sourceTexture, sourceRect, destinationRect, colorMultiplier, stretch, anchor, samplingPattern);
+        DrawTexture(sourceTexture, ToAbsoluteSize(sourceTexture.Size, relativeSourceRect), ToAbsoluteSize(_size, relativeDestinationRect), colorMultiplier, stretch, anchor, samplingPattern);
     }
 
     /// <summary>
@@ -508,32 +481,39 @@ public class TextureCanvas : IDisposable
     /// </summary>
     /// <param name="size">The new size</param>
     /// <param name="pixelFormat">The new pixel format</param>
-    /// <param name="samplingPattern">Not used; resampling is always linear</param>
+    /// <param name="samplingPattern">The filter the pixels are resampled with</param>
     public void Resample(Size2 size, PixelFormat pixelFormat, SamplingPattern samplingPattern = SamplingPattern.Linear)
     {
         // Nothing changed so we can safely skip this step
-        if (_primaryBuffer is null || (size == _size && pixelFormat == _pixelFormat)) return;
+        if (size == _size && pixelFormat == _pixelFormat) return;
 
-        // Create a new render target with the new settings and dispose the previous buffer at the end
-        _secondaryBuffer?.Dispose();
-        _secondaryBuffer = CreateRenderTarget(RenderContext, size, pixelFormat);
-
-        try
+        // Nothing drawn yet means nothing to resample: the first draw creates the buffer with the new settings
+        if (_primaryBuffer is not null)
         {
-            // We use the image scaler effect to resample the image to the new size and format
-            using var scaler = new ImageScaler(SamplingPattern.Linear);
-            scaler.SetInput(_primaryBuffer);
-            scaler.SetOutput(_secondaryBuffer);
+            // Create a new render target with the new settings and dispose the previous buffer at the end
+            _secondaryBuffer?.Dispose();
+            _secondaryBuffer = CreateRenderTarget(RenderContext, size, pixelFormat);
 
-            // Finally draw the current buffer to the new render texture
-            scaler.Draw(RenderDrawContext);
+            try
+            {
+                // We use the image scaler effect to resample the image to the new size and format
+                using var scaler = new ImageScaler(samplingPattern);
+                scaler.SetInput(_primaryBuffer);
+                scaler.SetOutput(_secondaryBuffer);
+
+                // Finally draw the current buffer to the new render texture
+                scaler.Draw(RenderDrawContext);
+            }
+            finally
+            {
+                _primaryBuffer.Dispose();
+                _primaryBuffer = _secondaryBuffer;
+                _secondaryBuffer = null;
+            }
         }
-        finally
-        {
-            _primaryBuffer?.Dispose();
-            _primaryBuffer = _secondaryBuffer;
-            _secondaryBuffer = null;
-        }
+
+        _size = size;
+        _pixelFormat = pixelFormat;
     }
 
     /// <summary>
@@ -672,9 +652,9 @@ public class TextureCanvas : IDisposable
     {
         return new Rectangle(
             (int)(size.Width * sourceRect.X),
-            (int)(size.Width * sourceRect.Y),
+            (int)(size.Height * sourceRect.Y),
             (int)(size.Width * sourceRect.Width),
-            (int)(size.Width * sourceRect.Height)
+            (int)(size.Height * sourceRect.Height)
         );
     }
 
@@ -682,9 +662,9 @@ public class TextureCanvas : IDisposable
     {
         return new Rectangle(
             (int)(size.Width * sourceRect.X),
-            (int)(size.Width * sourceRect.Y),
+            (int)(size.Height * sourceRect.Y),
             (int)(size.Width * sourceRect.Width),
-            (int)(size.Width * sourceRect.Height)
+            (int)(size.Height * sourceRect.Height)
         );
     }
 }

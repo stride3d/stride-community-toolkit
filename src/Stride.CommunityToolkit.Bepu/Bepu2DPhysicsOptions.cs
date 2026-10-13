@@ -23,10 +23,10 @@ public class Bepu2DPhysicsOptions : Primitive2DEntityOptions
     public CollidableComponent? Component { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether a collider shape matching the primitive type is created automatically.
+    /// Gets or sets the mass of the fitted collider shape, in kilograms, or <see langword="null"/> for Bepu's default of 1.
     /// </summary>
     /// <remarks>
-    /// Defaults to <see langword="true"/>. When set to <see langword="false"/>, the <see cref="Component"/> is attached without generated collider shapes so they can be added later. A compound collider that already holds a shape gets none either way.
+    /// Bepu keeps mass on the collider shape, so this is applied to the shape fitted to the primitive. A compound that already holds your own shapes keeps their masses.
     /// </remarks>
-    public bool IncludeCollider { get; set; } = true;
+    public float? Mass { get; set; }
 }

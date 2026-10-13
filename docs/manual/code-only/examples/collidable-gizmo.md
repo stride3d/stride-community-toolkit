@@ -7,13 +7,13 @@ slug: collidable-gizmo
 
 A single-purpose demo of CollidableGizmoScript, which draws the collider Bepu is actually using so
 it can be compared against the model you think you gave it. The cube here is created with
-IncludeCollider set to false and the gizmo left visible, which makes the point directly: the gizmo
+IncludePhysics set to false and the gizmo left visible, which makes the point directly: the gizmo
 reports what physics knows about, and if nothing is drawn, nothing is there.
 
 The `Program.cs` file shows how to:
 
 - Drawing the collider a body is really using
-- Suppressing the generated collider with IncludeCollider = false
+- Leaving physics out with IncludePhysics = false
 - Showing or hiding the gizmo with its Visible property
 - Diagnosing a body that does not collide as expected
 - Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive

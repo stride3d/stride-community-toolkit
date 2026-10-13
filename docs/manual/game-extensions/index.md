@@ -88,7 +88,7 @@ Both register their renderer once, however many times you call them.
 - [`AddProfiler()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Games.IGame,System.String)) - Adds Stride's profiler, toggled with <kbd>Left Shift</kbd> + <kbd>Left Ctrl</kbd> + <kbd>P</kbd>.
 - [`SetDeterministic()`](xref:Stride.CommunityToolkit.Engine.GameLoopExtensions.SetDeterministic(Stride.Games.IGame,System.Nullable{System.TimeSpan})) - Pins the loop so frame N is the same simulated instant on every run: fixed timestep, draws in step, one update per draw. For replays, lockstep, tests and screenshots.
 - [`AddGroundGizmo()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)) - Draws the world axes at the origin, optionally labelled. The quickest way to work out which way you are facing.
-- [`AddEntityDebugSceneRenderer()`](xref:Stride.CommunityToolkit.Renderers.GraphicsCompositorExtensions.AddEntityDebugSceneRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Renderers.EntityDebugSceneRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Renderers`.
+- [`AddEntityDebugSceneRenderer()`](xref:Stride.CommunityToolkit.Rendering.Text.EntityDebugRendererExtensions.AddEntityDebugSceneRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Text.EntityDebugSceneRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Rendering.Compositing`.
 - [`TakeScreenShot()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)) - Saves the current frame to a file. This is what the toolkit's own screenshot capture is built on.
 
 To see colliders, use `ShowColliders()` in [Physics Extensions](../physics-extensions/index.md) for Bullet, or Bepu's own debug rendering.
@@ -100,6 +100,6 @@ These take `IGame`, since they need nothing from the scene.
 - [`DeltaTime()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTime(Stride.Games.IGame)) - Seconds since the last update, as a `float`.
 - [`DeltaTimeAccurate()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DeltaTimeAccurate(Stride.Games.IGame)) - The same as a `double`, for accumulating over long runs.
 - [`FPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.FPS(Stride.Games.IGame)) - The current frames per second.
-- [`SetMaxFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)) - Caps the frame rate.
+- [`SetMaxFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetMaxFPS(Stride.Games.IGame,System.Int32)) - Caps the frame rate; `0` removes the cap.
 - [`SetFocusLostFPS()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetFocusLostFPS(Stride.Games.IGame,System.Int32)) - Caps it separately for when the window is in the background, so a minimised game stops burning a core.
 - [`EnableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.EnableVSync(Stride.Games.IGame)) / [`DisableVSync()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.DisableVSync(Stride.Games.IGame)) - Turns vertical sync on or off at runtime.

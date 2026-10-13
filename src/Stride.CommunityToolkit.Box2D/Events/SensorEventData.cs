@@ -1,7 +1,7 @@
 using Box2D.NET;
 using Stride.Engine;
 
-namespace Stride.CommunityToolkit.Box2D.Events;
+namespace Stride.CommunityToolkit.Box2D;
 
 /// <summary>
 /// A sensor overlap event delivered to <see cref="ISensorEventHandler"/> implementations.

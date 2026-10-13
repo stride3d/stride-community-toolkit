@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Scripts;
 
 /// <summary>
 /// The geometry behind <see cref="Scripts.Basic2DCameraController"/>, as pure functions.

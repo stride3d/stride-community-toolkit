@@ -3,7 +3,7 @@
 
 using Stride.Core.Mathematics;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// The texture-coordinate values the debug-primitive generators encode wireframe information with:

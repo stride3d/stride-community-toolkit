@@ -1,5 +1,4 @@
 using Box2D.NET;
-using Stride.CommunityToolkit.Box2D.Events;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using static Box2D.NET.B2Joints;

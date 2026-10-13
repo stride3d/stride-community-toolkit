@@ -3,7 +3,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 [StructLayout(LayoutKind.Explicit)]
 internal struct Renderable

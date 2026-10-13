@@ -1,6 +1,6 @@
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// One contributor's block of lines within a <see cref="DebugOverlay"/>.

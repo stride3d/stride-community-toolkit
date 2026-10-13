@@ -1,6 +1,6 @@
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Graphics;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Provides extension methods for the <see cref="GraphicsDevice"/> to simplify common operations related to graphics rendering.

@@ -2,9 +2,9 @@
 // Distributed under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using static Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem;
+using static Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 [StructLayout(LayoutKind.Explicit)]
 internal struct DebugRenderable

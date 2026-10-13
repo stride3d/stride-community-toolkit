@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 
-namespace Stride.CommunityToolkit.Bepu.Colliders;
+namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
 /// Keeps one <see cref="DecomposedHulls"/> per distinct shape and size, so many bodies of the same

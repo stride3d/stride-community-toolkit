@@ -1,10 +1,8 @@
 using Stride.BepuPhysics.Definitions.Colliders;
-using Stride.CommunityToolkit.Bepu.Extensions;
-using Stride.Core.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Graphics.GeometricPrimitives;
 
-namespace Stride.CommunityToolkit.Bepu.Colliders;
+namespace Stride.CommunityToolkit.Bepu;
 
 /// <summary>
 /// Builds the convex hull collider of a torus, decomposed from the same mesh the model is built from, and shares

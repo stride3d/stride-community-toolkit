@@ -911,10 +911,10 @@ select new {
 // shouldn't use which high-level types and methods. The refactoring 
 // patterns that help getting rid of each listed dependency include:
 //
-// • Moving one or several types from the *low-level* namespaces
+// â¢ Moving one or several types from the *low-level* namespaces
 // to the *high-level* one, or do the opposite.
 //
-// • Use *Dependency Inversion Principle (DIP)*: 
+// â¢ Use *Dependency Inversion Principle (DIP)*: 
 // https://blog.ndepend.com/solid-design-the-dependency-inversion-principle-dip
 // This consists in creating new interfaces in the
 // *low-level* namespace, implemented by classes
@@ -975,13 +975,13 @@ select new {
 // At this point, the dependency matrix shows types involved 
 // into the coupling.
 //
-// • Blue cells represent types from low-level namespace using types 
+// â¢ Blue cells represent types from low-level namespace using types 
 // from high-level namespace
 //
-// • Green cells represent types from high-level namespace using 
+// â¢ Green cells represent types from high-level namespace using 
 // types from low-level namespace
 //
-// • Black cells represent types from low-level and high-level
+// â¢ Black cells represent types from low-level and high-level
 // namespaces that use each other.
 //
 // There are more green cells than blue and black cells because
@@ -1144,11 +1144,11 @@ select new {
 // (i.e concrete and stable) and which assemblies are **potentially useless** 
 // (i.e abstract and instable).
 //
-// • **Abstractness**: If an assembly contains many abstract types 
+// â¢ **Abstractness**: If an assembly contains many abstract types 
 // (i.e interfaces and abstract classes) and few concrete types, 
 // it is considered as abstract.
 //
-// • **Stability**: An assembly is considered stable if its types 
+// â¢ **Stability**: An assembly is considered stable if its types 
 // are used by a lot of types from other assemblies. In this context 
 // stable means *painful to modify*.
 //
@@ -1156,7 +1156,7 @@ select new {
 // an assembly from the idealized line* **A + I = 1** (called *main sequence*). 
 // This metric is an indicator of the assembly's balance between abstractness 
 // and stability. We precise that the word *normalized* means that the range 
-// of values is [0.0 … 1.0].
+// of values is [0.0 â¦ 1.0].
 //
 // This rule warns about assemblies with a *normalized distance* greater than 
 // than 0.7.
@@ -1173,11 +1173,11 @@ select new {
 // Violations of this rule indicate assemblies with an improper 
 // *abstractness / stability* balance.
 //
-// • Either the assembly is *potentially painful to maintain* (i.e is massively
+// â¢ Either the assembly is *potentially painful to maintain* (i.e is massively
 // used and contains mostly concrete types). This can be fixed by creating 
 // abstractions to avoid too high coupling with concrete implementations.
 //
-// • Either the assembly is *potentially useless* (i.e contains mostly
+// â¢ Either the assembly is *potentially useless* (i.e contains mostly
 // abstractions and is not used enough). In such situation, the design
 // must be reviewed to see if it can be enhanced.
 //
@@ -1563,7 +1563,7 @@ select new {
 
 
 //<Desc>
-// An object is immutable if its state doesn’t change once the 
+// An object is immutable if its state doesnât change once the 
 // object has been created. Consequently, a structure or a class 
 // is immutable if its instances fields are only assigned inline
 // or from constructor(s).
@@ -1639,9 +1639,9 @@ select new {
 // A field assigned from many methods is a symptom of **bug-prone code**.
 // Notice that:
 //
-// • For an instance field, constructor(s) of its class that assign the field are not counted.
+// â¢ For an instance field, constructor(s) of its class that assign the field are not counted.
 //
-// • For a static field, the class constructor that assigns the field is not counted.
+// â¢ For a static field, the class constructor that assigns the field is not counted.
 //
 // The default threshold for *instance fields* is equal to *4 or more than 4 methods
 // assigning the instance field*. Such situation makes harder to anticipate the 
@@ -1763,11 +1763,11 @@ select new {
 // By default the presents rule supports the 3 most used naming
 // conventions for instance fields:
 //
-// • Instance field name starting with a lower-case letter
+// â¢ Instance field name starting with a lower-case letter
 //
-// • Instance field name starting with "_" followed with a lower-case letter
+// â¢ Instance field name starting with "_" followed with a lower-case letter
 //
-// • Instance field name starting with "m_" followed with an upper-case letter
+// â¢ Instance field name starting with "m_" followed with an upper-case letter
 //
 // The rule can be easily adapted to your own company naming convention.
 //
@@ -1839,11 +1839,11 @@ select new {
 // By default the presents rule supports the 3 most used naming
 // conventions for static fields:
 //
-// • Static field name starting with an upper-case letter
+// â¢ Static field name starting with an upper-case letter
 //
-// • Static field name starting with "_" followed with an upper-case letter
+// â¢ Static field name starting with "_" followed with an upper-case letter
 //
-// • Static field name starting with "s_" followed with an upper-case letter
+// â¢ Static field name starting with "s_" followed with an upper-case letter
 //
 // The rule can be easily adapted to your own company naming convention.
 //
@@ -2238,8 +2238,8 @@ let lookup = JustMyCode.Types.Where(t => t.SourceFileDeclAvailable && t.ParentNa
 from groupOfTypes in lookup
 let parentNamespaces = groupOfTypes.ParentNamespaces()
 
-// Select group of types (with source files stored in the same directory) …
-// … but contained in several namespaces
+// Select group of types (with source files stored in the same directory) â¦
+// â¦ but contained in several namespaces
 where parentNamespaces.Count() > 1
 
 // mainNamespaces is the namespace that contains many types 
@@ -2296,32 +2296,156 @@ select new {
 // in a namespace (what we call the **main namespace**) and a few types are declared 
 // out of the *main namespace*, this code rule matches:
 //
-// • The *main namespace*
+// â¢ The *main namespace*
 //
-// • **typesOutOfMainNamespace**: Types declared in source files in the *main namespace*'s directory
+// â¢ **typesOutOfMainNamespace**: Types declared in source files in the *main namespace*'s directory
 // but that are not in the *main namespace*.
 //
-// • *typesInMainNamespace*: And for informational purposes, types declared in source files in the 
+// â¢ *typesInMainNamespace*: And for informational purposes, types declared in source files in the 
 // *main namespace*'s directory, and that are in the *main namespace*.
 //</Desc>
 
 //<HowToFix>
 // Violations of this rule are types in the *typesOutOfMainNamespace* column.
-// Typically such type …
+// Typically such type â¦
 //
-// •  … is contained in the wrong namespace but its source file is stored in the right directory.
+// â¢  â¦ is contained in the wrong namespace but its source file is stored in the right directory.
 //    In such situation the type should be contained in *main namespace*.
 //
-// •  … is contained in the right namespace but its source file is stored in the wrong directory
+// â¢  â¦ is contained in the right namespace but its source file is stored in the wrong directory
 //    In such situation the source file of the type must be moved to the proper parent namespace directory.
 //
-// •  … is declared in multiple source files, stored in different directories.
+// â¢  â¦ is declared in multiple source files, stored in different directories.
 //    In such situation it is preferable that all source files are stored in a single directory.
 //
 // The estimated Debt, which means the effort to fix such issue,
 // is equal to 2 minutes plus 5 minutes per type in *typesOutOfMainNamespace*.
 //</HowToFix>]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND2105$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types declared in the same namespace, should have their source files stored in the same directory</Name>      
+// <Id>ND2105:TypesDeclaredInTheSameNamespaceShouldHaveTheirSourceFilesStoredInTheSameDirectory</Id>
+
+warnif count > 0 
+from @namespace in Application.Namespaces
+
+// Group types of @namespace in a lookup 
+// where groups are keyed with directories that contain the types' source file(s).
+// Note that a type can be contained in several groups 
+// if it is declared in several source files stored in different directories.
+let lookup = @namespace.ChildTypes.Where(
+          t => t.SourceFileDeclAvailable && 
+               JustMyCode.Contains(t) &&
+               // Don't match ASP.NET application types declared in Global.asax file
+               // that typically are in the root directory of the VS project.
+               !string.Equals(
+                  t.SourceDecls.First().SourceFile.FileName, 
+                  "global.asax", 
+                  StringComparison.OrdinalIgnoreCase))
+            .ToMultiKeyLookup(
+               t => t.SourceDecls.Select(
+                          decl => decl.SourceFile.FilePath.ParentDirectoryPath).Distinct()
+            )
+
+// Are types of @namespaces declared in more than one directory?
+where lookup.Count > 1
+
+// Infer the main folder, preferably the one that has the same name as the namespace.
+let dirs = lookup.Select(types => types.Key)
+let mainDirNullable = dirs.Where(d => d.DirectoryName == @namespace.SimpleName).FirstOrDefault()
+// Stride Community Toolkit tweak: a namespace may spread over its folder and that folder's
+// sub-folders. A folder is a grouping for whoever maintains the code; a namespace is something
+// a user has to import, and it only earns its keep where a user would import the area on its
+// own (Shapes since 2026-09, the physics packages' Colliders and Events, Rendering/Utilities,
+// DebugShapes/Code since 2026-10-13). So the main directory is the one named like the namespace,
+// else the shortest path - the package root rather than one of its sub-folders - and a source
+// file anywhere beneath it counts as in it. A file in a sibling or parent folder is still reported.
+let mainDir = mainDirNullable ?? dirs.OrderBy(d => d.ToString().Length).First()
+let mainDirPrefix = mainDir.ToString() + "\\"
+let isInMainDir = new Func<IDirectoryPath, bool>(d => d == mainDir || d.ToString().StartsWith(mainDirPrefix, StringComparison.OrdinalIgnoreCase))
+
+// Types declared out of mainDir, are types in group of types declared in a directory different than mainDir!
+let typesDeclaredOutOfMainDir = 
+   lookup.Where(types => !isInMainDir(types.Key))
+         .SelectMany(types => types)
+                                
+         // Filter types declared on several source files that contain generated methods 
+         // because typically such type contains one or several partial definitions generated.
+         // These partially generated types would be false positive for the present rule.
+         .Where(t => t.SourceDecls.Count() == 1 ||
+                     t.Methods.Count(m => JustMyCode.Contains(m)) == 0)
+
+where typesDeclaredOutOfMainDir.Count() > 0 &&
+
+      // Don't warn for types with at least one declaration in a generated file
+      // like the UWP generated file 'App.g.i.cs'
+     !typesDeclaredOutOfMainDir
+         .Where(t => t.SourceFileDeclAvailable)
+         .SelectMany(t => t.SourceDecls.Select(sd => sd.SourceFile.FilePathString))
+         .Any(fps => fps.IndexOf(".g.", StringComparison.OrdinalIgnoreCase) >= 0)
+
+let typesDeclaredInMainDir = 
+   lookup.Where(types => isInMainDir(types.Key))
+         .SelectMany(types => types)
+
+select new { 
+   @namespace, 
+   typesDeclaredOutOfMainDir, 
+   mainDir = mainDir.ToString(),
+   typesDeclaredInMainDir,
+   Debt = (2+5*typesDeclaredOutOfMainDir.Count()).ToMinutes().ToDebt(),
+   Severity = Severity.High
+}
+
+//<Expl>
+// The *{0}* declarations are present in source files spread across multiple directories.
+// *{1}* {1?is:are} declared in source files out of *{2}*.
+//</Expl>
+
+//<Desc>
+// To maintain a robust code structure and organization, 
+// it is advisable to synchronize the namespaces hierarchy with 
+// the directory hierarchy that contains the source files.
+//
+// Following this practice is a widely accepted convention, 
+// and failing to adhere to it can result in source code that 
+// is less maintainable and harder to navigate.
+//
+// Respecting this convention means that types declared in the same namespace,
+// should have their source files stored in the same directory.
+//
+// For each namespace that contains types whose source files
+// are declared in several directories, infer the **main directory**,
+// the directory that naturally hosts source files of types,
+// preferably the directory whose name corresponds with the namespace 
+// name. In this context, this code rule matches:
+//
+// • The namespace
+//
+// • **typesDeclaredOutOfMainDir**: types in the namespace whose source files 
+// are stored out of the *main directory*.
+//
+// • The *main directory*
+//  
+// • *typesDeclaredInMainDir*: for informational purposes, types declared 
+// in the namespace, whose source files are stored in the *main directory*.
+//</Desc>
+
+//<HowToFix>
+// Violations of this rule are types in the **typesDeclaredOutOfMainDir** column.
+// Typically such type…
+//
+// •  … is contained in the wrong namespace but its source file is stored in the right directory.
+//    In such situation the type should be contained in the namespace corresponding to
+//    the parent directory.
+//
+// •  … is contained in the right namespace but its source file is stored in the wrong directory.
+//    In such situation the source file of the type must be moved to the *main directory*.
+//
+// •  … is declared in multiple source files, stored in different directories.
+//    In such situation it is preferable that all source files are stored in a single directory.
+//
+// The estimated Debt, which means the effort to fix such issue,
+// is equal to 2 minutes plus 5 minutes per type in *typesDeclaredOutOfMainDir*.
+//</HowToFix>]]></Query>
     </Group>
     <Group Name=".NET Framework Usage" Active="True" ShownInReport="False">
       <Group Name="System" Active="True" ShownInReport="False">

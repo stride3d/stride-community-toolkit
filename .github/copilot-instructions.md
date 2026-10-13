@@ -30,9 +30,6 @@ These repository instructions guide GitHub Copilot (and similar AI assistants) t
 - `src/`: Core toolkit libraries
   - **Stride.CommunityToolkit**: Core library
     - `Engine/`: Game and Entity extensions
-    - `Extensions/`: General-purpose extensions
-    - `Graphics/`: Graphics utilities
-    - `Helpers/`: Helper classes
     - `Mathematics/`: Math utilities (e.g., easing)
     - `Physics/`: Physics extensions
     - `Rendering/`: Rendering utilities, including world text (`Rendering/Text`), the debug overlay and display scale

@@ -5,7 +5,7 @@ using Stride.Core.Mathematics;
 using Stride.Graphics;
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 [StructLayout(LayoutKind.Sequential, Pack = 4)]
 internal struct LineVertex

@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.Bepu;
 /// </summary>
 /// <remarks>
 /// A <see cref="Bepu3DPhysicsOptions"/> or <see cref="Bepu2DPhysicsOptions"/> passed to <c>CreatePrimitive</c> is read
-/// back here, so <see cref="Bepu3DPhysicsOptions.Component"/> and <see cref="Bepu3DPhysicsOptions.IncludeCollider"/>
+/// back here, so <see cref="Bepu3DPhysicsOptions.Component"/> and <see cref="Bepu3DPhysicsOptions.Mass"/>
 /// mean what they mean on <see cref="EntityExtensions.AddBepuPhysics(Entity, Primitive3D, Bepu3DPhysicsOptions)"/> and <see cref="EntityExtensions.AddBepuPhysics(Entity, Primitive2D, Bepu2DPhysicsOptions)"/>.
 /// </remarks>
 public sealed class BepuPhysicsSetup : PhysicsSetupBase

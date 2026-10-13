@@ -1,6 +1,6 @@
 # Procedural geometry
 
-In this example, we delve into creating procedural geometry meshes including a triangle, a plane, and a circle, and integrate them into a Stride scene. Utilizing the @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder class from the toolkit, the process of crafting and rendering these geometries is streamlined.
+In this example, we delve into creating procedural geometry meshes including a triangle, a plane, and a circle, and integrate them into a Stride scene. Utilizing the @Stride.CommunityToolkit.Rendering.MeshBuilder class from the toolkit, the process of crafting and rendering these geometries is streamlined.
 
 ![Stride UI Example](media/procedural-geometry.webp)
 

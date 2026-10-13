@@ -8,7 +8,7 @@ using Stride.Graphics;
 using Stride.Rendering;
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Provides a system for immediate debug rendering of various shapes and lines in the game world.

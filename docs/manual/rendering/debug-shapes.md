@@ -4,7 +4,7 @@ Immediate-mode wireframe and solid shapes for debugging: colliders, ray hits, sp
 
 ## Getting the system
 
-Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.Code.DebugShapeExtensions.AddDebugShapes(Stride.Games.IGame,Stride.Rendering.RenderGroup)), then resolve `ImmediateDebugRenderSystem` from the game's services. It is registered as a service and as a game system, so you get it the same way from a script or from a code-only `Start` callback.
+Register the renderer once with [`AddDebugShapes()`](xref:Stride.CommunityToolkit.DebugShapes.DebugShapeExtensions.AddDebugShapes(Stride.Games.IGame,Stride.Rendering.RenderGroup)), then resolve `ImmediateDebugRenderSystem` from the game's services. It is registered as a service and as a game system, so you get it the same way from a script or from a code-only `Start` callback.
 
 ```csharp
 game.AddDebugShapes();
@@ -35,19 +35,19 @@ Every method below ends with the same optional parameters, so they are listed on
 
 | Method | Shape-specific parameters |
 |---|---|
-| [`DrawLine`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawLine*) | `start`, `end` - no `solid` |
-| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - an array drawn as a connected run. No `solid` |
-| [`DrawRay`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawRay*) | `start`, `dir` - a direction rather than an end point. No `solid` |
-| [`DrawArrow`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawArrow*) | `from`, `to`, `coneHeight`, `coneRadius` |
-| [`DrawSphere`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawSphere*) | `position`, `radius` - no `rotation` |
-| [`DrawHalfSphere`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawHalfSphere*) | `position`, `radius`, `rotation` |
-| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCube*) | `start`, `size`, `rotation` |
-| [`DrawBounds`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawBounds*) | `start`, `end`, `rotation` - a box given by two opposite corners |
-| [`DrawCapsule`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCapsule*) | `position`, `height`, `radius`, `rotation` |
-| [`DrawCylinder`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCylinder*) | `position`, `height`, `radius`, `rotation` |
-| [`DrawCone`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCone*) | `position`, `height`, `radius`, `rotation` |
-| [`DrawQuad`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawQuad*) | `position`, `size` - a `Vector2` - and `rotation` |
-| [`DrawCircle`](xref:Stride.CommunityToolkit.DebugShapes.Code.ImmediateDebugRenderSystem.DrawCircle*) | `position`, `radius`, `rotation` |
+| [`DrawLine`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLine*) | `start`, `end` - no `solid` |
+| [`DrawLines`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawLines*) | `vertices` - an array drawn as a connected run. No `solid` |
+| [`DrawRay`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawRay*) | `start`, `dir` - a direction rather than an end point. No `solid` |
+| [`DrawArrow`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawArrow*) | `from`, `to`, `coneHeight`, `coneRadius` |
+| [`DrawSphere`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawSphere*) | `position`, `radius` - no `rotation` |
+| [`DrawHalfSphere`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawHalfSphere*) | `position`, `radius`, `rotation` |
+| [`DrawCube`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCube*) | `start`, `size`, `rotation` |
+| [`DrawBounds`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawBounds*) | `start`, `end`, `rotation` - a box given by two opposite corners |
+| [`DrawCapsule`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCapsule*) | `position`, `height`, `radius`, `rotation` |
+| [`DrawCylinder`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCylinder*) | `position`, `height`, `radius`, `rotation` |
+| [`DrawCone`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCone*) | `position`, `height`, `radius`, `rotation` |
+| [`DrawQuad`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawQuad*) | `position`, `size` - a `Vector2` - and `rotation` |
+| [`DrawCircle`](xref:Stride.CommunityToolkit.DebugShapes.ImmediateDebugRenderSystem.DrawCircle*) | `position`, `radius`, `rotation` |
 
 > [!NOTE]
 > `DrawCapsule`, `DrawCylinder` and `DrawCone` take **`height` before `radius`**, which is the opposite

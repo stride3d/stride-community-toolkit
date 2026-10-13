@@ -20,7 +20,7 @@ For most use-cases this is probably fine and the easier approach compared to a m
 However if you need to define your data dynamically or want a generalized method here we go.
 
 ## `MeshBuilder`
-The @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder abstracts away a lot of complexity behind custom buffers, type erasure, memory allocation and instead
+The @Stride.CommunityToolkit.Rendering.MeshBuilder abstracts away a lot of complexity behind custom buffers, type erasure, memory allocation and instead
 provides you with a simpler builder API to define your mesh dynamically.
 
 It uses the same concepts as Stride so you still have to define your layout manually but the process is easier and you don't need to worry about the memory layout yourself.
@@ -64,7 +64,7 @@ We use a `Vector3` as our vertex position and a `Color` for our vertex color.
 Other types would work as well but these are very common so we will use them as well.
 
 ## Vertices
-Next we define our vertices. For that we use a new method @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.AddVertex.
+Next we define our vertices. For that we use a new method @Stride.CommunityToolkit.Rendering.MeshBuilder.AddVertex.
 This will add a new vertex to our builder and allows us to use the `Get/SetElement` methods.
 
 You can also add several vertices first and set their values afterwards.
@@ -73,7 +73,7 @@ You can also add several vertices first and set their values afterwards.
 meshBuilder.AddVertex();
 ```
 
-After this we can set our element data. For this we use the [SetElement()](xref:Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder.SetElement``1(System.Int32,System.Int32,``0)) method.
+After this we can set our element data. For this we use the [SetElement()](xref:Stride.CommunityToolkit.Rendering.MeshBuilder.SetElement``1(System.Int32,System.Int32,``0)) method.
 It expects an element index (which we received from `WithPosition` and `WithColor` earlier) as well as your desired value.
 
 ```csharp

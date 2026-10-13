@@ -1,9 +1,8 @@
-using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Diagnostics;
 using Stride.Core.Serialization.Contents;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Scripts.Utilities;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Finds, registers and caches the font <see cref="DebugOverlay"/> draws with: the overlay's explicit

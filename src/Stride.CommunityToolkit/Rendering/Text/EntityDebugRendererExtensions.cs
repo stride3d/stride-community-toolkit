@@ -1,15 +1,14 @@
-using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.Engine;
 using Stride.Games;
 using Stride.Rendering.Compositing;
 
-namespace Stride.CommunityToolkit.Renderers;
+namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
-/// Extension methods that add an <see cref="EntityDebugSceneRenderer"/> to a <see cref="GraphicsCompositor"/>.
+/// Adds the <see cref="EntityDebugSceneRenderer"/> to a <see cref="GraphicsCompositor"/> or a game.
 /// </summary>
-public static class GraphicsCompositorExtensions
+public static class EntityDebugRendererExtensions
 {
     /// <summary>
     /// Adds an <see cref="EntityDebugSceneRenderer"/> to the <see cref="GraphicsCompositor"/> for rendering entity debug information.
@@ -67,7 +66,9 @@ public static class GraphicsCompositorExtensions
     /// </example>
     public static EntityDebugSceneRenderer AddEntityDebugSceneRenderer(this IGame game, EntityDebugSceneRendererOptions? options = null)
     {
-        var graphicsCompositor = game.GetSceneSystem().GraphicsCompositor ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
+        // The service registry rather than the Engine helper: this namespace is used by Engine, and must not use it back
+        var graphicsCompositor = game.Services.GetSafeServiceAs<SceneSystem>().GraphicsCompositor
+            ?? throw new InvalidOperationException("The game has no graphics compositor; call AddGraphicsCompositor first.");
 
         var renderer = new EntityDebugSceneRenderer(options);
 

@@ -3,7 +3,7 @@ using Stride.Games;
 using Stride.Rendering;
 using Stride.Rendering.Compositing;
 
-namespace Stride.CommunityToolkit.DebugShapes.Code;
+namespace Stride.CommunityToolkit.DebugShapes;
 
 /// <summary>
 /// Provides extension methods for adding and managing debug rendering features in a game.

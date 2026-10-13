@@ -1,7 +1,7 @@
 using Stride.Graphics;
 using Buffer = Stride.Graphics.Buffer;
 
-namespace Stride.CommunityToolkit.Graphics;
+namespace Stride.CommunityToolkit.Rendering;
 
 /// <summary>
 /// Provides extension methods for <see cref="Buffer"/>.
