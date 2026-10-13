@@ -9,7 +9,7 @@ Stride is a very versatile and powerful engine which uses textures for a lot of 
 Sometimes it is necessary to create these textures on the fly for example for simple tasks like scaling, applying image effects or to build new textures based on existing ones (texture atlas).
 
 ## `TextureCanvas`
-The @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas abstracts away a lot of complexity behind custom buffers, textures, memory allocation and instead
+The @Stride.CommunityToolkit.Rendering.TextureCanvas abstracts away a lot of complexity behind custom buffers, textures, memory allocation and instead
 provides you with a simpler builder API to define your texture dynamically.
 
 ```csharp

@@ -50,10 +50,10 @@ Every constraint example carries it, so the constrained bodies can be pulled abo
 
 ### Convex hulls
 
-In the `Stride.CommunityToolkit.Bepu.Extensions` namespace, for giving an arbitrary mesh a collider.
+In the `Stride.CommunityToolkit.Bepu` namespace, for giving an arbitrary mesh a collider.
 
-- [`ToConvexHullCollider()`](xref:Stride.CommunityToolkit.Bepu.Extensions.ConvexHullColliderExtensions.ToConvexHullCollider(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Wraps mesh data in a single convex hull. Cheap, but it fills in any concave detail.
-- [`ToDecomposedHulls()`](xref:Stride.CommunityToolkit.Bepu.Extensions.ConvexHullColliderExtensions.ToDecomposedHulls(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Splits the mesh into several hulls so concave shapes collide correctly. More accurate, more expensive to build.
+- [`ToConvexHullCollider()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToConvexHullCollider(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Wraps mesh data in a single convex hull. Cheap, but it fills in any concave detail.
+- [`ToDecomposedHulls()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToDecomposedHulls(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Splits the mesh into several hulls so concave shapes collide correctly. More accurate, more expensive to build.
 
 ## Bullet
 

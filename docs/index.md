@@ -66,7 +66,7 @@ Thanks to everyone pushing this forward:
 - [dfkeenan](https://github.com/dfkeenan): Previous toolkit implementation
 - [DockFrankenstein](https://github.com/DockFrankenstein): Script System Extensions
 - [Doprez](https://github.com/Doprez): Extensions, docs
-- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.Utilities.MeshBuilder, @Stride.CommunityToolkit.Rendering.Utilities.TextureCanvas and docs
+- [DotLogix](https://github.com/dotlogix): Utility @Stride.CommunityToolkit.Rendering.MeshBuilder, @Stride.CommunityToolkit.Rendering.TextureCanvas and docs
 - [Idomeneas1970](https://github.com/Idomeneas1970): Heightmap extensions
 - [IXLLEGACYIXL](https://github.com/IXLLEGACYIXL): Extensions
 - [Johan Gustafsson](https://github.com/johang88): Extensions

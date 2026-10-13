@@ -17,10 +17,10 @@ The `Program.cs` file shows how to:
 - Driving a kinematic Bepu 2D body towards an eased target with feed-forward velocity plus a correction
 - A pop-in by scale, a flight by position, a rise-and-fade on one tween
 - An elastic ease-out as a camera shake
-- Visual-only primitives with IncludeCollider off, next to physics bodies
+- Visual-only primitives with IncludePhysics off, next to physics bodies
 
 ![Easing in a 2D Game](media/easing-2d-game.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_2D_EasingInGame).
 
-[!code-csharp[](../../../../examples/code-only/E02_2D_EasingInGame/Program.cs?start=1&end=297)]
+[!code-csharp[](../../../../examples/code-only/E02_2D_EasingInGame/Program.cs?start=1&end=296)]

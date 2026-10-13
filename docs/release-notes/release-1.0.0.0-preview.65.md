@@ -8,7 +8,7 @@ This release is built against Stride 4.4.0-beta8 and contains new features, exam
 
 - `game.CreateMaterial(color, metalness, glossiness)`: parameters renamed from `specular` and `microSurface`. The default metalness is 0 instead of 1, so a colour alone gives a matte material. Positional calls compile unchanged; named arguments need updating.
 - `Easing` is one generic implementation: `Easing.Name<T>(T amount)` for any IEEE floating-point type replaces the `float` and `double` method pairs. `Easing.Ease` and `MathUtilEx.Interpolate` clamp time to [0, 1]; the curve methods stay unclamped.
-- `WorldTextRenderer`, `EntityTextRenderer`, `ScreenTextDrawer` and `ScreenTextStyle` moved from `Stride.CommunityToolkit.Renderers` to `Stride.CommunityToolkit.Rendering.Text`.
+- `WorldTextRenderer`, `EntityTextRenderer`, `ScreenTextDrawer` and `ScreenTextStyle` moved from `Stride.CommunityToolkit.Rendering.Compositing` to `Stride.CommunityToolkit.Rendering.Text`.
 - `ShapeComponent.Vertices` is a `List<Vector2>` instead of an array. Assign an array with a spread: `Vertices = [.. outline]`.
 - `WorldTextComponent` and `EntityTextComponent`: `FadeStartDistance` and `MaxDistance` are `float`, with 0 meaning off, instead of `float?`.
 - Box2D: `JointOptions2D` renamed to `JointOptionsBase`. `CharacterMover2D` category bits are `static readonly` instead of `const`.

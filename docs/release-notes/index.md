@@ -137,6 +137,33 @@ The seventeen `Add*` and `Show*` extensions that returned `void` now return the 
 | `game.AddSceneRenderer()`, `AddRootRenderFeature()`, `AddParticleRenderer()`, `ShowColliders()` | The game |
 | `compositor.AddRootRenderFeature()`, `AddParticleStagesAndFeatures()` | The compositor |
 | `compositor.EnsureSceneRenderer()` | The renderer of that type, instead of the compositor |
+
+#### Namespaces that were folders
+
+Nine namespaces that only mirrored a source folder are folded into the area a user already imports. A removed namespace is a `using` to delete, which the compiler names; nothing else changes.
+
+| Before | After | Note |
+|---|---|---|
+| `Stride.CommunityToolkit.Scripts.Utilities` | `Stride.CommunityToolkit.Rendering.Text` | `DebugOverlay`, `DebugOverlaySection`, `TextElement`, `DebugTextDropdown` and its item, next to the text renderers and `TextAnchor`. |
+| `Stride.CommunityToolkit.Rendering.Utilities` | `Stride.CommunityToolkit.Rendering` | `TextureCanvas`, `MeshBuilder`, `LetterMeshFactory`, `EarClipping`, `Anchor`, `Stretch`, `IndexingType`. |
+| `Stride.CommunityToolkit.Extensions`, `.Graphics` | `Stride.CommunityToolkit.Rendering` | `TextureExtensions`, `TextureCanvasExtensions`, `BufferExtensions`, `GraphicsDeviceExtensions`. |
+| `Stride.CommunityToolkit.Renderers` | `Stride.CommunityToolkit.Rendering.Text` | `EntityDebugSceneRenderer` and its options, a text renderer like the two beside it; `AddEntityDebugRenderer()` and `AddEntityDebugSceneRenderer()` in `EntityDebugRendererExtensions`. |
+| `Stride.CommunityToolkit.Helpers` | `Stride.CommunityToolkit.Mathematics` | `VectorHelper`. |
+| `Stride.CommunityToolkit.DebugShapes.Code` | `Stride.CommunityToolkit.DebugShapes` | The whole package; its root had no public type before. |
+| `Stride.CommunityToolkit.Bepu.Colliders`, `.Bepu.Extensions` | `Stride.CommunityToolkit.Bepu` | The collider helpers and `ToConvexHullCollider()`, found without a second `using`. |
+| `Stride.CommunityToolkit.Box2D.Events` | `Stride.CommunityToolkit.Box2D` | The contact and sensor event types. |
+| `Stride.CommunityToolkit.Charts.Lines` | `Stride.CommunityToolkit.Charts` | `PolylineSampling`. |
+
+#### Members that lied or did nothing
+
+| Before | After | Note |
+|---|---|---|
+| `Bepu3DPhysicsOptions.IncludeCollider = false` and the 2D, Bullet twins | Gone | `IncludePhysics = false` leaves the physics out; a `Component` whose collider already holds a shape is kept as it is, in Bullet too now. |
+| `Box2DBodyComponent.BodyType`, `Mass`, `Friction`, `Restitution`, `LinearDamping`, `AngularDamping`, `CollisionGroup`, `IsSensor` | Gone | Nothing read them; a body's type, density and friction are given to `Box2DSimulation` and `ShapeFixtureBuilder`. `BodyId` and the live velocity, force and impulse members stay. |
+| `TextureCanvas.DrawRect()` | Gone | It ignored every parameter and drew a quad. |
+| `TextureCanvas.Size = …`, `PixelFormat = …` | Resample the canvas | The setters assigned the field before the resample compared against it, so nothing ever happened. `Resample()` honours its `samplingPattern` and the relative `DrawTexture` overload its destination rectangle. |
+| `SetMaxFPS(0)`, `SetFocusLostFPS(0)` threw | No cap | Zero or less removes the minimum update interval. |
+| `AxialGizmoBase.Create()` returned `null` | `CreateMaterials()`, `void` | Protected; a derived gizmo calls it before building its entities. |
 ### 🎉 New Features
 
 - `Primitive3D` and `Primitive2D`, closed sets of shape records with factories; the mesh builder and every physics package switch over the same set, so a shape missed by one is a compile error, not a mesh that does not match its collider. The round shapes take a `tessellation`, which the enums could not express.
@@ -147,6 +174,7 @@ The seventeen `Add*` and `Show*` extensions that returned `void` now return the 
 - `Skies.Cloudy` and `UseSkybox()` in the Skyboxes package choose the photographed sky for a setup.
 - `entity.AddTo(scene)` and `entity.AddTo(parent)` return the entity, so creation, placement and adding read as one line.
 - `ScreenAnchor`: the overlay, anchored `EntityTextComponent` text and `ShapeBatch.Anchor()` can sit on the middle of an edge or the centre of the screen, not only in a corner; `ScreenAnchor.At(size)` gives the point for any rectangle.
+- `Mass` on `Bepu3DPhysicsOptions`, `Bepu2DPhysicsOptions`, `Bullet3DPhysicsOptions` and `Bullet2DPhysicsOptions`: the mass of the fitted collider shape (Bepu) or the rigid body (Bullet), `null` for the engine's default of 1, so a heavier sphere no longer needs a hand-built compound.
 
 ### 🐞 Bug Fixes
 
@@ -166,5 +194,6 @@ The seventeen `Add*` and `Show*` extensions that returned `void` now return the 
 - `E06_Box2D`: the keys spawn the factory's named models (`Square`, `Rectangle`, `Circle`, `LargeCircle`, `Triangle`, `Capsule`) instead of looking a kind of shape up; a square and a rectangle are the same kind.
 - `E09_3D_PostEffects`: film grain at `Amount = 0.6f` and `GrainSize = 2f` (was 0.35 and 1), so the G key shows in a screenshot.
 ### 🔧 Engineering
+
 
 ### 💪 Other Changes
