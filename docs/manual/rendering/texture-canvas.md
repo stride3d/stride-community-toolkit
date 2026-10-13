@@ -67,7 +67,7 @@ The `TextureCanvas` supports various image manipulations as well as image effect
 
 ### Resample
 The **Resample** method changes the current size of the texture or pixel format while preserving the current content.
-The content will be resized to match the new size if necessary.
+The content will be resized to match the new size if necessary. Setting `Size` or `PixelFormat` does the same for one of the two.
 ```csharp
 canvas.Resample(size: new Size2(512, 512), pixelFormat: PixelFormat.R8G8B8A8_UNorm)
 ```

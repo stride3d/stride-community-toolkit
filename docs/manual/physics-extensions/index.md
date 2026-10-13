@@ -27,7 +27,7 @@ Bullet is maintained, not extended: the package follows every toolkit change and
 
 ### Primitives with colliders
 
-- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bepu chosen, the entity comes with a matching Bepu collider. A [`Bepu3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions) or [`Bepu2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions) passed as the options sets the body component and whether a collider is included; `IncludePhysics = false` on any options leaves the physics out.
+- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bepu chosen, the entity comes with a matching Bepu collider. A [`Bepu3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions) or [`Bepu2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions) passed as the options sets the body component and whether a collider is included; `IncludePhysics = false` on any options leaves the physics out. `Mass` on the options is the mass of the fitted collider shape, where Bepu keeps it.
 
 ### Raycasting
 
@@ -65,7 +65,7 @@ In the `Stride.CommunityToolkit.Bepu` namespace, for giving an arbitrary mesh a 
 
 ### Primitives and colliders
 
-- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bullet chosen, the entity comes with a matching Bullet collider. A [`Bullet3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions) or [`Bullet2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions) passed as the options sets the physics component and whether a collider is included.
+- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bullet chosen, the entity comes with a matching Bullet collider. A [`Bullet3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions) or [`Bullet2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions) passed as the options sets the physics component and whether a collider is included. `Mass` on the options is the mass of the rigid body.
 - [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
 - [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
 
