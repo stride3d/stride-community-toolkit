@@ -1,11 +1,12 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-var random = new Random(1);
+// The five colours of the first examples, one shape after another
+Color[] colours = [new(30, 70, 170), new(240, 150, 60), new(235, 100, 80), new(110, 200, 110), new(190, 130, 230)];
+
 var parallelogramVertices = new Vector2[]
 {
     new(-0.5f, -0.25f),
@@ -34,7 +35,7 @@ void Start(Scene rootScene)
     {
         var entity = game.CreatePrimitive(shape, new()
         {
-            Material = game.CreateFlatMaterial(random.NextColor()),
+            Material = game.CreateFlatMaterial(colours[index % colours.Length]),
         });
 
         entity.Transform.Position = new Vector3(0, 10 + index * 1.5f, 0);
@@ -46,12 +47,12 @@ void Start(Scene rootScene)
 ---example-metadata
 slug: primitives-2d
 title:
-  en: Basic 2D Scene (Multiple Primitives)
-  cs: Základní 2D scéna (Více primitiv)
+  en: 2D Primitives
+  cs: 2D primitiva
 level: Beginner
 category: Shapes
 complexity: 1
-order: 80
+order: 11
 description:
   en: |-
     Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.
@@ -73,9 +74,9 @@ tags:
   - Transform
   - Position
 related:
-  - E08_2D_DebugRender
-  - E01_2D_BasicScene_Bullet
+  - E02_3D_Primitives
   - E01_2D_BasicScene
+  - E08_2D_DebugRender
 enabled: true
 created: 2025-11-30
 ---

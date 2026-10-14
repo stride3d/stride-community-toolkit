@@ -60,6 +60,9 @@ var viewpoint = 0;
 var flightFrom = Vector3.Zero;
 var flightFromRotation = Quaternion.Identity;
 
+// Where every camera flight looks: the middle of the scene, a little above the floor
+var lookTarget = new Vector3(0f, 1.5f, 0f);
+
 using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
@@ -208,7 +211,7 @@ void Update(Scene scene, GameTime time)
         var eye = viewpoints[viewpoint];
 
         camera.Position = flight.Lerp(flightFrom, eye);
-        camera.Rotation = flight.Slerp(flightFromRotation, MathUtilEx.LookRotation(eye, new Vector3(0f, 1.5f, 0f), Vector3.UnitY));
+        camera.Rotation = flight.Slerp(flightFromRotation, MathUtilEx.LookRotation(eye, lookTarget, Vector3.UnitY));
 
         if (flight.IsComplete) flight.Reset();
     }
@@ -269,7 +272,7 @@ void LookFrom(Vector3 eye)
     var camera = game.GetCameraEntity().Transform;
 
     camera.Position = eye;
-    camera.Rotation = MathUtilEx.LookRotation(eye, new Vector3(0f, 1.5f, 0f), Vector3.UnitY);
+    camera.Rotation = MathUtilEx.LookRotation(eye, lookTarget, Vector3.UnitY);
 }
 
 IReadOnlyList<TextElement> BuildOverlayLines() =>

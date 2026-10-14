@@ -20,15 +20,19 @@
     href: basic-2d-scene-bullet.md
   - name: Basic 3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (25)
+- name: C# Beginner (26)
   href: beginner-examples.md
   items:
-  - name: Basic 3D Scene (Eight Primitives)
+  - name: 3D Primitives
     href: primitives-3d.md
+  - name: 2D Primitives
+    href: primitives-2d.md
   - name: Basic Gum UI
     href: gum-stride-ui-basic.md
-  - name: Material
+  - name: 3D Material
     href: material.md
+  - name: 2D Material
+    href: material-2d.md
   - name: Post Effects
     href: post-effects.md
   - name: Mesh Line
@@ -37,14 +41,14 @@
     href: wav-file.md
   - name: Procedural Sound
     href: procedural-sound.md
-  - name: Give me a cube
-    href: give-me-cube-body.md
+  - name: SyncScript - moving a body every frame
+    href: sync-script.md
   - name: Grabber
     href: grabber.md
   - name: Physics Materials
     href: physics-materials.md
-  - name: SyncScript - moving a body every frame
-    href: sync-script.md
+  - name: Give me a cube
+    href: give-me-cube-body.md
   - name: Entity Text (Screen-Space)
     href: entity-text.md
   - name: Easing Basics
@@ -61,8 +65,6 @@
     href: hud-basics.md
   - name: 2D Panels and Text
     href: 2d-scene-panels.md
-  - name: Basic 2D Scene (Multiple Primitives)
-    href: primitives-2d.md
   - name: Falling Shapes with Physics Options (2D)
     href: falling-shapes-physics-2d.md
   - name: Box2D Explosion

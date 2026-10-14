@@ -46,6 +46,14 @@ A raycast sees colliders only. For what the eye sees under a screen point - a me
 game.AddGrabber();
 ```
 
+### Debug views
+
+- [`AddPhysicsDebug()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.AddPhysicsDebug(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color4},System.Boolean,System.Boolean)) - One entity carrying Bepu's two scene-wide debug views: [`CollidableGizmoScript`](xref:Stride.CommunityToolkit.Bepu.CollidableGizmoScript) draws every collider on <kbd>P</kbd>, and [`DebugRenderComponentScript`](xref:Stride.CommunityToolkit.Bepu.DebugRenderComponentScript) turns the physics debug meshes on for every Bepu entity on <kbd>F11</kbd>. Both act on the whole scene, so one entity is all a scene needs; a second copy of either script answers the same key and toggles the first one back.
+
+```csharp
+game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
+```
+
 Every constraint example carries it, so the constrained bodies can be pulled about and the constraints watched doing their work.
 
 ### Convex hulls
