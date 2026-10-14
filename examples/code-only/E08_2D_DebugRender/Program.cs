@@ -48,8 +48,9 @@ void Start(Scene rootScene)
         }
     }
 
-    // Activate debug rendering by pressing P for colliders and F11 for mesh
-    AddPhysicsDebugGizmo(rootScene);
+    // One entity with both debug views, since each acts on the whole scene: P draws the colliders,
+    // F11 the debug meshes
+    game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 
     DebugOverlay.GetOrCreate(game).AddSection("Debug", static () =>
     [
@@ -77,21 +78,6 @@ static void AddSpotLight(Scene rootScene)
     spotLight.Transform.Position = new Vector3(0, -4, 2);
     spotLight.Scene = rootScene;
 }
-
-static void AddPhysicsDebugGizmo(Scene rootScene)
-{
-    var debugGizmoEntity = new Entity("DebugGizmo")
-    {
-        new DebugRenderComponentScript(),
-        new CollidableGizmoScript()
-        {
-            Color = new Color4(0.4f, 0.843f, 0, 0.9f),
-            Visible = false
-        }
-    };
-
-    debugGizmoEntity.Scene = rootScene;
-}
 /*
 ---example-metadata
 slug: debug-render-2d
@@ -105,16 +91,15 @@ description:
   en: |-
     A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is
     actually solving can be seen rather than inferred. P draws the colliders and F11 draws the debug
-    meshes. Both come from components on a single entity that has nothing else to do, which is the
-    cheapest way to add them to any scene. A spot light is included because 2D scenes are lit like any
-    other and look flat without one.
+    meshes. Both come from AddPhysicsDebug, one entity with the two scripts; each acts on the whole
+    scene, so one entity is all any scene needs. A spot light is included because 2D scenes are lit like
+    any other and look flat without one.
 concepts:
-  - Drawing physics colliders with CollidableGizmoScript
-  - Toggling debug meshes with DebugRenderComponentScript
-  - Hanging both off one otherwise empty entity
+  - Both debug views on one entity with AddPhysicsDebug, the colliders on P and the debug meshes on F11
+  - Why one entity is enough, since CollidableGizmoScript and DebugRenderComponentScript act on the whole scene
   - Lighting a 2D scene with a LightSpot
   - Giving each shape its own colour with a flat material
-  - "Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive"
+  - "Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive, AddPhysicsDebug"
 tags:
   - 2D
   - Bepu

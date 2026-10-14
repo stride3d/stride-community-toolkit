@@ -59,6 +59,7 @@ concepts:
   - "Leaving physics out with IncludePhysics = false"
   - Showing or hiding the gizmo with its Visible property
   - Diagnosing a body that does not collide as expected
+  - "The one-call form for a whole scene: game.AddPhysicsDebug()"
   - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
 tags:
   - 3D
