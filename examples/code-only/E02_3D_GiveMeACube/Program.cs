@@ -112,7 +112,7 @@ title:
 level: Beginner
 category: Scripts
 complexity: 2
-order: 40
+order: 50
 description:
   en: |-
     Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
@@ -148,8 +148,9 @@ tags:
   - Collision
   - Cube
 related:
-  - E01_3D_BasicScene
+  - E02_3D_GiveMeACube_SimulationUpdate
   - E02_3D_SyncScript
+  - E01_3D_BasicScene
   - E04_ImGuiNet
 tocName: Give me a cube
 enabled: true

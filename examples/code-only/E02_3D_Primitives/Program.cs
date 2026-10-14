@@ -10,6 +10,9 @@ using Stride.Input;
 
 const string EntityName = "PrimitiveModelGroup";
 
+// The five colours of the first examples, one shape after another
+Color[] colours = [new(30, 70, 170), new(240, 150, 60), new(235, 100, 80), new(110, 200, 110), new(190, 130, 230)];
+
 using var game = new Game();
 
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
@@ -18,6 +21,10 @@ void Start(Scene scene)
 {
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
     game.AddGrabber();
+
+    // One entity for both debug views, since each acts on the whole scene: P draws every collider,
+    // F11 the physics debug meshes
+    game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 
     InitializeDebugOverlay();
     Add3DPrimitives(scene);
@@ -36,31 +43,28 @@ void Add3DPrimitives(Scene scene)
 {
     var primitives = new[]
     {
-        (Type: Primitive3D.Cube(0.5f), Position: new Vector3(-4f, 0.5f, 0), Rotation: (Quaternion?)null, AddDebug: true),
-        (Type: Primitive3D.Box(new Vector3(0.25f, 0.5f, 0.25f)), Position: new Vector3(-2.2f, 0.5f, -4f), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.Cone(0.5f, 3), Position: new Vector3(0, 2, 0), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.Capsule(0.25f, 0.5f), Position: new Vector3(0.01f, 6, 0), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.Sphere(0.25f), Position: new Vector3(0, 8, 0), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.Cylinder(0.25f, 0.5f), Position: new Vector3(0.5f, 10, 0), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.Teapot(), Position: new Vector3(3, 4f, 0), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.Torus(), Position: new Vector3(0, 12, 0), Rotation: null, AddDebug: false),
-        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-8.0f, 2, -3.0f), Rotation: Quaternion.RotationY(MathUtil.DegreesToRadians(75)), AddDebug: false),
-        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-3.5f, 0.5f, 1), Rotation: null, AddDebug: false),
+        (Type: Primitive3D.Cube(0.5f), Position: new Vector3(-4f, 0.5f, 0), Rotation: (Quaternion?)null),
+        (Type: Primitive3D.Box(new Vector3(0.25f, 0.5f, 0.25f)), Position: new Vector3(-2.2f, 0.5f, -4f), Rotation: null),
+        (Type: Primitive3D.Cone(0.5f, 3), Position: new Vector3(0, 2, 0), Rotation: null),
+        (Type: Primitive3D.Capsule(0.25f, 0.5f), Position: new Vector3(0.01f, 6, 0), Rotation: null),
+        (Type: Primitive3D.Sphere(0.25f), Position: new Vector3(0, 8, 0), Rotation: null),
+        (Type: Primitive3D.Cylinder(0.25f, 0.5f), Position: new Vector3(0.5f, 10, 0), Rotation: null),
+        (Type: Primitive3D.Teapot(), Position: new Vector3(3, 4f, 0), Rotation: null),
+        (Type: Primitive3D.Torus(), Position: new Vector3(0, 12, 0), Rotation: null),
+        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-8.0f, 2, -3.0f), Rotation: Quaternion.RotationY(MathUtil.DegreesToRadians(75))),
+        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-3.5f, 0.5f, 1), Rotation: null),
     };
 
-    foreach (var primitive in primitives)
+    foreach (var (index, primitive) in primitives.Index())
     {
-        var entity = CreatePrimitive(primitive.Type, primitive.Position, primitive.Rotation);
-
-        if (primitive.AddDebug)
-            AddDebugComponents(entity);
+        var entity = CreatePrimitive(primitive.Type, primitive.Position, primitive.Rotation, colours[index % colours.Length]);
 
         entity.Scene = scene;
     }
 
-    Entity CreatePrimitive(Primitive3D shape, Vector3 position, Quaternion? rotation)
+    Entity CreatePrimitive(Primitive3D shape, Vector3 position, Quaternion? rotation, Color colour)
     {
-        var entity = game.CreatePrimitive(shape);
+        var entity = game.CreatePrimitive(shape, new() { Material = game.CreateMaterial(colour) });
         entity.Transform.Position = position;
 
         if (rotation.HasValue)
@@ -68,16 +72,6 @@ void Add3DPrimitives(Scene scene)
 
         entity.Name = EntityName;
         return entity;
-    }
-
-    void AddDebugComponents(Entity entity)
-    {
-        entity.Add(new DebugRenderComponentScript());
-        entity.Add(new CollidableGizmoScript()
-        {
-            Color = new Color4(0.4f, 0.843f, 0, 0.9f),
-            Visible = false
-        });
     }
 }
 
@@ -107,7 +101,7 @@ void InitializeDebugOverlay()
 ---example-metadata
 slug: primitives-3d
 title:
-  en: Basic 3D Scene (Eight Primitives)
+  en: 3D Primitives
 level: Beginner
 category: Shapes
 complexity: 2
@@ -124,9 +118,9 @@ concepts:
   - Sizing a primitive through its factory arguments, such as Primitive3D.Cone(0.5f, 3)
   - Rotating an entity with Transform.Rotation
   - Tagging entities with a name so the scene can be torn down and rebuilt
-  - Inspecting generated colliders with CollidableGizmoScript
+  - Inspecting the generated colliders and debug meshes with AddPhysicsDebug, on P and F11
   - Adding keyboard instructions as a DebugOverlay section
-  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddGrabber, AddPhysicsDebug, CreatePrimitive"
 tags:
   - 3D
   - Bepu

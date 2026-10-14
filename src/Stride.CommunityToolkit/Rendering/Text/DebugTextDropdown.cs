@@ -13,10 +13,9 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// until it is needed.
 /// </para>
 /// <para>
-/// Nothing here reads the keyboard on its own - call <see cref="Update"/> once per frame from your
-/// update loop, and <see cref="Draw"/> to render it standalone. Better still, hand <see cref="GetLines"/>
-/// to a <see cref="DebugOverlay"/> section, so the dropdown shares one position and one toggle key
-/// with the camera help and everything else on screen.
+/// Nothing here reads the keyboard or draws on its own - call <see cref="Update"/> once per frame from
+/// your update loop, and hand <see cref="GetLines"/> to a <see cref="DebugOverlay"/> section, so the
+/// dropdown shares one position and one toggle key with the camera help and everything else on screen.
 /// </para>
 /// <para>
 /// Keep every title and label to printable ASCII. The debug text renderer replaces anything outside
@@ -30,7 +29,6 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// {
 ///     Title = "Shape",
 ///     ToggleKey = Keys.C,
-///     Position = new Int2(10, 200),
 ///     Items =
 ///     [
 ///         new(Keys.D1, "Cube", () => Rebuild(Primitive3D.Cube())),
@@ -38,15 +36,14 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 ///     ],
 /// };
 ///
+/// DebugOverlay.GetOrCreate(game).AddSection("Shape", () => shapes.GetLines());
+///
 /// // in Update
 /// shapes.Update(game.Input);
-/// shapes.Draw(game.DebugTextSystem);
 /// </code>
 /// </example>
 public class DebugTextDropdown
 {
-    private const int LineIncrement = 20;
-
     /// <summary>
     /// Gets the name shown after the toggle key, for example <c>Shape</c> in <c>[+] [C] Shape: Sphere</c>.
     /// </summary>
@@ -61,11 +58,6 @@ public class DebugTextDropdown
     /// Gets the entries to choose from.
     /// </summary>
     public required IReadOnlyList<DebugTextDropdownItem> Items { get; init; }
-
-    /// <summary>
-    /// Gets or sets the screen position of the first line, in pixels.
-    /// </summary>
-    public Int2 Position { get; set; }
 
     /// <summary>
     /// Gets or sets the colour of the collapsed line and of the title while expanded.
@@ -187,31 +179,13 @@ public class DebugTextDropdown
     }
 
     /// <summary>
-    /// Draws the dropdown at <see cref="Position"/>.
-    /// </summary>
-    /// <param name="debugTextSystem">The debug text system to draw with.</param>
-    public void Draw(Profiling.DebugTextSystem debugTextSystem)
-    {
-        ArgumentNullException.ThrowIfNull(debugTextSystem);
-
-        var y = Position.Y;
-
-        foreach (var line in GetLines())
-        {
-            debugTextSystem.Print(line.Text, new Int2(Position.X, y), line.Color);
-
-            y += LineIncrement;
-        }
-    }
-
-    /// <summary>
     /// Builds the lines the dropdown currently occupies: one when collapsed, one per entry plus a
     /// title when expanded.
     /// </summary>
     /// <returns>The lines, in display order.</returns>
     /// <remarks>
-    /// Use this to hand the dropdown to a <see cref="DebugOverlay"/> section rather than positioning it
-    /// yourself.
+    /// The <see cref="DebugOverlay"/> section the lines are handed to draws them; the dropdown has no
+    /// position of its own.
     /// </remarks>
     public IReadOnlyList<TextElement> GetLines()
     {

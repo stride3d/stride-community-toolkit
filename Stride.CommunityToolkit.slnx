@@ -16,6 +16,7 @@
     <Project Path="examples/code-only/E02_2D_Easing/E02_2D_Easing.csproj" />
     <Project Path="examples/code-only/E02_2D_EasingBasics/E02_2D_EasingBasics.csproj" />
     <Project Path="examples/code-only/E02_2D_EasingInGame/E02_2D_EasingInGame.csproj" />
+    <Project Path="examples/code-only/E02_2D_Material/E02_2D_Material.csproj" />
     <Project Path="examples/code-only/E02_2D_Primitives/E02_2D_Primitives.csproj" />
     <Project Path="examples/code-only/E02_3D_EasingInGame/E02_3D_EasingInGame.csproj" />
     <Project Path="examples/code-only/E02_3D_GiveMeACube/E02_3D_GiveMeACube.csproj" />

@@ -153,7 +153,7 @@ static List<TextElement> GenerateInstructions(float skyBoxLightIntensity)
 ---example-metadata
 slug: material
 title:
-  en: Material
+  en: 3D Material
 level: Beginner
 category: Rendering
 complexity: 2
@@ -184,6 +184,7 @@ tags:
   - Metalness
   - Input
 related:
+  - E02_2D_Material
   - E01_3D_BasicScene
   - E02_3D_Material_Gallery
   - E02_3D_MaterialPreview

@@ -30,7 +30,7 @@ title:
 level: Beginner
 category: Scripts
 complexity: 2
-order: 50
+order: 40
 description:
   en: |-
     A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame. The
