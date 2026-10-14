@@ -13,10 +13,15 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene rootScene)
 {
-    var entity = game.CreatePrimitive(Primitive3D.Cube());
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
-    entity.Add(new DebugRenderComponentScript() { Visible = true });
-    entity.Scene = rootScene;
+    // One DebugRenderComponent turns the wireframe on for every Bepu entity in the scene, so the script
+    // lives on an entity that has nothing else to do. game.AddPhysicsDebug() makes this entity, with
+    // the collider gizmos too
+    var debug = new Entity("Physics Debug") { new DebugRenderComponentScript { Visible = true } };
+    debug.Scene = rootScene;
+
+    var cube = game.CreatePrimitive(Primitive3D.Cube());
+    cube.Transform.Position = new Vector3(1f, 0.5f, 3f);
+    cube.Scene = rootScene;
 
     CreateSpheres(rootScene, 6);
 }
@@ -43,12 +48,12 @@ complexity: 2
 order: 20
 description:
   en: |-
-    The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of an entity's
-    own mesh rather than its collider. Having both on the same scene is how you tell the two apart -
+    The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of every
+    entity's mesh rather than its collider, from one script on an empty entity. Having both on the same scene is how you tell the two apart -
     when a body behaves oddly, the question is usually whether the mesh and the collider agree, and each
     script answers one half of that.
 concepts:
-  - Drawing an entity's mesh as a wireframe overlay
+  - Drawing every entity's mesh as a wireframe overlay, from one script on an empty entity
   - "How this differs from CollidableGizmoScript, which draws the collider"
   - Toggling the overlay with its Visible property
   - Comparing mesh against collider when a body misbehaves

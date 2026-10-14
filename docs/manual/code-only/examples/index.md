@@ -962,7 +962,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-render-component.md">Debug Render Component</a></h3>
                 <p><span class="badge text-bg-secondary">Debug</span></p>
-                <p class="card-text">The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of an entity's own mesh rather than its collider.</p>
+                <p class="card-text">The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of every entity's mesh rather than its collider, from one script...</p>
             </div>
         </div>
     </div>

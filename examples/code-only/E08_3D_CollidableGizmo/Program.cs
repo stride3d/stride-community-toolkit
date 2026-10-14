@@ -13,17 +13,25 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene rootScene)
 {
-    var entity = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
+    // The script draws every collider in the scene, not its own entity's, so it lives on an entity
+    // that has nothing else to do. game.AddPhysicsDebug() makes this entity, with the debug meshes too
+    var debug = new Entity("Physics Debug")
+    {
+        new CollidableGizmoScript
+        {
+            Color = new Color4(0.4f, 0.843f, 0, 0.9f),
+            Visible = true
+        }
+    };
+    debug.Scene = rootScene;
+
+    // A cube without physics beside the row: no gizmo appears for it, because physics knows nothing of it
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
     {
         IncludePhysics = false
     });
-    entity.Transform.Position = new Vector3(1f, 0.5f, 3f);
-    entity.Add(new CollidableGizmoScript()
-    {
-        Color = new Color4(0.4f, 0.843f, 0, 0.9f),
-        Visible = true
-    });
-    entity.Scene = rootScene;
+    cube.Transform.Position = new Vector3(1f, 0.5f, 3f);
+    cube.Scene = rootScene;
 
     CreateCubes(rootScene, 6);
 }
@@ -51,11 +59,13 @@ order: 10
 description:
   en: |-
     A single-purpose demo of CollidableGizmoScript, which draws the collider Bepu is actually using so
-    it can be compared against the model you think you gave it. The cube here is created with
-    IncludePhysics set to false and the gizmo left visible, which makes the point directly: the gizmo
-    reports what physics knows about, and if nothing is drawn, nothing is there.
+    it can be compared against the model you think you gave it. The script draws every collider in the
+    scene, so it sits on an empty entity of its own. The cube beside the row is created with
+    IncludePhysics set to false, which makes the point directly: the gizmo reports what physics knows
+    about, and if nothing is drawn, nothing is there.
 concepts:
   - Drawing the collider a body is really using
+  - Hosting a scene-wide script on an empty entity
   - "Leaving physics out with IncludePhysics = false"
   - Showing or hiding the gizmo with its Visible property
   - Diagnosing a body that does not collide as expected

@@ -9,7 +9,7 @@ Playgrounds and demonstrations that are not teaching one specific lesson, worth 
 ## Examples Overview
 
 - [Collidable Gizmo](collidable-gizmo.md): A single-purpose demo of CollidableGizmoScript, which draws the collider Bepu is actually using so it can be compared against the model you think you gave it.
-- [Debug Render Component](debug-render-component.md): The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of an entity's own mesh rather than its collider.
+- [Debug Render Component](debug-render-component.md): The companion to the collidable gizmo: DebugRenderComponentScript draws the wireframe of every entity's mesh rather than its collider, from one script on an empty entity.
 
 > [!NOTE]
 > Each example references a handful of toolkit packages. The `using` directives at the top of
