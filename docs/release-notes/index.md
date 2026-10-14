@@ -200,7 +200,7 @@ Nine namespaces that only mirrored a source folder are folded into the area a us
 - `E09_3D_PostEffects`: film grain at `Amount = 0.6f` and `GrainSize = 2f` (was 0.35 and 1), so the G key shows in a screenshot.
 ### 🔧 Engineering
 
-- Three NuGet audit advisories are suppressed in `Directory.Build.props` the way the ImageSharp ones are: two on `System.Security.Cryptography.Pkcs` 8.0.1, reached through `Stride.AssetCompiler`, until Stride moves off that version, and one on the SignalR client 10.0.12 of `E13_SignalR`, until the patched 10.0.13 reaches the feed.
+- NuGet packages bumped. Two audit advisories on `System.Security.Cryptography.Pkcs` 8.0.1, reached through `Stride.AssetCompiler`, are suppressed in `Directory.Build.props` the way the ImageSharp ones are, until Stride moves off that version.
 
 
 ### 💪 Other Changes
