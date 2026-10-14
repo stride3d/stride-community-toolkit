@@ -103,11 +103,21 @@ Prefer a list? Each level has its own page, linked from the table of contents.
 <div class="row g-4 mb-4">
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/primitives-3d.webp" class="card-img-top" alt="Screenshot of the Basic 3D Scene (Eight Primitives) example" width="1280" height="720" loading="lazy">
+            <img src="media/primitives-3d.webp" class="card-img-top" alt="Screenshot of the 3D Primitives example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-3d.md">Basic 3D Scene (Eight Primitives)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-3d.md">3D Primitives</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">Eight of the toolkit's 3D primitives - cube, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/primitives-2d.webp" class="card-img-top" alt="Screenshot of the 2D Primitives example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-2d.md">2D Primitives</a></h3>
+                <p><span class="badge text-bg-secondary">Shapes</span></p>
+                <p class="card-text">Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.</p>
             </div>
         </div>
     </div>
@@ -123,11 +133,21 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/material.webp" class="card-img-top" alt="Screenshot of the Material example" width="1280" height="720" loading="lazy">
+            <img src="media/material.webp" class="card-img-top" alt="Screenshot of the 3D Material example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="material.md">Material</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="material.md">3D Material</a></h3>
                 <p><span class="badge text-bg-secondary">Rendering</span></p>
                 <p class="card-text">The four numbers of a material, one per row of cubes: a glossiness sweep from rough to mirror, a metalness sweep from dielectric to metal, and a front...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/material-2d.webp" class="card-img-top" alt="Screenshot of the 2D Material example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="material-2d.md">2D Material</a></h3>
+                <p><span class="badge text-bg-secondary">Rendering</span></p>
+                <p class="card-text">What each material helper does on a flat shape, in four rows of squares: the flat material a 2D scene wants, the same colours as a lit material, black...</p>
             </div>
         </div>
     </div>
@@ -173,11 +193,11 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/give-me-cube-body.webp" class="card-img-top" alt="Screenshot of the Give Me a Cube example" width="1280" height="720" loading="lazy">
+            <img src="media/sync-script.webp" class="card-img-top" alt="Screenshot of the SyncScript - moving a body every frame example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="give-me-cube-body.md">Give Me a Cube</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="sync-script.md">SyncScript - moving a body every frame</a></h3>
                 <p><span class="badge text-bg-secondary">Scripts</span></p>
-                <p class="card-text">Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.</p>
+                <p class="card-text">A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.</p>
             </div>
         </div>
     </div>
@@ -203,11 +223,11 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/sync-script.webp" class="card-img-top" alt="Screenshot of the SyncScript - moving a body every frame example" width="1280" height="720" loading="lazy">
+            <img src="media/give-me-cube-body.webp" class="card-img-top" alt="Screenshot of the Give Me a Cube example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="sync-script.md">SyncScript - moving a body every frame</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="give-me-cube-body.md">Give Me a Cube</a></h3>
                 <p><span class="badge text-bg-secondary">Scripts</span></p>
-                <p class="card-text">A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.</p>
+                <p class="card-text">Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.</p>
             </div>
         </div>
     </div>
@@ -288,16 +308,6 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="2d-scene-panels.md">2D Panels and Text</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
                 <p class="card-text">Twenty-four HUD panel recipes side by side, each one property away from the last: fill only, border only, transparent fill over a stripe that proves...</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-xxl-4 col-md-6">
-        <div class="card h-100">
-            <img src="media/primitives-2d.webp" class="card-img-top" alt="Screenshot of the Basic 2D Scene (Multiple Primitives) example" width="1280" height="720" loading="lazy">
-            <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-2d.md">Basic 2D Scene (Multiple Primitives)</a></h3>
-                <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.</p>
             </div>
         </div>
     </div>

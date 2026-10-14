@@ -167,9 +167,6 @@ unscaled pixels overrides the calculation entirely.
 - **Not part of the graphics compositor.** It draws straight to the back buffer after everything else,
   so it is always on top and unaffected by post effects, and it needs nothing registered in the
   compositor.
-- **Not the `DebugTextDropdown.Draw(DebugTextSystem)` path.** A dropdown drawn standalone that way
-  still uses Stride's bitmap text at its own position; hand its `GetLines()` to the overlay instead to
-  get the font, scale, background and hide key.
 - **Not a UI toolkit.** One block of lines in a corner. Anything laid out in the scene wants
   [entity text](entity-text.md) or [world text](world-text.md); anything interactive wants Stride UI
   or the ImGui package.

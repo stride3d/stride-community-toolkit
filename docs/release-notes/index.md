@@ -164,6 +164,7 @@ Nine namespaces that only mirrored a source folder are folded into the area a us
 | `TextureCanvas.Size = …`, `PixelFormat = …` | Resample the canvas | The setters assigned the field before the resample compared against it, so nothing ever happened. `Resample()` honours its `samplingPattern` and the relative `DrawTexture` overload its destination rectangle. |
 | `SetMaxFPS(0)`, `SetFocusLostFPS(0)` threw | No cap | Zero or less removes the minimum update interval. |
 | `AxialGizmoBase.Create()` returned `null` | `CreateMaterials()`, `void` | Protected; a derived gizmo calls it before building its entities. |
+| `DebugTextDropdown.Draw()`, `Position` | Gone | The dropdown is lines for a `DebugOverlay` section, through `GetLines()`; the standalone path ignored the overlay's keys and nothing used it. |
 ### 🎉 New Features
 
 - `Primitive3D` and `Primitive2D`, closed sets of shape records with factories; the mesh builder and every physics package switch over the same set, so a shape missed by one is a compile error, not a mesh that does not match its collider. The round shapes take a `tessellation`, which the enums could not express.
@@ -174,6 +175,7 @@ Nine namespaces that only mirrored a source folder are folded into the area a us
 - `Skies.Cloudy` and `UseSkybox()` in the Skyboxes package choose the photographed sky for a setup.
 - `entity.AddTo(scene)` and `entity.AddTo(parent)` return the entity, so creation, placement and adding read as one line.
 - `ScreenAnchor`: the overlay, anchored `EntityTextComponent` text and `ShapeBatch.Anchor()` can sit on the middle of an edge or the centre of the screen, not only in a corner; `ScreenAnchor.At(size)` gives the point for any rectangle.
+- `game.AddPhysicsDebug()` in the Bepu package: one entity with the collidable gizmos (P) and the physics debug meshes (F11), both of which act on the whole scene, so a second copy of either script would only toggle the first one back.
 - `Mass` on `Bepu3DPhysicsOptions`, `Bepu2DPhysicsOptions`, `Bullet3DPhysicsOptions` and `Bullet2DPhysicsOptions`: the mass of the fitted collider shape (Bepu) or the rigid body (Bullet), `null` for the engine's default of 1, so a heavier sphere no longer needs a hand-built compound.
 
 ### 🐞 Bug Fixes
@@ -189,11 +191,16 @@ Nine namespaces that only mirrored a source folder are folded into the area a us
 - Create Project: the command-line steps are Windows and Linux tabs. The Linux tab adds the `linux-x64` runtime identifier, `Stride.CommunityToolkit.Linux` as its own step for a distribution's `dotnet` package, the first-build workaround for the asset compiler's signature check (`DOTNET_NUGET_SIGNATURE_VERIFICATION=false`), and the route that builds for Linux from Windows with `StridePlatform`.
 ### 🎓 Examples
 
+- `E02_2D_Material`, the 2D twin of `E02_3D_Material`: what each material helper does on a flat shape, with a checkerboard built in code.
+- The E02 cluster lined up with E01: a twin directly after its 3D example with matching titles (`3D Primitives` / `2D Primitives`, `3D Material` / `2D Material`), the script examples ordered lean to full (`E02_3D_SyncScript`, `E02_3D_GiveMeACube`, then `_SimulationUpdate`), both primitives examples in the five colours of the first examples, and `E02_3D_Primitives` and `E08_2D_DebugRender` on `AddPhysicsDebug()`, so P and F11 do what the overlay says for every shape.
+
 - Every example uses the shape factories; a size that was a `Size` option is now the factory's argument, so `Primitive3D.Cylinder(0.3f, 2.5f)` reads as a radius and a height where `new Vector3(0.3f, 0, 2.5f)` did not.
 - Every program, the F# and VB ones, the gold scenes and the tests run through a scene setup: `new SceneSetup3D().UseBepu().UseSkybox()` for the typical one, and `var sceneSetup = new SceneSetup3D { Camera = CameraSetup.Perspective(position, rotation).WithController(), Ground = …, Profiler = true }` where the program aims its camera or frames its scene, so `Start` holds the scene's own content only; `SceneSetup.None` for the tests.
 - `E06_Box2D`: the keys spawn the factory's named models (`Square`, `Rectangle`, `Circle`, `LargeCircle`, `Triangle`, `Capsule`) instead of looking a kind of shape up; a square and a rectangle are the same kind.
 - `E09_3D_PostEffects`: film grain at `Amount = 0.6f` and `GrainSize = 2f` (was 0.35 and 1), so the G key shows in a screenshot.
 ### 🔧 Engineering
+
+- Three NuGet audit advisories are suppressed in `Directory.Build.props` the way the ImageSharp ones are: two on `System.Security.Cryptography.Pkcs` 8.0.1, reached through `Stride.AssetCompiler`, until Stride moves off that version, and one on the SignalR client 10.0.12 of `E13_SignalR`, until the patched 10.0.13 reaches the feed.
 
 
 ### 💪 Other Changes
