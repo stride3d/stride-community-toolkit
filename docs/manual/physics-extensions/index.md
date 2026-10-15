@@ -46,6 +46,8 @@ A raycast sees colliders only. For what the eye sees under a screen point - a me
 game.AddGrabber();
 ```
 
+The same call serves a 2D scene: under an orthographic camera the pick ray runs along the view, a `Body2DComponent` is carried across its plane, and the mouse wheel does nothing, since depth there is the plane itself.
+
 ### Debug views
 
 - [`AddPhysicsDebug()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.AddPhysicsDebug(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color4},System.Boolean,System.Boolean)) - One entity carrying Bepu's two scene-wide debug views: [`CollidableGizmoScript`](xref:Stride.CommunityToolkit.Bepu.CollidableGizmoScript) draws every collider on <kbd>P</kbd>, and [`DebugRenderComponentScript`](xref:Stride.CommunityToolkit.Bepu.DebugRenderComponentScript) turns the physics debug meshes on for every Bepu entity on <kbd>F11</kbd>. Both act on the whole scene, so one entity is all a scene needs; a second copy of either script answers the same key and toggles the first one back.

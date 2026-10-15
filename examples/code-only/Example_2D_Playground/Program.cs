@@ -52,8 +52,13 @@ void Start(Scene scene)
 
     AddShapes(scene, shapes.Length);
 
+    // The 3D grabber on the 2D camera: the orthographic pick ray runs along Z and the servo pulls
+    // the body across the plane, so nothing 2D-specific is needed
+    game.AddGrabber();
+
     DebugOverlay.GetOrCreate(game).AddSection("2D playground", () =>
     [
+        new("Left mouse", "Grab a shape, drag it, let go to throw", Color.Gold),
         new("Space", "Add ten shapes", Color.Gold),
         new("X", "Remove every shape", Color.Gold),
         new(""),

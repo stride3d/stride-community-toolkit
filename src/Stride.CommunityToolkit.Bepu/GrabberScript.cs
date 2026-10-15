@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Engine.Processors;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Bepu;
@@ -32,6 +33,11 @@ namespace Stride.CommunityToolkit.Bepu;
 /// Keys: <see cref="Button"/> to grab and hold; the mouse wheel moves the carry point along the
 /// ray; <see cref="RotateKey"/> plus mouse movement turns the held body. All configurable, and none
 /// of them clash with the toolkit's camera controllers, which look with the right button.
+/// </para>
+/// <para>
+/// A 2D scene needs nothing more: under an orthographic camera the pick ray runs along the view, so
+/// a <see cref="Body2DComponent"/> is carried across its plane, and the wheel does nothing, since
+/// depth there is the plane itself.
 /// </para>
 /// </remarks>
 /// <example>
@@ -222,7 +228,10 @@ public class GrabberScript : SyncScript
         if (_camera is null || Held is not { } held || _linear is null)
             return;
 
-        HoldDistance = MathF.Max(MinimumHoldDistance, HoldDistance + Input.MouseWheelDelta * WheelDistanceStep);
+        // Under an orthographic camera depth is the plane itself: a 2D body pulled along the ray would
+        // leave it and fight its own plane lock, so the wheel changes nothing there
+        if (_camera.Projection != CameraProjectionMode.Orthographic)
+            HoldDistance = MathF.Max(MinimumHoldDistance, HoldDistance + Input.MouseWheelDelta * WheelDistanceStep);
 
         var ray = _camera.GetPickRay(Input.MousePosition);
 

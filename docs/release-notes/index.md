@@ -6,6 +6,30 @@ Welcome to the Release Notes for the **Stride Community Toolkit**. This section 
 
 The Stride Community Toolkit is developed with rapid iteration in mind. It moves at a faster development pace compared to the Stride Game Engine. As a result, you should expect frequent updates that may introduce breaking changes. This fast-paced approach allows us to incorporate community feedback quickly and continue improving the toolkit.
 
+## 1.0.0.0-preview.68
+
+## What's Changed
+
+### 💥 Breaking Changes
+
+### 🎉 New Features
+
+### 🐞 Bug Fixes
+
+### 🎨 Rendering
+
+### ✨ Enhancement
+
+- `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view, a `Body2DComponent` is carried across its plane, and the mouse wheel does nothing there, since depth is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D.
+
+### 📄 Docs
+
+### 🎓 Examples
+
+### 🔧 Engineering
+
+### 💪 Other Changes
+
 ## 1.0.0.0-preview.67
 
 ## What's Changed
