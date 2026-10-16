@@ -72,6 +72,8 @@
     href: rendering/entity-text.md
   - name: World Text
     href: rendering/world-text.md
+  - name: 3D Text
+    href: rendering/text-3d.md
   - name: Debug Overlay
     href: rendering/debug-overlay.md
   - name: Debug Shapes

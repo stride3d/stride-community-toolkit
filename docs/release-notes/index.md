@@ -12,9 +12,28 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 💥 Breaking Changes
 
+#### Lettering comes from fonts
+
+`LetterMeshFactory`, with its 38 hand-authored glyphs, is gone; `TextMesh` builds solid lettering from any font, with the toolkit's embedded Open Sans as the default.
+
+| Before | After | Note |
+|---|---|---|
+| `LetterMeshFactory.CreateTextMeshDraw(device, "XYZ")` | `TextMesh.CreateMeshDraw(device, MeshFont.Default, "XYZ")` | In `Stride.CommunityToolkit.Rendering.Text`. Any character the font has, upper and lower case, digits, punctuation. |
+| `CreateTextMeshDraw(..., depth: 0.3f, spacing: 0.1f, centerOrigin: true)` | `new TextMeshOptions { Depth = 0.3f, LetterSpacing = 0.1f, Anchor = TextAnchor.MiddleCenter }` | `Size` is world units per EM; the old glyphs were one unit tall, a capital is now about 0.7 of `Size`. |
+| `LetterMeshFactory.SupportedCharacters`, `TryGetOutlines` | `font.HasGlyph(c)`, `font.GetGlyph(c)` | A glyph the font lacks draws its "missing glyph" box instead of throwing. |
+
+- `EarClipping.Triangulate(outer, holes)` is new; the one-polygon overload is unchanged. `MeshBuilder.AddExtrudedPolygon` is unchanged.
+
 ### 🎉 New Features
 
+- `MeshFont`: a font file opened for its glyph outlines through the FreeType the engine ships, so TrueType, OpenType and collections work on every platform. `MeshFont.Default` is an embedded Open Sans Regular; `Load(path)`, `Load(bytes)` and `FromFamily(family, style)` open any other. Outlines come back in EM units as curves (`GlyphOutline`, `GlyphContour`, `OutlineSegment`) and flatten into polygons with their holes sorted out (`GlyphShape`).
+- `TextMesh`: solid 3D text from a `MeshFont`. `Create` gives CPU mesh data, `CreateMeshDraw` uploads it, `CreateGlyphs` gives one centred mesh per glyph for a body or an animation per letter, `Measure` gives the block. Lines, alignment, letter and line spacing, curve quality, the nine-point anchor, and texture coordinates on caps and walls, through `TextMeshOptions`.
+- `Primitive3D.Text`: lettering as a shape, so `CreatePrimitive` gives it a material and a collider of one convex hull per glyph, on Bepu (`TextCollider`) and on Bullet.
+- `ToMeshDraw(device)` on `GeometricMeshData<VertexPositionNormalTexture>`, for any procedural mesh data.
+
 ### 🐞 Bug Fixes
+
+- `E20_3D_CubeCollapse`: the tower spread apart as it spawned. Since the scene setup chose Bepu (preview.67), `CreatePrimitive` gave every cube a dynamic body of its own on top of the spawner's `SlidingCubeComponent`, and the two pushed each other apart; the cube is now created with `IncludePhysics = false`.
 
 ### 🎨 Rendering
 
@@ -25,10 +44,12 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
-- The glossary is in the top navigation, and defines gizmo and mesh collider.
+- The glossary is in the top navigation, and defines gizmo, mesh collider, glyph and EM.
+- A manual page for 3D text (`rendering/text-3d.md`); the MeshBuilder page points at it.
 
 ### 🎓 Examples
 
+- `E03_3D_MeshText` is 3D text from a font: the embedded font, an installed font found by family, lines that align in one mesh, the frame counter, and a word with physics through `Primitive3D.Text`. `E07_3D_ProceduralGeometry` and `E20_3D_CubeCollapse` use `TextMesh` for their lettering.
 - `E05_3D_MeshColliders`: a convex hull against a mesh collider on the same ring model, with a ball resting on the hull's lid and falling through the mesh's hole; a mesh sphere with a ball outside and one inside shows that a mesh has no inside; a moving mesh ring lands on a mesh ring. The overlay prints where each dropped thing came to rest, measured, and P draws the colliders.
 - A grabber in every Bepu example with bodies to pick up and a free left mouse button: `E01_2D_FallingShapes`, `E02_2D_Primitives`, `E04_2D_SpawnMenu`, `E05_2D_FallingShapes`, `E08_2D_DebugRender`, `E10_2D_StressPile`, `E01_3D_FallingShapes`, `E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent`, one line each; the overlay says so where there is one.
 

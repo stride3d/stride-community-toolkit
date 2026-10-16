@@ -92,7 +92,7 @@
     href: cylinder-mesh.md
   - name: Partial Torus Mesh
     href: partial-torus-mesh.md
-  - name: 3D Letters (Mesh Text)
+  - name: 3D Text from a Font
     href: letters-3d.md
   - name: Give Me a Cube (SimulationUpdate)
     href: simulation-update.md

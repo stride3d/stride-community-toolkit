@@ -172,17 +172,9 @@ var normal = meshBuilder.WithNormal<Vector3>();
 meshBuilder.AddExtrudedPolygon(outline, depth: 0.25f, position, normal);
 ```
 
-Built on top of it, `LetterMeshFactory` produces solid 3D lettering from glyph outlines authored in
-code - real geometry that is lit and shadowed, unlike the font-based `EntityTextComponent` and
-`WorldTextComponent`:
-
-```csharp
-var draw = LetterMeshFactory.CreateTextMeshDraw(graphicsDevice, "XYZ");
-```
-
-Only the characters in `LetterMeshFactory.SupportedCharacters` exist; each new glyph is a small
-hand-authored polygon, which is the price of staying cross-platform - extracting real font outlines
-at runtime would require DirectWrite, which is Windows-only.
+Lettering from a real font, holes and all, is [3D Text](text-3d.md): `TextMesh` reads a font's
+glyph outlines, triangulates them with `EarClipping.Triangulate(outer, holes)` and extrudes them the
+same way.
 
 ## Custom pixel formats
 
