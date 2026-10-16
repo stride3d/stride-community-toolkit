@@ -31,6 +31,9 @@ game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     foreach (var (index, shape) in shapes.Index())
     {
         var entity = game.CreatePrimitive(shape, new()
@@ -64,7 +67,7 @@ concepts:
   - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
   - Positioning entities with Transform.Position
   - Adding entities to a Scene (rootScene)
-  - "Using helpers: SceneSetup2D"
+  - "Using helpers: SceneSetup2D, AddGrabber"
 tags:
   - 2D
   - Bepu

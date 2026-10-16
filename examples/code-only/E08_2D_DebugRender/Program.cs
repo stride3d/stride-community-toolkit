@@ -25,6 +25,9 @@ game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Bepu 2D Physics Primitives";
 
@@ -54,6 +57,7 @@ void Start(Scene rootScene)
 
     DebugOverlay.GetOrCreate(game).AddSection("Debug", static () =>
     [
+        new("Left mouse", "Grab a shape, drag it, let go to throw", Color.Yellow),
         new("F11", "Mesh wireframes", Color.Yellow),
         new("P", "Collider outlines", Color.Yellow),
     ]);
@@ -99,7 +103,7 @@ concepts:
   - Why one entity is enough, since CollidableGizmoScript and DebugRenderComponentScript act on the whole scene
   - Lighting a 2D scene with a LightSpot
   - Giving each shape its own colour with a flat material
-  - "Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive, AddPhysicsDebug"
+  - "Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive, AddPhysicsDebug, AddGrabber"
 tags:
   - 2D
   - Bepu
