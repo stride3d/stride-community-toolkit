@@ -20,7 +20,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic 3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (26)
+- name: C# Beginner (27)
   href: beginner-examples.md
   items:
   - name: 3D Primitives
@@ -47,6 +47,8 @@
     href: grabber.md
   - name: Physics Materials
     href: physics-materials.md
+  - name: Mesh Colliders
+    href: mesh-colliders.md
   - name: Give me a cube
     href: give-me-cube-body.md
   - name: Entity Text (Screen-Space)

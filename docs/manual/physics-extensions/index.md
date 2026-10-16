@@ -65,6 +65,18 @@ In the `Stride.CommunityToolkit.Bepu` namespace, for giving an arbitrary mesh a 
 - [`ToConvexHullCollider()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToConvexHullCollider(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Wraps mesh data in a single convex hull. Cheap, but it fills in any concave detail.
 - [`ToDecomposedHulls()`](xref:Stride.CommunityToolkit.Bepu.ConvexHullColliderExtensions.ToDecomposedHulls(Stride.Graphics.GeometricMeshData{Stride.Graphics.VertexPositionNormalTexture})) - Splits the mesh into several hulls so concave shapes collide correctly. More accurate, more expensive to build.
 
+### Mesh colliders
+
+The engine's `MeshCollider` is the model's own triangles, so a hole stays a hole where a hull would fill it. It needs the model, so it is attached once the entity has one: create the primitive with `IncludePhysics = false`, then add the component.
+
+```csharp
+var ring = game.CreatePrimitive(Primitive3D.Torus(1.2f, 0.35f), new Bepu3DPhysicsOptions { IncludePhysics = false });
+
+ring.Add(new StaticComponent { Collider = new MeshCollider { Model = ring.Get<ModelComponent>().Model, Closed = true } });
+```
+
+What the triangles are not, measured in `E05_3D_MeshColliders`: a mesh is a surface with no inside, so a body that starts inside a closed mesh falls out through it; two meshes do meet, triangle against triangle, so a moving mesh works but costs more than a hull. `Closed` says the surface has no holes and is what the inertia of a moving mesh is computed from. The entity's scale scales the mesh.
+
 ## Bullet
 
 ### Scene setup

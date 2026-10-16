@@ -20,6 +20,7 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [SyncScript - moving a body every frame](sync-script.md): A cube driven in a circle by a SyncScript, which is the ordinary way to run code every frame.
 - [Grabber](grabber.md): A gravity gun: click any body to pick it up, carry it on the end of the camera ray, and let go - with its velocity, so a flick throws it.
 - [Physics Materials](physics-materials.md): How to make something bouncy and how to make something slippery.
+- [Mesh Colliders](mesh-colliders.md): A collider made from real geometry, two ways: a convex hull wraps the model in the smallest convex shape that holds it, so a ring becomes a disc, and a mesh collider is the model's own triangles, so the hole stays a hole.
 - [Give Me a Cube](give-me-cube-body.md): Add behaviour to an entity with a SyncScript component instead of the update callback of game.Run.
 - [Entity Text (Screen-Space)](entity-text.md): A gallery of everything EntityTextComponent can do, one feature per pole: anchoring, shadows, backgrounds, scaling, rotation, opacity, distance fading, several texts on one entity, and HUD text pinned to window corners that survives resizing.
 - [Easing Basics](easing-basics.md): Easing from the ground up, in four lanes that move a disc over the same two seconds: by hand with no easing, by hand with one formula, with the toolkit's easing functions, and with a Tween.
