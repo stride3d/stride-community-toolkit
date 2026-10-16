@@ -1,6 +1,7 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -37,14 +38,14 @@ void CreateLetterEntity(Scene rootScene)
     // letters themselves are turning
     var entity = new Entity { Scene = rootScene, Transform = { Position = new Vector3(-1.5f, 0, -2.5f) } };
 
-    // Not the gallery's shared material: that one reads colour from a vertex stream, and the letter
-    // mesh has position and normal only, so it needs a material with a colour of its own
+    // Not the gallery's shared material: that one reads colour from a vertex stream, and the text
+    // mesh has no colour stream, so it needs a material with a colour of its own
     var model = new Model
     {
         new MaterialInstance { Material = game.CreateMaterial(Color.Gold, metalness: 0.1f, glossiness: 0.4f) },
         new Mesh
         {
-            Draw = LetterMeshFactory.CreateTextMeshDraw(game.GraphicsDevice, "XYZ"),
+            Draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "XYZ"),
             MaterialIndex = 0
         }
     };

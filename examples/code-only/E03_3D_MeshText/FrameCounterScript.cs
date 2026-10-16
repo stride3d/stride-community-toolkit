@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
 using Stride.Rendering;
 
@@ -10,13 +10,15 @@ namespace E03_3D_MeshText;
 /// <remarks>
 /// This is the worst case for mesh text - a value that changes every single frame - and it is here
 /// on purpose, because it makes the one rule of rebuilding impossible to miss: release the old
-/// buffers first. <c>CreateTextMeshDraw</c> hands the caller GPU buffers that no content manager
+/// buffers first. <c>TextMesh.CreateMeshDraw</c> hands the caller GPU buffers that no content manager
 /// tracks, so swapping in a new model without disposing the old one leaks a buffer pair per rebuild
 /// - at hundreds of frames a second, megabytes per second. For a HUD counter in a real game, prefer
 /// <c>EntityTextComponent</c>, which redraws a font instead of rebuilding geometry.
 /// </remarks>
 public class FrameCounterScript : SyncScript
 {
+    private readonly TextMeshOptions _options = new() { Size = 1.2f, Anchor = TextAnchor.MiddleCenter };
+
     private readonly ModelComponent _modelComponent = new();
     private int _frames;
     private string _shown = string.Empty;
@@ -47,7 +49,7 @@ public class FrameCounterScript : SyncScript
             new MaterialInstance { Material = Material },
             new Mesh
             {
-                Draw = LetterMeshFactory.CreateTextMeshDraw(GraphicsDevice, text, centerOrigin: true),
+                Draw = TextMesh.CreateMeshDraw(GraphicsDevice, MeshFont.Default, text, _options),
                 MaterialIndex = 0
             }
         };
