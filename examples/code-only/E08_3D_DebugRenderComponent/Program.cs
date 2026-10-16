@@ -13,6 +13,9 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     // One DebugRenderComponent turns the wireframe on for every Bepu entity in the scene, so the script
     // lives on an entity that has nothing else to do. game.AddPhysicsDebug() makes this entity, with
     // the collider gizmos too
@@ -58,7 +61,7 @@ concepts:
   - Toggling the overlay with its Visible property
   - Comparing mesh against collider when a body misbehaves
   - "The one-call form for a whole scene: game.AddPhysicsDebug()"
-  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive, AddGrabber"
 tags:
   - 3D
   - Bepu

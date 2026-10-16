@@ -22,6 +22,9 @@ game.Run(new SceneSetup2D().UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     for (var i = 0; i < ShapeCount; i++)
     {
         // Each kind of shape in turn
@@ -64,7 +67,7 @@ concepts:
   - A list of shape types with a colour each
   - Applying a flat material with CreateFlatMaterial
   - Positioning entities so that they fall into a pile
-  - "Using helpers: SceneSetup2D"
+  - "Using helpers: SceneSetup2D, AddGrabber"
 tags:
   - 2D
   - Bepu

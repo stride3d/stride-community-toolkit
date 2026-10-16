@@ -85,6 +85,9 @@ sleepingInstancing?.Dispose();
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Stress Pile Example - Stride Community Toolkit";
 
@@ -439,6 +442,7 @@ IReadOnlyList<TextElement> BuildOverlayLines()
     [
         new("Space", $"Spawn {batchSize:N0} more", Color.Yellow),
         new("X", "Clear", Color.Yellow),
+        new("Left mouse", "Grab a body, drag it, let go to throw", Color.Yellow),
     ];
 
     // Laid out in sequence, so an expanded menu pushes the ones below it down instead of overlapping
@@ -497,7 +501,7 @@ concepts:
   - Tearing down an instanced pile safely, clearing the instancing before the entities
   - Switching shape, batch size and layout at runtime with DebugTextDropdown
   - Why a perfectly regular spawn lattice must be jittered
-  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepuPhysics"
+  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepuPhysics, AddGrabber"
 tags:
   - 2D
   - Bepu

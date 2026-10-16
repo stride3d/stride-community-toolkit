@@ -6,6 +6,33 @@ Welcome to the Release Notes for the **Stride Community Toolkit**. This section 
 
 The Stride Community Toolkit is developed with rapid iteration in mind. It moves at a faster development pace compared to the Stride Game Engine. As a result, you should expect frequent updates that may introduce breaking changes. This fast-paced approach allows us to incorporate community feedback quickly and continue improving the toolkit.
 
+## 1.0.0.0-preview.68
+
+## What's Changed
+
+### 💥 Breaking Changes
+
+### 🎉 New Features
+
+### 🐞 Bug Fixes
+
+### 🎨 Rendering
+
+### ✨ Enhancement
+
+- `SceneSetup.None` still honours what is not scene: the physics engine, the game settings, the overlay and the profiler. `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives and ground get Bepu bodies, the way a tutorial that adds the camera, light and ground line by line wants it; before, the engine chosen on it was silently dropped. It is a new instance each time.
+- `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view and a `Body2DComponent` is carried across its plane; the mouse wheel does nothing for a 2D body or under an orthographic camera, since depth there is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D. The reach (`MaxDistance`) defaults to 100 instead of 50: a 2D camera stands 50 from its bodies, and the stress pile is viewed from 80.
+
+### 📄 Docs
+
+### 🎓 Examples
+
+- A grabber in every Bepu example with bodies to pick up and a free left mouse button: `E01_2D_FallingShapes`, `E02_2D_Primitives`, `E04_2D_SpawnMenu`, `E05_2D_FallingShapes`, `E08_2D_DebugRender`, `E10_2D_StressPile`, `E01_3D_FallingShapes`, `E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent`, one line each; the overlay says so where there is one.
+
+### 🔧 Engineering
+
+### 💪 Other Changes
+
 ## 1.0.0.0-preview.67
 
 ## What's Changed
@@ -187,7 +214,6 @@ Nine namespaces that only mirrored a source folder are folded into the area a us
 
 - `E02_2D_Material`, the 2D twin of `E02_3D_Material`: what each material helper does on a flat shape, with a checkerboard built in code.
 - The E02 cluster lined up with E01: a twin directly after its 3D example with matching titles (`3D Primitives` / `2D Primitives`, `3D Material` / `2D Material`), the script examples ordered lean to full (`E02_3D_SyncScript`, `E02_3D_GiveMeACube`, then `_SimulationUpdate`), both primitives examples in the five colours of the first examples, and `E02_3D_Primitives` and `E08_2D_DebugRender` on `AddPhysicsDebug()`, so P and F11 do what the overlay says for every shape; `E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent` host their one script on an empty entity, as the helper does, since each acts on the whole scene.
-
 - Every example uses the shape factories; a size that was a `Size` option is now the factory's argument, so `Primitive3D.Cylinder(0.3f, 2.5f)` reads as a radius and a height where `new Vector3(0.3f, 0, 2.5f)` did not.
 - Every program, the F# and VB ones, the gold scenes and the tests run through a scene setup: `new SceneSetup3D().UseBepu().UseSkybox()` for the typical one, and `var sceneSetup = new SceneSetup3D { Camera = CameraSetup.Perspective(position, rotation).WithController(), Ground = …, Profiler = true }` where the program aims its camera or frames its scene, so `Start` holds the scene's own content only; `SceneSetup.None` for the tests.
 - `E06_Box2D`: the keys spawn the factory's named models (`Square`, `Rectangle`, `Circle`, `LargeCircle`, `Triangle`, `Capsule`) instead of looking a kind of shape up; a square and a rectangle are the same kind.

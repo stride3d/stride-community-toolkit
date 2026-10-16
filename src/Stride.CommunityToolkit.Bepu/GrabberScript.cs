@@ -5,6 +5,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Engine.Processors;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Bepu;
@@ -33,6 +34,11 @@ namespace Stride.CommunityToolkit.Bepu;
 /// ray; <see cref="RotateKey"/> plus mouse movement turns the held body. All configurable, and none
 /// of them clash with the toolkit's camera controllers, which look with the right button.
 /// </para>
+/// <para>
+/// A 2D scene needs nothing more: under an orthographic camera the pick ray runs along the view, so
+/// a <see cref="Body2DComponent"/> is carried across its plane. The wheel does nothing for a 2D body,
+/// or under an orthographic camera, since depth there is the plane itself.
+/// </para>
 /// </remarks>
 /// <example>
 /// <code>
@@ -59,8 +65,8 @@ public class GrabberScript : SyncScript
     /// <summary>Hold this key while grabbing to turn the held body with the mouse instead of moving it.</summary>
     public Keys RotateKey { get; set; } = Keys.T;
 
-    /// <summary>How far from the camera a body can be picked up.</summary>
-    public float MaxDistance { get; set; } = 50f;
+    /// <summary>How far from the camera a body can be picked up. Defaults to 100, which reaches a 2D scene's bodies from its camera at 50 and a pile viewed from 80.</summary>
+    public float MaxDistance { get; set; } = 100f;
 
     /// <summary>Spring stiffness of the hold, in hertz. Higher snaps harder and starts to fight the solver.</summary>
     public float SpringFrequency { get; set; } = 5f;
@@ -222,7 +228,10 @@ public class GrabberScript : SyncScript
         if (_camera is null || Held is not { } held || _linear is null)
             return;
 
-        HoldDistance = MathF.Max(MinimumHoldDistance, HoldDistance + Input.MouseWheelDelta * WheelDistanceStep);
+        // A 2D body pulled along the ray would leave its plane and fight its own plane lock, and under
+        // an orthographic camera depth is the plane itself, so the wheel changes nothing in either case
+        if (held is not Body2DComponent && _camera.Projection != CameraProjectionMode.Orthographic)
+            HoldDistance = MathF.Max(MinimumHoldDistance, HoldDistance + Input.MouseWheelDelta * WheelDistanceStep);
 
         var ray = _camera.GetPickRay(Input.MousePosition);
 

@@ -13,6 +13,9 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     // The script draws every collider in the scene, not its own entity's, so it lives on an entity
     // that has nothing else to do. game.AddPhysicsDebug() makes this entity, with the debug meshes too
     var debug = new Entity("Physics Debug")
@@ -70,7 +73,7 @@ concepts:
   - Showing or hiding the gizmo with its Visible property
   - Diagnosing a body that does not collide as expected
   - "The one-call form for a whole scene: game.AddPhysicsDebug()"
-  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive, AddGrabber"
 tags:
   - 3D
   - Bepu

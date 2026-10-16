@@ -50,6 +50,9 @@ game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     scene = rootScene;
 
     // The starting column, one of each shape
@@ -78,7 +81,7 @@ void Start(Scene rootScene)
     // No order given, so it lands after the camera controller's help, which registers at -100
     var overlay = DebugOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
-    overlay.AddSection("Spawn", () => spawnMenu.GetLines());
+    overlay.AddSection("Spawn", () => [new("Left mouse", "Grab a shape, drag it, let go to throw", Color.Gold), .. spawnMenu.GetLines()]);
 }
 
 void Spawn(ShapeItem shape, Vector3 position)
@@ -138,7 +141,7 @@ concepts:
   - Sharing one on-screen block with the camera help through a DebugOverlay section
   - Spawning entities at runtime from keyboard input
   - Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
-  - "Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial"
+  - "Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddGrabber"
 tags:
   - 2D
   - Bepu

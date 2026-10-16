@@ -13,6 +13,9 @@ game.Run(new SceneSetup2D { Profiler = true }.UseBepu(), start: Start);
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     var otherShape = game.CreatePrimitive(Primitive2D.Rectangle(0.5f, 0.8f), new()
     {
         Material = game.CreateFlatMaterial(Color.Gold),
@@ -61,7 +64,7 @@ concepts:
   - Passing a Body2DComponent to CreatePrimitive to set physics options
   - FrictionCoefficient - a lower value lets the pile spread
   - An empty CompoundCollider that the helper fills with the fitted shape
-  - "Using helpers: SceneSetup2D, AddProfiler, CreatePrimitive, CreateFlatMaterial"
+  - "Using helpers: SceneSetup2D, AddProfiler, CreatePrimitive, CreateFlatMaterial, AddGrabber"
 tags:
   - 2D
   - Bepu

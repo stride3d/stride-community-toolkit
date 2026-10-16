@@ -19,10 +19,10 @@ The `Program.cs` file shows how to:
 - Showing or hiding the gizmo with its Visible property
 - Diagnosing a body that does not collide as expected
 - The one-call form for a whole scene: game.AddPhysicsDebug()
-- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive, AddGrabber
 
 ![Collidable Gizmo](media/collidable-gizmo.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_CollidableGizmo).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_CollidableGizmo/Program.cs?start=1&end=49)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_CollidableGizmo/Program.cs?start=1&end=52)]

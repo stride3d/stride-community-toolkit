@@ -23,6 +23,9 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene rootScene)
 {
+    // Left mouse grabs any body, drags it and throws it on release
+    game.AddGrabber();
+
     for (var i = 0; i < ShapeCount; i++)
     {
         // Each kind of shape in turn
@@ -65,7 +68,7 @@ concepts:
   - A list of shape types with a colour each
   - Applying a material with CreateMaterial
   - Positioning entities so that they fall into a pile
-  - "Using helpers: SceneSetup3D, AddSkybox"
+  - "Using helpers: SceneSetup3D, AddSkybox, AddGrabber"
 tags:
   - 3D
   - Bepu

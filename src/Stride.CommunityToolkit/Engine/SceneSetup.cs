@@ -28,8 +28,13 @@ public abstract class SceneSetup
 {
     private protected SceneSetup() { }
 
-    /// <summary>A setup that applies nothing: for a game that builds its compositor and scene by hand, and for the headless tests.</summary>
-    public static SceneSetup None { get; } = new NoSceneSetup();
+    /// <summary>
+    /// A setup that adds nothing to the scene: for a game that builds its compositor and scene by hand, and for the
+    /// headless tests. What is not scene still applies when set, the physics engine, the game settings, the overlay
+    /// and the profiler, so <c>SceneSetup.None.UseBepu()</c> is a hand-built scene whose primitives get Bepu bodies.
+    /// A new instance each time, so what one game sets on it is not seen by the next.
+    /// </summary>
+    public static SceneSetup None => new NoSceneSetup();
 
     /// <summary>The clear colour of the compositor, or <see langword="null"/> for the compositor's own default.</summary>
     public Color? ClearColor { get; set; }
@@ -88,8 +93,6 @@ public abstract class SceneSetup
 
     private sealed class NoSceneSetup : SceneSetup
     {
-        internal override void Prepare(Game game) { }
-
-        internal override void Apply(Game game) { }
+        internal override void Apply(Game game) => ApplyCommon(game);
     }
 }

@@ -15,10 +15,10 @@ The `Program.cs` file shows how to:
 - Passing a Body2DComponent to CreatePrimitive to set physics options
 - FrictionCoefficient - a lower value lets the pile spread
 - An empty CompoundCollider that the helper fills with the fitted shape
-- Using helpers: SceneSetup2D, AddProfiler, CreatePrimitive, CreateFlatMaterial
+- Using helpers: SceneSetup2D, AddProfiler, CreatePrimitive, CreateFlatMaterial, AddGrabber
 
 ![Falling Shapes with Physics Options (2D)](media/falling-shapes-physics-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_2D_FallingShapes).
 
-[!code-csharp[](../../../../examples/code-only/E05_2D_FallingShapes/Program.cs?start=1&end=37)]
+[!code-csharp[](../../../../examples/code-only/E05_2D_FallingShapes/Program.cs?start=1&end=40)]
