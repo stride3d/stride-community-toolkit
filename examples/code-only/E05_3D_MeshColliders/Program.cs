@@ -220,8 +220,8 @@ IReadOnlyList<TextElement> OverlayLines()
     List<TextElement> lines =
     [
         new("R", "Drop everything again", Color.Gold),
-        new("P", "Draw the colliders", Color.Gold),
-        new("F11", "Draw the mesh", Color.Gold),
+        new("P", "Draw the collider gizmos", Color.Gold),
+        new("F11", "Draw the debug meshes", Color.Gold),
         new(""),
         new("Where each came to rest", Color.LightGray),
     ];
