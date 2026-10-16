@@ -10,6 +10,8 @@
 - name: 🔧 API
   href: api/
   homepage: api/index.md
+- name: 📖 Glossary
+  href: manual/glossary.md
 - name: 📖 Stride Docs
   href: https://doc.stride3d.net/latest/en/index.html
   # items:

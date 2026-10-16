@@ -25,8 +25,11 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 📄 Docs
 
+- The glossary is in the top navigation, and defines gizmo and mesh collider.
+
 ### 🎓 Examples
 
+- `E05_3D_MeshColliders`: a convex hull against a mesh collider on the same ring model, with a ball resting on the hull's lid and falling through the mesh's hole; a mesh sphere with a ball outside and one inside shows that a mesh has no inside; a moving mesh ring lands on a mesh ring. The overlay prints where each dropped thing came to rest, measured, and P draws the colliders.
 - A grabber in every Bepu example with bodies to pick up and a free left mouse button: `E01_2D_FallingShapes`, `E02_2D_Primitives`, `E04_2D_SpawnMenu`, `E05_2D_FallingShapes`, `E08_2D_DebugRender`, `E10_2D_StressPile`, `E01_3D_FallingShapes`, `E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent`, one line each; the overlay says so where there is one.
 
 ### 🔧 Engineering
