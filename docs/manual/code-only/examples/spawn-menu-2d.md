@@ -21,10 +21,10 @@ The `Program.cs` file shows how to:
 - Sharing one on-screen block with the camera help through a DebugOverlay section
 - Spawning entities at runtime from keyboard input
 - Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
-- Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial
+- Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddGrabber
 
 ![2D Spawn Menu](media/spawn-menu-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_2D_SpawnMenu).
 
-[!code-csharp[](../../../../examples/code-only/E04_2D_SpawnMenu/Program.cs?start=1&end=108)]
+[!code-csharp[](../../../../examples/code-only/E04_2D_SpawnMenu/Program.cs?start=1&end=111)]

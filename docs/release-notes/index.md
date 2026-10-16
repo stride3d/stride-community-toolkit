@@ -20,11 +20,14 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### ✨ Enhancement
 
-- `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view, a `Body2DComponent` is carried across its plane, and the mouse wheel does nothing there, since depth is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D.
+- `SceneSetup.None` still honours what is not scene: the physics engine, the game settings, the overlay and the profiler. `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives and ground get Bepu bodies, the way a tutorial that adds the camera, light and ground line by line wants it; before, the engine chosen on it was silently dropped. It is a new instance each time.
+- `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view and a `Body2DComponent` is carried across its plane; the mouse wheel does nothing for a 2D body or under an orthographic camera, since depth there is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D. The reach (`MaxDistance`) defaults to 100 instead of 50: a 2D camera stands 50 from its bodies, and the stress pile is viewed from 80.
 
 ### 📄 Docs
 
 ### 🎓 Examples
+
+- A grabber in every Bepu example with bodies to pick up and a free left mouse button: `E01_2D_FallingShapes`, `E02_2D_Primitives`, `E04_2D_SpawnMenu`, `E05_2D_FallingShapes`, `E08_2D_DebugRender`, `E10_2D_StressPile`, `E01_3D_FallingShapes`, `E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent`, one line each; the overlay says so where there is one.
 
 ### 🔧 Engineering
 

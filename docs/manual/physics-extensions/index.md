@@ -46,7 +46,7 @@ A raycast sees colliders only. For what the eye sees under a screen point - a me
 game.AddGrabber();
 ```
 
-The same call serves a 2D scene: under an orthographic camera the pick ray runs along the view, a `Body2DComponent` is carried across its plane, and the mouse wheel does nothing, since depth there is the plane itself.
+The same call serves a 2D scene: under an orthographic camera the pick ray runs along the view, a `Body2DComponent` is carried across its plane, and the mouse wheel does nothing for a 2D body or under an orthographic camera, since depth there is the plane itself.
 
 ### Debug views
 

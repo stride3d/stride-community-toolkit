@@ -17,10 +17,10 @@ The `Program.cs` file shows how to:
 - Toggling the overlay with its Visible property
 - Comparing mesh against collider when a body misbehaves
 - The one-call form for a whole scene: game.AddPhysicsDebug()
-- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive
+- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive, AddGrabber
 
 ![Debug Render Component](media/debug-render-component.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_DebugRenderComponent).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_DebugRenderComponent/Program.cs?start=1&end=39)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_DebugRenderComponent/Program.cs?start=1&end=42)]

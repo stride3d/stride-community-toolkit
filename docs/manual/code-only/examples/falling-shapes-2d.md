@@ -16,10 +16,10 @@ The `Program.cs` file shows how to:
 - A list of shape types with a colour each
 - Applying a flat material with CreateFlatMaterial
 - Positioning entities so that they fall into a pile
-- Using helpers: SceneSetup2D
+- Using helpers: SceneSetup2D, AddGrabber
 
 ![Basic 2D Scene (Falling Shapes)](media/falling-shapes-2d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_2D_FallingShapes).
 
-[!code-csharp[](../../../../examples/code-only/E01_2D_FallingShapes/Program.cs?start=1&end=39)]
+[!code-csharp[](../../../../examples/code-only/E01_2D_FallingShapes/Program.cs?start=1&end=42)]
