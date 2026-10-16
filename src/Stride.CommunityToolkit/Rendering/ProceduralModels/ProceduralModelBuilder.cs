@@ -27,6 +27,7 @@ public static class ProceduralModelBuilder
             Primitive3D.PlaneShape plane => new PlaneProceduralModel { Size = new Vector2(plane.Width, plane.Length), Tessellation = new Int2(plane.TessellationX, plane.TessellationY) },
             Primitive3D.TeapotShape teapot => new TeapotProceduralModel { Size = teapot.Size, Tessellation = teapot.Tessellation },
             Primitive3D.TriangularPrismShape prism => new TriangularPrismProceduralModel { Size = prism.Size },
+            Primitive3D.TextShape text => new TextProceduralModel { Text = text.Content, Font = text.Font, Options = text.Options },
             _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
     }

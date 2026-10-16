@@ -141,6 +141,7 @@ public static class EntityExtensions
             Primitive3D.PlaneShape plane => new BoxCollider { Size = new Vector3(plane.Width, 0, plane.Length) },
             Primitive3D.TeapotShape teapot => TeapotCollider.Create(teapot),
             Primitive3D.TriangularPrismShape prism => TriangularPrismCollider.Create(prism),
+            Primitive3D.TextShape text => TextCollider.Create(text),
             _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
     }

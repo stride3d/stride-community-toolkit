@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
@@ -137,6 +138,8 @@ public static class EntityExtensions
             // A plane has no thickness; a flat box the size of the plane is what a static ground needs
             Primitive3D.PlaneShape plane => new BoxColliderShapeDesc { Size = new Vector3(plane.Width, 0, plane.Length) },
             Primitive3D.TriangularPrismShape prism => HullOf(TriangularPrismProceduralModel.New(prism.Size)),
+            // One hull per glyph, placed where the glyph sits; a hull fills an O, as Bepu's does
+            Primitive3D.TextShape text => HullsOf(text),
             Primitive3D.TorusShape => null,
             Primitive3D.TeapotShape => null,
             _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
@@ -179,6 +182,42 @@ public static class EntityExtensions
 
         collider.ConvexHulls.Add([points]);
         collider.ConvexHullsIndices.Add([indices]);
+
+        return Describe(collider);
+    }
+
+    // A convex hull per glyph of solid lettering, in one shape
+    private static ColliderShapeAssetDesc HullsOf(Primitive3D.TextShape text)
+    {
+        var glyphs = TextMesh.CreateGlyphs(text.Font, text.Content, text.Options);
+
+        if (glyphs.Count == 0)
+            throw new ArgumentException("The text has no glyph with a shape, so there is nothing to collide with.", nameof(text));
+
+        var collider = new ConvexHullColliderShapeDesc
+        {
+            Scaling = new(0.9f),
+            ConvexHulls = [],
+            ConvexHullsIndices = []
+        };
+
+        var hulls = new List<List<Vector3>>(glyphs.Count);
+        var hullIndices = new List<List<uint>>(glyphs.Count);
+
+        foreach (var glyph in glyphs)
+        {
+            hulls.Add(glyph.Mesh.Vertices.Select(v => v.Position + glyph.Position).ToList());
+            hullIndices.Add(glyph.Mesh.Indices.Select(i => (uint)i).ToList());
+        }
+
+        collider.ConvexHulls.Add(hulls);
+        collider.ConvexHullsIndices.Add(hullIndices);
+
+        return Describe(collider);
+    }
+
+    private static ColliderShapeAssetDesc Describe(ConvexHullColliderShapeDesc collider)
+    {
 
         List<IAssetColliderShapeDesc> descriptions = [collider];
 

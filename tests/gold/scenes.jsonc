@@ -14,5 +14,6 @@
   { "name": "picking", "frame": 60 },
   { "name": "particles", "frame": 60 },
   { "name": "easing", "frame": 60 },
-  { "name": "easing-basics", "frame": 45 }
+  { "name": "easing-basics", "frame": 45 },
+  { "name": "text-3d", "frame": 60 }
 ]

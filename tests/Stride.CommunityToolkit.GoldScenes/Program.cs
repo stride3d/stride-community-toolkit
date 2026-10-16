@@ -29,6 +29,7 @@ IGoldScene? scene = name switch
     "particles" => new ParticlesScene(),
     "easing" => new EasingScene(),
     "easing-basics" => new EasingBasicsScene(),
+    "text-3d" => new Text3DScene(),
     _ => null,
 };
 
