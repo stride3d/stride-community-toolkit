@@ -86,7 +86,7 @@ public sealed class GlyphContour
 
                 case OutlineSegmentKind.Cubic:
                 {
-                    var steps = StepCount(segment.Control1 - previous, segment.End - segment.Control2, segment.End - previous, curveQuality);
+                    var steps = CubicStepCount(previous, segment.Control1, segment.Control2, segment.End, curveQuality);
 
                     for (var k = 1; k <= steps; k++)
                     {
@@ -124,6 +124,40 @@ public sealed class GlyphContour
         var angle = MathF.Acos(Math.Clamp(Vector2.Dot(tangentIn, tangentOut), -1f, 1f));
 
         return Math.Max(1, (int)MathF.Ceiling(angle / MathUtil.TwoPi * quality));
+    }
+
+    /// <summary>
+    /// The number of straight pieces a cubic gets from the turn its tangent makes along the whole curve,
+    /// sampled at eight places: a cubic can leave and arrive on the same heading and bend both ways
+    /// between (a tilde), which the angle between its end tangents alone cannot see.
+    /// </summary>
+    private static int CubicStepCount(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, int quality)
+    {
+        const int Samples = 8;
+
+        var turn = 0f;
+        var previous = Vector2.Zero;
+        var hasPrevious = false;
+
+        for (var k = 0; k <= Samples; k++)
+        {
+            var t = k / (float)Samples;
+            var u = 1f - t;
+
+            // The derivative of the cubic: the tangent at t
+            var tangent = 3f * u * u * (p1 - p0) + 6f * u * t * (p2 - p1) + 3f * t * t * (p3 - p2);
+
+            if (tangent.LengthSquared() < 1e-12f) continue;
+
+            tangent.Normalize();
+
+            if (hasPrevious) turn += MathF.Acos(Math.Clamp(Vector2.Dot(previous, tangent), -1f, 1f));
+
+            previous = tangent;
+            hasPrevious = true;
+        }
+
+        return Math.Max(1, (int)MathF.Ceiling(turn / MathUtil.TwoPi * quality));
     }
 
     /// <summary>Drops the closing repeat of the start, then duplicate and collinear points.</summary>

@@ -43,11 +43,11 @@ internal sealed class Text3DScene : IGoldScene
 
         // Every glyph a change could break, as one block of five lines hanging from its top anchor
         Place("Alphabet", new Vector3(0f, 5.6f, -1f), gold,
-            TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789 .,;:!?\"'()[]{}\n@#$%&*+-=/<>~^|_\n€£§©®°±µ¶", new TextMeshOptions { Size = 0.62f, Depth = 0.14f, Alignment = TextAlignment.Center, LineSpacing = 0.95f, Anchor = TextAnchor.TopCenter }));
+            TextMesh.CreateMesh(game.GraphicsDevice, MeshFont.Default, "ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789 .,;:!?\"'()[]{}\n@#$%&*+-=/<>~^|_\n€£§©®°±µ¶", new TextMeshOptions { Size = 0.62f, Depth = 0.14f, Alignment = TextAlignment.Center, LineSpacing = 0.95f, Anchor = TextAnchor.TopCenter }));
 
         // A word with holes and a descender, big enough to show the walls and the bevel, standing on the ground
         Place("Word", new Vector3(-2.2f, 0.5f, 1.5f), silver,
-            TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "Bog8@", new TextMeshOptions { Size = 1.1f, Depth = 0.35f, Anchor = TextAnchor.BottomCenter, Bevel = new TextBevel(size: 0.03f, thickness: 0.05f, segments: 4) }));
+            TextMesh.CreateMesh(game.GraphicsDevice, MeshFont.Default, "Bog8@", new TextMeshOptions { Size = 1.1f, Depth = 0.35f, Anchor = TextAnchor.BottomCenter, Bevel = new TextBevel(size: 0.03f, thickness: 0.05f, segments: 4) }));
 
         // The shape route: a primitive with a material, centred on its entity and turned a little
         var shape = game.CreatePrimitive(Primitive3D.Text("Shape", size: 0.55f, depth: 0.2f), new Primitive3DEntityOptions
@@ -59,19 +59,14 @@ internal sealed class Text3DScene : IGoldScene
         shape.Transform.Rotation = Quaternion.RotationY(-0.5f);
         shape.Scene = scene;
 
-        void Place(string name, Vector3 position, Material material, MeshDraw draw)
+        void Place(string name, Vector3 position, Material material, Mesh mesh)
         {
-            var entity = new Entity(name)
-            {
-                new ModelComponent
-                {
-                    Model = new Model
-                    {
-                        new MaterialInstance { Material = material },
-                        new Mesh { Draw = draw, MaterialIndex = 0 },
-                    },
-                },
-            };
+            var model = new Model { new MaterialInstance { Material = material }, mesh };
+
+            model.BoundingBox = mesh.BoundingBox;
+            model.BoundingSphere = mesh.BoundingSphere;
+
+            var entity = new Entity(name) { new ModelComponent { Model = model } };
 
             entity.Transform.Position = position;
             entity.Scene = scene;

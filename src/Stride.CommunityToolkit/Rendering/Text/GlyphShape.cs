@@ -19,13 +19,19 @@ public sealed class GlyphShape
     public bool IsEmpty => _polygons.Length == 0;
 
     /// <summary>
-    /// Sorts closed polygons into outsides and holes by how they nest, the way a font's even-odd fill
-    /// rule reads them: a contour inside no other is an outside, one inside exactly one is a hole of it,
-    /// one inside two is an outside again (the dot inside a copyright sign), and so on.
+    /// Sorts closed polygons into outsides and holes by how they nest: a contour inside no other is an
+    /// outside, one inside exactly one is a hole of it, one inside two is an outside again (the dot
+    /// inside a copyright sign), and so on. That is how fonts draw letters: nested contours that do not
+    /// touch, each wound the other way from the one around it.
     /// </summary>
     /// <param name="contours">Closed polygons in either winding, without the first corner repeated.</param>
     /// <returns>The shape. Outsides come back counter-clockwise and holes clockwise, whatever they were.</returns>
     /// <exception cref="ArgumentNullException">The contours are null.</exception>
+    /// <exception cref="InvalidDataException">
+    /// Two contours cross, a contour crosses itself, or a contour nested inside another is wound the same
+    /// way as it: shapes a nonzero fill would merge, which this does not do. Some composite glyphs and
+    /// variable fonts have them; a reader that does should say which glyph.
+    /// </exception>
     /// <remarks>
     /// Whether one contour lies inside another is decided by a vote of three of its points, so two
     /// contours that touch at a corner still sort correctly. Contours with fewer than three corners or
@@ -43,9 +49,34 @@ public sealed class GlyphShape
             if (contour is { Length: >= 3 } && MathF.Abs(EarClipping.SignedArea(contour)) > 1e-10f) valid.Add(contour);
         }
 
-        // Depth is how many other contours enclose a contour: even means an outside, odd a hole of the
-        // enclosing contour one level up
-        var count = valid.Count;
+        RejectCrossings(valid);
+
+        var (depth, contains) = Nest(valid);
+
+        return new GlyphShape(Assemble(valid, depth, contains));
+    }
+
+    /// <summary>Contours that cross each other, or themselves, are not a shape this can fill.</summary>
+    private static void RejectCrossings(List<Vector2[]> contours)
+    {
+        for (var i = 0; i < contours.Count; i++)
+        {
+            if (PolygonChecks.SelfIntersects(contours[i])) throw new InvalidDataException("a contour crosses itself");
+
+            for (var j = i + 1; j < contours.Count; j++)
+            {
+                if (PolygonChecks.Cross(contours[i], contours[j])) throw new InvalidDataException("two contours cross each other");
+            }
+        }
+    }
+
+    /// <summary>
+    /// How the contours nest: for each, how many others enclose it (even means an outside, odd a hole of
+    /// the one a level up), and which encloses which.
+    /// </summary>
+    private static (int[] Depth, bool[,] Contains) Nest(List<Vector2[]> contours)
+    {
+        var count = contours.Count;
         var depth = new int[count];
         var contains = new bool[count, count];
 
@@ -55,30 +86,43 @@ public sealed class GlyphShape
             {
                 if (i == j) continue;
 
-                contains[j, i] = Encloses(valid[j], valid[i]);
+                contains[j, i] = Encloses(contours[j], contours[i]);
 
                 if (contains[j, i]) depth[i]++;
             }
         }
 
-        // Each outside takes the holes one level deeper that it encloses
+        return (depth, contains);
+    }
+
+    /// <summary>
+    /// Each outside takes the holes one level deeper that it encloses. A hole wound the same way as its
+    /// outside is not a hole in a font's fill: with the nonzero rule it is more of the same shape.
+    /// </summary>
+    private static GlyphPolygon[] Assemble(List<Vector2[]> contours, int[] depth, bool[,] contains)
+    {
         var polygons = new List<GlyphPolygon>();
 
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < contours.Count; i++)
         {
             if (depth[i] % 2 != 0) continue;
 
             var holes = new List<Vector2[]>();
 
-            for (var h = 0; h < count; h++)
+            for (var h = 0; h < contours.Count; h++)
             {
-                if (depth[h] == depth[i] + 1 && contains[i, h]) holes.Add(Wind(valid[h], clockwise: true));
+                if (depth[h] != depth[i] + 1 || !contains[i, h]) continue;
+
+                if (MathF.Sign(EarClipping.SignedArea(contours[h])) == MathF.Sign(EarClipping.SignedArea(contours[i])))
+                    throw new InvalidDataException("a contour nested inside another is wound the same way, which overlaps rather than cuts a hole");
+
+                holes.Add(Wind(contours[h], clockwise: true));
             }
 
-            polygons.Add(new GlyphPolygon(Wind(valid[i], clockwise: false), holes));
+            polygons.Add(new GlyphPolygon(Wind(contours[i], clockwise: false), holes));
         }
 
-        return new GlyphShape([.. polygons]);
+        return [.. polygons];
     }
 
     /// <summary>Whether <paramref name="outer"/> encloses <paramref name="inner"/>, by a vote of three of the inner points.</summary>

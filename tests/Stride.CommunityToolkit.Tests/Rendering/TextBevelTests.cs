@@ -15,11 +15,14 @@ public class TextBevelTests
     private static readonly TextMeshOptions Bevelled = new() { Depth = 0.3f, Bevel = new TextBevel(size: 0.02f, thickness: 0.03f, segments: 3) };
 
     [Fact]
-    public void ABevelledGlyphIsAClosedSolid()
+    public void ABevelledGlyphIsAClosedSolidFacingOut()
     {
-        foreach (var character in "BOg8@&")
+        foreach (var character in "BOg8@&iI")
         {
-            TextMeshTests.AssertWatertight(TextMesh.Create(Font, character.ToString(), Bevelled));
+            var data = TextMesh.Create(Font, character.ToString(), Bevelled);
+
+            TextMeshTests.AssertWatertight(data);
+            TextMeshTests.AssertOutwardWinding(data);
         }
     }
 
@@ -78,6 +81,7 @@ public class TextBevelTests
         var data = TextMesh.Create(Font, "I", new TextMeshOptions { Depth = 0.3f, Bevel = new TextBevel(size: 0.2f, thickness: 0.05f) });
 
         TextMeshTests.AssertWatertight(data);
+        TextMeshTests.AssertOutwardWinding(data);
     }
 
     [Fact]

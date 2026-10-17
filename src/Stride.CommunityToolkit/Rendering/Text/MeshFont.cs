@@ -11,7 +11,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// Stride's sprite fonts rasterise glyphs; this reads the same files for their curves instead, through
 /// the FreeType library the engine ships on every platform, so TrueType, OpenType (CFF) and font
 /// collections all work. <see cref="Default"/> is an Open Sans Regular embedded in the toolkit, so
-/// lettering works with no font file at hand; <see cref="Load(string)"/> opens any file, and
+/// lettering works with no font file at hand; <see cref="Load(string, int)"/> opens any file, and
 /// <see cref="FromFamily"/> finds an installed family through <see cref="SystemFonts"/>.
 /// </para>
 /// <para>
@@ -40,8 +40,10 @@ public sealed unsafe class MeshFont : IDisposable
     private GCHandle _data;
     private FreeType.FaceRec* _face;
 
-    private MeshFont(byte[] data, string? name, bool isShared)
+    private MeshFont(byte[] data, string? name, int faceIndex, bool isShared)
     {
+        ArgumentOutOfRangeException.ThrowIfNegative(faceIndex);
+
         _isShared = isShared;
         _data = GCHandle.Alloc(data, GCHandleType.Pinned);
 
@@ -49,10 +51,12 @@ public sealed unsafe class MeshFont : IDisposable
         {
             lock (LibraryLock)
             {
-                var error = FreeType.NewMemoryFace(Library.Value, (byte*)_data.AddrOfPinnedObject(), new CLong(data.Length), new CLong(0), out _face);
+                var error = FreeType.NewMemoryFace(Library.Value, (byte*)_data.AddrOfPinnedObject(), new CLong(data.Length), new CLong(faceIndex), out _face);
 
-                if (error != 0) throw new InvalidDataException($"FreeType could not open the font{(name is null ? "" : $" '{name}'")} (error {error}). Is it a TrueType, OpenType or font collection file?");
+                if (error != 0) throw new InvalidDataException($"FreeType could not open face {faceIndex} of the font{(name is null ? "" : $" '{name}'")} (error {error}). Is it a TrueType, OpenType or font collection file, and does it have that many faces?");
             }
+
+            FaceCount = (int)_face->NumFaces.Value;
 
             if (_face->UnitsPerEm == 0) throw new InvalidDataException("The font has no outlines: its units per EM is zero. Bitmap-only fonts have no shapes to extrude.");
 
@@ -86,6 +90,9 @@ public sealed unsafe class MeshFont : IDisposable
     /// <summary>The font's family and style, as the file names them: "Open Sans", "Segoe UI Bold".</summary>
     public string Name { get; }
 
+    /// <summary>How many faces the file holds: 1 for a .ttf or .otf, more for a collection (.ttc), each opened by its index.</summary>
+    public int FaceCount { get; }
+
     /// <summary>The font's design grid: how many of its own units make one EM. Outlines are already divided by it.</summary>
     public int UnitsPerEm { get; }
 
@@ -102,15 +109,17 @@ public sealed unsafe class MeshFont : IDisposable
     /// Opens a font file.
     /// </summary>
     /// <param name="path">The path of a .ttf, .otf or .ttc file.</param>
+    /// <param name="faceIndex">Which face of a collection to open; 0, the first, for a single-face file. <see cref="FaceCount"/> says how many there are.</param>
     /// <returns>The font; dispose it when its outlines are no longer needed.</returns>
     /// <exception cref="ArgumentNullException">The path is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The face index is negative.</exception>
     /// <exception cref="FileNotFoundException">There is no file at the path.</exception>
-    /// <exception cref="InvalidDataException">The file is not a font FreeType can open, or has no outlines.</exception>
-    public static MeshFont Load(string path)
+    /// <exception cref="InvalidDataException">The file is not a font FreeType can open, has no such face, or has no outlines.</exception>
+    public static MeshFont Load(string path, int faceIndex = 0)
     {
         ArgumentNullException.ThrowIfNull(path);
 
-        return new MeshFont(File.ReadAllBytes(path), Path.GetFileNameWithoutExtension(path), isShared: false);
+        return new MeshFont(File.ReadAllBytes(path), Path.GetFileNameWithoutExtension(path), faceIndex, isShared: false);
     }
 
     /// <summary>
@@ -118,14 +127,16 @@ public sealed unsafe class MeshFont : IDisposable
     /// </summary>
     /// <param name="data">The whole font file. It is pinned for the font's lifetime, so do not change it.</param>
     /// <param name="name">A name for error messages; the font's own family name is read from the file.</param>
+    /// <param name="faceIndex">Which face of a collection to open; 0, the first, for a single-face file.</param>
     /// <returns>The font; dispose it when its outlines are no longer needed.</returns>
     /// <exception cref="ArgumentNullException">The data is null.</exception>
-    /// <exception cref="InvalidDataException">The bytes are not a font FreeType can open, or the font has no outlines.</exception>
-    public static MeshFont Load(byte[] data, string? name = null)
+    /// <exception cref="ArgumentOutOfRangeException">The face index is negative.</exception>
+    /// <exception cref="InvalidDataException">The bytes are not a font FreeType can open, have no such face, or the font has no outlines.</exception>
+    public static MeshFont Load(byte[] data, string? name = null, int faceIndex = 0)
     {
         ArgumentNullException.ThrowIfNull(data);
 
-        return new MeshFont(data, name, isShared: false);
+        return new MeshFont(data, name, faceIndex, isShared: false);
     }
 
     /// <summary>
@@ -135,6 +146,11 @@ public sealed unsafe class MeshFont : IDisposable
     /// <param name="style">The weight and slant wanted.</param>
     /// <returns>The font, or <see langword="null"/> when no file of that family and style is installed.</returns>
     /// <exception cref="ArgumentNullException">The family is null.</exception>
+    /// <remarks>
+    /// The lookup finds a file, and the first face of it: a style that a collection keeps as its second
+    /// or third face (macOS stores some families that way) needs <see cref="Load(string, int)"/> with the
+    /// face index.
+    /// </remarks>
     public static MeshFont? FromFamily(string family, FontStyle style = FontStyle.Regular)
     {
         ArgumentNullException.ThrowIfNull(family);
@@ -147,10 +163,10 @@ public sealed unsafe class MeshFont : IDisposable
     /// <summary>Whether the font has a glyph of its own for the code point, rather than only its "missing glyph" box.</summary>
     public bool HasGlyph(int codepoint)
     {
-        ThrowIfDisposed();
-
         lock (_faceLock)
         {
+            ThrowIfDisposed();
+
             return FreeType.GetCharIndex(_face, (uint)codepoint) != 0;
         }
     }
@@ -170,10 +186,10 @@ public sealed unsafe class MeshFont : IDisposable
     /// <exception cref="InvalidDataException">The font's outline for the glyph breaks FreeType's conventions.</exception>
     public GlyphOutline GetGlyph(int codepoint)
     {
-        ThrowIfDisposed();
-
         lock (_faceLock)
         {
+            ThrowIfDisposed();
+
             if (_glyphs.TryGetValue(codepoint, out var cached)) return cached;
 
             var outline = ReadGlyph(codepoint);
@@ -193,10 +209,10 @@ public sealed unsafe class MeshFont : IDisposable
     /// <returns>The adjustment to the left glyph's advance, in EM units.</returns>
     public float GetKerning(int left, int right)
     {
-        ThrowIfDisposed();
-
         lock (_faceLock)
         {
+            ThrowIfDisposed();
+
             var leftIndex = FreeType.GetCharIndex(_face, (uint)left);
             var rightIndex = FreeType.GetCharIndex(_face, (uint)right);
 
@@ -252,19 +268,26 @@ public sealed unsafe class MeshFont : IDisposable
         return new GlyphOutline(codepoint, glyphIndex, advance, new Vector2(bearingX, bearingY - height), new Vector2(bearingX + width, bearingY), contours);
     }
 
+    /// <summary>
+    /// Closes the native face under the same lock the readers take, so a reader already inside FreeType
+    /// finishes first and one that was waiting finds the font disposed rather than a freed face.
+    /// </summary>
     private void Release()
     {
-        if (_face is not null)
+        lock (_faceLock)
         {
-            lock (LibraryLock)
+            if (_face is not null)
             {
-                FreeType.DoneFace(_face);
+                lock (LibraryLock)
+                {
+                    FreeType.DoneFace(_face);
+                }
+
+                _face = null;
             }
 
-            _face = null;
+            if (_data.IsAllocated) _data.Free();
         }
-
-        if (_data.IsAllocated) _data.Free();
     }
 
     private void ThrowIfDisposed() => ObjectDisposedException.ThrowIf(_face is null, this);
@@ -278,7 +301,7 @@ public sealed unsafe class MeshFont : IDisposable
 
         stream.ReadExactly(data);
 
-        return new MeshFont(data, "Open Sans", isShared: true);
+        return new MeshFont(data, "Open Sans", 0, isShared: true);
     }
 
     /// <summary>The one FreeType library object, created on first use; the native library is the engine's own copy.</summary>

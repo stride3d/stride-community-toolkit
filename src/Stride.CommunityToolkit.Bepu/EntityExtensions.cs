@@ -78,7 +78,9 @@ public static class EntityExtensions
             {
                 var collider = ColliderFor(shape);
 
-                if (options.Mass is { } mass) collider.Mass = mass;
+                // Bepu adds a hull's mass once per hull, so a mass given for the whole shape is shared out
+                // among them: lettering is one hull per glyph
+                if (options.Mass is { } mass) collider.Mass = collider is ConvexHullCollider hulls ? mass / TextCollider.HullCount(hulls) : mass;
 
                 compoundCollider.Colliders.Add(collider);
             }

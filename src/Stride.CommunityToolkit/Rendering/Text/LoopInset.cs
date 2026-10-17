@@ -54,11 +54,14 @@ internal static class LoopInset
     }
 
     /// <summary>
-    /// Whether every pulled-in loop is still the loop it came from: the same way round, the outside
-    /// smaller and each hole larger (the material shrinks from both sides), with some area left, and
-    /// not crossing itself. A loop pulled in further than its narrowest part fails one of these, and a
-    /// triangulation of it would be wrong rather than loud.
+    /// Whether every pulled-in loop is still the loop it came from, pushed sideways: the same way round,
+    /// the outside smaller and each hole larger (the material shrinks from both sides), with some area
+    /// left, every edge still running its original way, not crossing itself, and no loop crossing
+    /// another. A loop pulled in further than its narrowest part fails one of these; the edge test is
+    /// what catches a corner that went through the far side and came out with the right area.
     /// </summary>
+    /// <param name="loops">The original loops: the outside first, then the holes.</param>
+    /// <param name="inset">The same loops pulled in.</param>
     internal static bool Fits(IReadOnlyList<Vector2[]> loops, IReadOnlyList<Vector2[]> inset)
     {
         for (var l = 0; l < loops.Count; l++)
@@ -68,44 +71,16 @@ internal static class LoopInset
             var sameWay = MathF.Sign(before) == MathF.Sign(after);
             var shrinks = l == 0 ? MathF.Abs(after) < MathF.Abs(before) && MathF.Abs(after) > 1e-4f * MathF.Abs(before) : MathF.Abs(after) > MathF.Abs(before);
 
-            if (!sameWay || !shrinks || SelfIntersects(inset[l])) return false;
-        }
+            if (!sameWay || !shrinks) return false;
+            if (!PolygonChecks.KeepsEdgeDirections(loops[l], inset[l])) return false;
+            if (PolygonChecks.SelfIntersects(inset[l])) return false;
 
-        return true;
-    }
-
-    /// <summary>Whether two non-adjacent edges of the loop cross.</summary>
-    private static bool SelfIntersects(Vector2[] loop)
-    {
-        var count = loop.Length;
-
-        for (var i = 0; i < count; i++)
-        {
-            var a = loop[i];
-            var b = loop[(i + 1) % count];
-
-            for (var j = i + 2; j < count; j++)
+            for (var m = 0; m < l; m++)
             {
-                // The last edge is adjacent to the first
-                if (i == 0 && j == count - 1) continue;
-
-                if (Crosses(a, b, loop[j], loop[(j + 1) % count])) return true;
+                if (PolygonChecks.Cross(inset[l], inset[m])) return false;
             }
         }
 
-        return false;
-    }
-
-    /// <summary>Whether the segments a-b and c-d cross, touching ends not counted.</summary>
-    private static bool Crosses(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
-    {
-        var d1 = Side(c, d, a);
-        var d2 = Side(c, d, b);
-        var d3 = Side(a, b, c);
-        var d4 = Side(a, b, d);
-
-        return d1 * d2 < 0f && d3 * d4 < 0f;
-
-        static float Side(Vector2 p, Vector2 q, Vector2 r) => (q.X - p.X) * (r.Y - p.Y) - (q.Y - p.Y) * (r.X - p.X);
+        return true;
     }
 }

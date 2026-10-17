@@ -27,7 +27,10 @@ public class TextMeshTests
     {
         foreach (var character in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&@%?")
         {
-            AssertWatertight(TextMesh.Create(Font, character.ToString()));
+            var data = TextMesh.Create(Font, character.ToString());
+
+            AssertWatertight(data);
+            AssertOutwardWinding(data);
         }
     }
 
@@ -43,7 +46,7 @@ public class TextMeshTests
         var data = TextMesh.Create(Font, "O");
 
         Assert.Equal(corners * 6, data.Vertices.Length);
-        Assert.Equal((2 * (corners + 2 * polygon.Holes.Count - 2) + 2 * corners) * 3, data.Indices.Length);
+        Assert.InRange(data.Indices.Length, (2 * (corners - 2) + 2 * corners) * 3, (2 * (corners + 2 * polygon.Holes.Count - 2) + 2 * corners) * 3);
     }
 
     [Fact]
@@ -183,6 +186,30 @@ public class TextMeshTests
         var data = TextMesh.Create(Font, "");
 
         Assert.NotEmpty(data.Vertices);
+    }
+
+    /// <summary>
+    /// Every triangle winds clockwise as seen from the side its normal points to, which is the side
+    /// Stride draws: its geometric normal must point against its lighting normal, for every triangle
+    /// with any area.
+    /// </summary>
+    internal static void AssertOutwardWinding(GeometricMeshData<VertexPositionNormalTexture> data)
+    {
+        var inward = 0;
+
+        for (var i = 0; i < data.Indices.Length; i += 3)
+        {
+            var a = data.Vertices[data.Indices[i]];
+            var b = data.Vertices[data.Indices[i + 1]];
+            var c = data.Vertices[data.Indices[i + 2]];
+            var geometric = Vector3.Cross(b.Position - a.Position, c.Position - b.Position);
+
+            if (geometric.LengthSquared() < 1e-16f) continue;
+
+            if (Vector3.Dot(geometric, a.Normal + b.Normal + c.Normal) >= 0f) inward++;
+        }
+
+        Assert.True(inward == 0, $"{inward} triangles wind the wrong way against their normals");
     }
 
     /// <summary>

@@ -14,14 +14,7 @@ thing in the world, a title, a sign, a logo, a word that falls.
 ```csharp
 var entity = new Entity("Title")
 {
-    new ModelComponent
-    {
-        Model = new Model
-        {
-            new MaterialInstance { Material = game.CreateMaterial(Color.Gold) },
-            new Mesh { Draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "Hello"), MaterialIndex = 0 },
-        },
-    },
+    new ModelComponent { Model = TextMesh.CreateModel(game.GraphicsDevice, game.CreateMaterial(Color.Gold), MeshFont.Default, "Hello") },
 };
 ```
 
@@ -32,10 +25,13 @@ every platform, so TrueType, OpenType (CFF) and font collections all work.
 
 - `MeshFont.Default` is an Open Sans Regular embedded in the toolkit (Apache 2.0): lettering works with
   no font file at hand, and gives the same shapes on every machine.
-- `MeshFont.Load(path)` and `MeshFont.Load(bytes)` open any file. Dispose the font when its outlines are
-  no longer needed; glyphs are read once and cached, and a font is safe to share between threads.
+- `MeshFont.Load(path)` and `MeshFont.Load(bytes)` open any file; a collection (.ttc) holds several
+  faces, `FaceCount` says how many and `Load(path, faceIndex)` picks one. Dispose the font when its
+  outlines are no longer needed; glyphs are read once and cached, a font is safe to share between
+  threads, and disposing it while another thread reads makes that reader throw rather than crash.
 - `MeshFont.FromFamily("Segoe UI", FontStyle.Bold)` finds an installed family through `SystemFonts`,
-  and is `null` when the machine has no such font, so a fallback reads `?? MeshFont.Default`.
+  and is `null` when the machine has no such font, so a fallback reads `?? MeshFont.Default`. It opens
+  the file's first face; a style kept as a later face of a collection needs `Load` with the index.
 
 Outlines are in EM units: a capital letter is about 0.7 high, the baseline is y = 0, and
 `MeshFont.LineHeight`, `Ascent` and `Descent` are the font's own. `font.GetGlyph('A')` returns the
@@ -94,14 +90,20 @@ var options = new TextMeshOptions
 ```
 
 A bevel wider than a glyph's thinnest stem would fold the cap over itself. `TextMesh` checks every
-pulled-in outline (same way round, smaller, not crossing itself) and halves the size for that glyph
-until it fits, so a wide bevel on a thin font rounds less rather than breaking. The thickness is
-capped at half the depth; at that value the two bevels meet and there is no wall.
+step of the pulled-in outline (same way round, smaller, every edge still running its way, not
+crossing itself or another) and halves the size for the whole glyph until every piece of it fits, so
+a wide bevel on a thin font rounds less rather than breaking; the dot and the stem of an i get the
+same rounding. The thickness is capped at half the depth; at that value the two bevels meet and there
+is no wall.
 
 ## The mesh
 
-`TextMesh.Create` returns `GeometricMeshData<VertexPositionNormalTexture>`, CPU data; the
-`ToMeshDraw(device)` extension uploads it, and `TextMesh.CreateMeshDraw` does both. Vertices carry a
+`TextMesh.Create` returns `GeometricMeshData<VertexPositionNormalTexture>`, CPU data. `ToMesh(device)`
+uploads it as a `Mesh` with its bounds, which the renderer needs to cull lettering that is off screen,
+and `TextMesh.CreateMesh` and `CreateModel` do both in one call; `ToMeshDraw` and `CreateMeshDraw`
+give the bare draw. Text with nothing to draw (empty, spaces, line breaks) gives empty CPU data and
+refuses to upload, since a GPU buffer cannot be empty: when a value clears, remove the model.
+Vertices carry a
 position, a normal and texture coordinates: the caps are mapped across the text's block (0..1 left to
 right, 0..1 top to bottom) and each wall runs 0..1 along its contour and 0..1 front to back, so a
 texture or a shader can follow the lettering.
@@ -114,7 +116,9 @@ rebuild. `E03_3D_MeshText` shows the pattern in its frame counter.
 
 `Primitive3D.Text` makes lettering a shape like any other, so `game.CreatePrimitive` gives it a material
 and, with a physics engine chosen, a collider: one convex hull per glyph. A hull fills a glyph's holes
-and bays, so an O collides as a disc, which is right for letters that tumble and pile up.
+and bays, so an O collides as a disc, which is right for letters that tumble and pile up. A `Mass` on
+the options is the word's, shared out among the hulls. The hulls of a string are kept, keyed by the
+font, the text and the options, so a word dropped many times shares one set.
 
 ```csharp
 var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new Bepu3DPhysicsOptions { Material = material });
@@ -131,14 +135,21 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
 
 - A mesh is for words and titles, not pages: a paragraph is thousands of triangles per line. Sprite
   fonts are for text.
-- Fonts whose contours overlap each other (some composite glyphs, variable fonts) are not
-  triangulated; the glyph is reported, not mangled.
+- Fonts whose contours cross or overlap (some composite glyphs, variable fonts) are not
+  triangulated; the glyph is reported by font and code point, not mangled. A contour of a single
+  point, which some fonts carry, is skipped.
+- Every option must be a positive finite number where it is a size; a zero or negative size or depth
+  is refused rather than built.
+- Letters landing on letters are hull-against-hull pairs, and the Bepu build Stride 4.4 ships
+  mishandles thin extruded hulls that overlap (reported upstream as bepuphysics2 issue 417; it can
+  crash the narrow phase). A hull collider suits a word on its own; give a pile of letters a box per
+  glyph instead, from the glyph meshes' bounds, as `E03_3D_MeshText` and Cube Collapse do.
 - No right-to-left, no wrapping, no text on a path.
 
 ## Examples
 
 - [`E03_3D_MeshText`](../code-only/examples/letters-3d.md): the embedded font, an installed font, lines
-  that align, a frame counter, and a word with physics.
+  that align, a frame counter, and words with physics piled on each other.
 - [`E03_3D_TextShaders`](../code-only/examples/text-shaders.md): four materials on the same lettering,
   a gradient through the texture coordinates, a rim light node, a vertex-stage wave and a pixel-stage
   dissolve, each a shader class in the example's `Effects` folder.

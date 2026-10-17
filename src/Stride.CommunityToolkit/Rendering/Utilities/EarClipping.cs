@@ -16,18 +16,22 @@ namespace Stride.CommunityToolkit.Rendering;
 /// <see cref="Triangulate(IReadOnlyList{Vector2}, IReadOnlyList{IReadOnlyList{Vector2}})"/>.
 /// Self-intersecting polygons are not handled by either overload.
 /// </para>
+/// <para>
+/// The tolerances scale with the polygon: a corner counts as flat, or a point as on a triangle's
+/// edge, relative to the polygon's extent, so a glyph a centimetre across triangulates the same way
+/// as one a metre across.
+/// </para>
 /// </remarks>
 public static class EarClipping
 {
-    private const float Epsilon = 1e-6f;
-
     /// <summary>
     /// Triangulates a simple polygon into a list of vertex-index triples.
     /// </summary>
     /// <param name="polygon">The polygon's corners, in order, without repeating the first corner at the end. Either winding is accepted.</param>
     /// <returns>
     /// Indices into <paramref name="polygon"/>, three per triangle, (corner count - 2) triangles in
-    /// total. Triangles are always wound counter-clockwise, whichever way the input was wound.
+    /// total for a polygon with no flat corners. Triangles are always wound counter-clockwise,
+    /// whichever way the input was wound.
     /// </returns>
     /// <exception cref="ArgumentNullException">The polygon is null.</exception>
     /// <exception cref="ArgumentException">The polygon has fewer than three corners.</exception>
@@ -52,7 +56,7 @@ public static class EarClipping
             for (var i = polygon.Count - 1; i >= 0; i--) ring.Add(i);
         }
 
-        return ClipRing(ring, polygon);
+        return ClipRing(ring, polygon, ToleranceFor(polygon));
     }
 
     /// <summary>
@@ -63,7 +67,7 @@ public static class EarClipping
     /// <returns>
     /// Indices into the corners of <paramref name="outer"/> followed by those of each hole in order,
     /// three per triangle, wound counter-clockwise. A polygon of n corners in all with h holes gives
-    /// n + 2h - 2 triangles.
+    /// up to n + 2h - 2 triangles; a flat corner made by a bridge is clipped without one.
     /// </returns>
     /// <exception cref="ArgumentNullException">The outside or the holes are null.</exception>
     /// <exception cref="ArgumentException">The outside has fewer than three corners.</exception>
@@ -95,6 +99,8 @@ public static class EarClipping
             holeStarts[h] = corners.Count;
             corners.AddRange(holes[h]);
         }
+
+        var tolerance = ToleranceFor(corners);
 
         // Counter-clockwise outside, clockwise holes: a bridge then keeps the merged ring simple
         var ring = new List<int>(corners.Count + holes.Count * 2);
@@ -134,7 +140,7 @@ public static class EarClipping
             }
 
             var m = holeRing[rightmost];
-            var bridgeAt = PolygonBridging.FindBridge(ring, corners, corners[m]);
+            var bridgeAt = PolygonBridging.FindBridge(ring, corners, corners[m], tolerance);
 
             // Walk the hole from its rightmost corner all the way round and back, then return to the outside
             var splice = new List<int>(holeRing.Length + 2);
@@ -147,7 +153,7 @@ public static class EarClipping
             ring.InsertRange(bridgeAt + 1, splice);
         }
 
-        return ClipRing(ring, corners);
+        return ClipRing(ring, corners, tolerance);
     }
 
     /// <summary>
@@ -172,14 +178,35 @@ public static class EarClipping
         return area * 0.5f;
     }
 
+    /// <summary>
+    /// The tolerance for the corners' size: a cross product below it is flat, a point within it of a
+    /// triangle's edge is on it. Relative to the polygon's extent, so the result does not depend on the
+    /// unit the corners are in.
+    /// </summary>
+    private static float ToleranceFor(IReadOnlyList<Vector2> corners)
+    {
+        var min = new Vector2(float.PositiveInfinity);
+        var max = new Vector2(float.NegativeInfinity);
+
+        foreach (var corner in corners)
+        {
+            min = Vector2.Min(min, corner);
+            max = Vector2.Max(max, corner);
+        }
+
+        var extent = MathF.Max(max.X - min.X, max.Y - min.Y);
+
+        return extent > 0f ? 1e-6f * extent * extent : 1e-12f;
+    }
+
     /// <summary>Clips a counter-clockwise ring of corner indices, which may hold the same corner twice where holes were bridged in.</summary>
-    private static List<int> ClipRing(List<int> ring, IReadOnlyList<Vector2> corners)
+    private static List<int> ClipRing(List<int> ring, IReadOnlyList<Vector2> corners, float tolerance)
     {
         var triangles = new List<int>((ring.Count - 2) * 3);
 
         while (ring.Count > 3)
         {
-            var clipped = TryClipEar(ring, corners, triangles, strict: true) || TryClipEar(ring, corners, triangles, strict: false);
+            var clipped = TryClipEar(ring, corners, triangles, tolerance, strict: true) || TryClipEar(ring, corners, triangles, tolerance, strict: false);
 
             if (!clipped)
             {
@@ -190,14 +217,17 @@ public static class EarClipping
             }
         }
 
-        triangles.Add(ring[0]);
-        triangles.Add(ring[1]);
-        triangles.Add(ring[2]);
+        if (Cross(corners[ring[0]], corners[ring[1]], corners[ring[2]]) > 0f)
+        {
+            triangles.Add(ring[0]);
+            triangles.Add(ring[1]);
+            triangles.Add(ring[2]);
+        }
 
         return triangles;
     }
 
-    private static bool TryClipEar(List<int> ring, IReadOnlyList<Vector2> corners, List<int> triangles, bool strict)
+    private static bool TryClipEar(List<int> ring, IReadOnlyList<Vector2> corners, List<int> triangles, float tolerance, bool strict)
     {
         for (var i = 0; i < ring.Count; i++)
         {
@@ -205,10 +235,11 @@ public static class EarClipping
             var current = ring[i];
             var next = ring[(i + 1) % ring.Count];
 
-            if (!IsEar(corners, ring, previous, current, next, strict)) continue;
+            if (!IsEar(corners, ring, previous, current, next, tolerance, strict)) continue;
 
-            // A flat triangle adds nothing; clipping it only tidies the ring
-            if (Cross(corners[previous], corners[current], corners[next]) > Epsilon)
+            // Any area at all is a triangle the cap needs, however thin: the walls keep its edges, so
+            // dropping it would leave a slit. Only a corner with no area is clipped without one
+            if (Cross(corners[previous], corners[current], corners[next]) > 0f)
             {
                 triangles.Add(previous);
                 triangles.Add(current);
@@ -223,7 +254,7 @@ public static class EarClipping
         return false;
     }
 
-    private static bool IsEar(IReadOnlyList<Vector2> corners, List<int> ring, int previous, int current, int next, bool strict)
+    private static bool IsEar(IReadOnlyList<Vector2> corners, List<int> ring, int previous, int current, int next, float tolerance, bool strict)
     {
         var a = corners[previous];
         var b = corners[current];
@@ -233,7 +264,7 @@ public static class EarClipping
         // A reflex corner can never be an ear; its triangle lies partly outside the polygon.
         // Collinear corners (cross ~ 0) are skipped on the strict pass - their zero-area triangle
         // would add nothing and can wedge the algorithm - and clipped away on the relaxed one
-        if (strict ? cross <= Epsilon : cross < -Epsilon) return false;
+        if (strict ? cross <= tolerance : cross < -tolerance) return false;
 
         // The triangle must contain no other remaining corner, or clipping it would swallow part of
         // the polygon. A corner that sits exactly on one of the triangle's own corners is the other
@@ -244,9 +275,9 @@ public static class EarClipping
 
             var point = corners[index];
 
-            if ((point - a).LengthSquared() < Epsilon * Epsilon || (point - b).LengthSquared() < Epsilon * Epsilon || (point - c).LengthSquared() < Epsilon * Epsilon) continue;
+            if ((point - a).LengthSquared() < tolerance || (point - b).LengthSquared() < tolerance || (point - c).LengthSquared() < tolerance) continue;
 
-            if (ContainsPoint(a, b, c, point)) return false;
+            if (ContainsPoint(a, b, c, point, tolerance)) return false;
         }
 
         return true;
@@ -255,8 +286,8 @@ public static class EarClipping
     private static float Cross(Vector2 a, Vector2 b, Vector2 c)
         => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
 
-    private static bool ContainsPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 point)
-        => Cross(a, b, point) >= -Epsilon
-        && Cross(b, c, point) >= -Epsilon
-        && Cross(c, a, point) >= -Epsilon;
+    private static bool ContainsPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 point, float tolerance)
+        => Cross(a, b, point) >= -tolerance
+        && Cross(b, c, point) >= -tolerance
+        && Cross(c, a, point) >= -tolerance;
 }

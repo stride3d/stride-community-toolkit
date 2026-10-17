@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -12,12 +13,27 @@ namespace Stride.CommunityToolkit.Bepu;
 /// the text, inside a single <see cref="ConvexHullCollider"/>.
 /// </summary>
 /// <remarks>
+/// <para>
 /// A hull fills a glyph's holes and its concave bays, so an O collides as a disc and a C as a D; for
 /// letters that tumble and pile up that is right, and it is cheap. Lettering that must be walked into
 /// or shot through its holes wants a <c>MeshCollider</c> on a static instead.
+/// </para>
+/// <para>
+/// The hulls of a string are kept, keyed by the font, the text and the options that shape them, so a
+/// word dropped a hundred times shares one set and Stride's own cache of built Bepu hulls hits. The
+/// store holds the last 64 strings; a counter that changes every frame does not fill it for ever.
+/// </para>
+/// <para>
+/// A mass on the options is the word's: the toolkit divides it among the hulls, since Bepu adds a
+/// hull's mass once per hull.
+/// </para>
 /// </remarks>
 public static class TextCollider
 {
+    private const int Capacity = 64;
+
+    private static readonly ConcurrentDictionary<string, DecomposedHulls> Hulls = new();
+
     /// <summary>
     /// Creates the collider of <paramref name="text"/>.
     /// </summary>
@@ -33,7 +49,8 @@ public static class TextCollider
     }
 
     /// <summary>
-    /// The hulls of a string, one per glyph, for sharing between every body that shows the same lettering.
+    /// The hulls of a string, one per glyph, shared between every body that shows the same lettering
+    /// with the same options.
     /// </summary>
     /// <param name="font">The font.</param>
     /// <param name="text">The text.</param>
@@ -46,6 +63,39 @@ public static class TextCollider
         ArgumentNullException.ThrowIfNull(font);
         ArgumentNullException.ThrowIfNull(text);
 
+        options ??= new TextMeshOptions();
+
+        var key = KeyFor(font, text, options);
+
+        if (Hulls.TryGetValue(key, out var cached)) return cached;
+
+        var hulls = Build(font, text, options);
+
+        if (Hulls.Count >= Capacity) Hulls.Clear();
+
+        return Hulls.GetOrAdd(key, hulls);
+    }
+
+    /// <summary>
+    /// How many hulls a collider holds: one per glyph for lettering, which is what a mass given for the
+    /// whole word is divided by.
+    /// </summary>
+    /// <param name="collider">The collider.</param>
+    /// <returns>The number of hulls, at least 1.</returns>
+    /// <exception cref="ArgumentNullException">The collider is null.</exception>
+    public static int HullCount(ConvexHullCollider collider)
+    {
+        ArgumentNullException.ThrowIfNull(collider);
+
+        var count = 0;
+
+        foreach (var mesh in collider.Hull.Meshes) count += mesh.Hulls.Length;
+
+        return Math.Max(count, 1);
+    }
+
+    private static DecomposedHulls Build(MeshFont font, string text, TextMeshOptions options)
+    {
         var glyphs = TextMesh.CreateGlyphs(font, text, options);
 
         if (glyphs.Count == 0)
@@ -57,17 +107,39 @@ public static class TextCollider
         {
             var glyph = glyphs[g];
             var vertices = glyph.Mesh.Vertices;
-            var points = new Vector3[vertices.Length];
 
-            for (var i = 0; i < vertices.Length; i++) points[i] = vertices[i].Position + glyph.Position;
+            // The mesh repeats a position for every wall and cap that meets there; the hull wants each
+            // once, and the indices (which draw the debug shape) are remapped to the unique points
+            var unique = new Dictionary<Vector3, uint>(vertices.Length);
+            var remap = new uint[vertices.Length];
+            var points = new List<Vector3>(vertices.Length / 3);
+
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                var position = vertices[i].Position + glyph.Position;
+
+                if (!unique.TryGetValue(position, out var index))
+                {
+                    index = (uint)points.Count;
+                    unique[position] = index;
+                    points.Add(position);
+                }
+
+                remap[i] = index;
+            }
 
             var indices = new uint[glyph.Mesh.Indices.Length];
 
-            for (var i = 0; i < indices.Length; i++) indices[i] = (uint)glyph.Mesh.Indices[i];
+            for (var i = 0; i < indices.Length; i++) indices[i] = remap[glyph.Mesh.Indices[i]];
 
-            hulls[g] = new Hull(points, indices);
+            hulls[g] = new Hull([.. points], indices);
         }
 
         return new DecomposedHulls([new DecomposedMesh(hulls)]);
     }
+
+    /// <summary>A snapshot of everything that shapes the hulls; the options object itself can change after the call.</summary>
+    private static string KeyFor(MeshFont font, string text, TextMeshOptions options)
+        => string.Join('\u001f', font.Name, text, options.Size, options.Depth, options.CurveQuality, options.Anchor, options.LetterSpacing, options.LineSpacing, options.Alignment, options.Kerning,
+            options.Bevel is null ? "" : $"{options.Bevel.Size}/{options.Bevel.Thickness}/{options.Bevel.Segments}");
 }

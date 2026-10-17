@@ -17,11 +17,12 @@ public sealed record TextBevel
     /// <param name="size">How far the bevel reaches in from the outline across the cap, in world units.</param>
     /// <param name="thickness">How far the bevel reaches along the depth, from the cap towards the middle, in world units; capped at half the depth.</param>
     /// <param name="segments">How many steps the rounding takes; 1 is a chamfer, 3 reads as round, 6 is smooth up close.</param>
-    /// <exception cref="ArgumentOutOfRangeException">The size or the thickness is not positive, or there are no segments.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The size or the thickness is not a positive finite number, or there are no segments.</exception>
     public TextBevel(float size, float thickness, int segments = 3)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(thickness);
+        if (!float.IsFinite(size) || size <= 0f) throw new ArgumentOutOfRangeException(nameof(size), size, "The bevel size must be a positive finite number.");
+        if (!float.IsFinite(thickness) || thickness <= 0f) throw new ArgumentOutOfRangeException(nameof(thickness), thickness, "The bevel thickness must be a positive finite number.");
+
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(segments);
 
         Size = size;

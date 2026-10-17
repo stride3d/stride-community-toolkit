@@ -26,7 +26,7 @@ internal static class OutlineDecoder
         {
             if (end >= points.Length) throw new InvalidDataException("A contour ends past the last point of the outline.");
 
-            if (end >= first) contours.Add(DecodeContour(points, tags, first, end));
+            if (end >= first && DecodeContour(points, tags, first, end) is { } contour) contours.Add(contour);
 
             first = end + 1;
         }
@@ -34,7 +34,8 @@ internal static class OutlineDecoder
         return [.. contours];
     }
 
-    private static GlyphContour DecodeContour(ReadOnlySpan<Vector2> points, ReadOnlySpan<byte> tags, int first, int last)
+    /// <summary>One contour, or <see langword="null"/> for a contour of a single point, which some fonts carry and nothing can fill.</summary>
+    private static GlyphContour? DecodeContour(ReadOnlySpan<Vector2> points, ReadOnlySpan<byte> tags, int first, int last)
     {
         var walk = new Walk(points, tags, first, last);
         var segments = new List<OutlineSegment>(last - first + 2);
@@ -60,6 +61,9 @@ internal static class OutlineDecoder
                     break;
             }
         }
+
+        // A single on-curve point makes no segment at all; it is a mark some fonts leave (Consolas has 364 of them)
+        if (segments.Count == 0) return null;
 
         // A contour closes with a line back to its start unless a curve already ended there
         if (!walk.Closed && segments[^1].End != walk.Start) segments.Add(OutlineSegment.Line(walk.Start));

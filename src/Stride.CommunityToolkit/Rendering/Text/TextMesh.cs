@@ -27,6 +27,12 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// font allows. <see cref="TextMeshOptions.Anchor"/> moves the block so a chosen corner or centre sits at
 /// the origin.
 /// </para>
+/// <para>
+/// All the geometry is worked out in the font's EM units and scaled on the way out, so a word a
+/// centimetre across is triangulated exactly as one a metre across. Within one build each distinct
+/// glyph is prepared once, however often it occurs. A glyph whose contours cross or overlap, which a
+/// few fonts have, is reported by font and code point rather than built wrong.
+/// </para>
 /// </remarks>
 public static class TextMesh
 {
@@ -36,22 +42,24 @@ public static class TextMesh
     /// <param name="font">The font.</param>
     /// <param name="text">The text; <c>\n</c> starts a new line. Characters the font lacks draw its "missing glyph" box.</param>
     /// <param name="options">Size, depth, layout; the defaults are one unit per EM and a depth of 0.25.</param>
-    /// <returns>The mesh data; <see cref="GeometricMeshDataExtensions.ToMeshDraw"/> uploads it. Empty when the text has nothing to draw.</returns>
+    /// <returns>The mesh data; <see cref="GeometricMeshDataExtensions.ToMesh"/> uploads it with bounds. Empty when the text has nothing to draw, which a GPU upload refuses.</returns>
     /// <exception cref="ArgumentNullException">The font or the text is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">An option is not a positive finite number where it has to be.</exception>
+    /// <exception cref="InvalidOperationException">A glyph cannot be built: its contours cross or overlap, or the bevel folds it; the message names the font and the code point.</exception>
     public static GeometricMeshData<VertexPositionNormalTexture> Create(MeshFont font, string text, TextMeshOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(font);
         ArgumentNullException.ThrowIfNull(text);
 
-        options ??= new TextMeshOptions();
+        options = Validate(options);
 
         var layout = Layout.Build(font, text, options);
-        var emitter = new Emitter(options.Depth, options.Bevel);
-        var block = layout.Block;
+        var prepared = new Dictionary<int, PreparedGlyph>();
+        var emitter = new Emitter(options);
 
         foreach (var placed in layout.Glyphs)
         {
-            emitter.AddGlyph(placed.Glyph.Flatten(options.CurveQuality), placed.Pen, placed.Pen + layout.Shift, options.Size, block.Min, block.Max);
+            emitter.Add(Prepare(font, placed.Glyph, options, prepared), placed.Pen, placed.Pen + layout.Shift, layout.Block.Min, layout.Block.Max);
         }
 
         return emitter.ToMeshData($"Text '{text}'");
@@ -64,10 +72,51 @@ public static class TextMesh
     /// <param name="font">The font.</param>
     /// <param name="text">The text; <c>\n</c> starts a new line.</param>
     /// <param name="options">Size, depth, layout.</param>
-    /// <returns>A draw for a <see cref="Mesh"/>; the caller owns its buffers, see <see cref="GeometricMeshDataExtensions.ToMeshDraw"/>.</returns>
+    /// <returns>A draw for a <see cref="Mesh"/>; the caller owns its buffers, see <see cref="GeometricMeshDataExtensions.ToMeshDraw"/>. <see cref="CreateMesh"/> adds the bounds.</returns>
     /// <exception cref="ArgumentNullException">The device, the font or the text is null.</exception>
+    /// <exception cref="ArgumentException">The text has nothing to draw (empty, spaces, line breaks): a GPU buffer cannot be empty, so remove the mesh instead.</exception>
     public static MeshDraw CreateMeshDraw(GraphicsDevice device, MeshFont font, string text, TextMeshOptions? options = null)
         => Create(font, text, options).ToMeshDraw(device);
+
+    /// <summary>
+    /// Builds the lettering, uploads it and wraps it in a <see cref="Mesh"/> with its bounds, which the
+    /// renderer needs to cull it when it is off screen.
+    /// </summary>
+    /// <param name="device">The graphics device the buffers are created on.</param>
+    /// <param name="font">The font.</param>
+    /// <param name="text">The text; <c>\n</c> starts a new line.</param>
+    /// <param name="options">Size, depth, layout.</param>
+    /// <param name="materialIndex">The index of the material the mesh uses in its model.</param>
+    /// <returns>The mesh; the caller owns its draw's buffers.</returns>
+    /// <exception cref="ArgumentNullException">The device, the font or the text is null.</exception>
+    /// <exception cref="ArgumentException">The text has nothing to draw.</exception>
+    public static Mesh CreateMesh(GraphicsDevice device, MeshFont font, string text, TextMeshOptions? options = null, int materialIndex = 0)
+        => Create(font, text, options).ToMesh(device, materialIndex);
+
+    /// <summary>
+    /// Builds the lettering as a complete <see cref="Model"/>: one mesh with its bounds, one material.
+    /// </summary>
+    /// <param name="device">The graphics device the buffers are created on.</param>
+    /// <param name="material">The material the lettering is drawn with.</param>
+    /// <param name="font">The font.</param>
+    /// <param name="text">The text; <c>\n</c> starts a new line.</param>
+    /// <param name="options">Size, depth, layout.</param>
+    /// <returns>The model, ready for a <c>ModelComponent</c>; the caller owns the mesh's buffers.</returns>
+    /// <exception cref="ArgumentNullException">The device, the material, the font or the text is null.</exception>
+    /// <exception cref="ArgumentException">The text has nothing to draw.</exception>
+    public static Model CreateModel(GraphicsDevice device, Material material, MeshFont font, string text, TextMeshOptions? options = null)
+    {
+        ArgumentNullException.ThrowIfNull(material);
+
+        var mesh = CreateMesh(device, font, text, options);
+
+        var model = new Model { new MaterialInstance { Material = material }, mesh };
+
+        model.BoundingBox = mesh.BoundingBox;
+        model.BoundingSphere = mesh.BoundingSphere;
+
+        return model;
+    }
 
     /// <summary>
     /// Builds the lettering one glyph at a time, each centred on itself and told where it belongs: for a
@@ -78,27 +127,30 @@ public static class TextMesh
     /// <param name="options">Size, depth, layout; the anchor applies to the whole block, as in <see cref="Create"/>.</param>
     /// <returns>One mesh per glyph that draws something, in text order; spaces are left out.</returns>
     /// <exception cref="ArgumentNullException">The font or the text is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">An option is not a positive finite number where it has to be.</exception>
+    /// <exception cref="InvalidOperationException">A glyph cannot be built; the message names the font and the code point.</exception>
     public static IReadOnlyList<GlyphMesh> CreateGlyphs(MeshFont font, string text, TextMeshOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(font);
         ArgumentNullException.ThrowIfNull(text);
 
-        options ??= new TextMeshOptions();
+        options = Validate(options);
 
         var layout = Layout.Build(font, text, options);
+        var prepared = new Dictionary<int, PreparedGlyph>();
         var glyphs = new List<GlyphMesh>(layout.Glyphs.Count);
 
         foreach (var placed in layout.Glyphs)
         {
-            var shape = placed.Glyph.Flatten(options.CurveQuality);
+            var glyph = Prepare(font, placed.Glyph, options, prepared);
 
-            if (shape.IsEmpty) continue;
+            if (glyph.IsEmpty) continue;
 
             var origin = placed.Pen + layout.Shift;
             var centre = origin + (placed.Glyph.BoundsMin + placed.Glyph.BoundsMax) * 0.5f;
-            var emitter = new Emitter(options.Depth, options.Bevel);
+            var emitter = new Emitter(options);
 
-            emitter.AddGlyph(shape, Vector2.Zero, origin - centre, options.Size, placed.Glyph.BoundsMin, placed.Glyph.BoundsMax);
+            emitter.Add(glyph, Vector2.Zero, origin - centre, placed.Glyph.BoundsMin, placed.Glyph.BoundsMax);
 
             glyphs.Add(new GlyphMesh(placed.Glyph.Codepoint, new Vector3(centre * options.Size, 0f), emitter.ToMeshData($"Glyph '{char.ConvertFromUtf32(placed.Glyph.Codepoint)}'")));
         }
@@ -115,18 +167,63 @@ public static class TextMesh
     /// <param name="options">Size, depth, layout.</param>
     /// <returns>The box.</returns>
     /// <exception cref="ArgumentNullException">The font or the text is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">An option is not a positive finite number where it has to be.</exception>
     public static BoundingBox Measure(MeshFont font, string text, TextMeshOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(font);
         ArgumentNullException.ThrowIfNull(text);
 
-        options ??= new TextMeshOptions();
+        options = Validate(options);
 
         var layout = Layout.Build(font, text, options);
         var min = (layout.Block.Min + layout.Shift) * options.Size;
         var max = (layout.Block.Max + layout.Shift) * options.Size;
 
         return new BoundingBox(new Vector3(min, -options.Depth * 0.5f), new Vector3(max, options.Depth * 0.5f));
+    }
+
+    /// <summary>The options checked once, the same way for every entry point; the defaults when none were given.</summary>
+    private static TextMeshOptions Validate(TextMeshOptions? options)
+    {
+        options ??= new TextMeshOptions();
+
+        Positive(options.Size, nameof(options.Size));
+        Positive(options.Depth, nameof(options.Depth));
+        Positive(options.LineSpacing, nameof(options.LineSpacing));
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(options.CurveQuality, nameof(options.CurveQuality));
+
+        if (!float.IsFinite(options.LetterSpacing))
+            throw new ArgumentOutOfRangeException(nameof(options.LetterSpacing), options.LetterSpacing, "The letter spacing must be a finite number.");
+
+        return options;
+
+        static void Positive(float value, string name)
+        {
+            if (!float.IsFinite(value) || value <= 0f)
+                throw new ArgumentOutOfRangeException(name, value, $"{name} must be a positive finite number.");
+        }
+    }
+
+    /// <summary>
+    /// The glyph's geometry in EM units, once per distinct glyph per build: its polygons flattened and
+    /// checked, their caps triangulated, and the bevel's rings with a width the glyph can take.
+    /// </summary>
+    private static PreparedGlyph Prepare(MeshFont font, GlyphOutline glyph, TextMeshOptions options, Dictionary<int, PreparedGlyph> prepared)
+    {
+        if (prepared.TryGetValue(glyph.Codepoint, out var existing)) return existing;
+
+        try
+        {
+            var result = PreparedGlyph.Build(glyph, options);
+
+            prepared[glyph.Codepoint] = result;
+
+            return result;
+        }
+        catch (Exception e) when (e is InvalidOperationException or InvalidDataException or ArgumentException)
+        {
+            throw new InvalidOperationException($"'{font.Name}' U+{glyph.Codepoint:X4} ('{char.ConvertFromUtf32(glyph.Codepoint)}') cannot be built: {e.Message}", e);
+        }
     }
 
     /// <summary>A glyph and where its pen sits, in EM units before the anchor shift.</summary>
@@ -237,46 +334,154 @@ public static class TextMesh
         }
     }
 
-    /// <summary>Accumulates the caps, bevels and walls of extruded polygons into one vertex and index list.</summary>
+    /// <summary>
+    /// One polygon of a glyph ready to extrude, in EM units: its loops (the outside counter-clockwise,
+    /// then the holes clockwise), the triangles of its cap, and with a bevel the rings each loop steps
+    /// through from the wall to the pulled-in cap, whose triangles are <see cref="CapTriangles"/>.
+    /// </summary>
+    /// <param name="Loops">The loops at the wall.</param>
+    /// <param name="Rings">With a bevel, ring k for every loop, ring 0 being <paramref name="Loops"/>; without, one ring.</param>
+    /// <param name="CapTriangles">The cap's triangles, indices into the innermost ring's corners, outside first then the holes.</param>
+    private sealed record PreparedPolygon(Vector2[][] Loops, Vector2[][][] Rings, List<int> CapTriangles);
+
+    /// <summary>A glyph's polygons prepared, and the bevel width in EM units they accepted.</summary>
+    private sealed class PreparedGlyph
+    {
+        private PreparedGlyph(List<PreparedPolygon> polygons, float bevelSizeEm)
+        {
+            Polygons = polygons;
+            BevelSizeEm = bevelSizeEm;
+        }
+
+        internal List<PreparedPolygon> Polygons { get; }
+
+        /// <summary>The bevel's reach across the cap in EM units, after any shrinking the glyph needed; 0 without a bevel.</summary>
+        internal float BevelSizeEm { get; }
+
+        internal bool IsEmpty => Polygons.Count == 0;
+
+        internal static PreparedGlyph Build(GlyphOutline glyph, TextMeshOptions options)
+        {
+            var shape = glyph.Flatten(options.CurveQuality);
+            var loops = new List<Vector2[][]>(shape.Polygons.Count);
+
+            foreach (var polygon in shape.Polygons)
+            {
+                var set = new Vector2[1 + polygon.Holes.Count][];
+
+                set[0] = [.. polygon.Outer];
+
+                for (var h = 0; h < polygon.Holes.Count; h++) set[h + 1] = [.. polygon.Holes[h]];
+
+                loops.Add(set);
+            }
+
+            if (options.Bevel is null)
+            {
+                var polygons = new List<PreparedPolygon>(loops.Count);
+
+                foreach (var set in loops) polygons.Add(new PreparedPolygon(set, [set], Triangulate(set)));
+
+                return new PreparedGlyph(polygons, 0f);
+            }
+
+            // The bevel's reach in EM units, halved for the whole glyph until every polygon takes it: a
+            // dot and its stem get the same rounding, or the glyph is given up
+            var sizeEm = options.Bevel.Size / options.Size;
+            var steps = options.Bevel.Segments;
+
+            for (var attempt = 0; ; attempt++)
+            {
+                var polygons = new List<PreparedPolygon>(loops.Count);
+                var fits = true;
+
+                foreach (var set in loops)
+                {
+                    var rings = new Vector2[steps + 1][][];
+
+                    rings[0] = set;
+
+                    for (var k = 1; k <= steps && fits; k++)
+                    {
+                        var inset = sizeEm * (1f - MathF.Cos(k / (float)steps * MathUtil.PiOverTwo));
+
+                        rings[k] = new Vector2[set.Length][];
+
+                        for (var l = 0; l < set.Length; l++) rings[k][l] = LoopInset.Inset(set[l], inset);
+
+                        // Every step is checked against the one before, not only the last against the
+                        // wall: a fold between two steps would pass a check of the ends alone
+                        fits = LoopInset.Fits(rings[k - 1], rings[k]);
+                    }
+
+                    if (!fits) break;
+
+                    polygons.Add(new PreparedPolygon(set, rings, Triangulate(rings[steps])));
+                }
+
+                if (fits) return new PreparedGlyph(polygons, sizeEm);
+
+                if (attempt == 6) throw new InvalidOperationException("the bevel is wider than the glyph's thinnest part, so the cap would fold over itself; lower the bevel size");
+
+                sizeEm *= 0.5f;
+            }
+        }
+
+        private static List<int> Triangulate(Vector2[][] loops)
+            => EarClipping.Triangulate(loops[0], loops.Skip(1).ToList());
+    }
+
+    /// <summary>Accumulates the caps, bevels and walls of prepared polygons into one vertex and index list, scaled and placed on the way in.</summary>
     private sealed class Emitter
     {
         private readonly List<VertexPositionNormalTexture> _vertices = [];
         private readonly List<int> _indices = [];
+        private readonly float _scale;
         private readonly float _halfDepth;
         private readonly TextBevel? _bevel;
 
-        internal Emitter(float depth, TextBevel? bevel)
+        internal Emitter(TextMeshOptions options)
         {
-            _halfDepth = depth * 0.5f;
-            _bevel = bevel;
+            _scale = options.Size;
+            _halfDepth = options.Depth * 0.5f;
+            _bevel = options.Bevel;
         }
 
         /// <summary>
-        /// Adds a flattened glyph: every polygon of it, placed at <paramref name="origin"/> and scaled by
-        /// <paramref name="scale"/>, with cap texture coordinates spread over the box from
-        /// <paramref name="uvMin"/> to <paramref name="uvMax"/>, in which the glyph sits at <paramref name="uvOrigin"/>.
-        /// All of it in EM units apart from the scale.
+        /// Adds a prepared glyph placed at <paramref name="origin"/>, with cap texture coordinates spread over
+        /// the box from <paramref name="uvMin"/> to <paramref name="uvMax"/>, in which the glyph sits at
+        /// <paramref name="uvOrigin"/>. Everything in EM units; the scale is applied here.
         /// </summary>
-        internal void AddGlyph(GlyphShape shape, Vector2 uvOrigin, Vector2 origin, float scale, Vector2 uvMin, Vector2 uvMax)
+        internal void Add(PreparedGlyph glyph, Vector2 uvOrigin, Vector2 origin, Vector2 uvMin, Vector2 uvMax)
         {
-            var uv = new CapUv(uvOrigin, origin, scale, uvMin, uvMax);
+            var placement = new Placement(origin, _scale, uvOrigin, uvMin, uvMax);
 
-            foreach (var polygon in shape.Polygons)
+            foreach (var polygon in glyph.Polygons)
             {
-                // The polygon in world units: the outside first, then each hole, which is the order the triangulation's indices expect
-                var loops = new List<Vector2[]>(1 + polygon.Holes.Count) { Scale(polygon.Outer, origin, scale) };
-
-                foreach (var hole in polygon.Holes) loops.Add(Scale(hole, origin, scale));
-
                 if (_bevel is null)
                 {
-                    AddCaps(loops, _halfDepth, uv);
+                    AddCaps(polygon.Rings[0], polygon.CapTriangles, _halfDepth, placement);
 
-                    foreach (var loop in loops) AddWalls(loop, _halfDepth);
+                    foreach (var loop in polygon.Loops) AddWalls(loop, _halfDepth, placement);
+
+                    continue;
                 }
-                else
+
+                // The bevel cannot go deeper than the middle, where the front and the back bevels would meet
+                var profile = new BevelProfile(glyph.BevelSizeEm * _scale, MathF.Min(_bevel.Thickness, _halfDepth), _bevel.Segments, _halfDepth);
+
+                AddCaps(polygon.Rings[profile.Steps], polygon.CapTriangles, _halfDepth, placement);
+
+                for (var l = 0; l < polygon.Loops.Length; l++)
                 {
-                    AddBevelled(loops, _bevel, uv);
+                    for (var k = 0; k < profile.Steps; k++)
+                    {
+                        AddBevelRing(polygon.Rings[k][l], polygon.Rings[k + 1][l], profile, k, placement, front: true);
+                        AddBevelRing(polygon.Rings[k][l], polygon.Rings[k + 1][l], profile, k, placement, front: false);
+                    }
+
+                    // A bevel as deep as half the depth leaves no wall between the two
+                    if (_halfDepth - profile.Thickness > 1e-6f) AddWalls(polygon.Loops[l], _halfDepth - profile.Thickness, placement);
                 }
             }
         }
@@ -284,31 +489,22 @@ public static class TextMesh
         internal GeometricMeshData<VertexPositionNormalTexture> ToMeshData(string name)
             => new([.. _vertices], [.. _indices], isLeftHanded: false) { Name = name };
 
-        private static Vector2[] Scale(IReadOnlyList<Vector2> loop, Vector2 origin, float scale)
-        {
-            var scaled = new Vector2[loop.Count];
-
-            for (var i = 0; i < loop.Count; i++) scaled[i] = (loop[i] + origin) * scale;
-
-            return scaled;
-        }
-
         /// <summary>
-        /// The front cap at +<paramref name="z"/> and the back cap at -<paramref name="z"/>, triangulated once
-        /// and shared: the front reverses the counter-clockwise triangulation so it winds clockwise for the
-        /// viewer at +Z, the back keeps it, where the same order already reads clockwise.
+        /// The front cap at +<paramref name="z"/> and the back cap at -<paramref name="z"/> from the same
+        /// corners and triangles: the front reverses the counter-clockwise triangulation so it winds
+        /// clockwise for the viewer at +Z, the back keeps it, where the same order already reads clockwise.
         /// </summary>
-        private void AddCaps(List<Vector2[]> loops, float z, CapUv uv)
+        private void AddCaps(Vector2[][] loops, List<int> triangles, float z, Placement placement)
         {
+            // The triangles index the corners of every loop in order: the outside, then each hole
             var corners = new List<Vector2>(loops.Sum(l => l.Length));
 
             foreach (var loop in loops) corners.AddRange(loop);
 
-            // One triangulation serves both caps: the corners are the same, only z and the winding differ
-            var triangles = EarClipping.Triangulate(loops[0], loops.Skip(1).ToList());
+            // Front cap: one vertex per corner at +z, then the triangles reversed
             var front = _vertices.Count;
 
-            foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(new Vector3(corner, z), Vector3.UnitZ, uv.Of(corner)));
+            foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(placement.World(corner, z), Vector3.UnitZ, placement.Uv(corner)));
 
             for (var i = 0; i < triangles.Count; i += 3)
             {
@@ -317,10 +513,10 @@ public static class TextMesh
                 _indices.Add(front + triangles[i]);
             }
 
-            // The back cap at -z, facing -Z, in the triangulation's own order
+            // Back cap: the same corners at -z, facing -Z, in the triangulation's own order
             var back = _vertices.Count;
 
-            foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(new Vector3(corner, -z), -Vector3.UnitZ, uv.Of(corner)));
+            foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(placement.World(corner, -z), -Vector3.UnitZ, placement.Uv(corner)));
 
             for (var i = 0; i < triangles.Count; i += 3)
             {
@@ -336,7 +532,7 @@ public static class TextMesh
         /// clockwise for a hole, so the same rule, rotate the edge to the right, points the wall away from the
         /// material either way. u runs 0..1 along the loop and v from the front to the back.
         /// </summary>
-        private void AddWalls(Vector2[] loop, float z)
+        private void AddWalls(Vector2[] loop, float z, Placement placement)
         {
             var total = 0f;
 
@@ -356,102 +552,30 @@ public static class TextMesh
                 if (length < 1e-7f) continue;
 
                 var normal = new Vector3(edge.Y / length, -edge.X / length, 0f);
-
                 var u0 = along / total;
                 var u1 = (along + length) / total;
 
                 AddQuad(
-                    new Corner(new Vector3(from, z), normal, new Vector2(u0, 0f)),
-                    new Corner(new Vector3(to, z), normal, new Vector2(u1, 0f)),
-                    new Corner(new Vector3(to, -z), normal, new Vector2(u1, 1f)),
-                    new Corner(new Vector3(from, -z), normal, new Vector2(u0, 1f)));
+                    new Corner(placement.World(from, z), normal, new Vector2(u0, 0f)),
+                    new Corner(placement.World(to, z), normal, new Vector2(u1, 0f)),
+                    new Corner(placement.World(to, -z), normal, new Vector2(u1, 1f)),
+                    new Corner(placement.World(from, -z), normal, new Vector2(u0, 1f)));
 
                 along += length;
             }
         }
 
         /// <summary>
-        /// The caps pulled in by the bevel, a ring of quads per step between the cap and the wall on each
-        /// side, and the walls between the two bevels. The profile is a quarter ellipse: leaving the wall
-        /// the surface still runs along the depth, meeting the cap it runs across it. A bevel too wide for
-        /// the polygon folds the pulled-in cap over itself, which <see cref="LoopInset.Fits"/> catches; the size is
-        /// halved for the polygon, up to six times, before the bevel is given up as an error.
+        /// The quads between step <paramref name="step"/> and the next of a bevel on one loop:
+        /// <paramref name="outer"/> is the step nearer the wall, <paramref name="inner"/> the one nearer the
+        /// cap. Flat around the loop like the walls, and rounded across the steps: a vertex's normal is the
+        /// profile's, which is an ellipse, so it leans by the ellipse and not by a circle.
         /// </summary>
-        private void AddBevelled(List<Vector2[]> loops, TextBevel bevel, CapUv uv)
-        {
-            // The bevel cannot go deeper than the middle, where the front and the back bevels would meet
-            var thickness = MathF.Min(bevel.Thickness, _halfDepth);
-            var size = bevel.Size;
-            var steps = bevel.Segments;
-
-            for (var attempt = 0; ; attempt++)
-            {
-                // ring[k] is every loop pulled in by the k-th step; ring[0] is the loop itself, at the wall
-                var rings = new Vector2[steps + 1][][];
-                var angles = new float[steps + 1];
-
-                for (var k = 0; k <= steps; k++)
-                {
-                    angles[k] = k / (float)steps * MathUtil.PiOverTwo;
-
-                    var inset = size * (1f - MathF.Cos(angles[k]));
-
-                    rings[k] = new Vector2[loops.Count][];
-
-                    for (var l = 0; l < loops.Count; l++) rings[k][l] = inset == 0f ? loops[l] : LoopInset.Inset(loops[l], inset);
-                }
-
-                // The caps go first so a fold can be undone by cutting the lists back to where they were
-                var innermost = rings[steps].ToList();
-                var capsAt = _vertices.Count;
-                var indicesAt = _indices.Count;
-
-                try
-                {
-                    if (!LoopInset.Fits(loops, innermost)) throw new InvalidOperationException("The pulled-in cap folds over itself.");
-
-                    AddCaps(innermost, _halfDepth, uv);
-                }
-                catch (Exception e) when (e is InvalidOperationException or ArgumentException)
-                {
-                    _vertices.RemoveRange(capsAt, _vertices.Count - capsAt);
-                    _indices.RemoveRange(indicesAt, _indices.Count - indicesAt);
-
-                    if (attempt == 6) throw new InvalidOperationException("The bevel is wider than the glyph's thinnest part, so the cap folds over itself; lower the bevel size.", e);
-
-                    size *= 0.5f;
-
-                    continue;
-                }
-
-                // The caps fit: the rings of quads from the wall to each cap, then the walls between the two bevels
-                for (var l = 0; l < loops.Count; l++)
-                {
-                    for (var k = 0; k < steps; k++)
-                    {
-                        AddBevelRing(rings[k][l], rings[k + 1][l], thickness, angles[k], angles[k + 1], uv, front: true);
-                        AddBevelRing(rings[k][l], rings[k + 1][l], thickness, angles[k], angles[k + 1], uv, front: false);
-                    }
-
-                    // A bevel as deep as half the depth leaves no wall between the two
-                    if (_halfDepth - thickness > 1e-6f) AddWalls(loops[l], _halfDepth - thickness);
-                }
-
-                return;
-            }
-        }
-
-        /// <summary>
-        /// The quads between two steps of a bevel on one loop: <paramref name="outer"/> is the step nearer the
-        /// wall, <paramref name="inner"/> the one nearer the cap. Flat around the loop like the walls, and
-        /// rounded across the steps: a vertex's normal leans from the edge's outward direction towards the
-        /// cap by its step's angle.
-        /// </summary>
-        private void AddBevelRing(Vector2[] outer, Vector2[] inner, float thickness, float angleOuter, float angleInner, CapUv uv, bool front)
+        private void AddBevelRing(Vector2[] outer, Vector2[] inner, BevelProfile profile, int step, Placement placement, bool front)
         {
             var sign = front ? 1f : -1f;
-            var zOuter = sign * (_halfDepth - thickness + thickness * MathF.Sin(angleOuter));
-            var zInner = sign * (_halfDepth - thickness + thickness * MathF.Sin(angleInner));
+            var zOuter = sign * profile.Z(step);
+            var zInner = sign * profile.Z(step + 1);
             var count = outer.Length;
 
             for (var i = 0; i < count; i++)
@@ -466,15 +590,15 @@ public static class TextMesh
                 edge.Normalize();
 
                 var outward = new Vector3(edge.Y, -edge.X, 0f);
-                var normalOuter = outward * MathF.Cos(angleOuter) + new Vector3(0f, 0f, sign * MathF.Sin(angleOuter));
-                var normalInner = outward * MathF.Cos(angleInner) + new Vector3(0f, 0f, sign * MathF.Sin(angleInner));
+                var normalOuter = profile.Normal(outward, step, sign);
+                var normalInner = profile.Normal(outward, step + 1, sign);
 
                 // The higher-z pair first and the loop's direction left to right, which is clockwise from outside
                 // on the front; on the back the outer step is the higher one
-                var innerFrom = new Corner(new Vector3(inner[i], zInner), normalInner, uv.Of(inner[i]));
-                var innerTo = new Corner(new Vector3(inner[next], zInner), normalInner, uv.Of(inner[next]));
-                var outerFrom = new Corner(new Vector3(outer[i], zOuter), normalOuter, uv.Of(outer[i]));
-                var outerTo = new Corner(new Vector3(outer[next], zOuter), normalOuter, uv.Of(outer[next]));
+                var innerFrom = new Corner(placement.World(inner[i], zInner), normalInner, placement.Uv(inner[i]));
+                var innerTo = new Corner(placement.World(inner[next], zInner), normalInner, placement.Uv(inner[next]));
+                var outerFrom = new Corner(placement.World(outer[i], zOuter), normalOuter, placement.Uv(outer[i]));
+                var outerTo = new Corner(placement.World(outer[next], zOuter), normalOuter, placement.Uv(outer[next]));
 
                 if (front)
                 {
@@ -509,22 +633,50 @@ public static class TextMesh
         private readonly record struct Corner(Vector3 Position, Vector3 Normal, Vector2 Uv);
 
         /// <summary>
-        /// Texture coordinates for a cap or bevel vertex from its world position: back to EM units, into the
-        /// glyph's place in the block, then 0..1 across the block, v downwards.
+        /// The bevel's profile in world units: a quarter ellipse <see cref="Size"/> across the cap and
+        /// <see cref="Thickness"/> through the depth, in <see cref="Steps"/> steps from the wall to the cap.
         /// </summary>
-        private readonly struct CapUv
+        private readonly record struct BevelProfile(float Size, float Thickness, int Steps, float HalfDepth)
         {
-            private readonly Vector2 _uvOrigin;
+            /// <summary>The profile's angle at a step: 0 at the wall, a quarter turn at the cap.</summary>
+            private float Angle(int step) => step / (float)Steps * MathUtil.PiOverTwo;
+
+            /// <summary>The depth of a step on the front; negate for the back.</summary>
+            internal float Z(int step) => HalfDepth - Thickness + Thickness * MathF.Sin(Angle(step));
+
+            /// <summary>
+            /// The normal at a step: the profile runs (size (1 - cos a), thickness sin a) in (inward, depth),
+            /// its tangent is (size sin a, thickness cos a), and the normal perpendicular to that, pointing out
+            /// of the material, is (thickness cos a, size sin a) normalised; <paramref name="sign"/> is the side.
+            /// </summary>
+            internal Vector3 Normal(Vector3 outward, int step, float sign)
+            {
+                var angle = Angle(step);
+                var normal = outward * (Thickness * MathF.Cos(angle)) + new Vector3(0f, 0f, sign * Size * MathF.Sin(angle));
+
+                normal.Normalize();
+
+                return normal;
+            }
+        }
+
+        /// <summary>
+        /// Where a glyph sits: its origin in EM units and the scale to world units, and the texture box of
+        /// the block it belongs to, in which it sits at the texture origin.
+        /// </summary>
+        private readonly struct Placement
+        {
             private readonly Vector2 _origin;
             private readonly float _scale;
+            private readonly Vector2 _uvOrigin;
             private readonly Vector2 _min;
             private readonly Vector2 _size;
 
-            internal CapUv(Vector2 uvOrigin, Vector2 origin, float scale, Vector2 uvMin, Vector2 uvMax)
+            internal Placement(Vector2 origin, float scale, Vector2 uvOrigin, Vector2 uvMin, Vector2 uvMax)
             {
-                _uvOrigin = uvOrigin;
                 _origin = origin;
                 _scale = scale;
+                _uvOrigin = uvOrigin;
                 _min = uvMin;
                 _size = uvMax - uvMin;
 
@@ -532,11 +684,15 @@ public static class TextMesh
                 if (_size.Y <= 0f) _size.Y = 1f;
             }
 
-            internal Vector2 Of(Vector2 world)
-            {
-                var em = world / _scale - _origin + _uvOrigin;
+            /// <summary>A corner in EM units placed and scaled into world units, at a depth.</summary>
+            internal Vector3 World(Vector2 em, float z) => new((em + _origin) * _scale, z);
 
-                return new Vector2((em.X - _min.X) / _size.X, 1f - (em.Y - _min.Y) / _size.Y);
+            /// <summary>Texture coordinates for a corner: into the glyph's place in the block, then 0..1 across it, v downwards.</summary>
+            internal Vector2 Uv(Vector2 em)
+            {
+                var inBlock = em + _uvOrigin;
+
+                return new Vector2((inBlock.X - _min.X) / _size.X, 1f - (inBlock.Y - _min.Y) / _size.Y);
             }
         }
     }

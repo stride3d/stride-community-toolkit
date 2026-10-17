@@ -59,7 +59,8 @@ public class GlyphShapeTests
     [Fact]
     public void AContourInsideAnotherIsItsHole_WoundTheOtherWay()
     {
-        var shape = GlyphShape.FromContours([Square(0, 0, 4), Square(1, 1, 2)]);
+        // A font winds a hole the other way from its outside; that is what makes it a hole
+        var shape = GlyphShape.FromContours([Square(0, 0, 4), Reverse(Square(1, 1, 2))]);
 
         var polygon = Assert.Single(shape.Polygons);
         var hole = Assert.Single(polygon.Holes);
@@ -69,9 +70,10 @@ public class GlyphShapeTests
     }
 
     [Fact]
-    public void TheWindingOfTheInputDoesNotMatter()
+    public void TheOutsidesWindingDoesNotMatter()
     {
-        var shape = GlyphShape.FromContours([Reverse(Square(0, 0, 4)), Reverse(Square(1, 1, 2))]);
+        // A clockwise outside with a counter-clockwise hole: still opposite, still a hole
+        var shape = GlyphShape.FromContours([Reverse(Square(0, 0, 4)), Square(1, 1, 2)]);
 
         var polygon = Assert.Single(shape.Polygons);
 
@@ -91,8 +93,8 @@ public class GlyphShapeTests
     [Fact]
     public void AnIslandInsideAHoleIsAnOutsideAgain()
     {
-        // The dot of a copyright sign: ring, hole, dot
-        var shape = GlyphShape.FromContours([Square(0, 0, 6), Square(1, 1, 4), Square(2, 2, 2)]);
+        // The dot of a copyright sign: ring, hole, dot, each wound the other way from the one around it
+        var shape = GlyphShape.FromContours([Square(0, 0, 6), Reverse(Square(1, 1, 4)), Square(2, 2, 2)]);
 
         Assert.Equal(2, shape.Polygons.Count);
         Assert.Single(shape.Polygons[0].Holes);
