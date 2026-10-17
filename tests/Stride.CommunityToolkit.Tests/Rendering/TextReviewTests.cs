@@ -53,6 +53,31 @@ public class TextReviewTests
     }
 
     [Fact]
+    public void ANearbyCornerIsNotSwallowedByAnEar()
+    {
+        // Corners 1 and 3 sit a twentieth of a percent of the extent apart: distinct corners, not the two
+        // ends of a bridge. Taking them as one lost the triangle between them and the cap came out
+        // a quarter too large (the second review's Times New Roman k)
+        Vector2[] polygon =
+        [
+            new(0.008300781f, 0f),
+            new(0.16357422f, 0.24902344f),
+            new(0.27734375f, 0.35302734f),
+            new(0.16357422f, 0.24951172f),
+            new(0.16357422f, 0.69433594f),
+        ];
+
+        var triangles = EarClipping.Triangulate(polygon);
+        var area = 0f;
+
+        for (var i = 0; i < triangles.Count; i += 3)
+            area += EarClipping.SignedArea([polygon[triangles[i]], polygon[triangles[i + 1]], polygon[triangles[i + 2]]]);
+
+        Assert.Equal(9, triangles.Count);
+        Assert.Equal(EarClipping.SignedArea(polygon), area, 1e-6f);
+    }
+
+    [Fact]
     public void AThinSliverIsStillATriangle()
     {
         // A polygon with a corner that is nearly, but not quite, flat: the sliver is part of the cap
@@ -142,15 +167,97 @@ public class TextReviewTests
         Assert.Contains(points, p => p.Y < -0.05f && p.X < 1f && p.Y > -1f);
     }
 
-    // F7: contours that cross or overlap are reported, with the glyph named
+    // F7: filled pieces that cross or overlap are kept as separate pieces, which is how composite glyphs
+    // are drawn; a self-crossing contour is reported with the glyph named
 
     [Fact]
-    public void CrossingContoursAreReported()
+    public void CrossingPiecesAreKeptAsTwoPieces()
     {
         Vector2[] a = [new(0, 0), new(1, 0), new(1, 1), new(0, 1)];
         Vector2[] b = [new(0.5f, 0.5f), new(1.5f, 0.5f), new(1.5f, 1.5f), new(0.5f, 1.5f)];
 
-        Assert.Throws<InvalidDataException>(() => GlyphShape.FromContours([a, b]));
+        var shape = GlyphShape.FromContours([a, b]);
+
+        Assert.Equal(2, shape.Polygons.Count);
+        Assert.All(shape.Polygons, p => Assert.Empty(p.Holes));
+    }
+
+    [Fact]
+    public void APieceMostlyInsideAnotherItCrossesIsNotItsHole()
+    {
+        // The small square pokes out of the big one on the right: a crossing, so two pieces, not a hole
+        Vector2[] big = [new(0, 0), new(4, 0), new(4, 4), new(0, 4)];
+        Vector2[] poking = [new(3, 1), new(5, 1), new(5, 3), new(3, 3)];
+
+        var shape = GlyphShape.FromContours([big, poking]);
+
+        Assert.Equal(2, shape.Polygons.Count);
+        Assert.All(shape.Polygons, p => Assert.Empty(p.Holes));
+    }
+
+    [Theory]
+    [InlineData(0.5f)]
+    [InlineData(0f)]
+    public void PiecesThatShareAStretchOfEdgeAreTwoPieces(float shift)
+    {
+        // Side by side with the top and bottom edges running along each other, and the same square twice
+        Vector2[] a = [new(0, 0), new(1, 0), new(1, 1), new(0, 1)];
+        Vector2[] b = [new(shift, 0), new(shift + 1, 0), new(shift + 1, 1), new(shift, 1)];
+
+        var shape = GlyphShape.FromContours([a, b]);
+
+        Assert.Equal(2, shape.Polygons.Count);
+        Assert.All(shape.Polygons, p => Assert.Empty(p.Holes));
+    }
+
+    [Fact]
+    public void PiecesThatOnlyTouchAtACornerNest()
+    {
+        // The small square touches the big one's edge from inside at one corner: still its hole
+        Vector2[] outer = [new(0, 0), new(4, 0), new(4, 4), new(0, 4)];
+        Vector2[] hole = [new(1, 1), new(3, 1), new(3, 3), new(1, 4)];
+
+        var polygon = Assert.Single(GlyphShape.FromContours([outer, hole.Reverse().ToArray()]).Polygons);
+
+        Assert.Single(polygon.Holes);
+    }
+
+    [Fact]
+    public void AStrokeThroughALetterAndItsHoleIsAPieceOfItsOwn()
+    {
+        // The bar of a Ⱥ: it crosses the outside and the hole alike, and is neither's hole or outside
+        Vector2[] outer = [new(0, 0), new(4, 0), new(4, 4), new(0, 4)];
+        Vector2[] hole = [new(1, 1), new(1, 3), new(3, 3), new(3, 1)];
+        Vector2[] bar = [new(-1, 1.8f), new(5, 1.8f), new(5, 2.2f), new(-1, 2.2f)];
+
+        var shape = GlyphShape.FromContours([outer, hole, bar]);
+
+        Assert.Equal(2, shape.Polygons.Count);
+        Assert.Single(shape.Polygons.Single(p => p.Outer.Count == 4 && p.Holes.Count == 1).Holes);
+        Assert.Empty(shape.Polygons.Single(p => p.Holes.Count == 0).Holes);
+    }
+
+    [Fact]
+    public void ABowTieIsReportedNotDropped()
+    {
+        // Its signed area cancels to nothing, which is no reason to take it for nothing
+        Vector2[] bowTie = [new(0, 0), new(1, 1), new(0, 1), new(1, 0)];
+
+        Assert.Throws<InvalidDataException>(() => GlyphShape.FromContours([bowTie]));
+    }
+
+    [Fact]
+    public void TheAccentedLettersOfTheEmbeddedFontBuildAsClosedSolids()
+    {
+        // The cedillas, ogoneks and the ring of Å cross the letters they belong to, or touch them at a
+        // corner (ą, Į, ų): two pieces each, each closed
+        foreach (var character in "ÅÇçęŞşţŲąĮų")
+        {
+            var data = TextMesh.Create(Font, character.ToString());
+
+            TextMeshTests.AssertWatertight(data);
+            TextMeshTests.AssertOutwardWinding(data);
+        }
     }
 
     [Fact]
@@ -166,7 +273,7 @@ public class TextReviewTests
     [Fact]
     public void ASelfCrossingContourIsReported()
     {
-        // A bow tie has no area and is dropped as degenerate; this one has area and crosses itself once
+        // One with area, crossing itself once
         Vector2[] crossed = [new(0, 0), new(3, 0), new(3, 2), new(1, 2), new(1, -1)];
 
         Assert.Throws<InvalidDataException>(() => GlyphShape.FromContours([crossed]));
@@ -249,18 +356,13 @@ public class TextReviewTests
 
         font.GetGlyph('A');
 
-        var started = new ManualResetEventSlim();
         Exception? seen = null;
 
-        // Take the face lock through a glyph read on another thread that we hold up with the lock itself:
-        // the simplest proof is that a read after Dispose throws, whichever thread it comes from
         var reader = new Thread(() =>
         {
-            started.Set();
-
             try
             {
-                font.GetGlyph('B');
+                font.GetGlyph('A');
             }
             catch (Exception e)
             {
@@ -268,12 +370,43 @@ public class TextReviewTests
             }
         });
 
-        font.Dispose();
-        reader.Start();
-        started.Wait();
+        // Hold the face lock so the reader queues behind it, dispose while it waits (the lock lets its
+        // own thread back in), then let the reader through: it must find the font gone, not the cached
+        // glyph of a freed face. The old order, checked before the lock, handed the glyph over
+        lock (font.FaceLock)
+        {
+            reader.Start();
+
+            Assert.True(SpinWait.SpinUntil(() => reader.ThreadState.HasFlag(ThreadState.WaitSleepJoin), 5000), "the reader never queued behind the lock");
+
+            font.Dispose();
+        }
+
         reader.Join();
 
         Assert.IsType<ObjectDisposedException>(seen);
+    }
+
+    [Fact]
+    public void DisposalWaitsForAReaderInsideTheFace()
+    {
+        var font = MeshFont.Load(ReadDefaultBytes(), "copy");
+        var disposed = new ManualResetEventSlim();
+
+        // Holding the face lock stands for a reader inside FreeType; disposal must wait for it
+        lock (font.FaceLock)
+        {
+            new Thread(() =>
+            {
+                font.Dispose();
+                disposed.Set();
+            }).Start();
+
+            Assert.False(disposed.Wait(200), "disposal went ahead while a reader held the face");
+        }
+
+        Assert.True(disposed.Wait(5000), "disposal never finished once the reader let go");
+        Assert.Throws<ObjectDisposedException>(() => font.GetGlyph('A'));
     }
 
     // Bounds

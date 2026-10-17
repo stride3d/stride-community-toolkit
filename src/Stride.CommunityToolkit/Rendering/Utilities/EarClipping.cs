@@ -217,11 +217,19 @@ public static class EarClipping
             }
         }
 
-        if (Cross(corners[ring[0]], corners[ring[1]], corners[ring[2]]) > 0f)
+        var last = Cross(corners[ring[0]], corners[ring[1]], corners[ring[2]]);
+
+        if (last > 0f)
         {
             triangles.Add(ring[0]);
             triangles.Add(ring[1]);
             triangles.Add(ring[2]);
+        }
+        else if (last < -tolerance)
+        {
+            // The last three corners of a correctly clipped counter-clockwise ring turn left or lie
+            // flat; turning right means an ear swallowed a corner and the triangles do not cover the polygon
+            throw new InvalidOperationException("The last triangle winds the wrong way; the polygon is probably self-intersecting");
         }
 
         return triangles;
@@ -267,15 +275,16 @@ public static class EarClipping
         if (strict ? cross <= tolerance : cross < -tolerance) return false;
 
         // The triangle must contain no other remaining corner, or clipping it would swallow part of
-        // the polygon. A corner that sits exactly on one of the triangle's own corners is the other
-        // end of a bridge and does not count
+        // the polygon. A corner at exactly the same point as one of the triangle's own is the other
+        // end of a bridge, the same corner twice, and does not count; a corner merely near one is a
+        // corner of its own, however close, and the tolerance is not used for that
         foreach (var index in ring)
         {
             if (index == previous || index == current || index == next) continue;
 
             var point = corners[index];
 
-            if ((point - a).LengthSquared() < tolerance || (point - b).LengthSquared() < tolerance || (point - c).LengthSquared() < tolerance) continue;
+            if (point == a || point == b || point == c) continue;
 
             if (ContainsPoint(a, b, c, point, tolerance)) return false;
         }

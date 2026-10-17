@@ -135,9 +135,11 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
 
 - A mesh is for words and titles, not pages: a paragraph is thousands of triangles per line. Sprite
   fonts are for text.
-- Fonts whose contours cross or overlap (some composite glyphs, variable fonts) are not
-  triangulated; the glyph is reported by font and code point, not mangled. A contour of a single
-  point, which some fonts carry, is skipped.
+- Two filled contours that cross or overlap (composite glyphs such as Ç, where the cedilla runs
+  into the C) are built as two solids through each other, which the font's nonzero fill would merge;
+  they look right from outside, and each piece is closed on its own. A contour that crosses itself
+  is reported by font and code point, not mangled. A contour of a single point, which some fonts
+  carry, is skipped.
 - Every option must be a positive finite number where it is a size; a zero or negative size or depth
   is refused rather than built.
 - Letters landing on letters are hull-against-hull pairs, and the Bepu build Stride 4.4 ships

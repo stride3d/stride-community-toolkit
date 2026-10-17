@@ -69,7 +69,11 @@ internal static class PolygonChecks
         return true;
     }
 
-    /// <summary>Whether the segments a-b and c-d cross, touching ends not counted.</summary>
+    /// <summary>
+    /// Whether the segments a-b and c-d cross, or lie on one line and run along each other for more than
+    /// a point. Touching at an end, or one end resting on the other segment, is not counted: corners of
+    /// separate contours may meet.
+    /// </summary>
     private static bool Crosses(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
         var d1 = Side(c, d, a);
@@ -77,7 +81,20 @@ internal static class PolygonChecks
         var d3 = Side(a, b, c);
         var d4 = Side(a, b, d);
 
-        return d1 * d2 < 0f && d3 * d4 < 0f;
+        if (d1 * d2 < 0f && d3 * d4 < 0f) return true;
+
+        // Not collinear: at most a touch
+        if (d1 != 0f || d2 != 0f || d3 != 0f || d4 != 0f) return false;
+
+        // On one line: the two spans overlap when they share a stretch of it, not only a point
+        var direction = b - a;
+        var length = direction.LengthSquared();
+        var start = Vector2.Dot(c - a, direction);
+        var end = Vector2.Dot(d - a, direction);
+
+        if (start > end) (start, end) = (end, start);
+
+        return MathF.Min(length, end) - MathF.Max(0f, start) > 0f;
 
         static float Side(Vector2 p, Vector2 q, Vector2 r) => (q.X - p.X) * (r.Y - p.Y) - (q.Y - p.Y) * (r.X - p.X);
     }

@@ -214,7 +214,10 @@ public class TextMeshTests
 
     /// <summary>
     /// Every edge of a closed surface is shared by exactly two triangles, one in each direction. The
-    /// caps share their corners and the walls own their vertices, so edges are matched by position.
+    /// caps share their corners and the walls own their vertices, so edges are matched by position,
+    /// exactly: the parts are built from the same corners and the same depths, and a hair-wide gap
+    /// between two of them is a gap. Two closed pieces that touch (the ogonek of an ą) share an edge,
+    /// which then appears twice each way; what matters is that each way is matched by the other.
     /// </summary>
     internal static void AssertWatertight(GeometricMeshData<VertexPositionNormalTexture> data)
     {
@@ -228,8 +231,8 @@ public class TextMeshTests
         {
             for (var k = 0; k < 3; k++)
             {
-                var a = Round(data.Vertices[data.Indices[i + k]].Position);
-                var b = Round(data.Vertices[data.Indices[i + (k + 1) % 3]].Position);
+                var a = data.Vertices[data.Indices[i + k]].Position;
+                var b = data.Vertices[data.Indices[i + (k + 1) % 3]].Position;
 
                 edges[(a, b)] = edges.GetValueOrDefault((a, b)) + 1;
             }
@@ -237,10 +240,7 @@ public class TextMeshTests
 
         foreach (var ((a, b), count) in edges)
         {
-            Assert.True(count == 1, $"edge {a} -> {b} appears {count} times in one direction");
-            Assert.True(edges.ContainsKey((b, a)), $"edge {a} -> {b} has no partner the other way: an open surface");
+            Assert.True(count == edges.GetValueOrDefault((b, a)), $"edge {a} -> {b} appears {count} times and {edges.GetValueOrDefault((b, a))} times the other way: an open surface");
         }
-
-        static Vector3 Round(Vector3 v) => new(MathF.Round(v.X, 4), MathF.Round(v.Y, 4), MathF.Round(v.Z, 4));
     }
 }

@@ -1,9 +1,11 @@
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
+using Stride.Graphics;
 using static Stride.BepuPhysics.Definitions.DecomposedHulls;
 
 namespace Stride.CommunityToolkit.Bepu;
@@ -19,9 +21,11 @@ namespace Stride.CommunityToolkit.Bepu;
 /// or shot through its holes wants a <c>MeshCollider</c> on a static instead.
 /// </para>
 /// <para>
-/// The hulls of a string are kept, keyed by the font, the text and the options that shape them, so a
-/// word dropped a hundred times shares one set and Stride's own cache of built Bepu hulls hits. The
-/// store holds the last 64 strings; a counter that changes every frame does not fill it for ever.
+/// The hulls of a string are kept with the font that shaped them, keyed by the text and the options,
+/// so a word dropped a hundred times shares one set and Stride's own cache of built Bepu hulls hits.
+/// Two fonts of the same name are two fonts: each has its own store, released with it. A store holds
+/// 64 strings and starts again when a 65th arrives; a counter that changes every frame does not fill
+/// it for ever.
 /// </para>
 /// <para>
 /// A mass on the options is the word's: the toolkit divides it among the hulls, since Bepu adds a
@@ -32,7 +36,7 @@ public static class TextCollider
 {
     private const int Capacity = 64;
 
-    private static readonly ConcurrentDictionary<string, DecomposedHulls> Hulls = new();
+    private static readonly ConditionalWeakTable<MeshFont, ConcurrentDictionary<HullKey, DecomposedHulls>> Stores = new();
 
     /// <summary>
     /// Creates the collider of <paramref name="text"/>.
@@ -65,15 +69,16 @@ public static class TextCollider
 
         options ??= new TextMeshOptions();
 
-        var key = KeyFor(font, text, options);
+        var store = Stores.GetValue(font, _ => new ConcurrentDictionary<HullKey, DecomposedHulls>());
+        var key = HullKey.For(text, options);
 
-        if (Hulls.TryGetValue(key, out var cached)) return cached;
+        if (store.TryGetValue(key, out var cached)) return cached;
 
         var hulls = Build(font, text, options);
 
-        if (Hulls.Count >= Capacity) Hulls.Clear();
+        if (store.Count >= Capacity) store.Clear();
 
-        return Hulls.GetOrAdd(key, hulls);
+        return store.GetOrAdd(key, hulls);
     }
 
     /// <summary>
@@ -138,8 +143,11 @@ public static class TextCollider
         return new DecomposedHulls([new DecomposedMesh(hulls)]);
     }
 
-    /// <summary>A snapshot of everything that shapes the hulls; the options object itself can change after the call.</summary>
-    private static string KeyFor(MeshFont font, string text, TextMeshOptions options)
-        => string.Join('\u001f', font.Name, text, options.Size, options.Depth, options.CurveQuality, options.Anchor, options.LetterSpacing, options.LineSpacing, options.Alignment, options.Kerning,
-            options.Bevel is null ? "" : $"{options.Bevel.Size}/{options.Bevel.Thickness}/{options.Bevel.Segments}");
+    /// <summary>A snapshot of everything but the font that shapes the hulls; the options object itself can change after the call.</summary>
+    private readonly record struct HullKey(string Text, float Size, float Depth, int CurveQuality, TextAnchor? Anchor, float LetterSpacing, float LineSpacing, TextAlignment Alignment, bool Kerning, float BevelSize, float BevelThickness, int BevelSegments)
+    {
+        internal static HullKey For(string text, TextMeshOptions options)
+            => new(text, options.Size, options.Depth, options.CurveQuality, options.Anchor, options.LetterSpacing, options.LineSpacing, options.Alignment, options.Kerning,
+                options.Bevel?.Size ?? 0f, options.Bevel?.Thickness ?? 0f, options.Bevel?.Segments ?? 0);
+    }
 }

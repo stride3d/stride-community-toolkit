@@ -34,6 +34,9 @@ public sealed unsafe class MeshFont : IDisposable
     private static readonly Lazy<MeshFont> DefaultFont = new(LoadDefault);
 
     private readonly Lock _faceLock = new();
+
+    /// <summary>The lock every face operation and the disposal take, for tests that hold one up against the other.</summary>
+    internal Lock FaceLock => _faceLock;
     private readonly Dictionary<int, GlyphOutline> _glyphs = [];
     private readonly bool _isShared;
     private readonly float _scale;

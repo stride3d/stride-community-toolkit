@@ -22,59 +22,74 @@ public sealed class GlyphShape
     /// Sorts closed polygons into outsides and holes by how they nest: a contour inside no other is an
     /// outside, one inside exactly one is a hole of it, one inside two is an outside again (the dot
     /// inside a copyright sign), and so on. That is how fonts draw letters: nested contours that do not
-    /// touch, each wound the other way from the one around it.
+    /// touch, each wound the other way from the one around it. Two filled contours that cross each other,
+    /// which is how composite glyphs are often drawn (the cedilla through the C), are kept as two pieces
+    /// that overlap, neither nested in the other.
     /// </summary>
     /// <param name="contours">Closed polygons in either winding, without the first corner repeated.</param>
     /// <returns>The shape. Outsides come back counter-clockwise and holes clockwise, whatever they were.</returns>
     /// <exception cref="ArgumentNullException">The contours are null.</exception>
     /// <exception cref="InvalidDataException">
-    /// Two contours cross, a contour crosses itself, or a contour nested inside another is wound the same
-    /// way as it: shapes a nonzero fill would merge, which this does not do. Some composite glyphs and
-    /// variable fonts have them; a reader that does should say which glyph.
+    /// A contour crosses itself, or a contour nested inside another is wound the same way as it: shapes
+    /// no fill rule this follows makes sense of. Some variable fonts have them; a reader that does
+    /// should say which glyph.
     /// </exception>
     /// <remarks>
     /// Whether one contour lies inside another is decided by a vote of three of its points, so two
     /// contours that touch at a corner still sort correctly. Contours with fewer than three corners or
-    /// no area are ignored.
+    /// no area are ignored. Fonts fill by the nonzero rule, under which two filled pieces that overlap
+    /// merge into one; this does not merge them, and a solid built from the pieces is two solids through
+    /// each other, which looks the same from outside. Which of two crossing contours is the outside
+    /// cannot be told, so both are taken as filled: the stroke of a Ⱥ runs through the letter's hole as a
+    /// piece of its own, and a hole that strays across its outside, which no font should have, is filled.
     /// </remarks>
     public static GlyphShape FromContours(IReadOnlyList<Vector2[]> contours)
     {
         ArgumentNullException.ThrowIfNull(contours);
 
-        // Only contours that can be filled take part; a line or a point would skew the nesting below
+        // Only contours that can be filled take part; a line or a point would skew the nesting below.
+        // A contour that crosses itself is refused before its area is looked at: a bow tie's signed
+        // area cancels to nothing, which does not make it nothing
         var valid = new List<Vector2[]>(contours.Count);
 
         foreach (var contour in contours)
         {
-            if (contour is { Length: >= 3 } && MathF.Abs(EarClipping.SignedArea(contour)) > 1e-10f) valid.Add(contour);
+            if (contour is not { Length: >= 3 }) continue;
+
+            if (PolygonChecks.SelfIntersects(contour)) throw new InvalidDataException("a contour crosses itself");
+
+            if (MathF.Abs(EarClipping.SignedArea(contour)) > 1e-10f) valid.Add(contour);
         }
 
-        RejectCrossings(valid);
-
-        var (depth, contains) = Nest(valid);
+        var crosses = FindCrossings(valid);
+        var (depth, contains) = Nest(valid, crosses);
 
         return new GlyphShape(Assemble(valid, depth, contains));
     }
 
-    /// <summary>Contours that cross each other, or themselves, are not a shape this can fill.</summary>
-    private static void RejectCrossings(List<Vector2[]> contours)
+    /// <summary>Which contours cross or overlap each other.</summary>
+    private static bool[,] FindCrossings(List<Vector2[]> contours)
     {
-        for (var i = 0; i < contours.Count; i++)
-        {
-            if (PolygonChecks.SelfIntersects(contours[i])) throw new InvalidDataException("a contour crosses itself");
+        var count = contours.Count;
+        var crosses = new bool[count, count];
 
-            for (var j = i + 1; j < contours.Count; j++)
+        for (var i = 0; i < count; i++)
+        {
+            for (var j = i + 1; j < count; j++)
             {
-                if (PolygonChecks.Cross(contours[i], contours[j])) throw new InvalidDataException("two contours cross each other");
+                if (PolygonChecks.Cross(contours[i], contours[j])) crosses[i, j] = crosses[j, i] = true;
             }
         }
+
+        return crosses;
     }
 
     /// <summary>
     /// How the contours nest: for each, how many others enclose it (even means an outside, odd a hole of
-    /// the one a level up), and which encloses which.
+    /// the one a level up), and which encloses which. Contours that cross each other never enclose each
+    /// other, whatever the vote says of the one mostly inside the other.
     /// </summary>
-    private static (int[] Depth, bool[,] Contains) Nest(List<Vector2[]> contours)
+    private static (int[] Depth, bool[,] Contains) Nest(List<Vector2[]> contours, bool[,] crosses)
     {
         var count = contours.Count;
         var depth = new int[count];
@@ -84,7 +99,7 @@ public sealed class GlyphShape
         {
             for (var j = 0; j < count; j++)
             {
-                if (i == j) continue;
+                if (i == j || crosses[i, j]) continue;
 
                 contains[j, i] = Encloses(contours[j], contours[i]);
 

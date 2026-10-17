@@ -467,8 +467,14 @@ public static class TextMesh
                     continue;
                 }
 
-                // The bevel cannot go deeper than the middle, where the front and the back bevels would meet
-                var profile = new BevelProfile(glyph.BevelSizeEm * _scale, MathF.Min(_bevel.Thickness, _halfDepth), _bevel.Segments, _halfDepth);
+                // The bevel cannot go deeper than the middle, where the front and the back bevels meet. One
+                // within a ten-thousandth of it is taken as reaching it: a wall thinner than that is left
+                // out below, and the rings must then end exactly where the two sides meet, not a hair short
+                var thickness = MathF.Min(_bevel.Thickness, _halfDepth);
+
+                if (_halfDepth - thickness <= 1e-4f * _halfDepth) thickness = _halfDepth;
+
+                var profile = new BevelProfile(glyph.BevelSizeEm * _scale, thickness, _bevel.Segments, _halfDepth);
 
                 AddCaps(polygon.Rings[profile.Steps], polygon.CapTriangles, _halfDepth, placement);
 
@@ -481,7 +487,7 @@ public static class TextMesh
                     }
 
                     // A bevel as deep as half the depth leaves no wall between the two
-                    if (_halfDepth - profile.Thickness > 1e-6f) AddWalls(polygon.Loops[l], _halfDepth - profile.Thickness, placement);
+                    if (profile.Thickness < _halfDepth) AddWalls(polygon.Loops[l], _halfDepth - profile.Thickness, placement);
                 }
             }
         }

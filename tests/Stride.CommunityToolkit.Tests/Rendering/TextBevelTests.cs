@@ -84,6 +84,20 @@ public class TextBevelTests
         TextMeshTests.AssertOutwardWinding(data);
     }
 
+    [Theory]
+    [InlineData(0.0499995f)]
+    [InlineData(0.049999f)]
+    [InlineData(0.05f)]
+    public void ABevelAtOrJustShortOfHalfTheDepthMeetsItself(float thickness)
+    {
+        // No wall is built for a remainder of a hair, so the two bevels must end at the same depth, exactly
+        var data = TextMesh.Create(MeshFont.Default, "H", new TextMeshOptions { Depth = 0.1f, Bevel = new TextBevel(0.01f, thickness) });
+
+        TextMeshTests.AssertWatertight(data);
+        TextMeshTests.AssertOutwardWinding(data);
+        Assert.Equal(0.05f, data.Vertices.Max(v => v.Position.Z));
+    }
+
     [Fact]
     public void TheThicknessIsCappedAtHalfTheDepth()
     {
