@@ -9,7 +9,8 @@ thing in the world, a title, a sign, a logo, a word that falls.
 
 `MeshFont`, `TextMesh`, `TextMeshOptions` and `GlyphOutline` live in the
 `Stride.CommunityToolkit.Rendering.Text` namespace; `Primitive3D.Text` in
-`Stride.CommunityToolkit.Rendering.ProceduralModels`.
+`Stride.CommunityToolkit.Rendering.ProceduralModels`. The stages between the font file and
+the mesh, and the files behind each, are on [How 3D text is built](text-3d-pipeline.md).
 
 ```csharp
 var entity = new Entity("Title")

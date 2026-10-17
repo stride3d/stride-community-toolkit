@@ -74,6 +74,8 @@
     href: rendering/world-text.md
   - name: 3D Text
     href: rendering/text-3d.md
+  - name: How 3D Text Is Built
+    href: rendering/text-3d-pipeline.md
   - name: Debug Overlay
     href: rendering/debug-overlay.md
   - name: Debug Shapes

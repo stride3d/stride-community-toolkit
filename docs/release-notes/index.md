@@ -46,7 +46,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - The glossary is in the top navigation, and defines gizmo, mesh collider, glyph and EM.
-- A manual page for 3D text (`rendering/text-3d.md`); the MeshBuilder page points at it.
+- A manual page for 3D text (`rendering/text-3d.md`); the MeshBuilder page points at it. A second page, `rendering/text-3d-pipeline.md`, walks the pipeline from the font file to the mesh, with the files behind each stage.
 
 ### 🎓 Examples
 
