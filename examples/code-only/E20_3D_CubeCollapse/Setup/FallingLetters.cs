@@ -81,7 +81,7 @@ public static class FallingLetters
                     Model = new Model
                     {
                         new MaterialInstance { Material = material },
-                        new Mesh { Draw = glyph.Mesh.ToMeshDraw(game.GraphicsDevice), MaterialIndex = 0 }
+                        glyph.Mesh.ToMesh(game.GraphicsDevice)
                     }
                 }
             };
@@ -136,15 +136,7 @@ public static class FallingLetters
         {
             new ModelComponent
             {
-                Model = new Model
-                {
-                    new MaterialInstance { Material = material },
-                    new Mesh
-                    {
-                        Draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, text, new TextMeshOptions { Size = Size, Depth = 0.12f, Anchor = TextAnchor.MiddleCenter }),
-                        MaterialIndex = 0
-                    }
-                }
+                Model = TextMesh.CreateModel(game.GraphicsDevice, material, MeshFont.Default, text, new TextMeshOptions { Size = Size, Depth = 0.12f, Anchor = TextAnchor.MiddleCenter })
             },
             new FaceCameraScript()
         };

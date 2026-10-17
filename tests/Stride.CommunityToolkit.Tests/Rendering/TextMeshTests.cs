@@ -189,7 +189,7 @@ public class TextMeshTests
     /// Every edge of a closed surface is shared by exactly two triangles, one in each direction. The
     /// caps share their corners and the walls own their vertices, so edges are matched by position.
     /// </summary>
-    private static void AssertWatertight(GeometricMeshData<VertexPositionNormalTexture> data)
+    internal static void AssertWatertight(GeometricMeshData<VertexPositionNormalTexture> data)
     {
         Assert.NotEmpty(data.Vertices);
         Assert.Equal(0, data.Indices.Length % 3);

@@ -6,7 +6,8 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
 /// Builds solid 3D lettering from a <see cref="MeshFont"/>: each glyph's outline is triangulated,
-/// holes and all, and extruded along Z with a front cap, a back cap and flat-shaded walls.
+/// holes and all, and extruded along Z with a front cap, a back cap and flat-shaded walls, with a
+/// rounded edge between them when <see cref="TextMeshOptions.Bevel"/> asks for one.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -45,7 +46,7 @@ public static class TextMesh
         options ??= new TextMeshOptions();
 
         var layout = Layout.Build(font, text, options);
-        var emitter = new Emitter(options.Depth);
+        var emitter = new Emitter(options.Depth, options.Bevel);
         var block = layout.Block;
 
         foreach (var placed in layout.Glyphs)
@@ -95,7 +96,7 @@ public static class TextMesh
 
             var origin = placed.Pen + layout.Shift;
             var centre = origin + (placed.Glyph.BoundsMin + placed.Glyph.BoundsMax) * 0.5f;
-            var emitter = new Emitter(options.Depth);
+            var emitter = new Emitter(options.Depth, options.Bevel);
 
             emitter.AddGlyph(shape, Vector2.Zero, origin - centre, options.Size, placed.Glyph.BoundsMin, placed.Glyph.BoundsMax);
 
@@ -236,16 +237,18 @@ public static class TextMesh
         }
     }
 
-    /// <summary>Accumulates the caps and walls of extruded polygons into one vertex and index list.</summary>
+    /// <summary>Accumulates the caps, bevels and walls of extruded polygons into one vertex and index list.</summary>
     private sealed class Emitter
     {
         private readonly List<VertexPositionNormalTexture> _vertices = [];
         private readonly List<int> _indices = [];
         private readonly float _halfDepth;
+        private readonly TextBevel? _bevel;
 
-        internal Emitter(float depth)
+        internal Emitter(float depth, TextBevel? bevel)
         {
             _halfDepth = depth * 0.5f;
+            _bevel = bevel;
         }
 
         /// <summary>
@@ -256,107 +259,284 @@ public static class TextMesh
         /// </summary>
         internal void AddGlyph(GlyphShape shape, Vector2 uvOrigin, Vector2 origin, float scale, Vector2 uvMin, Vector2 uvMax)
         {
-            var offset = origin * scale;
-            var uvSize = uvMax - uvMin;
-
-            if (uvSize.X <= 0f) uvSize.X = 1f;
-            if (uvSize.Y <= 0f) uvSize.Y = 1f;
+            var uv = new CapUv(uvOrigin, origin, scale, uvMin, uvMax);
 
             foreach (var polygon in shape.Polygons)
             {
-                // Every corner of the polygon in the order the triangulation's indices expect: the outside, then each hole
-                var corners = new List<Vector2>(polygon.Outer);
+                // The polygon in world units: the outside first, then each hole, which is the order the triangulation's indices expect
+                var loops = new List<Vector2[]>(1 + polygon.Holes.Count) { Scale(polygon.Outer, origin, scale) };
 
-                foreach (var hole in polygon.Holes) corners.AddRange(hole);
+                foreach (var hole in polygon.Holes) loops.Add(Scale(hole, origin, scale));
 
-                var triangles = EarClipping.Triangulate(polygon.Outer, polygon.Holes);
-
-                // Front cap, facing +Z: the counter-clockwise triangulation must wind clockwise for the viewer there
-                var front = _vertices.Count;
-
-                foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(new Vector3(corner * scale + offset, _halfDepth), Vector3.UnitZ, CapUv(corner + uvOrigin, uvMin, uvSize)));
-
-                for (var i = 0; i < triangles.Count; i += 3)
+                if (_bevel is null)
                 {
-                    _indices.Add(front + triangles[i + 2]);
-                    _indices.Add(front + triangles[i + 1]);
-                    _indices.Add(front + triangles[i]);
+                    AddCaps(loops, _halfDepth, uv);
+
+                    foreach (var loop in loops) AddWalls(loop, _halfDepth);
                 }
-
-                // Back cap, facing -Z, where the same order already reads clockwise
-                var back = _vertices.Count;
-
-                foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(new Vector3(corner * scale + offset, -_halfDepth), -Vector3.UnitZ, CapUv(corner + uvOrigin, uvMin, uvSize)));
-
-                for (var i = 0; i < triangles.Count; i += 3)
+                else
                 {
-                    _indices.Add(back + triangles[i]);
-                    _indices.Add(back + triangles[i + 1]);
-                    _indices.Add(back + triangles[i + 2]);
+                    AddBevelled(loops, _bevel, uv);
                 }
-
-                AddWalls(polygon.Outer, offset, scale);
-
-                foreach (var hole in polygon.Holes) AddWalls(hole, offset, scale);
             }
         }
 
         internal GeometricMeshData<VertexPositionNormalTexture> ToMeshData(string name)
             => new([.. _vertices], [.. _indices], isLeftHanded: false) { Name = name };
 
-        private static Vector2 CapUv(Vector2 corner, Vector2 uvMin, Vector2 uvSize)
-            => new((corner.X - uvMin.X) / uvSize.X, 1f - (corner.Y - uvMin.Y) / uvSize.Y);
+        private static Vector2[] Scale(IReadOnlyList<Vector2> loop, Vector2 origin, float scale)
+        {
+            var scaled = new Vector2[loop.Count];
+
+            for (var i = 0; i < loop.Count; i++) scaled[i] = (loop[i] + origin) * scale;
+
+            return scaled;
+        }
 
         /// <summary>
-        /// One flat-shaded quad per edge of a loop, with its own four vertices so the edges stay crisp.
-        /// The loop is counter-clockwise for an outside and clockwise for a hole, so the same rule,
-        /// rotate the edge to the right, points the wall away from the material either way.
+        /// The front cap at +<paramref name="z"/> and the back cap at -<paramref name="z"/>, triangulated once
+        /// and shared: the front reverses the counter-clockwise triangulation so it winds clockwise for the
+        /// viewer at +Z, the back keeps it, where the same order already reads clockwise.
         /// </summary>
-        private void AddWalls(IReadOnlyList<Vector2> loop, Vector2 offset, float scale)
+        private void AddCaps(List<Vector2[]> loops, float z, CapUv uv)
         {
-            // The loop's length first, so u can run 0..1 around it
+            var corners = new List<Vector2>(loops.Sum(l => l.Length));
+
+            foreach (var loop in loops) corners.AddRange(loop);
+
+            // One triangulation serves both caps: the corners are the same, only z and the winding differ
+            var triangles = EarClipping.Triangulate(loops[0], loops.Skip(1).ToList());
+            var front = _vertices.Count;
+
+            foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(new Vector3(corner, z), Vector3.UnitZ, uv.Of(corner)));
+
+            for (var i = 0; i < triangles.Count; i += 3)
+            {
+                _indices.Add(front + triangles[i + 2]);
+                _indices.Add(front + triangles[i + 1]);
+                _indices.Add(front + triangles[i]);
+            }
+
+            // The back cap at -z, facing -Z, in the triangulation's own order
+            var back = _vertices.Count;
+
+            foreach (var corner in corners) _vertices.Add(new VertexPositionNormalTexture(new Vector3(corner, -z), -Vector3.UnitZ, uv.Of(corner)));
+
+            for (var i = 0; i < triangles.Count; i += 3)
+            {
+                _indices.Add(back + triangles[i]);
+                _indices.Add(back + triangles[i + 1]);
+                _indices.Add(back + triangles[i + 2]);
+            }
+        }
+
+        /// <summary>
+        /// One flat-shaded quad per edge of a loop between +<paramref name="z"/> and -<paramref name="z"/>, with
+        /// its own four vertices so the edges stay crisp. The loop is counter-clockwise for an outside and
+        /// clockwise for a hole, so the same rule, rotate the edge to the right, points the wall away from the
+        /// material either way. u runs 0..1 along the loop and v from the front to the back.
+        /// </summary>
+        private void AddWalls(Vector2[] loop, float z)
+        {
             var total = 0f;
 
-            for (var i = 0; i < loop.Count; i++) total += (loop[(i + 1) % loop.Count] - loop[i]).Length();
+            for (var i = 0; i < loop.Length; i++) total += (loop[(i + 1) % loop.Length] - loop[i]).Length();
 
             if (total <= 0f) return;
 
             var along = 0f;
 
-            for (var i = 0; i < loop.Count; i++)
+            for (var i = 0; i < loop.Length; i++)
             {
                 var from = loop[i];
-                var to = loop[(i + 1) % loop.Count];
+                var to = loop[(i + 1) % loop.Length];
                 var edge = to - from;
                 var length = edge.Length();
 
                 if (length < 1e-7f) continue;
 
-                // The edge turned to the right is the wall's outward normal; u is where the edge sits
-                // along the loop, and v runs from the front cap to the back
                 var normal = new Vector3(edge.Y / length, -edge.X / length, 0f);
+
                 var u0 = along / total;
                 var u1 = (along + length) / total;
-                var a = new Vector3(from * scale + offset, _halfDepth);
-                var b = new Vector3(to * scale + offset, _halfDepth);
-                var c = new Vector3(to * scale + offset, -_halfDepth);
-                var d = new Vector3(from * scale + offset, -_halfDepth);
-                var start = _vertices.Count;
 
-                _vertices.Add(new VertexPositionNormalTexture(a, normal, new Vector2(u0, 0f)));
-                _vertices.Add(new VertexPositionNormalTexture(b, normal, new Vector2(u1, 0f)));
-                _vertices.Add(new VertexPositionNormalTexture(c, normal, new Vector2(u1, 1f)));
-                _vertices.Add(new VertexPositionNormalTexture(d, normal, new Vector2(u0, 1f)));
-
-                // Clockwise as seen from outside the wall, matching the caps
-                _indices.Add(start);
-                _indices.Add(start + 1);
-                _indices.Add(start + 2);
-                _indices.Add(start);
-                _indices.Add(start + 2);
-                _indices.Add(start + 3);
+                AddQuad(
+                    new Corner(new Vector3(from, z), normal, new Vector2(u0, 0f)),
+                    new Corner(new Vector3(to, z), normal, new Vector2(u1, 0f)),
+                    new Corner(new Vector3(to, -z), normal, new Vector2(u1, 1f)),
+                    new Corner(new Vector3(from, -z), normal, new Vector2(u0, 1f)));
 
                 along += length;
+            }
+        }
+
+        /// <summary>
+        /// The caps pulled in by the bevel, a ring of quads per step between the cap and the wall on each
+        /// side, and the walls between the two bevels. The profile is a quarter ellipse: leaving the wall
+        /// the surface still runs along the depth, meeting the cap it runs across it. A bevel too wide for
+        /// the polygon folds the pulled-in cap over itself, which <see cref="LoopInset.Fits"/> catches; the size is
+        /// halved for the polygon, up to six times, before the bevel is given up as an error.
+        /// </summary>
+        private void AddBevelled(List<Vector2[]> loops, TextBevel bevel, CapUv uv)
+        {
+            // The bevel cannot go deeper than the middle, where the front and the back bevels would meet
+            var thickness = MathF.Min(bevel.Thickness, _halfDepth);
+            var size = bevel.Size;
+            var steps = bevel.Segments;
+
+            for (var attempt = 0; ; attempt++)
+            {
+                // ring[k] is every loop pulled in by the k-th step; ring[0] is the loop itself, at the wall
+                var rings = new Vector2[steps + 1][][];
+                var angles = new float[steps + 1];
+
+                for (var k = 0; k <= steps; k++)
+                {
+                    angles[k] = k / (float)steps * MathUtil.PiOverTwo;
+
+                    var inset = size * (1f - MathF.Cos(angles[k]));
+
+                    rings[k] = new Vector2[loops.Count][];
+
+                    for (var l = 0; l < loops.Count; l++) rings[k][l] = inset == 0f ? loops[l] : LoopInset.Inset(loops[l], inset);
+                }
+
+                // The caps go first so a fold can be undone by cutting the lists back to where they were
+                var innermost = rings[steps].ToList();
+                var capsAt = _vertices.Count;
+                var indicesAt = _indices.Count;
+
+                try
+                {
+                    if (!LoopInset.Fits(loops, innermost)) throw new InvalidOperationException("The pulled-in cap folds over itself.");
+
+                    AddCaps(innermost, _halfDepth, uv);
+                }
+                catch (Exception e) when (e is InvalidOperationException or ArgumentException)
+                {
+                    _vertices.RemoveRange(capsAt, _vertices.Count - capsAt);
+                    _indices.RemoveRange(indicesAt, _indices.Count - indicesAt);
+
+                    if (attempt == 6) throw new InvalidOperationException("The bevel is wider than the glyph's thinnest part, so the cap folds over itself; lower the bevel size.", e);
+
+                    size *= 0.5f;
+
+                    continue;
+                }
+
+                // The caps fit: the rings of quads from the wall to each cap, then the walls between the two bevels
+                for (var l = 0; l < loops.Count; l++)
+                {
+                    for (var k = 0; k < steps; k++)
+                    {
+                        AddBevelRing(rings[k][l], rings[k + 1][l], thickness, angles[k], angles[k + 1], uv, front: true);
+                        AddBevelRing(rings[k][l], rings[k + 1][l], thickness, angles[k], angles[k + 1], uv, front: false);
+                    }
+
+                    // A bevel as deep as half the depth leaves no wall between the two
+                    if (_halfDepth - thickness > 1e-6f) AddWalls(loops[l], _halfDepth - thickness);
+                }
+
+                return;
+            }
+        }
+
+        /// <summary>
+        /// The quads between two steps of a bevel on one loop: <paramref name="outer"/> is the step nearer the
+        /// wall, <paramref name="inner"/> the one nearer the cap. Flat around the loop like the walls, and
+        /// rounded across the steps: a vertex's normal leans from the edge's outward direction towards the
+        /// cap by its step's angle.
+        /// </summary>
+        private void AddBevelRing(Vector2[] outer, Vector2[] inner, float thickness, float angleOuter, float angleInner, CapUv uv, bool front)
+        {
+            var sign = front ? 1f : -1f;
+            var zOuter = sign * (_halfDepth - thickness + thickness * MathF.Sin(angleOuter));
+            var zInner = sign * (_halfDepth - thickness + thickness * MathF.Sin(angleInner));
+            var count = outer.Length;
+
+            for (var i = 0; i < count; i++)
+            {
+                var next = (i + 1) % count;
+                var edge = outer[next] - outer[i];
+                var length = edge.Length();
+
+                if (length < 1e-7f && (inner[next] - inner[i]).Length() < 1e-7f) continue;
+                if (length < 1e-7f) edge = inner[next] - inner[i];
+
+                edge.Normalize();
+
+                var outward = new Vector3(edge.Y, -edge.X, 0f);
+                var normalOuter = outward * MathF.Cos(angleOuter) + new Vector3(0f, 0f, sign * MathF.Sin(angleOuter));
+                var normalInner = outward * MathF.Cos(angleInner) + new Vector3(0f, 0f, sign * MathF.Sin(angleInner));
+
+                // The higher-z pair first and the loop's direction left to right, which is clockwise from outside
+                // on the front; on the back the outer step is the higher one
+                var innerFrom = new Corner(new Vector3(inner[i], zInner), normalInner, uv.Of(inner[i]));
+                var innerTo = new Corner(new Vector3(inner[next], zInner), normalInner, uv.Of(inner[next]));
+                var outerFrom = new Corner(new Vector3(outer[i], zOuter), normalOuter, uv.Of(outer[i]));
+                var outerTo = new Corner(new Vector3(outer[next], zOuter), normalOuter, uv.Of(outer[next]));
+
+                if (front)
+                {
+                    AddQuad(innerFrom, innerTo, outerTo, outerFrom);
+                }
+                else
+                {
+                    AddQuad(outerFrom, outerTo, innerTo, innerFrom);
+                }
+            }
+        }
+
+        /// <summary>Four vertices of their own and two triangles: a, b, c, d clockwise as seen from outside.</summary>
+        private void AddQuad(Corner a, Corner b, Corner c, Corner d)
+        {
+            var start = _vertices.Count;
+
+            _vertices.Add(new VertexPositionNormalTexture(a.Position, a.Normal, a.Uv));
+            _vertices.Add(new VertexPositionNormalTexture(b.Position, b.Normal, b.Uv));
+            _vertices.Add(new VertexPositionNormalTexture(c.Position, c.Normal, c.Uv));
+            _vertices.Add(new VertexPositionNormalTexture(d.Position, d.Normal, d.Uv));
+
+            _indices.Add(start);
+            _indices.Add(start + 1);
+            _indices.Add(start + 2);
+            _indices.Add(start);
+            _indices.Add(start + 2);
+            _indices.Add(start + 3);
+        }
+
+        /// <summary>One corner of a quad: where it is, which way its surface faces, and where it reads a texture.</summary>
+        private readonly record struct Corner(Vector3 Position, Vector3 Normal, Vector2 Uv);
+
+        /// <summary>
+        /// Texture coordinates for a cap or bevel vertex from its world position: back to EM units, into the
+        /// glyph's place in the block, then 0..1 across the block, v downwards.
+        /// </summary>
+        private readonly struct CapUv
+        {
+            private readonly Vector2 _uvOrigin;
+            private readonly Vector2 _origin;
+            private readonly float _scale;
+            private readonly Vector2 _min;
+            private readonly Vector2 _size;
+
+            internal CapUv(Vector2 uvOrigin, Vector2 origin, float scale, Vector2 uvMin, Vector2 uvMax)
+            {
+                _uvOrigin = uvOrigin;
+                _origin = origin;
+                _scale = scale;
+                _min = uvMin;
+                _size = uvMax - uvMin;
+
+                if (_size.X <= 0f) _size.X = 1f;
+                if (_size.Y <= 0f) _size.Y = 1f;
+            }
+
+            internal Vector2 Of(Vector2 world)
+            {
+                var em = world / _scale - _origin + _uvOrigin;
+
+                return new Vector2((em.X - _min.X) / _size.X, 1f - (em.Y - _min.Y) / _size.Y);
             }
         }
     }

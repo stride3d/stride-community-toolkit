@@ -40,15 +40,7 @@ void CreateLetterEntity(Scene rootScene)
 
     // Not the gallery's shared material: that one reads colour from a vertex stream, and the text
     // mesh has no colour stream, so it needs a material with a colour of its own
-    var model = new Model
-    {
-        new MaterialInstance { Material = game.CreateMaterial(Color.Gold, metalness: 0.1f, glossiness: 0.4f) },
-        new Mesh
-        {
-            Draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "XYZ"),
-            MaterialIndex = 0
-        }
-    };
+    var model = TextMesh.CreateModel(game.GraphicsDevice, game.CreateMaterial(Color.Gold, metalness: 0.1f, glossiness: 0.4f), MeshFont.Default, "XYZ");
 
     entity.Add(new ModelComponent { Model = model });
 }

@@ -154,7 +154,7 @@
     href: charts-2d.md
   - name: Charts 3D
     href: charts-3d.md
-- name: C# Advanced (20)
+- name: C# Advanced (21)
   href: advanced-examples.md
   items:
   - name: Custom Scene Renderers
@@ -167,6 +167,8 @@
     href: image-processing.md
   - name: Instancing with Entity Transforms
     href: instancing-entity-transform.md
+  - name: 3D Text Shaders
+    href: text-shaders.md
   - name: Basic 2D Scene (Stress Pile)
     href: stress-pile-2d.md
   - name: Basic 2D Scene (Stress Pile, Box2D)

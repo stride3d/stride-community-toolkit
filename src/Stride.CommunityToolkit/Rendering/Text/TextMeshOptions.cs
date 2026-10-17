@@ -17,6 +17,12 @@ public sealed class TextMeshOptions
     public float Depth { get; set; } = 0.25f;
 
     /// <summary>
+    /// A rounded edge between the caps and the walls, front and back; <see langword="null"/>, the default,
+    /// is a sharp edge. See <see cref="TextBevel"/> for the size, the thickness and the steps.
+    /// </summary>
+    public TextBevel? Bevel { get; set; }
+
+    /// <summary>
     /// How many points a full turn of curve gets; see <see cref="GlyphContour.Flatten"/>. Defaults to 32,
     /// which is smooth at letter sizes. Lower it for far-away or tiny lettering, raise it for a logo
     /// the camera gets close to.

@@ -13,7 +13,7 @@ namespace Stride.CommunityToolkit.GoldScenes.Scenes;
 /// Solid lettering from the embedded font: the whole alphabet in both cases, the digits and the
 /// common signs, so a change to any glyph's outline decode, hole classification, bridging or
 /// extrusion shows in the picture; plus a centred block and a shape made by Primitive3D.Text for
-/// the layout, the anchor and the shape route. Lit from every side, as the setup's one light is
+/// the layout, the anchor and the shape route, and a bevelled word for the rounded edge. Lit from every side, as the setup's one light is
 /// behind the lettering. The embedded font is what makes the pixels the same on every machine.
 /// </summary>
 internal sealed class Text3DScene : IGoldScene
@@ -45,9 +45,9 @@ internal sealed class Text3DScene : IGoldScene
         Place("Alphabet", new Vector3(0f, 5.6f, -1f), gold,
             TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n0123456789 .,;:!?\"'()[]{}\n@#$%&*+-=/<>~^|_\n€£§©®°±µ¶", new TextMeshOptions { Size = 0.62f, Depth = 0.14f, Alignment = TextAlignment.Center, LineSpacing = 0.95f, Anchor = TextAnchor.TopCenter }));
 
-        // A word with holes and a descender, big enough to show the walls, standing on the ground
+        // A word with holes and a descender, big enough to show the walls and the bevel, standing on the ground
         Place("Word", new Vector3(-2.2f, 0.5f, 1.5f), silver,
-            TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "Bog8@", new TextMeshOptions { Size = 1.1f, Depth = 0.35f, Anchor = TextAnchor.BottomCenter }));
+            TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "Bog8@", new TextMeshOptions { Size = 1.1f, Depth = 0.35f, Anchor = TextAnchor.BottomCenter, Bevel = new TextBevel(size: 0.03f, thickness: 0.05f, segments: 4) }));
 
         // The shape route: a primitive with a material, centred on its entity and turned a little
         var shape = game.CreatePrimitive(Primitive3D.Text("Shape", size: 0.55f, depth: 0.2f), new Primitive3DEntityOptions

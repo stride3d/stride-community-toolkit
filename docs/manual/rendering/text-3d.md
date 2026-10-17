@@ -52,6 +52,7 @@ does not read without a shaping engine, so `GetKerning` is 0 for most fonts, inc
 |---|---|---|
 | `Size` | 1 | World units per EM. A capital comes out about 0.7 of this tall. |
 | `Depth` | 0.25 | How far the lettering extends along Z, centred on zero. |
+| `Bevel` | `null` | A `TextBevel(size, thickness, segments)` rounds the edge between the caps and the walls, front and back; see below. |
 | `CurveQuality` | 32 | Points a full turn of curve gets: a quarter-turn bowl gets a quarter of them. 16 is still smooth at a distance; 64 for a logo the camera gets close to. |
 | `Anchor` | `null` | Which point of the text block sits at the origin. `null` is the typographic origin: the first baseline at y = 0, the pen at x = 0. The nine `TextAnchor` points use the font's ascent-to-descent block over every line, so the anchor does not move with the letters used. |
 | `LetterSpacing` | 0 | Extra space after every glyph, in EM units; negative tightens. |
@@ -74,6 +75,28 @@ var options = new TextMeshOptions
 
 var draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "two lines\nof text", options);
 ```
+
+## Bevel
+
+`TextBevel` rounds the edge between the caps and the walls on both sides: a quarter-ellipse fillet
+that reaches `Size` in from the outline across the cap and `Thickness` from the cap towards the
+middle, in `Segments` steps (1 is a chamfer, 3 reads as round, 6 is smooth up close). The walls stay
+flat and the bevel is flat around the outline too, so the edges stay crisp; across the steps the
+normals turn from the wall to the cap, which is what catches the light on a title.
+
+```csharp
+var options = new TextMeshOptions
+{
+    Size = 0.6f,
+    Depth = 0.2f,
+    Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 4),
+};
+```
+
+A bevel wider than a glyph's thinnest stem would fold the cap over itself. `TextMesh` checks every
+pulled-in outline (same way round, smaller, not crossing itself) and halves the size for that glyph
+until it fits, so a wide bevel on a thin font rounds less rather than breaking. The thickness is
+capped at half the depth; at that value the two bevels meet and there is no wall.
 
 ## The mesh
 
@@ -110,11 +133,14 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
   fonts are for text.
 - Fonts whose contours overlap each other (some composite glyphs, variable fonts) are not
   triangulated; the glyph is reported, not mangled.
-- No bevel yet, no right-to-left, no wrapping.
+- No right-to-left, no wrapping, no text on a path.
 
 ## Examples
 
 - [`E03_3D_MeshText`](../code-only/examples/letters-3d.md): the embedded font, an installed font, lines
   that align, a frame counter, and a word with physics.
+- [`E03_3D_TextShaders`](../code-only/examples/text-shaders.md): four materials on the same lettering,
+  a gradient through the texture coordinates, a rim light node, a vertex-stage wave and a pixel-stage
+  dissolve, each a shader class in the example's `Effects` folder.
 - [`E07_3D_ProceduralGeometry`](../code-only/examples/procedural-geometry.md): lettering among other
   meshes built in code.

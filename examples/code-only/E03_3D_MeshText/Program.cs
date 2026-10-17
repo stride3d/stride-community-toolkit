@@ -1,6 +1,7 @@
 using E03_3D_MeshText;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
@@ -16,8 +17,8 @@ using Stride.Rendering;
 // engine ships, triangulates them, holes and all, and extrudes them: letters that are MESHES, lit and
 // shadowed like any other geometry, with a material of their own, and with a body when
 // CreatePrimitive makes them. On show: the Open Sans embedded in the toolkit, so this works with no
-// font file at hand; an installed font found by family name; lines that align; a frame counter whose
-// digits are rebuilt every frame; and a word with physics, dropped on the ground.
+// font file at hand, with a bevelled edge; an installed font found by family name; lines that align; a
+// frame counter whose digits are rebuilt every frame; and a word with physics, dropped on the ground.
 //
 // For ordinary text in a real font - labels, HUDs, signs - use E03_3D_EntityText (screen-space) or
 // E03_3D_WorldText (in-scene) instead: they draw a font, which is far cheaper than geometry.
@@ -28,6 +29,7 @@ WindowsDpiManager.EnablePerMonitorV2();
 // to face it square-on. Fly around it: these are solids, not billboards
 var faceCamera = Quaternion.RotationY(MathUtil.DegreesToRadians(45));
 
+var random = new Random(1);
 MeshFont? systemFont = null;
 Material? dropMaterial = null;
 var dropped = 0;
@@ -49,11 +51,10 @@ void Start(Scene scene)
     var silver = game.CreateMaterial(new Color(210, 215, 225));
     var blue = game.CreateMaterial(new Color(120, 190, 255));
 
-    dropMaterial = game.CreateMaterial(new Color(235, 90, 60), metalness: 0.1f, glossiness: 0.5f);
-
-    // The embedded font: Open Sans Regular, so the lettering is the same on every machine
+    // The embedded font: Open Sans Regular, so the lettering is the same on every machine. A bevel rounds
+    // the edge between the caps and the walls, which is what catches the light on a title
     AddText(scene, MeshFont.Default, "Stride Community Toolkit", new Vector3(0f, 3.6f, 0f), gold,
-        new TextMeshOptions { Size = 0.6f, Depth = 0.2f, Anchor = TextAnchor.MiddleCenter });
+        new TextMeshOptions { Size = 0.6f, Depth = 0.2f, Anchor = TextAnchor.MiddleCenter, Bevel = new TextBevel(size: 0.015f, thickness: 0.03f, segments: 4) });
 
     // An installed font by family name and style; null when this machine has no such family, so the
     // embedded one stands in and the line says so
@@ -104,20 +105,11 @@ void Update(Scene scene, GameTime time)
 /// </summary>
 void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material material, TextMeshOptions options)
 {
+    // CreateModel uploads the mesh and sets its bounds, which the renderer needs to cull the lettering
+    // when it is off screen; a bare MeshDraw has none
     var entity = new Entity($"Text {text}")
     {
-        new ModelComponent
-        {
-            Model = new Model
-            {
-                new MaterialInstance { Material = material },
-                new Mesh
-                {
-                    Draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, font, text, options),
-                    MaterialIndex = 0
-                }
-            }
-        }
+        new ModelComponent { Model = TextMesh.CreateModel(game.GraphicsDevice, material, font, text, options) }
     };
 
     entity.Transform.Position = position;
@@ -132,9 +124,11 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 /// </summary>
 void DropWord(Scene scene)
 {
+    dropMaterial = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
+
     var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new Bepu3DPhysicsOptions { Material = dropMaterial });
 
-    word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.5f, 2.2f);
+    word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f);
     word.Transform.Rotation = faceCamera;
     word.Scene = scene;
 
@@ -155,7 +149,7 @@ description:
   en: |-
     Solid 3D text from a real font: TextMesh reads a font's glyph outlines through the FreeType the
     engine ships, triangulates them, holes and all, and extrudes them into meshes that are lit and
-    shadowed like any other geometry. On show: the Open Sans embedded in the toolkit, an installed
+    shadowed like any other geometry. On show: the Open Sans embedded in the toolkit with a bevelled edge, an installed
     font found by family name, several lines that align in one mesh, a frame counter whose digits
     are rebuilt as a new mesh every frame, and a word with physics through Primitive3D.Text, dropped
     on the ground with one convex hull per glyph. The counter demonstrates the one rule of dynamic
@@ -170,8 +164,8 @@ description:
     obalem na glyf. Počítadlo ukazuje jediné pravidlo dynamického textu z meshů: před výměnou meshe
     uvolnit staré GPU buffery, jinak každá přestavba uteče o pár bufferů.
 concepts:
-  - "Solid 3D lettering from any font: TextMesh.CreateMeshDraw with MeshFont.Default, Load or FromFamily"
-  - TextMeshOptions - size per EM, depth, anchor, alignment, line spacing, curve quality
+  - "Solid 3D lettering from any font: TextMesh.CreateModel with MeshFont.Default, Load or FromFamily"
+  - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
   - A word as a primitive with a body - Primitive3D.Text through CreatePrimitive
   - Static lettering built once versus text that changes, and releasing the old buffers
   - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay"

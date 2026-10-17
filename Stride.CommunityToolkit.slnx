@@ -31,6 +31,7 @@
     <Project Path="examples/code-only/E03_2D_Panels/E03_2D_Panels.csproj" />
     <Project Path="examples/code-only/E03_3D_EntityText/E03_3D_EntityText.csproj" />
     <Project Path="examples/code-only/E03_3D_MeshText/E03_3D_MeshText.csproj" />
+    <Project Path="examples/code-only/E03_3D_TextShaders/E03_3D_TextShaders.csproj" />
     <Project Path="examples/code-only/E03_3D_WorldText/E03_3D_WorldText.csproj" />
     <Project Path="examples/code-only/E04_2D_SpawnMenu/E04_2D_SpawnMenu.csproj" />
     <Project Path="examples/code-only/E04_CubeClicker/E04_CubeClicker.csproj" />
