@@ -1,3 +1,5 @@
+using Stride.CommunityToolkit.Rendering.Text;
+
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 
 /// <summary>
@@ -53,6 +55,17 @@ public abstract record Primitive3D
     /// <summary>A triangular prism: a triangle <c>X</c> wide and <c>Y</c> tall, extruded <c>Z</c> along the depth.</summary>
     public static Primitive3D TriangularPrism(Vector3 size) => new TriangularPrismShape(size);
 
+    /// <summary>
+    /// Solid lettering: <paramref name="text"/> in <paramref name="font"/> (the toolkit's embedded font when <see langword="null"/>),
+    /// <paramref name="size"/> units per EM, extruded <paramref name="depth"/> along Z, with the <paramref name="anchor"/> of the
+    /// text block at the entity's origin: its centre by default, like every other shape.
+    /// </summary>
+    public static Primitive3D Text(string text, MeshFont? font = null, float size = 1f, float depth = 0.25f, TextAnchor? anchor = TextAnchor.MiddleCenter)
+        => new TextShape(text, font ?? MeshFont.Default, new TextMeshOptions { Size = size, Depth = depth, Anchor = anchor });
+
+    /// <summary>Solid lettering with every option of <see cref="TextMeshOptions"/>: lines, alignment, spacing, curve quality.</summary>
+    public static Primitive3D Text(string text, MeshFont font, TextMeshOptions options) => new TextShape(text, font, options);
+
     /// <summary>A box; <see cref="Cube(float)"/> and <see cref="Box(Vector3)"/> make one.</summary>
     public sealed record BoxShape(Vector3 Size) : Primitive3D;
 
@@ -79,4 +92,7 @@ public abstract record Primitive3D
 
     /// <summary>A triangular prism; <see cref="TriangularPrism(Vector3)"/> makes one.</summary>
     public sealed record TriangularPrismShape(Vector3 Size) : Primitive3D;
+
+    /// <summary>Solid lettering; <see cref="Text(string, MeshFont, float, float, TextAnchor?)"/> makes one.</summary>
+    public sealed record TextShape(string Content, MeshFont Font, TextMeshOptions Options) : Primitive3D;
 }

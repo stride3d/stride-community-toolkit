@@ -1,0 +1,26 @@
+namespace E03_3D_TextShaders
+{
+    // A wave along the lettering, installed by WaveFeature as the vertex stage's final modifier: every
+    // vertex rises and falls by a wave that runs along X, in object space, before the world transform, so
+    // the shadow pass, which runs the same vertex stage, waves with it. Up and down rather than along the
+    // normal: the caps share their vertices and the walls own theirs, and a move that depends on the
+    // normal would pull a cap and its wall apart at the seam; a move by x alone keeps them together. The
+    // clock is the engine's own Global.Time, which a mesh shader can read; the three numbers are the
+    // pass's parameters.
+    shader TextWave : IMaterialSurface, PositionStream
+    {
+        cbuffer PerMaterial
+        {
+            stage float WaveAmplitude;
+            stage float WaveFrequency;
+            stage float WaveSpeed;
+        }
+
+        override void Compute()
+        {
+            float wave = sin(streams.Position.x * WaveFrequency - Global.Time * WaveSpeed);
+
+            streams.Position = float4(streams.Position.x, streams.Position.y + wave * WaveAmplitude, streams.Position.zw);
+        }
+    };
+}

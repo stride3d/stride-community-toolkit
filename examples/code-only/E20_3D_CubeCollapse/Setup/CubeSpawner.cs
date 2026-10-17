@@ -100,6 +100,10 @@ public class CubeSpawner(Game game, Scene scene, CubeGrid grid, LevelState level
         {
             EntityName = EntityNames.Cube,
             Material = _materials?[colour],
+
+            // The scene setup chose Bepu, so CreatePrimitive would give the cube a dynamic body of its own; the
+            // spawner adds the SlidingCubeComponent below instead, and two bodies on one cube push each other apart
+            IncludePhysics = false,
         });
 
         cube.Add(new CubeComponent(colour));

@@ -44,7 +44,7 @@ var hullColour = new Color(240, 160, 70);
 var meshColour = new Color(90, 190, 200);
 var ballColour = new Color(235, 235, 240);
 
-var stations = new List<Station>();
+var stations = new List<DropStation>();
 var launched = false;
 
 using var game = new Game();
@@ -98,7 +98,7 @@ void BuildRingStation(Scene scene, string label, float x, bool mesh)
 
     var ball = AddBall(scene, new Vector3(x, RestHeight + DropHeight, 0f));
 
-    stations.Add(new Station(label, ball, mesh ? meshColour : hullColour,
+    stations.Add(new DropStation(label, ball, mesh ? meshColour : hullColour,
         static y => y > RestHeight ? "on the lid" : "through the hole"));
 
     AddLabel(scene, label, x);
@@ -120,10 +120,10 @@ void BuildShellStation(Scene scene, string label, float x)
     var outer = AddBall(scene, new Vector3(x, RestHeight + DropHeight, 0f));
     var inner = AddBall(scene, new Vector3(x, RestHeight, 0f));
 
-    stations.Add(new Station("3. Shell, outside", outer, meshColour,
+    stations.Add(new DropStation("3. Shell, outside", outer, meshColour,
         static y => y > RestHeight + ShellRadius ? "on top" : "through it"));
 
-    stations.Add(new Station("3. Shell, inside", inner, meshColour,
+    stations.Add(new DropStation("3. Shell, inside", inner, meshColour,
         static y => y > RestHeight - ShellRadius ? "still inside" : "fell out"));
 
     AddLabel(scene, label, x);
@@ -136,7 +136,7 @@ void BuildMovingRingStation(Scene scene, string label, float x)
 
     var ring = AddRing(scene, new Vector3(x, RestHeight + DropHeight, 0f), mesh: true, moving: true);
 
-    stations.Add(new Station(label, ring.Get<BodyComponent>(), meshColour,
+    stations.Add(new DropStation(label, ring.Get<BodyComponent>(), meshColour,
         static y => y > RestHeight ? "on the ring" : "through it, on the ground"));
 
     AddLabel(scene, label, x);
@@ -235,7 +235,7 @@ IReadOnlyList<TextElement> OverlayLines()
 /// The thing a station drops, a ball or a ring, where it starts, and the <paramref name="Verdict"/> its
 /// height earns once it has stopped.
 /// </summary>
-sealed record Station(string Label, BodyComponent Body, Color Colour, Func<float, string> Verdict)
+sealed record DropStation(string Label, BodyComponent Body, Color Colour, Func<float, string> Verdict)
 {
     /// <summary>Where the body was made, which is where it goes back to.</summary>
     internal Vector3 Start { get; } = Body.Entity.Transform.Position;

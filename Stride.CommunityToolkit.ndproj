@@ -1119,10 +1119,12 @@ select new {
 warnif count > 0 from a in Application.Assemblies 
   where a.NormDistFromMainSeq > 0.7
 
-  // Stride Community Toolkit tweak: the Windows assembly is empty since preview.67 (its code moved to
-  // the core; the package is kept one release as a forwarder), so the metric has nothing to say.
+  // Stride Community Toolkit tweak: the principle is about assemblies with a design to balance. A leaf
+  // package of a handful of types (Skyboxes: a setup, two extension classes, a texture) cannot sit on the main
+  // sequence, and its distance only measures how many examples reference it; the Windows assembly is
+  // empty since preview.67 (its code moved to the core; the package is kept one release as a forwarder).
   // An assembly-level issue cannot be suppressed from the central GlobalSuppression.cs, hence here.
-  && a.Name != "Stride.CommunityToolkit.Windows"
+  && a.NbTypes >= 10
 
   orderby a.NormDistFromMainSeq descending
 select new { 

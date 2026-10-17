@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
 using Stride.Rendering;
 
@@ -9,14 +9,16 @@ namespace E03_3D_MeshText;
 /// </summary>
 /// <remarks>
 /// This is the worst case for mesh text - a value that changes every single frame - and it is here
-/// on purpose, because it makes the one rule of rebuilding impossible to miss: release the old
-/// buffers first. <c>CreateTextMeshDraw</c> hands the caller GPU buffers that no content manager
+/// on purpose, because it makes the one rule of rebuilding impossible to miss: every swap releases
+/// the old buffers. <c>TextMesh.CreateModel</c> hands the caller GPU buffers that no content manager
 /// tracks, so swapping in a new model without disposing the old one leaks a buffer pair per rebuild
 /// - at hundreds of frames a second, megabytes per second. For a HUD counter in a real game, prefer
 /// <c>EntityTextComponent</c>, which redraws a font instead of rebuilding geometry.
 /// </remarks>
 public class FrameCounterScript : SyncScript
 {
+    private readonly TextMeshOptions _options = new() { Size = 1.2f, Anchor = TextAnchor.MiddleCenter };
+
     private readonly ModelComponent _modelComponent = new();
     private int _frames;
     private string _shown = string.Empty;
@@ -40,17 +42,12 @@ public class FrameCounterScript : SyncScript
 
         _shown = text;
 
+        // The new model first, then the old buffers: a build that throws leaves the last digits standing
+        var model = TextMesh.CreateModel(GraphicsDevice, Material, MeshFont.Default, text, _options);
+
         ReleaseMeshBuffers();
 
-        _modelComponent.Model = new Model
-        {
-            new MaterialInstance { Material = Material },
-            new Mesh
-            {
-                Draw = LetterMeshFactory.CreateTextMeshDraw(GraphicsDevice, text, centerOrigin: true),
-                MaterialIndex = 0
-            }
-        };
+        _modelComponent.Model = model;
     }
 
     /// <summary>The last mesh is the script's too: released when the script leaves the scene.</summary>

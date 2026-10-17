@@ -1,0 +1,24 @@
+namespace E03_3D_TextShaders
+{
+    // A rim light as a colour node: bright where the surface turns away from the eye, dark where it faces
+    // it, the Fresnel look of a backlit edge. It reads the world-space normal and position the material
+    // pipeline already carries, and the eye from the frame's transformation, so it needs nothing set per
+    // frame. In the emissive slot it adds to the light; the two numbers are the pass's parameters.
+    shader TextRim : ComputeColor, NormalStream, PositionStream4, Transformation
+    {
+        cbuffer PerMaterial
+        {
+            stage float3 RimColor;
+            stage float RimPower;
+        }
+
+        override float4 Compute()
+        {
+            float3 normal = normalize(streams.normalWS);
+            float3 toEye = normalize(Eye.xyz - streams.PositionWS.xyz);
+            float rim = pow(1.0 - saturate(dot(normal, toEye)), RimPower);
+
+            return float4(RimColor * rim, 1.0);
+        }
+    };
+}

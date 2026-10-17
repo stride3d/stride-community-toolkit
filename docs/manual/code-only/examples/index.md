@@ -438,11 +438,11 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
-            <img src="media/letters-3d.webp" class="card-img-top" alt="Screenshot of the 3D Letters (Mesh Text) example" width="1280" height="720" loading="lazy">
+            <img src="media/letters-3d.webp" class="card-img-top" alt="Screenshot of the 3D Text from a Font example" width="1280" height="720" loading="lazy">
             <div class="card-body">
-                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="letters-3d.md">3D Letters (Mesh Text)</a></h3>
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="letters-3d.md">3D Text from a Font</a></h3>
                 <p><span class="badge text-bg-secondary">Text</span></p>
-                <p class="card-text">A gallery of every glyph LetterMeshFactory can build - the digits, the full A-Z alphabet and the dash - as solid extruded meshes that catch the light...</p>
+                <p class="card-text">Solid 3D text from a real font: TextMesh reads a font's glyph outlines through the FreeType the engine ships, triangulates them, holes and all, and...</p>
             </div>
         </div>
     </div>
@@ -798,6 +798,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="instancing-entity-transform.md">Instancing with Entity Transforms</a></h3>
                 <p><span class="badge text-bg-secondary">Performance</span></p>
                 <p class="card-text">Keep every object a real entity - with a transform, a physics body and anything else you need - while still drawing the whole crowd in a single draw...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/text-shaders.webp" class="card-img-top" alt="Screenshot of the 3D Text Shaders example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="text-shaders.md">3D Text Shaders</a></h3>
+                <p><span class="badge text-bg-secondary">Text</span></p>
+                <p class="card-text">Four materials on the same solid lettering, which is geometry like any other with normals and texture coordinates: a gradient texture read through the...</p>
             </div>
         </div>
     </div>

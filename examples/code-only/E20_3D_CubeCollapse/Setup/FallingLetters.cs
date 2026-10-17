@@ -3,8 +3,10 @@ using CubeCollapse.Shared;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 using Stride.Rendering;
 
 namespace CubeCollapse.Setup;
@@ -29,8 +31,8 @@ namespace CubeCollapse.Setup;
 /// </remarks>
 public static class FallingLetters
 {
-    /// <summary>Glyph box width in glyph units, matching <see cref="LetterMeshFactory"/>.</summary>
-    private const float GlyphWidth = 0.7f;
+    /// <summary>World units per EM of the letters, so a capital comes out about 0.9 tall.</summary>
+    private const float Size = 1.3f;
 
     /// <summary>Depth of the letter bodies, in world units.</summary>
     private const float Depth = 0.3f;
@@ -40,7 +42,7 @@ public static class FallingLetters
     /// </summary>
     /// <param name="game">The running game.</param>
     /// <param name="scene">The scene the letters are added to.</param>
-    /// <param name="word">The word to drop. Every character must have an authored glyph, or be a space.</param>
+    /// <param name="word">The word to drop, in the toolkit's embedded font.</param>
     /// <param name="centre">Where the middle of the word starts, in world units. Height included - drop from high for drama.</param>
     /// <param name="material">The material every letter shares.</param>
     /// <param name="seed">Seed for the small per-letter jitter, so a run is reproducible.</param>
@@ -61,34 +63,25 @@ public static class FallingLetters
         ArgumentNullException.ThrowIfNull(material);
 
         var random = new Random(seed);
-        var advance = GlyphWidth + 0.25f;
 
-        // The word is laid out along its own X axis and then turned as one piece, so the line of
-        // letters stays perpendicular to the viewer whichever way it faces
+        // One mesh per glyph, each centred on itself and told where it sits in the word, so the box
+        // collider below and the visible letter share a centre, which is also what makes the
+        // tumbling look right. The word is laid out along its own X axis and then turned as one
+        // piece, so the line of letters stays perpendicular to the viewer whichever way it faces
+        var glyphs = TextMesh.CreateGlyphs(MeshFont.Default, word, new TextMeshOptions { Size = Size, Depth = Depth, LetterSpacing = 0.1f, Anchor = TextAnchor.MiddleCenter });
         var wordRotation = Quaternion.RotationY(yaw);
         var right = Vector3.Transform(Vector3.UnitX, wordRotation);
-        var start = centre - right * ((word.Length - 1) * advance / 2);
 
-        for (var i = 0; i < word.Length; i++)
+        foreach (var glyph in glyphs)
         {
-            var character = word[i];
-
-            if (character == ' ') continue;
-
-            var entity = new Entity($"{EntityNames.LetterPrefix}{character}")
+            var entity = new Entity($"{EntityNames.LetterPrefix}{(char)glyph.Codepoint}")
             {
                 new ModelComponent
                 {
                     Model = new Model
                     {
                         new MaterialInstance { Material = material },
-                        new Mesh
-                        {
-                            // Centred on the origin so the box collider below and the visible letter
-                            // share a centre, which is also what makes the tumbling look right
-                            Draw = LetterMeshFactory.CreateTextMeshDraw(game.GraphicsDevice, character.ToString(), depth: Depth, centerOrigin: true),
-                            MaterialIndex = 0
-                        }
+                        glyph.Mesh.ToMesh(game.GraphicsDevice)
                     }
                 }
             };
@@ -104,16 +97,16 @@ public static class FallingLetters
                     {
                         new BoxCollider
                         {
-                            Size = new Vector3(GlyphWidth, 1f, Depth),
+                            Size = BoxOf(glyph.Mesh),
                             Mass = 1f,
                         }
                     }
                 }
             });
 
-            entity.Transform.Position = start
-                + right * (i * advance)
-                + new Vector3(0, (float)random.NextDouble() * 1.5f, 0);
+            entity.Transform.Position = centre
+                + right * glyph.Position.X
+                + new Vector3(0, glyph.Position.Y + (float)random.NextDouble() * 1.5f, 0);
 
             entity.Transform.Rotation = wordRotation * Quaternion.RotationY((float)(random.NextDouble() - 0.5) * 0.6f);
 
@@ -127,7 +120,7 @@ public static class FallingLetters
     /// </summary>
     /// <param name="game">The running game.</param>
     /// <param name="scene">The scene the line is added to.</param>
-    /// <param name="text">The line to show. Every character must have an authored glyph, or be a space.</param>
+    /// <param name="text">The line to show, in the toolkit's embedded font.</param>
     /// <param name="position">Where the line's centre hovers, in world units.</param>
     /// <param name="material">The line's material.</param>
     /// <param name="scale">Letter height in world units. Defaults to 0.45.</param>
@@ -143,15 +136,7 @@ public static class FallingLetters
         {
             new ModelComponent
             {
-                Model = new Model
-                {
-                    new MaterialInstance { Material = material },
-                    new Mesh
-                    {
-                        Draw = LetterMeshFactory.CreateTextMeshDraw(game.GraphicsDevice, text, depth: 0.12f, centerOrigin: true),
-                        MaterialIndex = 0
-                    }
-                }
+                Model = TextMesh.CreateModel(game.GraphicsDevice, material, MeshFont.Default, text, new TextMeshOptions { Size = Size, Depth = 0.12f, Anchor = TextAnchor.MiddleCenter })
             },
             new FaceCameraScript()
         };
@@ -192,5 +177,16 @@ public static class FallingLetters
         }
 
         entity.Scene = null;
+    }
+
+    /// <summary>The extents of a glyph mesh, which is centred on its origin, for the box that collides in its place.</summary>
+
+    private static Vector3 BoxOf(GeometricMeshData<VertexPositionNormalTexture> mesh)
+    {
+        var max = Vector3.Zero;
+
+        foreach (var vertex in mesh.Vertices) max = Vector3.Max(max, new Vector3(MathF.Abs(vertex.Position.X), MathF.Abs(vertex.Position.Y), MathF.Abs(vertex.Position.Z)));
+
+        return max * 2f;
     }
 }

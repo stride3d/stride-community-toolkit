@@ -32,6 +32,14 @@ Physics helpers are in Stride.CommunityToolkit.Bepu (recommended) and Stride.Com
     </ItemGroup>
 
     <ItemGroup>
+        <!-- Open Sans Regular (Apache 2.0, licence beside it): the font MeshFont.Default opens, so solid lettering
+             works with no font file at hand and gives the same shapes on every machine. -->
+        <EmbeddedResource Include="Rendering\Text\Fonts\OpenSans-Regular.ttf" LogicalName="Stride.CommunityToolkit.Rendering.Text.Fonts.OpenSans-Regular.ttf" />
+        <None Include="Rendering\Text\Fonts\OpenSans-LICENSE.txt" Pack="true" PackagePath="fonts/OpenSans-LICENSE.txt" />
+        <InternalsVisibleTo Include="Stride.CommunityToolkit.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Stride.Engine" Version="$(StrideVersion)" />
         <PackageReference Include="Stride.Particles" Version="$(StrideVersion)" />
         <PackageReference Include="Stride.UI" Version="$(StrideVersion)" />

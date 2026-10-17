@@ -78,7 +78,9 @@ public static class EntityExtensions
             {
                 var collider = ColliderFor(shape);
 
-                if (options.Mass is { } mass) collider.Mass = mass;
+                // Bepu adds a hull's mass once per hull, so a mass given for the whole shape is shared out
+                // among them: lettering is one hull per glyph
+                if (options.Mass is { } mass) collider.Mass = collider is ConvexHullCollider hulls ? mass / TextCollider.HullCount(hulls) : mass;
 
                 compoundCollider.Colliders.Add(collider);
             }
@@ -141,6 +143,7 @@ public static class EntityExtensions
             Primitive3D.PlaneShape plane => new BoxCollider { Size = new Vector3(plane.Width, 0, plane.Length) },
             Primitive3D.TeapotShape teapot => TeapotCollider.Create(teapot),
             Primitive3D.TriangularPrismShape prism => TriangularPrismCollider.Create(prism),
+            Primitive3D.TextShape text => TextCollider.Create(text),
             _ => throw new ArgumentException($"Unknown shape {shape.GetType().Name}.", nameof(shape))
         };
     }
