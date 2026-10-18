@@ -25,11 +25,11 @@ The `Program.cs` file shows how to:
 - Deriving a Bepu collider from a primitive type without building a mesh per body
 - Switching the whole scene to a different primitive from one line
 - Knowing when instancing does not help
-- Using helpers: AddInstancingSupport, AddInstancingBufferUpload
+- Using helpers: SceneSetup3D, UseInstancing, AddInstancingBufferUpload
 - Using helpers: SceneSetup3D, Add3DGround, AddBepuPhysics
 
 ![Instancing with Entity Transforms](media/instancing-entity-transform.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_3D_Instancing_EntityTransform).
 
-[!code-csharp[](../../../../examples/code-only/E10_3D_Instancing_EntityTransform/Program.cs?start=1&end=366)]
+[!code-csharp[](../../../../examples/code-only/E10_3D_Instancing_EntityTransform/Program.cs?start=1&end=362)]

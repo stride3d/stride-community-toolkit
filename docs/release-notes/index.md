@@ -32,6 +32,9 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - `TextMesh`: solid 3D text from a `MeshFont`. `Create` gives CPU mesh data, `CreateMeshDraw` uploads it, `CreateGlyphs` gives one centred mesh per glyph for a body or an animation per letter, `Measure` gives the block. Lines, alignment, letter and line spacing, curve quality, the nine-point anchor, and texture coordinates on caps and walls, through `TextMeshOptions`.
 - `Primitive3D.Text`: lettering as a shape, so `CreatePrimitive` gives it a material and a collider of one convex hull per glyph, on Bepu (`TextCollider`) and on Bullet.
 - `TextBevel`: a rounded edge between the caps and the walls of 3D text, front and back, through `TextMeshOptions.Bevel`; a bevel wider than a glyph's thinnest stem shrinks for that glyph instead of folding.
+- Instancing needs one call, not three: `UseInstancing()` on the scene setup puts the render feature in the compositor from the first frame, and `AddInstancingBufferUpload` adds it itself. A master whose compositor has no render feature used to draw as one model with nothing said; the run loop now logs a warning naming the entity.
+- `EntityInstancing` and `BufferedEntityInstancing` unregister an instance whose entity leaves the scene, as the engine's `InstanceComponent` does; a removed entity no longer draws on as a ghost until `Clear()`.
+- `AddOrientationGizmo()`: the world axes in a corner of the screen as arrows with white letters, in the proportions of Game Studio's space marker, turning with the camera and ignoring depth; `OrientationGizmoRenderer` for the corner, size, colours and opacity. `AddGroundGizmo` stays the world-space marker of the origin.
 - `AddPhysicsDebug(contactsVisible: true)` draws the solver's contact points and normals with the debug meshes, the debug view Stride 4.4.1 added; `DebugRenderComponentScript.ShowContacts` is the same switch on the component. `E05_3D_TriggerZones` turns it on.
 - `ToMeshDraw(device)`, `ToMesh(device)` and `Bounds()` on `GeometricMeshData<VertexPositionNormalTexture>`, for any procedural mesh data; `TextMesh.CreateMesh` and `CreateModel` give lettering with its bounds, so the renderer can cull it.
 
@@ -50,6 +53,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - The glossary is in the top navigation, and defines gizmo, mesh collider, glyph and EM.
+- A manual page for the orientation gizmo (`rendering/orientation-gizmo.md`), with the two gizmos side by side.
 - Physics extensions: a section on the simulation clock (`TimeScale`, `Enabled`, `PoseGravity`, `MaxStepPerFrame`, `ISimulationUpdate`), a Triggers and contact events section (`Trigger`, `IContactHandler`, what the callbacks get and when they run), a Shape queries section (`Overlap`, `OverlapInfo`, `SweepCast`, `SweepCastPenetrating`, what the distance means), and a Mesh colliders section, what a `MeshCollider` on a static keeps that a hull fills in, and what a mesh is not (a surface with no inside), measured in `E05_3D_MeshColliders`.
 - A manual page for 3D text (`rendering/text-3d.md`); the MeshBuilder page points at it. A second page, `rendering/text-3d-pipeline.md`, walks the pipeline from the font file to the mesh, with the files behind each stage.
 

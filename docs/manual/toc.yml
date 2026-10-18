@@ -84,6 +84,8 @@
     href: rendering/shape-batch.md
   - name: Reference Grid
     href: rendering/reference-grid.md
+  - name: Orientation Gizmo
+    href: rendering/orientation-gizmo.md
   - name: Render to Texture
     href: rendering/render-to-texture.md
   - name: GPU Picking
