@@ -178,6 +178,9 @@ public static partial class GameExtensions
             if (start is not null)
                 await start(RootScene());
 
+            // A master with no render feature draws as one model and says nothing; this says it once
+            InstancingSupport.WarnIfMissing(game);
+
             if (update is null) return;
 
             while (true)

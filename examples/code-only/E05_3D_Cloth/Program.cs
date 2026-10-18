@@ -122,8 +122,6 @@ void Rebuild()
 
 void SetupInstancing(Scene scene)
 {
-    // Without this nothing instanced is drawn: the code-built compositor does not wire instancing up.
-    game.AddInstancingSupport();
 
     instancing = new BufferedEntityInstancing(new BepuEntityInstancing());
 

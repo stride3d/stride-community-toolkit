@@ -129,10 +129,6 @@ void CreateWall(Vector3 position, Vector3 size, Quaternion? rotation = null)
 
 void SetupInstancing()
 {
-    // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
-    // wires up transform, skinning, material and lighting, but not instancing
-    game.AddInstancingSupport();
-
     awakeInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
     sleepingInstancing = new BufferedEntityInstancing(new BepuEntityInstancing());
 
@@ -501,7 +497,7 @@ concepts:
   - Tearing down an instanced pile safely, clearing the instancing before the entities
   - Switching shape, batch size and layout at runtime with DebugTextDropdown
   - Why a perfectly regular spawn lattice must be jittered
-  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload, AddBepuPhysics, AddGrabber"
+  - "Using helpers: AddInstancingBufferUpload, AddBepuPhysics, AddGrabber"
 tags:
   - 2D
   - Bepu

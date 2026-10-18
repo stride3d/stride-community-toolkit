@@ -21,7 +21,9 @@ namespace Stride.CommunityToolkit.Rendering.Instancing;
 /// <para>
 /// Instances are registered explicitly with <see cref="AddInstance"/> rather than by adding an
 /// <see cref="InstanceComponent"/>, because the engine's registration hooks are internal to
-/// Stride.Engine. Instance entities must not have a <see cref="ModelComponent"/> of their own, or
+/// Stride.Engine. An instance that leaves its scene is unregistered by itself, as the engine's
+/// component is: the instancing listens to the scene's removals from the first update that sees the
+/// entity in a scene. Instance entities must not have a <see cref="ModelComponent"/> of their own, or
 /// they are drawn twice - once individually and once by the master.
 /// </para>
 /// <para>
@@ -45,6 +47,7 @@ public class EntityInstancing : InstancingUserArray
 {
     private readonly List<TransformComponent> _transforms = [];
     private readonly Dictionary<Entity, int> _indexOf = [];
+    private readonly HashSet<EntityManager> _watched = [];
     private readonly Lock _mergeLock = new();
 
     private Matrix[] _world = [];
@@ -130,14 +133,15 @@ public class EntityInstancing : InstancingUserArray
         _transforms.Add(entity.Transform);
         StructureDirty = true;
 
+        Watch(entity.EntityManager);
         OnInstanceAdded(entity);
 
         return true;
     }
 
     /// <summary>
-    /// Unregisters an entity. Removing the entity from the scene does not unregister it, unlike the
-    /// engine's <see cref="InstanceComponent"/>.
+    /// Unregisters an entity. An entity that leaves its scene is unregistered this way by itself, once
+    /// the instancing has seen it in a scene.
     /// </summary>
     /// <param name="entity">The entity to stop drawing.</param>
     /// <returns><see langword="true"/> if it was registered.</returns>
@@ -173,6 +177,9 @@ public class EntityInstancing : InstancingUserArray
         _indexOf.Clear();
         StructureDirty = true;
 
+        foreach (var manager in _watched) manager.EntityRemoved -= OnEntityRemoved;
+
+        _watched.Clear();
         OnInstancesCleared();
     }
 
@@ -202,6 +209,12 @@ public class EntityInstancing : InstancingUserArray
             LastUpdateMilliseconds = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
 
             return;
+        }
+
+        // An entity registered before it joined a scene is hooked now that it is in one
+        if (StructureDirty)
+        {
+            foreach (var transform in CollectionsMarshal.AsSpan(_transforms)) Watch(transform.Entity.EntityManager);
         }
 
         UpdateSkippedLastFrame = false;
@@ -286,6 +299,19 @@ public class EntityInstancing : InstancingUserArray
 
     /// <summary>Called after every instance is unregistered, for derived classes keeping parallel data.</summary>
     protected virtual void OnInstancesCleared() { }
+
+    /// <summary>Listens to a scene's removals once, so an instance that leaves it is dropped.</summary>
+    private void Watch(EntityManager? manager)
+    {
+        if (manager is null || !_watched.Add(manager)) return;
+
+        manager.EntityRemoved += OnEntityRemoved;
+    }
+
+    private void OnEntityRemoved(object? sender, Entity entity)
+    {
+        if (_indexOf.ContainsKey(entity)) RemoveInstance(entity);
+    }
 
     /// <summary>
     /// Gathers world matrices, inverses and position bounds for one index range. Shared by the

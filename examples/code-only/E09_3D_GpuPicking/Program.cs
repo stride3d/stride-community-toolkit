@@ -50,7 +50,7 @@ var sceneSetup = new SceneSetup3D
     Ground = null,
     Camera = CameraSetup.Perspective(position: new Vector3(0f, 9f, 22f), rotation: new Vector3(0f, -20f, 0f)).WithController(),
     Profiler = true
-}.UseSkybox();
+}.UseSkybox().UseInstancing();
 
 game.Run(sceneSetup, start: Start, update: Update);
 
@@ -58,8 +58,6 @@ void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "GPU Picking - Stride Community Toolkit";
-
-    game.AddInstancingSupport();
 
     BuildScene(scene);
 

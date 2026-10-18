@@ -18,23 +18,35 @@ public static class InstancingExtensions
     /// <returns><see langword="true"/> if it was added, <see langword="false"/> if it was already there.</returns>
     /// <exception cref="InvalidOperationException">The compositor has no <see cref="MeshRenderFeature"/>.</exception>
     /// <remarks>
-    /// Code-only projects need this and nothing warns when it is missing: the compositor built by
-    /// <c>GraphicsCompositorHelper.CreateDefault</c> wires up transform, skinning, material,
-    /// shadow-caster and lighting, but not instancing. Without it every instanced master renders as a
-    /// single model at its own transform and the instances are invisible. Calling it twice is safe.
+    /// Code-only projects need this: the compositor built by <c>GraphicsCompositorHelper.CreateDefault</c>
+    /// wires up transform, skinning, material, shadow-caster and lighting, but not instancing. Without it
+    /// every instanced master renders as a single model at its own transform and the instances are
+    /// invisible; the run loop logs a warning when it finds a master in that state. Calling it twice is
+    /// safe. <see cref="UseInstancing{T}"/> on the scene setup and <see cref="AddInstancingBufferUpload"/>
+    /// both do this for you.
     /// </remarks>
     public static bool AddInstancingSupport(this IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        var meshRenderFeature = game.GetSceneSystem().GraphicsCompositor?.RenderFeatures.OfType<MeshRenderFeature>().FirstOrDefault()
+        return InstancingSupport.Ensure(game.GetSceneSystem().GraphicsCompositor)
             ?? throw new InvalidOperationException("The graphics compositor has no MeshRenderFeature to add instancing to.");
+    }
 
-        if (meshRenderFeature.RenderFeatures.OfType<InstancingRenderFeature>().Any()) return false;
+    /// <summary>
+    /// Asks the scene setup for instanced rendering: the <see cref="InstancingRenderFeature"/> is in the
+    /// compositor from the first frame, the way <c>UseBepu()</c> gives the scene its physics.
+    /// </summary>
+    /// <typeparam name="T">The setup type, so the call chains.</typeparam>
+    /// <param name="setup">The setup.</param>
+    /// <returns>The same setup.</returns>
+    public static T UseInstancing<T>(this T setup) where T : SceneSetup
+    {
+        ArgumentNullException.ThrowIfNull(setup);
 
-        meshRenderFeature.RenderFeatures.Add(new InstancingRenderFeature());
+        setup.Instancing = true;
 
-        return true;
+        return setup;
     }
 
     /// <summary>
@@ -47,7 +59,8 @@ public static class InstancingExtensions
     /// <remarks>
     /// The renderer is inserted before the one that draws the scene, so uploads are recorded ahead of
     /// the draw calls that read them. Calling this repeatedly reuses the existing renderer rather than
-    /// adding another. This does not enable instancing itself - call <see cref="AddInstancingSupport"/> too.
+    /// adding another. It enables instancing as well, so <see cref="AddInstancingSupport"/> need not be
+    /// called first.
     /// </remarks>
     public static InstancingBufferUploadRenderer AddInstancingBufferUpload(this IGame game, params BufferedEntityInstancing[] instancings)
     {
@@ -56,6 +69,8 @@ public static class InstancingExtensions
 
         var compositor = game.GetSceneSystem().GraphicsCompositor
             ?? throw new InvalidOperationException("The game has no graphics compositor.");
+
+        game.AddInstancingSupport();
 
         var renderer = FindOrInsertUploadRenderer(compositor);
 

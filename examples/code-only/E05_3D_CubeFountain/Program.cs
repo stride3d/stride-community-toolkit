@@ -77,9 +77,6 @@ void Start(Scene scene)
     game.Window.AllowUserResizing = true;
     game.Window.Title = "Cube fountain - Stride Community Toolkit";
 
-    // Without this nothing instanced is drawn, and nothing warns you
-    game.AddInstancingSupport();
-
     for (var i = 0; i < shapes.Length; i++)
     {
         // The model, owned by a prototype parked out of sight

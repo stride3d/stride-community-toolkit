@@ -91,10 +91,6 @@ void Start(Scene rootScene)
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
     DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
 
-    // Without this nothing instanced is drawn, and nothing warns you: the code-built compositor
-    // wires up transform, skinning, material and lighting, but not instancing
-    game.AddInstancingSupport();
-
     sharedModel = CreateSharedModel(rootScene);
 
     // Three masters sharing one model: Stride's own, the toolkit's, and the toolkit's buffered
@@ -404,7 +400,7 @@ concepts:
   - Deriving a Bepu collider from a primitive type without building a mesh per body
   - Switching the whole scene to a different primitive from one line
   - Knowing when instancing does not help
-  - "Using helpers: AddInstancingSupport, AddInstancingBufferUpload"
+  - "Using helpers: SceneSetup3D, UseInstancing, AddInstancingBufferUpload"
   - "Using helpers: SceneSetup3D, Add3DGround, AddBepuPhysics"
 tags:
   - 3D
