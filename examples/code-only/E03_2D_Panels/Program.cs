@@ -638,26 +638,19 @@ complexity: 2
 order: 75
 description:
   en: |-
-    Twenty-four HUD panel recipes side by side, each one property away from the last: fill only,
-    border only, transparent fill over a stripe that proves it, a fill colour of its own, rounded
-    corners, heavy borders, glows of three strengths and colours, glass, a ship-console panel with
-    corner ticks and a gauge, dashed rings and lines that turn and march, a gradient to the text
-    colour, a gradient to nothing, a panel at a third opacity, a translucent border, an additive
-    glow, a glow on a see-through panel, a hairline border, a twelve-sided badge, a forty-point
-    dashed route, two see-through panels overlapping, and a concave bracket frame. Every panel
-    appears twice - alone, and carrying world text that demonstrates height, font size, colour
-    alpha, opacity, glow, alignment and system fonts in regular, bold, italic and monospace. Five
-    themes switch live.
+    Twenty-four HUD panel recipes side by side, each one property away from the last: fills, borders,
+    rounded corners, glows of three strengths, glass, a ship-console panel with corner ticks and a
+    gauge, dashed rings and lines that march, gradients, opacity, a translucent border, an additive
+    glow, a hairline, a twelve-sided badge, a dashed route, overlapping see-through panels and a
+    concave bracket. Every panel appears twice, alone and carrying world text that shows height,
+    font size, colour alpha, opacity, glow, alignment and system fonts. Five themes switch live.
   cs: |-
-    Dvacet čtyři receptů na HUD panely vedle sebe, každý o jednu vlastnost dál: jen výplň, jen
-    okraj, průhledná výplň nad pruhem, který to dokáže, vlastní barva výplně, zaoblené rohy, silné
-    okraje, záře tří sil a barev, sklo, panel lodní konzole s rohovými značkami a ukazatelem,
-    čárkované kroužky a čáry, které se točí a pochodují, přechod do barvy textu, přechod do ničeho,
-    panel s třetinovou průhledností, průhledný okraj, aditivní záře, záře na průhledném panelu,
-    vlasový okraj, dvanáctiúhelníkový odznak, čárkovaná trasa ze čtyřiceti bodů, dva průhledné
-    panely přes sebe a konkávní rám. Každý panel je dvakrát - samotný a s textem ve světě, který
-    ukazuje výšku, velikost písma, alfu barvy, průhlednost, záři, zarovnání a systémová písma -
-    normální, tučné, kurzívu i neproporcionální. Pět motivů lze přepínat za běhu.
+    Dvacet čtyři receptů na HUD panely vedle sebe, každý o jednu vlastnost dál: výplně, okraje,
+    zaoblené rohy, záře tří sil, sklo, panel lodní konzole s rohovými značkami a ukazatelem,
+    čárkované kroužky a čáry, které pochodují, přechody, průhlednost, průhledný okraj, aditivní záře,
+    vlasový okraj, dvanáctiúhelníkový odznak, čárkovaná trasa, průhledné panely přes sebe a konkávní
+    rám. Každý panel je dvakrát, samotný a s textem ve světě, který ukazuje výšku, velikost písma,
+    alfu barvy, průhlednost, záři, zarovnání a systémová písma. Pět motivů lze přepínat za běhu.
 concepts:
   - Panels with ShapeBatch - border, fill, glow, dashes, gradient and opacity as captured state
   - A fill colour of its own versus a fill derived from the outline colour

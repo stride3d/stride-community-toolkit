@@ -11,14 +11,11 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Input;
 
-// This example demonstrates these constraints: DistanceLimit, DistanceServo, BallSocket, PointOnLineServo
-// Any body can be picked up, carried and thrown with the left mouse button (GrabberScript on the
-// camera - see E05_3D_Grabber); a middle click on a stacked cube removes it so the stack above falls
-// The scene can be reset by pressing R
-// DistanceLimit: Connects two spheres with a minimum and maximum distance
-// DistanceServo: Connects two spheres with a target distance and spring settings
-// BallSocket: Connects two entities with a ball-and-socket joint
-// PointOnLineServo: Connects a cube to a line with a servo constraint
+// Four Bepu constraints side by side: DistanceLimit keeps two spheres between a minimum and a maximum
+// distance, DistanceServo pulls two spheres to a target distance with spring settings, BallSocket
+// joins two bodies at a point, PointOnLineServo holds a cube to a line. Left mouse grabs any body
+// (GrabberScript, see E05_3D_Grabber), a middle click removes a stacked cube so the stack above
+// falls, R resets the scene.
 
 const string GoldenSphereName = "Golden Sphere";
 const string ConnectedEntityName = "Connected Sphere";
@@ -29,7 +26,6 @@ const float SpringFrequency = 20;         // Reduced from 40
 const float FrictionCoefficient = 0.1f;   // Reduced from 0.5f for smoother sliding
 const float ServoMaxForce = 500;          // Reduced from 1000 for softer constraints
 
-// Game entities and components
 CameraComponent? mainCamera = null;
 
 List<Entity?> entities = [];
@@ -50,10 +46,8 @@ collisionMatrix.Set(cubeLayer, groundLayer, shouldCollide: true);
 collisionMatrix.Set(cubeLayer, otherLayer, shouldCollide: true);
 collisionMatrix.Set(cubeLayer, cubeLayer, shouldCollide: true);
 
-// Initialize the game instance
 using var game = new Game();
 
-// Run the game loop with the Start and Update methods
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
 void Start(Scene scene)
@@ -66,7 +60,6 @@ void Start(Scene scene)
     InitializeDebugOverlay();
     InitializeEntities(scene);
 
-    // Retrieve the active camera from the scene
     mainCamera = scene.GetCamera();
 
     // Pick up, carry and throw any body with the left mouse button - two servo constraints, so the
@@ -114,7 +107,6 @@ void SetupGroundCollisionLayer(Scene scene)
 
 void InitializeEntities(Scene scene)
 {
-    // Create reference entities for visual reference
     CreateReferenceCube(scene);
     CreateReferenceCapsule(scene);
 
@@ -162,12 +154,10 @@ void CreateReferenceCapsule(Scene scene)
 
 void CreateDistanceLimitConstraintExamples(Scene scene)
 {
-    // Create the golden sphere
     var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, 3, -2));
     var goldenBody = goldenSphere.Get<BodyComponent>();
     goldenBody.CollisionLayer = CollisionLayer.Layer5;
 
-    // Create a second sphere to demonstrate a connected constraint
     var connectedSphere = CreateEntity(Primitive3D.Sphere(), ConnectedEntityName, Color.Blue, new Vector3(-2.1f, 3, -2.9f));
     var connectedBody = connectedSphere.Get<BodyComponent>();
     connectedBody.CollisionLayer = CollisionLayer.Layer5;
@@ -183,7 +173,6 @@ void CreateDistanceLimitConstraintExamples(Scene scene)
 
     goldenSphere.Add(distanceLimit);
 
-    // Add both entities to the scene
     goldenSphere.Scene = scene;
     connectedSphere.Scene = scene;
 
@@ -193,7 +182,6 @@ void CreateDistanceLimitConstraintExamples(Scene scene)
 
 void CreateDistanceServoConstraintExamples(Scene scene)
 {
-    // Create the golden sphere
     var goldenSphere = CreateEntity(Primitive3D.Sphere(), GoldenSphereName, Color.Gold, new Vector3(-2, 6, -2));
     var goldenBody = goldenSphere.Get<BodyComponent>();
     goldenBody.CollisionLayer = CollisionLayer.Layer5;
@@ -209,12 +197,10 @@ void CreateDistanceServoConstraintExamples(Scene scene)
         B = connectedBody,
         TargetDistance = 3.0f,
         SpringDampingRatio = 2,
-        //SpringFrequency = 1,
     };
 
     goldenSphere.Add(distanceServo);
 
-    // Add both entities to the scene
     goldenSphere.Scene = scene;
     connectedSphere.Scene = scene;
 
@@ -257,7 +243,6 @@ void CreateBallSocketConstraintExample(Scene scene)
     };
 
     foundationBlock.Add(ballSocket);
-    //foundationBlock.Add(ballSocket2);
 
     foundationBlock.Scene = scene;
     platform.Scene = scene;
@@ -332,14 +317,12 @@ void TryRemoveCubeStack(Vector2 mousePosition)
 
     if (hit && (hitInfo.Collidable.Entity.Name == "CubeStackA" || hitInfo.Collidable.Entity.Name == "CubeStackB"))
     {
-        // Get the stack name to determine which column was clicked
         string stackName = hitInfo.Collidable.Entity.Name;
 
         // Remember where the clicked cube was, so the cubes above it can be nudged downward
         var clickedY = hitInfo.Collidable.Entity.Transform.Position.Y;
         var clickedZ = hitInfo.Collidable.Entity.Transform.Position.Z;
 
-        // Remove the clicked cube
         hitInfo.Collidable.Entity.Scene = null;
 
         // Find and nudge cubes above this position in the same stack
@@ -362,13 +345,8 @@ void TryRemoveCubeStack(Vector2 mousePosition)
         }
     }
 
-    //if (hit && hitInfo.Collidable.Entity.Name == "CubeStack")
-    //{
-    //    hitInfo.Collidable.Entity.Scene = null;
-    //}
 }
 
-// Resets the scene by removing all entities and reinitializing them
 void ResetTheScene(Scene scene)
 {
     for (int i = 0; i < entities.Count; i++)
@@ -484,7 +462,7 @@ concepts:
   - Anchoring a constraint to a kinematic foundation
   - Filtering collisions between the connected parts
   - Removing constrained bodies at runtime and resetting the scene
-  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - 3D
   - Bepu

@@ -244,7 +244,7 @@ concepts:
   - Driving a kinematic BodyComponent with LinearVelocity from a per-frame update
   - Why writing Transform.Position does not move a physics body
   - Rebuilding the ImGui font atlas for the window DPI
-  - "Using helpers: AddImGuiNet, SceneSetup3D, AddProfiler"
+  - "Using helpers: AddImGuiNet, SceneSetup3D"
 tags:
   - 3D
   - UI

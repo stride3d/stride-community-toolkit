@@ -465,7 +465,7 @@ concepts:
   - Why a constraint anchor must be a kinematic body, not a static one
   - Why a velocity set from the start callback is lost
   - Picking up and throwing bodies with GrabberScript
-  - "Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo"
 tags:
   - 3D
   - Physics

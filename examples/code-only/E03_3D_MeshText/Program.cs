@@ -18,7 +18,7 @@ using Stride.Rendering;
 // shadowed like any other geometry, with a material of their own, and with a body when
 // CreatePrimitive makes them. On show: the Open Sans embedded in the toolkit, so this works with no
 // font file at hand, with a bevelled edge; an installed font found by family name; lines that align; a
-// frame counter whose digits are rebuilt every frame; and words with physics, dropped into a pile.
+// frame counter whose digits are rebuilt every frame; and words with physics, dropped on the ground.
 //
 // For ordinary text in a real font - labels, HUDs, signs - use E03_3D_EntityText (screen-space) or
 // E03_3D_WorldText (in-scene) instead: they draw a font, which is far cheaper than geometry.
@@ -83,8 +83,8 @@ void Start(Scene scene)
     counter.Transform.Scale = new Vector3(0.5f);
     counter.Scene = scene;
 
-    // Three words to begin with, from staggered heights, so the pile is there before R is pressed
-    for (var i = 0; i < 3; i++) DropWord(scene, 4f + i * 1.8f);
+    // Three words to begin with, each higher than the last, so they land on each other
+    for (var i = 0; i < 3; i++) DropWord(scene);
 
     DebugOverlay.GetOrCreate(game).AddSection("3D text", () =>
     [
@@ -120,14 +120,11 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 }
 
 /// <summary>
-/// A word with a body, into a pile of them. Primitive3D.Text is a shape like any other: CreatePrimitive
-/// gives it the material and, with Bepu chosen, a collider of one convex hull per glyph. That hull is
-/// right for a word on its own; letters landing on letters are hull-against-hull pairs, which the
-/// Bepu build Stride ships mishandles for thin extruded hulls (reported upstream), so a pile gets a
-/// box per glyph instead, as Cube Collapse does, built from the glyph meshes' bounds. The oldest word
-/// leaves when the pile is full.
+/// A word with a body. Primitive3D.Text is a shape like any other: CreatePrimitive gives it the
+/// material and, with Bepu chosen, a collider of one convex hull per glyph, so it lands, tips over
+/// and can be grabbed. Each word starts a little higher than the last.
 /// </summary>
-void DropWord(Scene scene, float height = 4f)
+void DropWord(Scene scene)
 {
     dropMaterial = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
 
@@ -157,7 +154,7 @@ description:
     shadowed like any other geometry. On show: the Open Sans embedded in the toolkit with a bevelled edge, an installed
     font found by family name, several lines that align in one mesh, a frame counter whose digits
     are rebuilt as a new mesh every frame, and words with physics through Primitive3D.Text, dropped
-    into a pile with a box per glyph. The counter demonstrates the one rule of dynamic
+    on the ground with one convex hull per glyph. The counter demonstrates the one rule of dynamic
     mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak a buffer pair per
     rebuild.
   cs: |-
@@ -165,13 +162,13 @@ description:
     dodává, triangulizuje je i s dírami a vytlačí do meshů, které světlo a stíny zpracují jako
     jakoukoli jinou geometrii. K vidění: Open Sans vložený do toolkitu, nainstalovaný font nalezený
     podle rodiny, několik řádků zarovnaných v jednom meshi, počítadlo snímků, jehož číslice se každý
-    snímek staví znovu, a slova s fyzikou přes Primitive3D.Text, padající na hromadu s jedním kvádrem
-    na glyf. Počítadlo ukazuje jediné pravidlo dynamického textu z meshů: před výměnou meshe
+    snímek staví znovu, a slova s fyzikou přes Primitive3D.Text, upuštěná na zem s jedním konvexním
+    obalem na glyf. Počítadlo ukazuje jediné pravidlo dynamického textu z meshů: před výměnou meshe
     uvolnit staré GPU buffery, jinak každá přestavba uteče o pár bufferů.
 concepts:
   - "Solid 3D lettering from any font: TextMesh.CreateModel with MeshFont.Default, Load or FromFamily"
   - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
-  - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, boxed per glyph for a pile
+  - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
   - Static lettering built once versus text that changes, and releasing the old buffers
   - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay"
 tags:

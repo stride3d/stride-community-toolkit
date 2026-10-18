@@ -62,6 +62,7 @@
     <Project Path="examples/code-only/E05_3D_PhysicsMaterials/E05_3D_PhysicsMaterials.csproj" />
     <Project Path="examples/code-only/E05_3D_Raycast/E05_3D_Raycast.csproj" />
     <Project Path="examples/code-only/E05_3D_ShapeQueries/E05_3D_ShapeQueries.csproj" />
+    <Project Path="examples/code-only/E05_3D_TriggerZones/E05_3D_TriggerZones.csproj" />
     <Project Path="examples/code-only/E06_Box2D/E06_Box2D.csproj" />
     <Project Path="examples/code-only/E06_Box2D_Car/E06_Box2D_Car.csproj" />
     <Project Path="examples/code-only/E06_Box2D_CharacterMover/E06_Box2D_CharacterMover.csproj" />

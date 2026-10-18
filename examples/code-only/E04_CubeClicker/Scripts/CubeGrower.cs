@@ -17,14 +17,13 @@ public class CubeGrower : AsyncScript
         {
             elapsedTime += (float)Game.UpdateTime.Elapsed.TotalSeconds;
 
-            // Calculate the new scale based on elapsed time
             var newScale = elapsedTime / GrowDuration;
             Entity.Transform.Scale = new Vector3(newScale);
 
             await Script.NextFrame();
         }
 
-        // Ensure the entity is fully scaled up after the loop
+        // Exactly full size at the end, whatever the last step was
         Entity.Transform.Scale = Vector3.One;
 
         Entity.Remove<CubeGrower>();

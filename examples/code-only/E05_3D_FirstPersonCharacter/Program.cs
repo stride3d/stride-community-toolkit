@@ -95,7 +95,7 @@ concepts:
   - "Pairing an EntityComponent with an EntityProcessor"
   - "Auto-registering a processor with [DefaultEntityComponentProcessor]"
   - Driving a physics body from the camera entity
-  - "Using helpers: SceneSetup3D, Add3DGround, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bepu

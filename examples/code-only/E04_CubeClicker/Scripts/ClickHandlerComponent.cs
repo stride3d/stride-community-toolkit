@@ -74,7 +74,6 @@ public class ClickHandlerComponent : AsyncScript
 
         if (loadedCubes.Count == 0)
         {
-            // Create initial cube
             CreateCube();
         }
         else

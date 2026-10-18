@@ -9,35 +9,17 @@ using Stride.Rendering.Compositing;
 namespace E04_Myra_DraggableWindow;
 
 /// <summary>
-/// Provides functionality for rendering Myra-based user interfaces in a Stride game.
+/// Draws a Myra user interface as a scene renderer in Stride's rendering pipeline.
 /// </summary>
-/// <remarks>
-/// This renderer uses the Myra UI library to render the user interface and integrates it into the Stride rendering pipeline.
-/// </remarks>
 public class MyraSceneRenderer : SceneRendererBase
 {
-    /// <summary>
-    /// Gets or sets the root of all UI elements to be rendered.
-    /// </summary>
-    /// <remarks>
-    /// The desktop serves as the root container for all UI elements rendered by Myra.
-    /// </remarks>
+    /// <summary>Myra's root container, which every element hangs off.</summary>
     private Desktop? _desktop;
 
-    /// <summary>
-    /// Gets or sets the main view of the application UI.
-    /// </summary>
-    /// <remarks>
-    /// The main view contains the primary UI elements that the user will interact with.
-    /// </remarks>
+    /// <summary>The view with the elements the user interacts with.</summary>
     private MainView? _mainView;
 
-    /// <summary>
-    /// Initializes the core rendering properties.
-    /// </summary>
-    /// <remarks>
-    /// This method sets up the Myra environment, configures the main view, and associates it with the desktop.
-    /// </remarks>
+    /// <summary>Sets up Myra, the main view and the desktop that holds it.</summary>
     protected override void InitializeCore()
     {
         base.InitializeCore();
@@ -75,10 +57,8 @@ public class MyraSceneRenderer : SceneRendererBase
 
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
     {
-        // Clear depth buffer
         drawContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer);
 
-        // Render UI
         _desktop?.Render();
     }
 }

@@ -78,7 +78,6 @@ public class PrimitiveGenerator
     /// <param name="entity">The entity to configure.</param>
     private static void ConfigureTransform(Entity entity)
     {
-        // Set a random position within specified bounds
         entity.Transform.Position = VectorHelper.RandomVector3(
             xRange: [-4, 4],
             yRange: [4, 8],

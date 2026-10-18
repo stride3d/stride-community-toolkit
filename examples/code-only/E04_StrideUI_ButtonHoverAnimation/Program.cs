@@ -126,7 +126,7 @@ concepts:
   - Frame-rate independent movement with a clamped lerp
   - Laying an underline out inside the button so nothing resizes
   - Driving many UI elements from a single script
-  - "Using helpers: SceneSetup3D, AddSkybox"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - UI
   - Stride UI

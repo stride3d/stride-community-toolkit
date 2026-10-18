@@ -8,10 +8,8 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-// Initialize the game instance
 using var game = new Game();
 
-// Run the game loop with the Start method
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start);
 
 void Start(Scene scene)
@@ -34,26 +32,20 @@ void Start(Scene scene)
         new("Carry one and the other follows", Color.LightGray),
     ]);
 
-    // Create an additional capsule for visual reference
     var entity = game.CreatePrimitive(Primitive3D.Capsule());
     entity.Transform.Position = new Vector3(0, 3, 0);
     entity.Scene = scene;
 
-    // Create a sphere with a golden material
     var sphere = game.CreatePrimitive(Primitive3D.Sphere(), new()
     {
         Material = game.CreateMaterial(Color.Gold)
     });
     sphere.Transform.Position = new Vector3(0.1f, 5, -0.3f);
 
-    // Create a second sphere to demonstrate a connected constraint
     var connectedSphere = game.CreatePrimitive(Primitive3D.Sphere());
     connectedSphere.Transform.Position = new Vector3(-2f, 1, -2f);
 
-    // Set up a distance servo constraint between the sphere and connected sphere
-    // The distance servo constraint will try to keep the distance between the two spheres the same
-    // Observe the spheres pulling towards each other and the distance between them being maintained
-    // Zoom out to see the effect better
+    // A distance servo holds the two spheres at a target distance: grab one and the other follows
     var distanceServo = new DistanceServoConstraintComponent
     {
         A = sphere.Get<BodyComponent>(),
@@ -63,7 +55,6 @@ void Start(Scene scene)
 
     sphere.Add(distanceServo);
 
-    // Add both entities to the scene
     sphere.Scene = scene;
     connectedSphere.Scene = scene;
 }
@@ -88,7 +79,7 @@ concepts:
   - How a constraint component attaches to an entity
   - Reading the result against a ground reference grid
   - Picking a sphere up with GrabberScript and feeling the servo pull the other along
-  - "Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo"
 tags:
   - 3D
   - Bepu

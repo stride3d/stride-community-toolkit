@@ -3,27 +3,14 @@ using Myra.Graphics2D.UI;
 namespace E04_Myra_DraggableWindow;
 
 /// <summary>
-/// Represents the main user interface view for the application.
+/// The main view: a health bar and a draggable test window.
 /// </summary>
-/// <remarks>
-/// The MainView class is responsible for creating and managing key UI elements such as a health bar and a test window.
-/// </remarks>
 public class MainView : Panel
 {
-    /// <summary>
-    /// Gets the health bar UI element.
-    /// </summary>
-    /// <remarks>
-    /// The health bar shows the current health status.
-    /// </remarks>
+    /// <summary>The health bar.</summary>
     public HorizontalProgressBar HealthBar { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets the test window UI element.
-    /// </summary>
-    /// <remarks>
-    /// The example window is used for demo purposes and contains a sample label.
-    /// </remarks>
+    /// <summary>The draggable test window, with a sample label.</summary>
     public Window ExampleWindow { get; private set; } = null!;
 
     /// <summary>

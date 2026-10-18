@@ -23,7 +23,6 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBullet().UseSkybox(), start: St
 
 void Start(Scene scene)
 {
-    // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
         EnableBackground = true
@@ -33,10 +32,8 @@ void Start(Scene scene)
 
     var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
-    // Create and display the UI components on screen
     CreateAndAddUI(scene, font);
 
-    // Add an example 3D capsule entity to the scene for visual reference
     AddExampleShape(scene);
 
     MoveToAnotherProjectOrSnippetExample(scene, game);

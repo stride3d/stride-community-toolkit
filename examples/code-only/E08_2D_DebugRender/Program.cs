@@ -103,7 +103,7 @@ concepts:
   - Why one entity is enough, since CollidableGizmoScript and DebugRenderComponentScript act on the whole scene
   - Lighting a 2D scene with a LightSpot
   - Giving each shape its own colour with a flat material
-  - "Using helpers: SceneSetup2D, Add2DCameraController, Add2DGround, CreatePrimitive, AddPhysicsDebug, AddGrabber"
+  - "Using helpers: SceneSetup2D, Add2DGround, CreatePrimitive, AddPhysicsDebug, AddGrabber"
 tags:
   - 2D
   - Bepu

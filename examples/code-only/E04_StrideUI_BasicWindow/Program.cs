@@ -104,7 +104,7 @@ concepts:
   - Loading a SpriteFont before any text can be drawn
   - Hosting a UI on an entity through UIComponent
   - Keeping scene setup readable by splitting it per element
-  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
 tags:
   - 3D
   - UI

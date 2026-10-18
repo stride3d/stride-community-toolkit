@@ -10,22 +10,9 @@ using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
 /*
-  Procedural Cylinder Mesh Generation
-
-  This example demonstrates creating a 3D cylinder mesh programmatically with MeshBuilder by breaking down
-  the process into clear, distinct steps:
-
-  1. Setting up a basic 3D scene with a skybox
-  2. Creating precisely defined geometry using low-level mesh construction techniques
-  3. Demonstrating a structured approach to 3D mesh generation by dividing it into logical components:
-     - Creating ring vertices
-     - Building side walls
-     - Adding end caps
-
-  The example showcases proper 3D graphics fundamentals like vertex positioning, normal
-  definitions, triangle winding order, and efficient vertex reuse through indexing. It also
-  demonstrates good software engineering practices by separating concerns into well-named
-  methods with clear responsibilities.
+  A cylinder built vertex by vertex with MeshBuilder: a ring of vertices at each end, the side wall as
+  two triangles per segment, and a cap on each end around a centre vertex. Shows vertex positions,
+  normals, triangle winding and vertex reuse through indices.
 */
 
 const int Segments = 1000;
@@ -77,10 +64,8 @@ void BuildCylinderMesh(MeshBuilder meshBuilder, int segments, float radius, floa
 
     CreateCylinderSideWalls(meshBuilder, segments);
 
-    // Create the first end cap (closing the cylinder)
     CreateCircularEndCap(meshBuilder, segments, position, normal, 0, false);
 
-    // Create the second end cap (closing the cylinder)
     CreateCircularEndCap(meshBuilder, segments, position, normal, length, true);
 }
 
@@ -141,11 +126,10 @@ static void CreateCylinderSideWalls(MeshBuilder meshBuilder, int segments)
 // Creates a circular cap to close one end of the cylinder
 static void CreateCircularEndCap(MeshBuilder meshBuilder, int segments, int position, int normal, float zPosition, bool isEndFacingPositiveZ)
 {
-    // Create center vertex
     int centerVertexIndex = meshBuilder.AddVertex();
     meshBuilder.SetElement(position, new Vector3(0f, 0f, zPosition));
 
-    // Set normal direction based on which end we're creating
+    // The normal points out of the end
     var normalDirection = isEndFacingPositiveZ ? new Vector3(0, 0, 1) : new Vector3(0, 0, -1);
     meshBuilder.SetElement(normal, normalDirection);
 
@@ -153,7 +137,6 @@ static void CreateCircularEndCap(MeshBuilder meshBuilder, int segments, int posi
     // Second end cap has vertices from segments to 2*segments-1
     int vertexOffset = isEndFacingPositiveZ ? segments : 0;
 
-    // Create triangles to form the cap
     for (var i = 0; i < segments; i++)
     {
         if (isEndFacingPositiveZ)
@@ -193,7 +176,7 @@ concepts:
   - Closing the ends with fan-triangulated caps
   - Why the two caps must wind in opposite directions
   - Keeping index arithmetic readable by splitting the build into stages
-  - "Using helpers: SceneSetup3D, AddSkybox"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - 3D
   - Geometry

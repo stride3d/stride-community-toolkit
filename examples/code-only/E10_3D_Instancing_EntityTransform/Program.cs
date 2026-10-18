@@ -377,25 +377,23 @@ complexity: 4
 order: 50
 description:
   en: |-
-    Keep every object a real entity - with a transform, a physics body and anything else you need - while
-    still drawing the whole crowd in a single draw call. A master entity holds a ModelComponent and an
-    instancing type that reads its members' world matrices each frame, and the members carry no
-    ModelComponent of their own. Bepu drives the transforms, so the bodies collide and pile up normally.
-    Four kinds of body can be dropped side by side to compare: Stride's own InstancingEntityTransform,
-    no instancing at all, the toolkit's BepuEntityInstancing, and BufferedEntityInstancing. The toolkit
-    types stop working once Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from
-    239 to 329 FPS, and the example also shows where the real ceiling lies, because instancing removes
-    draw calls and does nothing about simulation cost. One line at the top switches the whole pile to
-    any other primitive, so the same comparison can be run with spheres, cones or hulls.
+    Every object stays a real entity, with a transform and a physics body, while the whole crowd is
+    drawn in one draw call: a master entity holds the ModelComponent and an instancing type that reads
+    its members' world matrices each frame. Bepu drives the transforms, so the bodies collide and pile
+    up as usual. Four kinds of body drop side by side: Stride's InstancingEntityTransform, no instancing,
+    the toolkit's BepuEntityInstancing and BufferedEntityInstancing. The toolkit types stop working once
+    Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from 239 to 329 FPS; instancing
+    removes draw calls and does nothing about simulation cost. One line switches the pile to another
+    primitive.
   cs: |-
-    Zachovejte každý objekt jako plnohodnotnou entitu - s transformací, fyzikálním tělesem i čímkoli dalším -
-    a přesto vykreslete celý zástup jediným vykreslovacím voláním. Hlavní entita nese ModelComponent
-    a instancing, který každý snímek načítá světové matice svých členů; členové sami žádný ModelComponent
-    nemají. Transformace řídí Bepu, takže tělesa normálně kolidují a vrší se na sebe. Vedle sebe lze
-    porovnat čtyři druhy těles: vlastní InstancingEntityTransform ze Stride, žádný instancing,
-    BepuEntityInstancing z toolkitu a BufferedEntityInstancing. Typy z toolkitu přestanou pracovat, jakmile
-    Bepu uspí tělesa, což u usazené hromady 20 000 kostek zvýší snímkovou frekvenci z 239 na 329.
-    Jediný řádek na začátku přepne celou hromadu na libovolný jiný primitivní tvar.
+    Každý objekt zůstává plnohodnotnou entitou s transformací a fyzikálním tělesem, a přesto se celý
+    zástup vykreslí jediným voláním: hlavní entita nese ModelComponent a instancing, který každý
+    snímek načítá světové matice svých členů. Transformace řídí Bepu, takže tělesa kolidují a vrší se
+    jako obvykle. Vedle sebe padají čtyři druhy těles: InstancingEntityTransform ze Stride, žádný
+    instancing, BepuEntityInstancing a BufferedEntityInstancing z toolkitu. Typy z toolkitu přestanou
+    pracovat, jakmile Bepu tělesa uspí, což u usazené hromady 20 000 kostek zvýší snímkovou frekvenci
+    z 239 na 329; instancing odstraní vykreslovací volání, ne cenu simulace. Jediný řádek přepne
+    hromadu na jiný primitivní tvar.
 concepts:
   - Combining physics bodies with instanced rendering
   - Comparing four instancing strategies side by side at runtime

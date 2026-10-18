@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
@@ -14,29 +15,30 @@ using Stride.Input;
 using Stride.Rendering;
 using Buffer = Stride.Graphics.Buffer;
 
-// Constants for the impulse strength and sphere properties
+// Two raycasts with two jobs. The camera's ray answers "what did I click, and where": the first thing
+// under the mouse. The sphere's ray answers "what lies in that direction, all of it": cast from the
+// sphere through the clicked point and on, with every hit listed near to far, which is what the sphere
+// would meet if it flew on. The line is the sphere's ray. Click the sphere itself and it stops.
+
 const float ImpulseStrength = 0.5f;
 const float SphereRadius = 0.5f;
+const float RayLength = 30f;
 
-// Game entities and components
 CameraComponent? mainCamera = null;
 Entity? sphereEntity = null;
 BodyComponent? sphereBody = null;
 Buffer? vertexBuffer = null;
 
-// Line vertices to visualize the impulse direction (start and end points)
+// The sphere's ray as a line: its two ends, in the sphere's local space
 Vector3[] lineVertices = new Vector3[2];
 
-// What the last penetrating ray went through, one line per hit, for the overlay
+// What the sphere's ray went through, one line per hit, for the overlay
 List<string> through = [];
 
-// Initialize the game instance
 using var game = new Game();
 
-// Run the game loop with the Start and Update methods
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Start, update: Update);
 
-// Sets up the initial scene with a skybox, profiler, ground reference, and a sphere with physics
 void Start(Scene scene)
 {
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
@@ -44,68 +46,89 @@ void Start(Scene scene)
 
     DebugOverlay.GetOrCreate(game).AddSection("Raycast", OverlayLines);
 
-    // Three panels in a row, so a ray from the camera has more than the sphere and the ground to go through
+    // Panels around the sphere, so a ray from it has something to go through
     AddPanels(scene);
 
-    // Create a sphere entity and position it above the ground
     sphereEntity = game.CreatePrimitive(Primitive3D.Sphere());
     sphereEntity.Transform.Position = new Vector3(0, 8, 0);
-
-    // Retrieve the physics body component attached to the sphere
-    sphereBody = sphereEntity.Get<BodyComponent>();
-
-    // Add the sphere entity to the scene, this will make it visible in the game window
     sphereEntity.Scene = scene;
 
-    // Retrieve the active camera from the scene
+    sphereBody = sphereEntity.Get<BodyComponent>();
     mainCamera = scene.GetCamera();
 
-    // Create a line entity used for visualizing the impulse direction
-    var lineEntity = CreateLineEntity(game);
-
-    // Attach the line as a child of the sphere so it moves along with it
-    sphereEntity.AddChild(lineEntity);
+    // The line is a child of the sphere, so it moves with it
+    sphereEntity.AddChild(CreateLineEntity(game));
 }
 
-// Called every frame to update game logic and process user input
 void Update(Scene scene, GameTime time)
 {
     if (mainCamera is null) return;
 
-    // On left mouse button click, process the interaction
     if (game.Input.IsMouseButtonPressed(MouseButton.Left))
     {
         ProcessMouseClick();
     }
-
-    // T lists everything under the mouse, near to far, not only the first thing
-    if (game.Input.IsKeyPressed(Keys.T))
-    {
-        ListEverythingUnderTheMouse();
-    }
 }
 
-// A raycast stops at the first hit. RayCastPenetrating goes on through everything along the ray and
-// returns every hit; the toolkit's overload takes the camera's ray segment and sorts the hits by distance
-void ListEverythingUnderTheMouse()
+// The camera's ray: the mouse position becomes a ray from the camera, and Bepu reports the first
+// thing it hits and where
+void ProcessMouseClick()
 {
-    if (sphereBody?.Simulation is not { } simulation) return;
+    if (sphereBody is null || sphereEntity is null) return;
 
-    var segment = mainCamera.ScreenToWorldRaySegment(game.Input.MousePosition);
+    if (!mainCamera.Raycast(game.Input.MousePosition, 100, out var hitInfo))
+    {
+        Console.WriteLine("No hit");
+
+        return;
+    }
+
+    Console.WriteLine($"Hit entity: {hitInfo.Collidable.Entity.Name}");
+
+    // The sphere itself: stop it dead
+    if (hitInfo.Collidable.Entity == sphereEntity)
+    {
+        sphereBody.LinearVelocity = Vector3.Zero;
+        sphereBody.AngularVelocity = Vector3.Zero;
+
+        return;
+    }
+
+    ListEverythingInThatDirection(hitInfo.Point);
+    ApplyImpulseToSphere(hitInfo.Point);
+}
+
+// The sphere's ray: from its centre through the clicked point and on for RayLength. A raycast stops at
+// the first hit; RayCastPenetrating goes on through everything along the ray, and the toolkit's
+// overload takes a segment and sorts the hits by distance. The line is drawn along it
+void ListEverythingInThatDirection(Vector3 clickedPoint)
+{
+    if (sphereEntity is null || sphereBody?.Simulation is not { } simulation) return;
+
+    var start = sphereEntity.Transform.WorldMatrix.TranslationVector;
+    var direction = Vector3.Normalize(clickedPoint - start);
+    var segment = new RaySegment(start, start + direction * RayLength);
     var hits = simulation.RayCastPenetrating(segment);
 
     through.Clear();
 
     foreach (var hit in hits)
     {
+        // The sphere's own surface is the first thing a ray from its centre meets
+        if (hit.Collidable.Entity == sphereEntity) continue;
+
         through.Add($"{hit.Collidable.Entity.Name} at {hit.Distance:0.0} m");
     }
+
+    UpdateLineVisualization(segment.End);
 }
 
-// Three thin static panels standing in a row behind the sphere, as seen from the camera, each one a hit on the way through
+// Static panels standing around the sphere on the ground: click the ground beyond one and the sphere's ray goes through it
 void AddPanels(Scene scene)
 {
-    for (var i = 0; i < 3; i++)
+    var positions = new[] { new Vector3(4f, 1f, 0f), new Vector3(0f, 1f, -5f), new Vector3(-3.5f, 1f, 3.5f), new Vector3(7f, 1f, 1f) };
+
+    for (var i = 0; i < positions.Length; i++)
     {
         var panel = game.CreatePrimitive(Primitive3D.Box(new Vector3(2.4f, 2f, 0.1f)), new Bepu3DPhysicsOptions
         {
@@ -113,9 +136,11 @@ void AddPanels(Scene scene)
             Component = new StaticComponent { Collider = new CompoundCollider() },
         });
 
+        // Each panel faces the sphere's starting point, so a ray from there meets it square on
+        var toCentre = -positions[i];
         panel.Name = $"Panel {i + 1}";
-        panel.Transform.Position = new Vector3(-1.5f - i * 1.5f, 1f, -1.5f - i * 1.5f);
-        panel.Transform.Rotation = Quaternion.RotationY(MathUtil.PiOverFour);
+        panel.Transform.Position = positions[i];
+        panel.Transform.Rotation = Quaternion.RotationY(MathF.Atan2(toCentre.X, toCentre.Z));
         panel.Scene = scene;
     }
 }
@@ -126,13 +151,12 @@ IReadOnlyList<TextElement> OverlayLines()
     [
         new("Left click", "On the ground: push the sphere towards the click", Color.Gold),
         new("Left click", "On the sphere: stop it moving", Color.Gold),
-        new("T", "List everything under the mouse, near to far", Color.Gold),
     ];
 
     if (through.Count > 0)
     {
         lines.Add(new(""));
-        lines.Add(new("The ray went through", Color.LightGray));
+        lines.Add(new("The sphere's ray went through", Color.LightGray));
 
         foreach (var line in through) lines.Add(new(line, Color.LightSkyBlue));
     }
@@ -140,98 +164,44 @@ IReadOnlyList<TextElement> OverlayLines()
     return lines;
 }
 
-// Processes mouse click events by casting a ray and determining the appropriate action.
-// If the sphere is clicked, its movement is halted; otherwise, an impulse is applied.
-void ProcessMouseClick()
-{
-    // Cast a ray from the camera into the scene based on the mouse position
-    var hit = mainCamera.Raycast(game.Input.MousePosition, 100, out var hitInfo);
-
-    if (hit)
-    {
-        // Ensure the sphere's physics body and entity are valid
-        if (sphereBody is null || sphereEntity is null) return;
-
-        Console.WriteLine($"Hit entity: {hitInfo.Collidable.Entity.Name}");
-
-        // If the sphere itself is clicked, stop its movement by zeroing its velocity
-        if (hitInfo.Collidable.Entity == sphereEntity)
-        {
-            sphereBody.LinearVelocity = Vector3.Zero;
-            sphereBody.AngularVelocity = Vector3.Zero;
-
-            return;
-        }
-
-        // Update the line visualization to point from the sphere to the hit point
-        UpdateLineVisualization(hitInfo.Point);
-
-        // Calculate and apply an impulse to the sphere based on the hit point
-        ApplyImpulseToSphere(hitInfo.Point);
-    }
-    else
-    {
-        Console.WriteLine("No hit");
-    }
-}
-
-// Updates the endpoint of the line to visualize the hit position in the sphere's local space
-void UpdateLineVisualization(Vector3 hitPointWorld)
+// The line's far end goes to the ray's end, in the sphere's local space since the line is its child
+void UpdateLineVisualization(Vector3 rayEndWorld)
 {
     if (sphereEntity == null || vertexBuffer == null) return;
 
-    // Convert the hit point from world space to the sphere's entity local coordinate space
-    var localHitPoint = Vector3.Transform(hitPointWorld, Matrix.Invert(sphereEntity.Transform.WorldMatrix));
+    lineVertices[1] = Vector3.Transform(rayEndWorld, Matrix.Invert(sphereEntity.Transform.WorldMatrix)).XYZ();
 
-    // Update the line's end vertex
-    lineVertices[1] = localHitPoint.XYZ();
-
-    // Re-upload the updated vertex data to the GPU
     vertexBuffer.SetData(game.GraphicsContext.CommandList, lineVertices);
 }
 
-// Calculates and applies an impulse to the sphere to simulate a physics interaction
+// The impulse points from the sphere's centre to the hit point, the same strength whatever the distance
 void ApplyImpulseToSphere(Vector3 hitPointWorld)
 {
     if (sphereEntity == null || sphereBody == null) return;
 
-    // Calculate the direction vector from the sphere's center to the hit point
-    var sphereCenter = sphereEntity.Transform.WorldMatrix.TranslationVector;
-    var direction = hitPointWorld - sphereCenter;
+    var direction = hitPointWorld - sphereEntity.Transform.WorldMatrix.TranslationVector;
 
-    // Normalize the direction to ensure a consistent impulse strength regardless of distance
     direction.Normalize();
 
-    // Determine the impulse vector
-    var impulse = direction * ImpulseStrength;
+    // Applied at the surface rather than the centre, so the sphere spins as well as moves
+    sphereBody.ApplyImpulse(direction * ImpulseStrength, direction * SphereRadius);
 
-    // Calculate an offset from the center so the impulse is applied at the sphere's surface,
-    // which helps in inducing a rotational effect
-    var offset = direction * SphereRadius;
-
-    // Apply the calculated impulse to the physics body
-    sphereBody.ApplyImpulse(impulse, offset);
-
-    // Mark the body as awake to ensure the physics engine processes the change
+    // A sleeping body ignores an impulse until it is woken
     sphereBody.Awake = true;
 }
 
-// Creates a line entity to visualize the direction of the applied impulse
+// A two-vertex line list in a buffer the example owns, so the far end can be rewritten on every click. The
+// line rides on the sphere, so once the sphere rolls on, the line no longer lies along the ray it drew
 Entity CreateLineEntity(Game game)
 {
-    // Initialize the line vertices.
-    // The start point is at the origin; the endpoint is set arbitrarily
     lineVertices[0] = Vector3.Zero;
     lineVertices[1] = new(-1, 1, 1);
 
-    // Create a vertex buffer for the line, with start and end points
     vertexBuffer = Buffer.New(game.GraphicsDevice, lineVertices, BufferFlags.VertexBuffer, GraphicsResourceUsage.Default);
 
-    // Create an index buffer defining the line's two endpoints
     var indices = new ushort[] { 0, 1 };
     var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer, GraphicsResourceUsage.Default);
 
-    // Set up the mesh draw parameters for a line list
     var meshDraw = new MeshDraw
     {
         PrimitiveType = PrimitiveType.LineList,
@@ -240,14 +210,11 @@ Entity CreateLineEntity(Game game)
         DrawCount = indices.Length
     };
 
-    // Create the mesh
     var mesh = new Mesh { Draw = meshDraw };
 
-    // The model is built from the mesh and a gizmo material: emissive, so the line is visible whatever the
-    // lighting, and bright enough (intensity above 1) that bloom gives it a glow
+    // An emissive gizmo material: visible whatever the lighting, and bright enough that bloom gives it a glow
     var lineModelComponent = new ModelComponent { Model = new Model { mesh, GizmoEmissiveColorMaterial.Create(game.GraphicsDevice, Color.OrangeRed, 4) } };
 
-    // Return a new entity that contains the line model component
     return new Entity { lineModelComponent };
 }
 
@@ -262,20 +229,18 @@ complexity: 3
 order: 70
 description:
   en: |-
-    Click the ground and a sphere is kicked towards where you clicked; click the sphere and it stops
-    dead. Turning a mouse position into a world direction is the whole trick - the camera unprojects the
-    screen point into a ray, physics reports what that ray hit and where, and the impulse is derived
-    from the hit point. A line is drawn from the sphere to the hit point, so the direction of the
-    impulse can be seen. T casts the same ray through everything and lists every hit, near to far.
+    Two raycasts with two jobs. Click the ground and the camera's ray finds the point, the first thing
+    under the mouse; the sphere is kicked towards it. A second ray is cast from the sphere through that
+    point and on, with every hit listed near to far, which is what the sphere would meet if it flew on,
+    and the line shows that ray. Click the sphere and it stops dead.
 concepts:
-  - Turning a screen position into a world ray from the camera
-  - Querying the physics world with a raycast
-  - Reading the hit point and the entity that was hit
-  - Listing every hit along a ray with RayCastPenetrating, not only the first
+  - Turning a screen position into a world ray from the camera, and the first thing it hits
+  - A second ray from a point in the world through another, as a RaySegment
+  - Listing every hit along a ray with RayCastPenetrating, near to far, not only the first
   - Applying an impulse towards a point
   - Stopping a body by zeroing its velocity
   - Drawing the impulse direction as a line from the sphere to the hit point
-  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
 tags:
   - 3D
   - Bepu

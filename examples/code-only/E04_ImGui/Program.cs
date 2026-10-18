@@ -12,7 +12,6 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
-    // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
         EnableBackground = true
@@ -25,7 +24,7 @@ void Start(Scene scene)
     _ = new PerfMonitor(game.Services);
     Inspector.FindFreeInspector(game.Services).Target = game.SceneSystem.SceneInstance;
 
-    // makes the profiling much easier to read.
+    // A capped frame rate makes the profiler's numbers easier to read
     game.SetMaxFPS(60);
 }
 /*

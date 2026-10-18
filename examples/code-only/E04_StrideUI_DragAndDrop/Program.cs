@@ -22,7 +22,6 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
-    // Add debugging aids: entity names, positions
     game.AddEntityDebugSceneRenderer(new()
     {
         EnableBackground = true
@@ -32,10 +31,8 @@ void Start(Scene scene)
 
     var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
 
-    // Create and display the UI components on screen
     CreateAndAddUI(scene, font);
 
-    // Add an example 3D capsule entity to the scene for visual reference
     AddExampleShape(scene);
 }
 
@@ -103,7 +100,7 @@ concepts:
   - Spawning scene objects from a UI button
   - Keeping a UI counter in step with the scene
   - Removing entities that fall out of the world
-  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
 tags:
   - 3D
   - UI

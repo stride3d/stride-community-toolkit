@@ -81,14 +81,11 @@ public class UIManager
     {
         var canvas = new DragAndDropCanvas(title, _font!, position);
 
-        // Set the Z index to ensure correct rendering order
         canvas.SetPanelZIndex(_rootElement.GetNewZIndex());
 
-        // Add a button for creating a new window
         var newWindowButton = CreateButton("New Window", new Vector2(10, 50), NewWindowButton_PreviewTouchUp);
         canvas.Children.Add(newWindowButton);
 
-        // Add a button for generating cubes
         var generateItemsButton = CreateButton("Generate Items", new Vector2(10, 90), GenerateItemsButton_PreviewTouchUp);
         canvas.Children.Add(generateItemsButton);
 

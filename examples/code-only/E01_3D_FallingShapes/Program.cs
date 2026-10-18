@@ -68,7 +68,7 @@ concepts:
   - A list of shape types with a colour each
   - Applying a material with CreateMaterial
   - Positioning entities so that they fall into a pile
-  - "Using helpers: SceneSetup3D, AddSkybox, AddGrabber"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGrabber"
 tags:
   - 3D
   - Bepu
