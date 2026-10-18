@@ -2,9 +2,6 @@
 
 This article lists the most significant changes in Stride Community Toolkit preview `1.0.0.0-preview.41-48`.
 
-## New Contributors
-* @johang88 made their first contribution in https://github.com/stride3d/stride-community-toolkit/pull/179
-
 ## What's Changed
 
 ### 💥 Breaking Changes
@@ -63,6 +60,9 @@ This article lists the most significant changes in Stride Community Toolkit prev
 * refactor: Spacing updates by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/182
 * refactor: Code improvements by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/183
 * feat: Enables sourcelink by @VaclavElias in https://github.com/stride3d/stride-community-toolkit/pull/184
+
+## New Contributors
+* @johang88 made their first contribution in https://github.com/stride3d/stride-community-toolkit/pull/179
 
 **Full Changelog**:
 - https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.47...v1.0.0.0-preview.48

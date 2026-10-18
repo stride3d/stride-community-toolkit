@@ -64,6 +64,9 @@ follow the steps, but it is there if you want to compare.
 
    void Start(Scene rootScene)
    {
+       // Left mouse grabs any body, drags it and throws it on release
+       game.AddGrabber();
+
        for (var i = 0; i < ShapeCount; i++)
        {
            // Each kind of shape in turn
@@ -97,8 +100,8 @@ WindowsDpiManager.EnablePerMonitorV2();
 ```
 
 It tells Windows that the game draws for the display's real pixels. Without it, on a display scaled
-to 150%, Windows stretches the whole window and the HUD's edges turn blurry. It needs
-`using Stride.CommunityToolkit.Windows;`.
+to 150%, Windows stretches the whole window and the HUD's edges turn blurry. `WindowsDpiManager` is in
+`Stride.CommunityToolkit.Engine`, which the program already imports.
 
 `ShapeBatch` draws shapes: rectangles, discs, rings, arcs and lines. Add a variable for it at the
 top of the file, above `using var game = new Game();`. The program already has an array called
@@ -127,7 +130,7 @@ The panel needs a few values. Put them at the top of the file, next to `shapeBat
 A HUD is drawn every frame, so the drawing goes in an `Update` function. Tell `game.Run` about it:
 
 ```csharp
-game.Run(start: Start, update: Update);
+game.Run(new SceneSetup2D().UseBepu(), start: Start, update: Update);
 ```
 
 Then add the function at the end of the file. It needs `using Stride.Games;`.

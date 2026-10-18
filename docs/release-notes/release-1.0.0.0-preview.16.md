@@ -36,4 +36,4 @@ This article lists the most significant changes in Stride Community Toolkit prev
 ## New Contributors
 * @DockFrankenstein made their first contribution in https://github.com/stride3d/stride-community-toolkit/pull/99
 
-**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.15...1.0.0.0-preview.16-toolkit/pull/32
+**Full Changelog**: https://github.com/stride3d/stride-community-toolkit/compare/v1.0.0.0-preview.15...1.0.0.0-preview.16

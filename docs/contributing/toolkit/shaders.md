@@ -51,10 +51,10 @@ mixin stays small and its parameter block stays yours:
 | Library | What is in it | Call it as |
 |---|---|---|
 | `Math` | `PI`, `Luminance`, `Hermine` and `Quintic` smoothsteps, `FastRandom`, ray-plane and ray-sphere tests, `ExpDecay` | `Math.Luminance(rgb)` |
-| `ColorUtility` | `ToLinear`, `ToSRgb` (the cubic fits the engine uses for sprites and UI), colour packing | `ColorUtility.ToLinear(c)` |
+| `ColorUtility` | `ToLinear`, `SRgbToLinear`, `LinearToSRgb` (the cubic fits the engine uses for sprites and UI) and their `Precise` forms, `GammaToLinear`, `LinearToGamma` | `ColorUtility.ToLinear(c)` |
 | `HSVUtils` | `GetHue`, `GetSaturation`, `GetValue`, RGB to HSV and back | `HSVUtils.GetValue(rgb)` |
-| `BlendUtils` | The Photoshop blend modes: multiply, screen, overlay, soft light and the rest | `BlendUtils.Overlay(a, b)` |
-| `NormalPack` | Normal packing and unpacking for G-buffers | `NormalPack.Unpack(n)` |
+| `BlendUtils` | `Overlay`, the basic colour and alpha blends of a front colour over a back colour, `ColorDivide` | `BlendUtils.Overlay(a, b)` |
+| `NormalPack` | `EncodeNormal` and `DecodeNormal` for G-buffers | `NormalPack.DecodeNormal(n)` |
 | `Texturing` | The full-screen quad's `TexCoord` stream and the default samplers | inherit it |
 | `ColorTransformShader` | The base of a post-processing colour transform: override `Compute(float4 color)` | inherit it |
 

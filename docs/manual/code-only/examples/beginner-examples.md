@@ -8,9 +8,9 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 
 ## Examples Overview
 
-- [3D Primitives](primitives-3d.md): Eight of the toolkit's 3D primitives - cube, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the shapes, their default sizes and their generated colliders can be compared side by side.
+- [3D Primitives](primitives-3d.md): Nine of the toolkit's 3D primitives - cube, box, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the shapes, their default sizes and their generated colliders can be compared side by side.
 - [2D Primitives](primitives-2d.md): Create a minimal 2D scene using toolkit helpers and place multiple different primitive shapes.
-- [Basic Gum UI Setup](gum-stride-ui-basic.md): Initialize Gum UI in Stride using the official Gum.Stride runtime and the Stride Community Toolkit.
+- [Basic Gum UI Setup](gum-stride-ui-basic.md): Initialise Gum UI in Stride using the official Gum.Stride runtime and the Stride Community Toolkit.
 - [3D Material](material.md): The four numbers of a material, one per row of cubes: a glossiness sweep from rough to mirror, a metalness sweep from dielectric to metal, and a front row that builds the same numbers as a MaterialDescriptor feature by feature - which is what CreateMaterial does.
 - [2D Material](material-2d.md): What each material helper does on a flat shape, in four rows of squares: the flat material a 2D scene wants, the same colours as a lit material, black because nothing in a 2D scene lights them, a checkerboard built in code as a screen material and as a lit textured one, and a translucent overlay drawn over a square.
 - [Post Effects](post-effects.md): Every post effect Stride ships, one key each: bloom, ambient occlusion, screen-space reflections, depth of field, light streaks, lens flare, fog, outline, FXAA, and the vignette, film-grain and dither colour transforms.

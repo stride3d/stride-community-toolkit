@@ -1,18 +1,26 @@
 - [Stride.CommunityToolkit](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit)
-  - The core library, providing general-purpose extensions for both regular Stride projects and code-only approaches.  
+  - The core library: extensions for regular Stride projects and the code-only approach. It brings in the Stride packages a code-only project needs, including the asset compiler build step.
 - [Stride.CommunityToolkit.Bepu](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bepu)
-  - Adds support for [Bepu Physics](https://github.com/bepu/bepuphysics2), a pure C# 3D real time physics simulation library.   
+  - [Bepu Physics](https://github.com/bepu/bepuphysics2) helpers, the recommended physics package: scene setup with physics, primitives with colliders, the grabber, shape queries, triggers and the debug view.
 - [Stride.CommunityToolkit.Bullet](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Bullet)
-  - Adds support for [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html). Note that we no longer plan to support or expand its features as our focus shifts to Bepu Physics.
-- [Stride.CommunityToolkit.DebugShapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.DebugShapes)
-  - Provides easy-to-use Debug shapes to be able to visualize and debug your Stride scenes   
-- [Stride.CommunityToolkit.ImGui](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui)
-  - Includes extensions for [Dear ImGui](https://github.com/ocornut/imgui), a fast, simple-to-use graphical user interface (GUI) library, accessed via the C# wrapper [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui). Ideal for creating debugging tools, editor windows, and in-game UI elements.  
-- [Stride.CommunityToolkit.Shapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Shapes)
-  - Draws filled convex shapes whose outline stays a constant few pixels wide at any zoom or distance, because a signed distance function measures it per fragment instead of building it as geometry. Discs, rings, rounded rectangles, wire boxes, camera-facing billboards and genuinely thick 3D lines, flat but placeable on any plane in 3D, thousands per frame in one instanced draw call.
+  - [Bullet Physics](https://doc.stride3d.net/latest/en/manual/physics-bullet/index.html) helpers, for projects on Stride's Bullet-based physics. Kept building; no new features are planned, since the focus is Bepu.
+- [Stride.CommunityToolkit.Box2D](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Box2D)
+  - [Box2D.NET](https://github.com/ikpil/Box2D.NET) as an experimental 2D physics alternative: a Box2D world bound to Stride entities, with contact, hit and sensor events. Not on NuGet yet; it runs from a clone of the repository.
 - [Stride.CommunityToolkit.Skyboxes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Skyboxes)
-  - Enhances code-only projects by adding skybox functionality.
-- [Stride.CommunityToolkit.Windows](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows)
-  - This library contains Windows-specific [dependencies](https://github.com/stride3d/stride-community-toolkit/blob/main/src/Stride.CommunityToolkit.Windows/Stride.CommunityToolkit.Windows.csproj) required for code-only approach (package reference `Stride.AssetCompiler`).
+  - A skybox for code-only projects in one call, from a bundled HDR texture.
+- [Stride.CommunityToolkit.DebugShapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.DebugShapes)
+  - Immediate-mode debug shapes: lines, arrows, cubes, spheres, capsules, cylinders, cones, circles, quads and bounds, drawn from any script for one frame or a set time.
+- [Stride.CommunityToolkit.Shapes](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Shapes)
+  - Vector shapes whose outline stays a constant few pixels wide at any zoom or distance, measured per fragment by a signed distance function: discs, rings, rounded rectangles, wire boxes, camera-facing billboards and thick 3D lines, thousands per frame in one instanced draw call. Also the reference grid.
+- [Stride.CommunityToolkit.Charts](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Charts)
+  - Charts built from meshes at runtime, with no assets to author: function plots, parametric curves, scatter and area series, with axes, grid, legend and cursor drawn in pixels. Not on NuGet yet; it runs from a clone of the repository.
+- [Stride.CommunityToolkit.Effects](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Effects)
+  - The pieces that ship a shader of their own: night-vision and thermal post-processing, and GPU picking.
+- [Stride.CommunityToolkit.ImGui](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGui)
+  - [Dear ImGui](https://github.com/ocornut/imgui) through [Hexa.NET.ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui): a system that draws ImGui over the scene with Stride's input, plus ready-made debug windows. For debugging tools, editor windows and in-game UI.
+- [Stride.CommunityToolkit.ImGuiNet](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.ImGuiNet)
+  - The same through [ImGui.NET](https://github.com/ImGuiNET/ImGui.NET), for projects that already depend on it. Not on NuGet yet; it runs from a clone of the repository.
 - [Stride.CommunityToolkit.Linux](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Linux)
-  - The Linux counterpart of the Windows package: brings in `Stride.AssetCompiler` and the native libraries a code-only project needs to build and run on Linux.
+  - The Linux package for code-only projects: the asset compiler as a build-only dependency and the native libraries it needs, copied into the build output for `linux-x64`.
+- [Stride.CommunityToolkit.Windows](https://github.com/stride3d/stride-community-toolkit/tree/main/src/Stride.CommunityToolkit.Windows)
+  - Superseded: the core package brings in the asset compiler and holds `WindowsDpiManager`. This package is empty and only depends on the core, so a project still naming it keeps building. Reference `Stride.CommunityToolkit` instead.

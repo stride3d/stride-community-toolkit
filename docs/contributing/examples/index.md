@@ -56,7 +56,8 @@ documentation writes them (`ImGui`, `ImGuiNet`, `SignalR`, `Blazor`, `Myra`, `St
 (`ShapeBatch`, `TextureCanvas`, `SyncScript`, `SimulationUpdate`).
 
 The project name is a filesystem convenience and may be renamed. The `slug` is the permanent
-identifier - see [D24](decisions.md#d24---why-slugs-stay-level-free).
+identifier: it becomes a public URL, so it carries no level or category, which change as the toolkit
+matures and would break external links when they did.
 
 ## How an example is registered
 
@@ -64,7 +65,9 @@ One metadata block, in the example's own entry file. There is nothing else to up
 
 1. Create a project under `examples/code-only/`, named to the convention above - pick the shelf it belongs on, then `E{NN}_[{Dimension}_]{Subject}`.
 
-2. Add an `---example-metadata` block to the bottom of the entry file, inside a comment:
+2. Add an `---example-metadata` block to the bottom of the entry file, inside a comment. Keep it
+   last: the generated page includes the code above the block by line range, and anything after the
+   block puts the whole file on the page, block included, with a validator warning.
 
     ```csharp
     /*
@@ -114,8 +117,10 @@ One metadata block, in the example's own entry file. There is nothing else to up
 5. Generate its documentation page:
 
     ```bash
-    dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- docs examples/code-only
+    dotnet run --project tools/Stride.CommunityToolkit.Examples.MetadataGenerator -- docs examples/code-only --docs-path docs/manual/code-only/examples --media-path docs/manual/code-only/examples/media
     ```
+
+    The `--docs-path` and `--media-path` defaults are relative to the current directory and assume the tool's own folder, so pass them explicitly from the repository root, as `docs/run.bat` does.
 
 ## Three flags worth knowing
 
@@ -135,7 +140,7 @@ dotnet run --file build/capture-screenshots.cs -- --review
 
 Each example runs once with capture enabled, saves its **GPU render target** at a fixed frame and exits. Nothing is scraped off the screen, so there is no window to keep in the foreground and the run can happen behind whatever you are doing.
 
-Screen capture - `gdigrab`, `PrintWindow`, Windows.Graphics.Capture - was tried and rejected: a fixed delay photographs a different moment every run, the window has to stay unobstructed for the whole run, and GDI capture of a Direct3D swapchain famously returns a black rectangle. See [D20-D23](decisions.md#d20-d23---why-capture-is-in-engine-not-off-the-screen).
+Screen capture - `gdigrab`, `PrintWindow`, Windows.Graphics.Capture - was tried and rejected: a fixed delay photographs a different moment every run, the window has to stay unobstructed for the whole run, and GDI capture of a Direct3D swapchain famously returns a black rectangle.
 
 `--review` writes every image to `screenshots-review/` at the repository root, together with an `index.html` contact sheet for looking at all of them in one pass. Run the command without `--review` to write them into the documentation media folder for real; an image already there is never replaced without `--force`.
 
@@ -143,7 +148,7 @@ Add `--only <slug>` to redo a single example, and `--frame <n>` to try a differe
 
 ### Edited the metadata? Rebuild the manifest
 
-The capture script does not read the metadata blocks. It reads `examples-manifest.json`, which is generated *from* them - so a `screenshot` or `screenshotFrame` you have just edited has no effect until the manifest is rebuilt:
+The capture script does not read the metadata blocks. It reads `tools/Stride.CommunityToolkit.Examples.Launcher/examples-manifest.json`, which is generated *from* them - so a `screenshot` or `screenshotFrame` you have just edited has no effect until the manifest is rebuilt:
 
 ```bash
 dotnet build tools/Stride.CommunityToolkit.Examples.Launcher
@@ -210,5 +215,4 @@ A page with no `generated:` frontmatter at all is yours entirely, and the genera
 ## Going deeper
 
 - [Example Metadata Schema](metadata-schema.md) - every field, the level rubric, the category vocabulary and the page ownership rules.
-- [Design Decisions](decisions.md) - why the pipeline works the way it does, and which parts are deliberate rather than accidental.
 - [Metadata Generator README](https://github.com/stride3d/stride-community-toolkit/blob/main/tools/Stride.CommunityToolkit.Examples.MetadataGenerator/README.md) - the tool's own commands, validation and architecture.

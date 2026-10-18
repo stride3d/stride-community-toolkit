@@ -5,9 +5,7 @@ writes `examples-manifest.json`.
 
 The manifest is the single source of truth for the docs generator and both example launchers. The
 schema is documented in
-[`docs/contributing/examples/metadata-schema.md`](../../docs/contributing/examples/metadata-schema.md),
-and the reasoning behind it in
-[`docs/contributing/examples/decisions.md`](../../docs/contributing/examples/decisions.md).
+[`docs/contributing/examples/metadata-schema.md`](../../docs/contributing/examples/metadata-schema.md).
 
 ## Commands
 
@@ -245,3 +243,9 @@ that, running the tool from anywhere else - which the pre-build hook does - find
 configures no Serilog sinks, and produces no output at all.
 
 The build output is `MetadataGenerator.exe` (`<AssemblyName>`), with the namespace unchanged.
+
+The examples sit four levels deep in the manual's navigation (Code-Only, Examples, a level, the page)
+because a nested toc file always produces a node of its own: a nameless `href` to a toc does not inline
+it, DocFX names the node after the folder instead. Three levels would need the generator to write into
+the hand-maintained `manual/toc.yml` or to own the whole `manual/code-only/toc.yml`; four levels is the
+choice until someone minds.

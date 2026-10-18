@@ -16,7 +16,7 @@ dotnet tool install -g docfx
    ```
    stride-community-toolkit\docs\
    ```
-2. Run the `run.bat` file to build the docs:
+2. Run `run.bat`. It regenerates the example pages from the examples' metadata blocks, then builds and serves the site:
    ```
    run.bat
    ```

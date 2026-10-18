@@ -45,8 +45,8 @@ internal static class Module
 > `ModuleInitializer` here is **`Stride.Core.ModuleInitializerAttribute`**, not the C#
 > `System.Runtime.CompilerServices` attribute of the same name. The `using Stride.Core;` matters.
 
-`Stride.CommunityToolkit`, `DebugShapes`, `ImGui`, `Shapes`, `Bepu` and `Box2D` all carry an identical
-copy of this file. Scripts count too: `GrabberScript` had its attributes for months and never showed
+`Stride.CommunityToolkit`, `DebugShapes`, `Effects`, `ImGui`, `Shapes`, `Bepu` and `Box2D` all carry an
+identical copy of this file. Scripts count too: `GrabberScript` had its attributes for months and never showed
 in the editor, because the Bepu package had no `Module.cs`.
 
 ## 2. Make the component serializable, and editable

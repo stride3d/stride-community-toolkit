@@ -8,9 +8,9 @@ local NuGet packages for testing.
 | File | Contents | Use it when |
 |---|---|---|
 | `Stride.CommunityToolkit.slnx` | Everything: libraries, tests, tools, benchmarks and all example projects | Verifying a change across every example, e.g. after a Stride upgrade |
-| `Stride.CommunityToolkit.Core.slnf` | Libraries, tests and tools only | Day-to-day library work |
+| `Stride.CommunityToolkit.Core.slnf` | The core libraries, tests and tools; the Box2D, Charts, Effects and Shapes packages are left out as well | Day-to-day library work |
 
-The repository contains 56 example projects. Loading all of them slows the IDE noticeably, so the
+The repository contains over a hundred example projects. Loading all of them slows the IDE noticeably, so the
 solution filter exists to skip them. Open the `.slnf` exactly like a solution; excluded projects
 still appear in Solution Explorer as unloaded nodes, and **Load Project** pulls in any single one
 when you need to debug it. **Load All Projects** restores the full set without switching files.
