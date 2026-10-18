@@ -26,7 +26,7 @@
     href: code-only/scene-setup.md
   - name: Extensions
     href: code-only/extensions.md
-- name: Code-Only Examples (98)
+- name: Code-Only Examples (102)
   # href supplies the children (the generated per-level toc); topicHref makes the node itself
   # clickable, landing on the visual gallery.
   href: code-only/examples/toc.yml
