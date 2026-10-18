@@ -1,7 +1,5 @@
 # 🚀 Get Started
 
-This article walks you through the initial steps to use the packages in the Stride Community Toolkit.
-
 ## 🔗 Which version for which Stride
 
 Each toolkit release is built against one Stride release and will not work with another, because the
@@ -42,7 +40,7 @@ Ensure the following are installed. If you already have Stride **4.4** installed
 
 ## 📦 Adding the NuGet package
 
-The toolkit is available via several packages named `Stride.CommunityToolkit` and `Stride.CommunityToolkit.*`. The main package includes all functionality. Add it via your IDE or CLI. It works for both regular Stride game projects and code-only projects.
+The toolkit is a set of packages named `Stride.CommunityToolkit` and `Stride.CommunityToolkit.*`. The core package holds the game, entity, camera and rendering extensions; physics, shapes, charts, effects and the UI integrations are separate packages. Add them through your IDE or the command line. They work in regular Stride game projects and in code-only projects.
 
 To add the package via the command line:
 
@@ -57,4 +55,4 @@ dotnet add package Stride.CommunityToolkit --prerelease
 
 [!INCLUDE [global-note](../includes/libraries.md)]
 
-Explore the extensions in the left navigation or dive into the code-only section for simple examples.
+See [Code-Only](code-only/index.md) for a first project, or the extension pages in the left navigation.

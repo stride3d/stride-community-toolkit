@@ -41,7 +41,7 @@ flowchart LR
 
 ### Helper methods
 
-The helpers are extension methods on `Game`.
+The helpers are extension methods on `IGame`.
 
 | Method | Result |
 |---|---|
@@ -49,7 +49,7 @@ The helpers are extension methods on `Game`.
 | `CreateFlatMaterial(color)` | An unlit colour, for 2D shapes and HUD elements |
 | `CreateEmissiveMaterial(color, intensity)` | A lit colour that also emits light. An intensity above 1 blooms under post effects |
 | `CreateTexturedMaterial(texture, metalness, glossiness, tiling)` | A PBR material with a texture as its colour |
-| `CreateScreenMaterial(texture)` | An unlit, clamped texture, for a monitor that shows a render-texture feed |
+| `CreateScreenMaterial(texture, intensity)` | An unlit, clamped texture, for a monitor that shows a render-texture feed |
 | `CreateOverlayMaterial(color, intensity)` | An unlit translucent colour, with the colour's alpha as the opacity: a zone, a placement preview, a marker over the scene |
 | `CreateMaterial(descriptor)` | Compiles any descriptor and keeps it on `Material.Descriptor` |
 
@@ -460,7 +460,7 @@ Remarks:
 - The view applies to every mesh drawn by the compositor's `MeshRenderFeature`.
 - Values are linear and pass through the post effects, including tone mapping.
 
-In the Material Gallery, press `M` to open the list of views.
+In the Material Gallery, press <kbd>M</kbd> to open the list of views.
 
 ## Highlight a model
 
@@ -474,7 +474,7 @@ picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
 ...
 if (picker.Result is { Hit: true, ModelComponent: { } model } hovered)
 {
-    if (model.Entity == crates) hover?.Show(model, crateMatrices[hovered.InstanceIndex]);
+    if (model.Entity == crates) hover?.Show(model, crateMatrices[Math.Clamp(hovered.InstanceIndex, 0, crateMatrices.Length - 1)]);
     else hover?.Show(model);
 }
 else
@@ -559,7 +559,11 @@ reflection pass for each face side.
 
 ```csharp
 // examples/code-only/E02_3D_Material_Gallery/Program.cs
-game.UseGameSettings(settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0);
+game.Run(new SceneSetup3D
+{
+    GameSettings = settings => settings.GetOrCreateConfiguration<RenderingSettings>().DefaultGraphicsProfile = GraphicsProfile.Level_11_0,
+    ...
+});
 ```
 
 ### Layers
@@ -630,12 +634,13 @@ rig in code.
 | Subject | A sphere scaled to a unit bounding sphere and rotated 180 degrees about Y |
 
 The rig has almost no environment lighting. A metal therefore looks darker in a thumbnail than in a scene
-with a skybox. Press `G` in the example to compare both.
+with a skybox. Press <kbd>G</kbd> in the example to compare both.
 
 ## Gallery stations by topic
 
-Press `V` to cycle a station's variations. Start the gallery with `--station N --variation M` to open a
-station directly. Add `--clean` to hide the overlay.
+<kbd>N</kbd> and <kbd>P</kbd> step between stations, <kbd>Home</kbd> returns to the first, <kbd>Tab</kbd>
+shows one station alone and <kbd>V</kbd> cycles a station's variations. Start the gallery with
+`--station N --variation M` to open a station directly. Add `--clean` to hide the overlay.
 
 | Stations | Section of this article |
 |---|---|

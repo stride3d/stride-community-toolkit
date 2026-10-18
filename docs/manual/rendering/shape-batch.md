@@ -57,8 +57,7 @@ flowchart LR
     E --> F["One instanced draw call<br/>however many shapes"]
 ```
 
-All shapes of a batch are drawn in one instanced draw call. The technique is based on the `solid_polygon`
-shader of the Box2D testbed.
+The technique is based on the `solid_polygon` shader of the Box2D testbed.
 
 ## Create a batch and draw
 
@@ -80,7 +79,7 @@ shapes.DrawDisc(new Vector3(0f, 0.02f, 1.5f), Vector3.UnitY, 3f, Color.OrangeRed
 | `afterPostEffects` | Draws the batch after the post-processing chain. See [Draw after post effects](#draw-after-post-effects) |
 
 `ShapeBatch` is immediate mode, like `SpriteBatch`. Shapes are submitted every frame, drawn once in submission
-order, and discarded. Nothing is retained between frames.
+order, and discarded.
 
 ## Draw state
 
@@ -131,7 +130,7 @@ shapes.Glow.Additive = true;
 
 ## Plane modes
 
-A shape is flat and lies in a plane. The plane mode sets how the plane is oriented.
+A shape is flat and lies in a plane. The draw method sets how the plane is oriented: a method that takes a normal, two axes or a rotation draws `Fixed`; `DrawBillboard`, `DrawBillboardCircle`, `DrawPixelDisc` and `DrawPixelRing` draw `Screen`; `DrawLine`, `DrawPixelLine` and `DrawWireBox` with `Vector3` points draw `Axial`.
 
 | `PlaneMode` | Plane | Use |
 |---|---|---|
@@ -148,7 +147,7 @@ screen and faces the camera from every angle.
 
 - `DrawPolyline` uses a width in world units, which narrows with distance.
 - `DrawPixelPolyline` uses a constant width in pixels.
-- Each fragment writes its depth, so a stroke passes behind and in front of geometry.
+- Each fragment is depth-tested at its own point, so in a depth-tested batch a stroke passes behind and in front of geometry.
 
 ### Depth fade
 
@@ -158,6 +157,7 @@ it. A marker on the ground blends into it instead of ending in a hard line. A va
 - In a depth-tested batch, the depth test still removes fragments behind a surface.
 - In an overlay batch, fragments behind a surface fade out.
 - The fade needs the resolved depth texture of the forward renderer. Without it, shapes keep the hard cut.
+- The distance is in world units under a perspective camera. Under an orthographic camera the fade is much stronger than the value asks for.
 
 ## Fill a shape with a texture or a shader
 
@@ -249,7 +249,6 @@ Remarks:
 - With `AutoScale` on, which is the default, units are the display's scaled pixels.
 - A positive angle turns clockwise on screen.
 - Screen shapes are drawn at the near plane, in front of scene geometry.
-- `Viewport` positions shapes. It does not clip them.
 - The `Screen` property is different from `PlaneMode.Screen`, which is a billboard in the world.
 
 ## Draw after post effects
@@ -290,8 +289,9 @@ if (shapes.TryPick(Input.MousePosition, out var hit) && hit.Tag is Station picke
 | Member | Description |
 |---|---|
 | `Tag` | Per-draw state. Only shapes drawn with a tag can be picked |
-| `TryPick(screenPosition, out hit, slackPixels)` | Returns the topmost tagged shape |
-| `PickAll` | Returns every hit, front to back |
+| `TryPick(screenPosition, out hit, slackPixels)` | Returns the topmost tagged shape. The position is normalised, as `Input.MousePosition` gives it |
+| `TryPick(ray, out hit, slackPixels)` | The same for a world ray. Screen shapes and space strokes are not tested |
+| `PickAll(screenPosition, slackPixels)` | Returns every hit, front to back |
 | `CanPick` | `false` until the batch has been drawn once |
 | `ShapeComponent.Pickable` | Makes a component its own tag |
 
@@ -358,7 +358,7 @@ The SignalR example (`E13_SignalR/Station/`) builds a console in the scene from 
 | `DrawCornerTicks` | A quarter `DrawArc` and two `DrawPixelLine` calls per corner | Arcs, pixel strokes |
 | `Labels` | World text entities with the board's rotation | World Text |
 | `DeckEffects` rings | `DrawRing` with a fading `Opacity` and a growing radius | Opacity |
-| Starfield | 400 `DrawBillboardCircle` calls in the same batch | `PlaneMode.Screen` |
+| Starfield | 420 `DrawBillboardCircle` calls in the same batch | `PlaneMode.Screen` |
 
 ## See also
 

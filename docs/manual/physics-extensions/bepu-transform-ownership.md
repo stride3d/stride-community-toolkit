@@ -8,9 +8,7 @@ Once an entity has a body attached, the simulation owns its position and rotatio
 `Entity.Transform.Position` moves the *mesh* only; the body stays exactly where the simulation put
 it, and the next frame usually overwrites your change.
 
-Most of the symptoms below produce no error and no warning at all, and the few that do kill the
-process without saying anything useful. Either way you are left working from behaviour, which is what
-makes them cost hours, so each section starts with what you actually observe.
+Most of the symptoms below produce no error or warning. Each section starts with what you observe.
 
 ## "My mesh moves, but nothing collides with it"
 
@@ -72,33 +70,16 @@ public void SimulationUpdate(BepuSimulation simulation, float simTimeStep)
 `CompoundCollider` holds no shapes never attaches to the simulation, so a body added by hand with an
 empty compound is an inert component rather than no physics.
 
-For a purely visual entity, use the non-physics `CreatePrimitive` overload by passing
-`Primitive3DEntityOptions` instead.
-
-## "CS0121: the call is ambiguous"
-
-`CreatePrimitive` has a Bepu overload taking `Bepu3DPhysicsOptions` and a plain one taking
-`Primitive3DEntityOptions`. With both namespaces imported, a bare `new()` cannot pick between them.
-
-Pass an explicitly typed options object so the intended overload is selected:
-
-```csharp
-var entity = game.CreatePrimitive(Primitive3D.Capsule(), new Primitive3DEntityOptions
-{
-    Material = material,
-});
-```
 
 ## "Bepu crashes with an AccessViolationException"
 
 The stack lands somewhere in the solver - `Contact4.ApplyDescription`, `AddToSimulationSpeculative`
-— on a physics worker thread, after a few seconds of simulation.
+- on a physics worker thread, after a few seconds of simulation.
 
 **This one is unresolved.** What is known about it:
 
 - It is **intermittent**, on the order of one run in five with the same binary and the same scene.
-  This matters more than it sounds: a change that survives one run has not been shown to fix
-  anything. Any claim about a cause needs a dozen or so runs per variant before it means something.
+  A change that survives one run has not been shown to fix anything.
 - Every case observed so far used a hull-backed shape - `TriangularPrism`, `Cone`, `Teapot` or
   `Torus` - at a few thousand bodies. It has not been reproduced with cubes or spheres, which is
   suggestive but not proof, since more bodies and more contacts also make it likelier.
@@ -196,7 +177,7 @@ A fully zeroed tensor is the idiom Bepu's own character demo uses - it means "no
 this" - and it is perfectly stable. So the problem is not that the tensor is degenerate; it is that
 it is degenerate in *some* directions and not others.
 
-The toolkit now scales those terms by `1e-4` instead of zeroing them, leaving the body four orders of
+The toolkit scales those terms by `1e-4` instead of zeroing them, leaving the body four orders of
 magnitude harder to rotate out of plane than within it while keeping every term non-zero. Anything
 that leaks through is removed by the angular velocity clamp on the same step. Measured across 20 runs
 at 8,000 and 20,000 bodies: no runaway, no increase in bodies squeezed out of the pile, and a pile
@@ -226,7 +207,6 @@ mesh collider if it can be static.
 | Kinematic body diverges to `NaN` | `SetTargetPose` called more than once per physics tick | Call it from `SimulationUpdate`, or integrate your own velocity |
 | Null reference in `SimulationUpdate` | It can run before `Start` | Resolve lazily with `??=` |
 | Inert `BodyComponent` | A body whose compound holds no shapes | `IncludePhysics = false` for no physics; your own shapes in the compound otherwise |
-| `CS0121` ambiguity | Two `CreatePrimitive` overloads | Pass an explicitly typed options object |
 | `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known - keep hull body counts down, or use an analytic collider |
 | Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |
 | `Stack overflow` in `Refit2WithCacheOptimization` | A degenerate broad-phase tree from a perfectly regular lattice | Jitter the spawn positions, or space the bodies apart |
@@ -234,5 +214,4 @@ mesh collider if it can be static.
 | Torus collides with its hole filled | A convex hull cannot represent a concave shape | Build a compound, or use a mesh collider for statics |
 
 > [!NOTE]
-> Do not combine Bepu and Bullet physics components on the same entity. Bepu is the primary
-> integration; Bullet is legacy and pending deprecation.
+> Do not combine Bepu and Bullet physics components on the same entity.

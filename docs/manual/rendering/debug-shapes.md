@@ -17,8 +17,8 @@ var debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>();
 > the `Draw*` methods from your update loop, not once at startup. `duration` is how many extra seconds
 > the shape survives without being re-issued; leave it at `0` for the once-per-frame case.
 >
-> `AddDebugShapes()` leaves `Visible` off in the published package. Set `Visible = true` on the
-> system, or nothing appears.
+> `AddDebugShapes()` turns `Visible` on only when the toolkit itself is a Debug build. With the
+> published package, set `Visible = true` on the system, or nothing appears.
 
 ## Shared parameters
 
@@ -26,7 +26,7 @@ Every method below ends with the same optional parameters, so they are listed on
 
 | Parameter | Default | Meaning |
 |---|---|---|
-| `color` | `default` | The shape's colour. |
+| `color` | `default` (`null` on `DrawLines`) | The shape's colour. |
 | `duration` | `0.0f` | Seconds the shape stays visible without being re-issued. `0` means this frame only. |
 | `depthTest` | `true` | When `false`, the shape draws through geometry in front of it. |
 | `solid` | `false` | Filled instead of wireframe. Not available on the line methods. |
@@ -52,7 +52,7 @@ Every method below ends with the same optional parameters, so they are listed on
 > [!NOTE]
 > `DrawCapsule`, `DrawCylinder` and `DrawCone` take **`height` before `radius`**, which is the opposite
 > way round from how most people write it. `DrawHalfSphere` takes `color` **before** `rotation`, unlike
-> every other rotatable shape. Use named arguments and neither can bite you.
+> every other rotatable shape. Use named arguments.
 
 ## Where to see it working
 

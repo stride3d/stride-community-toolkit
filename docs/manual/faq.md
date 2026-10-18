@@ -1,7 +1,6 @@
 # Frequently asked questions
 
-These are the questions people ask most often when they build a Stride game from code. Each
-answer is short and links to the page that says more. The answers apply to Stride 4.4 and the
+Short answers to common questions about building a Stride game from code, for Stride 4.4 and the
 current toolkit. For build errors, see [Troubleshooting](troubleshooting.md). For a word you don't
 know, see the [Glossary](glossary.md).
 
@@ -121,9 +120,10 @@ Build the game project, then reload assemblies in Game Studio. See
 
 ### Loading fails with "No serializer available for type". Why?
 
-A public member of a component has a type Stride can't serialize. Mark that member
-`[DataMemberIgnore]`, or mark its type `[DataContract]`. Stride ignores `[Serializable]`. A list
-property needs `[DataContract]` on its element type too.
+The component class, or the type of one of its public members, has no `[DataContract]`. Add
+`[DataContract]` to the component. For a member, mark it `[DataMemberIgnore]` or mark its type
+`[DataContract]`. Stride ignores `[Serializable]`. A list property needs `[DataContract]` on its
+element type too.
 
 ### A property in Game Studio shows a different value from the one in my code. Why?
 
@@ -242,8 +242,8 @@ version.
 ### My laptop shows a black screen or a graphics profile error. Why?
 
 The game may be running on the integrated GPU, or it may be asking for a graphics profile the
-device doesn't support. Since Stride 4.4.1 a game picks the discrete GPU of a hybrid laptop itself;
-on an older Stride, make it use the discrete GPU in the graphics driver's settings or in Windows
+device doesn't support. On Stride 4.4.1 a game picks the discrete GPU of a hybrid laptop itself.
+On an older Stride, make it use the discrete GPU in the graphics driver's settings or in Windows
 graphics settings.
 
 ## Physics
@@ -309,5 +309,5 @@ Set `<ApplicationIcon>` in the project file to your `.ico` file.
 ### The debugger stops inside Stride, not in my code. Why?
 
 By default, Visual Studio breaks only where an exception goes unhandled, which is often inside the
-engine. Turn on "Common Language Runtime Exceptions" in Exception Settings, and the debugger will
-stop where your code throws.
+engine. Turn on "Common Language Runtime Exceptions" in Exception Settings, and the debugger stops
+where your code throws.

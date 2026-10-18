@@ -104,13 +104,13 @@ The same call serves a 2D scene: under an orthographic camera the pick ray runs 
 
 ### Debug views
 
-- [`AddPhysicsDebug()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.AddPhysicsDebug(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color4},System.Boolean,System.Boolean,System.Boolean)) - One entity carrying Bepu's two scene-wide debug views: [`CollidableGizmoScript`](xref:Stride.CommunityToolkit.Bepu.CollidableGizmoScript) draws every collider on <kbd>P</kbd>, and [`DebugRenderComponentScript`](xref:Stride.CommunityToolkit.Bepu.DebugRenderComponentScript) turns the physics debug meshes on for every Bepu entity on <kbd>F11</kbd>. Both act on the whole scene, so one entity is all a scene needs; a second copy of either script answers the same key and toggles the first one back. `contactsVisible: true` adds the solver's contact points and normals to the debug meshes, the debug view Stride 4.4.1 added.
+- [`AddPhysicsDebug()`](xref:Stride.CommunityToolkit.Bepu.GameExtensions.AddPhysicsDebug(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Color4},System.Boolean,System.Boolean,System.Boolean)) - One entity carrying Bepu's two scene-wide debug views: [`CollidableGizmoScript`](xref:Stride.CommunityToolkit.Bepu.CollidableGizmoScript) draws every collider on <kbd>P</kbd>, and [`DebugRenderComponentScript`](xref:Stride.CommunityToolkit.Bepu.DebugRenderComponentScript) turns the physics debug meshes on for every Bepu entity on <kbd>F11</kbd>. Both act on the whole scene, so one entity is all a scene needs; a second copy of either script answers the same key and toggles the first one back. `contactsVisible: true` adds the solver's contact points and normals to the debug meshes (Stride 4.4.1 or later).
 
 ```csharp
 game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 ```
 
-Every constraint example carries it, so the constrained bodies can be pulled about and the constraints watched doing their work.
+`E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent` show one view each; `E05_3D_TriggerZones`, `E05_3D_ShapeQueries` and `E05_3D_MeshColliders` carry both.
 
 ### Convex hulls
 
@@ -155,6 +155,7 @@ What the triangles are not, measured in `E05_3D_MeshColliders`: a mesh is a surf
 ### Debugging
 
 - [`ShowColliders()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.ShowColliders(Stride.Games.IGame)) - Draws the collider shapes over the scene, which is how you find out that the collider is not where the model is.
+
 ## Box2D
 
 In `Stride.CommunityToolkit.Box2D`, for a 2D world run by Box2D.NET beside Stride. The wrapper is built around `Box2DSimulation`, which owns the world and steps it; see the Box2D examples for the whole pattern.

@@ -10,11 +10,11 @@ the camera away and world text shrinks.
 Two pieces are involved:
 
 - **`WorldTextComponent`** records what to draw and how.
-- **`WorldTextRenderer`** draws it. Register it once with `game.AddWorldTextRenderer()`.
+- **`WorldTextRenderer`** draws it. `WorldTextProcessor` adds it to the compositor when no
+  `AddWorldTextRenderer()` call has.
 
-`WorldTextComponent` and `TextAnchor` live in the `Stride.CommunityToolkit.Rendering.Text` namespace; the
-renderer is in `Stride.CommunityToolkit.Rendering.Text` too and the `AddWorldTextRenderer()` extension in
-`Stride.CommunityToolkit.Engine`.
+The component, the renderer and `TextAnchor` are in the `Stride.CommunityToolkit.Rendering.Text`
+namespace; the `AddWorldTextRenderer()` extension is in `Stride.CommunityToolkit.Engine`.
 
 ```csharp
 game.AddWorldTextRenderer();
@@ -33,15 +33,14 @@ sign.Transform.Position = new Vector3(0, 0, -3);
 sign.Scene = rootScene;
 ```
 
-> [!IMPORTANT]
-> A `WorldTextComponent` without the renderer simply never appears - no error, no log line, just
-> absent text. `AddWorldTextRenderer()` is safe to call any number of times; a duplicate renderer is
-> never added. Helpers that create world text themselves, such as `AddGroundGizmo` with
-> `showAxisName: true`, register it on your behalf.
+> [!NOTE]
+> `AddWorldTextRenderer()` registers the renderer explicitly, for example to keep a reference to it.
+> Calling it any number of times adds no duplicate. Helpers that create world text themselves, such as
+> `AddGroundGizmo` with `showAxisName: true`, register it as well.
 
 ## Sizing: Height, not FontSize
 
-The two size properties answer different questions, and keeping them apart is the point:
+The two size properties answer different questions:
 
 - **`Height`** is how tall the text block is **in world units**. A `Height` of `0.5f` is half a metre,
   however long the string is and however the camera moves. The entity's own scale multiplies on top.
@@ -55,11 +54,17 @@ in font pixels, scales along so the glow keeps its reach. `AutoScale = false` on
 rasterises at exactly `FontSize`. This only works when the process is DPI aware; see
 [the debug overlay page](debug-overlay.md#size-and-high-dpi-displays).
 
+## Glow
+
+`GlowColor` with an alpha above zero draws the text again behind itself in that colour, in a ring
+reaching `GlowSize` font pixels out from the letters. Both default to off (a transparent colour and
+`0`). A tenth of `FontSize` is a crisp halo; a quarter is a bloom.
+
 ## Orientation
 
 | Setup | Behaviour |
 |---|---|
-| `Billboard = true` (default) | Turns to face the camera. With `KeepUpright = true` (default) it swivels about the world Y axis only, so it never rolls when the camera tilts - how a standing label should behave. |
+| `Billboard = true` (default) | Turns to face the camera. With `KeepUpright = true` (default) it swivels about the world Y axis only, so it never rolls when the camera tilts. |
 | `Billboard = true, KeepUpright = false` | Faces the camera squarely from any angle, including from directly above. |
 | `Billboard = false` | Keeps the entity's own rotation. Lay it flat on a floor, fix it to a wall - it foreshortens and disappears edge-on like any other surface. |
 
@@ -81,10 +86,8 @@ arrows are.
 ## Costs and limits
 
 - **One draw call per text.** The view and projection matrices belong to a sprite batch rather than a
-  draw call, so every text is its own `Begin`/`End`. Fine for tens of labels - axis names, markers,
-  signs; wrong for thousands.
+  draw call, so every text is its own `Begin`/`End`. Fine for tens of labels; wrong for thousands.
 - The glyphs are rasterised bitmaps, so extreme close-ups show softness no matter the `FontSize`.
-  Text as actual geometry - extruded letters that catch the light - is a different feature with
-  different costs.
+  For lettering as geometry see [3D Text](text-3d.md).
 - One font per component; `\n` works, and `Alignment` arranges the lines.
 - The renderer uses the first camera in the graphics compositor.

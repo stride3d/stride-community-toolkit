@@ -1,4 +1,4 @@
-# Charts - plotting in a scene, step by step
+# Charts
 
 `Stride.CommunityToolkit.Charts` draws a chart in your scene: axes, grid, labels, a legend, and any
 number of curves, points, fills and trails, all as pixel-width strokes in a [ShapeBatch](shape-batch.md)
@@ -205,9 +205,8 @@ chart.Options.Series.Glow = 6f + 4f * MathF.Sin(elapsed);
 chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
 ```
 
-The cheapest animation of all is letting the user do it. With `Range.FollowCamera` the chart's
-ranges become whatever the camera sees, and tick steps are re-picked as you zoom, so the 2D
-controller's drag and wheel pan and zoom an endless chart:
+With `Range.FollowCamera` the chart's ranges follow what the camera sees and tick steps are re-picked
+as you zoom, so the 2D controller's drag and wheel pan and zoom an endless chart:
 
 ```csharp
 chart.Options.Range.FollowCamera = true;
@@ -249,7 +248,7 @@ chart = new Chart(game, options);
 chart.Root.Transform.Position = new Vector3(0f, 3f, 0f);
 chart.Root.Scene = scene;
 
-chart.FrameCamera(camera, padding: 0.12f);    // back the camera off until the whole chart fits
+chart.FrameCamera(camera, padding: 0.12f);    // back the camera off until the whole chart fits; the default padding is 0.05
 ```
 
 Curves at `z = 0` draw exactly as they do flat; the third dimension is for a parametric curve or a

@@ -3,14 +3,14 @@
 ## Building Project Issues
 
 1. **Error - Could not load native library libcore using CPU architecture x64**
-   - Missing Microsoft Visual C++ Redistributable, make sure you install [prerequisites](getting-started.md)
+   - Missing Microsoft Visual C++ Redistributable. Install the [prerequisites](getting-started.md).
        ```
         C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\Stride.Core.Assets.CompilerApp.targets(132,5): error MSB3073: The command ""C:\Users\Vacla\.nuget\packages\stride.core.assets.compilerapp\4.1.0.1728\buildTransitive\..\tools\net6.0-windows7.0\Stride.Core.Assets.CompilerApp.exe"  --disable-auto- 
         compile --project-configuration "Debug" --platform=Windows --project-configuration=Debug --compile-property:StrideGraphicsApi=Direct3D11 --output-path="C:\Projects\StrideDemo\bin\Debug\net6.0\data" --build-path="C:\Projects\StrideDemo\obj\stride\assetbuild\data" --package-file="C:\Projects\StrideDemo\StrideDemo.csproj" --msbuild-up 
         todatecheck-filebase="C:\Projects\StrideDemo\obj\Debug\net6.0\stride\assetcompiler-uptodatecheck"" exited with code -532462766. [C:\Projects\StrideDemo\StrideDemo.csproj]
        ```
 1. **Error - Unable to instantiate compiler**
-   - Missing Microsoft Visual C++ Redistributable, make sure you install [prerequisites](getting-started.md)
+   - Missing Microsoft Visual C++ Redistributable. Install the [prerequisites](getting-started.md).
         ```
         EXEC : error 6.206s: [AssetsCompiler.AttributeBasedRegistry] Unable to instantiate compiler [Stride.A
         ssets.Physics.ColliderShapeAsset, Stride.Assets, Version=4.1.0.1898, Culture=neutral, PublicKeyToken=
@@ -47,8 +47,11 @@
         d-uptodatecheck-filebase="D:\Projects\GitHub\Stride Projects\Console01\obj\Debug\net8.0\stride\assetcompiler-uptodatech
         eck" exited with code 1. [D:\Projects\GitHub\Stride Projects\Console01\Console01.csproj]
         ```
+1. **Error - Shader X could not be found**
+   - After a Stride version bump, an incremental build keeps the project's old `data/db` bundle, so a shader that a newer engine package added is missing at runtime. Delete the project's `bin` and `obj` folders and build again.
+   - In an engine-only project, `Shader ShaderBase could not be found` means the `Stride.AssetCompiler` package is missing; see [Create project (engine only)](code-only/create-project-engine-only.md).
 1. **Error - at Stride.Shaders.Compiler.TaskOrResult.**
-   - If this is from code-only, make sure the project references `Stride.CommunityToolkit` (or a package that depends on it, such as `Stride.CommunityToolkit.Bepu`), which brings in the asset compiler. Before 1.0.0-preview.67 that was the job of `Stride.CommunityToolkit.Windows`. Further instructions are [here](code-only/create-project.md)
+   - If this is from code-only, make sure the project references `Stride.CommunityToolkit` (or a package that depends on it, such as `Stride.CommunityToolkit.Bepu`), which brings in the asset compiler. `Stride.CommunityToolkit.Windows` is superseded and adds nothing of its own. See [Create project](code-only/create-project.md).
     ```
      at Stride.Shaders.Compiler.TaskOrResult`1.WaitForResult() in C:\BuildAgent\work\b5f46e3c4829a09e\sources\engine\Stride.Shaders\Compiler\TaskOrResult.cs:line 37
        at Stride.Rendering.DynamicEffectInstance.ChooseEffect(GraphicsDevice graphicsDevice) in C:\BuildAgent\work\b5f46e3c4829a09e\sources\engine\Stride.Rendering\Rendering\DynamicEffectInstance.cs:line 60

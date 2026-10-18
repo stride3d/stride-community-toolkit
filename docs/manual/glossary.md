@@ -1,11 +1,10 @@
 # Glossary
 
-The words the toolkit's manual, examples and release notes use, explained for someone who is new
-to Stride, to game development, or to both. Each entry is a sentence or two and a link to the page
-that says more: a toolkit page where the toolkit owns the idea, the
+Terms used by the toolkit's manual, examples and release notes. Each entry links to the page that
+says more: a toolkit page where the toolkit owns the idea, the
 [Stride manual](https://doc.stride3d.net/latest/en/manual/index.html) where the engine does. Terms
-are grouped by topic, the way the [Stride glossary](https://doc.stride3d.net/latest/en/manual/glossary/index.html)
-is, and sorted alphabetically inside each group. Use your browser's find (Ctrl+F) to jump to a word.
+are grouped by topic, as in the [Stride glossary](https://doc.stride3d.net/latest/en/manual/glossary/index.html),
+and sorted alphabetically within each group.
 
 ## Getting around
 
@@ -76,7 +75,7 @@ is, and sorted alphabetically inside each group. Use your browser's find (Ctrl+F
 - **Entity text**: A screen-space label pinned to an entity, readable at any distance; the gallery's numbered labels. See [Entity text](rendering/entity-text.md).
 - **Forward renderer**: Stride's default way to draw a frame: each mesh is shaded with its lights as it is drawn. See [Rendering pipeline](https://doc.stride3d.net/latest/en/manual/graphics/rendering-pipeline/index.html).
 - **GPU picking**: Answering "what is under this screen point" by drawing entity ids into a hidden image and reading one pixel back, so it works without colliders. See [GPU picking](rendering/gpu-picking.md).
-- **Gizmo**: A helper drawn in the world to show something that has no look of its own: the axes at the origin, a light's direction, the outline of a collider. An editor draws them to grab and drag; the toolkit draws them to see. `game.AddGroundGizmo()` adds the axes and `game.AddPhysicsDebug()` the collider outlines (P) and debug meshes (F11). See [Entity extensions](entity-extensions/index.md) and [Physics extensions](physics-extensions/index.md).
+- **Gizmo**: A helper drawn in the world to show something that has no look of its own: the axes at the origin, a light's direction, the outline of a collider. An editor draws them to grab and drag; the toolkit draws them to see. `game.AddGroundGizmo()` adds the axes at the ground, `game.AddOrientationGizmo()` a screen-corner axis indicator, and `game.AddPhysicsDebug()` the collider outlines (<kbd>P</kbd>) and debug meshes (<kbd>F11</kbd>). See [Entity extensions](entity-extensions/index.md) and [Physics extensions](physics-extensions/index.md).
 - **Glow**: In ShapeBatch and charts, a soft halo of a given pixel width outside a shape's edge; not the engine's bloom. See [ShapeBatch](rendering/shape-batch.md).
 - **HDR**: High dynamic range: rendering with colour values above 1, so a bright light or an emissive (glowing) material can be brighter than white, then tone-mapped down for the screen. Stride's default pipeline is HDR. See [Post effects](https://doc.stride3d.net/latest/en/manual/graphics/post-effects/index.html).
 - **HUD**: Heads-up display: text and shapes drawn on the screen rather than in the world, such as a score, a health bar or a crosshair. Screen-space ShapeBatch and the debug overlay draw one. See [ShapeBatch](rendering/shape-batch.md).
@@ -85,7 +84,7 @@ is, and sorted alphabetically inside each group. Use your browser's find (Ctrl+F
 - **Outline** (constant-pixel): An edge that stays the same width on screen whether the shape is near or far, which ShapeBatch gets from measuring the shape per pixel. See [ShapeBatch](rendering/shape-batch.md).
 - **Picking**: Finding what is under the cursor. Raycast picking asks the physics engine; GPU picking asks the rendered frame. See [Engine patterns](engine-patterns.md) and [GPU picking](rendering/gpu-picking.md).
 - **Post effect** (post-processing): An effect applied to the finished frame: bloom, fog, vignette, tone mapping, or a custom colour transform such as the toolkit's night vision. See [Post effects](https://doc.stride3d.net/latest/en/manual/graphics/post-effects/index.html) and the [post effects example](code-only/examples/post-effects.md).
-- **Reference grid**: The toolkit's grid of numbered lines that shows where things are, in world coordinates or in screen pixels. `game.AddGrid()` adds one; the key G steps through off, world and screen. See [Reference grid](rendering/reference-grid.md).
+- **Reference grid**: The toolkit's grid of numbered lines that shows where things are, in world coordinates or in screen pixels. `game.AddGrid()` adds one; <kbd>G</kbd> steps through off, world and screen. See [Reference grid](rendering/reference-grid.md).
 - **Render feature**: The engine class that draws one kind of thing (meshes, sprites, particles, ShapeBatch shapes) in phases: collect, prepare, draw. See [Shaders in a package](../contributing/toolkit/shaders.md) and [Render features](https://doc.stride3d.net/latest/en/manual/graphics/rendering-pipeline/render-features.html).
 - **Render group**: A tag on a component that a render stage's selector filters on; how one camera draws some things and not others. See [Render groups and masks](https://doc.stride3d.net/latest/en/manual/graphics/graphics-compositor/render-groups-and-masks.html).
 - **Render stage**: A named slot in the frame (opaque, transparent, shadow casters, the toolkit's picking stage) that meshes are routed to. See [Render stages](https://doc.stride3d.net/latest/en/manual/graphics/rendering-pipeline/render-stages.html).
@@ -162,7 +161,7 @@ is, and sorted alphabetically inside each group. Use your browser's find (Ctrl+F
 
 - **AABB** (axis-aligned bounding box): The smallest box with sides parallel to the X, Y and Z axes that encloses an object; cheap to test, so engines use it before anything precise. See [BoundingBox](https://doc.stride3d.net/latest/en/api/Stride.Core.Mathematics.BoundingBox.html).
 - **Easing**: A curve that shapes how a value moves from start to end over time, so motion accelerates, decelerates or overshoots instead of moving linearly. See the [Easing Cheat Sheet](code-only/examples/easing.md) and the [easing tutorial](../tutorials/mathematics/easing.md).
-- **Interpolation**: Blending from one value to another by a fraction between 0 and 1. Lerp, short for linear interpolation, is the simplest kind: the blend moves at a constant rate. `MathUtilEx.Interpolate` blends along an easing curve instead. See [MathUtil](https://doc.stride3d.net/latest/en/api/Stride.Core.Mathematics.MathUtil.html).
+- **Interpolation**: Blending from one value to another by a fraction between 0 and 1. Lerp, short for linear interpolation, is the simplest kind: the blend moves at a constant rate. The toolkit's `Interpolate` extension on `EasingFunction` blends along an easing curve instead. See [MathUtil](https://doc.stride3d.net/latest/en/api/Stride.Core.Mathematics.MathUtil.html).
 - **Matrix**: A 4x4 grid of numbers that stores a position, rotation and scale together; `WorldMatrix` is an entity's place in the world as one. See [Matrix](https://doc.stride3d.net/latest/en/api/Stride.Core.Mathematics.Matrix.html).
 - **Normal**: A direction perpendicular to a surface, used by lighting to know which way a face points. See [MeshBuilder](rendering/mesh-builder.md).
 - **Plane**: A flat surface without edges, given by a point and a normal or by four numbers; ShapeBatch draws on one. See [Plane](https://doc.stride3d.net/latest/en/api/Stride.Core.Mathematics.Plane.html).
@@ -174,7 +173,7 @@ is, and sorted alphabetically inside each group. Use your browser's find (Ctrl+F
 ## Input, UI and audio
 
 - **Camera controller**: A script that flies or orbits the camera from keyboard and mouse; the toolkit ships several. See [Camera controllers](camera-extensions/camera-controllers.md).
-- **Dear ImGui**: An immediate-mode UI library for tools and debug panels; the toolkit wraps it twice, through ImGui.NET and through its own binding. See the [ImGui example](code-only/examples/imgui-ui.md).
+- **Dear ImGui**: An immediate-mode UI library for tools and debug panels; the toolkit wraps it twice, through Hexa.NET.ImGui (`Stride.CommunityToolkit.ImGui`) and through ImGui.NET (`Stride.CommunityToolkit.ImGuiNet`). See the [ImGui example](code-only/examples/imgui-ui.md).
 - **Immediate mode**: Drawing or building UI by calling functions every frame, with nothing kept between frames: stop calling and it disappears. ImGui, debug shapes and ShapeBatch all work this way.
 - **Myra**: A UI library for Stride with windows, buttons and layouts. It is retained mode, the opposite of immediate mode: you build the controls once and they stay until you remove them. See the [Myra example](code-only/examples/myra-ui-draggable-window-and-services.md).
 - **Spatial audio**: Sound with a position, so it gets quieter with distance and pans left and right. See [Audio extensions](audio-extensions/index.md) and [Spatialized audio](https://doc.stride3d.net/latest/en/manual/audio/spatialized-audio.html).

@@ -19,7 +19,7 @@ The toolkit is optional: Stride doesn't need it, and you can adopt as much or as
 - Extensions - the full reference, one page per type being extended: [Game](game-extensions/index.md), [Entity](entity-extensions/index.md), [Camera](camera-extensions/index.md), [Model](model-extensions/index.md), [Animation](animation-extensions/index.md), [Script](script-extensions/index.md) and [Script System](script-system-extensions/index.md).
 - [Physics](physics-extensions/index.md) - the Bepu, Bullet and Box2D helpers, plus pages on silent Bepu failures: [who owns the transform](physics-extensions/bepu-transform-ownership.md), [why a constraint does nothing](physics-extensions/bepu-constraints.md) and [bounce and friction](physics-extensions/bepu-contact-materials.md).
 - Rendering - [Entity Text](rendering/entity-text.md) and [World Text](rendering/world-text.md) for labels, [ShapeBatch](rendering/shape-batch.md) for constant-pixel-width vector shapes, [Reference Grid](rendering/reference-grid.md), [Debug Overlay](rendering/debug-overlay.md), [Charts](rendering/charts.md), [Materials](rendering/materials.md), [Render to texture](rendering/render-to-texture.md), [GPU picking](rendering/gpu-picking.md), [Debug Shapes](rendering/debug-shapes.md), and [MeshBuilder](rendering/mesh-builder.md) and [TextureCanvas](rendering/texture-canvas.md) for building meshes and textures at runtime.
-- [Troubleshooting](troubleshooting.md) - the errors people actually hit.
+- [Troubleshooting](troubleshooting.md) - common build and runtime errors.
 - [API](../api/index.md) - the generated API reference for the toolkit.
 
 ## The toolkit is in preview

@@ -31,8 +31,6 @@ straight at or away from the camera is seen end-on, a disc with its letter on it
 | Hidden by | Anything in front of it, or the camera looking away | Nothing: it ignores depth and stays in its corner |
 | Letters | World text, optional | Always, past the arrow tips |
 
-They are complementary, and the examples that use one usually use both.
-
 ## Placement and size
 
 `AddOrientationGizmo` takes the corner or edge as a `ScreenAnchor` and returns the renderer, whose
@@ -60,7 +58,7 @@ gizmo.ShowNegativeEnds = false;
 | `LabelColor` | White | The letters, drawn over a faint shadow |
 
 Sizes are in pixels before the display scale. The default bottom left corner is free in the examples:
-the debug overlay sits top left, the camera help top right and the profiler top centre.
+the debug overlay, with the camera help in it, sits top right by default.
 
 ## Reading it
 
