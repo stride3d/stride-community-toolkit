@@ -38,9 +38,8 @@
     <Project Path="examples/code-only/E04_GumUI/E04_GumUI.csproj" />
     <Project Path="examples/code-only/E04_ImGui/E04_ImGui.csproj" />
     <Project Path="examples/code-only/E04_ImGuiNet/E04_ImGuiNet.csproj" />
-    <Project Path="examples/code-only/E04_Myra_DraggableWindow/E04_Myra_DraggableWindow.csproj">
-      <Build Solution="Debug|*" Project="false" />
-    </Project>
+    <Project Path="examples/code-only/E04_Myra_ControlPanel/E04_Myra_ControlPanel.csproj" />
+    <Project Path="examples/code-only/E04_Myra_DraggableWindow/E04_Myra_DraggableWindow.csproj" />
     <Project Path="examples/code-only/E04_StrideUI_BasicWindow/E04_StrideUI_BasicWindow.csproj" />
     <Project Path="examples/code-only/E04_StrideUI_ButtonHoverAnimation/E04_StrideUI_ButtonHoverAnimation.csproj" />
     <Project Path="examples/code-only/E04_StrideUI_DragAndDrop/E04_StrideUI_DragAndDrop.csproj" />
