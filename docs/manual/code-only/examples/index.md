@@ -317,7 +317,17 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="2d-scene-panels.md">2D Panels and Text</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">Twenty-four HUD panel recipes side by side, each one property away from the last: fill only, border only, transparent fill over a stripe that proves...</p>
+                <p class="card-text">Twenty-four HUD panel recipes side by side, each one property away from the last: fills, borders, rounded corners, glows of three strengths, glass, a...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/trigger-zones.webp" class="card-img-top" alt="Screenshot of the Trigger Zones example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="trigger-zones.md">Trigger Zones</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Reacting to contact, three ways.</p>
             </div>
         </div>
     </div>
@@ -462,7 +472,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="raycast.md">Raycast</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">Click the ground and a sphere is kicked towards where you clicked; click the sphere and it stops dead.</p>
+                <p class="card-text">Two raycasts with two jobs.</p>
             </div>
         </div>
     </div>
@@ -807,7 +817,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="instancing-entity-transform.md">Instancing with Entity Transforms</a></h3>
                 <p><span class="badge text-bg-secondary">Performance</span></p>
-                <p class="card-text">Keep every object a real entity - with a transform, a physics body and anything else you need - while still drawing the whole crowd in a single draw...</p>
+                <p class="card-text">Every object stays a real entity, with a transform and a physics body, while the whole crowd is drawn in one draw call: a master entity holds the...</p>
             </div>
         </div>
     </div>
@@ -957,7 +967,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="stride-signalr.md">Stride + SignalR - Orbital Cargo Deck</a></h3>
                 <p><span class="badge text-bg-secondary">Networking</span></p>
-                <p class="card-text">A Stride game and a Blazor web page as two consoles of the same orbital cargo deck, talking both ways over a SignalR hub.</p>
+                <p class="card-text">A Stride game and a Blazor page as two consoles of the same orbital cargo deck, talking both ways over a SignalR hub.</p>
             </div>
         </div>
     </div>

@@ -16,7 +16,7 @@ A Stride subsystem used directly, or several concepts combined. These assume you
 - [Partial Torus Mesh](partial-torus-mesh.md): A torus defined parametrically from two angles - one around the tube, one around the ring - and cut short by limiting the second, which turns the same code into an arc, a horseshoe or a full ring without special cases.
 - [3D Text from a Font](letters-3d.md): Solid 3D text from a real font: TextMesh reads a font's glyph outlines through the FreeType the engine ships, triangulates them, holes and all, and extrudes them into meshes that are lit and shadowed like any other geometry.
 - [Give Me a Cube (SimulationUpdate)](simulation-update.md): Drive an entity from the physics clock instead of the render loop.
-- [Raycast](raycast.md): Click the ground and a sphere is kicked towards where you clicked; click the sphere and it stops dead.
+- [Raycast](raycast.md): Two raycasts with two jobs.
 - [Shape Queries](shape-queries.md): Two questions a raycast cannot answer: what is inside this volume right now, and what would this shape touch first if it moved that way.
 - [Ship HUD](hud.md): A cockpit HUD composed from the toolkit's shapes and world text, with one widget per file.
 - [Spatial Sound](spatial-sound.md): 3D positional audio for a runtime sound: a looping pad on an orb that circles a pillar, heard from the camera.

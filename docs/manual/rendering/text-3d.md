@@ -146,13 +146,13 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
 - Letters landing on letters are hull-against-hull pairs, and the Bepu build Stride 4.4 ships
   mishandles thin extruded hulls that overlap (reported upstream as bepuphysics2 issue 417; it can
   crash the narrow phase). A hull collider suits a word on its own; give a pile of letters a box per
-  glyph instead, from the glyph meshes' bounds, as `E03_3D_MeshText` and Cube Collapse do.
+  glyph instead, from the glyph meshes' bounds, as Cube Collapse does.
 - No right-to-left, no wrapping, no text on a path.
 
 ## Examples
 
 - [`E03_3D_MeshText`](../code-only/examples/letters-3d.md): the embedded font, an installed font, lines
-  that align, a frame counter, and words with physics piled on each other.
+  that align, a frame counter, and words with physics.
 - [`E03_3D_TextShaders`](../code-only/examples/text-shaders.md): four materials on the same lettering,
   a gradient through the texture coordinates, a rim light node, a vertex-stage wave and a pixel-stage
   dissolve, each a shader class in the example's `Effects` folder.

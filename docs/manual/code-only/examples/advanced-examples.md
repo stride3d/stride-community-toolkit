@@ -12,7 +12,7 @@ Custom engine extension points, third-party integration and multi-project archit
 - [Root Renderer Shader](root-renderer-shader.md): An animated ribbon background drawn by a custom RootRenderFeature, which is the deepest extension point Stride offers short of writing your own compositor.
 - [Mesh Outline Render Feature](mesh-outline.md): Draw coloured outlines around 3D primitives with a custom RootRenderFeature.
 - [Image Processing (TextureCanvas)](image-processing.md): Every combination of anchor and stretch that TextureCanvas can apply, drawn as a grid of thumbnails so the options can be compared rather than read about.
-- [Instancing with Entity Transforms](instancing-entity-transform.md): Keep every object a real entity - with a transform, a physics body and anything else you need - while still drawing the whole crowd in a single draw call.
+- [Instancing with Entity Transforms](instancing-entity-transform.md): Every object stays a real entity, with a transform and a physics body, while the whole crowd is drawn in one draw call: a master entity holds the ModelComponent and an instancing type that reads its members' world matrices each frame.
 - [3D Text Shaders](text-shaders.md): Four materials on the same solid lettering, which is geometry like any other with normals and texture coordinates: a gradient texture read through the caps' coordinates, a rim light from a shader class of twenty lines as an emissive node, a wave that moves the vertices along the word on the engine's clock through a feature in the vertex stage, and a dissolve with a glowing edge through a feature in the pixel stage, its amount driven every frame.
 - [Basic 2D Scene (Stress Pile)](stress-pile-2d.md): Thousands of 2D physics bodies piling up, drawn in two instanced draw calls - awake bodies through one master, sleeping bodies tinted green through another - with the shape, batch size and spawn layout switchable while it runs.
 - [Basic 2D Scene (Stress Pile, Box2D)](stress-pile-2d-box2d.md): The Box2D twin of the stress pile: thousands of bodies piling up, drawn in two instanced draw calls - awake bodies through one master, sleeping bodies tinted green through another - with the shape, batch size and spawn layout switchable while it runs, simulated by Box2D.NET instead of Bepu.
@@ -27,7 +27,7 @@ Custom engine extension points, third-party integration and multi-project archit
 - [Stride UI - Draggable Window - Bullet Physics](stride-ui-draggable-window-bullet.md): The draggable window example running on the legacy Bullet physics engine.
 - [Compute Shader Boids](compute-boids.md): A flock of thousands of boids that lives entirely on the GPU.
 - [ImGui.NET Text Rendering](imgui-net.md): Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.
-- [Stride + SignalR - Orbital Cargo Deck](stride-signalr.md): A Stride game and a Blazor web page as two consoles of the same orbital cargo deck, talking both ways over a SignalR hub.
+- [Stride + SignalR - Orbital Cargo Deck](stride-signalr.md): A Stride game and a Blazor page as two consoles of the same orbital cargo deck, talking both ways over a SignalR hub.
 - [Game - Cube Collapse](cube-collapse.md): A colour-match collapse puzzle built entirely from code.
 
 > [!NOTE]

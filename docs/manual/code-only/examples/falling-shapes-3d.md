@@ -16,7 +16,7 @@ The `Program.cs` file shows how to:
 - A list of shape types with a colour each
 - Applying a material with CreateMaterial
 - Positioning entities so that they fall into a pile
-- Using helpers: SceneSetup3D, AddSkybox, AddGrabber
+- Using helpers: SceneSetup3D, UseSkybox, AddGrabber
 
 ![Basic 3D Scene (Falling Shapes)](media/falling-shapes-3d.webp)
 

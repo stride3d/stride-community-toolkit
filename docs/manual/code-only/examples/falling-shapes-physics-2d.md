@@ -15,7 +15,7 @@ The `Program.cs` file shows how to:
 - Passing a Body2DComponent to CreatePrimitive to set physics options
 - FrictionCoefficient - a lower value lets the pile spread
 - An empty CompoundCollider that the helper fills with the fitted shape
-- Using helpers: SceneSetup2D, AddProfiler, CreatePrimitive, CreateFlatMaterial, AddGrabber
+- Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddGrabber
 
 ![Falling Shapes with Physics Options (2D)](media/falling-shapes-physics-2d.webp)
 

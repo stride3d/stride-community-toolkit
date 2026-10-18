@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Toggling the overlay with its Visible property
 - Comparing mesh against collider when a body misbehaves
 - The one-call form for a whole scene: game.AddPhysicsDebug()
-- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive, AddGrabber
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGrabber
 
 ![Debug Render Component](media/debug-render-component.webp)
 
