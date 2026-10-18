@@ -37,8 +37,7 @@ concepts:
   - Creating a 3D primitive with CreatePrimitive
   - Positioning an entity with Transform.Position
   - Adding entities to a Scene (rootScene)
-  - "Using helpers: SceneSetup3D"
-  - "Using helpers: AddSkybox"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - 3D
   - Bepu

@@ -132,9 +132,7 @@ concepts:
   - Waking a body after changing its velocity
   - Why writing Transform.Position does not move a physics body
   - Sizing a primitive and its collider together
-  - "Using helpers: SceneSetup3D"
-  - "Using helpers: AddSkybox"
-  - "Using helpers: Game.DeltaTime"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
 tags:
   - 3D
   - Script

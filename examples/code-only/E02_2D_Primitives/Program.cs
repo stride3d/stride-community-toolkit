@@ -64,7 +64,7 @@ description:
     Vytvoření minimální 2D scény pomocí nástrojů sady a umístění více různých primitivních tvarů.
     Ukazuje vytvoření entity, základní umístění a připojení entit k scéně.
 concepts:
-  - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
+  - Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, RegularPolygon, Triangle, Polygon)
   - Positioning entities with Transform.Position
   - Adding entities to a Scene (rootScene)
   - "Using helpers: SceneSetup2D, AddGrabber"

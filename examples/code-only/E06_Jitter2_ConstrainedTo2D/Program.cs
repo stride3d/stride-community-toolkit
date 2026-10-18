@@ -155,7 +155,7 @@ concepts:
   - Constraining a 3D physics engine to 2D motion
   - Configuring RigidBody.AllowedMotion with MotionAxes.PlaneXY
   - Locking world-space translation and rotation axes without additional constraints
-  - Synchronizing physics bodies with visual entities
+  - Synchronising physics bodies with visual entities
   - Fixed-timestep physics update loop, decoupled from the render frame rate
 tags:
   - 3D

@@ -108,13 +108,13 @@ complexity: 2
 order: 10
 description:
   en: |-
-    Eight of the toolkit's 3D primitives - cube, cone, capsule, sphere, cylinder, teapot, torus and
+    Nine of the toolkit's 3D primitives - cube, box, cone, capsule, sphere, cylinder, teapot, torus and
     triangular prism - dropped into one scene so the shapes, their default sizes and their generated
     colliders can be compared side by side. Naming each entity is what makes the scene resettable: R
     removes everything with that name and rebuilds, which is the simplest safe teardown pattern there
     is. P and F11 turn on the collider and debug-mesh overlays.
 concepts:
-  - Creating eight Primitive3D shapes and comparing their defaults
+  - Creating nine Primitive3D shapes and comparing their defaults
   - Sizing a primitive through its factory arguments, such as Primitive3D.Cone(0.5f, 3)
   - Rotating an entity with Transform.Rotation
   - Tagging entities with a name so the scene can be torn down and rebuilt

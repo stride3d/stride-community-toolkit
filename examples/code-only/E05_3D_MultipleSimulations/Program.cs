@@ -173,7 +173,7 @@ concepts:
   - Why bodies in different simulations pass through each other
   - Respawning entities with Space
   - Showing instructions as a DebugOverlay section beside the camera help
-  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, SetCameraPosition, SetCameraRotation"
+  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, DebugOverlay"
 tags:
   - 3D
   - Bepu

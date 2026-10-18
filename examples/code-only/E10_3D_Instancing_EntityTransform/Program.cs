@@ -377,7 +377,7 @@ description:
     drawn in one draw call: a master entity holds the ModelComponent and an instancing type that reads
     its members' world matrices each frame. Bepu drives the transforms, so the bodies collide and pile
     up as usual. Four kinds of body drop side by side: Stride's InstancingEntityTransform, no instancing,
-    the toolkit's BepuEntityInstancing and BufferedEntityInstancing. The toolkit types stop working once
+    the toolkit's BepuEntityInstancing and BufferedEntityInstancing. The toolkit types do no work once
     Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from 239 to 329 FPS; instancing
     removes draw calls and does nothing about simulation cost. One line switches the pile to another
     primitive.
@@ -400,8 +400,7 @@ concepts:
   - Deriving a Bepu collider from a primitive type without building a mesh per body
   - Switching the whole scene to a different primitive from one line
   - Knowing when instancing does not help
-  - "Using helpers: SceneSetup3D, UseInstancing, AddInstancingBufferUpload"
-  - "Using helpers: SceneSetup3D, Add3DGround, AddBepuPhysics"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddBepuPhysics, AddInstancingBufferUpload, DebugOverlay"
 tags:
   - 3D
   - Rendering
