@@ -215,11 +215,11 @@ IReadOnlyList<TextElement> OverlayLines()
 /// </summary>
 sealed class PhysicsClock : StartupScript, ISimulationUpdate
 {
-    public double Seconds { get; private set; }
+    internal double Seconds { get; private set; }
 
-    public int Steps { get; private set; }
+    internal int Steps { get; private set; }
 
-    public void Reset()
+    internal void Reset()
     {
         Seconds = 0;
         Steps = 0;
