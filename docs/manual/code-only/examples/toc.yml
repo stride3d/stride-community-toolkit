@@ -160,7 +160,7 @@
     href: charts-2d.md
   - name: Charts 3D
     href: charts-3d.md
-- name: C# Advanced (21)
+- name: C# Advanced (23)
   href: advanced-examples.md
   items:
   - name: Custom Scene Renderers
@@ -199,6 +199,10 @@
     href: stride-ui-draggable-window-bullet.md
   - name: Compute Shader Boids
     href: compute-boids.md
+  - name: Myra UI - Draggable Window and Services
+    href: myra-ui-draggable-window-and-services.md
+  - name: Myra UI - Control Panel
+    href: myra-control-panel.md
   - name: ImGui.NET Text Rendering
     href: imgui-net.md
   - name: Stride + SignalR

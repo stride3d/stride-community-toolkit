@@ -18,10 +18,11 @@ The `Program.cs` file shows how to:
 - IContactHandler on a solid static, OnStartedTouching and OnStoppedTouching keeping a set of touchers
 - IContactHandler on a dynamic body, the impact force of a first touch from its contacts
 - Callbacks run on the main thread after the physics step, so they may change materials and entities
+- F11 draws the solver's contact points and normals, Stride 4.4.1's debug view, through AddPhysicsDebug
 - Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, DebugOverlay
 
 ![Trigger Zones](media/trigger-zones.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_TriggerZones).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_TriggerZones/Program.cs?start=1&end=313)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_TriggerZones/Program.cs?start=1&end=315)]

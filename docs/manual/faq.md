@@ -242,8 +242,9 @@ version.
 ### My laptop shows a black screen or a graphics profile error. Why?
 
 The game may be running on the integrated GPU, or it may be asking for a graphics profile the
-device doesn't support. Make the game use the discrete GPU in the graphics driver's settings or in
-Windows graphics settings.
+device doesn't support. Since Stride 4.4.1 a game picks the discrete GPU of a hybrid laptop itself;
+on an older Stride, make it use the discrete GPU in the graphics driver's settings or in Windows
+graphics settings.
 
 ## Physics
 

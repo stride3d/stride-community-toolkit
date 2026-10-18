@@ -12,6 +12,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 💥 Breaking Changes
 
+- Built against Stride 4.4.1 (was 4.4.0). What a game sees from the engine: transparent materials are brighter, since alpha is applied once; Direct3D 12 needs no Developer Mode and ships the Agility SDK in a `D3D12` folder beside the executable; every effect, shader and material compiles again once on the first run; `MaxStepPerFrame` is honoured; a hybrid laptop runs on its discrete GPU.
+
 #### Lettering comes from fonts
 
 `LetterMeshFactory`, with its 38 hand-authored glyphs, is gone; `TextMesh` builds solid lettering from any font, with the toolkit's embedded Open Sans as the default.
@@ -30,6 +32,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 - `TextMesh`: solid 3D text from a `MeshFont`. `Create` gives CPU mesh data, `CreateMeshDraw` uploads it, `CreateGlyphs` gives one centred mesh per glyph for a body or an animation per letter, `Measure` gives the block. Lines, alignment, letter and line spacing, curve quality, the nine-point anchor, and texture coordinates on caps and walls, through `TextMeshOptions`.
 - `Primitive3D.Text`: lettering as a shape, so `CreatePrimitive` gives it a material and a collider of one convex hull per glyph, on Bepu (`TextCollider`) and on Bullet.
 - `TextBevel`: a rounded edge between the caps and the walls of 3D text, front and back, through `TextMeshOptions.Bevel`; a bevel wider than a glyph's thinnest stem shrinks for that glyph instead of folding.
+- `AddPhysicsDebug(contactsVisible: true)` draws the solver's contact points and normals with the debug meshes, the debug view Stride 4.4.1 added; `DebugRenderComponentScript.ShowContacts` is the same switch on the component. `E05_3D_TriggerZones` turns it on.
 - `ToMeshDraw(device)`, `ToMesh(device)` and `Bounds()` on `GeometricMeshData<VertexPositionNormalTexture>`, for any procedural mesh data; `TextMesh.CreateMesh` and `CreateModel` give lettering with its bounds, so the renderer can cull it.
 
 ### 🐞 Bug Fixes
@@ -39,6 +42,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### ✨ Enhancement
 
 - `SceneSetup.None` still honours what is not scene: the physics engine, the game settings, the overlay and the profiler. `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives and ground get Bepu bodies, the way a tutorial that adds the camera, light and ground line by line wants it; before, the engine chosen on it was silently dropped. It is a new instance each time.
+- `GrabberScript` picks through trigger volumes: a body inside a zone can be grabbed, since a collidable whose handler says `NoContactResponse` does not stop the pick ray; `TryPick(segment, out hit)` is that pick, for a game that wants the same rule.
 - `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view and a `Body2DComponent` is carried across its plane; the mouse wheel does nothing for a 2D body or under an orthographic camera, since depth there is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D. The reach (`MaxDistance`) defaults to 100 instead of 50: a 2D camera stands 50 from its bodies, and the stress pile is viewed from 80.
 
 ### 📄 Docs
@@ -49,6 +53,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- `E04_Myra_DraggableWindow` is back in the solution and the docs: Myra.Stride 1.6.8 carries the Stride 4.4 retarget, so it builds and runs again.
+- `E04_Myra_ControlPanel`: Myra's widget set in one draggable window that drives a Stride scene. A menu bar, tabs, sliders for the light and the physics clock, a combo for gravity, check buttons for shadows and collider gizmos, a spin button and buttons that spawn bodies, a list view that selects and lights one, a dialog before clearing, tooltips and a status line.
 - `E03_3D_TextShaders`: four materials on the same solid lettering, a gradient texture through the caps' texture coordinates, a rim light as a shader-class colour node, a vertex-stage wave on `Global.Time` and a pixel-stage dissolve driven per frame, each shader in the example's `Effects` folder.
 - `E03_3D_MeshText` is 3D text from a font: the embedded font, an installed font found by family, lines that align in one mesh, the frame counter, and words with physics through `Primitive3D.Text`. `E07_3D_ProceduralGeometry` and `E20_3D_CubeCollapse` use `TextMesh` for their lettering.
 - `E05_3D_MeshColliders`: a convex hull against a mesh collider on the same ring model, with a ball resting on the hull's lid and falling through the mesh's hole; a mesh sphere with a ball outside and one inside shows that a mesh has no inside; a moving mesh ring lands on a mesh ring. The overlay prints where each dropped thing came to rest, measured, and P draws the colliders.

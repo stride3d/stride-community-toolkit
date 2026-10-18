@@ -26,6 +26,8 @@ Custom engine extension points, third-party integration and multi-project archit
 - [Stride UI - Draggable Window](stride-ui-draggable-window.md): A windowing system built on Stride's UI: windows with title bars and close buttons that can be dragged around, and that come to the front when clicked.
 - [Stride UI - Draggable Window - Bullet Physics](stride-ui-draggable-window-bullet.md): The draggable window example running on the legacy Bullet physics engine.
 - [Compute Shader Boids](compute-boids.md): A flock of thousands of boids that lives entirely on the GPU.
+- [Myra UI - Draggable Window and Services](myra-ui-draggable-window-and-services.md): Myra, an external UI library, hosted inside Stride: a draggable window, two health bars - one declared in the view, one added while it runs - and service lookup through GetService to keep the UI from depending directly on the game.
+- [Myra UI - Control Panel](myra-control-panel.md): Myra's widget set at work in one draggable window that drives a Stride scene: a menu bar, tabs, a grid of sliders for the light and the physics clock, a combo for gravity, check buttons for shadows and collider gizmos, a spin button and buttons that spawn bodies, a list view that selects and lights one, a dialog that asks before clearing, tooltips and a status line.
 - [ImGui.NET Text Rendering](imgui-net.md): Render debug text with ImGui.NET, both in screen space and anchored to positions in the 3D scene.
 - [Stride + SignalR - Orbital Cargo Deck](stride-signalr.md): A Stride game and a Blazor page as two consoles of the same orbital cargo deck, talking both ways over a SignalR hub.
 - [Game - Cube Collapse](cube-collapse.md): A colour-match collapse puzzle built entirely from code.
