@@ -1,7 +1,9 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Constraints;
+using Stride.BepuPhysics.Definitions;
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Tests.Engine;
 using Stride.Core.Mathematics;
@@ -132,5 +134,64 @@ public class GrabberScriptTests
 
         Assert.False(grabbed);
         Assert.Null(grabber!.Held);
+    }
+
+    [Fact]
+    public void Pick_LooksThroughATriggerVolume_ButNotThroughAWall()
+    {
+        using var game = new Game();
+
+        Entity? box = null;
+        Entity? wall = null;
+        GrabberScript? grabber = null;
+        var frames = 0;
+        var throughTrigger = false;
+        CollidableComponent? behindTrigger = null;
+        CollidableComponent? behindWall = null;
+
+        game.Run(SceneSetup.None, start: scene =>
+        {
+            grabber = new GrabberScript();
+
+            var camera = new Entity("camera") { new CameraComponent(), grabber };
+            camera.Scene = scene;
+
+            // A trigger zone in front of the body along -Z: the pick ray must reach the body through it
+            var zone = new Entity("zone")
+            {
+                new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(2f) } } }, ContactEventHandler = new Trigger() },
+            };
+            zone.Transform.Position = new Vector3(0, 0, -3);
+            zone.Scene = scene;
+
+            box = new Entity("box") { new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider() } } } };
+            box.Transform.Position = new Vector3(0, 0, -6);
+            box.Scene = scene;
+
+            // A solid wall in front of a second body along +Z: the ray must stop at the wall
+            wall = new Entity("wall") { new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(2f) } } } } };
+            wall.Transform.Position = new Vector3(0, 0, 3);
+            wall.Scene = scene;
+
+            var hidden = new Entity("hidden") { new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider() } } } };
+            hidden.Transform.Position = new Vector3(0, 0, 6);
+            hidden.Scene = scene;
+        }, update: (_, _) =>
+        {
+            if (++frames < 2)
+                return;
+
+            throughTrigger = grabber!.TryPick(new RaySegment(Vector3.Zero, new Vector3(0, 0, -10)), out var hit);
+            behindTrigger = hit.Collidable;
+
+            grabber.TryPick(new RaySegment(Vector3.Zero, new Vector3(0, 0, 10)), out var wallHit);
+            behindWall = wallHit.Collidable;
+
+            game.Exit();
+        }, context: new GameContextHeadless());
+
+        Assert.True(throughTrigger);
+        Assert.Same(box!.Get<BodyComponent>(), behindTrigger);
+        Assert.Same(wall!.Get<StaticComponent>(), behindWall);
     }
 }

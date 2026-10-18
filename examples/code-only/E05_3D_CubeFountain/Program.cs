@@ -151,7 +151,7 @@ void Update(Scene scene, GameTime time)
         simulation.TimeScale = timeScales[timeScaleIndex];
 
         // Five times the speed is five physics steps a frame at 60 frames a second, and this caps
-        // the steps a frame, three by default. Stride 4.4.0 ignores the cap; Stride 4.5 applies it
+        // the steps a frame, three by default (Stride 4.4.0 ignored the cap; 4.4.1 applies it)
         simulation.MaxStepPerFrame = 8;
     }
 

@@ -963,6 +963,26 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/stride-game-engine-example04-myra-ui-draggable-window.webp" class="card-img-top" alt="Screenshot of the Myra UI - Draggable Window and Services example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="myra-ui-draggable-window-and-services.md">Myra UI - Draggable Window and Services</a></h3>
+                <p><span class="badge text-bg-secondary">UI</span></p>
+                <p class="card-text">Myra, an external UI library, hosted inside Stride: a draggable window, two health bars - one declared in the view, one added while it runs - and...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
+            <img src="media/myra-control-panel.webp" class="card-img-top" alt="Screenshot of the Myra UI - Control Panel example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="myra-control-panel.md">Myra UI - Control Panel</a></h3>
+                <p><span class="badge text-bg-secondary">UI</span></p>
+                <p class="card-text">Myra's widget set at work in one draggable window that drives a Stride scene: a menu bar, tabs, a grid of sliders for the light and the physics clock,...</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/imgui-net.webp" class="card-img-top" alt="Screenshot of the ImGui.NET Text Rendering example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="imgui-net.md">ImGui.NET Text Rendering</a></h3>

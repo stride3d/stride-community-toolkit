@@ -51,7 +51,6 @@ description:
     declared in the view, one added while it runs - and service lookup through GetService to keep the UI
     from depending directly on the game. Hosting a foreign UI toolkit means giving it a scene renderer
     of its own and a place in the compositor, which is what MyraSceneRenderer does.
-    Currently disabled - it does not build against Stride 4.4.
 concepts:
   - Hosting an external UI library inside Stride
   - Rendering a foreign UI through a custom scene renderer
@@ -70,7 +69,7 @@ related:
   - E04_StrideUI_DragAndDrop
   - E04_ImGui
 media: stride-game-engine-example04-myra-ui-draggable-window.webp
-enabled: false
+enabled: true
 created: 2023-09-15
 ---
 */

@@ -2,6 +2,7 @@ using BepuPhysics;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Constraints;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Mathematics;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -211,12 +212,50 @@ public class GrabberScript : SyncScript
         return true;
     }
 
+    /// <summary>
+    /// Finds what the pick ray meets first, within <see cref="MaxDistance"/>, looking through trigger
+    /// volumes: a sensor is not a thing to hold, and it must not hide what is inside it.
+    /// </summary>
+    /// <param name="segment">The ray, from the camera outwards.</param>
+    /// <param name="hit">The first hit on something that is not a trigger; undefined when there is none.</param>
+    /// <returns><see langword="true"/> when something other than a trigger lies on the ray within reach.</returns>
+    /// <remarks>
+    /// A trigger is a collidable whose <c>ContactEventHandler</c> says <c>NoContactResponse</c>. Everything
+    /// else counts, statics included: a wall in front of a body hides it, as it should.
+    /// </remarks>
+    public bool TryPick(in RaySegment segment, out HitInfo hit)
+    {
+        hit = default;
+
+        if (Entity?.GetSimulation() is not { } simulation)
+            return false;
+
+        var hits = simulation.RayCastPenetrating(segment);
+
+        hits.Sort();
+
+        foreach (var candidate in hits)
+        {
+            if (candidate.Distance > MaxDistance)
+                break;
+
+            if (candidate.Collidable.ContactEventHandler is { NoContactResponse: true })
+                continue;
+
+            hit = candidate;
+
+            return true;
+        }
+
+        return false;
+    }
+
     private void GrabUnderMouse()
     {
         if (_camera is null)
             return;
 
-        if (!_camera.RaycastMouse(this, MaxDistance, out var hit))
+        if (!TryPick(_camera.ScreenToWorldRaySegment(Input.MousePosition), out var hit))
             return;
 
         if (hit.Collidable is BodyComponent body && Grab(body, hit.Point, hit.Distance))

@@ -77,7 +77,8 @@ void Start(Scene scene)
     game.Window.Title = "Trigger zones - Stride Community Toolkit";
 
     game.AddDebugShapes();
-    game.AddPhysicsDebug();
+    // F11 shows the debug meshes with the contacts the solver is resolving, which is what this example is about
+    game.AddPhysicsDebug(contactsVisible: true);
     game.AddGrabber();
 
     debugDraw = game.Services.GetService<ImmediateDebugRenderSystem>() ?? throw new InvalidOperationException("AddDebugShapes registers the renderer first");
@@ -241,6 +242,7 @@ IReadOnlyList<TextElement> OverlayLines() =>
     new("Left mouse", "Grab a ball and carry it", Color.Gold),
     new("R", "Reset", Color.Gold),
     new("P", "Draw the collider gizmos", Color.Gold),
+    new("F11", "Draw the debug meshes and the contacts", Color.Gold),
     new(""),
     new($"Zone: {inside.Count} inside, entered {entries} times", zoneColour),
     new($"Plate: {plate.Touching.Count} on it, {plate.Landings} landings", plateColour),
@@ -256,11 +258,11 @@ sealed class TouchCounter : IContactHandler
 {
     public bool NoContactResponse => false;
 
-    public HashSet<CollidableComponent> Touching { get; } = [];
+    internal HashSet<CollidableComponent> Touching { get; } = [];
 
-    public int Landings { get; private set; }
+    internal int Landings { get; private set; }
 
-    public void Reset()
+    internal void Reset()
     {
         Touching.Clear();
         Landings = 0;
@@ -282,15 +284,15 @@ sealed class ImpactMeter : IContactHandler
 {
     public bool NoContactResponse => false;
 
-    public float Last { get; private set; }
+    internal float Last { get; private set; }
 
-    public float Hardest { get; private set; }
+    internal float Hardest { get; private set; }
 
-    public string LastBy { get; private set; } = "nothing yet";
+    internal string LastBy { get; private set; } = "nothing yet";
 
-    public float FlashLeft { get; set; }
+    internal float FlashLeft { get; set; }
 
-    public void Reset()
+    internal void Reset()
     {
         Last = 0f;
         Hardest = 0f;
@@ -341,6 +343,7 @@ concepts:
   - IContactHandler on a solid static, OnStartedTouching and OnStoppedTouching keeping a set of touchers
   - IContactHandler on a dynamic body, the impact force of a first touch from its contacts
   - Callbacks run on the main thread after the physics step, so they may change materials and entities
+  - F11 draws the solver's contact points and normals, Stride 4.4.1's debug view, through AddPhysicsDebug
   - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, DebugOverlay"
 tags:
   - 3D

@@ -19,7 +19,9 @@ namespace Stride.CommunityToolkit.Bepu;
 /// - The component in this script is created with <c>Visible = false</c> by default to avoid
 ///   enabling debug rendering unexpectedly.<br />
 /// - When a physics body is not awake, its debug mesh is rendered with a lighter color to indicate
-///   the sleeping/non-awake state.
+///   the sleeping/non-awake state.<br />
+/// - With <see cref="ShowContacts"/> the component also draws the contacts the solver is resolving, a
+///   marker at each point and a line along its normal (Stride 4.4.1), whenever the meshes are visible.
 /// </remarks>
 [Display("Debug Render (Bepu)")]
 [ComponentCategory("Physics")]
@@ -29,6 +31,11 @@ public class DebugRenderComponentScript : SyncScript
     /// Gets or sets whether the debug render is visible when the component is added. Defaults to <see langword="false"/>.
     /// </summary>
     public bool Visible { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the solver's contact points and normals are drawn with the debug meshes. Defaults to <see langword="false"/>.
+    /// </summary>
+    public bool ShowContacts { get; set; }
 
     /// <summary>
     /// True when a <see cref="DebugRenderComponent"/> has already been added to the entity.
@@ -52,7 +59,7 @@ public class DebugRenderComponentScript : SyncScript
 
         if (visibilityGroups > 0)
         {
-            Entity.Add(new DebugRenderComponent() { Visible = Visible });
+            Entity.Add(new DebugRenderComponent { Visible = Visible, ShowContactPoints = ShowContacts, ShowContactNormals = ShowContacts });
 
             _debugAdded = true;
         }

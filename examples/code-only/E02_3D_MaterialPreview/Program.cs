@@ -71,7 +71,8 @@ WindowsDpiManager.EnablePerMonitorV2();
 
 using var game = new Game();
 
-game.Run(start: Start, update: Update);
+// Nothing from the default scene: the thumbnail rig below is the whole scene, compositor, camera and lights
+game.Run(SceneSetup.None, start: Start, update: Update);
 
 // The textures loaded in Start are this example's own: released once the game has ended
 textures?.Dispose();
@@ -157,6 +158,9 @@ CameraComponent AddThumbnailCamera(Scene scene)
     entity.Transform.Position = position;
     entity.Transform.Rotation = rotation;
     entity.Scene = scene;
+
+    // The editor's pose is the start; the controller orbits from there and H brings it back
+    entity.Add3DCameraController();
 
     return component;
 }
