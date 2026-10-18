@@ -10,7 +10,7 @@ Demonstrates entity creation, basic positioning, and attaching the entities to t
 
 The `Program.cs` file shows how to:
 
-- Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
+- Creating multiple 2D primitives (Circle, Capsule, Rectangle, Square, RegularPolygon, Triangle, Polygon)
 - Positioning entities with Transform.Position
 - Adding entities to a Scene (rootScene)
 - Using helpers: SceneSetup2D, AddGrabber

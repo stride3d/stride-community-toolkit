@@ -5,15 +5,15 @@ slug: jitter2-physics
 
 # Jitter2 Physics Integration
 
-Demonstrates integrating Jitter2 physics engine with Stride. Shows how to create a physics world,
+Demonstrates integrating the Jitter2 physics engine with Stride. Shows how to create a physics world,
 synchronize physics bodies with visual entities, and simulate dynamic rigid body interactions.
 Features 150 falling cubes with proper collision detection and a static ground plane.
 
 The `Program.cs` file shows how to:
 
-- Integrating external physics engine (Jitter2)
-- Creating and managing physics world
-- Synchronizing physics bodies with visual entities
+- Integrating an external physics engine (Jitter2)
+- Creating and managing a physics world
+- Synchronising physics bodies with visual entities
 - Dynamic rigid body simulation
 - Static vs dynamic physics bodies
 - Fixed-timestep physics update loop, decoupled from the render frame rate

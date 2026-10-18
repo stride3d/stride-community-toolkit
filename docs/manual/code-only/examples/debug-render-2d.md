@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Why one entity is enough, since CollidableGizmoScript and DebugRenderComponentScript act on the whole scene
 - Lighting a 2D scene with a LightSpot
 - Giving each shape its own colour with a flat material
-- Using helpers: SceneSetup2D, Add2DGround, CreatePrimitive, AddPhysicsDebug, AddGrabber
+- Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddPhysicsDebug, AddGrabber
 
 ![Basic 2D Scene (Debug Rendering)](media/debug-render-2d.webp)
 

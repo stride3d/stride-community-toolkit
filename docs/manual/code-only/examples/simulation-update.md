@@ -18,8 +18,7 @@ The `Program.cs` file shows how to:
 - Using SetTargetPose safely, once per physics step
 - StartupScript as a component with no per-frame Update
 - Moving a kinematic body so it pushes dynamic bodies
-- Using helpers: SceneSetup3D
-- Using helpers: AddSkybox
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
 
 ![Give Me a Cube (SimulationUpdate)](media/simulation-update.webp)
 

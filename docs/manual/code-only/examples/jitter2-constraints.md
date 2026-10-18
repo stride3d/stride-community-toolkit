@@ -15,7 +15,7 @@ The `Program.cs` file shows how to:
 - Constraining a 3D physics engine to 2D motion
 - Configuring RigidBody.AllowedMotion with MotionAxes.PlaneXY
 - Locking world-space translation and rotation axes without additional constraints
-- Synchronizing physics bodies with visual entities
+- Synchronising physics bodies with visual entities
 - Fixed-timestep physics update loop, decoupled from the render frame rate
 
 ![Jitter2 Physics - Constraining to 2D](media/jitter2-constraints.webp)
