@@ -866,6 +866,15 @@ public static partial class GameExtensions
     }
 
     /// <summary>
+    /// <see cref="AddSceneRenderer(IGame, SceneRendererBase)"/> with the signature that binaries built against
+    /// toolkit preview.66 and earlier bind to, Gum.Stride 2026.10.1 among them. Source binds to the
+    /// <see cref="IGame"/> overload; this one keeps those binaries running until they are rebuilt.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <param name="renderer">The scene renderer to add.</param>
+    public static void AddSceneRenderer(this Game game, SceneRendererBase renderer) => ((IGame)game).AddSceneRenderer(renderer);
+
+    /// <summary>
     /// Registers the renderer that draws <see cref="WorldTextComponent"/>, once, however many times
     /// this is called.
     /// </summary>
