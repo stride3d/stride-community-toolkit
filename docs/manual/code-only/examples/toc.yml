@@ -20,7 +20,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic 3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (28)
+- name: C# Beginner (29)
   href: beginner-examples.md
   items:
   - name: 3D Primitives
@@ -73,6 +73,8 @@
     href: falling-shapes-physics-2d.md
   - name: Box2D Explosion
     href: box2d-explosion.md
+  - name: Time Control
+    href: time-control.md
   - name: Basic 2D Scene (Debug Rendering)
     href: debug-render-2d.md
   - name: DPI-Aware Window

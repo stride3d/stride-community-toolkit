@@ -82,6 +82,16 @@ var zone = new Entity("Zone")
 
 The callbacks run on the main thread after the physics step, so they may change entities and materials. `OnTouching` does not fire for sleeping pairs. One body can touch through several contacts and several children of a compound, so keep a set of who touches, not a count. `E05_3D_TriggerZones` shows a zone, a solid plate that counts what stands on it, and a crate that measures its hits.
 
+### The simulation clock
+
+`BepuSimulation` runs on a clock of its own, in fixed steps, and three of its properties can change while the game runs:
+
+- `TimeScale` runs it slower or faster than the game. It stacks with `GameTime.Factor`, so a game that slows its whole clock slows its physics with it.
+- `Enabled` pauses it; bodies hang where they are until it is set again.
+- `PoseGravity` takes effect on the next step, on every body.
+
+A simulation running faster than the game needs more fixed steps per frame: at four times the speed and sixty frames a second it needs four, and the default `MaxStepPerFrame` of three lets it fall behind the clock. Raise the cap when a game runs fast. To read the simulation's clock exactly, give a component `ISimulationUpdate`: it is called once per fixed step with the step's length, before the step and after it. `E05_3D_TimeControl` puts a dropper on the game clock and a spinning bar on the physics clock, so the difference can be watched.
+
 ### Grabbing bodies
 
 - [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - `game.AddGrabber()` puts it on the camera entity, or add it there in Game Studio under Physics, and any dynamic body can be picked up with the mouse, carried on the end of the camera ray, and thrown. The wheel changes the carry distance; <kbd>T</kbd> plus mouse movement turns the held body. It works through a linear and an angular servo constraint rather than by moving the body, so the held body still collides and pushes, and its force caps scale with mass so heavy and light bodies drag alike. [`Grab()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Grab(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Single)) and [`Release()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Release) do the same from code.

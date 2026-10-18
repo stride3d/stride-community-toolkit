@@ -33,6 +33,7 @@ One new idea at a time, on top of the base scene. Toolkit helpers only, with no 
 - [Trigger Zones](trigger-zones.md): Reacting to contact, three ways.
 - [Falling Shapes with Physics Options (2D)](falling-shapes-physics-2d.md): Thirty capsules and a rectangle dropped in a column, as in E01_2D_FallingShapes, with one thing added: each capsule is given its own Body2DComponent with a lower FrictionCoefficient, so the pile spreads wider than with the default.
 - [Box2D Explosion](box2d-explosion.md): A grenade in one call: Explode gives every shape within a radius an impulse away from the centre, per metre of perimeter facing the blast, so a wide slab flies harder than a ball of the same mass.
+- [Time Control](time-control.md): The simulation has a clock of its own, with three knobs: TimeScale runs it slower or faster than the game, Enabled pauses it, and PoseGravity changes while it runs.
 - [Basic 2D Scene (Debug Rendering)](debug-render-2d.md): A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is actually solving can be seen rather than inferred.
 - [DPI-Aware Window](dpi-aware.md): The capsule scene again, with two differences.
 - [Game - Pong](pong.md): Pong, the first game: two paddles, a ball and a score to seven, with no assets and no physics engine.
