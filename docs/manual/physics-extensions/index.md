@@ -38,6 +38,29 @@ Bullet is maintained, not extended: the package follows every toolkit change and
 
 A raycast sees colliders only. For what the eye sees under a screen point - a mesh with no body, an instanced model, a teapot - the Effects package has a [GPU picker](../rendering/gpu-picking.md) that reads the answer from the rendered frame.
 
+### Shape queries
+
+A raycast asks what a line meets first. Bepu also answers what a convex shape meets, in place or along a path, with the same `HitInfo` a raycast gives:
+
+- `BepuSimulation.Overlap(shape, pose, buffer)` lists every collidable the shape intersects at that pose. The `Span<CollidableStack>` overload writes into stack memory and allocates nothing; the `ICollection<OverlapInfo>` overload appends records that also carry the penetration direction and depth of each.
+- `BepuSimulation.SweepCast(shape, pose, velocity, maxDistance, out hit)` throws the shape along the velocity and reports the first contact: the point, the normal, the collidable and how far along the path it happened. `SweepCastPenetrating` collects every contact on the way.
+
+```csharp
+Span<CollidableStack> buffer = stackalloc CollidableStack[32];
+
+foreach (var collidable in simulation.Overlap(new Box(2f, 1.5f, 2f), new RigidPose(centre, Quaternion.Identity), buffer))
+{
+    // Every body and static the box intersects right now
+}
+
+if (simulation.SweepCast(new Sphere(0.35f), new RigidPose(start, Quaternion.Identity), new BodyVelocity(direction, Vector3.Zero), 16f, out var hit))
+{
+    var touch = start + direction * hit.Distance;   // Where the sphere's centre is when it first touches hit.Collidable
+}
+```
+
+The shapes are Bepu's own (`BepuPhysics.Collidables.Box`, `Sphere`, `Capsule`, a convex hull), not the toolkit's colliders. `maxDistance` and `hit.Distance` are measured along the velocity: with a unit direction they are metres, with a real velocity they are seconds. A sweep is a straight line; gravity is not part of it. `E05_3D_ShapeQueries` shows both queries, and `E05_3D_Raycast` shows `RayCastPenetrating` listing every hit along a ray.
+
 ### Grabbing bodies
 
 - [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - `game.AddGrabber()` puts it on the camera entity, or add it there in Game Studio under Physics, and any dynamic body can be picked up with the mouse, carried on the end of the camera ray, and thrown. The wheel changes the carry distance; <kbd>T</kbd> plus mouse movement turns the held body. It works through a linear and an angular servo constraint rather than by moving the body, so the held body still collides and pushes, and its force caps scale with mass so heavy and light bodies drag alike. [`Grab()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Grab(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Single)) and [`Release()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Release) do the same from code.

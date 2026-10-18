@@ -468,6 +468,16 @@ Prefer a list? Each level has its own page, linked from the table of contents.
     </div>
     <div class="col-xxl-4 col-md-6">
         <div class="card h-100">
+            <img src="media/shape-queries.webp" class="card-img-top" alt="Screenshot of the Shape Queries example" width="1280" height="720" loading="lazy">
+            <div class="card-body">
+                <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="shape-queries.md">Shape Queries</a></h3>
+                <p><span class="badge text-bg-secondary">Physics</span></p>
+                <p class="card-text">Two questions a raycast cannot answer: what is inside this volume right now, and what would this shape touch first if it moved that way.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-md-6">
+        <div class="card h-100">
             <img src="media/hud.webp" class="card-img-top" alt="Screenshot of the Ship HUD example" width="1280" height="720" loading="lazy">
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="hud.md">Ship HUD</a></h3>

@@ -77,7 +77,7 @@
     href: dpi-aware.md
   - name: Game - Pong
     href: pong.md
-- name: C# Intermediate (37)
+- name: C# Intermediate (38)
   href: intermediate-examples.md
   items:
   - name: Procedural Geometry
@@ -98,6 +98,8 @@
     href: simulation-update.md
   - name: Raycast
     href: raycast.md
+  - name: Shape Queries
+    href: shape-queries.md
   - name: Ship HUD
     href: hud.md
   - name: Spatial Sound

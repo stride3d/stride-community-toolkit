@@ -1,4 +1,5 @@
 using Stride.BepuPhysics;
+using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Gizmos;
@@ -26,6 +27,9 @@ Buffer? vertexBuffer = null;
 // Line vertices to visualize the impulse direction (start and end points)
 Vector3[] lineVertices = new Vector3[2];
 
+// What the last penetrating ray went through, one line per hit, for the overlay
+List<string> through = [];
+
 // Initialize the game instance
 using var game = new Game();
 
@@ -36,12 +40,12 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 void Start(Scene scene)
 {
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
+    game.AddGrabber();
 
-    DebugOverlay.GetOrCreate(game).AddSection("Raycast", static () =>
-    [
-        new("Left click", "On the ground: push the sphere towards the click", Color.Gold),
-        new("Left click", "On the sphere: stop it moving", Color.Gold),
-    ]);
+    DebugOverlay.GetOrCreate(game).AddSection("Raycast", OverlayLines);
+
+    // Three panels in a row, so a ray from the camera has more than the sphere and the ground to go through
+    AddPanels(scene);
 
     // Create a sphere entity and position it above the ground
     sphereEntity = game.CreatePrimitive(Primitive3D.Sphere());
@@ -73,6 +77,67 @@ void Update(Scene scene, GameTime time)
     {
         ProcessMouseClick();
     }
+
+    // T lists everything under the mouse, near to far, not only the first thing
+    if (game.Input.IsKeyPressed(Keys.T))
+    {
+        ListEverythingUnderTheMouse();
+    }
+}
+
+// A raycast stops at the first hit. RayCastPenetrating goes on through everything along the ray and
+// returns every hit; the toolkit's overload takes the camera's ray segment and sorts the hits by distance
+void ListEverythingUnderTheMouse()
+{
+    if (sphereBody?.Simulation is not { } simulation) return;
+
+    var segment = mainCamera.ScreenToWorldRaySegment(game.Input.MousePosition);
+    var hits = simulation.RayCastPenetrating(segment);
+
+    through.Clear();
+
+    foreach (var hit in hits)
+    {
+        through.Add($"{hit.Collidable.Entity.Name} at {hit.Distance:0.0} m");
+    }
+}
+
+// Three thin static panels standing in a row behind the sphere, as seen from the camera, each one a hit on the way through
+void AddPanels(Scene scene)
+{
+    for (var i = 0; i < 3; i++)
+    {
+        var panel = game.CreatePrimitive(Primitive3D.Box(new Vector3(2.4f, 2f, 0.1f)), new Bepu3DPhysicsOptions
+        {
+            Material = game.CreateMaterial(new Color(120, 170, 220), metalness: 0f, glossiness: 0.5f),
+            Component = new StaticComponent { Collider = new CompoundCollider() },
+        });
+
+        panel.Name = $"Panel {i + 1}";
+        panel.Transform.Position = new Vector3(-1.5f - i * 1.5f, 1f, -1.5f - i * 1.5f);
+        panel.Transform.Rotation = Quaternion.RotationY(MathUtil.PiOverFour);
+        panel.Scene = scene;
+    }
+}
+
+IReadOnlyList<TextElement> OverlayLines()
+{
+    List<TextElement> lines =
+    [
+        new("Left click", "On the ground: push the sphere towards the click", Color.Gold),
+        new("Left click", "On the sphere: stop it moving", Color.Gold),
+        new("T", "List everything under the mouse, near to far", Color.Gold),
+    ];
+
+    if (through.Count > 0)
+    {
+        lines.Add(new(""));
+        lines.Add(new("The ray went through", Color.LightGray));
+
+        foreach (var line in through) lines.Add(new(line, Color.LightSkyBlue));
+    }
+
+    return lines;
 }
 
 // Processes mouse click events by casting a ray and determining the appropriate action.
@@ -201,11 +266,12 @@ description:
     dead. Turning a mouse position into a world direction is the whole trick - the camera unprojects the
     screen point into a ray, physics reports what that ray hit and where, and the impulse is derived
     from the hit point. A line is drawn from the sphere to the hit point, so the direction of the
-    impulse can be seen.
+    impulse can be seen. T casts the same ray through everything and lists every hit, near to far.
 concepts:
   - Turning a screen position into a world ray from the camera
   - Querying the physics world with a raycast
   - Reading the hit point and the entity that was hit
+  - Listing every hit along a ray with RayCastPenetrating, not only the first
   - Applying an impulse towards a point
   - Stopping a body by zeroing its velocity
   - Drawing the impulse direction as a line from the sphere to the hit point
@@ -219,6 +285,7 @@ tags:
   - Mouse
   - Impulse
 related:
+  - E05_3D_ShapeQueries
   - E05_3D_CollisionGroup
   - E02_3D_GiveMeACube_SimulationUpdate
 enabled: true
