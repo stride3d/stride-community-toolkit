@@ -46,7 +46,6 @@ concepts:
   - Initialising the ImGui integration
   - Drawing windows, menus and controls every frame
   - Why immediate mode removes the need to sync UI state
-  - Toggling the overlay from a key press
   - Showing live stats in a debug panel
 tags:
   - 3D

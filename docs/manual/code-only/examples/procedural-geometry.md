@@ -1,17 +1,27 @@
-# Procedural geometry
+---
+generated: true
+slug: procedural-geometry
+---
 
-In this example, we delve into creating procedural geometry meshes including a triangle, a plane, and a circle, and integrate them into a Stride scene. Utilizing the @Stride.CommunityToolkit.Rendering.MeshBuilder class from the toolkit, the process of crafting and rendering these geometries is streamlined.
+# Procedural Geometry
 
-![Stride UI Example](media/procedural-geometry.webp)
+A triangle, a plane and a circle built at runtime with MeshBuilder, which handles the vertex layout
+and buffer bookkeeping that raw buffers make you do by hand. The circle is rebuilt every frame with
+a changing segment count, which is where the one rule of dynamic geometry shows up: dispose the old
+buffers before swapping in the new mesh, or leak a buffer pair per frame.
 
-The `MeshBuilder` class is employed to define the layout and data for each mesh. For instance, the `GiveMeATriangle`, `GiveMeAPlane`, and `GiveMeACircle` methods demonstrate how to configure vertices, indices, and other properties to form a triangle, a plane, and a circle, respectively.
+The `Program.cs` file shows how to:
 
-The `Update` method demonstrates a dynamic adjustment to the circle's segments count over time, showcasing a simple animation effect.
+- Declaring a vertex layout and filling it with MeshBuilder
+- Building a triangle, a plane and a circle from first principles
+- Rebuilding a mesh every frame as a parameter changes
+- Disposing the previous mesh's buffers before replacing it, and sharing one material
+- Why clockwise winding matters for which face you see
+- Creating a non-indexed mesh when index reuse buys nothing
+- Using helpers: SceneSetup3D, UseSkybox, CreateMaterial
 
-For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
-
-[!INCLUDE [back-culling](../../../includes/manual/examples/back-culling.md)]
+![Procedural Geometry](media/procedural-geometry.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_ProceduralGeometry).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_ProceduralGeometry/Program.cs?start=1&end=241)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_ProceduralGeometry/Program.cs?start=1&end=231)]

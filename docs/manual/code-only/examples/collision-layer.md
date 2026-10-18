@@ -1,15 +1,26 @@
+---
+generated: true
+slug: collision-layer
+---
+
 # Collision Layer
 
-This example demonstrates how to implement and control collision detection between different types of entities using Stride's collision layer system. The code showcases:
+The same players-and-enemy scene as the collision group example, solved the other way. Layers name
+the categories - players, enemies, ground - and a matrix says which pairs interact, so both players
+collide with each other and the ground while the enemy ignores the players but still lands on the
+floor. Layers are the readable choice when the rules are per-pair; groups win when they follow a
+formula.
 
-- Creation and configuration of separate collision layers for players, enemies, and the ground
-- Setting up a collision matrix to define interaction rules between different layers
-- Implementation of selective collision detection where players can collide with each other and the ground, but not with enemies
+The `Program.cs` file shows how to:
 
-The example creates a scene with two player cubes (green and purple) that can interact with each other and the ground, plus a red enemy cube that passes through players while still colliding with the ground. This pattern is useful for implementing gameplay mechanics like ghost modes, team-based collision, or phasing through specific obstacles.
+- Defining named collision layers
+- Filling in the collision matrix pair by pair
+- Letting one entity phase through another while both keep colliding with the ground
+- When to prefer a layer matrix over an index rule
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, CreateMaterial
 
-![Stride UI Example](media/collision-layer.webp)
+![Collision Layer](media/collision-layer.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_CollisionLayer).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_CollisionLayer/Program.cs?start=1&end=89)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_CollisionLayer/Program.cs?start=1&end=81)]

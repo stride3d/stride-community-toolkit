@@ -1,25 +1,26 @@
-# Partial torus mesh
+---
+generated: true
+slug: partial-torus-mesh
+---
 
-This example demonstrates creating a 3D partial torus mesh programmatically by breaking down
-the process into clear, distinct steps:
+# Partial Torus Mesh
 
-1. Setting up a basic 3D scene with a skybox
-2. Creating a parametrically defined torus geometry using mathematical formulas
-3. Demonstrating how to generate a partial (incomplete) torus by constraining the bend angle
-4. Building structured 3D mesh generation with proper vertex positioning and normal definitions
+A torus defined parametrically from two angles - one around the tube, one around the ring - and cut
+short by limiting the second, which turns the same code into an arc, a horseshoe or a full ring
+without special cases. Normals are computed rather than guessed, because a parametric surface lit
+with wrong normals looks subtly faceted in a way that is hard to trace back.
 
-The example showcases important 3D graphics concepts including:
-- Parametric surface generation using two angle parameters (circumference and bend)
-- Correct normal calculation for accurate lighting and shading
-- Triangle winding order for proper face orientation
-- Vertex indexing to efficiently reuse vertices between adjacent triangles
+The `Program.cs` file shows how to:
 
-![Stride UI Example](media/partial-torus-mesh.webp)
+- Defining a surface from two angle parameters
+- Making the shape partial by constraining the bend angle
+- Computing correct normals for smooth shading
+- Reusing vertices between adjacent triangles through indexing
+- Getting triangle winding right so faces are not culled
+- Using helpers: SceneSetup3D, UseSkybox
 
-For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
-
-[!INCLUDE [back-culling](../../../includes/manual/examples/back-culling.md)]
+![Partial Torus Mesh](media/partial-torus-mesh.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_PartialTorus).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus/Program.cs?start=1&end=160)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus/Program.cs?start=1&end=141)]

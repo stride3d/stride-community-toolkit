@@ -1,15 +1,24 @@
+---
+generated: true
+slug: imgui-ui
+---
+
 # ImGui UI
 
-This example demonstrates how to integrate [ImGui](https://github.com/HexaEngine/Hexa.NET.ImGui) with the Stride game engine to render an immediate‑mode UI overlay for in‑game tools, debugging, and live controls.
+An ImGui overlay for in-game tools, debug panels and live tweaking. Immediate-mode UI suits this job
+because there is no widget tree to keep in sync - you describe the panel every frame from whatever
+the values happen to be. The example is short because the toolkit owns the setup: initialising the
+integration, feeding it input and drawing it are already handled.
 
-This project will show how to: 
-- Initialize and configure the ImGui integration
-- Draw ImGui windows, menus, and controls every frame
-- Handle input events and toggle UI visibility
-- Display real‑time stats or debug panels
+The `Program.cs` file shows how to:
 
-![ImGui UI Example](media/imgui-ui.webp)
+- Initialising the ImGui integration
+- Drawing windows, menus and controls every frame
+- Why immediate mode removes the need to sync UI state
+- Showing live stats in a debug panel
+
+![ImGui UI](media/imgui-ui.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_ImGui).
 
-[!code-csharp[](../../../../examples/code-only/E04_ImGui/Program.cs?start=1&end=34)]
+[!code-csharp[](../../../../examples/code-only/E04_ImGui/Program.cs?start=1&end=29)]

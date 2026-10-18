@@ -1,16 +1,22 @@
-# DebugShapes Usage
+---
+generated: true
+slug: debug-shapes-usage
+---
 
-This simple example demonstrates how to use the DebugShapes helpers to draw debug shapes.
+# Debug Shapes Usage
+
+The short version of the debug shapes example: turn the system on, draw a sphere and a circle, done.
+If the full tour is a reference, this is the copy-paste starting point - the minimum needed to get a
+shape on screen while debugging something else.
 
 The `Program.cs` file shows how to:
-- Initialize the DebugShapes system and enable it for the scene
-- Draw sphere and circle shapes at specific positions
 
-> [!NOTE]
-> Other required NuGet package: `Stride.CommunityToolkit.DebugShapes`.
+- Initialising the debug shape system and enabling it for a scene
+- Drawing a sphere and a circle at given positions
+- Requires the Stride.CommunityToolkit.DebugShapes package
 
-![DebugShapes Usage Example](media/debug-shapes-usage.webp)
+![Debug Shapes Usage](media/debug-shapes-usage.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E08_3D_DebugShapes_QuickStart).
 
-[!code-csharp[](../../../../examples/code-only/E08_3D_DebugShapes_QuickStart/Program.cs?start=1&end=63)]
+[!code-csharp[](../../../../examples/code-only/E08_3D_DebugShapes_QuickStart/Program.cs?start=1&end=59)]
