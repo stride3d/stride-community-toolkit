@@ -9,6 +9,10 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <c>Stride.Graphics/Font/FreeTypeNative.cs</c> field for field, which is why the two record structs
 /// have as many fields as the C structs they stand for.
 /// </summary>
+// TODO: Ask upstream for a public outline reader, FontSystem.TryGetGlyphOutline(fontName, codepoint, out contours)
+// or the like. The engine already binds FreeType for its sprite fonts; a public reader would make this
+// second binding unnecessary and keep the struct layouts in one place. Non-breaking for the engine.
+// Until then this file must track Stride.Graphics/Font/FreeTypeNative.cs field for field.
 internal static unsafe partial class FreeType
 {
     private const string LibraryName = "freetype";
