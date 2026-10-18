@@ -257,16 +257,12 @@ complexity: 4
 order: 160
 description:
   en: |-
-    A Stride game and a Blazor web page as two consoles of the same orbital cargo deck, talking both
-    ways over a SignalR hub. Either console releases rusty cargo containers in three sizes through a
-    hatch, clears the deck, shakes it, or switches the colour scheme, and the game reports every
-    release, landing and loss back to the page along with a census once a second. The game's own
-    console is drawn in the scene - a station board with the census and clickable scheme buttons, a
-    feed beside the deck, landings and losses marked on the deck - all ShapeBatch panels and world
-    text. The hub is optional: the game connects in the background, keeps retrying, and does
-    everything from the keyboard when there is no hub at all. Two processes and a server make this
-    the most involved example in the toolkit to run - start the Blazor app first so the hub exists,
-    then the game.
+    A Stride game and a Blazor page as two consoles of the same orbital cargo deck, talking both ways
+    over a SignalR hub. Either console releases cargo containers through a hatch, clears or shakes the
+    deck, or switches the colour scheme; the game reports every release, landing and loss back to the
+    page, with a census once a second. The game's own console is drawn in the scene from ShapeBatch
+    panels and world text. The hub is optional: the game connects in the background, keeps retrying,
+    and works from the keyboard without one. Start the Blazor app first so the hub exists, then the game.
 concepts:
   - Connecting a Stride game to a SignalR hub as an optional feature that retries in the background
   - Typed contracts shared by game, hub and page, with nameof on every method name

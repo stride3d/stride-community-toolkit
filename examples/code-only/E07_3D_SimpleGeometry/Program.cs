@@ -14,28 +14,15 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: scen
 {
     game.AddGroundGizmo(new(-4, 0, -4), showAxisName: true);
 
-    // Add 2D text renderer that renders screen-space labels for entities with EntityTextComponent
+    // Screen-space labels for the EntityTextComponents below
     game.AddSceneRenderer(new EntityTextRenderer());
 
     AddTriangleEntity(scene);
 
-    //var myModel = new QuadPrimitiveModel();
-    //var model2 = myModel.Generate(game.Services);
-    //model2.Materials.Add(game.CreateFlatMaterial(Color.Green));
-
-    //var meshEntity2 = new Entity("a", new Vector3(1, 1, 1));
-    //meshEntity2.Components.Add(new ModelComponent(model2));
-
     //// Add screen-space labels for quad vertices (local positions, shown in world via renderer)
-    //if (myModel.Vertices.Count > 0)
-    //{
-    //    AddVertexLabels(scene, meshEntity2, myModel.Vertices, labelPrefix: "q");
-    //}
 
-    //meshEntity2.Scene = scene;
 });
 
-// Create and add a simple triangle entity to the scene
 void AddTriangleEntity(Scene scene)
 {
     const float startX = -4f;
@@ -74,7 +61,7 @@ void AddTriangleEntity(Scene scene)
     entity.Scene = scene;
 }
 
-// Small reusable helper: attaches child entities with EntityTextComponent for each local-space point
+// One label entity per local-space point, as children so they follow the parent
 void AddVertexLabels(Scene scene, Entity parent, IReadOnlyCollection<Vector3> localPositions, string? labelPrefix = null)
 {
     int i = 0;
@@ -88,9 +75,7 @@ void AddVertexLabels(Scene scene, Entity parent, IReadOnlyCollection<Vector3> lo
                 FontSize = 14,
                 Offset = new Vector2(0, -18),
                 TextColor = Color.White,
-                // Anchor, not Alignment: this is what actually centres a label over its vertex.
-                // TextAlignment only arranges lines within a multi-line block and does nothing at
-                // all to a single line, so the label used to sit to the right of the point.
+                // Anchor centres the label over its vertex; TextAlignment only arranges the lines of a block
                 Anchor = TextAnchor.BottomCenter,
                 EnableBackground = true,
                 BackgroundColor = new Color4(0, 0, 0, 0.5f),
@@ -100,7 +85,6 @@ void AddVertexLabels(Scene scene, Entity parent, IReadOnlyCollection<Vector3> lo
 
         // Place in the same local space as mesh vertices so the label follows parent transforms
         labelEntity.Transform.Position = p;
-        //labelEntity.Scene = scene;
         parent.AddChild(labelEntity);
 
         i++;
@@ -122,20 +106,19 @@ public class QuadPrimitiveModel : PrimitiveProceduralModelBase
 
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
     {
-        // First generate the arrays for vertices and indices with the correct size
         var vertexCount = 4;
         var indexCount = 6;
         var vertices = new VertexPositionNormalTexture[vertexCount];
         var indices = new int[indexCount];
 
-        // Create custom vertices, in this case just a quad facing in Z direction
+        // A quad facing +Z
         var normal = Vector3.UnitZ;
         vertices[0] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.5f, 0) * Size, normal, new Vector2(0, 0));
         vertices[1] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.5f, 0) * Size, normal, new Vector2(1, 0));
         vertices[2] = new VertexPositionNormalTexture(new Vector3(-0.5f, -0.5f, 0) * Size, normal, new Vector2(0, 1));
         vertices[3] = new VertexPositionNormalTexture(new Vector3(0.5f, -0.5f, 0) * Size, normal, new Vector2(1, 1));
 
-        // Capture positions for external use (labels)
+        // Kept for the labels
         Vertices =
         [
             vertices[0].Position,
@@ -144,7 +127,6 @@ public class QuadPrimitiveModel : PrimitiveProceduralModelBase
             vertices[3].Position
         ];
 
-        // Create custom indices
         indices[0] = 0;
         indices[1] = 1;
         indices[2] = 2;
@@ -152,7 +134,6 @@ public class QuadPrimitiveModel : PrimitiveProceduralModelBase
         indices[4] = 3;
         indices[5] = 2;
 
-        // Create the primitive object for further processing by the base class
         return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, isLeftHanded: false) { Name = "MyModel" };
     }
 }
@@ -178,7 +159,7 @@ concepts:
   - Labelling vertices on screen to debug a mesh
   - "Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())"
   - Orienting yourself with a named-axis ground gizmo
-  - "Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler, CreateFlatMaterial"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, CreateFlatMaterial"
 tags:
   - 3D
   - Geometry

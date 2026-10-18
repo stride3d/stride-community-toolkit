@@ -7,15 +7,13 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-// This example demonstrates the CollisionLayer feature, two players colliding with each other and not colliding with the enemy entity (red cube)
+// Collision layers: two players that collide with each other and pass through the enemy, the red cube
 
-// Define collision layers to control which objects can collide with each other
 // Whether two layers collide, a layer with itself included, is what the CollisionMatrix below says
 var playerLayer = CollisionLayer.Layer1;
 var enemyLayer = CollisionLayer.Layer2;
 var groundLayer = CollisionLayer.Layer3;
 
-// CollisionMatrix is used to define which objects can collide with each other
 var collisionMatrix = new CollisionMatrix();
 collisionMatrix.Set(playerLayer, playerLayer, shouldCollide: true);
 collisionMatrix.Set(playerLayer, enemyLayer, shouldCollide: false);
@@ -26,17 +24,14 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-// Sets up the initial scene with players and enemies
 void Start(Scene scene)
 {
     SetupCollisionMatrix(scene);
     SetupGroundCollisionLayer(scene);
 
-    // Create player entities
     CreateEntityWithLayer("Player1", Color.MediumSeaGreen, new Vector3(0, 0.5f, 0), scene, playerLayer);
     CreateEntityWithLayer("Player2", Color.MediumPurple, new Vector3(0.5f, 4, 0.7f), scene, playerLayer);
 
-    // Create enemy entity
     CreateEntityWithLayer("Enemy", Color.Red, new Vector3(-0.1f, 12, 0.5f), scene, enemyLayer);
 }
 
@@ -105,7 +100,7 @@ concepts:
   - Filling in the collision matrix pair by pair
   - Letting one entity phase through another while both keep colliding with the ground
   - When to prefer a layer matrix over an index rule
-  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

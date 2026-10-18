@@ -38,6 +38,60 @@ Bullet is maintained, not extended: the package follows every toolkit change and
 
 A raycast sees colliders only. For what the eye sees under a screen point - a mesh with no body, an instanced model, a teapot - the Effects package has a [GPU picker](../rendering/gpu-picking.md) that reads the answer from the rendered frame.
 
+### Shape queries
+
+A raycast asks what a line meets first. Bepu also answers what a convex shape meets, in place or along a path, with the same `HitInfo` a raycast gives:
+
+- `BepuSimulation.Overlap(shape, pose, buffer)` lists every collidable the shape intersects at that pose. The `Span<CollidableStack>` overload writes into stack memory and allocates nothing; the `ICollection<OverlapInfo>` overload appends records that also carry the penetration direction and depth of each.
+- `BepuSimulation.SweepCast(shape, pose, velocity, maxDistance, out hit)` throws the shape along the velocity and reports the first contact: the point, the normal, the collidable and how far along the path it happened. `SweepCastPenetrating` collects every contact on the way.
+
+```csharp
+Span<CollidableStack> buffer = stackalloc CollidableStack[32];
+
+foreach (var collidable in simulation.Overlap(new Box(2f, 1.5f, 2f), new RigidPose(centre, Quaternion.Identity), buffer))
+{
+    // Every body and static the box intersects right now
+}
+
+if (simulation.SweepCast(new Sphere(0.35f), new RigidPose(start, Quaternion.Identity), new BodyVelocity(direction, Vector3.Zero), 16f, out var hit))
+{
+    var touch = start + direction * hit.Distance;   // Where the sphere's centre is when it first touches hit.Collidable
+}
+```
+
+The shapes are Bepu's own (`BepuPhysics.Collidables.Box`, `Sphere`, `Capsule`, a convex hull), not the toolkit's colliders. `maxDistance` and `hit.Distance` are measured along the velocity: with a unit direction they are metres, with a real velocity they are seconds. A sweep is a straight line; gravity is not part of it. `E05_3D_ShapeQueries` shows both queries, and `E05_3D_Raycast` shows `RayCastPenetrating` listing every hit along a ray.
+
+### Triggers and contact events
+
+A collidable's `ContactEventHandler` is told about its contacts, and the handler decides whether the collidable is solid:
+
+- `Trigger` is the engine's ready-made handler for a sensor volume. Its `NoContactResponse` is true, so bodies pass through as if the collidable were not there, and `OnEnter` and `OnLeave` fire with the other collidable. A static with a `BoxCollider` and no model is a zone.
+- Your own `IContactHandler` returns `NoContactResponse` false for a solid that also wants to know: `OnStartedTouching`, `OnTouching` and `OnStoppedTouching` receive the `Contacts`, with `Other`, every contact's point, normal and depth, and `ComputeImpactForce(contact)` for how hard a first touch was.
+
+```csharp
+var trigger = new Trigger();
+
+trigger.OnEnter += (_, other) => Console.WriteLine($"{other.Entity.Name} came in");
+trigger.OnLeave += (_, other) => Console.WriteLine($"{other.Entity.Name} left");
+
+var zone = new Entity("Zone")
+{
+    new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(3f, 2f, 3f) } } }, ContactEventHandler = trigger },
+};
+```
+
+The callbacks run on the main thread after the physics step, so they may change entities and materials. `OnTouching` does not fire for sleeping pairs. One body can touch through several contacts and several children of a compound, so keep a set of who touches, not a count. `E05_3D_TriggerZones` shows a zone, a solid plate that counts what stands on it, and a crate that measures its hits.
+
+### The simulation clock
+
+`BepuSimulation` runs on a clock of its own, in fixed steps, and three of its properties can change while the game runs:
+
+- `TimeScale` runs it slower or faster than the game. It stacks with `GameTime.Factor`, so a game that slows its whole clock slows its physics with it.
+- `Enabled` pauses it; bodies hang where they are until it is set again.
+- `PoseGravity` takes effect on the next step, on every body.
+
+A simulation running faster than the game needs more fixed steps per frame: at four times the speed and sixty frames a second it needs four, and the default `MaxStepPerFrame` of three lets it fall behind the clock. Raise the cap when a game runs fast. To read the simulation's clock exactly, give a component `ISimulationUpdate`: it is called once per fixed step with the step's length, before the step and after it. `E05_3D_TimeControl` puts a dropper on the game clock and a spinning bar on the physics clock, so the difference can be watched.
+
 ### Grabbing bodies
 
 - [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - `game.AddGrabber()` puts it on the camera entity, or add it there in Game Studio under Physics, and any dynamic body can be picked up with the mouse, carried on the end of the camera ray, and thrown. The wheel changes the carry distance; <kbd>T</kbd> plus mouse movement turns the held body. It works through a linear and an angular servo constraint rather than by moving the body, so the held body still collides and pushes, and its force caps scale with mass so heavy and light bodies drag alike. [`Grab()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Grab(Stride.BepuPhysics.BodyComponent,Stride.Core.Mathematics.Vector3,System.Single)) and [`Release()`](xref:Stride.CommunityToolkit.Bepu.GrabberScript.Release) do the same from code.

@@ -10,7 +10,7 @@ engine ships, triangulates them, holes and all, and extrudes them into meshes th
 shadowed like any other geometry. On show: the Open Sans embedded in the toolkit with a bevelled edge, an installed
 font found by family name, several lines that align in one mesh, a frame counter whose digits
 are rebuilt as a new mesh every frame, and words with physics through Primitive3D.Text, dropped
-into a pile with a box per glyph. The counter demonstrates the one rule of dynamic
+on the ground with one convex hull per glyph. The counter demonstrates the one rule of dynamic
 mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak a buffer pair per
 rebuild.
 
@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 
 - Solid 3D lettering from any font: TextMesh.CreateModel with MeshFont.Default, Load or FromFamily
 - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
-- Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, boxed per glyph for a pile
+- Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
 - Static lettering built once versus text that changes, and releasing the old buffers
 - Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay
 
@@ -26,4 +26,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_3D_MeshText).
 
-[!code-csharp[](../../../../examples/code-only/E03_3D_MeshText/Program.cs?start=1&end=176)]
+[!code-csharp[](../../../../examples/code-only/E03_3D_MeshText/Program.cs?start=1&end=138)]

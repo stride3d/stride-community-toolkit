@@ -8,7 +8,7 @@ using Stride.Games;
 
 using var game = new Game();
 
-// State flag to track health bar visibility
+// Whether the health bar has been added yet
 bool isHealthBarVisible = false;
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start, update: Update);
@@ -23,7 +23,7 @@ void Update(Scene rootScene, GameTime time)
     InitializeHealthBar();
 }
 
-// Initializes the health bar if it is not already visible.
+// Adds the health bar on the first press
 void InitializeHealthBar()
 {
     if (isHealthBarVisible) return;
@@ -32,7 +32,6 @@ void InitializeHealthBar()
 
     if (mainView == null) return;
 
-    // Create and add a new health bar to the main view
     mainView.Widgets.Add(UIUtils.CreateHealthBar(-50, "#FFD961FF"));
 
     isHealthBarVisible = true;

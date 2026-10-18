@@ -34,11 +34,9 @@ static Entity CreateSphereEntity(Game game)
 
 static Entity CreateLineEntity(Game game)
 {
-    // Create vertex buffer with start and end points
     var vertices = new Vector3[] { new(0, 0, 0), new(1, 1, -1) };
     var vertexBuffer = Buffer.New(game.GraphicsDevice, vertices, BufferFlags.VertexBuffer, GraphicsResourceUsage.Default);
 
-    // Create index buffer
     var indices = new short[] { 0, 1 };
     var indexBuffer = Buffer.New(game.GraphicsDevice, indices, BufferFlags.IndexBuffer, GraphicsResourceUsage.Default);
 
@@ -82,7 +80,7 @@ concepts:
   - Wrapping a MeshDraw in a Mesh, Model and ModelComponent
   - Making a line visible with an emissive material
   - Parenting an entity so it follows another
-  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, GizmoEmissiveColorMaterial.Create"
 tags:
   - 3D
   - Geometry

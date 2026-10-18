@@ -18,7 +18,7 @@ using Stride.Rendering;
 // shadowed like any other geometry, with a material of their own, and with a body when
 // CreatePrimitive makes them. On show: the Open Sans embedded in the toolkit, so this works with no
 // font file at hand, with a bevelled edge; an installed font found by family name; lines that align; a
-// frame counter whose digits are rebuilt every frame; and a word with physics, dropped on the ground.
+// frame counter whose digits are rebuilt every frame; and words with physics, dropped on the ground.
 //
 // For ordinary text in a real font - labels, HUDs, signs - use E03_3D_EntityText (screen-space) or
 // E03_3D_WorldText (in-scene) instead: they draw a font, which is far cheaper than geometry.
@@ -28,11 +28,11 @@ WindowsDpiManager.EnablePerMonitorV2();
 // The default camera starts at (6, 6, 6) looking at the origin, so the gallery is turned 45 degrees
 // to face it square-on. Fly around it: these are solids, not billboards
 var faceCamera = Quaternion.RotationY(MathUtil.DegreesToRadians(45));
-
+var dropped = 0;
 var random = new Random(1);
+
 MeshFont? systemFont = null;
 Material? dropMaterial = null;
-var dropped = 0;
 
 using var game = new Game();
 
@@ -42,6 +42,7 @@ void Start(Scene scene)
 {
     game.Window.AllowUserResizing = true;
     game.Window.Title = "3D text from a font - Stride Community Toolkit";
+    game.AddGrabber();
 
     // The base scene's single directional light shines from behind this gallery, leaving the front
     // caps in the dark. Six lights down the six world axes make solid lettering read from any side
@@ -82,7 +83,8 @@ void Start(Scene scene)
     counter.Transform.Scale = new Vector3(0.5f);
     counter.Scene = scene;
 
-    DropWord(scene);
+    // Three words to begin with, each higher than the last, so they land on each other
+    for (var i = 0; i < 3; i++) DropWord(scene);
 
     DebugOverlay.GetOrCreate(game).AddSection("3D text", () =>
     [
@@ -119,8 +121,8 @@ void AddText(Scene scene, MeshFont font, string text, Vector3 position, Material
 
 /// <summary>
 /// A word with a body. Primitive3D.Text is a shape like any other: CreatePrimitive gives it the
-/// material and, with Bepu chosen, a collider of one convex hull per glyph, so it lands on the
-/// ground, tips over, and can be pushed about.
+/// material and, with Bepu chosen, a collider of one convex hull per glyph, so it lands, tips over
+/// and can be grabbed. Each word starts a little higher than the last.
 /// </summary>
 void DropWord(Scene scene)
 {
@@ -151,7 +153,7 @@ description:
     engine ships, triangulates them, holes and all, and extrudes them into meshes that are lit and
     shadowed like any other geometry. On show: the Open Sans embedded in the toolkit with a bevelled edge, an installed
     font found by family name, several lines that align in one mesh, a frame counter whose digits
-    are rebuilt as a new mesh every frame, and a word with physics through Primitive3D.Text, dropped
+    are rebuilt as a new mesh every frame, and words with physics through Primitive3D.Text, dropped
     on the ground with one convex hull per glyph. The counter demonstrates the one rule of dynamic
     mesh text: dispose the old GPU buffers before swapping in the new mesh, or leak a buffer pair per
     rebuild.
@@ -160,13 +162,13 @@ description:
     dodává, triangulizuje je i s dírami a vytlačí do meshů, které světlo a stíny zpracují jako
     jakoukoli jinou geometrii. K vidění: Open Sans vložený do toolkitu, nainstalovaný font nalezený
     podle rodiny, několik řádků zarovnaných v jednom meshi, počítadlo snímků, jehož číslice se každý
-    snímek staví znovu, a slovo s fyzikou přes Primitive3D.Text, upuštěné na zem s jedním konvexním
+    snímek staví znovu, a slova s fyzikou přes Primitive3D.Text, upuštěná na zem s jedním konvexním
     obalem na glyf. Počítadlo ukazuje jediné pravidlo dynamického textu z meshů: před výměnou meshe
     uvolnit staré GPU buffery, jinak každá přestavba uteče o pár bufferů.
 concepts:
   - "Solid 3D lettering from any font: TextMesh.CreateModel with MeshFont.Default, Load or FromFamily"
   - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
-  - A word as a primitive with a body - Primitive3D.Text through CreatePrimitive
+  - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
   - Static lettering built once versus text that changes, and releasing the old buffers
   - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay"
 tags:

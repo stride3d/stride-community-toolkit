@@ -7,11 +7,9 @@ using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 
-// This example demonstrates how to create a simple scene with two players and an enemy entity
-// and set up collision groups to control which objects can collide with each other.
+// Collision groups: two players that collide with each other and pass through the enemy, the red box
 
-// Define collision groups to control which objects can collide with each other
-// Objects within the same group can't collide with each other, however, if IndexA is used, the objects collide with each other if the difference is 2 or more
+// Bodies in one group collide with each other only when their IndexA values differ by 2 or more
 
 // In this example, the players will collide with each other because the difference between their IndexA values is 2
 // The enemy entity (red box) won't collide with the players because the difference between their IndexA values is 1
@@ -23,14 +21,11 @@ using var game = new Game();
 
 game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: Start);
 
-// Sets up the initial scene with players and enemies
 void Start(Scene scene)
 {
-    // Create player entities
     CreateEntityWithGroup("Player1", Color.MediumSeaGreen, new Vector3(0, 0.5f, 0), scene, playerCollisionGroup1);
     CreateEntityWithGroup("Player2", Color.MediumPurple, new Vector3(0.5f, 4, 0.7f), scene, playerCollisionGroup2);
 
-    // Create enemy entity
     CreateEntityWithGroup("Enemy", Color.Red, new Vector3(-0.1f, 12, 0.5f), scene, enemyCollisionGroup);
 }
 
@@ -76,7 +71,7 @@ concepts:
   - "How the IndexA difference rule decides whether two bodies collide"
   - Choosing index values so one entity phases through others
   - When an arithmetic rule beats a full collision matrix
-  - "Using helpers: SceneSetup3D, AddSkybox, CreatePrimitive, CreateMaterial"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, CreateMaterial"
 tags:
   - 3D
   - Bepu

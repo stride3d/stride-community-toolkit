@@ -18,7 +18,7 @@ const int MaxStepsPerFrame = 5;
 
 var groundSize = new Vector3(15f, 1, 15f);
 
-// Initialize Jitter2 physics world with 4 substeps for better accuracy
+// Four substeps per step, for accuracy
 var world = new World()
 {
     SubstepCount = 4
@@ -59,26 +59,20 @@ void Update(Scene scene, GameTime time)
         steps++;
     }
 
-    // If the frame rate stays below the physics rate for a sustained period rather than a single
-    // hitch, the loop above can never fully drain accumulatedTime and the backlog would otherwise
-    // keep growing forever. Clamping it bounds that backlog to one frame's worth of catch-up,
-    // trading permanently-delayed simulation time for a value that can't grow without bound (which
-    // would eventually lose precision as a float in a long-running session).
+    // Below the physics rate for long, the backlog would grow without bound: clamping it to one
+    // frame's worth trades a permanently late simulation for a float that stays precise
     accumulatedTime = MathF.Min(accumulatedTime, FixedTimeStep * MaxStepsPerFrame);
 
-    // Update visual entities to match their physics body positions
     SyncPhysicsToEntities();
 }
 
 void CreateGround(Scene rootScene)
 {
-    // Create visual ground plane
     var groundEntity = game.CreatePrimitive(Primitive3D.Plane(groundSize.X, groundSize.Z), new()
     {
     });
     groundEntity.Scene = rootScene;
 
-    // Create physics body for the ground (static, won't move)
     var groundBody = world.CreateRigidBody();
     groundBody.MotionType = MotionType.Static;
     groundBody.AddShape(new BoxShape(groundSize.X, groundSize.Y, groundSize.Z));
@@ -91,7 +85,6 @@ void CreateCubes(Scene rootScene, int count)
     {
         var cubePosition = new Vector3(0, 10 + i * VerticalSpacing, 0);
 
-        // Create visual cube entity
         var cubeEntity = game.CreatePrimitive(Primitive3D.Cube(CubeSize), new()
         {
             Material = game.CreateMaterial(Color.Red),
@@ -100,7 +93,6 @@ void CreateCubes(Scene rootScene, int count)
         cubeEntity.Transform.Position = cubePosition;
         cubeEntity.Scene = rootScene;
 
-        // Create physics body for the cube (dynamic, affected by forces)
         var cubeBody = world.CreateRigidBody();
         cubeBody.AddShape(new BoxShape(CubeSize));
         cubeBody.SetMassInertia(1f);

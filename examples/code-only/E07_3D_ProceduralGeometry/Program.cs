@@ -251,7 +251,7 @@ concepts:
   - "Disposing the previous mesh's buffers before replacing it, and sharing one material"
   - Why clockwise winding matters for which face you see
   - Creating a non-indexed mesh when index reuse buys nothing
-  - "Using helpers: SceneSetup3D, AddSkybox, CreateMaterial"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreateMaterial"
 tags:
   - 3D
   - Geometry

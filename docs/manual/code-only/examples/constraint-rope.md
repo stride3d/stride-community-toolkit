@@ -5,17 +5,13 @@ slug: constraint-rope
 
 # Rope - building a stable chain of constraints
 
-Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing
-them together is the easy part; keeping a heavy weight on a light chain from thrashing itself
-apart is the real problem, because the force holding that weight up has to travel link by link
-to the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by
-side carrying the same weight: the naive one anchors its constraints at the segment ends and ties
-each segment only to its neighbour, while the stable one anchors at the segment centres and adds
-skip constraints that let impulses take shortcuts along the chain. Z switches the stabilisation
-off while it hangs, the centre anchors and the skip constraints together, which shows
-immediately what it was holding together. Follows
-Bepu's own RopeStabilityDemo rather than the more obvious ball-socket construction, which is
-precisely the one that misbehaves.
+Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Keeping a
+heavy weight on a light chain from thrashing itself apart is the real problem: the force holding
+the weight travels link by link to the anchor, and the solver gets only so many passes per frame.
+Two ropes carry the same weight: the naive one ties each segment to its neighbour at the segment
+ends, the stable one anchors at the centres and adds skip constraints that let impulses take
+shortcuts along the chain. Z switches the stabilisation off while it hangs. Follows Bepu's own
+RopeStabilityDemo rather than the obvious ball-socket construction, which is the one that misbehaves.
 
 The `Program.cs` file shows how to:
 
@@ -35,7 +31,7 @@ The `Program.cs` file shows how to:
 - Making the topmost segment kinematic to hold the chain up
 - Applying an impulse from the update loop rather than a velocity at build time
 - Picking up and throwing bodies with GrabberScript
-- Using helpers: SceneSetup3D, AddSkybox, AddProfiler
+- Using helpers: SceneSetup3D, UseSkybox
 
 ![Rope - building a stable chain of constraints](media/constraint-rope.webp)
 

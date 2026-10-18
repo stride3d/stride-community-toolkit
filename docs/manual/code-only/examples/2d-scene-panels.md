@@ -5,16 +5,12 @@ slug: 2d-scene-panels
 
 # 2D Panels and Text
 
-Twenty-four HUD panel recipes side by side, each one property away from the last: fill only,
-border only, transparent fill over a stripe that proves it, a fill colour of its own, rounded
-corners, heavy borders, glows of three strengths and colours, glass, a ship-console panel with
-corner ticks and a gauge, dashed rings and lines that turn and march, a gradient to the text
-colour, a gradient to nothing, a panel at a third opacity, a translucent border, an additive
-glow, a glow on a see-through panel, a hairline border, a twelve-sided badge, a forty-point
-dashed route, two see-through panels overlapping, and a concave bracket frame. Every panel
-appears twice - alone, and carrying world text that demonstrates height, font size, colour
-alpha, opacity, glow, alignment and system fonts in regular, bold, italic and monospace. Five
-themes switch live.
+Twenty-four HUD panel recipes side by side, each one property away from the last: fills, borders,
+rounded corners, glows of three strengths, glass, a ship-console panel with corner ticks and a
+gauge, dashed rings and lines that march, gradients, opacity, a translucent border, an additive
+glow, a hairline, a twelve-sided badge, a dashed route, overlapping see-through panels and a
+concave bracket. Every panel appears twice, alone and carrying world text that shows height,
+font size, colour alpha, opacity, glow, alignment and system fonts. Five themes switch live.
 
 The `Program.cs` file shows how to:
 

@@ -14,8 +14,7 @@ using static Box2D.NET.B2Shapes;
 namespace E06_Box2D.Helpers;
 
 /// <summary>
-/// Manages the overall demo experience including input handling, shape creation, and user interactions.
-/// This class orchestrates the various components of the Box2D physics demonstration.
+/// Runs the demo: input, the UI lines and the static yard. Spawning is <see cref="ShapeSpawner"/>'s.
 /// </summary>
 public class SceneManager
 {
@@ -49,34 +48,24 @@ public class SceneManager
     }
 
     /// <summary>
-    /// Initializes the demo manager and sets up initial state
+    /// Builds the yard and the first shapes.
     /// </summary>
     public void Initialize()
     {
         LogAction("Demo initialized");
 
-        // Register for physics events if needed
-        // _simulation.RegisterContactEventHandler(this);
-
-        // Could add initial demo shapes here
-        // AddInitialShapes();
-
-        // Create the initial scene setup
         CreateInitialScene();
     }
 
     void CreateInitialScene()
     {
-        // Add ground for physics objects to collide with
-        //WorldGeometryBuilder.AddGround(_simulation.GetWorldId());
         AddGroundAndWalls();
 
-        // Create a single shape with zero gravity for demonstration
+        // One shape with no gravity, so it hangs where it was put
         var shape = ShapeFactory.Rectangle;
         var entity = _shapeFactory.CreateEntity(shape, position: new Vector2(0, 2));
         var bodyId = _simulation.CreateDynamicBody(entity, entity.Transform.Position);
 
-        // Set zero gravity for this body to demonstrate weightless behavior
         b2Body_SetGravityScale(bodyId, 0);
 
         ShapeFixtureBuilder.AttachShape(shape.Type, bodyId, ShapeSpawner.DefaultShapeDef());
@@ -133,7 +122,7 @@ public class SceneManager
     }
 
     /// <summary>
-    /// Updates the demo manager each frame
+    /// Reads the input and refreshes the UI lines.
     /// </summary>
     /// <param name="gameTime">Current game time</param>
     public void Update(GameTime gameTime)
@@ -141,16 +130,13 @@ public class SceneManager
         ProcessInput();
         UpdateUI();
 
-        // Could add periodic demo updates here
-        // UpdateDemoLogic(gameTime);
     }
 
     /// <summary>
-    /// Adds initial demonstration shapes to the scene
+    /// The shapes on the yard at the start.
     /// </summary>
     public void AddInitialShapes()
     {
-        // Add some demo shapes with different properties
         _shapeSpawner.Add(ShapeFactory.Rectangle, 10, GameConfig.ShapeColor);
         LogAction($"Added {10} initial demo shapes");
     }
@@ -218,8 +204,6 @@ public class SceneManager
             TogglePhysics();
         }
 
-        // Could add more advanced controls
-        // Debug/utility commands could go here
     }
 
     private void ProcessMouseInput()
@@ -255,14 +239,11 @@ public class SceneManager
     {
         _uiHelper.RenderNavigation(ShapeCount, _shapeSpawner.TotalCreated, _simulation);
 
-        // Show last action
         if ((DateTime.Now - _lastActionTime).TotalSeconds < 3)
         {
             _uiHelper.RenderStatusMessage($"Last action: {_lastAction}", Color.LightGreen);
         }
 
-        // Could add more UI elements here
-        // Performance metrics, physics debug info, etc.
     }
 
     private void LogAction(string action)

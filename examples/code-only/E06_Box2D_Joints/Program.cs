@@ -345,7 +345,7 @@ concepts:
   - Toggling a joint's motor and limit at runtime through the Box2D joint functions
   - Drawing joints, contacts, bounds and mass with Box2DDebugDraw, Box2D's debug draw through ShapeBatch
   - Pulling on constrained bodies with Grabber2DScript
-  - "Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent"
+  - "Using helpers: SceneSetup2D, AddShapeBatch, ShapeComponent"
 tags:
   - 2D
   - Box2D

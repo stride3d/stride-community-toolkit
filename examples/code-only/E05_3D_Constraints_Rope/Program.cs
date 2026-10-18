@@ -231,28 +231,21 @@ complexity: 5
 order: 80
 description:
   en: |-
-    Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Stringing
-    them together is the easy part; keeping a heavy weight on a light chain from thrashing itself
-    apart is the real problem, because the force holding that weight up has to travel link by link
-    to the fixed anchor and the solver only gets so many passes per frame. Two ropes hang side by
-    side carrying the same weight: the naive one anchors its constraints at the segment ends and ties
-    each segment only to its neighbour, while the stable one anchors at the segment centres and adds
-    skip constraints that let impulses take shortcuts along the chain. Z switches the stabilisation
-    off while it hangs, the centre anchors and the skip constraints together, which shows
-    immediately what it was holding together. Follows
-    Bepu's own RopeStabilityDemo rather than the more obvious ball-socket construction, which is
-    precisely the one that misbehaves.
+    Bepu has no rope type, so a rope is a chain of small bodies tied together at runtime. Keeping a
+    heavy weight on a light chain from thrashing itself apart is the real problem: the force holding
+    the weight travels link by link to the anchor, and the solver gets only so many passes per frame.
+    Two ropes carry the same weight: the naive one ties each segment to its neighbour at the segment
+    ends, the stable one anchors at the centres and adds skip constraints that let impulses take
+    shortcuts along the chain. Z switches the stabilisation off while it hangs. Follows Bepu's own
+    RopeStabilityDemo rather than the obvious ball-socket construction, which is the one that misbehaves.
   cs: |-
-    Bepu nemá typ pro lano, takže lano je řetěz malých těles svázaných za běhu. Spojit je dohromady je
-    ta snadná část; skutečný problém je udržet těžké závaží na lehkém řetězu, aby se neroztrhalo -
-    síla, která závaží drží, musí putovat článek po článku až k pevnému úchytu a řešič má na to jen
-    omezený počet průchodů za snímek. Vedle sebe visí dvě lana se stejným závažím: naivní má vazby
-    ukotvené na koncích článků a každý článek spojený jen se sousedem, kdežto stabilní je ukotvené ve
-    středech článků a navíc má přeskakující vazby, které impulzům umožní zkratku podél řetězu.
-    Klávesa Z stabilizaci za běhu vypne, ukotvení ve středech i přeskakující vazby zároveň, což
-    okamžitě ukáže, co držela pohromadě. Vychází z
-    ukázky RopeStabilityDemo přímo od autora Bepu, nikoli z nasnadě ležící konstrukce s kulovými
-    klouby, která je právě tou nefungující.
+    Bepu nemá typ pro lano, takže lano je řetěz malých těles svázaných za běhu. Skutečný problém je
+    udržet těžké závaží na lehkém řetězu, aby se neroztrhalo: síla, která závaží drží, putuje článek
+    po článku až k úchytu a řešič má jen omezený počet průchodů za snímek. Dvě lana nesou stejné
+    závaží: naivní spojuje každý článek se sousedem na koncích článků, stabilní je ukotvené ve
+    středech a přidává přeskakující vazby, které impulzům zkrátí cestu podél řetězu. Klávesa Z
+    stabilizaci za běhu vypne. Vychází z RopeStabilityDemo přímo od autora Bepu, nikoli z nasnadě
+    ležící konstrukce s kulovými klouby, která je právě tou nefungující.
 concepts:
   - Building a rope as a runtime chain of bodies and constraints
   - Linking segments with DistanceLimitConstraintComponent rather than ball sockets
@@ -270,7 +263,7 @@ concepts:
   - Making the topmost segment kinematic to hold the chain up
   - Applying an impulse from the update loop rather than a velocity at build time
   - Picking up and throwing bodies with GrabberScript
-  - "Using helpers: SceneSetup3D, AddSkybox, AddProfiler"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - 3D
   - Physics

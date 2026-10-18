@@ -19,7 +19,7 @@ The `Program.cs` file shows how to:
 - Showing or hiding the gizmo with its Visible property
 - Diagnosing a body that does not collide as expected
 - The one-call form for a whole scene: game.AddPhysicsDebug()
-- Using helpers: SceneSetup3D, AddSkybox, AddProfiler, CreatePrimitive, AddGrabber
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGrabber
 
 ![Collidable Gizmo](media/collidable-gizmo.webp)
 

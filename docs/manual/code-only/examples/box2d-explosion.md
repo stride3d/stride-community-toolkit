@@ -16,7 +16,7 @@ The `Program.cs` file shows how to:
 - Why the impulse is per metre of perimeter, shown with a slab and a ball of equal mass
 - Drawing a transient effect with ShapeBatch rings that fade
 - Picking bodies up with Grabber2DScript
-- Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent
+- Using helpers: SceneSetup2D, AddShapeBatch, ShapeComponent
 
 > [!NOTE]
 > This example references `Stride.CommunityToolkit.Box2D`, which is not on NuGet yet. Run it from a clone of the

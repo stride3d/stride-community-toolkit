@@ -252,7 +252,7 @@ concepts:
   - Why the impulse is per metre of perimeter, shown with a slab and a ball of equal mass
   - Drawing a transient effect with ShapeBatch rings that fade
   - Picking bodies up with Grabber2DScript
-  - "Using helpers: SceneSetup2D, Add2DCameraController, AddShapeBatch, ShapeComponent"
+  - "Using helpers: SceneSetup2D, AddShapeBatch, ShapeComponent"
 tags:
   - 2D
   - Box2D

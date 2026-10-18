@@ -20,7 +20,7 @@
     href: basic-2d-scene-bullet.md
   - name: Basic 3D Scene (Capsule) - Bullet Physics
     href: capsule-with-rigid-body-bullet.md
-- name: C# Beginner (27)
+- name: C# Beginner (29)
   href: beginner-examples.md
   items:
   - name: 3D Primitives
@@ -67,17 +67,21 @@
     href: hud-basics.md
   - name: 2D Panels and Text
     href: 2d-scene-panels.md
+  - name: Trigger Zones
+    href: trigger-zones.md
   - name: Falling Shapes with Physics Options (2D)
     href: falling-shapes-physics-2d.md
   - name: Box2D Explosion
     href: box2d-explosion.md
+  - name: Time Control
+    href: time-control.md
   - name: Basic 2D Scene (Debug Rendering)
     href: debug-render-2d.md
   - name: DPI-Aware Window
     href: dpi-aware.md
   - name: Game - Pong
     href: pong.md
-- name: C# Intermediate (37)
+- name: C# Intermediate (38)
   href: intermediate-examples.md
   items:
   - name: Procedural Geometry
@@ -98,6 +102,8 @@
     href: simulation-update.md
   - name: Raycast
     href: raycast.md
+  - name: Shape Queries
+    href: shape-queries.md
   - name: Ship HUD
     href: hud.md
   - name: Spatial Sound

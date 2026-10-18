@@ -44,14 +44,19 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - The glossary is in the top navigation, and defines gizmo, mesh collider, glyph and EM.
-- Physics extensions: a Mesh colliders section, what a `MeshCollider` on a static keeps that a hull fills in, and what a mesh is not (a surface with no inside), measured in `E05_3D_MeshColliders`.
+- Physics extensions: a section on the simulation clock (`TimeScale`, `Enabled`, `PoseGravity`, `MaxStepPerFrame`, `ISimulationUpdate`), a Triggers and contact events section (`Trigger`, `IContactHandler`, what the callbacks get and when they run), a Shape queries section (`Overlap`, `OverlapInfo`, `SweepCast`, `SweepCastPenetrating`, what the distance means), and a Mesh colliders section, what a `MeshCollider` on a static keeps that a hull fills in, and what a mesh is not (a surface with no inside), measured in `E05_3D_MeshColliders`.
 - A manual page for 3D text (`rendering/text-3d.md`); the MeshBuilder page points at it. A second page, `rendering/text-3d-pipeline.md`, walks the pipeline from the font file to the mesh, with the files behind each stage.
 
 ### 🎓 Examples
 
 - `E03_3D_TextShaders`: four materials on the same solid lettering, a gradient texture through the caps' texture coordinates, a rim light as a shader-class colour node, a vertex-stage wave on `Global.Time` and a pixel-stage dissolve driven per frame, each shader in the example's `Effects` folder.
-- `E03_3D_MeshText` is 3D text from a font: the embedded font, an installed font found by family, lines that align in one mesh, the frame counter, and words with physics through `Primitive3D.Text`, piled with a box per glyph. `E07_3D_ProceduralGeometry` and `E20_3D_CubeCollapse` use `TextMesh` for their lettering.
+- `E03_3D_MeshText` is 3D text from a font: the embedded font, an installed font found by family, lines that align in one mesh, the frame counter, and words with physics through `Primitive3D.Text`. `E07_3D_ProceduralGeometry` and `E20_3D_CubeCollapse` use `TextMesh` for their lettering.
 - `E05_3D_MeshColliders`: a convex hull against a mesh collider on the same ring model, with a ball resting on the hull's lid and falling through the mesh's hole; a mesh sphere with a ball outside and one inside shows that a mesh has no inside; a moving mesh ring lands on a mesh ring. The overlay prints where each dropped thing came to rest, measured, and P draws the colliders.
+- `E05_3D_ShapeQueries`: the two questions a raycast cannot answer. A probe box follows the mouse over a field of bodies and lists what it holds through `Overlap`, a click tosses them; a ball is swept from a launcher through `SweepCast`, a ghost marks the first touch, and T throws a real ball, without gravity, to land where the ghost was.
+- `E05_3D_Raycast` casts two rays: the camera's finds the clicked point, and a second one from the sphere through that point lists everything in that direction through `RayCastPenetrating`, drawn as the line; panels stand around the sphere to be gone through.
+- `E05_3D_TimeControl`: the simulation's own clock. `TimeScale` from 1/16x to 4x, `Enabled` to pause, `PoseGravity` cycled through Earth, Moon, none and upside down, a dropper on the game clock against a spinning bar on the physics clock, and an `ISimulationUpdate` component counting the steps.
+- `E05_3D_TriggerZones`: reacting to contact. A `Trigger` zone with no model counts who enters and leaves, a solid plate with an `IContactHandler` counts what stands on it, and a crate measures each hit with `ComputeImpactForce`. Space drops balls, the grabber carries them.
+- A sweep of the example comments: references to the helpers that `SceneSetup3D` replaced are corrected, comments that only restated the code and leftover commented-out code are gone, and the longest metadata descriptions are shorter.
 - A grabber in every Bepu example with bodies to pick up and a free left mouse button: `E01_2D_FallingShapes`, `E02_2D_Primitives`, `E04_2D_SpawnMenu`, `E05_2D_FallingShapes`, `E08_2D_DebugRender`, `E10_2D_StressPile`, `E01_3D_FallingShapes`, `E08_3D_CollidableGizmo` and `E08_3D_DebugRenderComponent`, one line each; the overlay says so where there is one.
 
 ### 🔧 Engineering

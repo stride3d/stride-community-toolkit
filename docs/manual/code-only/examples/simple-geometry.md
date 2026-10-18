@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - Labelling vertices on screen to debug a mesh
 - Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())
 - Orienting yourself with a named-axis ground gizmo
-- Using helpers: SceneSetup3D, AddSkybox, AddGroundGizmo, AddProfiler, CreateFlatMaterial
+- Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, CreateFlatMaterial
 
 ![Simple Geometry (Labelled Triangle)](media/simple-geometry.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_SimpleGeometry).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_SimpleGeometry/Program.cs?start=1&end=158)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_SimpleGeometry/Program.cs?start=1&end=139)]

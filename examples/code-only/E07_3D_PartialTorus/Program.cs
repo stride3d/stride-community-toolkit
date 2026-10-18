@@ -10,26 +10,11 @@ using Stride.Rendering.Materials;
 using Stride.Rendering.Materials.ComputeColors;
 
 /*
-  Procedural Partial Torus Mesh Generation
-
-  This example demonstrates creating a 3D partial torus mesh programmatically by breaking down
-  the process into clear, distinct steps:
-
-  1. Setting up a basic 3D scene with a skybox
-  2. Creating a parametrically defined torus geometry using mathematical formulas
-  3. Demonstrating how to generate a partial (incomplete) torus by constraining the bend angle
-  4. Building structured 3D mesh generation with proper vertex positioning and normal definitions
-
-  The example showcases important 3D graphics concepts including:
-  - Parametric surface generation using two angle parameters (circumference and bend)
-  - Correct normal calculation for accurate lighting and shading
-  - Triangle winding order for proper face orientation
-  - Vertex indexing to efficiently reuse vertices between adjacent triangles
-
-  The partial nature of the torus also highlights the effect of back-face culling. When viewing
-  the open ends of the torus from certain angles, you can see through to the inside or outside,
-  as surfaces facing away from the camera are not rendered. This is normal behavior and improves
-  performance by avoiding the drawing of surfaces that wouldn't be visible in a complete object.
+  A partial torus built vertex by vertex: a parametric surface over two angles, around the tube and
+  along the bend, cut short of a full ring by limiting the bend angle. Shows positions, normals,
+  triangle winding and vertex reuse through indices. The open ends show back-face culling at work:
+  from some angles the inside is visible and from others the far wall is see-through, since faces
+  turned away from the camera are not drawn.
 */
 
 // Torus parameters
@@ -175,7 +160,7 @@ concepts:
   - Computing correct normals for smooth shading
   - Reusing vertices between adjacent triangles through indexing
   - Getting triangle winding right so faces are not culled
-  - "Using helpers: SceneSetup3D, AddSkybox"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - 3D
   - Geometry
