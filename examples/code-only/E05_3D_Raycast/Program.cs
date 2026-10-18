@@ -42,6 +42,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 void Start(Scene scene)
 {
     game.AddGroundGizmo(new(-5, 0, -5), showAxisName: true);
+    game.AddOrientationGizmo();
     game.AddGrabber();
 
     DebugOverlay.GetOrCreate(game).AddSection("Raycast", OverlayLines);
@@ -240,7 +241,7 @@ concepts:
   - Applying an impulse towards a point
   - Stopping a body by zeroing its velocity
   - Drawing the impulse direction as a line from the sphere to the hit point
-  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive"
+  - "Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGroundGizmo, AddOrientationGizmo"
 tags:
   - 3D
   - Bepu

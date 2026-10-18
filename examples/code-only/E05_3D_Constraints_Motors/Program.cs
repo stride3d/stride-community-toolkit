@@ -2,6 +2,7 @@ using Stride.BepuPhysics;
 using Stride.BepuPhysics.Constraints;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
@@ -105,6 +106,7 @@ void Start(Scene scene)
     // Pick up and throw any body with the left mouse button (GrabberScript, see E05_3D_Grabber).
     game.AddGrabber();
     game.AddGroundGizmo(new Vector3(-9, 0, -9), showAxisName: true);
+    game.AddOrientationGizmo();
 
     InitializeDebugOverlay();
 
@@ -465,7 +467,7 @@ concepts:
   - Why a constraint anchor must be a kinematic body, not a static one
   - Why a velocity set from the start callback is lost
   - Picking up and throwing bodies with GrabberScript
-  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, AddOrientationGizmo"
 tags:
   - 3D
   - Physics
