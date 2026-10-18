@@ -42,6 +42,8 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### ✨ Enhancement
 
 - `SceneSetup.None` still honours what is not scene: the physics engine, the game settings, the overlay and the profiler. `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives and ground get Bepu bodies, the way a tutorial that adds the camera, light and ground line by line wants it; before, the engine chosen on it was silently dropped. It is a new instance each time.
+- `AddSceneRenderer` keeps a `Game` overload with the signature binaries built against preview.66 and earlier bind to, so `Gum.Stride` 2026.10.1, built against preview.63, runs again; source binds to the `IGame` overload as before.
+- `E02_3D_MaterialPreview` runs on `SceneSetup.None` again: the default scene's ground, light and sky had crept under the thumbnail rig since the scene setup became data. The thumbnail camera has the controller; the editor's pose is the start and H brings it back.
 - `GrabberScript` picks through trigger volumes: a body inside a zone can be grabbed, since a collidable whose handler says `NoContactResponse` does not stop the pick ray; `TryPick(segment, out hit)` is that pick, for a game that wants the same rule.
 - `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view and a `Body2DComponent` is carried across its plane; the mouse wheel does nothing for a 2D body or under an orthographic camera, since depth there is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D. The reach (`MaxDistance`) defaults to 100 instead of 50: a 2D camera stands 50 from its bodies, and the stress pile is viewed from 80.
 
