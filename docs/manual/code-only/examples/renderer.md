@@ -1,27 +1,29 @@
-# Renderer
+---
+generated: true
+slug: renderer
+---
 
-This example shows three ways to draw 2D content over a 3D scene: a scene-wide renderer, a renderer attached to one entity, and the toolkit's `EntityTextComponent` labels drawn by `EntityTextRenderer`, which need no renderer of your own. The two custom renderers:
+# Custom Scene Renderers
 
-1. Global Scene Renderer Implementation - `MyCustomSceneRenderer`:
-   - Creates a custom renderer that operates on all entities in the scene
-   - Implements SceneRendererBase to hook into Stride's rendering pipeline
-   - Renders both static text ("Example 1") and dynamic per-entity information
-   - Displays entity names and positions with semi-transparent backgrounds
-   - Converts 3D world positions to 2D screen coordinates for text placement
-2. Entity-Specific Renderer Implementation - `SpriteBatchRendererScript`:
-   - Attaches a custom renderer to a specific entity via a StartupScript
-   - Creates a DelegateSceneRenderer to handle rendering without subclassing
-   - Displays "Example 3: I am a capsule" for its parent entity
-   - Demonstrates renderer initialization and integration through the component system
+Three ways to draw 2D content over a 3D scene, side by side. A SceneRendererBase subclass
+covers the whole scene and is the right shape for HUDs and debug overlays; a DelegateSceneRenderer
+created from a StartupScript belongs to one entity and is the right shape for labels attached to a
+thing; the toolkit's EntityTextComponent does the same with no renderer of your own. The first
+two project world positions into screen space and draw through a SpriteBatch, so the example
+also covers where those resources are created and when they must be released.
 
-The example also applies an angular impulse so the capsule rolls after it lands, which shows the labels following a moving entity. The approaches differ in scope:
+The `Program.cs` file shows how to:
 
-- The scene-wide approach for global visualization needs (debug overlays, HUD elements)
-- The entity-specific approach for object-focused rendering (labels, status indicators)
+- Hooking the pipeline by subclassing SceneRendererBase
+- Attaching a renderer to one entity with DelegateSceneRenderer
+- Converting a world position into screen coordinates
+- Drawing text and backgrounds with SpriteBatch
+- Deciding between a scene-wide and an entity-scoped renderer
+- Labelling entities with the toolkit's EntityTextComponent and EntityTextRenderer
+- Initialising and releasing renderer resources at the right time
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
 
-Both techniques utilize SpriteBatch for efficient 2D rendering within a 3D scene context, showing how to properly initialize resources, convert between coordinate systems, and integrate with Stride's render stages.
-
-![Custom scene renderers](media/renderer.webp)
+![Custom Scene Renderers](media/renderer.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E09_3D_SceneRenderer).
 

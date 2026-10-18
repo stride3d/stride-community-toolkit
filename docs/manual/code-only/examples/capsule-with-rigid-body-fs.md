@@ -1,20 +1,26 @@
+---
+generated: true
+slug: capsule-with-rigid-body-fs
+---
+
 # Capsule with rigid body in F#
 
-[!INCLUDE [capsule-with-rigid-body](../../../includes/manual/examples/capsule-with-rigid-body.md)]
+The first code-only scene written in F#. What the C# version does - base scene, skybox, one
+capsule - plus a profiler, with the differences F# forces you to be explicit about: helpers that return
+a value must be piped to ignore, assignment to a mutable property uses the left arrow, and the game
+loop is started from a real main function marked with EntryPoint.
+
+The `Program.fs` file shows how to:
+
+- Writing a code-only Stride app in F#
+- Discarding unwanted return values with |> ignore
+- Assigning to engine properties with the <- operator
+- Starting the loop from an [<EntryPoint>] main function
+- Passing the start callback by name: game.Run(start = Start)
+- Using helpers: SceneSetup3D, UseBepu, UseSkybox, AddProfiler, CreatePrimitive
+
+![Capsule with rigid body in F#](media/capsule-with-rigid-body-fs.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_3D_BasicScene_FSharp).
 
-[!code-fsharp[](../../../../examples/code-only/E01_3D_BasicScene_FSharp/Program.fs?start=1&end=22)]
-
-- `let game = new Game()` Creates a new instance of the `Game` class, serving as the central part of the Stride engine for managing game loop, scenes, and entities.
-- `let Start rootScene =` Defines a function named `Start` that takes a `Scene` object named `rootScene` as an argument.
-- `SceneSetup3D().UseBepu().UseSkybox()` is the scene setup `Run` applies before `Start`: a camera with the camera controller, a light, the photographed sky, a ground, and Bepu as the physics engine.
-- `game.AddSkybox()` Adds a skybox to the scene, providing a background image for the 3D environment.
-- `game.AddProfiler() |> ignore` Adds a profiler to the game and discards the unneeded return value.
-- `let firstBox = game.CreatePrimitive(Primitive3D.Capsule())` Creates a new 3D capsule primitive entity.
-- `firstBox.Transform.Position <- new Vector3(0f, 2.5f, 0f)` Sets the 3D position of the created entity.
-- `firstBox.Scene <- rootScene` Adds the entity to the `rootScene`.
-- `[<EntryPoint>]` Specifies that the following `main` function is the entry point of the application.
-- `let main argv =` Defines the main function, which will be the entry point for the application.
-- `game.Run(start = Start)` Initiates the game loop by passing the `Start` function as the `start` delegate.
-- `0` Indicates a successful program execution.
+[!code-fsharp[](../../../../examples/code-only/E01_3D_BasicScene_FSharp/Program.fs?start=1&end=20)]

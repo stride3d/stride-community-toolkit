@@ -1,30 +1,25 @@
+---
+generated: true
+slug: root-renderer-shader
+---
+
 # Root Renderer Shader
 
-This example demonstrates how to implement a custom render feature in Stride using a root renderer shader. The project showcases:
+An animated ribbon background drawn by a custom RootRenderFeature, which is the deepest extension
+point Stride offers short of writing your own compositor. Three pieces make it work and each has a
+distinct job: a component holding the settings an author edits, a render object carrying just what
+the shader needs, and the render feature that ties them to a stage. Intensity, frequency, amplitude,
+speed and width are all live properties.
 
-- Creating a custom component that integrates with Stride's rendering system
-- Implementing a root render feature that adds custom visual effects to the scene
-- Setting up shader parameters through component properties
-- Integrating custom rendering into Stride's graphics pipeline
+The `Program.cs` file shows how to:
 
-The example creates a visual ribbon background effect that's fully configurable through properties like intensity, frequency, amplitude, speed, and width factor. It illustrates a complete workflow for adding custom shader-based visual effects to a Stride application.
+- Writing a custom RootRenderFeature
+- Splitting state across component, render object and render feature
+- Registering a render feature with the graphics compositor
+- Choosing the render stage and group a feature draws in
+- Feeding component properties through to shader parameters
 
-Key components in this implementation include:
-
-- `RibbonBackgroundComponent` - An entity component that stores and manages the visual properties of the ribbon effect
-- `RibbonRenderBackground` - A render object that holds the parameters needed by the shader
-- `RibbonBackgroundRenderFeature` - A render feature that integrates with Stride's rendering pipeline
-
-The project demonstrates important render pipeline concepts including:
-
-1. Registering a custom render feature with the graphics compositor
-2. Specifying render stages and groups for proper rendering order
-3. Connecting component properties to shader parameters
-4. Creating entity-bound visual effects through the component system
-
-This approach to custom rendering is particularly useful for creating background effects, post-processing, and other visual enhancements that require direct access to the rendering pipeline.
-
-![Stride UI Example](media/root-renderer-shader.webp)
+![Root Renderer Shader](media/root-renderer-shader.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E09_3D_RootRendererShader).
 
