@@ -7,7 +7,7 @@ it, and it is a natural fit for experiments, teaching snippets and bug reproduct
 
 The regular [Create Project](create-project.md) steps still apply when you want a `.csproj` - an IDE
 solution, several files, content that needs copying to the output. `dotnet project convert` turns a
-file-based app into exactly that project when it outgrows one file, so nothing is lost by starting here.
+file-based app into that project; see [Growing into a project](#growing-into-a-project).
 
 > [!NOTE]
 > Requires the .NET 10 SDK. Visual Studio does not build file-based apps; run them from the command
@@ -49,9 +49,8 @@ by line.
 ## One app per folder
 
 Stride's asset compiler collects shaders and assets from the app's directory downwards. A file-based app
-sitting in a folder with other Stride code sees all of it as its own - the toolkit's examples folder,
-for instance, then fails on two examples that ship shaders with the same name. Give each app its own
-folder and it never comes up.
+sitting in a folder with other Stride code sees all of it as its own; in the toolkit's examples folder,
+for instance, it fails on two examples that ship shaders with the same name. Give each app its own folder.
 
 ## Where the build output goes
 

@@ -6,8 +6,6 @@ In a Game Studio project the editor hands you a scene, a camera, lighting and a 
 
 Extensions that apply equally either way live under the [Extensions](../game-extensions/index.md) section of the manual: [Animation](../animation-extensions/index.md), [Camera](../camera-extensions/index.md), [Entity](../entity-extensions/index.md), [Game](../game-extensions/index.md), [Model](../model-extensions/index.md), [Physics](../physics-extensions/index.md), [Script](../script-extensions/index.md) and [Script System](../script-system-extensions/index.md).
 
-Feel free to inspect and modify the source to adapt behaviour or create your own variants. These are starting points - use them as-is or customise as needed.
-
 ## Starting the game
 
 - [`Run()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)) - Starts the game loop. `start` runs once the root scene exists, `update` runs every frame after it.
@@ -19,10 +17,10 @@ Feel free to inspect and modify the source to adapt behaviour or create your own
 The setup is data that `Run` applies before `start`: one object instead of assembling the pieces below by hand, and one property to change one thing. Every property and piece is on the [Scene Setup](scene-setup.md) page.
 
 - [`Run(setup, start, update)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)) - Applies the setup, then runs `start` and `update`. `game.Run(start:)` with no setup applies `SceneSetup3D.Default`; `SceneSetup.None` applies nothing.
-- [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) - A forward compositor with the UI stage, a perspective camera with its controller, a directional light, a gradient sky and a ground plane. `Camera`, `Lighting`, `Skybox` and `Ground` each take `null` to leave that piece out; `ClearColor`, `Msaa`, `PostEffects`, `GameSettings`, `DebugOverlay` and `Profiler` are the rest.
+- [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) - A forward compositor with the UI stage, a perspective camera with its controller, a directional light, a gradient sky and a ground plane. `Camera`, `Lighting`, `Skybox` and `Ground` each take `null` to leave that piece out; `ClearColor`, `Msaa`, `PostEffects`, `GameSettings`, `DebugOverlay`, `Profiler` and `Instancing` are the rest.
 - [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D) - The 2D equivalent: an orthographic camera with the 2D controller and a flat ground, no lights and no sky, and no tone map, so flat colours stay as written.
 - [`CameraSetup`](xref:Stride.CommunityToolkit.Engine.CameraSetup), [`LightingSetup`](xref:Stride.CommunityToolkit.Engine.LightingSetup), [`GroundSetup`](xref:Stride.CommunityToolkit.Engine.GroundSetup), [`SkyboxSetupBase`](xref:Stride.CommunityToolkit.Engine.SkyboxSetupBase) - The pieces, each built through a factory: `CameraSetup.Perspective(position, rotation).WithController()`, `LightingSetup.Studio()`, `GroundSetup.Visual()`, `new GradientSkyboxSetup()`.
-- `UseBepu()` and `UseBullet()`, from the physics packages, choose the physics engine; `UseSkybox()`, from the skyboxes package, swaps the gradient sky for the photographed one. See [Physics Extensions](../physics-extensions/index.md).
+- `UseBepu()` and `UseBullet()`, from the physics packages, choose the physics engine; `UseSkybox()`, from the skyboxes package, swaps the gradient sky for the photographed one; `UseInstancing()`, from `Stride.CommunityToolkit.Rendering.Instancing`, puts the instancing render feature in the compositor. See [Physics Extensions](../physics-extensions/index.md).
 
 ```csharp
 game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio(), Ground = null }.UseBepu().UseSkybox(), start: Start);
@@ -47,7 +45,7 @@ game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio(), Ground = null }.U
 - [`Add2DCameraController()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add2DCameraController(Stride.Games.IGame,System.String,Stride.Input.Keys,System.Boolean)) - Makes the 2D camera pannable and zoomable, with an on-screen key reminder toggled by <kbd>F2</kbd>.
 - [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCameraController(Stride.Games.IGame,System.Nullable{Stride.CommunityToolkit.Rendering.ScreenAnchor},System.String,Stride.Input.Keys,System.Boolean,System.Boolean)) - Adds free-look movement to the 3D camera. The <kbd>F2</kbd> panel also prints the camera's live position and rotation, which is the quickest way to find numbers worth hard-coding.
 - See [Camera Controllers](../camera-extensions/camera-controllers.md) for the keys, the on-screen help and every option on both scripts.
-- [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - On the camera entity too, through `game.AddGrabber()`: left mouse picks up any dynamic body, carries it, and throws it on release, through servo constraints so the body still collides. One line that makes any Bepu scene a toy.
+- [`GrabberScript`](xref:Stride.CommunityToolkit.Bepu.GrabberScript) - On the camera entity too, through `game.AddGrabber()`: left mouse picks up any dynamic body, carries it, and throws it on release, through servo constraints so the body still collides.
 - [`Grabber2DScript`](xref:Stride.CommunityToolkit.Box2D.Grabber2DScript) - The same for a Box2D world: give it the `Box2DSimulation` and the left mouse picks up, drags and throws through a kinematic anchor and a motor joint.
 - [`CharacterMover2D`](xref:Stride.CommunityToolkit.Box2D.CharacterMover2D) - A platformer character for a Box2D world with no rigid body: a capsule moved Quake style on Box2D v3's mover API, registered with the simulation, driven by `Throttle` and `Jump()`.
 - [`SetCameraPosition()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraPosition(Stride.Games.IGame,Stride.Core.Mathematics.Vector3,System.String)) - Moves the existing camera. Use this after the setup rather than calling `Add3DCamera()` again, which would create a second camera competing for the same slot.
@@ -55,7 +53,7 @@ game.Run(new SceneSetup3D { Lighting = LightingSetup.Studio(), Ground = null }.U
 
 ## Sound
 
-A code-only game has no `Sound` asset, so these are the only way to make a noise. All on `game.Audio`, from the `start` callback onwards; see [Audio Extensions](../audio-extensions/index.md) for the whole story.
+A code-only game has no `Sound` asset, so these are the only way to make a noise. All on `game.Audio`, from the `start` callback onwards; see [Audio Extensions](../audio-extensions/index.md) for the rest.
 
 - [`CreateProceduralSound()`](xref:Stride.CommunityToolkit.Audio.AudioSystemExtensions.CreateProceduralSound(Stride.Audio.AudioSystem,Stride.CommunityToolkit.Audio.SampleFiller,System.Int32,System.Boolean,System.Boolean,System.Boolean,Stride.Audio.AudioListener)) - A sound generated by a callback, with no file behind it.
 - [`LoadWav()`](xref:Stride.CommunityToolkit.Audio.AudioSystemExtensions.LoadWav(Stride.Audio.AudioSystem,System.String)) - Reads a `.wav` from disk into a `WavSound`; each `CreateInstance()` is an independent playback.

@@ -35,7 +35,6 @@ The steps below show how to create a new Stride project using the command line. 
    ```
    dotnet run
    ```
-9. Enjoy Stride: If everything is set up correctly, your project should run.
 
 # [Linux](#tab/linux)
 
@@ -90,8 +89,6 @@ The steps below show how to create a new Stride project using the command line. 
 
 ## Example code
 
-The example demonstrates basic usage of the Stride Game Engine in a code-only app.
-
 ```csharp
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
@@ -118,11 +115,11 @@ void Start(Scene rootScene)
 - `void Start(Scene rootScene)` is invoked on start with the active root scene.
 - `game.CreatePrimitive(Primitive3D.Capsule())` creates a capsule primitive. `Primitive3D.Capsule(radius, length)` sizes it.
 - `entity.Transform.Position = new Vector3(0, 8, 0);` places the capsule 8 units above the ground.
-- `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. This step is crucial because assigning the entity to the scene ensures it is rendered and visible in the game. Without this assignment, the entity would not be part of the scene graph, and therefore, it would not appear in the game. 
+- `entity.Scene = rootScene;` adds the entity to the scene so it is rendered and simulated. Without it the entity is not in the scene graph and does not appear. 
 
 `CreatePrimitive()` creates a capsule with [rigid body physics](https://doc.stride3d.net/latest/en/manual/physics/rigid-bodies.html). Because it starts above the ground, it will fall due to gravity.
 
-Curious what those helpers do underneath, or want Stride with nothing else? [Create Project - Engine Only](create-project-engine-only.md) builds a ground, a cube and a camera against the engine alone and maps each part to the helper it replaces.
+[Create Project - Engine Only](create-project-engine-only.md) builds a ground, a cube and a camera against the engine alone, with no toolkit package, and maps each part to the helper it replaces.
 
 > [!TIP]
 > Remove entities you no longer need to free resources and avoid unnecessary physics updates.
@@ -137,5 +134,3 @@ Browse more examples in the navigation on the left, grouped by language and comp
 - [C# Advanced examples](examples/advance-examples.md)
 - [F# Basic examples](examples/basic-examples-fs.md)
 - [VB Basic examples](examples/basic-examples-vb.md)
-
-Select any example to see a short description and code snippets.
