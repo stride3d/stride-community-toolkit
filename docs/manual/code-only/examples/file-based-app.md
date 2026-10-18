@@ -17,8 +17,7 @@ The `Program.cs` file shows how to:
 - Referencing projects inline with #:project
 - Setting MSBuild properties inline with #:property
 - Converting a file-based app to a project with dotnet project convert
-- Using helpers: SceneSetup3D
-- Using helpers: AddSkybox
+- Using helpers: SceneSetup3D, UseSkybox
 
 ![Basic 3D Scene (Capsule) - File-Based App](media/file-based-app.webp)
 

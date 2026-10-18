@@ -1,30 +1,37 @@
+---
+generated: partial
+slug: stride-ui-draggable-window
+---
+
+<!-- #region generated -->
 # Stride UI - Draggable Window
 
-This example demonstrates how to create interactive, draggable UI windows in Stride using custom UI components. The project showcases:
+A windowing system built on Stride's UI: windows with title bars and close buttons that can be
+dragged around, and that come to the front when clicked. Z-order is the part that makes it feel
+real, and it needs a container tracking every window rather than logic on each one. The windows spawn
+falling spheres and keep a live count, with objects that drop out of the world cleaned up and
+subtracted again.
 
-- Creating a draggable window system using Stride's built-in UI framework
-- Implementing window management with proper z-index handling (windows coming to front when clicked)
-- Building a UI manager that handles window creation and management
-- Dynamically spawning 3D objects from UI interactions
-- Tracking object counts and updating UI elements accordingly
+The `Program.cs` file shows how to:
 
-The code sets up a basic 3D scene with a draggable UI window containing buttons to:
+- Building a draggable window from Canvas and pointer events
+- Bringing a window to the front by managing z-order centrally
+- Splitting responsibility: container, window, manager, generator
+- Spawning scene objects from a UI button
+- Keeping a UI counter in step with the scene
+- Removing entities that fall out of the world
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
 
-1. Create additional draggable windows
-2. Generate random 3D sphere objects that fall with physics
-
-Each window includes a title bar, divider line, close button, and maintains proper stacking order when interacted with. The main window also displays a counter showing the total number of 3D shapes in the scene.
-
-This example implements the functionality through several key classes:
-- `UIManager` - Creates and manages UI windows, handles text updates
-- `DragAndDropContainer` - Root canvas that tracks and manages draggable elements
-- `DragAndDropCanvas` - Individual window implementation with title and interactive features
-- `PrimitiveGenerator` - Creates and tracks 3D objects generated through UI actions
-
-The project also includes cleanup functionality to remove objects that fall below a threshold, updating the counter accordingly. This demonstrates a complete UI workflow from user interaction to scene manipulation.
-
-![Stride UI Example](media/stride-ui-draggable-window.webp)
+![Stride UI - Draggable Window](media/stride-ui-draggable-window.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_StrideUI_DragAndDrop).
 
-[!code-csharp[](../../../../examples/code-only/E04_StrideUI_DragAndDrop/Program.cs?start=1&end=84)]
+[!code-csharp[](../../../../examples/code-only/E04_StrideUI_DragAndDrop/Program.cs?start=1&end=79)]
+<!-- #endregion generated -->
+
+## Files
+
+- `UIManager` - creates and manages the windows and updates their text
+- `DragAndDropContainer` - the root canvas that tracks the draggable elements and their stacking order
+- `DragAndDropCanvas` - one window: title bar, divider, close button and dragging
+- `PrimitiveGenerator` - creates and counts the spheres spawned from the UI, and removes those that fall out of the world

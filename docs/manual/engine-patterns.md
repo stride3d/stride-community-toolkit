@@ -1,15 +1,12 @@
 # Engine Patterns
 
-Stride ships with its own editor, and the editor is a Stride game. That one sentence is worth more
-than it looks: every hard rendering problem Game Studio has solved - a grid that stays calm at any
-zoom, gizmos you can grab, picking under the cursor, text without a font asset - is solved *in C#, in
-the open, under MIT*, in the same engine your game uses. The documentation does not index these
-internals, so most of them are found only by reading the source.
+Game Studio is a Stride game. Every rendering problem it solves - a grid that stays stable at any
+zoom, grabbable gizmos, picking under the cursor, text without a font asset - is solved in C#, under
+MIT, in the engine your game uses. The Stride documentation does not index these internals.
 
-This page is that index, or at least the beginning of one: patterns the toolkit has borrowed from the
-engine and editor sources, with where each lives, what the toolkit built on it, and where it could fit
-in a game. Source paths are relative to the [Stride repository](https://github.com/stride3d/stride)
-`sources/` folder, as of Stride 4.4.
+This page lists patterns the toolkit borrowed from the engine and editor sources: where each lives,
+what the toolkit built on it, and where it fits in a game. Source paths are relative to the
+[Stride repository](https://github.com/stride3d/stride) `sources/` folder, as of Stride 4.4.1.
 
 ```mermaid
 flowchart LR
@@ -120,8 +117,7 @@ it is handed has an alpha below 255, and leaves opaque colours on the cheaper op
 
 ## CPU-side images: authoring textures pixel by pixel
 
-**Where:** `core/Stride.Foundation/Graphics/Image.cs` (note the home: this class moved from the old
-`Stride` assembly into `Stride.Foundation` in 4.4 - see the caveats below)
+**Where:** `engine/Stride.Foundation/Graphics/Image.cs`
 
 `Image.New2D(width, height, mipMapCount: true, format)` allocates an image *with its whole mip chain*
 on the CPU, `image.PixelBuffer[i].SetPixel(x, y, color)` writes any level, and `Texture.New(device,
@@ -142,9 +138,10 @@ rasterises glyphs on demand at whatever size is requested - no compiled font ass
 this machinery internally; it is reachable from game code through the font system's runtime-font
 registration.
 
-**In the toolkit:** `DebugOverlay` uses it to load a *system* font (Consolas, DejaVu Sans Mono, Menlo -
-per platform) so debug text is sharp at any DPI scale without shipping a font file - see
-`Scripts/Utilities/DebugOverlay.cs` and the [Debug Overlay](rendering/debug-overlay.md) page.
+**In the toolkit:** `DebugOverlay` uses it to load a *system* font (Consolas on Windows, Menlo on
+macOS, DejaVu Sans Mono or Liberation Mono on Linux) so debug text is sharp at any DPI scale without
+shipping a font file - see `Rendering/Text/DebugOverlay.cs` and the
+[Debug Overlay](rendering/debug-overlay.md) page.
 
 **In a game:** user-selected or modded fonts, chat and user-generated text in scripts your shipped
 font lacks, tools that must respect the OS look.
@@ -183,14 +180,13 @@ patterns for code-only scenes.
 
 **Where:** `engine/Stride.Graphics/FastTextRenderer.cs`
 
-This is the bitmap-font renderer behind `DebugTextSystem.Print` - a fixed 8×16 pixel font on a static
-texture, extremely cheap, zero assets. Knowing its internals explains its quirks, which we learned as
-scar tissue while building the overlay: the glyph texture has a dark strip baked into it (so text
+This is the bitmap-font renderer behind `DebugTextSystem.Print`: a fixed 8×16 pixel font on a static
+texture, cheap, with no assets. Its quirks follow from its internals: the glyph texture has a dark
+strip baked into it (so text
 carries its own contrast on any background), `DrawString` centres the first glyph on the given
 position rather than starting there, and the fixed pixel size means a 4K display renders it half the
-intended physical size. The toolkit's `DebugOverlay` moved to a real `SpriteFont` for exactly those
-reasons - but the fast renderer remains the right tool when you want one guaranteed-cheap line of
-text with literally zero setup.
+intended physical size. The toolkit's `DebugOverlay` uses a `SpriteFont` for those reasons; the
+fast renderer remains the right tool for one cheap line of text with no setup.
 
 **In a game:** frame counters and dev HUDs, crash-screen diagnostics, retro console aesthetics.
 
@@ -201,13 +197,13 @@ text with literally zero setup.
 | Mip-authored texture grid | `editor/.../Gizmos/ViewportGridGizmo.cs` | - | Build grids, infinite floors, line markings |
 | Runtime primitives | `engine/Stride.Graphics/GeometricPrimitives/` | Procedural models, gizmos, grid plane | Placeholder and procedural meshes |
 | Code-only materials | `engine/Stride.Rendering/.../Materials/` | Gizmo and grid materials | Highlights, holograms, team colours |
-| CPU image authoring | `core/Stride.Foundation/Graphics/Image.cs` | `TextureLoader` | Procedural textures, fog-of-war |
+| CPU image authoring | `engine/Stride.Foundation/Graphics/Image.cs` | `TextureLoader` | Procedural textures, fog-of-war |
 | Runtime fonts | `engine/Stride.Graphics/Font/FontSystem.cs` | DebugOverlay system fonts | User and modded fonts |
 | Picking helpers | `editor/.../GameEditor/Game/EditorGameHelper.cs` | Camera extensions, chart cursor | Placement, aiming, measuring |
 | Gizmo scripts | `editor/.../AssetEditors/Gizmos/` | TranslationGizmo and friends | In-game editors, photo modes |
 | Fast bitmap text | `engine/Stride.Graphics/FastTextRenderer.cs` | DebugTextSystem (and its lessons) | Dev HUDs, retro text |
 
-## The honest caveats
+## Caveats
 
 - **Internals are not API.** These classes carry no compatibility promise: `Image` moved assemblies in
   4.4, editor classes reorganise between releases. Borrow the *pattern* - copy and adapt the code into
@@ -220,4 +216,4 @@ text with literally zero setup.
   which of those costs your game actually needs.
 - **Reading order matters.** The fastest way into any of these files is to run Game Studio, find the
   behaviour you want on screen, then search the sources for the string or key you can see - a colour,
-  a parameter name, a menu label. That is how every entry on this page was found.
+  a parameter name, a menu label.

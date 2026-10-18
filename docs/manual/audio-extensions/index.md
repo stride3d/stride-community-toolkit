@@ -2,11 +2,7 @@
 
 Sound for a game with no sound assets: tones generated in a callback, `.wav` files read at runtime, and a listener that follows the camera. Everything lives in `Stride.CommunityToolkit.Audio` and hangs off `game.Audio`.
 
-## Why this exists
-
-The type an `AudioEmitterComponent` plays, `Sound`, only comes out of the asset pipeline: its constructor is internal and its data is compressed by ffmpeg at build time. A code-only game has no `.sdpkg`, so it has no `Sound` and no other way to make a sound.
-
-The door that is open is the `SoundInstance` constructor that takes a `DynamicSoundSource`. The engine asks the source for a block of PCM whenever a device buffer is free; the toolkit provides two sources - one backed by a callback, one by an array decoded from a `.wav` - and hides the constructor dance behind three methods.
+`Sound`, the type an `AudioEmitterComponent` plays, only comes out of the asset pipeline, so a code-only game has none. The toolkit instead feeds the `SoundInstance` constructor a `DynamicSoundSource`: one backed by a callback, one by an array decoded from a `.wav`.
 
 ## Making sound
 
@@ -54,7 +50,7 @@ game.UseGameSettings(settings => settings.GetOrCreateConfiguration<AudioEngineSe
 
 `AudioSystem.Initialize` swallows the native initialisation failure and leaves `game.Audio.AudioEngine` null - on Linux without OpenAL, and on headless machines. Every method here throws `InvalidOperationException` naming that cause; check `game.Audio.AudioEngine` first to degrade silently instead. The methods also need the engine to exist, so call them from the `start` callback of `Run()` or later, never before.
 
-One more engine rule worth knowing: the audio engine pauses whenever the game window loses focus, and while paused a `Play()` call is silently ignored. A game launched into the background therefore never starts its music until something calls `Play()` again with the window focused.
+The audio engine pauses whenever the game window loses focus, and while paused a `Play()` call is silently ignored. A game launched into the background therefore never starts its music until something calls `Play()` again with the window focused.
 
 ## Examples
 

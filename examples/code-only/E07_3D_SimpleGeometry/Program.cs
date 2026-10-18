@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -13,6 +14,9 @@ using var game = new Game();
 game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: scene =>
 {
     game.AddGroundGizmo(new(-4, 0, -4), showAxisName: true);
+
+    // The world axes in the bottom left corner, turning with the camera
+    game.AddOrientationGizmo();
 
     // Screen-space labels for the EntityTextComponents below
     game.AddSceneRenderer(new EntityTextRenderer());
@@ -159,7 +163,7 @@ concepts:
   - Labelling vertices on screen to debug a mesh
   - "Registering the label renderer with AddSceneRenderer(new EntityTextRenderer())"
   - Orienting yourself with a named-axis ground gizmo
-  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, CreateFlatMaterial"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo, AddOrientationGizmo, CreateFlatMaterial"
 tags:
   - 3D
   - Geometry

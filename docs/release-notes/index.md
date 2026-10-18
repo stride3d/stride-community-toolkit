@@ -16,7 +16,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 #### Lettering comes from fonts
 
-`LetterMeshFactory`, with its 38 hand-authored glyphs, is gone; `TextMesh` builds solid lettering from any font, with the toolkit's embedded Open Sans as the default.
+`LetterMeshFactory`, with its 37 hand-authored glyphs, is gone; `TextMesh` builds solid lettering from any font, with the toolkit's embedded Open Sans as the default.
 
 | Before | After | Note |
 |---|---|---|
@@ -24,14 +24,17 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 | `CreateTextMeshDraw(..., depth: 0.3f, spacing: 0.1f, centerOrigin: true)` | `new TextMeshOptions { Depth = 0.3f, LetterSpacing = 0.1f, Anchor = TextAnchor.MiddleCenter }` | `Size` is world units per EM; the old glyphs were one unit tall, a capital is now about 0.7 of `Size`. |
 | `LetterMeshFactory.SupportedCharacters`, `TryGetOutlines` | `font.HasGlyph(c)`, `font.GetGlyph(c)` | A glyph the font lacks draws its "missing glyph" box instead of throwing. |
 
-- `EarClipping.Triangulate(outer, holes)` is new; the one-polygon overload is unchanged. `MeshBuilder.AddExtrudedPolygon` is unchanged.
-
 ### 🎉 New Features
+
+- `EarClipping.Triangulate(outer, holes)` is new; the one-polygon overload is unchanged. `MeshBuilder.AddExtrudedPolygon` is unchanged.
 
 - `MeshFont`: a font file opened for its glyph outlines through the FreeType the engine ships, so TrueType, OpenType and collections work on every platform. `MeshFont.Default` is an embedded Open Sans Regular; `Load(path)`, `Load(bytes)` and `FromFamily(family, style)` open any other. Outlines come back in EM units as curves (`GlyphOutline`, `GlyphContour`, `OutlineSegment`) and flatten into polygons with their holes sorted out (`GlyphShape`).
 - `TextMesh`: solid 3D text from a `MeshFont`. `Create` gives CPU mesh data, `CreateMeshDraw` uploads it, `CreateGlyphs` gives one centred mesh per glyph for a body or an animation per letter, `Measure` gives the block. Lines, alignment, letter and line spacing, curve quality, the nine-point anchor, and texture coordinates on caps and walls, through `TextMeshOptions`.
 - `Primitive3D.Text`: lettering as a shape, so `CreatePrimitive` gives it a material and a collider of one convex hull per glyph, on Bepu (`TextCollider`) and on Bullet.
 - `TextBevel`: a rounded edge between the caps and the walls of 3D text, front and back, through `TextMeshOptions.Bevel`; a bevel wider than a glyph's thinnest stem shrinks for that glyph instead of folding.
+- Instancing needs one call, not three: `UseInstancing()` on the scene setup puts the render feature in the compositor from the first frame, and `AddInstancingBufferUpload` adds it itself. A master whose compositor has no render feature used to draw as one model with nothing said; the run loop now logs a warning naming the entity.
+- `EntityInstancing` and `BufferedEntityInstancing` unregister an instance whose entity leaves the scene, as the engine's `InstanceComponent` does; a removed entity no longer draws on as a ghost until `Clear()`.
+- `AddOrientationGizmo()`: the world axes in a corner of the screen as arrows with white letters, in the proportions of Game Studio's space marker, turning with the camera and ignoring depth; `OrientationGizmoRenderer` for the corner, size, colours and opacity. `AddGroundGizmo` stays the world-space marker of the origin.
 - `AddPhysicsDebug(contactsVisible: true)` draws the solver's contact points and normals with the debug meshes, the debug view Stride 4.4.1 added; `DebugRenderComponentScript.ShowContacts` is the same switch on the component. `E05_3D_TriggerZones` turns it on.
 - `ToMeshDraw(device)`, `ToMesh(device)` and `Bounds()` on `GeometricMeshData<VertexPositionNormalTexture>`, for any procedural mesh data; `TextMesh.CreateMesh` and `CreateModel` give lettering with its bounds, so the renderer can cull it.
 
@@ -42,7 +45,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### ✨ Enhancement
 
 - `SceneSetup.None` still honours what is not scene: the physics engine, the game settings, the overlay and the profiler. `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives and ground get Bepu bodies, the way a tutorial that adds the camera, light and ground line by line wants it; before, the engine chosen on it was silently dropped. It is a new instance each time.
-- `AddSceneRenderer` keeps a `Game` overload with the signature binaries built against preview.66 and earlier bind to, so `Gum.Stride` 2026.10.1, built against preview.63, runs again; source binds to the `IGame` overload as before.
+- `AddSceneRenderer` keeps a `Game` overload with the signature binaries built against preview.66 and earlier bind to, so `Gum.Stride` 2026.10.1.1, built against preview.63, runs again; source binds to the `IGame` overload as before.
 - `E02_3D_MaterialPreview` runs on `SceneSetup.None` again: the default scene's ground, light and sky had crept under the thumbnail rig since the scene setup became data. The thumbnail camera has the controller; the editor's pose is the start and H brings it back.
 - `GrabberScript` picks through trigger volumes: a body inside a zone can be grabbed, since a collidable whose handler says `NoContactResponse` does not stop the pick ray; `TryPick(segment, out hit)` is that pick, for a game that wants the same rule.
 - `GrabberScript` serves a 2D scene as it is: under an orthographic camera the pick ray runs along the view and a `Body2DComponent` is carried across its plane; the mouse wheel does nothing for a 2D body or under an orthographic camera, since depth there is the plane itself. `game.AddGrabber()` is the same call in 2D and 3D. The reach (`MaxDistance`) defaults to 100 instead of 50: a 2D camera stands 50 from its bodies, and the stress pile is viewed from 80.
@@ -50,6 +53,11 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - The glossary is in the top navigation, and defines gizmo, mesh collider, glyph and EM.
+- A manual page for the orientation gizmo (`rendering/orientation-gizmo.md`), with the two gizmos side by side.
+- A correctness and verbosity sweep of the whole `docs/` tree against the code: stale physics plumbing (`CreatePrimitive` overloads that no longer exist, `SetupBase*`), wrong defaults, keys and paths, dead links, the superseded Windows package, the four packages missing from the libraries list, example pages whose code includes swallowed the metadata block or described code that had changed, and the story-led rendering pages (render to texture, GPU picking, MeshBuilder, TextureCanvas) rewritten as reference pages.
+- Game Studio: a table of every toolkit component in the Add component menu, with its package, category and page.
+- The examples pipeline's design-decisions page is gone from the contributing section; the three rules a contributor needs that were only there (why slugs carry no level, the metadata block last in the file, the navigation depth) are on the examples page and in the generator README.
+- Every example page is now owned by the metadata block in its example: 24 hand-written pages became generated, and four keep a hand-written tail below the generated part (`generated: partial`) for a second file, a multi-file walkthrough or the SignalR how-to.
 - Physics extensions: a section on the simulation clock (`TimeScale`, `Enabled`, `PoseGravity`, `MaxStepPerFrame`, `ISimulationUpdate`), a Triggers and contact events section (`Trigger`, `IContactHandler`, what the callbacks get and when they run), a Shape queries section (`Overlap`, `OverlapInfo`, `SweepCast`, `SweepCastPenetrating`, what the distance means), and a Mesh colliders section, what a `MeshCollider` on a static keeps that a hull fills in, and what a mesh is not (a surface with no inside), measured in `E05_3D_MeshColliders`.
 - A manual page for 3D text (`rendering/text-3d.md`); the MeshBuilder page points at it. A second page, `rendering/text-3d-pipeline.md`, walks the pipeline from the font file to the mesh, with the files behind each stage.
 

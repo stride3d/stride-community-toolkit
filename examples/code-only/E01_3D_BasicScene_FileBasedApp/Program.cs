@@ -73,8 +73,7 @@ concepts:
   - "Referencing projects inline with #:project"
   - "Setting MSBuild properties inline with #:property"
   - Converting a file-based app to a project with dotnet project convert
-  - "Using helpers: SceneSetup3D"
-  - "Using helpers: AddSkybox"
+  - "Using helpers: SceneSetup3D, UseSkybox"
 tags:
   - 3D
   - Bepu

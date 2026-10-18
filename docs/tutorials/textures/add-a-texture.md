@@ -1,6 +1,6 @@
 # Adding a Texture at Runtime
 
-This tutorial shows how to dynamically apply a texture to a 3D object in your Stride project. Using the `Texture` class, you'll load an image at runtime and assign it to a 3D entity (a cube).
+This tutorial shows how to apply a texture to a 3D object at runtime. Using the toolkit's `TextureLoader`, you'll load an image file as a colour texture and assign it to a 3D entity (a cube).
 
 ## What you'll learn
 - Load a texture from an image file at runtime.

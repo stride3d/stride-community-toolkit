@@ -1,20 +1,26 @@
-# Cylinder mesh
+---
+generated: true
+slug: cylinder-mesh
+---
 
-This example demonstrates creating a 3D cylinder mesh programmatically by breaking down the process into clear, distinct steps:
-  
-1. Setting up a basic 3D scene with a skybox
-2. Creating precisely defined geometry using low-level mesh construction techniques
-3. Demonstrating a structured approach to 3D mesh generation by dividing it into logical components:
-   - Creating ring vertices
-   - Building side walls
-   - Adding end caps
+# Cylinder Mesh
 
-We will be utilizing the @Stride.CommunityToolkit.Rendering.MeshBuilder class from the toolkit, the process of crafting and rendering these geometries is streamlined.
+A cylinder generated with MeshBuilder, split into the three jobs any surface of revolution needs:
+place a ring of vertices, join consecutive rings into side walls, then close both ends with caps.
+Separating them is what keeps the index arithmetic followable - the caps in particular wind the
+opposite way to each other, which is easy to get wrong and instantly visible when you do.
 
-![Stride UI Example](media/cylinder-mesh.webp)
+The `Program.cs` file shows how to:
 
-For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
+- Generating a ring of vertices from an angle sweep
+- Stitching consecutive rings into a quad strip of triangles
+- Closing the ends with fan-triangulated caps
+- Why the two caps must wind in opposite directions
+- Keeping index arithmetic readable by splitting the build into stages
+- Using helpers: SceneSetup3D, UseSkybox
+
+![Cylinder Mesh](media/cylinder-mesh.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_CylinderMesh).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=179)]
+[!code-csharp[](../../../../examples/code-only/E07_3D_CylinderMesh/Program.cs?start=1&end=157)]

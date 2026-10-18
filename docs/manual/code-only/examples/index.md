@@ -107,7 +107,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="primitives-3d.md">3D Primitives</a></h3>
                 <p><span class="badge text-bg-secondary">Shapes</span></p>
-                <p class="card-text">Eight of the toolkit's 3D primitives - cube, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the...</p>
+                <p class="card-text">Nine of the toolkit's 3D primitives - cube, box, cone, capsule, sphere, cylinder, teapot, torus and triangular prism - dropped into one scene so the...</p>
             </div>
         </div>
     </div>
@@ -127,7 +127,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="gum-stride-ui-basic.md">Basic Gum UI Setup</a></h3>
                 <p><span class="badge text-bg-secondary">UI</span></p>
-                <p class="card-text">Initialize Gum UI in Stride using the official Gum.Stride runtime and the Stride Community Toolkit.</p>
+                <p class="card-text">Initialise Gum UI in Stride using the official Gum.Stride runtime and the Stride Community Toolkit.</p>
             </div>
         </div>
     </div>
@@ -917,7 +917,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="jitter2-physics.md">Jitter2 Physics Integration</a></h3>
                 <p><span class="badge text-bg-secondary">Physics</span></p>
-                <p class="card-text">Demonstrates integrating Jitter2 physics engine with Stride.</p>
+                <p class="card-text">Demonstrates integrating the Jitter2 physics engine with Stride.</p>
             </div>
         </div>
     </div>

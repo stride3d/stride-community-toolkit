@@ -3,7 +3,8 @@
 [3D Text](text-3d.md) describes what `TextMesh` does; this page describes how. The pipeline turns a
 string and a font into one `GeometricMeshData` in seven stages, each a small set of files with one
 job. Everything up to the last stage works in the font's own EM units; the size the caller asked
-for is applied as the vertices are written.
+for is applied as the vertices are written. File names without a folder are in
+`src/Stride.CommunityToolkit/Rendering/Text/`; the others are given from `src/`.
 
 ```mermaid
 flowchart LR
@@ -64,10 +65,10 @@ message.
 
 | File | Job |
 |---|---|
-| `Utilities/EarClipping.cs` | Triangulates a simple polygon by ear clipping, and a polygon with holes by first joining each hole to the outside with a bridge and clipping the result as one ring. |
-| `Utilities/PolygonBridging.cs` | Finds the bridge: from a hole's rightmost corner, the first edge of the outside that a ray to the right meets, then the visible corner of that edge (Eberly's method). |
+| `Stride.CommunityToolkit/Rendering/Utilities/EarClipping.cs` | Triangulates a simple polygon by ear clipping, and a polygon with holes by first joining each hole to the outside with a bridge and clipping the result as one ring. |
+| `Stride.CommunityToolkit/Rendering/Utilities/PolygonBridging.cs` | Finds the bridge: from a hole's rightmost corner, the first edge of the outside that a ray to the right meets, then the visible corner of that edge (Eberly's method). |
 
-Both are general-purpose and public; the text pipeline is their main caller. The tolerances scale
+`EarClipping` is public, in `Stride.CommunityToolkit.Rendering`; `PolygonBridging` is internal. The tolerances scale
 with the polygon's extent, so a glyph triangulates the same way at any size, and an ear with any
 area at all keeps its triangle: the walls keep every edge of the outline, so a cap that dropped a
 sliver would leave a slit.
@@ -83,7 +84,8 @@ A bevel is a quarter ellipse from the wall to the cap, built as rings: each ring
 one inset a little further, and every step is checked against the one before (orientation kept, an
 outside smaller and a hole larger, no edge turned round, no loop crossing itself or another). A
 width that fails anywhere in the glyph is halved, up to six times, for the whole glyph, so the dot
-and the stem of an i get the same bevel. The normals follow the ellipse, so a shallow wide bevel
+and the stem of an i get the same bevel; a width that still fails fails the build, with the font and
+the code point in the message. The normals follow the ellipse, so a shallow wide bevel
 and a steep narrow one shade differently.
 
 ## 6. Layout and emission
@@ -113,9 +115,9 @@ appears twice in a string is prepared once per build.
 
 | File | Job |
 |---|---|
-| `Rendering/GeometricMeshDataExtensions.cs` | `ToMeshDraw` uploads the buffers, `ToMesh` adds the bounds, `Bounds` measures; shared with every other mesh built in code. |
-| `ProceduralModels/TextProceduralModel.cs` | A procedural model whose mesh is `TextMesh.Create`; what `Primitive3D.Text` becomes. |
-| `ProceduralModels/Primitive3D.cs` | `Primitive3D.Text(...)` and the `TextShape` record that carries the text, the font and the options to `CreatePrimitive`. |
+| `Stride.CommunityToolkit/Rendering/GeometricMeshDataExtensions.cs` | `ToMeshDraw` uploads the buffers, `ToMesh` adds the bounds, `Bounds` measures; shared with every other mesh built in code. |
+| `Stride.CommunityToolkit/Rendering/ProceduralModels/TextProceduralModel.cs` | A procedural model whose mesh is `TextMesh.Create`; what `Primitive3D.Text` becomes. |
+| `Stride.CommunityToolkit/Rendering/ProceduralModels/Primitive3D.cs` | `Primitive3D.Text(...)` and the `TextShape` record that carries the text, the font and the options to `CreatePrimitive`. |
 | `Stride.CommunityToolkit.Bepu/Colliders/TextCollider.cs` | One convex hull per glyph for a body, from the same glyph meshes, with each position once; hulls are kept per font instance for the same text and options. |
 
 ```mermaid

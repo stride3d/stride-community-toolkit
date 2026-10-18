@@ -434,7 +434,7 @@ description:
     tentýž HUD přesunutý do vlastních souborů. Číselné klávesy ukazují HUD ve stavu po každém kroku.
     Je to program návodu "Build a simple HUD with ShapeBatch", který jím provází krok za krokem.
 concepts:
-  - Drawing on the screen in pixels with ShapeBatch.Screen, Corner and ScreenSize
+  - Drawing on the screen in pixels with ShapeBatch.Screen, Anchor and ScreenSize
   - Outline and fill - BorderWidth and Fill as the state each draw call takes
   - Immediate mode - a bar and a dial that are redrawn from a value every frame
   - Arcs and angles, rings, pixel lines

@@ -2,7 +2,7 @@
 
 Every example carries one `---example-metadata` block in its entry file, and everything downstream is generated from it: `examples-manifest.json`, both launchers, the documentation page, the level landing pages, the table of contents and the screenshot run.
 
-This page is the field reference. For the shorter "how do I add an example" walkthrough, see [Contribute Examples](index.md); for how the generator itself works, see the [Metadata Generator README](https://github.com/stride3d/stride-community-toolkit/blob/main/tools/Stride.CommunityToolkit.Examples.MetadataGenerator/README.md); and for why the schema looks like this, see [Design Decisions](decisions.md).
+This page is the field reference. For the shorter "how do I add an example" walkthrough, see [Contribute Examples](index.md); for how the generator itself works, see the [Metadata Generator README](https://github.com/stride3d/stride-community-toolkit/blob/main/tools/Stride.CommunityToolkit.Examples.MetadataGenerator/README.md).
 
 > [!NOTE]
 > This is **schema v1**. The manifest carries `schemaVersion`, and `ManifestLoader` refuses a manifest
@@ -61,7 +61,7 @@ Fields are written in that order - identity, classification, content, docs, laun
 
 | Field | Required | Notes |
 |---|---|---|
-| `slug` | ✔ | Kebab-case, globally unique, and **without a level prefix**. It becomes a public URL, so it must survive reclassification - see [D24](decisions.md#d24---why-slugs-stay-level-free). |
+| `slug` | ✔ | Kebab-case, globally unique, and **without a level prefix**. It becomes a public URL, so it must survive reclassification. |
 | `title.en` | ✔ | The page H1, the launcher entry and the toc fallback. |
 | `title.cs` | | Optional. Launchers only. |
 
@@ -104,7 +104,7 @@ Fields are written in that order - identity, classification, content, docs, laun
 
 ### Populated by the generator
 
-`projectName`, `projectPath` and `relatedSlugs` appear in the manifest but are never written by hand. Writing one is an unknown-key error.
+`projectName`, `projectPath`, `relatedSlugs` and `repositoryOnlyPackages` appear in the manifest but are never written by hand. Writing one is an unknown-key error.
 
 ## Levels
 

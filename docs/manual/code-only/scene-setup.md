@@ -13,7 +13,7 @@ void Start(Scene scene)
 }
 ```
 
-The pieces are applied in a fixed order: the compositor, the camera and its controller, the lights, the sky, the ground, the overlay and the profiler. A property changes one piece; `null` leaves it out. A physics package chooses the engine with `UseBepu()` or `UseBullet()`, and the skyboxes package swaps in a photographed sky with `UseSkybox()`.
+The pieces are applied in a fixed order: the compositor, the camera and its controller, the lights, the sky, the ground, the instancing render feature, the overlay and the profiler. A property changes one piece; `null` leaves it out. A physics package chooses the engine with `UseBepu()` or `UseBullet()`, the skyboxes package swaps in a photographed sky with `UseSkybox()`, and `UseInstancing()` from `Stride.CommunityToolkit.Rendering.Instancing` asks for instanced rendering.
 
 ## Run
 
@@ -21,7 +21,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 |---|---|
 | `game.Run(setup, start: Start, update: Update)` | Applies `setup`, runs `start` once with the root scene, then `update` every frame. `start` may be `async`. |
 | `game.Run(start: Start)` | The same with `SceneSetup3D.Default`. |
-| `game.Run(SceneSetup.None, start: Start)` | Adds nothing to the scene: for a game that builds its compositor and scene by hand, and for headless tests. The physics engine, game settings, overlay and profiler still apply when set, so `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives get Bepu bodies. |
+| `game.Run(SceneSetup.None, start: Start)` | Adds nothing to the scene: for a game that builds its compositor and scene by hand, and for headless tests. The physics engine, game settings, instancing, overlay and profiler still apply when set, so `SceneSetup.None.UseBepu()` is a hand-built scene whose primitives get Bepu bodies. |
 
 `GameSettings` and `Physics` are applied before the engine starts, because the engine reads them while it initialises; everything else once the root scene exists. See [`Run`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Run(Stride.Engine.Game,Stride.CommunityToolkit.Engine.SceneSetup,System.Action{Stride.Engine.Scene},System.Action{Stride.Engine.Scene,Stride.Games.GameTime},Stride.Games.GameContext)).
 
@@ -42,6 +42,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `GameSettings` | `null` | Configures the engine's `GameSettings` before the window is created: the graphics profile, the colour space, the window size. |
 | `DebugOverlay` | `false` | Creates the [debug overlay](../rendering/debug-overlay.md), so the first section added shows at once. |
 | `Profiler` | `false` | Adds the frame-time profiler readout. |
+| `Instancing` | `false` | Puts the instancing render feature in the compositor, so instanced masters draw from the first frame. Set through `UseInstancing()`. Without it a master draws as one model and the run loop warns. |
 
 ## SceneSetup2D
 
@@ -53,7 +54,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `Msaa` | `MultisampleCount.None` | As in 3D. Thin lines flicker without it; charts use `X4`. |
 | `Camera` | `CameraSetup.Orthographic().WithController()` | At `CameraDefaults.Initial2DPosition`, `(0, 0, 50)`, with the pan-and-zoom controller. `null` for no camera. |
 | `Ground` | `GroundSetup.Plane(…)` | A box `GameDefaults.Default2DGroundSize` wide and high at `GameDefaults.Default2DGroundPosition`, with a static collider when the setup has a physics engine. `null` for none. |
-| `Physics`, `PostEffects`, `GameSettings`, `DebugOverlay`, `Profiler` | as in 3D | Asking for `PostEffects` installs the clean post-effect set, tone map included. |
+| `Physics`, `PostEffects`, `GameSettings`, `DebugOverlay`, `Profiler`, `Instancing` | as in 3D | Asking for `PostEffects` installs the clean post-effect set, tone map included. |
 
 ## The pieces
 

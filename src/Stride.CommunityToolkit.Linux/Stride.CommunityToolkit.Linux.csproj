@@ -8,7 +8,7 @@ What's inside:
 - Brings in Stride.AssetCompiler as a build-only dependency. A code-only project has no assets, but the engine's shaders and default font still have to be compiled into its data folder, and this is the package that makes that happen
 - Copies the native libraries the asset compiler needs on Linux into the build output, keyed off a linux-x64 RuntimeIdentifier
 
-Set <RuntimeIdentifier>linux-x64</RuntimeIdentifier> in the consuming project. Use Stride.CommunityToolkit.Windows on Windows.$(StrideVersionNote)</Description>
+Set <RuntimeIdentifier>linux-x64</RuntimeIdentifier> in the consuming project. On Windows the core package alone is enough.$(StrideVersionNote)</Description>
         <!-- Consuming applications need <RuntimeIdentifier>linux-x64</RuntimeIdentifier>; the copy
              target below keys off it. Stride 4.4 selects Vulkan on Linux by itself, so the
              StrideGraphicsApi override that used to be needed here is gone. -->

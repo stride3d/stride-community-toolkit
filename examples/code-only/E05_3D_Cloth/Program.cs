@@ -122,8 +122,6 @@ void Rebuild()
 
 void SetupInstancing(Scene scene)
 {
-    // Without this nothing instanced is drawn: the code-built compositor does not wire instancing up.
-    game.AddInstancingSupport();
 
     instancing = new BufferedEntityInstancing(new BepuEntityInstancing());
 
@@ -402,7 +400,7 @@ concepts:
   - Solver substeps or velocity iterations for a stiff connected system, set through the setup's GameSettings
   - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
   - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds"
-  - "Using helpers: SceneSetup3D, Add3DGround, GrabberScript, DebugOverlay, DebugTextDropdown"
+  - "Using helpers: SceneSetup3D, UseSkybox, GrabberScript, DebugOverlay, DebugTextDropdown"
 tags:
   - 3D
   - Bepu

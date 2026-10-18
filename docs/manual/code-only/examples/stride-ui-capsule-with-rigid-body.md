@@ -1,21 +1,26 @@
-# Capsule with rigid body and window
+---
+generated: true
+slug: stride-ui-capsule-with-rigid-body
+---
 
-In this example, we demonstrate how to set up a 3D scene that includes a capsule with a rigid body as well as a simple window displaying a text message.
+# Stride UI - Capsule and Window
 
-This example is organized into multiple methods for better readability and maintainability. It is structured as follows:
+A capsule in a 3D scene with a "Hello, World" panel drawn over it using Stride's built-in UI. The
+interesting part is the assembly order, which the example splits into one small method per step:
+load a font, build a TextBlock, put it on a Canvas, wrap the canvas in a UIComponent, and attach
+that to an entity. A UI in Stride is an entity like any other, and it will not render without a font
+loaded first.
 
-- `Start(Scene scene)` This is the entry point for setting up the scene. It calls other methods to set up the 3D scene, add the capsule, load the font, and add the window.
-- `AddCapsule(Scene scene)` This method creates a 3D capsule and adds it to the scene at a specific position.
-- `LoadFont()` This method loads the font that will be used for the UI window.
-- `AddWindow(Scene scene)` This method calls `CreateUIEntity()` to create an entity with a UI component, and then adds this entity to the root scene.
-- `CreateUIEntity()` This method creates an entity that has a UI component. The UI component includes a canvas as its root element.
-- `CreateCanvas()` This method creates a canvas element that will be the root of the UI component.
-- `CreateTextBlock(SpriteFont? _font)` This method creates a `TextBlock` element that displays the message "Hello, World". It uses the loaded font and sets other properties like color and size.
+The `Program.cs` file shows how to:
 
-This modular approach makes the code easier to understand and maintain. Each method has a clear responsibility.
+- Building a UI hierarchy from code with Canvas and TextBlock
+- Loading a SpriteFont before any text can be drawn
+- Hosting a UI on an entity through UIComponent
+- Keeping scene setup readable by splitting it per element
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive
 
-![Stride UI Example](media/stride-ui-capsule-with-rigid-body.webp)
+![Stride UI - Capsule and Window](media/stride-ui-capsule-with-rigid-body.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E04_StrideUI_BasicWindow).
 
-[!code-csharp[](../../../../examples/code-only/E04_StrideUI_BasicWindow/Program.cs?start=1&end=88)]
+[!code-csharp[](../../../../examples/code-only/E04_StrideUI_BasicWindow/Program.cs?start=1&end=85)]

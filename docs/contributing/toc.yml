@@ -30,8 +30,6 @@ items:
   items:
   - name: Metadata schema
     href: examples/metadata-schema.md
-  - name: Design decisions
-    href: examples/decisions.md
 - name: 📖 Contribute to the documentation
   expanded: false
   href: documentation/index.md

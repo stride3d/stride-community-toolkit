@@ -23,10 +23,10 @@ The `Program.cs` file shows how to:
 - Solver substeps or velocity iterations for a stiff connected system, set through the setup's GameSettings
 - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
 - Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds
-- Using helpers: SceneSetup3D, Add3DGround, GrabberScript, DebugOverlay, DebugTextDropdown
+- Using helpers: SceneSetup3D, UseSkybox, GrabberScript, DebugOverlay, DebugTextDropdown
 
 ![Cloth](media/cloth.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Cloth).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Cloth/Program.cs?start=1&end=376)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Cloth/Program.cs?start=1&end=374)]

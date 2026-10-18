@@ -1,16 +1,24 @@
+---
+generated: true
+slug: capsule-with-rigid-body-vb
+---
+
 # Capsule with rigid body in Visual Basic
 
-[!INCLUDE [capsule-with-rigid-body](../../../includes/manual/examples/capsule-with-rigid-body.md)]
+The first code-only scene written in Visual Basic. VB has no top-level statements, so the app is a
+Module with a Main, and it cannot call C# extension methods with extension syntax - Run is invoked
+as the plain static method GameExtensions.Run, with the callback passed using AddressOf.
+
+The `Program.vb` file shows how to:
+
+- Writing a code-only Stride app in Visual Basic
+- Hosting the app in a Module with a Sub Main
+- Calling an extension method as a static: GameExtensions.Run(game, ...)
+- Passing a callback with AddressOf
+- Using helpers: SceneSetup3D, UseBepu, UseSkybox, AddProfiler, CreatePrimitive
+
+![Capsule with rigid body in Visual Basic](media/capsule-with-rigid-body-vb.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_3D_BasicScene_VisualBasic).
 
 [!code-vb[](../../../../examples/code-only/E01_3D_BasicScene_VisualBasic/Program.vb?start=1&end=25)]
-
-- `Private game As New Game()` This line of code creates a new instance of the `Game` class. The Game class is central to the Stride engine, managing the overall game loop, scenes, and updates to the entities.
-- `GameExtensions.Run(game, AddressOf StartGame)` This line initiates the game loop. The `Run` method, from `GameExtensions`, is responsible for starting the game and it takes a reference to the `StartGame` method as a parameter. This method is called once when the game starts.
-- `New SceneSetup3D().UseBepu().UseSkybox()` is the scene setup `Run` applies before `StartGame`: a camera with the camera controller, a light, the photographed sky, a ground, and Bepu as the physics engine.
-- `game.AddSkybox()` This line adds a skybox to the scene. A [skybox](https://doc.stride3d.net/latest/en/manual/graphics/textures/skyboxes-and-backgrounds.html) is a cube that surrounds the entire scene and is textured with an image to create the illusion of a sky.
-- `game.AddProfiler()` This line adds a profiler to the game.
-- `Dim entity = game.CreatePrimitive(Primitive3D.Capsule())` Here, a new entity is created in the form of a 3D capsule primitive. The `CreatePrimitive` method is a helper method provided to create basic 3D shapes.
-- `entity.Transform.Position = New Vector3(0, 8, 0)` This line sets the position of the created entity in the 3D space. The `Position` property of the `Transform` component determines the location of the entity.
-- `entity.Scene = rootScene` Finally, the entity is added to the `rootScene`. The `Scene` property of an entity determines which scene it belongs to.

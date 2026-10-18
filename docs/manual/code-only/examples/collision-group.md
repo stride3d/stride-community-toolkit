@@ -1,23 +1,25 @@
+---
+generated: true
+slug: collision-group
+---
+
 # Collision Group
 
-This example demonstrates how to create a simple scene with two players and an enemy entity and set up collision groups to control which objects can collide with each other.
+Two players and an enemy, where the players collide with each other but the enemy passes through
+both. Bepu collision groups decide this arithmetically rather than by a table: bodies in the same
+group collide only when their index values differ by more than a set amount. Here the players sit at
+0 and 2 and the enemy at 1, so the players interact and the enemy is transparent to them.
 
 The `Program.cs` file shows how to:
-- Define collision groups with specific IndexA values to control collision behaviors
-- Create a 3D scene with colored cube entities representing players and an enemy
-- Apply different collision group settings to each entity
-- Demonstrate the rule where objects with IndexA value differences greater than 2 will collide
 
-In this example, three collision groups are created:
-- Two player collision groups (green and purple cubes) with IndexA values of 0 and 2
-- One enemy collision group (red cube) with an IndexA value of 1
+- Assigning bodies to a collision group
+- How the IndexA difference rule decides whether two bodies collide
+- Choosing index values so one entity phases through others
+- When an arithmetic rule beats a full collision matrix
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, CreateMaterial
 
-This configuration ensures that:
-- The players will collide with each other because the difference between their IndexA values is 2
-- The enemy entity won't collide with either player because the difference between their IndexA values is 1
-
-![Stride UI Example](media/collision-group.webp)
+![Collision Group](media/collision-group.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_CollisionGroup).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_CollisionGroup/Program.cs?start=1&end=61)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_CollisionGroup/Program.cs?start=1&end=53)]

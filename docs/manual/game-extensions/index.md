@@ -47,10 +47,11 @@ Nothing renders without a compositor. These add one, or hang extra renderers off
 - [`Add2DCameraController()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add2DCameraController(Stride.Games.IGame,System.String,Stride.Input.Keys,System.Boolean)) - Makes the 2D camera pannable and zoomable, with an on-screen key reminder toggled by <kbd>F2</kbd>.
 - [`Add3DCameraController()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.Add3DCameraController(Stride.Games.IGame,System.Nullable{Stride.CommunityToolkit.Rendering.ScreenAnchor},System.String,Stride.Input.Keys,System.Boolean,System.Boolean)) - Adds free-look movement. The <kbd>F2</kbd> panel also prints the camera's live position and rotation, which is the quickest way to find numbers worth hard-coding.
 
-See [Camera Controllers](../camera-extensions/camera-controllers.md) for the keys, the on-screen help and every option on both scripts.
-- [`SetCameraPosition()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraPosition(Stride.Games.IGame,Stride.Core.Mathematics.Vector3,System.String)) - Moves the existing camera. Use this after a `SetupBase*` call rather than adding a second camera that competes for the same slot.
+- [`SetCameraPosition()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraPosition(Stride.Games.IGame,Stride.Core.Mathematics.Vector3,System.String)) - Moves the existing camera. Use this after `Run(setup, ...)` rather than adding a second camera that competes for the same slot.
 - [`SetCameraRotation()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.SetCameraRotation(Stride.Games.IGame,Stride.Core.Mathematics.Vector3,System.String)) - Aims the existing camera, taking yaw, pitch and roll in degrees.
 - [`GetCameraEntity()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.GetCameraEntity(Stride.Games.IGame,System.String)) - The camera entity itself, for everything the two setters do not cover - reading the transform, attaching a script, replacing the camera outright.
+
+See [Camera Controllers](../camera-extensions/camera-controllers.md) for the keys, the on-screen help and every option on both scripts.
 
 ## Lighting
 
@@ -68,13 +69,12 @@ The setup's gradient sky lights the scene from above; for a photographed sky, `U
 - [`CreateTexturedMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateTexturedMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single,System.Single,System.Single)) - A texture where the colour would be, tiled, with the same metalness and glossiness numbers.
 - [`CreateScreenMaterial()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateScreenMaterial(Stride.Games.IGame,Stride.Graphics.Texture,System.Single)) - A screen showing a texture, unlit and clamped: a monitor for a render-texture camera's feed.
 - [`CreateMaterial(descriptor)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreateMaterial(Stride.Games.IGame,Stride.Rendering.Materials.MaterialDescriptor)) - Compiles a descriptor and keeps it on the material, so it can be a layer later. The descriptors behind every helper are in [`MaterialDescriptors`](xref:Stride.CommunityToolkit.Rendering.MaterialDescriptors): take one, add a feature, compile it.
-- [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Engine.Primitive3DEntityOptions)) - A cube, sphere, capsule and so on as an entity, with no collider attached. The shape comes from a [`Primitive3D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D) factory with its dimensions: `Primitive3D.Sphere(0.5f)`, `Primitive3D.Box(new Vector3(2, 1, 1))`.
+- [`CreatePrimitive(Primitive3D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Engine.Primitive3DEntityOptions)) - A cube, sphere, capsule and so on as an entity. The shape comes from a [`Primitive3D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D) factory with its dimensions: `Primitive3D.Sphere(0.5f)`, `Primitive3D.Box(new Vector3(2, 1, 1))`.
 - [`CreatePrimitive(Primitive2D)`](xref:Stride.CommunityToolkit.Engine.GameExtensions.CreatePrimitive(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Engine.Primitive2DEntityOptions)) - The 2D equivalent - square, circle, triangle, polygon - from a [`Primitive2D`](xref:Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D) factory.
 
 > [!NOTE]
-> The Bepu and Bullet packages each define their own `CreatePrimitive()` overloads
-> that also attach a collider. If you have imported one of those namespaces, that overload is the one
-> you get. The two above are the physics-free versions.
+> With `UseBepu()` or `UseBullet()` on the scene setup, both attach that engine's collider as well;
+> `IncludePhysics = false` on the options leaves it out. See [Physics Extensions](../physics-extensions/index.md).
 
 ## Text renderers
 
@@ -87,11 +87,12 @@ Both register their renderer once, however many times you call them.
 
 - [`AddProfiler()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddProfiler(Stride.Games.IGame,System.String)) - Adds Stride's profiler, toggled with <kbd>Left Shift</kbd> + <kbd>Left Ctrl</kbd> + <kbd>P</kbd>.
 - [`SetDeterministic()`](xref:Stride.CommunityToolkit.Engine.GameLoopExtensions.SetDeterministic(Stride.Games.IGame,System.Nullable{System.TimeSpan})) - Pins the loop so frame N is the same simulated instant on every run: fixed timestep, draws in step, one update per draw. For replays, lockstep, tests and screenshots.
-- [`AddGroundGizmo()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)) - Draws the world axes at the origin, optionally labelled. The quickest way to work out which way you are facing.
-- [`AddEntityDebugSceneRenderer()`](xref:Stride.CommunityToolkit.Rendering.Text.EntityDebugRendererExtensions.AddEntityDebugSceneRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Text.EntityDebugSceneRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Rendering.Compositing`.
+- [`AddGroundGizmo()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.AddGroundGizmo(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector3},System.Boolean,System.Boolean)) - Draws the world axes at the origin, optionally labelled. Marks the origin and a unit in the scene.
+- [`AddOrientationGizmo()`](xref:Stride.CommunityToolkit.Rendering.Gizmos.OrientationGizmoExtensions.AddOrientationGizmo(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.ScreenAnchor)) - Draws the world axes in a corner of the screen, turning with the camera. The quickest way to work out which way you are facing; see [Orientation Gizmo](../rendering/orientation-gizmo.md).
+- [`AddEntityDebugSceneRenderer()`](xref:Stride.CommunityToolkit.Rendering.Text.EntityDebugRendererExtensions.AddEntityDebugSceneRenderer(Stride.Games.IGame,Stride.CommunityToolkit.Rendering.Text.EntityDebugSceneRendererOptions)) - Draws entity names and positions over the scene. In `Stride.CommunityToolkit.Rendering.Text`.
 - [`TakeScreenShot()`](xref:Stride.CommunityToolkit.Engine.GameExtensions.TakeScreenShot(Stride.Games.IGame,System.String,Stride.Graphics.ImageFileType)) - Saves the current frame to a file. This is what the toolkit's own screenshot capture is built on.
 
-To see colliders, use `ShowColliders()` in [Physics Extensions](../physics-extensions/index.md) for Bullet, or Bepu's own debug rendering.
+To see colliders, use `AddPhysicsDebug()` for Bepu or `ShowColliders()` for Bullet, both in [Physics Extensions](../physics-extensions/index.md).
 
 ## Frame rate
 

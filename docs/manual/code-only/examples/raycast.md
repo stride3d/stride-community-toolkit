@@ -1,18 +1,27 @@
+---
+generated: true
+slug: raycast
+---
+
 # Raycast
 
-This example demonstrates how to implement raycasting and physics interactions in Stride. The sample shows:
+Two raycasts with two jobs. Click the ground and the camera's ray finds the point, the first thing
+under the mouse; the sphere is kicked towards it. A second ray is cast from the sphere through that
+point and on, with every hit listed near to far, which is what the sphere would meet if it flew on,
+and the line shows that ray. Click the sphere and it stops dead.
 
-- Setting up a 3D scene with a sphere controlled by physics
-- Implementing mouse-based raycasting from the camera
-- Applying physics impulses to objects based on click location
-- Creating interaction between user input and physics objects
+The `Program.cs` file shows how to:
 
-The example features a sphere that responds to physics. When you click on the ground, a ray is cast from the camera to determine the hit point, and the sphere is propelled in that direction with an appropriate impulse. Clicking directly on the sphere stops its movement entirely. A visual line indicator shows the direction of the applied force.
+- Turning a screen position into a world ray from the camera, and the first thing it hits
+- A second ray from a point in the world through another, as a RaySegment
+- Listing every hit along a ray with RayCastPenetrating, near to far, not only the first
+- Applying an impulse towards a point
+- Stopping a body by zeroing its velocity
+- Drawing the impulse direction as a line from the sphere to the hit point
+- Using helpers: SceneSetup3D, UseSkybox, CreatePrimitive, AddGroundGizmo, AddOrientationGizmo
 
-This example demonstrates key concepts for interactive physics-based games, including raycasting for object selection, applying physics forces at specific points, and creating visual feedback for user interactions.
-
-![Stride UI Example](media/raycast.webp)
+![Raycast](media/raycast.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Raycast).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Raycast/Program.cs?start=1&end=193)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Raycast/Program.cs?start=1&end=220)]

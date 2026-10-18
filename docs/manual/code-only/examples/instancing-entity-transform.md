@@ -9,7 +9,7 @@ Every object stays a real entity, with a transform and a physics body, while the
 drawn in one draw call: a master entity holds the ModelComponent and an instancing type that reads
 its members' world matrices each frame. Bepu drives the transforms, so the bodies collide and pile
 up as usual. Four kinds of body drop side by side: Stride's InstancingEntityTransform, no instancing,
-the toolkit's BepuEntityInstancing and BufferedEntityInstancing. The toolkit types stop working once
+the toolkit's BepuEntityInstancing and BufferedEntityInstancing. The toolkit types do no work once
 Bepu puts the bodies to sleep, which takes a settled 20,000-cube pile from 239 to 329 FPS; instancing
 removes draw calls and does nothing about simulation cost. One line switches the pile to another
 primitive.
@@ -25,11 +25,10 @@ The `Program.cs` file shows how to:
 - Deriving a Bepu collider from a primitive type without building a mesh per body
 - Switching the whole scene to a different primitive from one line
 - Knowing when instancing does not help
-- Using helpers: AddInstancingSupport, AddInstancingBufferUpload
-- Using helpers: SceneSetup3D, Add3DGround, AddBepuPhysics
+- Using helpers: SceneSetup3D, CreatePrimitive, AddBepuPhysics, AddInstancingBufferUpload, DebugOverlay
 
 ![Instancing with Entity Transforms](media/instancing-entity-transform.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_3D_Instancing_EntityTransform).
 
-[!code-csharp[](../../../../examples/code-only/E10_3D_Instancing_EntityTransform/Program.cs?start=1&end=366)]
+[!code-csharp[](../../../../examples/code-only/E10_3D_Instancing_EntityTransform/Program.cs?start=1&end=362)]

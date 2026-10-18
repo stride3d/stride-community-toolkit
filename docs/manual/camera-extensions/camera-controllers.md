@@ -4,13 +4,11 @@ Every code-only example lets you fly or pan the camera straight away, without wr
 script first. That comes from two ready-made `SyncScript`s in the `Stride.CommunityToolkit.Scripts`
 namespace - [`Basic2DCameraController`](xref:Stride.CommunityToolkit.Scripts.Basic2DCameraController)
 and [`Basic3DCameraController`](xref:Stride.CommunityToolkit.Scripts.Basic3DCameraController) - which
-the setup helpers attach to the main camera. This page lists what they respond to, which knobs they
-expose, and how to tune or replace them once a project outgrows the defaults.
+the setup helpers attach to the main camera.
 
 The keys are the same in every scene, so the controllers also print them on screen: press
 <kbd>F2</kbd> to expand the camera's help, <kbd>F3</kbd> to move the overlay to another corner and
-<kbd>F4</kbd> to hide the whole overlay. If you forget everything else on this page, remember
-<kbd>F2</kbd>.
+<kbd>F4</kbd> to hide the whole overlay.
 
 ## Where they come from
 
@@ -56,20 +54,14 @@ parameters rather than properties you set later.
 | Right mouse drag | Pan - the point under the cursor stays under the cursor | `EnableMouseDragPan` (on), `MouseDragButton` (right) |
 | <kbd>H</kbd> | Reset to where the camera *started*, at the zoom it started with (or `OrthographicSizeDefault` if set) | `OrthographicSizeDefault` |
 
-Three of those defaults are decisions rather than accidents:
+Three defaults to know:
 
-- **WASD is opt-in.** A camera helper that silently owns <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd>
-  <kbd>D</kbd> is a nuisance the moment you start a game on top of the toolkit, because those are the
-  keys the game wants. The arrow keys are always live; turn WASD on for tools and playgrounds where
-  nothing else needs it.
-- **Zoom is per notch, not per second.** A wheel notch is an impulse - it arrives on one frame and
-  is gone the next - so it is not scaled by delta time, which would tie each notch to the frame
-  rate. Zoom is also multiplicative, so
-  every notch changes the visible area by the same fraction whether you are zoomed far in or far
-  out; subtracting a constant is a nudge at size 100 and a wall at size 1.
-- **Drag is cursor-locked.** `OrthographicSize` is the visible height and mouse positions are
-  normalised, so a drag moves the world by exactly the cursor's movement in world units. There is no
-  speed to tune, and <kbd>Shift</kbd> has no effect on it.
+- **WASD is opt-in**, so a game built on the toolkit keeps those keys. The arrow keys are always
+  live; turn WASD on for tools and playgrounds where nothing else needs it.
+- **Zoom is per notch, not per second**, and multiplicative: every notch changes the visible area by
+  the same fraction however far in or out you are.
+- **Drag is cursor-locked.** A drag moves the world by exactly the cursor's movement in world units.
+  There is no speed to tune, and <kbd>Shift</kbd> has no effect on it.
 
 ### Optional behaviours
 
@@ -101,8 +93,7 @@ controller.FollowTarget = player;
 ## The 3D controller
 
 `Basic3DCameraController` is a free-look camera in the style of Stride's editor: move in the camera's
-own axes, look around with the right mouse button, and never roll. It is adapted from the camera
-script in Stride's own templates.
+own axes, look around with the right mouse button, and never roll.
 
 | Input | Effect | Tune with |
 |---|---|---|
@@ -115,23 +106,19 @@ script in Stride's own templates.
 | Gamepad | Left stick moves, triggers descend/ascend, right stick looks, <kbd>A</kbd> or a shoulder button sprints | `Gamepad` (off) |
 | Touch (non-desktop) | One-finger drag looks, two-finger drag pans and pinch moves along the view axis | `TouchRotationSpeed`, `TouchMovementSpeed` |
 
-Two details worth knowing before you try to fight them:
+Two details:
 
 - **Pitch is clamped** just short of straight up and straight down, and yaw always turns around the
-  world's up axis. That is what keeps the horizon level however long you fly - there is no way to
-  roll the camera, by design.
+  world's up axis, so the horizon stays level. The camera cannot roll.
 - **The help overlay prints the live position and rotation** while expanded, and the rotation is
   yaw/pitch/roll in degrees - the same order and unit that `Add3DCamera()`'s `initialRotation` and
   `SetCameraRotation()` take. Fly to a view you like, press <kbd>F2</kbd>, and the numbers on screen
-  paste straight into the setup code. Plain XYZ Euler angles would look just as plausible and aim the
-  camera somewhere else entirely, which is why they are not the ones printed.
+  paste straight into the setup code.
 
-The overlay's anchor can be chosen with the `helpPosition` parameter of `Add3DCameraController()`;
-without it the controller leaves the anchor alone, so `DebugOverlay.GetOrCreate(game).Position` set
-anywhere - even before the controller has started - is respected. The 2D controller has no such
-parameter because the overlay belongs to the whole scene, not to the camera; move it with
-<kbd>F3</kbd> or set the position directly. Size, font and
-background of that block are the overlay's own settings - see [Debug Overlay](../rendering/debug-overlay.md).
+The 2D controller has no `helpPosition` parameter because the overlay belongs to the whole scene, not
+to the camera; move it with <kbd>F3</kbd> or set `DebugOverlay.GetOrCreate(game).Position` directly.
+Size, font and background of that block are the overlay's own settings - see
+[Debug Overlay](../rendering/debug-overlay.md).
 
 ## The orbit controller
 
@@ -146,12 +133,12 @@ orbit.
 | Left mouse drag | Orbit around the target; pitch clamped to about ±85° | `OrbitButton`, `OrbitSensitivity`, `MinPitch`/`MaxPitch` |
 | Mouse wheel | Dolly in and out, 10 % of the distance per notch; ignored while middle-drag panning | `ZoomStep` (0.1), `MinDistance` (0.5), `MaxDistance` (500) |
 | Middle mouse drag | Pan the target - the point under the cursor stays roughly under the cursor | `PanButton` |
-| Hold Shift | Faster zoom and pan | `SpeedFactor` (5) |
-| H | Reset to the starting view | - |
-| F2 | Collapse or expand the help, with the live target, distance and angles | `HelpToggleKey`, `HelpCollapsed` |
+| Hold <kbd>Shift</kbd> | Faster zoom and pan | `SpeedFactor` (5) |
+| <kbd>H</kbd> | Reset to the starting view | - |
+| <kbd>F2</kbd> | Collapse or expand the help, with the live target, distance and angles | `HelpToggleKey`, `HelpCollapsed` |
 
-The charts playground uses it in `--3d` mode: the fly controller from the setup is removed
-and an orbit centred on the chart takes its place.
+`E11_3D_Charts` uses it: the fly controller from the setup is removed and an orbit centred on the
+chart takes its place.
 
 ## When the defaults are wrong
 

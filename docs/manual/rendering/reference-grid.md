@@ -44,7 +44,7 @@ with a short Y axis in the middle. Scene geometry hides the lines behind it.
 
 The screen grid counts pixels from the top left corner and is drawn over everything. Its unit is the one
 `ShapeBatch` and screen-space text use, which follows the display scale: on a 150% display, 100 on the grid is
-150 pixels of the monitor. The overlay line then reads "Grid: screen, 1 = 1.5 px".
+150 pixels of the monitor. The overlay line then reads `[G] Grid: screen, 1 = 1.5 px`.
 
 > [!NOTE]
 > The grid can only know the display scale in a DPI-aware process. Call `WindowsDpiManager.EnablePerMonitorV2()`
@@ -53,7 +53,7 @@ The screen grid counts pixels from the top left corner and is drawn over everyth
 
 ## Switch the grid
 
-By default the key **G** steps through off, world and screen, and the [debug overlay](debug-overlay.md)
+By default <kbd>G</kbd> steps through off, world and screen, and the [debug overlay](debug-overlay.md)
 shows the current state. The same can be done from code.
 
 ```csharp

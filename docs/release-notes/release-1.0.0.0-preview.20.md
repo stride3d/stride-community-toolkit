@@ -2,7 +2,7 @@
 
 This article lists the most significant changes in Stride Community Toolkit preview `1.0.0.0-preview.20`.
 
-This release adds Bepu Physics integration, a new upcoming physics engine for Stride. Some of the new Bepu extensions are specific for code-only approach, while other can be used in the editor generated projects as well.
+This release adds Bepu Physics integration, a new upcoming physics engine for Stride. Some of the new Bepu extensions are specific to the code-only approach, while others can be used in editor-generated projects as well.
 
 ## What's Changed
 ### 💥 Breaking Changes

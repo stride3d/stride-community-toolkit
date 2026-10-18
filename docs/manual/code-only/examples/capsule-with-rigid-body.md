@@ -1,15 +1,22 @@
-# Capsule with rigid body
+---
+generated: true
+slug: capsule-with-rigid-body
+---
 
-[!INCLUDE [capsule-with-rigid-body](../../../includes/manual/examples/capsule-with-rigid-body.md)]
+# Basic 3D Scene (Capsule)
+
+Create a minimal 3D scene using toolkit helpers, add a skybox, and place a single capsule primitive.
+Demonstrates primitive creation, basic positioning, and attaching the entity to the scene.
+
+The `Program.cs` file shows how to:
+
+- Creating a 3D primitive with CreatePrimitive
+- Positioning an entity with Transform.Position
+- Adding entities to a Scene (rootScene)
+- Using helpers: SceneSetup3D, UseSkybox
+
+![Basic 3D Scene (Capsule)](media/capsule-with-rigid-body.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E01_3D_BasicScene).
 
-[!code-csharp[](../../../../examples/code-only/E01_3D_BasicScene/Program.cs?start=1&end=20)]
-
-- `using var game = new Game();` This line of code creates a new instance of the [`Game`](https://doc.stride3d.net/latest/en/api/Stride.Engine.Game.html) class. The `Game` class is the central part of the Stride engine, managing the overall game loop, the scenes, and the updates to the entities. The `using` keyword ensures that the `Dispose()` method is called on the `game` object when it goes out of scope, ensuring that any resources it uses are properly cleaned up
-- `game.Run(start: (Scene rootScene) =>` This line initiates the game loop. The `Run` method is responsible for starting the game, and it takes a delegate as a parameter. This delegate is a function that is called once when the game starts. The `rootScene` parameter represents the main scene of your game.
-- `new SceneSetup3D().UseBepu().UseSkybox()` is the scene setup `Run` applies before `Start`: a camera with the camera controller, a light, the photographed sky, a ground, and Bepu as the physics engine.
-- `game.AddSkybox();` This line adds a skybox to the scene. A [skybox](https://doc.stride3d.net/latest/en/manual/graphics/textures/skyboxes-and-backgrounds.html) is a cube that surrounds the entire scene and is textured with an image to create the illusion of a sky.
-- `var entity = game.CreatePrimitive(Primitive3D.Capsule());` Here, a new entity is created in the form of a 3D capsule primitive. The `CreatePrimitive` method is another helper method provided to create basic 3D shapes; the `Primitive3D` factories name each shape and its dimensions.
-- `entity.Transform.Position = new Vector3(0, 8, 0);` This line sets the position of the created entity in the 3D space. The `Position` property of the `Transform` component determines the location of the entity.
-- `entity.Scene = rootScene;` Finally, the entity is added to the `rootScene`. The `Scene` property of an entity determines which scene it belongs to.
+[!code-csharp[](../../../../examples/code-only/E01_3D_BasicScene/Program.cs?start=1&end=17)]

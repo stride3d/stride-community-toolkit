@@ -1,11 +1,8 @@
 # Create Project - Engine Only
 
-The [Create Project](create-project.md) page builds a scene with the toolkit: five lines, three of
-them helpers. This page builds the same kind of scene - a ground, a cube and a camera - against Stride
-alone, with no toolkit package. It is not the recommended route; it is here so you can see what the
-helpers stand for, and so you know the toolkit is a convenience, not a requirement. Everything it uses
-is plain Stride, and everything it does the toolkit does for you in `SceneSetup3D` and
-`CreatePrimitive()`.
+The [Create Project](create-project.md) page builds a scene with the toolkit. This page builds the same
+kind of scene - a ground, a cube and a camera - against Stride alone, with no toolkit package, so you
+can see what `SceneSetup3D` and `CreatePrimitive()` stand for. It is not the recommended route.
 
 > [!NOTE]
 > The prerequisites in [Getting Started](../getting-started.md) still apply.
@@ -31,7 +28,7 @@ is plain Stride, and everything it does the toolkit does for you in `SceneSetup3
 4. Make that reference build-only. Open the `.csproj` and add `IncludeAssets` to the line the previous
    step wrote, so it reads:
    ```xml
-   <PackageReference Include="Stride.AssetCompiler" Version="4.4.0" IncludeAssets="build;buildTransitive" />
+   <PackageReference Include="Stride.AssetCompiler" Version="4.4.1" IncludeAssets="build;buildTransitive" />
    ```
    Without it the package's own assemblies are copied next to your app and it fails at start-up with
    `Could not load file or assembly 'Stride.NuGetResolver'`. This is the one thing the toolkit's

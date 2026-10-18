@@ -69,6 +69,12 @@ public abstract class SceneSetup
     /// <summary>Adds the frame-time profiler readout.</summary>
     public bool Profiler { get; set; }
 
+    /// <summary>
+    /// Puts the instancing render feature in the compositor, so instanced masters draw from the first
+    /// frame; <c>UseInstancing()</c> sets it. Without it a master draws as one model and the run loop warns.
+    /// </summary>
+    public bool Instancing { get; set; }
+
     /// <summary>What runs before the engine starts: the settings and the physics service, which the start callback may need.</summary>
     internal virtual void Prepare(Game game)
     {
@@ -84,6 +90,9 @@ public abstract class SceneSetup
 
     private protected void ApplyCommon(Game game)
     {
+        if (Instancing)
+            InstancingSupport.Ensure(game.SceneSystem.GraphicsCompositor);
+
         if (DebugOverlay)
             Rendering.Text.DebugOverlay.GetOrCreate(game);
 

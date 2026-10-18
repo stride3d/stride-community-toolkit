@@ -1,16 +1,26 @@
-# Simple constraint
+---
+generated: true
+slug: simple-constraint
+---
 
-This example demonstrates how to create a physics-based constraint between two objects using the BepuPhysics integration in Stride. The code illustrates:
+# Simple Constraint
 
-- Setting up a basic 3D scene with skybox, profiler, and ground reference grid
-- Creating a capsule and two spheres as visual objects in the scene
-- Implementing a distance servo constraint that maintains a fixed distance between two spheres
-- Using the `DistanceServoConstraintComponent` to define the relationship between physics bodies
+One constraint, doing one thing: a distance servo holding two spheres three units apart, pulling
+them together or pushing them apart until they settle there. It is the gentlest possible
+introduction to Bepu constraints, and the shortest - everything else in the constraint family builds
+on the same pattern of naming two bodies and describing the relationship you want between them.
 
-The distance servo constraint connects the two spheres and enforces a target distance of 3.0 units between them, causing them to pull toward or push away from each other to maintain this distance. This example showcases how constraints can be used to create physically-driven connections between objects, which is useful for creating joints, hinges, ropes, and other interconnected mechanical systems.
+The `Program.cs` file shows how to:
 
-![Stride UI Example](media/simple-constraint.webp)
+- Connecting two bodies with DistanceServoConstraintComponent
+- Setting a target distance and watching the solver reach it
+- How a constraint component attaches to an entity
+- Reading the result against a ground reference grid
+- Picking a sphere up with GrabberScript and feeling the servo pull the other along
+- Using helpers: SceneSetup3D, UseSkybox, AddGroundGizmo
+
+![Simple Constraint](media/simple-constraint.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_Constraints_Simple).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_Constraints_Simple/Program.cs?start=1&end=56)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_Constraints_Simple/Program.cs?start=1&end=60)]

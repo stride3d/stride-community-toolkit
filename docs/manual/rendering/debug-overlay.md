@@ -19,20 +19,18 @@ values that change need no pushing - this is `E02_3D_Primitives`:
 ```csharp
 var overlay = DebugOverlay.GetOrCreate(game);
 
-overlay.Position = ScreenAnchor.BottomLeft;
-
 overlay.AddSection("Game", static () =>
 [
-    new("INSTRUCTIONS"),
-    new("Press P to see collidables"),
-    new("Press F11 to see debug meshes"),
-    new("Press R to reset the scene", Color.Yellow),
+    new("P", "Show or hide the collidable gizmos", Color.Gold),
+    new("F11", "Show or hide the debug meshes", Color.Gold),
+    new("R", "Reset the scene", Color.Gold),
 ]);
 ```
 
-Each `TextElement` is a line and an optional colour; a line without one uses `DefaultTextColor`.
-Sections are separated by a blank line and sorted by `order`. The 3D camera controller registers its
-help at order `-100`, so anything added without an order lands below it.
+Each `TextElement` is a line, an optional key and an optional colour; a line without a colour uses
+`DefaultTextColor`. Sections are sorted by `order` and separated by `SectionGap` blank lines (default
+`1`; `0` runs them together). The camera controllers register their help at order `-100`, so anything
+added without an order lands below it.
 
 A section can collapse to a single title line and expand again on a key:
 
@@ -40,24 +38,21 @@ A section can collapse to a single title line and expand again on a key:
 overlay.AddCollapsibleSection("Physics", "Physics", Keys.F5, () => [ ... ], collapsed: true);
 ```
 
-That is how `[+] [F2] Camera controls` works: the marker first so every dropdown lines up, then the key, decorated the same way the section's own key lines are, and the body indented one marker so its keys sit under the title's. `AddSection` returns the `DebugOverlaySection`, so a section can be disabled, collapsed or removed later.
+That is how `[+] [F2] Camera controls` is drawn: the marker, then the key, then the title, with the body indented one marker. `AddSection` and `AddCollapsibleSection` return the `DebugOverlaySection`, so a section can be disabled, collapsed or removed later.
 
 Keys are data, not text. A help line names them - `new("H", "Reset camera", Color.Gold)`, or
 `new(["Q", "E"], "Ascend / descend")` for keys that do the same thing, or `new("Arrow keys", "Move")` -
 and the overlay decorates them when it draws: each key through `KeyFormat` (default `[{0}]`), joined by
-`KeySeparator`, in `KeyColor`, which defaults to the line's colour blended halfway to white so the keys
-and the `[+]` marker read a shade apart from what they do. `overlay.KeyFormat = "{0}:"` restyles every
-help line from `[F2]` to `F2:`. A line with no keys is drawn as given.
+`KeySeparator`, in `KeyColor`, which defaults to the line's colour blended halfway to white.
+`overlay.KeyFormat = "{0}:"` restyles every help line from `[F2]` to `F2:`. A line with no keys is
+drawn as given.
 
-`BlockBounds` is the rectangle the block was last drawn in, in screen pixels. A scene laid out in world units can read it to keep something clear of the help - the easing sheet places its big panel under the block each frame, as tall as the space left, instead of guessing how many pixels twelve lines are on a scaled display.
-
-Sections are separated by one blank line; `SectionGap` changes how many, and `0` runs them together.
+`BlockBounds` is the rectangle the block was last drawn in, in screen pixels; `E02_2D_Easing` reads it to place its panel under the block each frame.
 
 > [!TIP]
 > Something that already knows how to describe itself as lines - `DebugTextDropdown.GetLines()`, for
-> example - plugs straight in: `overlay.AddSection("Spawn", () => spawnMenu.GetLines())`. That is what
-> keeps the spawn menu in `E04_2D_SpawnMenu` in the same block as the camera help
-> instead of being a second patch of text somewhere else.
+> example - plugs straight in: `overlay.AddSection("Spawn", () => spawnMenu.GetLines())`, as
+> `E04_2D_SpawnMenu` does.
 
 ## Keys and position
 
@@ -73,14 +68,15 @@ off still takes effect.
 
 > [!NOTE]
 > The camera controllers claim <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd>, <kbd>Q</kbd> <kbd>E</kbd>,
-> the arrow keys, <kbd>H</kbd>, <kbd>F2</kbd> and <kbd>F3</kbd>. Bind section toggles and example
+> the arrow keys, the numeric keypad, <kbd>H</kbd> and <kbd>F2</kbd>; the overlay itself claims
+> <kbd>F3</kbd> and <kbd>F4</kbd>. Bind section toggles and example
 > keys elsewhere; <kbd>G</kbd> is the reference grid's and <kbd>T</kbd> the grabbers'. Safe single
 > letters include <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>M</kbd> <kbd>N</kbd> <kbd>P</kbd> <kbd>R</kbd> <kbd>Z</kbd>.
 
 ## Size, and high-DPI displays
 
-The overlay draws with a real font, rasterised at the size asked for, so it can be any size and is
-sharp at every one of them. It follows the display by default: on a laptop at 150% it draws one and
+The overlay draws with a font rasterised at the size asked for, so it is sharp at any size. It
+follows the display by default: on a laptop at 150% it draws one and
 a half times larger than on a monitor at 100%, so it reads the same size to the eye on both. The
 factor comes from `DisplayScale`, which is shared with everything else that draws in pixels and is
 re-read when the window moves to a differently scaled monitor. Three properties control the rest:
@@ -98,9 +94,6 @@ stretching the whole window and the factor correctly reads 1. Declare awareness 
 package, namespace `Stride.CommunityToolkit.Engine`) before the game is created; see the
 [DPI-aware example](../code-only/examples/dpi-aware.md).
 
-Stride's `DebugTextSystem` draws an 8 by 16 pixel bitmap font that blurs or turns blocky when scaled.
-The overlay uses a rasterised font instead, as [entity text](entity-text.md) does.
-
 ## Fonts
 
 Stride's default font asset is **bold**. The overlay looks for an installed system font instead,
@@ -108,13 +101,11 @@ picked by `FontFamily`:
 
 | `FontFamily` | Windows | macOS | Linux |
 |---|---|---|---|
-| `Monospace` (default) | Consolas, Cascadia Mono, Courier New | Menlo, Courier New | DejaVu Sans Mono, Liberation Mono, Courier New |
-| `SansSerif` | Segoe UI, Arial | Helvetica, Arial | Liberation Sans, DejaVu Sans, Arial |
+| `Monospace` (default) | Consolas, Cascadia Mono, Courier New, DejaVu Sans Mono | Menlo, Courier New, DejaVu Sans Mono | DejaVu Sans Mono, Liberation Mono, Courier New |
+| `SansSerif` | Segoe UI, Arial, DejaVu Sans | Helvetica, Arial, DejaVu Sans | Liberation Sans, DejaVu Sans, Arial |
 
-The first family found in the system font folders wins. Monospace is the default for the same reason
-Stride's own debug font is fixed-width: columns line up, a number does not shift its neighbours as its
-digits change, and text aligned with spaces keeps its shape - `E10_3D_Instancing_EntityTransform`
-lays out its comparison table with `{count,6}` and would fall apart in a proportional font.
+The first family found in the system font folders wins. Monospace is the default so that columns
+line up and a number does not shift its neighbours as its digits change.
 
 To be specific rather than pick a family:
 
@@ -122,9 +113,8 @@ To be specific rather than pick a family:
   `Italic` or `BoldItalic`.
 - `FontFile = "/path/to/font.ttf"` points at a file that is not in the system font folders.
 - `Font = someSpriteFont` supplies a font asset of your own and overrides all of the above.
-- `FontName = null` with a family none of whose fonts are installed falls back to Stride's default
-  font. So does any font that fails to load - with one line in the log saying which font was wanted,
-  never a blank overlay.
+- When none of the candidates is installed, or the named font fails to load, the overlay falls back to
+  Stride's default font and logs one warning naming the fonts tried.
 
 The lookup finds files by the common naming conventions (`consola.ttf`, `LiberationMono-Regular.ttf`,
 `DejaVuSansMono.ttf`); it does not consult fontconfig, so an unusually named file needs `FontFile`.
@@ -144,16 +134,13 @@ On a light scene the default strip is too faint to carry light-coloured text. Da
 the scheme:
 
 ```csharp
-// The charts playground, paper-white 2D scene
+// E11_2D_Charts, a white 2D scene
 overlay.BackgroundColor = new Color(0, 0, 0, 200);
 
 // Or a light strip with dark text
 overlay.BackgroundColor = new Color(255, 255, 255, 230);
 overlay.DefaultTextColor = Color.Black;
 ```
-
-The strip is drawn by the overlay, not by the font. Stride's own debug text bakes its strip into the
-glyphs, so it cannot be changed there.
 
 ## Line spacing
 
@@ -177,6 +164,6 @@ unscaled pixels overrides the calculation entirely.
 |---|---|---|
 | `DebugOverlay.GetOrCreate(game)` | `Program.cs`, `Start` | one shared instance, registered as a service |
 | `WindowsDpiManager.EnablePerMonitorV2()` | `Program.cs`, before `new Game()` | a sharp window; the overlay's size then follows `DisplayScale` on its own |
-| `overlay.BackgroundColor = new Color(0, 0, 0, 200)` | `Program.cs`, 2D branch | readable on a white scene |
-| `overlay.AddSection("Chart", () => [...])` | `Program.cs` | a live key line: `[G] Grid on` |
-| `Add2DCameraController()` | `Program.cs`, `Start` | the collapsible `[+] [F2] Camera controls` section, order `-100` |
+| `overlay.BackgroundColor = new Color(0, 0, 0, 200)` | `Program.cs`, `Start` | readable on a white scene |
+| `overlay.AddSection("Chart", () => [...])` | `Program.cs`, `Start` | a live key line: `[G] Grid on` |
+| `SceneSetup2D` | `Program.cs`, `game.Run(...)` | adds the 2D camera controller, whose collapsible `[+] [F2] Camera controls` section is at order `-100` |

@@ -12,17 +12,17 @@ In this tutorial, we will learn how to use **raycasting** to detect entities in 
 
 [!code-csharp[Pick and Aim](../../../examples/snippets/Physics_Example001/Program.cs)]
 
-## Code Walkthrough
+## Code Breakdown
 
 - **Game Setup:** In the `Start()` method, the scene setup passed to `game.Run` has already given us lighting, a camera and a ground with Bepu physics. We then create two 3D entities, a **cube** and a **sphere**, and position them in the scene with different materials.
 
-- **Raycasting with Mouse Input:** In the `Update()` method, we check if the left mouse button is pressed. If pressed, a ray is cast from the mouse position into the 3D world using `ScreenToWorldRaySegment()`. This ray is used to check for collisions with 3D entities in the scene via **raycasting**.
+- **Raycasting with Mouse Input:** In the `Update()` method, we check if the left mouse button is pressed. If pressed, `camera.Raycast()` from the Bepu package casts a ray from the mouse position into the 3D world, up to 100 units, and reports the first collidable it hits.
 
 - **Camera Focus:** If the ray successfully hits an entity, that entity becomes the **target**. The camera then uses the `LookAt()` method to smoothly focus on the target entity, giving the player a clear view of the object they clicked on.
 
 ## Running the Code
 
-When you run this code, the game will display a 3D scene with a cube and a sphere. By clicking on either object with the mouse, the camera will smoothly rotate to focus on the clicked object. The left mouse button controls the focus.
+When you run this code, the game will display a 3D scene with a cube and a sphere. Clicking on either object, or on the ground, with the left mouse button makes the camera smoothly rotate to focus on what was clicked.
 
 ## Summary
 

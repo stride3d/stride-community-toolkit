@@ -25,7 +25,7 @@
 7. If the library ships `EntityComponent` types
    - Follow [Making components work in Game Studio](game-studio-components.md). A component works in
      code-only projects long before it works in the editor, so this is easy to skip and hard to
-     notice: the three requirements each fail silently, and differently.
+     notice: the four requirements each fail silently, and differently.
 8. Optional: add example projects
    - If adding examples, follow the existing folder structure in `examples`.
 9. Optional: add guidance content

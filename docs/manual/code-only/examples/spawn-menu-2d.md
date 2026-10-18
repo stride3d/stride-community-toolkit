@@ -20,7 +20,7 @@ The `Program.cs` file shows how to:
 - Keeping a menu open for repeated use with CloseOnSelect
 - Sharing one on-screen block with the camera help through a DebugOverlay section
 - Spawning entities at runtime from keyboard input
-- Creating 2D primitives (Circle, Capsule, Rectangle, Square, Polygon, Triangle)
+- Creating 2D primitives (Circle, Capsule, Rectangle, Square, RegularPolygon, Triangle, Polygon)
 - Using helpers: SceneSetup2D, CreatePrimitive, CreateFlatMaterial, AddGrabber
 
 ![2D Spawn Menu](media/spawn-menu-2d.webp)

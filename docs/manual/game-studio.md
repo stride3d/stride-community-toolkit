@@ -1,16 +1,39 @@
 # Using toolkit components in Game Studio
 
-You add **World Text** to an entity in Game Studio, type something into `Text`, and the label
-appears in the viewport, in the editor's own view, before you press Play. The same goes for
-**Entity Text** and for **Shape**. This page explains what makes that work, what the manual
-`Add*` calls are still for, and what to check when a component does not draw.
+**World Text**, **Entity Text** and **Shape** added to an entity in Game Studio draw in the
+editor's viewport before you press Play. This page lists the components the toolkit adds to the
+**Add component** menu, explains what makes the drawing ones work, what the `Add*` calls are for,
+and what to check when a component does not draw.
+
+## What you can add
+
+Reference the package in the game project and the components appear in the entity's
+**Add component** menu under the category shown. Their properties are edited in the property grid
+like any engine component's.
+
+| Package | Add component | Category | What it does |
+|---|---|---|---|
+| `Stride.CommunityToolkit` | Entity Text | Text | A screen-space label that follows the entity; see [Entity Text](rendering/entity-text.md) |
+| | World Text | Text | Text in the scene at the entity's transform; see [World Text](rendering/world-text.md) |
+| | Basic 2D Camera Controller | Camera | Pan and zoom for an orthographic camera; see [Camera Controllers](camera-extensions/camera-controllers.md) |
+| | Basic 3D Camera Controller | Camera | Fly, look and move; see [Camera Controllers](camera-extensions/camera-controllers.md) |
+| | Orbit Camera Controller | Camera | The camera circles a target; see [Camera Controllers](camera-extensions/camera-controllers.md) |
+| | Game Profiler | Debug | Stride's profiler on screen, with its filter, sort and page as properties |
+| | Sound Emitter (runtime instance) | Audio | Keeps a spatialised sound at the entity's position; see [Audio](audio-extensions/index.md) |
+| `Stride.CommunityToolkit.Shapes` | Shape | Rendering | A flat shape at the entity's transform, drawn through a `ShapeBatch`; see [ShapeBatch](rendering/shape-batch.md) |
+| | Reference grid | Debug | A numbered grid in world or screen coordinates; see [Reference Grid](rendering/reference-grid.md) |
+| `Stride.CommunityToolkit.Bepu` | Body2DComponent | Physics - Bepu 2D | A dynamic body confined to the XY plane; see [Physics Extensions](physics-extensions/index.md) |
+| | Collidable Gizmo (Bepu) | Physics | Shows or hides the collider gizmos of every collidable on a key |
+| | Debug Render (Bepu) | Physics | Adds Bepu's debug render component once the scene is ready, with its toggle key |
+| | Grabber (pick up bodies with the mouse) | Physics | Pick up, drag and throw bodies with the mouse |
+
+`Stride.CommunityToolkit.Box2D` adds **Box2D Body** and **Grabber 2D** the same way, but it is not on
+NuGet yet, so it is only available to a game that references the toolkit's source.
 
 ## A component is data; a processor sees to the rest
 
-Most engine components are self-contained: add a `ModelComponent`, assign a model, and it renders.
-The toolkit's drawing components are built the same way Stride's own are, in two halves. The
-component holds *what* to draw; a processor collects every component of its kind each frame, and a
-renderer draws them:
+The toolkit's drawing components are built the way Stride's own are. The component holds *what* to
+draw; a processor collects every component of its kind each frame; a renderer draws them:
 
 ```mermaid
 graph LR
@@ -51,7 +74,7 @@ appear at all.
 
 ## When it still does not draw
 
-Work down this list; each cause looks identical from the outside.
+Each cause looks the same from the outside.
 
 1. **Does the component appear in Add-component at all?** If a toolkit component is missing from the
    list entirely, the library was not registered for scanning. See

@@ -19,11 +19,7 @@ Have more reasons? Open a suggestion in our [GitHub Issues](https://github.com/s
 
 ## Extensions and helpers
 
-Our code-only extensions and helpers provide a streamlined path for building games programmatically with the Stride Game Engine. While not required, they save time, especially for newcomers, by offering sensible defaults and shortcut APIs tailored to code-only projects.
-
-These extensions are opinionated but flexible. If the defaults don't fit your needs, you can inspect their implementation and adapt them to your preferences.
-
-Although designed with beginner friendliness in mind, experienced users can also benefit from these utilities as a solid foundation to build, modify, and extend for more advanced scenarios.
+The code-only extensions build a game programmatically with the Stride Game Engine. They are not required: they offer defaults and shortcut APIs for code-only projects, and the source is there to inspect and adapt when a default does not fit.
 
 ## Functionality
 

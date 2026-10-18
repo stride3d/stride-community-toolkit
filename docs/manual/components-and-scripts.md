@@ -1,10 +1,8 @@
 # Components and Scripts - which one, and why
 
-When you start building a game in Stride, everything you attach to an entity looks like "a
-component", and the easiest one to reach for is a script - it has an `Update()` method, you can put
-anything in it, and it works. This page explains why you often *shouldn't*, what the alternatives
-are, and how to pick between them. Every rule here is illustrated by real code in this repository,
-so you can open the examples and see each choice living next to its consequences.
+Everything you attach to an entity is a component, and a script is the easiest kind to write. This
+page explains when a plain data component, a script or a physics-derived component is the right
+choice. Every rule is illustrated by code in `examples/code-only/E20_3D_CubeCollapse`.
 
 ## One entity, many components
 
@@ -19,9 +17,8 @@ graph LR
     E --> C[CubeComponent<br/><i>what colour it counts as</i>]
 ```
 
-The first three come from the engine. The last one is the interesting kind: a component *you* write
-to give an entity meaning in *your* game. And here is the fork in the road - you can write it as a
-plain data component or as a script, and the two behave very differently.
+The first three come from the engine. The last one you write, as a plain data component or as a
+script. The two behave differently.
 
 ## The three kinds of component you can write
 
@@ -30,8 +27,6 @@ plain data component or as a script, and the two behave very differently.
 | `EntityComponent` | What a thing **is** - data, identity | No | `CubeComponent` (a colour and a grid position) |
 | `ScriptComponent` (`SyncScript`, `AsyncScript`, `StartupScript`) | What a thing **does** over time | Yes - `Update()` / `Execute()` | `ScorePopupScript` (animates a floating score) |
 | A specialised engine component, e.g. `BodyComponent` | Behaviour inseparable from an engine system | Via that system's own hooks | `SlidingCubeComponent` (a body that only falls straight down) |
-
-The rest of this page is about choosing between them.
 
 ## Why "just make it a script" goes wrong
 
@@ -56,12 +51,11 @@ public class CubeScript : SyncScript
 }
 ```
 
-Both compile. Both let you write `entity.Get<CubeComponent>()`. But the script version schedules a
-thousand empty `Update()` calls per frame on a 10×10×10 board - pure overhead for data that never
-changes on its own. A plain `EntityComponent` just *sits there*; it costs nothing until somebody
-asks for it.
+Both compile, and both support `entity.Get<CubeComponent>()`. The script version schedules a
+thousand empty `Update()` calls per frame on a 10×10×10 board. A plain `EntityComponent` costs
+nothing until something asks for it.
 
-There is a subtler benefit too. A component's data **lives and dies with its entity**. The usual
+A component's data **lives and dies with its entity**. The usual
 alternative - a `Dictionary<Entity, Color>` somewhere - has to be cleaned up by hand every time an
 entity is removed, and when someone forgets, it leaks silently. Attach the data to the entity and
 that class of bug cannot exist.
@@ -69,14 +63,11 @@ that class of bug cannot exist.
 Finally, a typed component is **identity you can query**. "Is this a playable cube?" is answered by
 `entity.Get<CubeComponent>() is not null` - the compiler checks it, a rename refactors it. The
 string alternative (`entity.Name == "Cube"`) matches nothing, silently, the day someone renames the
-entity. Cube Collapse even exploits this deliberately: its decorative reference cube uses the
-same mesh as the playable ones but carries no `CubeComponent`, so the raycast and the colour
-matching pass straight over it.
+entity.
 
 ## When a script is exactly right
 
-Scripts are not the junior option - they are the right tool whenever something genuinely *happens
-over time*:
+A script is the right tool when something happens over time:
 
 - **`SyncScript`** - logic that runs every frame: animating a score popup's rise and fade, orbiting
   a camera, counting a displayed score up toward the real one. (`ScorePopupScript`,
@@ -102,9 +93,9 @@ flowchart TD
 
 ## The special case: behaviour that belongs to a physics body
 
-Sometimes the behaviour you want *is about being a rigid body*: fall slower, stay in your lane,
-never rotate. You could write a `SyncScript` that finds the entity's `BodyComponent` and pushes it
-around - but this repository learned, measurably, why deriving from `BodyComponent` is better:
+Some behaviour is about being a rigid body: fall slower, stay in a lane, never rotate. A
+`SyncScript` that finds the entity's `BodyComponent` and pushes it around works, but deriving from
+`BodyComponent` is better for four reasons:
 
 1. **No finding, no timing bug.** A physics body registers with the simulation the moment it enters
    the scene, but a script's `Start()` waits its turn in the script system - so physics callbacks
@@ -139,7 +130,7 @@ public class SlowFallComponent : BodyComponent, ISimulationUpdate
 }
 ```
 
-The honest trade-off: deriving couples the class to one physics engine, and C# single inheritance
+The trade-off: deriving couples the class to one physics engine, and C# single inheritance
 means one body cannot stack two derived behaviours. When behaviours must mix and match, or must work
 on bodies you don't create yourself, a script acting on the body is the composable choice - just
 resolve the body lazily (`_body ??= Entity.Get<BodyComponent>()`) inside the physics callback, never
@@ -147,9 +138,9 @@ in `Start`.
 
 ## Where this is heading: processors (the "S" in ECS)
 
-Stride is an entity–component engine, and this data/behaviour split is the component half of the
-**ECS** idea (Entity–Component–System). The system half exists too: an `EntityProcessor` registers
-interest in one component type, and the engine tells it whenever such a component enters or leaves
+The data/behaviour split is the component half of **ECS** (Entity–Component–System). The system
+half is the `EntityProcessor`: it registers interest in one component type, and the engine tells it
+whenever such a component enters or leaves
 the scene - anywhere in the entity hierarchy. One object then owns the whole population:
 
 ```mermaid
@@ -173,9 +164,6 @@ instead of in a thousand per-instance `Update()` calls. The toolkit's `EntityTex
 `WorldTextComponent` both work this way - the component is pure data describing text; a processor
 tracks them; a renderer draws them.
 
-A per-entity script is the convenience you start with; a processor is what you graduate to when the
-count grows or when membership bookkeeping starts leaking.
-
 ## Rules of thumb
 
 - **Data → `EntityComponent`.** Colour, team, hit points, grid position. No `Update`. Free until queried.
@@ -186,12 +174,12 @@ count grows or when membership bookkeeping starts leaking.
   `STRDIAG010` analyser will remind you). Pass dependencies as `required` init-only properties, not
   constructor parameters.
 - Identify entities by **component presence**, not by name strings.
-- Never mirror per-entity data in an external dictionary that you must remember to clean up —
+- Never mirror per-entity data in an external dictionary that you must remember to clean up -
   attach it, and let it die with the entity.
 
 ## See it all in one example
 
-`examples/code-only/E20_3D_CubeCollapse` uses every rung of the ladder, each where it belongs:
+`examples/code-only/E20_3D_CubeCollapse` uses every kind:
 
 | Piece | Kind | Why |
 |---|---|---|

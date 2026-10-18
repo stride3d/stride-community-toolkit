@@ -1,25 +1,25 @@
-# Partial torus mesh
+---
+generated: true
+slug: partial-torus-mesh-fs
+---
 
-This example demonstrates creating a 3D partial torus mesh programmatically by breaking down
-the process into clear, distinct steps:
+# Partial Torus Mesh in F#
 
-1. Setting up a basic 3D scene with a skybox
-2. Creating a parametrically defined torus geometry using mathematical formulas
-3. Demonstrating how to generate a partial (incomplete) torus by constraining the bend angle
-4. Building structured 3D mesh generation with proper vertex positioning and normal definitions
+The parametric partial torus, written in F#. The geometry is identical to the C# version; what
+differs is the shape of the code - the vertex generation is nested for loops with
+their results piped to ignore, and mutable engine state has to be assigned with the left arrow rather than plain equals.
 
-The example showcases important 3D graphics concepts including:
-- Parametric surface generation using two angle parameters (circumference and bend)
-- Correct normal calculation for accurate lighting and shading
-- Triangle winding order for proper face orientation
-- Vertex indexing to efficiently reuse vertices between adjacent triangles
+The `Program.fs` file shows how to:
 
-![Partial torus mesh](media/partial-torus-mesh-fs.webp)
+- Generating parametric geometry in F#
+- Expressing vertex generation with nested for loops
+- Assigning to engine properties with the <- operator
+- Computing correct normals for smooth shading
+- Interoperating with the C# MeshBuilder API from F#
+- Using helpers: SceneSetup3D, UseBepu, UseSkybox
 
-For more details of `MeshBuilder`, refer to our [MeshBuilder manual](../../rendering/mesh-builder.md).
-
-[!INCLUDE [back-culling](../../../includes/manual/examples/back-culling.md)]
+![Partial Torus Mesh in F#](media/partial-torus-mesh-fs.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E07_3D_PartialTorus_FSharp).
 
-[!code-csharp[](../../../../examples/code-only/E07_3D_PartialTorus_FSharp/Program.fs?start=1&end=121)]
+[!code-fsharp[](../../../../examples/code-only/E07_3D_PartialTorus_FSharp/Program.fs?start=1&end=120)]

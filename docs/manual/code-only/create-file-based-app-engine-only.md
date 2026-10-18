@@ -14,15 +14,13 @@ when the app is a single file.
    [project version](create-project-engine-only.md#the-code) after them:
 
    ```csharp
-   #:package Stride.Engine@4.4.0
-   #:package Stride.AssetCompiler@4.4.0
+   #:package Stride.Engine@4.4.1
+   #:package Stride.AssetCompiler@4.4.1
    #:property PublishAot=false
    ```
 
-   Use the Stride version you are on. `Stride.Engine` is the runtime; `Stride.AssetCompiler` is the
-   build step that compiles the engine's shaders into the output, without which the first frame
-   fails with `Shader ShaderBase could not be found`. `PublishAot=false` is there because file-based
-   apps publish as native AOT by default and Stride is not AOT-compatible.
+   Use the Stride version you are on. `PublishAot=false` is there because file-based apps publish as
+   native AOT by default and Stride is not AOT-compatible.
 3. Create `Directory.Build.targets` next to it - the second file, and the reason this page exists:
 
    ```xml

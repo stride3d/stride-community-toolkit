@@ -3,9 +3,9 @@
 `TextMesh` builds solid lettering from a real font: each glyph's outline is read from the font file,
 triangulated, holes and all, and extruded along Z into a mesh with a front cap, a back cap and
 flat-shaded walls. The result is geometry: it is lit and shadowed, takes any material, casts a
-shadow, and can carry a physics body. For ordinary text, labels and HUDs, [Entity Text](entity-text.md)
-and [World Text](world-text.md) draw a font far more cheaply; this is for lettering that is meant to be a
-thing in the world, a title, a sign, a logo, a word that falls.
+shadow, and can carry a physics body. For labels and HUDs, [Entity Text](entity-text.md) and
+[World Text](world-text.md) are far cheaper; this is for lettering that is a thing in the world: a
+title, a sign, a logo, a word that falls.
 
 `MeshFont`, `TextMesh`, `TextMeshOptions` and `GlyphOutline` live in the
 `Stride.CommunityToolkit.Rendering.Text` namespace; `Primitive3D.Text` in
@@ -37,7 +37,7 @@ every platform, so TrueType, OpenType (CFF) and font collections all work.
 Outlines are in EM units: a capital letter is about 0.7 high, the baseline is y = 0, and
 `MeshFont.LineHeight`, `Ascent` and `Descent` are the font's own. `font.GetGlyph('A')` returns the
 `GlyphOutline`: contours as curves, the advance, the bounds; `Flatten()` turns them into polygons
-with their holes sorted out, which is also what a ShapeBatch outline of a letter would draw.
+with their holes sorted out.
 
 Kerning comes from the font's legacy kern table only. Modern fonts keep it in GPOS, which FreeType
 does not read without a shaping engine, so `GetKerning` is 0 for most fonts, including the default.
@@ -77,9 +77,8 @@ var draw = TextMesh.CreateMeshDraw(game.GraphicsDevice, MeshFont.Default, "two l
 
 `TextBevel` rounds the edge between the caps and the walls on both sides: a quarter-ellipse fillet
 that reaches `Size` in from the outline across the cap and `Thickness` from the cap towards the
-middle, in `Segments` steps (1 is a chamfer, 3 reads as round, 6 is smooth up close). The walls stay
-flat and the bevel is flat around the outline too, so the edges stay crisp; across the steps the
-normals turn from the wall to the cap, which is what catches the light on a title.
+middle, in `Segments` steps (1 is a chamfer, 3 reads as round, 6 is smooth up close; the default is
+3). The walls stay flat; across the steps the normals turn from the wall to the cap.
 
 ```csharp
 var options = new TextMeshOptions
@@ -94,24 +93,23 @@ A bevel wider than a glyph's thinnest stem would fold the cap over itself. `Text
 step of the pulled-in outline (same way round, smaller, every edge still running its way, not
 crossing itself or another) and halves the size for the whole glyph until every piece of it fits, so
 a wide bevel on a thin font rounds less rather than breaking; the dot and the stem of an i get the
-same rounding. The thickness is capped at half the depth; at that value the two bevels meet and there
-is no wall.
+same rounding. After six halvings the build fails with the font and the code point named. The
+thickness is capped at half the depth; at that value the two bevels meet and there is no wall.
 
 ## The mesh
 
 `TextMesh.Create` returns `GeometricMeshData<VertexPositionNormalTexture>`, CPU data. `ToMesh(device)`
 uploads it as a `Mesh` with its bounds, which the renderer needs to cull lettering that is off screen,
 and `TextMesh.CreateMesh` and `CreateModel` do both in one call; `ToMeshDraw` and `CreateMeshDraw`
-give the bare draw. Text with nothing to draw (empty, spaces, line breaks) gives empty CPU data and
-refuses to upload, since a GPU buffer cannot be empty: when a value clears, remove the model.
-Vertices carry a
-position, a normal and texture coordinates: the caps are mapped across the text's block (0..1 left to
-right, 0..1 top to bottom) and each wall runs 0..1 along its contour and 0..1 front to back, so a
-texture or a shader can follow the lettering.
+give the bare draw. Text with nothing to draw (empty, spaces, line breaks) gives empty CPU data, and
+the upload methods throw `ArgumentException`, since a GPU buffer cannot be empty: when a value
+clears, remove the model. Vertices carry a position, a normal and texture coordinates: the caps are
+mapped across the text's block (0..1 left to right, 0..1 top to bottom) and each wall runs 0..1 along
+its contour and 0..1 front to back, so a texture or a shader can follow the lettering.
 
-The caller owns the buffers of a draw. Lettering built once costs nothing after that; text that
-changes must dispose the old buffers before the new mesh goes in, or it leaks a buffer pair per
-rebuild. `E03_3D_MeshText` shows the pattern in its frame counter.
+The caller owns the buffers of a draw: text that changes must dispose the old buffers before the new
+mesh goes in, or it leaks a buffer pair per rebuild. `E03_3D_MeshText` shows the pattern in its
+`FrameCounterScript`.
 
 ## A body per word, or per letter
 
@@ -141,8 +139,8 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
   they look right from outside, and each piece is closed on its own. A contour that crosses itself
   is reported by font and code point, not mangled. A contour of a single point, which some fonts
   carry, is skipped.
-- Every option must be a positive finite number where it is a size; a zero or negative size or depth
-  is refused rather than built.
+- `Size`, `Depth`, `CurveQuality` and a bevel's size and thickness must be positive finite numbers,
+  and `LetterSpacing` finite; anything else is refused with `ArgumentOutOfRangeException`.
 - Letters landing on letters are hull-against-hull pairs, and the Bepu build Stride 4.4 ships
   mishandles thin extruded hulls that overlap (reported upstream as bepuphysics2 issue 417; it can
   crash the narrow phase). A hull collider suits a word on its own; give a pile of letters a box per
@@ -153,8 +151,8 @@ Lettering that must be walked into or shot through its holes wants a `MeshCollid
 
 - [`E03_3D_MeshText`](../code-only/examples/letters-3d.md): the embedded font, an installed font, lines
   that align, a frame counter, and words with physics.
-- [`E03_3D_TextShaders`](../code-only/examples/text-shaders.md): four materials on the same lettering,
-  a gradient through the texture coordinates, a rim light node, a vertex-stage wave and a pixel-stage
-  dissolve, each a shader class in the example's `Effects` folder.
+- [`E03_3D_TextShaders`](../code-only/examples/text-shaders.md): four materials on the same lettering:
+  a gradient texture read through the texture coordinates, a rim light node, a vertex-stage wave and a
+  pixel-stage dissolve, the last three shader classes in the example's `Effects` folder.
 - [`E07_3D_ProceduralGeometry`](../code-only/examples/procedural-geometry.md): lettering among other
   meshes built in code.

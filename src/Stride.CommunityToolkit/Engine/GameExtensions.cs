@@ -178,6 +178,9 @@ public static partial class GameExtensions
             if (start is not null)
                 await start(RootScene());
 
+            // A master with no render feature draws as one model and says nothing; this says it once
+            InstancingSupport.WarnIfMissing(game);
+
             if (update is null) return;
 
             while (true)
@@ -881,10 +884,10 @@ public static partial class GameExtensions
     /// <param name="game">The game whose compositor the renderer is added to.</param>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
     /// <remarks>
-    /// A <see cref="WorldTextComponent"/> without this renderer simply never appears - no error, no
-    /// log line, just absent text - so call this whenever world text is used. Helpers that create
-    /// world text themselves, such as <see cref="AddGroundGizmo"/> with axis names, call it on your
-    /// behalf; calling it again is harmless, because a duplicate renderer is not added.
+    /// The <see cref="WorldTextProcessor"/> adds the renderer itself when a component needs one, so
+    /// this call is for keeping a reference to it or adding it ahead of the first component. Helpers
+    /// that create world text themselves, such as <see cref="AddGroundGizmo"/> with axis names, call
+    /// it; calling it again is harmless, because a duplicate renderer is not added.
     /// </remarks>
     /// <returns>The renderer: the one already in the compositor when there was one.</returns>
     public static WorldTextRenderer AddWorldTextRenderer(this IGame game)
@@ -900,8 +903,8 @@ public static partial class GameExtensions
     /// <param name="game">The game whose compositor the renderer is added to.</param>
     /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsCompositor"/> is not set in the game's <see cref="SceneSystem"/>.</exception>
     /// <remarks>
-    /// The screen-space counterpart of <see cref="AddWorldTextRenderer"/>, with the same failure mode
-    /// when forgotten: components collect, nothing draws them, and no error says why.
+    /// The screen-space counterpart of <see cref="AddWorldTextRenderer"/>; the <see cref="EntityTextProcessor"/>
+    /// adds the renderer itself when a component needs one.
     /// </remarks>
     /// <returns>The renderer: the one already in the compositor when there was one.</returns>
     public static EntityTextRenderer AddEntityTextRenderer(this IGame game)
