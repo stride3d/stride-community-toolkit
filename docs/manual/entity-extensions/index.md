@@ -21,6 +21,20 @@ var (model, light) = entity.Get<ModelComponent, LightComponent>();
 - [`WorldPosition()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.WorldPosition(Stride.Engine.Entity,System.Boolean)) - The entity's position in world space rather than relative to its parent, updating the transform hierarchy first unless you ask it not to.
 - [`Remove()`](xref:Stride.CommunityToolkit.Engine.EntityExtensions.Remove(Stride.Engine.Entity)) - Takes the entity out of its scene by setting `Scene` to `null`.
 
+To search a whole scene rather than one entity's subtree:
+
+- [`scene.GetComponentsInScene<T>()`](xref:Stride.CommunityToolkit.Engine.SceneSearchExtensions.GetComponentsInScene``1(Stride.Engine.Scene,System.Boolean)) - Every component of type `T` on any entity of the scene, its children and, unless `includeChildScenes` is `false`, its child scenes. [`GetComponentInScene<T>()`](xref:Stride.CommunityToolkit.Engine.SceneSearchExtensions.GetComponentInScene``1(Stride.Engine.Scene,System.Boolean)) is the first one or `null`.
+- [`game.GetComponentsInScene<T>()`](xref:Stride.CommunityToolkit.Engine.SceneSearchExtensions.GetComponentsInScene``1(Stride.Games.IGame)) - The same across every scene the game has loaded. Both walk every entity, so use them for a lookup at start or on an event, not every frame; a manager that many scripts need is better registered as a service, see the [FAQ](../faq.md#is-there-an-equivalent-of-unitys-findobjectoftype).
+
+## Turning and moving
+
+Extension methods for `TransformComponent`, in the same namespace:
+
+- [`Translate()`](xref:Stride.CommunityToolkit.Engine.TransformExtensions.Translate(Stride.Engine.TransformComponent,Stride.Core.Mathematics.Vector3,Stride.CommunityToolkit.Engine.Space)) and [`Rotate()`](xref:Stride.CommunityToolkit.Engine.TransformExtensions.Rotate(Stride.Engine.TransformComponent,Stride.Core.Mathematics.Vector3,Stride.CommunityToolkit.Engine.Space)) - Move or turn by an amount in the entity's own space (`Space.Self`, the default) or in world space.
+- [`LookAt()`](xref:Stride.CommunityToolkit.Engine.TransformExtensions.LookAt(Stride.Engine.TransformComponent,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single)) - Turns the entity's forward axis (-Z) towards a world point, with an optional `smooth` fraction for a turn that eases over several frames.
+- [`FaceDirection()`](xref:Stride.CommunityToolkit.Engine.TransformExtensions.FaceDirection(Stride.Engine.TransformComponent,Stride.Core.Mathematics.Vector3,System.Nullable{Stride.Core.Mathematics.Vector3},System.Single)) - `LookAt` along a direction instead of towards a point: a character facing the way it moves, a projectile facing its velocity. A zero direction is ignored.
+- [`RotateAround()`](xref:Stride.CommunityToolkit.Engine.TransformExtensions.RotateAround(Stride.Engine.TransformComponent,Stride.Core.Mathematics.Vector3,Stride.Core.Mathematics.Vector3,System.Single)) - Swings the entity about an axis through a point and turns it by the same angle, a moon keeping one face to its planet. Point and axis are in the parent's space, which is world space for a root entity; call it every frame with `speed * deltaTime` for an orbit.
+
 ## Camera controllers
 
 These are the entity-level counterparts of the `Game` extensions; use them when you already hold the camera entity.
