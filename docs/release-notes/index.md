@@ -27,7 +27,9 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 🎉 New Features
 
 - `EarClipping.Triangulate(outer, holes)` is new; the one-polygon overload is unchanged. `MeshBuilder.AddExtrudedPolygon` is unchanged.
-
+- `scene.GetComponentsInScene<T>()` and `game.GetComponentsInScene<T>()`, with `GetComponentInScene<T>()` for the first match: every component of a type across a scene, its children and child scenes, or across every scene the game has loaded. The scene-wide half of the FindObjectOfType answer.
+- `game.Script.RunOnGameThread(action)` and `RunOnGameThreadAsync(function)`: hand work from any thread to the next update, with the result back as a task. Ends "Collection was modified" from network callbacks and finished downloads.
+- `transform.RotateAround(point, axis, angle)` swings an entity about an axis through a point and turns it by the same angle; `transform.FaceDirection(direction)` turns the forward axis along a world direction, with the same `smooth` as `LookAt`. Both update the world matrix.
 - `MeshFont`: a font file opened for its glyph outlines through the FreeType the engine ships, so TrueType, OpenType and collections work on every platform. `MeshFont.Default` is an embedded Open Sans Regular; `Load(path)`, `Load(bytes)` and `FromFamily(family, style)` open any other. Outlines come back in EM units as curves (`GlyphOutline`, `GlyphContour`, `OutlineSegment`) and flatten into polygons with their holes sorted out (`GlyphShape`).
 - `TextMesh`: solid 3D text from a `MeshFont`. `Create` gives CPU mesh data, `CreateMeshDraw` uploads it, `CreateGlyphs` gives one centred mesh per glyph for a body or an animation per letter, `Measure` gives the block. Lines, alignment, letter and line spacing, curve quality, the nine-point anchor, and texture coordinates on caps and walls, through `TextMeshOptions`.
 - `Primitive3D.Text`: lettering as a shape, so `CreatePrimitive` gives it a material and a collider of one convex hull per glyph, on Bepu (`TextCollider`) and on Bullet.
@@ -53,6 +55,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 ### 📄 Docs
 
 - The glossary is in the top navigation, and defines gizmo, mesh collider, glyph and EM.
+- FAQ: why a HUD never goes through the tone map (Stride's UI stage and the toolkit's overlays draw after the post effects), and the scene-wide search and game-thread helpers in the FindObjectOfType and background-thread answers. The entity extensions page gains a turning-and-moving section for the transform helpers.
 - A manual page for the orientation gizmo (`rendering/orientation-gizmo.md`), with the two gizmos side by side.
 - A correctness and verbosity sweep of the whole `docs/` tree against the code: stale physics plumbing (`CreatePrimitive` overloads that no longer exist, `SetupBase*`), wrong defaults, keys and paths, dead links, the superseded Windows package, the four packages missing from the libraries list, example pages whose code includes swallowed the metadata block or described code that had changed, and the story-led rendering pages (render to texture, GPU picking, MeshBuilder, TextureCanvas) rewritten as reference pages.
 - Game Studio: a table of every toolkit component in the Add component menu, with its package, category and page.
@@ -63,6 +66,7 @@ The Stride Community Toolkit is developed with rapid iteration in mind. It moves
 
 ### 🎓 Examples
 
+- Cube Collapse orbits its camera with `RotateAround` and turns its falling letters with `FaceDirection`, in place of the quaternion maths each script carried.
 - `E04_Myra_DraggableWindow` is back in the solution and the docs: Myra.Stride 1.6.8 carries the Stride 4.4 retarget, so it builds and runs again.
 - `E04_Myra_ControlPanel`: Myra's widget set in one draggable window that drives a Stride scene. A menu bar, tabs, sliders for the light and the physics clock, a combo for gravity, check buttons for shadows and collider gizmos, a spin button and buttons that spawn bodies, a list view that selects and lights one, a dialog before clearing, tooltips and a status line.
 - `E03_3D_TextShaders`: four materials on the same solid lettering, a gradient texture through the caps' texture coordinates, a rim light as a shader-class colour node, a vertex-stage wave on `Global.Time` and a pixel-stage dissolve driven per frame, each shader in the example's `Effects` folder.

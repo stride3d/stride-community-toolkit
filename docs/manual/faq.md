@@ -55,9 +55,11 @@ Yes. It returns the first component that is a `T` or derives from `T`, or `null`
 
 ### Is there an equivalent of Unity's FindObjectOfType?
 
-No. For one entity and its children, use
-[`GetComponentsInChildren<T>`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions). For a
-manager that other scripts need, register it as a service instead: call
+For one entity and its children, use
+[`GetComponentsInChildren<T>`](xref:Stride.CommunityToolkit.Engine.EntitySearchExtensions); for a
+whole scene, [`scene.GetComponentsInScene<T>()`](xref:Stride.CommunityToolkit.Engine.SceneSearchExtensions)
+or `game.GetComponentsInScene<T>()`. Both walk every entity, so call them on an event, not every
+frame. For a manager that other scripts need, register it as a service instead: call
 `Services.AddService(this)` in its `Start` method and `Services.RemoveService<MyManager>()` in
 `Cancel`. Other scripts then call `Services.GetService<MyManager>()`.
 
@@ -85,7 +87,9 @@ GPU resources you created for it yourself.
 
 No. Scenes and entity collections are not thread-safe. Changing them from another thread causes
 errors such as "Collection was modified". Build the entity on the worker thread if you like, then
-add it to the scene from a script that runs on the game thread.
+add it to the scene on the game thread with
+[`game.Script.RunOnGameThread(() => entity.Scene = scene)`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.RunOnGameThread(Stride.Engine.Processors.ScriptSystem,System.Action)).
+`RunOnGameThreadAsync` does the same for a value you need back.
 
 ### My own class can't reach Content, Input or the scene. How do I give it access?
 
@@ -206,6 +210,14 @@ that are really transparent.
 
 Set the material's parameters, not its descriptor; the descriptor is used only when the material
 is built. See [Materials](rendering/materials.md).
+
+### My HUD looks dark or washed out. Why?
+
+It is not the HUD. Stride's UI draws in a stage after the forward renderer, and the toolkit's
+[overlay](rendering/debug-overlay.md), [entity text](rendering/entity-text.md) and
+[shape batches](rendering/shape-batch.md) are scene renderers appended after it, so none of them go
+through the tone map or the bloom. Something that changes with the lighting is in the scene: a
+sprite or a quad with a lit material. Give it an emissive or unlit material, or draw it as UI.
 
 ### How do I draw text or shapes on top of the scene every frame?
 

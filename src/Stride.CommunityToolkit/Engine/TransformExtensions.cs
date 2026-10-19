@@ -210,21 +210,79 @@ public static class TransformExtensions
         transform.Rotate(ref eulerAngles, relativeTo);
     }
 
-    //public static void RotateAround(this TransformComponent transform, ref Vector3 point, ref Vector3 axis, float angle)
-    //{
-    //    if (transform == null)
-    //    {
-    //        throw new ArgumentNullException(nameof(transform));
-    //    }
+    /// <summary>
+    /// Rotates the transform about an axis through a point: the position swings round the point and
+    /// the orientation turns by the same angle, as a moon orbits while keeping one face inward.
+    /// </summary>
+    /// <param name="transform">The transform to rotate.</param>
+    /// <param name="point">The point the axis passes through, in the parent's space: world space for a root entity.</param>
+    /// <param name="axis">The axis to rotate about, in the same space. It need not be normalised.</param>
+    /// <param name="angle">The angle in radians; positive is counter-clockwise looking down the axis.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="axis"/> has no length.</exception>
+    /// <remarks>
+    /// Updates the world matrix afterwards. Call it every frame with <c>angle = speed * deltaTime</c>
+    /// for a continuous orbit; a body under physics should be moved by its velocity instead.
+    /// </remarks>
+    public static void RotateAround(this TransformComponent transform, ref Vector3 point, ref Vector3 axis, float angle)
+    {
+        ArgumentNullException.ThrowIfNull(transform);
 
-    //    throw new NotImplementedException();
+        var length = axis.Length();
 
-    //}
+        if (length <= MathUtil.ZeroTolerance)
+        {
+            throw new ArgumentException("The axis must have a length.", nameof(axis));
+        }
 
-    //public static void RotateAround(this TransformComponent transform, Vector3 point, Vector3 axis, float angle)
-    //{
-    //    transform.RotateAround(ref point, ref axis, angle);
-    //}
+        if (angle == 0f) return;
+
+        var unitAxis = axis / length;
+
+        Quaternion.RotationAxis(ref unitAxis, angle, out var rotation);
+
+        var offset = transform.Position - point;
+
+        Vector3.Transform(ref offset, ref rotation, out offset);
+
+        transform.Position = point + offset;
+
+        Quaternion.Multiply(ref transform.Rotation, ref rotation, out transform.Rotation);
+
+        transform.UpdateWorldMatrix();
+    }
+
+    /// <inheritdoc cref="RotateAround(TransformComponent, ref Vector3, ref Vector3, float)"/>
+    public static void RotateAround(this TransformComponent transform, Vector3 point, Vector3 axis, float angle)
+        => transform.RotateAround(ref point, ref axis, angle);
+
+    /// <summary>
+    /// Turns the transform so that its forward axis (-Z) points along a direction, the way a character
+    /// faces the way it moves or a projectile faces its velocity.
+    /// </summary>
+    /// <param name="transform">The transform to turn.</param>
+    /// <param name="direction">The direction to face, in world space. It need not be normalised; a zero vector leaves the transform as it is.</param>
+    /// <param name="worldUp">The up direction that keeps the roll level; world Y when omitted.</param>
+    /// <param name="smooth">1 snaps to the direction; a value between 0 and 1 turns that fraction of the way, for a turn that eases over several frames.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="transform"/> is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// The same as <see cref="LookAt(TransformComponent, Vector3, Vector3, float)"/> at a target one unit
+    /// along the direction from the entity's world position, so a parented entity faces the world
+    /// direction, not its parent's. Updates the world matrix afterwards.
+    /// </remarks>
+    public static void FaceDirection(this TransformComponent transform, Vector3 direction, Vector3? worldUp = null, float smooth = 1f)
+    {
+        ArgumentNullException.ThrowIfNull(transform);
+
+        if (direction.LengthSquared() <= MathUtil.ZeroTolerance) return;
+
+        transform.UpdateWorldMatrix();
+
+        var target = transform.WorldMatrix.TranslationVector + direction;
+        var up = worldUp ?? Vector3.UnitY;
+
+        transform.LookAt(ref target, ref up, smooth);
+    }
 
     /// <summary>
     /// Performs a direction transformation using the given <see cref="TransformComponent.WorldMatrix"/>.

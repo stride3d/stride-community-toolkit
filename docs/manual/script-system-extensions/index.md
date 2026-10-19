@@ -26,6 +26,20 @@ These return the `MicroThread` they created, so you can keep it and cancel it la
 - [`AddOnEventTask()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.AddOnEventTask``1(Stride.Engine.Processors.ScriptSystem,Stride.Engine.Events.EventKey{``0},System.Func{``0,System.Threading.Tasks.Task},System.Int64)) - The `async` counterpart of `AddOnEventAction()`.
 - [`CancelAll()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.CancelAll(System.Collections.Generic.ICollection{Stride.Core.MicroThreading.MicroThread})) - Cancels every micro thread in a collection and clears it. An extension on the collection, not on the script system.
 
+## Reaching the game thread
+
+Scenes, entities and components may only be touched from the game thread. A network callback, a timer or a task that finished on the thread pool hands its work over with these; the work runs on the next update.
+
+- [`RunOnGameThread()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.RunOnGameThread(Stride.Engine.Processors.ScriptSystem,System.Action)) - Queues an action for the game thread, from any thread. Build the entity where you are, add it to the scene inside the action.
+- [`RunOnGameThreadAsync<T>()`](xref:Stride.CommunityToolkit.Engine.ScriptSystemExtensions.RunOnGameThreadAsync``1(Stride.Engine.Processors.ScriptSystem,System.Func{``0})) - The same for a function whose result you need back, as a `Task<T>` to await on the calling thread.
+
+```csharp
+// On a thread-pool thread, once a download has finished
+game.Script.RunOnGameThread(() => CreateCrate(bytes).Scene = rootScene);
+
+var count = await game.Script.RunOnGameThreadAsync(() => rootScene.Entities.Count);
+```
+
 > [!TIP]
 > When the action you pass is an instance method of a `ScriptComponent`, the micro thread stops on its
 > own once that component or its entity is removed. Pass a lambda that closes over other state and you

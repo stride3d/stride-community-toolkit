@@ -559,6 +559,72 @@ public static class ScriptSystemExtensions
     }
 
     /// <summary>
+    /// Runs an action on the game thread, from any thread: a network callback, a timer, a task that
+    /// finished on the thread pool. The action runs on the next update, after the scripts scheduled
+    /// before it.
+    /// </summary>
+    /// <param name="script">The script system; <c>game.Script</c> or a script's <c>Script</c> property.</param>
+    /// <param name="action">What to run. Touch the scene, entities and components only here.</param>
+    /// <returns>The micro thread, which can be cancelled before it runs.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="script"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// Scenes and entity collections are not thread-safe; adding an entity from another thread throws
+    /// "Collection was modified". Build the entity where you are, then add it to the scene inside the action.
+    /// Scheduling is safe from any thread because the scheduler takes continuations from the thread pool
+    /// the same way. When the action is an instance method of a <see cref="ScriptComponent"/>, it is dropped
+    /// if that component is removed before it runs.
+    /// </remarks>
+    public static MicroThread RunOnGameThread(this ScriptSystem script, Action action)
+    {
+        ArgumentNullException.ThrowIfNull(script);
+        ArgumentNullException.ThrowIfNull(action);
+
+        return script.AddTask(() =>
+        {
+            action();
+
+            return Task.CompletedTask;
+        });
+    }
+
+    /// <summary>
+    /// Runs a function on the game thread, from any thread, and hands its result back as a task: read a
+    /// position, count the entities, or build and add an entity and return it.
+    /// </summary>
+    /// <typeparam name="T">The result type.</typeparam>
+    /// <param name="script">The script system; <c>game.Script</c> or a script's <c>Script</c> property.</param>
+    /// <param name="function">What to run on the game thread.</param>
+    /// <returns>A task that completes with the function's result, or faults with its exception, once the game thread has run it.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="script"/> or <paramref name="function"/> is <see langword="null"/>.</exception>
+    /// <remarks>
+    /// Await it from a background thread only. Awaiting it from the game thread itself deadlocks nothing,
+    /// since the continuation is queued, but it waits a frame for a value that was already in reach.
+    /// </remarks>
+    public static Task<T> RunOnGameThreadAsync<T>(this ScriptSystem script, Func<T> function)
+    {
+        ArgumentNullException.ThrowIfNull(script);
+        ArgumentNullException.ThrowIfNull(function);
+
+        var completion = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        script.AddTask(() =>
+        {
+            try
+            {
+                completion.SetResult(function());
+            }
+            catch (Exception exception)
+            {
+                completion.SetException(exception);
+            }
+
+            return Task.CompletedTask;
+        });
+
+        return completion.Task;
+    }
+
+    /// <summary>
     /// Cancels all <see cref="MicroThread"/> and clears the <paramref name="microThreads"/> collection.
     /// </summary>
     /// <param name="microThreads">A collection of <see cref="MicroThread"/> to cancel.</param>
