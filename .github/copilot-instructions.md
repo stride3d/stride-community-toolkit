@@ -342,11 +342,11 @@ Guidance for the Bepu demos specifically:
 - **A key binding lives in three places**: the `IsKeyPressed` call, the on-screen label, and any
   header comment describing the controls. Rename one and the others silently drift, leaving
   documentation that names a key doing nothing. Grep for the old letter after changing a binding.
-- **The on-screen help reads top down.** In an example's `DebugOverlay` section the key lines come
+- **The on-screen help reads top down.** In an example's `TextOverlay` section the key lines come
   first, one key per line, then a blank line, then the status and explanation lines. A key line names
   its keys as data, never in the text: `new("N", "Next station", Color.Gold)`, and
   `new(["Q", "E"], "Ascend / descend")` for keys that do the same thing - not `new("[N] Next station")`.
-  The overlay decorates them when it draws (`DebugOverlay.KeyFormat`, default `[{0}]`, and `KeyColor`,
+  The overlay decorates them when it draws (`TextOverlay.KeyFormat`, default `[{0}]`, and `KeyColor`,
   a shade lighter than the text), and gives a collapsible title the same shape, `[+] [F2] Camera controls`.
   Multi-word inputs are just keys: `new("Arrow keys", "Move")`, `new("Mouse wheel", "Zoom")`,
   `new("Shift", "Hold to move faster")`, `new("Left drag", "Pan")`. What a key does is capitalised
