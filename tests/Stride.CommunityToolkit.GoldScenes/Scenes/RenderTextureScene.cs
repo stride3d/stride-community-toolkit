@@ -34,7 +34,7 @@ internal sealed class RenderTextureScene : IGoldScene
 
         // Something for the feeds to look at: a floor, three pillars of different heights and
         // colours, and a bright emissive ball on an orbit - the thing the thermal feed calls hot
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f),
@@ -52,7 +52,7 @@ internal sealed class RenderTextureScene : IGoldScene
 
         foreach (var (at, height, colour) in pillars)
         {
-            var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new Primitive3DEntityOptions
+            var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new PrimitiveEntityOptions
             {
                 EntityName = "Pillar",
                 Material = game.CreateMaterial(colour, metalness: 0.2f, glossiness: 0.5f),
@@ -62,7 +62,7 @@ internal sealed class RenderTextureScene : IGoldScene
             pillar.Scene = scene;
         }
 
-        _ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
+        _ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new PrimitiveEntityOptions
         {
             EntityName = "Ball",
             Material = Material.New(game.GraphicsDevice, new MaterialDescriptor
@@ -99,7 +99,7 @@ internal sealed class RenderTextureScene : IGoldScene
         // feed's texture, so the picture is shown and not lit again
         for (var i = 0; i < feeds.Length; i++)
         {
-            var monitor = game.CreatePrimitive(Primitive3D.Plane(3.6f, 3.6f), new Primitive3DEntityOptions
+            var monitor = game.CreatePrimitive(Primitive3D.Plane(3.6f, 3.6f), new PrimitiveEntityOptions
             {
                 EntityName = $"Monitor {feeds[i].Name}",
                 Material = Material.New(game.GraphicsDevice, new MaterialDescriptor

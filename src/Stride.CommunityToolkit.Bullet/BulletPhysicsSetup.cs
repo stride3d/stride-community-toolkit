@@ -1,54 +1,27 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Engine;
-using Stride.Physics;
 
 namespace Stride.CommunityToolkit.Bullet;
 
 /// <summary>
-/// Bullet as the physics engine of a <see cref="SceneSetup"/>: <c>CreatePrimitive</c> gives its entities a
-/// <see cref="RigidbodyComponent"/> with the collider fitted to the shape, and the grounds a
-/// <see cref="StaticColliderComponent"/>. Chosen with <see cref="SceneSetupExtensions.UseBullet"/>.
+/// Bullet as the physics engine of a scene setup: <c>UseBullet()</c> sets it, and from then on <c>CreatePrimitive</c>
+/// and the ground helpers attach a Bullet body or collider through <see cref="EntityExtensions.AddBulletPhysics(Entity, Primitive3D, BulletPhysicsOptions?)"/>.
 /// </summary>
 /// <remarks>
-/// A <see cref="Bullet3DPhysicsOptions"/> or <see cref="Bullet2DPhysicsOptions"/> passed to <c>CreatePrimitive</c> is
-/// read back here, so <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/> and <see cref="Bullet3DPhysicsOptions.Mass"/>
-/// mean what they mean on <see cref="EntityExtensions.AddBulletPhysics(Entity, Primitive3D, Bullet3DPhysicsOptions)"/> and <see cref="EntityExtensions.AddBulletPhysics(Entity, Primitive2D, Bullet2DPhysicsOptions)"/>.
+/// Options of another type than <see cref="BulletPhysicsOptions"/>, the core's own, carry their <see cref="PrimitiveEntityOptions.Body"/>
+/// across; everything else of theirs is about the model and was applied before the physics is reached.
 /// </remarks>
 public sealed class BulletPhysicsSetup : PhysicsSetupBase
 {
     /// <inheritdoc/>
-    public override void AddBody(Entity entity, Primitive3D shape, Primitive3DEntityOptions? options)
-        => entity.AddBulletPhysics(shape, options as Bullet3DPhysicsOptions);
+    public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options)
+        => entity.AddBulletPhysics(shape, Carry(options));
 
     /// <inheritdoc/>
-    public override void AddBody(Entity entity, Primitive2D shape, Primitive2DEntityOptions? options)
-        => entity.AddBulletPhysics(shape, options as Bullet2DPhysicsOptions ?? Carry2D(options));
+    public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options)
+        => entity.AddBulletPhysics(shape, Carry(options));
 
-    /// <inheritdoc/>
-    public override void AddStatic(Entity entity, Primitive3D shape, Primitive3DEntityOptions? options)
-    {
-        var physics = options as Bullet3DPhysicsOptions ?? new Bullet3DPhysicsOptions();
-
-        // Immovable unless the caller supplied its own component
-        if (!physics.IsPhysicsComponentSet)
-            physics.PhysicsComponent = new StaticColliderComponent();
-
-        entity.AddBulletPhysics(shape, physics);
-    }
-
-    /// <inheritdoc/>
-    public override void AddStatic(Entity entity, Primitive2D shape, Primitive2DEntityOptions? options)
-    {
-        var physics = options as Bullet2DPhysicsOptions ?? Carry2D(options);
-
-        if (!physics.IsPhysicsComponentSet)
-            physics.PhysicsComponent = new StaticColliderComponent();
-
-        entity.AddBulletPhysics(shape, physics);
-    }
-
-    // The collider depth is the one option of the base type the body needs
-    private static Bullet2DPhysicsOptions Carry2D(Primitive2DEntityOptions? options)
-        => new() { Depth = options?.Depth ?? 1 };
+    private static BulletPhysicsOptions Carry(PrimitiveEntityOptions? options)
+        => options as BulletPhysicsOptions ?? new BulletPhysicsOptions { Body = options?.Body ?? BodyMode.Dynamic };
 }

@@ -180,7 +180,6 @@ using System.Diagnostics.CodeAnalysis;
 // procedural models. Nothing is wired to the array, so replacing it breaks nothing; an outline's length
 // is the polygon's, so a get-only array could not be filled by the caller; and on the options bag null
 // means "no custom outline, use Size", which a get-only collection cannot say.
-[assembly: SuppressMessage("NDepend", "ND2300:CollectionPropertiesShouldBeReadOnly", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Engine.Primitive2DEntityOptions.Vertices", Justification = "Options bag: the outline is assigned in an object initializer and read once by the builder; null means use Size.")]
 [assembly: SuppressMessage("NDepend", "ND2300:CollectionPropertiesShouldBeReadOnly", Target = "Stride.CommunityToolkit:Stride.CommunityToolkit.Rendering.ProceduralModels.PolygonProceduralModel.Vertices", Justification = "Procedural model input, null-guarded in the setter; mirrors how Stride's own procedural models expose their parameters.")]
 
 // --- Examples.Core: one set of sources compiled into both launchers -------------------------

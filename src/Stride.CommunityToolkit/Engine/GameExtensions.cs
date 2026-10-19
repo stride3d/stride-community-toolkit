@@ -999,7 +999,7 @@ public static partial class GameExtensions
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
-    public static Entity CreatePrimitive(this IGame game, Primitive3D shape, Primitive3DEntityOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, Primitive3D shape, PrimitiveEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
@@ -1023,7 +1023,7 @@ public static partial class GameExtensions
         }
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
-        if (options.IncludePhysics)
+        if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
 
         return entity;
@@ -1041,7 +1041,7 @@ public static partial class GameExtensions
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="shape"/> is <see langword="null"/>.</exception>
-    public static Entity CreatePrimitive(this IGame game, Primitive2D shape, Primitive2DEntityOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, Primitive2D shape, PrimitiveEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
@@ -1064,7 +1064,7 @@ public static partial class GameExtensions
             entity.Transform.Position = position;
         }
 
-        if (options.IncludePhysics)
+        if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
 
         return entity;

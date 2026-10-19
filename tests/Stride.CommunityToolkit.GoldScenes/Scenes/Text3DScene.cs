@@ -30,7 +30,7 @@ internal sealed class Text3DScene : IGoldScene
         // down the world axes light solids from every side, as the example does
         game.AddAllDirectionLighting(intensity: 20f, showLightGizmo: false);
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
@@ -51,7 +51,7 @@ internal sealed class Text3DScene : IGoldScene
             TextMesh.CreateMesh(game.GraphicsDevice, MeshFont.Default, "Bog8@", new TextMeshOptions { Size = 1.1f, Depth = 0.35f, Anchor = TextAnchor.BottomCenter, Bevel = new TextBevel(size: 0.03f, thickness: 0.05f, segments: 4) }));
 
         // The shape route: a primitive with a material, centred on its entity and turned a little
-        var shape = game.CreatePrimitive(Primitive3D.Text("Shape", size: 0.55f, depth: 0.2f), new Primitive3DEntityOptions
+        var shape = game.CreatePrimitive(Primitive3D.Text("Shape", size: 0.55f, depth: 0.2f), new PrimitiveEntityOptions
         {
             EntityName = "Shape",
             Material = blue,
