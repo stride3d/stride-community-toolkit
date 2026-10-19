@@ -1,6 +1,7 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// How <see cref="TextMesh"/> sizes, extrudes and lays out a string.

@@ -1,3 +1,5 @@
+using Stride.CommunityToolkit.Rendering.Overlay;
+
 namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>

@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// One piece of a <see cref="GlyphContour"/>: a line or a Bézier curve from the previous segment's end to <see cref="End"/>.

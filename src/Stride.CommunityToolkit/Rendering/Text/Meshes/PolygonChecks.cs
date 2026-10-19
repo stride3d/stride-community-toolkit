@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// Segment and loop tests shared by the glyph shape and the bevel: whether loops cross themselves or

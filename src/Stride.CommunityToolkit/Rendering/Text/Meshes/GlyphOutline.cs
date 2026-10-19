@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// The vector shape of one character in a <see cref="MeshFont"/>: its contours as curves, how far the pen

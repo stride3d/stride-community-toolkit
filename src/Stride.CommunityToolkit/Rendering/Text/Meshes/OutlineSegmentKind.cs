@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// The kind of curve an <see cref="OutlineSegment"/> draws.

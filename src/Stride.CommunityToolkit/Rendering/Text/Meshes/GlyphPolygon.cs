@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// One filled piece of a <see cref="GlyphShape"/>: an outside polygon and the holes in it.

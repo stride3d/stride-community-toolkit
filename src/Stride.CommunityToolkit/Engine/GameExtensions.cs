@@ -1,6 +1,7 @@
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
@@ -389,7 +390,7 @@ public static partial class GameExtensions
     /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
     /// </summary>
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="helpPosition">Where the shared <see cref="Rendering.Text.TextOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// <param name="helpPosition">Where the shared <see cref="Rendering.Overlay.TextOverlay"/> is drawn. <see langword="null"/>, the default,
     /// leaves the overlay's own position alone.</param>
     /// <param name="cameraName">The name of the camera entity to attach the 3D camera controller to. If not specified, the main camera name is
     /// used.</param>

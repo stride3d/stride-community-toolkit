@@ -1,6 +1,6 @@
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// One selectable entry in a <see cref="KeyMenu"/>.

@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Diagnostics;
 using Stride.Engine;
 using Stride.Games;
@@ -8,7 +9,7 @@ using Stride.Rendering.Compositing;
 using System.Globalization;
 using System.Text;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// Scene renderer that draws per-entity debug information - the entity's name and/or position - as

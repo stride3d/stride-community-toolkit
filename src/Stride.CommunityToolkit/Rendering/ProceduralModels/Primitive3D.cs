@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 namespace Stride.CommunityToolkit.Rendering.ProceduralModels;
 

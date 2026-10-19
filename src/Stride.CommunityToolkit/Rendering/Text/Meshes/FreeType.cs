@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// The handful of FreeType calls <see cref="MeshFont"/> needs, bound to the <c>freetype</c> native library

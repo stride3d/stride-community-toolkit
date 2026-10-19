@@ -1,4 +1,4 @@
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// A rounded edge between the caps and the walls of 3D text: a quarter-ellipse fillet, the same on the

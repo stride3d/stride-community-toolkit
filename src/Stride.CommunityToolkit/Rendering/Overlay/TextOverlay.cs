@@ -1,9 +1,10 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Games;
 using Stride.Graphics;
 using Stride.Graphics.Font;
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// A single on-screen block of debug text, assembled from sections contributed by anything that has something to say, with one position and one toggle key for the lot.

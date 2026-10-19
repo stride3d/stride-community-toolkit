@@ -1,7 +1,8 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using System.Runtime.InteropServices;
 using Stride.Graphics.Font;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// A font file opened for its glyph outlines: the vector shapes that solid 3D lettering is built from.

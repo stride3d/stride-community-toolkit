@@ -1,6 +1,7 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Engine;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// Options for rendering debug information for entities in the scene.

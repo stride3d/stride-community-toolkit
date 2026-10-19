@@ -1,8 +1,9 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using System.Text;
 using Stride.Graphics;
 using Stride.Rendering;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// Builds solid 3D lettering from a <see cref="MeshFont"/>: each glyph's outline is triangulated,

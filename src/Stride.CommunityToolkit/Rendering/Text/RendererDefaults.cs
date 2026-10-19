@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Core.Diagnostics;
 using Stride.Core.Serialization.Contents;
 using Stride.Graphics;

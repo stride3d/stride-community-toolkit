@@ -1,6 +1,7 @@
+using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Input;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// One contributor's block of lines within a <see cref="TextOverlay"/>.

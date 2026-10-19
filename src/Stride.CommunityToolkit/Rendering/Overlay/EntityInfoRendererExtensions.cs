@@ -3,7 +3,7 @@ using Stride.Engine;
 using Stride.Games;
 using Stride.Rendering.Compositing;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Overlay;
 
 /// <summary>
 /// Adds the <see cref="EntityInfoRenderer"/> to a <see cref="GraphicsCompositor"/> or a game.

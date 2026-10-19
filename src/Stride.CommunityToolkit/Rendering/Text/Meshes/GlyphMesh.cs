@@ -1,6 +1,6 @@
 using Stride.Graphics;
 
-namespace Stride.CommunityToolkit.Rendering.Text;
+namespace Stride.CommunityToolkit.Rendering.Text.Meshes;
 
 /// <summary>
 /// One glyph of a string as its own mesh, centred on itself, with where it belongs in the text: what

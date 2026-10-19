@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Rendering.Text;
