@@ -86,7 +86,7 @@ void Start(Scene scene)
     // Three words to begin with, each higher than the last, so they land on each other
     for (var i = 0; i < 3; i++) DropWord(scene);
 
-    DebugOverlay.GetOrCreate(game).AddSection("3D text", () =>
+    TextOverlay.GetOrCreate(game).AddSection("3D text", () =>
     [
         new("R", "Drop another word", Color.Gold),
         new(""),
@@ -170,7 +170,7 @@ concepts:
   - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
   - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
   - Static lettering built once versus text that changes, and releasing the old buffers
-  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Text

@@ -69,7 +69,7 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Gallery", BuildOverlayLines);
     overlay.Visible = !clean;

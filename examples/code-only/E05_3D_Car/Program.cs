@@ -376,7 +376,7 @@ void BuildCourse(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Car", () =>
     {

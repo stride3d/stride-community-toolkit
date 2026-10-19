@@ -119,7 +119,7 @@ void Start(Scene rootScene)
     PopNextCoin();
     PopNextCoin();
 
-    DebugOverlay.GetOrCreate(game).AddSection("Easing", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Easing", () =>
     [
         new("C", "Pop the next coin in", Color.Gold),
         new("Space", "Collect every coin on screen", Color.Gold),

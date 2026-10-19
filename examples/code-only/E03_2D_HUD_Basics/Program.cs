@@ -130,7 +130,7 @@ void Start(Scene rootScene)
     hud = new SimpleHud(game, rootScene, shapeBatch, new HudStyle());
     #endregion
 
-    DebugOverlay.GetOrCreate(game).AddSection("HUD basics", () =>
+    TextOverlay.GetOrCreate(game).AddSection("HUD basics", () =>
     [
         new("1 to 8", "The HUD after that step", Color.Gold),
         new("J", "Take a hit", Color.Gold),

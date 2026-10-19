@@ -101,7 +101,7 @@ void Start(Scene scene)
     // A first batch, so the stations have something to report straight away
     DropBalls(scene);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Trigger zones", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Trigger zones", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -344,7 +344,7 @@ concepts:
   - IContactHandler on a dynamic body, the impact force of a first touch from its contacts
   - Callbacks run on the main thread after the physics step, so they may change materials and entities
   - F11 draws the solver's contact points and normals, Stride 4.4.1's debug view, through AddPhysicsDebug
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, TextOverlay"
 tags:
   - 3D
   - Physics

@@ -38,8 +38,8 @@ Entity? skybox = null;
 CameraComponent? camera = null;
 GraphicsCompositor? thumbnail = null;
 GraphicsCompositor? inGame = null;
-DebugTextDropdown? shapeMenu = null;
-DebugTextDropdown? materialMenu = null;
+KeyMenu? shapeMenu = null;
+KeyMenu? materialMenu = null;
 TextureLoader? textures = null;
 // The editor's preview primitives, less its plane
 Primitive3D[] shapes =
@@ -100,28 +100,28 @@ void Start(Scene scene)
     built = new Material?[materials.Length];
     materialIndex = Math.Clamp(materialIndex, 0, materials.Length - 1);
 
-    shapeMenu = new DebugTextDropdown
+    shapeMenu = new KeyMenu
     {
         Title = "Shape",
         ToggleKey = Keys.P,
         TitleColor = Color.Gold,
         SelectedIndex = Array.IndexOf(shapes, shape),
-        Items = [.. shapes.Select((type, i) => new DebugTextDropdownItem((Keys)(Keys.D1 + i), type.Name, () => { shape = type; Rebuild(scene); }))],
+        Items = [.. shapes.Select((type, i) => new KeyMenuItem((Keys)(Keys.D1 + i), type.Name, () => { shape = type; Rebuild(scene); }))],
     };
 
-    materialMenu = new DebugTextDropdown
+    materialMenu = new KeyMenu
     {
         Title = "Material",
         ToggleKey = Keys.M,
         TitleColor = Color.Gold,
         SelectedIndex = materialIndex,
-        Items = [.. materials.Select((entry, i) => new DebugTextDropdownItem((Keys)(Keys.D1 + i), entry.Name, () => { materialIndex = i; Rebuild(scene); }))],
+        Items = [.. materials.Select((entry, i) => new KeyMenuItem((Keys)(Keys.D1 + i), entry.Name, () => { materialIndex = i; Rebuild(scene); }))],
     };
 
     Rebuild(scene);
     SetGameLook(scene, gameLook);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Preview", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Preview", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -282,7 +282,7 @@ concepts:
   - A compositor without post effects, and swapping compositors at runtime
   - Why a metal needs an environment, and why the thumbnail barely has one
   - Scaling any model to its unit bounding sphere so every shape frames the same
-  - Keyboard dropdowns for shape and material with DebugTextDropdown
+  - Keyboard key menus for shape and material with KeyMenu
 tags:
   - 3D
   - Materials

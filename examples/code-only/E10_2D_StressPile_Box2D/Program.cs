@@ -76,7 +76,7 @@ var shape = Primitive3D.Sphere();
 var layout = SpawnLayout.Grid;
 var batchSize = 5000;
 
-List<DebugTextDropdown> menus = [];
+List<KeyMenu> menus = [];
 
 using var game = new Game();
 
@@ -234,16 +234,16 @@ void SetupMenus()
 {
     menus =
     [
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Shape",
             ToggleKey = Keys.C,
             TitleColor = Color.Yellow,
             SelectedIndex = Array.IndexOf(shapes, shape),
-            Items = [.. shapes.Index().Select(pair => new DebugTextDropdownItem(
+            Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
                 (Keys)(Keys.D1 + pair.Index), pair.Item.ToString(), () => ChangeShape(pair.Item)))]
         },
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Layout",
             ToggleKey = Keys.L,
@@ -255,20 +255,20 @@ void SetupMenus()
                 new(Keys.D2, "Random", () => layout = SpawnLayout.Random),
             ]
         },
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Batch",
             ToggleKey = Keys.N,
             TitleColor = Color.Yellow,
             SelectedIndex = Array.IndexOf(batchSizes, batchSize),
-            Items = [.. batchSizes.Index().Select(pair => new DebugTextDropdownItem(
+            Items = [.. batchSizes.Index().Select(pair => new KeyMenuItem(
                 (Keys)(Keys.D1 + pair.Index), $"{pair.Item:N0}", () => batchSize = pair.Item))]
         },
     ];
 
     // Shares one position and one toggle key with the camera controller's help, rather than being a
     // second block of text drawn somewhere else
-    DebugOverlay.GetOrCreate(game).AddSection("Stress pile", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Stress pile", BuildOverlayLines);
 }
 
 /// <summary>
@@ -545,7 +545,7 @@ concepts:
   - Removing bodies from an external simulation explicitly, no processor does it
   - Skipping instancing work while every Box2D body sleeps with Box2DEntityInstancing
   - Disabling contact events on fixtures nothing listens to
-  - Switching shape, batch size and layout at runtime with DebugTextDropdown
+  - Switching shape, batch size and layout at runtime with KeyMenu
   - Picking bodies out of the pile with Grabber2DScript, on a perspective camera
 tags:
   - 2D

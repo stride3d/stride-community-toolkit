@@ -28,7 +28,7 @@ var chalk = new Color(230, 236, 245);
 var glow = new Color(120, 190, 255, 140);
 
 Referee? referee = null;
-DebugOverlaySection? keys = null;
+TextOverlaySection? keys = null;
 var foldedKeys = false;
 
 using var game = new Game();
@@ -92,7 +92,7 @@ void Start(Scene scene)
 
     // The keys are shown over the demo and fold away to one line when a match starts, so they do
     // not cover the score. F1 brings them back
-    keys = DebugOverlay.GetOrCreate(game).AddSection("Pong", () =>
+    keys = TextOverlay.GetOrCreate(game).AddSection("Pong", () =>
     [
         new(["W", "S"], "Left paddle", Color.Gold),
         new(["Up", "Down"], "Right paddle, with two players", Color.Gold),

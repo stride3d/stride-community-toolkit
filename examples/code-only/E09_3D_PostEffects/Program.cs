@@ -109,7 +109,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // The lines are rebuilt whenever the overlay draws, so each shows the live state.
     overlay.AddSection("Post effects", () =>
@@ -210,7 +210,7 @@ concepts:
   - Which effects exist on the compositor and start disabled
   - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
   - Building an emissive material above intensity 1 so bloom has something to bloom
-  - Showing live effect state as a DebugOverlay section
+  - Showing live effect state as a TextOverlay section
   - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, CreateMaterial"
 tags:
   - 3D

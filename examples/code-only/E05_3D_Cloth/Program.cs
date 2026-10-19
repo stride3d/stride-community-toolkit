@@ -49,7 +49,7 @@ Scene? rootScene = null;
 BufferedEntityInstancing? instancing = null;
 Entity? master = null;
 Dictionary<float, Model> models = [];
-DebugTextDropdown? sizeMenu = null;
+KeyMenu? sizeMenu = null;
 List<Entity> nodes = [];
 List<Entity> extras = [];
 var constraintCount = 0;
@@ -153,13 +153,13 @@ Model ModelFor(float radius)
 // node count so the cost of a finer lattice is visible before choosing it.
 void SetupMenu()
 {
-    sizeMenu = new DebugTextDropdown
+    sizeMenu = new KeyMenu
     {
         Title = "Node size",
         ToggleKey = Keys.Z,
         TitleColor = Color.Yellow,
         SelectedIndex = Array.IndexOf(nodeRadii, nodeRadius),
-        Items = [.. nodeRadii.Select((radius, index) => new DebugTextDropdownItem((Keys)(Keys.D1 + index), $"radius {radius:0.00}, {NodeCount(radius):N0} nodes", () =>
+        Items = [.. nodeRadii.Select((radius, index) => new KeyMenuItem((Keys)(Keys.D1 + index), $"radius {radius:0.00}, {NodeCount(radius):N0} nodes", () =>
         {
             nodeRadius = radius;
             master!.Get<ModelComponent>().Model = ModelFor(radius);
@@ -356,7 +356,7 @@ void DropBall(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
 
     overlay.AddSection("Cloth", () =>
@@ -399,8 +399,8 @@ concepts:
   - Keeping neighbouring nodes from colliding with CollisionGroup's index rule
   - Solver substeps or velocity iterations for a stiff connected system, set through the setup's GameSettings
   - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
-  - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds"
-  - "Using helpers: SceneSetup3D, UseSkybox, GrabberScript, DebugOverlay, DebugTextDropdown"
+  - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a KeyMenu rebuilds"
+  - "Using helpers: SceneSetup3D, UseSkybox, GrabberScript, TextOverlay, KeyMenu"
 tags:
   - 3D
   - Bepu

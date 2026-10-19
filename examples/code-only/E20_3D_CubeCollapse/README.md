@@ -153,7 +153,7 @@ toolkit-level features belong in the repository's issues.
   the streak (the audio hooks exist), a camera punch on CALAMITY.
 - **Undo (U key)** - snapshot the grid before each clear. Good command-pattern teaching material,
   but needs a scoring-fairness decision first (does undo cost points? allowed after game over?).
-- **Game modes** - timed or limited-moves, offered through the same dropdown pattern as the
+- **Game modes** - timed or limited-moves, offered through the same key menu pattern as the
   palettes.
 
 ### Housekeeping

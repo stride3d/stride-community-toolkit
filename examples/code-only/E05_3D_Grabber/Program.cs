@@ -126,7 +126,7 @@ void BuildScene(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Grabber", () =>
     {
@@ -182,7 +182,7 @@ concepts:
   - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
   - Locking a body's rotation through its BodyInertia, and what the grabber does about it
   - Reading the held body's mass and the servo cap from the script for the overlay
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, TextOverlay"
 tags:
   - 3D
   - Physics

@@ -45,7 +45,7 @@ public static class GameSettings
     /// <summary>
     /// The colours the game starts with. A cube matches its neighbour when both carry the same one,
     /// so fewer colours means larger groups and an easier board. The player can switch to any set in
-    /// <see cref="ColourPalettes"/> at runtime from the in-game dropdown.
+    /// <see cref="ColourPalettes"/> at runtime from the in-game key menu.
     /// </summary>
     public static readonly IReadOnlyList<Color> Colours = ColourPalettes.Classic.Colours;
 

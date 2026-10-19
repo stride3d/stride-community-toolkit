@@ -20,7 +20,7 @@ void Start(Scene scene)
     // Left mouse picks either sphere up; the servo drags the other one along (GrabberScript, see E05_3D_Grabber).
     game.GetCameraEntity().Add(new GrabberScript());
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Constraint", static () =>
     [

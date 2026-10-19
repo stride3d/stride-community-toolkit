@@ -4,7 +4,7 @@ using Stride.Core.Mathematics;
 namespace CubeCollapse.Shared;
 
 /// <summary>
-/// The palettes the board can be painted with, switchable at any time from the in-game dropdown.
+/// The palettes the board can be painted with, switchable at any time from the in-game key menu.
 /// </summary>
 /// <remarks>
 /// Every palette must hold the same number of colours, in a stable order: a live palette switch
@@ -53,6 +53,6 @@ public static class ColourPalettes
         [new Color(240, 205, 205), new Color(205, 240, 210), new Color(225, 230, 235), new Color(240, 230, 195)], Glass: true, Glossiness: 0.45f);
 
 
-    /// <summary>Every palette, in the order the dropdown offers them.</summary>
+    /// <summary>Every palette, in the order the key menu offers them.</summary>
     public static readonly IReadOnlyList<ColourPalette> All = [Classic, Soft, HighVisibility, Examples, Glass, FrostedGlass];
 }

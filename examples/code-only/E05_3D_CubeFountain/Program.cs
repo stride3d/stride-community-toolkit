@@ -56,7 +56,7 @@ var models = new Model[shapes.Length];
 var masters = new BufferedEntityInstancing[shapes.Length];
 
 CubeFountain? fountain = null;
-DebugTextDropdown? shapeMenu = null;
+KeyMenu? shapeMenu = null;
 var timeScaleIndex = Array.IndexOf(timeScales, 1f);
 var interpolated = true;
 
@@ -114,17 +114,17 @@ void Start(Scene scene)
     mouth.Transform.Position = new Vector3(0f, NozzleHeight + 0.4f, 0f);
     scene.Entities.Add(mouth);
 
-    // The shape to launch, as a dropdown in the overlay: O opens it, a digit picks
-    shapeMenu = new DebugTextDropdown
+    // The shape to launch, as a key menu in the overlay: O opens it, a digit picks
+    shapeMenu = new KeyMenu
     {
         Title = "Shape",
         ToggleKey = Keys.O,
         TitleColor = Color.Gold,
-        Items = [.. shapes.Index().Select(pair => new DebugTextDropdownItem(
+        Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
             (Keys)(Keys.D1 + pair.Index), pair.Item.Name, () => fountain.Kind = pair.Index, pair.Item.Colour))],
     };
 
-    DebugOverlay.GetOrCreate(game).AddSection("Cube fountain", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Cube fountain", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -300,7 +300,7 @@ concepts:
   - A cap on the number of bodies, with the oldest one's place reused
   - Throwing a body along the camera's forward vector
   - Bodies without a model of their own, drawn by one BufferedEntityInstancing master per shape
-  - A DebugTextDropdown in the overlay to choose the shape
+  - A KeyMenu in the overlay to choose the shape
 tags:
   - 3D
   - Physics

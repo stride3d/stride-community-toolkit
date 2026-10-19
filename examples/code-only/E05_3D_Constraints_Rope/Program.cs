@@ -98,7 +98,7 @@ void Start(Scene scene)
     game.GetCameraEntity().Add(new GrabberScript());
     game.AddStudioLighting();
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
 
     // Anchored at the segment ends, neighbours only: the straightforward build, and the unstable one.
     naiveRope = RopeBuilder.Build(game, scene,
@@ -210,9 +210,9 @@ IReadOnlyList<TextElement> BuildInstructions()
 
 static string Length(Rope? rope) => rope is null ? "-" : rope.Length.ToString("0.00", CultureInfo.InvariantCulture);
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // BuildInstructions runs every frame the overlay is drawn, which is what keeps the measured rope
     // lengths live

@@ -297,7 +297,7 @@ Entity DynamicCircle(Scene scene, Vector2 centre, float radius, Color color)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Joints", () =>
     [

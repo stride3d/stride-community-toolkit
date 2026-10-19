@@ -12,7 +12,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
-    game.AddEntityDebugSceneRenderer(new()
+    game.AddEntityInfoRenderer(new()
     {
         EnableBackground = true
     });

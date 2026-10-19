@@ -75,7 +75,7 @@ void Start(Scene scene)
     BuildShellStation(scene, "3. Mesh shell", x + 2 * StationSpacing);
     BuildMovingRingStation(scene, "4. Mesh on mesh", x + 3 * StationSpacing);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Mesh colliders", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Mesh colliders", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -292,7 +292,7 @@ concepts:
   - A mesh is a surface with no inside, so a body that starts inside is not pushed out
   - Meshes meet meshes, triangle against triangle, which is why what moves is better off convex
   - Reading where a body came to rest from its position and velocity, with Teleport for the replay
-  - "Using helpers: SceneSetup3D, CreatePrimitive, TorusCollider, AddPhysicsDebug, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, TorusCollider, AddPhysicsDebug, TextOverlay"
 tags:
   - 3D
   - Physics

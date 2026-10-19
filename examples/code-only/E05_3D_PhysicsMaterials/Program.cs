@@ -110,7 +110,7 @@ void Start(Scene scene)
 
     BuildEndWall(scene);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Physics materials", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Physics materials", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -400,7 +400,7 @@ concepts:
   - Setting the four numbers on a BodyComponent and on a StaticComponent
   - Replaying a scene - Teleport, then Awake, then the velocities
   - Measuring a rebound from a body's LinearVelocity, which cannot miss a short contact
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddEntityTextRenderer, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddEntityTextRenderer, TextOverlay"
 tags:
   - 3D
   - Physics

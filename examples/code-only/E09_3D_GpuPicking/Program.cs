@@ -71,7 +71,7 @@ void Start(Scene scene)
     hover = new HighlightShell(game.CreateMaterial(MaterialDescriptors.Highlight(Color.Cyan)));
     picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", OverlayLines);
     overlay.SetPosition(ScreenAnchor.BottomLeft);
 }

@@ -68,7 +68,7 @@ void AddInstructions()
 {
     // One shared on-screen block with the camera help: the overlay draws itself, so nothing here
     // runs per frame
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Simulations", () =>
     [
@@ -172,8 +172,8 @@ concepts:
   - Choosing a simulation per body and per static with IndexBasedSimulationSelector
   - Why bodies in different simulations pass through each other
   - Respawning entities with Space
-  - Showing instructions as a DebugOverlay section beside the camera help
-  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, DebugOverlay"
+  - Showing instructions as a TextOverlay section beside the camera help
+  - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Bepu

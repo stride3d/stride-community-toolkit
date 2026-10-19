@@ -58,7 +58,7 @@ void Start(Scene scene)
     camera?.Entity.Add(new FirstPersonControllerComponent { Character = character });
 
     // The keys, then the live state; the callback runs every frame the overlay is drawn
-    DebugOverlay.GetOrCreate(game).AddSection("Character", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Character", () =>
     [
         new("W A S D", "Move", Color.Gold),
         new("Space", "Jump", Color.Gold),

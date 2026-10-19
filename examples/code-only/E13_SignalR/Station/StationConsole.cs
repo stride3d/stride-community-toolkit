@@ -15,7 +15,7 @@ public sealed class StationConsole
     private const int LogLength = 6;
     private const float HailSeconds = 8f;
 
-    private readonly DebugTextDropdown _menu;
+    private readonly KeyMenu _menu;
     private readonly List<LogEntry> _log = [];
 
     private string? _hail;
@@ -25,13 +25,13 @@ public sealed class StationConsole
 
     public StationConsole()
     {
-        _menu = new DebugTextDropdown
+        _menu = new KeyMenu
         {
             Title = "Scheme",
             ToggleKey = Keys.T,
             CloseOnSelect = false,
             SelectedIndex = 0,
-            Items = [.. Schemes.All.Index().Select(pair => new DebugTextDropdownItem(
+            Items = [.. Schemes.All.Index().Select(pair => new KeyMenuItem(
                 Keys.D1 + pair.Index, pair.Item.Name, () => Select(pair.Item.Name)))],
         };
 

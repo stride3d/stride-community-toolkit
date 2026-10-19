@@ -64,7 +64,7 @@ void Start(Scene scene)
     Cube(scene, new Vector3(-5f, 0.5f, 2f), FromDescriptor(Color.Blue, glossiness: 0.9f, metalness: 0f), "blue 0.90 / 0.00");
     Cube(scene, new Vector3(-3f, 0.5f, 2f), FromDescriptor(Color.Gold, glossiness: 0.1f, metalness: 0.8f), "gold 0.10 / 0.80");
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
 }
 
 void Cube(Scene scene, Vector3 position, Material material, string label)
@@ -127,9 +127,9 @@ void Update(Scene scene, GameTime time)
     }
 }
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // The callback runs every frame the overlay is drawn, so the live light intensity appears without
     // anything having to push it

@@ -55,7 +55,7 @@ void Start(Scene rootScene)
     // F11 the debug meshes
     game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 
-    DebugOverlay.GetOrCreate(game).AddSection("Debug", static () =>
+    TextOverlay.GetOrCreate(game).AddSection("Debug", static () =>
     [
         new("Left mouse", "Grab a shape, drag it, let go to throw", Color.Yellow),
         new("F11", "Mesh wireframes", Color.Yellow),
@@ -93,7 +93,7 @@ complexity: 2
 order: 100
 description:
   en: |-
-    A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is
+    A pile of falling 2D shapes with the physics text overlays turned on, so what the simulation is
     actually solving can be seen rather than inferred. P draws the colliders and F11 draws the debug
     meshes. Both come from AddPhysicsDebug, one entity with the two scripts; each acts on the whole
     scene, so one entity is all any scene needs. A spot light is included because 2D scenes are lit like

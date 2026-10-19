@@ -108,7 +108,7 @@ void Start(Scene scene)
     game.AddGroundGizmo(new Vector3(-9, 0, -9), showAxisName: true);
     game.AddOrientationGizmo();
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
 
     CreateMixer(scene);
     CreateMotorisedPendulum(scene);
@@ -410,9 +410,9 @@ static string OnOff(bool? enabled) => enabled == true ? "ON" : "OFF";
 
 static string Spin(BodyComponent? body) => body is null ? "-" : MathF.Abs(body.AngularVelocity.Y).ToString("0.0", CultureInfo.InvariantCulture);
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // BuildInstructions runs every frame the overlay is drawn, which is what puts the live spin
     // readouts on screen without anything having to push them

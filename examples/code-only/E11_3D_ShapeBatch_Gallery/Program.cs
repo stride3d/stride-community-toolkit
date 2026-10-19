@@ -106,7 +106,7 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime gameTime)

@@ -209,7 +209,7 @@ void DynamicCircle(Scene scene, Vector2 centre, float radius, Color color, float
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Explosion", () =>
     [

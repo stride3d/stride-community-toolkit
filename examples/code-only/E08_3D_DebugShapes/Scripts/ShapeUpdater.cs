@@ -98,7 +98,7 @@ public class ShapeUpdater : SyncScript
         _debugDraw.Visible = true;
 
         // The keys, then the live state; the callback runs every frame the overlay is drawn
-        DebugOverlay.GetOrCreate(Game).AddSection("Debug shapes", () =>
+        TextOverlay.GetOrCreate(Game).AddSection("Debug shapes", () =>
         [
             new("Mouse wheel", "Primitive count", Color.Gold),
             new("Shift", "Hold to change the count faster", Color.Gold),

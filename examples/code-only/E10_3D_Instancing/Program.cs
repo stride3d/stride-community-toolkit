@@ -54,7 +54,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
 
     EnableInstancing();
 
@@ -239,7 +239,7 @@ concepts:
   - Registering InstancingRenderFeature on the MeshRenderFeature
   - Sharing one Model between many entities
   - Toggling a ModelComponent to compare rendering cost
-  - "Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, TextOverlay"
 tags:
   - 3D
   - Rendering

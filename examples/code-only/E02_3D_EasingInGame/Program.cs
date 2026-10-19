@@ -152,7 +152,7 @@ void Start(Scene rootScene)
     door.Start();
     door.Update(door.Duration);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)

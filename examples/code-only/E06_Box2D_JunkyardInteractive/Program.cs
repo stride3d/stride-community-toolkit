@@ -56,7 +56,7 @@ Basic2DCameraController? cameraController = null;
 var random = new Random(1);
 List<SpawnedShape> shapes = [];
 var sensorWatcher = new SensorWatcher();
-List<DebugTextDropdown> menus = [];
+List<KeyMenu> menus = [];
 
 // The shape catalogue: outline vertices plus the rounding radius the shader applies. A single
 // vertex with a radius is a circle, two vertices with a radius a capsule - and the collider is
@@ -213,18 +213,18 @@ void SetupMenus()
 {
     menus =
     [
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Shape",
             ToggleKey = Keys.C,
             TitleColor = Color.Yellow,
             SelectedIndex = currentShape,
-            Items = [.. catalogue.Select((definition, index) => new DebugTextDropdownItem(
+            Items = [.. catalogue.Select((definition, index) => new KeyMenuItem(
                 (Keys)(Keys.D1 + index), definition.Name, () => currentShape = index))]
         },
     ];
 
-    DebugOverlay.GetOrCreate(game).AddSection("Playground", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Playground", BuildOverlayLines);
 }
 
 void SpawnBatch(Scene scene, int count)

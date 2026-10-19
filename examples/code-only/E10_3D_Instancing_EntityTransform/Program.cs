@@ -89,7 +89,7 @@ void Start(Scene rootScene)
     scene = rootScene;
 
     // A large ground so big drops cannot spill over the edge; the static collider comes with it
-    DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
 
     sharedModel = CreateSharedModel(rootScene);
 
@@ -400,7 +400,7 @@ concepts:
   - Deriving a Bepu collider from a primitive type without building a mesh per body
   - Switching the whole scene to a different primitive from one line
   - Knowing when instancing does not help
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddBepuPhysics, AddInstancingBufferUpload, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddBepuPhysics, AddInstancingBufferUpload, TextOverlay"
 tags:
   - 3D
   - Rendering

@@ -56,7 +56,7 @@ void Start(Scene scene)
     // the body across the plane, so nothing 2D-specific is needed
     game.AddGrabber();
 
-    DebugOverlay.GetOrCreate(game).AddSection("2D playground", () =>
+    TextOverlay.GetOrCreate(game).AddSection("2D playground", () =>
     [
         new("Left mouse", "Grab a shape, drag it, let go to throw", Color.Gold),
         new("Space", "Add ten shapes", Color.Gold),

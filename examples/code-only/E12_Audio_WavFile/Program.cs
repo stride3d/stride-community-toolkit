@@ -132,7 +132,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Wav file", () =>
     {
@@ -176,7 +176,7 @@ concepts:
   - Looping, volume and pan on a SoundInstance
   - Disposing instances once they have played out
   - "Why the files are mono: Pan and spatialisation need a single channel"
-  - "Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Audio

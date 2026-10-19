@@ -144,7 +144,7 @@ void Start(Scene scene)
     };
 
     // The overlay keeps only what is genuinely keyboard help; everything else is on the boards.
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Station", OverlayLines);
 

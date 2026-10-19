@@ -53,7 +53,7 @@ Basic2DCameraController? cameraController = null;
 Box2DDebugDraw? debugDraw = null;
 CharacterMover2D? mover = null;
 ShapeComponent? heroShape = null;
-DebugTextDropdown? pogoMenu = null;
+KeyMenu? pogoMenu = null;
 List<Vector2[]> terrain = [];
 B2BodyId ballBody = default;
 var showContacts = false;
@@ -232,7 +232,7 @@ Entity Spawn(Scene scene, string name, ShapeComponent shape, Vector2 position)
 
 void SetupMenu()
 {
-    pogoMenu = new DebugTextDropdown
+    pogoMenu = new KeyMenu
     {
         Title = "Pogo shape",
         ToggleKey = Keys.Z,
@@ -389,7 +389,7 @@ void Draw()
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // The keys first, the live numbers under them.
     overlay.AddSection("Mover", () =>
@@ -478,7 +478,7 @@ concepts:
   - Category bits so the mover overlaps some shapes, sweeps against others and kicks the rest
   - Level outlines from SVG paths with SvgPath2D, as closed chain shapes
   - A kinematic elevator driven by target transforms inside the fixed step
-  - "Using helpers: CharacterMover2D, SvgPath2D, Joints2D.CreateRevolute, Grabber2DScript, Box2DDebugDraw, DebugTextDropdown"
+  - "Using helpers: CharacterMover2D, SvgPath2D, Joints2D.CreateRevolute, Grabber2DScript, Box2DDebugDraw, KeyMenu"
 tags:
   - 2D
   - Box2D

@@ -74,7 +74,7 @@ void Start(Scene scene)
     var clockEntity = new Entity("Physics clock") { clock };
     clockEntity.Scene = scene;
 
-    DebugOverlay.GetOrCreate(game).AddSection("Time control", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Time control", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -265,7 +265,7 @@ concepts:
   - A kinematic body turned by a velocity, so its motion follows the physics clock
   - ISimulationUpdate on a component, called once per fixed step with the step's length
   - MaxStepPerFrame, the cap that lets a fast simulation keep up with the clock
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, TextOverlay"
 tags:
   - 3D
   - Physics

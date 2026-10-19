@@ -55,7 +55,7 @@ void Start(Scene scene)
 
     AddShapes(scene, shapes.Length);
 
-    DebugOverlay.GetOrCreate(game).AddSection("3D playground", () =>
+    TextOverlay.GetOrCreate(game).AddSection("3D playground", () =>
     [
         new("Space", "Add ten shapes", Color.Gold),
         new("X", "Remove every shape", Color.Gold),

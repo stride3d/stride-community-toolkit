@@ -70,7 +70,7 @@ void Start(Scene scene)
 
     BuildMonitors(scene);
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Feeds", OverlayLines);
 }

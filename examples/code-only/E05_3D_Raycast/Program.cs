@@ -45,7 +45,7 @@ void Start(Scene scene)
     game.AddOrientationGizmo();
     game.AddGrabber();
 
-    DebugOverlay.GetOrCreate(game).AddSection("Raycast", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Raycast", OverlayLines);
 
     // Panels around the sphere, so a ray from it has something to go through
     AddPanels(scene);

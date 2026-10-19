@@ -155,7 +155,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Spatial sound", () =>
     {
@@ -202,7 +202,7 @@ concepts:
   - HRTF as two switches - HrtfSupport through the setup's GameSettings, then useHrtf per instance
   - Positioning a one-shot once versus tracking a moving emitter every frame
   - Reading the emitter's side and distance relative to the camera for the overlay
-  - "Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Audio

@@ -57,7 +57,7 @@ void Start(Scene scene)
     SetupCollisionMatrix(scene);
     SetupGroundCollisionLayer(scene);
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
     InitializeEntities(scene);
 
     mainCamera = scene.GetCamera();
@@ -365,9 +365,9 @@ void ResetTheScene(Scene scene)
     InitializeEntities(scene);
 }
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Game", static () =>
     [

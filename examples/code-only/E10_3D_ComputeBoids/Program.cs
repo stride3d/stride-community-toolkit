@@ -91,7 +91,7 @@ void Start(Scene scene)
         compositor.Game = new SceneRendererCollection { computeRenderer, compositor.Game };
     }
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Boids", OverlayLines);
 }
@@ -366,7 +366,7 @@ concepts:
   - Unordered-access structured buffers, and two of them swapped each frame so reads never race writes
   - Filling an InstancingUserBuffer's matrix buffers on the GPU, so the mesh is drawn from data the CPU never sees
   - Building a world matrix and its inverse in a shader from a heading
-  - "Using helpers: SceneSetup3D, UseSkybox, AddInstancingSupport, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddInstancingSupport, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Rendering

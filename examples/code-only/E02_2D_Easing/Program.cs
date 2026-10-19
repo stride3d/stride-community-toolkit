@@ -87,7 +87,7 @@ void Start(Scene rootScene)
     rootScene.Entities.Add(titleEntity);
     rootScene.Entities.Add(noteEntity);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -117,7 +117,7 @@ void Update(Scene scene, GameTime time)
 // view allows, with room for the title and race lanes above it and the note below
 void PlacePanel()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     var pixelsPerUnit = game.GraphicsDevice.Presenter.BackBuffer.Height / ViewHeight;
     var overlayBottom = ViewHeight / 2f - overlay.BlockBounds.Bottom / pixelsPerUnit;
 
@@ -385,7 +385,7 @@ concepts:
   - The fluent extension function.Ease(t)
   - Ease-in, ease-out and in-out families, and what overshoot looks like in motion
   - A 2D ShapeBatch scene with pixel polylines, discs and a dashed reference line
-  - Screen-space labels with EntityTextComponent, and DebugOverlay for the keys
+  - Screen-space labels with EntityTextComponent, and TextOverlay for the keys
 tags:
   - 2D
   - Mathematics

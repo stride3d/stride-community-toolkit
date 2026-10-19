@@ -66,7 +66,7 @@ var shape = Primitive3D.Sphere();
 var layout = SpawnLayout.Grid;
 var batchSize = 5000;
 
-List<DebugTextDropdown> menus = [];
+List<KeyMenu> menus = [];
 
 using var game = new Game();
 
@@ -190,16 +190,16 @@ void SetupMenus()
 {
     menus =
     [
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Shape",
             ToggleKey = Keys.C,
             TitleColor = Color.Yellow,
             SelectedIndex = Array.IndexOf(shapes, shape),
-            Items = [.. shapes.Index().Select(pair => new DebugTextDropdownItem(
+            Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
                 (Keys)(Keys.D1 + pair.Index), pair.Item.ToString(), () => ChangeShape(pair.Item)))]
         },
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Layout",
             ToggleKey = Keys.L,
@@ -211,20 +211,20 @@ void SetupMenus()
                 new(Keys.D2, "Random", () => layout = SpawnLayout.Random),
             ]
         },
-        new DebugTextDropdown
+        new KeyMenu
         {
             Title = "Batch",
             ToggleKey = Keys.N,
             TitleColor = Color.Yellow,
             SelectedIndex = Array.IndexOf(batchSizes, batchSize),
-            Items = [.. batchSizes.Index().Select(pair => new DebugTextDropdownItem(
+            Items = [.. batchSizes.Index().Select(pair => new KeyMenuItem(
                 (Keys)(Keys.D1 + pair.Index), $"{pair.Item:N0}", () => batchSize = pair.Item))]
         },
     ];
 
     // Shares one position and one toggle key with the camera controller's help, rather than being a
     // second block of text drawn somewhere else
-    DebugOverlay.GetOrCreate(game).AddSection("Stress pile", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Stress pile", BuildOverlayLines);
 }
 
 /// <summary>
@@ -495,7 +495,7 @@ concepts:
   - Confining bodies to the XY plane with Body2DComponent
   - Sharing one Model across every body instead of generating one each
   - Tearing down an instanced pile safely, clearing the instancing before the entities
-  - Switching shape, batch size and layout at runtime with DebugTextDropdown
+  - Switching shape, batch size and layout at runtime with KeyMenu
   - Why a perfectly regular spawn lattice must be jittered
   - "Using helpers: AddInstancingBufferUpload, AddBepuPhysics, AddGrabber"
 tags:

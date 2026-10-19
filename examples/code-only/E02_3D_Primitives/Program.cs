@@ -26,7 +26,7 @@ void Start(Scene scene)
     // F11 the physics debug meshes
     game.AddPhysicsDebug(gizmoColor: new Color4(0.4f, 0.843f, 0, 0.9f));
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
     Add3DPrimitives(scene);
 }
 
@@ -83,11 +83,11 @@ static void ResetTheScene(Scene scene)
         entity.Scene = null;
 }
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
     // The overlay draws itself, and is shared with the camera controller's own help, so nothing here
     // needs to be called every frame
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Game", static () =>
     [
@@ -119,7 +119,7 @@ concepts:
   - Rotating an entity with Transform.Rotation
   - Tagging entities with a name so the scene can be torn down and rebuilt
   - Inspecting the generated colliders and debug meshes with AddPhysicsDebug, on P and F11
-  - Adding keyboard instructions as a DebugOverlay section
+  - Adding keyboard instructions as a TextOverlay section
   - "Using helpers: SceneSetup3D, AddGrabber, AddPhysicsDebug, CreatePrimitive"
 tags:
   - 3D
