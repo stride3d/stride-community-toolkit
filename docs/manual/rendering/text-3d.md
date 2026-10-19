@@ -8,7 +8,8 @@ shadow, and can carry a physics body. For labels and HUDs, [Entity Text](entity-
 title, a sign, a logo, a word that falls.
 
 `MeshFont`, `TextMesh`, `TextMeshOptions` and `GlyphOutline` live in the
-`Stride.CommunityToolkit.Rendering.Text` namespace; `Primitive3D.Text` in
+`Stride.CommunityToolkit.Rendering.Text.Meshes` namespace; `TextAnchor` and `SystemFonts`, which they
+share with the text components, in `Stride.CommunityToolkit.Rendering.Text`; `Primitive3D.Text` in
 `Stride.CommunityToolkit.Rendering.ProceduralModels`. The stages between the font file and
 the mesh, and the files behind each, are on [How 3D text is built](text-3d-pipeline.md).
 

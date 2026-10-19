@@ -140,7 +140,7 @@ registration.
 
 **In the toolkit:** `TextOverlay` uses it to load a *system* font (Consolas on Windows, Menlo on
 macOS, DejaVu Sans Mono or Liberation Mono on Linux) so debug text is sharp at any DPI scale without
-shipping a font file - see `Rendering/Text/TextOverlay.cs` and the
+shipping a font file - see `Rendering/Overlay/TextOverlay.cs` and the
 [Text Overlay](rendering/text-overlay.md) page.
 
 **In a game:** user-selected or modded fonts, chat and user-generated text in scripts your shipped

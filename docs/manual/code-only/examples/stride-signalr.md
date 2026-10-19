@@ -30,7 +30,7 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E13_SignalR).
 
-[!code-csharp[](../../../../examples/code-only/E13_SignalR/Program.cs?start=1&end=247)]
+[!code-csharp[](../../../../examples/code-only/E13_SignalR/Program.cs?start=1&end=248)]
 <!-- #endregion generated -->
 
 ## Running it

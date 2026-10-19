@@ -25,6 +25,18 @@ Three families were named for debugging and are used by games: the on-screen tex
 
 Unchanged, because they are debugging aids: `AddPhysicsDebug`, the collider gizmos, the `DebugShapes` package, `DebugRenderComponentScript`, and Stride's own `DebugTextSystem`.
 
+#### Three namespaces for text
+
+`Stride.CommunityToolkit.Rendering.Text` held three subjects: text drawn with a font, lettering built as meshes, and the overlay. Each now has a namespace and a folder of its own, so one `using` no longer brings in the lot.
+
+| Before | After | Note |
+|---|---|---|
+| `using Stride.CommunityToolkit.Rendering.Text;` for `EntityTextComponent`, `WorldTextComponent`, their renderers, `TextElement`, `TextAnchor`, `TextPositionMode`, `SystemFonts` | unchanged | Text drawn with a font stays. |
+| `using Stride.CommunityToolkit.Rendering.Text;` for `MeshFont`, `TextMesh`, `TextMeshOptions`, `TextBevel`, `GlyphMesh`, `GlyphOutline`, `GlyphContour`, `GlyphShape`, `GlyphPolygon`, `OutlineSegment`, `OutlineSegmentKind` | `using Stride.CommunityToolkit.Rendering.Text.Meshes;` | Lettering as meshes. `Primitive3D.Text` and `TextCollider` stay where they were. |
+| `using Stride.CommunityToolkit.Rendering.Text;` for `TextOverlay`, `TextOverlaySection`, `TextOverlayFontFamily`, `TextOverlayFontResolver`, `KeyMenu`, `KeyMenuItem`, `EntityInfoRenderer`, `EntityInfoRendererOptions`, `AddEntityInfoRenderer()` | `using Stride.CommunityToolkit.Rendering.Overlay;` | The overlay and the entity labels. `TextElement`, which sections return, stays in `Rendering.Text`, so an overlay section usually needs both. |
+
+The compiler names every call site that needs a new `using`; nothing else changes.
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed

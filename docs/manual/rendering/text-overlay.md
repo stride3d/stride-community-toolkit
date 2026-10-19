@@ -8,8 +8,9 @@ itself every frame; nothing calls it.
 Use it instead of `game.DebugTextSystem.Print(...)` from several scripts, whose hand-placed lines
 overlap and are unreadable on a high-DPI display.
 
-`TextOverlay`, `TextOverlaySection` and `TextElement` live in the
-`Stride.CommunityToolkit.Rendering.Text` namespace; `ScreenAnchor` in `Stride.CommunityToolkit.Rendering`.
+`TextOverlay`, `TextOverlaySection` and `KeyMenu` live in the `Stride.CommunityToolkit.Rendering.Overlay`
+namespace; `TextElement` in `Stride.CommunityToolkit.Rendering.Text`; `ScreenAnchor` in
+`Stride.CommunityToolkit.Rendering`.
 
 ## Adding text
 
