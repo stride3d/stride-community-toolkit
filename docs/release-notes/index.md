@@ -6,6 +6,25 @@ Welcome to the Release Notes for the **Stride Community Toolkit**. This section 
 
 The Stride Community Toolkit is developed with rapid iteration in mind. It moves at a faster development pace compared to the Stride Game Engine. As a result, you should expect frequent updates that may introduce breaking changes. This fast-paced approach allows us to incorporate community feedback quickly and continue improving the toolkit.
 
+## 1.0.0.0-preview.69
+
+### 💥 Breaking Changes
+
+#### The Debug names go
+
+Three families were named for debugging and are used by games: the on-screen text panel, the key-driven list, and the renderer that labels entities. Their names now say what they do. Namespaces are unchanged.
+
+| Before | After | Note |
+|---|---|---|
+| `DebugOverlay`, `DebugOverlaySection`, `DebugOverlayFontFamily`, `DebugOverlayFontResolver` | `TextOverlay`, `TextOverlaySection`, `TextOverlayFontFamily`, `TextOverlayFontResolver` | `DebugOverlay.GetOrCreate(game)` becomes `TextOverlay.GetOrCreate(game)`; every member keeps its name. |
+| `SceneSetup.DebugOverlay` | `SceneSetup.TextOverlay` | The setup flag that creates the overlay before the first frame. |
+| `DebugTextDropdown`, `DebugTextDropdownItem` | `KeyMenu`, `KeyMenuItem` | A key picks an item; nothing drops down. Members unchanged. |
+| `EntityDebugSceneRenderer`, `EntityDebugSceneRendererOptions`, `EntityDebugRendererExtensions` | `EntityInfoRenderer`, `EntityInfoRendererOptions`, `EntityInfoRendererExtensions` | It labels entities with their name and position. |
+| `game.AddEntityDebugSceneRenderer(options)`, `compositor.AddEntityDebugRenderer(options)` | `game.AddEntityInfoRenderer(options)`, `compositor.AddEntityInfoRenderer(options)` | One name on both receivers. |
+| `rendering/debug-overlay.md` | `rendering/text-overlay.md` | The manual page; the old address is gone. |
+
+Unchanged, because they are debugging aids: `AddPhysicsDebug`, the collider gizmos, the `DebugShapes` package, `DebugRenderComponentScript`, and Stride's own `DebugTextSystem`.
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed

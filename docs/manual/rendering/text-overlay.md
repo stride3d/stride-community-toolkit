@@ -1,6 +1,6 @@
-# Debug Overlay
+# Text Overlay
 
-`DebugOverlay` is one block of on-screen text, assembled from **sections** contributed by whatever has
+`TextOverlay` is one block of on-screen text, assembled from **sections** contributed by whatever has
 something to say - the camera controller's key help, your own instructions, a live counter - with one
 position and one hide key for the lot. It is a game system, so it survives scene swaps and draws
 itself every frame; nothing calls it.
@@ -8,7 +8,7 @@ itself every frame; nothing calls it.
 Use it instead of `game.DebugTextSystem.Print(...)` from several scripts, whose hand-placed lines
 overlap and are unreadable on a high-DPI display.
 
-`DebugOverlay`, `DebugOverlaySection` and `TextElement` live in the
+`TextOverlay`, `TextOverlaySection` and `TextElement` live in the
 `Stride.CommunityToolkit.Rendering.Text` namespace; `ScreenAnchor` in `Stride.CommunityToolkit.Rendering`.
 
 ## Adding text
@@ -17,7 +17,7 @@ Get the shared instance and add a section. The callback runs every frame the ove
 values that change need no pushing - this is `E02_3D_Primitives`:
 
 ```csharp
-var overlay = DebugOverlay.GetOrCreate(game);
+var overlay = TextOverlay.GetOrCreate(game);
 
 overlay.AddSection("Game", static () =>
 [
@@ -38,7 +38,7 @@ A section can collapse to a single title line and expand again on a key:
 overlay.AddCollapsibleSection("Physics", "Physics", Keys.F5, () => [ ... ], collapsed: true);
 ```
 
-That is how `[+] [F2] Camera controls` is drawn: the marker, then the key, then the title, with the body indented one marker. `AddSection` and `AddCollapsibleSection` return the `DebugOverlaySection`, so a section can be disabled, collapsed or removed later.
+That is how `[+] [F2] Camera controls` is drawn: the marker, then the key, then the title, with the body indented one marker. `AddSection` and `AddCollapsibleSection` return the `TextOverlaySection`, so a section can be disabled, collapsed or removed later.
 
 Keys are data, not text. A help line names them - `new("H", "Reset camera", Color.Gold)`, or
 `new(["Q", "E"], "Ascend / descend")` for keys that do the same thing, or `new("Arrow keys", "Move")` -
@@ -50,7 +50,7 @@ drawn as given.
 `BlockBounds` is the rectangle the block was last drawn in, in screen pixels; `E02_2D_Easing` reads it to place its panel under the block each frame.
 
 > [!TIP]
-> Something that already knows how to describe itself as lines - `DebugTextDropdown.GetLines()`, for
+> Something that already knows how to describe itself as lines - `KeyMenu.GetLines()`, for
 > example - plugs straight in: `overlay.AddSection("Spawn", () => spawnMenu.GetLines())`, as
 > `E04_2D_SpawnMenu` does.
 
@@ -162,7 +162,7 @@ unscaled pixels overrides the calculation entirely.
 
 | Piece | In `E11_2D_Charts` | Concept |
 |---|---|---|
-| `DebugOverlay.GetOrCreate(game)` | `Program.cs`, `Start` | one shared instance, registered as a service |
+| `TextOverlay.GetOrCreate(game)` | `Program.cs`, `Start` | one shared instance, registered as a service |
 | `WindowsDpiManager.EnablePerMonitorV2()` | `Program.cs`, before `new Game()` | a sharp window; the overlay's size then follows `DisplayScale` on its own |
 | `overlay.BackgroundColor = new Color(0, 0, 0, 200)` | `Program.cs`, `Start` | readable on a white scene |
 | `overlay.AddSection("Chart", () => [...])` | `Program.cs`, `Start` | a live key line: `[G] Grid on` |

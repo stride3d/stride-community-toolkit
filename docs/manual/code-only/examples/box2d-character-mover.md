@@ -22,7 +22,7 @@ The `Program.cs` file shows how to:
 - Category bits so the mover overlaps some shapes, sweeps against others and kicks the rest
 - Level outlines from SVG paths with SvgPath2D, as closed chain shapes
 - A kinematic elevator driven by target transforms inside the fixed step
-- Using helpers: CharacterMover2D, SvgPath2D, Joints2D.CreateRevolute, Grabber2DScript, Box2DDebugDraw, DebugTextDropdown
+- Using helpers: CharacterMover2D, SvgPath2D, Joints2D.CreateRevolute, Grabber2DScript, Box2DDebugDraw, KeyMenu
 
 > [!NOTE]
 > This example references `Stride.CommunityToolkit.Box2D`, which is not on NuGet yet. Run it from a clone of the

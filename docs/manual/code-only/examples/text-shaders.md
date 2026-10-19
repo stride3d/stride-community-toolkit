@@ -19,7 +19,7 @@ The `Program.cs` file shows how to:
 - A shader class as a colour node - ComputeShaderClassColor with MixinReference, keys set on the pass
 - A material feature in the vertex stage - IMaterialDisplacementFeature and SetStreamFinalModifier, Global.Time
 - A material feature in the pixel stage - IMaterialTransparencyFeature with a discard, driven per frame
-- Using helpers: SceneSetup3D, AddAllDirectionLighting, TextMesh, TextBevel, DebugOverlay
+- Using helpers: SceneSetup3D, AddAllDirectionLighting, TextMesh, TextBevel, TextOverlay
 
 ![3D Text Shaders](media/text-shaders.webp)
 

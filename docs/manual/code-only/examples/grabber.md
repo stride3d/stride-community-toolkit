@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
 - Locking a body's rotation through its BodyInertia, and what the grabber does about it
 - Reading the held body's mass and the servo cap from the script for the overlay
-- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, TextOverlay
 
 ![Grabber](media/grabber.webp)
 

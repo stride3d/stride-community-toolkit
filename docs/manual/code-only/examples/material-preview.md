@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - A compositor without post effects, and swapping compositors at runtime
 - Why a metal needs an environment, and why the thumbnail barely has one
 - Scaling any model to its unit bounding sphere so every shape frames the same
-- Keyboard dropdowns for shape and material with DebugTextDropdown
+- Keyboard key menus for shape and material with KeyMenu
 
 ![Material Preview](media/material-preview.webp)
 

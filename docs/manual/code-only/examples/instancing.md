@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Registering InstancingRenderFeature on the MeshRenderFeature
 - Sharing one Model between many entities
 - Toggling a ModelComponent to compare rendering cost
-- Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, TextOverlay
 
 ![GPU Instancing](media/instancing.webp)
 

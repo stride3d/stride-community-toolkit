@@ -40,7 +40,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `Physics` | `PhysicsSetupBase.None` | The physics engine `CreatePrimitive` and the grounds attach bodies with. Set through `UseBepu()` or `UseBullet()`. |
 | `PostEffects` | `null` | Configures the compositor's post effects, which are otherwise all off but the tone map: `fx => fx.Bloom.Enabled = true`. |
 | `GameSettings` | `null` | Configures the engine's `GameSettings` before the window is created: the graphics profile, the colour space, the window size. |
-| `DebugOverlay` | `false` | Creates the [debug overlay](../rendering/debug-overlay.md), so the first section added shows at once. |
+| `TextOverlay` | `false` | Creates the [text overlay](../rendering/text-overlay.md), so the first section added shows at once. |
 | `Profiler` | `false` | Adds the frame-time profiler readout. |
 | `Instancing` | `false` | Puts the instancing render feature in the compositor, so instanced masters draw from the first frame. Set through `UseInstancing()`. Without it a master draws as one model and the run loop warns. |
 
@@ -54,7 +54,7 @@ The pieces are applied in a fixed order: the compositor, the camera and its cont
 | `Msaa` | `MultisampleCount.None` | As in 3D. Thin lines flicker without it; charts use `X4`. |
 | `Camera` | `CameraSetup.Orthographic().WithController()` | At `CameraDefaults.Initial2DPosition`, `(0, 0, 50)`, with the pan-and-zoom controller. `null` for no camera. |
 | `Ground` | `GroundSetup.Plane(…)` | A box `GameDefaults.Default2DGroundSize` wide and high at `GameDefaults.Default2DGroundPosition`, with a static collider when the setup has a physics engine. `null` for none. |
-| `Physics`, `PostEffects`, `GameSettings`, `DebugOverlay`, `Profiler`, `Instancing` | as in 3D | Asking for `PostEffects` installs the clean post-effect set, tone map included. |
+| `Physics`, `PostEffects`, `GameSettings`, `TextOverlay`, `Profiler`, `Instancing` | as in 3D | Asking for `PostEffects` installs the clean post-effect set, tone map included. |
 
 ## The pieces
 

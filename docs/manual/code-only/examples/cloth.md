@@ -22,8 +22,8 @@ The `Program.cs` file shows how to:
 - Keeping neighbouring nodes from colliding with CollisionGroup's index rule
 - Solver substeps or velocity iterations for a stiff connected system, set through the setup's GameSettings
 - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
-- Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds
-- Using helpers: SceneSetup3D, UseSkybox, GrabberScript, DebugOverlay, DebugTextDropdown
+- Node size as lattice density: spacing follows the radius, the sheets keep their size, a KeyMenu rebuilds
+- Using helpers: SceneSetup3D, UseSkybox, GrabberScript, TextOverlay, KeyMenu
 
 ![Cloth](media/cloth.webp)
 

@@ -23,7 +23,7 @@ The `Program.cs` file shows how to:
 - Removing bodies from an external simulation explicitly, no processor does it
 - Skipping instancing work while every Box2D body sleeps with Box2DEntityInstancing
 - Disabling contact events on fixtures nothing listens to
-- Switching shape, batch size and layout at runtime with DebugTextDropdown
+- Switching shape, batch size and layout at runtime with KeyMenu
 - Picking bodies out of the pile with Grabber2DScript, on a perspective camera
 
 > [!NOTE]

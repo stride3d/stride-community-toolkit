@@ -26,7 +26,7 @@ The `Program.cs` file shows how to:
 - Strokes with DrawPixelPolyline - a dashed route and a concave, closed frame
 - World text styling - Height, FontSize, TextColor alpha, Opacity, GlowColor and GlowSize
 - Installed system fonts with SystemFonts, in four styles
-- A live theme switch through a DebugOverlay dropdown
+- A live theme switch through a TextOverlay key menu
 
 ![2D Panels and Text](media/2d-scene-panels.webp)
 

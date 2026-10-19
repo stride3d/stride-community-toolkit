@@ -53,7 +53,7 @@ The screen grid counts pixels from the top left corner and is drawn over everyth
 
 ## Switch the grid
 
-By default <kbd>G</kbd> steps through off, world and screen, and the [debug overlay](debug-overlay.md)
+By default <kbd>G</kbd> steps through off, world and screen, and the [text overlay](text-overlay.md)
 shows the current state. The same can be done from code.
 
 ```csharp
@@ -106,5 +106,5 @@ Remarks:
 ## See also
 
 - [ShapeBatch](shape-batch.md)
-- [Debug Overlay](debug-overlay.md)
+- [Text Overlay](text-overlay.md)
 - [Build a simple HUD with ShapeBatch](../../tutorials/rendering/shapebatch-hud.md)

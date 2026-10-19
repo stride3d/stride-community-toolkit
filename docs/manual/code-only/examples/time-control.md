@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - A kinematic body turned by a velocity, so its motion follows the physics clock
 - ISimulationUpdate on a component, called once per fixed step with the step's length
 - MaxStepPerFrame, the cap that lets a fast simulation keep up with the clock
-- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, TextOverlay
 
 ![Time Control](media/time-control.webp)
 

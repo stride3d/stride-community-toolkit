@@ -25,7 +25,7 @@ The `Program.cs` file shows how to:
 - Deriving a Bepu collider from a primitive type without building a mesh per body
 - Switching the whole scene to a different primitive from one line
 - Knowing when instancing does not help
-- Using helpers: SceneSetup3D, CreatePrimitive, AddBepuPhysics, AddInstancingBufferUpload, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddBepuPhysics, AddInstancingBufferUpload, TextOverlay
 
 ![Instancing with Entity Transforms](media/instancing-entity-transform.webp)
 

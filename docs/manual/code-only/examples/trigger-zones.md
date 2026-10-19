@@ -19,7 +19,7 @@ The `Program.cs` file shows how to:
 - IContactHandler on a dynamic body, the impact force of a first touch from its contacts
 - Callbacks run on the main thread after the physics step, so they may change materials and entities
 - F11 draws the solver's contact points and normals, Stride 4.4.1's debug view, through AddPhysicsDebug
-- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, TextOverlay
 
 ![Trigger Zones](media/trigger-zones.webp)
 

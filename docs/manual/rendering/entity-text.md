@@ -95,8 +95,8 @@ Every pixel figure on the component - `FontSize`, `Offset`, `ScreenPosition`, `P
 by the toolkit's shared `DisplayScale`, so a label designed at 18 px reads the same size to the eye
 on a 150% laptop as on a 100% monitor; the glyphs are rasterised at the larger size rather than
 stretched, so they stay sharp. A projected world position is not scaled. `AutoScale = false` on the
-component turns this off. The same applies to `EntityDebugSceneRendererOptions`, and it only works
-when the process is DPI aware; see [the debug overlay page](debug-overlay.md#size-and-high-dpi-displays).
+component turns this off. The same applies to `EntityInfoRendererOptions`, and it only works
+when the process is DPI aware; see [the text overlay page](text-overlay.md#size-and-high-dpi-displays).
 
 ## Fonts
 
@@ -111,12 +111,12 @@ measurements are released when a component is removed.
 
 ## The debug renderer
 
-`EntityDebugSceneRenderer` is the other side of the same coin. Where `EntityTextComponent` draws text
+`EntityInfoRenderer` is the other side of the same coin. Where `EntityTextComponent` draws text
 an entity **opts into**, the debug renderer labels **every** entity automatically with its name and/or
 position, in one shared style:
 
 ```csharp
-game.AddEntityDebugSceneRenderer(new()
+game.AddEntityInfoRenderer(new()
 {
     ShowEntityPosition = true,
     IncludeChildEntities = true,

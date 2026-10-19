@@ -21,7 +21,7 @@ The `Program.cs` file shows how to:
 - Confining bodies to the XY plane with Body2DComponent
 - Sharing one Model across every body instead of generating one each
 - Tearing down an instanced pile safely, clearing the instancing before the entities
-- Switching shape, batch size and layout at runtime with DebugTextDropdown
+- Switching shape, batch size and layout at runtime with KeyMenu
 - Why a perfectly regular spawn lattice must be jittered
 - Using helpers: AddInstancingBufferUpload, AddBepuPhysics, AddGrabber
 

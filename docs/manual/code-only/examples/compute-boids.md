@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Unordered-access structured buffers, and two of them swapped each frame so reads never race writes
 - Filling an InstancingUserBuffer's matrix buffers on the GPU, so the mesh is drawn from data the CPU never sees
 - Building a world matrix and its inverse in a shader from a heading
-- Using helpers: SceneSetup3D, UseSkybox, AddInstancingSupport, CreatePrimitive, DebugOverlay
+- Using helpers: SceneSetup3D, UseSkybox, AddInstancingSupport, CreatePrimitive, TextOverlay
 
 ![Compute Shader Boids](media/compute-boids.webp)
 

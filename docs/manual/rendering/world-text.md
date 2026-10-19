@@ -52,7 +52,7 @@ On a scaled display the same `Height` covers that many more pixels, so the rende
 1.5x the size and stays as sharp as on a 100% monitor. Nothing moves or resizes; `GlowSize`, being
 in font pixels, scales along so the glow keeps its reach. `AutoScale = false` on the component
 rasterises at exactly `FontSize`. This only works when the process is DPI aware; see
-[the debug overlay page](debug-overlay.md#size-and-high-dpi-displays).
+[the text overlay page](text-overlay.md#size-and-high-dpi-displays).
 
 ## Glow
 
