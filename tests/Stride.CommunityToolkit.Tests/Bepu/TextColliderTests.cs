@@ -1,6 +1,6 @@
 using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Bepu;

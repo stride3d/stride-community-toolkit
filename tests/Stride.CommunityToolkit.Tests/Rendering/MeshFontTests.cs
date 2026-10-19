@@ -1,4 +1,4 @@
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Xunit;
 
 namespace Stride.CommunityToolkit.Tests.Rendering;
