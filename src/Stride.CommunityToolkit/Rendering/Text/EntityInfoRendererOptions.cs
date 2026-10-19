@@ -5,7 +5,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <summary>
 /// Options for rendering debug information for entities in the scene.
 /// </summary>
-public class EntityDebugSceneRendererOptions
+public class EntityInfoRendererOptions
 {
     /// <summary>
     /// Gets or sets the font size for the debug text, in pixels on a 100% display. Default is 12.
@@ -129,16 +129,16 @@ public class EntityDebugSceneRendererOptions
     public Vector2 Padding { get; set; } = new(2, 2);
 
     /// <summary>
-    /// Initializes a new instance of <see cref="EntityDebugSceneRendererOptions"/> with default settings.
+    /// Initializes a new instance of <see cref="EntityInfoRendererOptions"/> with default settings.
     /// </summary>
-    public EntityDebugSceneRendererOptions() { }
+    public EntityInfoRendererOptions() { }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="EntityDebugSceneRendererOptions"/> with specified font size and color.
+    /// Initializes a new instance of <see cref="EntityInfoRendererOptions"/> with specified font size and color.
     /// </summary>
     /// <param name="fontSize">The size of the debug font text.</param>
     /// <param name="fontColor">The color of the debug font text.</param>
-    public EntityDebugSceneRendererOptions(int fontSize, Color fontColor)
+    public EntityInfoRendererOptions(int fontSize, Color fontColor)
     {
         FontSize = fontSize;
         FontColor = fontColor;
@@ -147,6 +147,6 @@ public class EntityDebugSceneRendererOptions
     /// <summary>
     /// Provides default settings for rendering entity debug information.
     /// </summary>
-    /// <returns>A new instance of <see cref="EntityDebugSceneRendererOptions"/> with default values.</returns>
-    public static EntityDebugSceneRendererOptions CreateDefault() => new();
+    /// <returns>A new instance of <see cref="EntityInfoRendererOptions"/> with default values.</returns>
+    public static EntityInfoRendererOptions CreateDefault() => new();
 }

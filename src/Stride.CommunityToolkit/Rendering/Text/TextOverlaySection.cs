@@ -3,13 +3,13 @@ using Stride.Input;
 namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
-/// One contributor's block of lines within a <see cref="DebugOverlay"/>.
+/// One contributor's block of lines within a <see cref="TextOverlay"/>.
 /// </summary>
 /// <remarks>
-/// Sections are what let the camera controller, a game's own instructions and any number of dropdowns
+/// Sections are what let the camera controller, a game's own instructions and any number of key menus
 /// share a single overlay with one position and one toggle key, instead of each drawing its own.
 /// </remarks>
-public sealed class DebugOverlaySection
+public sealed class TextOverlaySection
 {
     /// <summary>
     /// Gets the name of the section. Used to find it again, and not displayed.
@@ -21,7 +21,7 @@ public sealed class DebugOverlaySection
     /// </summary>
     /// <remarks>
     /// Called every frame the overlay is drawn, so it can return content that changes - a body count,
-    /// the state of a dropdown - without anyone having to push updates.
+    /// the state of a key menu - without anyone having to push updates.
     /// </remarks>
     public required Func<IReadOnlyList<TextElement>> Lines { get; init; }
 

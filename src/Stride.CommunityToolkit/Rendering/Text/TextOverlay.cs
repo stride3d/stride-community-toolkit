@@ -10,9 +10,9 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </summary>
 /// <remarks>
 ///
-/// <para>This is a game system rather than a script, so it is unaffected by scenes being swapped and draws itself once per frame with no help from the caller. Get one with <see cref="GetOrCreate(IGame)"/> - it is registered as a service, so every caller shares the same instance and the camera controller, your own instructions and any dropdowns end up in one place. </para>
+/// <para>This is a game system rather than a script, so it is unaffected by scenes being swapped and draws itself once per frame with no help from the caller. Get one with <see cref="GetOrCreate(IGame)"/> - it is registered as a service, so every caller shares the same instance and the camera controller, your own instructions and any key menus end up in one place. </para>
 ///
-/// <para>Contributors add a <see cref="DebugOverlaySection"/> whose callback runs each frame, so content that changes needs no pushing. Sections are separated by a blank line and sorted by <see cref="DebugOverlaySection.Order"/>. </para>
+/// <para>Contributors add a <see cref="TextOverlaySection"/> whose callback runs each frame, so content that changes needs no pushing. Sections are separated by a blank line and sorted by <see cref="TextOverlaySection.Order"/>. </para>
 ///
 /// <para>
 /// Text is drawn with an installed font chosen by <see cref="FontFamily"/> - monospace by default, like
@@ -22,7 +22,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </remarks>
 /// <example>
 /// <code>
-/// var overlay = DebugOverlay.GetOrCreate(game);
+/// var overlay = TextOverlay.GetOrCreate(game);
 ///
 /// overlay.AddSection("Stress pile", () =>
 /// [
@@ -31,12 +31,12 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// ]);
 /// </code>
 /// </example>
-public sealed class DebugOverlay : GameSystemBase
+public sealed class TextOverlay : GameSystemBase
 {
-    private readonly List<DebugOverlaySection> _sections = [];
+    private readonly List<TextOverlaySection> _sections = [];
 
     private SpriteBatch? _spriteBatch;
-    private readonly DebugOverlayFontResolver _fontResolver = new();
+    private readonly TextOverlayFontResolver _fontResolver = new();
     private Texture? _background;
     private InputManager? _input;
     private IGraphicsDeviceService? _graphicsDeviceService;
@@ -52,12 +52,12 @@ public sealed class DebugOverlay : GameSystemBase
     public SpriteFont? Font { get; set; }
 
     /// <summary>
-    /// Gets or sets which kind of installed font to draw with when <see cref="FontName"/> is not set. Defaults to <see cref="DebugOverlayFontFamily.Monospace"/>, the character of Stride's own debug text.
+    /// Gets or sets which kind of installed font to draw with when <see cref="FontName"/> is not set. Defaults to <see cref="TextOverlayFontFamily.Monospace"/>, the character of Stride's own debug text.
     /// </summary>
     /// <remarks>
     /// The font file is located in the system font folders and rasterised at the size asked for, so it stays sharp at any <see cref="FontSize"/> and <see cref="Scale"/>. If none of the family's fonts is installed, Stride's default font is used - which is bold and proportional.
     /// </remarks>
-    public DebugOverlayFontFamily FontFamily { get; set; } = DebugOverlayFontFamily.Monospace;
+    public TextOverlayFontFamily FontFamily { get; set; } = TextOverlayFontFamily.Monospace;
 
     /// <summary>
     /// Gets or sets the family name of a specific installed font to draw with, such as <c>"Consolas"</c> or <c>"Segoe UI"</c>, overriding <see cref="FontFamily"/>. <see langword="null"/>, the default, chooses from <see cref="FontFamily"/>. A font that cannot be found falls back the same way.
@@ -122,7 +122,7 @@ public sealed class DebugOverlay : GameSystemBase
     /// Initializes a new overlay. Prefer <see cref="GetOrCreate(IGame)"/>, which shares one instance.
     /// </summary>
     /// <param name="registry">The service registry to resolve input and the graphics device from.</param>
-    public DebugOverlay(IServiceRegistry registry) : base(registry)
+    public TextOverlay(IServiceRegistry registry) : base(registry)
     {
         Enabled = true;
         Visible = true;
@@ -221,7 +221,7 @@ public sealed class DebugOverlay : GameSystemBase
     public RectangleF BlockBounds { get; private set; }
 
     /// <summary>Gets the sections currently registered, in insertion order.</summary>
-    public IReadOnlyList<DebugOverlaySection> Sections => _sections;
+    public IReadOnlyList<TextOverlaySection> Sections => _sections;
 
     /// <summary>
     /// Decorates keys the way this overlay draws them: each through <see cref="KeyFormat"/>, joined by
@@ -252,13 +252,13 @@ public sealed class DebugOverlay : GameSystemBase
     /// </summary>
     /// <param name="game">The game to attach to.</param>
     /// <returns>The shared overlay.</returns>
-    public static DebugOverlay GetOrCreate(IGame game)
+    public static TextOverlay GetOrCreate(IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        if (game.Services.GetService<DebugOverlay>() is { } existing) return existing;
+        if (game.Services.GetService<TextOverlay>() is { } existing) return existing;
 
-        var overlay = new DebugOverlay(game.Services);
+        var overlay = new TextOverlay(game.Services);
 
         game.Services.AddService(overlay);
         game.GameSystems.Add(overlay);
@@ -273,12 +273,12 @@ public sealed class DebugOverlay : GameSystemBase
     /// <param name="lines">Produces the section's lines. Called every frame the overlay is drawn.</param>
     /// <param name="order">Sort order; lower is drawn first.</param>
     /// <returns>The section, so it can be disabled or removed later.</returns>
-    public DebugOverlaySection AddSection(string name, Func<IReadOnlyList<TextElement>> lines, int order = 0)
+    public TextOverlaySection AddSection(string name, Func<IReadOnlyList<TextElement>> lines, int order = 0)
     {
         ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(lines);
 
-        var section = new DebugOverlaySection { Name = name, Lines = lines, Order = order };
+        var section = new TextOverlaySection { Name = name, Lines = lines, Order = order };
 
         _sections.Add(section);
 
@@ -295,7 +295,7 @@ public sealed class DebugOverlay : GameSystemBase
     /// <param name="collapsed">Whether it starts collapsed.</param>
     /// <param name="order">Sort order; lower is drawn first.</param>
     /// <returns>The section, so it can be collapsed, disabled or removed later.</returns>
-    public DebugOverlaySection AddCollapsibleSection(
+    public TextOverlaySection AddCollapsibleSection(
         string name,
         string title,
         Keys toggleKey,
@@ -315,12 +315,12 @@ public sealed class DebugOverlay : GameSystemBase
     /// <summary>Removes a section previously added with <see cref="AddSection"/>.</summary>
     /// <param name="section">The section to remove.</param>
     /// <returns><see langword="true"/> if it was present.</returns>
-    public bool RemoveSection(DebugOverlaySection section) => _sections.Remove(section);
+    public bool RemoveSection(TextOverlaySection section) => _sections.Remove(section);
 
     /// <summary>Finds a section by name, or <see langword="null"/> if there is none.</summary>
     /// <param name="name">The name given when the section was added.</param>
     /// <returns>The section, if found.</returns>
-    public DebugOverlaySection? FindSection(string name)
+    public TextOverlaySection? FindSection(string name)
         => _sections.FirstOrDefault(section => section.Name == name);
 
     /// <summary>
@@ -460,7 +460,7 @@ public sealed class DebugOverlay : GameSystemBase
     private readonly record struct BlockMeasure(Vector2[] Sizes, string[] Prefixes, float IndentWidth, float Width);
 
     /// <summary>
-    /// Measures every line. Measured rather than declared, so a section appearing or a dropdown
+    /// Measures every line. Measured rather than declared, so a section appearing or a key menu
     /// expanding keeps the block anchored to its corner instead of running off the edge.
     /// </summary>
     private BlockMeasure MeasureBlock(List<TextElement> lines, SpriteFont font, float scale)
@@ -589,7 +589,7 @@ public sealed class DebugOverlay : GameSystemBase
 
             if (collapsible)
             {
-                // "[+] [F2] Camera controls": the marker first, so every dropdown lines up, then the key,
+                // "[+] [F2] Camera controls": the marker first, so every key menu lines up, then the key,
                 // decorated like the section's own key lines
                 lines.Add(new(KeyNames.Describe(section.ToggleKey!.Value), section.Title!, TitleColor)
                 {
@@ -625,7 +625,7 @@ public sealed class DebugOverlay : GameSystemBase
             ? new Int2((int)(1280 / scale), (int)(720 / scale))
             : new Int2((int)(backBuffer.Width / scale), (int)(backBuffer.Height / scale));
 
-        // Measured rather than declared, so a section appearing or a dropdown expanding keeps the
+        // Measured rather than declared, so a section appearing or a key menu expanding keeps the
         // block anchored to its corner instead of running off the edge
         var width = (int)MathF.Ceiling(blockWidth);
         var height = (int)MathF.Ceiling(blockHeight);

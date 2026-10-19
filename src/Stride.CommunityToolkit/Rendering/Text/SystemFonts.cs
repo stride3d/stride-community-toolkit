@@ -14,7 +14,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// the same in every such game - is the only one it gets for free. This finds a family's file in the
 /// operating system's font folders, registers it with Stride's font system and rasterises it at the
 /// size asked for, producing exactly what <see cref="WorldTextComponent.Font"/>,
-/// <see cref="EntityTextComponent.Font"/> and the debug overlay all accept.
+/// <see cref="EntityTextComponent.Font"/> and the text overlay all accept.
 /// </para>
 /// <para>
 /// Rasterised, not scaled: the font is sharp at whatever size it was loaded at, and a size well above

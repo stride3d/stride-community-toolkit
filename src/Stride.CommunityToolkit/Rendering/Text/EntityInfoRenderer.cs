@@ -16,7 +16,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Appearance is controlled through <see cref="EntityDebugSceneRendererOptions"/>. Unlike
+/// Appearance is controlled through <see cref="EntityInfoRendererOptions"/>. Unlike
 /// <see cref="EntityTextRenderer"/>, which draws text that entities opt into by carrying an
 /// <see cref="EntityTextComponent"/>, this labels entities automatically and styles them all the same
 /// way - it is a debugging overlay to switch on, not authored content.
@@ -26,28 +26,28 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// shadows and projection behave identically in both.
 /// </para>
 /// </remarks>
-public class EntityDebugSceneRenderer : SceneRendererBase
+public class EntityInfoRenderer : SceneRendererBase
 {
     private SpriteBatch? _spriteBatch;
     private SpriteFont? _font;
     private Texture? _backgroundTexture;
     private readonly StringBuilder _stringBuilder = new();
-    private readonly EntityDebugSceneRendererOptions _options;
+    private readonly EntityInfoRendererOptions _options;
     private DisplayScale? _displayScale;
 
     // The display's scale for this frame, applied to every pixel figure in the options
     private float _display = 1f;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EntityDebugSceneRenderer"/> class with default rendering options.
+    /// Initializes a new instance of the <see cref="EntityInfoRenderer"/> class with default rendering options.
     /// </summary>
-    public EntityDebugSceneRenderer() => _options = new();
+    public EntityInfoRenderer() => _options = new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EntityDebugSceneRenderer"/> class with the specified rendering options.
+    /// Initializes a new instance of the <see cref="EntityInfoRenderer"/> class with the specified rendering options.
     /// </summary>
     /// <param name="options">Options to customize debug text appearance. If null, defaults are used.</param>
-    public EntityDebugSceneRenderer(EntityDebugSceneRendererOptions? options = null) => _options = options ?? new();
+    public EntityInfoRenderer(EntityInfoRendererOptions? options = null) => _options = options ?? new();
 
     /// <inheritdoc />
     protected override void InitializeCore()
@@ -66,7 +66,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
     }
 
     /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
-    public static readonly ProfilingKey ProfilingKey = new("EntityDebug");
+    public static readonly ProfilingKey ProfilingKey = new("EntityInfo");
 
     private static readonly Color4 ProfileColor = new(0.6f, 0.6f, 0.9f, 1f);
 
@@ -147,7 +147,7 @@ public class EntityDebugSceneRenderer : SceneRendererBase
         var position = screenPosition + _options.Offset * _display;
 
         // With a separate colour the two parts have to be drawn separately, so they are stacked
-        // instead of chained along one line - see EntityDebugSceneRendererOptions.PositionColor
+        // instead of chained along one line - see EntityInfoRendererOptions.PositionColor
         if (_options.PositionColor is { } positionColor && _options.ShowEntityPosition)
         {
             var name = _options.ShowEntityName ? entity.Name : null;

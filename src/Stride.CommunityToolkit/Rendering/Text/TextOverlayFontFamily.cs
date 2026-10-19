@@ -1,9 +1,9 @@
 namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
-/// The kind of system font a <see cref="DebugOverlay"/> looks for when no <see cref="DebugOverlay.FontName"/> is set.
+/// The kind of system font a <see cref="TextOverlay"/> looks for when no <see cref="TextOverlay.FontName"/> is set.
 /// </summary>
-public enum DebugOverlayFontFamily
+public enum TextOverlayFontFamily
 {
     /// <summary>
     /// Every character the same width, like Stride's own debug font: columns line up, numbers do not

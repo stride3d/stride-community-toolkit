@@ -14,8 +14,8 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </para>
 /// <para>
 /// Nothing here reads the keyboard or draws on its own - call <see cref="Update"/> once per frame from
-/// your update loop, and hand <see cref="GetLines"/> to a <see cref="DebugOverlay"/> section, so the
-/// dropdown shares one position and one toggle key with the camera help and everything else on screen.
+/// your update loop, and hand <see cref="GetLines"/> to a <see cref="TextOverlay"/> section, so the
+/// key menu shares one position and one toggle key with the camera help and everything else on screen.
 /// </para>
 /// <para>
 /// Keep every title and label to printable ASCII. The debug text renderer replaces anything outside
@@ -25,7 +25,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// </remarks>
 /// <example>
 /// <code>
-/// var shapes = new DebugTextDropdown
+/// var shapes = new KeyMenu
 /// {
 ///     Title = "Shape",
 ///     ToggleKey = Keys.C,
@@ -36,13 +36,13 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 ///     ],
 /// };
 ///
-/// DebugOverlay.GetOrCreate(game).AddSection("Shape", () => shapes.GetLines());
+/// TextOverlay.GetOrCreate(game).AddSection("Shape", () => shapes.GetLines());
 ///
 /// // in Update
 /// shapes.Update(game.Input);
 /// </code>
 /// </example>
-public class DebugTextDropdown
+public class KeyMenu
 {
     /// <summary>
     /// Gets the name shown after the toggle key, for example <c>Shape</c> in <c>[+] [C] Shape: Sphere</c>.
@@ -57,7 +57,7 @@ public class DebugTextDropdown
     /// <summary>
     /// Gets the entries to choose from.
     /// </summary>
-    public required IReadOnlyList<DebugTextDropdownItem> Items { get; init; }
+    public required IReadOnlyList<KeyMenuItem> Items { get; init; }
 
     /// <summary>
     /// Gets or sets the colour of the collapsed line and of the title while expanded.
@@ -68,7 +68,7 @@ public class DebugTextDropdown
     /// Gets or sets the marker drawn before the toggle key while the list is collapsed.
     /// </summary>
     /// <remarks>
-    /// Printable ASCII only - see the remarks on <see cref="DebugTextDropdown"/>. Arrow glyphs such as
+    /// Printable ASCII only - see the remarks on <see cref="KeyMenu"/>. Arrow glyphs such as
     /// <c>▼</c> render as blanks.
     /// </remarks>
     public string CollapsedMarker { get; set; } = "[+]";
@@ -115,24 +115,24 @@ public class DebugTextDropdown
     /// <summary>
     /// Gets the selected entry, or <see langword="null"/> when nothing has been selected yet.
     /// </summary>
-    public DebugTextDropdownItem? Selected => SelectedIndex < 0 ? null : Items[SelectedIndex];
+    public KeyMenuItem? Selected => SelectedIndex < 0 ? null : Items[SelectedIndex];
 
     /// <summary>
     /// Gets or sets a value indicating whether the list is currently expanded.
     /// </summary>
     /// <remarks>
-    /// Settable so that several dropdowns can coordinate - close the others when one opens, and their
+    /// Settable so that several key menus can coordinate - close the others when one opens, and their
     /// entry keys are then free to overlap.
     /// </remarks>
     public bool IsOpen { get; set; }
 
     /// <summary>
-    /// Reads the keyboard and updates the dropdown, running the selected entry's action if one is chosen.
+    /// Reads the keyboard and updates the key menu, running the selected entry's action if one is chosen.
     /// </summary>
     /// <param name="input">The input manager to read from.</param>
     /// <returns>
-    /// <see langword="true"/> when a key belonging to this dropdown was pressed, so a caller with
-    /// several dropdowns can stop looking once one of them has claimed the key.
+    /// <see langword="true"/> when a key belonging to this key menu was pressed, so a caller with
+    /// several key menus can stop looking once one of them has claimed the key.
     /// </returns>
     /// <remarks>
     /// Call once per frame. While expanded, <see cref="Keys.Escape"/> collapses the list without
@@ -179,12 +179,12 @@ public class DebugTextDropdown
     }
 
     /// <summary>
-    /// Builds the lines the dropdown currently occupies: one when collapsed, one per entry plus a
+    /// Builds the lines the key menu currently occupies: one when collapsed, one per entry plus a
     /// title when expanded.
     /// </summary>
     /// <returns>The lines, in display order.</returns>
     /// <remarks>
-    /// The <see cref="DebugOverlay"/> section the lines are handed to draws them; the dropdown has no
+    /// The <see cref="TextOverlay"/> section the lines are handed to draws them; the key menu has no
     /// position of its own.
     /// </remarks>
     public IReadOnlyList<TextElement> GetLines()

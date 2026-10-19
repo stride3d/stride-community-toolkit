@@ -5,14 +5,14 @@ using Stride.Graphics;
 namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
-/// Finds, registers and caches the font <see cref="DebugOverlay"/> draws with: the overlay's explicit
-/// <see cref="DebugOverlay.Font"/> if set, otherwise an installed system font matching the overlay's
-/// font settings, otherwise Stride's default font. Split out of <see cref="DebugOverlay"/> so the
+/// Finds, registers and caches the font <see cref="TextOverlay"/> draws with: the overlay's explicit
+/// <see cref="TextOverlay.Font"/> if set, otherwise an installed system font matching the overlay's
+/// font settings, otherwise Stride's default font. Split out of <see cref="TextOverlay"/> so the
 /// overlay owns the settings and this owns the lookup and the caching.
 /// </summary>
-internal sealed class DebugOverlayFontResolver : IDisposable
+internal sealed class TextOverlayFontResolver : IDisposable
 {
-    private static readonly Logger _log = GlobalLogger.GetLogger(nameof(DebugOverlay));
+    private static readonly Logger _log = GlobalLogger.GetLogger(nameof(TextOverlay));
 
     private SpriteFont? _defaultFont;
     private SpriteFont? _systemFont;
@@ -20,9 +20,9 @@ internal sealed class DebugOverlayFontResolver : IDisposable
     private bool _systemFontFailed;
 
     /// <summary>
-    /// <see cref="DebugOverlay.Font"/> if set; otherwise an installed font - <see cref="DebugOverlay.FontName"/>, or the first of <see cref="DebugOverlay.FontFamily"/> 's candidates that is present - registered with Stride's font system from its file the first time it is needed; otherwise Stride's default font.
+    /// <see cref="TextOverlay.Font"/> if set; otherwise an installed font - <see cref="TextOverlay.FontName"/>, or the first of <see cref="TextOverlay.FontFamily"/> 's candidates that is present - registered with Stride's font system from its file the first time it is needed; otherwise Stride's default font.
     /// </summary>
-    internal SpriteFont Resolve(DebugOverlay overlay, IContentManager content, IServiceRegistry services)
+    internal SpriteFont Resolve(TextOverlay overlay, IContentManager content, IServiceRegistry services)
     {
         if (overlay.Font != null) return overlay.Font;
 
@@ -52,7 +52,7 @@ internal sealed class DebugOverlayFontResolver : IDisposable
         _systemFont = null;
     }
 
-    private static SpriteFont? LoadSystemFont(DebugOverlay overlay, IServiceRegistry services)
+    private static SpriteFont? LoadSystemFont(TextOverlay overlay, IServiceRegistry services)
     {
         var families = FamilyCandidates(overlay);
         var font = SystemFonts.LoadFirst(services, families, overlay.FontSize, overlay.FontStyle, overlay.FontFile);
@@ -68,11 +68,11 @@ internal sealed class DebugOverlayFontResolver : IDisposable
     /// <summary>
     /// The families tried, in order: the one the overlay names, or the platform's candidates for the kind of font it asks for.
     /// </summary>
-    private static IReadOnlyList<string> FamilyCandidates(DebugOverlay overlay)
+    private static IReadOnlyList<string> FamilyCandidates(TextOverlay overlay)
     {
         if (overlay.FontName is { Length: > 0 } explicitName) return [explicitName];
 
-        return overlay.FontFamily == DebugOverlayFontFamily.Monospace
+        return overlay.FontFamily == TextOverlayFontFamily.Monospace
             ? SystemFonts.MonospaceCandidates
             : SystemFonts.SansSerifCandidates;
     }

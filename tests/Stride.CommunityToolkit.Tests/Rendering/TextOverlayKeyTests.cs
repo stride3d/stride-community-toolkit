@@ -9,13 +9,13 @@ namespace Stride.CommunityToolkit.Tests.Rendering;
 /// Keys are data on a <see cref="TextElement"/> and the overlay decorates them: one property restyles
 /// every help line in every example, which is the point of not baking the brackets into the text.
 /// </summary>
-public class DebugOverlayKeyTests
+public class TextOverlayKeyTests
 {
     [Fact]
     public void FormatKeys_DecoratesEachKeyAndJoinsThem()
     {
         using var game = new Game();
-        var overlay = DebugOverlay.GetOrCreate(game);
+        var overlay = TextOverlay.GetOrCreate(game);
 
         Assert.Equal("[H]", overlay.FormatKeys(["H"]));
         Assert.Equal("[Q] [E]", overlay.FormatKeys(["Q", "E"]));
@@ -27,7 +27,7 @@ public class DebugOverlayKeyTests
     public void FormatKeys_FollowsTheFormatAndSeparator()
     {
         using var game = new Game();
-        var overlay = DebugOverlay.GetOrCreate(game);
+        var overlay = TextOverlay.GetOrCreate(game);
 
         overlay.KeyFormat = "{0}:";
         overlay.KeySeparator = ", ";
