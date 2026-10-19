@@ -15,7 +15,7 @@ per-frame behaviour to many entities without a script on each one.
 The `Program.cs` file shows how to:
 
 - Building a character controller with Bepu CharacterComponent
-- Attaching a collider by passing the component through Bepu3DPhysicsOptions
+- Attaching a collider by passing the component through BepuPhysicsOptions
 - Why the setup's camera has no controller when the scene brings its own
 - Pairing an EntityComponent with an EntityProcessor
 - Auto-registering a processor with [DefaultEntityComponentProcessor]

@@ -37,6 +37,25 @@ Unchanged, because they are debugging aids: `AddPhysicsDebug`, the collider gizm
 
 The compiler names every call site that needs a new `using`; nothing else changes.
 
+#### One body mode on the physics options
+
+Four option types with three overlapping knobs (`IncludePhysics`, `Component`, `Mass`, and `Depth` on the 2D pair) are two, and the kind of physics a primitive gets is one property.
+
+| Before | After | Note |
+|---|---|---|
+| `Primitive3DEntityOptions`, `Primitive2DEntityOptions`, `PrimitiveEntityOptionsBase` | `PrimitiveEntityOptions` | One core type for both dimensions. |
+| `Bepu3DPhysicsOptions`, `Bepu2DPhysicsOptions` | `BepuPhysicsOptions` | One Bepu type; `Component`, `Mass` and the new `Interpolation` on it. |
+| `Bullet3DPhysicsOptions`, `Bullet2DPhysicsOptions` | `BulletPhysicsOptions` | One Bullet type; `PhysicsComponent` has no default any more, the mode makes one. |
+| `IncludePhysics = false` | `Body = BodyMode.None` | `Body` is `Dynamic` by default; `Static`, `Kinematic` and `None` are the other modes. |
+| `Component = new StaticComponent { Collider = new CompoundCollider() }` | `Body = BodyMode.Static` | The same for Bullet's `StaticColliderComponent`. A supplied component still wins over the mode. |
+| `Component = new BodyComponent { Kinematic = true, Collider = new CompoundCollider() }` | `Body = BodyMode.Kinematic` | |
+| `Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated }` | nothing | A body the options make is interpolated by default; `Interpolation = false` turns it off. A supplied component keeps its own setting. |
+| `new Bepu2DPhysicsOptions { Depth = 4 }` | `Primitive2D.RegularPolygon(1, 5, depth: 4)` | The collider depth is on the 2D shape; every factory takes it last. |
+| `PhysicsSetupBase.AddStatic(...)` | `AddBody(...)` with `Body = BodyMode.Static` | The ground helpers set the mode; a package implements `AddBody` for both shape kinds only. |
+| the ground helpers wrote the default name and material into the options they were given | `options.WithBody(mode)` | The grounds build from a copy; the options you pass come back as they were. `WithBody` is public, a shallow copy of any options type. |
+
+A supplied component together with `Body = BodyMode.None` throws, since the two contradict each other. `Mass` with `Static` is ignored with a line in the log, since a static has none.
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed

@@ -66,7 +66,7 @@ public void SimulationUpdate(BepuSimulation simulation, float simTimeStep)
 
 ## "I want the model without a body"
 
-`IncludePhysics = false` on the options leaves the physics out altogether. A `BodyComponent` whose
+`Body = BodyMode.None` on the options leaves the physics out altogether. A `BodyComponent` whose
 `CompoundCollider` holds no shapes never attaches to the simulation, so a body added by hand with an
 empty compound is an inert component rather than no physics.
 
@@ -206,7 +206,7 @@ mesh collider if it can be static.
 | Velocity-driven motion stops | `LinearVelocity` does not wake a body | Also set `Awake = true` |
 | Kinematic body diverges to `NaN` | `SetTargetPose` called more than once per physics tick | Call it from `SimulationUpdate`, or integrate your own velocity |
 | Null reference in `SimulationUpdate` | It can run before `Start` | Resolve lazily with `??=` |
-| Inert `BodyComponent` | A body whose compound holds no shapes | `IncludePhysics = false` for no physics; your own shapes in the compound otherwise |
+| Inert `BodyComponent` | A body whose compound holds no shapes | `Body = BodyMode.None` for no physics; your own shapes in the compound otherwise |
 | `AccessViolationException` in the solver | Unknown; intermittent, seen only with hull shapes at scale | None known - keep hull body counts down, or use an analytic collider |
 | Slow spawns and finalizer churn with hull shapes | A hull per body, freed from a finalizer into a static pool | Share one `DecomposedHulls` per shape; the toolkit does this already |
 | `Stack overflow` in `Refit2WithCacheOptimization` | A degenerate broad-phase tree from a perfectly regular lattice | Jitter the spawn positions, or space the bodies apart |

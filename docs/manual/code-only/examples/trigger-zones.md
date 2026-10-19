@@ -25,4 +25,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_TriggerZones).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_TriggerZones/Program.cs?start=1&end=316)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_TriggerZones/Program.cs?start=1&end=315)]

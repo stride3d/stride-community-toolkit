@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Driving a kinematic Bepu 2D body towards an eased target with feed-forward velocity plus a correction
 - A pop-in by scale, a flight by position, a rise-and-fade on one tween
 - An elastic ease-out as a camera shake
-- Visual-only primitives with IncludePhysics off, next to physics bodies
+- Visual-only primitives with Body = BodyMode.None, next to physics bodies
 
 ![Easing in a 2D Game](media/easing-2d-game.webp)
 

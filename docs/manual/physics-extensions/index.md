@@ -22,12 +22,28 @@ Bullet is maintained, not extended: the package follows every toolkit change and
 ### Scene setup
 
 - [`UseBepu()`](xref:Stride.CommunityToolkit.Bepu.SceneSetupExtensions.UseBepu``1(``0)) - Makes Bepu the physics engine of a [`SceneSetup3D`](xref:Stride.CommunityToolkit.Engine.SceneSetup3D) or [`SceneSetup2D`](xref:Stride.CommunityToolkit.Engine.SceneSetup2D): `game.Run(new SceneSetup3D().UseBepu(), start: Start)` is a scene you can fly around, with a ground that collides.
-- [`BepuPhysicsSetup`](xref:Stride.CommunityToolkit.Bepu.BepuPhysicsSetup) - What `UseBepu()` sets: the core's `CreatePrimitive` then attaches a `BodyComponent` (a `Body2DComponent` for a flat shape) with the collider fitted to the shape, and the grounds a `StaticComponent`.
+- [`BepuPhysicsSetup`](xref:Stride.CommunityToolkit.Bepu.BepuPhysicsSetup) - What `UseBepu()` sets: the core's `CreatePrimitive` then attaches what the options' `Body` asks for, a `BodyComponent` (a `Body2DComponent` for a flat shape) or a `StaticComponent`, with the collider fitted to the shape; the grounds are static.
 - `Add3DGround()` and `Add2DGround()` are the core's; with Bepu chosen, the ground gets a static collider on its own, when you do not want the rest of the scene setup.
 
 ### Primitives with colliders
 
-- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bepu chosen, the entity comes with a matching Bepu collider. A [`Bepu3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu3DPhysicsOptions) or [`Bepu2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.Bepu2DPhysicsOptions) passed as the options sets the body component and whether a collider is included; `IncludePhysics = false` on any options leaves the physics out. `Mass` on the options is the mass of the fitted collider shape, where Bepu keeps it.
+- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bepu chosen, the entity comes with a matching Bepu collider. `Body` on any options picks the kind: `Dynamic` (the default), `Static`, `Kinematic` or `None`. A [`BepuPhysicsOptions`](xref:Stride.CommunityToolkit.Bepu.BepuPhysicsOptions) adds `Mass`, the mass of the fitted collider shape, where Bepu keeps it; `Interpolation`, on by default, so a body moves smoothly between physics steps; and `Component`, a collidable of your own, used as it is. A 2D shape's collider is as deep as the shape says, `Primitive2D.Circle(0.5f, depth: 2f)`.
+
+```csharp
+var crate = game.CreatePrimitive(Primitive3D.Cube());                                                  // a dynamic body
+var floor = game.CreatePrimitive(Primitive3D.Box(new Vector3(10, 0.2f, 10)), new BepuPhysicsOptions { Body = BodyMode.Static });
+var lift = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
+var prop = game.CreatePrimitive(Primitive3D.Teapot(), new BepuPhysicsOptions { Body = BodyMode.None }); // the model alone
+```
+
+When the body needs more than the mode gives, friction, a contact handler, a collision layer, shapes of your own, supply the component and it is used as it is. The mode is then ignored; an empty `CompoundCollider` on it still gets the fitted shape, and a compound that holds shapes keeps them. Options with a supplied component serve one entity, since a component belongs to one.
+
+```csharp
+var lift = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
+{
+    Component = new BodyComponent { Kinematic = true, FrictionCoefficient = 0.9f, Collider = new CompoundCollider() },
+});
+```
 
 ### Raycasting
 
@@ -121,10 +137,10 @@ In the `Stride.CommunityToolkit.Bepu` namespace, for giving an arbitrary mesh a 
 
 ### Mesh colliders
 
-The engine's `MeshCollider` is the model's own triangles, so a hole stays a hole where a hull would fill it. It needs the model, so it is attached once the entity has one: create the primitive with `IncludePhysics = false`, then add the component.
+The engine's `MeshCollider` is the model's own triangles, so a hole stays a hole where a hull would fill it. It needs the model, so it is attached once the entity has one: create the primitive with `Body = BodyMode.None`, then add the component.
 
 ```csharp
-var ring = game.CreatePrimitive(Primitive3D.Torus(1.2f, 0.35f), new Bepu3DPhysicsOptions { IncludePhysics = false });
+var ring = game.CreatePrimitive(Primitive3D.Torus(1.2f, 0.35f), new BepuPhysicsOptions { Body = BodyMode.None });
 
 ring.Add(new StaticComponent { Collider = new MeshCollider { Model = ring.Get<ModelComponent>().Model, Closed = true } });
 ```
@@ -136,14 +152,14 @@ What the triangles are not, measured in `E05_3D_MeshColliders`: a mesh is a surf
 ### Scene setup
 
 - [`UseBullet()`](xref:Stride.CommunityToolkit.Bullet.SceneSetupExtensions.UseBullet``1(``0)) - Makes Bullet the physics engine of a scene setup, the counterpart of `UseBepu()`.
-- [`BulletPhysicsSetup`](xref:Stride.CommunityToolkit.Bullet.BulletPhysicsSetup) - What `UseBullet()` sets: the core's `CreatePrimitive` then attaches a `RigidbodyComponent` with the collider fitted to the shape, and the grounds a `StaticColliderComponent`.
-- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - A ground plane nothing can fall off the edge of. Bullet only; there is no Bepu equivalent.
+- [`BulletPhysicsSetup`](xref:Stride.CommunityToolkit.Bullet.BulletPhysicsSetup) - What `UseBullet()` sets: the core's `CreatePrimitive` then attaches what the options' `Body` asks for, a `RigidbodyComponent`, kinematic or not, or a `StaticColliderComponent`, with the collider fitted to the shape; the grounds are static.
+- [`AddInfinite3DGround()`](xref:Stride.CommunityToolkit.Bullet.GameExtensions.AddInfinite3DGround(Stride.Games.IGame,System.Nullable{Stride.Core.Mathematics.Vector2},Stride.CommunityToolkit.Bullet.BulletPhysicsOptions)) - A ground plane nothing can fall off the edge of. Bullet only; there is no Bepu equivalent.
 
 ### Primitives and colliders
 
-- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bullet chosen, the entity comes with a matching Bullet collider. A [`Bullet3DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions) or [`Bullet2DPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions) passed as the options sets the physics component and whether a collider is included. `Mass` on the options is the mass of the rigid body.
-- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.Bullet3DPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
-- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.Bullet2DPhysicsOptions)) - The 2D equivalent.
+- `CreatePrimitive(Primitive3D)` and `CreatePrimitive(Primitive2D)` are the core's; with Bullet chosen, the entity comes with a matching Bullet collider. `Body` on any options picks the kind, as with Bepu. A [`BulletPhysicsOptions`](xref:Stride.CommunityToolkit.Bullet.BulletPhysicsOptions) adds `Mass`, the mass of the rigid body, and `PhysicsComponent`, a component of your own, used as it is.
+- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive3D,Stride.CommunityToolkit.Bullet.BulletPhysicsOptions)) - Attaches a collider to an entity you already built, rather than creating both together.
+- [`AddBulletPhysics()`](xref:Stride.CommunityToolkit.Bullet.EntityExtensions.AddBulletPhysics(Stride.Engine.Entity,Stride.CommunityToolkit.Rendering.ProceduralModels.Primitive2D,Stride.CommunityToolkit.Bullet.BulletPhysicsOptions)) - The 2D equivalent.
 
 ### Raycasting
 

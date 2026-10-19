@@ -121,7 +121,7 @@ the options is the word's, shared out among the hulls. The hulls of a string are
 font, the text and the options, so a word dropped many times shares one set.
 
 ```csharp
-var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new Bepu3DPhysicsOptions { Material = material });
+var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = material });
 word.Transform.Position = new Vector3(0, 4, 0);
 word.Scene = scene;
 ```

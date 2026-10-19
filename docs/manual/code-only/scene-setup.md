@@ -105,7 +105,7 @@ Skybox = new GradientSkyboxSetup { Zenith = new Color(40, 60, 120), Horizon = ne
 
 ### The physics engine
 
-`UseBepu()` and `UseBullet()` set [`PhysicsSetupBase`](xref:Stride.CommunityToolkit.Engine.PhysicsSetupBase) on the setup. From then on `CreatePrimitive` attaches that engine's body with the collider fitted to the shape, and `Add3DGround` and `Add2DGround` a static collider. `IncludePhysics = false` on the primitive options leaves one entity without physics; the engine-named entity extensions, `AddBepuPhysics` and `AddBulletPhysics`, attach physics explicitly whatever the setup chose, so two engines can share a game. See [Physics Extensions](../physics-extensions/index.md).
+`UseBepu()` and `UseBullet()` set [`PhysicsSetupBase`](xref:Stride.CommunityToolkit.Engine.PhysicsSetupBase) on the setup. From then on `CreatePrimitive` attaches that engine's body with the collider fitted to the shape, and `Add3DGround` and `Add2DGround` a static collider. `Body = BodyMode.None` on the primitive options leaves one entity without physics; the engine-named entity extensions, `AddBepuPhysics` and `AddBulletPhysics`, attach physics explicitly whatever the setup chose, so two engines can share a game. See [Physics Extensions](../physics-extensions/index.md).
 
 ### GameSettings
 
