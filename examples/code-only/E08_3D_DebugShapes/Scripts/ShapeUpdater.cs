@@ -1,7 +1,7 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Collections;
 using Stride.CommunityToolkit.DebugShapes;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Core;
 using Stride.Core.Mathematics;
 using Stride.Core.Threading;

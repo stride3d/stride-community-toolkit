@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Box2D;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
