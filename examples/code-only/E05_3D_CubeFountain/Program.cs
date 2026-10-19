@@ -1,7 +1,6 @@
 using E05_3D_CubeFountain;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
@@ -81,9 +80,9 @@ void Start(Scene scene)
     for (var i = 0; i < shapes.Length; i++)
     {
         // The model, owned by a prototype parked out of sight
-        var prototype = game.CreatePrimitive(shapes[i].Type, new Primitive3DEntityOptions
+        var prototype = game.CreatePrimitive(shapes[i].Type, new PrimitiveEntityOptions
         {
-            IncludePhysics = false,
+            Body = BodyMode.None,
             Material = game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f),
         });
 
@@ -210,10 +209,10 @@ Entity CreateBody(Scene scene, int kind, Vector3 position)
     // component to be present, which is then taken off again
     var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
 
-    body.AddBepuPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
+    body.AddBepuPhysics(shapes[kind].Type, new BepuPhysicsOptions
     {
-        // A body is not interpolated unless asked: by default it is moved on physics steps only
-        Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = Interpolation() },
+        // The toolkit interpolates a body by default; the I key turns it off to show the difference
+        Interpolation = interpolated,
     });
 
     body.Remove<ModelComponent>();
@@ -255,10 +254,10 @@ void BuildBasin(Scene scene)
     {
         // An empty compound collider: CreatePrimitive adds the collider that fits the shape. A
         // collider given here as well would be a second one, at its default size
-        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = stone,
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         entity.Transform.Position = position;

@@ -130,7 +130,7 @@ void DropWord(Scene scene)
 {
     dropMaterial = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
 
-    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new Bepu3DPhysicsOptions { Material = dropMaterial });
+    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = dropMaterial });
 
     word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f);
     word.Transform.Rotation = faceCamera;

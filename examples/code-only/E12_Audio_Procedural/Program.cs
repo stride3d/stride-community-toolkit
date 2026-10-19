@@ -52,9 +52,9 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     // Something to look at: the orb swells with the signal level.
-    orb = game.CreatePrimitive(Primitive3D.Sphere(), new Primitive3DEntityOptions
+    orb = game.CreatePrimitive(Primitive3D.Sphere(), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(255, 170, 60)),
         Position = new Vector3(0, 1.5f, 0),
     });

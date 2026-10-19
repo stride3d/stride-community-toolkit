@@ -1,7 +1,5 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Components;
-using Stride.BepuPhysics.Definitions;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -130,10 +128,10 @@ void Update(Scene scene, GameTime time)
 /// <summary>A kinematic bar at the centre: moved by its velocity, immovable to the balls, so it bats them away.</summary>
 void BuildSpinner(Scene scene)
 {
-    var bar = game.CreatePrimitive(Primitive3D.Box(new Vector3(6f, 0.4f, 0.4f)), new Bepu3DPhysicsOptions
+    var bar = game.CreatePrimitive(Primitive3D.Box(new Vector3(6f, 0.4f, 0.4f)), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(230, 170, 60), metalness: 0f, glossiness: 0.4f),
-        Component = new BodyComponent { Collider = new CompoundCollider(), Kinematic = true, InterpolationMode = InterpolationMode.Interpolated },
+        Body = BodyMode.Kinematic,
     });
 
     bar.Name = "Spinner";
@@ -142,10 +140,10 @@ void BuildSpinner(Scene scene)
 
     spinner = bar.Get<BodyComponent>();
 
-    var post = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 0.4f), new Bepu3DPhysicsOptions
+    var post = game.CreatePrimitive(Primitive3D.Cylinder(0.15f, 0.4f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(150, 150, 160), metalness: 0f, glossiness: 0.3f),
-        Component = new StaticComponent { Collider = new CompoundCollider() },
+        Body = BodyMode.Static,
     });
 
     post.Name = "Post";
@@ -156,10 +154,9 @@ void BuildSpinner(Scene scene)
 /// <summary>One ball from above the bar, a little off centre, so the bar meets it on the way down or on the ground.</summary>
 void DropBall(Scene scene)
 {
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = ballMaterial,
-        Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated },
     });
 
     ball.Name = $"Ball {balls.Count + 1}";

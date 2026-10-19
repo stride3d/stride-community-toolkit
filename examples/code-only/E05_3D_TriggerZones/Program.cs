@@ -148,7 +148,7 @@ void BuildZone(Scene scene)
     zone.Transform.Position = zoneCentre;
     zone.Scene = scene;
 
-    pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new Bepu3DPhysicsOptions { Material = idleMaterial, IncludePhysics = false });
+    pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new BepuPhysicsOptions { Material = idleMaterial, Body = BodyMode.None });
     pad.Name = "Zone pad";
     pad.Transform.Position = new Vector3(zoneCentre.X, 0.03f, zoneCentre.Z);
     pad.Scene = scene;
@@ -157,7 +157,7 @@ void BuildZone(Scene scene)
 /// <summary>A solid static with a handler: a floor that also knows what stands on it.</summary>
 void BuildPlate(Scene scene)
 {
-    plateEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.3f, 3f)), new Bepu3DPhysicsOptions
+    plateEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.3f, 3f)), new BepuPhysicsOptions
     {
         Material = idleMaterial,
         Component = new StaticComponent { Collider = new CompoundCollider(), ContactEventHandler = plate },
@@ -171,7 +171,7 @@ void BuildPlate(Scene scene)
 /// <summary>A dynamic body with a handler: it is hit, pushed about, and reports how hard.</summary>
 void BuildCrate(Scene scene)
 {
-    crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new Bepu3DPhysicsOptions
+    crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new BepuPhysicsOptions
     {
         Material = crateMaterial,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, ContactEventHandler = impact },
@@ -187,10 +187,9 @@ void DropBalls(Scene scene)
 {
     foreach (var x in new[] { zoneCentre.X, plateCentre.X, crateStart.X })
     {
-        var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
+        var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
         {
             Material = ballMaterial,
-            Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated },
         });
 
         ball.Name = $"Ball {balls.Count + 1}";

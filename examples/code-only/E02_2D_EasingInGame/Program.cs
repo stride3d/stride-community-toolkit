@@ -1,10 +1,9 @@
 using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -64,11 +63,11 @@ void Start(Scene rootScene)
     game.AddEntityTextRenderer();
 
     // The lift: a kinematic body, so it carries what lands on it and nothing pushes it back
-    var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new Bepu2DPhysicsOptions
+    var platform = game.CreatePrimitive(Primitive2D.Rectangle(4f, 0.4f), new BepuPhysicsOptions
     {
         EntityName = "Lift",
         Material = game.CreateFlatMaterial(new Color(70, 140, 200)),
-        Component = new Body2DComponent { Kinematic = true, Collider = new CompoundCollider() },
+        Body = BodyMode.Kinematic,
     });
 
     platform.Transform.Position = liftHome;
@@ -81,7 +80,7 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < boxHomes.Length; i++)
     {
-        var box = game.CreatePrimitive(Primitive2D.Rectangle(0.7f, 0.7f), new Bepu2DPhysicsOptions
+        var box = game.CreatePrimitive(Primitive2D.Rectangle(0.7f, 0.7f), new BepuPhysicsOptions
         {
             EntityName = $"Box {i + 1}",
             Material = game.CreateFlatMaterial(i == 2 ? new Color(235, 180, 60) : new Color(220, 90, 70)),
@@ -97,11 +96,11 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < coinSpots.Length; i++)
     {
-        var coin = game.CreatePrimitive(Primitive2D.Circle(0.4f), new Bepu2DPhysicsOptions
+        var coin = game.CreatePrimitive(Primitive2D.Circle(0.4f), new BepuPhysicsOptions
         {
             EntityName = $"Coin {i + 1}",
             Material = game.CreateFlatMaterial(new Color(250, 210, 60)),
-            IncludePhysics = false,
+            Body = BodyMode.None,
         });
 
         coin.Transform.Position = new Vector3(coinSpots[i], 0f);
@@ -323,7 +322,7 @@ concepts:
   - Driving a kinematic Bepu 2D body towards an eased target with feed-forward velocity plus a correction
   - A pop-in by scale, a flight by position, a rise-and-fade on one tween
   - An elastic ease-out as a camera shake
-  - Visual-only primitives with IncludePhysics off, next to physics bodies
+  - Visual-only primitives with Body = BodyMode.None, next to physics bodies
 tags:
   - 2D
   - Mathematics

@@ -131,15 +131,15 @@ void SetupInstancing(Scene scene)
     game.AddInstancingBufferUpload(instancing);
 }
 
-// One sphere model per node size, built on first use. Primitive3DEntityOptions, explicitly typed,
+// One sphere model per node size, built on first use. PrimitiveEntityOptions, explicitly typed,
 // is the overload that builds a model and no body; the entity is discarded.
 Model ModelFor(float radius)
 {
     if (models.TryGetValue(radius, out var cached)) return cached;
 
-    var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new Primitive3DEntityOptions
+    var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(230, 120, 90), metalness: 0.3f, glossiness: 0.7f),
     }).Get<ModelComponent>().Model;
 
@@ -178,7 +178,7 @@ void BuildScene(Scene scene)
     HangSheet(scene, new Vector3(-13, 10, 2), distanceHertz: 5, areaHertz: 30);
 
     // A ball for the fourth sheet to drape over.
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 1.5f } } } },
@@ -187,7 +187,7 @@ void BuildScene(Scene scene)
     ball.Scene = scene;
     extras.Add(ball);
 
-    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new Bepu3DPhysicsOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(1.0f) } } } },
@@ -344,7 +344,7 @@ void Area(Entity a, Entity b, Entity c, float hertz)
 
 void DropBall(Scene scene)
 {
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(240, 200, 80)),
         Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 0.7f, Mass = 4 } } } },

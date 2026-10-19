@@ -64,17 +64,17 @@ void Start(Scene scene)
 {
     // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
     // and its height in Z
-    var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new Primitive3DEntityOptions
+    var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         Position = new Vector3(0, 1.25f, 0),
     });
     pillar.Scene = scene;
 
-    orb = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
+    orb = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(255, 120, 60)),
     });
     orb.Scene = scene;

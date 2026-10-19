@@ -143,7 +143,7 @@ static Primitive3D Scaled(Primitive3D shape) => shape switch
 /// </summary>
 Model CreateSharedModel(Scene rootScene)
 {
-    var prototype = game.CreatePrimitive(modelShape, new Primitive3DEntityOptions { IncludePhysics = false });
+    var prototype = game.CreatePrimitive(modelShape, new PrimitiveEntityOptions { Body = BodyMode.None });
 
     // Parked out of sight; it exists only to own the Model
     prototype.Transform.Position = new Vector3(0, -100, 0);

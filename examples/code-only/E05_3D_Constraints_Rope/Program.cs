@@ -133,7 +133,7 @@ void CreateTower(Scene scene, float x)
     {
         for (var column = 0; column < TowerColumns; column++)
         {
-            var box = game.CreatePrimitive(Primitive3D.Cube(TowerBoxSize), new Bepu3DPhysicsOptions
+            var box = game.CreatePrimitive(Primitive3D.Cube(TowerBoxSize), new BepuPhysicsOptions
             {
                 EntityName = "Tower Box",
                 Material = game.CreateMaterial(row % 2 == 0 ? Color.Tan : Color.SandyBrown),

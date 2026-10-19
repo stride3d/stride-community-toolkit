@@ -108,10 +108,10 @@ void BuildRingStation(Scene scene, string label, float x, bool mesh)
 /// <summary>A static mesh sphere, hollow as every mesh is, with a ball dropped onto it and a ball started inside it.</summary>
 void BuildShellStation(Scene scene, string label, float x)
 {
-    var shell = game.CreatePrimitive(Primitive3D.Sphere(ShellRadius), new Bepu3DPhysicsOptions
+    var shell = game.CreatePrimitive(Primitive3D.Sphere(ShellRadius), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(meshColour, metalness: 0f, glossiness: 0.4f),
-        IncludePhysics = false,
+        Body = BodyMode.None,
     });
 
     shell.Add(new StaticComponent { Collider = new MeshCollider { Model = shell.Get<ModelComponent>().Model, Closed = true } });
@@ -150,7 +150,7 @@ void BuildMovingRingStation(Scene scene, string label, float x)
 /// </summary>
 Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
 {
-    var options = new Bepu3DPhysicsOptions
+    var options = new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(mesh ? meshColour : hullColour, metalness: 0f, glossiness: 0.4f),
     };
@@ -158,7 +158,7 @@ Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
     if (mesh)
     {
         // The mesh collider needs the model, so the physics is attached below
-        options.IncludePhysics = false;
+        options.Body = BodyMode.None;
     }
     else
     {
@@ -192,10 +192,9 @@ Entity AddRing(Scene scene, Vector3 position, bool mesh, bool moving)
 /// <summary>A ball with the default sphere collider, drawn between physics steps too so its fall is smooth.</summary>
 BodyComponent AddBall(Scene scene, Vector3 position)
 {
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(ballColour, metalness: 0f, glossiness: 0.6f),
-        Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated },
     });
 
     ball.Transform.Position = position;

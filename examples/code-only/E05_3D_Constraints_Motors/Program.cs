@@ -365,7 +365,7 @@ void PushPendulums()
 
 Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool kinematic = false)
 {
-    var entity = game.CreatePrimitive(Primitive3D.Box(size), new Bepu3DPhysicsOptions
+    var entity = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
     {
         EntityName = name,
         Material = game.CreateMaterial(color),

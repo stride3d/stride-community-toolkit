@@ -1,5 +1,3 @@
-using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
@@ -170,10 +168,10 @@ void BuildScene(Scene scene)
     void Place(Primitive3D shape, Vector3 position, Material material)
     {
         // Static, so the scene holds still: this example is about the picture, not the physics.
-        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = material,
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         entity.Transform.Position = position;

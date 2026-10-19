@@ -577,7 +577,7 @@ public static class ThrusterStations
     /// </summary>
     private static Entity Part(ParticleStation s, Primitive3D shape, Vector3 local, Color colour, Quaternion? rotation = null)
     {
-        var part = s.Game.CreatePrimitive(shape, new Primitive3DEntityOptions
+        var part = s.Game.CreatePrimitive(shape, new PrimitiveEntityOptions
         {
             EntityName = $"Station {s.Number} {shape.Name}",
             Material = s.Game.CreateMaterial(colour, metalness: 0.4f, glossiness: 0.6f),

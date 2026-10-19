@@ -187,7 +187,7 @@ void Rebuild(Scene scene)
 
     built[materialIndex] ??= materials[materialIndex].Make();
 
-    subject = game.CreatePrimitive(shape, new Primitive3DEntityOptions { Material = built[materialIndex] });
+    subject = game.CreatePrimitive(shape, new PrimitiveEntityOptions { Material = built[materialIndex] });
 
     var sphere = subject.Get<ModelComponent>()!.Model.BoundingSphere;
     var scale = sphere.Radius > MathUtil.ZeroTolerance ? 1f / sphere.Radius : 1f;

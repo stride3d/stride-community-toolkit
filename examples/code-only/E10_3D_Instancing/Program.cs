@@ -89,7 +89,7 @@ void EnableInstancing()
 /// </remarks>
 Model CreateSharedCubeModel(Scene rootScene, Color color)
 {
-    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions()
+    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions()
     {
         Material = game.CreateMaterial(color)
     });

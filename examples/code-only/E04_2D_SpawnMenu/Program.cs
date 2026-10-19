@@ -36,7 +36,8 @@ List<ShapeItem> shapes = [
     new(Primitive2D.Capsule()),
     new(Primitive2D.Rectangle()),
     new(Primitive2D.Square()),
-    new(Primitive2D.RegularPolygon(1, 5)),
+    // The pentagon is the big one, so its collider gets a depth to match
+    new(Primitive2D.RegularPolygon(1, 5, depth: 4)),
     new(Primitive2D.Triangle()),
     new(Primitive2D.Polygon(parallelogramVertices), "Parallelogram")
 ];
@@ -86,13 +87,10 @@ void Start(Scene rootScene)
 
 void Spawn(ShapeItem shape, Vector3 position)
 {
-    var bepuOptions = new Bepu2DPhysicsOptions()
+    var bepuOptions = new BepuPhysicsOptions()
     {
         Material = game.CreateFlatMaterial(random.NextColor()),
     };
-
-    // The pentagon is the big one, so its collider gets a depth to match
-    if (shape.Type is Primitive2D.RegularPolygonShape) bepuOptions.Depth = 4;
 
     var entity = game.CreatePrimitive(shape.Type, bepuOptions);
 

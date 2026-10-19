@@ -25,7 +25,7 @@ void Start(Scene rootScene)
 
     for (int i = 0; i < ShapeCount; i++)
     {
-        var shape = game.CreatePrimitive(Primitive2D.Capsule(), new Bepu2DPhysicsOptions
+        var shape = game.CreatePrimitive(Primitive2D.Capsule(), new BepuPhysicsOptions
         {
             Material = game.CreateFlatMaterial(Color.White),
             Component = new Body2DComponent()

@@ -29,9 +29,9 @@ void Start(Scene rootScene)
     debug.Scene = rootScene;
 
     // A cube without physics beside the row: no gizmo appears for it, because physics knows nothing of it
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
     {
-        IncludePhysics = false
+        Body = BodyMode.None
     });
     cube.Transform.Position = new Vector3(1f, 0.5f, 3f);
     cube.Scene = rootScene;
@@ -64,12 +64,12 @@ description:
     A single-purpose demo of CollidableGizmoScript, which draws the collider Bepu is actually using so
     it can be compared against the model you think you gave it. The script draws every collider in the
     scene, so it sits on an empty entity of its own. The cube beside the row is created with
-    IncludePhysics set to false, which makes the point directly: the gizmo reports what physics knows
+    Body set to BodyMode.None, which makes the point directly: the gizmo reports what physics knows
     about, and if nothing is drawn, nothing is there.
 concepts:
   - Drawing the collider a body is really using
   - Hosting a scene-wide script on an empty entity
-  - "Leaving physics out with IncludePhysics = false"
+  - "Leaving physics out with Body = BodyMode.None"
   - Showing or hiding the gizmo with its Visible property
   - Diagnosing a body that does not collide as expected
   - "The one-call form for a whole scene: game.AddPhysicsDebug()"

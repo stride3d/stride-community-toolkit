@@ -50,9 +50,9 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     // Scenery only, so the plain options: no physics body
-    speaker = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions
+    speaker = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(90, 160, 255)),
         Position = new Vector3(0, 1, 0),
     });

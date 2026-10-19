@@ -69,9 +69,9 @@ void Start(Scene scene)
 
     // The boid: a small cone, tip along +Y, which the shader points along the heading. The entity
     // is only a way to get the model; it never enters the scene.
-    boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new Primitive3DEntityOptions
+    boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(255, 150, 40)),
     }).Get<ModelComponent>().Model;
 

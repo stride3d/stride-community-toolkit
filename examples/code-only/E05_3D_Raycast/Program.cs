@@ -1,5 +1,4 @@
 using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
@@ -132,10 +131,10 @@ void AddPanels(Scene scene)
 
     for (var i = 0; i < positions.Length; i++)
     {
-        var panel = game.CreatePrimitive(Primitive3D.Box(new Vector3(2.4f, 2f, 0.1f)), new Bepu3DPhysicsOptions
+        var panel = game.CreatePrimitive(Primitive3D.Box(new Vector3(2.4f, 2f, 0.1f)), new BepuPhysicsOptions
         {
             Material = game.CreateMaterial(new Color(120, 170, 220), metalness: 0f, glossiness: 0.5f),
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         // Each panel faces the sphere's starting point, so a ray from there meets it square on

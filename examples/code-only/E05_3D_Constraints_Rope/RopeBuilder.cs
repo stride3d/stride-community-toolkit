@@ -152,7 +152,7 @@ public static class RopeBuilder
     /// </remarks>
     private static Entity CreateSphere(Game game, string name, Color color, Vector3 position, float radius, float mass, bool kinematic)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Sphere(radius), new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(Primitive3D.Sphere(radius), new BepuPhysicsOptions
         {
             EntityName = name,
             Material = game.CreateMaterial(color),

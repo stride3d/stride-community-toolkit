@@ -310,10 +310,10 @@ void BuildScenery(Scene scene)
 {
     foreach (var (position, size) in new[] { (new Vector3(-3f, 0.5f, -1f), new Vector3(3f, 1f, 2f)), (new Vector3(2.5f, 1f, 1.5f), new Vector3(2f, 2f, 2f)) })
     {
-        var block = game.CreatePrimitive(Primitive3D.Box(size), new Bepu3DPhysicsOptions
+        var block = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
         {
             Material = game.CreateMaterial(new Color(150, 150, 160), metalness: 0f, glossiness: 0.3f),
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         block.Transform.Position = position;
@@ -332,10 +332,9 @@ void Spawn(int count)
             _ => (Primitive3D.Cube(0.7f), "Cube"),
         };
 
-        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = materials[spawned.Count % materials.Length],
-            Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated },
         });
 
         entity.Name = $"{name} {spawned.Count + 1}";
