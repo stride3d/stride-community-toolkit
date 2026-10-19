@@ -102,12 +102,11 @@ public class CameraRotationScript : SyncScript
         // are degenerate, so there is nothing meaningful to do until the camera is moved off it.
         if (offset.Length() < MinimumOrbitRadius) return;
 
-        var yaw = Quaternion.RotationY(MathUtil.DegreesToRadians(angleDegrees));
-        var rotatedOffset = Vector3.Transform(offset, yaw);
+        Entity.Transform.RotateAround(_rotationCentre, Vector3.UnitY, MathUtil.DegreesToRadians(angleDegrees));
 
-        Entity.Transform.Position = _rotationCentre + rotatedOffset;
-
-        // Re-aim at the centre, which preserves the pitch the camera already had
+        // RotateAround turns the camera with the swing, which keeps whatever it was looking at in view.
+        // The orbit keys also bring the platform back after a free look, so re-aim at the centre; this
+        // keeps the pitch the camera already had
         Entity.Transform.LookAt(_rotationCentre, Vector3.UnitY);
     }
 

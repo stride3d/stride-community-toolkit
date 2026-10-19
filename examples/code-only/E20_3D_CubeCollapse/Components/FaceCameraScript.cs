@@ -27,8 +27,8 @@ public class FaceCameraScript : SyncScript
 
         direction.Y = 0;
 
-        if (direction.LengthSquared() < 1e-6f) return;
-
-        Entity.Transform.Rotation = Quaternion.RotationY(MathF.Atan2(direction.X, direction.Z));
+        // The lettering's front is +Z, so face away from the camera to show it; Y is zeroed above, so
+        // this is a yaw only and the letters stay upright
+        Entity.Transform.FaceDirection(-direction);
     }
 }
