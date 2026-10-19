@@ -17,7 +17,7 @@ namespace Stride.CommunityToolkit.Engine;
 /// </para>
 /// <para>
 /// Reading the display's scale is not Windows-only and does not live here: see
-/// <c>DisplayScale</c> in the core package, which the debug overlay follows by default.
+/// <c>DisplayScale</c> in the core package, which the text overlay follows by default.
 /// </para>
 /// </remarks>
 public static class WindowsDpiManager

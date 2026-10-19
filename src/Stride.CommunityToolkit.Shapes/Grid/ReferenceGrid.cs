@@ -56,7 +56,7 @@ public class ReferenceGrid : SyncScript
     public static readonly Color AxisZColor = new(0x2F, 0x6A, 0xE1);
 
     private GridCanvas? _canvas;
-    private DebugOverlaySection? _help;
+    private TextOverlaySection? _help;
     private DisplayScale? _displayScale;
 
     /// <summary>Whether the grid is drawn. Defaults to <see langword="true"/>.</summary>
@@ -70,7 +70,7 @@ public class ReferenceGrid : SyncScript
 
     /// <summary>
     /// The key that steps through off, world and screen, or <see cref="Keys.None"/> for no key.
-    /// Defaults to G. While a key is set, the debug overlay names it.
+    /// Defaults to G. While a key is set, the text overlay names it.
     /// </summary>
     public Keys ToggleKey { get; set; } = Keys.G;
 
@@ -155,7 +155,7 @@ public class ReferenceGrid : SyncScript
         game.AddEntityTextRenderer();
 
         _displayScale = DisplayScale.GetOrCreate(game);
-        _help = DebugOverlay.GetOrCreate(game).AddSection("Grid", HelpLines);
+        _help = TextOverlay.GetOrCreate(game).AddSection("Grid", HelpLines);
     }
 
     /// <inheritdoc/>
@@ -178,7 +178,7 @@ public class ReferenceGrid : SyncScript
             _canvas.RemoveLabels();
         }
 
-        if (_help is not null) DebugOverlay.GetOrCreate(game).RemoveSection(_help);
+        if (_help is not null) TextOverlay.GetOrCreate(game).RemoveSection(_help);
 
         _canvas = null;
         _help = null;

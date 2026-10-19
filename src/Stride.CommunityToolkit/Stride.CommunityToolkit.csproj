@@ -11,7 +11,7 @@ What's inside:
 - Entity, Game, Camera, Transform, Model and Script System extensions: component search, LookAt, screen-to-world rays, delays, repeats and timers
 - Procedural primitives (cube, sphere, capsule, cylinder, cone, torus, teapot, plane and 2D shapes) with materials, no assets required
 - MeshBuilder and TextureCanvas for building meshes and textures in code
-- On-screen text: DebugOverlay (scalable, high-DPI aware, per-line background), EntityTextComponent and WorldTextComponent
+- On-screen text: TextOverlay (scalable, high-DPI aware, per-line background), EntityTextComponent and WorldTextComponent
 - Camera controllers for 3D (fly) and 2D (pan and zoom) scenes with built-in key help
 - Easing functions, math and random helpers, collection helpers
 - WindowsDpiManager: opt the process into per-monitor DPI awareness from code, no app.manifest needed, and check that the declaration took (Windows only; a no-op elsewhere)

@@ -24,7 +24,7 @@ namespace Stride.CommunityToolkit.Scripts;
 /// <see cref="Basic2DCameraController"/> uses against the wheel-press-rolls-a-notch problem.
 /// </para>
 /// <para>
-/// The 'F2' help section is shared with the other controllers through <see cref="DebugOverlay"/> and shows
+/// The 'F2' help section is shared with the other controllers through <see cref="TextOverlay"/> and shows
 /// the live target, distance and angles.
 /// </para>
 /// </remarks>
@@ -41,7 +41,7 @@ public class Basic3DOrbitCameraController : SyncScript
     private float _defaultYaw;
     private float _defaultPitch;
     private float _defaultDistance;
-    private DebugOverlaySection? _instructions;
+    private TextOverlaySection? _instructions;
 
     /// <summary>
     /// Gets or sets the point the camera orbits and looks at. Move it to follow something; the camera keeps
@@ -110,7 +110,7 @@ public class Basic3DOrbitCameraController : SyncScript
 
         Apply();
 
-        _instructions = DebugOverlay.GetOrCreate(Game).AddCollapsibleSection(
+        _instructions = TextOverlay.GetOrCreate(Game).AddCollapsibleSection(
             "Camera", "Camera controls", HelpToggleKey, () =>
             [
                 // Keys first, one per line, each in the brackets the title uses, then the live values

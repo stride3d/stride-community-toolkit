@@ -63,8 +63,8 @@ public abstract class SceneSetup
     /// </summary>
     public Action<Stride.Engine.Design.GameSettings>? GameSettings { get; set; }
 
-    /// <summary>Creates the <see cref="Rendering.Text.DebugOverlay"/>, so the first section added shows at once.</summary>
-    public bool DebugOverlay { get; set; }
+    /// <summary>Creates the <see cref="Rendering.Text.TextOverlay"/>, so the first section added shows at once.</summary>
+    public bool TextOverlay { get; set; }
 
     /// <summary>Adds the frame-time profiler readout.</summary>
     public bool Profiler { get; set; }
@@ -93,8 +93,8 @@ public abstract class SceneSetup
         if (Instancing)
             InstancingSupport.Ensure(game.SceneSystem.GraphicsCompositor);
 
-        if (DebugOverlay)
-            Rendering.Text.DebugOverlay.GetOrCreate(game);
+        if (TextOverlay)
+            Rendering.Text.TextOverlay.GetOrCreate(game);
 
         if (Profiler)
             game.AddProfiler();

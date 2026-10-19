@@ -195,7 +195,7 @@ public class Basic2DCameraController : SyncScript
     /// </summary>
     /// <remarks>
     /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
-    /// it, is toggled with <see cref="DebugOverlay.ToggleKey"/>.
+    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
     /// </remarks>
     public bool ShowInstructions
     {
@@ -211,7 +211,7 @@ public class Basic2DCameraController : SyncScript
     private Vector2? _lastMousePosition;
     private float _defaultZ = 0;
 
-    private DebugOverlaySection? _instructions;
+    private TextOverlaySection? _instructions;
 
     /// <summary>
     /// Seconds elapsed since the previous update, for frame-rate independent movement.
@@ -240,7 +240,7 @@ public class Basic2DCameraController : SyncScript
     /// Initializes the camera controller by setting up the instruction overlay and caching the initial state.
     /// </summary>
     /// <remarks>
-    /// Registers the camera's help section with the shared <see cref="DebugOverlay"/> and records the
+    /// Registers the camera's help section with the shared <see cref="TextOverlay"/> and records the
     /// current position as the one the 'H' key restores.
     /// </remarks>
     public override void Start()
@@ -249,7 +249,7 @@ public class Basic2DCameraController : SyncScript
         _targetPosition = Entity.Transform.Position;
         _defaultZ = Entity.Transform.Position.Z;
 
-        _instructions = DebugOverlay.GetOrCreate(Game).AddCollapsibleSection(
+        _instructions = TextOverlay.GetOrCreate(Game).AddCollapsibleSection(
             "Camera", "Camera controls", HelpToggleKey, () =>
             {
                 // Keys first, one per line, each in the brackets the title uses, then the live values
