@@ -26,7 +26,7 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_GiveMeACube).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_GiveMeACube/Program.cs?start=1&end=97)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_GiveMeACube/Program.cs?start=1&end=95)]
 <!-- #endregion generated -->
 
 ## OrbitScript.cs
