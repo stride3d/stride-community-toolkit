@@ -21,6 +21,7 @@
         <ProjectReference Include="..\..\src\Stride.CommunityToolkit.Bepu\Stride.CommunityToolkit.Bepu.csproj" />
         <ProjectReference Include="..\..\src\Stride.CommunityToolkit.Box2D\Stride.CommunityToolkit.Box2D.csproj" />
         <ProjectReference Include="..\..\src\Stride.CommunityToolkit\Stride.CommunityToolkit.csproj" />
+        <ProjectReference Include="..\..\tools\Stride.CommunityToolkit.Examples\Stride.CommunityToolkit.Examples.csproj" />
     </ItemGroup>
     <ItemGroup>
         <!--
