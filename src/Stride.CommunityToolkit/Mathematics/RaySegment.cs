@@ -44,10 +44,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <param name="left">The first value to compare.</param>
     /// <param name="right">The second value to compare.</param>
     /// <returns><c>true</c> if <paramref name="left"/> has the same value as <paramref name="right"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator ==(RaySegment left, RaySegment right)
-    {
-        return left.Equals(right);
-    }
+    public static bool operator ==(RaySegment left, RaySegment right) => left.Equals(right);
 
     /// <summary>
     /// Tests for inequality between two objects.
@@ -55,10 +52,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <param name="left">The first value to compare.</param>
     /// <param name="right">The second value to compare.</param>
     /// <returns><c>true</c> if <paramref name="left"/> has a different value than <paramref name="right"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator !=(RaySegment left, RaySegment right)
-    {
-        return !left.Equals(right);
-    }
+    public static bool operator !=(RaySegment left, RaySegment right) => !left.Equals(right);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents this instance.
@@ -66,10 +60,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <returns>
     /// A <see cref="string"/> that represents this instance.
     /// </returns>
-    public override string ToString()
-    {
-        return string.Format(CultureInfo.CurrentCulture, ToStringFormat, Start, End);
-    }
+    public override string ToString() => string.Format(CultureInfo.CurrentCulture, ToStringFormat, Start, End);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents this instance.
@@ -91,10 +82,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <returns>
     /// A <see cref="string"/> that represents this instance.
     /// </returns>
-    public string ToString(IFormatProvider formatProvider)
-    {
-        return string.Format(formatProvider, ToStringFormat, Start, End);
-    }
+    public string ToString(IFormatProvider formatProvider) => string.Format(formatProvider, ToStringFormat, Start, End);
 
     /// <summary>
     /// Returns a <see cref="string"/> that represents this instance.
@@ -116,10 +104,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <returns>
     /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
     /// </returns>
-    public override int GetHashCode()
-    {
-        return Start.GetHashCode() + End.GetHashCode();
-    }
+    public override int GetHashCode() => Start.GetHashCode() + End.GetHashCode();
 
     /// <summary>
     /// Determines whether the specified <see cref="RaySegment"/> is equal to this instance.
@@ -128,10 +113,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <returns>
     /// <c>true</c> if the specified <see cref="RaySegment"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    public bool Equals(RaySegment value)
-    {
-        return Start == value.Start && End == value.End;
-    }
+    public bool Equals(RaySegment value) => Start == value.Start && End == value.End;
 
     /// <summary>
     /// Determines whether the specified <see cref="object"/> is equal to this instance.
@@ -146,6 +128,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
             return false;
         if (value.GetType() != GetType())
             return false;
+
         return Equals((RaySegment)value);
     }
 
@@ -155,9 +138,5 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <param name="raySegment">The <see cref="RaySegment"/> to convert</param>
     /// <returns>The result of the conversion.</returns>
     public static explicit operator Ray(RaySegment raySegment)
-    {
-        var result = new Ray(raySegment.Start, Vector3.Normalize(raySegment.End - raySegment.Start));
-
-        return result;
-    }
+        => new Ray(raySegment.Start, Vector3.Normalize(raySegment.End - raySegment.Start));
 }
