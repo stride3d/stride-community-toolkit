@@ -44,18 +44,8 @@ public static class ScriptSystemExtensions
     /// <param name="seconds">The number of seconds to delay execution.</param>
     /// <returns>A <see cref="Task"/> representing the delay.</returns>
     /// <remarks>This delay takes into account the game's time warp factor, using the <c>WarpElapsed</c> property of <c>UpdateTime</c>.</remarks>
-    public static async Task DelayWarped(this ScriptSystem script, float seconds)
-    {
-        ArgumentNullException.ThrowIfNull(script);
-
-        var game = GetGame(script);
-        float t = 0f;
-        while (game.IsRunning && t < seconds)
-        {
-            t += (float)game.UpdateTime.WarpElapsed.TotalSeconds;
-            await script.NextFrame();
-        }
-    }
+    public static Task DelayWarped(this ScriptSystem script, float seconds)
+        => RunFor(script, seconds, warped: true, action: null);
 
     /// <summary>
     /// Waits for a specified amount of real time (not accounting for any time warp factors).
@@ -64,8 +54,8 @@ public static class ScriptSystemExtensions
     /// <param name="seconds">The number of seconds to delay execution.</param>
     /// <returns>A <see cref="Task"/> representing the delay.</returns>
     /// <remarks>This delay operates in real time without considering the game's time warp.</remarks>
-    public static async Task Delay(this ScriptSystem script, float seconds) =>
-        await Task.Delay((int)(seconds * 1000f));
+    public static Task Delay(this ScriptSystem script, float seconds)
+        => Task.Delay((int)(seconds * 1000f));
 
     /// <summary>
     /// Executes an action every frame for a specified duration, adjusting for any time warp factors.
@@ -75,19 +65,8 @@ public static class ScriptSystemExtensions
     /// <param name="action">The action to perform on each frame, which receives the elapsed time as a parameter.</param>
     /// <returns>A <see cref="Task"/> representing the action execution.</returns>
     /// <remarks>This method accounts for the game's <c>WarpElapsed</c> time factor during execution.</remarks>
-    public static async Task ExecuteInWarpedTime(this ScriptSystem script, float seconds, Action<float> action)
-    {
-        ArgumentNullException.ThrowIfNull(script);
-
-        var game = GetGame(script);
-        float t = 0f;
-        while (game.IsRunning && t < seconds)
-        {
-            t += (float)game.UpdateTime.WarpElapsed.TotalSeconds;
-            action?.Invoke(t);
-            await script.NextFrame();
-        }
-    }
+    public static Task ExecuteInWarpedTime(this ScriptSystem script, float seconds, Action<float> action)
+        => RunFor(script, seconds, warped: true, action);
 
     /// <summary>
     /// Executes an action every frame for a specified duration, using real time (not accounting for any time warp factors).
@@ -97,19 +76,8 @@ public static class ScriptSystemExtensions
     /// <param name="action">The action to perform on each frame, which receives the elapsed time as a parameter.</param>
     /// <returns>A <see cref="Task"/> representing the action execution.</returns>
     /// <remarks>This method operates in real time, without considering the game's time warp.</remarks>
-    public static async Task ExecuteInTime(this ScriptSystem script, float seconds, Action<float> action)
-    {
-        ArgumentNullException.ThrowIfNull(script);
-
-        var game = GetGame(script);
-        float t = 0f;
-        while (game.IsRunning && t < seconds)
-        {
-            t += (float)game.UpdateTime.Elapsed.TotalSeconds;
-            action?.Invoke(t);
-            await script.NextFrame();
-        }
-    }
+    public static Task ExecuteInTime(this ScriptSystem script, float seconds, Action<float> action)
+        => RunFor(script, seconds, warped: false, action);
 
     /// <summary>
     /// Waits for the specified delay <paramref name="delay"/>.
@@ -117,50 +85,8 @@ public static class ScriptSystemExtensions
     /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
     /// <param name="delay">The amount of time to wait.</param>
     /// <returns>The <see cref="Task"/> to await.</returns>
-    public static async Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay)
-    {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
-
-        if (delay <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
-        }
-
-        var game = GetGame(scriptSystem);
-
-        while (game.IsRunning && delay >= TimeSpan.Zero)
-        {
-            delay -= game.UpdateTime.Elapsed;
-            await scriptSystem.NextFrame();
-        }
-
-    }
-
-    /// <summary>
-    /// Waits for the specified delay <paramref name="delay"/>.
-    /// </summary>
-    /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
-    /// <param name="delay">The amount of time to wait.</param>
-    /// <param name="scriptDelegateWatcher">Allows to stop waiting if <see cref="ScriptComponent"/> is not active.</param>
-    /// <returns>The <see cref="Task"/> to await.</returns>
-    private static async Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay, ScriptDelegateWatcher scriptDelegateWatcher)
-    {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
-
-        if (delay <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
-        }
-
-        var game = GetGame(scriptSystem);
-
-        while (game.IsRunning && scriptDelegateWatcher.IsActive && delay >= TimeSpan.Zero)
-        {
-            delay -= game.UpdateTime.Elapsed;
-            await scriptSystem.NextFrame();
-        }
-
-    }
+    public static Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay)
+        => scriptSystem.WaitFor(delay, default);
 
     /// <summary>
     /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes when the event is published.
@@ -175,14 +101,9 @@ public static class ScriptSystemExtensions
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
-    public static MicroThread AddOnEventAction<T>(
-        this ScriptSystem scriptSystem,
-        EventKey<T> eventKey, Action<T> action,
-        long priority = 0L)
+    public static MicroThread AddOnEventAction<T>(this ScriptSystem scriptSystem, EventKey<T> eventKey, Action<T> action, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(eventKey);
-        ArgumentNullException.ThrowIfNull(action);
 
         return scriptSystem.AddOnEventAction(new EventReceiver<T>(eventKey), action, priority);
     }
@@ -200,104 +121,27 @@ public static class ScriptSystemExtensions
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
-    public static MicroThread AddOnEventAction<T>(
-        this ScriptSystem scriptSystem,
-        EventReceiver<T> receiver,
-        Action<T> action,
-        long priority = 0L)
+    public static MicroThread AddOnEventAction<T>(this ScriptSystem scriptSystem, EventReceiver<T> receiver, Action<T> action, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
-        ArgumentNullException.ThrowIfNull(receiver);
         ArgumentNullException.ThrowIfNull(action);
 
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoEvent, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoEvent()
-        {
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            while (game.IsRunning && scriptDelegateWatcher.IsActive)
-            {
-                if (receiver.TryReceive(out var data))
-                {
-                    action(data);
-                }
-
-                await scriptSystem.NextFrame();
-            }
-        }
+        return scriptSystem.AddOnEvent(receiver, action, data => { action(data); return Task.CompletedTask; }, priority);
     }
 
-    /// <summary>
-    /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes when the event is published.
-    /// </summary>
-    /// <typeparam name="T">The type of the event handler parameter.</typeparam>
-    /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
-    /// <param name="eventKey">The event to wait for.</param>
-    /// <param name="action">The micro thread function to execute.</param>
-    /// <param name="priority">The priority of the micro thread action being added.</param>
-    /// <returns>The <see cref="MicroThread"/>.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/>, <paramref name="eventKey"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
-    /// </remarks>
-    public static MicroThread AddOnEventTask<T>(
-       this ScriptSystem scriptSystem,
-       EventKey<T> eventKey, Func<T, Task> action,
-       long priority = 0L)
+    /// <inheritdoc cref="AddOnEventAction{T}(ScriptSystem, EventKey{T}, Action{T}, long)"/>
+    public static MicroThread AddOnEventTask<T>(this ScriptSystem scriptSystem, EventKey<T> eventKey, Func<T, Task> action, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(eventKey);
-        ArgumentNullException.ThrowIfNull(action);
 
         return scriptSystem.AddOnEventTask(new EventReceiver<T>(eventKey), action, priority);
     }
 
-    /// <summary>
-    /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes when the event is published.
-    /// </summary>
-    /// <typeparam name="T">The type of the event handler parameter.</typeparam>
-    /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
-    /// <param name="receiver">The event reciever to listen to for.</param>
-    /// <param name="action">The micro thread function to execute.</param>
-    /// <param name="priority">The priority of the micro thread action being added.</param>
-    /// <returns>The <see cref="MicroThread"/>.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/>, <paramref name="receiver"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <remarks>
-    /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
-    /// </remarks>
-    public static MicroThread AddOnEventTask<T>(
-        this ScriptSystem scriptSystem,
-        EventReceiver<T> receiver,
-        Func<T, Task> action,
-        long priority = 0L)
+    /// <inheritdoc cref="AddOnEventAction{T}(ScriptSystem, EventReceiver{T}, Action{T}, long)"/>
+    public static MicroThread AddOnEventTask<T>(this ScriptSystem scriptSystem, EventReceiver<T> receiver, Func<T, Task> action, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
-        ArgumentNullException.ThrowIfNull(receiver);
         ArgumentNullException.ThrowIfNull(action);
 
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoEvent, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoEvent()
-        {
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            while (game.IsRunning && scriptDelegateWatcher.IsActive)
-            {
-                if (receiver.TryReceive(out var data))
-                {
-                    await action(data);
-                }
-
-                await scriptSystem.NextFrame();
-            }
-        }
+        return scriptSystem.AddOnEvent(receiver, action, action, priority);
     }
 
     /// <summary>
@@ -313,131 +157,19 @@ public static class ScriptSystemExtensions
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
-    public static MicroThread AddTask(
-       this ScriptSystem scriptSystem,
-       Func<Task> action,
-       TimeSpan delay,
-       long priority = 0L)
+    public static MicroThread AddTask(this ScriptSystem scriptSystem, Func<Task> action, TimeSpan delay, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(action);
 
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoTask, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoTask()
-        {
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            await scriptSystem.WaitFor(delay, scriptDelegateWatcher);
-
-            if (game.IsRunning && scriptDelegateWatcher.IsActive)
-            {
-                await action();
-            }
-        }
+        return scriptSystem.AddDelayed(action, action, delay, priority);
     }
 
-    /// <summary>
-    /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes after waiting specified delay.
-    /// </summary>
-    /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
-    /// <param name="action">The micro thread function to execute.</param>
-    /// <param name="delay">The amount of time to wait for.</param>
-    /// <param name="priority">The priority of the micro thread action being added.</param>
-    /// <returns>The <see cref="MicroThread"/>.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is zero or negative.</exception>
-    /// <remarks>
-    /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
-    /// </remarks>
-    public static MicroThread AddAction(
-       this ScriptSystem scriptSystem,
-       Action action,
-       TimeSpan delay,
-       long priority = 0L)
+    /// <inheritdoc cref="AddTask(ScriptSystem, Func{Task}, TimeSpan, long)"/>
+    public static MicroThread AddAction(this ScriptSystem scriptSystem, Action action, TimeSpan delay, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(action);
 
-        if (delay <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
-        }
-
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoTask, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoTask()
-        {
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            await scriptSystem.WaitFor(delay, scriptDelegateWatcher);
-
-            if (game.IsRunning && scriptDelegateWatcher.IsActive)
-            {
-                action();
-            }
-        }
-    }
-
-    /// <summary>
-    /// Adds a micro thread function to the <paramref name="scriptSystem"/> that executes after waiting specified delay and repeats execution.
-    /// </summary>
-    /// <param name="scriptSystem">The <see cref="ScriptSystem"/>.</param>
-    /// <param name="action">The micro thread function to execute.</param>
-    /// <param name="delay">The amount of time to wait for.</param>
-    /// <param name="repeatEvery">The amount of time to wait for between repetition.</param>
-    /// <param name="priority">The priority of the micro thread action being added.</param>
-    /// <returns>The <see cref="MicroThread"/>.</returns>
-    /// <exception cref="ArgumentNullException">If <paramref name="scriptSystem"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="delay"/> is zero or negative.</exception>
-    /// <remarks>
-    /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
-    /// </remarks>
-    public static MicroThread AddTask(
-       this ScriptSystem scriptSystem,
-       Func<Task> action,
-       TimeSpan delay,
-       TimeSpan repeatEvery,
-       long priority = 0L)
-    {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
-        ArgumentNullException.ThrowIfNull(action);
-
-        if (delay <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
-        }
-
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoTask, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoTask()
-        {
-            var elapsedTime = new TimeSpan(0);
-
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            while (game.IsRunning && scriptDelegateWatcher.IsActive)
-            {
-                elapsedTime += game.UpdateTime.Elapsed;
-
-                if (elapsedTime >= delay)
-                {
-                    elapsedTime -= delay;
-                    delay = repeatEvery;
-                    await action();
-                }
-                await scriptSystem.NextFrame();
-            }
-        }
+        return scriptSystem.AddDelayed(action, () => { action(); return Task.CompletedTask; }, delay, priority);
     }
 
     /// <summary>
@@ -454,50 +186,19 @@ public static class ScriptSystemExtensions
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
-    public static MicroThread AddAction(
-       this ScriptSystem scriptSystem,
-       Action action,
-       TimeSpan delay,
-       TimeSpan repeatEvery,
-       long priority = 0L)
+    public static MicroThread AddTask(this ScriptSystem scriptSystem, Func<Task> action, TimeSpan delay, TimeSpan repeatEvery, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(action);
 
-        if (delay <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(delay), "Must be greater than zero.");
-        }
+        return scriptSystem.AddRepeating(action, action, delay, repeatEvery, priority);
+    }
 
-        if (repeatEvery <= TimeSpan.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(repeatEvery), "Must be greater than zero.");
-        }
+    /// <inheritdoc cref="AddTask(ScriptSystem, Func{Task}, TimeSpan, TimeSpan, long)"/>
+    public static MicroThread AddAction(this ScriptSystem scriptSystem, Action action, TimeSpan delay, TimeSpan repeatEvery, long priority = 0L)
+    {
+        ArgumentNullException.ThrowIfNull(action);
 
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoTask, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoTask()
-        {
-            var elapsedTime = new TimeSpan(0);
-
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            while (game.IsRunning && scriptDelegateWatcher.IsActive)
-            {
-                elapsedTime += game.UpdateTime.Elapsed;
-
-                if (elapsedTime >= delay)
-                {
-                    elapsedTime -= delay;
-                    delay = repeatEvery;
-                    action();
-                }
-                await scriptSystem.NextFrame();
-            }
-        }
+        return scriptSystem.AddRepeating(action, () => { action(); return Task.CompletedTask; }, delay, repeatEvery, priority);
     }
 
     /// <summary>
@@ -513,49 +214,30 @@ public static class ScriptSystemExtensions
     /// <remarks>
     /// If the <paramref name="action"/> is a <see cref="ScriptComponent"/> instance method the micro thread will be automatically stopped if the <see cref="ScriptComponent"/> or <see cref="Entity"/> is removed.
     /// </remarks>
-    public static MicroThread AddOverTimeAction(
-       this ScriptSystem scriptSystem,
-       Action<float> action,
-       TimeSpan duration,
-       long priority = 0L)
+    public static MicroThread AddOverTimeAction(this ScriptSystem scriptSystem, Action<float> action, TimeSpan duration, long priority = 0L)
     {
-        ArgumentNullException.ThrowIfNull(scriptSystem);
         ArgumentNullException.ThrowIfNull(action);
+        ThrowIfNotPositive(duration);
 
-        if (duration <= TimeSpan.Zero)
+        return scriptSystem.AddWatched(action, async (game, watcher) =>
         {
-            throw new ArgumentOutOfRangeException(nameof(duration), "Must be greater than zero.");
-        }
+            var elapsed = TimeSpan.Zero;
 
-        var game = GetGame(scriptSystem);
-
-        return scriptSystem.AddTask(DoTask, priority);
-
-        //C# 7 Local function could also use a variable Func<Task> DoEvent = async () => { ... };
-        async Task DoTask()
-        {
-            var elapsedTime = new TimeSpan(0);
-
-            var scriptDelegateWatcher = new ScriptDelegateWatcher(action);
-
-            while (game.IsRunning && scriptDelegateWatcher.IsActive)
+            while (game.IsRunning && watcher.IsActive)
             {
-                elapsedTime += game.UpdateTime.Elapsed;
+                elapsed += game.UpdateTime.Elapsed;
 
-                if (elapsedTime >= duration)
+                if (elapsed >= duration)
                 {
                     action(1.0f);
                     break;
                 }
-                else
-                {
-                    var progress = (float)(elapsedTime.TotalSeconds / duration.TotalSeconds);
 
-                    action(progress);
-                }
+                action((float)(elapsed / duration));
+
                 await scriptSystem.NextFrame();
             }
-        }
+        }, priority);
     }
 
     /// <summary>
@@ -642,6 +324,129 @@ public static class ScriptSystemExtensions
     }
 
     /// <summary>
+    /// Counts <paramref name="seconds"/> of game time, frame by frame, calling <paramref name="action"/> with the
+    /// running total when there is one. <paramref name="warped"/> counts <see cref="GameTime.WarpElapsed"/>, otherwise
+    /// <see cref="GameTime.Elapsed"/>.
+    /// </summary>
+    private static async Task RunFor(ScriptSystem script, float seconds, bool warped, Action<float>? action)
+    {
+        ArgumentNullException.ThrowIfNull(script);
+
+        var game = GetGame(script);
+        var elapsed = 0f;
+
+        while (game.IsRunning && elapsed < seconds)
+        {
+            elapsed += (float)(warped ? game.UpdateTime.WarpElapsed : game.UpdateTime.Elapsed).TotalSeconds;
+
+            action?.Invoke(elapsed);
+
+            await script.NextFrame();
+        }
+    }
+
+    /// <summary>
+    /// Waits <paramref name="delay"/> on the game clock, giving up early when the game stops or the script
+    /// behind <paramref name="watcher"/> leaves the scene.
+    /// </summary>
+    private static async Task WaitFor(this ScriptSystem scriptSystem, TimeSpan delay, ScriptDelegateWatcher watcher)
+    {
+        ArgumentNullException.ThrowIfNull(scriptSystem);
+        ThrowIfNotPositive(delay);
+
+        var game = GetGame(scriptSystem);
+
+        while (game.IsRunning && watcher.IsActive && delay >= TimeSpan.Zero)
+        {
+            delay -= game.UpdateTime.Elapsed;
+
+            await scriptSystem.NextFrame();
+        }
+    }
+
+    /// <summary>
+    /// Polls <paramref name="receiver"/> every frame and runs <paramref name="invoke"/> on what arrives, until the game
+    /// stops or the script that owns <paramref name="owner"/> leaves the scene.
+    /// </summary>
+    private static MicroThread AddOnEvent<T>(this ScriptSystem scriptSystem, EventReceiver<T> receiver, Delegate owner, Func<T, Task> invoke, long priority)
+    {
+        ArgumentNullException.ThrowIfNull(receiver);
+
+        return scriptSystem.AddWatched(owner, async (game, watcher) =>
+        {
+            while (game.IsRunning && watcher.IsActive)
+            {
+                if (receiver.TryReceive(out var data))
+                    await invoke(data);
+
+                await scriptSystem.NextFrame();
+            }
+        }, priority);
+    }
+
+    /// <summary>Runs <paramref name="invoke"/> once, after <paramref name="delay"/>, unless the game or the owning script stopped first.</summary>
+    private static MicroThread AddDelayed(this ScriptSystem scriptSystem, Delegate owner, Func<Task> invoke, TimeSpan delay, long priority)
+    {
+        ThrowIfNotPositive(delay);
+
+        return scriptSystem.AddWatched(owner, async (game, watcher) =>
+        {
+            await scriptSystem.WaitFor(delay, watcher);
+
+            if (game.IsRunning && watcher.IsActive)
+                await invoke();
+        }, priority);
+    }
+
+    /// <summary>Runs <paramref name="invoke"/> after <paramref name="delay"/>, then every <paramref name="repeatEvery"/>, on the game clock.</summary>
+    private static MicroThread AddRepeating(this ScriptSystem scriptSystem, Delegate owner, Func<Task> invoke, TimeSpan delay, TimeSpan repeatEvery, long priority)
+    {
+        ThrowIfNotPositive(delay);
+        ThrowIfNotPositive(repeatEvery);
+
+        return scriptSystem.AddWatched(owner, async (game, watcher) =>
+        {
+            var elapsed = TimeSpan.Zero;
+
+            while (game.IsRunning && watcher.IsActive)
+            {
+                elapsed += game.UpdateTime.Elapsed;
+
+                if (elapsed >= delay)
+                {
+                    elapsed -= delay;
+                    delay = repeatEvery;
+
+                    await invoke();
+                }
+
+                await scriptSystem.NextFrame();
+            }
+        }, priority);
+    }
+
+    /// <summary>
+    /// Schedules <paramref name="body"/> with the game and a watcher on <paramref name="owner"/>: the delegate the caller
+    /// passed, so that a <see cref="ScriptComponent"/> instance method still stops with its script after being wrapped.
+    /// </summary>
+    private static MicroThread AddWatched(this ScriptSystem scriptSystem, Delegate owner, Func<GameBase, ScriptDelegateWatcher, Task> body, long priority)
+    {
+        ArgumentNullException.ThrowIfNull(scriptSystem);
+        ArgumentNullException.ThrowIfNull(owner);
+
+        var game = GetGame(scriptSystem);
+        var watcher = new ScriptDelegateWatcher(owner);
+
+        return scriptSystem.AddTask(() => body(game, watcher), priority);
+    }
+
+    private static void ThrowIfNotPositive(TimeSpan value, [System.Runtime.CompilerServices.CallerArgumentExpression(nameof(value))] string? name = null)
+    {
+        if (value <= TimeSpan.Zero)
+            throw new ArgumentOutOfRangeException(name, "Must be greater than zero.");
+    }
+
+    /// <summary>
     /// Returns the game the <paramref name="scriptSystem"/> belongs to.
     /// </summary>
     /// <exception cref="InvalidOperationException">
@@ -657,27 +462,24 @@ public static class ScriptSystemExtensions
 
     /// <summary>
     /// Remembers which <see cref="ScriptComponent"/>, if any, a delegate belongs to, so a scheduled callback can
-    /// stop once that script has left the scene instead of running against a dead entity.
+    /// stop once that script has left the scene instead of running against a dead entity. The default value
+    /// watches nothing and is always active.
     /// </summary>
     private readonly record struct ScriptDelegateWatcher
     {
         private readonly ScriptComponent? _script;
 
-        internal ScriptDelegateWatcher(Delegate? @delegate)
+        internal ScriptDelegateWatcher(Delegate @delegate)
         {
-            ArgumentNullException.ThrowIfNull(@delegate);
-
             var invocationList = @delegate.GetInvocationList();
 
-            _script = invocationList.Length == 1 && invocationList[0].Target is ScriptComponent scriptComponent
-                ? scriptComponent
-                : null;
+            _script = invocationList.Length == 1 ? invocationList[0].Target as ScriptComponent : null;
         }
 
         /// <summary>
         /// <see langword="true"/> while the owning script is still in a scene, or always when the delegate
         /// did not come from a script.
         /// </summary>
-        internal bool IsActive => _script is null || (_script.Entity != null && (_script.SceneSystem?.SceneInstance?.Contains(_script.Entity) == true));
+        internal bool IsActive => _script is null || (_script.Entity != null && _script.SceneSystem?.SceneInstance?.Contains(_script.Entity) == true);
     }
 }
