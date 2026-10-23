@@ -133,11 +133,7 @@ public static partial class EntityExtensions
     /// <typeparam name="T">The type of component to retrieve.</typeparam>
     /// <returns>The first component of the specified type, or null if no such component exists.</returns>
     public static T? GetComponent<T>(this Entity entity)
-    {
-        var result = entity.OfType<T>().FirstOrDefault();
-
-        return result;
-    }
+        => entity.OfType<T>().FirstOrDefault();
 
     /// <summary>
     /// Retrieves all components of the specified type from the entity.
@@ -145,20 +141,14 @@ public static partial class EntityExtensions
     /// <typeparam name="T">The type of components to retrieve.</typeparam>
     /// <returns>An <see cref="IEnumerable{T}"/> of components of the specified type.</returns>
     public static IEnumerable<T> GetComponents<T>(this Entity entity)
-    {
-        var result = entity.OfType<T>();
-
-        return result;
-    }
+        => entity.OfType<T>();
 
     /// <summary>
     /// Removes the entity from its current scene by setting its <see cref="Scene"/> property to null.
     /// </summary>
     /// <param name="entity">The entity to be removed from its current scene.</param>
     public static void Remove(this Entity entity)
-    {
-        entity.Scene = null;
-    }
+        => entity.Scene = null;
 
     /// <summary>
     /// Searches for an entity by name within the top-level entities of the current scene.
@@ -167,9 +157,7 @@ public static partial class EntityExtensions
     /// <param name="name">The name of the entity to find.</param>
     /// <returns>The first entity matching the specified name, or null if no match is found. This search does not include child entities.</returns>
     public static Entity? FindEntity(this Entity entity, string name)
-    {
-        return entity.Scene.Entities.FirstOrDefault(w => w.Name == name);
-    }
+        => entity.Scene.Entities.FirstOrDefault(other => other.Name == name);
 
     /// <summary>
     /// Searches the scene's top-level entities and all their descendants for an entity by name.
@@ -179,15 +167,11 @@ public static partial class EntityExtensions
     /// <returns>The first entity with the specified name, or null if none is found.</returns>
     public static Entity? FindEntityRecursive(this Entity parent, string name)
     {
-        var entities = parent.Scene.Entities;
-
-        foreach (var entity in entities)
+        foreach (var entity in parent.Scene.Entities)
         {
             if (entity.Name == name) return entity;
 
-            var child = entity.FindChild(name);
-
-            if (child != null && child.Name == name) return child;
+            if (entity.FindChild(name) is { } child) return child;
         }
 
         return null;
@@ -219,8 +203,7 @@ public static partial class EntityExtensions
     /// <returns>The <see cref="Vector3"/> representing the world position of the <see cref="Entity"/>.</returns>
     public static Vector3 WorldPosition(this Entity entity, bool updateTransforms = true)
     {
-        if (updateTransforms)
-            entity.Transform.UpdateWorldMatrix();
+        if (updateTransforms) entity.Transform.UpdateWorldMatrix();
 
         return entity.Transform.WorldMatrix.TranslationVector;
     }
