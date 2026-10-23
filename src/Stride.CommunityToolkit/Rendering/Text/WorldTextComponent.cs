@@ -183,9 +183,4 @@ public class WorldTextComponent : EntityComponent
     /// is no limit.
     /// </summary>
     public float MaxDistance { get; set; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WorldTextComponent"/> class.
-    /// </summary>
-    public WorldTextComponent() { }
 }

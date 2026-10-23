@@ -16,10 +16,7 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <param name="component">The component being drawn.</param>
 public class WorldTextRenderData(WorldTextComponent component)
 {
-    private string? _measuredText;
-    private float _measuredFontSize;
-    private SpriteFont? _measuredFont;
-    private Vector2 _measuredSize;
+    private readonly TextMeasurement _measurement = new();
 
     /// <summary>Gets the component being drawn.</summary>
     public WorldTextComponent Component { get; } = component;
@@ -46,17 +43,5 @@ public class WorldTextRenderData(WorldTextComponent component)
     /// <param name="fontSize">The size the glyphs are rasterised at, in pixels.</param>
     /// <returns>The width and height of the text, in font pixels.</returns>
     public Vector2 GetMeasuredSize(SpriteBatch spriteBatch, SpriteFont font, float fontSize)
-    {
-        if (_measuredText == Component.Text && _measuredFontSize == fontSize && _measuredFont == font)
-        {
-            return _measuredSize;
-        }
-
-        _measuredSize = spriteBatch.MeasureString(font, Component.Text, fontSize);
-        _measuredText = Component.Text;
-        _measuredFontSize = fontSize;
-        _measuredFont = font;
-
-        return _measuredSize;
-    }
+        => _measurement.Measure(spriteBatch, font, Component.Text, fontSize);
 }

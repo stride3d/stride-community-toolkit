@@ -175,9 +175,9 @@ public sealed class GlyphShape
 
         if (isClockwise == clockwise) return polygon;
 
-        var reversed = new Vector2[polygon.Length];
+        var reversed = (Vector2[])polygon.Clone();
 
-        for (var i = 0; i < polygon.Length; i++) reversed[i] = polygon[polygon.Length - 1 - i];
+        Array.Reverse(reversed);
 
         return reversed;
     }

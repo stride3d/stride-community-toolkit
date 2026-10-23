@@ -234,21 +234,8 @@ public static class TextMesh
     private readonly record struct Block(Vector2 Min, Vector2 Max);
 
     /// <summary>Where every glyph goes: the pen positions, the block they make, and the shift the anchor asks for.</summary>
-    private sealed class Layout
+    private sealed record Layout(List<PlacedGlyph> Glyphs, Block Block, Vector2 Shift)
     {
-        private Layout(List<PlacedGlyph> glyphs, Block block, Vector2 shift)
-        {
-            Glyphs = glyphs;
-            Block = block;
-            Shift = shift;
-        }
-
-        internal List<PlacedGlyph> Glyphs { get; }
-
-        internal Block Block { get; }
-
-        internal Vector2 Shift { get; }
-
         /// <summary>
         /// Lays the text out line by line: the pen runs right along each line by the glyphs' advances,
         /// kerning and spacing, lines go down by the line height, then shorter lines are pushed right by
@@ -346,19 +333,10 @@ public static class TextMesh
     private sealed record PreparedPolygon(Vector2[][] Loops, Vector2[][][] Rings, List<int> CapTriangles);
 
     /// <summary>A glyph's polygons prepared, and the bevel width in EM units they accepted.</summary>
-    private sealed class PreparedGlyph
+    /// <param name="Polygons">The polygons, each with its loops, rings and cap triangles.</param>
+    /// <param name="BevelSizeEm">The bevel's reach across the cap in EM units, after any shrinking the glyph needed; 0 without a bevel.</param>
+    private sealed record PreparedGlyph(List<PreparedPolygon> Polygons, float BevelSizeEm)
     {
-        private PreparedGlyph(List<PreparedPolygon> polygons, float bevelSizeEm)
-        {
-            Polygons = polygons;
-            BevelSizeEm = bevelSizeEm;
-        }
-
-        internal List<PreparedPolygon> Polygons { get; }
-
-        /// <summary>The bevel's reach across the cap in EM units, after any shrinking the glyph needed; 0 without a bevel.</summary>
-        internal float BevelSizeEm { get; }
-
         internal bool IsEmpty => Polygons.Count == 0;
 
         internal static PreparedGlyph Build(GlyphOutline glyph, TextMeshOptions options)
@@ -433,20 +411,13 @@ public static class TextMesh
     }
 
     /// <summary>Accumulates the caps, bevels and walls of prepared polygons into one vertex and index list, scaled and placed on the way in.</summary>
-    private sealed class Emitter
+    private sealed class Emitter(TextMeshOptions options)
     {
         private readonly List<VertexPositionNormalTexture> _vertices = [];
         private readonly List<int> _indices = [];
-        private readonly float _scale;
-        private readonly float _halfDepth;
-        private readonly TextBevel? _bevel;
-
-        internal Emitter(TextMeshOptions options)
-        {
-            _scale = options.Size;
-            _halfDepth = options.Depth * 0.5f;
-            _bevel = options.Bevel;
-        }
+        private readonly float _scale = options.Size;
+        private readonly float _halfDepth = options.Depth * 0.5f;
+        private readonly TextBevel? _bevel = options.Bevel;
 
         /// <summary>
         /// Adds a prepared glyph placed at <paramref name="origin"/>, with cap texture coordinates spread over

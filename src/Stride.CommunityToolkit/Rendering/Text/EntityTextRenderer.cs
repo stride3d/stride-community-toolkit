@@ -30,6 +30,11 @@ public class EntityTextRenderer : SceneRendererBase
     private DisplayScale? _displayScale;
     private readonly List<EntityTextRenderData> _drawList = [];
 
+    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
+    public static readonly ProfilingKey ProfilingKey = new("EntityText");
+
+    private static readonly Color4 ProfileColor = new(0.9f, 0.7f, 0.3f, 1f);
+
     /// <inheritdoc />
     protected override void InitializeCore()
     {
@@ -47,11 +52,6 @@ public class EntityTextRenderer : SceneRendererBase
             _displayScale = DisplayScale.GetOrCreate(game);
         }
     }
-
-    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
-    public static readonly ProfilingKey ProfilingKey = new("EntityText");
-
-    private static readonly Color4 ProfileColor = new(0.9f, 0.7f, 0.3f, 1f);
 
     /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
@@ -158,25 +158,10 @@ public class EntityTextRenderer : SceneRendererBase
         // and stays on screen. Anchor is ignored here rather than obeyed, because the combination
         // that a HUD wants is the only one that keeps the text visible - and getting it wrong shows
         // up as text half off the edge of the window. Screen mode is there when the caller wants to
-        // place and anchor text independently.
-        DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, GetAnchorForScreenAnchor(component.ScreenAnchor), display);
+        // place and anchor text independently. The two enums share one layout, so the text anchor
+        // of the same name is the cast.
+        DrawAt(data, ResolveAnchoredPosition(component.ScreenAnchor, offset, screenSize), opacity, (TextAnchor)component.ScreenAnchor, display);
     }
-
-    /// <summary>
-    /// Returns the text anchor that keeps text pinned to the given point inside the window: the one of the same name.
-    /// </summary>
-    private static TextAnchor GetAnchorForScreenAnchor(ScreenAnchor anchor) => anchor switch
-    {
-        ScreenAnchor.TopCenter => TextAnchor.TopCenter,
-        ScreenAnchor.TopRight => TextAnchor.TopRight,
-        ScreenAnchor.MiddleLeft => TextAnchor.MiddleLeft,
-        ScreenAnchor.MiddleCenter => TextAnchor.MiddleCenter,
-        ScreenAnchor.MiddleRight => TextAnchor.MiddleRight,
-        ScreenAnchor.BottomLeft => TextAnchor.BottomLeft,
-        ScreenAnchor.BottomCenter => TextAnchor.BottomCenter,
-        ScreenAnchor.BottomRight => TextAnchor.BottomRight,
-        _ => TextAnchor.TopLeft,
-    };
 
     /// <summary>
     /// Projects the entity into screen space, reporting whether the text should be drawn at all and
@@ -197,21 +182,7 @@ public class EntityTextRenderer : SceneRendererBase
         var worldPosition = data.Entity.Transform.WorldMatrix.TranslationVector;
         var component = data.Component;
 
-        if (component.MaxDistance > 0f || component.FadeStartDistance > 0f)
-        {
-            var distance = Vector3.Distance(cameraPosition, worldPosition);
-
-            if (component.MaxDistance > 0f && distance > component.MaxDistance) return false;
-
-            if (component.FadeStartDistance > 0f && component.MaxDistance > component.FadeStartDistance)
-            {
-                var fade = 1f - MathUtil.Clamp((distance - component.FadeStartDistance) / (component.MaxDistance - component.FadeStartDistance), 0f, 1f);
-
-                opacity *= fade;
-
-                if (opacity <= 0f) return false;
-            }
-        }
+        if (!ScreenTextDrawer.TryApplyDistanceFade(component.FadeStartDistance, component.MaxDistance, cameraPosition, worldPosition, ref opacity)) return false;
 
         return ScreenTextDrawer.TryProject(worldPosition, ref viewProjection, screenSize, out screenPosition);
     }

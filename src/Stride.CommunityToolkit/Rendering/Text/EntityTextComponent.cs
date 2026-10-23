@@ -256,9 +256,4 @@ public class EntityTextComponent : EntityComponent
     /// <see cref="FadeStartDistance"/>, when labels should simply stop rather than fade.
     /// </remarks>
     public float MaxDistance { get; set; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="EntityTextComponent"/> class.
-    /// </summary>
-    public EntityTextComponent() { }
 }

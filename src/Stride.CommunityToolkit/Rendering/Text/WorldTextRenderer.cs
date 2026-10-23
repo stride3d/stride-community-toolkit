@@ -32,6 +32,11 @@ public class WorldTextRenderer : SceneRendererBase
     private SpriteFont? _defaultFont;
     private DisplayScale? _displayScale;
 
+    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
+    public static readonly ProfilingKey ProfilingKey = new("WorldText");
+
+    private static readonly Color4 ProfileColor = new(0.9f, 0.9f, 0.3f, 1f);
+
     /// <inheritdoc />
     protected override void InitializeCore()
     {
@@ -47,11 +52,6 @@ public class WorldTextRenderer : SceneRendererBase
             _displayScale = DisplayScale.GetOrCreate(game);
         }
     }
-
-    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
-    public static readonly ProfilingKey ProfilingKey = new("WorldText");
-
-    private static readonly Color4 ProfileColor = new(0.9f, 0.9f, 0.3f, 1f);
 
     /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)
@@ -94,7 +94,7 @@ public class WorldTextRenderer : SceneRendererBase
 
         var opacity = MathUtil.Clamp(component.Opacity, 0f, 1f);
 
-        if (!TryApplyDistance(component, cameraPosition, origin, ref opacity)) return;
+        if (!ScreenTextDrawer.TryApplyDistanceFade(component.FadeStartDistance, component.MaxDistance, cameraPosition, origin, ref opacity)) return;
 
         var font = component.Font ?? _defaultFont!;
 
@@ -139,7 +139,7 @@ public class WorldTextRenderer : SceneRendererBase
 
         // Both alphas count: the colour's own says how transparent this text is by nature, Opacity is
         // the dimmer on top of it - and distance fading has already been folded into that dimmer
-        DrawText(font, component, fontSize, Vector2.Zero, anchorOrigin, ToColor4(component.TextColor, opacity * component.TextColor.A / 255f));
+        DrawText(font, component, fontSize, Vector2.Zero, anchorOrigin, ScreenTextDrawer.Premultiplied(component.TextColor, opacity * component.TextColor.A / 255f));
 
         _spriteBatch.End();
     }
@@ -155,8 +155,8 @@ public class WorldTextRenderer : SceneRendererBase
         const int InnerCopies = 6;
 
         var strength = component.GlowColor.A / 255f * opacity;
-        var outer = ToColor4(component.GlowColor, strength * 0.22f);
-        var inner = ToColor4(component.GlowColor, strength * 0.35f);
+        var outer = ScreenTextDrawer.Premultiplied(component.GlowColor, strength * 0.22f);
+        var inner = ScreenTextDrawer.Premultiplied(component.GlowColor, strength * 0.35f);
 
         for (var i = 0; i < OuterCopies; i++)
         {
@@ -191,24 +191,6 @@ public class WorldTextRenderer : SceneRendererBase
             SpriteEffects.None,
             0f,
             component.Alignment);
-
-    /// <summary>
-    /// The colour as SpriteBatch takes it, with its alpha replaced by the given one and its channels
-    /// premultiplied by that alpha.
-    /// </summary>
-    /// <remarks>
-    /// The premultiply is what makes alpha mean "fade". <see cref="BlendStates.AlphaBlend"/> is the
-    /// premultiplied blend - source factor <c>One</c> - so a colour handed over straight is added at
-    /// full strength while only the background is scaled down: text at a tenth alpha would still be
-    /// drawn at full brightness over a dark scene and simply never fade out. Scaling the channels by
-    /// the alpha first turns the same blend back into the fade it reads as.
-    /// </remarks>
-    private static Color4 ToColor4(Color color, float alpha)
-    {
-        alpha = MathUtil.Clamp(alpha, 0f, 1f);
-
-        return new(color.R / 255f * alpha, color.G / 255f * alpha, color.B / 255f * alpha, alpha);
-    }
 
     /// <summary>
     /// Builds the rotation part of the text's world matrix.
@@ -265,25 +247,6 @@ public class WorldTextRenderer : SceneRendererBase
             M33 = toCamera.Z,
             M44 = 1f,
         };
-    }
-
-    /// <summary>
-    /// Applies the distance cutoff and fade, reporting whether the text should be drawn at all.
-    /// </summary>
-    private static bool TryApplyDistance(WorldTextComponent component, Vector3 cameraPosition, Vector3 origin, ref float opacity)
-    {
-        if (component.MaxDistance <= 0f && component.FadeStartDistance <= 0f) return true;
-
-        var distance = Vector3.Distance(cameraPosition, origin);
-
-        if (component.MaxDistance > 0f && distance > component.MaxDistance) return false;
-
-        if (component.FadeStartDistance > 0f && component.MaxDistance > component.FadeStartDistance)
-        {
-            opacity *= 1f - MathUtil.Clamp((distance - component.FadeStartDistance) / (component.MaxDistance - component.FadeStartDistance), 0f, 1f);
-        }
-
-        return opacity > 0f;
     }
 
     /// <inheritdoc />
