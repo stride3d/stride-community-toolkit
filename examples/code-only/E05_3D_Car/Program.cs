@@ -147,7 +147,7 @@ void Steer(Car car, float angle)
     float left, right;
     var magnitude = MathF.Abs(angle);
 
-    if (magnitude > 1e-6f)
+    if (!MathUtil.IsZero(magnitude))
     {
         var turnRadius = MathF.Abs(WheelBaseLength * MathF.Tan(MathF.PI * 0.5f - magnitude));
         var halfWidth = WheelBaseWidth * 0.5f;
