@@ -56,6 +56,17 @@ Four option types with three overlapping knobs (`IncludePhysics`, `Component`, `
 
 A supplied component together with `Body = BodyMode.None` throws, since the two contradict each other. `Mass` with `Static` is ignored with a line in the log, since a static has none.
 
+#### One entity search family
+
+`EntitySearchExtensions` had every search twice: one overload for any `EntityComponent`, one for `ActivableEntityComponent` with `includeDisabled`. A call with no argument on a component that can be disabled bound to the first and found disabled ones; a call with `false` bound to the second and skipped them. There is one overload now, for any `EntityComponent`, and one rule.
+
+| Before | After | Note |
+|---|---|---|
+| `GetComponentInChildren<T>()`, `GetComponentsInDescendants<T>()` and the other seven, each with a second overload taking `bool includeDisabled` | One overload each, `where T : EntityComponent`, with `bool includeDisabled = false` | Source-compatible. A disabled `ActivableEntityComponent` is skipped unless `includeDisabled: true`; a component that cannot be disabled is always found. |
+| `entity.GetComponentInChildren<CameraComponent>()` found a disabled camera | skips it | Pass `includeDisabled: true` for the old result. `Scene.GetCamera`, `GetComponentsInScene` and `GetComponentInScene` still include disabled components, as their remarks say. |
+
+The rest of the Engine folder lost a fifth of its lines without changing what it does: the timer and event helpers on `ScriptSystem` share one core per family, `InstantiateSingle` is `Instantiate` plus the count check, the three ways of getting a camera's pick ray share one implementation, and the by-value twin of every `ref` overload documents itself by `inheritdoc`. `AddTask(action, delay, repeatEvery)` now rejects a zero or negative `repeatEvery`, as `AddAction` always did.
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed
