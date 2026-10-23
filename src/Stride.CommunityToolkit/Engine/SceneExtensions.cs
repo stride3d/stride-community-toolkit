@@ -15,27 +15,10 @@ public static class SceneExtensions
     /// The first <see cref="CameraComponent"/> found in the scene, or <c>null</c> if no camera is present.
     /// </returns>
     /// <remarks>
-    /// This method searches through the scene's entities and returns the first camera it finds.
-    /// It performs a recursive search through child entities as well.
+    /// Searches every top-level entity of the scene and all of its descendants; disabled cameras count.
     /// </remarks>
     public static CameraComponent? GetCamera(this Scene scene)
-    {
-        var entities = scene.Entities;
-
-        CameraComponent? camera = null;
-
-        foreach (var entity in entities)
-        {
-            camera = entity.GetComponentInDescendantsAndSelf<CameraComponent>();
-
-            if (camera != null)
-            {
-                break;
-            }
-        }
-
-        return camera;
-    }
+        => scene.GetComponentInScene<CameraComponent>(includeChildScenes: false);
 
     /// <summary>
     /// Retrieves the first <see cref="CameraComponent"/> in the scene that belongs to an entity with the specified name.
@@ -46,20 +29,8 @@ public static class SceneExtensions
     /// The first <see cref="CameraComponent"/> found with the specified entity name, or <c>null</c> if no matching camera is found.
     /// </returns>
     /// <remarks>
-    /// Searches every top-level entity of the scene and all of its descendants.
+    /// Searches every top-level entity of the scene and all of its descendants; disabled cameras count.
     /// </remarks>
     public static CameraComponent? GetCamera(this Scene scene, string name)
-    {
-        ArgumentNullException.ThrowIfNull(scene);
-
-        foreach (var entity in scene.Entities)
-        {
-            foreach (var camera in entity.GetComponentsInDescendantsAndSelf<CameraComponent>(includeDisabled: true))
-            {
-                if (camera.Entity.Name == name) return camera;
-            }
-        }
-
-        return null;
-    }
+        => scene.GetComponentsInScene<CameraComponent>(includeChildScenes: false).FirstOrDefault(camera => camera.Entity.Name == name);
 }

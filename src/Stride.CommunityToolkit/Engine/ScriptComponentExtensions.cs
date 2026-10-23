@@ -14,36 +14,10 @@ public static class ScriptComponentExtensions
     /// <param name="scriptComponent">The <see cref="ScriptComponent"/> used to access game timing information.</param>
     /// <returns>The time elapsed since the last game update, in seconds, as a single-precision floating-point number.</returns>
     public static float DeltaTime(this ScriptComponent scriptComponent)
-    {
-        return (float)scriptComponent.Game.UpdateTime.Elapsed.TotalSeconds;
-    }
+        => (float)scriptComponent.Game.UpdateTime.Elapsed.TotalSeconds;
 
     /// <summary>
-    /// Retrieves the camera named "Main" from the <see cref="GraphicsCompositor"/>.
-    /// Note that the camera might not be available during the first 2-3 frames.
-    /// </summary>
-    /// <param name="scriptComponent">The <see cref="ScriptComponent"/> from which to access the <see cref="GraphicsCompositor"/>.</param>
-    /// <returns>The <see cref="CameraComponent"/> named "Main", if found; otherwise, null.</returns>
-    /// <remarks>
-    /// Ensure that the <see cref="GraphicsCompositor"/> is initialized with cameras before calling this method, or it may return null.
-    /// </remarks>
-    public static CameraComponent? GetGCCamera(this ScriptComponent scriptComponent)
-    {
-        var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
-
-        foreach (var sceneCamera in cameraCollection)
-        {
-            if (sceneCamera.Name == "Main")
-            {
-                return sceneCamera.Camera;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// Retrieves a camera from the <see cref="GraphicsCompositor"/> with the specified name.
+    /// Retrieves a camera from the <see cref="GraphicsCompositor"/> with the specified name, <see cref="CameraDefaults.MainCameraName"/> by default.
     /// Note that the camera might not be available during the first 2-3 frames.
     /// </summary>
     /// <param name="scriptComponent">The <see cref="ScriptComponent"/> from which to access the <see cref="GraphicsCompositor"/>.</param>
@@ -52,20 +26,8 @@ public static class ScriptComponentExtensions
     /// <remarks>
     /// Ensure that the <see cref="GraphicsCompositor"/> is initialized with cameras before calling this method, or it may return null.
     /// </remarks>
-    public static CameraComponent? GetGCCamera(this ScriptComponent scriptComponent, string cameraName)
-    {
-        var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
-
-        foreach (var sceneCamera in cameraCollection)
-        {
-            if (sceneCamera.Name == cameraName)
-            {
-                return sceneCamera.Camera;
-            }
-        }
-
-        return null;
-    }
+    public static CameraComponent? GetGCCamera(this ScriptComponent scriptComponent, string cameraName = CameraDefaults.MainCameraName)
+        => scriptComponent.SceneSystem.GraphicsCompositor.Cameras.FirstOrDefault(slot => slot.Name == cameraName)?.Camera;
 
     /// <summary>
     /// Retrieves the first camera from the <see cref="GraphicsCompositor"/>.
@@ -77,9 +39,5 @@ public static class ScriptComponentExtensions
     /// Ensure that the <see cref="GraphicsCompositor"/> is initialized with cameras before calling this method.
     /// </remarks>
     public static CameraComponent GetFirstGCCamera(this ScriptComponent scriptComponent)
-    {
-        var cameraCollection = scriptComponent.SceneSystem.GraphicsCompositor.Cameras;
-
-        return cameraCollection[0].Camera;
-    }
+        => scriptComponent.SceneSystem.GraphicsCompositor.Cameras[0].Camera;
 }

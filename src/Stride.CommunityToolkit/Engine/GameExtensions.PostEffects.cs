@@ -41,12 +41,7 @@ public static partial class GameExtensions
     /// <exception cref="InvalidOperationException">The game has no compositor, or its compositor has no post effects.</exception>
     public static IGame ConfigurePostEffects(this IGame game, Action<PostProcessingEffects> configure)
     {
-        ArgumentNullException.ThrowIfNull(game);
-
-        var compositor = game.GetSceneSystem().GraphicsCompositor
-            ?? throw new InvalidOperationException(GameDefaults.GraphicsCompositorNotSet);
-
-        compositor.ConfigurePostEffects(configure);
+        game.RequireGraphicsCompositor().ConfigurePostEffects(configure);
 
         return game;
     }

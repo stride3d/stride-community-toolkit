@@ -38,9 +38,9 @@ public static class GameLoopExtensions
             game.TargetElapsedTime = fixedStep;
         }
 
-        _forceOneUpdatePerDraw?.SetValue(game, true);
+        ForceOneUpdatePerDraw?.SetValue(game, true);
     }
 
     /// <summary>The engine's one-update-per-draw switch, protected internal on <see cref="GameBase"/>; <see langword="null"/> if the engine has renamed it.</summary>
-    private static readonly PropertyInfo? _forceOneUpdatePerDraw = typeof(GameBase).GetProperty("ForceOneUpdatePerDraw", BindingFlags.Instance | BindingFlags.NonPublic);
+    private static readonly PropertyInfo? ForceOneUpdatePerDraw = typeof(GameBase).GetProperty("ForceOneUpdatePerDraw", BindingFlags.Instance | BindingFlags.NonPublic);
 }

@@ -29,7 +29,7 @@ public static class SceneSearchExtensions
 
         foreach (var entity in scene.Entities)
         {
-            foreach (var component in entity.GetComponentsInDescendantsAndSelf<T>())
+            foreach (var component in entity.GetComponentsInDescendantsAndSelf<T>(includeDisabled: true))
             {
                 yield return component;
             }

@@ -8,7 +8,7 @@ public static class GameDefaults
     /// <summary>
     /// The default name assigned to generated ground entities.
     /// </summary>
-    public static readonly string DefaultGroundName = "Ground";
+    public const string DefaultGroundName = "Ground";
 
     /// <summary>
     /// The error message used when a graphics compositor is required but has not been configured.
