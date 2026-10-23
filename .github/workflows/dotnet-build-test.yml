@@ -27,6 +27,11 @@ on:
       - 'src/**'
       - 'tests/Stride.CommunityToolkit.Tests/**'
       - 'tests/Directory.Build.*'
+      # The test project also exercises the console launcher
+      - 'tools/Stride.CommunityToolkit.Examples/**'
+      - 'tools/Stride.CommunityToolkit.Examples.MetadataGenerator/**'
+      - 'tools/ExamplesManifest.targets'
+      - 'tools/Directory.Build.*'
       # The test project references this example
       - 'examples/code-only/E20_3D_CubeCollapse/**'
       - 'examples/Directory.Build.*'
