@@ -63,7 +63,7 @@ internal sealed class ChartCursor : IDisposable
         var facing = Vector3.Dot(normal, ray.Direction);
 
         // Parallel to the plane, or the plane is behind the camera
-        if (MathF.Abs(facing) < 1e-6f)
+        if (MathUtil.IsZero(facing))
         {
             Hide();
             return;

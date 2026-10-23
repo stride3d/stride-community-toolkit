@@ -64,7 +64,7 @@ internal static class ShapeDistance
         {
             var e = current - previous;
             var w = p - previous;
-            var ee = MathF.Max(Vector2.Dot(e, e), 0.000001f);
+            var ee = MathF.Max(Vector2.Dot(e, e), MathUtil.ZeroTolerance);
             var b = w - e * Math.Clamp(Vector2.Dot(w, e) / ee, 0f, 1f);
 
             d = MathF.Min(d, Vector2.Dot(b, b));
@@ -89,7 +89,7 @@ internal static class ShapeDistance
             var current = points[i];
             var e = current - previous;
             var w = p - previous;
-            var ee = MathF.Max(Vector2.Dot(e, e), 0.000001f);
+            var ee = MathF.Max(Vector2.Dot(e, e), MathUtil.ZeroTolerance);
             var b = w - e * Math.Clamp(Vector2.Dot(w, e) / ee, 0f, 1f);
 
             d = MathF.Min(d, Vector2.Dot(b, b));
@@ -178,7 +178,7 @@ internal static class ShapeDistance
             var currentW = MathF.Max(view.ClipW(currentWorld), 0.0001f);
             var e = new Vector2(current.X - previous.X, current.Y - previous.Y);
             var toPixel = new Vector2(pixel.X - previous.X, pixel.Y - previous.Y);
-            var t = Math.Clamp(Vector2.Dot(toPixel, e) / MathF.Max(Vector2.Dot(e, e), 0.000001f), 0f, 1f);
+            var t = Math.Clamp(Vector2.Dot(toPixel, e) / MathF.Max(Vector2.Dot(e, e), MathUtil.ZeroTolerance), 0f, 1f);
             var b = toPixel - e * t;
             var segment = b.Length() - MathUtil.Lerp(previous.Z, current.Z, t);
 

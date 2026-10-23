@@ -117,7 +117,7 @@ internal readonly struct GridView
     {
         t = 0f;
 
-        if (MathF.Abs(direction) < 0.000001f) return false;
+        if (MathUtil.IsZero(direction)) return false;
 
         t = -origin / direction;
 

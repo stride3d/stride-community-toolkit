@@ -89,7 +89,7 @@ public static class MeshBuilderExtensions
             var edge = to - from;
             var length = edge.Length();
 
-            if (length < 1e-6f) continue;
+            if (MathUtil.IsZero(length)) continue;
 
             var normal = new Vector3(edge.Y / length, -edge.X / length, 0);
 

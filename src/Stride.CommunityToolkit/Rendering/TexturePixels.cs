@@ -174,7 +174,7 @@ public static class TexturePixels
         var normal = new Vector3(value.X, value.Y, value.Z);
         var length = normal.Length();
 
-        return length > 1e-6f ? new Vector4(normal / length, value.W) : value;
+        return !MathUtil.IsZero(length) ? new Vector4(normal / length, value.W) : value;
     }
 
     private static byte ToByte(float value) => (byte)MathF.Round(Math.Clamp(value, 0f, 1f) * 255f);

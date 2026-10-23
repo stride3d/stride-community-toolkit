@@ -217,8 +217,8 @@ public static class MathUtilEx
         float yz = rotation.Y * rotation.Z;
         float xw = rotation.X * rotation.W;
         result.Y = (float)Math.Asin(2.0f * (yw - zx));
-        double test = Math.Cos(result.Y);
-        if (test > 1e-6f)
+        float test = MathF.Cos(result.Y);
+        if (!MathUtil.IsZero(test))
         {
             result.Z = (float)Math.Atan2(2.0f * (xy + zw), 1.0f - (2.0f * (yy + zz)));
             result.X = (float)Math.Atan2(2.0f * (yz + xw), 1.0f - (2.0f * (yy + xx)));

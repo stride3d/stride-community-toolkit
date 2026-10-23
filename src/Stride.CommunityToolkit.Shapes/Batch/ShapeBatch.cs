@@ -484,7 +484,7 @@ public sealed partial class ShapeBatch : RenderObject
         // Never zero: the shader divides by it. A shape with no extent - a circle of radius zero, a
         // run whose points coincide - is then a dot the width of its border, which is what a
         // stroke of no length is.
-        var localScale = MathF.Max(radius + 0.5f * MathF.Max(extent.X, extent.Y), 0.000001f);
+        var localScale = MathF.Max(radius + 0.5f * MathF.Max(extent.X, extent.Y), MathUtil.ZeroTolerance);
 
         if (!float.IsFinite(localScale)) return;
 

@@ -222,14 +222,14 @@ public sealed partial class ShapeBatch
             case PlaneMode.Axial:
                 var side = Vector3.Cross(view.EyePosition - origin, axisX);
                 var sideLength = side.Length();
-                axisY = sideLength > 0.000001f ? side / sideLength : view.CameraUp;
+                axisY = !MathUtil.IsZero(sideLength) ? side / sideLength : view.CameraUp;
                 break;
         }
 
         var normal = Vector3.Cross(axisX, axisY);
         var normalLength = normal.Length();
 
-        if (normalLength < 0.000001f) return false;
+        if (MathUtil.IsZero(normalLength)) return false;
 
         normal /= normalLength;
 
@@ -237,7 +237,7 @@ public sealed partial class ShapeBatch
         // Plane(point, normal) constructor builds the mirror plane)
         var facing = Vector3.Dot(normal, ray.Direction);
 
-        if (MathF.Abs(facing) < 0.000001f) return false;
+        if (MathUtil.IsZero(facing)) return false;
 
         var along = Vector3.Dot(normal, origin - ray.Position) / facing;
 
