@@ -67,6 +67,24 @@ A supplied component together with `Body = BodyMode.None` throws, since the two 
 
 The rest of the Engine folder lost a fifth of its lines without changing what it does: the timer and event helpers on `ScriptSystem` share one core per family, `InstantiateSingle` is `Instantiate` plus the count check, the three ways of getting a camera's pick ray share one implementation, and the by-value twin of every `ref` overload documents itself by `inheritdoc`. `AddTask(action, delay, repeatEvery)` now rejects a zero or negative `repeatEvery`, as `AddAction` always did.
 
+#### Camera controllers
+
+The three camera scripts share one shift check and one aspect-ratio helper, `GraphicsDevice.GetAspectRatio()`, and lost their duplicated branches. Two of those branches behaved differently from their twins, so the fix is visible:
+
+| Before | After | Note |
+|---|---|---|
+| `Basic2DCameraController` with `FollowTarget` and `FollowSmoothing = 0` put the camera at the target's Z | keeps the camera's own Z, as the smoothed follow always did | A 2D camera that jumped onto its target's plane saw nothing. |
+| `MouseDragButton = MouseButton.Extended1` (or `Extended2`) never panned | pans | The button check is `IsMouseButtonDown(MouseDragButton)` instead of a switch over three buttons. |
+
+#### Random helpers
+
+One family of helpers on the caller's own `Random`, so a world built from `new Random(seed)` comes out the same for the same seed.
+
+| Before | After | Note |
+|---|---|---|
+| `VectorHelper.RandomVector3(xRange: [-4, 4], yRange: [4, 8], zRange: [-4, 4])` | `random.NextVector3(new(-4, 4, -4), new(4, 8, 4))` | `VectorHelper` is gone, with its process-wide static `Random` and `SeedRandom`. `NextVector3(float min, float max)` covers the one-range form, and `NextSingle(min, max)` is new beside them. |
+| `random.NextColor()` built the colour from a random unit direction | a hue spread evenly round the wheel, saturation and brightness from `ColorTone.Vivid` | The old code clamped negative components to zero, which happened to give vivid colours; the default keeps that look with an even spread of hues. `NextColor(ColorTone.Light)`, `Dark` and `Any` draw from other ranges. |
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed
