@@ -15,14 +15,9 @@ public static class ListStackExtensions
     /// <exception cref="ArgumentException">If <paramref name="stack"/> is empty.</exception>
     public static T Peek<T>(this IList<T> stack)
     {
-        ArgumentNullException.ThrowIfNull(stack);
+        ThrowIfEmpty(stack);
 
-        if (stack.Count == 0)
-        {
-            throw new ArgumentException("The stack is empty.", nameof(stack));
-        }
-
-        return stack[stack.Count - 1];
+        return stack[^1];
     }
 
     /// <summary>
@@ -49,14 +44,9 @@ public static class ListStackExtensions
     /// <exception cref="ArgumentException">If <paramref name="stack"/> is empty.</exception>
     public static T Pop<T>(this IList<T> stack)
     {
-        ArgumentNullException.ThrowIfNull(stack);
+        ThrowIfEmpty(stack);
 
-        if (stack.Count == 0)
-        {
-            throw new ArgumentException("The stack is empty.", nameof(stack));
-        }
-
-        var item = stack[stack.Count - 1];
+        var item = stack[^1];
 
         stack.RemoveAt(stack.Count - 1);
 
@@ -73,17 +63,22 @@ public static class ListStackExtensions
     /// <exception cref="ArgumentException">If <paramref name="stack"/> is empty.</exception>
     public static T PopFront<T>(this IList<T> stack)
     {
-        ArgumentNullException.ThrowIfNull(stack);
-
-        if (stack.Count == 0)
-        {
-            throw new ArgumentException("The stack is empty.", nameof(stack));
-        }
+        ThrowIfEmpty(stack);
 
         var item = stack[0];
 
         stack.RemoveAt(0);
 
         return item;
+    }
+
+    private static void ThrowIfEmpty<T>(IList<T> stack)
+    {
+        ArgumentNullException.ThrowIfNull(stack);
+
+        if (stack.Count == 0)
+        {
+            throw new ArgumentException("The stack is empty.", nameof(stack));
+        }
     }
 }

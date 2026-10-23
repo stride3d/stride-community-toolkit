@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Engine;
 using Stride.Input;
@@ -173,12 +174,11 @@ public class Basic3DOrbitCameraController : SyncScript
     {
         // A full-window drag moves the target by the world size of the view at the target's distance,
         // so the point under the cursor stays roughly under the cursor - the 2D controller's rule
-        var backBuffer = Game.GraphicsDevice.Presenter.BackBuffer;
-        var aspect = (float)backBuffer.Width / backBuffer.Height;
+        var aspect = Game.GraphicsDevice.GetAspectRatio();
         var fov = MathUtil.DegreesToRadians(_camera!.VerticalFieldOfView);
         var worldHeight = 2f * _distance * MathF.Tan(fov * 0.5f);
 
-        if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+        if (Input.IsShiftDown())
         {
             worldHeight *= SpeedFactor;
         }
@@ -202,7 +202,7 @@ public class Basic3DOrbitCameraController : SyncScript
         if (wheel == 0f)
             return;
 
-        if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+        if (Input.IsShiftDown())
         {
             wheel *= SpeedFactor;
         }

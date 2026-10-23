@@ -104,7 +104,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <returns>
     /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
     /// </returns>
-    public override int GetHashCode() => Start.GetHashCode() + End.GetHashCode();
+    public override int GetHashCode() => HashCode.Combine(Start, End);
 
     /// <summary>
     /// Determines whether the specified <see cref="RaySegment"/> is equal to this instance.
@@ -122,15 +122,7 @@ public readonly struct RaySegment : IEquatable<RaySegment>, IFormattable
     /// <returns>
     /// <c>true</c> if the specified <see cref="object"/> is equal to this instance; otherwise, <c>false</c>.
     /// </returns>
-    public override bool Equals(object? value)
-    {
-        if (value == null)
-            return false;
-        if (value.GetType() != GetType())
-            return false;
-
-        return Equals((RaySegment)value);
-    }
+    public override bool Equals(object? value) => value is RaySegment other && Equals(other);
 
     /// <summary>
     /// Performs an explicit conversion from <see cref="RaySegment"/> to <see cref="Ray"/>.

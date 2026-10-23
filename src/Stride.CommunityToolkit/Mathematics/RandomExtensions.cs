@@ -110,7 +110,7 @@ public static class RandomExtensions
         ArgumentNullException.ThrowIfNull(random);
 
         // Use a single angle and sqrt on radius factor to achieve uniform area distribution.
-        var angle = random.NextSingle() * MathF.PI * 2f;
+        var angle = random.NextSingle() * MathUtil.TwoPi;
         var r = MathF.Sqrt(random.NextSingle()) * radius;
 
         return new Vector2(MathF.Cos(angle) * r, MathF.Sin(angle) * r);

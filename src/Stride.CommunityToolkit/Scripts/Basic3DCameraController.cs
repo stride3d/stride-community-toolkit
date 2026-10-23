@@ -20,7 +20,6 @@ public class Basic3DCameraController : SyncScript
 {
     private const float MaximumPitch = MathUtil.PiOverTwo * 0.99f;
     private readonly ScreenAnchor? _helpPosition;
-    private Vector3 _upVector;
     private Vector3 _translation;
     private Vector3 _defaultCameraPosition;
     private Quaternion _defaultCameraRotation;
@@ -52,6 +51,19 @@ public class Basic3DCameraController : SyncScript
     /// <see langword="true"/>, and must be set before the script starts.
     /// </summary>
     public bool ShowHelp { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets whether the camera's help section is shown.
+    /// </summary>
+    /// <remarks>
+    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
+    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
+    /// </remarks>
+    public bool ShowInstructions
+    {
+        get => _instructions?.Enabled ?? false;
+        set { if (_instructions is not null) _instructions.Enabled = value; }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
@@ -156,9 +168,6 @@ public class Basic3DCameraController : SyncScript
             }, HelpCollapsed, order: -100);
         }
 
-        // Default up-direction
-        _upVector = Vector3.UnitY;
-
         _defaultCameraPosition = Entity.Transform.Position;
         _defaultCameraRotation = Entity.Transform.Rotation;
 
@@ -186,7 +195,6 @@ public class Basic3DCameraController : SyncScript
         _yaw = 0f;
         _pitch = 0f;
 
-
         KeyboardAndGamePadBasedMovement(deltaTime);
 
         KeyboardAndGamePadBasedRotation(deltaTime);
@@ -196,38 +204,16 @@ public class Basic3DCameraController : SyncScript
         ResetCameraToDefault();
     }
 
-    /// <summary>
-    /// Gets or sets whether the camera's help section is shown.
-    /// </summary>
-    /// <remarks>
-    /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
-    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
-    /// </remarks>
-    public bool ShowInstructions
-    {
-        get => _instructions?.Enabled ?? false;
-        set { if (_instructions is not null) _instructions.Enabled = value; }
-    }
-
     private void KeyboardAndGamePadBasedMovement(float deltaTime)
     {
-        // Our base speed is: one unit per second:
-        // deltaTime contains the duration of the previous frame, let's say that in this update
-        // or frame it is equal to 1/60, that means that the previous update ran 1/60 of a second ago
-        // and the next will, in most cases, run in around 1/60 of a second from now. Knowing that,
-        // we can move 1/60 of a unit on this frame so that in around 60 frames(1 second)
-        // we will have traveled one whole unit in a second.
-        // If you don't use deltaTime, your speed will be dependent on the number of frames rendered
-        // on screen, which often are inconsistent, meaning that if the player has performance issues,
-        // this entity will move around slower.
-
-        var speed = 1f * deltaTime;
+        // Scaled by the frame time, so the speed is in units per second whatever the frame rate
+        var speed = deltaTime;
 
         var movementDirection = Vector3.Zero;
 
         if (Gamepad && Input.HasGamePad)
         {
-            GamePadState padState = Input.DefaultGamePad.State;
+            var padState = Input.DefaultGamePad.State;
             // LeftThumb can be positive or negative on both axes (pushed to the right or to the left)
             movementDirection.Z += padState.LeftThumb.Y;
             movementDirection.X += padState.LeftThumb.X;
@@ -236,8 +222,7 @@ public class Basic3DCameraController : SyncScript
             movementDirection.Y -= padState.LeftTrigger;
             movementDirection.Y += padState.RightTrigger;
 
-            // Increase speed when pressing A, LeftShoulder or RightShoulder
-            // Here:does the enum flag 'Buttons' have one of the flag ('A','LeftShoulder' or 'RightShoulder') set
+            // Sprint while A or either shoulder is held
             if ((padState.Buttons & (GamePadButton.A | GamePadButton.LeftShoulder | GamePadButton.RightShoulder)) != 0)
                 speed *= SpeedFactor;
         }
@@ -264,15 +249,10 @@ public class Basic3DCameraController : SyncScript
                 movementDirection.Y += 1;
 
             // Increase speed when pressing shift
-            if (Input.IsKeyDown(Keys.LeftShift) || Input.IsKeyDown(Keys.RightShift))
+            if (Input.IsShiftDown())
                 speed *= SpeedFactor;
 
-            // If the player pushes down two or more buttons, the direction and ultimately the base speed
-            // will be greater than one (vector(1, 1) is farther away from zero than vector(0, 1)),
-            // normalizing the vector ensures that whichever direction the player chooses, that direction
-            // will always be at most one unit in length.
-            // We're keeping dir as is if it isn't longer than one to retain subunit movement:
-            // a stick not entirely pushed forward should make the entity move slower.
+            // Normalise only when longer than one, so a half-pushed stick still moves slowly
             if (movementDirection.Length() > 1f)
                 movementDirection = Vector3.Normalize(movementDirection);
         }
@@ -283,15 +263,12 @@ public class Basic3DCameraController : SyncScript
 
     private void KeyboardAndGamePadBasedRotation(float deltaTime)
     {
-        // See Keyboard & Gamepad translation's deltaTime usage
-
-        float speed = 1f * deltaTime;
-
-        Vector2 rotation = Vector2.Zero;
+        var speed = deltaTime;
+        var rotation = Vector2.Zero;
 
         if (Gamepad && Input.HasGamePad)
         {
-            GamePadState padState = Input.DefaultGamePad.State;
+            var padState = Input.DefaultGamePad.State;
             rotation.X += padState.RightThumb.Y;
             rotation.Y += -padState.RightThumb.X;
         }
@@ -323,10 +300,7 @@ public class Basic3DCameraController : SyncScript
 
     private void MouseMovementAndGestures()
     {
-        // This type of input should not use delta time at all, they already are frame-rate independent.
-        // Let's say that you are going to move your finger/mouse for one second over 40 units, it doesn't matter
-        // the number of frames occurring within that time frame, each frame will receive the right amount of delta:
-        // a quarter of a second -> 10 units, half a second -> 20 units, one second -> your 40 units.
+        // Mouse and touch deltas are already distances per frame, so no frame time here
 
         if (Input.HasMouse)
         {
@@ -376,7 +350,7 @@ public class Basic3DCameraController : SyncScript
         var rotation = Matrix.RotationQuaternion(Entity.Transform.Rotation);
 
         // Enforce the global up-vector by adjusting the local x-axis
-        var right = Vector3.Cross(rotation.Forward, _upVector);
+        var right = Vector3.Cross(rotation.Forward, Vector3.UnitY);
         var up = Vector3.Cross(right, rotation.Forward);
 
         // Stabilize
@@ -384,7 +358,7 @@ public class Basic3DCameraController : SyncScript
         up.Normalize();
 
         // Adjust pitch. Prevent it from exceeding up and down facing. Stabilize edge cases.
-        var currentPitch = MathUtil.PiOverTwo - MathF.Acos(Vector3.Dot(rotation.Forward, _upVector));
+        var currentPitch = MathUtil.PiOverTwo - MathF.Acos(Vector3.Dot(rotation.Forward, Vector3.UnitY));
         _pitch = MathUtil.Clamp(currentPitch + _pitch, -MaximumPitch, MaximumPitch) - currentPitch;
 
         Vector3 finalTranslation = _translation;
@@ -395,7 +369,7 @@ public class Basic3DCameraController : SyncScript
         Entity.Transform.Position += finalTranslation;
 
         // Yaw around global up-vector, pitch and roll in local space
-        Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(_upVector, _yaw);
+        Entity.Transform.Rotation *= Quaternion.RotationAxis(right, _pitch) * Quaternion.RotationAxis(Vector3.UnitY, _yaw);
     }
 
     /// <summary>

@@ -148,6 +148,7 @@ public static class MathUtilEx
     public static Quaternion LookRotation(Vector3 eye, Vector3 target, Vector3 up)
     {
         LookRotation(ref eye, ref target, ref up, out var result);
+
         return result;
     }
 
@@ -158,7 +159,7 @@ public static class MathUtilEx
     /// <param name="result">Resulting quaternion rotation</param>
     public static void ToQuaternion(ref Vector3 rotationEulerXYZ, out Quaternion result)
     {
-        // Equilvalent to:
+        // Equivalent to:
         //  Quaternion quatX, quatY, quatZ;
         //
         //  Quaternion.RotationX(value.X, out quatX);
@@ -168,12 +169,12 @@ public static class MathUtilEx
         //  rotation = quatX * quatY * quatZ;
 
         var halfAngles = rotationEulerXYZ * 0.5f;
-        var fSinX = (float)Math.Sin(halfAngles.X);
-        var fCosX = (float)Math.Cos(halfAngles.X);
-        var fSinY = (float)Math.Sin(halfAngles.Y);
-        var fCosY = (float)Math.Cos(halfAngles.Y);
-        var fSinZ = (float)Math.Sin(halfAngles.Z);
-        var fCosZ = (float)Math.Cos(halfAngles.Z);
+        var fSinX = MathF.Sin(halfAngles.X);
+        var fCosX = MathF.Cos(halfAngles.X);
+        var fSinY = MathF.Sin(halfAngles.Y);
+        var fCosY = MathF.Cos(halfAngles.Y);
+        var fSinZ = MathF.Sin(halfAngles.Z);
+        var fCosZ = MathF.Cos(halfAngles.Z);
         var fCosXY = fCosX * fCosY;
         var fSinXY = fSinX * fSinY;
 
@@ -181,7 +182,6 @@ public static class MathUtilEx
         result.Y = fSinY * fCosX * fCosZ + fSinZ * fSinX * fCosY;
         result.Z = fSinZ * fCosXY - fSinXY * fCosZ;
         result.W = fCosZ * fCosXY + fSinXY * fSinZ;
-
     }
 
     /// <summary>
@@ -192,6 +192,7 @@ public static class MathUtilEx
     public static Quaternion ToQuaternion(this Vector3 rotationEulerXYZ)
     {
         ToQuaternion(ref rotationEulerXYZ, out var result);
+
         return result;
     }
 
@@ -202,7 +203,6 @@ public static class MathUtilEx
     /// <param name="result">The Euler rotation, in XYZ order.</param>
     public static void ToRotationEulerXYZ(ref Quaternion rotation, out Vector3 result)
     {
-
         // Equivalent to:
         //  Matrix rotationMatrix;
         //  Matrix.Rotation(ref cachedRotation, out rotationMatrix);
@@ -216,19 +216,18 @@ public static class MathUtilEx
         float yw = rotation.Y * rotation.W;
         float yz = rotation.Y * rotation.Z;
         float xw = rotation.X * rotation.W;
-        result.Y = (float)Math.Asin(2.0f * (yw - zx));
+        result.Y = MathF.Asin(2.0f * (yw - zx));
         float test = MathF.Cos(result.Y);
         if (!MathUtil.IsZero(test))
         {
-            result.Z = (float)Math.Atan2(2.0f * (xy + zw), 1.0f - (2.0f * (yy + zz)));
-            result.X = (float)Math.Atan2(2.0f * (yz + xw), 1.0f - (2.0f * (yy + xx)));
+            result.Z = MathF.Atan2(2.0f * (xy + zw), 1.0f - (2.0f * (yy + zz)));
+            result.X = MathF.Atan2(2.0f * (yz + xw), 1.0f - (2.0f * (yy + xx)));
         }
         else
         {
-            result.Z = (float)Math.Atan2(2.0f * (zw - xy), 2.0f * (zx + yw));
+            result.Z = MathF.Atan2(2.0f * (zw - xy), 2.0f * (zx + yw));
             result.X = 0.0f;
         }
-
     }
 
     /// <summary>
@@ -239,6 +238,7 @@ public static class MathUtilEx
     public static Vector3 ToRotationEulerXYZ(this Quaternion rotation)
     {
         ToRotationEulerXYZ(ref rotation, out var result);
+
         return result;
     }
 
@@ -254,9 +254,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Interpolate(float start, float end, float amount, EasingFunction easingFunction)
-    {
-        return MathUtil.Lerp(start, end, Easing.Ease(amount, easingFunction));
-    }
+        => MathUtil.Lerp(start, end, Easing.Ease(amount, easingFunction));
 
     /// <summary>
     /// Performs an interpolation between two vectors using an easing function.
@@ -271,9 +269,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Interpolate(ref Vector2 start, ref Vector2 end, float amount, EasingFunction easingFunction, out Vector2 result)
-    {
-        Vector2.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
-    }
+        => Vector2.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
 
     /// <summary>
     /// Performs an interpolation between two vectors using an easing function.
@@ -288,9 +284,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 Interpolate(Vector2 start, Vector2 end, float amount, EasingFunction easingFunction)
-    {
-        return Vector2.Lerp(start, end, Easing.Ease(amount, easingFunction));
-    }
+        => Vector2.Lerp(start, end, Easing.Ease(amount, easingFunction));
 
     /// <summary>
     /// Performs an interpolation between two vectors using an easing function.
@@ -305,9 +299,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Interpolate(ref Vector3 start, ref Vector3 end, float amount, EasingFunction easingFunction, out Vector3 result)
-    {
-        Vector3.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
-    }
+        => Vector3.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
 
     /// <summary>
     /// Performs an interpolation between two vectors using an easing function.
@@ -320,12 +312,10 @@ public static class MathUtilEx
     /// <remarks>
     /// Passing <paramref name="amount"/> a value of 0 will cause <paramref name="start"/> to be returned; a value of 1 will cause <paramref name="end"/> to be returned.
     /// </remarks>
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector3 Interpolate(Vector3 start, Vector3 end, float amount, EasingFunction easingFunction)
-    {
-        return Vector3.Lerp(start, end, Easing.Ease(amount, easingFunction));
-    }
+        => Vector3.Lerp(start, end, Easing.Ease(amount, easingFunction));
+
     /// <summary>
     /// Performs an interpolation between two vectors using an easing function.
     /// </summary>
@@ -339,9 +329,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Interpolate(ref Vector4 start, ref Vector4 end, float amount, EasingFunction easingFunction, out Vector4 result)
-    {
-        Vector4.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
-    }
+        => Vector4.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
 
     /// <summary>
     /// Performs an interpolation between two vectors using an easing function.
@@ -356,9 +344,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector4 Interpolate(Vector4 start, Vector4 end, float amount, EasingFunction easingFunction)
-    {
-        return Vector4.Lerp(start, end, Easing.Ease(amount, easingFunction));
-    }
+        => Vector4.Lerp(start, end, Easing.Ease(amount, easingFunction));
 
     /// <summary>
     /// Performs an interpolation between two colors using an easing function.
@@ -373,9 +359,7 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Interpolate(ref Color start, ref Color end, float amount, EasingFunction easingFunction, out Color result)
-    {
-        Color.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
-    }
+        => Color.Lerp(ref start, ref end, Easing.Ease(amount, easingFunction), out result);
 
     /// <summary>
     /// Performs an interpolation between two colors using an easing function.
@@ -390,7 +374,5 @@ public static class MathUtilEx
     /// </remarks>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Color Interpolate(Color start, Color end, float amount, EasingFunction easingFunction)
-    {
-        return Color.Lerp(start, end, Easing.Ease(amount, easingFunction));
-    }
+        => Color.Lerp(start, end, Easing.Ease(amount, easingFunction));
 }

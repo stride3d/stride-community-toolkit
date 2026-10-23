@@ -38,12 +38,7 @@ public static class DictionaryExtensions
     {
         ArgumentNullException.ThrowIfNull(dictionary);
 
-        if (dictionary.TryGetValue(key, out TValue? result))
-        {
-            return result;
-        }
-
-        return defaultValue;
+        return dictionary.TryGetValue(key, out var result) ? result : defaultValue;
     }
 
     /// <summary>
@@ -59,7 +54,6 @@ public static class DictionaryExtensions
     public static TValue? GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> getValue)
     {
         ArgumentNullException.ThrowIfNull(dictionary);
-
         ArgumentNullException.ThrowIfNull(getValue);
 
         if (!dictionary.TryGetValue(key, out TValue? result))
@@ -85,9 +79,7 @@ public static class DictionaryExtensions
     public static TValue? GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey, TValue> getValue, Func<TValue, bool> shouldAdd)
     {
         ArgumentNullException.ThrowIfNull(dictionary);
-
         ArgumentNullException.ThrowIfNull(getValue);
-
         ArgumentNullException.ThrowIfNull(shouldAdd);
 
         if (!dictionary.TryGetValue(key, out TValue? result))
