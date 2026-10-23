@@ -1,3 +1,5 @@
+using Stride.CommunityToolkit.Rendering.Overlay;
+
 namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
@@ -7,8 +9,8 @@ namespace Stride.CommunityToolkit.Rendering.Text;
 /// <param name="Color">The optional color for the text. If null, a default color will be used.</param>
 /// <remarks>
 /// A help line names its keys as data rather than in the text - <c>new("H", "Reset camera")</c>, not
-/// <c>new("[H] Reset camera")</c> - and the <see cref="DebugOverlay"/> decorates them when it draws, with
-/// <see cref="DebugOverlay.KeyFormat"/> and in <see cref="DebugOverlay.KeyColor"/>. Changing the whole
+/// <c>new("[H] Reset camera")</c> - and the <see cref="TextOverlay"/> decorates them when it draws, with
+/// <see cref="TextOverlay.KeyFormat"/> and in <see cref="TextOverlay.KeyColor"/>. Changing the whole
 /// toolkit from <c>[H]</c> to <c>H:</c> is then one property, not an edit to every example.
 /// </remarks>
 public record TextElement(string Text, Color? Color = null)
@@ -27,7 +29,7 @@ public record TextElement(string Text, Color? Color = null)
 
     /// <summary>
     /// Whether the line is drawn one marker in, so its keys sit under the key of a title with a marker.
-    /// The overlay sets it for the body of a collapsible section; a dropdown sets it on its items.
+    /// The overlay sets it for the body of a collapsible section; a key menu sets it on its items.
     /// </summary>
     public bool Indented { get; init; }
 

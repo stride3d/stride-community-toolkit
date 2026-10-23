@@ -4,7 +4,8 @@
 string and a font into one `GeometricMeshData` in seven stages, each a small set of files with one
 job. Everything up to the last stage works in the font's own EM units; the size the caller asked
 for is applied as the vertices are written. File names without a folder are in
-`src/Stride.CommunityToolkit/Rendering/Text/`; the others are given from `src/`.
+`src/Stride.CommunityToolkit/Rendering/Text/Meshes/`, except `SystemFonts.cs`, which is in
+`Rendering/Text/`; the others are given from `src/`.
 
 ```mermaid
 flowchart LR

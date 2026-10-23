@@ -1,6 +1,7 @@
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Scripts;
 using Stride.Engine;
@@ -389,7 +390,7 @@ public static partial class GameExtensions
     /// Adds a 3D camera controller to the specified camera entity in the game's current scene.
     /// </summary>
     /// <param name="game">The game instance containing the scene and camera entities to which the controller will be added.</param>
-    /// <param name="helpPosition">Where the shared <see cref="Rendering.Text.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// <param name="helpPosition">Where the shared <see cref="Rendering.Overlay.TextOverlay"/> is drawn. <see langword="null"/>, the default,
     /// leaves the overlay's own position alone.</param>
     /// <param name="cameraName">The name of the camera entity to attach the 3D camera controller to. If not specified, the main camera name is
     /// used.</param>
@@ -998,7 +999,7 @@ public static partial class GameExtensions
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> is <see langword="null"/>.</exception>
-    public static Entity CreatePrimitive(this IGame game, Primitive3D shape, Primitive3DEntityOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, Primitive3D shape, PrimitiveEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
@@ -1022,7 +1023,7 @@ public static partial class GameExtensions
         }
 
         // The physics engine the setup chose, if any; the core alone attaches nothing
-        if (options.IncludePhysics)
+        if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
 
         return entity;
@@ -1040,7 +1041,7 @@ public static partial class GameExtensions
     /// <para>If a material is specified in <paramref name="options"/>, it is added to the generated model's material collection.</para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="game"/> or <paramref name="shape"/> is <see langword="null"/>.</exception>
-    public static Entity CreatePrimitive(this IGame game, Primitive2D shape, Primitive2DEntityOptions? options = null)
+    public static Entity CreatePrimitive(this IGame game, Primitive2D shape, PrimitiveEntityOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(shape);
@@ -1063,7 +1064,7 @@ public static partial class GameExtensions
             entity.Transform.Position = position;
         }
 
-        if (options.IncludePhysics)
+        if (options.Body != BodyMode.None)
             PhysicsSetupBase.Of(game).AddBody(entity, shape, options);
 
         return entity;

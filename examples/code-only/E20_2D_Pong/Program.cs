@@ -1,6 +1,7 @@
 using E20_2D_Pong;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -28,7 +29,7 @@ var chalk = new Color(230, 236, 245);
 var glow = new Color(120, 190, 255, 140);
 
 Referee? referee = null;
-DebugOverlaySection? keys = null;
+TextOverlaySection? keys = null;
 var foldedKeys = false;
 
 using var game = new Game();
@@ -61,7 +62,7 @@ void Start(Scene scene)
     var leftPaddle = Rectangle("Left paddle", Court.PaddleSize, new Vector3(-Court.PaddleX, 0f, 0f), material);
     var rightPaddle = Rectangle("Right paddle", Court.PaddleSize, new Vector3(Court.PaddleX, 0f, 0f), material);
 
-    var ballEntity = game.CreatePrimitive(Primitive2D.Circle(Court.BallSize * 0.5f), new Primitive2DEntityOptions
+    var ballEntity = game.CreatePrimitive(Primitive2D.Circle(Court.BallSize * 0.5f), new PrimitiveEntityOptions
     {
         EntityName = "Ball",
         Material = material,
@@ -92,7 +93,7 @@ void Start(Scene scene)
 
     // The keys are shown over the demo and fold away to one line when a match starts, so they do
     // not cover the score. F1 brings them back
-    keys = DebugOverlay.GetOrCreate(game).AddSection("Pong", () =>
+    keys = TextOverlay.GetOrCreate(game).AddSection("Pong", () =>
     [
         new(["W", "S"], "Left paddle", Color.Gold),
         new(["Up", "Down"], "Right paddle, with two players", Color.Gold),
@@ -109,7 +110,7 @@ void Start(Scene scene)
 
     Entity Rectangle(string name, Vector2 size, Vector3 position, Material fill)
     {
-        var entity = game.CreatePrimitive(Primitive2D.Rectangle(size.X, size.Y), new Primitive2DEntityOptions
+        var entity = game.CreatePrimitive(Primitive2D.Rectangle(size.X, size.Y), new PrimitiveEntityOptions
         {
             EntityName = name,
             Material = fill,

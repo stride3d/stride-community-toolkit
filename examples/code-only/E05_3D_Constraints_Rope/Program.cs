@@ -2,6 +2,7 @@ using E05_3D_Constraints_Rope;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -98,7 +99,7 @@ void Start(Scene scene)
     game.GetCameraEntity().Add(new GrabberScript());
     game.AddStudioLighting();
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
 
     // Anchored at the segment ends, neighbours only: the straightforward build, and the unstable one.
     naiveRope = RopeBuilder.Build(game, scene,
@@ -132,7 +133,7 @@ void CreateTower(Scene scene, float x)
     {
         for (var column = 0; column < TowerColumns; column++)
         {
-            var box = game.CreatePrimitive(Primitive3D.Cube(TowerBoxSize), new Bepu3DPhysicsOptions
+            var box = game.CreatePrimitive(Primitive3D.Cube(TowerBoxSize), new BepuPhysicsOptions
             {
                 EntityName = "Tower Box",
                 Material = game.CreateMaterial(row % 2 == 0 ? Color.Tan : Color.SandyBrown),
@@ -210,9 +211,9 @@ IReadOnlyList<TextElement> BuildInstructions()
 
 static string Length(Rope? rope) => rope is null ? "-" : rope.Length.ToString("0.00", CultureInfo.InvariantCulture);
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // BuildInstructions runs every frame the overlay is drawn, which is what keeps the measured rope
     // lengths live

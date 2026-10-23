@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Core.Diagnostics;
 using Stride.Core.Serialization.Contents;
 using Stride.Graphics;
@@ -27,7 +28,7 @@ internal static class RendererDefaults
     /// Default background color used behind entity debug text.
     /// </summary>
     /// <remarks>
-    /// Light rather than dark, because <see cref="EntityDebugSceneRendererOptions.FontColor"/>
+    /// Light rather than dark, because <see cref="EntityInfoRendererOptions.FontColor"/>
     /// defaults to black. Each renderer pairs its default background with its default text colour.
     /// </remarks>
     public static readonly Color4 DefaultDebugBackground = new(0.85f, 0.85f, 0.85f, 0.6f);

@@ -1,5 +1,5 @@
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Engine;
 using Stride.Input;
 
@@ -27,7 +27,7 @@ public class Basic3DCameraController : SyncScript
     private float _yaw;
     private float _pitch;
 
-    private DebugOverlaySection? _instructions;
+    private TextOverlaySection? _instructions;
 
     /// <summary>
     /// Gets or sets the key that collapses and expands the camera's help. Defaults to
@@ -48,7 +48,7 @@ public class Basic3DCameraController : SyncScript
     public bool HelpCollapsed { get; set; } = true;
 
     /// <summary>
-    /// Gets or sets whether the camera's help is put on the shared <see cref="DebugOverlay"/> at all. Defaults to
+    /// Gets or sets whether the camera's help is put on the shared <see cref="TextOverlay"/> at all. Defaults to
     /// <see langword="true"/>, and must be set before the script starts.
     /// </summary>
     public bool ShowHelp { get; set; } = true;
@@ -57,7 +57,7 @@ public class Basic3DCameraController : SyncScript
     /// Initializes a new instance of the <see cref="Basic3DCameraController"/> class, optionally moving the
     /// shared overlay to an anchor.
     /// </summary>
-    /// <param name="helpPosition">Where the shared <see cref="DebugOverlay"/> - and so the camera help - is
+    /// <param name="helpPosition">Where the shared <see cref="TextOverlay"/> - and so the camera help - is
     /// drawn. <see langword="null"/>, the default, leaves the overlay where it is, so a position set elsewhere
     /// (for example before the controller starts) is kept.
     /// </param>
@@ -118,7 +118,7 @@ public class Basic3DCameraController : SyncScript
         // set by the example before the controller started would be silently overwritten
         if (ShowHelp)
         {
-            var overlay = DebugOverlay.GetOrCreate(Game);
+            var overlay = TextOverlay.GetOrCreate(Game);
 
             if (_helpPosition is { } position)
             {
@@ -201,7 +201,7 @@ public class Basic3DCameraController : SyncScript
     /// </summary>
     /// <remarks>
     /// This hides only the camera's own lines. The overlay itself, and anything else contributing to
-    /// it, is toggled with <see cref="DebugOverlay.ToggleKey"/>.
+    /// it, is toggled with <see cref="TextOverlay.ToggleKey"/>.
     /// </remarks>
     public bool ShowInstructions
     {

@@ -81,7 +81,7 @@ public sealed class MaterialStation : GalleryStation
     /// <param name="local">Where, in station coordinates.</param>
     public Entity Place(Primitive3D shape, Material material, Vector3 local)
     {
-        var entity = Game.CreatePrimitive(shape, new Primitive3DEntityOptions
+        var entity = Game.CreatePrimitive(shape, new PrimitiveEntityOptions
         {
             EntityName = $"Station {Number} {shape.Name}",
             Material = material,

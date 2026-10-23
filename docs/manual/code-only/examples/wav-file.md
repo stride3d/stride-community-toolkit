@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - Looping, volume and pan on a SoundInstance
 - Disposing instances once they have played out
 - Why the files are mono: Pan and spatialisation need a single channel
-- Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay
 
 ![Wav File](media/wav-file.webp)
 

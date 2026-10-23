@@ -19,7 +19,7 @@ public static partial class EntityExtensions
     /// enabling camera movement and rotation through various input methods.
     /// </summary>
     /// <param name="entity">The entity to which the interactive camera script will be added.</param>
-    /// <param name="helpPosition">Where the shared <see cref="Rendering.Text.DebugOverlay"/> is drawn. <see langword="null"/>, the default,
+    /// <param name="helpPosition">Where the shared <see cref="Rendering.Overlay.TextOverlay"/> is drawn. <see langword="null"/>, the default,
     /// leaves the overlay's own position alone.</param>
     /// <remarks>
     /// The camera entity can be moved using W, A, S, D, Q and E, arrow keys, a gamepad's left stick

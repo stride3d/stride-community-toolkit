@@ -26,10 +26,10 @@ The `Program.cs` file shows how to:
 - Strokes with DrawPixelPolyline - a dashed route and a concave, closed frame
 - World text styling - Height, FontSize, TextColor alpha, Opacity, GlowColor and GlowSize
 - Installed system fonts with SystemFonts, in four styles
-- A live theme switch through a DebugOverlay dropdown
+- A live theme switch through a TextOverlay key menu
 
 ![2D Panels and Text](media/2d-scene-panels.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_2D_Panels).
 
-[!code-csharp[](../../../../examples/code-only/E03_2D_Panels/Program.cs?start=1&end=627)]
+[!code-csharp[](../../../../examples/code-only/E03_2D_Panels/Program.cs?start=1&end=628)]

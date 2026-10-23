@@ -23,7 +23,7 @@ The `Program.cs` file shows how to:
 - Removing bodies from an external simulation explicitly, no processor does it
 - Skipping instancing work while every Box2D body sleeps with Box2DEntityInstancing
 - Disabling contact events on fixtures nothing listens to
-- Switching shape, batch size and layout at runtime with DebugTextDropdown
+- Switching shape, batch size and layout at runtime with KeyMenu
 - Picking bodies out of the pile with Grabber2DScript, on a perspective camera
 
 > [!NOTE]
@@ -34,4 +34,4 @@ The `Program.cs` file shows how to:
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_2D_StressPile_Box2D).
 
-[!code-csharp[](../../../../examples/code-only/E10_2D_StressPile_Box2D/Program.cs?start=1&end=512)]
+[!code-csharp[](../../../../examples/code-only/E10_2D_StressPile_Box2D/Program.cs?start=1&end=513)]

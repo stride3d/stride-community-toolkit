@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Box2D;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -8,7 +9,7 @@ namespace E06_Box2D.Helpers;
 
 /// <summary>
 /// The on-screen help and physics readout for the Box2D physics example, drawn by the shared
-/// <see cref="DebugOverlay"/>: the keys first, the live numbers under them, and the rarer keys in a
+/// <see cref="TextOverlay"/>: the keys first, the live numbers under them, and the rarer keys in a
 /// collapsible section behind Z.
 /// </summary>
 public class UiHelper
@@ -21,7 +22,7 @@ public class UiHelper
 
     public UiHelper(Game game)
     {
-        var overlay = DebugOverlay.GetOrCreate(game);
+        var overlay = TextOverlay.GetOrCreate(game);
 
         // The callbacks run every frame the overlay is drawn, so the numbers stay live without
         // anything having to push them

@@ -6,6 +6,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -101,7 +102,7 @@ void Start(Scene scene)
     // A first batch, so the stations have something to report straight away
     DropBalls(scene);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Trigger zones", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Trigger zones", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -147,7 +148,7 @@ void BuildZone(Scene scene)
     zone.Transform.Position = zoneCentre;
     zone.Scene = scene;
 
-    pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new Bepu3DPhysicsOptions { Material = idleMaterial, IncludePhysics = false });
+    pad = game.CreatePrimitive(Primitive3D.Box(new Vector3(zoneSize.X, 0.06f, zoneSize.Z)), new BepuPhysicsOptions { Material = idleMaterial, Body = BodyMode.None });
     pad.Name = "Zone pad";
     pad.Transform.Position = new Vector3(zoneCentre.X, 0.03f, zoneCentre.Z);
     pad.Scene = scene;
@@ -156,7 +157,7 @@ void BuildZone(Scene scene)
 /// <summary>A solid static with a handler: a floor that also knows what stands on it.</summary>
 void BuildPlate(Scene scene)
 {
-    plateEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.3f, 3f)), new Bepu3DPhysicsOptions
+    plateEntity = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.3f, 3f)), new BepuPhysicsOptions
     {
         Material = idleMaterial,
         Component = new StaticComponent { Collider = new CompoundCollider(), ContactEventHandler = plate },
@@ -170,7 +171,7 @@ void BuildPlate(Scene scene)
 /// <summary>A dynamic body with a handler: it is hit, pushed about, and reports how hard.</summary>
 void BuildCrate(Scene scene)
 {
-    crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new Bepu3DPhysicsOptions
+    crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new BepuPhysicsOptions
     {
         Material = crateMaterial,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, ContactEventHandler = impact },
@@ -186,10 +187,9 @@ void DropBalls(Scene scene)
 {
     foreach (var x in new[] { zoneCentre.X, plateCentre.X, crateStart.X })
     {
-        var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
+        var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
         {
             Material = ballMaterial,
-            Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated },
         });
 
         ball.Name = $"Ball {balls.Count + 1}";
@@ -344,7 +344,7 @@ concepts:
   - IContactHandler on a dynamic body, the impact force of a first touch from its contacts
   - Callbacks run on the main thread after the physics step, so they may change materials and entities
   - F11 draws the solver's contact points and normals, Stride 4.4.1's debug view, through AddPhysicsDebug
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, AddDebugShapes, AddPhysicsDebug, TextOverlay"
 tags:
   - 3D
   - Physics

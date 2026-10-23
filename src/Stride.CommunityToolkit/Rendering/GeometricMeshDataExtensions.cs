@@ -12,7 +12,7 @@ public static class GeometricMeshDataExtensions
     /// <summary>
     /// Uploads the vertices and indices to the GPU and wraps them in a <see cref="MeshDraw"/>.
     /// </summary>
-    /// <param name="meshData">The mesh data, such as a procedural model's or <see cref="Text.TextMesh"/>'s.</param>
+    /// <param name="meshData">The mesh data, such as a procedural model's or <see cref="Text.Meshes.TextMesh"/>'s.</param>
     /// <param name="device">The graphics device the buffers are created on.</param>
     /// <returns>A draw with a 32-bit index buffer, ready for a <see cref="Mesh"/>.</returns>
     /// <exception cref="ArgumentNullException">The mesh data or the device is null.</exception>

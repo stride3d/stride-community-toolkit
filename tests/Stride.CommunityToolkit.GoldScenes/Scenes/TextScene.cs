@@ -23,7 +23,7 @@ internal sealed class TextScene : IGoldScene
         game.SetCameraPosition(new Vector3(0f, 4f, 12f));
         game.SetCameraRotation(new Vector3(0f, -15f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
@@ -32,7 +32,7 @@ internal sealed class TextScene : IGoldScene
 
         ground.Scene = scene;
 
-        var cube = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions
+        var cube = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
         {
             EntityName = "Cube",
             Material = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f),

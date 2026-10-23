@@ -6,6 +6,56 @@ Welcome to the Release Notes for the **Stride Community Toolkit**. This section 
 
 The Stride Community Toolkit is developed with rapid iteration in mind. It moves at a faster development pace compared to the Stride Game Engine. As a result, you should expect frequent updates that may introduce breaking changes. This fast-paced approach allows us to incorporate community feedback quickly and continue improving the toolkit.
 
+## 1.0.0.0-preview.69
+
+### 💥 Breaking Changes
+
+#### The Debug names go
+
+Three families were named for debugging and are used by games: the on-screen text panel, the key-driven list, and the renderer that labels entities. Their names now say what they do. Namespaces are unchanged.
+
+| Before | After | Note |
+|---|---|---|
+| `DebugOverlay`, `DebugOverlaySection`, `DebugOverlayFontFamily`, `DebugOverlayFontResolver` | `TextOverlay`, `TextOverlaySection`, `TextOverlayFontFamily`, `TextOverlayFontResolver` | `DebugOverlay.GetOrCreate(game)` becomes `TextOverlay.GetOrCreate(game)`; every member keeps its name. |
+| `SceneSetup.DebugOverlay` | `SceneSetup.TextOverlay` | The setup flag that creates the overlay before the first frame. |
+| `DebugTextDropdown`, `DebugTextDropdownItem` | `KeyMenu`, `KeyMenuItem` | A key picks an item; nothing drops down. Members unchanged. |
+| `EntityDebugSceneRenderer`, `EntityDebugSceneRendererOptions`, `EntityDebugRendererExtensions` | `EntityInfoRenderer`, `EntityInfoRendererOptions`, `EntityInfoRendererExtensions` | It labels entities with their name and position. |
+| `game.AddEntityDebugSceneRenderer(options)`, `compositor.AddEntityDebugRenderer(options)` | `game.AddEntityInfoRenderer(options)`, `compositor.AddEntityInfoRenderer(options)` | One name on both receivers. |
+| `rendering/debug-overlay.md` | `rendering/text-overlay.md` | The manual page; the old address is gone. |
+
+Unchanged, because they are debugging aids: `AddPhysicsDebug`, the collider gizmos, the `DebugShapes` package, `DebugRenderComponentScript`, and Stride's own `DebugTextSystem`.
+
+#### Three namespaces for text
+
+`Stride.CommunityToolkit.Rendering.Text` held three subjects: text drawn with a font, lettering built as meshes, and the overlay. Each now has a namespace and a folder of its own, so one `using` no longer brings in the lot.
+
+| Before | After | Note |
+|---|---|---|
+| `using Stride.CommunityToolkit.Rendering.Text;` for `EntityTextComponent`, `WorldTextComponent`, their renderers, `TextElement`, `TextAnchor`, `TextPositionMode`, `SystemFonts` | unchanged | Text drawn with a font stays. |
+| `using Stride.CommunityToolkit.Rendering.Text;` for `MeshFont`, `TextMesh`, `TextMeshOptions`, `TextBevel`, `GlyphMesh`, `GlyphOutline`, `GlyphContour`, `GlyphShape`, `GlyphPolygon`, `OutlineSegment`, `OutlineSegmentKind` | `using Stride.CommunityToolkit.Rendering.Text.Meshes;` | Lettering as meshes. `Primitive3D.Text` and `TextCollider` stay where they were. |
+| `using Stride.CommunityToolkit.Rendering.Text;` for `TextOverlay`, `TextOverlaySection`, `TextOverlayFontFamily`, `TextOverlayFontResolver`, `KeyMenu`, `KeyMenuItem`, `EntityInfoRenderer`, `EntityInfoRendererOptions`, `AddEntityInfoRenderer()` | `using Stride.CommunityToolkit.Rendering.Overlay;` | The overlay and the entity labels. `TextElement`, which sections return, stays in `Rendering.Text`, so an overlay section usually needs both. |
+
+The compiler names every call site that needs a new `using`; nothing else changes.
+
+#### One body mode on the physics options
+
+Four option types with three overlapping knobs (`IncludePhysics`, `Component`, `Mass`, and `Depth` on the 2D pair) are two, and the kind of physics a primitive gets is one property.
+
+| Before | After | Note |
+|---|---|---|
+| `Primitive3DEntityOptions`, `Primitive2DEntityOptions`, `PrimitiveEntityOptionsBase` | `PrimitiveEntityOptions` | One core type for both dimensions. |
+| `Bepu3DPhysicsOptions`, `Bepu2DPhysicsOptions` | `BepuPhysicsOptions` | One Bepu type; `Component`, `Mass` and the new `Interpolation` on it. |
+| `Bullet3DPhysicsOptions`, `Bullet2DPhysicsOptions` | `BulletPhysicsOptions` | One Bullet type; `PhysicsComponent` has no default any more, the mode makes one. |
+| `IncludePhysics = false` | `Body = BodyMode.None` | `Body` is `Dynamic` by default; `Static`, `Kinematic` and `None` are the other modes. |
+| `Component = new StaticComponent { Collider = new CompoundCollider() }` | `Body = BodyMode.Static` | The same for Bullet's `StaticColliderComponent`. A supplied component still wins over the mode. |
+| `Component = new BodyComponent { Kinematic = true, Collider = new CompoundCollider() }` | `Body = BodyMode.Kinematic` | |
+| `Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated }` | nothing | A body the options make is interpolated by default; `Interpolation = false` turns it off. A supplied component keeps its own setting. |
+| `new Bepu2DPhysicsOptions { Depth = 4 }` | `Primitive2D.RegularPolygon(1, 5, depth: 4)` | The collider depth is on the 2D shape; every factory takes it last. |
+| `PhysicsSetupBase.AddStatic(...)` | `AddBody(...)` with `Body = BodyMode.Static` | The ground helpers set the mode; a package implements `AddBody` for both shape kinds only. |
+| the ground helpers wrote the default name and material into the options they were given | `options.WithBody(mode)` | The grounds build from a copy; the options you pass come back as they were. `WithBody` is public, a shallow copy of any options type. |
+
+A supplied component together with `Body = BodyMode.None` throws, since the two contradict each other. `Mass` with `Static` is ignored with a line in the log, since a static has none.
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed

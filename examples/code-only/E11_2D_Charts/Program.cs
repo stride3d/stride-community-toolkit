@@ -1,6 +1,6 @@
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -161,7 +161,7 @@ void Start(Scene rootScene)
 
     ThrowBall();
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // The default box is Stride's 49% black, tuned for dark scenes; on paper white it needs to be darker
     overlay.BackgroundColor = new Color(0, 0, 0, 200);

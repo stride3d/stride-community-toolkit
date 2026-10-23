@@ -4,6 +4,7 @@ using E13_SignalR.Station;
 using E13_SignalR_Shared;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Diagnostics;
 using Stride.Core.Mathematics;
@@ -144,7 +145,7 @@ void Start(Scene scene)
     };
 
     // The overlay keeps only what is genuinely keyboard help; everything else is on the boards.
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Station", OverlayLines);
 

@@ -5,7 +5,7 @@ slug: debug-render-2d
 
 # Basic 2D Scene (Debug Rendering)
 
-A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is
+A pile of falling 2D shapes with the physics text overlays turned on, so what the simulation is
 actually solving can be seen rather than inferred. P draws the colliders and F11 draws the debug
 meshes. Both come from AddPhysicsDebug, one entity with the two scripts; each acts on the whole
 scene, so one entity is all any scene needs. A spot light is included because 2D scenes are lit like

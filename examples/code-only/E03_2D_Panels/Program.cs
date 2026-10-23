@@ -1,4 +1,5 @@
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -52,7 +53,7 @@ SpriteFont? monoFont = null;
 var themeIndex = 0;
 var time = 0f;
 List<(WorldTextComponent Text, Action<WorldTextComponent, Theme> Restyle)> themedText = [];
-DebugTextDropdown? themeMenu = null;
+KeyMenu? themeMenu = null;
 
 // The panel under the mouse, as the batch last drew it: every panel is drawn with its station as
 // the tag, and the batch answers from the frame on screen
@@ -241,18 +242,18 @@ void Start(Scene scene)
         }
     }
 
-    themeMenu = new DebugTextDropdown
+    themeMenu = new KeyMenu
     {
         Title = "Theme",
         ToggleKey = Keys.T,
         TitleColor = Color.Yellow,
         SelectedIndex = themeIndex,
         CloseOnSelect = false,
-        Items = [.. themes.Index().Select(pair => new DebugTextDropdownItem(
+        Items = [.. themes.Index().Select(pair => new KeyMenuItem(
             (Keys)(Keys.D1 + pair.Index), pair.Item.Name, () => ApplyTheme(pair.Index)))],
     };
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Panels", OverlayLines);
 }
@@ -664,7 +665,7 @@ concepts:
   - Strokes with DrawPixelPolyline - a dashed route and a concave, closed frame
   - World text styling - Height, FontSize, TextColor alpha, Opacity, GlowColor and GlowSize
   - Installed system fonts with SystemFonts, in four styles
-  - A live theme switch through a DebugOverlay dropdown
+  - A live theme switch through a TextOverlay key menu
 tags:
   - 2D
   - Shapes

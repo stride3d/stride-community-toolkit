@@ -2,7 +2,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ImGui;
 using Stride.CommunityToolkit.ImGui.DebugTools;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Engine;
 
@@ -12,7 +12,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
-    game.AddEntityDebugSceneRenderer(new()
+    game.AddEntityInfoRenderer(new()
     {
         EnableBackground = true
     });

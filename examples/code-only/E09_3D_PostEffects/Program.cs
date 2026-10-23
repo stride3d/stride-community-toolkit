@@ -1,8 +1,7 @@
-using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -109,7 +108,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // The lines are rebuilt whenever the overlay draws, so each shows the live state.
     overlay.AddSection("Post effects", () =>
@@ -169,10 +168,10 @@ void BuildScene(Scene scene)
     void Place(Primitive3D shape, Vector3 position, Material material)
     {
         // Static, so the scene holds still: this example is about the picture, not the physics.
-        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = material,
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         entity.Transform.Position = position;
@@ -210,7 +209,7 @@ concepts:
   - Which effects exist on the compositor and start disabled
   - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
   - Building an emissive material above intensity 1 so bloom has something to bloom
-  - Showing live effect state as a DebugOverlay section
+  - Showing live effect state as a TextOverlay section
   - "Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, CreateMaterial"
 tags:
   - 3D

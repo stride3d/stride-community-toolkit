@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.CommunityToolkit.Skyboxes;
@@ -71,7 +72,7 @@ void Start(Scene scene)
     hover = new HighlightShell(game.CreateMaterial(MaterialDescriptors.Highlight(Color.Cyan)));
     picker.Pickable = RenderGroupMask.All & ~RenderGroupMask.Group30;
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.AddSection("Picking", OverlayLines);
     overlay.SetPosition(ScreenAnchor.BottomLeft);
 }
@@ -116,7 +117,7 @@ void Update(Scene scene, GameTime time)
 /// </summary>
 void BuildScene(Scene scene)
 {
-    var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(44f, 0.5f, 44f)), new Primitive3DEntityOptions
+    var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(44f, 0.5f, 44f)), new PrimitiveEntityOptions
     {
         EntityName = "Ground",
         Material = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f),
@@ -125,7 +126,7 @@ void BuildScene(Scene scene)
 
     ground.Scene = scene;
 
-    var teapot = game.CreatePrimitive(Primitive3D.Teapot(3f), new Primitive3DEntityOptions
+    var teapot = game.CreatePrimitive(Primitive3D.Teapot(3f), new PrimitiveEntityOptions
     {
         EntityName = "Teapot",
         Material = game.CreateMaterial(Color.Gold, metalness: 0.6f, glossiness: 0.8f),
@@ -141,7 +142,7 @@ void BuildScene(Scene scene)
         var angle = i * MathF.Tau / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
-        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new Primitive3DEntityOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new PrimitiveEntityOptions
         {
             EntityName = $"Pillar {i + 1}",
             Material = game.CreateMaterial(colours[i], metalness: 0.2f, glossiness: 0.5f),
@@ -161,7 +162,7 @@ void BuildScene(Scene scene)
 
     foreach (var (name, type, at, colour) in primitives)
     {
-        var entity = game.CreatePrimitive(type, new Primitive3DEntityOptions
+        var entity = game.CreatePrimitive(type, new PrimitiveEntityOptions
         {
             EntityName = name,
             Material = game.CreateMaterial(colour, metalness: 0.3f, glossiness: 0.6f),
@@ -200,7 +201,7 @@ void BuildCrates(Scene scene)
 
     instancing.UpdateWorldMatrices(crateMatrices);
 
-    crates = game.CreatePrimitive(Primitive3D.Cube(0.9f), new Primitive3DEntityOptions
+    crates = game.CreatePrimitive(Primitive3D.Cube(0.9f), new PrimitiveEntityOptions
     {
         EntityName = "Crates",
         Material = game.CreateMaterial(new Color(176, 120, 64), metalness: 0.1f, glossiness: 0.4f),

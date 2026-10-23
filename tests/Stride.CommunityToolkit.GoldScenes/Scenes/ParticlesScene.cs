@@ -30,7 +30,7 @@ internal sealed class ParticlesScene : IGoldScene
         game.SetCameraPosition(new Vector3(0f, 3.5f, 10f));
         game.SetCameraRotation(new Vector3(0f, -12f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(20f, 0.5f, 20f)), new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(20f, 0.5f, 20f)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),

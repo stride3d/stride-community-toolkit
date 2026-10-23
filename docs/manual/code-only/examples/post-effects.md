@@ -19,11 +19,11 @@ The `Program.cs` file shows how to:
 - Which effects exist on the compositor and start disabled
 - Adding Vignetting, FilmGrain and Dither to the colour-transform group, where they cost nothing extra
 - Building an emissive material above intensity 1 so bloom has something to bloom
-- Showing live effect state as a DebugOverlay section
+- Showing live effect state as a TextOverlay section
 - Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, CreateMaterial
 
 ![Post Effects](media/post-effects.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E09_3D_PostEffects).
 
-[!code-csharp[](../../../../examples/code-only/E09_3D_PostEffects/Program.cs?start=1&end=188)]
+[!code-csharp[](../../../../examples/code-only/E09_3D_PostEffects/Program.cs?start=1&end=187)]

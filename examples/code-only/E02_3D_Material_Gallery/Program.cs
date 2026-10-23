@@ -3,6 +3,7 @@ using Example.Common;
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -40,7 +41,7 @@ var clean = args.Contains("--clean");
 
 Gallery<MaterialStation>? gallery = null;
 MaterialTextures? textures = null;
-DebugTextDropdown? viewMenu = null;
+KeyMenu? viewMenu = null;
 
 WindowsDpiManager.EnablePerMonitorV2();
 
@@ -72,7 +73,7 @@ void Start(Scene rootScene)
     var view = game.AddMaterialStreamView();
 
     view.Stream = startStream;
-    viewMenu = new DebugTextDropdown
+    viewMenu = new KeyMenu
     {
         Title = "View",
         ToggleKey = Keys.M,
@@ -80,7 +81,7 @@ void Start(Scene rootScene)
         SelectedIndex = startStream is { } chosen ? (int)chosen : MaterialStreamView.All.Count,
         Items =
         [
-            .. MaterialStreamView.All.Select(stream => new DebugTextDropdownItem((Keys)(Keys.D1 + (int)stream), MaterialStreamView.DisplayName(stream), () => view.Stream = stream)),
+            .. MaterialStreamView.All.Select(stream => new KeyMenuItem((Keys)(Keys.D1 + (int)stream), MaterialStreamView.DisplayName(stream), () => view.Stream = stream)),
             new(Keys.D0, "Lit", () => view.Stream = null),
         ],
     };
@@ -105,7 +106,7 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Gallery", BuildOverlayLines);
     overlay.Visible = !clean;

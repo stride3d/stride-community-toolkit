@@ -6,6 +6,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.DebugShapes;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -78,7 +79,7 @@ void Start(Scene scene)
     BuildField(scene);
     BuildLauncher(scene);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Shape queries", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Shape queries", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -193,7 +194,7 @@ void Throw(Scene scene, Vector3 direction)
     // Per-body gravity is honoured only once the simulation is told to look at per-body settings
     simulation!.UsePerBodyAttributes = true;
 
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = ballMaterial,
         Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated, Gravity = false },
@@ -233,10 +234,9 @@ void BuildField(Scene scene)
             _ => (Primitive3D.Capsule(0.3f, 0.6f), "Capsule"),
         };
 
-        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = material,
-            Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = InterpolationMode.Interpolated },
         });
 
         entity.Name = $"{name} {i + 1}";
@@ -249,10 +249,10 @@ void BuildField(Scene scene)
 
     foreach (var (x, z, number) in new[] { (4.5f, 0f, 1), (-2.5f, -4f, 2) })
     {
-        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1f, 3f, 1f)), new Bepu3DPhysicsOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1f, 3f, 1f)), new BepuPhysicsOptions
         {
             Material = game.CreateMaterial(new Color(150, 150, 160), metalness: 0f, glossiness: 0.3f),
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         pillar.Name = $"Pillar {number}";
@@ -264,10 +264,10 @@ void BuildField(Scene scene)
 /// <summary>The launcher is only a marker: it has no collider, or every sweep would start inside it.</summary>
 void BuildLauncher(Scene scene)
 {
-    var marker = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new Bepu3DPhysicsOptions
+    var marker = game.CreatePrimitive(Primitive3D.Sphere(BallRadius), new BepuPhysicsOptions
     {
         Material = ballMaterial,
-        IncludePhysics = false,
+        Body = BodyMode.None,
     });
 
     marker.Name = "Launcher";
@@ -346,7 +346,7 @@ concepts:
   - A sweep is a straight line, so the thrown ball has gravity switched off per body
   - Turning the mouse into a point on the ground with the camera's pick ray and a plane
   - Highlighting a body with a material override, and removing it to restore the model's own
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddDebugShapes, AddPhysicsDebug, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddDebugShapes, AddPhysicsDebug, TextOverlay"
 tags:
   - 3D
   - Physics

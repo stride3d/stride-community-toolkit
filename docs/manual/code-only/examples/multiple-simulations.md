@@ -18,8 +18,8 @@ The `Program.cs` file shows how to:
 - Choosing a simulation per body and per static with IndexBasedSimulationSelector
 - Why bodies in different simulations pass through each other
 - Respawning entities with Space
-- Showing instructions as a DebugOverlay section beside the camera help
-- Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, DebugOverlay
+- Showing instructions as a TextOverlay section beside the camera help
+- Using helpers: SceneSetup3D, Add3DGround, CreatePrimitive, TextOverlay
 
 ![Multiple Physics Simulations](media/multiple-simulations.webp)
 

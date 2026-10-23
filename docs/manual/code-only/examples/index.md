@@ -367,7 +367,7 @@ Prefer a list? Each level has its own page, linked from the table of contents.
             <div class="card-body">
                 <h3 class="card-title h6"><a class="stretched-link text-decoration-none text-body" href="debug-render-2d.md">Basic 2D Scene (Debug Rendering)</a></h3>
                 <p><span class="badge text-bg-secondary">Debug</span></p>
-                <p class="card-text">A pile of falling 2D shapes with the physics debug overlays turned on, so what the simulation is actually solving can be seen rather than inferred.</p>
+                <p class="card-text">A pile of falling 2D shapes with the physics text overlays turned on, so what the simulation is actually solving can be seen rather than inferred.</p>
             </div>
         </div>
     </div>

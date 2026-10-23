@@ -10,7 +10,7 @@ let game = new Game()
 let Start rootScene =
     game.AddProfiler() |> ignore
 
-    let capsule = game.CreatePrimitive(Primitive3D.Capsule(), Bepu3DPhysicsOptions())
+    let capsule = game.CreatePrimitive(Primitive3D.Capsule(), BepuPhysicsOptions())
     capsule.Transform.Position <- new Vector3(0f, 2.5f, 0f)
     capsule.Scene <- rootScene
 

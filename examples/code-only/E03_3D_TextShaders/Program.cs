@@ -1,6 +1,8 @@
 using E03_3D_TextShaders;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -57,7 +59,7 @@ void Start(Scene scene)
     Place(scene, "wave", 1.7f, WaveMaterial());
     Place(scene, "dissolve", 0.6f, dissolve);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Text shaders", static () =>
+    TextOverlay.GetOrCreate(game).AddSection("Text shaders", static () =>
     [
         new("Gradient: a texture through the cap coordinates", Color.LightGray),
         new("Rim: TextRim.sdsl, an emissive colour node", Color.LightGray),
@@ -202,7 +204,7 @@ concepts:
   - A shader class as a colour node - ComputeShaderClassColor with MixinReference, keys set on the pass
   - A material feature in the vertex stage - IMaterialDisplacementFeature and SetStreamFinalModifier, Global.Time
   - A material feature in the pixel stage - IMaterialTransparencyFeature with a discard, driven per frame
-  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, TextMesh, TextBevel, DebugOverlay"
+  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, TextMesh, TextBevel, TextOverlay"
 tags:
   - 3D
   - Text

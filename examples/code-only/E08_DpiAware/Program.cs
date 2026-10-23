@@ -2,7 +2,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -41,7 +41,7 @@ game.Run(new SceneSetup3D().UseBepu().UseSkybox(), start: (Scene rootScene) =>
     // differently scaled monitor and the figure below follows.
     var displayScale = DisplayScale.GetOrCreate(game);
 
-    DebugOverlay.GetOrCreate(game).AddSection("DPI", () =>
+    TextOverlay.GetOrCreate(game).AddSection("DPI", () =>
     [
         new($"Display scale: {displayScale.Value:0.##}  (detected {displayScale.Detected:0.##})", Color.Yellow),
         new("This text is drawn that much larger than its 16px design", Color.LightGray),

@@ -30,7 +30,7 @@ internal sealed class Shapes3DScene : IGoldScene
         var groundMaterial = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f);
         var pillarMaterial = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f);
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = groundMaterial,
@@ -47,7 +47,7 @@ internal sealed class Shapes3DScene : IGoldScene
 
         void Pillar(string name, Vector3 at, float height)
         {
-            var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, height, 1.6f)), new Primitive3DEntityOptions
+            var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, height, 1.6f)), new PrimitiveEntityOptions
             {
                 EntityName = name,
                 Material = pillarMaterial,

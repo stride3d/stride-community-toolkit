@@ -3,7 +3,7 @@ using Stride.CommunityToolkit.Audio;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -64,17 +64,17 @@ void Start(Scene scene)
 {
     // Scenery only, so the plain options: no physics body. A cylinder's size is its radius in X
     // and its height in Z
-    var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new Primitive3DEntityOptions
+    var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.3f, 2.5f), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         Position = new Vector3(0, 1.25f, 0),
     });
     pillar.Scene = scene;
 
-    orb = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
+    orb = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(255, 120, 60)),
     });
     orb.Scene = scene;
@@ -155,7 +155,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Spatial sound", () =>
     {
@@ -202,7 +202,7 @@ concepts:
   - HRTF as two switches - HrtfSupport through the setup's GameSettings, then useHrtf per instance
   - Positioning a one-shot once versus tracking a moving emitter every frame
   - Reading the emitter's side and distance relative to the camera for the overlay
-  - "Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Audio

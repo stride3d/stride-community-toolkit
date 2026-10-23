@@ -2,7 +2,7 @@ using E04_StrideUI_DragAndDrop;
 using Stride.CommunityToolkit.Bullet;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -23,7 +23,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBullet().UseSkybox(), start: St
 
 void Start(Scene scene)
 {
-    game.AddEntityDebugSceneRenderer(new()
+    game.AddEntityInfoRenderer(new()
     {
         EnableBackground = true
     });

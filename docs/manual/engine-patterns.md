@@ -24,7 +24,7 @@ flowchart LR
         MODELS[Procedural models and gizmo meshes]
         GIZMAT[Code-only gizmo materials]
         TEX[TextureLoader mip images]
-        OVERLAY[DebugOverlay system fonts]
+        OVERLAY[TextOverlay system fonts]
         CURSOR[Chart cursor readout]
         TGIZ[TranslationGizmo]
         DBGTXT[DebugTextSystem lessons]
@@ -138,10 +138,10 @@ rasterises glyphs on demand at whatever size is requested - no compiled font ass
 this machinery internally; it is reachable from game code through the font system's runtime-font
 registration.
 
-**In the toolkit:** `DebugOverlay` uses it to load a *system* font (Consolas on Windows, Menlo on
+**In the toolkit:** `TextOverlay` uses it to load a *system* font (Consolas on Windows, Menlo on
 macOS, DejaVu Sans Mono or Liberation Mono on Linux) so debug text is sharp at any DPI scale without
-shipping a font file - see `Rendering/Text/DebugOverlay.cs` and the
-[Debug Overlay](rendering/debug-overlay.md) page.
+shipping a font file - see `Rendering/Overlay/TextOverlay.cs` and the
+[Text Overlay](rendering/text-overlay.md) page.
 
 **In a game:** user-selected or modded fonts, chat and user-generated text in scripts your shipped
 font lacks, tools that must respect the OS look.
@@ -185,7 +185,7 @@ texture, cheap, with no assets. Its quirks follow from its internals: the glyph 
 strip baked into it (so text
 carries its own contrast on any background), `DrawString` centres the first glyph on the given
 position rather than starting there, and the fixed pixel size means a 4K display renders it half the
-intended physical size. The toolkit's `DebugOverlay` uses a `SpriteFont` for those reasons; the
+intended physical size. The toolkit's `TextOverlay` uses a `SpriteFont` for those reasons; the
 fast renderer remains the right tool for one cheap line of text with no setup.
 
 **In a game:** frame counters and dev HUDs, crash-screen diagnostics, retro console aesthetics.
@@ -198,7 +198,7 @@ fast renderer remains the right tool for one cheap line of text with no setup.
 | Runtime primitives | `engine/Stride.Graphics/GeometricPrimitives/` | Procedural models, gizmos, grid plane | Placeholder and procedural meshes |
 | Code-only materials | `engine/Stride.Rendering/.../Materials/` | Gizmo and grid materials | Highlights, holograms, team colours |
 | CPU image authoring | `engine/Stride.Foundation/Graphics/Image.cs` | `TextureLoader` | Procedural textures, fog-of-war |
-| Runtime fonts | `engine/Stride.Graphics/Font/FontSystem.cs` | DebugOverlay system fonts | User and modded fonts |
+| Runtime fonts | `engine/Stride.Graphics/Font/FontSystem.cs` | TextOverlay system fonts | User and modded fonts |
 | Picking helpers | `editor/.../GameEditor/Game/EditorGameHelper.cs` | Camera extensions, chart cursor | Placement, aiming, measuring |
 | Gizmo scripts | `editor/.../AssetEditors/Gizmos/` | TranslationGizmo and friends | In-game editors, photo modes |
 | Fast bitmap text | `engine/Stride.Graphics/FastTextRenderer.cs` | DebugTextSystem (and its lessons) | Dev HUDs, retro text |

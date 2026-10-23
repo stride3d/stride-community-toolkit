@@ -18,7 +18,7 @@ Module Program
     Private Sub StartGame(rootScene As Scene)
         game.AddProfiler()
 
-        Dim entity = game.CreatePrimitive(Primitive3D.Capsule(), New Bepu3DPhysicsOptions())
+        Dim entity = game.CreatePrimitive(Primitive3D.Capsule(), New BepuPhysicsOptions())
         entity.Transform.Position = New Vector3(0, 8, 0)
         entity.Scene = rootScene
     End Sub

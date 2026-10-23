@@ -1,6 +1,7 @@
 using E03_2D_HUD;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -44,7 +45,7 @@ var heldPointer = PointerFromArguments(args);
 var heldPointerClicked = false;
 
 HudCanvas? canvas = null;
-DebugTextDropdown? themeMenu = null;
+KeyMenu? themeMenu = null;
 
 // Before the window exists: a sharp window on a scaled display
 WindowsDpiManager.EnablePerMonitorV2();
@@ -67,16 +68,16 @@ void Start(Scene scene)
 
     canvas = new HudCanvas(game, scene, shapes, HudTheme.All[themeIndex]);
 
-    themeMenu = new DebugTextDropdown
+    themeMenu = new KeyMenu
     {
         Title = "Scheme",
         ToggleKey = Keys.T,
         TitleColor = Color.Yellow,
         SelectedIndex = themeIndex,
-        Items = [.. HudTheme.All.Index().Select(pair => new DebugTextDropdownItem(SchemeKey(pair.Index), pair.Item.Name, () => canvas.Apply(pair.Item)))],
+        Items = [.. HudTheme.All.Index().Select(pair => new KeyMenuItem(SchemeKey(pair.Index), pair.Item.Name, () => canvas.Apply(pair.Item)))],
     };
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.Position = ScreenAnchor.TopLeft;
     overlay.SectionGap = 0;

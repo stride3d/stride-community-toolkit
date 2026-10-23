@@ -1,5 +1,6 @@
 using CubeCollapse.Shared;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -25,7 +26,7 @@ public class CameraRotationScript : SyncScript
 
     private readonly float _rotationSpeed = 45f; // degrees per second
     private Vector3 _rotationCentre;
-    private DebugOverlaySection? _instructions;
+    private TextOverlaySection? _instructions;
 
     /// <summary>
     /// Gets or sets the world point the camera orbits and aims at. Leave <see langword="null"/> to
@@ -46,7 +47,7 @@ public class CameraRotationScript : SyncScript
                    .Entities.FirstOrDefault(e => e.Name == EntityNames.Ground)?.Transform.Position
             ?? Vector3.Zero;
 
-        InitializeDebugOverlay();
+        InitializeTextOverlay();
     }
 
     /// <inheritdoc />
@@ -110,9 +111,9 @@ public class CameraRotationScript : SyncScript
         Entity.Transform.LookAt(_rotationCentre, Vector3.UnitY);
     }
 
-    void InitializeDebugOverlay()
+    void InitializeTextOverlay()
     {
-        var overlay = DebugOverlay.GetOrCreate(Game);
+        var overlay = TextOverlay.GetOrCreate(Game);
 
         // Runs every frame the overlay is drawn, so the camera position readout stays live
         _instructions = overlay.AddSection(

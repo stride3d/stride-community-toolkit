@@ -27,7 +27,7 @@ public static class MeshBuilderExtensions
     /// A shape with a hole is built by calling this once per piece with pieces that touch along their
     /// edges without overlapping - abutting walls seal invisibly inside the solid, while overlapping
     /// pieces would put two caps on the same plane and shimmer. Lettering from a font, holes and all,
-    /// is <see cref="Text.TextMesh"/>'s job.
+    /// is <see cref="Text.Meshes.TextMesh"/>'s job.
     /// </para>
     /// </remarks>
     public static void AddExtrudedPolygon(

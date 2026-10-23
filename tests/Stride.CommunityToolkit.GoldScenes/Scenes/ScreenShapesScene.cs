@@ -26,7 +26,7 @@ internal sealed class ScreenShapesScene : IGoldScene
         game.SetCameraPosition(new Vector3(0f, 5f, 12f));
         game.SetCameraRotation(new Vector3(0f, -18f, 0f));
 
-        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new Primitive3DEntityOptions
+        var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(30f, 0.5f, 30f)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = game.CreateMaterial(new Color(38, 41, 47), metalness: 0.04f, glossiness: 0.25f),
@@ -36,7 +36,7 @@ internal sealed class ScreenShapesScene : IGoldScene
         ground.Scene = scene;
 
         // A pillar in the middle of the view: the crosshair and the panel sit over it, not behind it
-        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, 4f, 1.6f)), new Primitive3DEntityOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.6f, 4f, 1.6f)), new PrimitiveEntityOptions
         {
             EntityName = "Pillar",
             Material = game.CreateMaterial(new Color(96, 103, 116), metalness: 0.1f, glossiness: 0.35f),

@@ -23,30 +23,36 @@ public static class GameExtensions
     /// <param name="options">Optional physics options. If <c>null</c>, defaults will be used.</param>
     /// <returns>The ground entity, already in the root scene.</returns>
     /// <remarks>
-    /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> sets <see cref="Bullet3DPhysicsOptions.PhysicsComponent"/>. If <see cref="PrimitiveEntityOptionsBase.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
+    /// The ground gets a <see cref="StaticColliderComponent"/> unless <paramref name="options"/> asks for <see cref="BodyMode.None"/> or supplies a component. If <see cref="PrimitiveEntityOptions.EntityName"/> is not provided, <see cref="GameDefaults.DefaultGroundName"/> is used.
     /// The physics is attached here whatever the scene setup chose, since the plane collider is Bullet's own.
     /// </remarks>
-    public static Entity AddInfinite3DGround(this IGame game, Vector2? size = null, Bullet3DPhysicsOptions? options = null)
+    public static Entity AddInfinite3DGround(this IGame game, Vector2? size = null, BulletPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(game);
 
-        options ??= new Bullet3DPhysicsOptions();
+        options ??= new BulletPhysicsOptions();
 
-        if (!options.IsPhysicsComponentSet) options.PhysicsComponent = new StaticColliderComponent();
+        // The visible plane is finite; the collider is Bullet's infinite static plane, not the plane's own box.
+        // Two copies, so the caller's options are left as given: the model with no physics, then a static
+        // whose component is given the plane collider first, so the helper keeps it as the caller's own
+        var model = options.WithBody(BodyMode.None);
 
-        options.EntityName ??= GameDefaults.DefaultGroundName;
-        options.Material ??= game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
-
-        // The visible plane is finite; the collider is Bullet's infinite static plane, not the plane's own
-        // box. The component is given the plane collider first, so the helper keeps it as the caller's own
-        options.IncludePhysics = false;
-        options.PhysicsComponent?.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
+        model.EntityName ??= GameDefaults.DefaultGroundName;
+        model.Material ??= game.CreateMaterial(GameDefaults.DefaultGroundMaterialColor, 0.0f, 0.1f);
 
         var groundSize = size ?? new Vector2(GameDefaults.Default3DGroundSize.X, GameDefaults.Default3DGroundSize.Z);
         var shape = Primitive3D.Plane(groundSize.X, groundSize.Y);
-        var entity = game.CreatePrimitive(shape, options);
 
-        entity.AddBulletPhysics(shape, options);
+        var entity = game.CreatePrimitive(shape, model);
+
+        if (options.Body != BodyMode.None)
+        {
+            var collider = (BulletPhysicsOptions)options.WithBody(BodyMode.Static);
+
+            collider.PhysicsComponent ??= new StaticColliderComponent();
+            collider.PhysicsComponent.ColliderShapes.Add(new StaticPlaneColliderShapeDesc());
+            entity.AddBulletPhysics(shape, collider);
+        }
 
         entity.Scene = game.GetSceneSystem().SceneInstance.RootScene;
 

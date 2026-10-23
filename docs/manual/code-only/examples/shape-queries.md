@@ -19,7 +19,7 @@ The `Program.cs` file shows how to:
 - A sweep is a straight line, so the thrown ball has gravity switched off per body
 - Turning the mouse into a point on the ground with the camera's pick ray and a plane
 - Highlighting a body with a material override, and removing it to restore the model's own
-- Using helpers: SceneSetup3D, CreatePrimitive, AddDebugShapes, AddPhysicsDebug, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddDebugShapes, AddPhysicsDebug, TextOverlay
 
 ![Shape Queries](media/shape-queries.webp)
 

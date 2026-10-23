@@ -7,7 +7,7 @@ using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -49,7 +49,7 @@ Scene? rootScene = null;
 BufferedEntityInstancing? instancing = null;
 Entity? master = null;
 Dictionary<float, Model> models = [];
-DebugTextDropdown? sizeMenu = null;
+KeyMenu? sizeMenu = null;
 List<Entity> nodes = [];
 List<Entity> extras = [];
 var constraintCount = 0;
@@ -131,15 +131,15 @@ void SetupInstancing(Scene scene)
     game.AddInstancingBufferUpload(instancing);
 }
 
-// One sphere model per node size, built on first use. Primitive3DEntityOptions, explicitly typed,
+// One sphere model per node size, built on first use. PrimitiveEntityOptions, explicitly typed,
 // is the overload that builds a model and no body; the entity is discarded.
 Model ModelFor(float radius)
 {
     if (models.TryGetValue(radius, out var cached)) return cached;
 
-    var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new Primitive3DEntityOptions
+    var model = game.CreatePrimitive(Primitive3D.Sphere(radius), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(230, 120, 90), metalness: 0.3f, glossiness: 0.7f),
     }).Get<ModelComponent>().Model;
 
@@ -153,13 +153,13 @@ Model ModelFor(float radius)
 // node count so the cost of a finer lattice is visible before choosing it.
 void SetupMenu()
 {
-    sizeMenu = new DebugTextDropdown
+    sizeMenu = new KeyMenu
     {
         Title = "Node size",
         ToggleKey = Keys.Z,
         TitleColor = Color.Yellow,
         SelectedIndex = Array.IndexOf(nodeRadii, nodeRadius),
-        Items = [.. nodeRadii.Select((radius, index) => new DebugTextDropdownItem((Keys)(Keys.D1 + index), $"radius {radius:0.00}, {NodeCount(radius):N0} nodes", () =>
+        Items = [.. nodeRadii.Select((radius, index) => new KeyMenuItem((Keys)(Keys.D1 + index), $"radius {radius:0.00}, {NodeCount(radius):N0} nodes", () =>
         {
             nodeRadius = radius;
             master!.Get<ModelComponent>().Model = ModelFor(radius);
@@ -178,7 +178,7 @@ void BuildScene(Scene scene)
     HangSheet(scene, new Vector3(-13, 10, 2), distanceHertz: 5, areaHertz: 30);
 
     // A ball for the fourth sheet to drape over.
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(1.5f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 1.5f } } } },
@@ -187,7 +187,7 @@ void BuildScene(Scene scene)
     ball.Scene = scene;
     extras.Add(ball);
 
-    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new Bepu3DPhysicsOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(1.0f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(120, 160, 220)),
         Component = new StaticComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Size = new Vector3(1.0f) } } } },
@@ -344,7 +344,7 @@ void Area(Entity a, Entity b, Entity c, float hertz)
 
 void DropBall(Scene scene)
 {
-    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new Bepu3DPhysicsOptions
+    var ball = game.CreatePrimitive(Primitive3D.Sphere(0.7f), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(240, 200, 80)),
         Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new SphereCollider { Radius = 0.7f, Mass = 4 } } } },
@@ -356,7 +356,7 @@ void DropBall(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
 
     overlay.AddSection("Cloth", () =>
@@ -399,8 +399,8 @@ concepts:
   - Keeping neighbouring nodes from colliding with CollisionGroup's index rule
   - Solver substeps or velocity iterations for a stiff connected system, set through the setup's GameSettings
   - Drawing hundreds of bodies as one instanced master with BepuEntityInstancing
-  - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a DebugTextDropdown rebuilds"
-  - "Using helpers: SceneSetup3D, UseSkybox, GrabberScript, DebugOverlay, DebugTextDropdown"
+  - "Node size as lattice density: spacing follows the radius, the sheets keep their size, a KeyMenu rebuilds"
+  - "Using helpers: SceneSetup3D, UseSkybox, GrabberScript, TextOverlay, KeyMenu"
 tags:
   - 3D
   - Bepu

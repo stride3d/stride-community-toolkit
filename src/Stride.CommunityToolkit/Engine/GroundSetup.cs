@@ -17,7 +17,7 @@ public sealed record GroundSetup(Vector2 Size, bool Collider = true)
     /// <summary>A ground to look at only: no collider even when the setup has a physics engine.</summary>
     public static GroundSetup Visual(Vector2? size = null) => Plane(size) with { Collider = false };
 
-    internal Entity Apply3D(Game game) => game.Add3DGround(Size, new Primitive3DEntityOptions { IncludePhysics = Collider });
+    internal Entity Apply3D(Game game) => game.Add3DGround(Size, new PrimitiveEntityOptions { Body = Collider ? BodyMode.Static : BodyMode.None });
 
-    internal Entity Apply2D(Game game) => game.Add2DGround(Size, new Primitive2DEntityOptions { IncludePhysics = Collider });
+    internal Entity Apply2D(Game game) => game.Add2DGround(Size, new PrimitiveEntityOptions { Body = Collider ? BodyMode.Static : BodyMode.None });
 }

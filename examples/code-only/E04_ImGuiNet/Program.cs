@@ -1,5 +1,4 @@
 using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.ImGuiNet;
@@ -89,14 +88,7 @@ void ConfigureWindow()
 /// </summary>
 Entity CreateOrbitingCube(Scene rootScene)
 {
-    var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
-    {
-        Component = new BodyComponent
-        {
-            Kinematic = true,
-            Collider = new CompoundCollider()
-        }
-    });
+    var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions { Body = BodyMode.Kinematic });
 
     cube.Transform.Position = new Vector3(0, OrbitHeight, 0);
     cube.Scene = rootScene;

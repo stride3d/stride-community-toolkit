@@ -20,10 +20,10 @@ The `Program.cs` file shows how to:
 - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
 - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
 - Static lettering built once versus text that changes, and releasing the old buffers
-- Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay
+- Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, TextOverlay
 
 ![3D Text from a Font](media/letters-3d.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E03_3D_MeshText).
 
-[!code-csharp[](../../../../examples/code-only/E03_3D_MeshText/Program.cs?start=1&end=138)]
+[!code-csharp[](../../../../examples/code-only/E03_3D_MeshText/Program.cs?start=1&end=140)]

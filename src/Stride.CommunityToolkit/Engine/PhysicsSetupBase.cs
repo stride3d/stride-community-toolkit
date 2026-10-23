@@ -5,22 +5,24 @@ using Stride.Games;
 namespace Stride.CommunityToolkit.Engine;
 
 /// <summary>
-/// The physics engine of a <see cref="SceneSetup"/>: what <see cref="GameExtensions.CreatePrimitive(IGame, Primitive3D, Primitive3DEntityOptions?)"/>
-/// and the grounds attach a body or a static collider with. A physics package derives from it and registers its
-/// setup through an extension method on the setup (<c>UseBepu()</c>, <c>UseBullet()</c>); <see cref="None"/> attaches
-/// nothing, which is the core on its own.
+/// The physics engine a scene setup chose, as the core sees it: the one that gives a created primitive its body
+/// or collider. The physics packages implement it and <c>UseBepu()</c> or <c>UseBullet()</c> set it on the setup;
+/// the core alone has <see cref="None"/>, which attaches nothing.
 /// </summary>
 /// <remarks>
-/// The setup is chosen once and decides what the implicit calls mean. The explicit route, the entity extensions of
-/// each physics package (<c>AddBepuPhysics</c>, <c>AddBulletPhysics</c>), stays open whatever is chosen, so two
-/// engines can share a game.
+/// Registered as a service by the setup, so <see cref="Of"/> finds it from any game. The options' <see cref="BodyMode"/>
+/// decides what is attached; <see cref="BodyMode.None"/> never reaches an implementation.
 /// </remarks>
 public abstract class PhysicsSetupBase
 {
-    /// <summary>No physics engine: the primitives get a mesh and nothing else.</summary>
+    /// <summary>No physics engine: primitives and grounds get a model and nothing else.</summary>
     public static PhysicsSetupBase None { get; } = new NoPhysicsSetup();
 
-    /// <summary>The physics setup registered on <paramref name="game"/> by <see cref="GameExtensions.Run(Game, SceneSetup, Action{Scene}?, Action{Scene, GameTime}?, GameContext?)"/>, or <see cref="None"/>.</summary>
+    /// <summary>
+    /// The physics setup the game runs with: the one registered as a service, else <see cref="None"/>.
+    /// </summary>
+    /// <param name="game">The game.</param>
+    /// <returns>The setup; never <see langword="null"/>.</returns>
     public static PhysicsSetupBase Of(IGame game)
     {
         ArgumentNullException.ThrowIfNull(game);
@@ -28,32 +30,27 @@ public abstract class PhysicsSetupBase
         return game.Services.GetService<PhysicsSetupBase>() ?? None;
     }
 
-    /// <summary>Attaches a dynamic body with the collider that matches <paramref name="shape"/>.</summary>
-    /// <param name="entity">The entity with the shape's model.</param>
-    /// <param name="shape">The shape the model was built from.</param>
-    /// <param name="options">The options the entity was created with; a package reads its own derived options back from them.</param>
-    public abstract void AddBody(Entity entity, Primitive3D shape, Primitive3DEntityOptions? options);
+    /// <summary>
+    /// Attaches the physics the options ask for to an entity built from a 3D shape: a body, a kinematic body or
+    /// a static collider, with the collider fitted to the shape.
+    /// </summary>
+    /// <param name="entity">The entity, already carrying the shape's model.</param>
+    /// <param name="shape">The shape the model was built from; the collider is derived from it.</param>
+    /// <param name="options">The options, whose <see cref="PrimitiveEntityOptions.Body"/> picks the kind; an engine's own options type carries its component and mass.</param>
+    public abstract void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options);
 
-    /// <inheritdoc cref="AddBody(Entity, Primitive3D, Primitive3DEntityOptions?)"/>
-    public abstract void AddBody(Entity entity, Primitive2D shape, Primitive2DEntityOptions? options);
-
-    /// <summary>Attaches a static collider that matches <paramref name="shape"/>: a ground, a wall.</summary>
-    /// <param name="entity">The entity with the shape's model.</param>
-    /// <param name="shape">The shape the model was built from.</param>
-    /// <param name="options">The options the entity was created with; a package reads its own derived options back from them.</param>
-    public abstract void AddStatic(Entity entity, Primitive3D shape, Primitive3DEntityOptions? options);
-
-    /// <inheritdoc cref="AddStatic(Entity, Primitive3D, Primitive3DEntityOptions?)"/>
-    public abstract void AddStatic(Entity entity, Primitive2D shape, Primitive2DEntityOptions? options);
+    /// <summary>
+    /// Attaches the physics the options ask for to an entity built from a flat shape, with the collider fitted
+    /// to the shape and extruded by the shape's depth.
+    /// </summary>
+    /// <param name="entity">The entity, already carrying the shape's model.</param>
+    /// <param name="shape">The flat shape the model was built from; the collider is derived from it.</param>
+    /// <param name="options">The options, whose <see cref="PrimitiveEntityOptions.Body"/> picks the kind; an engine's own options type carries its component and mass.</param>
+    public abstract void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options);
 
     private sealed class NoPhysicsSetup : PhysicsSetupBase
     {
-        public override void AddBody(Entity entity, Primitive3D shape, Primitive3DEntityOptions? options) { }
-
-        public override void AddBody(Entity entity, Primitive2D shape, Primitive2DEntityOptions? options) { }
-
-        public override void AddStatic(Entity entity, Primitive3D shape, Primitive3DEntityOptions? options) { }
-
-        public override void AddStatic(Entity entity, Primitive2D shape, Primitive2DEntityOptions? options) { }
+        public override void AddBody(Entity entity, Primitive3D shape, PrimitiveEntityOptions? options) { }
+        public override void AddBody(Entity entity, Primitive2D shape, PrimitiveEntityOptions? options) { }
     }
 }

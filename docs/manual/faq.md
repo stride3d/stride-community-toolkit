@@ -214,14 +214,14 @@ is built. See [Materials](rendering/materials.md).
 ### My HUD looks dark or washed out. Why?
 
 It is not the HUD. Stride's UI draws in a stage after the forward renderer, and the toolkit's
-[overlay](rendering/debug-overlay.md), [entity text](rendering/entity-text.md) and
+[overlay](rendering/text-overlay.md), [entity text](rendering/entity-text.md) and
 [shape batches](rendering/shape-batch.md) are scene renderers appended after it, so none of them go
 through the tone map or the bloom. Something that changes with the lighting is in the scene: a
 sprite or a quad with a lit material. Give it an emissive or unlit material, or draw it as UI.
 
 ### How do I draw text or shapes on top of the scene every frame?
 
-Use [DebugOverlay](rendering/debug-overlay.md) for text and [ShapeBatch](rendering/shape-batch.md)
+Use [TextOverlay](rendering/text-overlay.md) for text and [ShapeBatch](rendering/shape-batch.md)
 for 2D and 3D shapes. A `SpriteBatch` drawn from a script's `Update` method shows nothing, because
 it has to run inside the graphics compositor. `DebugText.Print` lasts one frame, so call it every
 frame.

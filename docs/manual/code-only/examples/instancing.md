@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - Registering InstancingRenderFeature on the MeshRenderFeature
 - Sharing one Model between many entities
 - Toggling a ModelComponent to compare rendering cost
-- Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, TextOverlay
 
 ![GPU Instancing](media/instancing.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E10_3D_Instancing).
 
-[!code-csharp[](../../../../examples/code-only/E10_3D_Instancing/Program.cs?start=1&end=211)]
+[!code-csharp[](../../../../examples/code-only/E10_3D_Instancing/Program.cs?start=1&end=212)]

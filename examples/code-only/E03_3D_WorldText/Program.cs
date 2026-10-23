@@ -84,9 +84,9 @@ void Start(Scene scene)
 
     // A wall with text behind it, twice: depth-tested text is hidden by the wall until you fly
     // around it, while DepthTest = false text shows through everything
-    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 2f, 0.2f)), new Primitive3DEntityOptions
+    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 2f, 0.2f)), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         EntityName = "Wall",
     });
 

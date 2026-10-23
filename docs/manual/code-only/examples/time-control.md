@@ -18,10 +18,10 @@ The `Program.cs` file shows how to:
 - A kinematic body turned by a velocity, so its motion follows the physics clock
 - ISimulationUpdate on a component, called once per fixed step with the step's length
 - MaxStepPerFrame, the cap that lets a fast simulation keep up with the clock
-- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, TextOverlay
 
 ![Time Control](media/time-control.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E05_3D_TimeControl).
 
-[!code-csharp[](../../../../examples/code-only/E05_3D_TimeControl/Program.cs?start=1&end=237)]
+[!code-csharp[](../../../../examples/code-only/E05_3D_TimeControl/Program.cs?start=1&end=235)]

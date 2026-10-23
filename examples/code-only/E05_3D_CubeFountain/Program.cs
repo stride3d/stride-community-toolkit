@@ -1,11 +1,11 @@
 using E05_3D_CubeFountain;
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Definitions;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -56,7 +56,7 @@ var models = new Model[shapes.Length];
 var masters = new BufferedEntityInstancing[shapes.Length];
 
 CubeFountain? fountain = null;
-DebugTextDropdown? shapeMenu = null;
+KeyMenu? shapeMenu = null;
 var timeScaleIndex = Array.IndexOf(timeScales, 1f);
 var interpolated = true;
 
@@ -80,9 +80,9 @@ void Start(Scene scene)
     for (var i = 0; i < shapes.Length; i++)
     {
         // The model, owned by a prototype parked out of sight
-        var prototype = game.CreatePrimitive(shapes[i].Type, new Primitive3DEntityOptions
+        var prototype = game.CreatePrimitive(shapes[i].Type, new PrimitiveEntityOptions
         {
-            IncludePhysics = false,
+            Body = BodyMode.None,
             Material = game.CreateMaterial(shapes[i].Colour, metalness: 0f, glossiness: 0.5f),
         });
 
@@ -114,17 +114,17 @@ void Start(Scene scene)
     mouth.Transform.Position = new Vector3(0f, NozzleHeight + 0.4f, 0f);
     scene.Entities.Add(mouth);
 
-    // The shape to launch, as a dropdown in the overlay: O opens it, a digit picks
-    shapeMenu = new DebugTextDropdown
+    // The shape to launch, as a key menu in the overlay: O opens it, a digit picks
+    shapeMenu = new KeyMenu
     {
         Title = "Shape",
         ToggleKey = Keys.O,
         TitleColor = Color.Gold,
-        Items = [.. shapes.Index().Select(pair => new DebugTextDropdownItem(
+        Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
             (Keys)(Keys.D1 + pair.Index), pair.Item.Name, () => fountain.Kind = pair.Index, pair.Item.Colour))],
     };
 
-    DebugOverlay.GetOrCreate(game).AddSection("Cube fountain", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Cube fountain", OverlayLines);
 }
 
 void Update(Scene scene, GameTime time)
@@ -209,10 +209,10 @@ Entity CreateBody(Scene scene, int kind, Vector3 position)
     // component to be present, which is then taken off again
     var body = new Entity(shapes[kind].Name) { new ModelComponent(models[kind]) };
 
-    body.AddBepuPhysics(shapes[kind].Type, new Bepu3DPhysicsOptions
+    body.AddBepuPhysics(shapes[kind].Type, new BepuPhysicsOptions
     {
-        // A body is not interpolated unless asked: by default it is moved on physics steps only
-        Component = new BodyComponent { Collider = new CompoundCollider(), InterpolationMode = Interpolation() },
+        // The toolkit interpolates a body by default; the I key turns it off to show the difference
+        Interpolation = interpolated,
     });
 
     body.Remove<ModelComponent>();
@@ -254,10 +254,10 @@ void BuildBasin(Scene scene)
     {
         // An empty compound collider: CreatePrimitive adds the collider that fits the shape. A
         // collider given here as well would be a second one, at its default size
-        var entity = game.CreatePrimitive(shape, new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(shape, new BepuPhysicsOptions
         {
             Material = stone,
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         entity.Transform.Position = position;
@@ -300,7 +300,7 @@ concepts:
   - A cap on the number of bodies, with the oldest one's place reused
   - Throwing a body along the camera's forward vector
   - Bodies without a model of their own, drawn by one BufferedEntityInstancing master per shape
-  - A DebugTextDropdown in the overlay to choose the shape
+  - A KeyMenu in the overlay to choose the shape
 tags:
   - 3D
   - Physics

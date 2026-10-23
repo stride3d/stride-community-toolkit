@@ -1,5 +1,7 @@
+using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.Core.Diagnostics;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Physics;
@@ -13,15 +15,19 @@ namespace Stride.CommunityToolkit.Bullet;
 /// </summary>
 public static class EntityExtensions
 {
+    private static readonly Logger Log = GlobalLogger.GetLogger("Bullet");
+
     /// <summary>
-    /// Adds Bullet 2D physics to the entity, with the collider that matches <paramref name="shape"/>.
+    /// Adds Bullet 2D physics to the entity, with the collider that matches <paramref name="shape"/>, extruded by
+    /// the shape's depth where the shape is a hull.
     /// </summary>
     /// <param name="entity">The entity to add physics components to.</param>
     /// <param name="shape">The flat shape the entity's model was built from; the collider is derived from it.</param>
-    /// <param name="options">Optional physics configuration: the physics component, the collider depth and the mass. If null, default options are used.</param>
-    /// <returns>The entity with the Bullet 2D physics components added.</returns>
+    /// <param name="options">The body's mode, component and mass; <see langword="null"/> is a dynamic body.</param>
+    /// <returns>The entity, with the component added unless the mode is <see cref="BodyMode.None"/>.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-    public static Entity AddBulletPhysics(this Entity entity, Primitive2D shape, Bullet2DPhysicsOptions? options = null)
+    /// <exception cref="InvalidOperationException">A component is supplied together with <see cref="BodyMode.None"/>.</exception>
+    public static Entity AddBulletPhysics(this Entity entity, Primitive2D shape, BulletPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(shape);
@@ -34,17 +40,18 @@ public static class EntityExtensions
             entity.Transform.Rotation = Quaternion.RotationAxis(Vector3.UnitX, MathUtil.DegreesToRadians(90));
         }
 
-        if (options.PhysicsComponent is null) return entity;
+        var component = ComponentFor(options);
+
+        if (component is null) return entity;
 
         // A component that already holds a shape is the caller's own collider and is kept as it is
-        if (options.PhysicsComponent.ColliderShapes.Count == 0)
+        if (component.ColliderShapes.Count == 0)
         {
-            options.PhysicsComponent.ColliderShapes.Add(ColliderFor(shape, options.Depth));
+            component.ColliderShapes.Add(ColliderFor(shape, shape.Depth));
         }
 
-        ApplyMass(options.PhysicsComponent, options.Mass);
-
-        entity.Add(options.PhysicsComponent);
+        ApplyMass(component, options.Mass);
+        entity.Add(component);
 
         return entity;
     }
@@ -54,43 +61,70 @@ public static class EntityExtensions
     /// </summary>
     /// <param name="entity">The entity to add physics components to.</param>
     /// <param name="shape">The shape the entity's model was built from; the collider is derived from it.</param>
-    /// <param name="options">Optional physics configuration: the physics component and the mass. If null, default options are used.</param>
-    /// <returns>The entity with the Bullet 3D physics components added.</returns>
+    /// <param name="options">The body's mode, component and mass; <see langword="null"/> is a dynamic body.</param>
+    /// <returns>The entity, with the component added unless the mode is <see cref="BodyMode.None"/> or the shape has no Bullet collider.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="entity"/> or <paramref name="shape"/> is null.</exception>
-    /// <remarks>
-    /// A torus or a teapot has no Bullet collider shape and is added without a collider.
-    /// </remarks>
-    public static Entity AddBulletPhysics(this Entity entity, Primitive3D shape, Bullet3DPhysicsOptions? options = null)
+    /// <exception cref="InvalidOperationException">A component is supplied together with <see cref="BodyMode.None"/>.</exception>
+    public static Entity AddBulletPhysics(this Entity entity, Primitive3D shape, BulletPhysicsOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(shape);
 
         options ??= new();
 
-        if (options.PhysicsComponent is null) return entity;
+        var component = ComponentFor(options);
+
+        if (component is null) return entity;
 
         // A component that already holds a shape is the caller's own collider and is kept as it is
-        if (options.PhysicsComponent.ColliderShapes.Count == 0)
+        if (component.ColliderShapes.Count == 0)
         {
             var colliderShape = ColliderFor(shape);
 
             if (colliderShape is null) return entity;
 
-            options.PhysicsComponent.ColliderShapes.Add(colliderShape);
+            component.ColliderShapes.Add(colliderShape);
         }
 
-        ApplyMass(options.PhysicsComponent, options.Mass);
-
-        entity.Add(options.PhysicsComponent);
+        ApplyMass(component, options.Mass);
+        entity.Add(component);
 
         return entity;
+    }
+
+    /// <summary>
+    /// The component the options ask for: the supplied one as it is, else one made from the mode;
+    /// <see langword="null"/> for <see cref="BodyMode.None"/>. A fresh component per call, so the same options
+    /// instance can be reused across entities.
+    /// </summary>
+    private static PhysicsComponent? ComponentFor(BulletPhysicsOptions options)
+    {
+        if (options.PhysicsComponent is { } supplied)
+        {
+            if (options.Body == BodyMode.None)
+                throw new InvalidOperationException("The options supply a component and ask for no physics at once; drop one of the two.");
+
+            return supplied;
+        }
+
+        return options.Body switch
+        {
+            BodyMode.None => null,
+            BodyMode.Static => new StaticColliderComponent(),
+            BodyMode.Kinematic => new RigidbodyComponent { IsKinematic = true },
+            _ => new RigidbodyComponent(),
+        };
     }
 
     // Bullet keeps mass on the rigid body; a static or character component has none to set
     private static void ApplyMass(PhysicsComponent component, float? mass)
     {
-        if (mass is { } value && component is RigidbodyComponent rigidbody)
+        if (mass is not { } value) return;
+
+        if (component is RigidbodyComponent rigidbody)
             rigidbody.Mass = value;
+        else
+            Log.Debug($"Mass {value} ignored: a {component.GetType().Name} has none.");
     }
 
     /// <summary>

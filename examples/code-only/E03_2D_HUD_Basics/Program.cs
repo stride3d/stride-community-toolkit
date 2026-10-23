@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -130,7 +131,7 @@ void Start(Scene rootScene)
     hud = new SimpleHud(game, rootScene, shapeBatch, new HudStyle());
     #endregion
 
-    DebugOverlay.GetOrCreate(game).AddSection("HUD basics", () =>
+    TextOverlay.GetOrCreate(game).AddSection("HUD basics", () =>
     [
         new("1 to 8", "The HUD after that step", Color.Gold),
         new("J", "Take a hit", Color.Gold),

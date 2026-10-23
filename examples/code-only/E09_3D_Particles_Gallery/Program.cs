@@ -2,6 +2,7 @@ using E09_3D_Particles_Gallery;
 using Example.Common;
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -69,7 +70,7 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Gallery", BuildOverlayLines);
     overlay.Visible = !clean;

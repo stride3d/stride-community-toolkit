@@ -111,8 +111,8 @@ Two rules when editing these:
 - Setting `LinearVelocity` does **not** wake a sleeping body — set `Awake = true` as well, or the motion silently stops once the body sleeps.
 - `ISimulationUpdate.SimulationUpdate` can run **before** `StartupScript.Start` / `SyncScript.Start`. The component is registered with the simulation as soon as it enters the scene, while `Start` waits its turn in the script system. Resolve component references lazily inside `SimulationUpdate` (`_body ??= Entity.Get<BodyComponent>()`) rather than caching them in `Start`.
 - Only **awake** bodies are synced back to their transform. A dynamic body that settles and falls asleep stops overwriting the transform, so direct transform writes suddenly appear to work while the collider is left behind. A "moving mesh with no collisions" almost always means this.
-- `Bepu3DPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`, but a `CompoundCollider` with no shapes never attaches to the simulation, leaving an inert component. For a purely visual entity use the non-physics `Create3DPrimitive` overload by passing `Primitive3DEntityOptions` instead.
-- `Create3DPrimitive` has both a Bepu overload (`Bepu3DPhysicsOptions`) and a plain one (`Primitive3DEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
+- `BepuPhysicsOptions.IncludeCollider = false` still attaches a `BodyComponent`, but a `CompoundCollider` with no shapes never attaches to the simulation, leaving an inert component. For a purely visual entity use the non-physics `Create3DPrimitive` overload by passing `PrimitiveEntityOptions` instead.
+- `Create3DPrimitive` has both a Bepu overload (`BepuPhysicsOptions`) and a plain one (`PrimitiveEntityOptions`). Passing an explicitly typed options object selects the intended overload and avoids `CS0121` ambiguity when both namespaces are imported.
 - Spawning thousands of bodies on a **perfectly regular lattice**, exactly touching, degenerates Bepu's broad-phase tree and kills the process with a `Stack overflow` in `Tree.Refit2WithCacheOptimization` within seconds. It is deterministic and not a threading problem. Jitter the spawn positions by a millimetre or space the bodies apart.
 - Hull-backed shapes (`TriangularPrism`, `Cone`, `Teapot`, `Torus`) at a few thousand bodies can crash with an intermittent `AccessViolationException` inside the solver. The cause is **not known**; it appears in roughly one run in five, so do not treat a single clean run as evidence that anything fixed it.
 - **Never zero *some* terms of `BodyInertia.InverseInertiaTensor` to lock individual axes** — in dense piles the solve diverges and the narrow phase allocates until the process dies (tens of GB in seconds). Zeroing the *whole* tensor is fine and is what Bepu's own character demo does; a full tensor is fine; a partly-zeroed one fails 3/3 at 20k bodies. Scale the terms down instead, as `Body2DComponent` does, or use a one-body constraint.
@@ -342,11 +342,11 @@ Guidance for the Bepu demos specifically:
 - **A key binding lives in three places**: the `IsKeyPressed` call, the on-screen label, and any
   header comment describing the controls. Rename one and the others silently drift, leaving
   documentation that names a key doing nothing. Grep for the old letter after changing a binding.
-- **The on-screen help reads top down.** In an example's `DebugOverlay` section the key lines come
+- **The on-screen help reads top down.** In an example's `TextOverlay` section the key lines come
   first, one key per line, then a blank line, then the status and explanation lines. A key line names
   its keys as data, never in the text: `new("N", "Next station", Color.Gold)`, and
   `new(["Q", "E"], "Ascend / descend")` for keys that do the same thing - not `new("[N] Next station")`.
-  The overlay decorates them when it draws (`DebugOverlay.KeyFormat`, default `[{0}]`, and `KeyColor`,
+  The overlay decorates them when it draws (`TextOverlay.KeyFormat`, default `[{0}]`, and `KeyColor`,
   a shade lighter than the text), and gives a collapsible title the same shape, `[+] [F2] Camera controls`.
   Multi-word inputs are just keys: `new("Arrow keys", "Move")`, `new("Mouse wheel", "Zoom")`,
   `new("Shift", "Hold to move faster")`, `new("Left drag", "Pan")`. What a key does is capitalised

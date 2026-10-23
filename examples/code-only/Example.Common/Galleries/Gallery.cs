@@ -277,7 +277,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
             var (local, height) = spots[i];
             var basePoint = station.At(local);
 
-            var pillar = _game.CreatePrimitive(Primitive3D.Box(new Vector3(1.8f, height, 1.8f)), new Primitive3DEntityOptions
+            var pillar = _game.CreatePrimitive(Primitive3D.Box(new Vector3(1.8f, height, 1.8f)), new PrimitiveEntityOptions
             {
                 EntityName = $"Station {station.Number} pillar {i + 1}",
                 Material = _pillarMaterial,
@@ -355,7 +355,7 @@ public sealed class Gallery<TStation> where TStation : GalleryStation, new()
         // Room for the ring, and for the exhibits that run outwards
         var side = (Radius + Options.GroundMargin) * 2f;
 
-        var ground = _game.CreatePrimitive(Primitive3D.Box(new Vector3(side, 0.5f, side)), new Primitive3DEntityOptions
+        var ground = _game.CreatePrimitive(Primitive3D.Box(new Vector3(side, 0.5f, side)), new PrimitiveEntityOptions
         {
             EntityName = "Ground",
             Material = groundMaterial,

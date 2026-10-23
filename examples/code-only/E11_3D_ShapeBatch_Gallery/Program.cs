@@ -2,6 +2,7 @@ using E11_3D_ShapeBatch_Gallery;
 using Example.Common;
 using Example.Common.Galleries;
 using Stride.CommunityToolkit.Engine;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.CommunityToolkit.Skyboxes;
@@ -106,7 +107,7 @@ void Start(Scene rootScene)
     if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
     else gallery.GoHome(instant: true);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime gameTime)

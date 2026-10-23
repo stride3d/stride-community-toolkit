@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -54,7 +55,7 @@ game.Run(sceneSetup, start: Start, update: Update);
 
 void Start(Scene rootScene)
 {
-    DebugOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Instancing", OverlayLines);
 
     EnableInstancing();
 
@@ -88,7 +89,7 @@ void EnableInstancing()
 /// </remarks>
 Model CreateSharedCubeModel(Scene rootScene, Color color)
 {
-    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions()
+    var prototype = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions()
     {
         Material = game.CreateMaterial(color)
     });
@@ -239,7 +240,7 @@ concepts:
   - Registering InstancingRenderFeature on the MeshRenderFeature
   - Sharing one Model between many entities
   - Toggling a ModelComponent to compare rendering cost
-  - "Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial, TextOverlay"
 tags:
   - 3D
   - Rendering

@@ -3,7 +3,7 @@ using Stride.CommunityToolkit.Audio;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -52,9 +52,9 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     // Something to look at: the orb swells with the signal level.
-    orb = game.CreatePrimitive(Primitive3D.Sphere(), new Primitive3DEntityOptions
+    orb = game.CreatePrimitive(Primitive3D.Sphere(), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(255, 170, 60)),
         Position = new Vector3(0, 1.5f, 0),
     });
@@ -138,7 +138,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Procedural sound", () =>
     {
@@ -179,7 +179,7 @@ concepts:
   - Generating audio in a callback with game.Audio.CreateProceduralSound
   - Sharing state between the game thread and the audio thread without a lock
   - Buffering and the latency it implies
-  - Showing live audio state as a DebugOverlay section
+  - Showing live audio state as a TextOverlay section
   - "Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial"
 tags:
   - 3D

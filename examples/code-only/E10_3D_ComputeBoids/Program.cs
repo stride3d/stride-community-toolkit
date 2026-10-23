@@ -3,6 +3,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Instancing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -68,9 +69,9 @@ void Start(Scene scene)
 
     // The boid: a small cone, tip along +Y, which the shader points along the heading. The entity
     // is only a way to get the model; it never enters the scene.
-    boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new Primitive3DEntityOptions
+    boidModel = game.CreatePrimitive(Primitive3D.Cone(0.14f, 0.4f), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(255, 150, 40)),
     }).Get<ModelComponent>().Model;
 
@@ -91,7 +92,7 @@ void Start(Scene scene)
         compositor.Game = new SceneRendererCollection { computeRenderer, compositor.Game };
     }
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Boids", OverlayLines);
 }
@@ -366,7 +367,7 @@ concepts:
   - Unordered-access structured buffers, and two of them swapped each frame so reads never race writes
   - Filling an InstancingUserBuffer's matrix buffers on the GPU, so the mesh is drawn from data the CPU never sees
   - Building a world matrix and its inverse in a shader from a heading
-  - "Using helpers: SceneSetup3D, UseSkybox, AddInstancingSupport, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, UseSkybox, AddInstancingSupport, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Rendering

@@ -4,6 +4,7 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Gizmos;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -108,7 +109,7 @@ void Start(Scene scene)
     game.AddGroundGizmo(new Vector3(-9, 0, -9), showAxisName: true);
     game.AddOrientationGizmo();
 
-    InitializeDebugOverlay();
+    InitializeTextOverlay();
 
     CreateMixer(scene);
     CreateMotorisedPendulum(scene);
@@ -364,7 +365,7 @@ void PushPendulums()
 
 Entity CreateBox(string name, Color color, Vector3 position, Vector3 size, bool kinematic = false)
 {
-    var entity = game.CreatePrimitive(Primitive3D.Box(size), new Bepu3DPhysicsOptions
+    var entity = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
     {
         EntityName = name,
         Material = game.CreateMaterial(color),
@@ -410,9 +411,9 @@ static string OnOff(bool? enabled) => enabled == true ? "ON" : "OFF";
 
 static string Spin(BodyComponent? body) => body is null ? "-" : MathF.Abs(body.AngularVelocity.Y).ToString("0.0", CultureInfo.InvariantCulture);
 
-void InitializeDebugOverlay()
+void InitializeTextOverlay()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // BuildInstructions runs every frame the overlay is drawn, which is what puts the live spin
     // readouts on screen without anything having to push them

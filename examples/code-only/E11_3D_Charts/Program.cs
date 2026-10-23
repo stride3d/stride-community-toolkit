@@ -1,7 +1,7 @@
 using Stride.CommunityToolkit.Charts;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Scripts;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -174,7 +174,7 @@ void Start(Scene rootScene)
         chart.FrameCamera(sceneCamera, padding: 0.12f);
     }
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     // The chart fills the window, so the help goes in a corner rather than across the figure (F3 moves it)
     overlay.Position = ScreenAnchor.BottomLeft;

@@ -1,9 +1,10 @@
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.Input;
 
 namespace Stride.CommunityToolkit.Rendering.Text;
 
 /// <summary>
-/// Formats <see cref="Keys"/> values for on-screen help text, shared by <see cref="DebugOverlay"/> and <see cref="DebugTextDropdown"/>.
+/// Formats <see cref="Keys"/> values for on-screen help text, shared by <see cref="TextOverlay"/> and <see cref="KeyMenu"/>.
 /// </summary>
 internal static class KeyNames
 {

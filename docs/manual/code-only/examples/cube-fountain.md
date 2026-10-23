@@ -22,7 +22,7 @@ The `Program.cs` file shows how to:
 - A cap on the number of bodies, with the oldest one's place reused
 - Throwing a body along the camera's forward vector
 - Bodies without a model of their own, drawn by one BufferedEntityInstancing master per shape
-- A DebugTextDropdown in the overlay to choose the shape
+- A KeyMenu in the overlay to choose the shape
 
 ![Cube Fountain](media/cube-fountain.webp)
 

@@ -5,7 +5,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -326,7 +326,7 @@ Wheel BuildWheel(Scene scene, BodyComponent chassis, Vector3 mount)
 Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
 {
     // The core, physics-free primitive: the body is on the parent, this is only the look.
-    var entity = game.CreatePrimitive(shape, new Primitive3DEntityOptions { IncludePhysics = false, Material = material });
+    var entity = game.CreatePrimitive(shape, new PrimitiveEntityOptions { Body = BodyMode.None, Material = material });
     entity.Transform.Position = localPosition;
 
     return entity;
@@ -335,11 +335,11 @@ Entity Model(Primitive3D shape, Material material, Vector3 localPosition)
 // A ramp, a slalom of pillars, and a wall of crates to drive through or throw with the grabber.
 void BuildCourse(Scene scene)
 {
-    var ramp = game.CreatePrimitive(Primitive3D.Box(new Vector3(6, 0.4f, 10)), new Bepu3DPhysicsOptions
+    var ramp = game.CreatePrimitive(Primitive3D.Box(new Vector3(6, 0.4f, 10)), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(150, 150, 160)),
         // An empty compound: the helper adds the box that fits the ramp's size
-        Component = new StaticComponent { Collider = new CompoundCollider() },
+        Body = BodyMode.Static,
         Position = new Vector3(0, 0.9f, 30),
     });
     ramp.Transform.Rotation = Quaternion.RotationX(MathUtil.DegreesToRadians(-12));
@@ -347,11 +347,11 @@ void BuildCourse(Scene scene)
 
     for (var i = 0; i < 6; i++)
     {
-        var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.5f, 3), new Bepu3DPhysicsOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Cylinder(0.5f, 3), new BepuPhysicsOptions
         {
             // A cylinder's size is its radius in X and its height in Z
             Material = game.CreateMaterial(new Color(120, 170, 220)),
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
             Position = new Vector3(i % 2 == 0 ? -4 : 4, 1.5f, -20 - i * 8),
         });
         pillar.Scene = scene;
@@ -361,7 +361,7 @@ void BuildCourse(Scene scene)
     {
         for (var i = 0; i < 6; i++)
         {
-            var crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new Bepu3DPhysicsOptions
+            var crate = game.CreatePrimitive(Primitive3D.Cube(1.2f), new BepuPhysicsOptions
             {
                 Material = game.CreateMaterial(new Color(220, 180, 90)),
                 // The crate's own collider, for its mass: a compound that already holds a shape is
@@ -376,7 +376,7 @@ void BuildCourse(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Car", () =>
     {

@@ -57,7 +57,7 @@ public class PrimitiveGenerator
     {
         var selectedColor = color ?? _random.NextColor();
 
-        var entity = _game.CreatePrimitive(shape ?? Primitive3D.Cube(0.3f), new Bullet3DPhysicsOptions
+        var entity = _game.CreatePrimitive(shape ?? Primitive3D.Cube(0.3f), new BulletPhysicsOptions
         {
             Material = _game.CreateMaterial(selectedColor),
         });

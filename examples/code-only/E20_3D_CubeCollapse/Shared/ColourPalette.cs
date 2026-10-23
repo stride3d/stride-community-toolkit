@@ -5,7 +5,7 @@ namespace CubeCollapse.Shared;
 /// <summary>
 /// A named set of cube colours.
 /// </summary>
-/// <param name="Name">Shown in the palette dropdown. Printable ASCII only - the debug text renderer
+/// <param name="Name">Shown in the palette key menu. Printable ASCII only - the debug text renderer
 /// silently blanks anything else.</param>
 /// <param name="Colours">The cube colours, in a fixed order.</param>
 /// <param name="Glass">Whether the cubes are tinted glass instead of flat colour; the colours are then the tints.</param>

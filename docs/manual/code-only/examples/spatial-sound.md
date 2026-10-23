@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - HRTF as two switches - HrtfSupport through the setup's GameSettings, then useHrtf per instance
 - Positioning a one-shot once versus tracking a moving emitter every frame
 - Reading the emitter's side and distance relative to the camera for the overlay
-- Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay
 
 ![Spatial Sound](media/spatial-sound.webp)
 

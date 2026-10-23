@@ -3,7 +3,7 @@ using Stride.CommunityToolkit.Audio;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -50,9 +50,9 @@ game.Run(sceneSetup, start: Start, update: Update);
 void Start(Scene scene)
 {
     // Scenery only, so the plain options: no physics body
-    speaker = game.CreatePrimitive(Primitive3D.Cube(), new Primitive3DEntityOptions
+    speaker = game.CreatePrimitive(Primitive3D.Cube(), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         Material = game.CreateMaterial(new Color(90, 160, 255)),
         Position = new Vector3(0, 1, 0),
     });
@@ -132,7 +132,7 @@ void Update(Scene scene, Stride.Games.GameTime time)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Wav file", () =>
     {
@@ -176,7 +176,7 @@ concepts:
   - Looping, volume and pan on a SoundInstance
   - Disposing instances once they have played out
   - "Why the files are mono: Pan and spatialisation need a single channel"
-  - "Using helpers: SceneSetup3D, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Audio

@@ -116,9 +116,9 @@ Two details:
   paste straight into the setup code.
 
 The 2D controller has no `helpPosition` parameter because the overlay belongs to the whole scene, not
-to the camera; move it with <kbd>F3</kbd> or set `DebugOverlay.GetOrCreate(game).Position` directly.
+to the camera; move it with <kbd>F3</kbd> or set `TextOverlay.GetOrCreate(game).Position` directly.
 Size, font and background of that block are the overlay's own settings - see
-[Debug Overlay](../rendering/debug-overlay.md).
+[Text Overlay](../rendering/text-overlay.md).
 
 ## The orbit controller
 

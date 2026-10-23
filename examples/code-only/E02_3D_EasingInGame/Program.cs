@@ -1,9 +1,9 @@
 using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -75,12 +75,12 @@ void Start(Scene rootScene)
     LookFrom(viewpoints[0]);
 
     // The platform: a kinematic body, so it pushes what it carries and nothing pushes it back
-    var platform = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.4f, 3f)), new Bepu3DPhysicsOptions
+    var platform = game.CreatePrimitive(Primitive3D.Box(new Vector3(3f, 0.4f, 3f)), new BepuPhysicsOptions
     {
         EntityName = "Platform",
         Material = game.CreateMaterial(new Color(70, 140, 200), metalness: 0.3f, glossiness: 0.6f),
         Position = liftHome,
-        Component = new BodyComponent { Kinematic = true, Collider = new CompoundCollider() },
+        Body = BodyMode.Kinematic,
     });
 
     platform.Scene = rootScene;
@@ -92,7 +92,7 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < riderHomes.Length; i++)
     {
-        var rider = game.CreatePrimitive(i == 2 ? Primitive3D.Cube(0.8f) : Primitive3D.Sphere(0.4f), new Bepu3DPhysicsOptions
+        var rider = game.CreatePrimitive(i == 2 ? Primitive3D.Cube(0.8f) : Primitive3D.Sphere(0.4f), new BepuPhysicsOptions
         {
             EntityName = $"Rider {i + 1}",
             Material = game.CreateMaterial(i == 2 ? new Color(235, 180, 60) : new Color(220, 90, 70), metalness: 0.4f, glossiness: 0.7f),
@@ -105,9 +105,9 @@ void Start(Scene rootScene)
 
     // The door: a frame that stays, and a leaf that swings about the frame's edge. The leaf is a
     // visual, not a body - the platform already shows how easing meets physics
-    var frame = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.2f, 2.6f, 0.2f)), new Primitive3DEntityOptions
+    var frame = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.2f, 2.6f, 0.2f)), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         EntityName = "Door frame",
         Material = game.CreateMaterial(new Color(60, 62, 70), metalness: 0.2f, glossiness: 0.5f),
         Position = doorHinge,
@@ -117,9 +117,9 @@ void Start(Scene rootScene)
 
     doorEntity = new Entity("Door hinge") { Transform = { Position = doorHinge } };
 
-    var leaf = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.12f, 2.4f, 1.6f)), new Primitive3DEntityOptions
+    var leaf = game.CreatePrimitive(Primitive3D.Box(new Vector3(0.12f, 2.4f, 1.6f)), new PrimitiveEntityOptions
     {
-        IncludePhysics = false,
+        Body = BodyMode.None,
         EntityName = "Door leaf",
         Material = game.CreateMaterial(new Color(170, 110, 60), metalness: 0.2f, glossiness: 0.5f),
         Position = doorOffset,
@@ -133,9 +133,9 @@ void Start(Scene rootScene)
 
     for (var i = 0; i < crystalSpots.Length; i++)
     {
-        var crystal = game.CreatePrimitive(Primitive3D.Cone(0.5f, 1f), new Primitive3DEntityOptions
+        var crystal = game.CreatePrimitive(Primitive3D.Cone(0.5f, 1f), new PrimitiveEntityOptions
         {
-            IncludePhysics = false,
+            Body = BodyMode.None,
             EntityName = $"Crystal {i + 1}",
             Material = game.CreateMaterial(new Color(120, 230, 200), metalness: 0.9f, glossiness: 0.9f),
             Position = crystalSpots[i],
@@ -152,7 +152,7 @@ void Start(Scene rootScene)
     door.Start();
     door.Update(door.Duration);
 
-    DebugOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Easing", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)

@@ -4,7 +4,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -38,7 +38,7 @@ void Start(Scene scene)
     }
 
     // The character body: a Bepu CharacterComponent riding a capsule primitive. Passing the
-    // component through Bepu3DPhysicsOptions makes CreatePrimitive attach a matching capsule
+    // component through BepuPhysicsOptions makes CreatePrimitive attach a matching capsule
     // collider to it.
     character = new CharacterComponent
     {
@@ -47,7 +47,7 @@ void Start(Scene scene)
         Collider = new CompoundCollider(),
         Gravity = true,
     };
-    var body = game.CreatePrimitive(Primitive3D.Capsule(), new Bepu3DPhysicsOptions { Component = character });
+    var body = game.CreatePrimitive(Primitive3D.Capsule(), new BepuPhysicsOptions { Component = character });
     body.Transform.Position = new Vector3(0, 2f, 0);
     body.Scene = scene;
 
@@ -58,7 +58,7 @@ void Start(Scene scene)
     camera?.Entity.Add(new FirstPersonControllerComponent { Character = character });
 
     // The keys, then the live state; the callback runs every frame the overlay is drawn
-    DebugOverlay.GetOrCreate(game).AddSection("Character", () =>
+    TextOverlay.GetOrCreate(game).AddSection("Character", () =>
     [
         new("W A S D", "Move", Color.Gold),
         new("Space", "Jump", Color.Gold),
@@ -90,7 +90,7 @@ description:
     per-frame behaviour to many entities without a script on each one.
 concepts:
   - Building a character controller with Bepu CharacterComponent
-  - "Attaching a collider by passing the component through Bepu3DPhysicsOptions"
+  - "Attaching a collider by passing the component through BepuPhysicsOptions"
   - "Why the setup's camera has no controller when the scene brings its own"
   - "Pairing an EntityComponent with an EntityProcessor"
   - "Auto-registering a processor with [DefaultEntityComponentProcessor]"

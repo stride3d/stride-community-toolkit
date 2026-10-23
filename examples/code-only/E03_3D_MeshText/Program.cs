@@ -3,7 +3,9 @@ using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Text.Meshes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -86,7 +88,7 @@ void Start(Scene scene)
     // Three words to begin with, each higher than the last, so they land on each other
     for (var i = 0; i < 3; i++) DropWord(scene);
 
-    DebugOverlay.GetOrCreate(game).AddSection("3D text", () =>
+    TextOverlay.GetOrCreate(game).AddSection("3D text", () =>
     [
         new("R", "Drop another word", Color.Gold),
         new(""),
@@ -128,7 +130,7 @@ void DropWord(Scene scene)
 {
     dropMaterial = game.CreateMaterial(random.NextColor(), metalness: 0.1f, glossiness: 0.5f);
 
-    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new Bepu3DPhysicsOptions { Material = dropMaterial });
+    var word = game.CreatePrimitive(Primitive3D.Text("Drop", size: 0.7f, depth: 0.3f), new BepuPhysicsOptions { Material = dropMaterial });
 
     word.Transform.Position = new Vector3(-2.2f, 4f + dropped * 0.7f, 2.2f);
     word.Transform.Rotation = faceCamera;
@@ -170,7 +172,7 @@ concepts:
   - TextMeshOptions - size per EM, depth, bevel, anchor, alignment, line spacing, curve quality
   - Words as primitives with bodies - Primitive3D.Text through CreatePrimitive, one convex hull per glyph
   - Static lettering built once versus text that changes, and releasing the old buffers
-  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, DebugOverlay"
+  - "Using helpers: SceneSetup3D, AddAllDirectionLighting, CreatePrimitive, TextOverlay"
 tags:
   - 3D
   - Text

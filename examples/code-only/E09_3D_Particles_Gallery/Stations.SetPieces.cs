@@ -155,14 +155,14 @@ public static class SetPieceStations
             const float NozzleLength = 1f;
             const float BodyLength = 2.6f;
 
-            var nozzle = s.Game.CreatePrimitive(Primitive3D.Cone(0.6f, NozzleLength), new Primitive3DEntityOptions
+            var nozzle = s.Game.CreatePrimitive(Primitive3D.Cone(0.6f, NozzleLength), new PrimitiveEntityOptions
             {
                 EntityName = $"Station {s.Number} nozzle",
                 Material = s.Game.CreateMaterial(new Color(70, 72, 78), metalness: 0.5f, glossiness: 0.7f),
                 Position = s.At(0f, Height + NozzleLength / 2f, 0f),
             });
 
-            var body = s.Game.CreatePrimitive(Primitive3D.Cylinder(0.45f, BodyLength), new Primitive3DEntityOptions
+            var body = s.Game.CreatePrimitive(Primitive3D.Cylinder(0.45f, BodyLength), new PrimitiveEntityOptions
             {
                 EntityName = $"Station {s.Number} body",
                 Material = s.Game.CreateMaterial(new Color(200, 205, 210), metalness: 0.3f, glossiness: 0.6f),

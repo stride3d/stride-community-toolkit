@@ -1,5 +1,3 @@
-using Stride.BepuPhysics;
-using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
@@ -260,12 +258,12 @@ public sealed class StationScene(Game game)
 
     private void AddStatic(Scene scene, string name, Material material, Vector3 size, Vector3 position)
     {
-        var entity = game.CreatePrimitive(Primitive3D.Box(size), new Bepu3DPhysicsOptions
+        var entity = game.CreatePrimitive(Primitive3D.Box(size), new BepuPhysicsOptions
         {
             EntityName = name,
             Material = material,
             Position = position,
-            Component = new StaticComponent { Collider = new CompoundCollider() },
+            Body = BodyMode.Static,
         });
 
         entity.Scene = scene;

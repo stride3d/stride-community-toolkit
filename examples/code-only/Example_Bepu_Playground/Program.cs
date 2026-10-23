@@ -2,7 +2,7 @@ using Example.Common;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Shapes;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -55,7 +55,7 @@ void Start(Scene scene)
 
     AddShapes(scene, shapes.Length);
 
-    DebugOverlay.GetOrCreate(game).AddSection("3D playground", () =>
+    TextOverlay.GetOrCreate(game).AddSection("3D playground", () =>
     [
         new("Space", "Add ten shapes", Color.Gold),
         new("X", "Remove every shape", Color.Gold),

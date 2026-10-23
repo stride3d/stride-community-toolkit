@@ -1,5 +1,6 @@
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
@@ -75,7 +76,7 @@ void Start(Scene rootScene)
         rootScene.Entities.Add(Label(code[lane], new Vector2(EndX + 2.2f, laneY[lane]), 13, new Color(170, 210, 255), TextAnchor.MiddleLeft));
     }
 
-    DebugOverlay.GetOrCreate(game).AddSection("Easing basics", BuildOverlayLines);
+    TextOverlay.GetOrCreate(game).AddSection("Easing basics", BuildOverlayLines);
 }
 
 void Update(Scene scene, GameTime time)

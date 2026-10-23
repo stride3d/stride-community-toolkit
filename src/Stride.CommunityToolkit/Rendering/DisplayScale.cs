@@ -14,7 +14,7 @@ namespace Stride.CommunityToolkit.Rendering;
 /// look the same, while a 4K monitor at 100% does not. Only the DPI tells the two apart.
 /// </para>
 /// <para>
-/// It applies to what is measured in pixels: a debug overlay's font, a screen-space label, a shape
+/// It applies to what is measured in pixels: a text overlay's font, a screen-space label, a shape
 /// outline that is "3 pixels wide". Anything measured in world units already scales with the view
 /// and needs nothing.
 /// </para>

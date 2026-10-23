@@ -1,7 +1,7 @@
 using Box2D.NET;
 using Stride.CommunityToolkit.Box2D;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.Text;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -101,7 +101,7 @@ void Start(Scene rootScene)
     // Left mouse picks a rock up and throws it - the one interaction the replica adds to the testbed
     game.GetCameraEntity().Add(new Grabber2DScript { Simulation = simulation });
 
-    DebugOverlay.GetOrCreate(game).AddSection("Junkyard", static () =>
+    TextOverlay.GetOrCreate(game).AddSection("Junkyard", static () =>
     [
         new("Left mouse", "Pick a rock up, carry it, throw it", Color.Yellow),
     ]);

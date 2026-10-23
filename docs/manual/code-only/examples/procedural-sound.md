@@ -17,7 +17,7 @@ The `Program.cs` file shows how to:
 - Generating audio in a callback with game.Audio.CreateProceduralSound
 - Sharing state between the game thread and the audio thread without a lock
 - Buffering and the latency it implies
-- Showing live audio state as a DebugOverlay section
+- Showing live audio state as a TextOverlay section
 - Using helpers: SceneSetup3D, CreatePrimitive, CreateMaterial
 
 ![Procedural Sound](media/procedural-sound.webp)

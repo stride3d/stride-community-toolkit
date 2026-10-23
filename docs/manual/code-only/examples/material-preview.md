@@ -17,10 +17,10 @@ The `Program.cs` file shows how to:
 - A compositor without post effects, and swapping compositors at runtime
 - Why a metal needs an environment, and why the thumbnail barely has one
 - Scaling any model to its unit bounding sphere so every shape frames the same
-- Keyboard dropdowns for shape and material with DebugTextDropdown
+- Keyboard key menus for shape and material with KeyMenu
 
 ![Material Preview](media/material-preview.webp)
 
 View on [GitHub](https://github.com/stride3d/stride-community-toolkit/tree/main/examples/code-only/E02_3D_MaterialPreview).
 
-[!code-csharp[](../../../../examples/code-only/E02_3D_MaterialPreview/Program.cs?start=1&end=255)]
+[!code-csharp[](../../../../examples/code-only/E02_3D_MaterialPreview/Program.cs?start=1&end=256)]

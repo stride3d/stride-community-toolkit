@@ -7,6 +7,7 @@ using Stride.BepuPhysics;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering;
 using Stride.CommunityToolkit.Rendering.Compositing;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -53,7 +54,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     // palette switch should be a repaint, not an allocation
     private CubeMaterialSet[] _materialSets = [];
     private int _paletteIndex;
-    private DebugTextDropdown? _paletteDropdown;
+    private KeyMenu? _paletteMenu;
 
     private CubeMaterialSet? _materials;
     private CubeSpawner? _spawner;
@@ -140,7 +141,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
         _audio = new GameAudio(game);
 
         AddOrientationGizmo();
-        AddPaletteDropdown();
+        AddPaletteMenu();
 
         UseLighting(ColourPalettes.All[_paletteIndex].Glass);
 
@@ -166,7 +167,7 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     /// <param name="time">Timing for the current frame.</param>
     public void Update(Scene scene, GameTime time)
     {
-        _paletteDropdown?.Update(game.Input);
+        _paletteMenu?.Update(game.Input);
 
         _elapsedTime += time.Elapsed.TotalSeconds;
 
@@ -345,28 +346,28 @@ public class CubeCollapseGame(Game game, IProgressStore? progressStore = null)
     }
 
     /// <summary>
-    /// Adds the keyboard dropdown that switches the board between the palettes in
+    /// Adds the keyboard key menu that switches the board between the palettes in
     /// <see cref="ColourPalettes"/>, live.
     /// </summary>
     /// <remarks>
-    /// The dropdown renders through the same debug overlay as the game instructions, so it costs one
+    /// The key menu renders through the same text overlay as the game instructions, so it costs one
     /// line of screen until it is opened. Choosing an entry repaints the standing board in place -
     /// see <see cref="ApplyPalette"/>.
     /// </remarks>
-    private void AddPaletteDropdown()
+    private void AddPaletteMenu()
     {
-        _paletteDropdown = new DebugTextDropdown
+        _paletteMenu = new KeyMenu
         {
             Title = "Colours",
             ToggleKey = Keys.P,
             SelectedIndex = _paletteIndex,
             Items = [.. ColourPalettes.All.Select((palette, index) =>
-                new DebugTextDropdownItem(Keys.D1 + index, palette.Name, () => ApplyPalette(index)))],
+                new KeyMenuItem(Keys.D1 + index, palette.Name, () => ApplyPalette(index)))],
         };
 
-        var overlay = DebugOverlay.GetOrCreate(game);
+        var overlay = TextOverlay.GetOrCreate(game);
 
-        overlay.AddSection("Palette", () => _paletteDropdown.GetLines());
+        overlay.AddSection("Palette", () => _paletteMenu.GetLines());
     }
 
     /// <summary>

@@ -4,6 +4,7 @@ using Stride.BepuPhysics.Definitions.Colliders;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -69,7 +70,7 @@ void BuildScene(Scene scene)
     for (var i = 0; i < masses.Length; i++)
     {
         var shade = (byte)(230 - i * 35);
-        var cube = game.CreatePrimitive(Primitive3D.Cube(), new Bepu3DPhysicsOptions
+        var cube = game.CreatePrimitive(Primitive3D.Cube(), new BepuPhysicsOptions
         {
             Material = game.CreateMaterial(new Color(shade, (byte)(120 + i * 20), (byte)(80 + i * 30))),
             Component = new BodyComponent { Collider = new CompoundCollider { Colliders = { new BoxCollider { Mass = masses[i] } } } },
@@ -105,12 +106,12 @@ void BuildScene(Scene scene)
     locked.BodyInertia = new BodyInertia { InverseMass = inertia.InverseMass };   // zero inverse inertia: rotation locked
 
     // A wall to throw at.
-    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(8, 3, 0.4f)), new Bepu3DPhysicsOptions
+    var wall = game.CreatePrimitive(Primitive3D.Box(new Vector3(8, 3, 0.4f)), new BepuPhysicsOptions
     {
         Material = game.CreateMaterial(new Color(140, 140, 150)),
         // An empty compound: the helper adds the box that fits the wall's size. A box given here
         // would be kept as the wall's collider, at its own default size
-        Component = new StaticComponent { Collider = new CompoundCollider() },
+        Body = BodyMode.Static,
         Position = new Vector3(0, 1.5f, 7),
     });
     wall.Name = "wall";
@@ -126,7 +127,7 @@ void BuildScene(Scene scene)
 
 void AddInstructions()
 {
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
 
     overlay.AddSection("Grabber", () =>
     {
@@ -182,7 +183,7 @@ concepts:
   - Force caps scaled by mass, so heavy and light bodies feel the same in the hand
   - Locking a body's rotation through its BodyInertia, and what the grabber does about it
   - Reading the held body's mass and the servo cap from the script for the overlay
-  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, DebugOverlay"
+  - "Using helpers: SceneSetup3D, CreatePrimitive, AddGrabber, TextOverlay"
 tags:
   - 3D
   - Physics

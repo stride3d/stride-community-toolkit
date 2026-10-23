@@ -2,6 +2,7 @@ using Stride.CommunityToolkit.Effects.PostProcessing;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Compositing;
 using Stride.CommunityToolkit.Rendering.ProceduralModels;
+using Stride.CommunityToolkit.Rendering.Overlay;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
@@ -70,7 +71,7 @@ void Start(Scene scene)
 
     BuildMonitors(scene);
 
-    var overlay = DebugOverlay.GetOrCreate(game);
+    var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
     overlay.AddSection("Feeds", OverlayLines);
 }
@@ -93,7 +94,7 @@ void BuildScene(Scene scene)
 {
     var groundMaterial = game.CreateMaterial(new Color(52, 56, 64), metalness: 0.05f, glossiness: 0.3f);
 
-    var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new Primitive3DEntityOptions
+    var ground = game.CreatePrimitive(Primitive3D.Box(new Vector3(40f, 0.5f, 40f)), new PrimitiveEntityOptions
     {
         EntityName = "Ground",
         Material = groundMaterial,
@@ -109,7 +110,7 @@ void BuildScene(Scene scene)
         var angle = i * MathF.Tau / colours.Length;
         var height = 2f + (i % 3) * 1.2f;
 
-        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new Primitive3DEntityOptions
+        var pillar = game.CreatePrimitive(Primitive3D.Box(new Vector3(1.4f, height, 1.4f)), new PrimitiveEntityOptions
         {
             EntityName = $"Pillar {i}",
             Material = game.CreateMaterial(colours[i], metalness: 0.2f, glossiness: 0.5f),
@@ -119,7 +120,7 @@ void BuildScene(Scene scene)
         pillar.Scene = scene;
     }
 
-    var cube = game.CreatePrimitive(Primitive3D.Cube(2f), new Primitive3DEntityOptions
+    var cube = game.CreatePrimitive(Primitive3D.Cube(2f), new PrimitiveEntityOptions
     {
         EntityName = "Cube",
         Material = game.CreateMaterial(Color.LightSteelBlue, metalness: 0.4f, glossiness: 0.7f),
@@ -128,7 +129,7 @@ void BuildScene(Scene scene)
 
     cube.Scene = scene;
 
-    ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new Primitive3DEntityOptions
+    ball = game.CreatePrimitive(Primitive3D.Sphere(0.6f), new PrimitiveEntityOptions
     {
         EntityName = "Ball",
         Material = EmissiveMaterial(new Color(255, 200, 120), 6f),
@@ -263,7 +264,7 @@ void BuildMonitors(Scene scene)
 
     Entity Monitor(string name, Material material, Vector3 position, float size)
     {
-        var monitor = game.CreatePrimitive(Primitive3D.Plane(size, size), new Primitive3DEntityOptions
+        var monitor = game.CreatePrimitive(Primitive3D.Plane(size, size), new PrimitiveEntityOptions
         {
             EntityName = name,
             Material = material,

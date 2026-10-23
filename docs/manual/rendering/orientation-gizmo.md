@@ -58,7 +58,7 @@ gizmo.ShowNegativeEnds = false;
 | `LabelColor` | White | The letters, drawn over a faint shadow |
 
 Sizes are in pixels before the display scale. The default bottom left corner is free in the examples:
-the debug overlay, with the camera help in it, sits top right by default.
+the text overlay, with the camera help in it, sits top right by default.
 
 ## Reading it
 

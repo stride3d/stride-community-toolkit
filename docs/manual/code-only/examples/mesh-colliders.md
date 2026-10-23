@@ -18,7 +18,7 @@ The `Program.cs` file shows how to:
 - A mesh is a surface with no inside, so a body that starts inside is not pushed out
 - Meshes meet meshes, triangle against triangle, which is why what moves is better off convex
 - Reading where a body came to rest from its position and velocity, with Teleport for the replay
-- Using helpers: SceneSetup3D, CreatePrimitive, TorusCollider, AddPhysicsDebug, DebugOverlay
+- Using helpers: SceneSetup3D, CreatePrimitive, TorusCollider, AddPhysicsDebug, TextOverlay
 
 ![Mesh Colliders](media/mesh-colliders.webp)
 
