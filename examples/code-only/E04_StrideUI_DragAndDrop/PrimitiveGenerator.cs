@@ -76,12 +76,8 @@ public class PrimitiveGenerator
     /// Gives the entity a random position.
     /// </summary>
     /// <param name="entity">The entity to configure.</param>
-    private static void ConfigureTransform(Entity entity)
+    private void ConfigureTransform(Entity entity)
     {
-        entity.Transform.Position = VectorHelper.RandomVector3(
-            xRange: [-4, 4],
-            yRange: [4, 8],
-            zRange: [-4, 4]
-        );
+        entity.Transform.Position = _random.NextVector3(new Vector3(-4, 4, -4), new Vector3(4, 8, 4));
     }
 }

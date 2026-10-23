@@ -99,4 +99,42 @@ public class RandomExtensionsTests
             Assert.Equal<byte>(255, color.A);
         }
     }
+
+    [Fact]
+    public void NextVector3_StaysInsideTheBox()
+    {
+        var min = new Vector3(-4, 4, -4);
+        var max = new Vector3(4, 8, 4);
+
+        for (int i = 0; i < 500; i++)
+        {
+            var point = _random.NextVector3(min, max);
+            Assert.InRange(point.X, min.X, max.X);
+            Assert.InRange(point.Y, min.Y, max.Y);
+            Assert.InRange(point.Z, min.Z, max.Z);
+        }
+
+        var cube = _random.NextVector3(1f, 2f);
+        Assert.InRange(cube.X, 1f, 2f);
+        Assert.InRange(cube.Y, 1f, 2f);
+        Assert.InRange(cube.Z, 1f, 2f);
+    }
+
+    [Theory]
+    [InlineData(ColorTone.Vivid, 0.7f, 1f, 0.8f, 1f)]
+    [InlineData(ColorTone.Light, 0.2f, 0.5f, 0.9f, 1f)]
+    [InlineData(ColorTone.Dark, 0.5f, 1f, 0.2f, 0.45f)]
+    public void NextColor_StaysInsideItsTone(ColorTone tone, float minSaturation, float maxSaturation, float minValue, float maxValue)
+    {
+        for (int i = 0; i < 200; i++)
+        {
+            var color = _random.NextColor(tone);
+            var hsv = ColorHSV.FromColor(color);
+
+            // Going through bytes moves saturation and value by a few hundredths at the dim end
+            Assert.Equal<byte>(255, color.A);
+            Assert.InRange(hsv.S, minSaturation - 0.03f, maxSaturation + 0.03f);
+            Assert.InRange(hsv.V, minValue - 0.03f, maxValue + 0.03f);
+        }
+    }
 }
