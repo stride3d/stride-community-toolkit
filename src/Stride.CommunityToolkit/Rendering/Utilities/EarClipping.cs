@@ -43,20 +43,7 @@ public static class EarClipping
         if (polygon.Count < 3)
             throw new ArgumentException("A polygon needs at least three corners", nameof(polygon));
 
-        // Working on counter-clockwise indices makes "convex corner" a single sign test below; the
-        // caller's winding is restored by emitting whatever order the working list holds
-        var ring = new List<int>(polygon.Count);
-
-        if (SignedArea(polygon) >= 0)
-        {
-            for (var i = 0; i < polygon.Count; i++) ring.Add(i);
-        }
-        else
-        {
-            for (var i = polygon.Count - 1; i >= 0; i--) ring.Add(i);
-        }
-
-        return ClipRing(ring, polygon, ToleranceFor(polygon));
+        return ClipRing(CounterClockwiseRing(polygon, polygon.Count), polygon, ToleranceFor(polygon));
     }
 
     /// <summary>
@@ -103,16 +90,7 @@ public static class EarClipping
         var tolerance = ToleranceFor(corners);
 
         // Counter-clockwise outside, clockwise holes: a bridge then keeps the merged ring simple
-        var ring = new List<int>(corners.Count + holes.Count * 2);
-
-        if (SignedArea(outer) >= 0)
-        {
-            for (var i = 0; i < outer.Count; i++) ring.Add(i);
-        }
-        else
-        {
-            for (var i = outer.Count - 1; i >= 0; i--) ring.Add(i);
-        }
+        var ring = CounterClockwiseRing(outer, corners.Count + holes.Count * 2);
 
         // Rightmost hole first: its bridge runs to the right of every other hole, which a later bridge cannot cross
         var order = Enumerable.Range(0, holes.Count)
@@ -176,6 +154,26 @@ public static class EarClipping
         }
 
         return area * 0.5f;
+    }
+
+    /// <summary>
+    /// The polygon's corner indices in counter-clockwise order, whichever way it was wound: "convex corner" is
+    /// then a single sign test, and the caller's winding is restored by emitting whatever order the ring holds.
+    /// </summary>
+    private static List<int> CounterClockwiseRing(IReadOnlyList<Vector2> polygon, int capacity)
+    {
+        var ring = new List<int>(capacity);
+
+        if (SignedArea(polygon) >= 0)
+        {
+            for (var i = 0; i < polygon.Count; i++) ring.Add(i);
+        }
+        else
+        {
+            for (var i = polygon.Count - 1; i >= 0; i--) ring.Add(i);
+        }
+
+        return ring;
     }
 
     /// <summary>
@@ -292,10 +290,12 @@ public static class EarClipping
         return true;
     }
 
-    private static float Cross(Vector2 a, Vector2 b, Vector2 c)
+    /// <summary>The z of the cross product (b - a) x (c - a): positive when a, b, c turn left.</summary>
+    internal static float Cross(Vector2 a, Vector2 b, Vector2 c)
         => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
 
-    private static bool ContainsPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 point, float tolerance)
+    /// <summary>Whether the point is inside the counter-clockwise triangle a, b, c, or within the tolerance of an edge.</summary>
+    internal static bool ContainsPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 point, float tolerance)
         => Cross(a, b, point) >= -tolerance
         && Cross(b, c, point) >= -tolerance
         && Cross(c, a, point) >= -tolerance;

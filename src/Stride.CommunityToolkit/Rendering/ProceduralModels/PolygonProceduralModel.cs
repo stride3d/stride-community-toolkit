@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
 
@@ -55,12 +56,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
 
     /// <inheritdoc />
     protected override GeometricMeshData<VertexPositionNormalTexture> CreatePrimitiveMeshData()
-    {
-        if (Vertices.Length > 0)
-            return New(Vertices, UvScale.X, UvScale.Y);
-
-        return New(GenerateRegularPolygonVertices(Radius, Sides), UvScale.X, UvScale.Y);
-    }
+        => New(Vertices.Length > 0 ? Vertices : GenerateRegularPolygonVertices(Radius, Sides), UvScale.X, UvScale.Y);
 
     /// <summary>
     /// Generates vertices for a regular polygon centered at the origin.
@@ -95,17 +91,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     /// <param name="size">The triangle width and height.</param>
     /// <returns>A polygon model configured with three triangle vertices.</returns>
     public static PolygonProceduralModel CreateTriangle(Vector2 size)
-    {
-        return new PolygonProceduralModel
-        {
-            Vertices =
-            [
-                new(0, size.Y / 2),
-                new(-size.X / 2, -size.Y / 2),
-                new(size.X / 2, -size.Y / 2)
-            ]
-        };
-    }
+        => new() { Vertices = [new(0, size.Y / 2), new(-size.X / 2, -size.Y / 2), new(size.X / 2, -size.Y / 2)] };
 
     /// <summary>
     /// Convenience factory for an axis-aligned rectangle centered at the origin.
@@ -113,18 +99,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
     /// <param name="size">The rectangle width and height.</param>
     /// <returns>A polygon model configured with four rectangle vertices.</returns>
     public static PolygonProceduralModel CreateRectangle(Vector2 size)
-    {
-        return new PolygonProceduralModel
-        {
-            Vertices =
-            [
-                new(-size.X / 2, -size.Y / 2),
-                new(-size.X / 2, size.Y / 2),
-                new(size.X / 2, size.Y / 2),
-                new(size.X / 2, -size.Y / 2)
-            ]
-        };
-    }
+        => new() { Vertices = [new(-size.X / 2, -size.Y / 2), new(-size.X / 2, size.Y / 2), new(size.X / 2, size.Y / 2), new(size.X / 2, -size.Y / 2)] };
 
     /// <summary>
     /// Creates (or retrieves from cache) a mesh for the supplied polygon vertex list.
@@ -143,13 +118,7 @@ public class PolygonProceduralModel : PrimitiveProceduralModelBase
         var hash = string.Join(",", vertices.Select(vertex => $"{vertex.X},{vertex.Y}"));
         var cacheKey = $"{hash}_{uScale}_{vScale}_{toLeftHanded}";
 
-        if (!_meshCache.TryGetValue(cacheKey, out var mesh))
-        {
-            mesh = CreateMesh(vertices, uScale, vScale, toLeftHanded);
-            _meshCache[cacheKey] = mesh;
-        }
-
-        return mesh;
+        return _meshCache.GetOrAdd(cacheKey, _ => CreateMesh(vertices, uScale, vScale, toLeftHanded));
     }
 
     /// <summary>

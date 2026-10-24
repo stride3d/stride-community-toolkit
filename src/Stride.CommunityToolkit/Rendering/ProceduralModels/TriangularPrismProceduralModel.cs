@@ -122,15 +122,8 @@ public class TriangularPrismProceduralModel : PrimitiveProceduralModelBase
 
         return new GeometricMeshData<VertexPositionNormalTexture>(vertices, indices, toLeftHanded) { Name = "TriangularPrism" };
 
-        static Vector3 ComputeFaceNormal(in Vector3 v0, in Vector3 v1, in Vector3 v2)
-        {
-            var edge1 = v1 - v0;
-            var edge2 = v2 - v0;
-            var normal = Vector3.Cross(edge1, edge2);
-
-            normal.Normalize();
-
-            return normal;
-        }
+        // The corners run clockwise as seen from outside, so the outward normal is the cross product
+        // of the second edge with the first; the other order pointed both slanted faces inwards
+        static Vector3 ComputeFaceNormal(Vector3 v0, Vector3 v1, Vector3 v2) => Vector3.Normalize(Vector3.Cross(v2 - v0, v1 - v0));
     }
 }

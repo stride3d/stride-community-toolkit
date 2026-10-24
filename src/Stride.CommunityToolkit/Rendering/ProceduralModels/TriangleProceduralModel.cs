@@ -1,3 +1,4 @@
+using Stride.CommunityToolkit.Collections;
 using Stride.Graphics;
 using Stride.Rendering.ProceduralModels;
 
@@ -31,16 +32,7 @@ public class TriangleProceduralModel : PrimitiveProceduralModelBase
     /// <param name="toLeftHanded">Whether to convert the mesh to left-handed coordinates.</param>
     /// <returns>A geometric mesh data instance representing the triangle.</returns>
     public static GeometricMeshData<VertexPositionNormalTexture> New(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
-    {
-        var key = new MeshCacheKey(size, uScale, vScale, toLeftHanded);
-
-        if (_meshCache.TryGetValue(key, out var mesh)) return mesh;
-
-        mesh = CreateMesh(size, uScale, vScale, toLeftHanded);
-        _meshCache[key] = mesh;
-
-        return mesh;
-    }
+        => _meshCache.GetOrAdd(new MeshCacheKey(size, uScale, vScale, toLeftHanded), _ => CreateMesh(size, uScale, vScale, toLeftHanded));
 
     /// <summary>
     /// Builds a new triangle mesh (no caching).
@@ -52,27 +44,17 @@ public class TriangleProceduralModel : PrimitiveProceduralModelBase
     /// <returns>A geometric mesh data instance representing the triangle.</returns>
     public static GeometricMeshData<VertexPositionNormalTexture> CreateMesh(Vector2 size, float uScale = 1.0f, float vScale = 1.0f, bool toLeftHanded = false)
     {
-        Span<VertexPositionNormalTexture> vertices = stackalloc VertexPositionNormalTexture[3];
-        Span<int> indices = stackalloc int[3];
-        Span<Vector2> textureCoordinates = stackalloc Vector2[3];
-
         size /= 2.0f;
         var uvScale = new Vector2(uScale, vScale);
 
-        for (var i = 0; i < 3; i++)
-            textureCoordinates[i] = _textureCoordinates[i] * uvScale;
+        // The apex first, then the base from left to right
+        VertexPositionNormalTexture[] vertices =
+        [
+            new(new Vector3(0, size.Y, 0), Vector3.UnitZ, _textureCoordinates[0] * uvScale),
+            new(new Vector3(-size.X, -size.Y, 0), Vector3.UnitZ, _textureCoordinates[1] * uvScale),
+            new(new Vector3(size.X, -size.Y, 0), Vector3.UnitZ, _textureCoordinates[2] * uvScale),
+        ];
 
-        // Three vertices for a triangle
-        vertices[0] = new VertexPositionNormalTexture(new Vector3(0, size.Y, 0), Vector3.UnitZ, textureCoordinates[0]);
-        vertices[1] = new VertexPositionNormalTexture(new Vector3(-size.X, -size.Y, 0), Vector3.UnitZ, textureCoordinates[1]);
-        vertices[2] = new VertexPositionNormalTexture(new Vector3(size.X, -size.Y, 0), Vector3.UnitZ, textureCoordinates[2]);
-
-        // Triangle indices
-        indices[0] = 0;
-        indices[1] = 2;
-        indices[2] = 1;
-
-        // Create the primitive object.
-        return new GeometricMeshData<VertexPositionNormalTexture>(vertices.ToArray(), indices.ToArray(), toLeftHanded) { Name = "Triangle" };
+        return new GeometricMeshData<VertexPositionNormalTexture>(vertices, [0, 2, 1], toLeftHanded) { Name = "Triangle" };
     }
 }

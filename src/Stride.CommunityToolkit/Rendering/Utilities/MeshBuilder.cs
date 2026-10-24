@@ -216,45 +216,23 @@ public class MeshBuilder : IDisposable
             throw new InvalidOperationException("The mesh builder was not defined to use indices.");
         }
 
-        if ((IndexCount + 1) * _indexStride <= _indexBuffer.Length)
+        if ((IndexCount + 1) * _indexStride > _indexBuffer.Length)
         {
-            IndexCount++;
-
-            var indexOffset = (IndexCount - 1) * _indexStride;
-
-            ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)indexOffset);
-
-            if (_indexStride == 2)
-                Unsafe.WriteUnaligned(ref address, (short)vertexIndex);
-            else
-                Unsafe.WriteUnaligned(ref address, vertexIndex);
-
-            return;
+            _indexBuffer = RentZeroed(Math.Max(MinCapacity * _indexStride, _indexBuffer.Length * 2), _indexBuffer);
         }
 
-        AddIndexWithResize(vertexIndex);
-    }
-
-    /// <summary>
-    ///     A more complex version of <see cref="AddIndex" /> including an array resize
-    /// </summary>
-    private void AddIndexWithResize(int vertexIndex)
-    {
-        var nextCapacity = Math.Max(MinCapacity * _indexStride, _indexBuffer.Length * 2);
-        var nextBuffer = RentZeroed(nextCapacity, _indexBuffer);
-
-        _indexBuffer = nextBuffer;
-
-        IndexCount++;
-
-        var indexOffset = (IndexCount - 1) * _indexStride;
-
-        ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)indexOffset);
+        ref var address = ref Unsafe.AddByteOffset(ref MemoryMarshal.GetArrayDataReference(_indexBuffer), (nuint)(IndexCount * _indexStride));
 
         if (_indexStride == 2)
+        {
             Unsafe.WriteUnaligned(ref address, (short)vertexIndex);
+        }
         else
+        {
             Unsafe.WriteUnaligned(ref address, vertexIndex);
+        }
+
+        IndexCount++;
     }
 
     /// <summary>
@@ -294,20 +272,10 @@ public class MeshBuilder : IDisposable
     /// </returns>
     public int AddVertex()
     {
-        if ((VertexCount + 1) * _vertexStride <= _vertexBuffer.Length) return VertexCount++;
-
-        return AddVertexWithResize();
-    }
-
-    /// <summary>
-    ///     A more complex version of <see cref="AddVertex" /> including an array resize
-    /// </summary>
-    private int AddVertexWithResize()
-    {
-        var nextCapacity = Math.Max(MinCapacity * _vertexStride, _vertexBuffer.Length * 2);
-        var nextBuffer = RentZeroed(nextCapacity, _vertexBuffer);
-
-        _vertexBuffer = nextBuffer;
+        if ((VertexCount + 1) * _vertexStride > _vertexBuffer.Length)
+        {
+            _vertexBuffer = RentZeroed(Math.Max(MinCapacity * _vertexStride, _vertexBuffer.Length * 2), _vertexBuffer);
+        }
 
         return VertexCount++;
     }

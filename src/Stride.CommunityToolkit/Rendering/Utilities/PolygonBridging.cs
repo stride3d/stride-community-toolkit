@@ -87,7 +87,7 @@ internal static class PolygonBridging
 
             if ((r - pCorner).LengthSquared() < tolerance) continue;
             if (!IsReflex(ring, corners, k, tolerance)) continue;
-            if (!ContainsPoint(m, hitPoint, pCorner, r, tolerance) && !ContainsPoint(m, pCorner, hitPoint, r, tolerance)) continue;
+            if (!EarClipping.ContainsPoint(m, hitPoint, pCorner, r, tolerance) && !EarClipping.ContainsPoint(m, pCorner, hitPoint, r, tolerance)) continue;
 
             var d = r - m;
             var distance = d.Length();
@@ -133,7 +133,7 @@ internal static class PolygonBridging
         var current = corners[ring[k]];
         var next = corners[ring[(k + 1) % count]];
 
-        return Cross(previous, current, next) < -tolerance;
+        return EarClipping.Cross(previous, current, next) < -tolerance;
     }
 
     /// <summary>Whether the direction from the ring corner at <paramref name="k"/> to <paramref name="target"/> lies inside the polygon's angle at that corner.</summary>
@@ -149,14 +149,6 @@ internal static class PolygonBridging
 
         return IsReflex(ring, corners, k, tolerance) ? leftOfNext || rightOfPrevious : leftOfNext && rightOfPrevious;
     }
-
-    private static float Cross(Vector2 a, Vector2 b, Vector2 c)
-        => (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
-
-    private static bool ContainsPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 point, float tolerance)
-        => Cross(a, b, point) >= -tolerance
-        && Cross(b, c, point) >= -tolerance
-        && Cross(c, a, point) >= -tolerance;
 
     /// <summary>What the ray met first: an edge (by its first corner's ring position) or a corner, and how far right.</summary>
     private readonly record struct RayHit(int Edge, int Corner, float X);
