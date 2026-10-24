@@ -69,13 +69,7 @@ public static class RenderTextureCameraExtensions
 
         compositor.Cameras.Add(slot);
 
-        var camera = cameraEntity.Get<CameraComponent>();
-
-        if (camera is null)
-        {
-            camera = new CameraComponent();
-            cameraEntity.Add(camera);
-        }
+        var camera = cameraEntity.GetOrCreate<CameraComponent>();
 
         // The texture's shape, not the window's, or the picture is squashed
         camera.Slot = slot.ToSlotId();

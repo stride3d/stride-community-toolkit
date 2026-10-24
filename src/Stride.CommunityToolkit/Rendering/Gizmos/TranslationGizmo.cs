@@ -24,17 +24,6 @@ public class TranslationGizmo : AxialGizmoBase
     private const float OriginRadius = GizmoOriginScale * AxisConeRadius;
 
     private readonly Material[] _planeMaterials = new Material[3];
-    private readonly List<Entity>[] _translationAxes = [[], [], []];
-    private readonly List<Entity>[] _translationPlanes = [[], [], []];
-    private readonly List<Entity>[] _translationPlaneEdges = [[], [], []];
-    private readonly List<Entity> _translationPlaneRoots = [];
-    private readonly List<ModelComponent>[] _translationOppositeAxes = [[], [], []];
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TranslationGizmo"/> class with the specified graphics device.
-    /// </summary>
-    /// <param name="graphicsDevice">The graphics device used to render the gizmo.</param>
-    public TranslationGizmo(GraphicsDevice graphicsDevice) : base(graphicsDevice) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TranslationGizmo"/> class with the specified graphics device and optional colors for each axis.
@@ -62,24 +51,21 @@ public class TranslationGizmo : AxialGizmoBase
         var axisRootEntities = new[] { new Entity("Root X axis"), new Entity("Root Y axis"), new Entity("Root Z axis") };
 
         CreateAxisArrow(axisRootEntities);
-
         CreateTranslationPlanes(axisRootEntities);
 
-        // set the axis root entities rotation and add them to the main entity
+        // Each root is built along +X, then turned onto its own axis
         var axisRotations = new[] { Vector3.Zero, new Vector3(MathUtil.PiOverTwo, 0, MathUtil.PiOverTwo), new Vector3(-MathUtil.PiOverTwo, -MathUtil.PiOverTwo, 0) };
 
-        for (int axis = 0; axis < 3; axis++)
+        for (var axis = 0; axis < 3; axis++)
         {
             axisRootEntities[axis].Transform.RotationEulerXYZ = axisRotations[axis];
 
-            entity.Transform.Children.Add(axisRootEntities[axis].Transform);
+            entity.AddChild(axisRootEntities[axis]);
         }
-
-        var translationOrigin = CreateMiddleSphere();
 
         AddAxisNames(entity, showAxisName, rotateAxisNames);
 
-        entity.Transform.Children.Add(translationOrigin.Transform);
+        entity.AddChild(Part("OriginSphere", DefaultOriginMaterial, GeometricPrimitive.Sphere.New(GraphicsDevice, OriginRadius, GizmoTessellation).ToMeshDraw()));
     }
 
     /// <summary>
@@ -142,22 +128,6 @@ public class TranslationGizmo : AxialGizmoBase
     }
 
     /// <summary>
-    /// Creates a sphere at the origin of the gizmo for visual reference.
-    /// </summary>
-    /// <returns>An entity representing the origin sphere.</returns>
-    private Entity CreateMiddleSphere()
-    {
-        var sphereMeshDraw = GeometricPrimitive.Sphere.New(GraphicsDevice, OriginRadius, GizmoTessellation).ToMeshDraw();
-
-        var translationOrigin = new Entity("OriginSphere")
-        {
-            new ModelComponent { Model = new Model { DefaultOriginMaterial, new Mesh { Draw = sphereMeshDraw } }, RenderGroup = RenderGroup }
-        };
-
-        return translationOrigin;
-    }
-
-    /// <summary>
     /// Creates arrow-shaped entities for the gizmo axes and adds them to the root entities for each axis.
     /// </summary>
     /// <param name="axisRootEntities">The root entities for each axis to which the arrows will be added.</param>
@@ -165,41 +135,37 @@ public class TranslationGizmo : AxialGizmoBase
     {
         var coneMesh = GeometricPrimitive.Cone.New(GraphicsDevice, AxisConeRadius, AxisConeHeight, GizmoTessellation).ToMeshDraw();
         var bodyMesh = GeometricPrimitive.Cylinder.New(GraphicsDevice, AxisBodyLength, AxisBodyRadius, GizmoTessellation).ToMeshDraw();
+        var oppositeMesh = GeometricPrimitive.Cylinder.New(GraphicsDevice, GizmoPlaneLength, AxisBodyRadius, GizmoTessellation).ToMeshDraw();
 
-        for (int axis = 0; axis < 3; ++axis)
+        for (var axis = 0; axis < 3; axis++)
         {
             var material = GetAxisDefaultMaterial(axis);
 
-            // the end cone
-            var coneEntity = new Entity("ArrowCone" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = coneMesh } }, RenderGroup = RenderGroup } };
-            coneEntity.Transform.Rotation = Quaternion.RotationZ(-MathUtil.Pi / 2);
-            coneEntity.Transform.Position.X = AxisBodyLength + AxisConeHeight * 0.5f;
-            _translationAxes[axis].Add(coneEntity);
-            //coneEntity.AddChild(CreateLetterX());
+            // The cone at the end of the arrow
+            var cone = Part("ArrowCone" + axis, material, coneMesh);
 
-            // the main body
-            var bodyEntity = new Entity("ArrowBody" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = bodyMesh } }, RenderGroup = RenderGroup } };
-            bodyEntity.Transform.Position.X = AxisBodyLength / 2;
-            bodyEntity.Transform.RotationEulerXYZ = -MathUtil.Pi / 2 * Vector3.UnitZ;
-            _translationAxes[axis].Add(bodyEntity);
+            cone.Transform.Rotation = Quaternion.RotationZ(-MathUtil.PiOverTwo);
+            cone.Transform.Position.X = AxisBodyLength + AxisConeHeight * 0.5f;
 
-            // opposite side part (cylinder shown when camera is looking opposite direction to the axis)
-            var frameMesh = GeometricPrimitive.Cylinder.New(GraphicsDevice, GizmoPlaneLength, AxisBodyRadius, GizmoTessellation).ToMeshDraw();
-            var oppositeFrameEntity = new Entity("Oposite Frame" + axis) { new ModelComponent { Model = new Model { material, new Mesh { Draw = frameMesh } }, RenderGroup = RenderGroup } };
-            oppositeFrameEntity.Transform.Position.X = -GizmoPlaneLength / 2;
-            oppositeFrameEntity.Transform.RotationEulerXYZ = -MathUtil.Pi / 2 * Vector3.UnitZ;
-            _translationAxes[axis].Add(oppositeFrameEntity);
-            _translationOppositeAxes[axis].Add(oppositeFrameEntity.Get<ModelComponent>());
+            // The shaft
+            var body = Part("ArrowBody" + axis, material, bodyMesh);
 
-            // create the arrow entity composed of the cone and body
-            var arrowEntity = new Entity("ArrowEntity" + axis);
-            arrowEntity.Transform.Children.Add(coneEntity.Transform);
-            arrowEntity.Transform.Children.Add(bodyEntity.Transform);
-            arrowEntity.Transform.Children.Add(oppositeFrameEntity.Transform);
+            body.Transform.Position.X = AxisBodyLength / 2;
+            body.Transform.RotationEulerXYZ = -MathUtil.PiOverTwo * Vector3.UnitZ;
 
+            // A short stub on the far side, seen when the camera looks against the axis
+            var opposite = Part("Opposite Frame" + axis, material, oppositeMesh);
 
-            // Add the arrow entity to the gizmo entity
-            axisRootEntities[axis].Transform.Children.Add(arrowEntity.Transform);
+            opposite.Transform.Position.X = -GizmoPlaneLength / 2;
+            opposite.Transform.RotationEulerXYZ = -MathUtil.PiOverTwo * Vector3.UnitZ;
+
+            var arrow = new Entity("ArrowEntity" + axis);
+
+            arrow.AddChild(cone);
+            arrow.AddChild(body);
+            arrow.AddChild(opposite);
+
+            axisRootEntities[axis].AddChild(arrow);
         }
     }
 
@@ -209,45 +175,44 @@ public class TranslationGizmo : AxialGizmoBase
     /// <param name="axisRootEntities">The root entities for each axis to which the translation planes will be added.</param>
     private void CreateTranslationPlanes(Entity[] axisRootEntities)
     {
-        for (int axis = 0; axis < 3; ++axis)
+        var frameMesh = GeometricPrimitive.Cube.New(GraphicsDevice, new Vector3(AxisBodyRadius / 2f, GizmoPlaneLength / 3f, AxisBodyRadius / 2f)).ToMeshDraw();
+        var planeMesh = GeometricPrimitive.Plane.New(GraphicsDevice, GizmoPlaneLength, GizmoPlaneLength).ToMeshDraw();
+
+        for (var axis = 0; axis < 3; axis++)
         {
-            // The skeleton material
             var axisMaterial = GetAxisDefaultMaterial(axis);
 
-            // The 2 frame rectangles
-            var frameMesh = GeometricPrimitive.Cube.New(GraphicsDevice, new Vector3(AxisBodyRadius / 2f, GizmoPlaneLength / 3f, AxisBodyRadius / 2f)).ToMeshDraw();
-            var topFrameEntity = new Entity("TopFrame" + axis) { new ModelComponent { Model = new Model { axisMaterial, new Mesh { Draw = frameMesh } }, RenderGroup = RenderGroup } };
-            var leftFrameEntity = new Entity("LeftFrame" + axis) { new ModelComponent { Model = new Model { axisMaterial, new Mesh { Draw = frameMesh } }, RenderGroup = RenderGroup } };
-            topFrameEntity.Transform.Position = new Vector3(0, GizmoPlaneLength, GizmoPlaneLength - (GizmoPlaneLength / 6));
-            topFrameEntity.Transform.RotationEulerXYZ = new Vector3(MathUtil.Pi / 2f, 0, 0);
-            leftFrameEntity.Transform.Position = new Vector3(0, GizmoPlaneLength - (GizmoPlaneLength / 6), GizmoPlaneLength);
-            _translationPlaneEdges[axis].Add(topFrameEntity);
-            _translationPlaneEdges[axis].Add(leftFrameEntity);
+            // The two edges of the frame, in the axis colour
+            var topFrame = Part("TopFrame" + axis, axisMaterial, frameMesh);
+            var leftFrame = Part("LeftFrame" + axis, axisMaterial, frameMesh);
 
-            // The transparent planes (2 for correct lighting)
-            var materialPlane = _planeMaterials[axis];
-            var planeMesh = GeometricPrimitive.Plane.New(GraphicsDevice, GizmoPlaneLength, GizmoPlaneLength).ToMeshDraw();
-            var planeFrameEntityFront = new Entity("FramePlaneFront" + axis) { new ModelComponent { Model = new Model { materialPlane, new Mesh { Draw = planeMesh } }, RenderGroup = RenderGroup } };
-            var planeFrameEntityBack = new Entity("FramePlaneBack" + axis) { new ModelComponent { Model = new Model { materialPlane, new Mesh { Draw = planeMesh } }, RenderGroup = RenderGroup } };
-            planeFrameEntityFront.Transform.Position = new Vector3(0, GizmoPlaneLength / 2, GizmoPlaneLength / 2);
-            planeFrameEntityFront.Transform.RotationEulerXYZ = new Vector3(0, MathUtil.Pi / 2f, 0);
-            planeFrameEntityBack.Transform.Position = new Vector3(0, GizmoPlaneLength / 2, GizmoPlaneLength / 2);
-            planeFrameEntityBack.Transform.RotationEulerXYZ = new Vector3(0, -MathUtil.Pi / 2f, 0);
-            _translationPlanes[axis].Add(planeFrameEntityFront);
-            _translationPlanes[axis].Add(planeFrameEntityBack);
+            topFrame.Transform.Position = new Vector3(0, GizmoPlaneLength, GizmoPlaneLength - GizmoPlaneLength / 6);
+            topFrame.Transform.RotationEulerXYZ = new Vector3(MathUtil.PiOverTwo, 0, 0);
+            leftFrame.Transform.Position = new Vector3(0, GizmoPlaneLength - GizmoPlaneLength / 6, GizmoPlaneLength);
 
-            // Add the different parts of the plane to the plane entity
-            var planeEntity = new Entity("GizmoPlane" + axis);
-            planeEntity.Transform.Children.Add(topFrameEntity.Transform);
-            planeEntity.Transform.Children.Add(leftFrameEntity.Transform);
-            planeEntity.Transform.Children.Add(planeFrameEntityFront.Transform);
-            planeEntity.Transform.Children.Add(planeFrameEntityBack.Transform);
-            _translationPlaneRoots.Add(planeEntity);
+            // The translucent plane, drawn from both sides so it is lit from both
+            var planeFront = Part("FramePlaneFront" + axis, _planeMaterials[axis], planeMesh);
+            var planeBack = Part("FramePlaneBack" + axis, _planeMaterials[axis], planeMesh);
 
-            // Add the plane entity to the gizmo entity
-            axisRootEntities[axis].Transform.Children.Add(planeEntity.Transform);
+            planeFront.Transform.Position = new Vector3(0, GizmoPlaneLength / 2, GizmoPlaneLength / 2);
+            planeFront.Transform.RotationEulerXYZ = new Vector3(0, MathUtil.PiOverTwo, 0);
+            planeBack.Transform.Position = new Vector3(0, GizmoPlaneLength / 2, GizmoPlaneLength / 2);
+            planeBack.Transform.RotationEulerXYZ = new Vector3(0, -MathUtil.PiOverTwo, 0);
+
+            var plane = new Entity("GizmoPlane" + axis);
+
+            plane.AddChild(topFrame);
+            plane.AddChild(leftFrame);
+            plane.AddChild(planeFront);
+            plane.AddChild(planeBack);
+
+            axisRootEntities[axis].AddChild(plane);
         }
     }
+
+    /// <summary>An entity with one mesh in one material, in the gizmo's render group.</summary>
+    private Entity Part(string name, Material? material, MeshDraw mesh)
+        => new(name) { new ModelComponent { Model = new Model { material, new Mesh { Draw = mesh } }, RenderGroup = RenderGroup } };
 
     /// <summary>
     /// Creates a uniform color material for the gizmo.

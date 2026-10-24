@@ -112,7 +112,7 @@ public class EntityInfoRendererOptions
     /// Gets or sets the offset for positioning the debug text relative to the entity.
     /// Default offset is (0, -25).
     /// </summary>
-    public Vector2 Offset { get; set; } = new Vector2(0, -25);
+    public Vector2 Offset { get; set; } = new(0, -25);
 
     /// <summary>
     /// Gets or sets the color of the background behind the text.

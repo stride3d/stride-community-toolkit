@@ -39,6 +39,11 @@ public class EntityInfoRenderer : SceneRendererBase
     // The display's scale for this frame, applied to every pixel figure in the options
     private float _display = 1f;
 
+    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
+    public static readonly ProfilingKey ProfilingKey = new("EntityInfo");
+
+    private static readonly Color4 ProfileColor = new(0.6f, 0.6f, 0.9f, 1f);
+
     /// <summary>
     /// Initializes a new instance of the <see cref="EntityInfoRenderer"/> class with default rendering options.
     /// </summary>
@@ -65,11 +70,6 @@ public class EntityInfoRenderer : SceneRendererBase
             _displayScale = DisplayScale.GetOrCreate(game);
         }
     }
-
-    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
-    public static readonly ProfilingKey ProfilingKey = new("EntityInfo");
-
-    private static readonly Color4 ProfileColor = new(0.6f, 0.6f, 0.9f, 1f);
 
     /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)

@@ -18,7 +18,7 @@ public abstract class AxialGizmoBase
     /// <summary>
     /// Gets the graphics device used for rendering the Gizmo.
     /// </summary>
-    protected GraphicsDevice GraphicsDevice { get; private set; }
+    protected GraphicsDevice GraphicsDevice { get; }
 
     /// <summary>
     /// Defines the tessellation level of the Gizmo, which affects how smoothly the object is rendered.
@@ -89,14 +89,8 @@ public abstract class AxialGizmoBase
     /// <summary>
     /// Creates the origin and axis materials. A derived gizmo calls this before it builds its entities.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if the <see cref="GraphicsDevice"/> is not initialized.</exception>
     protected void CreateMaterials()
     {
-        if (GraphicsDevice == null)
-        {
-            throw new InvalidOperationException("GraphicsDevice has not been initialized");
-        }
-
         DefaultOriginMaterial = CreateEmissiveColorMaterial(Color.White);
         RedUniformMaterial = CreateEmissiveColorMaterial(GetRedColor());
         GreenUniformMaterial = CreateEmissiveColorMaterial(GetGreenColor());
@@ -110,8 +104,11 @@ public abstract class AxialGizmoBase
     /// <param name="redColor">Optional custom color for the X-axis (Red). If null, a default red color is used.</param>
     /// <param name="greenColor">Optional custom color for the Y-axis (Green). If null, a default green color is used.</param>
     /// <param name="blueColor">Optional custom color for the Z-axis (Blue). If null, a default blue color is used.</param>
+    /// <exception cref="ArgumentNullException">The graphics device is null.</exception>
     protected AxialGizmoBase(GraphicsDevice graphicsDevice, Color? redColor = null, Color? greenColor = null, Color? blueColor = null)
     {
+        ArgumentNullException.ThrowIfNull(graphicsDevice);
+
         GraphicsDevice = graphicsDevice;
         _redColor = redColor;
         _greenColor = greenColor;
