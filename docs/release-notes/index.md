@@ -85,6 +85,18 @@ One family of helpers on the caller's own `Random`, so a world built from `new R
 | `VectorHelper.RandomVector3(xRange: [-4, 4], yRange: [4, 8], zRange: [-4, 4])` | `random.NextVector3(new(-4, 4, -4), new(4, 8, 4))` | `VectorHelper` is gone, with its process-wide static `Random` and `SeedRandom`. `NextVector3(float min, float max)` covers the one-range form, and `NextSingle(min, max)` is new beside them. |
 | `random.NextColor()` built the colour from a random unit direction | a hue spread evenly round the wheel, saturation and brightness from `ColorTone.Vivid` | The old code clamped negative components to zero, which happened to give vivid colours; the default keeps that look with an even spread of hues. `NextColor(ColorTone.Light)`, `Dark` and `Any` draw from other ranges. |
 
+#### Triangular prism lighting
+
+| Before | After | Note |
+|---|---|---|
+| `Primitive3D.TriangularPrism` lit its two slanted faces from the inside | the normals point outwards | The face normal was the cross product of the edges in the wrong order. Found by a new geometry test; the bottom and the two triangles were right all along. |
+
+#### Gizmos
+
+| Before | After | Note |
+|---|---|---|
+| `new TranslationGizmo(device)` had a constructor of its own | binds to `TranslationGizmo(device, xColor, yColor, zColor)`, whose colours default | Source-compatible; the gizmo also lost five private lists that were filled and never read, and builds each mesh once rather than once per axis. |
+
 ## 1.0.0.0-preview.68
 
 ## What's Changed
