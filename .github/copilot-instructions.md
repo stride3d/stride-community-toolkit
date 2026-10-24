@@ -285,6 +285,38 @@ change in Stride to be possible at all.
   patterns noticed in passing are worth reporting. Fixing them as a side effect of unrelated work
   makes the diff harder to review and is out of scope unless requested.
 
+### Building the engine clone: native link fails with `could not open 'kernel32.lib'`
+
+Stride links its native DLLs (`libstridevr`, `libstridecrash`, ...) by calling the bundled `lld.exe`
+from `Stride.Dependencies.LLVM.Windows` and relying on lld to find the MSVC toolset and the Windows
+SDK by itself. With Visual Studio 2026 (VS 18) and lld 22 that self-discovery fails: in a plain
+process, or in Visual Studio launched from the Start menu, every native link dies with
+`lld : error : could not open 'kernel32.lib'`, even though the SDK and the C++ workload are installed.
+Installing or uninstalling the ARM64 build tools does not change this; the x64 link fails first.
+
+The fix is two **user-level environment variables**, the ones a developer prompt would set, which lld
+honours for the toolset and, from there, the SDK. Set them once with `setx` (new processes only, so
+restart Visual Studio afterwards), adjusting the edition and toolset version to the machine:
+
+```
+setx VCINSTALLDIR "C:\Program Files\Microsoft Visual Studio\18\Professional\VC\"
+setx VCToolsInstallDir "C:\Program Files\Microsoft Visual Studio\18\Professional\VC\Tools\MSVC\14.51.36231\"
+```
+
+- Both are needed. `VCINSTALLDIR` alone finds the SDK but not the CRT (`libcmt.lib`, `oldnames.lib`,
+  `libcpmt.lib`). The toolset version folder is under `VC\Tools\MSVC\`.
+- **`VCToolsInstallDir` pins a toolset version.** When a Visual Studio update replaces the toolset,
+  the native link fails on the CRT again until the variable is updated to the new folder.
+- Do not set `LIB`, and do not launch Visual Studio from a developer prompt as a substitute: the
+  prompt's x64 `LIB` wins over lld's discovery and the ARM64 link then fails with
+  `kernel32.lib: machine type x64 conflicts with arm64`. If a developer prompt is the only option,
+  pass `-p:StrideNativeWindowsArm64Enabled=false` to skip the ARM64 build (it is optional and
+  auto-skipped with a warning when the ARM64 toolset is absent).
+- Diagnose quickly by linking nothing but libraries, which tests discovery without a build:
+  `lld.exe -flavor link -nologo -machine:x64 -dll -noentry -defaultlib:libcmt -defaultlib:oldnames -out:probe.dll kernel32.lib`
+  exits 0 when discovery works; repeat with `-machine:arm64`.
+- Undo with `reg delete HKCU\Environment /v VCINSTALLDIR` and the same for `VCToolsInstallDir`.
+
 ## Reference repositories (read them before writing physics code)
 
 Two sibling clones are often available next to this one. Neither is required, but when present they
