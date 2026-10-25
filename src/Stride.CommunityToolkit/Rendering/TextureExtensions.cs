@@ -20,37 +20,19 @@ public static class TextureExtensions
     /// <returns>The source path, or an empty string if the asset or its source line is not found.</returns>
     public static string FindAssetSourceDir(string urlName, string workDir)
     {
-        //start in the same directory as the .sln project
-        string? startupPath = Directory.GetParent(Assembly.
-            GetExecutingAssembly().Location)?.Parent?.Parent?.Parent?.
-            FullName;
-        DirectoryInfo dir = new(startupPath + workDir);
-        FileInfo[] Files = dir.GetFiles(urlName, SearchOption.AllDirectories);
+        // Three folders above the executing assembly is where the solution usually sits
+        var startupPath = Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.Parent?.Parent?.Parent?.FullName;
+        var asset = new DirectoryInfo(startupPath + workDir).GetFiles(urlName, SearchOption.AllDirectories).FirstOrDefault();
 
-        if (Files.Length == 0)
+        if (asset is null) return string.Empty;
+
+        // The *.sdtex asset names its source file on one line
+        foreach (var line in File.ReadLines(asset.FullName))
         {
-            return "";
+            if (line.StartsWith(SourceFileIdentifier, StringComparison.Ordinal)) return line[SourceFileIdentifier.Length..];
         }
 
-        string filename = Files[0].FullName;
-
-        //open the *.sdtex file and read the Source
-        var lines = File.ReadAllLines(filename);
-        string outFilename = "";
-
-        for (var i = 0; i < lines.Length; ++i)
-        {
-            string line = lines[i];
-
-            // Process line
-            if (line.StartsWith(SourceFileIdentifier))
-            {
-                outFilename = line.Substring(SourceFileIdentifier.Length);
-                break;
-            }
-        }
-
-        return outFilename;
+        return string.Empty;
     }
 
     /// <summary>
@@ -63,58 +45,52 @@ public static class TextureExtensions
     /// <param name="graphicsContext">The graphics context to use for rendering.</param>
     /// <param name="pixelFormat">The pixel format for the resized texture (default is PixelFormat.R8G8B8A8_UNorm).</param>
     /// <returns>A new texture with the specified width, height, and pixel format, or null if the operation fails or the original texture has invalid dimensions.</returns>
-    public static Texture? Resize(this Texture texture, int width, int height,
-        GraphicsContext graphicsContext, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
+    public static Texture? Resize(this Texture texture, int width, int height, GraphicsContext graphicsContext, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
     {
         try
         {
             if (texture.Width == 0 || texture.Height == 0) return null;
 
-            //if(texture.Width==width && texture.Height == height) return texture;
-            GraphicsDevice GraphicsDevice = texture.GraphicsDevice;
-            Texture offlineTarget = Texture.New2D(GraphicsDevice, width, height,
-                pixelFormat, TextureFlags.ShaderResource |
-                TextureFlags.RenderTarget);
-            using Texture depthBuffer = Texture.New2D(GraphicsDevice, width, height,
-                PixelFormat.D24_UNorm_S8_UInt, TextureFlags.DepthStencil);
-            using SpriteBatch spriteBatch = new(GraphicsDevice);
+            var device = texture.GraphicsDevice;
+            var commandList = graphicsContext.CommandList;
+            var target = Texture.New2D(device, width, height, pixelFormat, TextureFlags.ShaderResource | TextureFlags.RenderTarget);
 
-            // render into texture
-            graphicsContext.CommandList.Clear(offlineTarget, new Color4(0, 0, 0, 0));
-            graphicsContext.CommandList.Clear(depthBuffer, DepthStencilClearOptions.DepthBuffer);
-            graphicsContext.CommandList.SetRenderTargetAndViewport(depthBuffer, offlineTarget);
+            using var depthBuffer = Texture.New2D(device, width, height, PixelFormat.D24_UNorm_S8_UInt, TextureFlags.DepthStencil);
+            using var spriteBatch = new SpriteBatch(device);
+
+            // Render into the new texture
+            commandList.Clear(target, new Color4(0, 0, 0, 0));
+            commandList.Clear(depthBuffer, DepthStencilClearOptions.DepthBuffer);
+            commandList.SetRenderTargetAndViewport(depthBuffer, target);
 
             spriteBatch.Begin(graphicsContext);
             spriteBatch.Draw(texture, new RectangleF(0, 0, width, height), null, Color.White, 0, Vector2.Zero);
             spriteBatch.End();
 
-            // copy texture on screen
-            graphicsContext.CommandList.Clear(GraphicsDevice.Presenter.BackBuffer, Color.Black);
-            graphicsContext.CommandList.Clear(GraphicsDevice.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer);
-            graphicsContext.CommandList.SetRenderTargetAndViewport(GraphicsDevice.Presenter.DepthStencilBuffer, GraphicsDevice.Presenter.BackBuffer);
+            // Then copy it to the screen
+            commandList.Clear(device.Presenter.BackBuffer, Color.Black);
+            commandList.Clear(device.Presenter.DepthStencilBuffer, DepthStencilClearOptions.DepthBuffer);
+            commandList.SetRenderTargetAndViewport(device.Presenter.DepthStencilBuffer, device.Presenter.BackBuffer);
 
             spriteBatch.Begin(graphicsContext);
-            spriteBatch.Draw(offlineTarget, new RectangleF(0, 0, width, height), null, Color.White, 0, Vector2.Zero);
+            spriteBatch.Draw(target, new RectangleF(0, 0, width, height), null, Color.White, 0, Vector2.Zero);
             spriteBatch.End();
 
-            // offlineTarget.ToStaging();
-            return offlineTarget;
+            return target;
         }
-
-        catch { return null; }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 
     /// <summary>
     /// Reformats the pixels of a given texture via a rendering to texture approach.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="graphicsContext"></param>
-    /// <param name="pixelFormat"></param>
-    /// <returns></returns>
-    public static Texture? ReFormat(
-        this Texture texture, GraphicsContext graphicsContext,
-        PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
-    {
-        return texture.Resize(texture.Width, texture.Height, graphicsContext, pixelFormat);
-    }
+    /// <param name="texture">The texture to reformat.</param>
+    /// <param name="graphicsContext">The graphics context to use for rendering.</param>
+    /// <param name="pixelFormat">The pixel format of the new texture (default is PixelFormat.R8G8B8A8_UNorm).</param>
+    /// <returns>A new texture of the same size in the requested format, or null if the operation fails.</returns>
+    public static Texture? ReFormat(this Texture texture, GraphicsContext graphicsContext, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
+        => texture.Resize(texture.Width, texture.Height, graphicsContext, pixelFormat);
 }

@@ -32,6 +32,11 @@ public class InstancingBufferUploadRenderer : SceneRendererBase
     [DataMemberIgnore]
     public List<BufferedEntityInstancing> Targets { get; } = [];
 
+    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
+    public static readonly ProfilingKey ProfilingKey = new("InstancingUpload");
+
+    private static readonly Color4 ProfileColor = new(0.5f, 0.8f, 0.9f, 1f);
+
     /// <inheritdoc />
     protected override void CollectCore(RenderContext context)
     {
@@ -42,11 +47,6 @@ public class InstancingBufferUploadRenderer : SceneRendererBase
             target.EnsureCapacity(context.GraphicsDevice);
         }
     }
-
-    /// <summary>The block the profiler shows this renderer's GPU time under.</summary>
-    public static readonly ProfilingKey ProfilingKey = new("InstancingUpload");
-
-    private static readonly Color4 ProfileColor = new(0.5f, 0.8f, 0.9f, 1f);
 
     /// <inheritdoc />
     protected override void DrawCore(RenderContext context, RenderDrawContext drawContext)

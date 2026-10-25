@@ -79,32 +79,23 @@ public static class InstancingExtensions
         return renderer;
     }
 
+    /// <summary>The upload renderer at the front of the compositor's top-level collection, wrapping a single renderer in one first.</summary>
     private static InstancingBufferUploadRenderer FindOrInsertUploadRenderer(GraphicsCompositor compositor)
     {
-        if (compositor.Game is SceneRendererCollection collection)
+        if (compositor.Game is not SceneRendererCollection collection)
         {
-            var existing = collection.Children.OfType<InstancingBufferUploadRenderer>().FirstOrDefault();
+            collection = new SceneRendererCollection();
 
-            if (existing is not null) return existing;
+            if (compositor.Game is not null) collection.Children.Add(compositor.Game);
 
-            var inserted = new InstancingBufferUploadRenderer();
-
-            collection.Children.Insert(0, inserted);
-
-            return inserted;
+            compositor.Game = collection;
         }
+
+        if (collection.Children.OfType<InstancingBufferUploadRenderer>().FirstOrDefault() is { } existing) return existing;
 
         var renderer = new InstancingBufferUploadRenderer();
-        var wrapper = new SceneRendererCollection();
 
-        wrapper.Children.Add(renderer);
-
-        if (compositor.Game is not null)
-        {
-            wrapper.Children.Add(compositor.Game);
-        }
-
-        compositor.Game = wrapper;
+        collection.Children.Insert(0, renderer);
 
         return renderer;
     }

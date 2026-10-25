@@ -17,9 +17,7 @@ public static class TextureCanvasExtensions
     /// <param name="pixelFormat">The pixel format of the texture canvas. Default is <see cref="PixelFormat.R8G8B8A8_UNorm"/>.</param>
     /// <returns>A new instance of <see cref="TextureCanvas"/>.</returns>
     public static TextureCanvas CreateTextureCanvas(this RenderContext renderContext, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
-    {
-        return new TextureCanvas(renderContext, size, pixelFormat);
-    }
+        => new(renderContext, size, pixelFormat);
 
     /// <summary>
     /// Creates a new instance of <see cref="TextureCanvas"/> using the specified <see cref="IServiceRegistry"/>.
@@ -29,9 +27,7 @@ public static class TextureCanvasExtensions
     /// <param name="pixelFormat">The pixel format of the texture canvas. Default is <see cref="PixelFormat.R8G8B8A8_UNorm"/>.</param>
     /// <returns>A new instance of <see cref="TextureCanvas"/>.</returns>
     public static TextureCanvas CreateTextureCanvas(this IServiceRegistry services, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
-    {
-        return new TextureCanvas(RenderContext.GetShared(services), size, pixelFormat);
-    }
+        => new(RenderContext.GetShared(services), size, pixelFormat);
 
     /// <summary>
     /// Creates a new instance of <see cref="TextureCanvas"/> using the specified <see cref="IGame"/>.
@@ -41,7 +37,5 @@ public static class TextureCanvasExtensions
     /// <param name="pixelFormat">The pixel format of the texture canvas. Default is <see cref="PixelFormat.R8G8B8A8_UNorm"/>.</param>
     /// <returns>A new instance of <see cref="TextureCanvas"/>.</returns>
     public static TextureCanvas CreateTextureCanvas(this IGame game, Size2? size, PixelFormat pixelFormat = PixelFormat.R8G8B8A8_UNorm)
-    {
-        return new TextureCanvas(RenderContext.GetShared(game.Services), size, pixelFormat);
-    }
+        => new(RenderContext.GetShared(game.Services), size, pixelFormat);
 }

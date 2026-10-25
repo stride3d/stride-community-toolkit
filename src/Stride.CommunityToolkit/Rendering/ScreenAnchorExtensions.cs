@@ -7,20 +7,7 @@ public static class ScreenAnchorExtensions
     /// <param name="anchor">Which point of the rectangle.</param>
     /// <param name="size">The rectangle's width and height.</param>
     /// <returns>The point, in the rectangle's own coordinates: a corner, the middle of an edge or the centre.</returns>
+    /// <remarks>The enum is laid out as a 3 by 3 grid row by row, so the ordinal gives the column and the row.</remarks>
     public static Vector2 At(this ScreenAnchor anchor, Vector2 size)
-        => new(size.X * HorizontalFactor(anchor), size.Y * VerticalFactor(anchor));
-
-    private static float HorizontalFactor(ScreenAnchor anchor) => anchor switch
-    {
-        ScreenAnchor.TopCenter or ScreenAnchor.MiddleCenter or ScreenAnchor.BottomCenter => 0.5f,
-        ScreenAnchor.TopRight or ScreenAnchor.MiddleRight or ScreenAnchor.BottomRight => 1f,
-        _ => 0f,
-    };
-
-    private static float VerticalFactor(ScreenAnchor anchor) => anchor switch
-    {
-        ScreenAnchor.MiddleLeft or ScreenAnchor.MiddleCenter or ScreenAnchor.MiddleRight => 0.5f,
-        ScreenAnchor.BottomLeft or ScreenAnchor.BottomCenter or ScreenAnchor.BottomRight => 1f,
-        _ => 0f,
-    };
+        => new(size.X * ((int)anchor % 3) * 0.5f, size.Y * ((int)anchor / 3) * 0.5f);
 }
