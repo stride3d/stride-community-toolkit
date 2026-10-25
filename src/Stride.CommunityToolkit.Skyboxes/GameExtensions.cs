@@ -38,21 +38,20 @@ public static class GameExtensions
     /// </example>
     public static Entity AddSkybox(this IGame game, string? entityName = "Skybox")
     {
+        ArgumentNullException.ThrowIfNull(game);
+
         using var stream = new FileStream(Path.Combine(AppContext.BaseDirectory, "Resources", SkyboxTexture), FileMode.Open, FileAccess.Read);
 
         var texture = Texture.Load(game.GraphicsDevice, stream, TextureFlags.ShaderResource, GraphicsResourceUsage.Dynamic);
 
         using var context = new SkyboxGeneratorContext(game);
 
-        var skybox = new Skybox();
+        var skybox = SkyboxGenerator.Generate(new Skybox(), context, texture);
 
-        skybox = SkyboxGenerator.Generate(skybox, context, texture);
-
-        var entity = new Entity(entityName) {
-                new BackgroundComponent { Texture = texture },
-                new LightComponent {
-                    Type = new LightSkybox() { Skybox = skybox }
-                }
+        var entity = new Entity(entityName)
+        {
+            new BackgroundComponent { Texture = texture },
+            new LightComponent { Type = new LightSkybox { Skybox = skybox } }
         };
 
         entity.Transform.Position = new Vector3(0.0f, 2.0f, -2.0f);

@@ -46,13 +46,13 @@ public static class ConvexHullColliderExtensions
         ArgumentNullException.ThrowIfNull(indices);
 
         var points = new Vector3[vertices.Length];
-        for (int i = 0; i < vertices.Length; i++)
+        for (var i = 0; i < vertices.Length; i++)
         {
             points[i] = vertices[i].Position;
         }
 
         var uintIndices = new uint[indices.Length];
-        for (int i = 0; i < indices.Length; i++)
+        for (var i = 0; i < indices.Length; i++)
         {
             uintIndices[i] = (uint)indices[i];
         }

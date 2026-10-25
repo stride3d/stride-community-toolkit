@@ -65,14 +65,16 @@ public static class PolygonCollider
             points[i + vertexCount] = new Vector3(vertices[i].X, vertices[i].Y, -halfDepth);
         }
 
-        var indexList = new List<uint>();
+        // Two fans of vertexCount - 2 triangles for the caps and two triangles per side: 12 (vertexCount - 1) indices
+        var indices = new uint[12 * (vertexCount - 1)];
+        var next = 0;
 
         // Front cap: a triangle fan from vertex 0, wound so it faces +Z.
         for (var i = 1; i < vertexCount - 1; i++)
         {
-            indexList.Add(0);
-            indexList.Add((uint)i);
-            indexList.Add((uint)(i + 1));
+            indices[next++] = 0;
+            indices[next++] = (uint)i;
+            indices[next++] = (uint)(i + 1);
         }
 
         // Back cap: the same fan with the last two indices swapped, so it faces -Z instead.
@@ -80,39 +82,30 @@ public static class PolygonCollider
 
         for (var i = 1; i < vertexCount - 1; i++)
         {
-            indexList.Add(backBase);
-            indexList.Add((uint)(backBase + i + 1));
-            indexList.Add((uint)(backBase + i));
+            indices[next++] = backBase;
+            indices[next++] = (uint)(backBase + i + 1);
+            indices[next++] = (uint)(backBase + i);
         }
 
         // Sides: one quad per edge, as two triangles. The modulo closes the loop from the last
         // vertex back to the first.
         for (var i = 0; i < vertexCount; i++)
         {
-            var firstFrontIndex = (uint)i;
-            var secondFrontIndex = (uint)((i + 1) % vertexCount);
-            var firstBackIndex = (uint)(i + vertexCount);
-            var secondBackIndex = (uint)((i + 1) % vertexCount + vertexCount);
+            var front = (uint)i;
+            var nextFront = (uint)((i + 1) % vertexCount);
+            var back = front + backBase;
+            var nextBack = nextFront + backBase;
 
-            indexList.Add(firstFrontIndex);
-            indexList.Add(secondFrontIndex);
-            indexList.Add(secondBackIndex);
+            indices[next++] = front;
+            indices[next++] = nextFront;
+            indices[next++] = nextBack;
 
-            indexList.Add(firstFrontIndex);
-            indexList.Add(secondBackIndex);
-            indexList.Add(firstBackIndex);
+            indices[next++] = front;
+            indices[next++] = nextBack;
+            indices[next++] = back;
         }
 
         // Bepu computes the actual hull from these points; the triangles are what it decomposes.
-        return new ConvexHullCollider
-        {
-            Hull = new DecomposedHulls(
-            [
-                new DecomposedMesh(
-                [
-                    new Hull(points, indexList.ToArray())
-                ])
-            ])
-        };
+        return new ConvexHullCollider { Hull = new DecomposedHulls([new DecomposedMesh([new Hull(points, indices)])]) };
     }
 }

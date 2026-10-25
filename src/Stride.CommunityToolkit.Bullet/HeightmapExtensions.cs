@@ -31,8 +31,9 @@ public static class HeightmapExtensions
     /// </summary>
     public static readonly float HeightMultiplier = 255.0f;
 
-    //ToDo: Needs refactoring
-    //Example of picking a Heightmap, and its extension
+    // The vertex colour of a terrain mesh, an earthy brown
+    private static readonly Vector4 TerrainColor = new(149, 135, 118, 255);
+
     /// <summary>
     /// Tests a ray against each sampled height point (approximated as small spheres) and returns the closest intersection.
     /// </summary>
@@ -44,32 +45,33 @@ public static class HeightmapExtensions
     /// <returns><c>true</c> if the ray intersects at least one sample; otherwise <c>false</c>.</returns>
     public static bool IntersectsRay(this Heightmap heightmap, Ray ray, out Vector3 point, float m_QuadSideWidthX = 1.0f, float m_QuadSideWidthZ = 1.0f)
     {
-        BoundingSphere sphere = new BoundingSphere(Vector3.Zero, 1.5f);
-        int x, z;
-        float mindist = 1000000000.0f;
+        var sphere = new BoundingSphere(Vector3.Zero, 1.5f);
+        var nearest = float.MaxValue;
+        var found = false;
+
         point = Vector3.Zero;
-        bool foundit = false;
-        for (z = 0; z < heightmap.Size.Y; z++)
+
+        for (var z = 0; z < heightmap.Size.Y; z++)
         {
-            for (x = 0; x < heightmap.Size.X; x++)
+            for (var x = 0; x < heightmap.Size.X; x++)
             {
                 sphere.Center = new Vector3(x * m_QuadSideWidthX, heightmap.GetHeightAt(x, z), z * m_QuadSideWidthZ);
 
-                if (sphere.Intersects(ref ray, out Vector3 pt))
+                if (!sphere.Intersects(ref ray, out Vector3 hit)) continue;
+
+                // The nearest hit, not the first
+                var distance = Vector3.Distance(hit, ray.Position);
+
+                if (distance < nearest)
                 {
-                    //get nearest hit
-                    float dist = Vector3.Distance(pt, ray.Position);
-                    if (dist < mindist)
-                    {
-                        mindist = dist;
-                        point = pt;
-                        foundit = true;
-                    }
-                    //return true;//gets the first hit, replace out Vector3 pt with out point and comment the above
+                    nearest = distance;
+                    point = hit;
+                    found = true;
                 }
             }
         }
-        return foundit;
+
+        return found;
     }
 
     /// <summary>
@@ -77,16 +79,11 @@ public static class HeightmapExtensions
     /// </summary>
     public static float GetHeightAt(this Heightmap heightmap, int x, int y)
     {
-        if (!IsValidCoordinate(heightmap, x, y))
-        {
-            return heightmap.HeightRange.X;
-        }
+        if (!IsValidCoordinate(heightmap, x, y)) return heightmap.HeightRange.X;
 
-        var index = GetHeightIndex(heightmap, x, y);
-        var heightData = 1.0f * heightmap.Shorts[index] / HeightMultiplier;
-        var height = heightmap.HeightRange.X + (heightmap.HeightRange.Y -
-            heightmap.HeightRange.X) * heightData;
-        return height;
+        var heightData = heightmap.Shorts[GetHeightIndex(heightmap, x, y)] / HeightMultiplier;
+
+        return heightmap.HeightRange.X + (heightmap.HeightRange.Y - heightmap.HeightRange.X) * heightData;
     }
 
     /// <summary>
@@ -106,21 +103,17 @@ public static class HeightmapExtensions
     /// </summary>
     public static Vector3 GetTangent(this Heightmap heightmap, int x, int z)
     {
-        var flip = 1;
         var here = new Vector3(x, GetHeightAt(heightmap, x, z), z);
         var left = new Vector3(x - 1, GetHeightAt(heightmap, x - 1, z), z);
+        var flip = 1;
+
         if (left.X < 0.0f)
         {
-            flip *= -1;
+            flip = -1;
             left = new Vector3(x + 1, GetHeightAt(heightmap, x + 1, z), z);
         }
 
-        left -= here;
-
-        var tangent = left * flip;
-        tangent.Normalize();
-
-        return tangent;
+        return Vector3.Normalize((left - here) * flip);
     }
 
     /// <summary>
@@ -133,9 +126,7 @@ public static class HeightmapExtensions
         var heightD = GetHeightAt(heightmap, x, y - 1);
         var heightU = GetHeightAt(heightmap, x, y + 1);
 
-        var normal = new Vector3(heightL - heightR, 2.0f, heightD - heightU);
-        normal.Normalize();
-        return normal;
+        return Vector3.Normalize(new Vector3(heightL - heightR, 2.0f, heightD - heightU));
     }
 
     /// <summary>
@@ -143,16 +134,13 @@ public static class HeightmapExtensions
     /// </summary>
     public static float[] ToFloats(this Heightmap heightmap)
     {
-        int i, j, index, m_Width = heightmap.Size.X, m_Height = heightmap.Size.Y;
-        float[] heightValues = new float[m_Width * m_Height];
-        for (i = 0; i < m_Width; i++)
+        var heightValues = new float[heightmap.Size.X * heightmap.Size.Y];
+
+        for (var i = 0; i < heightValues.Length; i++)
         {
-            for (j = 0; j < m_Height; j++)
-            {
-                index = (m_Width * j) + i;
-                heightValues[index] = heightmap.Shorts[index];
-            }
+            heightValues[i] = heightmap.Shorts[i];
         }
+
         return heightValues;
     }
 
@@ -166,22 +154,19 @@ public static class HeightmapExtensions
     /// <returns>A newly created 2D texture containing the height preview.</returns>
     public static Texture ToTexture(this Heightmap heightmap, GraphicsDevice graphicsDevice, CommandList commandList)
     {
-        int i, j, index, m_Width = heightmap.Size.X, m_Height = heightmap.Size.Y;
-        Texture tex = Texture.New2D(graphicsDevice, m_Width,
-            m_Height, PixelFormat.R8G8B8A8_UNorm,
-            TextureFlags.ShaderResource, 1, GraphicsResourceUsage.Dynamic);
-        Color[] heightValues = new Color[m_Width * m_Height];
-        // Get the height information and put it in the array
-        for (i = 0; i < m_Width; i++)
+        var width = heightmap.Size.X;
+        var height = heightmap.Size.Y;
+        var texture = Texture.New2D(graphicsDevice, width, height, PixelFormat.R8G8B8A8_UNorm, TextureFlags.ShaderResource, 1, GraphicsResourceUsage.Dynamic);
+        var heightValues = new Color[width * height];
+
+        for (var i = 0; i < heightValues.Length; i++)
         {
-            for (j = 0; j < m_Height; j++)
-            {
-                index = (m_Width * j) + i;
-                heightValues[index] = heightmap.Shorts[index].AsStrideColor();
-            }
+            heightValues[i] = heightmap.Shorts[i].AsStrideColor();
         }
-        tex.SetData(commandList, heightValues);
-        return tex;
+
+        texture.SetData(commandList, heightValues);
+
+        return texture;
     }
 
     /// <summary>
@@ -195,70 +180,69 @@ public static class HeightmapExtensions
     /// <param name="terrainPoints">Output array of vertex positions.</param>
     /// <param name="tessellation">Stride between samples (1 = full resolution).</param>
     /// <returns>Constructed mesh.</returns>
-    public static Mesh ToMesh(this Heightmap heightmap,
-        GraphicsDevice graphicsDevice,
-        float m_QuadSideWidthX, float m_QuadSideWidthZ, float TEXTURE_REPEAT,
-        out Vector3[] terrainPoints, int tessellation)
+    public static Mesh ToMesh(this Heightmap heightmap, GraphicsDevice graphicsDevice, float m_QuadSideWidthX, float m_QuadSideWidthZ, float TEXTURE_REPEAT, out Vector3[] terrainPoints, int tessellation)
     {
-        Vector3 minBounds = Vector3.Zero;
-        int m_num_quads_z = (heightmap.Size.Y - 1) / tessellation,
-            m_num_quads_x = (heightmap.Size.X - 1) / tessellation;
-        Vector3 maxBounds = new Vector3((heightmap.Size.X - 1)
-            * m_QuadSideWidthX, 0,
-            (heightmap.Size.Y - 1)
-            * m_QuadSideWidthZ);
-        Vector3 center = 0.5f * (minBounds + maxBounds);
-        int numVertsX = m_num_quads_x + 1;
-        int numVertsZ = m_num_quads_z + 1;
-        float stepX = tessellation * (maxBounds.X - minBounds.X) / (heightmap.Size.X - 1);
-        float stepZ = tessellation * (maxBounds.Z - minBounds.Z) / (heightmap.Size.Y - 1);
-        int count = 0, x, z, m_vertexCount = numVertsX * numVertsZ;
-        Vector3 pos = new Vector3(minBounds.X, 0, minBounds.Z);
-        byte R = 149, G = 135, B = 118;
-        // Create the vertex array.
-        VertexTypePosTexNormColor[] m_vertices = new VertexTypePosTexNormColor[m_vertexCount];
-        terrainPoints = new Vector3[m_vertexCount];
+        var quadsX = (heightmap.Size.X - 1) / tessellation;
+        var quadsZ = (heightmap.Size.Y - 1) / tessellation;
+        var vertsX = quadsX + 1;
+        var vertsZ = quadsZ + 1;
+        var vertexCount = vertsX * vertsZ;
 
-        // Vector3[] Normals = heightmap.CalculateNormals();
-        // Initialize the index to the vertex buffer.
-        for (z = 0; z < numVertsZ; z++)
+        // The terrain starts at the origin and spans one quad width per sample
+        var minBounds = Vector3.Zero;
+        var maxBounds = new Vector3((heightmap.Size.X - 1) * m_QuadSideWidthX, 0, (heightmap.Size.Y - 1) * m_QuadSideWidthZ);
+        var stepX = tessellation * (maxBounds.X - minBounds.X) / (heightmap.Size.X - 1);
+        var stepZ = tessellation * (maxBounds.Z - minBounds.Z) / (heightmap.Size.Y - 1);
+
+        var vertices = new VertexTypePosTexNormColor[vertexCount];
+        var position = new Vector3(minBounds.X, 0, minBounds.Z);
+        var count = 0;
+
+        terrainPoints = new Vector3[vertexCount];
+
+        for (var z = 0; z < vertsZ; z++)
         {
-            pos.X = minBounds.X;
-            for (x = 0; x < numVertsX; x++)
+            position.X = minBounds.X;
+
+            for (var x = 0; x < vertsX; x++)
             {
-                var vertexPosition = new Vector3(pos.X, heightmap.GetHeightAt(x, z), pos.Z);
+                var vertexPosition = new Vector3(position.X, heightmap.GetHeightAt(x, z), position.Z);
+
                 terrainPoints[count] = vertexPosition;
 
                 // TEXTURE_REPEAT > 0 tiles the texture over the whole terrain; otherwise each quad gets one copy.
                 var texCoord = TEXTURE_REPEAT > 0
-                    ? new Vector2(m_QuadSideWidthX * TEXTURE_REPEAT * x / (float)numVertsX * tessellation, m_QuadSideWidthZ * TEXTURE_REPEAT * (z * 1.0f) / (float)numVertsZ * tessellation)
+                    ? new Vector2(m_QuadSideWidthX * TEXTURE_REPEAT * x / (float)vertsX * tessellation, m_QuadSideWidthZ * TEXTURE_REPEAT * (z * 1.0f) / (float)vertsZ * tessellation)
                     : new Vector2(m_QuadSideWidthX * x * tessellation, m_QuadSideWidthZ * z * tessellation);
 
-                m_vertices[count] = new VertexTypePosTexNormColor(vertexPosition, heightmap.GetNormal(x, z), heightmap.GetTangent(x, z), texCoord, new Vector4(R, G, B, 255.0f));
-                pos.X += stepX;
+                vertices[count] = new VertexTypePosTexNormColor(vertexPosition, heightmap.GetNormal(x, z), heightmap.GetTangent(x, z), texCoord, TerrainColor);
+                position.X += stepX;
                 count++;
             }
-            // Increment Z
-            pos.Z += stepZ;
+
+            position.Z += stepZ;
         }
 
-        int[] indices = new int[m_vertexCount * 6];
+        var indices = new int[vertexCount * 6];
+
         count = 0;
-        for (z = 0; z < m_num_quads_z; z++)
+
+        for (var z = 0; z < quadsZ; z++)
         {
-            for (x = 0; x < m_num_quads_x; x++)
+            for (var x = 0; x < quadsX; x++)
             {
-                var vbase = numVertsX * z + x;
-                indices[count++] = (vbase + 1);
-                indices[count++] = (vbase + 1 + numVertsX);
-                indices[count++] = (vbase + numVertsX);
-                indices[count++] = (vbase + 1);
-                indices[count++] = (vbase + numVertsX);
-                indices[count++] = (vbase);
+                var vbase = vertsX * z + x;
+
+                indices[count++] = vbase + 1;
+                indices[count++] = vbase + 1 + vertsX;
+                indices[count++] = vbase + vertsX;
+                indices[count++] = vbase + 1;
+                indices[count++] = vbase + vertsX;
+                indices[count++] = vbase;
             }
         }
 
-        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(graphicsDevice, m_vertices, GraphicsResourceUsage.Dynamic);
+        var vertexBuffer = Stride.Graphics.Buffer.Vertex.New(graphicsDevice, vertices, GraphicsResourceUsage.Dynamic);
         var indexBuffer = Stride.Graphics.Buffer.Index.New(graphicsDevice, indices);
 
         return new Mesh
@@ -268,7 +252,7 @@ public static class HeightmapExtensions
                 PrimitiveType = PrimitiveType.TriangleList,
                 DrawCount = indices.Length,
                 IndexBuffer = new IndexBufferBinding(indexBuffer, true, indices.Length),
-                VertexBuffers = new[] { new VertexBufferBinding(vertexBuffer, VertexTypePosTexNormColor.Layout, vertexBuffer.ElementCount) },
+                VertexBuffers = [new VertexBufferBinding(vertexBuffer, VertexTypePosTexNormColor.Layout, vertexBuffer.ElementCount)],
             },
             BoundingBox = BoundingBox.FromPoints(terrainPoints),
             BoundingSphere = BoundingSphere.FromPoints(terrainPoints)
@@ -278,39 +262,23 @@ public static class HeightmapExtensions
     /// <summary>
     /// Converts all sample heights to world-space points using the provided quad spacing.
     /// </summary>
-    public static Vector3[] ToWorldPoints(this Heightmap heightmap,
-        float m_QuadSideWidthX, float m_QuadSideWidthZ)
+    public static Vector3[] ToWorldPoints(this Heightmap heightmap, float m_QuadSideWidthX, float m_QuadSideWidthZ)
     {
-        Vector3 minBounds = Vector3.Zero;
-        int m_num_quads_z = heightmap.Size.Y - 1, m_num_quads_x = heightmap.Size.X - 1;
-        Vector3 maxBounds = new Vector3(m_num_quads_x * m_QuadSideWidthX, 0,
-            m_num_quads_z * m_QuadSideWidthZ);
-        Vector3 center = 0.5f * (minBounds + maxBounds);
-        int numVertsX = m_num_quads_x + 1;
-        int numVertsZ = m_num_quads_z + 1;
-        float stepX = (maxBounds.X - minBounds.X) / m_num_quads_x;
-        float stepZ = (maxBounds.Z - minBounds.Z) / m_num_quads_z;
-        int count = 0, x, z, m_vertexCount = numVertsX * numVertsZ;
-        Vector3 pos = new Vector3(minBounds.X, 0, minBounds.Z);
-        Vector3[] points = new Vector3[m_vertexCount];
+        var vertsX = heightmap.Size.X;
+        var vertsZ = heightmap.Size.Y;
+        var points = new Vector3[vertsX * vertsZ];
+        var count = 0;
 
-        for (z = 0; z < numVertsZ; z++)
+        for (var z = 0; z < vertsZ; z++)
         {
-            pos.X = minBounds.X;
-            for (x = 0; x < numVertsX; x++)
+            for (var x = 0; x < vertsX; x++)
             {
-                points[count] = new Vector3(pos.X,
-                    heightmap.GetHeightAt(x, z), pos.Z);
-                pos.X += stepX;
-                count++;
+                points[count++] = new Vector3(x * m_QuadSideWidthX, heightmap.GetHeightAt(x, z), z * m_QuadSideWidthZ);
             }
-            // Increment Z
-            pos.Z += stepZ;
         }
 
         return points;
     }
-
 
     /// <summary>
     /// Converts a signed 16-bit height value to a packed <see cref="Color"/> using a float-to-RGBA conversion.

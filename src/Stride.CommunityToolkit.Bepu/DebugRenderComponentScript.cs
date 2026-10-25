@@ -53,15 +53,10 @@ public class DebugRenderComponentScript : SyncScript
     /// </remarks>
     public override void Update()
     {
-        if (_debugAdded) return;
+        if (_debugAdded || SceneSystem.SceneInstance.VisibilityGroups.Count == 0) return;
 
-        var visibilityGroups = SceneSystem.SceneInstance.VisibilityGroups.Count;
+        Entity.Add(new DebugRenderComponent { Visible = Visible, ShowContactPoints = ShowContacts, ShowContactNormals = ShowContacts });
 
-        if (visibilityGroups > 0)
-        {
-            Entity.Add(new DebugRenderComponent { Visible = Visible, ShowContactPoints = ShowContacts, ShowContactNormals = ShowContacts });
-
-            _debugAdded = true;
-        }
+        _debugAdded = true;
     }
 }

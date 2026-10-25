@@ -1,8 +1,8 @@
 using Stride.BepuPhysics;
 using Stride.BepuPhysics.Systems;
 using Stride.CommunityToolkit.Engine;
-using Stride.Core.Mathematics;
 using Stride.Core;
+using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Input;
 using Stride.Rendering.Materials;
@@ -18,6 +18,8 @@ namespace Stride.CommunityToolkit.Bepu;
 public class CollidableGizmoScript : SyncScript
 {
     private const string GizmoEntityName = "CollidableGizmo";
+
+    private readonly List<CollidableGizmo> _gizmos = [];
 
     /// <summary>
     /// Gets or sets the key used to toggle collidable gizmos on and off. Default: <see cref="Keys.P"/>.
@@ -39,16 +41,10 @@ public class CollidableGizmoScript : SyncScript
     /// </summary>
     public bool Visible { get; set; }
 
-    private readonly List<CollidableGizmo> _gizmos = [];
-
     ///<inheritdoc />
     public override void Start()
     {
-        if (Visible)
-        {
-            CreateGizmos();
-            ApplyGizmoEmissiveColor();
-        }
+        if (Visible) CreateGizmos();
     }
 
     ///<inheritdoc />
@@ -56,41 +52,23 @@ public class CollidableGizmoScript : SyncScript
     {
         if (Input.IsKeyPressed(Key))
         {
-            if (!Visible)
+            Visible = !Visible;
+
+            if (Visible)
             {
                 CreateGizmos();
-                ApplyGizmoEmissiveColor();
             }
             else
             {
                 RemoveGizmos();
             }
-
-            Visible = !Visible;
         }
 
         if (!Visible) return;
 
         foreach (var gizmo in _gizmos)
-            gizmo.Update();
-    }
-
-    private void ApplyGizmoEmissiveColor()
-    {
-        if (Color is null) return;
-
-        var gizmoEntities = Entity.Scene.Entities.Where(e => e.Name.Contains(GizmoEntityName)).ToList();
-
-        foreach (var gizmoEntity in gizmoEntities)
         {
-            if (!gizmoEntity.Name.Contains(GizmoEntityName))
-                continue;
-
-            var modelComponent = gizmoEntity.Get<ModelComponent>();
-
-            if (modelComponent is null) continue;
-
-            modelComponent.SetMaterialParameter(MaterialKeys.EmissiveValue, Color.Value);
+            gizmo.Update();
         }
     }
 
@@ -102,12 +80,9 @@ public class CollidableGizmoScript : SyncScript
 
         if (scene is null) return;
 
-        foreach (var component in GetAllComponents<CollidableComponent>(scene))
+        foreach (var component in scene.GetComponentsInScene<CollidableComponent>(includeChildScenes: false))
         {
-            var gizmo = new CollidableGizmo(component)
-            {
-                SizeFactor = SizeFactor
-            };
+            var gizmo = new CollidableGizmo(component) { SizeFactor = SizeFactor };
 
             // This needs to be before IsEnabled and IsSelected
             gizmo.Initialize(Game.Services, scene);
@@ -116,37 +91,31 @@ public class CollidableGizmoScript : SyncScript
 
             _gizmos.Add(gizmo);
         }
+
+        ApplyGizmoEmissiveColor(scene);
+    }
+
+    // Each gizmo puts its own entity, named after it, at the top of the scene; the colour goes on their models
+    private void ApplyGizmoEmissiveColor(Scene scene)
+    {
+        if (Color is not { } color) return;
+
+        foreach (var entity in scene.Entities)
+        {
+            if (entity.Name.Contains(GizmoEntityName) && entity.Get<ModelComponent>() is { } model)
+            {
+                model.SetMaterialParameter(MaterialKeys.EmissiveValue, color);
+            }
+        }
     }
 
     private void RemoveGizmos()
     {
         foreach (var gizmo in _gizmos)
+        {
             gizmo.Dispose();
+        }
 
         _gizmos.Clear();
-    }
-
-    private static IEnumerable<T> GetAllComponents<T>(Scene scene)
-        where T : EntityComponent
-    {
-        foreach (var entity in GetAllEntities(scene.Entities))
-        {
-            foreach (var component in entity.Components)
-            {
-                if (component is T typed)
-                    yield return typed;
-            }
-        }
-    }
-
-    private static IEnumerable<Entity> GetAllEntities(IEnumerable<Entity> entities)
-    {
-        foreach (var entity in entities)
-        {
-            yield return entity;
-
-            foreach (var child in GetAllEntities(entity.GetChildren()))
-                yield return child;
-        }
     }
 }

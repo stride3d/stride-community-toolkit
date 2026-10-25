@@ -24,13 +24,10 @@ public static class SimulationExtensions
     /// </remarks>
     public static HitResult Raycast(this Simulation simulation, Entity entityPosition, float length = 1, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.AllFilter, EFlags eFlags = EFlags.None)
     {
-        var raycastStart = entityPosition.Transform.WorldMatrix.TranslationVector;
-        var forward = entityPosition.Transform.WorldMatrix.Forward;
-        var raycastEnd = raycastStart + forward * length;
+        var start = entityPosition.Transform.WorldMatrix.TranslationVector;
+        var end = start + entityPosition.Transform.WorldMatrix.Forward * length;
 
-        var result = simulation.Raycast(raycastStart, raycastEnd, filterFlags: collisionFlags, eFlags: eFlags);
-
-        return result;
+        return simulation.Raycast(start, end, filterFlags: collisionFlags, eFlags: eFlags);
     }
 
     /// <summary>
@@ -45,12 +42,9 @@ public static class SimulationExtensions
     /// <returns>A <see cref="HitResult"/> that contains information about the first object hit by the ray, or an empty result if nothing is hit.</returns>
     public static HitResult Raycast(this Simulation simulation, Entity entityPosition, Vector3 direction, float length = 1, CollisionFilterGroupFlags collisionFlags = CollisionFilterGroupFlags.AllFilter, EFlags eFlags = EFlags.None)
     {
-        var raycastStart = entityPosition.Transform.WorldMatrix.TranslationVector;
-        var raycastEnd = raycastStart + direction * length;
+        var start = entityPosition.Transform.WorldMatrix.TranslationVector;
 
-        var result = simulation.Raycast(raycastStart, raycastEnd, filterFlags: collisionFlags, eFlags: eFlags);
-
-        return result;
+        return simulation.Raycast(start, start + direction * length, filterFlags: collisionFlags, eFlags: eFlags);
     }
 
     /// <summary>

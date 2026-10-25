@@ -24,7 +24,6 @@ public static class CameraComponentExtensions
     /// </param>
     /// <returns><c>true</c> if the raycast hit a collider; otherwise, <c>false</c>.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="camera"/> or <paramref name="component"/> is <c>null</c>.</exception>
-
     public static bool RaycastMouse(this CameraComponent camera, ScriptComponent component, float maxDistance, out HitInfo hit, CollisionMask collisionMask = CollisionMask.Everything)
     {
         ArgumentNullException.ThrowIfNull(camera);
@@ -47,7 +46,6 @@ public static class CameraComponentExtensions
     /// </param>
     /// <returns><c>true</c> if the raycast hit a collider; otherwise, <c>false</c>.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="camera"/> is <c>null</c>.</exception>
-
     public static bool Raycast(this CameraComponent camera, Vector2 screenPosition, float maxDistance, out HitInfo hit, CollisionMask collisionMask = CollisionMask.Everything)
     {
         ArgumentNullException.ThrowIfNull(camera);
