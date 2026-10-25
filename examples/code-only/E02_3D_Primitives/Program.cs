@@ -1,7 +1,7 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -21,6 +21,7 @@ void Start(Scene scene)
 {
     // The one line. Left mouse grabs, the wheel changes the carry distance, T + mouse turns the body.
     game.AddGrabber();
+    game.AddGroundGizmo(showAxisName: true);
 
     // One entity for both debug views, since each acts on the whole scene: P draws every collider,
     // F11 the physics debug meshes
@@ -51,7 +52,7 @@ void Add3DPrimitives(Scene scene)
         (Type: Primitive3D.Cylinder(0.25f, 0.5f), Position: new Vector3(0.5f, 10, 0), Rotation: null),
         (Type: Primitive3D.Teapot(), Position: new Vector3(3, 4f, 0), Rotation: null),
         (Type: Primitive3D.Torus(), Position: new Vector3(0, 12, 0), Rotation: null),
-        (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-8.0f, 2, -3.0f), Rotation: Quaternion.RotationY(MathUtil.DegreesToRadians(75))),
+        (Type: Primitive3D.TriangularPrism(new(1, 1, 3)), Position: new Vector3(-6.0f, 2, -8.0f), Rotation: Quaternion.RotationY(MathUtil.DegreesToRadians(125))),
         (Type: Primitive3D.TriangularPrism(Vector3.One), Position: new Vector3(-3.5f, 0.5f, 1), Rotation: null),
     };
 
