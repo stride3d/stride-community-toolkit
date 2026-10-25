@@ -13,6 +13,42 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </summary>
 public static class PhysicsQueries2D
 {
+    // One delegate each, shared by every call, with the result list or holder passed as Box2D's
+    // context object: a lambda closing over a local would allocate a closure and a delegate per query
+    private static readonly b2OverlapResultFcn CollectBody = static (shapeId, context) =>
+    {
+        var bodies = (List<B2BodyId>)context;
+        var bodyId = b2Shape_GetBody(shapeId);
+
+        if (!bodies.Contains(bodyId)) bodies.Add(bodyId);
+
+        return true;
+    };
+
+    private static readonly b2CastResultFcn CollectHit = static (shapeId, point, normal, fraction, context) =>
+    {
+        ((List<QueryRaycastHit>)context).Add(new QueryRaycastHit(b2Shape_GetBody(shapeId), shapeId, point.ToVector2(), normal.ToVector2(), fraction));
+
+        return 1f; // every hit is wanted, so the ray keeps its full length
+    };
+
+    private static readonly b2CastResultFcn KeepClosest = static (shapeId, point, normal, fraction, context) =>
+    {
+        ((ClosestHit)context).Hit = new ShapeCastHit(shapeId, b2Shape_GetBody(shapeId), point.ToVector2(), normal.ToVector2(), fraction);
+
+        // Returning the fraction clips the sweep to this hit, so only a nearer one can replace it
+        return fraction;
+    };
+
+    // One holder per thread, reused, so a shape cast allocates nothing: CharacterMover2D casts every step
+    [ThreadStatic]
+    private static ClosestHit? t_closest;
+
+    private sealed class ClosestHit
+    {
+        internal ShapeCastHit? Hit;
+    }
+
     /// <summary>
     /// Performs a closest-hit raycast against every shape in <paramref name="worldId"/> along a segment starting at <paramref name="origin"/> in <paramref name="direction"/> up to <paramref name="maxDistance"/>.
     /// </summary>
@@ -26,18 +62,11 @@ public static class PhysicsQueries2D
     public static (bool hit, B2BodyId bodyId, B2ShapeId shapeId, Vector2 point, Vector2 normal, float fraction) RaycastClosest(
         B2WorldId worldId, Vector2 origin, Vector2 direction, float maxDistance)
     {
-        var start = new B2Vec2(origin.X, origin.Y);
-        var translation = new B2Vec2(direction.X * maxDistance, direction.Y * maxDistance);
-        var result = b2World_CastRayClosest(worldId, start, translation, b2DefaultQueryFilter());
+        var result = b2World_CastRayClosest(worldId, origin.ToB2Vec2(), (direction * maxDistance).ToB2Vec2(), b2DefaultQueryFilter());
 
-        if (!result.hit)
-            return (false, default, default, default, default, 0f);
+        if (!result.hit) return (false, default, default, default, default, 0f);
 
-        var point = new Vector2(result.point.X, result.point.Y);
-        var normal = new Vector2(result.normal.X, result.normal.Y);
-        var bodyId = b2Shape_GetBody(result.shapeId);
-
-        return (true, bodyId, result.shapeId, point, normal, result.fraction);
+        return (true, b2Shape_GetBody(result.shapeId), result.shapeId, result.point.ToVector2(), result.normal.ToVector2(), result.fraction);
     }
 
     /// <summary>
@@ -49,24 +78,23 @@ public static class PhysicsQueries2D
     /// <returns>The first body id whose shape actually contains the point; null if none.</returns>
     public static B2BodyId? OverlapPoint(B2WorldId worldId, Vector2 point, float querySize = 0.1f)
     {
-        var lower = new B2Vec2(point.X - querySize, point.Y - querySize);
-        var upper = new B2Vec2(point.X + querySize, point.Y + querySize);
-        var box = new B2AABB { lowerBound = lower, upperBound = upper };
+        var box = new B2AABB
+        {
+            lowerBound = new B2Vec2(point.X - querySize, point.Y - querySize),
+            upperBound = new B2Vec2(point.X + querySize, point.Y + querySize)
+        };
+        var target = point.ToB2Vec2();
 
         B2BodyId? hit = null;
 
-        b2World_OverlapAABB(worldId, box, b2DefaultQueryFilter(), (shapeId, userData) =>
+        // A pick, not a per-frame query, so the closure over the point and the result is fine here
+        b2World_OverlapAABB(worldId, box, b2DefaultQueryFilter(), (shapeId, _) =>
         {
-            var bodyId = b2Shape_GetBody(shapeId);
+            if (!b2Shape_TestPoint(shapeId, target)) return true;
 
-            if (b2Shape_TestPoint(shapeId, new B2Vec2(point.X, point.Y)))
-            {
-                hit = bodyId;
-                return false;
-            }
+            hit = b2Shape_GetBody(shapeId);
 
-            return true;
-
+            return false;
         }, null);
 
         return hit;
@@ -83,20 +111,8 @@ public static class PhysicsQueries2D
     public static List<QueryRaycastHit> RaycastAll(B2WorldId worldId, Vector2 origin, Vector2 direction, float maxDistance)
     {
         var hits = new List<QueryRaycastHit>();
-        var start = new B2Vec2(origin.X, origin.Y);
-        var translation = new B2Vec2(direction.X * maxDistance, direction.Y * maxDistance);
 
-        b2World_CastRay(worldId, start, translation, b2DefaultQueryFilter(), (shapeId, point, normal, fraction, userData) =>
-        {
-            var bodyId = b2Shape_GetBody(shapeId);
-            hits.Add(new QueryRaycastHit(
-                bodyId,
-                shapeId,
-                new Vector2(point.X, point.Y),
-                new Vector2(normal.X, normal.Y),
-                fraction));
-            return 1.0f; // continue collecting
-        }, null);
+        b2World_CastRay(worldId, origin.ToB2Vec2(), (direction * maxDistance).ToB2Vec2(), b2DefaultQueryFilter(), CollectHit, hits);
 
         return hits;
     }
@@ -111,21 +127,9 @@ public static class PhysicsQueries2D
     public static List<B2BodyId> OverlapAABB(B2WorldId worldId, Vector2 lowerBound, Vector2 upperBound)
     {
         var bodies = new List<B2BodyId>();
-        var box = new B2AABB
-        {
-            lowerBound = new B2Vec2(lowerBound.X, lowerBound.Y),
-            upperBound = new B2Vec2(upperBound.X, upperBound.Y)
-        };
+        var box = new B2AABB { lowerBound = lowerBound.ToB2Vec2(), upperBound = upperBound.ToB2Vec2() };
 
-        b2World_OverlapAABB(worldId, box, b2DefaultQueryFilter(), (shapeId, userData) =>
-        {
-            var bodyId = b2Shape_GetBody(shapeId);
-            if (!bodies.Contains(bodyId))
-            {
-                bodies.Add(bodyId);
-            }
-            return true;
-        }, null);
+        b2World_OverlapAABB(worldId, box, b2DefaultQueryFilter(), CollectBody, bodies);
 
         return bodies;
     }
@@ -152,18 +156,9 @@ public static class PhysicsQueries2D
     public static List<B2BodyId> OverlapCircle(B2WorldId worldId, Vector2 center, float radius, B2QueryFilter filter)
     {
         var bodies = new List<B2BodyId>();
-        var circle = new B2Circle(new B2Vec2(center.X, center.Y), radius);
-        var proxy = b2MakeProxy(circle.center, 1, circle.radius);
+        var proxy = b2MakeProxy(center.ToB2Vec2(), 1, radius);
 
-        b2World_OverlapShape(worldId, ref proxy, filter, (shapeId, userData) =>
-        {
-            var bodyId = b2Shape_GetBody(shapeId);
-            if (!bodies.Contains(bodyId))
-            {
-                bodies.Add(bodyId);
-            }
-            return true;
-        }, null);
+        b2World_OverlapShape(worldId, ref proxy, filter, CollectBody, bodies);
 
         return bodies;
     }
@@ -180,7 +175,7 @@ public static class PhysicsQueries2D
     /// <returns>The closest hit, or null when the sweep is clear.</returns>
     public static ShapeCastHit? CastCircleClosest(B2WorldId worldId, Vector2 center, float radius, Vector2 translation, B2QueryFilter filter)
     {
-        var proxy = b2MakeProxy(new B2Vec2(center.X, center.Y), 1, radius);
+        var proxy = b2MakeProxy(center.ToB2Vec2(), 1, radius);
 
         return CastShapeClosest(worldId, ref proxy, translation, filter);
     }
@@ -197,7 +192,7 @@ public static class PhysicsQueries2D
     /// <returns>The closest hit, or null when the sweep is clear.</returns>
     public static ShapeCastHit? CastSegmentClosest(B2WorldId worldId, Vector2 a, Vector2 b, Vector2 translation, B2QueryFilter filter)
     {
-        var proxy = b2MakeProxy(new B2Vec2(a.X, a.Y), new B2Vec2(b.X, b.Y), 2, 0f);
+        var proxy = b2MakeProxy(a.ToB2Vec2(), b.ToB2Vec2(), 2, 0f);
 
         return CastShapeClosest(worldId, ref proxy, translation, filter);
     }
@@ -213,16 +208,12 @@ public static class PhysicsQueries2D
     /// <returns>The closest hit, or null when the sweep is clear.</returns>
     public static ShapeCastHit? CastShapeClosest(B2WorldId worldId, ref B2ShapeProxy proxy, Vector2 translation, B2QueryFilter filter)
     {
-        ShapeCastHit? closest = null;
+        var closest = t_closest ??= new ClosestHit();
 
-        b2World_CastShape(worldId, ref proxy, new B2Vec2(translation.X, translation.Y), filter, (shapeId, point, normal, fraction, userData) =>
-        {
-            closest = new ShapeCastHit(shapeId, b2Shape_GetBody(shapeId), new Vector2(point.X, point.Y), new Vector2(normal.X, normal.Y), fraction);
+        closest.Hit = null;
 
-            // Returning the fraction clips the sweep to this hit, so only a nearer one can replace it.
-            return fraction;
-        }, null);
+        b2World_CastShape(worldId, ref proxy, translation.ToB2Vec2(), filter, KeepClosest, closest);
 
-        return closest;
+        return closest.Hit;
     }
 }

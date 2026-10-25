@@ -12,20 +12,11 @@ namespace Stride.CommunityToolkit.Box2D;
 /// Bridge responsible for mapping Box2D bodies to Stride entities and synchronizing transforms.
 /// This isolates engine-specific concerns away from the engine-agnostic <see cref="PhysicsWorld2D"/>.
 /// </summary>
-public sealed class Box2DStrideBridge
+/// <param name="world">The physics world bodies are created in.</param>
+public sealed class Box2DStrideBridge(PhysicsWorld2D world)
 {
-    private readonly PhysicsWorld2D _world;
     private readonly Dictionary<B2BodyId, Entity> _bodyToEntity = [];
     private readonly Dictionary<Entity, B2BodyId> _entityToBody = [];
-
-    /// <summary>
-    /// Creates a bridge for the given world.
-    /// </summary>
-    /// <param name="world">The physics world bodies are created in.</param>
-    public Box2DStrideBridge(PhysicsWorld2D world)
-    {
-        _world = world;
-    }
 
     /// <summary>
     /// Creates a body of the given type at a world position, without an associated entity.
@@ -37,11 +28,12 @@ public sealed class Box2DStrideBridge
     public B2BodyId CreateBody(Vector3 position, B2BodyType type, float rotation = 0f)
     {
         var bodyDef = b2DefaultBodyDef();
+
         bodyDef.type = type;
         bodyDef.position = new B2Vec2(position.X, position.Y);
         bodyDef.rotation = b2MakeRot(rotation);
 
-        return b2CreateBody(_world.WorldId, in bodyDef);
+        return b2CreateBody(world.WorldId, in bodyDef);
     }
 
     /// <summary>
@@ -69,22 +61,19 @@ public sealed class Box2DStrideBridge
     /// <param name="entity">The entity whose body should be removed.</param>
     public void RemoveBody(Entity entity)
     {
-        if (_entityToBody.TryGetValue(entity, out var bodyId))
-        {
-            b2DestroyBody(bodyId);
+        if (!_entityToBody.Remove(entity, out var bodyId)) return;
 
-            _entityToBody.Remove(entity);
-            _bodyToEntity.Remove(bodyId);
-        }
+        b2DestroyBody(bodyId);
+        _bodyToEntity.Remove(bodyId);
     }
 
     /// <summary>Gets the entity registered for the given body id, or null.</summary>
     /// <param name="bodyId">The body to look up.</param>
-    public Entity? GetEntity(B2BodyId bodyId) => _bodyToEntity.TryGetValue(bodyId, out var e) ? e : null;
+    public Entity? GetEntity(B2BodyId bodyId) => _bodyToEntity.TryGetValue(bodyId, out var entity) ? entity : null;
 
     /// <summary>Gets the body registered for the given entity, or null.</summary>
     /// <param name="entity">The entity to look up.</param>
-    public B2BodyId? GetBody(Entity entity) => _entityToBody.TryGetValue(entity, out var id) ? id : null;
+    public B2BodyId? GetBody(Entity entity) => _entityToBody.TryGetValue(entity, out var bodyId) ? bodyId : null;
 
     /// <summary>All body ids currently mapped to an entity.</summary>
     public IEnumerable<B2BodyId> Bodies => _bodyToEntity.Keys;
@@ -99,9 +88,9 @@ public sealed class Box2DStrideBridge
         // included, as one contiguous array - the API Box2D provides precisely for engine sync.
         // The cost scales with movement, not population: a settled pile produces zero events,
         // where iterating every body and asking for its transform cost ~10x more while moving.
-        var events = b2World_GetBodyEvents(_world.WorldId);
+        var events = b2World_GetBodyEvents(world.WorldId);
 
-        for (int i = 0; i < events.moveCount; i++)
+        for (var i = 0; i < events.moveCount; i++)
         {
             ref var moveEvent = ref events.moveEvents[i];
 

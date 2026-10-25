@@ -84,7 +84,7 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
     /// <param name="radius">The capsule's radius.</param>
     public CharacterMover2D(Vector2 position, float halfHeight = 0.5f, float radius = 0.3f)
     {
-        _position = new B2Vec2(position.X, position.Y);
+        _position = position.ToB2Vec2();
         HalfHeight = halfHeight;
         Radius = radius;
         PogoRestLength = 3f * radius;
@@ -100,10 +100,10 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
     public float Throttle { get; set; }
 
     /// <summary>World-space centre of the capsule.</summary>
-    public Vector2 Position => new(_position.X, _position.Y);
+    public Vector2 Position => _position.ToVector2();
 
     /// <summary>Current velocity, metres per second.</summary>
-    public Vector2 Velocity => new(_velocity.X, _velocity.Y);
+    public Vector2 Velocity => _velocity.ToVector2();
 
     /// <summary>Whether the pogo found ground under the feet in the last step.</summary>
     public bool IsOnGround { get; private set; }
@@ -190,7 +190,7 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
     /// <param name="position">New world-space centre.</param>
     public void Teleport(Vector2 position)
     {
-        _position = new B2Vec2(position.X, position.Y);
+        _position = position.ToB2Vec2();
         _velocity = b2Vec2_zero;
         _pogoVelocity = 0f;
         IsOnGround = false;
@@ -338,7 +338,7 @@ public sealed class CharacterMover2D : IBox2DSimulationUpdate
         _pogoVelocity = b2SpringDamper(PogoHertz, PogoDampingRatio, offset, _pogoVelocity, deltaTime);
         PogoEnd = origin + ground.Fraction * translation;
 
-        b2Body_ApplyForce(ground.BodyId, new B2Vec2(0f, -GroundPushForce), new B2Vec2(ground.Point.X, ground.Point.Y), true);
+        b2Body_ApplyForce(ground.BodyId, new B2Vec2(0f, -GroundPushForce), ground.Point.ToB2Vec2(), true);
     }
 
     // Collect planes, solve a translation that respects them, sweep it; repeat while the sweep

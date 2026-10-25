@@ -6,7 +6,7 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </summary>
 public sealed class Box2DCollisionMatrix
 {
-    private readonly Dictionary<(int groupA, int groupB), bool> _collisionTable = new();
+    private readonly Dictionary<(int, int), bool> _collisionTable = [];
 
     /// <summary>
     /// Sets whether two groups may collide. Order does not matter.
@@ -14,20 +14,15 @@ public sealed class Box2DCollisionMatrix
     /// <param name="groupA">First collision group.</param>
     /// <param name="groupB">Second collision group.</param>
     /// <param name="canCollide">Whether members of the two groups collide.</param>
-    public void SetCollision(int groupA, int groupB, bool canCollide)
-    {
-        _collisionTable[(Math.Min(groupA, groupB), Math.Max(groupA, groupB))] = canCollide;
-    }
+    public void SetCollision(int groupA, int groupB, bool canCollide) => _collisionTable[Key(groupA, groupB)] = canCollide;
 
     /// <summary>
     /// Returns whether two groups may collide; true for any pair never configured.
     /// </summary>
     /// <param name="groupA">First collision group.</param>
     /// <param name="groupB">Second collision group.</param>
-    public bool CanCollide(int groupA, int groupB)
-    {
-        var key = (Math.Min(groupA, groupB), Math.Max(groupA, groupB));
+    public bool CanCollide(int groupA, int groupB) => !_collisionTable.TryGetValue(Key(groupA, groupB), out var canCollide) || canCollide;
 
-        return !_collisionTable.TryGetValue(key, out var canCollide) || canCollide;
-    }
+    // The smaller group first, so (a, b) and (b, a) are one entry
+    private static (int, int) Key(int groupA, int groupB) => (Math.Min(groupA, groupB), Math.Max(groupA, groupB));
 }

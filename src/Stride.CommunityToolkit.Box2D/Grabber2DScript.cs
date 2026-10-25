@@ -128,7 +128,7 @@ public class Grabber2DScript : SyncScript
         // The anchor: a kinematic body at the grab point that never sleeps, moved each frame.
         var anchorDef = b2DefaultBodyDef();
         anchorDef.type = B2BodyType.b2_kinematicBody;
-        anchorDef.position = new B2Vec2(worldPoint.X, worldPoint.Y);
+        anchorDef.position = worldPoint.ToB2Vec2();
         anchorDef.enableSleep = false;
         _anchor = b2CreateBody(world, anchorDef);
 
@@ -167,7 +167,7 @@ public class Grabber2DScript : SyncScript
 
         // A target transform gives the anchor the velocity to get there in one physics step, so
         // the joint sees motion rather than a teleport.
-        var transform = new B2Transform(new B2Vec2(worldPoint.X, worldPoint.Y), b2Rot_identity);
+        var transform = new B2Transform(worldPoint.ToB2Vec2(), b2Rot_identity);
         b2Body_SetTargetTransform(_anchor, transform, 1f / Simulation.TargetHz, true);
     }
 

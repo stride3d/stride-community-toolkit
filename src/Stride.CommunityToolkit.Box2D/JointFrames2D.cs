@@ -21,7 +21,7 @@ internal static class JointFrames2D
     /// </summary>
     internal static B2Transform LocalFrame(in B2Transform body, Vector2 worldPivot, float worldAngle = 0f)
     {
-        var pivot = new B2Vec2(worldPivot.X, worldPivot.Y);
+        var pivot = worldPivot.ToB2Vec2();
         var frameRotation = b2MakeRot(worldAngle);
 
         return new B2Transform(b2InvTransformPoint(body, pivot), b2InvMulRot(body.q, frameRotation));
@@ -49,6 +49,6 @@ internal static class JointFrames2D
     {
         var point = b2TransformPoint(body, localFrame.p);
 
-        return new Vector2(point.X, point.Y);
+        return point.ToVector2();
     }
 }

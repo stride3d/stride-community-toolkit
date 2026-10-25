@@ -12,8 +12,8 @@ namespace Stride.CommunityToolkit.Box2D;
 /// </summary>
 public sealed class PhysicsEventRouter2D
 {
-    private readonly List<IContactEventHandler> _contactHandlers = new();
-    private readonly List<ISensorEventHandler> _sensorHandlers = new();
+    private readonly List<IContactEventHandler> _contactHandlers = [];
+    private readonly List<ISensorEventHandler> _sensorHandlers = [];
 
     /// <summary>Registers a contact event handler; a handler is only registered once.</summary>
     /// <param name="handler">The handler to receive contact events.</param>
@@ -44,45 +44,36 @@ public sealed class PhysicsEventRouter2D
     /// <param name="entityResolver">Maps a body id to its entity; events with unresolved entities are dropped.</param>
     /// <param name="enableContactEvents">Whether begin/end touch events are dispatched.</param>
     /// <param name="enableHitEvents">Whether hit (impact) events are dispatched.</param>
-    public void ProcessContacts(
-        B2WorldId worldId,
-        Func<B2BodyId, Entity?> entityResolver,
-        bool enableContactEvents,
-        bool enableHitEvents)
+    public void ProcessContacts(B2WorldId worldId, Func<B2BodyId, Entity?> entityResolver, bool enableContactEvents, bool enableHitEvents)
     {
         if ((!enableContactEvents && !enableHitEvents) || _contactHandlers.Count == 0) return;
 
-        var contactEvents = b2World_GetContactEvents(worldId);
+        var events = b2World_GetContactEvents(worldId);
 
         if (enableContactEvents)
         {
-            // Begin touch
-            for (int i = 0; i < contactEvents.beginCount; i++)
+            for (var i = 0; i < events.beginCount; i++)
             {
-                ref var evt = ref contactEvents.beginEvents[i];
-                DispatchContactEvent(entityResolver, evt.shapeIdA, evt.shapeIdB, ContactEventType.BeginTouch, Vector2.Zero, Vector2.Zero, 0f);
+                ref var begin = ref events.beginEvents[i];
+
+                Dispatch(entityResolver, begin.shapeIdA, begin.shapeIdB, ContactEventType.BeginTouch, Vector2.Zero, Vector2.Zero, 0f);
             }
-            // End touch
-            for (int i = 0; i < contactEvents.endCount; i++)
+
+            for (var i = 0; i < events.endCount; i++)
             {
-                ref var evt = ref contactEvents.endEvents[i];
-                DispatchContactEvent(entityResolver, evt.shapeIdA, evt.shapeIdB, ContactEventType.EndTouch, Vector2.Zero, Vector2.Zero, 0f);
+                ref var end = ref events.endEvents[i];
+
+                Dispatch(entityResolver, end.shapeIdA, end.shapeIdB, ContactEventType.EndTouch, Vector2.Zero, Vector2.Zero, 0f);
             }
         }
 
-        if (enableHitEvents)
+        if (!enableHitEvents) return;
+
+        for (var i = 0; i < events.hitCount; i++)
         {
-            for (int i = 0; i < contactEvents.hitCount; i++)
-            {
-                ref var evt = ref contactEvents.hitEvents[i];
-                DispatchContactEvent(entityResolver,
-                    evt.shapeIdA,
-                    evt.shapeIdB,
-                    ContactEventType.Hit,
-                    new Vector2(evt.point.X, evt.point.Y),
-                    new Vector2(evt.normal.X, evt.normal.Y),
-                    evt.approachSpeed);
-            }
+            ref var hit = ref events.hitEvents[i];
+
+            Dispatch(entityResolver, hit.shapeIdA, hit.shapeIdB, ContactEventType.Hit, hit.point.ToVector2(), hit.normal.ToVector2(), hit.approachSpeed);
         }
     }
 
@@ -92,58 +83,42 @@ public sealed class PhysicsEventRouter2D
     /// <param name="worldId">The world to read events from.</param>
     /// <param name="entityResolver">Maps a body id to its entity; events with unresolved entities are dropped.</param>
     /// <param name="enableSensorEvents">Whether sensor events are dispatched.</param>
-    public void ProcessSensors(
-        B2WorldId worldId,
-        Func<B2BodyId, Entity?> entityResolver,
-        bool enableSensorEvents)
+    public void ProcessSensors(B2WorldId worldId, Func<B2BodyId, Entity?> entityResolver, bool enableSensorEvents)
     {
         if (!enableSensorEvents || _sensorHandlers.Count == 0) return;
 
-        var sensorEvents = b2World_GetSensorEvents(worldId);
+        var events = b2World_GetSensorEvents(worldId);
 
-        for (int i = 0; i < sensorEvents.beginCount; i++)
+        for (var i = 0; i < events.beginCount; i++)
         {
-            ref var evt = ref sensorEvents.beginEvents[i];
-            DispatchSensorEvent(entityResolver, evt.sensorShapeId, evt.visitorShapeId, SensorEventType.BeginTouch);
+            ref var begin = ref events.beginEvents[i];
+
+            Dispatch(entityResolver, begin.sensorShapeId, begin.visitorShapeId, SensorEventType.BeginTouch);
         }
-        for (int i = 0; i < sensorEvents.endCount; i++)
+
+        for (var i = 0; i < events.endCount; i++)
         {
-            ref var evt = ref sensorEvents.endEvents[i];
-            DispatchSensorEvent(entityResolver, evt.sensorShapeId, evt.visitorShapeId, SensorEventType.EndTouch);
+            ref var end = ref events.endEvents[i];
+
+            Dispatch(entityResolver, end.sensorShapeId, end.visitorShapeId, SensorEventType.EndTouch);
         }
     }
 
-    private void DispatchContactEvent(
-        Func<B2BodyId, Entity?> entityResolver,
-        B2ShapeId shapeIdA,
-        B2ShapeId shapeIdB,
-        ContactEventType type,
-        Vector2 point,
-        Vector2 normal,
-        float approachSpeed)
+    // Both bodies must belong to an entity, or the event is dropped
+    private void Dispatch(Func<B2BodyId, Entity?> entityResolver, B2ShapeId shapeIdA, B2ShapeId shapeIdB, ContactEventType type, Vector2 point, Vector2 normal, float approachSpeed)
     {
-        var entityA = entityResolver(b2Shape_GetBody(shapeIdA));
-        var entityB = entityResolver(b2Shape_GetBody(shapeIdB));
-
-        if (entityA == null || entityB == null) return;
+        if (entityResolver(b2Shape_GetBody(shapeIdA)) is not { } entityA || entityResolver(b2Shape_GetBody(shapeIdB)) is not { } entityB) return;
 
         var data = new ContactEventData(type, entityA, entityB, shapeIdA, shapeIdB, point, normal, approachSpeed);
 
         foreach (var handler in _contactHandlers) handler.OnContactEvent(data);
     }
 
-    private void DispatchSensorEvent(
-        Func<B2BodyId, Entity?> entityResolver,
-        B2ShapeId sensorShape,
-        B2ShapeId visitorShape,
-        SensorEventType type)
+    private void Dispatch(Func<B2BodyId, Entity?> entityResolver, B2ShapeId sensorShape, B2ShapeId visitorShape, SensorEventType type)
     {
-        var sensorEntity = entityResolver(b2Shape_GetBody(sensorShape));
-        var visitorEntity = entityResolver(b2Shape_GetBody(visitorShape));
+        if (entityResolver(b2Shape_GetBody(sensorShape)) is not { } sensor || entityResolver(b2Shape_GetBody(visitorShape)) is not { } visitor) return;
 
-        if (sensorEntity == null || visitorEntity == null) return;
-
-        var data = new SensorEventData(type, sensorEntity, visitorEntity, sensorShape, visitorShape);
+        var data = new SensorEventData(type, sensor, visitor, sensorShape, visitorShape);
 
         foreach (var handler in _sensorHandlers) handler.OnSensorEvent(data);
     }

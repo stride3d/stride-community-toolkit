@@ -22,12 +22,10 @@ namespace Stride.CommunityToolkit.Box2D;
 internal sealed class Box2DTaskScheduler : IDisposable
 {
     /// <summary>One Enqueue call's worth of jobs; Finish blocks on it until the count drains.</summary>
-    private sealed class Batch
+    private sealed class Batch(int jobs)
     {
         private readonly object _gate = new();
-        private int _remaining;
-
-        internal Batch(int jobs) => _remaining = jobs;
+        private int _remaining = jobs;
 
         internal void CompleteOne()
         {
@@ -41,31 +39,12 @@ internal sealed class Box2DTaskScheduler : IDisposable
         {
             lock (_gate)
             {
-                while (Volatile.Read(ref _remaining) > 0)
-                {
-                    Monitor.Wait(_gate);
-                }
+                while (Volatile.Read(ref _remaining) > 0) Monitor.Wait(_gate);
             }
         }
     }
 
-    private readonly struct Job
-    {
-        internal readonly b2TaskCallback Task;
-        internal readonly int Start;
-        internal readonly int End;
-        internal readonly object TaskContext;
-        internal readonly Batch Batch;
-
-        internal Job(b2TaskCallback task, int start, int end, object taskContext, Batch batch)
-        {
-            Task = task;
-            Start = start;
-            End = end;
-            TaskContext = taskContext;
-            Batch = batch;
-        }
-    }
+    private readonly record struct Job(b2TaskCallback Task, int Start, int End, object TaskContext, Batch Batch);
 
     private readonly BlockingCollection<Job> _queue = new();
     private readonly Thread[] _threads;
@@ -77,9 +56,9 @@ internal sealed class Box2DTaskScheduler : IDisposable
     {
         _threads = new Thread[workerCount];
 
-        for (int i = 0; i < workerCount; i++)
+        for (var i = 0; i < workerCount; i++)
         {
-            int workerIndex = i;
+            var workerIndex = i;
 
             _threads[i] = new Thread(() =>
             {
@@ -111,7 +90,7 @@ internal sealed class Box2DTaskScheduler : IDisposable
         // need a worker index, and every index belongs to a pool thread that may be busy with it.
         var chunk = itemCount / jobs;
 
-        for (int i = 0; i < jobs; i++)
+        for (var i = 0; i < jobs; i++)
         {
             var start = i * chunk;
             var end = i == jobs - 1 ? itemCount : start + chunk;
