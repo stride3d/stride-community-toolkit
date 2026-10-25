@@ -101,72 +101,49 @@ internal readonly struct ShapeInstance
 
     /// <summary>Which part of the shape is kept, plus the glow width in the spare slot.</summary>
     [StructLayout(LayoutKind.Sequential)]
-    private readonly struct SliceData
+    private readonly struct SliceData(float ringWidth, float angleStart, float angleSweep, float glowWidth)
     {
         /// <summary>How deep the band reaches inward from the outline, in world units, when hollow.</summary>
-        public readonly float RingWidth;
+        public readonly float RingWidth = ringWidth;
 
         /// <summary>Where the angular cut starts, radians from the plane's X axis, counter-clockwise.</summary>
-        public readonly float AngleStart;
+        public readonly float AngleStart = angleStart;
 
         /// <summary>How far the cut extends; 0 means no cut.</summary>
-        public readonly float AngleSweep;
+        public readonly float AngleSweep = angleSweep;
 
         /// <summary>Outer glow width in pixels; 0 for none.</summary>
-        public readonly float GlowWidth;
-
-        internal SliceData(float ringWidth, float angleStart, float angleSweep, float glowWidth)
-        {
-            RingWidth = ringWidth;
-            AngleStart = angleStart;
-            AngleSweep = angleSweep;
-            GlowWidth = glowWidth;
-        }
+        public readonly float GlowWidth = glowWidth;
     }
 
     /// <summary>The dash pattern, in pixels.</summary>
     [StructLayout(LayoutKind.Sequential)]
-    private readonly struct DashData
+    private readonly struct DashData(float length, float gap, float phase, float runOffset)
     {
         /// <summary>Length of each dash; 0 for solid.</summary>
-        public readonly float Length;
+        public readonly float Length = length;
 
         /// <summary>Gap between dashes.</summary>
-        public readonly float Gap;
+        public readonly float Gap = gap;
 
         /// <summary>Where the pattern starts.</summary>
-        public readonly float Phase;
+        public readonly float Phase = phase;
 
         /// <summary>For a polyline, the arc length along the whole run at its first point, in world units.</summary>
-        public readonly float RunOffset;
-
-        internal DashData(float length, float gap, float phase, float runOffset)
-        {
-            Length = length;
-            Gap = gap;
-            Phase = phase;
-            RunOffset = runOffset;
-        }
+        public readonly float RunOffset = runOffset;
     }
 
     /// <summary>The fill gradient's direction, plus the opacity and the soft depth fade in the spare slots.</summary>
     [StructLayout(LayoutKind.Sequential)]
-    private readonly struct GradientData
+    private readonly struct GradientData(Vector2 direction, float opacity, float depthFade)
     {
         /// <summary>The direction the gradient runs in, in the plane's local axes.</summary>
-        public readonly Vector2 Direction;
+        public readonly Vector2 Direction = direction;
 
         /// <summary>A multiplier on every alpha the shape produces.</summary>
-        public readonly float Opacity;
+        public readonly float Opacity = opacity;
 
         /// <summary>Distance in world units over which the shape fades out as it nears scene geometry; 0 for a hard cut.</summary>
-        public readonly float DepthFade;
-
-        internal GradientData(Vector2 direction, float opacity, float depthFade)
-        {
-            Direction = direction;
-            Opacity = opacity;
-            DepthFade = depthFade;
-        }
+        public readonly float DepthFade = depthFade;
     }
 }

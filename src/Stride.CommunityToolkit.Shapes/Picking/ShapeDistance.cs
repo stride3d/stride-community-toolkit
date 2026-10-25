@@ -62,15 +62,10 @@ internal static class ShapeDistance
 
         foreach (var current in points)
         {
-            var e = current - previous;
-            var w = p - previous;
-            var ee = MathF.Max(Vector2.Dot(e, e), MathUtil.ZeroTolerance);
-            var b = w - e * Math.Clamp(Vector2.Dot(w, e) / ee, 0f, 1f);
-
-            d = MathF.Min(d, Vector2.Dot(b, b));
+            d = MathF.Min(d, SegmentDistanceSquared(p, previous, current));
 
             // Outside any edge is outside the polygon
-            if (Cross(w, e) >= 0f) side = 1f;
+            if (Cross(p - previous, current - previous) >= 0f) side = 1f;
 
             previous = current;
         }
@@ -86,17 +81,22 @@ internal static class ShapeDistance
 
         for (var i = 1; i < points.Length; i++)
         {
-            var current = points[i];
-            var e = current - previous;
-            var w = p - previous;
-            var ee = MathF.Max(Vector2.Dot(e, e), MathUtil.ZeroTolerance);
-            var b = w - e * Math.Clamp(Vector2.Dot(w, e) / ee, 0f, 1f);
-
-            d = MathF.Min(d, Vector2.Dot(b, b));
-            previous = current;
+            d = MathF.Min(d, SegmentDistanceSquared(p, previous, points[i]));
+            previous = points[i];
         }
 
         return MathF.Sqrt(d);
+    }
+
+    /// <summary>Squared distance from <paramref name="p"/> to the segment from <paramref name="a"/> to <paramref name="b"/>; a segment of no length is its point.</summary>
+    private static float SegmentDistanceSquared(Vector2 p, Vector2 a, Vector2 b)
+    {
+        var e = b - a;
+        var w = p - a;
+        var ee = MathF.Max(Vector2.Dot(e, e), MathUtil.ZeroTolerance);
+        var d = w - e * Math.Clamp(Vector2.Dot(w, e) / ee, 0f, 1f);
+
+        return Vector2.Dot(d, d);
     }
 
     /// <summary>

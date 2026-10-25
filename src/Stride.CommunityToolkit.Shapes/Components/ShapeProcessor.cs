@@ -29,10 +29,8 @@ public sealed class ShapeProcessor : EntityProcessor<ShapeComponent>
         // processor but never calls AddShapeBatch, and in any game that did not call it either.
         var fallback = Services.GetService<ShapeBatch>() ?? OwnBatch(context);
 
-        foreach (var kv in ComponentDatas)
+        foreach (var (component, _) in ComponentDatas)
         {
-            var component = kv.Key;
-
             if (!component.Enabled || component.Vertices.Count < 1) continue;
 
             var batch = component.Batch ?? fallback;

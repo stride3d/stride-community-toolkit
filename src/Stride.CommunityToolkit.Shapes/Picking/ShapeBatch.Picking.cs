@@ -74,9 +74,7 @@ public sealed partial class ShapeBatch
 
         foreach (ref readonly var record in CollectionsMarshal.AsSpan(_lastPicks))
         {
-            if (!Test(record, view, screenPosition, slackPixels, out var candidate)) continue;
-
-            if (!found || candidate.Depth < hit.Depth || (candidate.Depth == hit.Depth && record.Index > bestIndex))
+            if (Test(record, view, screenPosition, slackPixels, out var candidate) && Topmost(candidate, record.Index, found, hit, bestIndex))
             {
                 hit = candidate;
                 bestIndex = record.Index;
@@ -133,9 +131,8 @@ public sealed partial class ShapeBatch
         foreach (ref readonly var record in CollectionsMarshal.AsSpan(_lastPicks))
         {
             if (record.Screen || record.Slice.Space) continue;
-            if (!TestPlane(record, view, ray, slackPixels, out var candidate)) continue;
 
-            if (!found || candidate.Depth < hit.Depth || (candidate.Depth == hit.Depth && record.Index > bestIndex))
+            if (TestPlane(record, view, ray, slackPixels, out var candidate) && Topmost(candidate, record.Index, found, hit, bestIndex))
             {
                 hit = candidate;
                 bestIndex = record.Index;
@@ -145,6 +142,10 @@ public sealed partial class ShapeBatch
 
         return found;
     }
+
+    /// <summary>Whether a candidate goes over the best hit so far: nearer the camera, or drawn later at the same depth. The first candidate always does.</summary>
+    private static bool Topmost(in ShapeHit candidate, int index, bool found, in ShapeHit best, int bestIndex)
+        => !found || candidate.Depth < best.Depth || (candidate.Depth == best.Depth && index > bestIndex);
 
     private void RecordPick(ReadOnlySpan<Vector2> vertices, in ShapePlane plane, in ShapeStyle style, in ShapeSlice slice, float radius, float scale)
     {
