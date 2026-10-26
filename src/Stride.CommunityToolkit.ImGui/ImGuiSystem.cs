@@ -112,19 +112,17 @@ public class ImGuiSystem : GameSystemBase
     /// Creates the ImGui context, compiles the ImGui shader, allocates the vertex and index buffers, and registers the
     /// system with the game's services and systems.
     /// </summary>
-    /// <param name="registry">The game's service registry; must provide <see cref="IGame"/>, <see cref="GraphicsContext"/> and <see cref="EffectSystem"/>.</param>
-    /// <param name="graphicsDeviceManager">The device manager whose <see cref="GraphicsDeviceManager.GraphicsDevice"/> is rendered to.</param>
+    /// <param name="registry">The game's service registry; must provide <see cref="IGame"/> with a created graphics device, <see cref="GraphicsContext"/> and <see cref="EffectSystem"/>.</param>
     /// <param name="inputManager">The input manager to read from, or <see langword="null"/> to resolve it from <paramref name="registry"/>.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="registry"/> or <paramref name="graphicsDeviceManager"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="registry"/> is <see langword="null"/>.</exception>
     /// <exception cref="InvalidOperationException">If a required service or the graphics device is not available yet.</exception>
-    public ImGuiSystem(IServiceRegistry registry, GraphicsDeviceManager graphicsDeviceManager, InputManager? inputManager = null) : base(registry)
+    public ImGuiSystem(IServiceRegistry registry, InputManager? inputManager = null) : base(registry)
     {
         ArgumentNullException.ThrowIfNull(registry);
-        ArgumentNullException.ThrowIfNull(graphicsDeviceManager);
 
         _game = Game ?? throw new InvalidOperationException("ImGuiSystem: IGame must be available!");
         _input = inputManager ?? Services.GetService<InputManager>() ?? throw new InvalidOperationException("ImGuiSystem: InputManager must be available!");
-        _device = graphicsDeviceManager.GraphicsDevice ?? throw new InvalidOperationException("ImGuiSystem: GraphicsDevice must be available!");
+        _device = _game.GraphicsDevice ?? throw new InvalidOperationException("ImGuiSystem: GraphicsDevice must be available!");
         _context = Services.GetService<GraphicsContext>() ?? throw new InvalidOperationException("ImGuiSystem: GraphicsContext must be available!");
         _effectSystem = Services.GetService<EffectSystem>() ?? throw new InvalidOperationException("ImGuiSystem: EffectSystem must be available!");
         _commandList = _context.CommandList;
