@@ -87,6 +87,11 @@ void HandleUserInput()
     }
     else
     {
+        if (example.Title != Constants.Quit && example.Title != Constants.Clear)
+        {
+            Console.WriteLine($"Starting example: {example.Title}");
+        }
+
         example.Action();
 
         if (example.Title == Constants.Clear)
