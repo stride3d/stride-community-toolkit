@@ -1,8 +1,8 @@
 using E04_StrideUI_DragAndDrop;
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Skyboxes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
@@ -21,6 +21,7 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene scene)
 {
+    game.AddGrabber();
     game.AddEntityInfoRenderer(new() { EnableBackground = true });
 
     shapeGenerator = new PrimitiveGenerator(game, scene);
