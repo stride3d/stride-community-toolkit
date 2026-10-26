@@ -1,6 +1,7 @@
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 using static E11_3D_ShapeBatch_Gallery.Palette;
 
 namespace E11_3D_ShapeBatch_Gallery;
@@ -225,7 +226,7 @@ public static class ShapeStations
             TextColor = HudBlue,
             GlowColor = new Color(0, 140, 255, 170),
             GlowSize = 4f,
-            Alignment = Stride.Graphics.TextAlignment.Center,
+            Alignment = TextAlignment.Center,
             Billboard = false,
         };
 
@@ -273,6 +274,7 @@ public static class ShapeStations
             text.Text = $"SHAPE GALLERY\n{(long)(s.Seconds * 137.5f):N0}";
         }
     }
+
     /// <summary>
     /// Builds the two labels the overflow station compares. Both carry the same words; only the
     /// string differs, because wrapping is the caller's job.
@@ -294,7 +296,7 @@ public static class ShapeStations
                 TextColor = HudBlue,
                 GlowColor = new Color(0, 140, 255, 170),
                 GlowSize = 4f,
-                Alignment = Stride.Graphics.TextAlignment.Center,
+                Alignment = TextAlignment.Center,
                 Billboard = false,
             };
 
@@ -321,7 +323,7 @@ public static class ShapeStations
     {
         var shapes = s.Shapes;
 
-        foreach (var spills in (bool[])[true, false])
+        foreach (var spills in (ReadOnlySpan<bool>)[true, false])
         {
             var centre = s.At(spills ? -2.4f : 2.4f, 2.6f, -1f);
 

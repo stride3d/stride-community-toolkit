@@ -1,5 +1,6 @@
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.UI;
 using Stride.UI.Controls;
 
 namespace E04_StrideUI_ButtonHoverAnimation;
@@ -62,7 +63,7 @@ public class ButtonHoverAnimation : SyncScript
         {
             // Not == MouseOverElement: the pointer sitting on the button's own text reads as
             // MouseOverChild, and from the player's point of view that is still hovering the button.
-            var hovering = button.MouseOverState != Stride.UI.MouseOverState.MouseOverNone;
+            var hovering = button.MouseOverState != MouseOverState.MouseOverNone;
 
             // RenderSize is the size the last layout pass gave the button, so the underline tracks a
             // button that changes width - with the window, or with a longer label.

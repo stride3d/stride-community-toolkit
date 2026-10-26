@@ -22,18 +22,13 @@ void Start(Scene rootScene)
 {
     game.AddGroundGizmo(showAxisName: true);
 
-    CreateAndRegisterGameManagerUI(rootScene);
-}
-
-void CreateAndRegisterGameManagerUI(Scene rootScene)
-{
-    var font = game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont");
-    var gameManager = new GameManager(font);
+    // The click handler finds the game manager through the services
+    var gameManager = new GameManager(game.Content.Load<SpriteFont>("/Stride.Engine/StrideDefaultFont"));
     game.Services.AddService(gameManager);
 
-    var uiEntity = gameManager.CreateUI();
-    uiEntity.Add(new ClickHandlerComponent());
-    uiEntity.Scene = rootScene;
+    var ui = gameManager.CreateUI();
+    ui.Add(new ClickHandlerComponent());
+    ui.Scene = rootScene;
 }
 /*
 ---example-metadata

@@ -104,8 +104,14 @@ void Start(Scene rootScene)
     };
     gallery.UpdateLabels();
 
-    if (startStation > 0) gallery.GoTo(startStation - 1, instant: true);
-    else gallery.GoHome(instant: true);
+    if (startStation > 0)
+    {
+        gallery.GoTo(startStation - 1, instant: true);
+    }
+    else
+    {
+        gallery.GoHome(instant: true);
+    }
 
     TextOverlay.GetOrCreate(game).AddSection("Gallery", BuildOverlayLines);
 }
@@ -160,10 +166,14 @@ void HandleInput(Gallery<ShapeStation> gallery)
     }
 
     if (game.Input.IsKeyPressed(Keys.OemPlus) || game.Input.IsKeyPressed(Keys.Add))
+    {
         style.BorderWidth = MathF.Min(style.BorderWidth + 1f, 16f);
+    }
 
     if (game.Input.IsKeyPressed(Keys.OemMinus) || game.Input.IsKeyPressed(Keys.Subtract))
+    {
         style.BorderWidth = MathF.Max(style.BorderWidth - 1f, 0f);
+    }
 }
 
 int Submitted() => batches is null ? 0 : batches.Scene.Count + batches.Overlay.Count + batches.Pictures.Count + batches.Stripes.Count + batches.Shaded.Count;

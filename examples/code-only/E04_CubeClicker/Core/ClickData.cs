@@ -10,9 +10,9 @@ namespace E04_CubeClicker.Core;
 [DataContract]
 public sealed class ClickData
 {
-    /// <summary>
-    /// "NullPattern", ensuring that there is never null and a valid fallback option
-    /// </summary>
+    private const string DefaultDataName = "Just to have more example data in the saved file";
+
+    /// <summary>A valid starting point, so there is never a null to deal with.</summary>
     public static ClickData Default => new()
     {
         Clickables = [new LeftMouseButtonCounter(), new RightMouseButtonCounter()]
@@ -20,8 +20,6 @@ public sealed class ClickData
 
     [AllowNull]
     public string DataName { get => field; set => field = value ?? DefaultDataName; } = DefaultDataName;
-
-    private const string DefaultDataName = "Just to have more example data in the saved file";
 
     /// <summary>
     /// We can serialize Interfaces, Abstracts as long as the "real" object in it

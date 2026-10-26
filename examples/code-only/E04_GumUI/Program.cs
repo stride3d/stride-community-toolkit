@@ -13,78 +13,64 @@ game.Run(new SceneSetup3D { Camera = CameraSetup.Orthographic(), Lighting = null
 
 void Start(Scene rootScene)
 {
-    //Initialize GumUi
     GumService.Default.Initialize(game);
 
     CreateUi();
 }
 
-void Update(Scene scene, GameTime time)
-{
-    double gameTime = game.UpdateTime.Elapsed.TotalSeconds;
-    GumService.Default.Update(gameTime);
-}
+void Update(Scene scene, GameTime time) => GumService.Default.Update(game.UpdateTime.Elapsed.TotalSeconds);
 
 void CreateUi()
 {
     var mainPanel = new StackPanel();
     mainPanel.AddToRoot();
 
-    //Labels
+    // A label the controls below write into
     var label = new Label();
     mainPanel.AddChild(label);
-    label.Text = $"I was created at {System.DateTime.Now}";
+    label.Text = $"I was created at {DateTime.Now}";
 
-    //Buttons
+    // Buttons, one of them styled through its visual
     var button = new Button();
     mainPanel.AddChild(button);
     button.Text = "Click Me";
-    button.Click += (_, _) => label.Text = $"Button clicked @ {System.DateTime.Now}";
+    button.Click += (_, _) => label.Text = $"Button clicked @ {DateTime.Now}";
 
     var disabledButton = new Button();
     mainPanel.AddChild(disabledButton);
     disabledButton.Text = "Disabled Button";
     disabledButton.IsEnabled = false;
 
-    //Styling a Button
     var buttonVisual = (ButtonVisual)button.Visual;
     buttonVisual.BackgroundColor = Color.Red.ToSkia();
 
-    //CheckBox
     var checkBox = new CheckBox();
     mainPanel.AddChild(checkBox);
     checkBox.Text = "Click Me";
     checkBox.Checked += (_, _) => label.Text = "CheckBox checked";
     checkBox.Unchecked += (_, _) => label.Text = "CheckBox unchecked";
 
-    //ComboBox
     var comboBox = new ComboBox();
     var items = comboBox.Items ?? throw new InvalidOperationException("The combo box has no item list.");
 
-    for (int i = 0; i < 10; i++)
+    for (var i = 0; i < 10; i++)
     {
         items.Add($"Item {i}");
     }
-    comboBox.SelectionChanged += (_, _) =>
-    {
-        label.Text = "Selected: " + comboBox.SelectedObject;
-    };
+
+    comboBox.SelectionChanged += (_, _) => label.Text = "Selected: " + comboBox.SelectedObject;
     mainPanel.AddChild(comboBox);
 
-    //ListBox
     var listBox = new ListBox();
     listBox.Visual.Width = 150;
     listBox.Height = 100;
 
-    for (int i = 0; i < 10; i++)
+    for (var i = 0; i < 10; i++)
     {
         listBox.Items?.Add($"Item {i}");
     }
 
-    listBox.SelectionChanged += (_, _) =>
-    {
-        label.Text = $"Selected item is {listBox.SelectedObject} at index {listBox.SelectedIndex}";
-    };
+    listBox.SelectionChanged += (_, _) => label.Text = $"Selected item is {listBox.SelectedObject} at index {listBox.SelectedIndex}";
     mainPanel.AddChild(listBox);
 }
 

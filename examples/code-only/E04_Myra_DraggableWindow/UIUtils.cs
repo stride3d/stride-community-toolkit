@@ -14,19 +14,16 @@ public static class UIUtils
     /// <param name="top">The top position of the progress bar.</param>
     /// <param name="filler">The filler color of the progress bar.</param>
     /// <returns>A new <see cref="HorizontalProgressBar"/> instance.</returns>
-    public static HorizontalProgressBar CreateHealthBar(int top, string filler)
+    public static HorizontalProgressBar CreateHealthBar(int top, string filler) => new()
     {
-        return new HorizontalProgressBar
-        {
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Value = 100,
-            Filler = new SolidBrush(filler),
-            Left = 20,
-            Top = top,
-            Width = 300,
-            Height = 20,
-            Background = new SolidBrush("#202020FF")
-        };
-    }
+        HorizontalAlignment = HorizontalAlignment.Left,
+        VerticalAlignment = VerticalAlignment.Bottom,
+        Value = 100,
+        Filler = new SolidBrush(filler),
+        Left = 20,
+        Top = top,
+        Width = 300,
+        Height = 20,
+        Background = new SolidBrush("#202020FF")
+    };
 }

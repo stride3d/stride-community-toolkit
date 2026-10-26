@@ -1,8 +1,8 @@
 using Stride.CommunityToolkit.Bepu;
 using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Mathematics;
-using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.CommunityToolkit.Rendering.Overlay;
+using Stride.CommunityToolkit.Rendering.ProceduralModels;
 using Stride.Core.Mathematics;
 using Stride.Engine;
 using Stride.Games;
@@ -23,15 +23,11 @@ using Stride.Input;
 // repeatedly. Leave it at the default to have the list collapse as soon as a choice is made.
 
 var random = new Random(1);
-var parallelogramVertices = new Vector2[]
-{
-    new(-0.5f, -0.25f),
-    new(0.5f, -0.25f),
-    new(0.75f, 0.25f),
-    new(-0.25f, 0.25f),
-};
 
-List<ShapeItem> shapes = [
+Vector2[] parallelogram = [new(-0.5f, -0.25f), new(0.5f, -0.25f), new(0.75f, 0.25f), new(-0.25f, 0.25f)];
+
+ShapeItem[] shapes =
+[
     new(Primitive2D.Circle()),
     new(Primitive2D.Capsule()),
     new(Primitive2D.Rectangle()),
@@ -39,7 +35,7 @@ List<ShapeItem> shapes = [
     // The pentagon is the big one, so its collider gets a depth to match
     new(Primitive2D.RegularPolygon(1, 5, depth: 4)),
     new(Primitive2D.Triangle()),
-    new(Primitive2D.Polygon(parallelogramVertices), "Parallelogram")
+    new(Primitive2D.Polygon(parallelogram), "Parallelogram")
 ];
 
 Scene? scene = null;
@@ -76,9 +72,9 @@ void Start(Scene rootScene)
         Items = [.. shapes.Index().Select(pair => new KeyMenuItem(
             Key: (Keys)(Keys.D1 + pair.Index),
             Text: pair.Item.Name ?? pair.Item.Type.Name,
-            Action: () => Spawn(pair.Item, new Vector3((random.NextSingle() - 0.5f) * 6f, 14, 0))))]
+            Action: () => Spawn(pair.Item, random.NextVector3(new Vector3(-7, 6, 0), new Vector3(7, 20, 0))))
+)]
     };
-
     // No order given, so it lands after the camera controller's help, which registers at -100
     var overlay = TextOverlay.GetOrCreate(game);
     overlay.SectionGap = 0;
@@ -87,14 +83,8 @@ void Start(Scene rootScene)
 
 void Spawn(ShapeItem shape, Vector3 position)
 {
-    var bepuOptions = new BepuPhysicsOptions()
-    {
-        Material = game.CreateFlatMaterial(random.NextColor()),
-    };
+    var entity = game.CreatePrimitive(shape.Type, new() { Material = game.CreateFlatMaterial(random.NextColor()), Position = position });
 
-    var entity = game.CreatePrimitive(shape.Type, bepuOptions);
-
-    entity.Transform.Position = position;
     entity.Scene = scene;
 }
 

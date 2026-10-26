@@ -8,7 +8,7 @@ public class DragAndDropContainer : Canvas
 {
     private UIElement? _draggedElement;
     private int _lastZIndex = 1;
-    private Vector2? _dragOffset;
+    private Vector2 _dragOffset;
 
     public DragAndDropContainer()
     {
@@ -39,7 +39,7 @@ public class DragAndDropContainer : Canvas
     /// Handles the touch move event to update the dragged element's position.
     /// </summary>
     private void OnTouchMove(object? sender, TouchEventArgs e)
-        => _draggedElement?.SetCanvasRelativePosition((Vector3)(e.ScreenPosition - (_dragOffset ?? Vector2.Zero)));
+        => _draggedElement?.SetCanvasRelativePosition((Vector3)(e.ScreenPosition - _dragOffset));
 
     /// <summary>
     /// Handles the touch up event to stop the drag operation.

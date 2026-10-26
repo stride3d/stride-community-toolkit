@@ -21,14 +21,11 @@ public class ClickHandlerComponent : AsyncScript
 
     public override async Task Execute()
     {
-        _camera = Entity.Scene.Entities.FirstOrDefault(x => x.Get<CameraComponent>() != null)?.Get<CameraComponent>();
+        _camera = Entity.Scene.GetCamera();
         _gameManager = Game.Services.GetService<GameManager>();
 
-        if (_camera is null || _gameManager is null)
-        {
-            // Nothing to do without a camera and the GameManager service
-            return;
-        }
+        // Nothing to do without a camera and the GameManager service
+        if (_camera is null || _gameManager is null) return;
 
         _material = Game.CreateMaterial(Color.Yellow, 0.0f, 0.1f);
 
@@ -134,7 +131,7 @@ public class ClickHandlerComponent : AsyncScript
 
     private void ChangeColor(Entity clickedEntity)
     {
-        var modelComponent = clickedEntity.GetComponent<ModelComponent>();
+        var modelComponent = clickedEntity.Get<ModelComponent>();
 
         if (modelComponent is null) return;
 

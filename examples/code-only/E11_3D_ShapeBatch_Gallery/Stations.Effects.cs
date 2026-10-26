@@ -4,6 +4,7 @@ using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
 using Stride.Engine;
+using Stride.Graphics;
 using static E11_3D_ShapeBatch_Gallery.Palette;
 
 namespace E11_3D_ShapeBatch_Gallery;
@@ -403,7 +404,7 @@ public static class EffectStations
             TextColor = HudBlue,
             GlowColor = new Color(0, 140, 255, 170),
             GlowSize = 3f,
-            Alignment = Stride.Graphics.TextAlignment.Center,
+            Alignment = TextAlignment.Center,
             Billboard = false,
         };
 

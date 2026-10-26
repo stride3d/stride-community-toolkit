@@ -38,7 +38,7 @@ using var game = new Game();
 ImGuiNetSystem? imGuiSystem = null;
 Entity? orbitingCube = null;
 BodyComponent? orbitingCubeBody = null;
-float elapsedSeconds = 0f;
+var elapsedSeconds = 0f;
 
 // Fixed points in the scene, drawn to show that DrawText projects world positions to the screen
 WorldLabel[] worldLabels =
@@ -52,7 +52,8 @@ game.Run(new SceneSetup3D { Profiler = true }.UseBepu().UseSkybox(), start: Star
 
 void Start(Scene rootScene)
 {
-    ConfigureWindow();
+    game.Window.AllowUserResizing = true;
+    game.Window.Title = "ImGui.NET Text Rendering";
 
     imGuiSystem = game.AddImGuiNet();
 
@@ -75,12 +76,6 @@ void Update(Scene rootScene, GameTime gameTime)
     DrawTopLeftPanel(imGuiSystem, gameTime);
     DrawWorldLabels(imGuiSystem, orbitingCube);
     DrawBottomLeftPanel(imGuiSystem, rootScene);
-}
-
-void ConfigureWindow()
-{
-    game.Window.AllowUserResizing = true;
-    game.Window.Title = "ImGui.NET Text Rendering";
 }
 
 /// <summary>

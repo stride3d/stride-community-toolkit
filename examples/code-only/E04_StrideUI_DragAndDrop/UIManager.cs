@@ -15,13 +15,13 @@ public class UIManager
     /// </summary>
     public Entity Entity { get; }
 
-    private readonly DragAndDropContainer _rootElement;
+    private readonly DragAndDropContainer _rootElement = new();
     private readonly SpriteFont _font;
-    private readonly Action? _onGenerateCubes;
+    private readonly Action _onGenerateCubes;
+    private readonly Vector3 _defaultWindowPosition = new(0.02f, 0.05f, 0);
 
     private int _windowId = 1;
     private TextBlock? _textBlock;
-    private readonly Vector3 _defaultWindowPosition = new(0.02f, 0.05f, 0);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UIManager"/> class.
@@ -32,12 +32,16 @@ public class UIManager
     public UIManager(SpriteFont? font, Action? onGenerateCubes)
     {
         _font = font ?? throw new ArgumentNullException(nameof(font));
-
         _onGenerateCubes = onGenerateCubes ?? throw new ArgumentNullException(nameof(onGenerateCubes));
 
-        _rootElement = new DragAndDropContainer();
-
-        Entity = CreateUIEntity(_rootElement);
+        Entity = new Entity
+        {
+            new UIComponent
+            {
+                Page = new UIPage { RootElement = _rootElement },
+                RenderGroup = RenderGroup.Group31
+            }
+        };
 
         CreateMainWindow();
     }
@@ -48,22 +52,8 @@ public class UIManager
     /// <param name="text">The text to display.</param>
     public void UpdateTextBlock(string text)
     {
-        if (_textBlock is null) return;
-
-        _textBlock.Text = text;
+        if (_textBlock is not null) _textBlock.Text = text;
     }
-
-    /// <summary>
-    /// Creates the root UI entity.
-    /// </summary>
-    /// <param name="element">The root UI element.</param>
-    /// <returns>A new entity containing the UI element.</returns>
-    private static Entity CreateUIEntity(UIElement element) => [
-        new UIComponent
-        {
-            Page = new UIPage { RootElement = element },
-            RenderGroup = RenderGroup.Group31
-        }];
 
     private void CreateMainWindow()
     {
@@ -79,7 +69,7 @@ public class UIManager
 
     private DragAndDropCanvas CreateWindow(string title, Vector3? position = null)
     {
-        var canvas = new DragAndDropCanvas(title, _font!, position);
+        var canvas = new DragAndDropCanvas(title, _font, position);
 
         canvas.SetPanelZIndex(_rootElement.GetNewZIndex());
 
@@ -92,10 +82,7 @@ public class UIManager
         return canvas;
     }
 
-    private void GenerateItemsButton_PreviewTouchUp(object? sender, TouchEventArgs e)
-    {
-        _onGenerateCubes?.Invoke();
-    }
+    private void GenerateItemsButton_PreviewTouchUp(object? sender, TouchEventArgs e) => _onGenerateCubes();
 
     private void NewWindowButton_PreviewTouchUp(object? sender, TouchEventArgs e)
         => _rootElement.Children.Add(CreateWindow($"Window {_windowId++}", _defaultWindowPosition));
@@ -109,7 +96,7 @@ public class UIManager
     /// <returns>A new button UI element.</returns>
     private Button CreateButton(string title, Vector2 position, EventHandler<TouchEventArgs> onTouchUp)
     {
-        var button = new Button()
+        var button = new Button
         {
             Content = CreateTextBlock(title),
             BackgroundColor = new Color(100, 100, 100, 200),

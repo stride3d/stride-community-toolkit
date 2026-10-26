@@ -11,10 +11,11 @@ namespace E04_StrideUI_DragAndDrop.UI;
 /// </summary>
 public class DragAndDropCanvas : Canvas
 {
+    private const int CanvasWidth = 300;
+    private const int CanvasHeight = 200;
+    private const int CloseButtonSize = 25;
+
     private readonly SpriteFont _font;
-    private readonly int _canvasWidth = 300;
-    private readonly int _canvasHeight = 200;
-    private readonly int _closeButtonSize = 25;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DragAndDropCanvas"/> class.
@@ -25,8 +26,8 @@ public class DragAndDropCanvas : Canvas
     public DragAndDropCanvas(string title, SpriteFont font, Vector3? position = null)
     {
         BackgroundColor = new Color(0, 0, 0, 200);
-        Width = _canvasWidth;
-        Height = _canvasHeight;
+        Width = CanvasWidth;
+        Height = CanvasHeight;
         CanBeHitByUser = true;
 
         this.SetCanvasRelativePosition(position ?? Vector3.Zero);
@@ -59,7 +60,7 @@ public class DragAndDropCanvas : Canvas
     {
         BorderColor = Color.White,
         BorderThickness = new Thickness(0, 0, 0, 2),
-        Width = _canvasWidth,
+        Width = CanvasWidth,
         Height = 27
     });
 
@@ -72,9 +73,9 @@ public class DragAndDropCanvas : Canvas
         {
             Content = GetCloseButtonTitle(),
             BackgroundColor = new Color(0, 0, 0, 200),
-            Width = _closeButtonSize,
-            Height = _closeButtonSize,
-            Margin = new Thickness(_canvasWidth - _closeButtonSize, 0, 0, 0),
+            Width = CloseButtonSize,
+            Height = CloseButtonSize,
+            Margin = new Thickness(CanvasWidth - CloseButtonSize, 0, 0, 0),
         };
 
         button.PreviewTouchUp += OnCloseButtonTouchUp;
@@ -85,11 +86,11 @@ public class DragAndDropCanvas : Canvas
     /// <summary>
     /// Creates the content for the close button (an "x" character).
     /// </summary>
-    private TextBlock GetCloseButtonTitle() => new TextBlock
+    private TextBlock GetCloseButtonTitle() => new()
     {
         Text = "x",
-        Width = _closeButtonSize,
-        Height = _closeButtonSize,
+        Width = CloseButtonSize,
+        Height = CloseButtonSize,
         TextColor = Color.White,
         TextSize = 16,
         Font = _font,

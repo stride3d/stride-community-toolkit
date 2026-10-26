@@ -184,15 +184,8 @@ void Update(Scene scene, GameTime time)
 {
     if (chart is null) return;
 
-    if (game.Input.IsKeyPressed(Keys.G))
-    {
-        chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
-    }
-
-    if (game.Input.IsKeyPressed(Keys.L))
-    {
-        chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
-    }
+    if (game.Input.IsKeyPressed(Keys.G)) chart.Options.Grid.Visible = !chart.Options.Grid.Visible;
+    if (game.Input.IsKeyPressed(Keys.L)) chart.Options.Legend.Visible = !chart.Options.Legend.Visible;
 
     // Remove frees the ribbon's GPU buffers; plotting again builds new ones
     if (game.Input.IsKeyPressed(Keys.T))
@@ -208,15 +201,8 @@ void Update(Scene scene, GameTime time)
         }
     }
 
-    if (game.Input.IsKeyPressed(Keys.Space))
-    {
-        ThrowBall();
-    }
-
-    if (game.Input.IsKeyPressed(Keys.A))
-    {
-        animate = !animate;
-    }
+    if (game.Input.IsKeyPressed(Keys.Space)) ThrowBall();
+    if (game.Input.IsKeyPressed(Keys.A)) animate = !animate;
 
     // Swapping the function rebuilds one mesh in place - same entity, same colour, same legend row - so
     // it is cheap enough to do every frame
@@ -231,7 +217,7 @@ void Update(Scene scene, GameTime time)
     // The chart's frame: applies whatever changed in its options since last time (the G and L toggles
     // above, the range the follower derives from the camera) and moves the cursor readout. The camera is
     // explicit because a scene can hold several, and only you know which one is looking at this chart.
-    camera ??= scene.Entities.Select(e => e.Get<CameraComponent>()).FirstOrDefault(c => c != null);
+    camera ??= scene.GetCamera();
 
     if (camera is not null && batch is not null)
     {

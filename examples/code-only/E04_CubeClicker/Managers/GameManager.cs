@@ -8,18 +8,14 @@ namespace E04_CubeClicker.Managers;
 
 public class GameManager
 {
-    private const string ErrorDuringLoad = "Error during load operation: {0}";
-
-    private readonly CubeDataManager _cubeDataManager;
-    private readonly ClickDataManager _clickDataManager;
+    private readonly CubeDataManager _cubeDataManager = new();
+    private readonly ClickDataManager _clickDataManager = new();
     private readonly UIManager _uiManager;
 
     public bool ReloadCubes { get; set; }
 
     public GameManager(SpriteFont font)
     {
-        _cubeDataManager = new CubeDataManager();
-        _clickDataManager = new ClickDataManager();
         _uiManager = new UIManager(font, _clickDataManager.GetClickables())
         {
             LoadDataHandler = LoadDataAsync,
@@ -45,36 +41,27 @@ public class GameManager
 
     private async void LoadDataAsync(object? sender, RoutedEventArgs e)
     {
-        if (await LoadClickDataAsync())
-        {
-            _uiManager.UpdateMessage("Data loaded. Start clicking.");
-        }
-        else
-        {
-            _uiManager.UpdateMessage("No click data found.");
-        }
+        _uiManager.UpdateMessage(await LoadClickDataAsync() ? "Data loaded. Start clicking." : "No click data found.");
 
         ReloadCubes = true;
     }
 
     public async Task<bool> LoadClickDataAsync()
     {
-        bool result;
-
         try
         {
-            result = await _clickDataManager.TryLoadAsync();
+            var loaded = await _clickDataManager.TryLoadAsync();
+
+            _uiManager.UpdateClickTextBlocks(_clickDataManager.GetClickables());
+
+            return loaded;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(string.Format(ErrorDuringLoad, ex.Message));
+            Console.WriteLine($"Error during load operation: {ex.Message}");
 
             return false;
         }
-
-        _uiManager.UpdateClickTextBlocks(_clickDataManager.GetClickables());
-
-        return result;
     }
 
     public async Task<List<Vector3>> LoadCubeDataAsync()
@@ -85,7 +72,7 @@ public class GameManager
         }
         catch (Exception ex)
         {
-            Console.WriteLine(string.Format(ErrorDuringLoad, ex.Message));
+            Console.WriteLine($"Error during load operation: {ex.Message}");
 
             return [];
         }
