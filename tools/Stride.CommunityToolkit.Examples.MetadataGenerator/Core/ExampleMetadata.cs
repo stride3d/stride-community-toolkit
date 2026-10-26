@@ -184,20 +184,8 @@ public class ExampleMetadata
     /// therefore read as "not translated yet" and show the English, never as a blank label. Putting the
     /// rule here rather than in each consumer is what stops one of them forgetting it.
     /// </remarks>
-    private static string? Localised(Dictionary<string, string>? values, string language)
-    {
-        if (values is null)
-        {
-            return null;
-        }
+    private static string? Localised(Dictionary<string, string>? values, string language) => NonBlank(values, language) ?? NonBlank(values, FallbackLanguage);
 
-        if (values.TryGetValue(language, out var value) && !string.IsNullOrWhiteSpace(value))
-        {
-            return value;
-        }
-
-        return values.TryGetValue(FallbackLanguage, out var fallback) && !string.IsNullOrWhiteSpace(fallback)
-            ? fallback
-            : null;
-    }
+    private static string? NonBlank(Dictionary<string, string>? values, string language)
+        => values is not null && values.TryGetValue(language, out var value) && !string.IsNullOrWhiteSpace(value) ? value : null;
 }

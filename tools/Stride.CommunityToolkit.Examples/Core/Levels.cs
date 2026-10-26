@@ -45,12 +45,7 @@ public static class Levels
     /// <returns>The sort index.</returns>
     public static int IndexOf(string? level)
     {
-        if (level is null)
-        {
-            return All.Length;
-        }
-
-        var index = All.IndexOf(level);
+        var index = level is null ? -1 : All.IndexOf(level);
 
         return index < 0 ? All.Length : index;
     }

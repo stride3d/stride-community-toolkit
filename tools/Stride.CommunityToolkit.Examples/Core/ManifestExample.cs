@@ -62,20 +62,8 @@ public sealed class ManifestExample
     /// Translations are optional and partial by design - most examples carry English only - so a
     /// missing one must read as "not translated yet" and show the English, never as a blank label.
     /// </remarks>
-    private static string? Localised(Dictionary<string, string>? values, string language)
-    {
-        if (values is null)
-        {
-            return null;
-        }
+    private static string? Localised(Dictionary<string, string>? values, string language) => NonBlank(values, language) ?? NonBlank(values, "en");
 
-        if (values.TryGetValue(language, out var value) && !string.IsNullOrWhiteSpace(value))
-        {
-            return value;
-        }
-
-        return values.TryGetValue("en", out var fallback) && !string.IsNullOrWhiteSpace(fallback)
-            ? fallback
-            : null;
-    }
+    private static string? NonBlank(Dictionary<string, string>? values, string language)
+        => values is not null && values.TryGetValue(language, out var value) && !string.IsNullOrWhiteSpace(value) ? value : null;
 }

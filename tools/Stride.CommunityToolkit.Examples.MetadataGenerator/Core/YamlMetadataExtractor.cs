@@ -71,12 +71,7 @@ public static partial class YamlMetadataExtractor
         yaml = string.Empty;
         location = default;
 
-        var extension = Path.GetExtension(filePath);
-
-        if (!LanguageByExtension.TryGetValue(extension, out var language))
-        {
-            return false;
-        }
+        if (GetLanguage(filePath) is not { } language) return false;
 
         var match = language switch
         {
@@ -85,14 +80,9 @@ public static partial class YamlMetadataExtractor
             _ => CSharpBlockPattern().Match(content)
         };
 
-        if (!match.Success)
-        {
-            return false;
-        }
+        if (!match.Success) return false;
 
-        yaml = language == "vb"
-            ? StripLineCommentPrefixes(match.Groups[1].Value)
-            : match.Groups[1].Value.Trim();
+        yaml = language == "vb" ? StripLineCommentPrefixes(match.Groups[1].Value) : match.Groups[1].Value.Trim();
 
         location = MetadataBlockLocation.Measure(content, match.Index, match.Index + match.Length);
 
@@ -124,22 +114,14 @@ public static partial class YamlMetadataExtractor
             if (apostrophe < 0)
             {
                 // A blank separator line inside the block.
-                if (trimmed.Trim().Length == 0)
-                {
-                    builder.AppendLine();
-                }
+                if (string.IsNullOrWhiteSpace(trimmed)) builder.AppendLine();
 
                 continue;
             }
 
             var payload = trimmed[(apostrophe + 1)..];
 
-            if (payload.StartsWith(' '))
-            {
-                payload = payload[1..];
-            }
-
-            builder.AppendLine(payload);
+            builder.AppendLine(payload.StartsWith(' ') ? payload[1..] : payload);
         }
 
         return builder.ToString().Trim('\n', '\r');

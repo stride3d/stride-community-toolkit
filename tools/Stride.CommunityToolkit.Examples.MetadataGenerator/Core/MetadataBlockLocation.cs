@@ -47,10 +47,7 @@ public readonly record struct MetadataBlockLocation(int CodeLineCount, bool IsLa
         var count = lines.Length - 1;
 
         // Trailing blank lines belong to the separation before the block, not to the code.
-        while (count > 0 && string.IsNullOrWhiteSpace(lines[count - 1]))
-        {
-            count--;
-        }
+        while (count > 0 && string.IsNullOrWhiteSpace(lines[count - 1])) count--;
 
         return new MetadataBlockLocation(count, content[endIndex..].AsSpan().IsWhiteSpace());
     }

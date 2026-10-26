@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Stride.CommunityToolkit.Examples.MetadataGenerator.Core;
+using System.Collections.Frozen;
 using System.Text.RegularExpressions;
 
 namespace Stride.CommunityToolkit.Examples.MetadataGenerator.Services;
@@ -23,6 +24,11 @@ public partial class ExampleScanner(ILogger<ExampleScanner> logger)
 {
     /// <summary>Directory names that are skipped wherever they appear in the tree.</summary>
     private static readonly string[] ExcludedDirectories = ["bin", "obj", ".vs", ".git", "node_modules"];
+
+    private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
+
+    [GeneratedRegex(@"<ProjectReference\s+Include\s*=\s*""(?<path>[^""]+)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex ProjectReferencePattern();
 
     /// <summary>
     /// Finds every source file under <paramref name="examplesRootPath"/> that contains a metadata block.
@@ -68,17 +74,13 @@ public partial class ExampleScanner(ILogger<ExampleScanner> logger)
     {
         ArgumentNullException.ThrowIfNull(examplesRootPath);
 
-        if (!examplesRootPath.Exists)
-        {
-            return new HashSet<string>(StringComparer.Ordinal);
-        }
+        if (!examplesRootPath.Exists) return FrozenSet<string>.Empty;
 
-        var names = examplesRootPath
+        return examplesRootPath
             .EnumerateDirectories()
             .Select(directory => directory.Name)
-            .Where(name => !ExcludedDirectories.Contains(name, StringComparer.OrdinalIgnoreCase));
-
-        return new HashSet<string>(names, StringComparer.Ordinal);
+            .Where(name => !ExcludedDirectories.Contains(name, StringComparer.OrdinalIgnoreCase))
+            .ToHashSet(StringComparer.Ordinal);
     }
 
     /// <summary>
@@ -90,9 +92,7 @@ public partial class ExampleScanner(ILogger<ExampleScanner> logger)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(exampleFilePath);
 
-        var projectDirectory = Path.GetDirectoryName(exampleFilePath);
-
-        return Path.GetFileName(projectDirectory) ?? string.Empty;
+        return Path.GetFileName(Path.GetDirectoryName(exampleFilePath)) ?? string.Empty;
     }
 
     /// <summary>
@@ -106,12 +106,11 @@ public partial class ExampleScanner(ILogger<ExampleScanner> logger)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(exampleFilePath);
 
-        var directory = Path.GetDirectoryName(exampleFilePath);
         var references = new List<string>();
 
-        if (directory is not null)
+        if (Path.GetDirectoryName(exampleFilePath) is { } directory)
         {
-            foreach (var projectFile in Directory.EnumerateFiles(directory, "*.csproj").Concat(Directory.EnumerateFiles(directory, "*.fsproj")).Concat(Directory.EnumerateFiles(directory, "*.vbproj")))
+            foreach (var projectFile in ProjectPatterns.SelectMany(pattern => Directory.EnumerateFiles(directory, pattern)))
             {
                 references.AddRange(ProjectReferenceNames(File.ReadAllText(projectFile)));
             }
@@ -131,26 +130,11 @@ public partial class ExampleScanner(ILogger<ExampleScanner> logger)
     }
 
     private static IEnumerable<string> ProjectReferenceNames(string projectXml)
-        => ProjectReferencePattern().Matches(projectXml)
-            .Select(match => Path.GetFileNameWithoutExtension(match.Groups["path"].Value.Replace('\\', '/')));
+        => ProjectReferencePattern().Matches(projectXml).Select(match => Path.GetFileNameWithoutExtension(match.Groups["path"].Value.Replace('\\', '/')));
 
-    [GeneratedRegex(@"<ProjectReference\s+Include\s*=\s*""(?<path>[^""]+)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
-    private static partial Regex ProjectReferencePattern();
-
+    // The last segment is the file itself; any directory on the way may exclude it
     private static bool IsExcluded(string filePath, string rootPath)
-    {
-        var relative = Path.GetRelativePath(rootPath, filePath);
-        var segments = relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-
-        // The last segment is the file itself.
-        for (var i = 0; i < segments.Length - 1; i++)
-        {
-            if (ExcludedDirectories.Contains(segments[i], StringComparer.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+        => Path.GetRelativePath(rootPath, filePath)
+            .Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[..^1]
+            .Any(segment => ExcludedDirectories.Contains(segment, StringComparer.OrdinalIgnoreCase));
 }

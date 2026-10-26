@@ -17,10 +17,9 @@ public static class ManifestLoader
     /// <summary>The manifest filename, copied next to the launcher executable at build time.</summary>
     public const string ManifestFileName = "examples-manifest.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+
+    private static readonly string[] ProjectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
 
     /// <summary>
     /// Loads every example that should appear in a launcher.
@@ -62,10 +61,7 @@ public static class ManifestLoader
             throw new InvalidOperationException($"{manifestPath} is not valid JSON: {ex.Message}", ex);
         }
 
-        if (manifest is null)
-        {
-            throw new InvalidOperationException($"{manifestPath} is empty.");
-        }
+        if (manifest is null) throw new InvalidOperationException($"{manifestPath} is empty.");
 
         // A newer manifest may contain fields or semantics this build does not know about. Saying so is
         // better than silently showing a wrong list.
@@ -111,29 +107,16 @@ public static class ManifestLoader
     /// </remarks>
     private static (string RunTarget, bool IsFileBased) ResolveRunTarget(ManifestExample example, string? examplesRoot)
     {
-        if (examplesRoot is null || example.ProjectPath is not { Length: > 0 } relativePath)
-        {
-            return (string.Empty, false);
-        }
+        if (examplesRoot is null || example.ProjectPath is not { Length: > 0 } relativePath) return (string.Empty, false);
 
         var sourceFile = Path.GetFullPath(Path.Combine(examplesRoot, relativePath.Replace('/', Path.DirectorySeparatorChar)));
         var directory = Path.GetDirectoryName(sourceFile);
 
-        if (directory is null || !Directory.Exists(directory))
+        if (directory is null || !Directory.Exists(directory)) return (string.Empty, false);
+
+        foreach (var pattern in ProjectPatterns)
         {
-            return (string.Empty, false);
-        }
-
-        string[] projectPatterns = ["*.csproj", "*.fsproj", "*.vbproj"];
-
-        foreach (var pattern in projectPatterns)
-        {
-            var project = Directory.EnumerateFiles(directory, pattern, SearchOption.TopDirectoryOnly).FirstOrDefault();
-
-            if (project is not null)
-            {
-                return (project, false);
-            }
+            if (Directory.EnumerateFiles(directory, pattern, SearchOption.TopDirectoryOnly).FirstOrDefault() is { } project) return (project, false);
         }
 
         return File.Exists(sourceFile) ? (sourceFile, true) : (string.Empty, false);
@@ -164,10 +147,7 @@ public static class ManifestLoader
         {
             var candidate = Path.Combine(directory, "examples", "code-only");
 
-            if (Directory.Exists(candidate))
-            {
-                return candidate;
-            }
+            if (Directory.Exists(candidate)) return candidate;
 
             directory = Path.GetDirectoryName(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
         }

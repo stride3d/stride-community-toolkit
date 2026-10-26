@@ -10,17 +10,12 @@ namespace Stride.CommunityToolkit.Examples.MetadataGenerator;
 /// <param name="serviceProvider">Service provider for resolving command handlers.</param>
 public class CommandLineConfiguration(IServiceProvider serviceProvider)
 {
-    /// <summary>
-    /// The examples root, relative to the generator project directory. Matches how the MSBuild
-    /// pre-build hook in the Launcher invokes the tool.
-    /// </summary>
-    private const string DefaultExamplesRoot = @"..\..\examples\code-only";
+    // Relative to the generator project directory, matching how the MSBuild pre-build hook in the Launcher invokes the tool
+    private static readonly string DefaultExamplesRoot = Path.Combine("..", "..", "examples", "code-only");
+    private static readonly string DefaultDocsPath = Path.Combine("..", "..", "docs", "manual", "code-only", "examples");
+    private static readonly string DefaultMediaPath = Path.Combine(DefaultDocsPath, "media");
 
     private const string DefaultOutputPath = "examples-manifest.json";
-
-    private const string DefaultDocsPath = "../../docs/manual/code-only/examples";
-
-    private const string DefaultMediaPath = "../../docs/manual/code-only/examples/media";
 
     /// <summary>
     /// Creates and configures the root command with all subcommands.
@@ -28,7 +23,11 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
     /// <returns>Configured root command ready for parsing.</returns>
     public RootCommand CreateRootCommand()
     {
-        var pathArgument = CreatePathArgument();
+        var pathArgument = new Argument<DirectoryInfo>("examples-root-path")
+        {
+            Description = $"The root path of the examples to scan. Defaults to {DefaultExamplesRoot}, relative to the current directory.",
+            DefaultValueFactory = _ => new DirectoryInfo(DefaultExamplesRoot)
+        };
 
         return new RootCommand("Stride examples metadata parser")
         {
@@ -38,24 +37,10 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         };
     }
 
-    private static Argument<DirectoryInfo> CreatePathArgument()
-        => new("examples-root-path")
-        {
-            Description = $"The root path of the examples to scan. Defaults to {DefaultExamplesRoot}, relative to the current directory.",
-            DefaultValueFactory = _ => new DirectoryInfo(Path.Combine("..", "..", "examples", "code-only"))
-        };
-
-    private static Option<DirectoryInfo?> CreateMediaOption()
-        => new("--media-path")
-        {
-            Description = "The docs media folder used to confirm that every explicit media: file exists. Skipped when omitted."
-        };
-
-    private static Option<bool> CreateStrictOption()
-        => new("--strict")
-        {
-            Description = "Treat validation errors as fatal: report them, write no manifest, and exit non-zero."
-        };
+    private static Option<DirectoryInfo?> CreateMediaOption() => new("--media-path")
+    {
+        Description = "The docs media folder used to confirm that every explicit media: file exists. Skipped when omitted."
+    };
 
     private Command CreateScanCommand(Argument<DirectoryInfo> pathArgument)
     {
@@ -65,29 +50,44 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         scanCommand.Arguments.Add(pathArgument);
         scanCommand.Options.Add(mediaOption);
 
-        scanCommand.SetAction(async (parseResult, cancellationToken) =>
-        {
-            using var scope = serviceProvider.CreateScope();
-
-            var service = scope.ServiceProvider.GetRequiredService<ManifestService>();
-            var validator = scope.ServiceProvider.GetRequiredService<MetadataValidator>();
-            var path = parseResult.GetValue(pathArgument);
-
-            var scan = await service.ScanExamplesAsync(path, cancellationToken);
-
-            if (scan.Examples.Count == 0)
-            {
-                return ManifestService.ExitNoExamplesFound;
-            }
-
-            var published = scan.Examples.Where(example => example.Metadata.Enabled != false).ToList();
-            var messages = validator.Validate(published, parseResult.GetValue(mediaOption), ExampleScanner.FindProjectNames(path!));
-            var errorCount = service.ReportValidation(messages) + scan.Failures;
-
-            return errorCount > 0 ? ManifestService.ExitValidationFailed : ManifestService.ExitSuccess;
-        });
+        scanCommand.SetAction((parseResult, cancellationToken) => RunAsync(service => service.ScanAndValidateAsync(
+            parseResult.GetValue(pathArgument),
+            parseResult.GetValue(mediaOption),
+            cancellationToken)));
 
         return scanCommand;
+    }
+
+    private Command CreateGenerateCommand(Argument<DirectoryInfo> pathArgument)
+    {
+        var outputOption = new Option<string>("--output", "-o")
+        {
+            Description = "The output path for the generated manifest JSON file.",
+            DefaultValueFactory = _ => DefaultOutputPath
+        };
+
+        var mediaOption = CreateMediaOption();
+
+        var strictOption = new Option<bool>("--strict")
+        {
+            Description = "Treat validation errors as fatal: report them, write no manifest, and exit non-zero."
+        };
+
+        var generateCommand = new Command("generate", "Generates the metadata JSON manifest.");
+
+        generateCommand.Arguments.Add(pathArgument);
+        generateCommand.Options.Add(outputOption);
+        generateCommand.Options.Add(mediaOption);
+        generateCommand.Options.Add(strictOption);
+
+        generateCommand.SetAction((parseResult, cancellationToken) => RunAsync(service => service.ScanAndGenerateManifestAsync(
+            parseResult.GetValue(pathArgument),
+            parseResult.GetValue(outputOption) ?? DefaultOutputPath,
+            parseResult.GetValue(mediaOption),
+            parseResult.GetValue(strictOption),
+            cancellationToken)));
+
+        return generateCommand;
     }
 
     private Command CreateDocsCommand(Argument<DirectoryInfo> pathArgument)
@@ -95,7 +95,7 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         var docsOption = new Option<DirectoryInfo>("--docs-path")
         {
             Description = $"The examples documentation folder. Defaults to {DefaultDocsPath}, relative to the current directory.",
-            DefaultValueFactory = _ => new DirectoryInfo(Path.Combine("..", "..", "docs", "manual", "code-only", "examples"))
+            DefaultValueFactory = _ => new DirectoryInfo(DefaultDocsPath)
         };
 
         // Unlike scan and generate, this one defaults. There the folder is only used to confirm that an
@@ -106,7 +106,7 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         var mediaOption = new Option<DirectoryInfo?>("--media-path")
         {
             Description = $"The docs media folder. An image is linked only when the file exists. Defaults to {DefaultMediaPath}, relative to the current directory.",
-            DefaultValueFactory = _ => new DirectoryInfo(Path.Combine("..", "..", "docs", "manual", "code-only", "examples", "media"))
+            DefaultValueFactory = _ => new DirectoryInfo(DefaultMediaPath)
         };
 
         var dryRunOption = new Option<bool>("--dry-run")
@@ -121,55 +121,21 @@ public class CommandLineConfiguration(IServiceProvider serviceProvider)
         docsCommand.Options.Add(mediaOption);
         docsCommand.Options.Add(dryRunOption);
 
-        docsCommand.SetAction(async (parseResult, cancellationToken) =>
-        {
-            using var scope = serviceProvider.CreateScope();
-
-            var service = scope.ServiceProvider.GetRequiredService<ManifestService>();
-
-            return await service.GenerateDocsAsync(
-                parseResult.GetValue(pathArgument),
-                parseResult.GetValue(docsOption),
-                parseResult.GetValue(mediaOption),
-                parseResult.GetValue(dryRunOption),
-                cancellationToken);
-        });
+        docsCommand.SetAction((parseResult, cancellationToken) => RunAsync(service => service.GenerateDocsAsync(
+            parseResult.GetValue(pathArgument),
+            parseResult.GetValue(docsOption),
+            parseResult.GetValue(mediaOption),
+            parseResult.GetValue(dryRunOption),
+            cancellationToken)));
 
         return docsCommand;
     }
 
-    private Command CreateGenerateCommand(Argument<DirectoryInfo> pathArgument)
+    // Every command runs in a service scope of its own
+    private async Task<int> RunAsync(Func<ManifestService, Task<int>> command)
     {
-        var outputOption = new Option<string>("--output", "-o")
-        {
-            Description = "The output path for the generated manifest JSON file.",
-            DefaultValueFactory = _ => DefaultOutputPath
-        };
+        using var scope = serviceProvider.CreateScope();
 
-        var mediaOption = CreateMediaOption();
-        var strictOption = CreateStrictOption();
-
-        var generateCommand = new Command("generate", "Generates the metadata JSON manifest.");
-
-        generateCommand.Arguments.Add(pathArgument);
-        generateCommand.Options.Add(outputOption);
-        generateCommand.Options.Add(mediaOption);
-        generateCommand.Options.Add(strictOption);
-
-        generateCommand.SetAction(async (parseResult, cancellationToken) =>
-        {
-            using var scope = serviceProvider.CreateScope();
-
-            var service = scope.ServiceProvider.GetRequiredService<ManifestService>();
-
-            return await service.ScanAndGenerateManifestAsync(
-                parseResult.GetValue(pathArgument),
-                parseResult.GetValue(outputOption) ?? DefaultOutputPath,
-                parseResult.GetValue(mediaOption),
-                parseResult.GetValue(strictOption),
-                cancellationToken);
-        });
-
-        return generateCommand;
+        return await command(scope.ServiceProvider.GetRequiredService<ManifestService>());
     }
 }
