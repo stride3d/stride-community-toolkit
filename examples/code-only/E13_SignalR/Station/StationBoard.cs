@@ -1,9 +1,7 @@
 using E13_SignalR_Shared;
-using Stride.CommunityToolkit.Engine;
 using Stride.CommunityToolkit.Rendering.Text;
 using Stride.CommunityToolkit.Shapes;
 using Stride.Core.Mathematics;
-using Stride.Engine;
 using Stride.Input;
 using System.Globalization;
 
@@ -281,7 +279,9 @@ public sealed class StationBoard
         // The arc is a stroke at the border width, so it matches the lines' two pixels
         shapes.BorderWidth = 2f;
 
-        foreach (var (signX, signY) in new[] { (-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f) })
+        ReadOnlySpan<(float X, float Y)> corners = [(-1f, -1f), (1f, -1f), (-1f, 1f), (1f, 1f)];
+
+        foreach (var (signX, signY) in corners)
         {
             var corner = new Vector2(signX * half.X, signY * half.Y);
             var elbow = corner - new Vector2(signX * Radius, signY * Radius);

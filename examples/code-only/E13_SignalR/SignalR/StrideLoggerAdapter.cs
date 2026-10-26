@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Logging;
 using Stride.Core.Diagnostics;
+using MsLogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace E13_SignalR.SignalR;
 
@@ -7,57 +9,42 @@ namespace E13_SignalR.SignalR;
 /// Messages are forwarded to the provided Stride <see cref="Logger"/>.
 /// </summary>
 /// <typeparam name="T">Category type for the logger.</typeparam>
-public sealed class StrideLoggerAdapter<T> : Microsoft.Extensions.Logging.ILogger<T>
+public sealed class StrideLoggerAdapter<T>(Logger strideLogger) : ILogger<T>
 {
-    private readonly Logger _strideLogger;
+    private readonly Logger _strideLogger = strideLogger ?? throw new ArgumentNullException(nameof(strideLogger));
 
-    public StrideLoggerAdapter(Logger strideLogger)
-    {
-        _strideLogger = strideLogger ?? throw new ArgumentNullException(nameof(strideLogger));
-    }
+    // Explicit interface implementations through an alias: Stride.Core.Diagnostics has an ILogger of its own
+    IDisposable MsLogger.BeginScope<TState>(TState state) => NullScope.Instance;
 
-    // Explicit interface implementations (fully qualified to avoid ambiguity with Stride.Core.Diagnostics.ILogger)
-    IDisposable Microsoft.Extensions.Logging.ILogger.BeginScope<TState>(TState state) => NullScope.Instance;
+    bool MsLogger.IsEnabled(LogLevel logLevel) => true; // Stride filtering can be done via listeners
 
-    bool Microsoft.Extensions.Logging.ILogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel) => true; // Stride filtering can be done via listeners
-
-    void Microsoft.Extensions.Logging.ILogger.Log<TState>(
-        Microsoft.Extensions.Logging.LogLevel logLevel,
-        Microsoft.Extensions.Logging.EventId eventId,
-        TState state,
-        Exception? exception,
-        Func<TState, Exception?, string> formatter)
+    void MsLogger.Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         if (formatter is null) return;
 
         var message = formatter(state, exception);
+
         if (string.IsNullOrEmpty(message) && exception is null) return;
+
+        var line = exception is null ? message : $"{message}\n{exception}";
 
         switch (logLevel)
         {
-            case Microsoft.Extensions.Logging.LogLevel.Trace:
-            case Microsoft.Extensions.Logging.LogLevel.Debug:
-                if (exception is null) _strideLogger.Debug(message);
-                else _strideLogger.Debug($"{message}\n{exception}");
+            case LogLevel.Trace:
+            case LogLevel.Debug:
+                _strideLogger.Debug(line);
                 break;
-            case Microsoft.Extensions.Logging.LogLevel.Information:
-                if (exception is null) _strideLogger.Info(message);
-                else _strideLogger.Info($"{message}\n{exception}");
+            case LogLevel.Information:
+                _strideLogger.Info(line);
                 break;
-            case Microsoft.Extensions.Logging.LogLevel.Warning:
-                if (exception is null) _strideLogger.Warning(message);
-                else _strideLogger.Warning($"{message}\n{exception}");
+            case LogLevel.Warning:
+                _strideLogger.Warning(line);
                 break;
-            case Microsoft.Extensions.Logging.LogLevel.Error:
-                if (exception is null) _strideLogger.Error(message);
-                else _strideLogger.Error($"{message}\n{exception}");
+            case LogLevel.Error:
+                _strideLogger.Error(line);
                 break;
-            case Microsoft.Extensions.Logging.LogLevel.Critical:
-                if (exception is null) _strideLogger.Fatal(message);
-                else _strideLogger.Fatal($"{message}\n{exception}");
-                break;
-            case Microsoft.Extensions.Logging.LogLevel.None:
-            default:
+            case LogLevel.Critical:
+                _strideLogger.Fatal(line);
                 break;
         }
     }
@@ -65,6 +52,7 @@ public sealed class StrideLoggerAdapter<T> : Microsoft.Extensions.Logging.ILogge
     private sealed class NullScope : IDisposable
     {
         public static readonly NullScope Instance = new();
+
         public void Dispose() { }
     }
 }

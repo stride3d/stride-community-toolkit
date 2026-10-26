@@ -113,20 +113,22 @@ public sealed class DeckEffects
         _rings.RemoveAll(ring => ring.Age >= ring.Life);
 
         // A drift borrows a pooled label, so it is hidden rather than removed
-        foreach (var drift in _drifts.Where(drift => drift.Age >= LostSeconds))
+        for (var i = _drifts.Count - 1; i >= 0; i--)
         {
-            _labels.Hide(drift.Key);
-        }
+            if (_drifts[i].Age < LostSeconds) continue;
 
-        _drifts.RemoveAll(drift => drift.Age >= LostSeconds);
+            _labels.Hide(_drifts[i].Key);
+            _drifts.RemoveAt(i);
+        }
 
         // An expired tag comes off its container; a container already gone takes it along anyway
-        foreach (var tag in _tags.Where(tag => _time >= tag.Until))
+        for (var i = _tags.Count - 1; i >= 0; i--)
         {
-            tag.Entity.Remove(tag.Text);
-        }
+            if (_time < _tags[i].Until) continue;
 
-        _tags.RemoveAll(tag => _time >= tag.Until);
+            _tags[i].Entity.Remove(_tags[i].Text);
+            _tags.RemoveAt(i);
+        }
     }
 
     public void Draw(ShapeBatch shapes, StationConsole console)

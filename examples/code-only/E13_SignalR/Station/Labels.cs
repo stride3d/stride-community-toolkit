@@ -86,7 +86,7 @@ public sealed class Labels
             label.Text.Text = text;
 
             // Height is the whole block, so a second line must not halve the letters
-            label.Text.Height = label.LineHeight * (text.Count(c => c == '\n') + 1);
+            label.Text.Height = label.LineHeight * (text.AsSpan().Count('\n') + 1);
         }
 
         if (color is { } c) label.Text.TextColor = c;
